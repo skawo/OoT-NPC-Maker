@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using FastColoredTextBoxNS;
 
 namespace NPC_Maker
 {
@@ -101,9 +103,12 @@ namespace NPC_Maker
                 Textbox_ParseErrors.Text = "Parsed successfully!";
             else
             {
-                foreach (string error in SelectedEntry.ParseErrors)
+                foreach (string Error in SelectedEntry.ParseErrors)
                 {
-                    Textbox_ParseErrors.Text += error + Environment.NewLine;
+                    Textbox_ParseErrors.Text += Error + Environment.NewLine;
+                    string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
+                    Line = Line.Substring(1, Line.Length - 2);
+                    FCTB.ApplyError(Textbox_Script, Line);
                 }
             }
         }
@@ -281,9 +286,12 @@ namespace NPC_Maker
             SelectedEntry.ChangeValueOfMember((sender as ComboBox).Tag.ToString(), (sender as ComboBox).SelectedIndex);
         }
 
-        private void Textbox_Script_TextChanged(object sender, EventArgs e)
+        private void Textbox_Script_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (SelectedEntry == null)
+                return;
             SelectedEntry.Script = Textbox_Script.Text;
+            FCTB.ApplySyntaxHighlight(sender, e);
         }
 
         private void DataGridViewAnimations_CellParse(object sender, DataGridViewCellParsingEventArgs e)
@@ -396,7 +404,10 @@ namespace NPC_Maker
             {
                 foreach (string Error in Parser.ParseErrors)
                 {
-                    Textbox_ParseErrors.Text += Error + Environment.NewLine; 
+                    Textbox_ParseErrors.Text += Error + Environment.NewLine;
+                    string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
+                    Line = Line.Substring(1, Line.Length - 2);
+                    FCTB.ApplyError(Textbox_Script, Line);
                 }
             }
         }

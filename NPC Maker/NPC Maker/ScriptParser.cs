@@ -76,7 +76,7 @@ namespace NPC_Maker
             Script = Regex.Replace(Script, @"/\*(.|[\r\n])*?\*/", string.Empty);                                // Remove comment blocks
             Script = Regex.Replace(Script, "//.+", string.Empty);                                               // Remove inline comments
             Script = Regex.Replace(Script, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();      // Remove empty lines
-            Script = Regex.Replace(Script.Replace("\t", " "), @"[ ]{2,}", " ");                                 // Remove tabs and multiple spaces
+            Script = Script.Replace("\t", " ");                                                                 // Remove tabs
 
             List<string> Lines = Script.Split(new[] { "\n" }, StringSplitOptions.None).ToList();                // Split text into lines
             Labels = GetLabels(Lines, ref ParseErrors);                                                         // Get all the labels with their indexes...
@@ -479,7 +479,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                ParseErrors.Add("Problem parsing instruction: " + Line);
+                ParseErrors.Add("Problem parsing. Line: \"" + Line.Trim() + "\"");
                 return new byte[8];
             }
         }
@@ -694,28 +694,28 @@ namespace NPC_Maker
 
     public class WrongParamCountException : Exception
     {
-        public WrongParamCountException(string Line) : base(String.Format("Incorrect number of parameters in line: \"{0}\"", Line))
+        public WrongParamCountException(string Line) : base(String.Format("Incorrect number of parameters. Line: \"{0}\"", Line.Trim()))
         {
         }
     }
 
     public class ParamOutOfRangeException : Exception
     {
-        public ParamOutOfRangeException(string Line) : base(String.Format("One of the parameters is out of range: \"{0}\"", Line))
+        public ParamOutOfRangeException(string Line) : base(String.Format("One of the parameters is out of range. Line: \"{0}\"", Line.Trim()))
         {
         }
     }
 
     public class LabelOutOfRangeException : Exception
     {
-        public LabelOutOfRangeException(string Line) : base(String.Format("Script is too long as one of the labels falls out of range: \"{0}\"", Line))
+        public LabelOutOfRangeException(string Line) : base(String.Format("Script is too long as one of the labels falls out of range. Line: \"{0}\"", Line.Trim()))
         {
         }
     }
 
     public class LabelNotFoundException : Exception
     {
-        public LabelNotFoundException(string Line) : base(String.Format("Could not find some of the labels in line: \"{0}\"", Line))
+        public LabelNotFoundException(string Line) : base(String.Format("Could not find some of the labels. Line: \"{0}\"", Line.Trim()))
         {
         }
     }
