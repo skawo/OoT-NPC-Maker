@@ -19,13 +19,42 @@ namespace NPC_Maker
         GOTO = 7,
         SETANIM = 8,
         WAITFORTEXTEND = 9,
-        STOP = 10,
+        WAIT = 10,
         TURNTOPLAYER = 11,
-        RETURNIFNOTTALKING = 12,
-        STOPMOVEMENT = 13,
-        ENABLEMOVEMENT = 14,
-        PLAYSND = 15,
-        SUBTRACTRUPEES = 16
+        SETMOVEMENT = 12,
+        PLAYSND = 13,
+        RUPEESOP = 14,
+        WAITFORRESPONSE = 15,
+        STOP = 255
+    }
+
+    public enum FlagTables
+    {
+        inf_table = 0,
+        event_chk_inf = 1,
+        switch_table = 2,
+        uscene = 3,
+        treasure = 4,
+        room_clear = 5,
+        scene_collect = 6,
+        temporary = 7
+    }
+
+    public enum Flags
+    {
+        age = 10,
+        day = 11,
+        talking = 12,
+        has_empty_bottle = 13
+    }
+
+    public enum IfValues
+    {
+        rupees = 30,
+        time = 31,
+        scene_id = 32,
+        worn_mask = 33,
+        skulltulas = 34
     }
 
     public class ScriptParser
@@ -47,6 +76,7 @@ namespace NPC_Maker
             Script = Regex.Replace(Script, @"/\*(.|[\r\n])*?\*/", string.Empty);                                // Remove comment blocks
             Script = Regex.Replace(Script, "//.+", string.Empty);                                               // Remove inline comments
             Script = Regex.Replace(Script, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();      // Remove empty lines
+            Script = Regex.Replace(Script.Replace("\t", " "), @"[ ]{2,}", " ");                                 // Remove tabs and multiple spaces
 
             List<string> Lines = Script.Split(new[] { "\n" }, StringSplitOptions.None).ToList();                // Split text into lines
             Labels = GetLabels(Lines, ref ParseErrors);                                                         // Get all the labels with their indexes...
@@ -103,9 +133,21 @@ namespace NPC_Maker
             return Result;
         }
 
+        private static Int32 Helper_ConvertToInt32(string Number)
+        {
+            Int32 Result = 0;
+
+            if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
+                Result = Convert.ToInt32(Number, 16);
+            else
+                Result = Convert.ToInt32(Number);
+
+            return Result;
+        }
+
         private static byte[] GetInstructionBytes(string Line, ref List<string> ParseErrors)
         {
-            string[] Instr = Line.TrimEnd().Split(' ');
+            string[] Instr = Line.Trim().Split(' ');
 
             try
             {
@@ -113,51 +155,136 @@ namespace NPC_Maker
                 {
                     case "if":
                         {
-                            if (Instr.Length != 7)
+                            if (Instr.Length < 2)
                                 throw new WrongParamCountException(Line);
 
-                            UInt32 FlagID = Helper_ConvertToUInt32(Instr[2]);
+                            switch (Instr[1])
+                            {
+                                case "flag_table":
+                                    {
+                                        if (Instr.Length != 9)
+                                            throw new WrongParamCountException(Line);
 
-                            if (FlagID > UInt16.MaxValue || FlagID < 0)
-                                throw new ParamOutOfRangeException(Line);
+                                        UInt32 FlagID = Helper_ConvertToUInt32(Instr[3]);
 
-                            int Label_True = GetLabelOffset(Line, Instr[4]);
-                            int Label_False = GetLabelOffset(Line, Instr[6]);
+                                        if (FlagID > UInt16.MaxValue || FlagID < 0)
+                                            throw new ParamOutOfRangeException(Line);
 
-                            if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
-                                throw new LabelOutOfRangeException(Line);
+                                        int Label_True = GetLabelOffset(Line, Instr[6]);
+                                        int Label_False = GetLabelOffset(Line, Instr[8]);
 
-                            if (Instr[3].ToLower() != "then" || Instr[5].ToLower() != "else")
-                                throw new Exception();
+                                        if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
+                                            throw new LabelOutOfRangeException(Line);
 
-                            IfInstruction If = new IfInstruction(Instr[1], Convert.ToUInt16(FlagID), Convert.ToUInt16(Label_True), Convert.ToUInt16(Label_False));
-                            return If.GetByteData();
+                                        if (Instr[5].ToLower() != "then" || Instr[7].ToLower() != "else")
+                                            throw new Exception();
+
+                                        if (Instr[4].ToLower() != "true" && Instr[4].ToLower() != "false")
+                                            throw new Exception();
+
+                       
+                                        IfInstruction If = new IfInstruction(Convert.ToByte(System.Enum.Parse(typeof(FlagTables), Instr[2].ToLower())),
+                                                                             (byte)(Instr[4].ToLower() == "true" ? 1 : 0),
+                                                                             Convert.ToUInt16(FlagID), 
+                                                                             Convert.ToUInt16(Label_True), 
+                                                                             Convert.ToUInt16(Label_False));
+                                        return If.GetByteData();
+                                    }
+                                case "flag":
+                                    {
+                                        if (Instr.Length != 8)
+                                            throw new WrongParamCountException(Line);
+
+                                        int Label_True = GetLabelOffset(Line, Instr[5]);
+                                        int Label_False = GetLabelOffset(Line, Instr[7]);
+
+                                        if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
+                                            throw new LabelOutOfRangeException(Line);
+
+                                        if (Instr[4].ToLower() != "then" || Instr[6].ToLower() != "else")
+                                            throw new Exception();
+
+                                        if (Instr[3].ToLower() != "true" && Instr[3].ToLower() != "false")
+                                            throw new Exception();
+
+                                        IfInstruction If = new IfInstruction(Convert.ToByte(System.Enum.Parse(typeof(Flags), Instr[2].ToLower())),
+                                                                             (byte)(Instr[3].ToLower() == "true" ? 1 : 0),
+                                                                             0,
+                                                                             Convert.ToUInt16(Label_True),
+                                                                             Convert.ToUInt16(Label_False));
+                                        return If.GetByteData();
+                                    }
+                                default:
+                                    {
+                                        if (Instr.Length != 8)
+                                            throw new WrongParamCountException(Line);
+
+                                        UInt32 Value = Helper_ConvertToUInt32(Instr[3]);
+
+                                        if (Value > UInt16.MaxValue || Value > UInt16.MaxValue)
+                                            throw new ParamOutOfRangeException(Line);
+
+                                        int Label_True = GetLabelOffset(Line, Instr[5]);
+                                        int Label_False = GetLabelOffset(Line, Instr[7]);
+
+                                        if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
+                                            throw new LabelOutOfRangeException(Line);
+
+                                        if (Instr[4].ToLower() != "then" || Instr[6].ToLower() != "else")
+                                            throw new Exception();
+
+                                        byte Condition = 0;
+
+                                        switch (Instr[2])
+                                        {
+                                            case "==" : Condition = 0; break;
+                                            case "<" : Condition = 1; break;
+                                            case ">": Condition = 2; break;
+                                            default: throw new Exception();
+                                        }
+
+                                        IfInstruction If = new IfInstruction(Convert.ToByte(System.Enum.Parse(typeof(IfValues), Instr[1].ToLower())),
+                                                                             Condition,
+                                                                             Convert.ToUInt16(Value),
+                                                                             Convert.ToUInt16(Label_True),
+                                                                             Convert.ToUInt16(Label_False));
+                                        return If.GetByteData();
+                                    }
+                            }
                         }
                     case "enable_textbox":
                         {
-                            if (Instr.Length != 2)
+                            if (Instr.Length != 3)
                                 throw new WrongParamCountException(Line);
 
-                            UInt32 TextID = Helper_ConvertToUInt32(Instr[1]);
+                            UInt32 TextID_Adult = Helper_ConvertToUInt32(Instr[1]);
+                            UInt32 TextID_Child = Helper_ConvertToUInt32(Instr[2]);
 
-                            if (TextID > UInt16.MaxValue || TextID < 0)
+                            if (TextID_Adult > UInt16.MaxValue || TextID_Adult < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericU16Instruction EnableSay = new GenericU16Instruction((byte)InstructionIDs.ENABLETEXTBOX, Convert.ToUInt16(TextID));
-                            return EnableSay.GetByteData();
+                            if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
+                                throw new ParamOutOfRangeException(Line);
+
+                            GenericDoubleU16Instruction EnableTextbox = new GenericDoubleU16Instruction((byte)InstructionIDs.ENABLETEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child));
+                            return EnableTextbox.GetByteData();
                         }
                     case "show_textbox":
                         {
-                            if (Instr.Length != 2)
+                            if (Instr.Length != 3)
                                 throw new WrongParamCountException(Line);
 
-                            UInt32 TextID = Helper_ConvertToUInt32(Instr[1]);
+                            UInt32 TextID_Adult = Helper_ConvertToUInt32(Instr[1]);
+                            UInt32 TextID_Child = Helper_ConvertToUInt32(Instr[2]);
 
-                            if (TextID > UInt16.MaxValue || TextID < 0)
+                            if (TextID_Adult > UInt16.MaxValue || TextID_Adult < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericU16Instruction Say = new GenericU16Instruction((byte)InstructionIDs.SHOWTEXTBOX, Convert.ToUInt16(TextID));
-                            return Say.GetByteData();
+                            if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
+                                throw new ParamOutOfRangeException(Line);
+
+                            GenericDoubleU16Instruction ShowTextbox = new GenericDoubleU16Instruction((byte)InstructionIDs.SHOWTEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child));
+                            return ShowTextbox.GetByteData();
                         }
                     case "give_item":
                         {
@@ -236,14 +363,6 @@ namespace NPC_Maker
                             SetFlagInstruction SetFlag = new SetFlagInstruction(Instr[1], Convert.ToUInt16(FlagID));
                             return SetFlag.GetByteData();
                         }
-                    case "return":
-                        {
-                            if (Instr.Length != 1)
-                                throw new WrongParamCountException(Line);
-
-                            GenericU16Instruction Return = new GenericU16Instruction((byte)InstructionIDs.GOTO, 0);
-                            return Return.GetByteData();
-                        }
                     case "wait_for_text_end":
                         {
                             if (Instr.Length != 1)
@@ -251,6 +370,14 @@ namespace NPC_Maker
 
                             GenericInstruction Wait = new GenericInstruction((byte)InstructionIDs.WAITFORTEXTEND);
                             return Wait.GetByteData();
+                        }
+                    case "wait_for_response":
+                        {
+                            if (Instr.Length != 1)
+                                throw new WrongParamCountException(Line);
+
+                            GenericInstruction WaitResp = new GenericInstruction((byte)InstructionIDs.WAITFORRESPONSE);
+                            return WaitResp.GetByteData();
                         }
                     case "turn_towards_player":
                         {
@@ -260,22 +387,7 @@ namespace NPC_Maker
                             GenericInstruction Turn = new GenericInstruction((byte)InstructionIDs.TURNTOPLAYER);
                             return Turn.GetByteData();
                         }
-                    case "return_if_not_talking":
-                        {
-                            if (Instr.Length != 1)
-                                throw new WrongParamCountException(Line);
-
-                            GenericInstruction Turn = new GenericInstruction((byte)InstructionIDs.RETURNIFNOTTALKING);
-                            return Turn.GetByteData();
-                        }
-                    case "wait_for_response":
-                        {
-                            if (Instr.Length != 1)
-                                throw new WrongParamCountException(Line);
-
-                            GenericInstruction WaitForResp = new GenericInstruction((byte)InstructionIDs.STOP);
-                            return WaitForResp.GetByteData();
-                        }
+                    case "return":
                     case "stop":
                         {
                             if (Instr.Length != 1)
@@ -284,29 +396,37 @@ namespace NPC_Maker
                             GenericInstruction Stop = new GenericInstruction((byte)InstructionIDs.STOP);
                             return Stop.GetByteData();
                         }
-                    case "player_lock_movement":
+                    case "set_movement":
                         {
-                            if (Instr.Length != 1)
+                            if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
 
-                            GenericInstruction Stop = new GenericInstruction((byte)InstructionIDs.STOPMOVEMENT);
+                            if (Instr[1].ToLower() != "true" && Instr[1].ToLower() != "false")
+                                throw new Exception();
+
+                            GenericU16Instruction Stop = new GenericU16Instruction((byte)InstructionIDs.SETMOVEMENT, (UInt16)(Instr[1].ToLower() == "true" ? 1 : 0));
                             return Stop.GetByteData();
                         }
-                    case "player_unlock_movement":
+                    case "wait":
                         {
-                            if (Instr.Length != 1)
+                            if (Instr.Length > 2)
                                 throw new WrongParamCountException(Line);
 
-                            GenericInstruction Stop = new GenericInstruction((byte)InstructionIDs.ENABLEMOVEMENT);
-                            return Stop.GetByteData();
-                        }
-                    case "nop":
-                        {
-                            if (Instr.Length != 1)
-                                throw new WrongParamCountException(Line);
+                            UInt32 Frames = 0;
 
-                            GenericInstruction Stop = new GenericInstruction((byte)InstructionIDs.NOP);
-                            return Stop.GetByteData();
+                            if (Instr.Length == 2)
+                            {
+                                Frames = Helper_ConvertToUInt32(Instr[1]);
+
+                                if (Frames > UInt16.MaxValue)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                if (Frames == 0)
+                                    throw new ParamOutOfRangeException(Line);
+                            }
+
+                            GenericU16Instruction Wait = new GenericU16Instruction((byte)InstructionIDs.WAIT, Convert.ToUInt16(Frames));
+                            return Wait.GetByteData();
                         }
                     case "play_snd":
                         {
@@ -321,17 +441,17 @@ namespace NPC_Maker
                             GenericU16Instruction Sound = new GenericU16Instruction((byte)InstructionIDs.PLAYSND, Convert.ToUInt16(SNDID));
                             return Sound.GetByteData();
                         }
-                    case "subtract_rupees":
+                    case "change_rupees":
                         {
                             if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
 
-                            UInt32 RupeeCount = Helper_ConvertToUInt32(Instr[1]);
+                            Int32 RupeeCount = Helper_ConvertToInt32(Instr[1]);
 
-                            if (RupeeCount > UInt16.MaxValue || RupeeCount > UInt16.MaxValue)
+                            if (RupeeCount > Int16.MaxValue || RupeeCount < Int16.MinValue)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericU16Instruction RupeeSub = new GenericU16Instruction((byte)InstructionIDs.SUBTRACTRUPEES, Convert.ToUInt16(RupeeCount));
+                            GenericS16Instruction RupeeSub = new GenericS16Instruction((byte)InstructionIDs.RUPEESOP, Convert.ToInt16(RupeeCount));
                             return RupeeSub.GetByteData();
                         }
                     default: throw new Exception();
@@ -405,7 +525,57 @@ namespace NPC_Maker
             Data.Add(ID);
             Data.Add(0);
             Data.AddRange(Program.BEConverter.GetBytes(U16));
-            Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
+            Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
+
+            return Data.ToArray();
+        }
+    }
+
+    public class GenericS16Instruction
+    {
+        Byte ID { get; set; }
+        Int16 Int16 { get; set; }
+
+        public GenericS16Instruction(Byte _ID, Int16 _Data)
+        {
+            ID = _ID;
+            Int16 = _Data;
+        }
+
+        public byte[] GetByteData()
+        {
+            List<byte> Data = new List<byte>();
+
+            Data.Add(ID);
+            Data.Add(0);
+            Data.AddRange(Program.BEConverter.GetBytes(Int16));
+            Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
+
+            return Data.ToArray();
+        }
+    }
+
+    public class GenericDoubleU16Instruction
+    {
+        Byte ID { get; set; }
+        UInt16 U16_1 { get; set; }
+        UInt16 U16_2 { get; set; }
+
+        public GenericDoubleU16Instruction(Byte _ID, UInt16 _Data1, UInt16 _Data2)
+        {
+            ID = _ID;
+            U16_1 = _Data1;
+            U16_2 = _Data2;
+        }
+
+        public byte[] GetByteData()
+        {
+            List<byte> Data = new List<byte>();
+
+            Data.Add(ID);
+            Data.Add(0);
+            Data.AddRange(Program.BEConverter.GetBytes(U16_1));
+            Data.AddRange(Program.BEConverter.GetBytes(U16_2));
             Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
 
             return Data.ToArray();
@@ -415,27 +585,17 @@ namespace NPC_Maker
     public class IfInstruction
     {
         Byte ID = (byte)InstructionIDs.IF;
-        Byte FlagType { get; set; }
-        UInt16 FlagID { get; set; }
+        Byte Check { get; set; }
+        UInt16 Value { get; set; }
         UInt16 Offs_True { get; set; }
         UInt16 Offs_False { get; set; }
 
-        public IfInstruction(string Type, UInt16 ID, UInt16 True, UInt16 False)
+        public IfInstruction(Byte Checked, Byte Condition, UInt16 Val, UInt16 True, UInt16 False)
         {
-            switch (Type)
-            {
-                case "inf_table": FlagType = 0; break;
-                case "event_chk_inf": FlagType = 1; break;
-                case "switch": FlagType = 2; break;
-                case "uscene": FlagType = 3; break;
-                case "treasure": FlagType = 4; break;
-                case "roomclear": FlagType = 5; break;
-                case "scenecollect": FlagType = 6; break;
-                case "temp": FlagType = 7; break;
-                default: FlagType = 0; break;
-            }
-
-            FlagID = ID;
+            Check = 0;
+            Check |= (byte)(Checked << 2);
+            Check |= Condition;
+            Value = Val;
             Offs_True = True;
             Offs_False = False;
         }
@@ -445,8 +605,8 @@ namespace NPC_Maker
             List<byte> Data = new List<byte>();
 
             Data.Add(ID);
-            Data.Add(FlagType);
-            Data.AddRange(Program.BEConverter.GetBytes(FlagID));
+            Data.Add(Check);
+            Data.AddRange(Program.BEConverter.GetBytes(Value));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_True));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_False));
 
@@ -462,19 +622,7 @@ namespace NPC_Maker
 
         public SetFlagInstruction(string Type, UInt16 ID)
         {
-            switch (Type)
-            {
-                case "inf_table": FlagType = 0; break;
-                case "event_chk_inf": FlagType = 1; break;
-                case "switch": FlagType = 2; break;
-                case "uscene": FlagType = 3; break;
-                case "treasure": FlagType = 4; break;
-                case "roomclear": FlagType = 5; break;
-                case "scenecollect": FlagType = 6; break;
-                case "temp": FlagType = 7; break;
-                default: FlagType = 0; break;
-            }
-
+            FlagType = Convert.ToByte(System.Enum.Parse(typeof(FlagTables), Type.ToLower()));
             FlagID = ID;
         }
 
@@ -485,8 +633,7 @@ namespace NPC_Maker
             Data.Add(ID);
             Data.Add(FlagType);
             Data.AddRange(Program.BEConverter.GetBytes(FlagID));
-            Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
-            Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
+            Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
 
             return Data.ToArray();
         }
@@ -539,8 +686,7 @@ namespace NPC_Maker
             Data.Add(ID);
             Data.Add(Loops);
             Data.AddRange(Program.BEConverter.GetBytes(U16));
-            Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
-            Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
+            Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
 
             return Data.ToArray();
         }
