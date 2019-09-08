@@ -66,6 +66,15 @@
             this.Checkbox_Targettable = new System.Windows.Forms.CheckBox();
             this.NumUpDown_ObjectID = new System.Windows.Forms.NumericUpDown();
             this.Panel_Movement = new System.Windows.Forms.Panel();
+            this.Label_LoopDelay = new System.Windows.Forms.Label();
+            this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
+            this.Label_LoopStartNode = new System.Windows.Forms.Label();
+            this.NumUpDown_LoopStartNode = new System.Windows.Forms.NumericUpDown();
+            this.Label_LoopEndNode = new System.Windows.Forms.Label();
+            this.NumUpDown_LoopEndNode = new System.Windows.Forms.NumericUpDown();
+            this.Checkbox_Loop = new System.Windows.Forms.CheckBox();
+            this.Label_PathFollowID = new System.Windows.Forms.Label();
+            this.NumUpDown_PathFollowID = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_MovDistance = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_MovSpeed = new System.Windows.Forms.NumericUpDown();
             this.Label_Distance = new System.Windows.Forms.Label();
@@ -131,6 +140,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XTargetOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ObjectID)).BeginInit();
             this.Panel_Movement.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_PathFollowID)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).BeginInit();
@@ -238,6 +251,7 @@
             this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DataGrid_NPCs.Size = new System.Drawing.Size(236, 668);
             this.DataGrid_NPCs.TabIndex = 2;
+            this.DataGrid_NPCs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellContentClick);
             this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
             this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
             // 
@@ -469,7 +483,7 @@
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetOffset);
             this.Panel_TargetPanel.Location = new System.Drawing.Point(556, 244);
             this.Panel_TargetPanel.Name = "Panel_TargetPanel";
-            this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 86);
+            this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 80);
             this.Panel_TargetPanel.TabIndex = 40;
             // 
             // NumUpDown_ZTargetOffs
@@ -590,14 +604,147 @@
             // Panel_Movement
             // 
             this.Panel_Movement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Panel_Movement.Controls.Add(this.Label_LoopDelay);
+            this.Panel_Movement.Controls.Add(this.Label_LoopStartNode);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopStartNode);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopDelay);
+            this.Panel_Movement.Controls.Add(this.Label_LoopEndNode);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopEndNode);
+            this.Panel_Movement.Controls.Add(this.Checkbox_Loop);
+            this.Panel_Movement.Controls.Add(this.Label_PathFollowID);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_PathFollowID);
             this.Panel_Movement.Controls.Add(this.NumUpDown_MovDistance);
             this.Panel_Movement.Controls.Add(this.NumUpDown_MovSpeed);
             this.Panel_Movement.Controls.Add(this.Label_Distance);
             this.Panel_Movement.Controls.Add(this.Label_Speed);
             this.Panel_Movement.Location = new System.Drawing.Point(350, 274);
             this.Panel_Movement.Name = "Panel_Movement";
-            this.Panel_Movement.Size = new System.Drawing.Size(200, 56);
+            this.Panel_Movement.Size = new System.Drawing.Size(200, 186);
             this.Panel_Movement.TabIndex = 38;
+            // 
+            // Label_LoopDelay
+            // 
+            this.Label_LoopDelay.AutoSize = true;
+            this.Label_LoopDelay.Location = new System.Drawing.Point(14, 57);
+            this.Label_LoopDelay.Name = "Label_LoopDelay";
+            this.Label_LoopDelay.Size = new System.Drawing.Size(81, 13);
+            this.Label_LoopDelay.TabIndex = 47;
+            this.Label_LoopDelay.Text = "Delay between:";
+            // 
+            // NumUpDown_LoopDelay
+            // 
+            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(120, 55);
+            this.NumUpDown_LoopDelay.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_LoopDelay.Name = "NumUpDown_LoopDelay";
+            this.NumUpDown_LoopDelay.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_LoopDelay.TabIndex = 46;
+            this.NumUpDown_LoopDelay.Tag = "LOOPDEL";
+            this.NumUpDown_LoopDelay.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_LoopStartNode
+            // 
+            this.Label_LoopStartNode.AutoSize = true;
+            this.Label_LoopStartNode.Location = new System.Drawing.Point(14, 109);
+            this.Label_LoopStartNode.Name = "Label_LoopStartNode";
+            this.Label_LoopStartNode.Size = new System.Drawing.Size(84, 13);
+            this.Label_LoopStartNode.TabIndex = 45;
+            this.Label_LoopStartNode.Text = "Loop start node:";
+            // 
+            // NumUpDown_LoopStartNode
+            // 
+            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(120, 107);
+            this.NumUpDown_LoopStartNode.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_LoopStartNode.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LoopStartNode.Name = "NumUpDown_LoopStartNode";
+            this.NumUpDown_LoopStartNode.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_LoopStartNode.TabIndex = 44;
+            this.NumUpDown_LoopStartNode.Tag = "LOOPSTART";
+            this.NumUpDown_LoopStartNode.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LoopStartNode.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_LoopEndNode
+            // 
+            this.Label_LoopEndNode.AutoSize = true;
+            this.Label_LoopEndNode.Location = new System.Drawing.Point(14, 135);
+            this.Label_LoopEndNode.Name = "Label_LoopEndNode";
+            this.Label_LoopEndNode.Size = new System.Drawing.Size(82, 13);
+            this.Label_LoopEndNode.TabIndex = 43;
+            this.Label_LoopEndNode.Text = "Loop end node:";
+            // 
+            // NumUpDown_LoopEndNode
+            // 
+            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(120, 133);
+            this.NumUpDown_LoopEndNode.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_LoopEndNode.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LoopEndNode.Name = "NumUpDown_LoopEndNode";
+            this.NumUpDown_LoopEndNode.Size = new System.Drawing.Size(64, 20);
+            this.NumUpDown_LoopEndNode.TabIndex = 42;
+            this.NumUpDown_LoopEndNode.Tag = "LOOPEND";
+            this.NumUpDown_LoopEndNode.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LoopEndNode.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Checkbox_Loop
+            // 
+            this.Checkbox_Loop.AutoSize = true;
+            this.Checkbox_Loop.Location = new System.Drawing.Point(134, 159);
+            this.Checkbox_Loop.Name = "Checkbox_Loop";
+            this.Checkbox_Loop.Size = new System.Drawing.Size(50, 17);
+            this.Checkbox_Loop.TabIndex = 41;
+            this.Checkbox_Loop.Tag = "LOOP";
+            this.Checkbox_Loop.Text = "Loop";
+            this.Checkbox_Loop.UseVisualStyleBackColor = true;
+            this.Checkbox_Loop.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // Label_PathFollowID
+            // 
+            this.Label_PathFollowID.AutoSize = true;
+            this.Label_PathFollowID.Location = new System.Drawing.Point(13, 83);
+            this.Label_PathFollowID.Name = "Label_PathFollowID";
+            this.Label_PathFollowID.Size = new System.Drawing.Size(76, 13);
+            this.Label_PathFollowID.TabIndex = 39;
+            this.Label_PathFollowID.Text = "Path follow ID:";
+            // 
+            // NumUpDown_PathFollowID
+            // 
+            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(120, 81);
+            this.NumUpDown_PathFollowID.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_PathFollowID.Name = "NumUpDown_PathFollowID";
+            this.NumUpDown_PathFollowID.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_PathFollowID.TabIndex = 38;
+            this.NumUpDown_PathFollowID.Tag = "PATHID";
+            this.NumUpDown_PathFollowID.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_MovDistance
             // 
@@ -615,6 +762,12 @@
             // 
             // NumUpDown_MovSpeed
             // 
+            this.NumUpDown_MovSpeed.DecimalPlaces = 2;
+            this.NumUpDown_MovSpeed.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
             this.NumUpDown_MovSpeed.Location = new System.Drawing.Point(120, 29);
             this.NumUpDown_MovSpeed.Maximum = new decimal(new int[] {
             65535,
@@ -661,7 +814,8 @@
             "None",
             "Walks randomly",
             "Follows Link",
-            "Follow a path"});
+            "Follow a path, collisionwise",
+            "Follow a path, direct"});
             this.Combo_MovementType.Location = new System.Drawing.Point(367, 244);
             this.Combo_MovementType.Name = "Combo_MovementType";
             this.Combo_MovementType.Size = new System.Drawing.Size(168, 21);
@@ -1147,7 +1301,7 @@
         '\''};
             this.Textbox_Script.AutoIndent = false;
             this.Textbox_Script.AutoIndentChars = false;
-            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(2, 14);
             this.Textbox_Script.BackBrush = null;
             this.Textbox_Script.CharHeight = 14;
             this.Textbox_Script.CharWidth = 8;
@@ -1258,6 +1412,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ObjectID)).EndInit();
             this.Panel_Movement.ResumeLayout(false);
             this.Panel_Movement.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_PathFollowID)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).EndInit();
@@ -1367,6 +1525,15 @@
         private System.Windows.Forms.TextBox Textbox_ParseErrors;
         private System.Windows.Forms.Button Button_TryParse;
         private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script;
+        private System.Windows.Forms.Label Label_LoopDelay;
+        private System.Windows.Forms.NumericUpDown NumUpDown_LoopDelay;
+        private System.Windows.Forms.Label Label_LoopStartNode;
+        private System.Windows.Forms.NumericUpDown NumUpDown_LoopStartNode;
+        private System.Windows.Forms.Label Label_LoopEndNode;
+        private System.Windows.Forms.NumericUpDown NumUpDown_LoopEndNode;
+        private System.Windows.Forms.CheckBox Checkbox_Loop;
+        private System.Windows.Forms.Label Label_PathFollowID;
+        private System.Windows.Forms.NumericUpDown NumUpDown_PathFollowID;
     }
 }
 

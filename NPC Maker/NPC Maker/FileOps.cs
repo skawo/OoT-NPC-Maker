@@ -87,6 +87,11 @@ namespace NPC_Maker
                     EntryBytes.AddRange(new byte[] { Entry.MovementType });
                     EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.MovementDistance));
                     EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.MovementSpeed));
+                    EntryBytes.AddRange(new byte[] { Entry.PathID });
+                    EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopStart));
+                    EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopEnd));
+                    EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopDel));
+                    EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Loop));
 
                     EntryBytes.AddRange(new byte[] { Entry.AnimationType });
                     EntryBytes.AddRange(Program.BEConverter.GetBytes((UInt16)Entry.Animations.Count()));
@@ -98,7 +103,7 @@ namespace NPC_Maker
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Anim.ObjID));
                     }
 
-                    byte[] Script = Parser.Parse(Entry.Script);
+                    byte[] Script = Parser.Parse(Entry.Script, Entry.Animations);
                     EntryBytes.AddRange(Program.BEConverter.GetBytes(Script.Length));
 
                     while ((EntryBytes.Count + 2) % 4 != 0)

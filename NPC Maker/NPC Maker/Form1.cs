@@ -85,7 +85,12 @@ namespace NPC_Maker
 
             Combo_MovementType.SelectedIndex = SelectedEntry.MovementType;
             NumUpDown_MovDistance.Value = SelectedEntry.MovementDistance;
-            NumUpDown_MovSpeed.Value = SelectedEntry.MovementSpeed;
+            NumUpDown_MovSpeed.Value = (decimal)SelectedEntry.MovementSpeed;
+            NumUpDown_LoopDelay.Value = SelectedEntry.LoopDel;
+            NumUpDown_LoopEndNode.Value = SelectedEntry.LoopEnd;
+            NumUpDown_LoopStartNode.Value = SelectedEntry.LoopStart;
+            Checkbox_Loop.Checked = SelectedEntry.Loop;
+            NumUpDown_PathFollowID.Value = SelectedEntry.PathID;
 
             ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
             NumUpDown_Scale.Value = (decimal)SelectedEntry.Scale;
@@ -204,9 +209,9 @@ namespace NPC_Maker
         {
             NPCEntry Entry = new NPCEntry();
             Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, 0xFFFF));
+            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, 0xFFFF));
             Entry.Animations.Add(new AnimationEntry("Start talking", 0, 1.0f, 0xFFFF));
             Entry.Animations.Add(new AnimationEntry("Talking", 0, 1.0f, 0xFFFF));
-            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, 0xFFFF));
 
             EditedFile.Entries.Add(Entry);
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
@@ -391,9 +396,13 @@ namespace NPC_Maker
 
         private void Button_TryParse_Click(object sender, EventArgs e)
         {
+            string[] Lines = Textbox_Script.Text.Split(new[] { "\n" }, StringSplitOptions.None);
+            Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
+            r.ClearStyle(FCTB.ErrorStyle);
+
             ScriptParser Parser = new ScriptParser();
 
-            Parser.Parse(Textbox_Script.Text);
+            Parser.Parse(Textbox_Script.Text, SelectedEntry.Animations);
             SelectedEntry.ParseErrors = Parser.ParseErrors;
 
             Textbox_ParseErrors.Text = "";
@@ -410,6 +419,13 @@ namespace NPC_Maker
                     FCTB.ApplyError(Textbox_Script, Line);
                 }
             }
+
+            Textbox_Script.Focus();
+        }
+
+        private void DataGrid_NPCs_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

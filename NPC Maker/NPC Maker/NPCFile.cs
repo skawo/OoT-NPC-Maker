@@ -47,7 +47,12 @@ namespace NPC_Maker
 
         public byte MovementType { get; set; }
         public UInt16 MovementDistance { get; set; }
-        public UInt16 MovementSpeed { get; set; }
+        public float MovementSpeed { get; set; }
+        public byte PathID { get; set; }
+        public Int16 LoopStart { get; set; }
+        public Int16 LoopEnd { get; set; }
+        public UInt16 LoopDel { get; set; }
+        public bool Loop { get; set; }
 
         public byte AnimationType { get; set; }
         public List<AnimationEntry> Animations { get; set; }
@@ -87,6 +92,11 @@ namespace NPC_Maker
             MovementType = 0;
             MovementDistance = 0;
             MovementSpeed = 0;
+            PathID = 0;
+            LoopStart = -1;
+            LoopEnd = -1;
+            LoopDel = 0;
+            Loop = false;
 
             Animations = new List<AnimationEntry>();
             AnimationType = 0;
@@ -134,7 +144,12 @@ namespace NPC_Maker
 
                 case "MOVEMENT": MovementType = Convert.ToByte(Value); break;
                 case "MOVDISTANCE": MovementDistance = Convert.ToUInt16(Value); break;
-                case "MOVSPEED": MovementSpeed = Convert.ToUInt16(Value); break;
+                case "MOVSPEED": MovementSpeed = (float)Convert.ToDecimal(Value); break;
+                case "PATHID": PathID = Convert.ToByte(Value); break;
+                case "LOOPSTART": LoopStart = Convert.ToInt16(Value); break;
+                case "LOOPEND": LoopEnd = Convert.ToInt16(Value); break;
+                case "LOOPDEL": LoopDel = Convert.ToUInt16(Value); break;
+                case "LOOP": Loop = Convert.ToBoolean(Value); break;
 
                 case "ANIMTYPE": AnimationType = Convert.ToByte(Value); break;
 
