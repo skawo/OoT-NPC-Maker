@@ -60,6 +60,15 @@ namespace NPC_Maker
         public string Script { get; set; }
         public List<string> ParseErrors { get; set; }
 
+        public System.Drawing.Color EnvColor { get; set; }
+        public List<List<TextureEntry>> Textures { get; set; } 
+        public string BlinkPattern { get; set; }
+        public string TalkPattern { get; set; }
+        public byte BlinkSegment { get; set; }
+        public byte TalkSegment { get; set; }
+        public byte BlinkSpeed { get; set; }
+        public byte TalkSpeed { get; set; }
+
         public NPCEntry()
         {
             NPCName = "";
@@ -103,6 +112,16 @@ namespace NPC_Maker
 
             Script = "";
             ParseErrors = new List<string>();
+
+            Textures = new List<List<TextureEntry>>();
+
+            EnvColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+            BlinkPattern = "";
+            TalkPattern = "";
+            BlinkSegment = 8;
+            TalkSegment = 8;
+            BlinkSpeed = 1;
+            TalkSpeed = 1;
         }
 
         public void ChangeValueOfMember(string Member, object Value)
@@ -155,6 +174,13 @@ namespace NPC_Maker
 
                 case "TALKSCRIPT": Script = Convert.ToString(Value); break;
 
+                case "BLINKPAT": BlinkPattern = Convert.ToString(Value); break;
+                case "TALKPAT": TalkPattern = Convert.ToString(Value); break;
+                case "BLINKSEG": BlinkSegment = Convert.ToByte(Value); break;
+                case "TALKSEG": TalkSegment = Convert.ToByte(Value); break;
+                case "BLINKSPE": BlinkSpeed = Convert.ToByte(Value); break;
+                case "TALKSPE": TalkSpeed = Convert.ToByte(Value); break;
+
                 default: break;
             }
         }
@@ -180,6 +206,23 @@ namespace NPC_Maker
             Address = _Address;
             Speed = _Speed;
             ObjID = _ObjectID;
+        }
+    }
+
+    public class TextureEntry
+    {
+        public string Name { get; set; }
+        public UInt32 Address { get; set; }
+
+        public TextureEntry()
+        {
+            Name = "";
+            Address = 0;
+        }
+        public TextureEntry(string _Name, UInt32 _Address)
+        {
+            Name = _Name;
+            Address = _Address;
         }
     }
 }

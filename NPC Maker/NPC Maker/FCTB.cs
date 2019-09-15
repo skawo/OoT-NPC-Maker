@@ -127,7 +127,10 @@ namespace NPC_Maker
             "sfx",
             "self",
             "configid",
-            "actorid"
+            "actorid",
+            "do_blinking_anim",
+            "do_talking_anim",
+            "segment_tex"
         };
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e)

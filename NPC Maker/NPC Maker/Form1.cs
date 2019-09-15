@@ -116,6 +116,30 @@ namespace NPC_Maker
                     FCTB.ApplyError(Textbox_Script, Line);
                 }
             }
+
+            Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
+
+            if (SelectedEntry.EnvColor.A == 0)
+                Checkbox_EnvColor.Checked = false;
+            else
+                Checkbox_EnvColor.Checked = true;
+
+            Textbox_BlinkPattern.Text = SelectedEntry.BlinkPattern;
+            Textbox_TalkingPattern.Text = SelectedEntry.TalkPattern;
+            NumUpDown_BlinkSegment.Value = SelectedEntry.BlinkSegment;
+            NumUpDown_BlinkSpeed.Value = SelectedEntry.BlinkSpeed;
+            NumUpDown_TalkSegment.Value = SelectedEntry.TalkSegment;
+            NumUpDown_TalkSpeed.Value = SelectedEntry.TalkSpeed;
+
+            for (int i = 0; i < SelectedEntry.Textures.Count; i++)
+            {
+                DataGridView Grid = (TabControl_Textures.TabPages[i].Controls[0] as DataGridView);
+
+                Grid.Rows.Clear();
+
+                foreach (TextureEntry Entry in SelectedEntry.Textures[i])
+                    Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"));
+            }    
         }
 
         #region MenuStrip
@@ -213,6 +237,9 @@ namespace NPC_Maker
             Entry.Animations.Add(new AnimationEntry("Start talking", 0, 1.0f, 0xFFFF));
             Entry.Animations.Add(new AnimationEntry("Talking", 0, 1.0f, 0xFFFF));
 
+            for (int i = 0; i < 8; i++)
+                Entry.Textures.Add(new List<TextureEntry>());
+
             EditedFile.Entries.Add(Entry);
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
         }
@@ -276,6 +303,11 @@ namespace NPC_Maker
             DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = Textbox_NPCName.Text;
         }
 
+        private void TextBox_TextChanged(object sender, EventArgs e)
+        {
+            SelectedEntry.ChangeValueOfMember((sender as TextBox).Tag.ToString(), (sender as TextBox).Text);
+        }
+
         private void NumUpDown_ValueChanged(object sender, EventArgs e)
         {
             SelectedEntry.ChangeValueOfMember((sender as NumericUpDown).Tag.ToString(), (sender as NumericUpDown).Value);
@@ -299,6 +331,54 @@ namespace NPC_Maker
             FCTB.ApplySyntaxHighlight(sender, e);
         }
 
+        private void DataGridViewTextures_CellParse(object sender, DataGridViewCellParsingEventArgs e)
+        {
+            if (e.RowIndex > 31)
+            {
+                MessageBox.Show("Cannot define more than 32 textures per segment.");
+                (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
+                e.ParsingApplied = true;
+                return;
+            }
+
+            int DataGridIndex = TabControl_Textures.SelectedIndex;
+
+            if (e.ColumnIndex == 0)
+            {
+                if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
+                {
+                    SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry(e.Value.ToString(), 0));
+                    (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
+                }
+                else
+                    SelectedEntry.Textures[DataGridIndex][e.RowIndex].Name = e.Value.ToString();
+
+                e.ParsingApplied = true;
+                return;
+            }
+            else if (e.ColumnIndex == 1)
+            {
+                try
+                {
+                    if(SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
+                    {
+                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16)));
+                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
+                    }
+                    else
+                        SelectedEntry.Textures[DataGridIndex][e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+
+                    e.ParsingApplied = true;
+                    return;
+                }
+                catch (Exception)
+                {
+                    e.Value = Convert.ToInt32("0", 16);
+                    e.ParsingApplied = true;
+                }
+            }
+        }
+
         private void DataGridViewAnimations_CellParse(object sender, DataGridViewCellParsingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -316,7 +396,7 @@ namespace NPC_Maker
                 e.ParsingApplied = true;
                 return;
             }
-            if (e.ColumnIndex == 1)
+            else if (e.ColumnIndex == 1)
             {
                 try
                 {
@@ -340,7 +420,7 @@ namespace NPC_Maker
                     e.ParsingApplied = true;
                 }
             }
-            if (e.ColumnIndex == 2)
+            else if(e.ColumnIndex == 2)
             {
                 try
                 {
@@ -364,7 +444,7 @@ namespace NPC_Maker
                     e.ParsingApplied = true;
                 }
             }
-            if (e.ColumnIndex == 3)
+            else if(e.ColumnIndex == 3)
             {
                 try
                 {
@@ -402,7 +482,7 @@ namespace NPC_Maker
 
             ScriptParser Parser = new ScriptParser();
 
-            Parser.Parse(Textbox_Script.Text, SelectedEntry.Animations);
+            Parser.Parse(Textbox_Script.Text, SelectedEntry.Animations, SelectedEntry.Textures);
             SelectedEntry.ParseErrors = Parser.ParseErrors;
 
             Textbox_ParseErrors.Text = "";
@@ -423,9 +503,64 @@ namespace NPC_Maker
             Textbox_Script.Focus();
         }
 
-        private void DataGrid_NPCs_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridViewTextures_KeyUp(object sender, KeyEventArgs e)
         {
+            try
+            {
+                if (e.KeyCode == Keys.Delete)
+                {
+                    int DataGridIndex = TabControl_Textures.SelectedIndex;
+                    (sender as DataGridView).Rows.RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
+                    SelectedEntry.Textures[DataGridIndex].RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
+                }
+            }
+            catch (Exception)
+            {
 
+            }
+        }
+
+        private void DataGrid_Animations_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if ((sender as DataGridView).SelectedCells[0].RowIndex > 3)
+                {
+                    if (e.KeyCode == Keys.Delete)
+                    {
+                        int DataGridIndex = TabControl_Textures.SelectedIndex;
+                        (sender as DataGridView).Rows.RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
+                        SelectedEntry.Animations.RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void Button_EnvironmentColorPreview_Click(object sender, EventArgs e)
+        {
+            if (ColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                Button_EnvironmentColorPreview.BackColor = ColorDialog.Color;
+                SelectedEntry.EnvColor = ColorDialog.Color;
+
+                if (Checkbox_EnvColor.Checked)
+                    SelectedEntry.EnvColor = Color.FromArgb(255, ColorDialog.Color.R, ColorDialog.Color.G, ColorDialog.Color.B);
+                else
+                    SelectedEntry.EnvColor = Color.FromArgb(0, ColorDialog.Color.R, ColorDialog.Color.G, ColorDialog.Color.B);
+            }
+
+        }
+
+        private void Checkbox_EnvColor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Checkbox_EnvColor.Checked)
+                SelectedEntry.EnvColor = Color.FromArgb(255, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
+            else
+                SelectedEntry.EnvColor = Color.FromArgb(0, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
         }
     }
 }

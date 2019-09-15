@@ -47,6 +47,53 @@
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
+            this.Checkbox_EnvColor = new System.Windows.Forms.CheckBox();
+            this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
+            this.Label_TalkingFramesBetween = new System.Windows.Forms.Label();
+            this.NumUpDown_TalkSegment = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_BlinkSegment = new System.Windows.Forms.NumericUpDown();
+            this.Label_BlinkingFramesBetween = new System.Windows.Forms.Label();
+            this.Label_TalkingSegment = new System.Windows.Forms.Label();
+            this.Label_TalkingPattern = new System.Windows.Forms.Label();
+            this.NumUpDown_TalkSpeed = new System.Windows.Forms.NumericUpDown();
+            this.Textbox_BlinkPattern = new System.Windows.Forms.TextBox();
+            this.NumUpDown_BlinkSpeed = new System.Windows.Forms.NumericUpDown();
+            this.Label_BlinkingPattern = new System.Windows.Forms.Label();
+            this.Label_BlinkingSegment = new System.Windows.Forms.Label();
+            this.Textbox_TalkingPattern = new System.Windows.Forms.TextBox();
+            this.TabControl_Textures = new System.Windows.Forms.TabControl();
+            this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
+            this.Seg_8 = new System.Windows.Forms.DataGridView();
+            this.Seg_8_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_8_TextOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
+            this.Seg_9 = new System.Windows.Forms.DataGridView();
+            this.Seg_9_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_9_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
+            this.Seg_A = new System.Windows.Forms.DataGridView();
+            this.Seg_A_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_A_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
+            this.Seg_B = new System.Windows.Forms.DataGridView();
+            this.Seg_B_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_B_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
+            this.Seg_C = new System.Windows.Forms.DataGridView();
+            this.Seg_C_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_C_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
+            this.Seg_D = new System.Windows.Forms.DataGridView();
+            this.Seg_D_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_D_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
+            this.Seg_E = new System.Windows.Forms.DataGridView();
+            this.Seg_E_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_E_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
+            this.Seg_F = new System.Windows.Forms.DataGridView();
+            this.Seg_F_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_F_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_HeadRot = new System.Windows.Forms.Panel();
             this.ComboBox_HeadLookAxis = new System.Windows.Forms.ComboBox();
             this.NumUpDown_DegVert = new System.Windows.Forms.NumericUpDown();
@@ -67,9 +114,9 @@
             this.NumUpDown_ObjectID = new System.Windows.Forms.NumericUpDown();
             this.Panel_Movement = new System.Windows.Forms.Panel();
             this.Label_LoopDelay = new System.Windows.Forms.Label();
-            this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
             this.Label_LoopStartNode = new System.Windows.Forms.Label();
             this.NumUpDown_LoopStartNode = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
             this.Label_LoopEndNode = new System.Windows.Forms.Label();
             this.NumUpDown_LoopEndNode = new System.Windows.Forms.NumericUpDown();
             this.Checkbox_Loop = new System.Windows.Forms.CheckBox();
@@ -123,12 +170,34 @@
             this.Panel_NPCList = new System.Windows.Forms.Panel();
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
+            this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.Tab1_Data.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSegment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSegment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
+            this.TabControl_Textures.SuspendLayout();
+            this.TabPage_Segment_8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).BeginInit();
+            this.TabPage_Segment_9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).BeginInit();
+            this.TabPage_Segment_A.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).BeginInit();
+            this.TabPage_Segment_B.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).BeginInit();
+            this.TabPage_Segment_C.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).BeginInit();
+            this.TabPage_Segment_D.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).BeginInit();
+            this.TabPage_Segment_E.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).BeginInit();
+            this.TabPage_Segment_F.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).BeginInit();
             this.Panel_HeadRot.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_DegVert)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_DegHoz)).BeginInit();
@@ -140,8 +209,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XTargetOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ObjectID)).BeginInit();
             this.Panel_Movement.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_PathFollowID)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
@@ -170,7 +239,7 @@
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.MaximumSize = new System.Drawing.Size(2000, 0);
             this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(1019, 24);
+            this.MenuStrip.Size = new System.Drawing.Size(1028, 24);
             this.MenuStrip.TabIndex = 1;
             this.MenuStrip.Text = "menuStrip1";
             // 
@@ -249,9 +318,8 @@
             this.DataGrid_NPCs.ReadOnly = true;
             this.DataGrid_NPCs.RowHeadersVisible = false;
             this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid_NPCs.Size = new System.Drawing.Size(236, 668);
+            this.DataGrid_NPCs.Size = new System.Drawing.Size(236, 748);
             this.DataGrid_NPCs.TabIndex = 2;
-            this.DataGrid_NPCs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellContentClick);
             this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
             this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
             // 
@@ -297,7 +365,7 @@
             this.Panel_Editor.Enabled = false;
             this.Panel_Editor.Location = new System.Drawing.Point(0, 24);
             this.Panel_Editor.Name = "Panel_Editor";
-            this.Panel_Editor.Size = new System.Drawing.Size(1019, 714);
+            this.Panel_Editor.Size = new System.Drawing.Size(1028, 794);
             this.Panel_Editor.TabIndex = 5;
             // 
             // Panel_NPCData
@@ -309,7 +377,7 @@
             this.Panel_NPCData.Enabled = false;
             this.Panel_NPCData.Location = new System.Drawing.Point(245, 3);
             this.Panel_NPCData.Name = "Panel_NPCData";
-            this.Panel_NPCData.Size = new System.Drawing.Size(771, 708);
+            this.Panel_NPCData.Size = new System.Drawing.Size(780, 788);
             this.Panel_NPCData.TabIndex = 6;
             // 
             // TabControl
@@ -320,11 +388,26 @@
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(771, 708);
+            this.TabControl.Size = new System.Drawing.Size(780, 788);
             this.TabControl.TabIndex = 41;
             // 
             // Tab1_Data
             // 
+            this.Tab1_Data.Controls.Add(this.Checkbox_EnvColor);
+            this.Tab1_Data.Controls.Add(this.Button_EnvironmentColorPreview);
+            this.Tab1_Data.Controls.Add(this.Label_TalkingFramesBetween);
+            this.Tab1_Data.Controls.Add(this.NumUpDown_TalkSegment);
+            this.Tab1_Data.Controls.Add(this.NumUpDown_BlinkSegment);
+            this.Tab1_Data.Controls.Add(this.Label_BlinkingFramesBetween);
+            this.Tab1_Data.Controls.Add(this.Label_TalkingSegment);
+            this.Tab1_Data.Controls.Add(this.Label_TalkingPattern);
+            this.Tab1_Data.Controls.Add(this.NumUpDown_TalkSpeed);
+            this.Tab1_Data.Controls.Add(this.Textbox_BlinkPattern);
+            this.Tab1_Data.Controls.Add(this.NumUpDown_BlinkSpeed);
+            this.Tab1_Data.Controls.Add(this.Label_BlinkingPattern);
+            this.Tab1_Data.Controls.Add(this.Label_BlinkingSegment);
+            this.Tab1_Data.Controls.Add(this.Textbox_TalkingPattern);
+            this.Tab1_Data.Controls.Add(this.TabControl_Textures);
             this.Tab1_Data.Controls.Add(this.Panel_HeadRot);
             this.Tab1_Data.Controls.Add(this.Label_NPCName);
             this.Tab1_Data.Controls.Add(this.Panel_TargetPanel);
@@ -359,10 +442,550 @@
             this.Tab1_Data.Location = new System.Drawing.Point(4, 22);
             this.Tab1_Data.Name = "Tab1_Data";
             this.Tab1_Data.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab1_Data.Size = new System.Drawing.Size(763, 682);
+            this.Tab1_Data.Size = new System.Drawing.Size(772, 762);
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
             this.Tab1_Data.UseVisualStyleBackColor = true;
+            // 
+            // Checkbox_EnvColor
+            // 
+            this.Checkbox_EnvColor.AutoSize = true;
+            this.Checkbox_EnvColor.Location = new System.Drawing.Point(599, 384);
+            this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
+            this.Checkbox_EnvColor.Size = new System.Drawing.Size(114, 17);
+            this.Checkbox_EnvColor.TabIndex = 50;
+            this.Checkbox_EnvColor.Tag = "";
+            this.Checkbox_EnvColor.Text = "Environment color:";
+            this.Checkbox_EnvColor.UseVisualStyleBackColor = true;
+            this.Checkbox_EnvColor.CheckedChanged += new System.EventHandler(this.Checkbox_EnvColor_CheckedChanged);
+            // 
+            // Button_EnvironmentColorPreview
+            // 
+            this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(719, 380);
+            this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
+            this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(42, 23);
+            this.Button_EnvironmentColorPreview.TabIndex = 49;
+            this.Button_EnvironmentColorPreview.UseVisualStyleBackColor = false;
+            this.Button_EnvironmentColorPreview.Click += new System.EventHandler(this.Button_EnvironmentColorPreview_Click);
+            // 
+            // Label_TalkingFramesBetween
+            // 
+            this.Label_TalkingFramesBetween.AutoSize = true;
+            this.Label_TalkingFramesBetween.Location = new System.Drawing.Point(555, 691);
+            this.Label_TalkingFramesBetween.Name = "Label_TalkingFramesBetween";
+            this.Label_TalkingFramesBetween.Size = new System.Drawing.Size(123, 13);
+            this.Label_TalkingFramesBetween.TabIndex = 48;
+            this.Label_TalkingFramesBetween.Text = "Talking frames between:";
+            // 
+            // NumUpDown_TalkSegment
+            // 
+            this.NumUpDown_TalkSegment.Hexadecimal = true;
+            this.NumUpDown_TalkSegment.Location = new System.Drawing.Point(697, 666);
+            this.NumUpDown_TalkSegment.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.NumUpDown_TalkSegment.Minimum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.NumUpDown_TalkSegment.Name = "NumUpDown_TalkSegment";
+            this.NumUpDown_TalkSegment.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_TalkSegment.TabIndex = 47;
+            this.NumUpDown_TalkSegment.Tag = "TALKSEG";
+            this.NumUpDown_TalkSegment.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.NumUpDown_TalkSegment.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // NumUpDown_BlinkSegment
+            // 
+            this.NumUpDown_BlinkSegment.Hexadecimal = true;
+            this.NumUpDown_BlinkSegment.Location = new System.Drawing.Point(489, 666);
+            this.NumUpDown_BlinkSegment.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.NumUpDown_BlinkSegment.Minimum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.NumUpDown_BlinkSegment.Name = "NumUpDown_BlinkSegment";
+            this.NumUpDown_BlinkSegment.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_BlinkSegment.TabIndex = 45;
+            this.NumUpDown_BlinkSegment.Tag = "BLINKSEG";
+            this.NumUpDown_BlinkSegment.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.NumUpDown_BlinkSegment.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_BlinkingFramesBetween
+            // 
+            this.Label_BlinkingFramesBetween.AutoSize = true;
+            this.Label_BlinkingFramesBetween.Location = new System.Drawing.Point(354, 691);
+            this.Label_BlinkingFramesBetween.Name = "Label_BlinkingFramesBetween";
+            this.Label_BlinkingFramesBetween.Size = new System.Drawing.Size(125, 13);
+            this.Label_BlinkingFramesBetween.TabIndex = 46;
+            this.Label_BlinkingFramesBetween.Text = "Blinking frames between:";
+            // 
+            // Label_TalkingSegment
+            // 
+            this.Label_TalkingSegment.AutoSize = true;
+            this.Label_TalkingSegment.Location = new System.Drawing.Point(555, 670);
+            this.Label_TalkingSegment.Name = "Label_TalkingSegment";
+            this.Label_TalkingSegment.Size = new System.Drawing.Size(88, 13);
+            this.Label_TalkingSegment.TabIndex = 38;
+            this.Label_TalkingSegment.Text = "Talking segment:";
+            // 
+            // Label_TalkingPattern
+            // 
+            this.Label_TalkingPattern.AutoSize = true;
+            this.Label_TalkingPattern.Location = new System.Drawing.Point(443, 741);
+            this.Label_TalkingPattern.Name = "Label_TalkingPattern";
+            this.Label_TalkingPattern.Size = new System.Drawing.Size(81, 13);
+            this.Label_TalkingPattern.TabIndex = 44;
+            this.Label_TalkingPattern.Text = "Talking pattern:";
+            // 
+            // NumUpDown_TalkSpeed
+            // 
+            this.NumUpDown_TalkSpeed.Location = new System.Drawing.Point(697, 689);
+            this.NumUpDown_TalkSpeed.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.NumUpDown_TalkSpeed.Name = "NumUpDown_TalkSpeed";
+            this.NumUpDown_TalkSpeed.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_TalkSpeed.TabIndex = 37;
+            this.NumUpDown_TalkSpeed.Tag = "TALKSPE";
+            this.NumUpDown_TalkSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Textbox_BlinkPattern
+            // 
+            this.Textbox_BlinkPattern.Location = new System.Drawing.Point(541, 715);
+            this.Textbox_BlinkPattern.Name = "Textbox_BlinkPattern";
+            this.Textbox_BlinkPattern.Size = new System.Drawing.Size(216, 20);
+            this.Textbox_BlinkPattern.TabIndex = 43;
+            this.Textbox_BlinkPattern.Tag = "BLINKPAT";
+            this.Textbox_BlinkPattern.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
+            // 
+            // NumUpDown_BlinkSpeed
+            // 
+            this.NumUpDown_BlinkSpeed.Location = new System.Drawing.Point(489, 689);
+            this.NumUpDown_BlinkSpeed.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.NumUpDown_BlinkSpeed.Name = "NumUpDown_BlinkSpeed";
+            this.NumUpDown_BlinkSpeed.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_BlinkSpeed.TabIndex = 35;
+            this.NumUpDown_BlinkSpeed.Tag = "BLINKSPE";
+            this.NumUpDown_BlinkSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_BlinkingPattern
+            // 
+            this.Label_BlinkingPattern.AutoSize = true;
+            this.Label_BlinkingPattern.Location = new System.Drawing.Point(443, 718);
+            this.Label_BlinkingPattern.Name = "Label_BlinkingPattern";
+            this.Label_BlinkingPattern.Size = new System.Drawing.Size(83, 13);
+            this.Label_BlinkingPattern.TabIndex = 35;
+            this.Label_BlinkingPattern.Text = "Blinking pattern:";
+            // 
+            // Label_BlinkingSegment
+            // 
+            this.Label_BlinkingSegment.AutoSize = true;
+            this.Label_BlinkingSegment.Location = new System.Drawing.Point(354, 668);
+            this.Label_BlinkingSegment.Name = "Label_BlinkingSegment";
+            this.Label_BlinkingSegment.Size = new System.Drawing.Size(90, 13);
+            this.Label_BlinkingSegment.TabIndex = 36;
+            this.Label_BlinkingSegment.Text = "Blinking segment:";
+            // 
+            // Textbox_TalkingPattern
+            // 
+            this.Textbox_TalkingPattern.Location = new System.Drawing.Point(541, 738);
+            this.Textbox_TalkingPattern.Name = "Textbox_TalkingPattern";
+            this.Textbox_TalkingPattern.Size = new System.Drawing.Size(216, 20);
+            this.Textbox_TalkingPattern.TabIndex = 42;
+            this.Textbox_TalkingPattern.Tag = "TALKPAT";
+            this.Textbox_TalkingPattern.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
+            // 
+            // TabControl_Textures
+            // 
+            this.TabControl_Textures.Controls.Add(this.TabPage_Segment_8);
+            this.TabControl_Textures.Controls.Add(this.TabPage_Segment_9);
+            this.TabControl_Textures.Controls.Add(this.TabPage_Segment_A);
+            this.TabControl_Textures.Controls.Add(this.TabPage_Segment_B);
+            this.TabControl_Textures.Controls.Add(this.TabPage_Segment_C);
+            this.TabControl_Textures.Controls.Add(this.TabPage_Segment_D);
+            this.TabControl_Textures.Controls.Add(this.TabPage_Segment_E);
+            this.TabControl_Textures.Controls.Add(this.TabPage_Segment_F);
+            this.TabControl_Textures.Location = new System.Drawing.Point(350, 405);
+            this.TabControl_Textures.Name = "TabControl_Textures";
+            this.TabControl_Textures.SelectedIndex = 0;
+            this.TabControl_Textures.Size = new System.Drawing.Size(411, 259);
+            this.TabControl_Textures.TabIndex = 41;
+            // 
+            // TabPage_Segment_8
+            // 
+            this.TabPage_Segment_8.Controls.Add(this.Seg_8);
+            this.TabPage_Segment_8.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_8.Name = "TabPage_Segment_8";
+            this.TabPage_Segment_8.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_8.Size = new System.Drawing.Size(403, 233);
+            this.TabPage_Segment_8.TabIndex = 0;
+            this.TabPage_Segment_8.Text = "Segment 8";
+            this.TabPage_Segment_8.UseVisualStyleBackColor = true;
+            // 
+            // Seg_8
+            // 
+            this.Seg_8.AllowUserToResizeColumns = false;
+            this.Seg_8.AllowUserToResizeRows = false;
+            this.Seg_8.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_8.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_8.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_8_Name,
+            this.Seg_8_TextOffs});
+            this.Seg_8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_8.Location = new System.Drawing.Point(3, 3);
+            this.Seg_8.MultiSelect = false;
+            this.Seg_8.Name = "Seg_8";
+            this.Seg_8.RowHeadersVisible = false;
+            this.Seg_8.Size = new System.Drawing.Size(397, 227);
+            this.Seg_8.TabIndex = 10;
+            this.Seg_8.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_8.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_8_Name
+            // 
+            this.Seg_8_Name.FillWeight = 50F;
+            this.Seg_8_Name.HeaderText = "Name";
+            this.Seg_8_Name.Name = "Seg_8_Name";
+            this.Seg_8_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_8_TextOffs
+            // 
+            this.Seg_8_TextOffs.HeaderText = "Texture Offset";
+            this.Seg_8_TextOffs.Name = "Seg_8_TextOffs";
+            this.Seg_8_TextOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // TabPage_Segment_9
+            // 
+            this.TabPage_Segment_9.Controls.Add(this.Seg_9);
+            this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_9.Name = "TabPage_Segment_9";
+            this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_9.Size = new System.Drawing.Size(403, 233);
+            this.TabPage_Segment_9.TabIndex = 1;
+            this.TabPage_Segment_9.Text = "Segment 9";
+            this.TabPage_Segment_9.UseVisualStyleBackColor = true;
+            // 
+            // Seg_9
+            // 
+            this.Seg_9.AllowUserToResizeColumns = false;
+            this.Seg_9.AllowUserToResizeRows = false;
+            this.Seg_9.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_9.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_9.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_9_Name,
+            this.Seg_9_TexOffs});
+            this.Seg_9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_9.Location = new System.Drawing.Point(3, 3);
+            this.Seg_9.MultiSelect = false;
+            this.Seg_9.Name = "Seg_9";
+            this.Seg_9.RowHeadersVisible = false;
+            this.Seg_9.Size = new System.Drawing.Size(397, 227);
+            this.Seg_9.TabIndex = 11;
+            this.Seg_9.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_9.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_9_Name
+            // 
+            this.Seg_9_Name.FillWeight = 50F;
+            this.Seg_9_Name.HeaderText = "Name";
+            this.Seg_9_Name.Name = "Seg_9_Name";
+            this.Seg_9_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_9_TexOffs
+            // 
+            this.Seg_9_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_9_TexOffs.Name = "Seg_9_TexOffs";
+            this.Seg_9_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // TabPage_Segment_A
+            // 
+            this.TabPage_Segment_A.Controls.Add(this.Seg_A);
+            this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_A.Name = "TabPage_Segment_A";
+            this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_A.Size = new System.Drawing.Size(403, 233);
+            this.TabPage_Segment_A.TabIndex = 2;
+            this.TabPage_Segment_A.Text = "Segment A";
+            this.TabPage_Segment_A.UseVisualStyleBackColor = true;
+            // 
+            // Seg_A
+            // 
+            this.Seg_A.AllowUserToResizeColumns = false;
+            this.Seg_A.AllowUserToResizeRows = false;
+            this.Seg_A.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_A.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_A.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_A.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_A_Name,
+            this.Seg_A_TexOffs});
+            this.Seg_A.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_A.Location = new System.Drawing.Point(3, 3);
+            this.Seg_A.MultiSelect = false;
+            this.Seg_A.Name = "Seg_A";
+            this.Seg_A.RowHeadersVisible = false;
+            this.Seg_A.Size = new System.Drawing.Size(397, 227);
+            this.Seg_A.TabIndex = 11;
+            this.Seg_A.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_A.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_A_Name
+            // 
+            this.Seg_A_Name.FillWeight = 50F;
+            this.Seg_A_Name.HeaderText = "Name";
+            this.Seg_A_Name.Name = "Seg_A_Name";
+            this.Seg_A_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_A_TexOffs
+            // 
+            this.Seg_A_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_A_TexOffs.Name = "Seg_A_TexOffs";
+            this.Seg_A_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // TabPage_Segment_B
+            // 
+            this.TabPage_Segment_B.Controls.Add(this.Seg_B);
+            this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_B.Name = "TabPage_Segment_B";
+            this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_B.Size = new System.Drawing.Size(403, 233);
+            this.TabPage_Segment_B.TabIndex = 3;
+            this.TabPage_Segment_B.Text = "Segment B";
+            this.TabPage_Segment_B.UseVisualStyleBackColor = true;
+            // 
+            // Seg_B
+            // 
+            this.Seg_B.AllowUserToResizeColumns = false;
+            this.Seg_B.AllowUserToResizeRows = false;
+            this.Seg_B.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_B.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_B.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_B.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_B_Name,
+            this.Seg_B_TexOffs});
+            this.Seg_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_B.Location = new System.Drawing.Point(3, 3);
+            this.Seg_B.MultiSelect = false;
+            this.Seg_B.Name = "Seg_B";
+            this.Seg_B.RowHeadersVisible = false;
+            this.Seg_B.Size = new System.Drawing.Size(397, 227);
+            this.Seg_B.TabIndex = 11;
+            this.Seg_B.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_B.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_B_Name
+            // 
+            this.Seg_B_Name.FillWeight = 50F;
+            this.Seg_B_Name.HeaderText = "Name";
+            this.Seg_B_Name.Name = "Seg_B_Name";
+            this.Seg_B_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_B_TexOffs
+            // 
+            this.Seg_B_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_B_TexOffs.Name = "Seg_B_TexOffs";
+            this.Seg_B_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // TabPage_Segment_C
+            // 
+            this.TabPage_Segment_C.Controls.Add(this.Seg_C);
+            this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_C.Name = "TabPage_Segment_C";
+            this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_C.Size = new System.Drawing.Size(403, 233);
+            this.TabPage_Segment_C.TabIndex = 4;
+            this.TabPage_Segment_C.Text = "Segment C";
+            this.TabPage_Segment_C.UseVisualStyleBackColor = true;
+            // 
+            // Seg_C
+            // 
+            this.Seg_C.AllowUserToResizeColumns = false;
+            this.Seg_C.AllowUserToResizeRows = false;
+            this.Seg_C.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_C.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_C.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_C.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_C_Name,
+            this.Seg_C_TexOffs});
+            this.Seg_C.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_C.Location = new System.Drawing.Point(3, 3);
+            this.Seg_C.MultiSelect = false;
+            this.Seg_C.Name = "Seg_C";
+            this.Seg_C.RowHeadersVisible = false;
+            this.Seg_C.Size = new System.Drawing.Size(397, 227);
+            this.Seg_C.TabIndex = 11;
+            this.Seg_C.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_C.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_C_Name
+            // 
+            this.Seg_C_Name.FillWeight = 50F;
+            this.Seg_C_Name.HeaderText = "Name";
+            this.Seg_C_Name.Name = "Seg_C_Name";
+            this.Seg_C_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_C_TexOffs
+            // 
+            this.Seg_C_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_C_TexOffs.Name = "Seg_C_TexOffs";
+            this.Seg_C_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // TabPage_Segment_D
+            // 
+            this.TabPage_Segment_D.Controls.Add(this.Seg_D);
+            this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_D.Name = "TabPage_Segment_D";
+            this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_D.Size = new System.Drawing.Size(403, 233);
+            this.TabPage_Segment_D.TabIndex = 5;
+            this.TabPage_Segment_D.Text = "Segment D";
+            this.TabPage_Segment_D.UseVisualStyleBackColor = true;
+            // 
+            // Seg_D
+            // 
+            this.Seg_D.AllowUserToResizeColumns = false;
+            this.Seg_D.AllowUserToResizeRows = false;
+            this.Seg_D.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_D.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_D.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_D.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_D_Name,
+            this.Seg_D_TexOffs});
+            this.Seg_D.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_D.Location = new System.Drawing.Point(3, 3);
+            this.Seg_D.MultiSelect = false;
+            this.Seg_D.Name = "Seg_D";
+            this.Seg_D.RowHeadersVisible = false;
+            this.Seg_D.Size = new System.Drawing.Size(397, 227);
+            this.Seg_D.TabIndex = 11;
+            this.Seg_D.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_D.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_D_Name
+            // 
+            this.Seg_D_Name.FillWeight = 50F;
+            this.Seg_D_Name.HeaderText = "Name";
+            this.Seg_D_Name.Name = "Seg_D_Name";
+            this.Seg_D_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_D_TexOffs
+            // 
+            this.Seg_D_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_D_TexOffs.Name = "Seg_D_TexOffs";
+            this.Seg_D_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // TabPage_Segment_E
+            // 
+            this.TabPage_Segment_E.Controls.Add(this.Seg_E);
+            this.TabPage_Segment_E.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_E.Name = "TabPage_Segment_E";
+            this.TabPage_Segment_E.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_E.Size = new System.Drawing.Size(403, 233);
+            this.TabPage_Segment_E.TabIndex = 6;
+            this.TabPage_Segment_E.Text = "Segment E";
+            this.TabPage_Segment_E.UseVisualStyleBackColor = true;
+            // 
+            // Seg_E
+            // 
+            this.Seg_E.AllowUserToResizeColumns = false;
+            this.Seg_E.AllowUserToResizeRows = false;
+            this.Seg_E.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_E.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_E.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_E.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_E_Name,
+            this.Seg_E_TexOffs});
+            this.Seg_E.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_E.Location = new System.Drawing.Point(3, 3);
+            this.Seg_E.MultiSelect = false;
+            this.Seg_E.Name = "Seg_E";
+            this.Seg_E.RowHeadersVisible = false;
+            this.Seg_E.Size = new System.Drawing.Size(397, 227);
+            this.Seg_E.TabIndex = 11;
+            this.Seg_E.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_E.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_E_Name
+            // 
+            this.Seg_E_Name.FillWeight = 50F;
+            this.Seg_E_Name.HeaderText = "Name";
+            this.Seg_E_Name.Name = "Seg_E_Name";
+            this.Seg_E_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_E_TexOffs
+            // 
+            this.Seg_E_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_E_TexOffs.Name = "Seg_E_TexOffs";
+            this.Seg_E_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // TabPage_Segment_F
+            // 
+            this.TabPage_Segment_F.Controls.Add(this.Seg_F);
+            this.TabPage_Segment_F.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_F.Name = "TabPage_Segment_F";
+            this.TabPage_Segment_F.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_F.Size = new System.Drawing.Size(403, 233);
+            this.TabPage_Segment_F.TabIndex = 7;
+            this.TabPage_Segment_F.Text = "Segment F";
+            this.TabPage_Segment_F.UseVisualStyleBackColor = true;
+            // 
+            // Seg_F
+            // 
+            this.Seg_F.AllowUserToResizeColumns = false;
+            this.Seg_F.AllowUserToResizeRows = false;
+            this.Seg_F.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_F.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_F.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_F.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_F_Name,
+            this.Seg_F_TexOffs});
+            this.Seg_F.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_F.Location = new System.Drawing.Point(3, 3);
+            this.Seg_F.MultiSelect = false;
+            this.Seg_F.Name = "Seg_F";
+            this.Seg_F.RowHeadersVisible = false;
+            this.Seg_F.Size = new System.Drawing.Size(397, 227);
+            this.Seg_F.TabIndex = 11;
+            this.Seg_F.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_F.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_F_Name
+            // 
+            this.Seg_F_Name.FillWeight = 50F;
+            this.Seg_F_Name.HeaderText = "Name";
+            this.Seg_F_Name.Name = "Seg_F_Name";
+            this.Seg_F_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_F_TexOffs
+            // 
+            this.Seg_F_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_F_TexOffs.Name = "Seg_F_TexOffs";
+            this.Seg_F_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Panel_HeadRot
             // 
@@ -481,7 +1104,7 @@
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_TargetLimb);
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_XTargetOffs);
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetOffset);
-            this.Panel_TargetPanel.Location = new System.Drawing.Point(556, 244);
+            this.Panel_TargetPanel.Location = new System.Drawing.Point(561, 294);
             this.Panel_TargetPanel.Name = "Panel_TargetPanel";
             this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 80);
             this.Panel_TargetPanel.TabIndex = 40;
@@ -578,7 +1201,7 @@
             // Checkbox_Targettable
             // 
             this.Checkbox_Targettable.AutoSize = true;
-            this.Checkbox_Targettable.Location = new System.Drawing.Point(556, 222);
+            this.Checkbox_Targettable.Location = new System.Drawing.Point(561, 272);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
             this.Checkbox_Targettable.Size = new System.Drawing.Size(80, 17);
             this.Checkbox_Targettable.TabIndex = 39;
@@ -617,7 +1240,7 @@
             this.Panel_Movement.Controls.Add(this.NumUpDown_MovSpeed);
             this.Panel_Movement.Controls.Add(this.Label_Distance);
             this.Panel_Movement.Controls.Add(this.Label_Speed);
-            this.Panel_Movement.Location = new System.Drawing.Point(350, 274);
+            this.Panel_Movement.Location = new System.Drawing.Point(561, 75);
             this.Panel_Movement.Name = "Panel_Movement";
             this.Panel_Movement.Size = new System.Drawing.Size(200, 186);
             this.Panel_Movement.TabIndex = 38;
@@ -630,20 +1253,6 @@
             this.Label_LoopDelay.Size = new System.Drawing.Size(81, 13);
             this.Label_LoopDelay.TabIndex = 47;
             this.Label_LoopDelay.Text = "Delay between:";
-            // 
-            // NumUpDown_LoopDelay
-            // 
-            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(120, 55);
-            this.NumUpDown_LoopDelay.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.NumUpDown_LoopDelay.Name = "NumUpDown_LoopDelay";
-            this.NumUpDown_LoopDelay.Size = new System.Drawing.Size(65, 20);
-            this.NumUpDown_LoopDelay.TabIndex = 46;
-            this.NumUpDown_LoopDelay.Tag = "LOOPDEL";
-            this.NumUpDown_LoopDelay.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_LoopStartNode
             // 
@@ -677,6 +1286,20 @@
             0,
             -2147483648});
             this.NumUpDown_LoopStartNode.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // NumUpDown_LoopDelay
+            // 
+            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(120, 55);
+            this.NumUpDown_LoopDelay.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_LoopDelay.Name = "NumUpDown_LoopDelay";
+            this.NumUpDown_LoopDelay.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_LoopDelay.TabIndex = 46;
+            this.NumUpDown_LoopDelay.Tag = "LOOPDEL";
+            this.NumUpDown_LoopDelay.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_LoopEndNode
             // 
@@ -816,7 +1439,7 @@
             "Follows Link",
             "Follow a path, collisionwise",
             "Follow a path, direct"});
-            this.Combo_MovementType.Location = new System.Drawing.Point(367, 244);
+            this.Combo_MovementType.Location = new System.Drawing.Point(578, 45);
             this.Combo_MovementType.Name = "Combo_MovementType";
             this.Combo_MovementType.Size = new System.Drawing.Size(168, 21);
             this.Combo_MovementType.TabIndex = 26;
@@ -845,7 +1468,7 @@
             // Label_MovementType
             // 
             this.Label_MovementType.AutoSize = true;
-            this.Label_MovementType.Location = new System.Drawing.Point(364, 223);
+            this.Label_MovementType.Location = new System.Drawing.Point(575, 24);
             this.Label_MovementType.Name = "Label_MovementType";
             this.Label_MovementType.Size = new System.Drawing.Size(83, 13);
             this.Label_MovementType.TabIndex = 25;
@@ -863,7 +1486,7 @@
             // Checkbox_Pushable
             // 
             this.Checkbox_Pushable.AutoSize = true;
-            this.Checkbox_Pushable.Location = new System.Drawing.Point(662, 48);
+            this.Checkbox_Pushable.Location = new System.Drawing.Point(456, 239);
             this.Checkbox_Pushable.Name = "Checkbox_Pushable";
             this.Checkbox_Pushable.Size = new System.Drawing.Size(70, 17);
             this.Checkbox_Pushable.TabIndex = 24;
@@ -890,7 +1513,7 @@
             // Checkbox_CanPressSwitches
             // 
             this.Checkbox_CanPressSwitches.AutoSize = true;
-            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(556, 49);
+            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(350, 240);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
             this.Checkbox_CanPressSwitches.TabIndex = 23;
@@ -921,7 +1544,7 @@
             // Checkbox_DrawShadow
             // 
             this.Checkbox_DrawShadow.AutoSize = true;
-            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(662, 23);
+            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(456, 214);
             this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
             this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 17);
             this.Checkbox_DrawShadow.TabIndex = 22;
@@ -945,11 +1568,13 @@
             this.Col_Speed,
             this.Col_OBJ});
             this.DataGrid_Animations.Location = new System.Drawing.Point(14, 165);
+            this.DataGrid_Animations.MultiSelect = false;
             this.DataGrid_Animations.Name = "DataGrid_Animations";
             this.DataGrid_Animations.RowHeadersVisible = false;
-            this.DataGrid_Animations.Size = new System.Drawing.Size(317, 472);
+            this.DataGrid_Animations.Size = new System.Drawing.Size(317, 552);
             this.DataGrid_Animations.TabIndex = 9;
             this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
+            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
             // 
             // Col_AnimName
             // 
@@ -981,7 +1606,7 @@
             // Checkbox_HaveCollision
             // 
             this.Checkbox_HaveCollision.AutoSize = true;
-            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(556, 23);
+            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(350, 214);
             this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
             this.Checkbox_HaveCollision.Size = new System.Drawing.Size(85, 17);
             this.Checkbox_HaveCollision.TabIndex = 21;
@@ -1011,7 +1636,7 @@
             this.Panel_Collision.Controls.Add(this.NumUpDown_ColRadius);
             this.Panel_Collision.Controls.Add(this.Label_Radius);
             this.Panel_Collision.Controls.Add(this.Label_Collision);
-            this.Panel_Collision.Location = new System.Drawing.Point(556, 75);
+            this.Panel_Collision.Location = new System.Drawing.Point(350, 266);
             this.Panel_Collision.Name = "Panel_Collision";
             this.Panel_Collision.Size = new System.Drawing.Size(200, 133);
             this.Panel_Collision.TabIndex = 20;
@@ -1218,7 +1843,7 @@
             this.ComboBox_AnimType.Items.AddRange(new object[] {
             "Standard",
             "Link"});
-            this.ComboBox_AnimType.Location = new System.Drawing.Point(242, 643);
+            this.ComboBox_AnimType.Location = new System.Drawing.Point(242, 723);
             this.ComboBox_AnimType.Name = "ComboBox_AnimType";
             this.ComboBox_AnimType.Size = new System.Drawing.Size(89, 21);
             this.ComboBox_AnimType.TabIndex = 13;
@@ -1229,7 +1854,7 @@
             // 
             this.Label_AnimType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Label_AnimType.AutoSize = true;
-            this.Label_AnimType.Location = new System.Drawing.Point(154, 646);
+            this.Label_AnimType.Location = new System.Drawing.Point(154, 726);
             this.Label_AnimType.Name = "Label_AnimType";
             this.Label_AnimType.Size = new System.Drawing.Size(79, 13);
             this.Label_AnimType.TabIndex = 14;
@@ -1278,7 +1903,7 @@
             this.Tab2_Script.Location = new System.Drawing.Point(4, 22);
             this.Tab2_Script.Name = "Tab2_Script";
             this.Tab2_Script.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab2_Script.Size = new System.Drawing.Size(763, 682);
+            this.Tab2_Script.Size = new System.Drawing.Size(772, 762);
             this.Tab2_Script.TabIndex = 1;
             this.Tab2_Script.Text = "Interaction script";
             this.Tab2_Script.UseVisualStyleBackColor = true;
@@ -1301,19 +1926,20 @@
         '\''};
             this.Textbox_Script.AutoIndent = false;
             this.Textbox_Script.AutoIndentChars = false;
-            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(2, 14);
+            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.Textbox_Script.BackBrush = null;
             this.Textbox_Script.CharHeight = 14;
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(3, 3);
             this.Textbox_Script.Name = "Textbox_Script";
             this.Textbox_Script.Paddings = new System.Windows.Forms.Padding(0);
             this.Textbox_Script.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.Textbox_Script.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("Textbox_Script.ServiceColors")));
-            this.Textbox_Script.Size = new System.Drawing.Size(757, 541);
+            this.Textbox_Script.Size = new System.Drawing.Size(757, 615);
             this.Textbox_Script.TabIndex = 3;
             this.Textbox_Script.WordWrapAutoIndent = false;
             this.Textbox_Script.Zoom = 100;
@@ -1324,7 +1950,7 @@
             this.Button_TryParse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Button_TryParse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.Button_TryParse.Location = new System.Drawing.Point(6, 550);
+            this.Button_TryParse.Location = new System.Drawing.Point(9, 624);
             this.Button_TryParse.Name = "Button_TryParse";
             this.Button_TryParse.Size = new System.Drawing.Size(751, 30);
             this.Button_TryParse.TabIndex = 2;
@@ -1336,7 +1962,7 @@
             // 
             this.Textbox_ParseErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_ParseErrors.Location = new System.Drawing.Point(1, 586);
+            this.Textbox_ParseErrors.Location = new System.Drawing.Point(4, 660);
             this.Textbox_ParseErrors.Multiline = true;
             this.Textbox_ParseErrors.Name = "Textbox_ParseErrors";
             this.Textbox_ParseErrors.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -1352,13 +1978,13 @@
             this.Panel_NPCList.Controls.Add(this.DataGrid_NPCs);
             this.Panel_NPCList.Location = new System.Drawing.Point(0, 3);
             this.Panel_NPCList.Name = "Panel_NPCList";
-            this.Panel_NPCList.Size = new System.Drawing.Size(244, 708);
+            this.Panel_NPCList.Size = new System.Drawing.Size(244, 788);
             this.Panel_NPCList.TabIndex = 5;
             // 
             // Button_Delete
             // 
             this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Delete.Location = new System.Drawing.Point(131, 674);
+            this.Button_Delete.Location = new System.Drawing.Point(131, 754);
             this.Button_Delete.Name = "Button_Delete";
             this.Button_Delete.Size = new System.Drawing.Size(108, 31);
             this.Button_Delete.TabIndex = 4;
@@ -1369,7 +1995,7 @@
             // Button_Add
             // 
             this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Add.Location = new System.Drawing.Point(3, 674);
+            this.Button_Add.Location = new System.Drawing.Point(3, 754);
             this.Button_Add.Name = "Button_Add";
             this.Button_Add.Size = new System.Drawing.Size(108, 31);
             this.Button_Add.TabIndex = 3;
@@ -1381,7 +2007,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1019, 738);
+            this.ClientSize = new System.Drawing.Size(1028, 818);
             this.Controls.Add(this.Panel_Editor);
             this.Controls.Add(this.MenuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1398,6 +2024,27 @@
             this.TabControl.ResumeLayout(false);
             this.Tab1_Data.ResumeLayout(false);
             this.Tab1_Data.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSegment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSegment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).EndInit();
+            this.TabControl_Textures.ResumeLayout(false);
+            this.TabPage_Segment_8.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).EndInit();
+            this.TabPage_Segment_9.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).EndInit();
+            this.TabPage_Segment_A.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).EndInit();
+            this.TabPage_Segment_B.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).EndInit();
+            this.TabPage_Segment_C.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).EndInit();
+            this.TabPage_Segment_D.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).EndInit();
+            this.TabPage_Segment_E.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).EndInit();
+            this.TabPage_Segment_F.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).EndInit();
             this.Panel_HeadRot.ResumeLayout(false);
             this.Panel_HeadRot.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_DegVert)).EndInit();
@@ -1412,8 +2059,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ObjectID)).EndInit();
             this.Panel_Movement.ResumeLayout(false);
             this.Panel_Movement.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_PathFollowID)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).EndInit();
@@ -1534,6 +2181,54 @@
         private System.Windows.Forms.CheckBox Checkbox_Loop;
         private System.Windows.Forms.Label Label_PathFollowID;
         private System.Windows.Forms.NumericUpDown NumUpDown_PathFollowID;
+        private System.Windows.Forms.TabControl TabControl_Textures;
+        private System.Windows.Forms.TabPage TabPage_Segment_8;
+        private System.Windows.Forms.TabPage TabPage_Segment_9;
+        private System.Windows.Forms.TabPage TabPage_Segment_A;
+        private System.Windows.Forms.TabPage TabPage_Segment_B;
+        private System.Windows.Forms.TabPage TabPage_Segment_C;
+        private System.Windows.Forms.TabPage TabPage_Segment_D;
+        private System.Windows.Forms.DataGridView Seg_8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_8_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_8_TextOffs;
+        private System.Windows.Forms.DataGridView Seg_9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_TexOffs;
+        private System.Windows.Forms.DataGridView Seg_A;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_TexOffs;
+        private System.Windows.Forms.DataGridView Seg_B;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_TexOffs;
+        private System.Windows.Forms.DataGridView Seg_C;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_TexOffs;
+        private System.Windows.Forms.DataGridView Seg_D;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_TexOffs;
+        private System.Windows.Forms.TabPage TabPage_Segment_E;
+        private System.Windows.Forms.DataGridView Seg_E;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_TexOffs;
+        private System.Windows.Forms.TabPage TabPage_Segment_F;
+        private System.Windows.Forms.DataGridView Seg_F;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_TexOffs;
+        private System.Windows.Forms.Label Label_TalkingSegment;
+        private System.Windows.Forms.Label Label_TalkingPattern;
+        private System.Windows.Forms.NumericUpDown NumUpDown_TalkSpeed;
+        private System.Windows.Forms.TextBox Textbox_BlinkPattern;
+        private System.Windows.Forms.NumericUpDown NumUpDown_BlinkSpeed;
+        private System.Windows.Forms.Label Label_BlinkingPattern;
+        private System.Windows.Forms.Label Label_BlinkingSegment;
+        private System.Windows.Forms.TextBox Textbox_TalkingPattern;
+        private System.Windows.Forms.Label Label_TalkingFramesBetween;
+        private System.Windows.Forms.NumericUpDown NumUpDown_TalkSegment;
+        private System.Windows.Forms.NumericUpDown NumUpDown_BlinkSegment;
+        private System.Windows.Forms.Label Label_BlinkingFramesBetween;
+        private System.Windows.Forms.Button Button_EnvironmentColorPreview;
+        private System.Windows.Forms.ColorDialog ColorDialog;
+        private System.Windows.Forms.CheckBox Checkbox_EnvColor;
     }
 }
 

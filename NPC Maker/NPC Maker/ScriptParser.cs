@@ -7,6 +7,18 @@ using System.Text.RegularExpressions;
 
 namespace NPC_Maker
 {
+    public enum Segments
+    {
+        SEGMENT_8 = 0,
+        SEGMENT_9 = 1,
+        SEGMENT_A = 2,
+        SEGMENT_B = 3,
+        SEGMENT_C = 4,
+        SEGMENT_D = 5,
+        SEGMENT_E = 6,
+        SEGMENT_F = 7
+    }
+
     public enum InstructionIDs
     {
         NOP = 0,
@@ -88,6 +100,8 @@ namespace NPC_Maker
         targettable = 180,
         player_movement = 181,
         movement = 182,
+        do_blinking_anim = 183,
+        do_talking_anim = 184,
 
         /* s8 Subtypes */
 
@@ -103,6 +117,9 @@ namespace NPC_Maker
         animation_offset = 239,
         animation_speed = 240,
         script_start = 241,
+        blink_pattern = 242,
+        talk_pattern = 243,
+        segment_tex = 244,
     }
 
     public enum WaitForSubTypes
@@ -135,7 +152,7 @@ namespace NPC_Maker
         {
         }
 
-        public byte[] Parse(string Script, List<AnimationEntry> Animations)
+        public byte[] Parse(string Script, List<AnimationEntry> Animations, List<List<TextureEntry>> Textures)
         {
             ParseErrors.Clear();
 
@@ -160,7 +177,7 @@ namespace NPC_Maker
 
             foreach (string Line in Lines)                                                                      // Convert every instruction into an 8 byte array and add it to the output
             {
-                byte[] ParsedBytes = GetInstructionBytes(Line, Animations, ref ParseErrors);
+                byte[] ParsedBytes = GetInstructionBytes(Line, Animations, Textures, ref ParseErrors);
 
                 if (ParsedBytes.Length != 8)
                 {
@@ -235,6 +252,17 @@ namespace NPC_Maker
             return -1;
         }
 
+        private static Int32 Helper_GetTextureID(string TextureName, int Segment, List<List<TextureEntry>> Textures)
+        {
+            for (int i = 0; i < Textures[Segment].Count; i++)
+            {
+                if (TextureName.ToLower() == Textures[Segment][i].Name.Replace(" ", "").ToLower())
+                    return i;
+            }
+
+            return -1;
+        }
+
         private static Int32 Helper_GetSFXId(string SFXName)
         {
             try
@@ -247,7 +275,7 @@ namespace NPC_Maker
             }
         }
 
-        private static byte[] GetInstructionBytes(string Line, List<AnimationEntry> Animations, ref List<string> ParseErrors)
+        private static byte[] GetInstructionBytes(string Line, List<AnimationEntry> Animations, List<List<TextureEntry>> Textures, ref List<string> ParseErrors)
         {
             string[] Instr = Line.Trim().Split(' ');
 
@@ -464,7 +492,7 @@ namespace NPC_Maker
                                 GenericS8Instruction SetS8 = new GenericS8Instruction((byte)InstructionIDs.SET, (byte)SetSubType, Convert.ToSByte(Data));
                                 return SetS8.GetByteData();
                             }
-                            else if (SetSubType == 230) // responses subtype
+                            else if (SetSubType == (int)SetSubTypes.responses)
                             {
                                 if (Instr.Length < 3 || Instr.Length > 5)
                                     throw new WrongParamCountException(Line);
@@ -480,7 +508,7 @@ namespace NPC_Maker
                                 SetResponseInstruction Respond = new SetResponseInstruction(Convert.ToUInt16(Label_1), Convert.ToUInt16(Label_2), Convert.ToUInt16(Label_3));
                                 return Respond.GetByteData();
                             }
-                            else if (SetSubType == 231) // flag
+                            else if (SetSubType == (int)SetSubTypes.flag) 
                             {
                                 if (Instr.Length != 5)
                                     throw new WrongParamCountException(Line);
@@ -496,48 +524,7 @@ namespace NPC_Maker
                                 SetFlagInstruction SetFlag = new SetFlagInstruction(Instr[2], Convert.ToUInt16(FlagID), Instr[4].ToLower() == "true" ? true : false);
                                 return SetFlag.GetByteData();
                             }
-                            else if (SetSubType == 232) // hierarchy type
-                            {
-                                if (Instr.Length != 3)
-                                    throw new WrongParamCountException(Line);
-
-                                Int32 Data = 0;
-
-                                switch (Instr[2].ToLower())
-                                {
-                                    case "matrix": Data = 0; break;
-                                    case "nomatrix": Data = 1; break;
-                                    case "weighted": Data = 2; break;
-                                    default: Data = Helper_ConvertToInt32(Instr[2]); break;
-                                }
-
-                                if (Data > 2 || Data < 0)
-                                    throw new ParamOutOfRangeException(Line);
-
-                                GenericU8Instruction SetHierarchyT = new GenericU8Instruction((byte)InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
-                                return SetHierarchyT.GetByteData();
-                            }
-                            else if (SetSubType == 233) // animation type
-                            {
-                                if (Instr.Length != 3)
-                                    throw new WrongParamCountException(Line);
-
-                                Int32 Data = 0;
-
-                                switch (Instr[2].ToLower())
-                                {
-                                    case "standard": Data = 0; break;
-                                    case "link": Data = 1; break;
-                                    default: Data = Helper_ConvertToInt32(Instr[2]); break;
-                                }
-
-                                if (Data > 1 || Data < 0)
-                                    throw new ParamOutOfRangeException(Line);
-
-                                GenericU8Instruction SetAnimT = new GenericU8Instruction((byte)InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
-                                return SetAnimT.GetByteData();
-                            }
-                            else if (SetSubType == 234) // movement type
+                            else if (SetSubType == (int)SetSubTypes.movement_type) 
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
@@ -560,7 +547,7 @@ namespace NPC_Maker
                                 GenericU8Instruction SetMovT = new GenericU8Instruction((byte)InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetMovT.GetByteData();
                             }
-                            else if (SetSubType == 235) // look type
+                            else if (SetSubType == (int)SetSubTypes.look_type) 
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
@@ -581,7 +568,7 @@ namespace NPC_Maker
                                 GenericU8Instruction SetLookT = new GenericU8Instruction((byte)InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetLookT.GetByteData();
                             }
-                            else if (SetSubType == 236) // head axis
+                            else if (SetSubType == (int)SetSubTypes.head_axis) 
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
@@ -602,7 +589,7 @@ namespace NPC_Maker
                                 GenericU8Instruction SetHeadA = new GenericU8Instruction((byte)InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetHeadA.GetByteData();
                             }
-                            else if (SetSubType == 237) // animation
+                            else if (SetSubType == (int)SetSubTypes.animation)
                             {
                                 if (Instr.Length < 3 && Instr.Length > 4)
                                     throw new WrongParamCountException(Line);
@@ -628,7 +615,7 @@ namespace NPC_Maker
                                 SetAnimInstruction SetAnim = new SetAnimInstruction(Convert.ToByte(Loops), Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
-                            else if (SetSubType == 238) // animation object
+                            else if (SetSubType == (int)SetSubTypes.animation_object) 
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -649,7 +636,7 @@ namespace NPC_Maker
                                 SetAnimObjectInstruction SetAnim = new SetAnimObjectInstruction(Convert.ToUInt16(Object), Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
-                            else if (SetSubType == 239) // animation offset
+                            else if (SetSubType == (int)SetSubTypes.animation_offset) 
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -667,7 +654,7 @@ namespace NPC_Maker
                                 SetAnimOffsetInstruction SetAnim = new SetAnimOffsetInstruction(Offset, Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
-                            else if (SetSubType == 240) // animation speed
+                            else if (SetSubType == (int)SetSubTypes.animation_speed)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -683,7 +670,7 @@ namespace NPC_Maker
                                 SetAnimSpeedInstruction SetAnim = new SetAnimSpeedInstruction(Convert.ToDecimal(Instr[3]), Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
-                            else if (SetSubType == 241) // script start
+                            else if (SetSubType == (int)SetSubTypes.script_start)
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
@@ -695,6 +682,23 @@ namespace NPC_Maker
 
                                 GenericU16Instruction SetScriptStart = new GenericU16Instruction((byte)InstructionIDs.SET, (byte)SetSubType, Convert.ToUInt16(GotoLabel));
                                 return SetScriptStart.GetByteData();
+                            }
+                            else if (SetSubType == (int)SetSubTypes.segment_tex)
+                            {
+                                if (Instr.Length != 4)
+                                    throw new WrongParamCountException(Line);
+
+                                int SegmentID = (int)System.Enum.Parse(typeof(Segments), Instr[2].ToUpper());
+                                Int32 TexID = Helper_GetTextureID(Instr[3], SegmentID, Textures);
+
+                                if (TexID == -1)
+                                    TexID = Helper_ConvertToInt32(Instr[3]);
+
+                                if (TexID > 31 || TexID < 0)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                SetSegmentTextureIDInstruction SetSegmentTex = new SetSegmentTextureIDInstruction(Convert.ToByte(SegmentID), Convert.ToUInt16(TexID));
+                                return SetSegmentTex.GetByteData();
                             }
                             else
                             {
@@ -817,10 +821,10 @@ namespace NPC_Maker
 
                             if (Instr[1].ToLower() == "sfx")
                             {
-                                int SNDID = Helper_GetSFXId(Instr[1]);
+                                int SNDID = Helper_GetSFXId(Instr[2]);
 
                                 if (SNDID == -1)
-                                    SNDID = Helper_ConvertToInt32(Instr[1]);
+                                    SNDID = Helper_ConvertToInt32(Instr[2]);
 
                                 if (SNDID > UInt16.MaxValue || SNDID < 0)
                                     throw new ParamOutOfRangeException(Line);
@@ -830,7 +834,7 @@ namespace NPC_Maker
                             }
                             else if (Instr[1].ToLower() == "music")
                             {
-                                UInt32 SNDID = Helper_ConvertToUInt32(Instr[1]);
+                                UInt32 SNDID = Helper_ConvertToUInt32(Instr[2]);
 
                                 if (SNDID > byte.MaxValue || SNDID < 0)
                                     throw new ParamOutOfRangeException(Line);
@@ -1372,6 +1376,34 @@ namespace NPC_Maker
             Data.Add(SubID);
             Data.AddRange(Program.BEConverter.GetBytes(AnimID));
             Data.AddRange(Program.BEConverter.GetBytes(Speed));
+            return Data.ToArray();
+        }
+    }
+
+    public class SetSegmentTextureIDInstruction
+    {
+        Byte ID = (byte)InstructionIDs.SET;
+        Byte SubID = (byte)SetSubTypes.segment_tex;
+        Byte SegmentID { get; set; }
+        UInt16 TextureID { get; set; }
+
+        public SetSegmentTextureIDInstruction(byte _Segment, UInt16 _TextureID)
+        {
+            SegmentID = _Segment;
+            TextureID = _TextureID;
+        }
+
+        public byte[] GetByteData()
+        {
+            List<byte> Data = new List<byte>();
+
+            Data.Add(ID);
+            Data.Add(SubID);
+            Data.Add(SegmentID);
+            Data.Add(0);
+            Data.AddRange(Program.BEConverter.GetBytes(TextureID));
+            Data.AddRange(Program.BEConverter.GetBytes((Int16)0));
+
             return Data.ToArray();
         }
     }
