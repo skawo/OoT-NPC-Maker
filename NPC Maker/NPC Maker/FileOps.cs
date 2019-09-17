@@ -43,7 +43,7 @@ namespace NPC_Maker
         {
             try
             {
-                int Offset = Data.Entries.Count() * 4 + 2;
+                int Offset = Data.Entries.Count() * 4 + 4;
 
                 List<byte> EntryAddresses = new List<byte>();
                 List<List<byte>> EntryData = new List<List<byte>>();
@@ -108,9 +108,8 @@ namespace NPC_Maker
                         byte[] Script = Parser.Parse(Entry.Script, Entry.Animations, Entry.Textures);
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Script.Length));
 
-                        while ((EntryBytes.Count + 2) % 4 != 0)
+                        while (EntryBytes.Count % 4 != 0)
                             EntryBytes.Add(0);
-
 
                         EntryBytes.AddRange(Script);
                         Entry.ParseErrors = Parser.ParseErrors.ToList();
@@ -202,12 +201,14 @@ namespace NPC_Maker
 
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(TexBytes));
 
-                        while ((EntryBytes.Count + 2) % 4 != 0)
+                        while ((EntryBytes.Count) % 4 != 0)
                             EntryBytes.Add(0);
 
                         EntryBytes.AddRange(TextureOffsets.ToArray());
                         EntryBytes.AddRange(TextureEntries.ToArray());
 
+                        while ((EntryBytes.Count) % 4 != 0)
+                            EntryBytes.Add(0);
 
                         EntryData.Add(EntryBytes);
                         EntryAddresses.AddRange(Program.BEConverter.GetBytes(Offset));
@@ -221,7 +222,7 @@ namespace NPC_Maker
 
                 List<byte> Output = new List<byte>();
 
-                Output.AddRange(Program.BEConverter.GetBytes((UInt16)Data.Entries.Count()));
+                Output.AddRange(Program.BEConverter.GetBytes((UInt32)Data.Entries.Count()));
                 Output.AddRange(EntryAddresses);
 
                 foreach (List<byte> Entry in EntryData)

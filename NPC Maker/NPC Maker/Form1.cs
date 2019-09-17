@@ -10,6 +10,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
+using Newtonsoft.Json;
 
 namespace NPC_Maker
 {
@@ -19,19 +20,32 @@ namespace NPC_Maker
         NPCFile EditedFile = null;
         NPCEntry SelectedEntry = null;
         int SelectedIndex = -1;
+        string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
 
         public Form1()
         {
             InitializeComponent();
+            this.DoubleBuffered = true;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (EditedFile != null)
             {
-                if (MessageBox.Show("Save changes?", "Save changes before opening a new file?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                string CurrentFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+
+                if (!String.Equals(CurrentFile, OpenedFile))
                 {
-                    FileMenu_SaveAs_Click(this, null);
+                    DialogResult Res = MessageBox.Show("Save changes before exiting?", "Save changes?", MessageBoxButtons.YesNoCancel);
+
+                    if (Res == DialogResult.Yes)
+                    {
+                        FileMenu_SaveAs_Click(this, null);
+                    }
+                    else if (Res == DialogResult.Cancel)
+                    {
+                        e.Cancel = true;
+                    }
                 }
             }
         }
@@ -144,20 +158,41 @@ namespace NPC_Maker
 
         #region MenuStrip
 
-        private void SaveChangesAsPrompt()
+        private bool SaveChangesAsPrompt()
         {
             if (EditedFile != null)
             {
-                if (MessageBox.Show("Save changes before opening a new file?", "Save changes?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                string CurrentFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+
+                if (!String.Equals(CurrentFile, OpenedFile))
                 {
-                    FileMenu_SaveAs_Click(this, null);
+                    DialogResult DR = MessageBox.Show("Save changes before opening a new file?", "Save changes?", MessageBoxButtons.YesNoCancel);
+
+                    if (DR == DialogResult.Yes)
+                    {
+                        FileMenu_SaveAs_Click(this, null);
+                        return true;
+                    }
+                    else if (DR == DialogResult.No)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
+                else
+                    return true;
             }
+            else
+                return true;
         }
 
         private void FileMenu_Open_Click(object sender, EventArgs e)
         {
-            SaveChangesAsPrompt();
+            if (SaveChangesAsPrompt() == false)
+                return;
 
             OpenFileDialog OFD = new OpenFileDialog();
             OFD.ShowDialog();
@@ -165,6 +200,7 @@ namespace NPC_Maker
             if (OFD.FileName != "")
             {
                 EditedFile = FileOps.ParseJSONFile(OFD.FileName);
+                OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
                 if (EditedFile != null)
                 {
@@ -178,7 +214,8 @@ namespace NPC_Maker
 
         private void FileMenu_New_Click(object sender, EventArgs e)
         {
-            SaveChangesAsPrompt();
+            if (SaveChangesAsPrompt() == false)
+                return;
 
             EditedFile = new NPCFile();
             Panel_Editor.Enabled = true;
@@ -202,7 +239,10 @@ namespace NPC_Maker
             if (OpenedPath == "")
                 FileMenu_SaveAs_Click(this, null);
             else
+            {
+                OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 FileOps.SaveJSONFile(OpenedPath, EditedFile);
+            }
         }
 
         private void FileMenu_SaveBinary_Click(object sender, EventArgs e)
@@ -221,7 +261,9 @@ namespace NPC_Maker
 
         private void FileMenu_Exit_Click(object sender, EventArgs e)
         {
-            SaveChangesAsPrompt();
+            if (SaveChangesAsPrompt() == false)
+                return;
+
             Application.Exit();
         }
 
@@ -240,6 +282,14 @@ namespace NPC_Maker
             for (int i = 0; i < 8; i++)
                 Entry.Textures.Add(new List<TextureEntry>());
 
+            EditedFile.Entries.Add(Entry);
+            DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
+        }
+
+        private void Button_Duplicate_Click(object sender, EventArgs e)
+        {
+            string Obj = JsonConvert.SerializeObject(SelectedEntry, Formatting.Indented);
+            NPCEntry Entry = JsonConvert.DeserializeObject<NPCEntry>(Obj);
             EditedFile.Entries.Add(Entry);
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
         }
@@ -561,6 +611,13 @@ namespace NPC_Maker
                 SelectedEntry.EnvColor = Color.FromArgb(255, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
             else
                 SelectedEntry.EnvColor = Color.FromArgb(0, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
+        }
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About Window = new About();
+            Window.ShowDialog();
+
         }
     }
 }

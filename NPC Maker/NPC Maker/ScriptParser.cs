@@ -577,9 +577,10 @@ namespace NPC_Maker
 
                                 switch (Instr[2].ToLower())
                                 {
-                                    case "xz": Data = 0; break;
-                                    case "xy": Data = 1; break;
-                                    case "yz": Data = 2; break;
+                                    case "-x+z": Data = 0; break;
+                                    case "-x-y": Data = 1; break;
+                                    case "+y+z": Data = 2; break;
+                                    case "-y+x": Data = 3; break;
                                     default: Data = Helper_ConvertToInt32(Instr[2]); break;
                                 }
 

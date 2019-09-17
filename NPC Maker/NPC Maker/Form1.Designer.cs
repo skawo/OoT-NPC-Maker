@@ -168,9 +168,11 @@
             this.Button_TryParse = new System.Windows.Forms.Button();
             this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
+            this.Button_Duplicate = new System.Windows.Forms.Button();
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_Editor.SuspendLayout();
@@ -235,7 +237,8 @@
             // MenuStrip
             // 
             this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FileMenu});
+            this.FileMenu,
+            this.aboutToolStripMenuItem});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.MaximumSize = new System.Drawing.Size(2000, 0);
             this.MenuStrip.Name = "MenuStrip";
@@ -1007,9 +1010,10 @@
             // 
             this.ComboBox_HeadLookAxis.FormattingEnabled = true;
             this.ComboBox_HeadLookAxis.Items.AddRange(new object[] {
-            "XZ",
-            "XY",
-            "YZ"});
+            "-X+Z",
+            "-X-Y",
+            "+Y+Z",
+            "-Y+X"});
             this.ComboBox_HeadLookAxis.Location = new System.Drawing.Point(16, 23);
             this.ComboBox_HeadLookAxis.Name = "ComboBox_HeadLookAxis";
             this.ComboBox_HeadLookAxis.Size = new System.Drawing.Size(168, 21);
@@ -1926,13 +1930,12 @@
         '\''};
             this.Textbox_Script.AutoIndent = false;
             this.Textbox_Script.AutoIndentChars = false;
-            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(2, 14);
             this.Textbox_Script.BackBrush = null;
             this.Textbox_Script.CharHeight = 14;
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(3, 3);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -1973,6 +1976,7 @@
             // 
             this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
             this.Panel_NPCList.Controls.Add(this.Button_Delete);
             this.Panel_NPCList.Controls.Add(this.Button_Add);
             this.Panel_NPCList.Controls.Add(this.DataGrid_NPCs);
@@ -1981,12 +1985,23 @@
             this.Panel_NPCList.Size = new System.Drawing.Size(244, 788);
             this.Panel_NPCList.TabIndex = 5;
             // 
+            // Button_Duplicate
+            // 
+            this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Duplicate.Location = new System.Drawing.Point(87, 754);
+            this.Button_Duplicate.Name = "Button_Duplicate";
+            this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
+            this.Button_Duplicate.TabIndex = 5;
+            this.Button_Duplicate.Text = "Duplicate";
+            this.Button_Duplicate.UseVisualStyleBackColor = true;
+            this.Button_Duplicate.Click += new System.EventHandler(this.Button_Duplicate_Click);
+            // 
             // Button_Delete
             // 
             this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Delete.Location = new System.Drawing.Point(131, 754);
+            this.Button_Delete.Location = new System.Drawing.Point(166, 754);
             this.Button_Delete.Name = "Button_Delete";
-            this.Button_Delete.Size = new System.Drawing.Size(108, 31);
+            this.Button_Delete.Size = new System.Drawing.Size(73, 31);
             this.Button_Delete.TabIndex = 4;
             this.Button_Delete.Text = "Delete";
             this.Button_Delete.UseVisualStyleBackColor = true;
@@ -1997,11 +2012,18 @@
             this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Button_Add.Location = new System.Drawing.Point(3, 754);
             this.Button_Add.Name = "Button_Add";
-            this.Button_Add.Size = new System.Drawing.Size(108, 31);
+            this.Button_Add.Size = new System.Drawing.Size(79, 31);
             this.Button_Add.TabIndex = 3;
             this.Button_Add.Text = "Add";
             this.Button_Add.UseVisualStyleBackColor = true;
             this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -2229,6 +2251,8 @@
         private System.Windows.Forms.Button Button_EnvironmentColorPreview;
         private System.Windows.Forms.ColorDialog ColorDialog;
         private System.Windows.Forms.CheckBox Checkbox_EnvColor;
+        private System.Windows.Forms.Button Button_Duplicate;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }
 
