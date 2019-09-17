@@ -19,6 +19,7 @@ namespace NPC_Maker
         string OpenedPath = "";
         NPCFile EditedFile = null;
         NPCEntry SelectedEntry = null;
+        NPCEntry CopiedEntry = null;
         int SelectedIndex = -1;
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
 
@@ -270,6 +271,52 @@ namespace NPC_Maker
         #endregion
 
         #region NPCList
+
+        private void Button_CopyBase_Click(object sender, EventArgs e)
+        {
+            string Copy = JsonConvert.SerializeObject(SelectedEntry, Formatting.Indented);
+            CopiedEntry = JsonConvert.DeserializeObject<NPCEntry>(Copy);
+        }
+
+        private void Button_PasteBase_Click(object sender, EventArgs e)
+        {
+            if (CopiedEntry != null && !SelectedEntry.IsNull)
+            {
+                SelectedEntry.Animations.Clear();
+
+                foreach (AnimationEntry Anim in CopiedEntry.Animations)
+                {
+                    SelectedEntry.Animations.Add(new AnimationEntry(Anim.Name, Anim.Address, Anim.Speed, Anim.ObjID));
+                }
+
+                SelectedEntry.Textures.Clear();
+
+                foreach (List<TextureEntry> TexList in CopiedEntry.Textures)
+                {
+                    List<TextureEntry> DestTexList = new List<TextureEntry>();
+                    SelectedEntry.Textures.Add(DestTexList);
+
+                    foreach (TextureEntry Tex in TexList)
+                    {
+                        DestTexList.Add(new TextureEntry(Tex.Name, Tex.Address));
+                    }
+
+                }
+
+                SelectedEntry.ObjectID = CopiedEntry.ObjectID;
+                SelectedEntry.Hierarchy = CopiedEntry.Hierarchy;
+                SelectedEntry.HierarchyType = CopiedEntry.HierarchyType;
+                SelectedEntry.AnimationType = CopiedEntry.AnimationType;
+                SelectedEntry.BlinkPattern = CopiedEntry.BlinkPattern;
+                SelectedEntry.BlinkSegment = CopiedEntry.BlinkSegment;
+                SelectedEntry.BlinkSpeed = CopiedEntry.BlinkSpeed;
+                SelectedEntry.TalkPattern = CopiedEntry.TalkPattern;
+                SelectedEntry.TalkSegment = CopiedEntry.TalkSegment;
+                SelectedEntry.TalkSpeed = CopiedEntry.TalkSpeed;
+
+                InsertDataToEditor();
+            }
+        }
 
         private void Button_Add_Click(object sender, EventArgs e)
         {
@@ -619,5 +666,6 @@ namespace NPC_Maker
             Window.ShowDialog();
 
         }
+
     }
 }

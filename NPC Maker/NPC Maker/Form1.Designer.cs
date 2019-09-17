@@ -38,6 +38,7 @@
             this.FileMenu_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_SaveBinary = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DataGrid_NPCs = new System.Windows.Forms.DataGridView();
             this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -168,11 +169,12 @@
             this.Button_TryParse = new System.Windows.Forms.Button();
             this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
+            this.Button_PasteBase = new System.Windows.Forms.Button();
+            this.Button_CopyBase = new System.Windows.Forms.Button();
             this.Button_Duplicate = new System.Windows.Forms.Button();
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_Editor.SuspendLayout();
@@ -301,6 +303,13 @@
             this.FileMenu_Exit.Text = "Exit";
             this.FileMenu_Exit.Click += new System.EventHandler(this.FileMenu_Exit_Click);
             // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            // 
             // DataGrid_NPCs
             // 
             this.DataGrid_NPCs.AllowUserToAddRows = false;
@@ -321,7 +330,7 @@
             this.DataGrid_NPCs.ReadOnly = true;
             this.DataGrid_NPCs.RowHeadersVisible = false;
             this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid_NPCs.Size = new System.Drawing.Size(236, 748);
+            this.DataGrid_NPCs.Size = new System.Drawing.Size(236, 708);
             this.DataGrid_NPCs.TabIndex = 2;
             this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
             this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
@@ -1936,6 +1945,7 @@
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(3, 3);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -1976,6 +1986,8 @@
             // 
             this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.Panel_NPCList.Controls.Add(this.Button_PasteBase);
+            this.Panel_NPCList.Controls.Add(this.Button_CopyBase);
             this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
             this.Panel_NPCList.Controls.Add(this.Button_Delete);
             this.Panel_NPCList.Controls.Add(this.Button_Add);
@@ -1985,10 +1997,32 @@
             this.Panel_NPCList.Size = new System.Drawing.Size(244, 788);
             this.Panel_NPCList.TabIndex = 5;
             // 
+            // Button_PasteBase
+            // 
+            this.Button_PasteBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_PasteBase.Location = new System.Drawing.Point(125, 751);
+            this.Button_PasteBase.Name = "Button_PasteBase";
+            this.Button_PasteBase.Size = new System.Drawing.Size(109, 31);
+            this.Button_PasteBase.TabIndex = 7;
+            this.Button_PasteBase.Text = "Paste model info";
+            this.Button_PasteBase.UseVisualStyleBackColor = true;
+            this.Button_PasteBase.Click += new System.EventHandler(this.Button_PasteBase_Click);
+            // 
+            // Button_CopyBase
+            // 
+            this.Button_CopyBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_CopyBase.Location = new System.Drawing.Point(10, 751);
+            this.Button_CopyBase.Name = "Button_CopyBase";
+            this.Button_CopyBase.Size = new System.Drawing.Size(109, 31);
+            this.Button_CopyBase.TabIndex = 6;
+            this.Button_CopyBase.Text = "Copy model info";
+            this.Button_CopyBase.UseVisualStyleBackColor = true;
+            this.Button_CopyBase.Click += new System.EventHandler(this.Button_CopyBase_Click);
+            // 
             // Button_Duplicate
             // 
             this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Duplicate.Location = new System.Drawing.Point(87, 754);
+            this.Button_Duplicate.Location = new System.Drawing.Point(87, 714);
             this.Button_Duplicate.Name = "Button_Duplicate";
             this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
             this.Button_Duplicate.TabIndex = 5;
@@ -1999,7 +2033,7 @@
             // Button_Delete
             // 
             this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Delete.Location = new System.Drawing.Point(166, 754);
+            this.Button_Delete.Location = new System.Drawing.Point(166, 714);
             this.Button_Delete.Name = "Button_Delete";
             this.Button_Delete.Size = new System.Drawing.Size(73, 31);
             this.Button_Delete.TabIndex = 4;
@@ -2010,20 +2044,13 @@
             // Button_Add
             // 
             this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Add.Location = new System.Drawing.Point(3, 754);
+            this.Button_Add.Location = new System.Drawing.Point(3, 714);
             this.Button_Add.Name = "Button_Add";
             this.Button_Add.Size = new System.Drawing.Size(79, 31);
             this.Button_Add.TabIndex = 3;
             this.Button_Add.Text = "Add";
             this.Button_Add.UseVisualStyleBackColor = true;
             this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -2253,6 +2280,8 @@
         private System.Windows.Forms.CheckBox Checkbox_EnvColor;
         private System.Windows.Forms.Button Button_Duplicate;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.Button Button_PasteBase;
+        private System.Windows.Forms.Button Button_CopyBase;
     }
 }
 
