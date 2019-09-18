@@ -105,7 +105,7 @@ namespace NPC_Maker
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Anim.ObjID));
                         }
 
-                        byte[] Script = Parser.Parse(Entry.Script, Entry.Animations, Entry.Textures);
+                        byte[] Script = Parser.Parse(Entry);
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Script.Length));
 
                         while (EntryBytes.Count % 4 != 0)
@@ -136,9 +136,9 @@ namespace NPC_Maker
                         if (Entry.TalkPattern != "")
                             TalkPat = Entry.TalkPattern.Split(',');
 
-                        if (BlinkPat.Length > 8 || TalkPat.Length > 8)
+                        if (BlinkPat.Length > 6 || TalkPat.Length > 6)
                         {
-                            System.Windows.Forms.MessageBox.Show("Talking and blinking patterns may only be 8 entries long");
+                            System.Windows.Forms.MessageBox.Show("Talking and blinking patterns may only be 6 entries long!");
                             return;
                         }
 

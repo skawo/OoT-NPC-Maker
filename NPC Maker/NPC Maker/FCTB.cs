@@ -130,7 +130,10 @@ namespace NPC_Maker
             "actorid",
             "do_blinking_anim",
             "do_talking_anim",
-            "segment_tex"
+            "segment_tex",
+            "blink_pattern",
+            "talk_pattern",
+            "env_color"
         };
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e)

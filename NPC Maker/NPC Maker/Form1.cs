@@ -387,6 +387,7 @@ namespace NPC_Maker
             {
                 SelectedEntry = new NPCEntry();
                 SelectedEntry.IsNull = false;
+                EditedFile.Entries[SelectedIndex] = SelectedEntry;
                 DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = "";
                 DataGrid_NPCs_SelectionChanged(this, null);
             }
@@ -579,7 +580,7 @@ namespace NPC_Maker
 
             ScriptParser Parser = new ScriptParser();
 
-            Parser.Parse(Textbox_Script.Text, SelectedEntry.Animations, SelectedEntry.Textures);
+            Parser.Parse(SelectedEntry);
             SelectedEntry.ParseErrors = Parser.ParseErrors;
 
             Textbox_ParseErrors.Text = "";
