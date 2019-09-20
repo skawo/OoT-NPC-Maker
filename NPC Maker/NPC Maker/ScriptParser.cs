@@ -735,7 +735,6 @@ namespace NPC_Maker
                                 int R = Helper_ConvertToInt32(Instr[2]);
                                 int G = Helper_ConvertToInt32(Instr[3]);
                                 int B = Helper_ConvertToInt32(Instr[4]);
-                                int A = Helper_ConvertToInt32(Instr[5]);
 
                                 if (R > 255 || R < 0)
                                     throw new ParamOutOfRangeException(Line);
@@ -743,10 +742,13 @@ namespace NPC_Maker
                                     throw new ParamOutOfRangeException(Line);
                                 if (B > 255 || B < 0)
                                     throw new ParamOutOfRangeException(Line);
-                                if (A > 255 || A < 0)
-                                    throw new ParamOutOfRangeException(Line);
 
-                                SetRGBAInstruction SetRGBA = new SetRGBAInstruction((byte)R, (byte)G, (byte)B, (byte)A);
+                                string Use = Instr[5].ToLower();
+
+                                if (Use != "true" && Use != "false")
+                                    throw new Exception();
+
+                                SetRGBAInstruction SetRGBA = new SetRGBAInstruction((byte)R, (byte)G, (byte)B, Use == "true" ? (byte)255 : (byte)0);
                                 return SetRGBA.GetByteData();
                             }
                             else
