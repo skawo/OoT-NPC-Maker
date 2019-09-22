@@ -207,6 +207,26 @@ namespace NPC_Maker
                         EntryBytes.AddRange(TextureOffsets.ToArray());
                         EntryBytes.AddRange(TextureEntries.ToArray());
 
+                        int DListBytes = Entry.DLists.Count * 27;
+
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(DListBytes));
+
+                        while ((EntryBytes.Count) % 4 != 0)
+                            EntryBytes.Add(0);
+
+                        foreach (DListEntry Dlist in Entry.DLists)
+                        {
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Address));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransX));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransY));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransZ));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotX));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotY));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotZ));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Limb));
+                            EntryBytes.Add((byte)Dlist.ShowType);
+                        }
+
                         while ((EntryBytes.Count) % 4 != 0)
                             EntryBytes.Add(0);
 

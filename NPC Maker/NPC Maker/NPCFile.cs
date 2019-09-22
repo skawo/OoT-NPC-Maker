@@ -61,13 +61,14 @@ namespace NPC_Maker
         public List<string> ParseErrors { get; set; }
 
         public System.Drawing.Color EnvColor { get; set; }
-        public List<List<TextureEntry>> Textures { get; set; } 
+        public List<List<TextureEntry>> Textures { get; set; }
         public string BlinkPattern { get; set; }
         public string TalkPattern { get; set; }
         public byte BlinkSegment { get; set; }
         public byte TalkSegment { get; set; }
         public byte BlinkSpeed { get; set; }
         public byte TalkSpeed { get; set; }
+        public List<DListEntry> DLists { get; set; }
 
         public NPCEntry()
         {
@@ -122,6 +123,8 @@ namespace NPC_Maker
             TalkSegment = 8;
             BlinkSpeed = 1;
             TalkSpeed = 1;
+
+            DLists = new List<DListEntry>();
         }
 
         public void ChangeValueOfMember(string Member, object Value)
@@ -225,5 +228,45 @@ namespace NPC_Maker
             Address = _Address;
         }
     }
+
+    public class DListEntry
+    {
+        public string Name { get; set; }
+        public UInt32 Address { get; set; }
+        public float TransX { get; set; }
+        public float TransY { get; set; }
+        public float TransZ { get; set; }
+        public Int16 RotX { get; set; }
+        public Int16 RotY { get; set; }
+        public Int16 RotZ { get; set; }
+        public int ShowType { get; set; }
+        public int Limb { get; set; }
+
+        public DListEntry()
+        {
+            Name = "";
+            Address = 0;
+            TransX = 0;
+            TransY = 0;
+            TransZ = 0;
+            RotX = 0;
+            RotY = 0;
+            RotZ = 0;
+            ShowType = 0;
+            Limb = 0;
+        }
+        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, Int16 _RotX, Int16 _RotY, Int16 _RotZ, int _ShowType, int _Limb)
+        {
+            Name = _Name;
+            Address = _Address;
+            TransX = _TransX;
+            TransY = _TransY;
+            TransZ = _TransZ;
+            RotX = _RotX;
+            RotY = _RotY;
+            RotZ = _RotZ;
+            Limb = _Limb;
+            ShowType = _ShowType;
+        }
+    }
 }
- 
