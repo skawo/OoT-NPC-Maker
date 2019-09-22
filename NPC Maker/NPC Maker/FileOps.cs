@@ -207,7 +207,7 @@ namespace NPC_Maker
                         EntryBytes.AddRange(TextureOffsets.ToArray());
                         EntryBytes.AddRange(TextureEntries.ToArray());
 
-                        int DListBytes = Entry.DLists.Count * 27;
+                        int DListBytes = Entry.DLists.Count * 25;
 
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(DListBytes));
 

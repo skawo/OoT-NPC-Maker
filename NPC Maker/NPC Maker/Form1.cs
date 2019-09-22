@@ -608,7 +608,7 @@ namespace NPC_Maker
                 {
                     if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, Convert.ToInt32(e.Value), 0));
+                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, Convert.ToUInt16(e.Value), 0));
                         (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "DList_" + e.RowIndex.ToString();
                         (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
                         (sender as DataGridView).Rows[e.RowIndex].Cells[2].Value = "0, 0, 0";
@@ -617,7 +617,7 @@ namespace NPC_Maker
                     }
                     else
                     {
-                        SelectedEntry.DLists[e.RowIndex].Limb = Convert.ToInt32(e.Value);
+                        SelectedEntry.DLists[e.RowIndex].Limb = Convert.ToUInt16(e.Value);
                     }
                 }
                 catch (Exception)

@@ -51,6 +51,12 @@
             this.Label_ExtraTextures = new System.Windows.Forms.Label();
             this.Label_ExtraDisplayLists = new System.Windows.Forms.Label();
             this.DataGridView_ExtraDLists = new System.Windows.Forms.DataGridView();
+            this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Checkbox_EnvColor = new System.Windows.Forms.CheckBox();
             this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
             this.Label_TalkingFramesBetween = new System.Windows.Forms.Label();
@@ -178,12 +184,6 @@
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
-            this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_Editor.SuspendLayout();
@@ -514,6 +514,50 @@
             this.DataGridView_ExtraDLists.TabIndex = 51;
             this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
             this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
+            // 
+            // ExtraDlists_Purpose
+            // 
+            this.ExtraDlists_Purpose.FillWeight = 70F;
+            this.ExtraDlists_Purpose.HeaderText = "Purpose";
+            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
+            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Offset
+            // 
+            this.ExtraDlists_Offset.FillWeight = 50F;
+            this.ExtraDlists_Offset.HeaderText = "Offset";
+            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
+            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Translation
+            // 
+            this.ExtraDlists_Translation.FillWeight = 70F;
+            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
+            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
+            // 
+            // ExtraDlists_Rotation
+            // 
+            this.ExtraDlists_Rotation.FillWeight = 70F;
+            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
+            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
+            // 
+            // ExtraDlists_Limb
+            // 
+            this.ExtraDlists_Limb.FillWeight = 35F;
+            this.ExtraDlists_Limb.HeaderText = "Limb";
+            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
+            // 
+            // ExtraDlists_ShowType
+            // 
+            this.ExtraDlists_ShowType.FillWeight = 80F;
+            this.ExtraDlists_ShowType.HeaderText = "Show type";
+            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
+            "Don\'t show",
+            "Alongside limb",
+            "Instead of limb"});
+            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
+            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ExtraDlists_ShowType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // Checkbox_EnvColor
             // 
@@ -1317,7 +1361,7 @@
             // Label_LoopDelay
             // 
             this.Label_LoopDelay.AutoSize = true;
-            this.Label_LoopDelay.Location = new System.Drawing.Point(14, 57);
+            this.Label_LoopDelay.Location = new System.Drawing.Point(11, 58);
             this.Label_LoopDelay.Name = "Label_LoopDelay";
             this.Label_LoopDelay.Size = new System.Drawing.Size(81, 13);
             this.Label_LoopDelay.TabIndex = 47;
@@ -1326,7 +1370,7 @@
             // Label_LoopStartNode
             // 
             this.Label_LoopStartNode.AutoSize = true;
-            this.Label_LoopStartNode.Location = new System.Drawing.Point(14, 109);
+            this.Label_LoopStartNode.Location = new System.Drawing.Point(11, 110);
             this.Label_LoopStartNode.Name = "Label_LoopStartNode";
             this.Label_LoopStartNode.Size = new System.Drawing.Size(84, 13);
             this.Label_LoopStartNode.TabIndex = 45;
@@ -1373,7 +1417,7 @@
             // Label_LoopEndNode
             // 
             this.Label_LoopEndNode.AutoSize = true;
-            this.Label_LoopEndNode.Location = new System.Drawing.Point(14, 135);
+            this.Label_LoopEndNode.Location = new System.Drawing.Point(11, 135);
             this.Label_LoopEndNode.Name = "Label_LoopEndNode";
             this.Label_LoopEndNode.Size = new System.Drawing.Size(82, 13);
             this.Label_LoopEndNode.TabIndex = 43;
@@ -1418,7 +1462,7 @@
             // Label_PathFollowID
             // 
             this.Label_PathFollowID.AutoSize = true;
-            this.Label_PathFollowID.Location = new System.Drawing.Point(13, 83);
+            this.Label_PathFollowID.Location = new System.Drawing.Point(11, 83);
             this.Label_PathFollowID.Name = "Label_PathFollowID";
             this.Label_PathFollowID.Size = new System.Drawing.Size(76, 13);
             this.Label_PathFollowID.TabIndex = 39;
@@ -1475,7 +1519,7 @@
             // Label_Distance
             // 
             this.Label_Distance.AutoSize = true;
-            this.Label_Distance.Location = new System.Drawing.Point(14, 5);
+            this.Label_Distance.Location = new System.Drawing.Point(11, 5);
             this.Label_Distance.Name = "Label_Distance";
             this.Label_Distance.Size = new System.Drawing.Size(103, 13);
             this.Label_Distance.TabIndex = 35;
@@ -1484,7 +1528,7 @@
             // Label_Speed
             // 
             this.Label_Speed.AutoSize = true;
-            this.Label_Speed.Location = new System.Drawing.Point(14, 31);
+            this.Label_Speed.Location = new System.Drawing.Point(11, 31);
             this.Label_Speed.Name = "Label_Speed";
             this.Label_Speed.Size = new System.Drawing.Size(92, 13);
             this.Label_Speed.TabIndex = 36;
@@ -2001,6 +2045,7 @@
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(3, 3);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -2106,50 +2151,6 @@
             this.Button_Add.Text = "Add";
             this.Button_Add.UseVisualStyleBackColor = true;
             this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
-            // 
-            // ExtraDlists_Purpose
-            // 
-            this.ExtraDlists_Purpose.FillWeight = 70F;
-            this.ExtraDlists_Purpose.HeaderText = "Purpose";
-            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
-            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Offset
-            // 
-            this.ExtraDlists_Offset.FillWeight = 50F;
-            this.ExtraDlists_Offset.HeaderText = "Offset";
-            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
-            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Translation
-            // 
-            this.ExtraDlists_Translation.FillWeight = 70F;
-            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
-            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
-            // 
-            // ExtraDlists_Rotation
-            // 
-            this.ExtraDlists_Rotation.FillWeight = 70F;
-            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
-            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
-            // 
-            // ExtraDlists_Limb
-            // 
-            this.ExtraDlists_Limb.FillWeight = 35F;
-            this.ExtraDlists_Limb.HeaderText = "Limb";
-            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
-            // 
-            // ExtraDlists_ShowType
-            // 
-            this.ExtraDlists_ShowType.FillWeight = 80F;
-            this.ExtraDlists_ShowType.HeaderText = "Show type";
-            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
-            "Don\'t show",
-            "Alongside limb",
-            "Instead of limb"});
-            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
-            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ExtraDlists_ShowType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // Form1
             // 

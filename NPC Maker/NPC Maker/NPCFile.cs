@@ -240,7 +240,7 @@ namespace NPC_Maker
         public Int16 RotY { get; set; }
         public Int16 RotZ { get; set; }
         public int ShowType { get; set; }
-        public int Limb { get; set; }
+        public UInt16 Limb { get; set; }
 
         public DListEntry()
         {
@@ -255,7 +255,7 @@ namespace NPC_Maker
             ShowType = 0;
             Limb = 0;
         }
-        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, Int16 _RotX, Int16 _RotY, Int16 _RotZ, int _ShowType, int _Limb)
+        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, Int16 _RotX, Int16 _RotY, Int16 _RotZ, UInt16 _Limb, int _ShowType)
         {
             Name = _Name;
             Address = _Address;
