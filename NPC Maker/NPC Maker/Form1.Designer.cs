@@ -475,7 +475,7 @@
             // Label_ExtraTextures
             // 
             this.Label_ExtraTextures.AutoSize = true;
-            this.Label_ExtraTextures.Location = new System.Drawing.Point(351, 393);
+            this.Label_ExtraTextures.Location = new System.Drawing.Point(354, 393);
             this.Label_ExtraTextures.Name = "Label_ExtraTextures";
             this.Label_ExtraTextures.Size = new System.Drawing.Size(74, 13);
             this.Label_ExtraTextures.TabIndex = 53;
@@ -484,7 +484,7 @@
             // Label_ExtraDisplayLists
             // 
             this.Label_ExtraDisplayLists.AutoSize = true;
-            this.Label_ExtraDisplayLists.Location = new System.Drawing.Point(351, 11);
+            this.Label_ExtraDisplayLists.Location = new System.Drawing.Point(354, 11);
             this.Label_ExtraDisplayLists.Name = "Label_ExtraDisplayLists";
             this.Label_ExtraDisplayLists.Size = new System.Drawing.Size(89, 13);
             this.Label_ExtraDisplayLists.TabIndex = 52;
@@ -506,11 +506,11 @@
             this.ExtraDlists_Rotation,
             this.ExtraDlists_Limb,
             this.ExtraDlists_ShowType});
-            this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(350, 34);
+            this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(357, 27);
             this.DataGridView_ExtraDLists.MultiSelect = false;
             this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
             this.DataGridView_ExtraDLists.RowHeadersVisible = false;
-            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(514, 356);
+            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(507, 363);
             this.DataGridView_ExtraDLists.TabIndex = 51;
             this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
             this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
@@ -2045,7 +2045,6 @@
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(3, 3);
             this.Textbox_Script.Name = "Textbox_Script";

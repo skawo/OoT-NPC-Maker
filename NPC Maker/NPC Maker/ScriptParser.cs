@@ -121,6 +121,7 @@ namespace NPC_Maker
         talk_pattern = 243,
         segment_tex = 244,
         env_color = 245,
+        dlist_visiblility = 246,
     }
 
     public enum WaitForSubTypes
@@ -141,7 +142,14 @@ namespace NPC_Maker
         random = 1,
         follow = 2,
         path_collisionwise = 3,
-        path_direct
+        path_direct = 4
+    }
+
+    public enum DListVisibilityTypes
+    {
+        none = 0,
+        atlimb = 1,
+        insteadlimb = 2,
     }
 
     public class ScriptParser
@@ -260,6 +268,17 @@ namespace NPC_Maker
             for (int i = 0; i < Textures[Segment].Count; i++)
             {
                 if (TextureName.ToLower() == Textures[Segment][i].Name.Replace(" ", "").ToLower())
+                    return i;
+            }
+
+            return -1;
+        }
+
+        private static Int32 Helper_GetDListID(string DlistName, List<DListEntry> DLists)
+        {
+            for (int i = 0; i < DLists.Count; i++)
+            {
+                if (DlistName.ToLower() == DLists[i].Name.Replace(" ", "").ToLower())
                     return i;
             }
 
@@ -750,6 +769,32 @@ namespace NPC_Maker
 
                                 SetRGBAInstruction SetRGBA = new SetRGBAInstruction((byte)R, (byte)G, (byte)B, Use == "true" ? (byte)255 : (byte)0);
                                 return SetRGBA.GetByteData();
+                            }
+                            else if (SetSubType == (int)SetSubTypes.dlist_visiblility)
+                            {
+                                if (Instr.Length != 4)
+                                    throw new WrongParamCountException(Line);
+
+                                Int32 DListID = Helper_GetDListID(Instr[2], Entry.DLists);
+
+                                if (DListID == -1)
+                                    DListID = Helper_ConvertToInt32(Instr[2]);
+
+                                if (DListID > (Entry.DLists.Count() - 1) || DListID < 0)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                int VisibleType = 0;
+
+                                switch (Instr[3].ToLower())
+                                {
+                                    case "invisible": VisibleType = 0; break;
+                                    case "at_limb": VisibleType = 1; break;
+                                    case "instead_of_limb": VisibleType = 2; break;
+                                    default: throw new Exception();
+                                }
+
+                                SetDListVisibilityInstruction SetDListV = new SetDListVisibilityInstruction(Convert.ToByte(VisibleType), Convert.ToUInt16(DListID));
+                                return SetDListV.GetByteData();
                             }
                             else
                             {
@@ -1427,6 +1472,34 @@ namespace NPC_Maker
             Data.Add(SubID);
             Data.AddRange(Program.BEConverter.GetBytes(AnimID));
             Data.AddRange(Program.BEConverter.GetBytes(Speed));
+            return Data.ToArray();
+        }
+    }
+
+    public class SetDListVisibilityInstruction
+    {
+        Byte ID = (byte)InstructionIDs.SET;
+        Byte SubID = (byte)SetSubTypes.dlist_visiblility;
+        UInt16 DlistID { get; set; }
+        byte VisibilityType { get; set; }
+
+        public SetDListVisibilityInstruction(byte _VisibilityType, UInt16 _DlistID)
+        {
+            DlistID = _DlistID;
+            VisibilityType = _VisibilityType;
+        }
+
+        public byte[] GetByteData()
+        {
+            List<byte> Data = new List<byte>();
+
+            Data.Add(ID);
+            Data.Add(SubID);
+            Data.AddRange(Program.BEConverter.GetBytes(DlistID));
+            Data.Add(VisibilityType);
+            Data.Add(0);
+            Data.Add(0);
+            Data.Add(0);
             return Data.ToArray();
         }
     }

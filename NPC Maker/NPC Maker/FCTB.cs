@@ -133,7 +133,11 @@ namespace NPC_Maker
             "segment_tex",
             "blink_pattern",
             "talk_pattern",
-            "env_color"
+            "env_color",
+            "invisible",
+            "at_limb",
+            "instead_of_limb",
+            "dlist_invisibility"
         };
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e)
