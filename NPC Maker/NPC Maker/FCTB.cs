@@ -137,7 +137,7 @@ namespace NPC_Maker
             "invisible",
             "at_limb",
             "instead_of_limb",
-            "dlist_invisibility"
+            "dlist_visibility"
         };
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e)
