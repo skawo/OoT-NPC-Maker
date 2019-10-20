@@ -175,9 +175,10 @@ namespace NPC_Maker
                                                                  Dlist.Address.ToString("X"),
                                                                  Dlist.TransX.ToString() + "," + Dlist.TransY.ToString() + "," + Dlist.TransZ.ToString(),
                                                                  Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
+                                                                 Dlist.Scale.ToString(),
                                                                  Dlist.Limb.ToString(),
                                                                  SelCombo
-                                                                });
+                                                                }) ;
             }
 
         }
@@ -457,27 +458,37 @@ namespace NPC_Maker
 
         private void AddBlankDList(int Index)
         {
-            SelectedEntry.DLists.Add(new DListEntry("DList_" + Index, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+            SelectedEntry.DLists.Add(new DListEntry("DList_" + Index, 0, 0, 0, 0, 0, 0, 0, 0.01f, 0, 0));
             DataGridView_ExtraDLists.Rows[Index].Cells[0].Value = "DList_" + Index;
             DataGridView_ExtraDLists.Rows[Index].Cells[1].Value = 0;
             DataGridView_ExtraDLists.Rows[Index].Cells[2].Value = "0, 0, 0";
             DataGridView_ExtraDLists.Rows[Index].Cells[3].Value = "0, 0, 0";
-            DataGridView_ExtraDLists.Rows[Index].Cells[4].Value = 0;
-            DataGridView_ExtraDLists.Rows[Index].Cells[5].Value = ExtraDlists_ShowType.Items[0];
+            DataGridView_ExtraDLists.Rows[Index].Cells[4].Value = "0.01";
+            DataGridView_ExtraDLists.Rows[Index].Cells[5].Value = 0;
+            DataGridView_ExtraDLists.Rows[Index].Cells[6].Value = ExtraDlists_ShowType.Items[0];
+        }
+
+        private void SetDlist(DataGridView Grid, int RowIndex, int CellIndex, object CellValue)
+        {
+            Grid.Rows[RowIndex].Cells[0].Value = "DList_" + RowIndex.ToString();
+            Grid.Rows[RowIndex].Cells[1].Value = 0;
+            Grid.Rows[RowIndex].Cells[2].Value = "0, 0, 0";
+            Grid.Rows[RowIndex].Cells[3].Value = "0, 0, 0";
+            Grid.Rows[RowIndex].Cells[4].Value = 1.0f;
+            Grid.Rows[RowIndex].Cells[5].Value = 0;
+            Grid.Rows[RowIndex].Cells[6].Value = ExtraDlists_ShowType.Items[0];
+
+            Grid.Rows[RowIndex].Cells[CellIndex].Value = CellValue;
         }
 
         private void DataGridView_ExtraDLists_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
         {
-            if (e.ColumnIndex == 0)
+            if (e.ColumnIndex == 0)     // Purpose
             {
                 if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry(e.Value.ToString(), 0, 0, 0, 0, 0, 0, 0, 0, 0));
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[2].Value = "0, 0, 0";
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[3].Value = "0, 0, 0";
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[4].Value = 0;
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[5].Value = ExtraDlists_ShowType.Items[0];
+                    SelectedEntry.DLists.Add(new DListEntry(e.Value.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, 0, 0));
+                    SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
                 }
                 else
                     SelectedEntry.DLists[e.RowIndex].Name = e.Value.ToString();
@@ -485,18 +496,14 @@ namespace NPC_Maker
                 e.ParsingApplied = true;
                 return;
             }
-            else if (e.ColumnIndex == 1)
+            else if (e.ColumnIndex == 1)    // Offset
             {
                 try
                 {
                     if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), 0, 0, 0, 0, 0, 0, 0, 0));
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "DList_" + e.RowIndex.ToString();
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[2].Value = "0, 0, 0";
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[3].Value = "0, 0, 0";
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[4].Value = 0;
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[5].Value = ExtraDlists_ShowType.Items[0];
+                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), 0, 0, 0, 0, 0, 0, 0.01f, 0, 0));
+                        SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, Convert.ToUInt32(e.Value.ToString(), 16));
                     }
                     else
                         SelectedEntry.DLists[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
@@ -514,7 +521,7 @@ namespace NPC_Maker
                     return;
                 }
             }
-            else if (e.ColumnIndex == 2)
+            else if (e.ColumnIndex == 2)    // XYZ Transl Offs
             {
                 string[] Split = e.Value.ToString().Split(',');
 
@@ -541,12 +548,8 @@ namespace NPC_Maker
 
                 if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, X, Y, Z, 0, 0, 0, 0, 0));
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "DList_" + e.RowIndex.ToString();
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[3].Value = "0, 0, 0";
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[4].Value = 0;
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[5].Value = ExtraDlists_ShowType.Items[0];
+                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, X, Y, Z, 0, 0, 0, 0.01f, 0, 0));
+                    SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
                 }
                 else
                 {
@@ -558,7 +561,7 @@ namespace NPC_Maker
                 e.ParsingApplied = true;
                 return;
             }
-            else if (e.ColumnIndex == 3)
+            else if (e.ColumnIndex == 3) // XYZ Rot 
             {
                 string[] Split = e.Value.ToString().Split(',');
 
@@ -585,12 +588,8 @@ namespace NPC_Maker
 
                 if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, X, Y, Z, 0, 0));
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "DList_" + e.RowIndex.ToString();
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[2].Value = "0, 0, 0";
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[4].Value = 0;
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[5].Value = ExtraDlists_ShowType.Items[0];
+                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, X, Y, Z, 0.01f, 0, 0));
+                    SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
                 }
                 else
                 {
@@ -602,18 +601,41 @@ namespace NPC_Maker
                 e.ParsingApplied = true;
                 return;
             }
-            else if (e.ColumnIndex == 4)
+            else if (e.ColumnIndex == 4) // Scale
             {
                 try
                 {
                     if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, Convert.ToUInt16(e.Value), 0));
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "DList_" + e.RowIndex.ToString();
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[2].Value = "0, 0, 0";
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[3].Value = "0, 0, 0";
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[5].Value = ExtraDlists_ShowType.Items[0];
+                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, (float)Convert.ToDecimal(e.Value), 0, 0));
+                        SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, (float)Convert.ToDecimal(e.Value));
+                    }
+                    else
+                    {
+                        SelectedEntry.DLists[e.RowIndex].Scale = (float)Convert.ToDecimal(e.Value);
+                    }
+                }
+                catch (Exception)
+                {
+                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                        AddBlankDList(e.RowIndex);
+
+                    e.Value = 0;
+                    e.ParsingApplied = true;
+                    return;
+                }
+
+                e.ParsingApplied = true;
+                return;
+            }
+            else if (e.ColumnIndex == 5)  // Limb
+            {
+                try
+                {
+                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                    {
+                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 0.01f, Convert.ToUInt16(e.Value), 0));
+                        SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, Convert.ToUInt16(e.Value));
                     }
                     else
                     {
@@ -633,7 +655,7 @@ namespace NPC_Maker
                 e.ParsingApplied = true;
                 return;
             }
-            else if (e.ColumnIndex == 5)
+            else if (e.ColumnIndex == 6)  // Showtype
             {
                 int ShowType = 0;
 
@@ -647,12 +669,8 @@ namespace NPC_Maker
 
                 if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 0, ShowType));
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "DList_" + e.RowIndex.ToString();
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[2].Value = "0, 0, 0";
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[3].Value = "0, 0, 0";
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[4].Value = 0;
+                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 0.01f, 0, ShowType));
+                    SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, ShowType);
                 }
                 else
                 {

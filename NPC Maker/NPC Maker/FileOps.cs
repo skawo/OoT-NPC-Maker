@@ -207,9 +207,9 @@ namespace NPC_Maker
                         EntryBytes.AddRange(TextureOffsets.ToArray());
                         EntryBytes.AddRange(TextureEntries.ToArray());
 
-                        int DListBytes = Entry.DLists.Count * 25;
+                        int DLists = Entry.DLists.Count;
 
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(DListBytes));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(DLists));
 
                         while ((EntryBytes.Count) % 4 != 0)
                             EntryBytes.Add(0);
@@ -217,14 +217,16 @@ namespace NPC_Maker
                         foreach (DListEntry Dlist in Entry.DLists)
                         {
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Address));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransX));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransY));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransZ));
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotX));
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotY));
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotZ));
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Limb));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransX));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransY));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransZ));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Scale));
                             EntryBytes.Add((byte)Dlist.ShowType);
+                            EntryBytes.AddRange(new byte[3]);
                         }
 
                         while ((EntryBytes.Count) % 4 != 0)

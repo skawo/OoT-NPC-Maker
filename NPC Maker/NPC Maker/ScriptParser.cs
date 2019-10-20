@@ -121,7 +121,7 @@ namespace NPC_Maker
         talk_pattern = 243,
         segment_tex = 244,
         env_color = 245,
-        dlist_visiblility = 246,
+        dlist_show = 246,
     }
 
     public enum WaitForSubTypes
@@ -770,7 +770,7 @@ namespace NPC_Maker
                                 SetRGBAInstruction SetRGBA = new SetRGBAInstruction((byte)R, (byte)G, (byte)B, Use == "true" ? (byte)255 : (byte)0);
                                 return SetRGBA.GetByteData();
                             }
-                            else if (SetSubType == (int)SetSubTypes.dlist_visiblility)
+                            else if (SetSubType == (int)SetSubTypes.dlist_show)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -1010,7 +1010,7 @@ namespace NPC_Maker
                 ParseErrors.Add(ex.Message);
                 return new byte[8];
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ParseErrors.Add("Problem parsing. Line: \"" + Line.Trim() + "\"");
                 return new byte[8];
@@ -1479,7 +1479,7 @@ namespace NPC_Maker
     public class SetDListVisibilityInstruction
     {
         Byte ID = (byte)InstructionIDs.SET;
-        Byte SubID = (byte)SetSubTypes.dlist_visiblility;
+        Byte SubID = (byte)SetSubTypes.dlist_show;
         UInt16 DlistID { get; set; }
         byte VisibilityType { get; set; }
 
