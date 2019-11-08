@@ -900,8 +900,9 @@ namespace NPC_Maker
                 if (e.KeyCode == Keys.Delete)
                 {
                     int DataGridIndex = TabControl_Textures.SelectedIndex;
-                    (sender as DataGridView).Rows.RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
-                    SelectedEntry.Textures[DataGridIndex].RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
+                    int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
+                    (sender as DataGridView).Rows.RemoveAt(Index);
+                    SelectedEntry.Textures[DataGridIndex].RemoveAt(Index);
                 }
             }
             catch (Exception)
@@ -918,9 +919,9 @@ namespace NPC_Maker
                 {
                     if (e.KeyCode == Keys.Delete)
                     {
-                        int DataGridIndex = TabControl_Textures.SelectedIndex;
-                        (sender as DataGridView).Rows.RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
-                        SelectedEntry.Animations.RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
+                        int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
+                        (sender as DataGridView).Rows.RemoveAt(Index);
+                        SelectedEntry.Animations.RemoveAt(Index);
                     }
                 }
             }
