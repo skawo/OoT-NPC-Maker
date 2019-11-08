@@ -883,8 +883,9 @@ namespace NPC_Maker
             {
                 if (e.KeyCode == Keys.Delete)
                 {
-                    (sender as DataGridView).Rows.RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
-                    SelectedEntry.DLists.RemoveAt((sender as DataGridView).SelectedCells[0].RowIndex);
+                    int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
+                    (sender as DataGridView).Rows.RemoveAt(Index);
+                    SelectedEntry.DLists.RemoveAt(Index);
                 }
             }
             catch (Exception)
