@@ -32,7 +32,161 @@ namespace NPC_Maker
         TURNTOPLAYER = 8,
         PLAY = 9,
         KILL = 10,
+        ENABLETRADE = 11,
         RETURN = 255,
+    }
+
+    public enum TradeItems
+    {
+        ZELDALETTER = 1,
+        WEIRDEGG = 2,
+        CHICKEN = 3,
+        MAGICBEAN = 4,
+        POCKETEGG = 5,
+        POCKETCUCCO = 6,
+        COJIRO = 7,
+        ODDMUSHROOM = 8,
+        ODDPOTION = 9,
+        POACHERSAW = 10,
+        BROKENGORONSWORD = 11,
+        PRESCRIPTION = 12,
+        EYEBALLFROG = 13,
+        EYEDROPS = 14,
+        CLAIMCHECK = 15,
+        FISH = 24,
+        BLUEFIRE = 25,
+        BUG = 26,
+        POE = 27,
+        BIGPOE = 28,
+        RUTOLETTER = 29,
+    }
+
+    public enum GiveItems
+    {
+        BOMBSX5 = 1,
+        DEKUNUTSX5 = 2,
+        BOMBCHUX10 = 3,
+        FAIRYBOW = 4,
+        FAIRYSLINGSHOT = 5,
+        BOOMERANG = 6,
+        DEKUSTICK = 7,
+        HOOKSHOT = 8,
+        LONGSHOT = 9,
+        LENSOFTRUTH = 10,
+        ZELDALETTER = 11,
+        OCARINAOFTIME = 12,
+        MEGATONHAMMER = 13,
+        COJIRO = 14,
+        EMPTYBOTTLE = 15,
+        REDPOTION = 16,
+        GREENPOTION = 17,
+        BLUEPOTION = 18,
+        BOTTLEDFAIRY = 19,
+        BOTTLEDMILK = 20,
+        BOTTLEDRUTOLETTER = 21,
+        MAGICBEAN = 22,
+        SKULLMASK = 23,
+        SPOOKYMASK = 24,
+        CHICKEN = 25,
+        KEATONMASK = 26,
+        BUNNYHOOD = 27,
+        MASKOFTRUTH = 28,
+        POCKETEGG = 29,
+        POCKETCUCCO = 30,
+        ODDMUSHROOM = 31,
+        ODDPOTION = 32,
+        POACHERSAW = 33,
+        BROKENGORONSWORD = 34,
+        PRESCRIPTION = 35,
+        EYEBALLFROG = 36,
+        EYEDROPS = 37,
+        CLAIMCHECK = 38,
+        KOKIRISWORD = 39,
+        GIANTKNIFE = 40,
+        DEKUSHIELD = 41,
+        HYLIANSHIELD = 42,
+        MIRRORSHIELD = 43,
+        GORONTUNIC = 44,
+        ZORATUNIC = 45,
+        IRONBOOTS = 46,
+        HOVERBOOTS = 47,
+        BIGQUIVER = 48,
+        BIGGESTQUIVER = 49,
+        BOMBBAG = 50,
+        BIGBOMBBAG = 51,
+        BIGGESTBOMBBAG = 52,
+        SILVERGAUNTLETS = 53,
+        GOLDENGAUNTLETS = 54,
+        SILVERSCALE = 55,
+        GOLDENSCALE = 56,
+        STONEOFAGONY = 57,
+        GERUDOCARD = 58,
+        INCORRECTFAIRYOCARINA = 59,
+        DEKUSEEDSX5 = 60,
+        HEARTCONTAINER = 61,
+        PIECEOFHEART = 62,
+        BOSSKEY = 63,
+        COMPASS = 64,
+        DUNGEONMAP = 65,
+        SMALLKEY = 66,
+        SMALLMAGICJAR = 67,
+        LARGEMAGICJAR = 68,
+        ADULTWALLET = 69,
+        GIANTWALLET = 70,
+        WEIRDEGG = 71,
+        RECOVERYHEART = 72,
+        ARROWSX5 = 73,
+        ARROWSX10 = 74,
+        ARROWSX30 = 75,
+        GREENRUPEE = 76,
+        BLUERUPEE = 77,
+        REDRUPEE = 78,
+        HEARTCONTAINER_ID79 = 79,
+        PURCHASEDMILK = 80,
+        GORONMASK = 81,
+        ZORAMASK = 82,
+        GERUDOMASK = 83,
+        GORONBRACELET = 84,
+        PURPLERUPEE = 85,
+        HUGERUPEE = 86,
+        BIGGORONSWORD = 87,
+        FIREARROW = 88,
+        ICEARROW = 89,
+        LIGHTARROW = 90,
+        GOLDSKULLTULATOKEN = 91,
+        DINFIRE = 92,
+        FAROREWIND = 93,
+        NAYRULOVE = 94,
+        BULLETBAG = 95,
+        BIGBULLETBAG = 96,
+        DEKUSTICKSX5 = 97,
+        DEKUSTICKSX10 = 98,
+        DEKUNUTSX5_ID99 = 99,
+        DEKUNUTSX10 = 100,
+        BOMB = 101,
+        BOMBSX10 = 102,
+        BOMBSX20 = 103,
+        BOMBXX30 = 104,
+        DEKUSEEDSX30 = 105,
+        BOMBCHUX5 = 106,
+        BOMBCHUX20 = 107,
+        PURCHASEDFISH = 108,
+        PURCHASEDBUG = 109,
+        PURCHASEDBLUEFIRE = 110,
+        PURCHASEDPOE = 111,
+        PURCHASEDBIGPOE = 112,
+        WONSMALLKEY = 113,
+        WONGREENRUPEE = 114,
+        WONBLUERUPEE = 115,
+        WONREDRUPEE = 116,
+        WONPURPLERUPEEE = 117,
+        WONPIECEOFHEART = 118,
+        DEKUSTICKUPGRADE = 119,
+        DEKUSTICKUPGRADE2 = 120,
+        DEKUNUTUPGRADE = 121,
+        DEKUNUTUPGRADE2 = 122,
+        BIGGESTBULLETBAG = 123,
+        ICETRAP = 124
     }
 
     public enum IfSubTypes
@@ -56,6 +210,9 @@ namespace NPC_Maker
         scene_id = 32,
         worn_mask = 33,
         skulltulas = 34,
+        item_being_traded = 62,
+
+        trade_status = 63,
     }
 
     public enum SetSubTypes
@@ -68,6 +225,7 @@ namespace NPC_Maker
         target_limb = 4,
         path_id = 6,
         time_of_day = 7,
+        incorrect_trade_text_id = 8,
 
         /* s16 Subtypes */
         loop_start = 35,
@@ -285,6 +443,30 @@ namespace NPC_Maker
             return -1;
         }
 
+        private static Int32 Helper_GetTradeItemId(string Name)
+        {
+            try
+            {
+                return (int)System.Enum.Parse(typeof(TradeItems), Name.ToUpper());
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
+        private static Int32 Helper_GetGiveItemId(string Name)
+        {
+            try
+            {
+                return (int)System.Enum.Parse(typeof(GiveItems), Name.ToUpper());
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
         private static Int32 Helper_GetSFXId(string SFXName)
         {
             try
@@ -311,6 +493,7 @@ namespace NPC_Maker
                                 throw new WrongParamCountException(Line);
 
                             int IfSubType = (int)System.Enum.Parse(typeof(IfSubTypes), Instr[1].ToLower());
+
 
                             if (IfSubType < 10)
                             {
@@ -372,7 +555,7 @@ namespace NPC_Maker
                                                                      Convert.ToUInt16(Label_False));
                                 return If.GetByteData();
                             }
-                            else if (IfSubType < 64)
+                            else if (IfSubType < 62)
                             {
                                 if (Instr.Length != 8)
                                     throw new WrongParamCountException(Line);
@@ -407,6 +590,61 @@ namespace NPC_Maker
                                                                      Convert.ToUInt16(Label_True),
                                                                      Convert.ToUInt16(Label_False));
                                 return If.GetByteData();
+                            }
+                            else if (IfSubType == 62)
+                            {
+                                if (Instr.Length != 8)
+                                    throw new WrongParamCountException(Line);
+
+                                int Item = Helper_GetTradeItemId(Instr[3]);
+
+                                if (Item == -1)
+                                    Item = (int)Helper_ConvertToUInt32(Instr[3]);
+
+                                if (Item > UInt16.MaxValue || Item > UInt16.MaxValue)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                int Label_True = GetLabelOffset(Line, Instr[5]);
+                                int Label_False = GetLabelOffset(Line, Instr[7]);
+
+                                if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
+                                    throw new LabelOutOfRangeException(Line);
+
+                                if (Instr[4].ToLower() != "then" || Instr[6].ToLower() != "else")
+                                    throw new Exception();
+
+                                byte Condition = 0;
+
+                                switch (Instr[2])
+                                {
+                                    case "==": Condition = 0; break;
+                                    default: throw new Exception();
+                                }
+
+                                IfInstruction If = new IfInstruction(Convert.ToByte(IfSubType),
+                                                                     Condition,
+                                                                     Convert.ToUInt16(Item),
+                                                                     Convert.ToUInt16(Label_True),
+                                                                     Convert.ToUInt16(Label_False));
+                                return If.GetByteData();
+                            }
+                            else if (IfSubType == 63)
+                            {
+                                if (Instr.Length != 8)
+                                    throw new WrongParamCountException(Line);
+
+
+                                int Label_Successful = GetLabelOffset(Line, Instr[2]);
+                                int LabelUnsuccesful = GetLabelOffset(Line, Instr[3]);
+                                int LabelNone = GetLabelOffset(Line, Instr[4]);
+
+                                IfInstruction If = new IfInstruction(Convert.ToByte(IfSubType),
+                                                                     0,
+                                                                     Convert.ToUInt16(Label_Successful),
+                                                                     Convert.ToUInt16(LabelUnsuccesful),
+                                                                     Convert.ToUInt16(LabelNone));
+                                return If.GetByteData();
+
                             }
                             else
                             {
@@ -848,8 +1086,37 @@ namespace NPC_Maker
                             if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericDoubleU16Instruction EnableTextbox = new GenericDoubleU16Instruction((byte)InstructionIDs.ENABLETEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child));
+                            GenericTripleU16Instruction EnableTextbox = new GenericTripleU16Instruction((byte)InstructionIDs.ENABLETEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
                             return EnableTextbox.GetByteData();
+                        }
+                    case "enable_trade":
+                        {
+                            if (Instr.Length != 5)
+                                throw new WrongParamCountException(Line);
+
+                            UInt32 TextID_Trade = Helper_ConvertToUInt32(Instr[1]);
+                            UInt32 TextID_Incorrect = Helper_ConvertToUInt32(Instr[2]);
+                            UInt32 TextID_Talking = Helper_ConvertToUInt32(Instr[3]);
+
+                            int Item = Helper_GetTradeItemId(Instr[4]);
+
+                            if (Item == -1)
+                                Item = (int)Helper_ConvertToUInt32(Instr[3]);
+
+                            if (TextID_Trade > UInt16.MaxValue || TextID_Trade < 0)
+                                throw new ParamOutOfRangeException(Line);
+
+                            if (TextID_Talking > UInt16.MaxValue || TextID_Talking < 0)
+                                throw new ParamOutOfRangeException(Line);
+
+                            if (TextID_Incorrect > UInt16.MaxValue || TextID_Incorrect < 0)
+                                throw new ParamOutOfRangeException(Line);
+
+                            if (Item > byte.MaxValue || Item < 0)
+                                throw new ParamOutOfRangeException(Line);
+
+                            EnableTradeInstruction EnableTrade = new EnableTradeInstruction((byte)InstructionIDs.ENABLETRADE, Convert.ToUInt16(TextID_Trade), Convert.ToUInt16(TextID_Incorrect), Convert.ToUInt16(TextID_Talking), Convert.ToByte(Item));
+                            return EnableTrade.GetByteData();
                         }
                     case "show_textbox":
                         {
@@ -865,7 +1132,7 @@ namespace NPC_Maker
                             if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericDoubleU16Instruction ShowTextbox = new GenericDoubleU16Instruction((byte)InstructionIDs.SHOWTEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child));
+                            GenericTripleU16Instruction ShowTextbox = new GenericTripleU16Instruction((byte)InstructionIDs.SHOWTEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
                             return ShowTextbox.GetByteData();
                         }
                     case "give_item":
@@ -873,7 +1140,11 @@ namespace NPC_Maker
                             if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
 
-                            UInt32 ItemID = Helper_ConvertToUInt32(Instr[1]);
+
+                            int ItemID = Helper_GetGiveItemId(Instr[1]);
+
+                            if (ItemID == -1)
+                               ItemID = (int)Helper_ConvertToUInt32(Instr[1]);
 
                             if (ItemID > UInt16.MaxValue || ItemID < 0)
                                 throw new ParamOutOfRangeException(Line);
@@ -1248,17 +1519,19 @@ namespace NPC_Maker
         }
     }
 
-    public class GenericDoubleU16Instruction
+    public class GenericTripleU16Instruction
     {
         Byte ID { get; set; }
         UInt16 U16_1 { get; set; }
         UInt16 U16_2 { get; set; }
+        UInt16 U16_3 { get; set; }
 
-        public GenericDoubleU16Instruction(Byte _ID, UInt16 _Data1, UInt16 _Data2)
+        public GenericTripleU16Instruction(Byte _ID, UInt16 _Data1, UInt16 _Data2, UInt16 _Data3)
         {
             ID = _ID;
             U16_1 = _Data1;
             U16_2 = _Data2;
+            U16_3 = _Data3;
         }
 
         public byte[] GetByteData()
@@ -1269,7 +1542,38 @@ namespace NPC_Maker
             Data.Add(0);
             Data.AddRange(Program.BEConverter.GetBytes(U16_1));
             Data.AddRange(Program.BEConverter.GetBytes(U16_2));
-            Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
+            Data.AddRange(Program.BEConverter.GetBytes(U16_3));
+
+            return Data.ToArray();
+        }
+    }
+
+    public class EnableTradeInstruction
+    {
+        Byte ID { get; set; }
+        Byte Item { get; set; }
+        UInt16 Correct { get; set; }
+        UInt16 False { get; set; }
+        UInt16 None { get; set; }
+
+        public EnableTradeInstruction(Byte _ID, UInt16 _TextIDCorrect, UInt16 _TextIDFalse, UInt16 _TextIDNone, byte _Item)
+        {
+            ID = _ID;
+            Item = _Item;
+            Correct = _TextIDCorrect;
+            False = _TextIDFalse;
+            None = _TextIDNone;
+        }
+
+        public byte[] GetByteData()
+        {
+            List<byte> Data = new List<byte>();
+
+            Data.Add(ID);
+            Data.Add(Item);
+            Data.AddRange(Program.BEConverter.GetBytes(Correct));
+            Data.AddRange(Program.BEConverter.GetBytes(False));
+            Data.AddRange(Program.BEConverter.GetBytes(None));
 
             return Data.ToArray();
         }

@@ -30,7 +30,8 @@ namespace NPC_Maker
             "goto",
             "turn_towards_player",
             "play",
-            "kill"
+            "kill",
+            "enable_trade",
         };
 
         public static List<string> Keywords = new List<string>()
@@ -61,6 +62,7 @@ namespace NPC_Maker
             "age",
             "day",
             "talking",
+            "trade_successful",
             "has_empty_bottle",
             "rupees",
             "time",
@@ -79,6 +81,7 @@ namespace NPC_Maker
             "movement_speed",
             "path_id",
             "time_of_day",
+            "incorrect_trade_text_id",
             "loop_start",
             "loop_end",
             "collision_offset_x",
