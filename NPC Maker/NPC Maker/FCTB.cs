@@ -18,6 +18,7 @@ namespace NPC_Maker
         public static Style PurpleStyle = new TextStyle(Brushes.Purple, null, FontStyle.Regular);
         public static Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
         public static Style DarkGrayStyle = new TextStyle(Brushes.DarkGray, null, FontStyle.Regular);
+        public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Regular);
 
         public static List<string> Functions = new List<string>()
         {
@@ -32,6 +33,15 @@ namespace NPC_Maker
             "play",
             "kill",
             "enable_trade",
+        };
+
+        public static Dictionary<string, string[]> FunctionSubtypes = new Dictionary<string, string[]>()
+        {
+            {"if", Enum.GetNames(typeof(Enums.IfSubTypes)) },
+            {"set", Enum.GetNames(typeof(Enums.SetSubTypes)) },
+            {"waitfor", Enum.GetNames(typeof(Enums.WaitForSubTypes)) },
+            {"play", Enum.GetNames(typeof(Enums.PlaySubtypes)) },
+            {"kill", Enum.GetNames(typeof(Enums.KillSubtypes)) },
         };
 
         public static List<string> Keywords = new List<string>()
@@ -51,96 +61,18 @@ namespace NPC_Maker
 
         public static List<string> KeyValues = new List<string>()
         {
-            "inf_table",
-            "event_chk_inf",
-            "switch_table",
-            "uscene",
-            "treasure",
-            "room_clear",
-            "scene_collect",
-            "temporary",
-            "age",
-            "day",
-            "talking",
-            "trade_successful",
-            "has_empty_bottle",
-            "rupees",
-            "time",
-            "scene_id",
-            "worn_mask",
-            "skulltulas",
             "none",
             "roam",
             "follow",
             "path_follow",
-            "movement_distance",
-            "loop_delay",
-            "collision_radius",
-            "collision_height",
-            "target_limb",
-            "movement_speed",
-            "path_id",
-            "time_of_day",
-            "incorrect_trade_text_id",
-            "loop_start",
-            "loop_end",
-            "collision_offset_x",
-            "collision_offset_y",
-            "collision_offset_z",
-            "target_offset_x",
-            "target_offset_y",
-            "target_offset_z",
-            "model_offset_x",
-            "model_offset_y",
-            "model_offset_z",
-            "rupees",
-            "model_scale",
-            "do_loop",
-            "collision",
-            "shadow",
-            "switches",
-            "pushable",
-            "player_movement",
-            "movement",
-            "responses",
-            "flag",
-            "movement_type",
-            "look_type",
-            "head_axis",
-            "animation",
-            "animation_object",
-            "animation_offset",
-            "animation_speed",
-            "script_start",
-            "path_end",
-            "response",
-            "text_end",
-            "endless",
-            "path_node",
-            "frames",
-            "animation_frame",
-            "none",
             "body",
             "head",
             "random",
-            "follow",
             "path_collisionwise",
             "path_direct",
-            "music",
-            "sfx",
-            "self",
-            "configid",
-            "actorid",
-            "do_blinking_anim",
-            "do_talking_anim",
-            "segment_tex",
-            "blink_pattern",
-            "talk_pattern",
-            "env_color",
             "invisible",
             "at_limb",
-            "instead_of_limb",
-            "dlist_visibility"
+            "instead_of_limb"
         };
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e)
@@ -152,9 +84,19 @@ namespace NPC_Maker
             e.ChangedRange.ClearStyle(FCTB.PurpleStyle);
             e.ChangedRange.ClearStyle(FCTB.GrayStyle);
             e.ChangedRange.ClearStyle(FCTB.DarkGrayStyle);
+            e.ChangedRange.ClearStyle(FCTB.CyanStyle);
 
             e.ChangedRange.SetStyle(FCTB.GreenStyle, @"/\*(.|[\r\n])*?\*/", RegexOptions.Multiline);
             e.ChangedRange.SetStyle(FCTB.GreenStyle, @"//.+", RegexOptions.Multiline);
+
+            foreach (string Item in FCTB.Functions.ToArray())
+            {
+                if (FCTB.FunctionSubtypes.ContainsKey(Item))
+                {
+                    foreach (string KWord in FCTB.FunctionSubtypes[Item])
+                        e.ChangedRange.SetStyle(FCTB.GrayStyle, KWord, RegexOptions.Multiline);
+                }
+            }
 
             foreach (string KWord in Keywords)
                 e.ChangedRange.SetStyle(FCTB.BlueStyle, KWord, RegexOptions.Multiline);
@@ -167,6 +109,13 @@ namespace NPC_Maker
 
             foreach (string Func in Functions)
                 e.ChangedRange.SetStyle(FCTB.PurpleStyle, Func, RegexOptions.Multiline);
+
+
+            foreach (string KWord in Enum.GetNames(typeof(Enums.TradeItems)))
+                e.ChangedRange.SetStyle(FCTB.CyanStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
+            foreach (string KWord in Enum.GetNames(typeof(Enums.GiveItems)))
+                e.ChangedRange.SetStyle(FCTB.CyanStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
         }
 
         public static void ApplyError(FastColoredTextBox tb, string Line)

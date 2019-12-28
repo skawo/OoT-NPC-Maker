@@ -27,6 +27,65 @@ namespace NPC_Maker
         {
             InitializeComponent();
             this.DoubleBuffered = true;
+
+            foreach (string Item in FCTB.Functions.ToArray())
+            {
+                ToolStripMenuItem Tsmi = new ToolStripMenuItem();
+                Tsmi.DoubleClickEnabled = true;
+                Tsmi.DoubleClick += Tsmi_DoubleClick;
+                Tsmi.Text = Item;
+
+                if (FCTB.FunctionSubtypes.ContainsKey(Item))
+                    AddItemCollectionToToolStripMenuItem(FCTB.FunctionSubtypes[Item], Tsmi);
+
+                functionsToolStripMenuItem.DropDownItems.Add(Tsmi);
+            }
+
+            AddItemCollectionToToolStripMenuItem(FCTB.Keywords.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(FCTB.KeywordsDarkGray.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(FCTB.KeyValues.ToArray(), keyValuesToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Enums.GiveItems)), itemsgiveToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Enums.TradeItems)), itemstradeToolStripMenuItem);
+        }
+
+        private void Tsmi_DoubleClick(object sender, EventArgs e)
+        {
+            InsertTxtToScript((sender as ToolStripItem).Text + " ");
+        }
+
+        private void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
+        {
+            MenuItem.DropDown.MaximumSize = new Size(300, 700);
+            MenuItem.DropDown.MouseWheel += DropDown_MouseWheel;
+
+            foreach (string Item in Collection)
+            {
+                ToolStripItem SubItem = MenuItem.DropDownItems.Add(Item);
+                SubItem.Click += SubItem_Click;
+            }
+        }
+
+        private void DropDown_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0) 
+                System.Windows.Forms.SendKeys.Send("{UP}");
+            else 
+                System.Windows.Forms.SendKeys.Send("{DOWN}");
+        }
+
+        private void InsertTxtToScript(string Text)
+        {
+            int start = Textbox_Script.SelectionStart;
+            string newTxt = Textbox_Script.Text;
+            newTxt = newTxt.Remove(Textbox_Script.SelectionStart, Textbox_Script.SelectionLength);
+            newTxt = newTxt.Insert(Textbox_Script.SelectionStart, Text);
+            Textbox_Script.Text = newTxt;
+            Textbox_Script.SelectionStart = start + Text.Length;
+        }
+
+        private void SubItem_Click(object sender, EventArgs e)
+        {
+            InsertTxtToScript((sender as ToolStripItem).Text);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -886,6 +945,8 @@ namespace NPC_Maker
                     int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
                     (sender as DataGridView).Rows.RemoveAt(Index);
                     SelectedEntry.DLists.RemoveAt(Index);
+
+
                 }
             }
             catch (Exception)
@@ -960,6 +1021,30 @@ namespace NPC_Maker
             About Window = new About();
             Window.ShowDialog();
 
+        }
+
+        private void Textbox_Script_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Textbox_Script_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ContextMenuStrip.Show(Textbox_Script, e.Location);
+            }
+        }
+
+        private void soundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SFXList SFX = new SFXList();
+            DialogResult DR = SFX.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                InsertTxtToScript(SFX.ChosenSFX);
+            }
         }
     }
 }
