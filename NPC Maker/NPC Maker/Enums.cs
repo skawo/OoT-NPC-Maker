@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.IO;
+
 namespace NPC_Maker
 {
     public static class Enums
@@ -43,12 +45,36 @@ namespace NPC_Maker
             head = 2,
         }
 
+        public static Dictionary<string, int> SFXes = GetSFXDictionary();
 
+        private static Dictionary<string, int> GetSFXDictionary()
+        {
+            if (!File.Exists("SFX.csv"))
+            {
+                System.Windows.Forms.MessageBox.Show("SFX.csv is missing or incorrect.");
+            }
 
+            Dictionary<string, int> Dict = new Dictionary<string, int>();
 
+            try
+            {
+                string[] RawData = File.ReadAllLines("SFX.csv");
 
+                foreach (string Row in RawData)
+                {
+                    string[] NameAndID = Row.Split(',');
+                    Dict.Add(NameAndID[1], Convert.ToInt32(NameAndID[0]));
+                }
 
+                return Dict;
+            }
+            catch (Exception)
+            {
+                System.Windows.Forms.MessageBox.Show("SFX.csv is missing or incorrect.");
+                return Dict;
+            }
 
+        }
 
         public enum InstructionIDs
         {

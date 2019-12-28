@@ -169,7 +169,7 @@ namespace NPC_Maker
         {
             try
             {
-                return (int)System.Enum.Parse(typeof(OotSFX.SFXes), SFXName.ToUpper());
+                return (int)Enums.SFXes[SFXName.ToUpper()];
             }
             catch (Exception)
             {

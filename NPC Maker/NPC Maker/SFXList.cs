@@ -29,22 +29,20 @@ namespace NPC_Maker
                 {
                     string[] NameAndDesc = Row.Split(',');
 
-                    if (NameAndDesc.Length == 1)
-                        Data.Add(new string[] { NameAndDesc[0], "" });
+                    if (NameAndDesc.Length == 2)
+                        Data.Add(new string[] { "0x" + Convert.ToInt32(NameAndDesc[0]).ToString("X"), NameAndDesc[1], "" });
                     else
-                        Data.Add(NameAndDesc);
+                        Data.Add(new string[] { "0x" + Convert.ToInt32(NameAndDesc[0]).ToString("X"), NameAndDesc[1], NameAndDesc[2] });
                 }
             }
             catch (Exception)
             {
-                string[] DataWoDescriptions = Enum.GetNames(typeof(OotSFX.SFXes));
-
-                foreach (string Row in DataWoDescriptions)
-                    Data.Add(new string[] { Row, "" });
+                MessageBox.Show("SFX.cvs is missing or incorrect.");
+                return;
             }
 
             foreach (string[] Row in Data)
-                listView1.Items.Add(new ListViewItem(new string[] { Row[0], Row[1] }));
+                listView1.Items.Add(new ListViewItem(new string[] { Row[0], Row[1], Row[2] }));
 
             this.ActiveControl = textBox1;
         }
@@ -59,15 +57,16 @@ namespace NPC_Maker
                 foreach (string[] s in Data)
                 {
                     if (s[0].ToUpper().Contains(textBox1.Text.ToUpper()) 
-                        || s[1].ToUpper().Contains(textBox1.Text.ToUpper()))
+                        || s[1].ToUpper().Contains(textBox1.Text.ToUpper())
+                        || s[2].ToUpper().Contains(textBox1.Text.ToUpper()))
                     {
-                        listView1.Items.Add(new ListViewItem(new string[] { s[0], s[1] }));
+                        listView1.Items.Add(new ListViewItem(new string[] { s[0], s[1], s[2] }));
                     }
                 }
             }
             else
                 foreach (string[] Row in Data)
-                    listView1.Items.Add(new ListViewItem(new string[] { Row[0], Row[1] }));
+                    listView1.Items.Add(new ListViewItem(new string[] { Row[0], Row[1], Row[2] }));
 
             listView1.EndUpdate();
         }
@@ -77,7 +76,9 @@ namespace NPC_Maker
             if (listView1.SelectedItems.Count == 0)
                 return;
 
-            ChosenSFX = (string)listView1.SelectedItems[0].Text;
+            string ID = (string)listView1.SelectedItems[0].Text;
+            ChosenSFX = Data.Find(x => x[0] == ID)[1];
+
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -87,7 +88,9 @@ namespace NPC_Maker
             if (listView1.SelectedItems.Count == 0)
                 return;
 
-            ChosenSFX = (string)listView1.SelectedItems[0].Text;
+            string ID = (string)listView1.SelectedItems[0].Text;
+            ChosenSFX = Data.Find(x => x[0] == ID)[1];
+
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -99,7 +102,8 @@ namespace NPC_Maker
 
             if (e.KeyCode == Keys.Enter)
             {
-                ChosenSFX = (string)listView1.SelectedItems[0].Text;
+                string ID = (string)listView1.SelectedItems[0].Text;
+                ChosenSFX = Data.Find(x => x[0] == ID)[1];
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }

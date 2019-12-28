@@ -1,1396 +1,1396 @@
-NA_SE_PL_WALK_GROUND,Child Link - Walking on Ground
-NA_SE_PL_WALK_SAND,Child Link - Walking on Sand
-NA_SE_PL_WALK_CONCRETE,Child Link - Walking on Stone
-NA_SE_PL_WALK_DIRT,Child Link - Walking on Jabu-Jabu's Insides
-NA_SE_PL_WALK_WATER0,Child Link - Walking in Shallow Water
-NA_SE_PL_WALK_WATER1,Child Link - Walking in Deep Water
-NA_SE_PL_WALK_WATER2,Child Link - Walking in Tall Grass
-NA_SE_PL_WALK_MAGMA,Child Link - Walking in Magma
-NA_SE_PL_WALK_GRASS,Child Link - Walking on Grass
-NA_SE_PL_WALK_IRON,Child Link - Walking on Carpets
-NA_SE_PL_WALK_LADDER,Child Link - Walking on Wood
-NA_SE_PL_WALK_GLASS,Child Link - Walking on Wood Bridges
-NA_SE_PL_WALK_WALL,Climbing Vine Walls
-NA_SE_PL_WALK_HEAVYBOOTS,Walking with Iron Boots
-NA_SE_PL_DUMMY_14,
-NA_SE_PL_WALK_ICE,Child Link - Walking on Ice
-NA_SE_PL_JUMP,Child Link - Jumping off Ground
-NA_SE_PL_JUMP_SAND,Child Link - Jumping off Sand
-NA_SE_PL_JUMP_CONCRETE,Child Link - Jumping off Stone
-NA_SE_PL_JUMP_DIRT,Child Link - Jumping off Jabu-Jabu's Insides
-NA_SE_PL_JUMP_WATER0,Child Link - Jumping out of Shallow Water
-NA_SE_PL_JUMP_WATER1,Child Link - Jumping out of Deep Water
-NA_SE_PL_JUMP_WATER2,Child Link - Jumping out of Tall Grass
-NA_SE_PL_JUMP_MAGMA,Child Link - Jumping out of Magma
-NA_SE_PL_JUMP_GRASS,Child Link-  Jumping off Grass
-NA_SE_PL_JUMP_IRON,Child Link - Jumping off Carpets
-NA_SE_PL_JUMP_LADDER,Child Link - Jumping off Wood
-NA_SE_PL_JUMP_GLASS,Child Link - Jumping off Wood Bridges
-NA_SE_PL_DUMMY28,
-NA_SE_PL_JUMP_HEAVYBOOTS,Jumping with Iron Boots
-NA_SE_PL_DUMMY30,
-NA_SE_PL_JUMP_ICE,Child Link - Jumping off Ice
-NA_SE_PL_LAND,Child Link - Landing on Ground
-NA_SE_PL_LAND_SAND,Child Link - Landing on Sand
-NA_SE_PL_LAND_CONCRETE,Child Link - Landing on Stone
-NA_SE_PL_LAND_DIRT,Child Link - Landing on Jabu-Jabu's Insides
-NA_SE_PL_LAND_WATER0,Child Link - Landing in Shallow Water
-NA_SE_PL_LAND_WATER1,Child Link - Landing in Deep Water
-NA_SE_PL_LAND_WATER2,Child Link - Landing in Tall Grass
-NA_SE_PL_LAND_MAGMA,Child Link - Landing in Magma
-NA_SE_PL_LAND_GRASS,Child Link - Landing on Grass
-NA_SE_PL_LAND_IRON,Child Link - Landing on Carpets
-NA_SE_PL_LAND_LADDER,Child Link - Landing on Wood
-NA_SE_PL_LAND_GLASS,Child Link - Landing on Wood Bridges
-NA_SE_PL_DUMMY_44,
-NA_SE_PL_LAND_HEAVYBOOTS,Landing with Iron Boots
-NA_SE_PL_DUMMY_46,
-NA_SE_PL_LAND_ICE,Child Link - Landing on Ice
-NA_SE_PL_SLIPDOWN,Going over Ledge from Top
-NA_SE_PL_CLIMB_CLIFF,Going over Ledge from Side
-NA_SE_PL_SIT_ON_HORSE,Getting on Epona
-NA_SE_PL_GET_OFF_HORSE,Getting off Epona
-NA_SE_PL_TAKE_OUT_SHIELD,
-NA_SE_PL_CHANGE_ARMS,Changing Held Item
-NA_SE_PL_CATCH_BOOMERANG,Catching Boomerang
-NA_SE_PL_DUMMY_55,
-NA_SE_PL_DUMMY_56,
-NA_SE_PL_SWIM,Swimming in Water
-NA_SE_PL_THROW,Throwing Objects
-NA_SE_PL_BODY_BOUND,
-NA_SE_PL_ROLL,Rolling and Backflips
-NA_SE_PL_SKIP,Side-jumping
-NA_SE_PL_BODY_HIT,Hit by Something
-NA_SE_PL_DAMAGE,Hit by Enemy
-NA_SE_PL_SLIP,
-NA_SE_PL_SLIP_SAND,
-NA_SE_PL_SLIP_CONCRETE,
-NA_SE_PL_SLIP_DIRT,
-NA_SE_PL_SLIP_WATER0,
-NA_SE_PL_SLIP_WATER1,
-NA_SE_PL_SLIP_WATER2,
-NA_SE_PL_SLIP_MAGMA,
-NA_SE_PL_SLIP_GRASS,
-NA_SE_PL_SLIP_IRON,
-NA_SE_PL_SLIP_LADDER,
-NA_SE_PL_SLIP_GLASS,
-NA_SE_PL_DUMMY76,
-NA_SE_PL_SLIP_HEAVYBOOTS,
-NA_SE_PL_DUMMY78,
-NA_SE_PL_SLIP_ICE,
-NA_SE_PL_BOUND,Rebound from Hit onto Ground
-NA_SE_PL_BOUND_SAND,Rebound from Hit onto Sand
-NA_SE_PL_BOUND_CONCRETE,Rebound from Hit onto Stone
-NA_SE_PL_BOUND_DIRT,Rebound from Hit onto Jabu-Jabu's Insides
-NA_SE_PL_BOUND_WATER0,Rebound from Hit into Shallow Water
-NA_SE_PL_BOUND_WATER1,Rebound from Hit into Deep Water
-NA_SE_PL_BOUND_WATER2,Rebound from Hit into Tall Grass
-NA_SE_PL_BOUND_MAGMA,Rebound from Hit into Magma
-NA_SE_PL_BOUND_GRASS,Rebound from Hit onto Grass
-NA_SE_PL_BOUND_IRON,Rebound from Hit onto Carpets
-NA_SE_PL_BOUND_LADDER,Rebound from Hit onto Wood
-NA_SE_PL_BOUND_WOOD,Rebound from Hit onto Wood Bridges
-NA_SE_PL_DUMMY_92,
-NA_SE_PL_BOUND_HEAVYBOOTS,
-NA_SE_PL_DUMMY_94,
-NA_SE_PL_BOUND_ICE,Rebound from Hit onto Ice
-NA_SE_PL_DUMMY_96,
-NA_SE_PL_DUMMY_97,
-NA_SE_PL_DUMMY_98,
-NA_SE_PL_FACE_UP,Surfacing from Water
-NA_SE_PL_DIVE_BUBBLE,Diving in Water
-NA_SE_PL_MOVE_BUBBLE,
-NA_SE_PL_METALEFFECT_KID,Child Link - Clanging Equipment when Walking
-NA_SE_PL_METALEFFECT_ADULT,Adult Link - Clanging Equipment when Walking
-NA_SE_PL_SPARK,
-NA_SE_PL_PULL_UP_PLANT,Picking up Grass
-NA_SE_PL_PULL_UP_ROCK,Picking up Rock or Bomb Flower
-NA_SE_PL_IN_BUBBLE,While Underwater
-NA_SE_PL_PULL_UP_BIGROCK,"Picking up Large, Obsidian Rocks"
-NA_SE_PL_SWORD_CHARGE,Spin Attack Charge
-NA_SE_PL_FREEZE,
-NA_SE_PL_PULL_UP_POT,Picking up Pot
-NA_SE_PL_KNOCK,
-NA_SE_PL_CALM_HIT,Shuffling in Idle Animation
-NA_SE_PL_CALM_PAT,
-NA_SE_PL_SUBMERGE,
-NA_SE_PL_FREEZE_S,Frozen by Enemy
-NA_SE_PL_ICE_BROKEN,Breaking Out of Freeze Effect
-NA_SE_PL_SLIP_ICE_LELEL,
-NA_SE_PL_PUT_OUT_ITEM,
-NA_SE_PL_PULL_UP_WOODBOX,Picking up Small Wooden Crate
-NA_SE_PL_MAGIC_FIRE,Casting Din's Fire
-NA_SE_PL_MAGIC_WIND_NORMAL,Casting Farore's Wind
-NA_SE_PL_MAGIC_WIND_WARP,Warping with Farore's Wind
-NA_SE_PL_MAGIC_SOUL_NORMAL,Using Nayru's Love
-NA_SE_PL_ARROW_CHARGE_FIRE,Charging Fire Arrow
-NA_SE_PL_ARROW_CHARGE_ICE,Charging Ice Arrow
-NA_SE_PL_ARROW_CHARGE_LIGHT,Charging Light Arrow
-NA_SE_PL_DUMMY_128,Adult Link - Walking on Ground
-NA_SE_PL_DUMMY_129,Adult Link - Walking on Sand
-NA_SE_PL_DUMMY_130,Adult Link - Walking on Stone
-NA_SE_PL_PULL_UP_RUTO,Picking up Ruto
-NA_SE_PL_DUMMY_132,Adult Link - Walking in Shallow Water
-NA_SE_PL_DUMMY_133,Adult Link - Walking in Deep Water
-NA_SE_PL_DUMMY_134,Adult Link - Walking in Tall Grass
-NA_SE_PL_DUMMY_135,Adult Link - Walking in Magma
-NA_SE_PL_DUMMY_136,Adult Link - Walking on Grass
-NA_SE_PL_DUMMY_137,Adult Link - Walking on Carpets
-NA_SE_PL_DUMMY_138,Adult Link - Walking on Wood
-NA_SE_PL_DUMMY_139,Adult Link - Walking on Wood Bridges
-NA_SE_PL_DUMMY_140,
-NA_SE_PL_DUMMY_141,
-NA_SE_PL_DUMMY_142,
-NA_SE_PL_DUMMY_143,Adult Link - Walking on Ice
-NA_SE_PL_DUMMY_144,Adult Link - Jumping off Ground
-NA_SE_PL_DUMMY_145,Adult Link - Jumping off Sand
-NA_SE_PL_DUMMY_146,Adult Link - Jumping off Stone
-NA_SE_PL_DUMMY_147,Adult Link - Jumping off Jabu-Jabu's Insides
-NA_SE_PL_DUMMY_148,Adult Link - Jumping out of Shallow Water
-NA_SE_PL_DUMMY_149,Adult Link - Jumping out of Deep Water
-NA_SE_PL_DUMMY_150,Adult Link - Jumping out of Tall Grass
-NA_SE_PL_DUMMY_151,Adult Link - Jumping out of Magma
-NA_SE_PL_DUMMY_152,Adult Link - Jumping off Grass
-NA_SE_PL_DUMMY_153,Adult Link - Jumping off Carpets
-NA_SE_PL_DUMMY_154,Adult Link - Jumping off Wood
-NA_SE_PL_DUMMY_155,Adult Link - Jumping off Wood Bridges
-NA_SE_PL_DUMMY_156,
-NA_SE_PL_DUMMY_157,
-NA_SE_PL_DUMMY_158,
-NA_SE_PL_DUMMY_159,Adult Link - Jumping off Ice
-NA_SE_PL_DUMMY_160,Adult Link - Landing on Ground
-NA_SE_PL_DUMMY_161,Adult Link - Landing on Sand
-NA_SE_PL_DUMMY_162,Adult Link - Landing on Stone
-NA_SE_PL_DUMMY_163,Adult Link - Landing on Jabu-Jabu's Insides
-NA_SE_PL_DUMMY_164,Adult Link - Landing in Shallow Water
-NA_SE_PL_DUMMY_165,Adult Link - Landing in Deep Water
-NA_SE_PL_DUMMY_166,Adult Link - Landing in Tall Grass
-NA_SE_PL_DUMMY_167,Adult Link - Landing in Magma
-NA_SE_PL_DUMMY_168,Adult Link - Landing on Grass
-NA_SE_PL_DUMMY_169,Adult Link - Landing on Carpets
-NA_SE_PL_DUMMY_170,Adult Link - Landing on Wood
-NA_SE_PL_DUMMY_171,Adult Link - Landing on Wood Bridges
-NA_SE_PL_DUMMY_172,
-NA_SE_PL_DUMMY_173,
-NA_SE_PL_DUMMY_174,
-NA_SE_PL_DUMMY_175,Adult Link - Landing on Ice
-NA_SE_PL_CRAWL,Crawling on Ground
-NA_SE_PL_CRAWL_SAND,
-NA_SE_PL_CRAWL_CONCRETE,Crawling on Stone Floor
-NA_SE_PL_CRAWL_DIRT,
-NA_SE_PL_CRAWL_WATER0,
-NA_SE_PL_DUMMY_181,
-NA_SE_PL_DUMMY_182,
-NA_SE_PL_DUMMY_183,
-NA_SE_PL_DUMMY_184,Crawling on Grass
-NA_SE_PL_DUMMY_185,
-NA_SE_PL_DUMMY_186,Crawling on Wood
-NA_SE_PL_CRAWL_WOOD,
-NA_SE_PL_CRAWL_ICE,
-NA_SE_PL_DUMMY_189,
-NA_SE_PL_DUMMY_190,
-NA_SE_PL_DUMMY_191,
-NA_SE_PL_MAGIC_SOUL_FLASH,Nayru's Love Ending
-NA_SE_PL_ROLL_DUST,Dust Clouds when Rolling
-NA_SE_PL_DUMMY_192,
-NA_SE_PL_MAGIC_SOUL_BALL,Casting Nayru's Love
-NA_SE_PL_SPIRAL_HEAL_BEAM,Great Fairy Healing
-NA_SE_PL_BOUND_NOWEAPON,
-NA_SE_PL_PLANT_GROW_UP,Planting Magic Bean Plant
-NA_SE_PL_PLANT_TALLER,
-NA_SE_PL_MAGIC_WIND_VANISH,Farore's Wind - Dispelling the Warp Point
-NA_SE_PL_HOBBERBOOTS_LV,Hovering with Hover Boots
-NA_SE_PL_PLANT_MOVE,Magic Bean Plant Moving
-NA_SE_EV_WALL_MOVE_SP,
-NA_SE_PL_DUMMY_204,
-NA_SE_PL_DUMMY_205,
-NA_SE_PL_DUMMY_206,
-NA_SE_PL_DUMMY_207,
-NA_SE_PL_SLIP_LEVEL,Slipping on Floor
-NA_SE_PL_SLIP_SAND_LEVEL,
-NA_SE_PL_SLIP_CONCRETE_LEVEL,
-NA_SE_PL_SLIP_DIRT_LEVEL,
-NA_SE_PL_SLIP_WATER0_LEVEL,
-NA_SE_PL_SLIP_WATER1_LEVEL,
-NA_SE_PL_SLIP_WATER2_LEVEL,
-NA_SE_PL_SLIP_MAGMA_LEVEL,
-NA_SE_PL_SLIP_GRASS_LEVEL,
-NA_SE_PL_SLIP_IRON_LEVEL,
-NA_SE_PL_SLIP_GLASS_LEVEL,
-NA_SE_PL_SLIP_WOOD_LEVEL,
-NA_SE_PL_DUMMY_220,
-NA_SE_PL_DUMMY_221,
-NA_SE_PL_SLIP_HEAVYBOOTS_LEVEL,
-NA_SE_PL_SLIP_ICE_LEVEL
-NA_SE_PL_JUMP_METAL
-NA_SE_PL_LAND_METAL
-NA_SE_PL_WALK_RUNNINGMAN
-NA_SE_PL_WALK_ZELDA_DEMO
-NA_SE_PL_YOBI_DATA02
-NA_SE_PL_YOBI_DATA03
-NA_SE_PL_YOBI_DATA04
-NA_SE_PL_YOBI_DATA05
-NA_SE_PL_YOBI_DATA06
-NA_SE_PL_YOBI_DATA07
-NA_SE_PL_YOBI_DATA08
-NA_SE_PL_YOBI_DATA09
-NA_SE_PL_YOBI_DATA10
-NA_SE_PL_YOBI_DATA11
-NA_SE_PL_YOBI_DATA12
-NA_SE_PL_YOBI_DATA13,
-NA_SE_PL_YOBI_DATA14,
-NA_SE_IT_SWORD_IMPACT,
-NA_SE_IT_SWORD_SWING,Swing Sword
-NA_SE_IT_SWORD_PUTAWAY,Sheathe Sword
-NA_SE_IT_SWORD_PICKOUT,Draw Sword
-NA_SE_IT_ARROW_SHOT,Shoot Arrow
-NA_SE_IT_BOOMERANG_THROW,Throw Boomerang
-NA_SE_IT_SHIELD_BOUND,Projectile Bounces off Shield
-NA_SE_IT_BOW_DRAW,Draw Bow
-NA_SE_IT_SHIELD_REFLECT_SW,Blade Reflects off Shield
-NA_SE_IT_ARROW_STICK_HRAD,Arrow Sticks in Hard Surface
-NA_SE_IT_HAMMER_HIT,Hammer Hits Target
-NA_SE_IT_HOOKSHOT_CHAIN,Hookshot Chain Unravels
-NA_SE_IT_SHIELD_REFLECT_MG,Mirror Shield Reflects Magic
-NA_SE_IT_BOMB_IGNIT,Bomb is Lit
-NA_SE_IT_BOMB_EXPLOSION,Bomb Explodes
-NA_SE_IT_BOMB_UNEXPLOSION,Bomb is Extinguished
-NA_SE_IT_BOOMERANG_FLY,Boomerang Flies
-NA_SE_IT_SWORD_STRIKE,Strike Enemy with Sword
-NA_SE_IT_HAMMER_SWING,Hammer Swung through Air
-NA_SE_IT_HOOKSHOT_REFLECT,Hookshot Bounces off Hard Surface
-NA_SE_IT_ARROW_STICK_CRE,Arrows Sticks in Enemy
-NA_SE_IT_ARROW_STICK_OBJ,Arrow Sticks in Object
-NA_SE_IT_DUMMY,
-NA_SE_IT_DUMMY2,
-NA_SE_IT_SWORD_SWING_HARD,Swing Fishing Rod
-NA_SE_IT_DUMMY3,
-NA_SE_IT_WALL_HIT_HARD,Sword Bounces off Wall
-NA_SE_IT_WALL_HIT_SOFT,Sword Bounces off Bombable Wall
-NA_SE_IT_STONE_HIT,Sword Bounces off Stone
-NA_SE_IT_WOODSTICK_BROKEN,Deku Stick Breaks
-NA_SE_IT_LASH,Whip Epona
-NA_SE_IT_SHIELD_POSTURE,Take out/Use Shield
-NA_SE_IT_SLING_SHOT,Fire Slingshot
-NA_SE_IT_SLING_DRAW,Draw Slingshot
-NA_SE_IT_SWORD_CHARGE,Charging Spin Attack
-NA_SE_IT_ROLLING_CUT,"Spin Attack, No Magic"
-NA_SE_IT_SWORD_STRIKE_HARD,
-NA_SE_IT_SLING_REFLECT,Deku Seed Bounces off Hard Surface
-NA_SE_IT_SHIELD_REMOVE,Put Away Shield
-NA_SE_IT_HOOKSHOT_READY,Hookshot is Ready to Fire
-NA_SE_IT_HOOKSHOT_RECEIVE,
-NA_SE_IT_HOOKSHOT_STICK_OBJ,Hookshot Latches to Surface
-NA_SE_IT_SWORD_REFLECT_MG,Reflect Magic With Sword
-NA_SE_IT_DEKU,Throw Deku Nut
-NA_SE_IT_WALL_HIT_BUYO,
-NA_SE_IT_SWORD_PUTAWAY_STN,
-NA_SE_IT_ROLLING_CUT_LV1,"Spin Attack, Blue Spin"
-NA_SE_IT_ROLLING_CUT_LV2,"Spin Attack, Red Spin"
-NA_SE_IT_BOW_FLICK,Fire Empty Bow
-NA_SE_IT_BOMBCHU_MOVE,Set Bombchu Free
-NA_SE_IT_SHIELD_CHARGE_LV1,Charge Mirror Shield (Level 1)
-NA_SE_IT_SHIELD_CHARGE_LV2,Charge Mirror Shield (Level 2)
-NA_SE_IT_SHIELD_CHARGE_LV3,Charge Mirror Shield (Level 3)
-NA_SE_IT_SLING_FLICK,Fire Empty Slingshot
-NA_SE_IT_SWORD_STICK_STN,
-NA_SE_IT_REFLECTION_WOOD,Sword Bounces Off Wooden Surface
-NA_SE_IT_SHIELD_REFLECT_MG2,Shield Reflects Magic (2)
-NA_SE_IT_MAGIC_ARROW_SHOT,Fire Magic Arrow
-NA_SE_IT_EXPLOSION_FRAME,Fire Arrow Explodes on Impact
-NA_SE_IT_EXPLOSION_ICE,Ice Arrow Explodes on Impact
-NA_SE_IT_EXPLOSION_LIGHT,Light Arrow Explodes on Impact
-NA_SE_IT_FISHING_REEL_SLOW,Reel In Fishing Rod Slowly
-NA_SE_IT_FISHING_REEL_HIGH,Reel In Fishing Rod Quickly
-NA_SE_IT_PULL_FISHING_ROD,Pull Back on Fishing Rod
-NA_SE_IT_DM_FLYING_GOD_PASS,Goddess Passing by Camera
-NA_SE_IT_DM_FLYING_GOD_DASH,Goddess Dashing
-NA_SE_IT_DM_RING_EXPLOSION,Goddess Causing Explosion
-NA_SE_IT_DM_RING_GATHER,
-NA_SE_IT_INGO_HORSE_NEIGH,Horse Neigh
-NA_SE_IT_EARTHQUAKE,
-NA_SE_IT_DUMMY4,
-NA_SE_IT_KAKASHI_JUMP,Scarecrow Jumping
-NA_SE_IT_FLAME,
-NA_SE_IT_SHIELD_BEAM,
-NA_SE_IT_FISHING_HIT,
-NA_SE_IT_GOODS_APPEAR,
-NA_SE_IT_MAJIN_SWORD_BROKEN,Giant's Knife Breaking
-NA_SE_IT_HAND_CLAP,
-NA_SE_IT_MASTER_SWORD_SWING
-NA_SE_IT_DUMMY5
-NA_SE_IT_YOBI19
-NA_SE_FISHING_REEL_SLOW2
-NA_SE_IT_SPIDERNET_HIT1
-NA_SE_IT_LURE_LAND1
-NA_SE_IT_HOOKSHOT_STICK_OBJ_WATER
-NA_SE_IT_SWORD_PICKOUT_GANON
-NA_SE_IT_BOMB_IGNIT_DODO_M
-NA_SE_IT_YOBI05
-NA_SE_IT_YOBI06
-NA_SE_IT_YOBI07
-NA_SE_IT_YOBI08
-NA_SE_IT_YOBI09
-NA_SE_IT_YOBI10
-NA_SE_IT_YOBI11
-NA_SE_IT_YOBI12,
-NA_SE_IT_YOBI13,
-NA_SE_IT_YOBI14,
-NA_SE_IT_YOBI15,
-NA_SE_IT_YOBI16,
-NA_SE_IT_YOBI17,
-NA_SE_IT_YOBI18,
-NA_SE_EV_DOOR_OPEN,Open Door
-NA_SE_EV_DOOR_CLOSE,Close Door
-NA_SE_EV_EXPLOSION,
-NA_SE_EV_HORSE_WALK,Epona Walks
-NA_SE_EV_HORSE_RUN,Epona Runs
-NA_SE_EV_HORSE_NEIGH,Epona Neighs
-NA_SE_EV_RIVER_STREAM,Flowing River
-NA_SE_EV_WATER_WALL_BIG,Large Waterfall Rushes
-NA_SE_EV_OUT_OF_WATER,Zora Jumping out of Water
-NA_SE_EV_DIVE_WATER,Zora Diving into Water
-NA_SE_EV_ROCK_SLIDE,Pushing Block
-NA_SE_EV_MAGMA_LEVEL,Magma Bubbles
-NA_SE_EV_BRIDGE_OPEN,Drawbridge Opens
-NA_SE_EV_BRIDGE_CLOSE,Drawbridge Closes
-NA_SE_EV_BRIDGE_OPEN_STOP,Drawbridge Finishes Opening
-NA_SE_EV_BRIDGE_CLOSE_STOP,Drawbridge Finishes Closing
-NA_SE_EV_WALL_BROKEN,Wall Destroyed by Explosion
-NA_SE_EV_CHICKEN_CRY_N,Cucco Clucks
-NA_SE_EV_CHICKEN_CRY_A,Cucco Clucks While Attacking
-NA_SE_EV_CHICKEN_CRY_M,Cucco Crows at Dawn
-NA_SE_EV_SLIDE_DOOR_OPEN,Sliding Dungeon Door Opens
-NA_SE_EV_FOOT_SWITCH,Switch Depressed
-NA_SE_EV_HORSE_GROAN,Horse Snorts
-NA_SE_EV_BOMB_DROP_WATER,Bomb Dropped in Water
-NA_SE_EV_HORSE_JUMP,Epona Jumps
-NA_SE_EV_HORSE_LAND,Epona Lands
-NA_SE_EV_HORSE_SLIP,Epona Comes to a Screeching Halt
-NA_SE_EV_FAIRY_DASH,"Navi Emerges, Flies to Targetable Object"
-NA_SE_EV_SLIDE_DOOR_CLOSE,Sliding Dungeon Door Closes
-NA_SE_EV_STONE_BOUND,Large Stone Door Closes
-NA_SE_EV_STONE_STATUE_OPEN,Temple of Time Door Opening
-NA_SE_EV_TBOX_UNLOCK,Unlock Treasure Chest
-NA_SE_EV_TBOX_OPEN,Open Treasure Chest
-NA_SE_SY_TIMER,Timer Ticks
-NA_SE_EV_FLAME_IGNITION,Light Torch
-NA_SE_EV_SPEAR_HIT,Guard Hits Spear on Ground
-NA_SE_EV_ELEVATOR_MOVE,Elevator Moves
-NA_SE_EV_WARP_HOLE,Blue Warp Resonates
-NA_SE_EV_LINK_WARP,Enter Blue Warp
-NA_SE_EV_PILLAR_SINK,
-NA_SE_EV_WATER_WALL,Small Waterfall Trickles
-NA_SE_EV_RIVER_STREAM_S,
-NA_SE_EV_RIVER_STREAM_F,
-NA_SE_EV_HORSE_LAND2,Epona Lands (2)
-NA_SE_EV_HORSE_SANDDUST,Epona Stops in Sand/Dust
-NA_SE_EV_DUMMY45,
-NA_SE_EV_LIGHTNING,Lightning Crashes
-NA_SE_EV_BOMB_BOUND,Bomb Bouncing off Wall
-NA_SE_EV_WATERDROP,Water Drips
-NA_SE_EV_TORCH,Torch Crackles
-NA_SE_EV_MAGMA_LEVEL_M,Lava Bubbles
-NA_SE_EV_FIRE_PILLAR,Pillar of Fire
-NA_SE_EV_FIRE_PLATE,Wall of Fire
-NA_SE_EV_BLOCK_BOUND,Push Block Into Place
-NA_SE_EV_METALDOOR_SLIDE,
-NA_SE_EV_METALDOOR_STOP,
-NA_SE_EV_BLOCK_SHAKE,Shaking Block
-NA_SE_EV_BOX_BREAK,Wood Breaking
-NA_SE_EV_HAMMER_SWITCH,
-NA_SE_EV_MAGMA_LEVEL_L,Magma Bubbles
-NA_SE_EV_SPEAR_FENCE,Spear-shaped Fence Rising
-NA_SE_EV_GANON_HORSE_NEIGH,Ganondorf's Horse Neighs
-NA_SE_EV_GANON_HORSE_GROAN,Ganondorf's Horse Snorts
-NA_SE_EV_FANTOM_WARP_S,Phantom Ganon Going through Painting
-NA_SE_EV_FANTOM_WARP_L,Witches Kidnapping Nabooru
-NA_SE_EV_FOUNTAIN,Pillar of Water
-NA_SE_EV_KID_HORSE_WALK,Child Epona Walks
-NA_SE_EV_KID_HORSE_RUN,Child Epona Runs
-NA_SE_EV_KID_HORSE_NEIGH,Child Epona Neighs
-NA_SE_EV_KID_HORSE_GROAN,Child Epona Snorts
-NA_SE_EV_WHITE_OUT,
-NA_SE_EV_LIGHT_GATHER,
-NA_SE_EV_TREE_CUT,
-NA_SE_EV_VOLCANO,Volcano Erupts
-NA_SE_EV_GUILLOTINE_UP,Guillotine Rises
-NA_SE_EV_GUILLOTINE_BOUND,Guillotine Falls
-NA_SE_EV_ROLLCUTTER_MOTOR,Spinning Blades (Giant Scythes)
-NA_SE_EV_CHINETRAP_DOWN,Chain Trap Lowers
-NA_SE_EV_PLANT_BROKEN,Thrown Plant Destroyed on Impact
-NA_SE_EV_SHIP_BELL,Bells on Shadow Temple Ship
-NA_SE_EV_FLUTTER_FLAG,Flag Flaps in Wind
-NA_SE_EV_TRAP_BOUND,
-NA_SE_EV_ROCK_BROKEN,Thrown Rock Destroyed on Impact
-NA_SE_EV_FANTOM_WARP_S2,Phantom Ganon Going through Painting
-NA_SE_EV_FANTOM_WARP_L2,
-NA_SE_EV_COFFIN_CAP_OPEN,Coffin Lid Opens
-NA_SE_EV_COFFIN_CAP_BOUND,
-NA_SE_EV_WIND_TRAP,Giant Fans
-NA_SE_EV_TRAP_OBJ_SLIDE,Spike Wall Trap Closing In
-NA_SE_EV_METALDOOR_OPEN,Portcullis Rising
-NA_SE_EV_METALDOOR_CLOSE,
-NA_SE_EV_BURN_OUT,
-NA_SE_EV_BLOCKSINK,Floor Tiles in Ganondorf Battle Falling
-NA_SE_EV_CROWD,Hyrule Market Crowd Hubbub
-NA_SE_EV_WATER_LEVEL_DOWN,Water Level Changes in Water Temple
-NA_SE_EV_NAVY_VANISH,Navi Hides under Link's Hat
-NA_SE_EV_LADDER_DOUND,Ladder Landing
-NA_SE_EV_WEB_VIBRATION,Web Vibrating
-NA_SE_EV_WEB_BROKEN,Web Breaking
-NA_SE_EV_ROLL_STAND,
-NA_SE_EV_BUYODOOR_OPEN,Jabu-Jabu Door Opening
-NA_SE_EV_BUYODOOR_CLOSE,Jabu-Jabu Door Closing
-NA_SE_EV_WOODDOOR_OPEN,
-NA_SE_EV_METALGATE_OPEN,Gate to Death Mountain Trail Opening
-NA_SE_IT_SCOOP_UP_WATER,Dipping Bottle in Water
-NA_SE_EV_FISH_LEAP,Fish Flopping on Ground
-NA_SE_EV_KAKASHI_SWING,Scarecrow Swaying Side-to-Side
-NA_SE_EV_KAKASHI_ROLL,Scarecrow Spinning Around
-NA_SE_EV_BOTTLE_CAP_OPEN,Opening Bottle
-NA_SE_EV_JABJAB_BREATHE,Jabu-Jabu Breathing In
-NA_SE_EV_SPIRIT_STONE,Resonating Spiritual Stones
-NA_SE_EV_TRIFORCE_FLASH,Triforce above Door of Time Flashing
-NA_SE_EV_FALL_DOWN_DIRT,Ruto Falling through Hole
-NA_SE_EV_NAVY_FLY,Navi Flying
-NA_SE_EV_NAVY_CRASH,Navi Crashing into Fence
-NA_SE_EV_WOOD_HIT,
-NA_SE_EV_SCOOPUP_WATER,
-NA_SE_EV_DROP_FALL,
-NA_SE_EV_WOOD_GEAR,Windmill Gears Spinning
-NA_SE_EV_TREE_SWING,Moving through Bush
-NA_SE_EV_HORSE_RUN_LEVEL,Ganondorf's Horse Running
-NA_SE_EV_ELEVATOR_MOVE2,
-NA_SE_EV_ELEVATOR_STOP,
-NA_SE_EV_TRE_BOX_APPEAR,Treasure Chest Appearing
-NA_SE_EV_CHAIN_KEY_UNLOCK,Unlocking Chained Door
-NA_SE_EV_SPINE_TRAP_MOVE,Sliding Blade Trap Hitting Wall
-NA_SE_EV_HEALING,
-NA_SE_EV_GREAT_FAIRY_APPEAR,Great Fairy Appears
-NA_SE_EV_GREAT_FAIRY_VANISH,Great Fairy Disappears
-NA_SE_EV_RED_EYE,
-NA_SE_EV_ROLL_STAND_2,
-NA_SE_EV_WALL_SLIDE,
-NA_SE_EV_TRE_BOX_FLASH,Flash of Light Opening Chest
-NA_SE_EV_WINDMILL_LEVEL,Windmill Blades Spinning
-NA_SE_EV_GOTO_HEAVEN,
-NA_SE_EV_POT_BROKEN,Breaking Pot
-NA_SE_PL_PUT_DOWN_POT,
-NA_SE_EV_DIVE_INTO_WATER,Diving into Water
-NA_SE_EV_JUMP_OUT_WATER,Climbing out of Water
-NA_SE_EV_GOD_FLYING,Goddesses Flying
-NA_SE_EV_TRIFORCE,Triforce Resonating
-NA_SE_EV_AURORA,Light around Triforce
-NA_SE_EV_DEKU_DEATH,Deku Tree Dying
-NA_SE_EV_BUYOSTAND_RISING,Jabu-Jabu Miniboss Platform Rising
-NA_SE_EV_BUYOSTAND_FALL,Jabu-Jabu Miniboss Platform Falling
-NA_SE_EV_BUYOSHUTTER_OPEN,Jabu-Jabu Door Unbarred
-NA_SE_EV_BUYOSHUTTER_CLOSE,Jabu-Jabu Door Barred
-NA_SE_EV_STONEDOOR_STOP,Temple of Time Door Finished Opening
-NA_SE_EV_S_STONE_REVIVAL,
-NA_SE_EV_MEDAL_APPEAR_S,Medallion Falling in Chamber of Sages
-NA_SE_EV_HUMAN_BOUND,
-NA_SE_EV_MEDAL_APPEAR_L,Link Gets Arrow of Light
-NA_SE_EV_EARTHQUAKE,Temple of Time Rumbling (Zelda Captured)
-NA_SE_EV_SHUT_BY_CRYSTAL,Zelda Trapped in Crystal
-NA_SE_EV_GOD_LIGHTBALL_2,Sages Becoming Balls of Light (Trapping Ganondorf)
-NA_SE_EV_RUN_AROUND,
-NA_SE_EV_CONSENTRATION,Sages Flying into Triforce (Trapping Ganondorf)
-NA_SE_EV_TIMETRIP_LIGHT,Halo at End of Time Travel
-NA_SE_EV_BUYOSTAND_STOP_A,Jabu-Jabu Miniboss Platform Stopping at Top
-NA_SE_EV_BUYOSTAND_STOP_U,Jabu-Jabu Miniboss Platform Stopping at Bottom
-NA_SE_EV_OBJECT_FALL,Goron Falling (Getting Goron Ruby)
-NA_SE_EV_JUMP_CONC,
-NA_SE_EV_ICE_MELT,Red Ice Melting
-NA_SE_EV_FIRE_PILLAR_S,Constant Pillar of Fire
-NA_SE_EV_BLOCK_RISING,
-NA_SE_EV_NABALL_VANISH,
-NA_SE_EV_SARIA_MELODY,Warp Song - Leaving
-NA_SE_EV_LINK_WARP_OUT,Warp Song - Arriving
-NA_SE_EV_FIATY_HEAL,Pink Fairy Heals
-NA_SE_EV_CHAIN_KEY_UNLOCK_B,Unlock Boss Door
-NA_SE_EV_WOODBOX_BREAK,Throwing Small Wooden Crate
-NA_SE_EV_PUT_DOWN_WOODBOX,Dropping Small Wooden Crate
-NA_SE_EV_LAND_DIRT,Throwing Ruto onto Jabu-Jabu's Insides
-NA_SE_EV_FLOOR_ROLLING,
-NA_SE_EV_DOG_CRY_EVENING,Wolf Howl for Night
-NA_SE_EV_JABJAB_HICCUP,
-NA_SE_EV_NALE_MAGIC,
-NA_SE_EV_FROG_JUMP,Frog Jumps on Log
-NA_SE_EV_ICE_FREEZE,
-NA_SE_EV_BURNING,Wall of Fire
-NA_SE_EV_WOODPLATE_BOUND,
-NA_SE_EV_GORON_WATER_DROP,
-NA_SE_EV_JABJAB_GROAN,Jabu-Jabu Breathing
-NA_SE_EV_DARUMA_VANISH,Hitting Dalm Block (Fire Temple Entrance)
-NA_SE_EV_BIGBALL_ROLL,Rolling Boulder
-NA_SE_EV_ELEVATOR_MOVE3,
-NA_SE_EV_DIAMOND_SWITCH,Hitting Diamond Switch
-NA_SE_EV_FLAME_OF_FIRE,Fires in Kakariko Village
-NA_SE_EV_RAINBOW_SHOWER,Light Constructing Rainbow Bridge
-NA_SE_EV_FLYING_AIR,
-NA_SE_EV_PASS_AIR,
-NA_SE_EV_COME_UP_DEKU_JR,Deku Tree Sprout Rises from Ground
-NA_SE_EV_SAND_STORM,Desert Sand Storm
-NA_SE_EV_TRIFORCE_MARK,Triforce Hand Mark Shines
-NA_SE_EV_GRAVE_EXPLOSION,Royal Family's Tomb Explodes
-NA_SE_EV_LURE_MOVE_W,Moving Fishing Lure
-NA_SE_EV_POT_MOVE_START,Picking up Pot
-NA_SE_EV_DIVE_INTO_WATER_L,Throwing Rock or Grass into Water
-NA_SE_EV_OUT_OF_WATER_L,
-NA_SE_EV_GANON_MANTLE,Ganondorf Whips His Cloak
-NA_SE_EV_DIG_UP,
-NA_SE_EV_WOOD_BOUND,
-NA_SE_EV_WATER_BUBBLE,Tank in Laboratory
-NA_SE_EV_ICE_BROKEN,
-NA_SE_EV_FROG_GROW_UP,Frog Growing after Song
-NA_SE_EV_WATER_CONVECTION,
-NA_SE_EV_GROUND_GATE_OPEN,
-NA_SE_EV_FACE_BREAKDOWN,
-NA_SE_EV_FACE_EXPLOSION,
-NA_SE_EV_FACE_CRUMBLE_SLOW,
-NA_SE_EV_ROUND_TRAP_MOVE,
-NA_SE_EV_HIT_SOUND,
-NA_SE_EV_ICE_SWING,
-NA_SE_EV_DOWN_TO_GROUND,
-NA_SE_EV_KENJA_ENVIROMENT_0,Chamber of Sages Ambience
-NA_SE_EV_KENJA_ENVIROMENT_1,Chamber of Sages Ambience (Sealing Ganondorf)
-NA_SE_EV_SMALL_DOG_BARK,Dog Barking
-NA_SE_EV_ZELDA_POWER,Zelda Opening Gate
-NA_SE_EV_RAIN,
-NA_SE_EV_IRON_DOOR_OPEN,Iron Door Opening
-NA_SE_EV_IRON_DOOR_CLOSE,Iron Door Closing
-NA_SE_EV_WHIRLPOOL,Whirlpool
-NA_SE_EV_TOWER_PARTS_BROKEN,Ganon's Tower Crumbling
-NA_SE_EV_COW_CRY,Cow Mooing
-NA_SE_EV_METAL_BOX_BOUND,
-NA_SE_EV_ELECTRIC_EXPLOSION,Throwing Obsidian Rock into Tower Barrier
-NA_SE_EV_HEAVY_THROW,Throwing Obsidian Rock
-NA_SE_EV_FROG_CRY_0,Frog Croaks while Jumping Back into Water
-NA_SE_EV_FROG_CRY_1,Frog Croaks after Growing
-NA_SE_EV_COW_CRY_LV,Cow mooing from Elsewhere
-NA_SE_EV_RONRON_DOOR_CLOSE,Ingo Gates Closing
-NA_SE_EV_BUTTERFRY_TO_FAIRY,Butterfly Transforms into Fairy
-NA_SE_EV_FIVE_COUNT_LUPY,Collect Silver Rupee
-NA_SE_EV_STONE_GROW_UP,Gossip Stone Stretches
-NA_SE_EV_STONE_LAUNCH,Gossip Stone Launching into Space
-NA_SE_EV_STONE_ROLLING,Gossip Stone Spins in Place
-NA_SE_EV_TOGE_STICK_ROLLING,Spiky Log Rolling
-NA_SE_EV_TOWER_ENERGY,Energy Fluctuating in Minidungeon Final Rooms
-NA_SE_EV_TOWER_BARRIER,Ganon's Tower Barrier Fluctuating
-NA_SE_EV_CHIBI_WALK,Grave Kid Walking
-NA_SE_EV_KNIGHT_WALK,Hyrule Guard Walking
-NA_SE_EV_PILLAR_MOVE_STOP,Pillar Stops Moving
-NA_SE_EV_ERUPTION_CLOUD,
-NA_SE_EV_LINK_WARP_OUT_LV,
-NA_SE_EV_LINK_WARP_IN,
-NA_SE_EV_OCARINA_BMELO_0,
-NA_SE_EV_OCARINA_BMELO_1,
-NA_SE_EV_EXPLOSION_FOR_RENZOKU,
-NA_SE_EV_ELEVATOR_MOVE_KABE1,
-NA_SE_EV_RIVER_STREAM_F_IDO
-NA_SE_EV_GUILLOTINE_BOUND_copyOrigin
-NA_SE_EV_HEALING_TOU
-NA_SE_EV_RUMUBLE_KEMURI
-NA_SE_EV_GANON_HADOU
-NA_SE_EV_KANOKE_OPEN
-NA_SE_EV_KANOKE_CLOSE
-NA_SE_EV_SEEK_CLOTH1
-NA_SE_EV_SEEK_CLOTH2
-NA_SE_EV_BOTTLE_CAP_CLOSE
-NA_SE_EV_ELEVATOR_MOVE_KABE2
-NA_SE_EV_WATER_LEVEL_DOWN_STOP
-NA_SE_EV_DAIKU_CLOTH1
-NA_SE_EV_DEMO_EPONA_LAND
-NA_SE_EV_DIVE_INTO_WATER_BLOCK
-NA_SE_EV_TORCH2
-NA_SE_EV_TORCH3
-NA_SE_EV_TORCH4
-NA_SE_EV_TORCH5
-NA_SE_EV_EARTHQUAKE_LAST
-NA_SE_EV_YAMI_TRAP_CHAIN
-NA_SE_EV_FLAME_IGNITION_GANON
-NA_SE_EV_MGANON_DOWN2
-NA_SE_EV_EXPLOSION_HOUKAI
-NA_SE_EV_BLOCKSINK_GANON
-NA_SE_EV_DOG_WALK
-NA_SE_EV_GANON_HOUKAI_KEMURI1
-NA_SE_EV_YOBI21
-NA_SE_EV_YOBI22
-NA_SE_EV_YOBI23
-NA_SE_EV_YOBI24
-NA_SE_EV_YOBI25
-NA_SE_EN_DODO_J_WALK,Dodongo - Walking
-NA_SE_EN_DODO_J_CRY,Dodongo - Exhaling
-NA_SE_EN_DODO_J_FIRE,Dodongo - Breathing Fire
-NA_SE_EN_DODO_J_DAMAGE,Dodongo - Hurt by Link
-NA_SE_EN_DODO_J_DEAD,Dodongo - Final Hit
-NA_SE_EN_DODO_K_CRY,King Dodongo - Exhaling
-NA_SE_EN_DODO_K_DAMAGE,King Dodongo - Hurt by Link
-NA_SE_EN_DODO_K_DEAD,King Dodongo - Final Hit
-NA_SE_EN_DODO_K_WALK,King Dodongo - Walking
-NA_SE_EN_DODO_K_FIRE,King Dodongo - Breathing Fire
-NA_SE_EN_GOMA_WALK,Gohma - Walking on Ground
-NA_SE_EN_GOMA_HIGH,Gohma - Walking on Ceiling
-NA_SE_EN_GOMA_CLIM,Gohma - Climbing to Ceiling
-NA_SE_EN_GOMA_DOWN,Gohma - Falls off Ceiling
-NA_SE_EN_GOMA_CRY1,Gohma - Cries
-NA_SE_EN_GOMA_CRY2,Gohma - Grumbles
-NA_SE_EN_GOMA_DAM1,Gohma - Hurt by Link
-NA_SE_EN_GOMA_DAM2,Gohma - Hit in Eyeball
-NA_SE_EN_GOMA_DEAD,Gohma - Final Hit
-NA_SE_EN_GOMA_UNARI,Gohma - Dropping Larvae
-NA_SE_EN_GOMA_BJR_EGG1,Gohma Larva (Boss Battle) - Egg Falls onto Floor
-NA_SE_EN_GOMA_BJR_EGG2,Gohma Larva (Boss Battle) - Egg Hatches
-NA_SE_EN_GOMA_BJR_WALK,Gohma Larva (Boss Battle) - Walking
-NA_SE_EN_GOMA_BJR_CRY,Gohma Larva (Boss Battle) - Cries
-NA_SE_EN_GOMA_BJR_DAM1,Gohma Larva (Boss Battle) - Hurt by Link
-NA_SE_EN_GOMA_BJR_DAM2,Gohma Larva (Boss Battle) - Hurt by Link
-NA_SE_EN_GOMA_BJR_DEAD,Gohma Larva (Boss Battle) - Final Hit
-NA_SE_EN_GOMA_DEMO_EYE,Gohma - Eye Rolls (Battle Start)
-NA_SE_EN_GOMA_LAST,Gohma - Body Burns Away
-NA_SE_EN_GOMA_UNARI2,Gohma - Cries When Stuck in Ground
-NA_SE_EN_GOMA_FAINT,Gohma - Temporarily Paralyzed
-NA_SE_EN_GOMA_BJR_FREEZE,Gohma Larva (Boss Battle) - Paralyzed
-NA_SE_EN_DODO_M_CRY,Baby Dodongo - Attack Cry
-NA_SE_EN_DODO_M_DEAD,Baby Dodongo - Final Hit
-NA_SE_EN_DODO_M_MOVE,Baby Dodongo - Moving
-NA_SE_EN_DODO_M_DOWN,Baby Dodongo - Burrowing
-NA_SE_EN_DODO_M_UP,Baby Dodongo - Emerging
-NA_SE_EN_GANON_THROW_MASIC,Ganondorf - Throws Energy Orb
-NA_SE_EN_DODO_M_EAT,Baby Dodongo - Eats Bomb
-NA_SE_EN_GANON_DD_THUNDER,Ganondorf - Hit by Light Arrow
-NA_SE_EN_RIZA_ONGND,Lizalfos - xxx
-NA_SE_EN_RIZA_CRY,Lizalfos - Cries
-NA_SE_EN_RIZA_ATTACK,Lizalfos - Attacks
-NA_SE_EN_RIZA_DAMAGE,Lizalfos - Hurt by Link
-NA_SE_EN_RIZA_WARAU,Lizalfos - xxx
-NA_SE_EN_RIZA_DEAD,Lizalfos - Final Hit
-NA_SE_EN_RIZA_WALK,Lizalfos - Walking
-NA_SE_EN_RIZA_JUMP,Lizalfos - Jumps
-NA_SE_EN_STALKID_WALK,Stalchild - Walking
-NA_SE_EN_STALKID_ATTACK,Stalchild - Attacking
-NA_SE_EN_STALKID_DAMAGE,Stalchild - Hurt by Link
-NA_SE_EN_STALKID_DEAD,Stalchild - Final Hit
-NA_SE_EN_FLOORMASTER_SLIDING,Floormaster - Sliding on Ground
-NA_SE_EN_TEKU_WALK_WATER,Tektite - Turning around in Water
-NA_SE_EN_LIGHT_ARROW_HIT,
-NA_SE_EN_TUBOOCK_FLY,Flying Pot Trap - Flying
-NA_SE_EN_STAL_WARAU,Stalfos - Laughs
-NA_SE_EN_STAL_SAKEBI,Stalfos - Swipes Sword
-NA_SE_EN_STAL_DAMAGE,Stalfos - Hurt by Link
-NA_SE_EN_STAL_DEAD,Stalfos - Final Hit
-NA_SE_EN_WOLFOS_APPEAR,Wolfos - Howling on Appearance
-NA_SE_EN_STAL_WALK,Stalfos - Walking
-NA_SE_EN_WOLFOS_CRY,Wolfos - Cries
-NA_SE_EN_WOLFOS_ATTACK,Wolfos - Attack & Cry
-NA_SE_EN_FFLY_ATTACK,Keese - Attacking
-NA_SE_EN_FFLY_FLY,Keese - Flying
-NA_SE_EN_FFLY_DEAD,Keese - Final Hit
-NA_SE_EN_WOLFOS_DAMAGE,Wolfos - Hurt by Link
-NA_SE_EN_AMOS_WALK,Armos - Hopping
-NA_SE_EN_AMOS_WAVE,Armos - Awakes
-NA_SE_EN_AMOS_DEAD,Armos - Final Hit
-NA_SE_EN_AMOS_DAMAGE,Armos - Hurt by Link
-NA_SE_EN_AMOS_VOICE,Armos - Roars
-NA_SE_EN_SHELL_MOUTH,Shellblade - Opens Mouth
-NA_SE_EN_SHELL_DEAD,Shellblade - Final Hit
-NA_SE_EN_WOLFOS_DEAD,Wolfos - Final Hit
-NA_SE_EN_DODO_K_COLI,King Dodongo - Last Roll into Wall
-NA_SE_EN_DODO_K_COLI2,"King Dodongo - Curls into Ball, Rolls into Wall"
-NA_SE_EN_DODO_K_ROLL,King Dodongo - Rolling
-NA_SE_EN_DODO_K_BREATH,King Dodongo - Inhaling
-NA_SE_EN_DODO_K_DRINK,King Dodongo - Swallows Bomb
-NA_SE_EN_DODO_K_DOWN,King Dodongo - Temporarily Paralyzed
-NA_SE_EN_DODO_K_OTAKEBI,King Dodongo - Introductory Roar
-NA_SE_EN_DODO_K_END,King Dodongo - Melting
-NA_SE_EN_DODO_K_LAST,King Dodongo - Melting
-NA_SE_EN_DODO_K_LAVA,King Dodongo - In Lava
-NA_SE_EN_GANON_FLOAT,Ganondorf - Floating in Air (Cutscene)
-NA_SE_EN_GANON_DARKWAVE_M,Ganondorf - Purple Vortex
-NA_SE_EN_DODO_J_BREATH,Dodongo - Inhaling
-NA_SE_EN_DODO_J_TAIL,Dodongo - Tail Dragging on Ground
-NA_SE_EN_WOLFOS_WALK,Wolfos - Walking
-NA_SE_EN_DODO_J_EAT,Dodongo - Eats Bomb
-NA_SE_EN_DEKU_MOUTH,Big Deku Baba - Chomps Mouth
-NA_SE_EN_DEKU_ATTACK,Big Deku Baba - Attacks
-NA_SE_EN_DEKU_DAMAGE,Big Deku Baba - Hurt by Link
-NA_SE_EN_DEKU_DEAD,Big Deku Baba - Final Hit
-NA_SE_EN_DEKU_JR_MOUTH,Deku Baba - Chomps Mouth
-NA_SE_EN_DEKU_JR_ATTACK,Dekub Baba - Attacks
-NA_SE_EN_DEKU_JR_DEAD,Deku Baba - Final Hit
-NA_SE_EN_DEKU_SCRAPE,Deku Baba - Scrapes Mouth along Ground
-NA_SE_EN_TAIL_FLY,"Tailpasaran - Flying, Rising out of Ground"
-NA_SE_EN_TAIL_CRY,Tailpasaran - Cries
-NA_SE_EN_TAIL_DEAD,Tailpasaran - Final Hit
-NA_SE_EN_GANON_SPARK,Ganondorf - Charging Ball
-NA_SE_EN_STALTU_DOWN,Skulltula - Drops Down
-NA_SE_EN_STALTU_UP,Skulltula - Goes Up
-NA_SE_EN_STALTU_LAUGH,Skulltula - Quivers
-NA_SE_EN_STALTU_DAMAGE,Skulltula - Hurt by Link
-NA_SE_EN_STAL_JUMP,Stalfos - Jumps
-NA_SE_EN_TEKU_DAMAGE,Tektite - Hurt by Link
-NA_SE_EN_TEKU_DEAD,Tektite - Final Hit
-NA_SE_EN_TEKU_WALK,Tektite - Turning around on Ground
-NA_SE_EN_PO_KANTERA,Poe - Spins Lantern
-NA_SE_EN_PO_FLY,Poe - Flying
-NA_SE_EN_PO_AWAY,Poe - Runs Away
-NA_SE_EN_PO_APPEAR,Poe - Appears
-NA_SE_EN_PO_DISAPPEAR,Poe - Disappears When Z-Targeting
-NA_SE_EN_PO_DAMAGE,Poe - Hurt by Link
-NA_SE_EN_PO_DEAD,Poe - Final Hit
-NA_SE_EN_PO_DEAD2,Poe - Turns into Soul
-NA_SE_EN_EXTINCT,Body Disappears (Any Enemy)
-NA_SE_EN_GOLON_LAND_BIG,Rolling Goron - Hits Ground
-NA_SE_EN_RIZA_DOWN,Lizalfos - Lands on Back
-NA_SE_EN_DODO_M_GND,Baby Dodongo - Landing on Ground
-NA_SE_EN_NUTS_UP,Mad Scrub - Emerges from Ground
-NA_SE_EN_NUTS_DOWN,Mad Scrub - Burrows into Ground
-NA_SE_EN_NUTS_THROW,Mad Scrub - Spits Nut
-NA_SE_EN_NUTS_WALK,Mad Scrub - Walking
-NA_SE_EN_NUTS_DAMAGE,Mad Scrub - Hurt by Link
-NA_SE_EN_NUTS_DEAD,Mad Scrub - Last Hit
-NA_SE_EN_NUTS_FAINT,Business Scrub - Squeaks When Talking
-NA_SE_EN_PO_BIG_GET,Big Poe - Catch Poe Soul
-NA_SE_EN_STALTU_ROLL,Skulltula - Turns Around
-NA_SE_EN_STALWALL_DEAD,Skullwalltula - Final Hit
-NA_SE_EN_PO_SISTER_DEAD,Poe Sister - Final Hit
-NA_SE_EN_BARI_SPLIT,Bari - Splits into Biri
-NA_SE_EN_TEKU_REVERSE,Tektite - Flipped Upside-Down
-NA_SE_EN_VALVAISA_LAND2,Volvagia - Skull Lands
-NA_SE_EN_TEKU_LAND_WATER,Tektite - Land in Water (Long Jump)
-NA_SE_EN_LAST_DAMAGE,Final Hit (Any Enemy)
-NA_SE_EN_STALWALL_ROLL,Skullwalltula - Spinning on Wall
-NA_SE_EN_STALWALL_DASH,Skullwalltula - Dashing towards Link
-NA_SE_EN_TEKU_JUMP_WATER,Tektite - Jump in Water
-NA_SE_EN_TEKU_LAND_WATER2,Tektite - Land in Water (Short Jump)
-NA_SE_EN_FALL_AIM,Wallmaster - Falling over Link
-NA_SE_EN_FALL_UP,Wallmaster - Flies Up
-NA_SE_EN_FALL_CATCH,Wallmaster - Catches Link
-NA_SE_EN_FALL_LAND,Wallmaster & Floormaster - Lands
-NA_SE_EN_FALL_WALK,Wallmaster & Floormaster - Walking
-NA_SE_EN_FALL_DAMAGE,Wallmaster & Floormaster - Hurt by Link
-NA_SE_EN_FALL_DEAD,Wallmaster & Floormaster - Final Hit
-NA_SE_EN_KAICHO_FLUTTER,Guay - Flying
-NA_SE_EN_BIRI_FLY,Biri - Floating
-NA_SE_EN_BIRI_JUMP,Biri - Flies Up
-NA_SE_EN_BIRI_SPARK,Biri - Attacks
-NA_SE_EN_BIRI_DEAD,Biri - Final Hit
-NA_SE_EN_BIRI_BUBLE,Biri - Bubbles when Dead
-NA_SE_EN_BARI_ROLL,Bari - Spinning
-NA_SE_EN_GOMA_JR_FREEZE,Gohma Larva - Temporarily Paralyzed
-NA_SE_EN_BARI_DEAD,Bari - Final Hit
-NA_SE_EN_GANON_FIRE,Ganondorf - Thrown Magic Orb
-NA_SE_EN_FANTOM_TRANSFORM,Phantom Ganon - Removes Face
-NA_SE_EN_FANTOM_THUNDER,Phantom Ganon - Lighting Attack
-NA_SE_EN_FANTOM_SPARK,Phantom Ganon - Sparks from Lighting Attack
-NA_SE_EN_FANTOM_FLOAT,Phantom Ganon - Floating
-NA_SE_EN_FANTOM_MASIC1,Phantom Ganon - xxx
-NA_SE_EN_FANTOM_MASIC2,Phantom Ganon - Enters Painting
-NA_SE_EN_FANTOM_FIRE,Phantom Ganon - Fires Lightning Ball with Staff
-NA_SE_EN_FANTOM_HIT_THUNDER,Phantom Ganon - Lightning Ball hits Phantom Ganon or Link
-NA_SE_EN_FANTOM_ATTACK,Phantom Ganon - xxx
-NA_SE_EN_FANTOM_STICK,Phantom Ganon - Spins Staff
-NA_SE_EN_FANTOM_EYE,Phantom Ganon - Eye Glows after Face Removal
-NA_SE_EN_FANTOM_LAST,Phantom Ganon - Dying Roar
-NA_SE_EN_FANTOM_THUNDER_GND,Phantom Ganon - Lightning Ball Hits Ground
-NA_SE_EN_FANTOM_DAMAGE,Phantom Ganon - Hurt by Link
-NA_SE_EN_FANTOM_DEAD,Phantom Ganon - Final Hit
-NA_SE_EN_FANTOM_LAUGH,Phantom Ganon - Laughs
-NA_SE_EN_FANTOM_DAMAGE2,Phantom Ganon - Hurt by Lightning Ball
-NA_SE_EN_FANTOM_VOICE,Phantom Ganon - Yells
-NA_SE_EN_KAICHO_DAMAGE,Guay - Hurt by Link
-NA_SE_EN_GANON_ATTACK_DEMO,Ganondorf (Cutscene) - Charges Magic Attack
-NA_SE_EN_GANON_FIRE_DEMO,Ganondorf (Cutscene) - Shoots Magic Attack
-NA_SE_EN_KAICHO_CRY,Guay - Cries
-NA_SE_EN_KAICHO_ATTACK,Guay - Attacks Link
-NA_SE_EN_MORIBLIN_WALK,Spear Moblin - Walking
-NA_SE_EN_MORIBLIN_SLIDE,Spear Moblin - Slides to a Halt
-NA_SE_EN_MORIBLIN_ATTACK,Spear Moblin - Attack Cry
-NA_SE_EN_MORIBLIN_VOICE,Spear Moblin - Grunts
-NA_SE_EN_MORIBLIN_SPEAR_AT,Spear Moblin - Readies Spear
-NA_SE_EN_MORIBLIN_SPEAR_NORM,Spear Moblin - Pulls Spear Up
-NA_SE_EN_MORIBLIN_DEAD,Spear Moblin - Final Hit
-NA_SE_EN_MORIBLIN_DASH,Spear Moblin - Dashes after Link
-NA_SE_EN_OCTAROCK_ROCK,Octorok - Rock Breaks on Impact
-NA_SE_EN_OCTAROCK_FLOAT,Octorok - Floating on Water
-NA_SE_EN_OCTAROCK_JUMP,Octorok - Jumps out of Water
-NA_SE_EN_OCTAROCK_LAND,Octorok - Settles on Surface
-NA_SE_EN_OCTAROCK_SINK,Octorok - Goes under Surface
-NA_SE_EN_OCTAROCK_BUBLE,Octorok - Bubbles Underwater
-NA_SE_EN_OCTAROCK_DEAD1,Octorok - Final Hit
-NA_SE_EN_OCTAROCK_DEAD2,Octorok - Dying Noise
-NA_SE_EN_BUBLE_WING,Bubble - Flying
-NA_SE_EN_BUBLE_MOUTH,Red Bubble - Chomps Mouth
-NA_SE_EN_BUBLE_LAUGH,Bubble - Laughing
-NA_SE_EN_BUBLE_BITE,Bubble - Attacks
-NA_SE_EN_BUBLE_UP,Bubble - Protective Flame Reappears
-NA_SE_EN_BUBLE_DOWN,Bubble - Protective Flame Disappears
-NA_SE_EN_BUBLE_DEAD,Bubble - Final Hit
-NA_SE_EN_BUBLEFALL_FIRE,Red Bubble - Jumping through Magma
-NA_SE_EN_VALVAISA_APPEAR,Volvagia - Dives into/Appears from Magma Holes
-NA_SE_EN_VALVAISA_ROAR,Volvagia - Roars
-NA_SE_EN_VALVAISA_MAHI1,Volvagia - Hit with Hammer
-NA_SE_EN_VALVAISA_MAHI2,Volvagia - Falls to Ground
-NA_SE_EN_VALVAISA_KNOCKOUT,Volvagia - Temporarily Paralyzed
-NA_SE_EN_VALVAISA_DAMAGE1,Volvagia - Hurt by Link
-NA_SE_EN_VALVAISA_DAMAGE2,Volvagia - Awoken by Link's Attacks
-NA_SE_EN_VALVAISA_ROCK,Volvagia - Falling Rock
-NA_SE_EN_VALVAISA_SW_NAIL,Volvagia - Swipes at Link
-NA_SE_EN_VALVAISA_DEAD,Volvagia - Final Hit
-NA_SE_EN_VALVAISA_BURN,Volvagia - Burns Up
-NA_SE_EN_VALVAISA_FIRE,Volvagia - Breathes Fire
-NA_SE_EN_BARI_DAMAGE,Bari - xxx
-NA_SE_EN_MOFER_CORE_LAND,Morpha - Nucleus Lands on Ground
-NA_SE_EN_MOFER_CORE_MOVE_WT,Morpha - Goes after Link in Water
-NA_SE_EN_MOFER_CORE_SMJUMP,Morpha - Nucleus Hops on Water
-NA_SE_EN_MONBLIN_GNDWAVE,Club Moblin - Shockwave from Club Hit
-NA_SE_EN_MONBLIN_HAM_DOWN,Club Moblin - Hit Ground with Club
-NA_SE_EN_MONBLIN_HAM_UP,Club Moblin - Raise Club
-NA_SE_EN_BUBLE_DAMAGE,Bubble - Hurt by Link
-NA_SE_EN_REDEAD_CRY,Redead - Moaning
-NA_SE_EN_REDEAD_AIM,"Redead - Screams at Link, Approaches"
-NA_SE_EN_REDEAD_DAMAGE,Redead - Hurt by Link
-NA_SE_EN_REDEAD_DEAD,Redead - Final Hit
-NA_SE_EN_REDEAD_ATTACK,Redead - Jumps on Link and Attacks
-NA_SE_EN_NYU_MOVE,Spike Trap - Rolling towards Link
-NA_SE_EN_NYU_HIT_STOP,Spike Trap - Turns into Rock
-NA_SE_EN_KAICHO_DEAD,Guay - Final Hit
-NA_SE_EN_PO_LAUGH,Poe - Laughs
-NA_SE_EN_PO_CRY,Poe - Cries
-NA_SE_EN_PO_ROLL,Poe - Spinning after Link
-NA_SE_EN_PO_LAUGH2,Poe Sister - Laughs
-NA_SE_EN_MOFER_APPEAR,Morpha - Appears
-NA_SE_EN_MOFER_ATTACK,Morpha - Attacks Link
-NA_SE_EN_MOFER_WAVE,Morpha - Waves Link Around
-NA_SE_EN_MOFER_CATCH,Morpha - Grabs Link
-NA_SE_EN_MOFER_CUT,Morpha - Link Grabs Nucleus from Tentacle
-NA_SE_EN_MOFER_MOVE_DEMO,Morpha (Cutscene) - Moving Underwater
-NA_SE_EN_MOFER_BUBLE_DEMO,Morpha (Cutscene) - Makes Bubbles
-NA_SE_EN_MOFER_CORE_JUMP,Morpha - Nucleus Jumps on Water
-NA_SE_EN_MOFER_DEAD,Morpha - Final Hit
-NA_SE_EN_MOFER_LASTVOICE,Morpha - Dying Cry
-NA_SE_EN_MOFER_CORE_ROLL,Morpha - Nucleus Rolls in Water
-NA_SE_EN_MOFER_CORE_FLY,Morpha - xxx
-NA_SE_EN_GOLON_WAKE_UP,Goron - Sitting Up
-NA_SE_EN_GOLON_SIT_DOWN,Goron - Standing up or Sitting Down
-NA_SE_EN_CHICKEN_FLUTTER,Cucco - xxx
-NA_SE_EN_DEKU_WAKEUP,Cucco - Fluttering Wings
-NA_SE_EN_DEADHAND_BITE,Dead Hand - Bites Link
-NA_SE_EN_DEADHAND_WALK,Dead Hand - Sliding
-NA_SE_EN_DEADHAND_GRIP,Dead Hand - Has Grip on Link
-NA_SE_EN_DEADHAND_HAND_AT,Dead Hand's Hands - Grab Link
-NA_SE_EN_DAIOCTA_MAHI,Big Octorok - Temporarily Paralyzed
-NA_SE_EN_DAIOCTA_SPLASH,Big Octorok - Walking around in Water
-NA_SE_EN_DAIOCTA_VOICE,Big Octorok - Grunts
-NA_SE_EN_DAIOCTA_DAMAGE,Big Octorok - Hurt by Link
-NA_SE_EN_DAIOCTA_SINK,Big Octorok - Sinks into Ground
-NA_SE_EN_DAIOCTA_DEAD,Big Octorok - Final Hit
-NA_SE_EN_DAIOCTA_DEAD2,Big Octorok - Dying
-NA_SE_EN_GANON_HIT_THUNDER,Ganondorf - Lightning Ball Hits Someone
-NA_SE_EN_TWINROBA_APPEAR_MS,Twinrova - Sisters Appear
-NA_SE_EN_TWINROBA_TRANSFORM,Twinrova - Sister Transforms
-NA_SE_EN_TWINROBA_MS_FIRE,Twinrova - Fire Attack Charging
-NA_SE_EN_TWINROBA_FIRE_EXP,Twinrova - Fire Attack Hits Ground
-NA_SE_EN_TWINROBA_POWERUP,Twinrova - xxx
-NA_SE_EN_TWINROBA_SHOOT_FREEZE,Twinrova - Shooting Ice Attack
-NA_SE_EN_TWINROBA_MS_FREEZE,Twinrova - Charging Ice Attack
-NA_SE_EN_TWINROBA_MASIC_SET,Twinrova - Starting to Cast Magic
-NA_SE_EN_TWINROBA_CUTBODY,Young Twinrova - Hit by Link with Sword
-NA_SE_EN_GANON_HIT_GND_IMP,Ganondorf - Pounds Ground
-NA_SE_EN_TWINROBA_DAMAGE_VOICE,Twinrova - Hurt by Link
-NA_SE_EN_TWINROBA_REFL_FIRE,Twinrova - Reflect Fire Attack
-NA_SE_EN_TWINROBA_REFL_FREEZE,Twinrova - Reflect Ice Attack
-NA_SE_EN_GANON_CUTBODY,Ganondorf - Hit with Sword by Link
-NA_SE_EN_TWINROBA_YOUNG_DAMAGE,Young Twinrova - Hit with Mirror Shield
-NA_SE_EN_TWINROBA_YOUNG_DEAD,Young Twinrova - Final Hit
-NA_SE_EN_GOLON_EYE_BIG,Biggoron - xxx
-NA_SE_EN_GOLON_GOOD_BIG,Biggoron - xxx
-NA_SE_EN_TWINROBA_FB_FLY,Twinrova - Particle Remains Flying
-NA_SE_EN_TWINROBA_FLY,Twinrova - Flying
-NA_SE_EN_TWINROBA_UNARI,Twinrova - Sisters Hovering
-NA_SE_EN_TWINROBA_ROLL,Twinrova - Sister Spins Around
-NA_SE_EN_TWINROBA_SHOOT_FIRE,Twinrova - Shooting Fire Attack
-NA_SE_EN_TWINROBA_THROW_MASIC,Twinrova - Casts Magic
-NA_SE_EN_DARUNIA_HIT_BREAST,Darunia - Pounds Chest
-NA_SE_EN_DARUNIA_HIT_LINK,Darunia - Hits Link's Head
-NA_SE_EN_OWL_FLUTTER,Kaepora Gaebora - Flies Away
-NA_SE_EN_VALVAISA_LAND,Volvagia - Collapses on Ground
-NA_SE_EN_IRONNACK_WALK,Iron Knuckle - Walking
-NA_SE_EN_IRONNACK_SWING_AXE,Iron Knuckle - Swings Axe
-NA_SE_EN_IRONNACK_ARMOR_DEMO,Iron Knuckle (Cutscene) - Armor Clank
-NA_SE_EN_IRONNACK_STAGGER_DEMO,Iron Knuckle (Cutscene) - Staggers
-NA_SE_EN_IRONNACK_ARMOR_OFF_DEMO,Iron Knuckle (Cutscene) - Armor Falls Off
-NA_SE_EN_IRONNACK_ARMOR_LAND1_DEMO,Iron Knuckle (Cutscene) - Armor Lands
-NA_SE_EN_IRONNACK_ARMOR_LAND2_DEMO,Iron Knuckle (Cutscene) - Armor Lands
-NA_SE_EN_IRONNACK_ARMOR_LAND3_DEMO,Iron Knuckle (Cutscene) - Armor Lands
-NA_SE_EN_FLOORMASTER_ATTACK,Floormaster - Attacks
-NA_SE_EN_FLOORMASTER_SM_WALK,Small Floormaster - Walking
-NA_SE_EN_FLOORMASTER_SM_DEAD,Small Floormaster - Final Hit
-NA_SE_EN_FLOORMASTER_RESTORE,Floormaster - Grows
-NA_SE_EN_FLOORMASTER_EXPAND,Floormaster - Grows
-NA_SE_EN_FLOORMASTER_SPLIT,Floormaster - Splits Apart
-NA_SE_EN_FLOORMASTER_SM_STICK,Small Floormaster - Grabs onto Link
-NA_SE_EN_FLOORMASTER_SM_LAND,Small Floormaster - Lands on Floor
-NA_SE_EN_IRONNACK_WAVE_DEMO,Iron Knuckle (Cutscene) - Shakes Axe
-NA_SE_EN_IRONNACK_FINGER_DEMO,Iron Knuckle (Cutscene) - Finger Snap
-NA_SE_EN_IRONNACK_ARMOR_HIT,Iron Knuckle - Link Hits Armor
-NA_SE_EN_NUTS_CUTBODY,Mad Scrub - Hit with Sword by Link
-NA_SE_EN_BALINADE_LEVEL,Barinade - Rumbling
-NA_SE_EN_BALINADE_DAMAGE,Barinade - Hurt by Link
-NA_SE_EN_BALINADE_FAINT,Barinade - Weakpoint Hurt by Link
-NA_SE_EN_BALINADE_BREAK,Barinade - Dying
-NA_SE_EN_BALINADE_DEAD,Barinade - Dying Cry
-NA_SE_EN_BALINADE_STICK,Barinade - Bari Attaches to Barinade
-NA_SE_EN_BALINADE_THUNDER,Barinade - Lightning Attack
-NA_SE_EN_BALINADE_BL_SPARK,Barinade (Bari) - Sparks
-NA_SE_EN_BALINADE_BL_DEAD,Barinade (Bari) - Final Hit
-NA_SE_EN_BALINADE_BREAK2,Barinade - Tentacles Break Off
-NA_SE_EN_BALINADE_HIT_RINK,Barinade - Hits Edge of Room?
-NA_SE_EN_GANON_WAVE_GND,Ganondorf - Shockwave from Ground Pound
-NA_SE_EN_AWA_BOUND,Shabom - Bounces off Surface
-NA_SE_EN_AWA_BREAK,Shabom - Pops
-NA_SE_EN_BROB_WAVE,Red Jelly - Waves Around
-NA_SE_EN_NYU_DEAD,Spike Trap - Final Hit
-NA_SE_EN_EIER_DAMAGE,Stinger - Hurt by Link
-NA_SE_EN_EIER_DEAD,Stinger - Final Hit
-NA_SE_EN_EIER_FLUTTER,Stinger - Flops on Ground
-NA_SE_EN_EIER_FLY,Stinger (Land) - Gliding
-NA_SE_EN_SHADEST_TAIKO_LOW,Bongo Bongo - Low Drum Hit
-NA_SE_EN_SHADEST_TAIKO_HIGH,Bongo Bongo - High Drum Hit
-NA_SE_EN_SHADEST_CLAP,Bongo Bongo - Claps Link
-NA_SE_EN_SHADEST_FLY_ATTACK,Bongo Bongo - Swipes Hand
-NA_SE_EN_PIHAT_UP,Peahat - Rises out of Ground
-NA_SE_EN_PIHAT_FLY,Peahat - Flying
-NA_SE_EN_PIHAT_DAMAGE,Peahat - Hurt by Link
-NA_SE_EN_PIHAT_LAND,Peahat - Lands
-NA_SE_EN_BALINADE_HAND_DOWN,Parasitic Tentacle - Hits Link
-NA_SE_EN_BALINADE_HAND_UP,Parasitic Tentacle - Gets Ready to Hit
-NA_SE_EN_BALINADE_HAND_DAMAGE,Parasitic Tentacle - Hurt by Link
-NA_SE_EN_BALINADE_HAND_DEAD,Parasitic Tentacle - Final Hit
-NA_SE_EN_GOMA_JR_WALK,Gohma Larva - Walking
-NA_SE_EN_GOMA_JR_CRY,Gohma Larva - Croaks
-NA_SE_EN_GOMA_JR_DAM1,Gohma Larva - Hurt by Link
-NA_SE_EN_GOMA_JR_DAM2,Gohma Larva - Cries when Hurt by Link
-NA_SE_EN_GOMA_JR_DEAD,Gohma Larva - Final Hit
-NA_SE_EN_GOMA_EGG1,Gohma Larva - Larva Escapes Egg
-NA_SE_EN_GOMA_EGG2,Gohma Larva - Egg Cracks
-NA_SE_EN_GANON_BODY_SPARK,Ganondorf - Lightning when Transforming into Ganon
-NA_SE_EN_SHADEST_HAND_WAVE,Bongo Bongo - Waves Hand
-NA_SE_EN_SHADEST_CATCH,Bongo Bongo - Grabs Link
-NA_SE_EN_SHADEST_LAND,Bongo Bongo - Falls after Shot in Eye
-NA_SE_EN_SHADEST_HAND_FLY,Bongo Bongo - Attacks with Hand
-NA_SE_EN_SHADEST_SHAKEHAND,Bongo Bongo - Shakes Attacked Hand
-NA_SE_EN_SHADEST_DAMAGE,Bongo Bongo - Hurt by Link
-NA_SE_EN_SHADEST_DAMAGE_HAND,Bongo Bongo - Hand Hurt by Link
-NA_SE_EN_SHADEST_DISAPPEAR,Bongo Bongo - Turns Invisible
-NA_SE_EN_GANON_CHARGE_MASIC,Ganondorf - Charges Big Lightning Attack
-NA_SE_EN_GANON_THROW_BIG,Ganondorf - Throws Big Lightning Attack
-NA_SE_EN_SHADEST_FREEZE,Bongo Bongo - Temporarily Paralyzed
-NA_SE_EN_SHADEST_DEAD,Bongo Bongo - Final Hit
-NA_SE_EN_BIMOS_ROLL_HEAD,Beamos - Spinning Around
-NA_SE_EN_BIMOS_LAZER,Beamos - Laser Beam
-NA_SE_EN_BIMOS_LAZER_GND,Beamos - Laser Hits Ground
-NA_SE_EN_BIMOS_AIM,Beamos - About to Fire
-NA_SE_EN_BUBLEWALK_WALK,Torch Slug - Crawling
-NA_SE_EN_BUBLEWALK_AIM,Torch Slug - Sees Link
-NA_SE_EN_BUBLEWALK_REVERSE,Torch Slug - xxx
-NA_SE_EN_BUBLEWALK_DAMAGE,Torch Slug - Hurt by Link
-NA_SE_EN_BUBLEWALK_DEAD,Torch Slug - Final Hit
-NA_SE_EN_YUKABYUN_FLY,Flying Floor Tile - Flies After Link
-NA_SE_EN_FLAME_DAMAGE,Flare Dancer - Hurt by Link
-NA_SE_EN_TWINROBA_FLY_DEMO,Twinrova - Flying (Non-boss Cutscenes)
-NA_SE_EN_FLAME_KICK,Flare Dancer - Kicks while Running
-NA_SE_EN_FLAME_RUN,Flare Dancer - Runs Around
-NA_SE_EN_FLAME_ROLL,Flare Dancer - Spins Around
-NA_SE_EN_FLAME_MAN_RUN,Flare Dancer Head - Runs
-NA_SE_EN_FLAME_MAN_DAMAGE,Flare Dancer Head - Hurt by Link
-NA_SE_EN_FLAME_LAUGH,Flare Dancer - Laughs
-NA_SE_EN_FLAME_MAN_SLIDE,Flare Dancer Head - Slides on Ground
-NA_SE_EN_FLAME_FIRE_ATTACK,Flare Dancer - Shoots Fire
-NA_SE_EN_PIHAT_SM_FLY,Peahat Larva - Flying
-NA_SE_EN_PIHAT_SM_DEAD,Peahat Larva - Final Hit
-NA_SE_EN_RIVA_APPEAR,Leaver - Emerges from Ground
-NA_SE_EN_AKINDONUTS_HIDE,Deku Seller - Burrows into Ground
-NA_SE_EN_RIVA_DAMAGE,Leaver - Hurt by Link
-NA_SE_EN_RIVA_DEAD,Leaver - Final Hit
-NA_SE_EN_RIVA_MOVE,Leaver - Moves on Ground
-NA_SE_EN_FLAME_MAN_SURP,Flare Dancer Head - Yells
-NA_SE_EN_SHADEST_LAST,Bongo Bongo - Disappears after Death
-NA_SE_EN_SHADEST_MOVE,Bongo Bongo - Charges after Link
-NA_SE_EN_SHADEST_PRAY,Bongo Bongo - Chanting
-NA_SE_EN_MGANON_ROAR,Ganon - Roars
-NA_SE_EN_LIKE_WALK,Like Like - Moving
-NA_SE_EN_LIKE_UNARI,Like Like - Groans
-NA_SE_EN_LIKE_DRINK,Like Like - Swallows Link
-NA_SE_EN_LIKE_EAT,Like Like - Eating Link
-NA_SE_EN_LIKE_THROW,Like Like - Spits out Link
-NA_SE_EN_LIKE_DAMAGE,Like Like - Hurt by Link
-NA_SE_EN_LIKE_DEAD,Like Like - Final Hit
-NA_SE_EN_MGANON_SWORD,Ganon - Swings Sword
-NA_SE_EN_GERUDOFT_ATTACK,Gerudo Fighter - Attacks Link
-NA_SE_EN_GERUDOFT_DAMAGE,Gerudo Fighter - Hurt by Link
-NA_SE_EN_GERUDOFT_DEAD,Gerudo Fighter - Final Hit
-NA_SE_EN_MGANON_DAMAGE,Ganon - Hurt by Link
-NA_SE_EN_ANUBIS_FIRE,Anubis - Breathes Fire
-NA_SE_EN_ANUBIS_FIREBOMB,Anubis - Fire Attack Hits Surface
-NA_SE_EN_MGANON_DEAD1,Ganon - Final Hit (Can Get Master Sword)
-NA_SE_EN_ANUBIS_DEAD,Anubis - Final Hit
-NA_SE_EN_MUSI_LAND,Insect - Fall on Ground
-NA_SE_EN_MGANON_DEAD2,Ganon - Final Hit (Stabbed with Master Sword)
-NA_SE_EN_EIER_ATTACK,Stinger (Water) - Attacks Link
-NA_SE_EN_EIER_CRY,Stinger (Water) - Squeaks
-NA_SE_EN_FREEZAD_BREATH,Freezard - Breathes Ice
-NA_SE_EN_FREEZAD_DAMAGE,Freezard - Hurt by Link
-NA_SE_EN_FREEZAD_DEAD,Freezard - Final Hit
-NA_SE_EN_DEADHAND_LAUGH,Dead Hand - Laughs
-NA_SE_EN_DEADHAND_HIDE,Dead Hand - Hides in Ground
-NA_SE_EN_DEADHAND_DAMAGE,Dead Hand - Hurt by Link
-NA_SE_EN_DEADHAND_HAND_DEAD,Dead Hand's Hand - Final Hit
-NA_SE_EN_DEADHAND_DEAD,Dead Hand - Final Hit
-NA_SE_EN_IRONNACK_BREAK_PILLAR2,Iron Knuckle - Breaks Pillar Stump
-NA_SE_EN_IRONNACK_BREAK_PILLAR,Iron Knuckle - Breaks Pillar
-NA_SE_EN_IRONNACK_HIT_GND,Iron Knuckle - Swings Axe into Ground
-NA_SE_EN_MGANON_BREATH,Ganon - Temporarily Paralyzed
-NA_SE_EN_TWINROBA_LAUGH,Twinrova - Koume Laughs
-NA_SE_EN_TWINROBA_LAUGH2,Twinrova - Kotake Laughs
-NA_SE_EN_DUMMY434,
-NA_SE_EN_TWINROBA_SHOOT_VOICE,Twinrova - Yells when Casting Magic
-NA_SE_EN_TWINROBA_SENSE,Twinrova - Sister Notices Halo
-NA_SE_EN_TWINROBA_DIE,Twinrova - Final Cry
-NA_SE_EN_DUMMY438,
-NA_SE_EN_TWINROBA_YOUNG_DAMAGE2,Young Twinrova - Hurt by Link
-NA_SE_EN_TWINROBA_YOUNG_SHOOTVC,Young Twinrova - Casting Magic
-NA_SE_EN_TWINROBA_YOUNG_LAUGH,Young Twinrova - Laughs
-NA_SE_EN_DUMMY442,
-NA_SE_EN_TWINROBA_YOUNG_WINK,Young Twinrova - Winks at Link
-NA_SE_EN_DUMMY444,
-NA_SE_EN_DUMMY445,
-NA_SE_EN_IRONNACK_DAMAGE,Iron Knuckle - Hurt by Link
-NA_SE_EN_IRONNACK_DASH,Iron Knuckle - Dashes after Link
-NA_SE_EN_IRONNACK_DEAD,Iron Knuckle - Final Hit
-NA_SE_EN_IRONNACK_PULLOUT,Iron Knuckle - Pulls Axe out of Ground
-NA_SE_EN_IRONNACK_WAKEUP,Iron Knuckle - Wakes Up
-NA_SE_EN_DUMMY451,
-NA_SE_EN_DUMMY452,
-NA_SE_EN_DUMMY453,
-NA_SE_EN_GERUDOFT_BREATH,Gerudo Fighter - Exhales
-NA_SE_EN_GANON_LAUGH,Ganondorf - Laughs
-NA_SE_EN_GANON_VOICE_DEMO,Ganondorf (Cutscene) - Whips Horse
-NA_SE_EN_GANON_THROW,Ganondorf - Yells when Throwing Lightning Ball
-NA_SE_EN_GANON_AT_RETURN,Ganondorf - Yells when Hitting Lightning Ball
-NA_SE_EN_GANON_HIT_GND,Ganondorf - Yells when Hitting Ground
-NA_SE_EN_GANON_DAMAGE1,Ganondorf - Yells when Hurt by Lightning Ball
-NA_SE_EN_GANON_DAMAGE2,Ganondorf - Yells when Hurt by Light Arrow
-NA_SE_EN_GANON_DOWN,Ganondorf - Gasping while on Knees
-NA_SE_EN_GANON_RESTORE,Ganondorf - Yells when Back Up
-NA_SE_EN_GANON_DEAD,Ganondorf - Final Hit
-NA_SE_EN_GANON_BREATH,Ganondorf - Dying Gasps
-NA_SE_EN_GANON_TOKETU,Ganondorf - Vomits Blood
-NA_SE_EN_GANON_CASBREAK,Ganondorf - Yells when Destroying Tower
-NA_SE_EN_GANON_BIGMASIC,Ganondorf - Yells when Throwing Big Lightning Attack
-NA_SE_EN_GANON_DARKWAVE,Ganondorf - Yells when Using Dark Vortex
-NA_SE_EN_FANTOM_ST_LAUGH,Phantom Ganon - Laughs
-NA_SE_EN_MGANON_WALK,Ganon - Walking
-NA_SE_EN_MGANON_STAND,Ganon - Stands after Getting Stabbed
-NA_SE_EN_MGANON_UNARI,Ganon - Roars
-NA_SE_EN_STALGOLD_ROLL,Gold Skulltula - Spinning Around
-NA_SE_EN_KDOOR_WAVE,Killer Door - Waves Around
-NA_SE_EN_KDOOR_HIT,Killer Door - Hits Link
-NA_SE_EN_KDOOR_BREAK,Killer Door - Breaks Apart
-NA_SE_EN_KDOOR_HIT_GND,Killer Door - Hits Ground
-NA_SE_EN_MGANON_SWDIMP,Ganon - xxx
-NA_SE_EN_STALTU_WAVE,Skulltula - Swings Side-to-Side
-NA_SE_EN_STALTU_DOWN_SET,Skulltula - Creaks after Falling
-NA_SE_EN_DUMMY482,
-NA_SE_EN_GOMA_BJR_LAND,Gohma Larva (Boss) - Lands after Hurt by Link
-NA_SE_EN_GOMA_BJR_LAND2,Gohma Larva (Boss) - Lands after Attack Hop
-NA_SE_EN_GOMA_JR_LAND,Gohma Larva - Lands after Hurt by Link
-NA_SE_EN_GOMA_JR_LAND2,Gohma Larva - Lands after Attack Hop
-NA_SE_EN_TWINROBA_FIGHT,Twinrova - Sisters Bickering
-NA_SE_EN_PO_BIG_CRY,Big Poe - Poe Soul Crying (Getting with Bottle)
-NA_SE_EN_MUSI_SINK,Insect - Burrows in Bean Planting Spot
-NA_SE_EN_STALGOLD_UP_CRY,Gold Skulltula - xxx
-NA_SE_EN_GOLON_CRY,Goron - xxx
-NA_SE_EN_MOFER_CORE_DAMAGE,Morpha - Nucleus Hurt by Link
-NA_SE_EN_DAIOCTA_LAND_WATER,Big Octorok - Lands in Water
-NA_SE_EN_RIVA_BIG_APPEAR,Big Leever - Appears
-NA_SE_EN_MONBLIN_HAM_LAND,Club Moblin - Club Hits Ground
-NA_SE_EN_MUSI_WALK,Insect - Walking
-NA_SE_EN_MIMICK_BREATH,
-NA_SE_EN_STALWALL_LAUGH,Skullwalltula - Makes Noise before Attacking
-NA_SE_EN_TWINROBA_TRANSFORM2,Twinrova - xxx
-NA_SE_EN_KAICHO_PIYORI,Guay - xxx
-NA_SE_EN_DODO_K_WALK_APPEAR,King Dodongo - xxx
-NA_SE_EN_DODO_K_STOP,King Dodongo - xxx
-NA_SE_EN_TEKU_GND993,Tektite - xxx
-NA_SE_EN_TEKU_JUMP993,Tektite - xxx
-NA_SE_EN_MORIBLIN_DEMO,Moblin - xxx
-NA_SE_EN_LEADED_WHITE,Redead - xxx
-NA_SE_EN_RIVA_HIDE_NEW,Leever - xxx
-NA_SE_EN_STALBABY_HIDE_NEW,Stalchild - xxx
-NA_SE_EN_STAL_REBORN,
-NA_SE_EN_DAIKU_FOOT,Carpenter - xxx
-NA_SE_EN_STALKID_DAMAGE_NEW,Skullkid - xxx
-NA_SE_EN_STALKID_DOWN_NEW,Skullkid - xxx
-NA_SE_EN_BALINADE_ARM_LAND,Barinade - xxx
-NA_SE_EN_BALINADE_ARM_DEAD,Barinade - xxx
-NA_SE_EN_READED_WALK,Redead - xxx
-NA_SE_EN_YOBI14,
-NA_SE_EN_YOBI15,
-NA_SE_EN_YOBI16,
-NA_SE_EN_YOBI17,
-NA_SE_EN_YOBI18,
-NA_SE_EN_YOBI19,
-NA_SE_EN_YOBI20,
-NA_SE_EN_YOBI21,
-NA_SE_EN_YOBI22,
-NA_SE_EN_YOBI23,
-NA_SE_EN_YOBI24,
-NA_SE_EN_YOBI25,
-NA_SE_EN_YOBI26,
-NA_SE_EN_YOBI27,
-NA_SE_EN_YOBI28,
-NA_SE_EN_YOBI29,
-NA_SE_EN_YOBI30,
-NA_SE_SY_WIN_OPEN,Open Pause Window
-NA_SE_SY_WIN_CLOSE,Close Pause Window
-NA_SE_SY_CORRECT_CHIME,Player Accomplished Something
-NA_SE_SY_GET_RUPY,Get Rupee
-NA_SE_SY_MESSAGE_WOMAN,Countdown Timer - 10 Seconds Down
-NA_SE_SY_MESSAGE_MAN,
-NA_SE_SY_ERROR,Error
-NA_SE_SY_TRE_BOX_APPEAR,Reveal Treasure Chest
-NA_SE_SY_DECIDE,Select Pause Menu Option
-NA_SE_SY_CURSOR,Move Pause Menu Cursor
-NA_SE_SY_CANCEL,Cancel Pause Menu Selection
-NA_SE_SY_HP_RECOVER,Get Recovery Heart
-NA_SE_SY_ATTENTION_ON,Enter Z-Target Mode
-NA_SE_SY_DUMMY_13,
-NA_SE_SY_DUMMY_14,
-NA_SE_SY_LOCK_OFF,Stop Z-Targeting Object
-NA_SE_SY_LOCK_ON_HUMAN,Start Z-Targeting Object (Except Enemies)
-NA_SE_SY_DUMMY_17,
-NA_SE_SY_DUMMY_18,
-NA_SE_SY_CAMERA_ZOOM_UP,Enter/Exit First-Person View
-NA_SE_SY_CAMERA_ZOOM_DOWN,Show Map with L
-NA_SE_SY_DUMMY_21,
-NA_SE_SY_DUMMY_22,
-NA_SE_SY_ATTENTION_ON_OLD,Z-Target Enemy (Early)
-NA_SE_SY_MESSAGE_PASS,Advance Text Box
-NA_SE_SY_WARNING_COUNT_N,Countdown Timer - Under 1 Minute (per 2 Seconds)
-NA_SE_SY_WARNING_COUNT_E,Countdown Timer - Under 10 Seconds (per Second)
-NA_SE_SY_HITPOINT_ALARM,Low Health Beep
-NA_SE_SY_DUMMY_28,
-NA_SE_SY_DEMO_CUT,
-NA_SE_SY_NAVY_CALL,Navi Button (Early)
-NA_SE_SY_GAUGE_UP,Magic Meter Refills
-NA_SE_SY_DUMMY_32,
-NA_SE_SY_DUMMY_33,
-NA_SE_SY_DUMMY_34,
-NA_SE_SY_PIECE_OF_HEART,Press Start on Title Screen
-NA_SE_SY_GET_ITEM,Get Small Item
-NA_SE_SY_WIN_SCROLL_LEFT,Scroll Pause Menu Left
-NA_SE_SY_WIN_SCROLL_RIGHT,Scroll Pause Menu Right
-NA_SE_SY_OCARINA_ERROR,Make a Mistake Playing the Ocarina
-NA_SE_SY_CAMERA_ZOOM_UP_2,Sound Effect - Enter First-Person View (Alternate)
-NA_SE_SY_CAMERA_ZOOM_DOWN_2,Sound Effect - Exit First-Person View (Alternate)
-NA_SE_SY_GLASSMODE_ON,Activate Lens of Truth
-NA_SE_SY_GLASSMODE_OFF,Deactivate Lens of Truth
-NA_SE_SY_FOUND,Gerudo Guard Blows Whistle
-NA_SE_SY_HIT_SOUND,
-NA_SE_SY_MESSAGE_END,Last Text Window
-NA_SE_SY_RUPY_COUNT,Rupee Counter Increases
-NA_SE_SY_LOCK_ON,Z-Target Enemy
-NA_SE_SY_GET_BOXITEM,Sound Effect - Get Small Item From Chest
-NA_SE_SY_WHITE_OUT_L,
-NA_SE_SY_WHITE_OUT_S,Short Fade to White
-NA_SE_SY_WHITE_OUT_T,Sage Appears (Opening Sacred Realm)
-NA_SE_SY_START_SHOT,Shotgun Fires to Start Race
-NA_SE_SY_METRONOME,Skullkids' Tambourine Metronome (First Skull Kid Done)
-NA_SE_SY_ATTENTION_URGENCY,Threat Detected when Z-Targeting
-NA_SE_SY_METRONOME_LV,Skullkids' Drum Metronome (Playing Tune)
-NA_SE_SY_FSEL_CURSOR,File Select - Move File Select Cursor
-NA_SE_SY_FSEL_DECIDE_S,File Select - Type Character in Name Entry
-NA_SE_SY_FSEL_DECIDE_L,File Select - Select Option
-NA_SE_SY_FSEL_CLOSE,File Select - Exit Option
-NA_SE_SY_FSEL_ERROR,File Select - Error
-NA_SE_SY_SET_FIRE_ARROW,Fire Magic Set to Bow
-NA_SE_SY_SET_ICE_ARROW,Ice Magic Set to Bow
-NA_SE_SY_SET_LIGHT_ARROW,Light Magic Set to Bow
-NA_SE_SY_SYNTH_MAGIC_ARROW,Magic Bow Set to C
-NA_SE_SY_METRONOME_2,Skullkids' Tambourine Metronome (Second Skull Kid Done)
-NA_SE_SY_KINSTA_MARK_APPEAR,Gold Skulltula Token Appears
-NA_SE_SY_FIVE_COUNT_LUPY,Sound Effect - Get Silver Rupee
-NA_SE_SY_CARROT_RECOVER,Carrot Replenished
-NA_SE_EV_FAIVE_LUPY_COUNT,
-NA_SE_SY_DUMMY_71,
-NA_SE_SY_KANADE_ISHI,
-NA_SE_SY_NA_HELLO_2,
-NA_SE_SY_MAGIC_SOUL_NORMAL,
-NA_SE_SY_MAGIC_SOUL_FLASH
-NA_SE_SY_CANCEL_CHALLENGE
-NA_SE_SY_DECIDE_CHALLENGE
-NA_SE_SY_YOBI05
-NA_SE_SY_YOBI06
-NA_SE_SY_YOBI07
-NA_SE_SY_YOBI08
-NA_SE_SY_YOBI09
-NA_SE_SY_YOBI10
-NA_SE_SY_YOBI11
-NA_SE_SY_YOBI12
-NA_SE_SY_YOBI13
-NA_SE_SY_YOBI14
-NA_SE_SY_YOBI15
-NA_SE_SY_YOBI16
-NA_SE_SY_YOBI17
-NA_SE_OC_OCARINA,Harp or Ocarina Note
-NA_SE_OC_ABYSS,Fall into Abyss
-NA_SE_OC_DOOR_OPEN,Open Door
-NA_SE_OC_SECRET_WARP_IN,Exit Lost Woods/Goron City Shortcut
-NA_SE_OC_SECRET_WARP_OUT,Enter Lost Woods/Goron City Shortcut
-NA_SE_OC_SECRET_HOLE_OUT,Exiting Grotto
-NA_SE_OC_REVENGE,Respawn after Falling into Abyss
-NA_SE_OC_HINT_MOVIE,
-NA_SE_OC_HINT_MOVIE2_WHITE,
-NA_SE_OC_HINT_MOVIE_ZOOMIN,
-NA_SE_OC_HIBIKI_ISHI,
-NA_SE_VO_LI_SWORD_N,Adult Link - Attack Yell
-NA_SE_VO_LI_SWORD_L,Adult Link - Long Attack Yell
-NA_SE_VO_LI_LASH,Adult Link - Whips Epona
-NA_SE_VO_LI_HANG,Adult Link - Grabs onto Ledge
-NA_SE_VO_LI_CLIMB_END,Adult Link - Climbs up from Ledge
-NA_SE_VO_LI_DAMAGE_S,Adult Link - Hurt by Enemy
-NA_SE_VO_LI_FREEZE,Adult Link - Frozen in Ice
-NA_SE_VO_LI_FALL_S,Adult Link - Short Fall
-NA_SE_VO_LI_FALL_L,Adult Link - Long Fall
-NA_SE_VO_LI_BREATH_REST,Adult Link - Breathing when Low on Health
-NA_SE_VO_LI_BREATH_DRINK,Adult Link - Breath after Drinking
-NA_SE_VO_LI_DOWN,Adult Link - Dying Gasps
-NA_SE_VO_LI_TAKEN_AWAY,Adult Link - Taken by Wallmaster
-NA_SE_VO_LI_HELD,Adult Link - Held by Hand
-NA_SE_VO_LI_SNEEZE,Adult Link - Sneezes in Cold Places
-NA_SE_VO_LI_SWEAT,Adult Link - Sweats in Hot Places
-NA_SE_VO_LI_DRINK,Adult Link - Drinks from Bottle
-NA_SE_VO_LI_RELAX,Adult Link - Stretching and Yawning
-NA_SE_VO_LI_SWORD_PUTAWAY,Adult Link - xxx
-NA_SE_VO_LI_GROAN,Adult Link - xxx
-NA_SE_VO_LI_AUTO_JUMP,Adult Link - Automatic Jump
-NA_SE_VO_LI_MAGIC_NALE,Adult Link - Casting Nayru's Love
-NA_SE_VO_LI_SURPRISE,Adult Link - Shocked Gasp
-NA_SE_VO_LI_MAGIC_FROL,Adult Link - Casting Farore's Wind
-NA_SE_VO_LI_PUSH,Adult Link - Pushes Block
-NA_SE_VO_LI_HOOKSHOT_HANG,Adult Link - xxx
-NA_SE_VO_LI_LAND_DAMAGE_S,Adult Link - Cringing from Fall Damage
-NA_SE_VO_LI_NULL_0x1b,Adult Link - xxx
-NA_SE_VO_LI_MAGIC_ATTACK,Adult Link - Casting Din's Fire
-NA_SE_VO_BL_DOWN,Adult Link - xxx
-NA_SE_VO_LI_DEMO_DAMAGE,Adult Link - xxx
-NA_SE_VO_LI_ELECTRIC_SHOCK_LV,Adult Link - xxx
-NA_SE_VO_LI_SWORD_N_KID,Child Link - Attack Yell
-NA_SE_VO_LI_ROLLING_CUT_KID,Child Link - Long Attack Yell
-NA_SE_VO_LI_LASH_KID,Child Link - xxx
-NA_SE_VO_LI_HANG_KID,Child Link - Grabs onto Ledge
-NA_SE_VO_LI_CLIMB_END_KID,Child Link - Climbs up from Ledge
-NA_SE_VO_LI_DAMAGE_S_KID,Child Link - Hurt by Enemy
-NA_SE_VO_LI_FREEZE_KID,Child Link - Frozen in Ice
-NA_SE_VO_LI_FALL_S_KID,Child Link - Short Fall
-NA_SE_VO_LI_FALL_L_KID,Child Link - Long Fall
-NA_SE_VO_LI_BREATH_REST_KID,Child Link - Breathing when Low on Health
-NA_SE_VO_LI_BREATH_DRINK_KID,Child Link - Breath after Drinking
-NA_SE_VO_LI_DOWN_KID,Child Link - Dying Gasps
-NA_SE_VO_LI_TAKEN_AWAY_KID,Child Link - Taken by Wallmaster
-NA_SE_VO_LI_HELD_KID,Child Link - Grabbed by Hand
-NA_SE_VO_LI_SNEEZE_KID,Child Link - Sneezes in Cold Places
-NA_SE_VO_LI_SWEAT_KID,Child Link - Sweats in Hot Places
-NA_SE_VO_LI_DRINK_KID,Child Link - Drinks from Bottle
-NA_SE_VO_LI_RELAX_KID,Child Link - Stretching and Yawning
-NA_SE_VO_LI_SWORD_PUTAWAY_KID,Child Link - xxx
-NA_SE_VO_LI_GROAN_KID,Child Link - xxx
-NA_SE_VO_LI_AUTO_JUMP_KID,Child Link - Automatic Jump
-NA_SE_VO_LI_MAGIC_NALE_KID,Child Link - Casting Nayru's Love
-NA_SE_VO_LI_SURPRISE_KID,Child Link - Surprised Gasp
-NA_SE_VO_LI_MAGIC_FROL_KID,Child Link - Casting Farore's Wind
-NA_SE_VO_LI_PUSH_KID,Child Link - Pushes Block
-NA_SE_VO_LI_HOOKSHOT_HANG_KID,Child Link - xxx
-NA_SE_VO_LI_LAND_DAMAGE_S_KID,Child Link - Cringing from Fall Damage
-NA_SE_VO_LI_NULL_0x1b_KID,Child Link - xxx
-NA_SE_VO_LI_MAGIC_ATTACK_KID,Child Link - Casting Din's Fire
-NA_SE_VO_BL_DOWN_KID,Child Link - xxx
-NA_SE_VO_LI_DEMO_DAMAGE_KID,Child Link - xxx
-NA_SE_VO_LI_ELECTRIC_SHOCK_LV_KID,Child Link - xxx
-NA_SE_VO_NAVY_ENEMY,Navi - Z-Targeting Enemy
-NA_SE_VO_NAVY_HELLO,Navi - Z-Targeting Friendly NPC
-NA_SE_VO_NAVY_HEAR,Navi - Z-Targeting Sign
-NA_SE_VO_NAVY_CALL,Navi - Z-Targeting Enemy
-NA_SE_VO_NA_HELLO_3,"Navi - Says ""H'lo!"""
-NA_SE_VO_DUMMY_0x45,
-NA_SE_VO_DUMMY_0x46,
-NA_SE_VO_DUMMY_0x47,
-NA_SE_VO_DUMMY_0x48,
-NA_SE_VO_DUMMY_0x49,
-NA_SE_VO_DUMMY_0x4a,
-NA_SE_VO_DUMMY_0x4b,
-NA_SE_VO_DUMMY_0x4c,
-NA_SE_VO_DUMMY_0x4d,
-NA_SE_VO_DUMMY_0x4e,
-NA_SE_VO_DUMMY_0x4f,
-NA_SE_VO_TA_SLEEP,Talon - Snoring
-NA_SE_VO_TA_SURPRISE,Talon - Surprised at Being Woken
-NA_SE_VO_TA_CRY_0,"Talon - Says ""Huh?"""
-NA_SE_VO_TA_CRY_1,Talon - Screaming while Running Away
-NA_SE_VO_IN_CRY_0,Ingo - Yells when Starting Race
-NA_SE_VO_IN_LOST,Ingo - Frustrated at Losing Race
-NA_SE_VO_IN_LASH_0,Ingo - Whips Horse
-NA_SE_VO_IN_LASH_1,Ingo - Whips Horse
-NA_SE_VO_FR_LAUGH_0,Great Fairy - Laughs on Appearance
-NA_SE_VO_FR_SMILE_0,Great Fairy - Gentle Laugh
-NA_SE_VO_NB_AGONY,Nabooru - In Agony
-NA_SE_VO_NB_CRY_0,Nabooru - Cries
-NA_SE_VO_NB_NOTICE,Nabooru - Notices Link
-NA_SE_VO_NA_HELLO_0,Navi - xxx
-NA_SE_VO_NA_HELLO_1,Navi - xxx
-NA_SE_VO_NA_HELLO_2,Navi - Has Something to Tell Link
-NA_SE_VO_RT_CRASH,Ruto - Crashes into Wall
-NA_SE_VO_RT_DISCOVER,Ruto - Sees Zora's Sapphire
-NA_SE_VO_RT_FALL,Ruto - Falls down Hole
-NA_SE_VO_RT_LAUGH_0,Ruto - Laughs
-NA_SE_VO_RT_LIFT,Ruto - Picked up by Link
-NA_SE_VO_RT_THROW,Ruto - Thrown by Link
-NA_SE_VO_RT_UNBALLANCE,Ruto - xxx
-NA_SE_VO_ST_DAMAGE,
-NA_SE_VO_ST_ATTACK,
-NA_SE_VO_Z0_HURRY,Child Zelda - Gaps before Retelling Legend
-NA_SE_VO_Z0_MEET,Child Zelda - Gasp when Meeting Link
-NA_SE_VO_Z0_QUESTION,Child Zelda - Questions Link's Response
-NA_SE_VO_Z0_SIGH_0,Child Zelda - Sighs
-NA_SE_VO_Z0_SMILE_0,Child Zelda - Gentle Laugh
-NA_SE_VO_Z0_SURPRISE,Child Zelda - Cries while Riding Away
-NA_SE_VO_Z0_THROW,Child Zelda - Throws Ocarina of Time
-NA_SE_VO_SK_CRY_0,Sheik - xxx
-NA_SE_VO_SK_CRY_1,Sheik - Thrown by Shadow Spirit
-NA_SE_VO_SK_CRASH,Sheik - Falls after Being Thrown
-NA_SE_VO_SK_LAUGH,Navi - Starts Telling Link Something
-NA_SE_VO_SK_SHOUT,Sheik - Throws Deku Nut
-NA_SE_VO_Z1_CRY_0,Adult Zelda - Cries when Imprisoned in Crystal
-NA_SE_VO_Z1_CRY_1,Adult Zelda - Screams when Link is Hurt (Boss Battle)
-NA_SE_VO_Z1_OPENDOOR,Adult Zelda - Opening Barred Door
-NA_SE_VO_Z1_SURPRISE,Adult Zelda - Gasp when Temple of Time Shaking
-NA_SE_VO_Z1_PAIN,Adult Zelda - Gasps when Link is Hurt (Escaping the Tower)
-NA_SE_VO_KZ_MOVE,King Zora - Scooting Aside
-NA_SE_VO_NB_LAUGH,Nabooru - xxx
-NA_SE_VO_IN_LAUGH,Ingo - xxx
-NA_SE_VO_DUMMY_0x7d,
-NA_SE_VO_DUMMY_0x7e,
-NA_SE_VO_DUMMY_0x7f,
-NA_SE_VO_DUMMY_0x80,
-NA_SE_VO_LI_AUTO_JUMP_DARKLINK,
-NA_SE_VO_DUMMY_0x82_YOBI,
-NA_SE_VO_DUMMY_0x83_YOBI,
-NA_SE_VO_DUMMY_0x84_YOBI,
-NA_SE_VO_DUMMY_0x85_YOBI
-NA_SE_VO_DUMMY_0x86_YOBI
-NA_SE_VO_DUMMY_0x87_YOBI
-NA_SE_VO_DUMMY_0x88_YOBI
-NA_SE_VO_DUMMY_0x89_YOBI
+0,NA_SE_PL_WALK_GROUND,Child Link - Walking on Ground
+1,NA_SE_PL_WALK_SAND,Child Link - Walking on Sand
+2,NA_SE_PL_WALK_CONCRETE,Child Link - Walking on Stone
+3,NA_SE_PL_WALK_DIRT,Child Link - Walking on Jabu-Jabu's Insides
+4,NA_SE_PL_WALK_WATER0,Child Link - Walking in Shallow Water
+5,NA_SE_PL_WALK_WATER1,Child Link - Walking in Deep Water
+6,NA_SE_PL_WALK_WATER2,Child Link - Walking in Tall Grass
+7,NA_SE_PL_WALK_MAGMA,Child Link - Walking in Magma
+8,NA_SE_PL_WALK_GRASS,Child Link - Walking on Grass
+9,NA_SE_PL_WALK_IRON,Child Link - Walking on Carpets
+10,NA_SE_PL_WALK_LADDER,Child Link - Walking on Wood
+11,NA_SE_PL_WALK_GLASS,Child Link - Walking on Wood Bridges
+12,NA_SE_PL_WALK_WALL,Climbing Vine Walls
+13,NA_SE_PL_WALK_HEAVYBOOTS,Walking with Iron Boots
+14,NA_SE_PL_DUMMY_14,
+15,NA_SE_PL_WALK_ICE,Child Link - Walking on Ice
+16,NA_SE_PL_JUMP,Child Link - Jumping off Ground
+17,NA_SE_PL_JUMP_SAND,Child Link - Jumping off Sand
+18,NA_SE_PL_JUMP_CONCRETE,Child Link - Jumping off Stone
+19,NA_SE_PL_JUMP_DIRT,Child Link - Jumping off Jabu-Jabu's Insides
+20,NA_SE_PL_JUMP_WATER0,Child Link - Jumping out of Shallow Water
+21,NA_SE_PL_JUMP_WATER1,Child Link - Jumping out of Deep Water
+22,NA_SE_PL_JUMP_WATER2,Child Link - Jumping out of Tall Grass
+23,NA_SE_PL_JUMP_MAGMA,Child Link - Jumping out of Magma
+24,NA_SE_PL_JUMP_GRASS,Child Link-  Jumping off Grass
+25,NA_SE_PL_JUMP_IRON,Child Link - Jumping off Carpets
+26,NA_SE_PL_JUMP_LADDER,Child Link - Jumping off Wood
+27,NA_SE_PL_JUMP_GLASS,Child Link - Jumping off Wood Bridges
+28,NA_SE_PL_DUMMY28,
+29,NA_SE_PL_JUMP_HEAVYBOOTS,Jumping with Iron Boots
+30,NA_SE_PL_DUMMY30,
+31,NA_SE_PL_JUMP_ICE,Child Link - Jumping off Ice
+32,NA_SE_PL_LAND,Child Link - Landing on Ground
+33,NA_SE_PL_LAND_SAND,Child Link - Landing on Sand
+34,NA_SE_PL_LAND_CONCRETE,Child Link - Landing on Stone
+35,NA_SE_PL_LAND_DIRT,Child Link - Landing on Jabu-Jabu's Insides
+36,NA_SE_PL_LAND_WATER0,Child Link - Landing in Shallow Water
+37,NA_SE_PL_LAND_WATER1,Child Link - Landing in Deep Water
+38,NA_SE_PL_LAND_WATER2,Child Link - Landing in Tall Grass
+39,NA_SE_PL_LAND_MAGMA,Child Link - Landing in Magma
+40,NA_SE_PL_LAND_GRASS,Child Link - Landing on Grass
+41,NA_SE_PL_LAND_IRON,Child Link - Landing on Carpets
+42,NA_SE_PL_LAND_LADDER,Child Link - Landing on Wood
+43,NA_SE_PL_LAND_GLASS,Child Link - Landing on Wood Bridges
+44,NA_SE_PL_DUMMY_44,
+45,NA_SE_PL_LAND_HEAVYBOOTS,Landing with Iron Boots
+46,NA_SE_PL_DUMMY_46,
+47,NA_SE_PL_LAND_ICE,Child Link - Landing on Ice
+48,NA_SE_PL_SLIPDOWN,Going over Ledge from Top
+49,NA_SE_PL_CLIMB_CLIFF,Going over Ledge from Side
+50,NA_SE_PL_SIT_ON_HORSE,Getting on Epona
+51,NA_SE_PL_GET_OFF_HORSE,Getting off Epona
+52,NA_SE_PL_TAKE_OUT_SHIELD,
+53,NA_SE_PL_CHANGE_ARMS,Changing Held Item
+54,NA_SE_PL_CATCH_BOOMERANG,Catching Boomerang
+55,NA_SE_PL_DUMMY_55,
+56,NA_SE_PL_DUMMY_56,
+57,NA_SE_PL_SWIM,Swimming in Water
+58,NA_SE_PL_THROW,Throwing Objects
+59,NA_SE_PL_BODY_BOUND,
+60,NA_SE_PL_ROLL,Rolling and Backflips
+61,NA_SE_PL_SKIP,Side-jumping
+62,NA_SE_PL_BODY_HIT,Hit by Something
+63,NA_SE_PL_DAMAGE,Hit by Enemy
+64,NA_SE_PL_SLIP,
+65,NA_SE_PL_SLIP_SAND,
+66,NA_SE_PL_SLIP_CONCRETE,
+67,NA_SE_PL_SLIP_DIRT,
+68,NA_SE_PL_SLIP_WATER0,
+69,NA_SE_PL_SLIP_WATER1,
+70,NA_SE_PL_SLIP_WATER2,
+71,NA_SE_PL_SLIP_MAGMA,
+72,NA_SE_PL_SLIP_GRASS,
+73,NA_SE_PL_SLIP_IRON,
+74,NA_SE_PL_SLIP_LADDER,
+75,NA_SE_PL_SLIP_GLASS,
+76,NA_SE_PL_DUMMY76,
+77,NA_SE_PL_SLIP_HEAVYBOOTS,
+78,NA_SE_PL_DUMMY78,
+79,NA_SE_PL_SLIP_ICE,
+80,NA_SE_PL_BOUND,Rebound from Hit onto Ground
+81,NA_SE_PL_BOUND_SAND,Rebound from Hit onto Sand
+82,NA_SE_PL_BOUND_CONCRETE,Rebound from Hit onto Stone
+83,NA_SE_PL_BOUND_DIRT,Rebound from Hit onto Jabu-Jabu's Insides
+84,NA_SE_PL_BOUND_WATER0,Rebound from Hit into Shallow Water
+85,NA_SE_PL_BOUND_WATER1,Rebound from Hit into Deep Water
+86,NA_SE_PL_BOUND_WATER2,Rebound from Hit into Tall Grass
+87,NA_SE_PL_BOUND_MAGMA,Rebound from Hit into Magma
+88,NA_SE_PL_BOUND_GRASS,Rebound from Hit onto Grass
+89,NA_SE_PL_BOUND_IRON,Rebound from Hit onto Carpets
+90,NA_SE_PL_BOUND_LADDER,Rebound from Hit onto Wood
+91,NA_SE_PL_BOUND_WOOD,Rebound from Hit onto Wood Bridges
+92,NA_SE_PL_DUMMY_92,
+93,NA_SE_PL_BOUND_HEAVYBOOTS,
+94,NA_SE_PL_DUMMY_94,
+95,NA_SE_PL_BOUND_ICE,Rebound from Hit onto Ice
+96,NA_SE_PL_DUMMY_96,
+97,NA_SE_PL_DUMMY_97,
+98,NA_SE_PL_DUMMY_98,
+99,NA_SE_PL_FACE_UP,Surfacing from Water
+100,NA_SE_PL_DIVE_BUBBLE,Diving in Water
+101,NA_SE_PL_MOVE_BUBBLE,
+102,NA_SE_PL_METALEFFECT_KID,Child Link - Clanging Equipment when Walking
+103,NA_SE_PL_METALEFFECT_ADULT,Adult Link - Clanging Equipment when Walking
+104,NA_SE_PL_SPARK,
+105,NA_SE_PL_PULL_UP_PLANT,Picking up Grass
+106,NA_SE_PL_PULL_UP_ROCK,Picking up Rock or Bomb Flower
+107,NA_SE_PL_IN_BUBBLE,While Underwater
+108,NA_SE_PL_PULL_UP_BIGROCK,
+109,NA_SE_PL_SWORD_CHARGE,Spin Attack Charge
+110,NA_SE_PL_FREEZE,
+111,NA_SE_PL_PULL_UP_POT,Picking up Pot
+112,NA_SE_PL_KNOCK,
+113,NA_SE_PL_CALM_HIT,Shuffling in Idle Animation
+114,NA_SE_PL_CALM_PAT,
+115,NA_SE_PL_SUBMERGE,
+116,NA_SE_PL_FREEZE_S,Frozen by Enemy
+117,NA_SE_PL_ICE_BROKEN,Breaking Out of Freeze Effect
+118,NA_SE_PL_SLIP_ICE_LELEL,
+119,NA_SE_PL_PUT_OUT_ITEM,
+120,NA_SE_PL_PULL_UP_WOODBOX,Picking up Small Wooden Crate
+121,NA_SE_PL_MAGIC_FIRE,Casting Din's Fire
+122,NA_SE_PL_MAGIC_WIND_NORMAL,Casting Farore's Wind
+123,NA_SE_PL_MAGIC_WIND_WARP,Warping with Farore's Wind
+124,NA_SE_PL_MAGIC_SOUL_NORMAL,Using Nayru's Love
+125,NA_SE_PL_ARROW_CHARGE_FIRE,Charging Fire Arrow
+126,NA_SE_PL_ARROW_CHARGE_ICE,Charging Ice Arrow
+127,NA_SE_PL_ARROW_CHARGE_LIGHT,Charging Light Arrow
+128,NA_SE_PL_DUMMY_128,Adult Link - Walking on Ground
+129,NA_SE_PL_DUMMY_129,Adult Link - Walking on Sand
+130,NA_SE_PL_DUMMY_130,Adult Link - Walking on Stone
+131,NA_SE_PL_PULL_UP_RUTO,Picking up Ruto
+132,NA_SE_PL_DUMMY_132,Adult Link - Walking in Shallow Water
+133,NA_SE_PL_DUMMY_133,Adult Link - Walking in Deep Water
+134,NA_SE_PL_DUMMY_134,Adult Link - Walking in Tall Grass
+135,NA_SE_PL_DUMMY_135,Adult Link - Walking in Magma
+136,NA_SE_PL_DUMMY_136,Adult Link - Walking on Grass
+137,NA_SE_PL_DUMMY_137,Adult Link - Walking on Carpets
+138,NA_SE_PL_DUMMY_138,Adult Link - Walking on Wood
+139,NA_SE_PL_DUMMY_139,Adult Link - Walking on Wood Bridges
+140,NA_SE_PL_DUMMY_140,
+141,NA_SE_PL_DUMMY_141,
+142,NA_SE_PL_DUMMY_142,
+143,NA_SE_PL_DUMMY_143,Adult Link - Walking on Ice
+144,NA_SE_PL_DUMMY_144,Adult Link - Jumping off Ground
+145,NA_SE_PL_DUMMY_145,Adult Link - Jumping off Sand
+146,NA_SE_PL_DUMMY_146,Adult Link - Jumping off Stone
+147,NA_SE_PL_DUMMY_147,Adult Link - Jumping off Jabu-Jabu's Insides
+148,NA_SE_PL_DUMMY_148,Adult Link - Jumping out of Shallow Water
+149,NA_SE_PL_DUMMY_149,Adult Link - Jumping out of Deep Water
+150,NA_SE_PL_DUMMY_150,Adult Link - Jumping out of Tall Grass
+151,NA_SE_PL_DUMMY_151,Adult Link - Jumping out of Magma
+152,NA_SE_PL_DUMMY_152,Adult Link - Jumping off Grass
+153,NA_SE_PL_DUMMY_153,Adult Link - Jumping off Carpets
+154,NA_SE_PL_DUMMY_154,Adult Link - Jumping off Wood
+155,NA_SE_PL_DUMMY_155,Adult Link - Jumping off Wood Bridges
+156,NA_SE_PL_DUMMY_156,
+157,NA_SE_PL_DUMMY_157,
+158,NA_SE_PL_DUMMY_158,
+159,NA_SE_PL_DUMMY_159,Adult Link - Jumping off Ice
+160,NA_SE_PL_DUMMY_160,Adult Link - Landing on Ground
+161,NA_SE_PL_DUMMY_161,Adult Link - Landing on Sand
+162,NA_SE_PL_DUMMY_162,Adult Link - Landing on Stone
+163,NA_SE_PL_DUMMY_163,Adult Link - Landing on Jabu-Jabu's Insides
+164,NA_SE_PL_DUMMY_164,Adult Link - Landing in Shallow Water
+165,NA_SE_PL_DUMMY_165,Adult Link - Landing in Deep Water
+166,NA_SE_PL_DUMMY_166,Adult Link - Landing in Tall Grass
+167,NA_SE_PL_DUMMY_167,Adult Link - Landing in Magma
+168,NA_SE_PL_DUMMY_168,Adult Link - Landing on Grass
+169,NA_SE_PL_DUMMY_169,Adult Link - Landing on Carpets
+170,NA_SE_PL_DUMMY_170,Adult Link - Landing on Wood
+171,NA_SE_PL_DUMMY_171,Adult Link - Landing on Wood Bridges
+172,NA_SE_PL_DUMMY_172,
+173,NA_SE_PL_DUMMY_173,
+174,NA_SE_PL_DUMMY_174,
+175,NA_SE_PL_DUMMY_175,Adult Link - Landing on Ice
+176,NA_SE_PL_CRAWL,Crawling on Ground
+177,NA_SE_PL_CRAWL_SAND,
+178,NA_SE_PL_CRAWL_CONCRETE,Crawling on Stone Floor
+179,NA_SE_PL_CRAWL_DIRT,
+180,NA_SE_PL_CRAWL_WATER0,
+181,NA_SE_PL_DUMMY_181,
+182,NA_SE_PL_DUMMY_182,
+183,NA_SE_PL_DUMMY_183,
+184,NA_SE_PL_DUMMY_184,Crawling on Grass
+185,NA_SE_PL_DUMMY_185,
+186,NA_SE_PL_DUMMY_186,Crawling on Wood
+187,NA_SE_PL_CRAWL_WOOD,
+188,NA_SE_PL_CRAWL_ICE,
+189,NA_SE_PL_DUMMY_189,
+190,NA_SE_PL_DUMMY_190,
+191,NA_SE_PL_DUMMY_191,
+192,NA_SE_PL_MAGIC_SOUL_FLASH,Nayru's Love Ending
+193,NA_SE_PL_ROLL_DUST,Dust Clouds when Rolling
+194,NA_SE_PL_DUMMY_192,
+195,NA_SE_PL_MAGIC_SOUL_BALL,Casting Nayru's Love
+196,NA_SE_PL_SPIRAL_HEAL_BEAM,Great Fairy Healing
+197,NA_SE_PL_BOUND_NOWEAPON,
+198,NA_SE_PL_PLANT_GROW_UP,Planting Magic Bean Plant
+199,NA_SE_PL_PLANT_TALLER,
+200,NA_SE_PL_MAGIC_WIND_VANISH,Farore's Wind - Dispelling the Warp Point
+201,NA_SE_PL_HOBBERBOOTS_LV,Hovering with Hover Boots
+202,NA_SE_PL_PLANT_MOVE,Magic Bean Plant Moving
+203,NA_SE_EV_WALL_MOVE_SP,
+204,NA_SE_PL_DUMMY_204,
+205,NA_SE_PL_DUMMY_205,
+206,NA_SE_PL_DUMMY_206,
+207,NA_SE_PL_DUMMY_207,
+208,NA_SE_PL_SLIP_LEVEL,Slipping on Floor
+209,NA_SE_PL_SLIP_SAND_LEVEL,
+210,NA_SE_PL_SLIP_CONCRETE_LEVEL,
+211,NA_SE_PL_SLIP_DIRT_LEVEL,
+212,NA_SE_PL_SLIP_WATER0_LEVEL,
+213,NA_SE_PL_SLIP_WATER1_LEVEL,
+214,NA_SE_PL_SLIP_WATER2_LEVEL,
+215,NA_SE_PL_SLIP_MAGMA_LEVEL,
+216,NA_SE_PL_SLIP_GRASS_LEVEL,
+217,NA_SE_PL_SLIP_IRON_LEVEL,
+218,NA_SE_PL_SLIP_GLASS_LEVEL,
+219,NA_SE_PL_SLIP_WOOD_LEVEL,
+220,NA_SE_PL_DUMMY_220,
+221,NA_SE_PL_DUMMY_221,
+222,NA_SE_PL_SLIP_HEAVYBOOTS_LEVEL,
+223,NA_SE_PL_SLIP_ICE_LEVEL,
+224,NA_SE_PL_JUMP_METAL,
+225,NA_SE_PL_LAND_METAL,
+226,NA_SE_PL_WALK_RUNNINGMAN,
+227,NA_SE_PL_WALK_ZELDA_DEMO,
+228,NA_SE_PL_YOBI_DATA02,
+229,NA_SE_PL_YOBI_DATA03,
+230,NA_SE_PL_YOBI_DATA04,
+231,NA_SE_PL_YOBI_DATA05,
+232,NA_SE_PL_YOBI_DATA06,
+233,NA_SE_PL_YOBI_DATA07,
+234,NA_SE_PL_YOBI_DATA08,
+235,NA_SE_PL_YOBI_DATA09,
+236,NA_SE_PL_YOBI_DATA10,
+237,NA_SE_PL_YOBI_DATA11,
+238,NA_SE_PL_YOBI_DATA12,
+239,NA_SE_PL_YOBI_DATA13,
+240,NA_SE_PL_YOBI_DATA14,
+6144,NA_SE_IT_SWORD_IMPACT,
+6145,NA_SE_IT_SWORD_SWING,Swing Sword
+6146,NA_SE_IT_SWORD_PUTAWAY,Sheathe Sword
+6147,NA_SE_IT_SWORD_PICKOUT,Draw Sword
+6148,NA_SE_IT_ARROW_SHOT,Shoot Arrow
+6149,NA_SE_IT_BOOMERANG_THROW,Throw Boomerang
+6150,NA_SE_IT_SHIELD_BOUND,Projectile Bounces off Shield
+6151,NA_SE_IT_BOW_DRAW,Draw Bow
+6152,NA_SE_IT_SHIELD_REFLECT_SW,Blade Reflects off Shield
+6153,NA_SE_IT_ARROW_STICK_HRAD,Arrow Sticks in Hard Surface
+6154,NA_SE_IT_HAMMER_HIT,Hammer Hits Target
+6155,NA_SE_IT_HOOKSHOT_CHAIN,Hookshot Chain Unravels
+6156,NA_SE_IT_SHIELD_REFLECT_MG,Mirror Shield Reflects Magic
+6157,NA_SE_IT_BOMB_IGNIT,Bomb is Lit
+6158,NA_SE_IT_BOMB_EXPLOSION,Bomb Explodes
+6159,NA_SE_IT_BOMB_UNEXPLOSION,Bomb is Extinguished
+6160,NA_SE_IT_BOOMERANG_FLY,Boomerang Flies
+6161,NA_SE_IT_SWORD_STRIKE,Strike Enemy with Sword
+6162,NA_SE_IT_HAMMER_SWING,Hammer Swung through Air
+6163,NA_SE_IT_HOOKSHOT_REFLECT,Hookshot Bounces off Hard Surface
+6164,NA_SE_IT_ARROW_STICK_CRE,Arrows Sticks in Enemy
+6165,NA_SE_IT_ARROW_STICK_OBJ,Arrow Sticks in Object
+6166,NA_SE_IT_DUMMY,
+6167,NA_SE_IT_DUMMY2,
+6168,NA_SE_IT_SWORD_SWING_HARD,Swing Fishing Rod
+6169,NA_SE_IT_DUMMY3,
+6170,NA_SE_IT_WALL_HIT_HARD,Sword Bounces off Wall
+6171,NA_SE_IT_WALL_HIT_SOFT,Sword Bounces off Bombable Wall
+6172,NA_SE_IT_STONE_HIT,Sword Bounces off Stone
+6173,NA_SE_IT_WOODSTICK_BROKEN,Deku Stick Breaks
+6174,NA_SE_IT_LASH,Whip Epona
+6175,NA_SE_IT_SHIELD_POSTURE,Take out/Use Shield
+6176,NA_SE_IT_SLING_SHOT,Fire Slingshot
+6177,NA_SE_IT_SLING_DRAW,Draw Slingshot
+6178,NA_SE_IT_SWORD_CHARGE,Charging Spin Attack
+6179,NA_SE_IT_ROLLING_CUT,
+6180,NA_SE_IT_SWORD_STRIKE_HARD,
+6181,NA_SE_IT_SLING_REFLECT,Deku Seed Bounces off Hard Surface
+6182,NA_SE_IT_SHIELD_REMOVE,Put Away Shield
+6183,NA_SE_IT_HOOKSHOT_READY,Hookshot is Ready to Fire
+6184,NA_SE_IT_HOOKSHOT_RECEIVE,
+6185,NA_SE_IT_HOOKSHOT_STICK_OBJ,Hookshot Latches to Surface
+6186,NA_SE_IT_SWORD_REFLECT_MG,Reflect Magic With Sword
+6187,NA_SE_IT_DEKU,Throw Deku Nut
+6188,NA_SE_IT_WALL_HIT_BUYO,
+6189,NA_SE_IT_SWORD_PUTAWAY_STN,
+6190,NA_SE_IT_ROLLING_CUT_LV1,
+6191,NA_SE_IT_ROLLING_CUT_LV2,
+6192,NA_SE_IT_BOW_FLICK,Fire Empty Bow
+6193,NA_SE_IT_BOMBCHU_MOVE,Set Bombchu Free
+6194,NA_SE_IT_SHIELD_CHARGE_LV1,Charge Mirror Shield (Level 1)
+6195,NA_SE_IT_SHIELD_CHARGE_LV2,Charge Mirror Shield (Level 2)
+6196,NA_SE_IT_SHIELD_CHARGE_LV3,Charge Mirror Shield (Level 3)
+6197,NA_SE_IT_SLING_FLICK,Fire Empty Slingshot
+6198,NA_SE_IT_SWORD_STICK_STN,
+6199,NA_SE_IT_REFLECTION_WOOD,Sword Bounces Off Wooden Surface
+6200,NA_SE_IT_SHIELD_REFLECT_MG2,Shield Reflects Magic (2)
+6201,NA_SE_IT_MAGIC_ARROW_SHOT,Fire Magic Arrow
+6202,NA_SE_IT_EXPLOSION_FRAME,Fire Arrow Explodes on Impact
+6203,NA_SE_IT_EXPLOSION_ICE,Ice Arrow Explodes on Impact
+6204,NA_SE_IT_EXPLOSION_LIGHT,Light Arrow Explodes on Impact
+6205,NA_SE_IT_FISHING_REEL_SLOW,Reel In Fishing Rod Slowly
+6206,NA_SE_IT_FISHING_REEL_HIGH,Reel In Fishing Rod Quickly
+6207,NA_SE_IT_PULL_FISHING_ROD,Pull Back on Fishing Rod
+6208,NA_SE_IT_DM_FLYING_GOD_PASS,Goddess Passing by Camera
+6209,NA_SE_IT_DM_FLYING_GOD_DASH,Goddess Dashing
+6210,NA_SE_IT_DM_RING_EXPLOSION,Goddess Causing Explosion
+6211,NA_SE_IT_DM_RING_GATHER,
+6212,NA_SE_IT_INGO_HORSE_NEIGH,Horse Neigh
+6213,NA_SE_IT_EARTHQUAKE,
+6214,NA_SE_IT_DUMMY4,
+6215,NA_SE_IT_KAKASHI_JUMP,Scarecrow Jumping
+6216,NA_SE_IT_FLAME,
+6217,NA_SE_IT_SHIELD_BEAM,
+6218,NA_SE_IT_FISHING_HIT,
+6219,NA_SE_IT_GOODS_APPEAR,
+6220,NA_SE_IT_MAJIN_SWORD_BROKEN,Giant's Knife Breaking
+6221,NA_SE_IT_HAND_CLAP,
+6222,NA_SE_IT_MASTER_SWORD_SWING,
+6223,NA_SE_IT_DUMMY5,
+6224,NA_SE_IT_YOBI19,
+6225,NA_SE_FISHING_REEL_SLOW2,
+6226,NA_SE_IT_SPIDERNET_HIT1,
+6227,NA_SE_IT_LURE_LAND1,
+6228,NA_SE_IT_HOOKSHOT_STICK_OBJ_WATER,
+6229,NA_SE_IT_SWORD_PICKOUT_GANON,
+6230,NA_SE_IT_BOMB_IGNIT_DODO_M,
+6231,NA_SE_IT_YOBI05,
+6232,NA_SE_IT_YOBI06,
+6233,NA_SE_IT_YOBI07,
+6234,NA_SE_IT_YOBI08,
+6235,NA_SE_IT_YOBI09,
+6236,NA_SE_IT_YOBI10,
+6237,NA_SE_IT_YOBI11,
+6238,NA_SE_IT_YOBI12,
+6239,NA_SE_IT_YOBI13,
+6240,NA_SE_IT_YOBI14,
+6241,NA_SE_IT_YOBI15,
+6242,NA_SE_IT_YOBI16,
+6243,NA_SE_IT_YOBI17,
+6244,NA_SE_IT_YOBI18,
+10240,NA_SE_EV_DOOR_OPEN,Open Door
+10241,NA_SE_EV_DOOR_CLOSE,Close Door
+10242,NA_SE_EV_EXPLOSION,
+10243,NA_SE_EV_HORSE_WALK,Epona Walks
+10244,NA_SE_EV_HORSE_RUN,Epona Runs
+10245,NA_SE_EV_HORSE_NEIGH,Epona Neighs
+10246,NA_SE_EV_RIVER_STREAM,Flowing River
+10247,NA_SE_EV_WATER_WALL_BIG,Large Waterfall Rushes
+10248,NA_SE_EV_OUT_OF_WATER,Zora Jumping out of Water
+10249,NA_SE_EV_DIVE_WATER,Zora Diving into Water
+10250,NA_SE_EV_ROCK_SLIDE,Pushing Block
+10251,NA_SE_EV_MAGMA_LEVEL,Magma Bubbles
+10252,NA_SE_EV_BRIDGE_OPEN,Drawbridge Opens
+10253,NA_SE_EV_BRIDGE_CLOSE,Drawbridge Closes
+10254,NA_SE_EV_BRIDGE_OPEN_STOP,Drawbridge Finishes Opening
+10255,NA_SE_EV_BRIDGE_CLOSE_STOP,Drawbridge Finishes Closing
+10256,NA_SE_EV_WALL_BROKEN,Wall Destroyed by Explosion
+10257,NA_SE_EV_CHICKEN_CRY_N,Cucco Clucks
+10258,NA_SE_EV_CHICKEN_CRY_A,Cucco Clucks While Attacking
+10259,NA_SE_EV_CHICKEN_CRY_M,Cucco Crows at Dawn
+10260,NA_SE_EV_SLIDE_DOOR_OPEN,Sliding Dungeon Door Opens
+10261,NA_SE_EV_FOOT_SWITCH,Switch Depressed
+10262,NA_SE_EV_HORSE_GROAN,Horse Snorts
+10263,NA_SE_EV_BOMB_DROP_WATER,Bomb Dropped in Water
+10264,NA_SE_EV_HORSE_JUMP,Epona Jumps
+10265,NA_SE_EV_HORSE_LAND,Epona Lands
+10266,NA_SE_EV_HORSE_SLIP,Epona Comes to a Screeching Halt
+10267,NA_SE_EV_FAIRY_DASH,
+10268,NA_SE_EV_SLIDE_DOOR_CLOSE,Sliding Dungeon Door Closes
+10269,NA_SE_EV_STONE_BOUND,Large Stone Door Closes
+10270,NA_SE_EV_STONE_STATUE_OPEN,Temple of Time Door Opening
+10271,NA_SE_EV_TBOX_UNLOCK,Unlock Treasure Chest
+10272,NA_SE_EV_TBOX_OPEN,Open Treasure Chest
+10273,NA_SE_SY_TIMER,Timer Ticks
+10274,NA_SE_EV_FLAME_IGNITION,Light Torch
+10275,NA_SE_EV_SPEAR_HIT,Guard Hits Spear on Ground
+10276,NA_SE_EV_ELEVATOR_MOVE,Elevator Moves
+10277,NA_SE_EV_WARP_HOLE,Blue Warp Resonates
+10278,NA_SE_EV_LINK_WARP,Enter Blue Warp
+10279,NA_SE_EV_PILLAR_SINK,
+10280,NA_SE_EV_WATER_WALL,Small Waterfall Trickles
+10281,NA_SE_EV_RIVER_STREAM_S,
+10282,NA_SE_EV_RIVER_STREAM_F,
+10283,NA_SE_EV_HORSE_LAND2,Epona Lands (2)
+10284,NA_SE_EV_HORSE_SANDDUST,Epona Stops in Sand/Dust
+10285,NA_SE_EV_DUMMY45,
+10286,NA_SE_EV_LIGHTNING,Lightning Crashes
+10287,NA_SE_EV_BOMB_BOUND,Bomb Bouncing off Wall
+10288,NA_SE_EV_WATERDROP,Water Drips
+10289,NA_SE_EV_TORCH,Torch Crackles
+10290,NA_SE_EV_MAGMA_LEVEL_M,Lava Bubbles
+10291,NA_SE_EV_FIRE_PILLAR,Pillar of Fire
+10292,NA_SE_EV_FIRE_PLATE,Wall of Fire
+10293,NA_SE_EV_BLOCK_BOUND,Push Block Into Place
+10294,NA_SE_EV_METALDOOR_SLIDE,
+10295,NA_SE_EV_METALDOOR_STOP,
+10296,NA_SE_EV_BLOCK_SHAKE,Shaking Block
+10297,NA_SE_EV_BOX_BREAK,Wood Breaking
+10298,NA_SE_EV_HAMMER_SWITCH,
+10299,NA_SE_EV_MAGMA_LEVEL_L,Magma Bubbles
+10300,NA_SE_EV_SPEAR_FENCE,Spear-shaped Fence Rising
+10301,NA_SE_EV_GANON_HORSE_NEIGH,Ganondorf's Horse Neighs
+10302,NA_SE_EV_GANON_HORSE_GROAN,Ganondorf's Horse Snorts
+10303,NA_SE_EV_FANTOM_WARP_S,Phantom Ganon Going through Painting
+10304,NA_SE_EV_FANTOM_WARP_L,Witches Kidnapping Nabooru
+10305,NA_SE_EV_FOUNTAIN,Pillar of Water
+10306,NA_SE_EV_KID_HORSE_WALK,Child Epona Walks
+10307,NA_SE_EV_KID_HORSE_RUN,Child Epona Runs
+10308,NA_SE_EV_KID_HORSE_NEIGH,Child Epona Neighs
+10309,NA_SE_EV_KID_HORSE_GROAN,Child Epona Snorts
+10310,NA_SE_EV_WHITE_OUT,
+10311,NA_SE_EV_LIGHT_GATHER,
+10312,NA_SE_EV_TREE_CUT,
+10313,NA_SE_EV_VOLCANO,Volcano Erupts
+10314,NA_SE_EV_GUILLOTINE_UP,Guillotine Rises
+10315,NA_SE_EV_GUILLOTINE_BOUND,Guillotine Falls
+10316,NA_SE_EV_ROLLCUTTER_MOTOR,Spinning Blades (Giant Scythes)
+10317,NA_SE_EV_CHINETRAP_DOWN,Chain Trap Lowers
+10318,NA_SE_EV_PLANT_BROKEN,Thrown Plant Destroyed on Impact
+10319,NA_SE_EV_SHIP_BELL,Bells on Shadow Temple Ship
+10320,NA_SE_EV_FLUTTER_FLAG,Flag Flaps in Wind
+10321,NA_SE_EV_TRAP_BOUND,
+10322,NA_SE_EV_ROCK_BROKEN,Thrown Rock Destroyed on Impact
+10323,NA_SE_EV_FANTOM_WARP_S2,Phantom Ganon Going through Painting
+10324,NA_SE_EV_FANTOM_WARP_L2,
+10325,NA_SE_EV_COFFIN_CAP_OPEN,Coffin Lid Opens
+10326,NA_SE_EV_COFFIN_CAP_BOUND,
+10327,NA_SE_EV_WIND_TRAP,Giant Fans
+10328,NA_SE_EV_TRAP_OBJ_SLIDE,Spike Wall Trap Closing In
+10329,NA_SE_EV_METALDOOR_OPEN,Portcullis Rising
+10330,NA_SE_EV_METALDOOR_CLOSE,
+10331,NA_SE_EV_BURN_OUT,
+10332,NA_SE_EV_BLOCKSINK,Floor Tiles in Ganondorf Battle Falling
+10333,NA_SE_EV_CROWD,Hyrule Market Crowd Hubbub
+10334,NA_SE_EV_WATER_LEVEL_DOWN,Water Level Changes in Water Temple
+10335,NA_SE_EV_NAVY_VANISH,Navi Hides under Link's Hat
+10336,NA_SE_EV_LADDER_DOUND,Ladder Landing
+10337,NA_SE_EV_WEB_VIBRATION,Web Vibrating
+10338,NA_SE_EV_WEB_BROKEN,Web Breaking
+10339,NA_SE_EV_ROLL_STAND,
+10340,NA_SE_EV_BUYODOOR_OPEN,Jabu-Jabu Door Opening
+10341,NA_SE_EV_BUYODOOR_CLOSE,Jabu-Jabu Door Closing
+10342,NA_SE_EV_WOODDOOR_OPEN,
+10343,NA_SE_EV_METALGATE_OPEN,Gate to Death Mountain Trail Opening
+10344,NA_SE_IT_SCOOP_UP_WATER,Dipping Bottle in Water
+10345,NA_SE_EV_FISH_LEAP,Fish Flopping on Ground
+10346,NA_SE_EV_KAKASHI_SWING,Scarecrow Swaying Side-to-Side
+10347,NA_SE_EV_KAKASHI_ROLL,Scarecrow Spinning Around
+10348,NA_SE_EV_BOTTLE_CAP_OPEN,Opening Bottle
+10349,NA_SE_EV_JABJAB_BREATHE,Jabu-Jabu Breathing In
+10350,NA_SE_EV_SPIRIT_STONE,Resonating Spiritual Stones
+10351,NA_SE_EV_TRIFORCE_FLASH,Triforce above Door of Time Flashing
+10352,NA_SE_EV_FALL_DOWN_DIRT,Ruto Falling through Hole
+10353,NA_SE_EV_NAVY_FLY,Navi Flying
+10354,NA_SE_EV_NAVY_CRASH,Navi Crashing into Fence
+10355,NA_SE_EV_WOOD_HIT,
+10356,NA_SE_EV_SCOOPUP_WATER,
+10357,NA_SE_EV_DROP_FALL,
+10358,NA_SE_EV_WOOD_GEAR,Windmill Gears Spinning
+10359,NA_SE_EV_TREE_SWING,Moving through Bush
+10360,NA_SE_EV_HORSE_RUN_LEVEL,Ganondorf's Horse Running
+10361,NA_SE_EV_ELEVATOR_MOVE2,
+10362,NA_SE_EV_ELEVATOR_STOP,
+10363,NA_SE_EV_TRE_BOX_APPEAR,Treasure Chest Appearing
+10364,NA_SE_EV_CHAIN_KEY_UNLOCK,Unlocking Chained Door
+10365,NA_SE_EV_SPINE_TRAP_MOVE,Sliding Blade Trap Hitting Wall
+10366,NA_SE_EV_HEALING,
+10367,NA_SE_EV_GREAT_FAIRY_APPEAR,Great Fairy Appears
+10368,NA_SE_EV_GREAT_FAIRY_VANISH,Great Fairy Disappears
+10369,NA_SE_EV_RED_EYE,
+10370,NA_SE_EV_ROLL_STAND_2,
+10371,NA_SE_EV_WALL_SLIDE,
+10372,NA_SE_EV_TRE_BOX_FLASH,Flash of Light Opening Chest
+10373,NA_SE_EV_WINDMILL_LEVEL,Windmill Blades Spinning
+10374,NA_SE_EV_GOTO_HEAVEN,
+10375,NA_SE_EV_POT_BROKEN,Breaking Pot
+10376,NA_SE_PL_PUT_DOWN_POT,
+10377,NA_SE_EV_DIVE_INTO_WATER,Diving into Water
+10378,NA_SE_EV_JUMP_OUT_WATER,Climbing out of Water
+10379,NA_SE_EV_GOD_FLYING,Goddesses Flying
+10380,NA_SE_EV_TRIFORCE,Triforce Resonating
+10381,NA_SE_EV_AURORA,Light around Triforce
+10382,NA_SE_EV_DEKU_DEATH,Deku Tree Dying
+10383,NA_SE_EV_BUYOSTAND_RISING,Jabu-Jabu Miniboss Platform Rising
+10384,NA_SE_EV_BUYOSTAND_FALL,Jabu-Jabu Miniboss Platform Falling
+10385,NA_SE_EV_BUYOSHUTTER_OPEN,Jabu-Jabu Door Unbarred
+10386,NA_SE_EV_BUYOSHUTTER_CLOSE,Jabu-Jabu Door Barred
+10387,NA_SE_EV_STONEDOOR_STOP,Temple of Time Door Finished Opening
+10388,NA_SE_EV_S_STONE_REVIVAL,
+10389,NA_SE_EV_MEDAL_APPEAR_S,Medallion Falling in Chamber of Sages
+10390,NA_SE_EV_HUMAN_BOUND,
+10391,NA_SE_EV_MEDAL_APPEAR_L,Link Gets Arrow of Light
+10392,NA_SE_EV_EARTHQUAKE,Temple of Time Rumbling (Zelda Captured)
+10393,NA_SE_EV_SHUT_BY_CRYSTAL,Zelda Trapped in Crystal
+10394,NA_SE_EV_GOD_LIGHTBALL_2,Sages Becoming Balls of Light (Trapping Ganondorf)
+10395,NA_SE_EV_RUN_AROUND,
+10396,NA_SE_EV_CONSENTRATION,Sages Flying into Triforce (Trapping Ganondorf)
+10397,NA_SE_EV_TIMETRIP_LIGHT,Halo at End of Time Travel
+10398,NA_SE_EV_BUYOSTAND_STOP_A,Jabu-Jabu Miniboss Platform Stopping at Top
+10399,NA_SE_EV_BUYOSTAND_STOP_U,Jabu-Jabu Miniboss Platform Stopping at Bottom
+10400,NA_SE_EV_OBJECT_FALL,Goron Falling (Getting Goron Ruby)
+10401,NA_SE_EV_JUMP_CONC,
+10402,NA_SE_EV_ICE_MELT,Red Ice Melting
+10403,NA_SE_EV_FIRE_PILLAR_S,Constant Pillar of Fire
+10404,NA_SE_EV_BLOCK_RISING,
+10405,NA_SE_EV_NABALL_VANISH,
+10406,NA_SE_EV_SARIA_MELODY,Warp Song - Leaving
+10407,NA_SE_EV_LINK_WARP_OUT,Warp Song - Arriving
+10408,NA_SE_EV_FIATY_HEAL,Pink Fairy Heals
+10409,NA_SE_EV_CHAIN_KEY_UNLOCK_B,Unlock Boss Door
+10410,NA_SE_EV_WOODBOX_BREAK,Throwing Small Wooden Crate
+10411,NA_SE_EV_PUT_DOWN_WOODBOX,Dropping Small Wooden Crate
+10412,NA_SE_EV_LAND_DIRT,Throwing Ruto onto Jabu-Jabu's Insides
+10413,NA_SE_EV_FLOOR_ROLLING,
+10414,NA_SE_EV_DOG_CRY_EVENING,Wolf Howl for Night
+10415,NA_SE_EV_JABJAB_HICCUP,
+10416,NA_SE_EV_NALE_MAGIC,
+10417,NA_SE_EV_FROG_JUMP,Frog Jumps on Log
+10418,NA_SE_EV_ICE_FREEZE,
+10419,NA_SE_EV_BURNING,Wall of Fire
+10420,NA_SE_EV_WOODPLATE_BOUND,
+10421,NA_SE_EV_GORON_WATER_DROP,
+10422,NA_SE_EV_JABJAB_GROAN,Jabu-Jabu Breathing
+10423,NA_SE_EV_DARUMA_VANISH,Hitting Dalm Block (Fire Temple Entrance)
+10424,NA_SE_EV_BIGBALL_ROLL,Rolling Boulder
+10425,NA_SE_EV_ELEVATOR_MOVE3,
+10426,NA_SE_EV_DIAMOND_SWITCH,Hitting Diamond Switch
+10427,NA_SE_EV_FLAME_OF_FIRE,Fires in Kakariko Village
+10428,NA_SE_EV_RAINBOW_SHOWER,Light Constructing Rainbow Bridge
+10429,NA_SE_EV_FLYING_AIR,
+10430,NA_SE_EV_PASS_AIR,
+10431,NA_SE_EV_COME_UP_DEKU_JR,Deku Tree Sprout Rises from Ground
+10432,NA_SE_EV_SAND_STORM,Desert Sand Storm
+10433,NA_SE_EV_TRIFORCE_MARK,Triforce Hand Mark Shines
+10434,NA_SE_EV_GRAVE_EXPLOSION,Royal Family's Tomb Explodes
+10435,NA_SE_EV_LURE_MOVE_W,Moving Fishing Lure
+10436,NA_SE_EV_POT_MOVE_START,Picking up Pot
+10437,NA_SE_EV_DIVE_INTO_WATER_L,Throwing Rock or Grass into Water
+10438,NA_SE_EV_OUT_OF_WATER_L,
+10439,NA_SE_EV_GANON_MANTLE,Ganondorf Whips His Cloak
+10440,NA_SE_EV_DIG_UP,
+10441,NA_SE_EV_WOOD_BOUND,
+10442,NA_SE_EV_WATER_BUBBLE,Tank in Laboratory
+10443,NA_SE_EV_ICE_BROKEN,
+10444,NA_SE_EV_FROG_GROW_UP,Frog Growing after Song
+10445,NA_SE_EV_WATER_CONVECTION,
+10446,NA_SE_EV_GROUND_GATE_OPEN,
+10447,NA_SE_EV_FACE_BREAKDOWN,
+10448,NA_SE_EV_FACE_EXPLOSION,
+10449,NA_SE_EV_FACE_CRUMBLE_SLOW,
+10450,NA_SE_EV_ROUND_TRAP_MOVE,
+10451,NA_SE_EV_HIT_SOUND,
+10452,NA_SE_EV_ICE_SWING,
+10453,NA_SE_EV_DOWN_TO_GROUND,
+10454,NA_SE_EV_KENJA_ENVIROMENT_0,Chamber of Sages Ambience
+10455,NA_SE_EV_KENJA_ENVIROMENT_1,Chamber of Sages Ambience (Sealing Ganondorf)
+10456,NA_SE_EV_SMALL_DOG_BARK,Dog Barking
+10457,NA_SE_EV_ZELDA_POWER,Zelda Opening Gate
+10458,NA_SE_EV_RAIN,
+10459,NA_SE_EV_IRON_DOOR_OPEN,Iron Door Opening
+10460,NA_SE_EV_IRON_DOOR_CLOSE,Iron Door Closing
+10461,NA_SE_EV_WHIRLPOOL,Whirlpool
+10462,NA_SE_EV_TOWER_PARTS_BROKEN,Ganon's Tower Crumbling
+10463,NA_SE_EV_COW_CRY,Cow Mooing
+10464,NA_SE_EV_METAL_BOX_BOUND,
+10465,NA_SE_EV_ELECTRIC_EXPLOSION,Throwing Obsidian Rock into Tower Barrier
+10466,NA_SE_EV_HEAVY_THROW,Throwing Obsidian Rock
+10467,NA_SE_EV_FROG_CRY_0,Frog Croaks while Jumping Back into Water
+10468,NA_SE_EV_FROG_CRY_1,Frog Croaks after Growing
+10469,NA_SE_EV_COW_CRY_LV,Cow mooing from Elsewhere
+10470,NA_SE_EV_RONRON_DOOR_CLOSE,Ingo Gates Closing
+10471,NA_SE_EV_BUTTERFRY_TO_FAIRY,Butterfly Transforms into Fairy
+10472,NA_SE_EV_FIVE_COUNT_LUPY,Collect Silver Rupee
+10473,NA_SE_EV_STONE_GROW_UP,Gossip Stone Stretches
+10474,NA_SE_EV_STONE_LAUNCH,Gossip Stone Launching into Space
+10475,NA_SE_EV_STONE_ROLLING,Gossip Stone Spins in Place
+10476,NA_SE_EV_TOGE_STICK_ROLLING,Spiky Log Rolling
+10477,NA_SE_EV_TOWER_ENERGY,Energy Fluctuating in Minidungeon Final Rooms
+10478,NA_SE_EV_TOWER_BARRIER,Ganon's Tower Barrier Fluctuating
+10479,NA_SE_EV_CHIBI_WALK,Grave Kid Walking
+10480,NA_SE_EV_KNIGHT_WALK,Hyrule Guard Walking
+10481,NA_SE_EV_PILLAR_MOVE_STOP,Pillar Stops Moving
+10482,NA_SE_EV_ERUPTION_CLOUD,
+10483,NA_SE_EV_LINK_WARP_OUT_LV,
+10484,NA_SE_EV_LINK_WARP_IN,
+10485,NA_SE_EV_OCARINA_BMELO_0,
+10486,NA_SE_EV_OCARINA_BMELO_1,
+10487,NA_SE_EV_EXPLOSION_FOR_RENZOKU,
+10488,NA_SE_EV_ELEVATOR_MOVE_KABE1,
+10489,NA_SE_EV_RIVER_STREAM_F_IDO,
+10490,NA_SE_EV_GUILLOTINE_BOUND_copyOrigin,
+10491,NA_SE_EV_HEALING_TOU,
+10492,NA_SE_EV_RUMUBLE_KEMURI,
+10493,NA_SE_EV_GANON_HADOU,
+10494,NA_SE_EV_KANOKE_OPEN,
+10495,NA_SE_EV_KANOKE_CLOSE,
+10496,NA_SE_EV_SEEK_CLOTH1,
+10497,NA_SE_EV_SEEK_CLOTH2,
+10498,NA_SE_EV_BOTTLE_CAP_CLOSE,
+10499,NA_SE_EV_ELEVATOR_MOVE_KABE2,
+10500,NA_SE_EV_WATER_LEVEL_DOWN_STOP,
+10501,NA_SE_EV_DAIKU_CLOTH1,
+10502,NA_SE_EV_DEMO_EPONA_LAND,
+10503,NA_SE_EV_DIVE_INTO_WATER_BLOCK,
+10504,NA_SE_EV_TORCH2,
+10505,NA_SE_EV_TORCH3,
+10506,NA_SE_EV_TORCH4,
+10507,NA_SE_EV_TORCH5,
+10508,NA_SE_EV_EARTHQUAKE_LAST,
+10509,NA_SE_EV_YAMI_TRAP_CHAIN,
+10510,NA_SE_EV_FLAME_IGNITION_GANON,
+10511,NA_SE_EV_MGANON_DOWN2,
+10512,NA_SE_EV_EXPLOSION_HOUKAI,
+10513,NA_SE_EV_BLOCKSINK_GANON,
+10514,NA_SE_EV_DOG_WALK,
+10515,NA_SE_EV_GANON_HOUKAI_KEMURI1,
+10516,NA_SE_EV_YOBI21,
+10517,NA_SE_EV_YOBI22,
+10518,NA_SE_EV_YOBI23,
+10519,NA_SE_EV_YOBI24,
+10520,NA_SE_EV_YOBI25,
+14336,NA_SE_EN_DODO_J_WALK,Dodongo - Walking
+14337,NA_SE_EN_DODO_J_CRY,Dodongo - Exhaling
+14338,NA_SE_EN_DODO_J_FIRE,Dodongo - Breathing Fire
+14339,NA_SE_EN_DODO_J_DAMAGE,Dodongo - Hurt by Link
+14340,NA_SE_EN_DODO_J_DEAD,Dodongo - Final Hit
+14341,NA_SE_EN_DODO_K_CRY,King Dodongo - Exhaling
+14342,NA_SE_EN_DODO_K_DAMAGE,King Dodongo - Hurt by Link
+14343,NA_SE_EN_DODO_K_DEAD,King Dodongo - Final Hit
+14344,NA_SE_EN_DODO_K_WALK,King Dodongo - Walking
+14345,NA_SE_EN_DODO_K_FIRE,King Dodongo - Breathing Fire
+14346,NA_SE_EN_GOMA_WALK,Gohma - Walking on Ground
+14347,NA_SE_EN_GOMA_HIGH,Gohma - Walking on Ceiling
+14348,NA_SE_EN_GOMA_CLIM,Gohma - Climbing to Ceiling
+14349,NA_SE_EN_GOMA_DOWN,Gohma - Falls off Ceiling
+14350,NA_SE_EN_GOMA_CRY1,Gohma - Cries
+14351,NA_SE_EN_GOMA_CRY2,Gohma - Grumbles
+14352,NA_SE_EN_GOMA_DAM1,Gohma - Hurt by Link
+14353,NA_SE_EN_GOMA_DAM2,Gohma - Hit in Eyeball
+14354,NA_SE_EN_GOMA_DEAD,Gohma - Final Hit
+14355,NA_SE_EN_GOMA_UNARI,Gohma - Dropping Larvae
+14356,NA_SE_EN_GOMA_BJR_EGG1,Gohma Larva (Boss Battle) - Egg Falls onto Floor
+14357,NA_SE_EN_GOMA_BJR_EGG2,Gohma Larva (Boss Battle) - Egg Hatches
+14358,NA_SE_EN_GOMA_BJR_WALK,Gohma Larva (Boss Battle) - Walking
+14359,NA_SE_EN_GOMA_BJR_CRY,Gohma Larva (Boss Battle) - Cries
+14360,NA_SE_EN_GOMA_BJR_DAM1,Gohma Larva (Boss Battle) - Hurt by Link
+14361,NA_SE_EN_GOMA_BJR_DAM2,Gohma Larva (Boss Battle) - Hurt by Link
+14362,NA_SE_EN_GOMA_BJR_DEAD,Gohma Larva (Boss Battle) - Final Hit
+14363,NA_SE_EN_GOMA_DEMO_EYE,Gohma - Eye Rolls (Battle Start)
+14364,NA_SE_EN_GOMA_LAST,Gohma - Body Burns Away
+14365,NA_SE_EN_GOMA_UNARI2,Gohma - Cries When Stuck in Ground
+14366,NA_SE_EN_GOMA_FAINT,Gohma - Temporarily Paralyzed
+14367,NA_SE_EN_GOMA_BJR_FREEZE,Gohma Larva (Boss Battle) - Paralyzed
+14368,NA_SE_EN_DODO_M_CRY,Baby Dodongo - Attack Cry
+14369,NA_SE_EN_DODO_M_DEAD,Baby Dodongo - Final Hit
+14370,NA_SE_EN_DODO_M_MOVE,Baby Dodongo - Moving
+14371,NA_SE_EN_DODO_M_DOWN,Baby Dodongo - Burrowing
+14372,NA_SE_EN_DODO_M_UP,Baby Dodongo - Emerging
+14373,NA_SE_EN_GANON_THROW_MASIC,Ganondorf - Throws Energy Orb
+14374,NA_SE_EN_DODO_M_EAT,Baby Dodongo - Eats Bomb
+14375,NA_SE_EN_GANON_DD_THUNDER,Ganondorf - Hit by Light Arrow
+14376,NA_SE_EN_RIZA_ONGND,Lizalfos - xxx
+14377,NA_SE_EN_RIZA_CRY,Lizalfos - Cries
+14378,NA_SE_EN_RIZA_ATTACK,Lizalfos - Attacks
+14379,NA_SE_EN_RIZA_DAMAGE,Lizalfos - Hurt by Link
+14380,NA_SE_EN_RIZA_WARAU,Lizalfos - xxx
+14381,NA_SE_EN_RIZA_DEAD,Lizalfos - Final Hit
+14382,NA_SE_EN_RIZA_WALK,Lizalfos - Walking
+14383,NA_SE_EN_RIZA_JUMP,Lizalfos - Jumps
+14384,NA_SE_EN_STALKID_WALK,Stalchild - Walking
+14385,NA_SE_EN_STALKID_ATTACK,Stalchild - Attacking
+14386,NA_SE_EN_STALKID_DAMAGE,Stalchild - Hurt by Link
+14387,NA_SE_EN_STALKID_DEAD,Stalchild - Final Hit
+14388,NA_SE_EN_FLOORMASTER_SLIDING,Floormaster - Sliding on Ground
+14389,NA_SE_EN_TEKU_WALK_WATER,Tektite - Turning around in Water
+14390,NA_SE_EN_LIGHT_ARROW_HIT,
+14391,NA_SE_EN_TUBOOCK_FLY,Flying Pot Trap - Flying
+14392,NA_SE_EN_STAL_WARAU,Stalfos - Laughs
+14393,NA_SE_EN_STAL_SAKEBI,Stalfos - Swipes Sword
+14394,NA_SE_EN_STAL_DAMAGE,Stalfos - Hurt by Link
+14395,NA_SE_EN_STAL_DEAD,Stalfos - Final Hit
+14396,NA_SE_EN_WOLFOS_APPEAR,Wolfos - Howling on Appearance
+14397,NA_SE_EN_STAL_WALK,Stalfos - Walking
+14398,NA_SE_EN_WOLFOS_CRY,Wolfos - Cries
+14399,NA_SE_EN_WOLFOS_ATTACK,Wolfos - Attack & Cry
+14400,NA_SE_EN_FFLY_ATTACK,Keese - Attacking
+14401,NA_SE_EN_FFLY_FLY,Keese - Flying
+14402,NA_SE_EN_FFLY_DEAD,Keese - Final Hit
+14403,NA_SE_EN_WOLFOS_DAMAGE,Wolfos - Hurt by Link
+14404,NA_SE_EN_AMOS_WALK,Armos - Hopping
+14405,NA_SE_EN_AMOS_WAVE,Armos - Awakes
+14406,NA_SE_EN_AMOS_DEAD,Armos - Final Hit
+14407,NA_SE_EN_AMOS_DAMAGE,Armos - Hurt by Link
+14408,NA_SE_EN_AMOS_VOICE,Armos - Roars
+14409,NA_SE_EN_SHELL_MOUTH,Shellblade - Opens Mouth
+14410,NA_SE_EN_SHELL_DEAD,Shellblade - Final Hit
+14411,NA_SE_EN_WOLFOS_DEAD,Wolfos - Final Hit
+14412,NA_SE_EN_DODO_K_COLI,King Dodongo - Last Roll into Wall
+14413,NA_SE_EN_DODO_K_COLI2,
+14414,NA_SE_EN_DODO_K_ROLL,King Dodongo - Rolling
+14415,NA_SE_EN_DODO_K_BREATH,King Dodongo - Inhaling
+14416,NA_SE_EN_DODO_K_DRINK,King Dodongo - Swallows Bomb
+14417,NA_SE_EN_DODO_K_DOWN,King Dodongo - Temporarily Paralyzed
+14418,NA_SE_EN_DODO_K_OTAKEBI,King Dodongo - Introductory Roar
+14419,NA_SE_EN_DODO_K_END,King Dodongo - Melting
+14420,NA_SE_EN_DODO_K_LAST,King Dodongo - Melting
+14421,NA_SE_EN_DODO_K_LAVA,King Dodongo - In Lava
+14422,NA_SE_EN_GANON_FLOAT,Ganondorf - Floating in Air (Cutscene)
+14423,NA_SE_EN_GANON_DARKWAVE_M,Ganondorf - Purple Vortex
+14424,NA_SE_EN_DODO_J_BREATH,Dodongo - Inhaling
+14425,NA_SE_EN_DODO_J_TAIL,Dodongo - Tail Dragging on Ground
+14426,NA_SE_EN_WOLFOS_WALK,Wolfos - Walking
+14427,NA_SE_EN_DODO_J_EAT,Dodongo - Eats Bomb
+14428,NA_SE_EN_DEKU_MOUTH,Big Deku Baba - Chomps Mouth
+14429,NA_SE_EN_DEKU_ATTACK,Big Deku Baba - Attacks
+14430,NA_SE_EN_DEKU_DAMAGE,Big Deku Baba - Hurt by Link
+14431,NA_SE_EN_DEKU_DEAD,Big Deku Baba - Final Hit
+14432,NA_SE_EN_DEKU_JR_MOUTH,Deku Baba - Chomps Mouth
+14433,NA_SE_EN_DEKU_JR_ATTACK,Dekub Baba - Attacks
+14434,NA_SE_EN_DEKU_JR_DEAD,Deku Baba - Final Hit
+14435,NA_SE_EN_DEKU_SCRAPE,Deku Baba - Scrapes Mouth along Ground
+14436,NA_SE_EN_TAIL_FLY,
+14437,NA_SE_EN_TAIL_CRY,Tailpasaran - Cries
+14438,NA_SE_EN_TAIL_DEAD,Tailpasaran - Final Hit
+14439,NA_SE_EN_GANON_SPARK,Ganondorf - Charging Ball
+14440,NA_SE_EN_STALTU_DOWN,Skulltula - Drops Down
+14441,NA_SE_EN_STALTU_UP,Skulltula - Goes Up
+14442,NA_SE_EN_STALTU_LAUGH,Skulltula - Quivers
+14443,NA_SE_EN_STALTU_DAMAGE,Skulltula - Hurt by Link
+14444,NA_SE_EN_STAL_JUMP,Stalfos - Jumps
+14445,NA_SE_EN_TEKU_DAMAGE,Tektite - Hurt by Link
+14446,NA_SE_EN_TEKU_DEAD,Tektite - Final Hit
+14447,NA_SE_EN_TEKU_WALK,Tektite - Turning around on Ground
+14448,NA_SE_EN_PO_KANTERA,Poe - Spins Lantern
+14449,NA_SE_EN_PO_FLY,Poe - Flying
+14450,NA_SE_EN_PO_AWAY,Poe - Runs Away
+14451,NA_SE_EN_PO_APPEAR,Poe - Appears
+14452,NA_SE_EN_PO_DISAPPEAR,Poe - Disappears When Z-Targeting
+14453,NA_SE_EN_PO_DAMAGE,Poe - Hurt by Link
+14454,NA_SE_EN_PO_DEAD,Poe - Final Hit
+14455,NA_SE_EN_PO_DEAD2,Poe - Turns into Soul
+14456,NA_SE_EN_EXTINCT,Body Disappears (Any Enemy)
+14457,NA_SE_EN_GOLON_LAND_BIG,Rolling Goron - Hits Ground
+14458,NA_SE_EN_RIZA_DOWN,Lizalfos - Lands on Back
+14459,NA_SE_EN_DODO_M_GND,Baby Dodongo - Landing on Ground
+14460,NA_SE_EN_NUTS_UP,Mad Scrub - Emerges from Ground
+14461,NA_SE_EN_NUTS_DOWN,Mad Scrub - Burrows into Ground
+14462,NA_SE_EN_NUTS_THROW,Mad Scrub - Spits Nut
+14463,NA_SE_EN_NUTS_WALK,Mad Scrub - Walking
+14464,NA_SE_EN_NUTS_DAMAGE,Mad Scrub - Hurt by Link
+14465,NA_SE_EN_NUTS_DEAD,Mad Scrub - Last Hit
+14466,NA_SE_EN_NUTS_FAINT,Business Scrub - Squeaks When Talking
+14467,NA_SE_EN_PO_BIG_GET,Big Poe - Catch Poe Soul
+14468,NA_SE_EN_STALTU_ROLL,Skulltula - Turns Around
+14469,NA_SE_EN_STALWALL_DEAD,Skullwalltula - Final Hit
+14470,NA_SE_EN_PO_SISTER_DEAD,Poe Sister - Final Hit
+14471,NA_SE_EN_BARI_SPLIT,Bari - Splits into Biri
+14472,NA_SE_EN_TEKU_REVERSE,Tektite - Flipped Upside-Down
+14473,NA_SE_EN_VALVAISA_LAND2,Volvagia - Skull Lands
+14474,NA_SE_EN_TEKU_LAND_WATER,Tektite - Land in Water (Long Jump)
+14475,NA_SE_EN_LAST_DAMAGE,Final Hit (Any Enemy)
+14476,NA_SE_EN_STALWALL_ROLL,Skullwalltula - Spinning on Wall
+14477,NA_SE_EN_STALWALL_DASH,Skullwalltula - Dashing towards Link
+14478,NA_SE_EN_TEKU_JUMP_WATER,Tektite - Jump in Water
+14479,NA_SE_EN_TEKU_LAND_WATER2,Tektite - Land in Water (Short Jump)
+14480,NA_SE_EN_FALL_AIM,Wallmaster - Falling over Link
+14481,NA_SE_EN_FALL_UP,Wallmaster - Flies Up
+14482,NA_SE_EN_FALL_CATCH,Wallmaster - Catches Link
+14483,NA_SE_EN_FALL_LAND,Wallmaster & Floormaster - Lands
+14484,NA_SE_EN_FALL_WALK,Wallmaster & Floormaster - Walking
+14485,NA_SE_EN_FALL_DAMAGE,Wallmaster & Floormaster - Hurt by Link
+14486,NA_SE_EN_FALL_DEAD,Wallmaster & Floormaster - Final Hit
+14487,NA_SE_EN_KAICHO_FLUTTER,Guay - Flying
+14488,NA_SE_EN_BIRI_FLY,Biri - Floating
+14489,NA_SE_EN_BIRI_JUMP,Biri - Flies Up
+14490,NA_SE_EN_BIRI_SPARK,Biri - Attacks
+14491,NA_SE_EN_BIRI_DEAD,Biri - Final Hit
+14492,NA_SE_EN_BIRI_BUBLE,Biri - Bubbles when Dead
+14493,NA_SE_EN_BARI_ROLL,Bari - Spinning
+14494,NA_SE_EN_GOMA_JR_FREEZE,Gohma Larva - Temporarily Paralyzed
+14495,NA_SE_EN_BARI_DEAD,Bari - Final Hit
+14496,NA_SE_EN_GANON_FIRE,Ganondorf - Thrown Magic Orb
+14497,NA_SE_EN_FANTOM_TRANSFORM,Phantom Ganon - Removes Face
+14498,NA_SE_EN_FANTOM_THUNDER,Phantom Ganon - Lighting Attack
+14499,NA_SE_EN_FANTOM_SPARK,Phantom Ganon - Sparks from Lighting Attack
+14500,NA_SE_EN_FANTOM_FLOAT,Phantom Ganon - Floating
+14501,NA_SE_EN_FANTOM_MASIC1,Phantom Ganon - xxx
+14502,NA_SE_EN_FANTOM_MASIC2,Phantom Ganon - Enters Painting
+14503,NA_SE_EN_FANTOM_FIRE,Phantom Ganon - Fires Lightning Ball with Staff
+14504,NA_SE_EN_FANTOM_HIT_THUNDER,Phantom Ganon - Lightning Ball hits Phantom Ganon or Link
+14505,NA_SE_EN_FANTOM_ATTACK,Phantom Ganon - xxx
+14506,NA_SE_EN_FANTOM_STICK,Phantom Ganon - Spins Staff
+14507,NA_SE_EN_FANTOM_EYE,Phantom Ganon - Eye Glows after Face Removal
+14508,NA_SE_EN_FANTOM_LAST,Phantom Ganon - Dying Roar
+14509,NA_SE_EN_FANTOM_THUNDER_GND,Phantom Ganon - Lightning Ball Hits Ground
+14510,NA_SE_EN_FANTOM_DAMAGE,Phantom Ganon - Hurt by Link
+14511,NA_SE_EN_FANTOM_DEAD,Phantom Ganon - Final Hit
+14512,NA_SE_EN_FANTOM_LAUGH,Phantom Ganon - Laughs
+14513,NA_SE_EN_FANTOM_DAMAGE2,Phantom Ganon - Hurt by Lightning Ball
+14514,NA_SE_EN_FANTOM_VOICE,Phantom Ganon - Yells
+14515,NA_SE_EN_KAICHO_DAMAGE,Guay - Hurt by Link
+14516,NA_SE_EN_GANON_ATTACK_DEMO,Ganondorf (Cutscene) - Charges Magic Attack
+14517,NA_SE_EN_GANON_FIRE_DEMO,Ganondorf (Cutscene) - Shoots Magic Attack
+14518,NA_SE_EN_KAICHO_CRY,Guay - Cries
+14519,NA_SE_EN_KAICHO_ATTACK,Guay - Attacks Link
+14520,NA_SE_EN_MORIBLIN_WALK,Spear Moblin - Walking
+14521,NA_SE_EN_MORIBLIN_SLIDE,Spear Moblin - Slides to a Halt
+14522,NA_SE_EN_MORIBLIN_ATTACK,Spear Moblin - Attack Cry
+14523,NA_SE_EN_MORIBLIN_VOICE,Spear Moblin - Grunts
+14524,NA_SE_EN_MORIBLIN_SPEAR_AT,Spear Moblin - Readies Spear
+14525,NA_SE_EN_MORIBLIN_SPEAR_NORM,Spear Moblin - Pulls Spear Up
+14526,NA_SE_EN_MORIBLIN_DEAD,Spear Moblin - Final Hit
+14527,NA_SE_EN_MORIBLIN_DASH,Spear Moblin - Dashes after Link
+14528,NA_SE_EN_OCTAROCK_ROCK,Octorok - Rock Breaks on Impact
+14529,NA_SE_EN_OCTAROCK_FLOAT,Octorok - Floating on Water
+14530,NA_SE_EN_OCTAROCK_JUMP,Octorok - Jumps out of Water
+14531,NA_SE_EN_OCTAROCK_LAND,Octorok - Settles on Surface
+14532,NA_SE_EN_OCTAROCK_SINK,Octorok - Goes under Surface
+14533,NA_SE_EN_OCTAROCK_BUBLE,Octorok - Bubbles Underwater
+14534,NA_SE_EN_OCTAROCK_DEAD1,Octorok - Final Hit
+14535,NA_SE_EN_OCTAROCK_DEAD2,Octorok - Dying Noise
+14536,NA_SE_EN_BUBLE_WING,Bubble - Flying
+14537,NA_SE_EN_BUBLE_MOUTH,Red Bubble - Chomps Mouth
+14538,NA_SE_EN_BUBLE_LAUGH,Bubble - Laughing
+14539,NA_SE_EN_BUBLE_BITE,Bubble - Attacks
+14540,NA_SE_EN_BUBLE_UP,Bubble - Protective Flame Reappears
+14541,NA_SE_EN_BUBLE_DOWN,Bubble - Protective Flame Disappears
+14542,NA_SE_EN_BUBLE_DEAD,Bubble - Final Hit
+14543,NA_SE_EN_BUBLEFALL_FIRE,Red Bubble - Jumping through Magma
+14544,NA_SE_EN_VALVAISA_APPEAR,Volvagia - Dives into/Appears from Magma Holes
+14545,NA_SE_EN_VALVAISA_ROAR,Volvagia - Roars
+14546,NA_SE_EN_VALVAISA_MAHI1,Volvagia - Hit with Hammer
+14547,NA_SE_EN_VALVAISA_MAHI2,Volvagia - Falls to Ground
+14548,NA_SE_EN_VALVAISA_KNOCKOUT,Volvagia - Temporarily Paralyzed
+14549,NA_SE_EN_VALVAISA_DAMAGE1,Volvagia - Hurt by Link
+14550,NA_SE_EN_VALVAISA_DAMAGE2,Volvagia - Awoken by Link's Attacks
+14551,NA_SE_EN_VALVAISA_ROCK,Volvagia - Falling Rock
+14552,NA_SE_EN_VALVAISA_SW_NAIL,Volvagia - Swipes at Link
+14553,NA_SE_EN_VALVAISA_DEAD,Volvagia - Final Hit
+14554,NA_SE_EN_VALVAISA_BURN,Volvagia - Burns Up
+14555,NA_SE_EN_VALVAISA_FIRE,Volvagia - Breathes Fire
+14556,NA_SE_EN_BARI_DAMAGE,Bari - xxx
+14557,NA_SE_EN_MOFER_CORE_LAND,Morpha - Nucleus Lands on Ground
+14558,NA_SE_EN_MOFER_CORE_MOVE_WT,Morpha - Goes after Link in Water
+14559,NA_SE_EN_MOFER_CORE_SMJUMP,Morpha - Nucleus Hops on Water
+14560,NA_SE_EN_MONBLIN_GNDWAVE,Club Moblin - Shockwave from Club Hit
+14561,NA_SE_EN_MONBLIN_HAM_DOWN,Club Moblin - Hit Ground with Club
+14562,NA_SE_EN_MONBLIN_HAM_UP,Club Moblin - Raise Club
+14563,NA_SE_EN_BUBLE_DAMAGE,Bubble - Hurt by Link
+14564,NA_SE_EN_REDEAD_CRY,Redead - Moaning
+14565,NA_SE_EN_REDEAD_AIM,
+14566,NA_SE_EN_REDEAD_DAMAGE,Redead - Hurt by Link
+14567,NA_SE_EN_REDEAD_DEAD,Redead - Final Hit
+14568,NA_SE_EN_REDEAD_ATTACK,Redead - Jumps on Link and Attacks
+14569,NA_SE_EN_NYU_MOVE,Spike Trap - Rolling towards Link
+14570,NA_SE_EN_NYU_HIT_STOP,Spike Trap - Turns into Rock
+14571,NA_SE_EN_KAICHO_DEAD,Guay - Final Hit
+14572,NA_SE_EN_PO_LAUGH,Poe - Laughs
+14573,NA_SE_EN_PO_CRY,Poe - Cries
+14574,NA_SE_EN_PO_ROLL,Poe - Spinning after Link
+14575,NA_SE_EN_PO_LAUGH2,Poe Sister - Laughs
+14576,NA_SE_EN_MOFER_APPEAR,Morpha - Appears
+14577,NA_SE_EN_MOFER_ATTACK,Morpha - Attacks Link
+14578,NA_SE_EN_MOFER_WAVE,Morpha - Waves Link Around
+14579,NA_SE_EN_MOFER_CATCH,Morpha - Grabs Link
+14580,NA_SE_EN_MOFER_CUT,Morpha - Link Grabs Nucleus from Tentacle
+14581,NA_SE_EN_MOFER_MOVE_DEMO,Morpha (Cutscene) - Moving Underwater
+14582,NA_SE_EN_MOFER_BUBLE_DEMO,Morpha (Cutscene) - Makes Bubbles
+14583,NA_SE_EN_MOFER_CORE_JUMP,Morpha - Nucleus Jumps on Water
+14584,NA_SE_EN_MOFER_DEAD,Morpha - Final Hit
+14585,NA_SE_EN_MOFER_LASTVOICE,Morpha - Dying Cry
+14586,NA_SE_EN_MOFER_CORE_ROLL,Morpha - Nucleus Rolls in Water
+14587,NA_SE_EN_MOFER_CORE_FLY,Morpha - xxx
+14588,NA_SE_EN_GOLON_WAKE_UP,Goron - Sitting Up
+14589,NA_SE_EN_GOLON_SIT_DOWN,Goron - Standing up or Sitting Down
+14590,NA_SE_EN_CHICKEN_FLUTTER,Cucco - xxx
+14591,NA_SE_EN_DEKU_WAKEUP,Cucco - Fluttering Wings
+14592,NA_SE_EN_DEADHAND_BITE,Dead Hand - Bites Link
+14593,NA_SE_EN_DEADHAND_WALK,Dead Hand - Sliding
+14594,NA_SE_EN_DEADHAND_GRIP,Dead Hand - Has Grip on Link
+14595,NA_SE_EN_DEADHAND_HAND_AT,Dead Hand's Hands - Grab Link
+14596,NA_SE_EN_DAIOCTA_MAHI,Big Octorok - Temporarily Paralyzed
+14597,NA_SE_EN_DAIOCTA_SPLASH,Big Octorok - Walking around in Water
+14598,NA_SE_EN_DAIOCTA_VOICE,Big Octorok - Grunts
+14599,NA_SE_EN_DAIOCTA_DAMAGE,Big Octorok - Hurt by Link
+14600,NA_SE_EN_DAIOCTA_SINK,Big Octorok - Sinks into Ground
+14601,NA_SE_EN_DAIOCTA_DEAD,Big Octorok - Final Hit
+14602,NA_SE_EN_DAIOCTA_DEAD2,Big Octorok - Dying
+14603,NA_SE_EN_GANON_HIT_THUNDER,Ganondorf - Lightning Ball Hits Someone
+14604,NA_SE_EN_TWINROBA_APPEAR_MS,Twinrova - Sisters Appear
+14605,NA_SE_EN_TWINROBA_TRANSFORM,Twinrova - Sister Transforms
+14606,NA_SE_EN_TWINROBA_MS_FIRE,Twinrova - Fire Attack Charging
+14607,NA_SE_EN_TWINROBA_FIRE_EXP,Twinrova - Fire Attack Hits Ground
+14608,NA_SE_EN_TWINROBA_POWERUP,Twinrova - xxx
+14609,NA_SE_EN_TWINROBA_SHOOT_FREEZE,Twinrova - Shooting Ice Attack
+14610,NA_SE_EN_TWINROBA_MS_FREEZE,Twinrova - Charging Ice Attack
+14611,NA_SE_EN_TWINROBA_MASIC_SET,Twinrova - Starting to Cast Magic
+14612,NA_SE_EN_TWINROBA_CUTBODY,Young Twinrova - Hit by Link with Sword
+14613,NA_SE_EN_GANON_HIT_GND_IMP,Ganondorf - Pounds Ground
+14614,NA_SE_EN_TWINROBA_DAMAGE_VOICE,Twinrova - Hurt by Link
+14615,NA_SE_EN_TWINROBA_REFL_FIRE,Twinrova - Reflect Fire Attack
+14616,NA_SE_EN_TWINROBA_REFL_FREEZE,Twinrova - Reflect Ice Attack
+14617,NA_SE_EN_GANON_CUTBODY,Ganondorf - Hit with Sword by Link
+14618,NA_SE_EN_TWINROBA_YOUNG_DAMAGE,Young Twinrova - Hit with Mirror Shield
+14619,NA_SE_EN_TWINROBA_YOUNG_DEAD,Young Twinrova - Final Hit
+14620,NA_SE_EN_GOLON_EYE_BIG,Biggoron - xxx
+14621,NA_SE_EN_GOLON_GOOD_BIG,Biggoron - xxx
+14622,NA_SE_EN_TWINROBA_FB_FLY,Twinrova - Particle Remains Flying
+14623,NA_SE_EN_TWINROBA_FLY,Twinrova - Flying
+14624,NA_SE_EN_TWINROBA_UNARI,Twinrova - Sisters Hovering
+14625,NA_SE_EN_TWINROBA_ROLL,Twinrova - Sister Spins Around
+14626,NA_SE_EN_TWINROBA_SHOOT_FIRE,Twinrova - Shooting Fire Attack
+14627,NA_SE_EN_TWINROBA_THROW_MASIC,Twinrova - Casts Magic
+14628,NA_SE_EN_DARUNIA_HIT_BREAST,Darunia - Pounds Chest
+14629,NA_SE_EN_DARUNIA_HIT_LINK,Darunia - Hits Link's Head
+14630,NA_SE_EN_OWL_FLUTTER,Kaepora Gaebora - Flies Away
+14631,NA_SE_EN_VALVAISA_LAND,Volvagia - Collapses on Ground
+14632,NA_SE_EN_IRONNACK_WALK,Iron Knuckle - Walking
+14633,NA_SE_EN_IRONNACK_SWING_AXE,Iron Knuckle - Swings Axe
+14634,NA_SE_EN_IRONNACK_ARMOR_DEMO,Iron Knuckle (Cutscene) - Armor Clank
+14635,NA_SE_EN_IRONNACK_STAGGER_DEMO,Iron Knuckle (Cutscene) - Staggers
+14636,NA_SE_EN_IRONNACK_ARMOR_OFF_DEMO,Iron Knuckle (Cutscene) - Armor Falls Off
+14637,NA_SE_EN_IRONNACK_ARMOR_LAND1_DEMO,Iron Knuckle (Cutscene) - Armor Lands
+14638,NA_SE_EN_IRONNACK_ARMOR_LAND2_DEMO,Iron Knuckle (Cutscene) - Armor Lands
+14639,NA_SE_EN_IRONNACK_ARMOR_LAND3_DEMO,Iron Knuckle (Cutscene) - Armor Lands
+14640,NA_SE_EN_FLOORMASTER_ATTACK,Floormaster - Attacks
+14641,NA_SE_EN_FLOORMASTER_SM_WALK,Small Floormaster - Walking
+14642,NA_SE_EN_FLOORMASTER_SM_DEAD,Small Floormaster - Final Hit
+14643,NA_SE_EN_FLOORMASTER_RESTORE,Floormaster - Grows
+14644,NA_SE_EN_FLOORMASTER_EXPAND,Floormaster - Grows
+14645,NA_SE_EN_FLOORMASTER_SPLIT,Floormaster - Splits Apart
+14646,NA_SE_EN_FLOORMASTER_SM_STICK,Small Floormaster - Grabs onto Link
+14647,NA_SE_EN_FLOORMASTER_SM_LAND,Small Floormaster - Lands on Floor
+14648,NA_SE_EN_IRONNACK_WAVE_DEMO,Iron Knuckle (Cutscene) - Shakes Axe
+14649,NA_SE_EN_IRONNACK_FINGER_DEMO,Iron Knuckle (Cutscene) - Finger Snap
+14650,NA_SE_EN_IRONNACK_ARMOR_HIT,Iron Knuckle - Link Hits Armor
+14651,NA_SE_EN_NUTS_CUTBODY,Mad Scrub - Hit with Sword by Link
+14652,NA_SE_EN_BALINADE_LEVEL,Barinade - Rumbling
+14653,NA_SE_EN_BALINADE_DAMAGE,Barinade - Hurt by Link
+14654,NA_SE_EN_BALINADE_FAINT,Barinade - Weakpoint Hurt by Link
+14655,NA_SE_EN_BALINADE_BREAK,Barinade - Dying
+14656,NA_SE_EN_BALINADE_DEAD,Barinade - Dying Cry
+14657,NA_SE_EN_BALINADE_STICK,Barinade - Bari Attaches to Barinade
+14658,NA_SE_EN_BALINADE_THUNDER,Barinade - Lightning Attack
+14659,NA_SE_EN_BALINADE_BL_SPARK,Barinade (Bari) - Sparks
+14660,NA_SE_EN_BALINADE_BL_DEAD,Barinade (Bari) - Final Hit
+14661,NA_SE_EN_BALINADE_BREAK2,Barinade - Tentacles Break Off
+14662,NA_SE_EN_BALINADE_HIT_RINK,Barinade - Hits Edge of Room?
+14663,NA_SE_EN_GANON_WAVE_GND,Ganondorf - Shockwave from Ground Pound
+14664,NA_SE_EN_AWA_BOUND,Shabom - Bounces off Surface
+14665,NA_SE_EN_AWA_BREAK,Shabom - Pops
+14666,NA_SE_EN_BROB_WAVE,Red Jelly - Waves Around
+14667,NA_SE_EN_NYU_DEAD,Spike Trap - Final Hit
+14668,NA_SE_EN_EIER_DAMAGE,Stinger - Hurt by Link
+14669,NA_SE_EN_EIER_DEAD,Stinger - Final Hit
+14670,NA_SE_EN_EIER_FLUTTER,Stinger - Flops on Ground
+14671,NA_SE_EN_EIER_FLY,Stinger (Land) - Gliding
+14672,NA_SE_EN_SHADEST_TAIKO_LOW,Bongo Bongo - Low Drum Hit
+14673,NA_SE_EN_SHADEST_TAIKO_HIGH,Bongo Bongo - High Drum Hit
+14674,NA_SE_EN_SHADEST_CLAP,Bongo Bongo - Claps Link
+14675,NA_SE_EN_SHADEST_FLY_ATTACK,Bongo Bongo - Swipes Hand
+14676,NA_SE_EN_PIHAT_UP,Peahat - Rises out of Ground
+14677,NA_SE_EN_PIHAT_FLY,Peahat - Flying
+14678,NA_SE_EN_PIHAT_DAMAGE,Peahat - Hurt by Link
+14679,NA_SE_EN_PIHAT_LAND,Peahat - Lands
+14680,NA_SE_EN_BALINADE_HAND_DOWN,Parasitic Tentacle - Hits Link
+14681,NA_SE_EN_BALINADE_HAND_UP,Parasitic Tentacle - Gets Ready to Hit
+14682,NA_SE_EN_BALINADE_HAND_DAMAGE,Parasitic Tentacle - Hurt by Link
+14683,NA_SE_EN_BALINADE_HAND_DEAD,Parasitic Tentacle - Final Hit
+14684,NA_SE_EN_GOMA_JR_WALK,Gohma Larva - Walking
+14685,NA_SE_EN_GOMA_JR_CRY,Gohma Larva - Croaks
+14686,NA_SE_EN_GOMA_JR_DAM1,Gohma Larva - Hurt by Link
+14687,NA_SE_EN_GOMA_JR_DAM2,Gohma Larva - Cries when Hurt by Link
+14688,NA_SE_EN_GOMA_JR_DEAD,Gohma Larva - Final Hit
+14689,NA_SE_EN_GOMA_EGG1,Gohma Larva - Larva Escapes Egg
+14690,NA_SE_EN_GOMA_EGG2,Gohma Larva - Egg Cracks
+14691,NA_SE_EN_GANON_BODY_SPARK,Ganondorf - Lightning when Transforming into Ganon
+14692,NA_SE_EN_SHADEST_HAND_WAVE,Bongo Bongo - Waves Hand
+14693,NA_SE_EN_SHADEST_CATCH,Bongo Bongo - Grabs Link
+14694,NA_SE_EN_SHADEST_LAND,Bongo Bongo - Falls after Shot in Eye
+14695,NA_SE_EN_SHADEST_HAND_FLY,Bongo Bongo - Attacks with Hand
+14696,NA_SE_EN_SHADEST_SHAKEHAND,Bongo Bongo - Shakes Attacked Hand
+14697,NA_SE_EN_SHADEST_DAMAGE,Bongo Bongo - Hurt by Link
+14698,NA_SE_EN_SHADEST_DAMAGE_HAND,Bongo Bongo - Hand Hurt by Link
+14699,NA_SE_EN_SHADEST_DISAPPEAR,Bongo Bongo - Turns Invisible
+14700,NA_SE_EN_GANON_CHARGE_MASIC,Ganondorf - Charges Big Lightning Attack
+14701,NA_SE_EN_GANON_THROW_BIG,Ganondorf - Throws Big Lightning Attack
+14702,NA_SE_EN_SHADEST_FREEZE,Bongo Bongo - Temporarily Paralyzed
+14703,NA_SE_EN_SHADEST_DEAD,Bongo Bongo - Final Hit
+14704,NA_SE_EN_BIMOS_ROLL_HEAD,Beamos - Spinning Around
+14705,NA_SE_EN_BIMOS_LAZER,Beamos - Laser Beam
+14706,NA_SE_EN_BIMOS_LAZER_GND,Beamos - Laser Hits Ground
+14707,NA_SE_EN_BIMOS_AIM,Beamos - About to Fire
+14708,NA_SE_EN_BUBLEWALK_WALK,Torch Slug - Crawling
+14709,NA_SE_EN_BUBLEWALK_AIM,Torch Slug - Sees Link
+14710,NA_SE_EN_BUBLEWALK_REVERSE,Torch Slug - xxx
+14711,NA_SE_EN_BUBLEWALK_DAMAGE,Torch Slug - Hurt by Link
+14712,NA_SE_EN_BUBLEWALK_DEAD,Torch Slug - Final Hit
+14713,NA_SE_EN_YUKABYUN_FLY,Flying Floor Tile - Flies After Link
+14714,NA_SE_EN_FLAME_DAMAGE,Flare Dancer - Hurt by Link
+14715,NA_SE_EN_TWINROBA_FLY_DEMO,Twinrova - Flying (Non-boss Cutscenes)
+14716,NA_SE_EN_FLAME_KICK,Flare Dancer - Kicks while Running
+14717,NA_SE_EN_FLAME_RUN,Flare Dancer - Runs Around
+14718,NA_SE_EN_FLAME_ROLL,Flare Dancer - Spins Around
+14719,NA_SE_EN_FLAME_MAN_RUN,Flare Dancer Head - Runs
+14720,NA_SE_EN_FLAME_MAN_DAMAGE,Flare Dancer Head - Hurt by Link
+14721,NA_SE_EN_FLAME_LAUGH,Flare Dancer - Laughs
+14722,NA_SE_EN_FLAME_MAN_SLIDE,Flare Dancer Head - Slides on Ground
+14723,NA_SE_EN_FLAME_FIRE_ATTACK,Flare Dancer - Shoots Fire
+14724,NA_SE_EN_PIHAT_SM_FLY,Peahat Larva - Flying
+14725,NA_SE_EN_PIHAT_SM_DEAD,Peahat Larva - Final Hit
+14726,NA_SE_EN_RIVA_APPEAR,Leaver - Emerges from Ground
+14727,NA_SE_EN_AKINDONUTS_HIDE,Deku Seller - Burrows into Ground
+14728,NA_SE_EN_RIVA_DAMAGE,Leaver - Hurt by Link
+14729,NA_SE_EN_RIVA_DEAD,Leaver - Final Hit
+14730,NA_SE_EN_RIVA_MOVE,Leaver - Moves on Ground
+14731,NA_SE_EN_FLAME_MAN_SURP,Flare Dancer Head - Yells
+14732,NA_SE_EN_SHADEST_LAST,Bongo Bongo - Disappears after Death
+14733,NA_SE_EN_SHADEST_MOVE,Bongo Bongo - Charges after Link
+14734,NA_SE_EN_SHADEST_PRAY,Bongo Bongo - Chanting
+14735,NA_SE_EN_MGANON_ROAR,Ganon - Roars
+14736,NA_SE_EN_LIKE_WALK,Like Like - Moving
+14737,NA_SE_EN_LIKE_UNARI,Like Like - Groans
+14738,NA_SE_EN_LIKE_DRINK,Like Like - Swallows Link
+14739,NA_SE_EN_LIKE_EAT,Like Like - Eating Link
+14740,NA_SE_EN_LIKE_THROW,Like Like - Spits out Link
+14741,NA_SE_EN_LIKE_DAMAGE,Like Like - Hurt by Link
+14742,NA_SE_EN_LIKE_DEAD,Like Like - Final Hit
+14743,NA_SE_EN_MGANON_SWORD,Ganon - Swings Sword
+14744,NA_SE_EN_GERUDOFT_ATTACK,Gerudo Fighter - Attacks Link
+14745,NA_SE_EN_GERUDOFT_DAMAGE,Gerudo Fighter - Hurt by Link
+14746,NA_SE_EN_GERUDOFT_DEAD,Gerudo Fighter - Final Hit
+14747,NA_SE_EN_MGANON_DAMAGE,Ganon - Hurt by Link
+14748,NA_SE_EN_ANUBIS_FIRE,Anubis - Breathes Fire
+14749,NA_SE_EN_ANUBIS_FIREBOMB,Anubis - Fire Attack Hits Surface
+14750,NA_SE_EN_MGANON_DEAD1,Ganon - Final Hit (Can Get Master Sword)
+14751,NA_SE_EN_ANUBIS_DEAD,Anubis - Final Hit
+14752,NA_SE_EN_MUSI_LAND,Insect - Fall on Ground
+14753,NA_SE_EN_MGANON_DEAD2,Ganon - Final Hit (Stabbed with Master Sword)
+14754,NA_SE_EN_EIER_ATTACK,Stinger (Water) - Attacks Link
+14755,NA_SE_EN_EIER_CRY,Stinger (Water) - Squeaks
+14756,NA_SE_EN_FREEZAD_BREATH,Freezard - Breathes Ice
+14757,NA_SE_EN_FREEZAD_DAMAGE,Freezard - Hurt by Link
+14758,NA_SE_EN_FREEZAD_DEAD,Freezard - Final Hit
+14759,NA_SE_EN_DEADHAND_LAUGH,Dead Hand - Laughs
+14760,NA_SE_EN_DEADHAND_HIDE,Dead Hand - Hides in Ground
+14761,NA_SE_EN_DEADHAND_DAMAGE,Dead Hand - Hurt by Link
+14762,NA_SE_EN_DEADHAND_HAND_DEAD,Dead Hand's Hand - Final Hit
+14763,NA_SE_EN_DEADHAND_DEAD,Dead Hand - Final Hit
+14764,NA_SE_EN_IRONNACK_BREAK_PILLAR2,Iron Knuckle - Breaks Pillar Stump
+14765,NA_SE_EN_IRONNACK_BREAK_PILLAR,Iron Knuckle - Breaks Pillar
+14766,NA_SE_EN_IRONNACK_HIT_GND,Iron Knuckle - Swings Axe into Ground
+14767,NA_SE_EN_MGANON_BREATH,Ganon - Temporarily Paralyzed
+14768,NA_SE_EN_TWINROBA_LAUGH,Twinrova - Koume Laughs
+14769,NA_SE_EN_TWINROBA_LAUGH2,Twinrova - Kotake Laughs
+14770,NA_SE_EN_DUMMY434,
+14771,NA_SE_EN_TWINROBA_SHOOT_VOICE,Twinrova - Yells when Casting Magic
+14772,NA_SE_EN_TWINROBA_SENSE,Twinrova - Sister Notices Halo
+14773,NA_SE_EN_TWINROBA_DIE,Twinrova - Final Cry
+14774,NA_SE_EN_DUMMY438,
+14775,NA_SE_EN_TWINROBA_YOUNG_DAMAGE2,Young Twinrova - Hurt by Link
+14776,NA_SE_EN_TWINROBA_YOUNG_SHOOTVC,Young Twinrova - Casting Magic
+14777,NA_SE_EN_TWINROBA_YOUNG_LAUGH,Young Twinrova - Laughs
+14778,NA_SE_EN_DUMMY442,
+14779,NA_SE_EN_TWINROBA_YOUNG_WINK,Young Twinrova - Winks at Link
+14780,NA_SE_EN_DUMMY444,
+14781,NA_SE_EN_DUMMY445,
+14782,NA_SE_EN_IRONNACK_DAMAGE,Iron Knuckle - Hurt by Link
+14783,NA_SE_EN_IRONNACK_DASH,Iron Knuckle - Dashes after Link
+14784,NA_SE_EN_IRONNACK_DEAD,Iron Knuckle - Final Hit
+14785,NA_SE_EN_IRONNACK_PULLOUT,Iron Knuckle - Pulls Axe out of Ground
+14786,NA_SE_EN_IRONNACK_WAKEUP,Iron Knuckle - Wakes Up
+14787,NA_SE_EN_DUMMY451,
+14788,NA_SE_EN_DUMMY452,
+14789,NA_SE_EN_DUMMY453,
+14790,NA_SE_EN_GERUDOFT_BREATH,Gerudo Fighter - Exhales
+14791,NA_SE_EN_GANON_LAUGH,Ganondorf - Laughs
+14792,NA_SE_EN_GANON_VOICE_DEMO,Ganondorf (Cutscene) - Whips Horse
+14793,NA_SE_EN_GANON_THROW,Ganondorf - Yells when Throwing Lightning Ball
+14794,NA_SE_EN_GANON_AT_RETURN,Ganondorf - Yells when Hitting Lightning Ball
+14795,NA_SE_EN_GANON_HIT_GND,Ganondorf - Yells when Hitting Ground
+14796,NA_SE_EN_GANON_DAMAGE1,Ganondorf - Yells when Hurt by Lightning Ball
+14797,NA_SE_EN_GANON_DAMAGE2,Ganondorf - Yells when Hurt by Light Arrow
+14798,NA_SE_EN_GANON_DOWN,Ganondorf - Gasping while on Knees
+14799,NA_SE_EN_GANON_RESTORE,Ganondorf - Yells when Back Up
+14800,NA_SE_EN_GANON_DEAD,Ganondorf - Final Hit
+14801,NA_SE_EN_GANON_BREATH,Ganondorf - Dying Gasps
+14802,NA_SE_EN_GANON_TOKETU,Ganondorf - Vomits Blood
+14803,NA_SE_EN_GANON_CASBREAK,Ganondorf - Yells when Destroying Tower
+14804,NA_SE_EN_GANON_BIGMASIC,Ganondorf - Yells when Throwing Big Lightning Attack
+14805,NA_SE_EN_GANON_DARKWAVE,Ganondorf - Yells when Using Dark Vortex
+14806,NA_SE_EN_FANTOM_ST_LAUGH,Phantom Ganon - Laughs
+14807,NA_SE_EN_MGANON_WALK,Ganon - Walking
+14808,NA_SE_EN_MGANON_STAND,Ganon - Stands after Getting Stabbed
+14809,NA_SE_EN_MGANON_UNARI,Ganon - Roars
+14810,NA_SE_EN_STALGOLD_ROLL,Gold Skulltula - Spinning Around
+14811,NA_SE_EN_KDOOR_WAVE,Killer Door - Waves Around
+14812,NA_SE_EN_KDOOR_HIT,Killer Door - Hits Link
+14813,NA_SE_EN_KDOOR_BREAK,Killer Door - Breaks Apart
+14814,NA_SE_EN_KDOOR_HIT_GND,Killer Door - Hits Ground
+14815,NA_SE_EN_MGANON_SWDIMP,Ganon - xxx
+14816,NA_SE_EN_STALTU_WAVE,Skulltula - Swings Side-to-Side
+14817,NA_SE_EN_STALTU_DOWN_SET,Skulltula - Creaks after Falling
+14818,NA_SE_EN_DUMMY482,
+14819,NA_SE_EN_GOMA_BJR_LAND,Gohma Larva (Boss) - Lands after Hurt by Link
+14820,NA_SE_EN_GOMA_BJR_LAND2,Gohma Larva (Boss) - Lands after Attack Hop
+14821,NA_SE_EN_GOMA_JR_LAND,Gohma Larva - Lands after Hurt by Link
+14822,NA_SE_EN_GOMA_JR_LAND2,Gohma Larva - Lands after Attack Hop
+14823,NA_SE_EN_TWINROBA_FIGHT,Twinrova - Sisters Bickering
+14824,NA_SE_EN_PO_BIG_CRY,Big Poe - Poe Soul Crying (Getting with Bottle)
+14825,NA_SE_EN_MUSI_SINK,Insect - Burrows in Bean Planting Spot
+14826,NA_SE_EN_STALGOLD_UP_CRY,Gold Skulltula - xxx
+14827,NA_SE_EN_GOLON_CRY,Goron - xxx
+14828,NA_SE_EN_MOFER_CORE_DAMAGE,Morpha - Nucleus Hurt by Link
+14829,NA_SE_EN_DAIOCTA_LAND_WATER,Big Octorok - Lands in Water
+14830,NA_SE_EN_RIVA_BIG_APPEAR,Big Leever - Appears
+14831,NA_SE_EN_MONBLIN_HAM_LAND,Club Moblin - Club Hits Ground
+14832,NA_SE_EN_MUSI_WALK,Insect - Walking
+14833,NA_SE_EN_MIMICK_BREATH,
+14834,NA_SE_EN_STALWALL_LAUGH,Skullwalltula - Makes Noise before Attacking
+14835,NA_SE_EN_TWINROBA_TRANSFORM2,Twinrova - xxx
+14836,NA_SE_EN_KAICHO_PIYORI,Guay - xxx
+14837,NA_SE_EN_DODO_K_WALK_APPEAR,King Dodongo - xxx
+14838,NA_SE_EN_DODO_K_STOP,King Dodongo - xxx
+14839,NA_SE_EN_TEKU_GND993,Tektite - xxx
+14840,NA_SE_EN_TEKU_JUMP993,Tektite - xxx
+14841,NA_SE_EN_MORIBLIN_DEMO,Moblin - xxx
+14842,NA_SE_EN_LEADED_WHITE,Redead - xxx
+14843,NA_SE_EN_RIVA_HIDE_NEW,Leever - xxx
+14844,NA_SE_EN_STALBABY_HIDE_NEW,Stalchild - xxx
+14845,NA_SE_EN_STAL_REBORN,
+14846,NA_SE_EN_DAIKU_FOOT,Carpenter - xxx
+14847,NA_SE_EN_STALKID_DAMAGE_NEW,Skullkid - xxx
+14848,NA_SE_EN_STALKID_DOWN_NEW,Skullkid - xxx
+14849,NA_SE_EN_BALINADE_ARM_LAND,Barinade - xxx
+14850,NA_SE_EN_BALINADE_ARM_DEAD,Barinade - xxx
+14851,NA_SE_EN_READED_WALK,Redead - xxx
+14852,NA_SE_EN_YOBI14,
+14853,NA_SE_EN_YOBI15,
+14854,NA_SE_EN_YOBI16,
+14855,NA_SE_EN_YOBI17,
+14856,NA_SE_EN_YOBI18,
+14857,NA_SE_EN_YOBI19,
+14858,NA_SE_EN_YOBI20,
+14859,NA_SE_EN_YOBI21,
+14860,NA_SE_EN_YOBI22,
+14861,NA_SE_EN_YOBI23,
+14862,NA_SE_EN_YOBI24,
+14863,NA_SE_EN_YOBI25,
+14864,NA_SE_EN_YOBI26,
+14865,NA_SE_EN_YOBI27,
+14866,NA_SE_EN_YOBI28,
+14867,NA_SE_EN_YOBI29,
+14868,NA_SE_EN_YOBI30,
+18432,NA_SE_SY_WIN_OPEN,Open Pause Window
+18433,NA_SE_SY_WIN_CLOSE,Close Pause Window
+18434,NA_SE_SY_CORRECT_CHIME,Player Accomplished Something
+18435,NA_SE_SY_GET_RUPY,Get Rupee
+18436,NA_SE_SY_MESSAGE_WOMAN,Countdown Timer - 10 Seconds Down
+18437,NA_SE_SY_MESSAGE_MAN,
+18438,NA_SE_SY_ERROR,Error
+18439,NA_SE_SY_TRE_BOX_APPEAR,Reveal Treasure Chest
+18440,NA_SE_SY_DECIDE,Select Pause Menu Option
+18441,NA_SE_SY_CURSOR,Move Pause Menu Cursor
+18442,NA_SE_SY_CANCEL,Cancel Pause Menu Selection
+18443,NA_SE_SY_HP_RECOVER,Get Recovery Heart
+18444,NA_SE_SY_ATTENTION_ON,Enter Z-Target Mode
+18445,NA_SE_SY_DUMMY_13,
+18446,NA_SE_SY_DUMMY_14,
+18447,NA_SE_SY_LOCK_OFF,Stop Z-Targeting Object
+18448,NA_SE_SY_LOCK_ON_HUMAN,Start Z-Targeting Object (Except Enemies)
+18449,NA_SE_SY_DUMMY_17,
+18450,NA_SE_SY_DUMMY_18,
+18451,NA_SE_SY_CAMERA_ZOOM_UP,Enter/Exit First-Person View
+18452,NA_SE_SY_CAMERA_ZOOM_DOWN,Show Map with L
+18453,NA_SE_SY_DUMMY_21,
+18454,NA_SE_SY_DUMMY_22,
+18455,NA_SE_SY_ATTENTION_ON_OLD,Z-Target Enemy (Early)
+18456,NA_SE_SY_MESSAGE_PASS,Advance Text Box
+18457,NA_SE_SY_WARNING_COUNT_N,Countdown Timer - Under 1 Minute (per 2 Seconds)
+18458,NA_SE_SY_WARNING_COUNT_E,Countdown Timer - Under 10 Seconds (per Second)
+18459,NA_SE_SY_HITPOINT_ALARM,Low Health Beep
+18460,NA_SE_SY_DUMMY_28,
+18461,NA_SE_SY_DEMO_CUT,
+18462,NA_SE_SY_NAVY_CALL,Navi Button (Early)
+18463,NA_SE_SY_GAUGE_UP,Magic Meter Refills
+18464,NA_SE_SY_DUMMY_32,
+18465,NA_SE_SY_DUMMY_33,
+18466,NA_SE_SY_DUMMY_34,
+18467,NA_SE_SY_PIECE_OF_HEART,Press Start on Title Screen
+18468,NA_SE_SY_GET_ITEM,Get Small Item
+18469,NA_SE_SY_WIN_SCROLL_LEFT,Scroll Pause Menu Left
+18470,NA_SE_SY_WIN_SCROLL_RIGHT,Scroll Pause Menu Right
+18471,NA_SE_SY_OCARINA_ERROR,Make a Mistake Playing the Ocarina
+18472,NA_SE_SY_CAMERA_ZOOM_UP_2,Sound Effect - Enter First-Person View (Alternate)
+18473,NA_SE_SY_CAMERA_ZOOM_DOWN_2,Sound Effect - Exit First-Person View (Alternate)
+18474,NA_SE_SY_GLASSMODE_ON,Activate Lens of Truth
+18475,NA_SE_SY_GLASSMODE_OFF,Deactivate Lens of Truth
+18476,NA_SE_SY_FOUND,Gerudo Guard Blows Whistle
+18477,NA_SE_SY_HIT_SOUND,
+18478,NA_SE_SY_MESSAGE_END,Last Text Window
+18479,NA_SE_SY_RUPY_COUNT,Rupee Counter Increases
+18480,NA_SE_SY_LOCK_ON,Z-Target Enemy
+18481,NA_SE_SY_GET_BOXITEM,Sound Effect - Get Small Item From Chest
+18482,NA_SE_SY_WHITE_OUT_L,
+18483,NA_SE_SY_WHITE_OUT_S,Short Fade to White
+18484,NA_SE_SY_WHITE_OUT_T,Sage Appears (Opening Sacred Realm)
+18485,NA_SE_SY_START_SHOT,Shotgun Fires to Start Race
+18486,NA_SE_SY_METRONOME,Skullkids' Tambourine Metronome (First Skull Kid Done)
+18487,NA_SE_SY_ATTENTION_URGENCY,Threat Detected when Z-Targeting
+18488,NA_SE_SY_METRONOME_LV,Skullkids' Drum Metronome (Playing Tune)
+18489,NA_SE_SY_FSEL_CURSOR,File Select - Move File Select Cursor
+18490,NA_SE_SY_FSEL_DECIDE_S,File Select - Type Character in Name Entry
+18491,NA_SE_SY_FSEL_DECIDE_L,File Select - Select Option
+18492,NA_SE_SY_FSEL_CLOSE,File Select - Exit Option
+18493,NA_SE_SY_FSEL_ERROR,File Select - Error
+18494,NA_SE_SY_SET_FIRE_ARROW,Fire Magic Set to Bow
+18495,NA_SE_SY_SET_ICE_ARROW,Ice Magic Set to Bow
+18496,NA_SE_SY_SET_LIGHT_ARROW,Light Magic Set to Bow
+18497,NA_SE_SY_SYNTH_MAGIC_ARROW,Magic Bow Set to C
+18498,NA_SE_SY_METRONOME_2,Skullkids' Tambourine Metronome (Second Skull Kid Done)
+18499,NA_SE_SY_KINSTA_MARK_APPEAR,Gold Skulltula Token Appears
+18500,NA_SE_SY_FIVE_COUNT_LUPY,Sound Effect - Get Silver Rupee
+18501,NA_SE_SY_CARROT_RECOVER,Carrot Replenished
+18502,NA_SE_EV_FAIVE_LUPY_COUNT,
+18503,NA_SE_SY_DUMMY_71,
+18504,NA_SE_SY_KANADE_ISHI,
+18505,NA_SE_SY_NA_HELLO_2,
+18506,NA_SE_SY_MAGIC_SOUL_NORMAL,
+18507,NA_SE_SY_MAGIC_SOUL_FLASH,
+18508,NA_SE_SY_CANCEL_CHALLENGE,
+18509,NA_SE_SY_DECIDE_CHALLENGE,
+18510,NA_SE_SY_YOBI05,
+18511,NA_SE_SY_YOBI06,
+18512,NA_SE_SY_YOBI07,
+18513,NA_SE_SY_YOBI08,
+18514,NA_SE_SY_YOBI09,
+18515,NA_SE_SY_YOBI10,
+18516,NA_SE_SY_YOBI11,
+18517,NA_SE_SY_YOBI12,
+18518,NA_SE_SY_YOBI13,
+18519,NA_SE_SY_YOBI14,
+18520,NA_SE_SY_YOBI15,
+18521,NA_SE_SY_YOBI16,
+18522,NA_SE_SY_YOBI17,
+22528,NA_SE_OC_OCARINA,Harp or Ocarina Note
+22529,NA_SE_OC_ABYSS,Fall into Abyss
+22530,NA_SE_OC_DOOR_OPEN,Open Door
+22531,NA_SE_OC_SECRET_WARP_IN,Exit Lost Woods/Goron City Shortcut
+22532,NA_SE_OC_SECRET_WARP_OUT,Enter Lost Woods/Goron City Shortcut
+22533,NA_SE_OC_SECRET_HOLE_OUT,Exiting Grotto
+22534,NA_SE_OC_REVENGE,Respawn after Falling into Abyss
+22535,NA_SE_OC_HINT_MOVIE,
+22536,NA_SE_OC_HINT_MOVIE2_WHITE,
+22537,NA_SE_OC_HINT_MOVIE_ZOOMIN,
+22538,NA_SE_OC_HIBIKI_ISHI,
+26624,NA_SE_VO_LI_SWORD_N,Adult Link - Attack Yell
+26625,NA_SE_VO_LI_SWORD_L,Adult Link - Long Attack Yell
+26626,NA_SE_VO_LI_LASH,Adult Link - Whips Epona
+26627,NA_SE_VO_LI_HANG,Adult Link - Grabs onto Ledge
+26628,NA_SE_VO_LI_CLIMB_END,Adult Link - Climbs up from Ledge
+26629,NA_SE_VO_LI_DAMAGE_S,Adult Link - Hurt by Enemy
+26630,NA_SE_VO_LI_FREEZE,Adult Link - Frozen in Ice
+26631,NA_SE_VO_LI_FALL_S,Adult Link - Short Fall
+26632,NA_SE_VO_LI_FALL_L,Adult Link - Long Fall
+26633,NA_SE_VO_LI_BREATH_REST,Adult Link - Breathing when Low on Health
+26634,NA_SE_VO_LI_BREATH_DRINK,Adult Link - Breath after Drinking
+26635,NA_SE_VO_LI_DOWN,Adult Link - Dying Gasps
+26636,NA_SE_VO_LI_TAKEN_AWAY,Adult Link - Taken by Wallmaster
+26637,NA_SE_VO_LI_HELD,Adult Link - Held by Hand
+26638,NA_SE_VO_LI_SNEEZE,Adult Link - Sneezes in Cold Places
+26639,NA_SE_VO_LI_SWEAT,Adult Link - Sweats in Hot Places
+26640,NA_SE_VO_LI_DRINK,Adult Link - Drinks from Bottle
+26641,NA_SE_VO_LI_RELAX,Adult Link - Stretching and Yawning
+26642,NA_SE_VO_LI_SWORD_PUTAWAY,Adult Link - xxx
+26643,NA_SE_VO_LI_GROAN,Adult Link - xxx
+26644,NA_SE_VO_LI_AUTO_JUMP,Adult Link - Automatic Jump
+26645,NA_SE_VO_LI_MAGIC_NALE,Adult Link - Casting Nayru's Love
+26646,NA_SE_VO_LI_SURPRISE,Adult Link - Shocked Gasp
+26647,NA_SE_VO_LI_MAGIC_FROL,Adult Link - Casting Farore's Wind
+26648,NA_SE_VO_LI_PUSH,Adult Link - Pushes Block
+26649,NA_SE_VO_LI_HOOKSHOT_HANG,Adult Link - xxx
+26650,NA_SE_VO_LI_LAND_DAMAGE_S,Adult Link - Cringing from Fall Damage
+26651,NA_SE_VO_LI_NULL_0x1b,Adult Link - xxx
+26652,NA_SE_VO_LI_MAGIC_ATTACK,Adult Link - Casting Din's Fire
+26653,NA_SE_VO_BL_DOWN,Adult Link - xxx
+26654,NA_SE_VO_LI_DEMO_DAMAGE,Adult Link - xxx
+26655,NA_SE_VO_LI_ELECTRIC_SHOCK_LV,Adult Link - xxx
+26656,NA_SE_VO_LI_SWORD_N_KID,Child Link - Attack Yell
+26657,NA_SE_VO_LI_ROLLING_CUT_KID,Child Link - Long Attack Yell
+26658,NA_SE_VO_LI_LASH_KID,Child Link - xxx
+26659,NA_SE_VO_LI_HANG_KID,Child Link - Grabs onto Ledge
+26660,NA_SE_VO_LI_CLIMB_END_KID,Child Link - Climbs up from Ledge
+26661,NA_SE_VO_LI_DAMAGE_S_KID,Child Link - Hurt by Enemy
+26662,NA_SE_VO_LI_FREEZE_KID,Child Link - Frozen in Ice
+26663,NA_SE_VO_LI_FALL_S_KID,Child Link - Short Fall
+26664,NA_SE_VO_LI_FALL_L_KID,Child Link - Long Fall
+26665,NA_SE_VO_LI_BREATH_REST_KID,Child Link - Breathing when Low on Health
+26666,NA_SE_VO_LI_BREATH_DRINK_KID,Child Link - Breath after Drinking
+26667,NA_SE_VO_LI_DOWN_KID,Child Link - Dying Gasps
+26668,NA_SE_VO_LI_TAKEN_AWAY_KID,Child Link - Taken by Wallmaster
+26669,NA_SE_VO_LI_HELD_KID,Child Link - Grabbed by Hand
+26670,NA_SE_VO_LI_SNEEZE_KID,Child Link - Sneezes in Cold Places
+26671,NA_SE_VO_LI_SWEAT_KID,Child Link - Sweats in Hot Places
+26672,NA_SE_VO_LI_DRINK_KID,Child Link - Drinks from Bottle
+26673,NA_SE_VO_LI_RELAX_KID,Child Link - Stretching and Yawning
+26674,NA_SE_VO_LI_SWORD_PUTAWAY_KID,Child Link - xxx
+26675,NA_SE_VO_LI_GROAN_KID,Child Link - xxx
+26676,NA_SE_VO_LI_AUTO_JUMP_KID,Child Link - Automatic Jump
+26677,NA_SE_VO_LI_MAGIC_NALE_KID,Child Link - Casting Nayru's Love
+26678,NA_SE_VO_LI_SURPRISE_KID,Child Link - Surprised Gasp
+26679,NA_SE_VO_LI_MAGIC_FROL_KID,Child Link - Casting Farore's Wind
+26680,NA_SE_VO_LI_PUSH_KID,Child Link - Pushes Block
+26681,NA_SE_VO_LI_HOOKSHOT_HANG_KID,Child Link - xxx
+26682,NA_SE_VO_LI_LAND_DAMAGE_S_KID,Child Link - Cringing from Fall Damage
+26683,NA_SE_VO_LI_NULL_0x1b_KID,Child Link - xxx
+26684,NA_SE_VO_LI_MAGIC_ATTACK_KID,Child Link - Casting Din's Fire
+26685,NA_SE_VO_BL_DOWN_KID,Child Link - xxx
+26686,NA_SE_VO_LI_DEMO_DAMAGE_KID,Child Link - xxx
+26687,NA_SE_VO_LI_ELECTRIC_SHOCK_LV_KID,Child Link - xxx
+26688,NA_SE_VO_NAVY_ENEMY,Navi - Z-Targeting Enemy
+26689,NA_SE_VO_NAVY_HELLO,Navi - Z-Targeting Friendly NPC
+26690,NA_SE_VO_NAVY_HEAR,Navi - Z-Targeting Sign
+26691,NA_SE_VO_NAVY_CALL,Navi - Z-Targeting Enemy
+26692,NA_SE_VO_NA_HELLO_3,"Navi - Says ""H'lo!"""
+26693,NA_SE_VO_DUMMY_0x45,
+26694,NA_SE_VO_DUMMY_0x46,
+26695,NA_SE_VO_DUMMY_0x47,
+26696,NA_SE_VO_DUMMY_0x48,
+26697,NA_SE_VO_DUMMY_0x49,
+26698,NA_SE_VO_DUMMY_0x4a,
+26699,NA_SE_VO_DUMMY_0x4b,
+26700,NA_SE_VO_DUMMY_0x4c,
+26701,NA_SE_VO_DUMMY_0x4d,
+26702,NA_SE_VO_DUMMY_0x4e,
+26703,NA_SE_VO_DUMMY_0x4f,
+26704,NA_SE_VO_TA_SLEEP,Talon - Snoring
+26705,NA_SE_VO_TA_SURPRISE,Talon - Surprised at Being Woken
+26706,NA_SE_VO_TA_CRY_0,"Talon - Says ""Huh?"""
+26707,NA_SE_VO_TA_CRY_1,Talon - Screaming while Running Away
+26708,NA_SE_VO_IN_CRY_0,Ingo - Yells when Starting Race
+26709,NA_SE_VO_IN_LOST,Ingo - Frustrated at Losing Race
+26710,NA_SE_VO_IN_LASH_0,Ingo - Whips Horse
+26711,NA_SE_VO_IN_LASH_1,Ingo - Whips Horse
+26712,NA_SE_VO_FR_LAUGH_0,Great Fairy - Laughs on Appearance
+26713,NA_SE_VO_FR_SMILE_0,Great Fairy - Gentle Laugh
+26714,NA_SE_VO_NB_AGONY,Nabooru - In Agony
+26715,NA_SE_VO_NB_CRY_0,Nabooru - Cries
+26716,NA_SE_VO_NB_NOTICE,Nabooru - Notices Link
+26717,NA_SE_VO_NA_HELLO_0,Navi - xxx
+26718,NA_SE_VO_NA_HELLO_1,Navi - xxx
+26719,NA_SE_VO_NA_HELLO_2,Navi - Has Something to Tell Link
+26720,NA_SE_VO_RT_CRASH,Ruto - Crashes into Wall
+26721,NA_SE_VO_RT_DISCOVER,Ruto - Sees Zora's Sapphire
+26722,NA_SE_VO_RT_FALL,Ruto - Falls down Hole
+26723,NA_SE_VO_RT_LAUGH_0,Ruto - Laughs
+26724,NA_SE_VO_RT_LIFT,Ruto - Picked up by Link
+26725,NA_SE_VO_RT_THROW,Ruto - Thrown by Link
+26726,NA_SE_VO_RT_UNBALLANCE,Ruto - xxx
+26727,NA_SE_VO_ST_DAMAGE,
+26728,NA_SE_VO_ST_ATTACK,
+26729,NA_SE_VO_Z0_HURRY,Child Zelda - Gaps before Retelling Legend
+26730,NA_SE_VO_Z0_MEET,Child Zelda - Gasp when Meeting Link
+26731,NA_SE_VO_Z0_QUESTION,Child Zelda - Questions Link's Response
+26732,NA_SE_VO_Z0_SIGH_0,Child Zelda - Sighs
+26733,NA_SE_VO_Z0_SMILE_0,Child Zelda - Gentle Laugh
+26734,NA_SE_VO_Z0_SURPRISE,Child Zelda - Cries while Riding Away
+26735,NA_SE_VO_Z0_THROW,Child Zelda - Throws Ocarina of Time
+26736,NA_SE_VO_SK_CRY_0,Sheik - xxx
+26737,NA_SE_VO_SK_CRY_1,Sheik - Thrown by Shadow Spirit
+26738,NA_SE_VO_SK_CRASH,Sheik - Falls after Being Thrown
+26739,NA_SE_VO_SK_LAUGH,Navi - Starts Telling Link Something
+26740,NA_SE_VO_SK_SHOUT,Sheik - Throws Deku Nut
+26741,NA_SE_VO_Z1_CRY_0,Adult Zelda - Cries when Imprisoned in Crystal
+26742,NA_SE_VO_Z1_CRY_1,Adult Zelda - Screams when Link is Hurt (Boss Battle)
+26743,NA_SE_VO_Z1_OPENDOOR,Adult Zelda - Opening Barred Door
+26744,NA_SE_VO_Z1_SURPRISE,Adult Zelda - Gasp when Temple of Time Shaking
+26745,NA_SE_VO_Z1_PAIN,Adult Zelda - Gasps when Link is Hurt (Escaping the Tower)
+26746,NA_SE_VO_KZ_MOVE,King Zora - Scooting Aside
+26747,NA_SE_VO_NB_LAUGH,Nabooru - xxx
+26748,NA_SE_VO_IN_LAUGH,Ingo - xxx
+26749,NA_SE_VO_DUMMY_0x7d,
+26750,NA_SE_VO_DUMMY_0x7e,
+26751,NA_SE_VO_DUMMY_0x7f,
+26752,NA_SE_VO_DUMMY_0x80,
+26753,NA_SE_VO_LI_AUTO_JUMP_DARKLINK,
+26754,NA_SE_VO_DUMMY_0x82_YOBI,
+26755,NA_SE_VO_DUMMY_0x83_YOBI,
+26756,NA_SE_VO_DUMMY_0x84_YOBI,
+26757,NA_SE_VO_DUMMY_0x85_YOBI,
+26758,NA_SE_VO_DUMMY_0x86_YOBI,
+26759,NA_SE_VO_DUMMY_0x87_YOBI,
+26760,NA_SE_VO_DUMMY_0x88_YOBI,
+26761,NA_SE_VO_DUMMY_0x89_YOBI,
