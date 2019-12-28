@@ -31,12 +31,16 @@ namespace NPC_Maker
             foreach (string Item in Enum.GetNames(typeof(Enums.InstructionIDs)))
             {
                 ToolStripMenuItem Tsmi = new ToolStripMenuItem();
-                Tsmi.DoubleClickEnabled = true;
-                Tsmi.DoubleClick += Tsmi_DoubleClick;
                 Tsmi.Text = Item;
 
                 if (FCTB.FunctionSubtypes.ContainsKey(Item))
+                {
+                    Tsmi.DoubleClickEnabled = true;
+                    Tsmi.DoubleClick += Tsmi_DoubleClick;
                     AddItemCollectionToToolStripMenuItem(FCTB.FunctionSubtypes[Item], Tsmi);
+                }
+                else
+                    Tsmi.Click += Tsmi_Click;
 
                 functionsToolStripMenuItem.DropDownItems.Add(Tsmi);
             }
@@ -46,46 +50,6 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(FCTB.KeyValues.ToArray(), keyValuesToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Enums.GiveItems)), itemsgiveToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Enums.TradeItems)), itemstradeToolStripMenuItem);
-        }
-
-        private void Tsmi_DoubleClick(object sender, EventArgs e)
-        {
-            InsertTxtToScript((sender as ToolStripItem).Text + " ");
-        }
-
-        private void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
-        {
-            MenuItem.DropDown.MaximumSize = new Size(300, 700);
-            MenuItem.DropDown.MouseWheel += DropDown_MouseWheel;
-
-            foreach (string Item in Collection)
-            {
-                ToolStripItem SubItem = MenuItem.DropDownItems.Add(Item);
-                SubItem.Click += SubItem_Click;
-            }
-        }
-
-        private void DropDown_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (e.Delta > 0) 
-                System.Windows.Forms.SendKeys.Send("{UP}");
-            else 
-                System.Windows.Forms.SendKeys.Send("{DOWN}");
-        }
-
-        private void InsertTxtToScript(string Text)
-        {
-            int start = Textbox_Script.SelectionStart;
-            string newTxt = Textbox_Script.Text;
-            newTxt = newTxt.Remove(Textbox_Script.SelectionStart, Textbox_Script.SelectionLength);
-            newTxt = newTxt.Insert(Textbox_Script.SelectionStart, Text);
-            Textbox_Script.Text = newTxt;
-            Textbox_Script.SelectionStart = start + Text.Length;
-        }
-
-        private void SubItem_Click(object sender, EventArgs e)
-        {
-            InsertTxtToScript((sender as ToolStripItem).Text);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -107,6 +71,28 @@ namespace NPC_Maker
                         e.Cancel = true;
                     }
                 }
+            }
+        }
+
+        private void InsertTxtToScript(string Text)
+        {
+            int start = Textbox_Script.SelectionStart;
+            string newTxt = Textbox_Script.Text;
+            newTxt = newTxt.Remove(Textbox_Script.SelectionStart, Textbox_Script.SelectionLength);
+            newTxt = newTxt.Insert(Textbox_Script.SelectionStart, Text);
+            Textbox_Script.Text = newTxt;
+            Textbox_Script.SelectionStart = start + Text.Length;
+        }
+
+        private void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
+        {
+            MenuItem.DropDown.MaximumSize = new Size(300, 700);
+            MenuItem.DropDown.MouseWheel += DropDown_MouseWheel;
+
+            foreach (string Item in Collection)
+            {
+                ToolStripItem SubItem = MenuItem.DropDownItems.Add(Item);
+                SubItem.Click += SubItem_Click;
             }
         }
 
@@ -1034,6 +1020,29 @@ namespace NPC_Maker
             {
                 ContextMenuStrip.Show(Textbox_Script, e.Location);
             }
+        }
+
+        private void Tsmi_DoubleClick(object sender, EventArgs e)
+        {
+            InsertTxtToScript((sender as ToolStripItem).Text + " ");
+        }
+
+        private void Tsmi_Click(object sender, EventArgs e)
+        {
+            InsertTxtToScript((sender as ToolStripItem).Text + " ");
+        }
+
+        private void DropDown_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+                System.Windows.Forms.SendKeys.Send("{UP}");
+            else
+                System.Windows.Forms.SendKeys.Send("{DOWN}");
+        }
+
+        private void SubItem_Click(object sender, EventArgs e)
+        {
+            InsertTxtToScript((sender as ToolStripItem).Text);
         }
 
         private void soundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
