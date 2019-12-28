@@ -20,33 +20,17 @@ namespace NPC_Maker
         public static Style DarkGrayStyle = new TextStyle(Brushes.DarkGray, null, FontStyle.Regular);
         public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Regular);
 
-        public static List<string> Functions = new List<string>()
-        {
-            "if",
-            "set",
-            "waitfor",
-            "enable_textbox",
-            "show_textbox",
-            "give_item",
-            "goto",
-            "turn_towards_player",
-            "play",
-            "kill",
-            "enable_trade",
-        };
-
         public static Dictionary<string, string[]> FunctionSubtypes = new Dictionary<string, string[]>()
         {
-            {"if", Enum.GetNames(typeof(Enums.IfSubTypes)) },
-            {"set", Enum.GetNames(typeof(Enums.SetSubTypes)) },
-            {"waitfor", Enum.GetNames(typeof(Enums.WaitForSubTypes)) },
-            {"play", Enum.GetNames(typeof(Enums.PlaySubtypes)) },
-            {"kill", Enum.GetNames(typeof(Enums.KillSubtypes)) },
+            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.IF), Enum.GetNames(typeof(Enums.IfSubTypes)) },
+            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.SET), Enum.GetNames(typeof(Enums.SetSubTypes)) },
+            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.WAITFOR), Enum.GetNames(typeof(Enums.WaitForSubTypes)) },
+            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.PLAY), Enum.GetNames(typeof(Enums.PlaySubtypes)) },
+            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.KILL), Enum.GetNames(typeof(Enums.KillSubtypes)) },
         };
 
         public static List<string> Keywords = new List<string>()
         {
-            "if",
             "true",
             "false",
             "return",
@@ -59,21 +43,19 @@ namespace NPC_Maker
             "else"
         };
 
-        public static List<string> KeyValues = new List<string>()
+        public static List<string> KeyValues = GetKeyValues();
+
+        public static List<string> GetKeyValues()
         {
-            "none",
-            "roam",
-            "follow",
-            "path_follow",
-            "body",
-            "head",
-            "random",
-            "path_collisionwise",
-            "path_direct",
-            "invisible",
-            "at_limb",
-            "instead_of_limb"
-        };
+            List<string> Values = new List<string>();
+
+            Values.AddRange(Enum.GetNames(typeof(Enums.MovementStyles)));
+            Values.AddRange(Enum.GetNames(typeof(Enums.DListVisibilityTypes)));
+            Values.AddRange(Enum.GetNames(typeof(Enums.LookTypes)));
+            Values.AddRange(Enum.GetNames(typeof(Enums.Segments)));
+
+            return Values;
+        }
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e)
         {
@@ -89,7 +71,7 @@ namespace NPC_Maker
             e.ChangedRange.SetStyle(FCTB.GreenStyle, @"/\*(.|[\r\n])*?\*/", RegexOptions.Multiline);
             e.ChangedRange.SetStyle(FCTB.GreenStyle, @"//.+", RegexOptions.Multiline);
 
-            foreach (string Item in FCTB.Functions.ToArray())
+            foreach (string Item in Enum.GetNames(typeof(Enums.InstructionIDs)))
             {
                 if (FCTB.FunctionSubtypes.ContainsKey(Item))
                 {
@@ -102,14 +84,13 @@ namespace NPC_Maker
                 e.ChangedRange.SetStyle(FCTB.BlueStyle, KWord, RegexOptions.Multiline);
 
             foreach (string KWord in KeyValues)
-                e.ChangedRange.SetStyle(FCTB.GrayStyle, KWord, RegexOptions.Multiline);
+                e.ChangedRange.SetStyle(FCTB.GrayStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             foreach (string KWord in KeywordsDarkGray)
                 e.ChangedRange.SetStyle(FCTB.DarkGrayStyle, KWord, RegexOptions.Multiline);
 
-            foreach (string Func in Functions)
-                e.ChangedRange.SetStyle(FCTB.PurpleStyle, Func, RegexOptions.Multiline);
-
+            foreach (string Func in Enum.GetNames(typeof(Enums.InstructionIDs)))
+                e.ChangedRange.SetStyle(FCTB.PurpleStyle, Func, RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             foreach (string KWord in Enum.GetNames(typeof(Enums.TradeItems)))
                 e.ChangedRange.SetStyle(FCTB.CyanStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);

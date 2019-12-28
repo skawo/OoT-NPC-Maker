@@ -28,7 +28,7 @@ namespace NPC_Maker
             InitializeComponent();
             this.DoubleBuffered = true;
 
-            foreach (string Item in FCTB.Functions.ToArray())
+            foreach (string Item in Enum.GetNames(typeof(Enums.InstructionIDs)))
             {
                 ToolStripMenuItem Tsmi = new ToolStripMenuItem();
                 Tsmi.DoubleClickEnabled = true;

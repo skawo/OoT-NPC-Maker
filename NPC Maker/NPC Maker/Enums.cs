@@ -20,20 +20,50 @@ namespace NPC_Maker
             SEGMENT_F = 7
         }
 
+        public enum MovementStyles
+        {
+            none = 0,
+            random = 1,
+            follow = 2,
+            path_collisionwise = 3,
+            path_direct = 4
+        }
+
+        public enum DListVisibilityTypes
+        {
+            invisible = 0,
+            at_limb = 1,
+            instead_of_limb = 2,
+        }
+
+        public enum LookTypes
+        {
+            none = 0,
+            body = 1,
+            head = 2,
+        }
+
+
+
+
+
+
+
+
         public enum InstructionIDs
         {
             NOP = 0,
             IF = 1,
             SET = 2,
             WAITFOR = 3,
-            ENABLETEXTBOX = 4,
-            SHOWTEXTBOX = 5,
-            GIVEITEM = 6,
+            ENABLE_TEXTBOX = 4,
+            SHOW_TEXTBOX = 5,
+            GIVE_ITEM = 6,
             GOTO = 7,
-            TURNTOPLAYER = 8,
+            TURN_TOWARDS_PLAYER = 8,
             PLAY = 9,
             KILL = 10,
-            ENABLETRADE = 11,
+            ENABLE_TRADE = 11,
             RETURN = 255,
         }
 
@@ -293,22 +323,6 @@ namespace NPC_Maker
             path_node = 35,
             frames = 36,
             animation_frame = 37,
-        }
-
-        public enum MovementStyles
-        {
-            none = 0,
-            random = 1,
-            follow = 2,
-            path_collisionwise = 3,
-            path_direct = 4
-        }
-
-        public enum DListVisibilityTypes
-        {
-            none = 0,
-            atlimb = 1,
-            insteadlimb = 2,
         }
 
         public enum PlaySubtypes

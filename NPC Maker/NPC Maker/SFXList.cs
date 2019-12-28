@@ -8,60 +8,98 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.IO;
+
 namespace NPC_Maker
 {
     public partial class SFXList : Form
     {
-        string[] Data = Enum.GetNames(typeof(OotSFX.SFXes));
+        List<string[]> Data = new List<string[]>();
         public string ChosenSFX;
 
         public SFXList()
         {
             InitializeComponent();
-            listBox1.Items.AddRange(Data);
+
+            try
+            {
+                string[] RawData = File.ReadAllLines("SFX.csv");
+
+                foreach (string Row in RawData)
+                {
+                    string[] NameAndDesc = Row.Split(',');
+
+                    if (NameAndDesc.Length == 1)
+                        Data.Add(new string[] { NameAndDesc[0], "" });
+                    else
+                        Data.Add(NameAndDesc);
+                }
+            }
+            catch (Exception)
+            {
+                string[] DataWoDescriptions = Enum.GetNames(typeof(OotSFX.SFXes));
+
+                foreach (string Row in DataWoDescriptions)
+                    Data.Add(new string[] { Row, "" });
+            }
+
+            foreach (string[] Row in Data)
+                listView1.Items.Add(new ListViewItem(new string[] { Row[0], Row[1] }));
+
             this.ActiveControl = textBox1;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            listBox1.BeginUpdate();
-            listBox1.Items.Clear();
+            listView1.BeginUpdate();
+            listView1.Items.Clear();
 
             if (!string.IsNullOrEmpty(textBox1.Text))
             {
-                foreach (string String in Data)
+                foreach (string[] s in Data)
                 {
-                    if (String.ToUpper().Contains(textBox1.Text.ToUpper()))
+                    if (s[0].ToUpper().Contains(textBox1.Text.ToUpper()) 
+                        || s[1].ToUpper().Contains(textBox1.Text.ToUpper()))
                     {
-                        listBox1.Items.Add(String);
+                        listView1.Items.Add(new ListViewItem(new string[] { s[0], s[1] }));
                     }
                 }
             }
             else
-                listBox1.Items.AddRange(Data);
+                foreach (string[] Row in Data)
+                    listView1.Items.Add(new ListViewItem(new string[] { Row[0], Row[1] }));
 
-            listBox1.EndUpdate();
+            listView1.EndUpdate();
         }
 
-        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ListDoubleClick(object sender, MouseEventArgs e)
         {
-            ChosenSFX = (string)listBox1.SelectedItem;
+            if (listView1.SelectedItems.Count == 0)
+                return;
+
+            ChosenSFX = (string)listView1.SelectedItems[0].Text;
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void OKClick(object sender, EventArgs e)
         {
-            ChosenSFX = (string)listBox1.SelectedItem;
+            if (listView1.SelectedItems.Count == 0)
+                return;
+
+            ChosenSFX = (string)listView1.SelectedItems[0].Text;
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
-        private void listBox1_KeyDown(object sender, KeyEventArgs e)
+        private void EnterPress(object sender, KeyEventArgs e)
         {
+            if (listView1.SelectedItems.Count == 0)
+                return;
+
             if (e.KeyCode == Keys.Enter)
             {
-                ChosenSFX = (string)listBox1.SelectedItem;
+                ChosenSFX = (string)listView1.SelectedItems[0].Text;
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }

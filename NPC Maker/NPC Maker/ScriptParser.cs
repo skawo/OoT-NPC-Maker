@@ -183,9 +183,11 @@ namespace NPC_Maker
 
             try
             {
-                switch (Instr[0].ToLower())
+                int FunctionType = (int)System.Enum.Parse(typeof(Enums.InstructionIDs), Instr[0].ToUpper());
+
+                switch (FunctionType)
                 {
-                    case "if":
+                    case (int)Enums.InstructionIDs.IF:
                         {
                             if (Instr.Length < 2)
                                 throw new WrongParamCountException(Line);
@@ -349,7 +351,7 @@ namespace NPC_Maker
                                 throw new Exception();
                             }
                         }
-                    case "set":
+                    case (int)Enums.InstructionIDs.SET:
                         {
                             if (Instr.Length < 2)
                                 throw new WrongParamCountException(Line);
@@ -487,17 +489,7 @@ namespace NPC_Maker
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
 
-                                Int32 Data = 0;
-
-                                switch (Instr[2].ToLower())
-                                {
-                                    case "none": Data = 0; break;
-                                    case "random": Data = 1; break;
-                                    case "follow": Data = 2; break;
-                                    case "path_collisionwise": Data = 3; break;
-                                    case "path_direct": Data = 4; break;
-                                    default: Data = Helper_ConvertToInt32(Instr[2]); break;
-                                }
+                                int Data = (int)System.Enum.Parse(typeof(Enums.MovementStyles), Instr[2].ToLower());
 
                                 if (Data > 4 || Data < 0)
                                     throw new ParamOutOfRangeException(Line);
@@ -510,15 +502,7 @@ namespace NPC_Maker
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
 
-                                Int32 Data = 0;
-
-                                switch (Instr[2].ToLower())
-                                {
-                                    case "none": Data = 0; break;
-                                    case "body": Data = 1; break;
-                                    case "head": Data = 2; break;
-                                    default: Data = Helper_ConvertToInt32(Instr[2]); break;
-                                }
+                                int Data = (int)System.Enum.Parse(typeof(Enums.LookTypes), Instr[2].ToLower());
 
                                 if (Data > 2 || Data < 0)
                                     throw new ParamOutOfRangeException(Line);
@@ -719,15 +703,7 @@ namespace NPC_Maker
                                 if (DListID > (Entry.DLists.Count() - 1) || DListID < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                int VisibleType = 0;
-
-                                switch (Instr[3].ToLower())
-                                {
-                                    case "invisible": VisibleType = 0; break;
-                                    case "at_limb": VisibleType = 1; break;
-                                    case "instead_of_limb": VisibleType = 2; break;
-                                    default: throw new Exception();
-                                }
+                                int VisibleType = (int)Enum.Parse(typeof(Enums.DListVisibilityTypes), Instr[3].ToLower());
 
                                 SetDListVisibilityInstruction SetDListV = new SetDListVisibilityInstruction(Convert.ToByte(VisibleType), Convert.ToUInt16(DListID));
                                 return SetDListV.GetByteData();
@@ -737,7 +713,7 @@ namespace NPC_Maker
                                 throw new Exception();
                             }
                         }
-                    case "waitfor":
+                    case (int)Enums.InstructionIDs.WAITFOR:
                         {
                             if (Instr.Length < 2)
                                 throw new WrongParamCountException(Line);
@@ -770,7 +746,7 @@ namespace NPC_Maker
                                 throw new Exception();
                             }
                         }
-                    case "enable_textbox":
+                    case (int)Enums.InstructionIDs.ENABLE_TEXTBOX:
                         {
                             if (Instr.Length != 3)
                                 throw new WrongParamCountException(Line);
@@ -784,10 +760,10 @@ namespace NPC_Maker
                             if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericTripleU16Instruction EnableTextbox = new GenericTripleU16Instruction((byte)Enums.InstructionIDs.ENABLETEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
+                            GenericTripleU16Instruction EnableTextbox = new GenericTripleU16Instruction((byte)Enums.InstructionIDs.ENABLE_TEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
                             return EnableTextbox.GetByteData();
                         }
-                    case "enable_trade":
+                    case (int)Enums.InstructionIDs.ENABLE_TRADE:
                         {
                             if (Instr.Length != 5)
                                 throw new WrongParamCountException(Line);
@@ -813,10 +789,10 @@ namespace NPC_Maker
                             if (Item > byte.MaxValue || Item < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            EnableTradeInstruction EnableTrade = new EnableTradeInstruction((byte)Enums.InstructionIDs.ENABLETRADE, Convert.ToUInt16(TextID_Trade), Convert.ToUInt16(TextID_Incorrect), Convert.ToUInt16(TextID_Talking), Convert.ToByte(Item));
+                            EnableTradeInstruction EnableTrade = new EnableTradeInstruction((byte)Enums.InstructionIDs.ENABLE_TRADE, Convert.ToUInt16(TextID_Trade), Convert.ToUInt16(TextID_Incorrect), Convert.ToUInt16(TextID_Talking), Convert.ToByte(Item));
                             return EnableTrade.GetByteData();
                         }
-                    case "show_textbox":
+                    case (int)Enums.InstructionIDs.SHOW_TEXTBOX:
                         {
                             if (Instr.Length != 3)
                                 throw new WrongParamCountException(Line);
@@ -830,10 +806,10 @@ namespace NPC_Maker
                             if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericTripleU16Instruction ShowTextbox = new GenericTripleU16Instruction((byte)Enums.InstructionIDs.SHOWTEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
+                            GenericTripleU16Instruction ShowTextbox = new GenericTripleU16Instruction((byte)Enums.InstructionIDs.SHOW_TEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
                             return ShowTextbox.GetByteData();
                         }
-                    case "give_item":
+                    case (int)Enums.InstructionIDs.GIVE_ITEM:
                         {
                             if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
@@ -847,10 +823,10 @@ namespace NPC_Maker
                             if (ItemID > UInt16.MaxValue || ItemID < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericU16Instruction Give = new GenericU16Instruction((byte)Enums.InstructionIDs.GIVEITEM, 0, Convert.ToUInt16(ItemID));
+                            GenericU16Instruction Give = new GenericU16Instruction((byte)Enums.InstructionIDs.GIVE_ITEM, 0, Convert.ToUInt16(ItemID));
                             return Give.GetByteData();
                         }
-                    case "goto":
+                    case (int)Enums.InstructionIDs.GOTO:
                         {
                             if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
@@ -863,15 +839,15 @@ namespace NPC_Maker
                             GenericU16Instruction Goto = new GenericU16Instruction((byte)Enums.InstructionIDs.GOTO, 0, Convert.ToUInt16(GotoLabel));
                             return Goto.GetByteData();
                         }
-                    case "turn_towards_player":
+                    case (int)Enums.InstructionIDs.TURN_TOWARDS_PLAYER:
                         {
                             if (Instr.Length != 1)
                                 throw new WrongParamCountException(Line);
 
-                            GenericInstruction Turn = new GenericInstruction((byte)Enums.InstructionIDs.TURNTOPLAYER);
+                            GenericInstruction Turn = new GenericInstruction((byte)Enums.InstructionIDs.TURN_TOWARDS_PLAYER);
                             return Turn.GetByteData();
                         }
-                    case "return":
+                    case (int)Enums.InstructionIDs.RETURN:
                         {
                             if (Instr.Length != 1)
                                 throw new WrongParamCountException(Line);
@@ -879,7 +855,7 @@ namespace NPC_Maker
                             GenericInstruction Stop = new GenericInstruction((byte)Enums.InstructionIDs.RETURN);
                             return Stop.GetByteData();
                         }
-                    case "play":
+                    case (int)Enums.InstructionIDs.PLAY:
                         {
                             if (Instr.Length != 3)
                                 throw new WrongParamCountException(Line);
@@ -912,12 +888,11 @@ namespace NPC_Maker
                             else
                                 throw new Exception();
                         }
-                    case "kill":
+                    case (int)Enums.InstructionIDs.KILL:
                         {
                             if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
 
-                            byte Type = 0;
                             Int32 ActorNum = 0;
                             Int32 ActorType = 0;
 
