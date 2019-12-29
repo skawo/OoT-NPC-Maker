@@ -18,6 +18,8 @@ namespace NPC_Maker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            DropDownMenuScrollWheelHandler.Enable(true);
             Application.Run(new Form1());
         }
     }

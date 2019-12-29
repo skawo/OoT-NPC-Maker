@@ -87,7 +87,6 @@ namespace NPC_Maker
         private void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
         {
             MenuItem.DropDown.MaximumSize = new Size(300, 700);
-            MenuItem.DropDown.MouseWheel += DropDown_MouseWheel;
 
             foreach (string Item in Collection)
             {
@@ -1030,14 +1029,6 @@ namespace NPC_Maker
         private void Tsmi_Click(object sender, EventArgs e)
         {
             InsertTxtToScript((sender as ToolStripItem).Text + " ");
-        }
-
-        private void DropDown_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (e.Delta > 0)
-                System.Windows.Forms.SendKeys.Send("{UP}");
-            else
-                System.Windows.Forms.SendKeys.Send("{DOWN}");
         }
 
         private void SubItem_Click(object sender, EventArgs e)
