@@ -34,7 +34,8 @@ namespace NPC_Maker
             "true",
             "false",
             "return",
-            "stop"
+            "stop",
+            "next"
         };
 
         public static List<string> KeywordsDarkGray = new List<string>()

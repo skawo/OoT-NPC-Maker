@@ -1038,7 +1038,18 @@ namespace NPC_Maker
 
         private void soundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SFXList SFX = new SFXList();
+            SFXList SFX = new SFXList("SFX.csv");
+            DialogResult DR = SFX.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                InsertTxtToScript(SFX.ChosenSFX);
+            }
+        }
+
+        private void musicToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SFXList SFX = new SFXList("Music.csv");
             DialogResult DR = SFX.ShowDialog();
 
             if (DR == DialogResult.OK)

@@ -45,20 +45,16 @@ namespace NPC_Maker
             head = 2,
         }
 
-        public static Dictionary<string, int> SFXes = GetSFXDictionary();
+        public static Dictionary<string, int> SFXes = GetDictionary("SFX.csv");
+        public static Dictionary<string, int> Music = GetDictionary("Music.csv");
 
-        private static Dictionary<string, int> GetSFXDictionary()
+        private static Dictionary<string, int> GetDictionary(string Filename)
         {
-            if (!File.Exists("SFX.csv"))
-            {
-                System.Windows.Forms.MessageBox.Show("SFX.csv is missing or incorrect.");
-            }
-
             Dictionary<string, int> Dict = new Dictionary<string, int>();
 
             try
             {
-                string[] RawData = File.ReadAllLines("SFX.csv");
+                string[] RawData = File.ReadAllLines(Filename);
 
                 foreach (string Row in RawData)
                 {
@@ -70,7 +66,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show("SFX.csv is missing or incorrect.");
+                System.Windows.Forms.MessageBox.Show(Filename + " is missing or incorrect.");
                 return Dict;
             }
 

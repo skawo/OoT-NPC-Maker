@@ -17,19 +17,19 @@ namespace NPC_Maker
         List<string[]> Data = new List<string[]>();
         public string ChosenSFX;
 
-        public SFXList()
+        public SFXList(string CSV)
         {
             InitializeComponent();
 
             try
             {
-                string[] RawData = File.ReadAllLines("SFX.csv");
+                string[] RawData = File.ReadAllLines(CSV);
 
                 foreach (string Row in RawData)
                 {
                     string[] NameAndDesc = Row.Split(',');
 
-                    if (NameAndDesc.Length == 2)
+                    if (NameAndDesc.Length < 3)
                         Data.Add(new string[] { "0x" + Convert.ToInt32(NameAndDesc[0]).ToString("X"), NameAndDesc[1], "" });
                     else
                         Data.Add(new string[] { "0x" + Convert.ToInt32(NameAndDesc[0]).ToString("X"), NameAndDesc[1], NameAndDesc[2] });
@@ -37,7 +37,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                MessageBox.Show("SFX.cvs is missing or incorrect.");
+                MessageBox.Show(CSV + " is missing or incorrect.");
                 return;
             }
 

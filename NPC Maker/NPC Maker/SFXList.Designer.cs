@@ -32,9 +32,9 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.NameCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Description = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // textBox1
@@ -80,6 +80,10 @@
             this.listView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.EnterPress);
             this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListDoubleClick);
             // 
+            // ID
+            // 
+            this.ID.Text = "ID";
+            // 
             // NameCol
             // 
             this.NameCol.Text = "Internal name";
@@ -89,10 +93,6 @@
             // 
             this.Description.Text = "Description";
             this.Description.Width = 350;
-            // 
-            // ID
-            // 
-            this.ID.Text = "ID";
             // 
             // SFXList
             // 
@@ -106,7 +106,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SFXList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Sound effects list";
+            this.Text = "Sound list";
             this.ResumeLayout(false);
             this.PerformLayout();
 

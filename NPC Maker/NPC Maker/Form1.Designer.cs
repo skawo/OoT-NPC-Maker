@@ -192,6 +192,7 @@
             this.itemsgiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemstradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_Editor.SuspendLayout();
@@ -2061,6 +2062,7 @@
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(4, 0);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -2177,46 +2179,54 @@
             this.keyValuesToolStripMenuItem,
             this.itemsgiveToolStripMenuItem,
             this.itemstradeToolStripMenuItem,
-            this.soundEffectsToolStripMenuItem});
+            this.soundEffectsToolStripMenuItem,
+            this.musicToolStripMenuItem});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(147, 136);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 180);
             // 
             // functionsToolStripMenuItem
             // 
             this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
-            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.functionsToolStripMenuItem.Text = "Functions";
             // 
             // keywordsToolStripMenuItem
             // 
             this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
-            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.keywordsToolStripMenuItem.Text = "Keywords";
             // 
             // keyValuesToolStripMenuItem
             // 
             this.keyValuesToolStripMenuItem.Name = "keyValuesToolStripMenuItem";
-            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.keyValuesToolStripMenuItem.Text = "Key values";
             // 
             // itemsgiveToolStripMenuItem
             // 
             this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
-            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.itemsgiveToolStripMenuItem.Text = "Items (give)";
             // 
             // itemstradeToolStripMenuItem
             // 
             this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
-            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.itemstradeToolStripMenuItem.Text = "Items (trade)";
             // 
             // soundEffectsToolStripMenuItem
             // 
             this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
-            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.soundEffectsToolStripMenuItem.Text = "Sound effects";
             this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.soundEffectsToolStripMenuItem_Click);
+            // 
+            // musicToolStripMenuItem
+            // 
+            this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
+            this.musicToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.musicToolStripMenuItem.Text = "Music";
+            this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -2468,6 +2478,7 @@
         private System.Windows.Forms.ToolStripMenuItem itemstradeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem keyValuesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem soundEffectsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem musicToolStripMenuItem;
     }
 }
 

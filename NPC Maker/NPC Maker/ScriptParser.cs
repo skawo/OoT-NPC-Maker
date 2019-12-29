@@ -42,9 +42,11 @@ namespace NPC_Maker
 
             List<byte> Parsed = new List<byte>();
 
+            int LineCount = 0;
+
             foreach (string Line in Lines)                                                                      // Convert every instruction into an 8 byte array and add it to the output
             {
-                byte[] ParsedBytes = GetInstructionBytes(Line, Entry, ref ParseErrors);
+                byte[] ParsedBytes = GetInstructionBytes(Line, Entry, LineCount, ref ParseErrors);
 
                 if (ParsedBytes.Length != 8)
                 {
@@ -53,6 +55,8 @@ namespace NPC_Maker
                 }
 
                 Parsed.AddRange(ParsedBytes);
+
+                LineCount++;
             }
 
             return Parsed.ToArray();
@@ -68,6 +72,8 @@ namespace NPC_Maker
                 {
                     if (Labels.ContainsKey(Lines[i]))
                         ParseErrors.Add("Label \"" + Lines[i].Substring(0, Lines[i].Length - 1) + "\" is defined more than once.");
+                    else if (Lines[i].ToUpper() == "NEXT:")
+                        ParseErrors.Add("A label cannot be named 'next'.");
                     else
                         Labels.Add(Lines[i], i - Labels.Count);                                                 // Decrementing the index by label count, since we'll be removing them
                 }
@@ -76,9 +82,11 @@ namespace NPC_Maker
             return Labels;
         }
 
-        private static int GetLabelOffset(string Line, string Label)
+        private static int GetLabelOffset(string Line, int LineNo, string Label)
         {
-            if (!Labels.ContainsKey(Label + ":"))
+            if (Label.ToUpper() == "NEXT")
+                return LineNo++;
+            else if (!Labels.ContainsKey(Label + ":"))
                 throw new LabelNotFoundException(Line);
             else
                 return Labels[Label + ":"];
@@ -177,7 +185,19 @@ namespace NPC_Maker
             }
         }
 
-        private static byte[] GetInstructionBytes(string Line, NPCEntry Entry, ref List<string> ParseErrors)
+        private static Int32 Helper_GetMusicId(string MusicName)
+        {
+            try
+            {
+                return (int)Enums.Music[MusicName.ToUpper()];
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
+        private static byte[] GetInstructionBytes(string Line, NPCEntry Entry, int LineNo, ref List<string> ParseErrors)
         {
             string[] Instr = Line.Trim().Split(' ');
 
@@ -201,8 +221,8 @@ namespace NPC_Maker
                                     throw new WrongParamCountException(Line);
 
                                 UInt32 FlagID = Helper_ConvertToUInt32(Instr[2]);
-                                int Label_True = GetLabelOffset(Line, Instr[5]);
-                                int Label_False = GetLabelOffset(Line, Instr[7]);
+                                int Label_True = GetLabelOffset(Line, LineNo, Instr[5]);
+                                int Label_False = GetLabelOffset(Line, LineNo, Instr[7]);
 
                                 #region Exceptions
 
@@ -232,8 +252,8 @@ namespace NPC_Maker
                                 if (Instr.Length != 7)
                                     throw new WrongParamCountException(Line);
 
-                                int Label_True = GetLabelOffset(Line, Instr[4]);
-                                int Label_False = GetLabelOffset(Line, Instr[6]);
+                                int Label_True = GetLabelOffset(Line, LineNo, Instr[4]);
+                                int Label_False = GetLabelOffset(Line, LineNo, Instr[6]);
 
                                 #region Exceptions
 
@@ -265,8 +285,8 @@ namespace NPC_Maker
                                 if (Value > UInt16.MaxValue || Value > UInt16.MaxValue)
                                     throw new ParamOutOfRangeException(Line);
 
-                                int Label_True = GetLabelOffset(Line, Instr[5]);
-                                int Label_False = GetLabelOffset(Line, Instr[7]);
+                                int Label_True = GetLabelOffset(Line, LineNo, Instr[5]);
+                                int Label_False = GetLabelOffset(Line, LineNo, Instr[7]);
 
                                 if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
                                     throw new LabelOutOfRangeException(Line);
@@ -304,8 +324,8 @@ namespace NPC_Maker
                                 if (Item > UInt16.MaxValue || Item > UInt16.MaxValue)
                                     throw new ParamOutOfRangeException(Line);
 
-                                int Label_True = GetLabelOffset(Line, Instr[5]);
-                                int Label_False = GetLabelOffset(Line, Instr[7]);
+                                int Label_True = GetLabelOffset(Line, LineNo, Instr[5]);
+                                int Label_False = GetLabelOffset(Line, LineNo, Instr[7]);
 
                                 if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
                                     throw new LabelOutOfRangeException(Line);
@@ -334,9 +354,9 @@ namespace NPC_Maker
                                     throw new WrongParamCountException(Line);
 
 
-                                int Label_Successful = GetLabelOffset(Line, Instr[2]);
-                                int LabelUnsuccesful = GetLabelOffset(Line, Instr[3]);
-                                int LabelNone = GetLabelOffset(Line, Instr[4]);
+                                int Label_Successful = GetLabelOffset(Line, LineNo, Instr[2]);
+                                int LabelUnsuccesful = GetLabelOffset(Line, LineNo, Instr[3]);
+                                int LabelNone = GetLabelOffset(Line, LineNo, Instr[4]);
 
                                 IfInstruction If = new IfInstruction(Convert.ToByte(IfSubType),
                                                                      0,
@@ -457,10 +477,10 @@ namespace NPC_Maker
                                 if (Instr.Length < 3 || Instr.Length > 5)
                                     throw new WrongParamCountException(Line);
 
-                                int Label_1 = GetLabelOffset(Line, Instr[2]);
-                                int Label_2 = Instr.Length > 3 ? GetLabelOffset(Line, Instr[3]) : GetLabelOffset(Line, Instr[2]);
-                                int Label_3 = Instr.Length > 4 ? GetLabelOffset(Line, Instr[4]) :
-                                                                 Instr.Length > 3 ? GetLabelOffset(Line, Instr[3]) : GetLabelOffset(Line, Instr[2]);
+                                int Label_1 = GetLabelOffset(Line, LineNo, Instr[2]);
+                                int Label_2 = Instr.Length > 3 ? GetLabelOffset(Line, LineNo, Instr[3]) : GetLabelOffset(Line, LineNo, Instr[2]);
+                                int Label_3 = Instr.Length > 4 ? GetLabelOffset(Line, LineNo, Instr[4]) :
+                                                                 Instr.Length > 3 ? GetLabelOffset(Line, LineNo, Instr[3]) : GetLabelOffset(Line, LineNo, Instr[2]);
 
                                 if (Label_1 > UInt16.MaxValue || Label_2 > UInt16.MaxValue || Label_3 > UInt16.MaxValue)
                                     throw new LabelOutOfRangeException(Line);
@@ -618,7 +638,7 @@ namespace NPC_Maker
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
 
-                                int GotoLabel = GetLabelOffset(Line, Instr[2]);
+                                int GotoLabel = GetLabelOffset(Line, LineNo, Instr[2]);
 
                                 if (GotoLabel > UInt16.MaxValue || GotoLabel > UInt16.MaxValue)
                                     throw new LabelOutOfRangeException(Line);
@@ -831,7 +851,7 @@ namespace NPC_Maker
                             if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
 
-                            int GotoLabel = GetLabelOffset(Line, Instr[1]);
+                            int GotoLabel = GetLabelOffset(Line, LineNo, Instr[1]);
 
                             if (GotoLabel > UInt16.MaxValue || GotoLabel > UInt16.MaxValue)
                                 throw new LabelOutOfRangeException(Line);
@@ -877,7 +897,10 @@ namespace NPC_Maker
                             }
                             else if (SetSubType == (int)Enums.PlaySubtypes.music)
                             {
-                                UInt32 SNDID = Helper_ConvertToUInt32(Instr[2]);
+                                int SNDID = Helper_GetMusicId(Instr[2]);
+
+                                if (SNDID == -1)
+                                    SNDID = Helper_ConvertToInt32(Instr[2]);
 
                                 if (SNDID > byte.MaxValue || SNDID < 0)
                                     throw new ParamOutOfRangeException(Line);
