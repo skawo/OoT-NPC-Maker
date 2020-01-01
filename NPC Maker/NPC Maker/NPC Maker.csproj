@@ -83,11 +83,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ScriptParser.cs" />
-    <Compile Include="SFXList.cs">
+    <Compile Include="SoundList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SFXList.Designer.cs">
-      <DependentUpon>SFXList.cs</DependentUpon>
+    <Compile Include="SoundList.Designer.cs">
+      <DependentUpon>SoundList.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
@@ -100,8 +100,8 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SFXList.resx">
-      <DependentUpon>SFXList.cs</DependentUpon>
+    <EmbeddedResource Include="SoundList.resx">
+      <DependentUpon>SoundList.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Music.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

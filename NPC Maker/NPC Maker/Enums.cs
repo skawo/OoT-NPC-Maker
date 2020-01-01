@@ -82,10 +82,11 @@ namespace NPC_Maker
             SHOW_TEXTBOX = 5,
             GIVE_ITEM = 6,
             GOTO = 7,
-            TURN_TOWARDS_PLAYER = 8,
+            TURN = 8,
             PLAY = 9,
             KILL = 10,
             ENABLE_TRADE = 11,
+            SCRIPT_CHANGE = 12,
             RETURN = 255,
         }
 
@@ -340,11 +341,33 @@ namespace NPC_Maker
             path_end = 0,
             response = 1,
             text_end = 2,
-            endless = 3,
+            no_text_on_screen = 3,
+            endless = 4,
 
             path_node = 35,
             frames = 36,
             animation_frame = 37,
+        }
+
+        public enum ScriptOverwriteTypes
+        {
+            overwrite = 0,
+            restore = 1,
+        }
+
+        public enum TurnTowardsSubtypes
+        {
+            self = 0,
+            player = 1,
+            configid = 2,
+            actorid = 3,
+        }
+
+        public enum TurnTypeSubtypes
+        {
+            towards = 0,
+            degrees_left = 1,
+            degrees_right = 2
         }
 
         public enum PlaySubtypes

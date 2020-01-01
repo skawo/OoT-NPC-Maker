@@ -27,6 +27,8 @@ namespace NPC_Maker
             {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.WAITFOR), Enum.GetNames(typeof(Enums.WaitForSubTypes)) },
             {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.PLAY), Enum.GetNames(typeof(Enums.PlaySubtypes)) },
             {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.KILL), Enum.GetNames(typeof(Enums.KillSubtypes)) },
+            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.TURN), Enum.GetNames(typeof(Enums.TurnTypeSubtypes)) },
+            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.SCRIPT_CHANGE), Enum.GetNames(typeof(Enums.ScriptOverwriteTypes)) },
         };
 
         public static List<string> Keywords = new List<string>()

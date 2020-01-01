@@ -12,12 +12,12 @@ using System.IO;
 
 namespace NPC_Maker
 {
-    public partial class SFXList : Form
+    public partial class SoundList : Form
     {
         List<string[]> Data = new List<string[]>();
         public string ChosenSFX;
 
-        public SFXList(string CSV)
+        public SoundList(string CSV)
         {
             InitializeComponent();
 
