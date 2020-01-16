@@ -8,8 +8,48 @@ using System.IO;
 
 namespace NPC_Maker
 {
-    public static class Enums
+    public static class Lists
     {
+        public static Dictionary<string, int> SFXes = FileOps.GetSoundDictionary("SFX.csv");
+        public static Dictionary<string, int> Music = FileOps.GetSoundDictionary("Music.csv");
+
+        public static Dictionary<string, string[]> FunctionSubtypes = new Dictionary<string, string[]>()
+        {
+            {Enum.GetName(typeof(Lists.InstructionIDs), (int)Lists.InstructionIDs.IF), Enum.GetNames(typeof(Lists.IfSubTypes)) },
+            {Enum.GetName(typeof(Lists.InstructionIDs), (int)Lists.InstructionIDs.SET), Enum.GetNames(typeof(Lists.SetSubTypes)) },
+            {Enum.GetName(typeof(Lists.InstructionIDs), (int)Lists.InstructionIDs.WAITFOR), Enum.GetNames(typeof(Lists.WaitForSubTypes)) },
+            {Enum.GetName(typeof(Lists.InstructionIDs), (int)Lists.InstructionIDs.PLAY), Enum.GetNames(typeof(Lists.PlaySubtypes)) },
+            {Enum.GetName(typeof(Lists.InstructionIDs), (int)Lists.InstructionIDs.KILL), Enum.GetNames(typeof(Lists.KillSubtypes)) },
+            {Enum.GetName(typeof(Lists.InstructionIDs), (int)Lists.InstructionIDs.TURN), Enum.GetNames(typeof(Lists.TurnTypeSubtypes)) },
+            {Enum.GetName(typeof(Lists.InstructionIDs), (int)Lists.InstructionIDs.SCRIPT_CHANGE), Enum.GetNames(typeof(Lists.ScriptOverwriteTypes)) },
+        };
+
+        public static List<string> Keywords = new List<string>()
+        {
+            "true",
+            "false",
+            "return",
+            "stop",
+            "next"
+        };
+        public static List<string> KeywordsDarkGray = new List<string>()
+        {
+            "then",
+            "else"
+        };
+        public static List<string> KeyValues = GetKeyValues();
+        private static List<string> GetKeyValues()
+        {
+            List<string> Values = new List<string>();
+
+            Values.AddRange(Enum.GetNames(typeof(Lists.MovementStyles)));
+            Values.AddRange(Enum.GetNames(typeof(Lists.DListVisibilityTypes)));
+            Values.AddRange(Enum.GetNames(typeof(Lists.LookTypes)));
+            Values.AddRange(Enum.GetNames(typeof(Lists.Segments)));
+
+            return Values;
+        }
+
         public enum Segments
         {
             SEGMENT_8 = 0,
@@ -21,7 +61,6 @@ namespace NPC_Maker
             SEGMENT_E = 6,
             SEGMENT_F = 7
         }
-
         public enum MovementStyles
         {
             none = 0,
@@ -30,48 +69,18 @@ namespace NPC_Maker
             path_collisionwise = 3,
             path_direct = 4
         }
-
         public enum DListVisibilityTypes
         {
             invisible = 0,
             at_limb = 1,
             instead_of_limb = 2,
         }
-
         public enum LookTypes
         {
             none = 0,
             body = 1,
             head = 2,
         }
-
-        public static Dictionary<string, int> SFXes = GetDictionary("SFX.csv");
-        public static Dictionary<string, int> Music = GetDictionary("Music.csv");
-
-        private static Dictionary<string, int> GetDictionary(string Filename)
-        {
-            Dictionary<string, int> Dict = new Dictionary<string, int>();
-
-            try
-            {
-                string[] RawData = File.ReadAllLines(Filename);
-
-                foreach (string Row in RawData)
-                {
-                    string[] NameAndID = Row.Split(',');
-                    Dict.Add(NameAndID[1], Convert.ToInt32(NameAndID[0]));
-                }
-
-                return Dict;
-            }
-            catch (Exception)
-            {
-                System.Windows.Forms.MessageBox.Show(Filename + " is missing or incorrect.");
-                return Dict;
-            }
-
-        }
-
         public enum InstructionIDs
         {
             NOP = 0,
@@ -89,7 +98,6 @@ namespace NPC_Maker
             SCRIPT_CHANGE = 12,
             RETURN = 255,
         }
-
         public enum TradeItems
         {
             ZELDALETTER = 1,
@@ -114,7 +122,6 @@ namespace NPC_Maker
             BIGPOE = 28,
             RUTOLETTER = 29,
         }
-
         public enum GiveItems
         {
             BOMBSX5 = 1,
@@ -242,7 +249,6 @@ namespace NPC_Maker
             BIGGESTBULLETBAG = 123,
             ICETRAP = 124
         }
-
         public enum IfSubTypes
         {
             inf_table = 0,
@@ -268,7 +274,6 @@ namespace NPC_Maker
 
             trade_status = 63,
         }
-
         public enum SetSubTypes
         {
             /* u16 Subtypes */
@@ -335,7 +340,6 @@ namespace NPC_Maker
             env_color = 245,
             dlist_show = 246,
         }
-
         public enum WaitForSubTypes
         {
             path_end = 0,
@@ -348,13 +352,11 @@ namespace NPC_Maker
             frames = 36,
             animation_frame = 37,
         }
-
         public enum ScriptOverwriteTypes
         {
             overwrite = 0,
             restore = 1,
         }
-
         public enum TurnTowardsSubtypes
         {
             self = 0,
@@ -362,20 +364,17 @@ namespace NPC_Maker
             configid = 2,
             actorid = 3,
         }
-
         public enum TurnTypeSubtypes
         {
             towards = 0,
             degrees_left = 1,
             degrees_right = 2
         }
-
         public enum PlaySubtypes
         {
             sfx = 0,
             music = 1,
         }
-
         public enum KillSubtypes
         {
             self = 0,

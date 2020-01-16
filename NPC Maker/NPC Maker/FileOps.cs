@@ -39,6 +39,30 @@ namespace NPC_Maker
             }
         }
 
+        public static Dictionary<string, int> GetSoundDictionary(string Filename)
+        {
+            Dictionary<string, int> Dict = new Dictionary<string, int>();
+
+            try
+            {
+                string[] RawData = File.ReadAllLines(Filename);
+
+                foreach (string Row in RawData)
+                {
+                    string[] NameAndID = Row.Split(',');
+                    Dict.Add(NameAndID[1], Convert.ToInt32(NameAndID[0]));
+                }
+
+                return Dict;
+            }
+            catch (Exception)
+            {
+                System.Windows.Forms.MessageBox.Show(Filename + " is missing or incorrect.");
+                return Dict;
+            }
+
+        }
+
         public static void SaveBinaryFile(string Path, NPCFile Data)
         {
             try

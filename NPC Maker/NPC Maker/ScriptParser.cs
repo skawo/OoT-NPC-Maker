@@ -62,7 +62,7 @@ namespace NPC_Maker
             return Parsed.ToArray();
         }
 
-        private static Dictionary<string, int> GetLabels(List<string> Lines, ref List<string> ParseErrors)
+        public static Dictionary<string, int> GetLabels(List<string> Lines, ref List<string> ParseErrors)
         {
             Dictionary<string, int> Labels = new Dictionary<string, int>();
 
@@ -168,7 +168,7 @@ namespace NPC_Maker
         {
             try
             {
-                return (int)System.Enum.Parse(typeof(Enums.TradeItems), Name.ToUpper());
+                return (int)System.Enum.Parse(typeof(Lists.TradeItems), Name.ToUpper());
             }
             catch (Exception)
             {
@@ -180,7 +180,7 @@ namespace NPC_Maker
         {
             try
             {
-                return (int)System.Enum.Parse(typeof(Enums.GiveItems), Name.ToUpper());
+                return (int)System.Enum.Parse(typeof(Lists.GiveItems), Name.ToUpper());
             }
             catch (Exception)
             {
@@ -192,7 +192,7 @@ namespace NPC_Maker
         {
             try
             {
-                return (int)Enums.SFXes[SFXName.ToUpper()];
+                return (int)Lists.SFXes[SFXName.ToUpper()];
             }
             catch (Exception)
             {
@@ -204,7 +204,7 @@ namespace NPC_Maker
         {
             try
             {
-                return (int)Enums.Music[MusicName.ToUpper()];
+                return (int)Lists.Music[MusicName.ToUpper()];
             }
             catch (Exception)
             {
@@ -218,16 +218,16 @@ namespace NPC_Maker
 
             try
             {
-                int FunctionType = (int)System.Enum.Parse(typeof(Enums.InstructionIDs), Instr[0].ToUpper());
+                int FunctionType = (int)System.Enum.Parse(typeof(Lists.InstructionIDs), Instr[0].ToUpper());
 
                 switch (FunctionType)
                 {
-                    case (int)Enums.InstructionIDs.IF:
+                    case (int)Lists.InstructionIDs.IF:
                         {
                             if (Instr.Length < 2)
                                 throw new WrongParamCountException(Line);
 
-                            int IfSubType = (int)System.Enum.Parse(typeof(Enums.IfSubTypes), Instr[1].ToLower());
+                            int IfSubType = (int)System.Enum.Parse(typeof(Lists.IfSubTypes), Instr[1].ToLower());
 
 
                             if (IfSubType < 10)
@@ -386,12 +386,12 @@ namespace NPC_Maker
                                 throw new Exception();
                             }
                         }
-                    case (int)Enums.InstructionIDs.SET:
+                    case (int)Lists.InstructionIDs.SET:
                         {
                             if (Instr.Length < 2)
                                 throw new WrongParamCountException(Line);
 
-                            int SetSubType = (int)System.Enum.Parse(typeof(Enums.SetSubTypes), Instr[1].ToLower());
+                            int SetSubType = (int)System.Enum.Parse(typeof(Lists.SetSubTypes), Instr[1].ToLower());
 
                             if (SetSubType < 35)        // u16 Subtypes
                             {
@@ -403,7 +403,7 @@ namespace NPC_Maker
                                 if (Data > UInt16.MaxValue || Data < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU16Instruction SetU16 = new GenericU16Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToUInt16(Data));
+                                GenericU16Instruction SetU16 = new GenericU16Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToUInt16(Data));
                                 return SetU16.GetByteData();
                             }
                             else if (SetSubType < 70)   // s16 Subtypes
@@ -416,7 +416,7 @@ namespace NPC_Maker
                                 if (Data > Int16.MaxValue || Data < Int16.MinValue)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericS16Instruction SetS16 = new GenericS16Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToInt16(Data));
+                                GenericS16Instruction SetS16 = new GenericS16Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToInt16(Data));
                                 return SetS16.GetByteData();
                             }
                             else if (SetSubType < 105) // u32 Subtypes
@@ -426,7 +426,7 @@ namespace NPC_Maker
 
                                 UInt32 Data = Helper_ConvertToUInt32(Instr[2]);
 
-                                GenericU32Instruction SetU32 = new GenericU32Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToUInt32(Data));
+                                GenericU32Instruction SetU32 = new GenericU32Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToUInt32(Data));
                                 return SetU32.GetByteData();
                             }
                             else if (SetSubType < 140) // s32 Subtypes
@@ -439,7 +439,7 @@ namespace NPC_Maker
                                 if (Data > Int32.MaxValue || Data < Int32.MinValue)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericS32Instruction SetS32 = new GenericS32Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToInt32(Data));
+                                GenericS32Instruction SetS32 = new GenericS32Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToInt32(Data));
                                 return SetS32.GetByteData();
                             }
                             else if (SetSubType < 175) // Float subtypes
@@ -447,7 +447,7 @@ namespace NPC_Maker
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
 
-                                GenericFloatInstruction SetFloat = new GenericFloatInstruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToDecimal(Instr[2]));
+                                GenericFloatInstruction SetFloat = new GenericFloatInstruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToDecimal(Instr[2]));
                                 return SetFloat.GetByteData();
                             }
                             else if (SetSubType < 210) // u8 and bool Subtypes
@@ -469,7 +469,7 @@ namespace NPC_Maker
                                         throw new ParamOutOfRangeException(Line);
                                 }
 
-                                GenericU8Instruction SetU8 = new GenericU8Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
+                                GenericU8Instruction SetU8 = new GenericU8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetU8.GetByteData();
                             }
                             else if (SetSubType < 230) // s8 Subtype
@@ -484,10 +484,10 @@ namespace NPC_Maker
                                 if (Data > sbyte.MaxValue || Data < sbyte.MinValue)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericS8Instruction SetS8 = new GenericS8Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToSByte(Data));
+                                GenericS8Instruction SetS8 = new GenericS8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToSByte(Data));
                                 return SetS8.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.responses)
+                            else if (SetSubType == (int)Lists.SetSubTypes.responses)
                             {
                                 if (Instr.Length < 3 || Instr.Length > 5)
                                     throw new WrongParamCountException(Line);
@@ -503,7 +503,7 @@ namespace NPC_Maker
                                 SetResponseInstruction Respond = new SetResponseInstruction(Convert.ToUInt16(Label_1), Convert.ToUInt16(Label_2), Convert.ToUInt16(Label_3));
                                 return Respond.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.flag)
+                            else if (SetSubType == (int)Lists.SetSubTypes.flag)
                             {
                                 if (Instr.Length != 5)
                                     throw new WrongParamCountException(Line);
@@ -519,33 +519,33 @@ namespace NPC_Maker
                                 SetFlagInstruction SetFlag = new SetFlagInstruction(Instr[2], Convert.ToUInt16(FlagID), Instr[4].ToLower() == "true" ? true : false);
                                 return SetFlag.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.movement_type)
+                            else if (SetSubType == (int)Lists.SetSubTypes.movement_type)
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
 
-                                int Data = (int)System.Enum.Parse(typeof(Enums.MovementStyles), Instr[2].ToLower());
+                                int Data = (int)System.Enum.Parse(typeof(Lists.MovementStyles), Instr[2].ToLower());
 
                                 if (Data > 4 || Data < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU8Instruction SetMovT = new GenericU8Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
+                                GenericU8Instruction SetMovT = new GenericU8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetMovT.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.look_type)
+                            else if (SetSubType == (int)Lists.SetSubTypes.look_type)
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
 
-                                int Data = (int)System.Enum.Parse(typeof(Enums.LookTypes), Instr[2].ToLower());
+                                int Data = (int)System.Enum.Parse(typeof(Lists.LookTypes), Instr[2].ToLower());
 
                                 if (Data > 2 || Data < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU8Instruction SetLookT = new GenericU8Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
+                                GenericU8Instruction SetLookT = new GenericU8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetLookT.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.head_axis)
+                            else if (SetSubType == (int)Lists.SetSubTypes.head_axis)
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
@@ -564,10 +564,10 @@ namespace NPC_Maker
                                 if (Data > 2 || Data < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU8Instruction SetHeadA = new GenericU8Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
+                                GenericU8Instruction SetHeadA = new GenericU8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetHeadA.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.animation)
+                            else if (SetSubType == (int)Lists.SetSubTypes.animation)
                             {
                                 if (Instr.Length < 3 && Instr.Length > 4)
                                     throw new WrongParamCountException(Line);
@@ -593,7 +593,7 @@ namespace NPC_Maker
                                 SetAnimInstruction SetAnim = new SetAnimInstruction(Convert.ToByte(Loops), Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.animation_object)
+                            else if (SetSubType == (int)Lists.SetSubTypes.animation_object)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -614,7 +614,7 @@ namespace NPC_Maker
                                 SetAnimObjectInstruction SetAnim = new SetAnimObjectInstruction(Convert.ToUInt16(Object), Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.animation_offset)
+                            else if (SetSubType == (int)Lists.SetSubTypes.animation_offset)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -632,7 +632,7 @@ namespace NPC_Maker
                                 SetAnimOffsetInstruction SetAnim = new SetAnimOffsetInstruction(Offset, Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.animation_speed)
+                            else if (SetSubType == (int)Lists.SetSubTypes.animation_speed)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -648,7 +648,7 @@ namespace NPC_Maker
                                 SetAnimSpeedInstruction SetAnim = new SetAnimSpeedInstruction(Convert.ToDecimal(Instr[3]), Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.script_start)
+                            else if (SetSubType == (int)Lists.SetSubTypes.script_start)
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
@@ -658,15 +658,15 @@ namespace NPC_Maker
                                 if (GotoLabel > UInt16.MaxValue || GotoLabel > UInt16.MaxValue)
                                     throw new LabelOutOfRangeException(Line);
 
-                                GenericU16Instruction SetScriptStart = new GenericU16Instruction((byte)Enums.InstructionIDs.SET, (byte)SetSubType, Convert.ToUInt16(GotoLabel));
+                                GenericU16Instruction SetScriptStart = new GenericU16Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToUInt16(GotoLabel));
                                 return SetScriptStart.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.segment_tex)
+                            else if (SetSubType == (int)Lists.SetSubTypes.segment_tex)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
 
-                                int SegmentID = (int)System.Enum.Parse(typeof(Enums.Segments), Instr[2].ToUpper());
+                                int SegmentID = (int)System.Enum.Parse(typeof(Lists.Segments), Instr[2].ToUpper());
                                 Int32 TexID = Helper_GetTextureID(Instr[3], SegmentID, Entry.Textures);
 
                                 if (TexID == -1)
@@ -678,7 +678,7 @@ namespace NPC_Maker
                                 SetSegmentTextureIDInstruction SetSegmentTex = new SetSegmentTextureIDInstruction(Convert.ToByte(SegmentID), Convert.ToUInt16(TexID));
                                 return SetSegmentTex.GetByteData();
                             }
-                            else if ((SetSubType == (int)Enums.SetSubTypes.blink_pattern) || (SetSubType == (int)Enums.SetSubTypes.talk_pattern))
+                            else if ((SetSubType == (int)Lists.SetSubTypes.blink_pattern) || (SetSubType == (int)Lists.SetSubTypes.talk_pattern))
                             {
                                 if (Instr.Length < 3)
                                     throw new WrongParamCountException(Line);
@@ -687,7 +687,7 @@ namespace NPC_Maker
 
                                 for (int i = 2; i < Instr.Length; i++)
                                 {
-                                    Int32 TexID = Helper_GetTextureID(Instr[i], SetSubType == (int)Enums.SetSubTypes.blink_pattern ? Entry.BlinkSegment - 8 : Entry.TalkSegment - 8, Entry.Textures);
+                                    Int32 TexID = Helper_GetTextureID(Instr[i], SetSubType == (int)Lists.SetSubTypes.blink_pattern ? Entry.BlinkSegment - 8 : Entry.TalkSegment - 8, Entry.Textures);
 
                                     if (TexID == -1)
                                         TexID = Helper_ConvertToInt32(Instr[i]);
@@ -701,7 +701,7 @@ namespace NPC_Maker
                                 SetPatternInstruction SetBlink = new SetPatternInstruction((Byte)SetSubType, Data);
                                 return SetBlink.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.env_color)
+                            else if (SetSubType == (int)Lists.SetSubTypes.env_color)
                             {
                                 if (Instr.Length != 6)
                                     throw new WrongParamCountException(Line);
@@ -725,7 +725,7 @@ namespace NPC_Maker
                                 SetRGBAInstruction SetRGBA = new SetRGBAInstruction((byte)R, (byte)G, (byte)B, Use == "true" ? (byte)255 : (byte)0);
                                 return SetRGBA.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.SetSubTypes.dlist_show)
+                            else if (SetSubType == (int)Lists.SetSubTypes.dlist_show)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -738,7 +738,7 @@ namespace NPC_Maker
                                 if (DListID > (Entry.DLists.Count() - 1) || DListID < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                int VisibleType = (int)Enum.Parse(typeof(Enums.DListVisibilityTypes), Instr[3].ToLower());
+                                int VisibleType = (int)Enum.Parse(typeof(Lists.DListVisibilityTypes), Instr[3].ToLower());
 
                                 SetDListVisibilityInstruction SetDListV = new SetDListVisibilityInstruction(Convert.ToByte(VisibleType), Convert.ToUInt16(DListID));
                                 return SetDListV.GetByteData();
@@ -748,19 +748,19 @@ namespace NPC_Maker
                                 throw new Exception();
                             }
                         }
-                    case (int)Enums.InstructionIDs.WAITFOR:
+                    case (int)Lists.InstructionIDs.WAITFOR:
                         {
                             if (Instr.Length < 2)
                                 throw new WrongParamCountException(Line);
 
-                            int WaitForSubType = (int)System.Enum.Parse(typeof(Enums.WaitForSubTypes), Instr[1].ToLower());
+                            int WaitForSubType = (int)System.Enum.Parse(typeof(Lists.WaitForSubTypes), Instr[1].ToLower());
 
                             if (WaitForSubType < 35)
                             {
                                 if (Instr.Length != 2)
                                     throw new WrongParamCountException(Line);
 
-                                GenericInstructionWithSubType WaitResp = new GenericInstructionWithSubType((byte)Enums.InstructionIDs.WAITFOR, (byte)WaitForSubType);
+                                GenericInstructionWithSubType WaitResp = new GenericInstructionWithSubType((byte)Lists.InstructionIDs.WAITFOR, (byte)WaitForSubType);
                                 return WaitResp.GetByteData();
                             }
                             else if (WaitForSubType < 70)
@@ -773,7 +773,7 @@ namespace NPC_Maker
                                 if (Data > UInt16.MaxValue || Data < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU16Instruction WaitForU16 = new GenericU16Instruction((byte)Enums.InstructionIDs.WAITFOR, (byte)WaitForSubType, Convert.ToUInt16(Data));
+                                GenericU16Instruction WaitForU16 = new GenericU16Instruction((byte)Lists.InstructionIDs.WAITFOR, (byte)WaitForSubType, Convert.ToUInt16(Data));
                                 return WaitForU16.GetByteData();
                             }
                             else
@@ -781,7 +781,7 @@ namespace NPC_Maker
                                 throw new Exception();
                             }
                         }
-                    case (int)Enums.InstructionIDs.ENABLE_TEXTBOX:
+                    case (int)Lists.InstructionIDs.ENABLE_TEXTBOX:
                         {
                             if (Instr.Length != 3)
                                 throw new WrongParamCountException(Line);
@@ -795,10 +795,10 @@ namespace NPC_Maker
                             if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericTripleU16Instruction EnableTextbox = new GenericTripleU16Instruction((byte)Enums.InstructionIDs.ENABLE_TEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
+                            GenericTripleU16Instruction EnableTextbox = new GenericTripleU16Instruction((byte)Lists.InstructionIDs.ENABLE_TEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
                             return EnableTextbox.GetByteData();
                         }
-                    case (int)Enums.InstructionIDs.ENABLE_TRADE:
+                    case (int)Lists.InstructionIDs.ENABLE_TRADE:
                         {
                             if (Instr.Length != 5)
                                 throw new WrongParamCountException(Line);
@@ -824,10 +824,10 @@ namespace NPC_Maker
                             if (Item > byte.MaxValue || Item < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            EnableTradeInstruction EnableTrade = new EnableTradeInstruction((byte)Enums.InstructionIDs.ENABLE_TRADE, Convert.ToUInt16(TextID_Trade), Convert.ToUInt16(TextID_Incorrect), Convert.ToUInt16(TextID_Talking), Convert.ToByte(Item));
+                            EnableTradeInstruction EnableTrade = new EnableTradeInstruction((byte)Lists.InstructionIDs.ENABLE_TRADE, Convert.ToUInt16(TextID_Trade), Convert.ToUInt16(TextID_Incorrect), Convert.ToUInt16(TextID_Talking), Convert.ToByte(Item));
                             return EnableTrade.GetByteData();
                         }
-                    case (int)Enums.InstructionIDs.SHOW_TEXTBOX:
+                    case (int)Lists.InstructionIDs.SHOW_TEXTBOX:
                         {
                             if (Instr.Length != 3)
                                 throw new WrongParamCountException(Line);
@@ -841,10 +841,10 @@ namespace NPC_Maker
                             if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericTripleU16Instruction ShowTextbox = new GenericTripleU16Instruction((byte)Enums.InstructionIDs.SHOW_TEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
+                            GenericTripleU16Instruction ShowTextbox = new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SHOW_TEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
                             return ShowTextbox.GetByteData();
                         }
-                    case (int)Enums.InstructionIDs.GIVE_ITEM:
+                    case (int)Lists.InstructionIDs.GIVE_ITEM:
                         {
                             if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
@@ -858,10 +858,10 @@ namespace NPC_Maker
                             if (ItemID > UInt16.MaxValue || ItemID < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericU16Instruction Give = new GenericU16Instruction((byte)Enums.InstructionIDs.GIVE_ITEM, 0, Convert.ToUInt16(ItemID));
+                            GenericU16Instruction Give = new GenericU16Instruction((byte)Lists.InstructionIDs.GIVE_ITEM, 0, Convert.ToUInt16(ItemID));
                             return Give.GetByteData();
                         }
-                    case (int)Enums.InstructionIDs.GOTO:
+                    case (int)Lists.InstructionIDs.GOTO:
                         {
                             if (Instr.Length != 2)
                                 throw new WrongParamCountException(Line);
@@ -871,13 +871,13 @@ namespace NPC_Maker
                             if (GotoLabel > UInt16.MaxValue || GotoLabel > UInt16.MaxValue)
                                 throw new LabelOutOfRangeException(Line);
 
-                            GenericU16Instruction Goto = new GenericU16Instruction((byte)Enums.InstructionIDs.GOTO, 0, Convert.ToUInt16(GotoLabel));
+                            GenericU16Instruction Goto = new GenericU16Instruction((byte)Lists.InstructionIDs.GOTO, 0, Convert.ToUInt16(GotoLabel));
                             return Goto.GetByteData();
                         }
-                    case (int)Enums.InstructionIDs.TURN:
+                    case (int)Lists.InstructionIDs.TURN:
                         {
-                            int Acting = (int)System.Enum.Parse(typeof(Enums.TurnTowardsSubtypes), Instr[1].ToLower());
-                            int Type = (int)System.Enum.Parse(typeof(Enums.TurnTypeSubtypes), Instr[2].ToLower());
+                            int Acting = (int)System.Enum.Parse(typeof(Lists.TurnTowardsSubtypes), Instr[1].ToLower());
+                            int Type = (int)System.Enum.Parse(typeof(Lists.TurnTypeSubtypes), Instr[2].ToLower());
                             int Value = 0;
                             int Value2 = 0;
                             int ActorType = 0;
@@ -886,14 +886,14 @@ namespace NPC_Maker
                                 throw new ParamOutOfRangeException(Line);
 
 
-                            if (Type == (int)Enums.TurnTypeSubtypes.towards)
+                            if (Type == (int)Lists.TurnTypeSubtypes.towards)
                             {
-                                Value = (int)System.Enum.Parse(typeof(Enums.TurnTowardsSubtypes), Instr[3].ToLower());
+                                Value = (int)System.Enum.Parse(typeof(Lists.TurnTowardsSubtypes), Instr[3].ToLower());
 
                                 if (Value == Acting)
                                     throw new Exception();
 
-                                if (Value == (int)Enums.TurnTowardsSubtypes.actorid)
+                                if (Value == (int)Lists.TurnTowardsSubtypes.actorid)
                                 {
                                     if (Instr.Length != 6)
                                         throw new WrongParamCountException(Line);
@@ -907,7 +907,7 @@ namespace NPC_Maker
                                     if (ActorType > 12 || ActorType < 0)
                                         throw new ParamOutOfRangeException(Line);
                                 }
-                                else if (Value == (int)Enums.TurnTowardsSubtypes.configid)
+                                else if (Value == (int)Lists.TurnTowardsSubtypes.configid)
                                 {
                                     if (Instr.Length != 5)
                                         throw new WrongParamCountException(Line);
@@ -934,25 +934,25 @@ namespace NPC_Maker
                                     throw new ParamOutOfRangeException(Line);
                             }
 
-                            TurnInstruction Turn = new TurnInstruction((byte)Enums.InstructionIDs.TURN, (Byte)Acting, (Byte)Type, (UInt16)Value, (UInt16)Value2, (Byte)ActorType);
+                            TurnInstruction Turn = new TurnInstruction((byte)Lists.InstructionIDs.TURN, (Byte)Acting, (Byte)Type, (UInt16)Value, (UInt16)Value2, (Byte)ActorType);
                             return Turn.GetByteData();
                         }
-                    case (int)Enums.InstructionIDs.RETURN:
+                    case (int)Lists.InstructionIDs.RETURN:
                         {
                             if (Instr.Length != 1)
                                 throw new WrongParamCountException(Line);
 
-                            GenericInstruction Stop = new GenericInstruction((byte)Enums.InstructionIDs.RETURN);
+                            GenericInstruction Stop = new GenericInstruction((byte)Lists.InstructionIDs.RETURN);
                             return Stop.GetByteData();
                         }
-                    case (int)Enums.InstructionIDs.PLAY:
+                    case (int)Lists.InstructionIDs.PLAY:
                         {
                             if (Instr.Length != 3)
                                 throw new WrongParamCountException(Line);
 
-                            int SetSubType = (int)System.Enum.Parse(typeof(Enums.PlaySubtypes), Instr[1].ToLower());
+                            int SetSubType = (int)System.Enum.Parse(typeof(Lists.PlaySubtypes), Instr[1].ToLower());
 
-                            if (SetSubType == (int)Enums.PlaySubtypes.sfx)
+                            if (SetSubType == (int)Lists.PlaySubtypes.sfx)
                             {
                                 int SNDID = Helper_GetSFXId(Instr[2]);
 
@@ -962,10 +962,10 @@ namespace NPC_Maker
                                 if (SNDID > UInt16.MaxValue || SNDID < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU16Instruction Sound = new GenericU16Instruction((byte)Enums.InstructionIDs.PLAY, 0, Convert.ToUInt16(SNDID));
+                                GenericU16Instruction Sound = new GenericU16Instruction((byte)Lists.InstructionIDs.PLAY, 0, Convert.ToUInt16(SNDID));
                                 return Sound.GetByteData();
                             }
-                            else if (SetSubType == (int)Enums.PlaySubtypes.music)
+                            else if (SetSubType == (int)Lists.PlaySubtypes.music)
                             {
                                 int SNDID = Helper_GetMusicId(Instr[2]);
 
@@ -975,20 +975,20 @@ namespace NPC_Maker
                                 if (SNDID > byte.MaxValue || SNDID < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU8Instruction Sound = new GenericU8Instruction((byte)Enums.InstructionIDs.PLAY, 1, Convert.ToByte(SNDID));
+                                GenericU8Instruction Sound = new GenericU8Instruction((byte)Lists.InstructionIDs.PLAY, 1, Convert.ToByte(SNDID));
                                 return Sound.GetByteData();
                             }
                             else
                                 throw new Exception();
                         }
-                    case (int)Enums.InstructionIDs.KILL:
+                    case (int)Lists.InstructionIDs.KILL:
                         {
                             Int32 ActorNum = 0;
                             Int32 ActorType = 0;
 
-                            int SetSubType = (int)System.Enum.Parse(typeof(Enums.KillSubtypes), Instr[1].ToLower());
+                            int SetSubType = (int)System.Enum.Parse(typeof(Lists.KillSubtypes), Instr[1].ToLower());
 
-                            if (SetSubType == (int)Enums.KillSubtypes.configid)
+                            if (SetSubType == (int)Lists.KillSubtypes.configid)
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
@@ -998,7 +998,7 @@ namespace NPC_Maker
                                 if (ActorNum > UInt16.MaxValue || ActorNum < 0)
                                     throw new ParamOutOfRangeException(Line);
                             }
-                            else if (SetSubType == (int)Enums.KillSubtypes.actorid)
+                            else if (SetSubType == (int)Lists.KillSubtypes.actorid)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -1016,14 +1016,14 @@ namespace NPC_Maker
                             ExternalActorDependantInstruction Kill = new ExternalActorDependantInstruction((byte)FunctionType, (byte)SetSubType, Convert.ToInt16(ActorNum), Convert.ToUInt16(ActorType), 0);
                             return Kill.GetByteData();
                         }
-                    case (int)Enums.InstructionIDs.SCRIPT_CHANGE:
+                    case (int)Lists.InstructionIDs.SCRIPT_CHANGE:
                         {
                             int ActorNum = 0;
                             int Label = 0;
 
-                            int SetSubType = (int)System.Enum.Parse(typeof(Enums.ScriptOverwriteTypes), Instr[1].ToLower());
+                            int SetSubType = (int)System.Enum.Parse(typeof(Lists.ScriptOverwriteTypes), Instr[1].ToLower());
 
-                            if (SetSubType == (int)Enums.ScriptOverwriteTypes.overwrite)
+                            if (SetSubType == (int)Lists.ScriptOverwriteTypes.overwrite)
                             {
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
@@ -1038,7 +1038,7 @@ namespace NPC_Maker
                                 if (Label > UInt16.MaxValue || Label > UInt16.MaxValue)
                                     throw new LabelOutOfRangeException(Line);
                             }
-                            else if (SetSubType == (int)Enums.ScriptOverwriteTypes.restore)
+                            else if (SetSubType == (int)Lists.ScriptOverwriteTypes.restore)
                             {
                                 if (Instr.Length != 3)
                                     throw new WrongParamCountException(Line);
@@ -1409,7 +1409,7 @@ namespace NPC_Maker
 
     public class IfInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.IF;
+        Byte ID = (byte)Lists.InstructionIDs.IF;
         Byte Check { get; set; }
         UInt16 Value { get; set; }
         UInt16 Offs_True { get; set; }
@@ -1441,8 +1441,8 @@ namespace NPC_Maker
 
     public class SetResponseInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubID = (byte)Enums.SetSubTypes.responses;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.responses;
         UInt16 Offs_1 { get; set; }
         UInt16 Offs_2 { get; set; }
         UInt16 Offs_3 { get; set; }
@@ -1470,15 +1470,15 @@ namespace NPC_Maker
 
     public class SetFlagInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubId = (byte)Enums.SetSubTypes.flag;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubId = (byte)Lists.SetSubTypes.flag;
         Byte FlagType { get; set; }
         bool OnOff { get; set; }
         UInt16 FlagID { get; set; }
 
         public SetFlagInstruction(string Type, UInt16 ID, bool _OnOff)
         {
-            FlagType = Convert.ToByte(System.Enum.Parse(typeof(Enums.IfSubTypes), Type.ToLower()));
+            FlagType = Convert.ToByte(System.Enum.Parse(typeof(Lists.IfSubTypes), Type.ToLower()));
 
             if (FlagType > 7)
                 throw new Exception();
@@ -1505,8 +1505,8 @@ namespace NPC_Maker
 
     public class SetAnimInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubID = (byte)Enums.SetSubTypes.animation;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.animation;
         Byte Loops { get; set; }
         UInt16 U16 { get; set; }
 
@@ -1533,8 +1533,8 @@ namespace NPC_Maker
 
     public class SetAnimOffsetInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubID = (byte)Enums.SetSubTypes.animation_offset;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.animation_offset;
         UInt16 AnimID { get; set; }
         UInt32 Offset { get; set; }
 
@@ -1559,8 +1559,8 @@ namespace NPC_Maker
 
     public class SetAnimObjectInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubID = (byte)Enums.SetSubTypes.animation_object;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.animation_object;
         UInt16 AnimID { get; set; }
         UInt16 Object { get; set; }
 
@@ -1585,8 +1585,8 @@ namespace NPC_Maker
 
     public class SetAnimSpeedInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubID = (byte)Enums.SetSubTypes.animation_speed;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.animation_speed;
         UInt16 AnimID { get; set; }
         float Speed { get; set; }
 
@@ -1610,8 +1610,8 @@ namespace NPC_Maker
 
     public class SetDListVisibilityInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubID = (byte)Enums.SetSubTypes.dlist_show;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.dlist_show;
         UInt16 DlistID { get; set; }
         byte VisibilityType { get; set; }
 
@@ -1638,8 +1638,8 @@ namespace NPC_Maker
 
     public class SetSegmentTextureIDInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubID = (byte)Enums.SetSubTypes.segment_tex;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.segment_tex;
         Byte SegmentID { get; set; }
         UInt16 TextureID { get; set; }
 
@@ -1666,7 +1666,7 @@ namespace NPC_Maker
 
     public class SetPatternInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
         Byte SubID;
         Byte[] Bytes = new byte[6];
 
@@ -1690,8 +1690,8 @@ namespace NPC_Maker
 
     public class SetRGBAInstruction
     {
-        Byte ID = (byte)Enums.InstructionIDs.SET;
-        Byte SubID = (byte)Enums.SetSubTypes.env_color;
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.env_color;
         Byte R;
         Byte G;
         Byte B;

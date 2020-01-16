@@ -65,7 +65,7 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="DropDownScrollWheelFix.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="Lists.cs" />
     <Compile Include="FCTB.cs" />
     <Compile Include="FileOps.cs" />
     <Compile Include="Form1.cs">

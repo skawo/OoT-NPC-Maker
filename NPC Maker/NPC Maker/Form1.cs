@@ -28,16 +28,16 @@ namespace NPC_Maker
             InitializeComponent();
             this.DoubleBuffered = true;
 
-            foreach (string Item in Enum.GetNames(typeof(Enums.InstructionIDs)))
+            foreach (string Item in Enum.GetNames(typeof(Lists.InstructionIDs)))
             {
                 ToolStripMenuItem Tsmi = new ToolStripMenuItem();
                 Tsmi.Text = Item;
 
-                if (FCTB.FunctionSubtypes.ContainsKey(Item))
+                if (Lists.FunctionSubtypes.ContainsKey(Item))
                 {
                     Tsmi.DoubleClickEnabled = true;
                     Tsmi.DoubleClick += Tsmi_DoubleClick;
-                    AddItemCollectionToToolStripMenuItem(FCTB.FunctionSubtypes[Item], Tsmi);
+                    AddItemCollectionToToolStripMenuItem(Lists.FunctionSubtypes[Item], Tsmi);
                 }
                 else
                     Tsmi.Click += Tsmi_Click;
@@ -45,11 +45,11 @@ namespace NPC_Maker
                 functionsToolStripMenuItem.DropDownItems.Add(Tsmi);
             }
 
-            AddItemCollectionToToolStripMenuItem(FCTB.Keywords.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(FCTB.KeywordsDarkGray.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(FCTB.KeyValues.ToArray(), keyValuesToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Enums.GiveItems)), itemsgiveToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Enums.TradeItems)), itemstradeToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Lists.Keywords.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Lists.KeywordsDarkGray.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Lists.KeyValues.ToArray(), keyValuesToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.GiveItems)), itemsgiveToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

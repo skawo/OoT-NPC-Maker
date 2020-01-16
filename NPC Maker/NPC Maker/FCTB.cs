@@ -19,46 +19,8 @@ namespace NPC_Maker
         public static Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
         public static Style DarkGrayStyle = new TextStyle(Brushes.DarkGray, null, FontStyle.Regular);
         public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Regular);
-
-        public static Dictionary<string, string[]> FunctionSubtypes = new Dictionary<string, string[]>()
-        {
-            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.IF), Enum.GetNames(typeof(Enums.IfSubTypes)) },
-            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.SET), Enum.GetNames(typeof(Enums.SetSubTypes)) },
-            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.WAITFOR), Enum.GetNames(typeof(Enums.WaitForSubTypes)) },
-            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.PLAY), Enum.GetNames(typeof(Enums.PlaySubtypes)) },
-            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.KILL), Enum.GetNames(typeof(Enums.KillSubtypes)) },
-            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.TURN), Enum.GetNames(typeof(Enums.TurnTypeSubtypes)) },
-            {Enum.GetName(typeof(Enums.InstructionIDs), (int)Enums.InstructionIDs.SCRIPT_CHANGE), Enum.GetNames(typeof(Enums.ScriptOverwriteTypes)) },
-        };
-
-        public static List<string> Keywords = new List<string>()
-        {
-            "true",
-            "false",
-            "return",
-            "stop",
-            "next"
-        };
-
-        public static List<string> KeywordsDarkGray = new List<string>()
-        {
-            "then",
-            "else"
-        };
-
-        public static List<string> KeyValues = GetKeyValues();
-
-        public static List<string> GetKeyValues()
-        {
-            List<string> Values = new List<string>();
-
-            Values.AddRange(Enum.GetNames(typeof(Enums.MovementStyles)));
-            Values.AddRange(Enum.GetNames(typeof(Enums.DListVisibilityTypes)));
-            Values.AddRange(Enum.GetNames(typeof(Enums.LookTypes)));
-            Values.AddRange(Enum.GetNames(typeof(Enums.Segments)));
-
-            return Values;
-        }
+        public static Style BoldRedStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
+        public static Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e)
         {
@@ -70,36 +32,67 @@ namespace NPC_Maker
             e.ChangedRange.ClearStyle(FCTB.GrayStyle);
             e.ChangedRange.ClearStyle(FCTB.DarkGrayStyle);
             e.ChangedRange.ClearStyle(FCTB.CyanStyle);
+            e.ChangedRange.ClearStyle(FCTB.BoldRedStyle);
 
             e.ChangedRange.SetStyle(FCTB.GreenStyle, @"/\*(.|[\r\n])*?\*/", RegexOptions.Multiline);
             e.ChangedRange.SetStyle(FCTB.GreenStyle, @"//.+", RegexOptions.Multiline);
+            e.ChangedRange.SetStyle(FCTB.BoldRedStyle, @".+:", RegexOptions.Multiline);
 
-            foreach (string Item in Enum.GetNames(typeof(Enums.InstructionIDs)))
+            string[] Lines = (sender as FastColoredTextBox).Text.Split(new[] { "\n" }, StringSplitOptions.None);
+            Range r = new Range((sender as FastColoredTextBox), 0, 0, Lines[Lines.Length - 1].Length - 1, Lines.Length - 1);
+
+            List<string> Labels = GetLabels((sender as FastColoredTextBox).Text);
+
+            r.ClearStyle(FCTB.RedStyle);
+
+            foreach (string KWord in Labels)
+                r.SetStyle(FCTB.RedStyle, KWord, RegexOptions.Multiline);
+
+            foreach (string Item in Enum.GetNames(typeof(Lists.InstructionIDs)))
             {
-                if (FCTB.FunctionSubtypes.ContainsKey(Item))
+                if (Lists.FunctionSubtypes.ContainsKey(Item))
                 {
-                    foreach (string KWord in FCTB.FunctionSubtypes[Item])
+                    foreach (string KWord in Lists.FunctionSubtypes[Item])
                         e.ChangedRange.SetStyle(FCTB.GrayStyle, KWord, RegexOptions.Multiline);
                 }
             }
 
-            foreach (string KWord in Keywords)
+            foreach (string KWord in Lists.Keywords)
                 e.ChangedRange.SetStyle(FCTB.BlueStyle, KWord, RegexOptions.Multiline);
 
-            foreach (string KWord in KeyValues)
+            foreach (string KWord in Lists.KeyValues)
                 e.ChangedRange.SetStyle(FCTB.GrayStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in KeywordsDarkGray)
+            foreach (string KWord in Lists.KeywordsDarkGray)
                 e.ChangedRange.SetStyle(FCTB.DarkGrayStyle, KWord, RegexOptions.Multiline);
 
-            foreach (string Func in Enum.GetNames(typeof(Enums.InstructionIDs)))
+            foreach (string Func in Enum.GetNames(typeof(Lists.InstructionIDs)))
                 e.ChangedRange.SetStyle(FCTB.PurpleStyle, Func, RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in Enum.GetNames(typeof(Enums.TradeItems)))
+            foreach (string KWord in Enum.GetNames(typeof(Lists.TradeItems)))
                 e.ChangedRange.SetStyle(FCTB.CyanStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in Enum.GetNames(typeof(Enums.GiveItems)))
+            foreach (string KWord in Enum.GetNames(typeof(Lists.GiveItems)))
                 e.ChangedRange.SetStyle(FCTB.CyanStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        }
+
+        public static List<string> GetLabels(string Text)
+        {
+            Text = Regex.Replace(Text, @"/\*(.|[\r\n])*?\*/", string.Empty);                                // Remove comment blocks
+            Text = Regex.Replace(Text, "//.+", string.Empty);                                               // Remove inline comments
+            Text = Regex.Replace(Text, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();      // Remove empty lines
+            Text = Text.Replace("\t", " ");
+
+            List<string> Lines = Text.Split(new[] { "\n" }, StringSplitOptions.None).ToList();
+            List<string> Labels = new List<string>();
+
+            for (int i = 0; i < Lines.Count(); i++)
+            {
+                if (Lines[i].EndsWith(":"))
+                    Labels.Add(Lines[i].Substring(0, Lines[i].Length - 1));
+            }
+
+            return Labels;
         }
 
         public static void ApplyError(FastColoredTextBox tb, string Line)
