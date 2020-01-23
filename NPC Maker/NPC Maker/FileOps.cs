@@ -162,7 +162,7 @@ namespace NPC_Maker
 
                         if (BlinkPat.Length > 6 || TalkPat.Length > 6)
                         {
-                            System.Windows.Forms.MessageBox.Show("Talking and blinking patterns may only be 6 entries long!");
+                            System.Windows.Forms.MessageBox.Show("and blinking patterns may only be 6 entries long!");
                             return;
                         }
 

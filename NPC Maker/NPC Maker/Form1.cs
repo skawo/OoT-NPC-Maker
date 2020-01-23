@@ -394,8 +394,6 @@ namespace NPC_Maker
             NPCEntry Entry = new NPCEntry();
             Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, 0xFFFF));
             Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, 0xFFFF));
-            Entry.Animations.Add(new AnimationEntry("Start talking", 0, 1.0f, 0xFFFF));
-            Entry.Animations.Add(new AnimationEntry("Talking", 0, 1.0f, 0xFFFF));
 
             for (int i = 0; i < 8; i++)
                 Entry.Textures.Add(new List<TextureEntry>());
@@ -962,7 +960,7 @@ namespace NPC_Maker
         {
             try
             {
-                if ((sender as DataGridView).SelectedCells[0].RowIndex > 3)
+                if ((sender as DataGridView).SelectedCells[0].RowIndex > 1)
                 {
                     if (e.KeyCode == Keys.Delete)
                     {

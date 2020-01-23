@@ -59,6 +59,15 @@ namespace NPC_Maker
                 LineCount++;
             }
 
+            // Add a return at the very end if one isn't there.
+            if (Parsed.Count != 0)
+            {
+                byte[] ParsedBytes = GetInstructionBytes("return", Entry, LineCount, ref ParseErrors);
+
+                if (Parsed[Parsed.Count - 8] != ParsedBytes[0])
+                    Parsed.AddRange(ParsedBytes);
+            }
+
             return Parsed.ToArray();
         }
 

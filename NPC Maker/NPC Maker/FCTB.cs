@@ -46,34 +46,34 @@ namespace NPC_Maker
             r.ClearStyle(FCTB.RedStyle);
 
             foreach (string KWord in Labels)
-                r.SetStyle(FCTB.RedStyle, KWord, RegexOptions.Multiline);
+                r.SetStyle(FCTB.RedStyle, @"\b" + KWord + @"\b", RegexOptions.Multiline);
 
             foreach (string Item in Enum.GetNames(typeof(Lists.InstructionIDs)))
             {
                 if (Lists.FunctionSubtypes.ContainsKey(Item))
                 {
                     foreach (string KWord in Lists.FunctionSubtypes[Item])
-                        e.ChangedRange.SetStyle(FCTB.GrayStyle, KWord, RegexOptions.Multiline);
+                        e.ChangedRange.SetStyle(FCTB.GrayStyle, @"\b" + KWord + @"\b", RegexOptions.Multiline);
                 }
             }
 
             foreach (string KWord in Lists.Keywords)
-                e.ChangedRange.SetStyle(FCTB.BlueStyle, KWord, RegexOptions.Multiline);
+                e.ChangedRange.SetStyle(FCTB.BlueStyle, @"\b" + KWord + @"\b", RegexOptions.Multiline);
 
             foreach (string KWord in Lists.KeyValues)
-                e.ChangedRange.SetStyle(FCTB.GrayStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                e.ChangedRange.SetStyle(FCTB.GrayStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             foreach (string KWord in Lists.KeywordsDarkGray)
-                e.ChangedRange.SetStyle(FCTB.DarkGrayStyle, KWord, RegexOptions.Multiline);
+                e.ChangedRange.SetStyle(FCTB.DarkGrayStyle, @"\b" + KWord + @"\b", RegexOptions.Multiline);
 
             foreach (string Func in Enum.GetNames(typeof(Lists.InstructionIDs)))
-                e.ChangedRange.SetStyle(FCTB.PurpleStyle, Func, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                e.ChangedRange.SetStyle(FCTB.PurpleStyle, @"\b" + Func + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             foreach (string KWord in Enum.GetNames(typeof(Lists.TradeItems)))
-                e.ChangedRange.SetStyle(FCTB.CyanStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             foreach (string KWord in Enum.GetNames(typeof(Lists.GiveItems)))
-                e.ChangedRange.SetStyle(FCTB.CyanStyle, KWord, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
         }
 
         public static List<string> GetLabels(string Text)
