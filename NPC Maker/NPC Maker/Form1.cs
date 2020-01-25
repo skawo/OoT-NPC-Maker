@@ -197,7 +197,7 @@ namespace NPC_Maker
                 Grid.Rows.Clear();
 
                 foreach (TextureEntry Entry in SelectedEntry.Textures[i])
-                    Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"));
+                    Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"), Entry.ObjectID == -1 ? SelectedEntry.ObjectID.ToString() : Entry.ObjectID.ToString());
             }
 
             DataGridView_ExtraDLists.Rows.Clear();
@@ -221,6 +221,7 @@ namespace NPC_Maker
                                                                  Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
                                                                  Dlist.Scale.ToString(),
                                                                  Dlist.Limb.ToString(),
+                                                                 Dlist.ObjectID == -1 ? SelectedEntry.ObjectID.ToString() : Dlist.ObjectID.ToString(),
                                                                  SelCombo
                                                                 }) ;
             }
@@ -369,7 +370,7 @@ namespace NPC_Maker
 
                     foreach (TextureEntry Tex in TexList)
                     {
-                        DestTexList.Add(new TextureEntry(Tex.Name, Tex.Address));
+                        DestTexList.Add(new TextureEntry(Tex.Name, Tex.Address, Tex.ObjectID));
                     }
 
                 }
@@ -500,14 +501,15 @@ namespace NPC_Maker
 
         private void AddBlankDList(int Index)
         {
-            SelectedEntry.DLists.Add(new DListEntry("DList_" + Index, 0, 0, 0, 0, 0, 0, 0, 0.01f, 0, 0));
+            SelectedEntry.DLists.Add(new DListEntry("DList_" + Index, 0, 0, 0, 0, 0, 0, 0, 0.01f, 0, 0, 0));
             DataGridView_ExtraDLists.Rows[Index].Cells[0].Value = "DList_" + Index;
             DataGridView_ExtraDLists.Rows[Index].Cells[1].Value = 0;
             DataGridView_ExtraDLists.Rows[Index].Cells[2].Value = "0, 0, 0";
             DataGridView_ExtraDLists.Rows[Index].Cells[3].Value = "0, 0, 0";
-            DataGridView_ExtraDLists.Rows[Index].Cells[4].Value = "0.01";
+            DataGridView_ExtraDLists.Rows[Index].Cells[4].Value = "1";
             DataGridView_ExtraDLists.Rows[Index].Cells[5].Value = 0;
-            DataGridView_ExtraDLists.Rows[Index].Cells[6].Value = ExtraDlists_ShowType.Items[0];
+            DataGridView_ExtraDLists.Rows[Index].Cells[6].Value = -1;
+            DataGridView_ExtraDLists.Rows[Index].Cells[7].Value = ExtraDlists_ShowType.Items[0];
         }
 
         private void SetDlist(DataGridView Grid, int RowIndex, int CellIndex, object CellValue)
@@ -518,7 +520,8 @@ namespace NPC_Maker
             Grid.Rows[RowIndex].Cells[3].Value = "0, 0, 0";
             Grid.Rows[RowIndex].Cells[4].Value = 1.0f;
             Grid.Rows[RowIndex].Cells[5].Value = 0;
-            Grid.Rows[RowIndex].Cells[6].Value = ExtraDlists_ShowType.Items[0];
+            Grid.Rows[RowIndex].Cells[6].Value = -1;
+            Grid.Rows[RowIndex].Cells[7].Value = ExtraDlists_ShowType.Items[0];
 
             Grid.Rows[RowIndex].Cells[CellIndex].Value = CellValue;
         }
@@ -529,7 +532,7 @@ namespace NPC_Maker
             {
                 if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry(e.Value.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, 0, 0));
+                    SelectedEntry.DLists.Add(new DListEntry(e.Value.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, 0, 0, -1));
                     SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
                 }
                 else
@@ -544,7 +547,7 @@ namespace NPC_Maker
                 {
                     if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), 0, 0, 0, 0, 0, 0, 0.01f, 0, 0));
+                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), 0, 0, 0, 0, 0, 0, 1.0f, 0, 0, -1));
                         SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, Convert.ToUInt32(e.Value.ToString(), 16));
                     }
                     else
@@ -590,7 +593,7 @@ namespace NPC_Maker
 
                 if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, X, Y, Z, 0, 0, 0, 0.01f, 0, 0));
+                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, X, Y, Z, 0, 0, 0, 1.0f, 0, 0, -1));
                     SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
                 }
                 else
@@ -630,7 +633,7 @@ namespace NPC_Maker
 
                 if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, X, Y, Z, 0.01f, 0, 0));
+                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, X, Y, Z, 1.0f, 0, 0, -1));
                     SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
                 }
                 else
@@ -649,7 +652,7 @@ namespace NPC_Maker
                 {
                     if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, (float)Convert.ToDecimal(e.Value), 0, 0));
+                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, (float)Convert.ToDecimal(e.Value), 0, 0, -1));
                         SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, (float)Convert.ToDecimal(e.Value));
                     }
                     else
@@ -676,7 +679,7 @@ namespace NPC_Maker
                 {
                     if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 0.01f, Convert.ToUInt16(e.Value), 0));
+                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, Convert.ToUInt16(e.Value), 0, -1));
                         SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, Convert.ToUInt16(e.Value));
                     }
                     else
@@ -697,7 +700,34 @@ namespace NPC_Maker
                 e.ParsingApplied = true;
                 return;
             }
-            else if (e.ColumnIndex == 6)  // Showtype
+            else if (e.ColumnIndex == 6)  // ObjectID
+            {
+                try
+                {
+                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                    {
+                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, 0, 0, Convert.ToInt16(e.Value)));
+                        SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, Convert.ToInt32(e.Value));
+                    }
+                    else
+                    {
+                        SelectedEntry.DLists[e.RowIndex].ObjectID = Convert.ToInt16(e.Value);
+                    }
+                }
+                catch (Exception)
+                {
+                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                        AddBlankDList(e.RowIndex);
+
+                    e.Value = 0;
+                    e.ParsingApplied = true;
+                    return;
+                }
+
+                e.ParsingApplied = true;
+                return;
+            }
+            else if (e.ColumnIndex == 7)  // Showtype
             {
                 int ShowType = 0;
 
@@ -711,7 +741,7 @@ namespace NPC_Maker
 
                 if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 0.01f, 0, ShowType));
+                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, 0, ShowType, -1));
                     SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, ShowType);
                 }
                 else
@@ -740,7 +770,7 @@ namespace NPC_Maker
             {
                 if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry(e.Value.ToString(), 0));
+                    SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry(e.Value.ToString(), 0, -1));
                     (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
                 }
                 else
@@ -755,7 +785,7 @@ namespace NPC_Maker
                 {
                     if(SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16)));
+                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), -1));
                         (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
                     }
                     else
@@ -768,11 +798,38 @@ namespace NPC_Maker
                 {
                     if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), 0));
+                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), 0, -1));
                         (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
                     }
 
                     e.Value = Convert.ToInt32("0", 16);
+                    e.ParsingApplied = true;
+                }
+            }
+            else if (e.ColumnIndex == 2)
+            {
+                try
+                {
+                    if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
+                    {
+                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), 0, Convert.ToInt32(e.Value)));
+                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
+                    }
+                    else
+                        SelectedEntry.Textures[DataGridIndex][e.RowIndex].ObjectID = Convert.ToInt32(e.Value);
+
+                    e.ParsingApplied = true;
+                    return;
+                }
+                catch (Exception)
+                {
+                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                    {
+                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), 0, -1));
+                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
+                    }
+
+                    e.Value = Convert.ToInt32("-1");
                     e.ParsingApplied = true;
                 }
             }
@@ -1054,6 +1111,12 @@ namespace NPC_Maker
             {
                 InsertTxtToScript(SFX.ChosenSFX);
             }
+        }
+
+        private void FileMenu_Click(object sender, EventArgs e)
+        {
+            //hack
+            NumUpDown_Hierarchy.Focus();
         }
     }
 }

@@ -208,7 +208,7 @@ namespace NPC_Maker
 
                         foreach (List<TextureEntry> Segment in Entry.Textures)
                         {
-                            UInt32 SegBytes = (UInt32)(4 * Segment.Count);
+                            UInt32 SegBytes = (UInt32)(8 * Segment.Count);
 
                             if (SegBytes != 0)
                                 TextureOffsets.AddRange(Program.BEConverter.GetBytes(SegOffset));
@@ -218,7 +218,10 @@ namespace NPC_Maker
                             SegOffset += SegBytes;
 
                             foreach (TextureEntry TexEntry in Segment)
+                            {
                                 TextureEntries.AddRange(Program.BEConverter.GetBytes(TexEntry.Address));
+                                TextureEntries.AddRange(Program.BEConverter.GetBytes(TexEntry.ObjectID));
+                            }
                         }
 
                         UInt32 TexBytes = (7 * 4) + (UInt32)TextureEntries.Count;
@@ -249,8 +252,9 @@ namespace NPC_Maker
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransY));
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransZ));
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Scale));
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.ObjectID));
                             EntryBytes.Add((byte)Dlist.ShowType);
-                            EntryBytes.AddRange(new byte[3]);
+                            EntryBytes.AddRange(new byte[1]);
                         }
 
                         while ((EntryBytes.Count) % 4 != 0)

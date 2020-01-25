@@ -57,6 +57,7 @@
             this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDLists_Scale = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Checkbox_EnvColor = new System.Windows.Forms.CheckBox();
             this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
@@ -77,34 +78,42 @@
             this.Seg_8 = new System.Windows.Forms.DataGridView();
             this.Seg_8_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_8_TextOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg8_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
             this.Seg_9 = new System.Windows.Forms.DataGridView();
             this.Seg_9_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_9_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_9_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
             this.Seg_A = new System.Windows.Forms.DataGridView();
             this.Seg_A_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_A_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_A_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
             this.Seg_B = new System.Windows.Forms.DataGridView();
             this.Seg_B_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_B_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_B_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
             this.Seg_C = new System.Windows.Forms.DataGridView();
             this.Seg_C_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_C_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_C_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
             this.Seg_D = new System.Windows.Forms.DataGridView();
             this.Seg_D_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_D_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_D_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
             this.Seg_E = new System.Windows.Forms.DataGridView();
             this.Seg_E_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_E_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_E_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
             this.Seg_F = new System.Windows.Forms.DataGridView();
             this.Seg_F_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_F_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_F_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_HeadRot = new System.Windows.Forms.Panel();
             this.ComboBox_HeadLookAxis = new System.Windows.Forms.ComboBox();
             this.NumUpDown_DegVert = new System.Windows.Forms.NumericUpDown();
@@ -264,7 +273,7 @@
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.MaximumSize = new System.Drawing.Size(2000, 0);
             this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(1608, 24);
+            this.MenuStrip.Size = new System.Drawing.Size(1665, 24);
             this.MenuStrip.TabIndex = 1;
             this.MenuStrip.Text = "menuStrip1";
             // 
@@ -280,46 +289,47 @@
             this.FileMenu.Name = "FileMenu";
             this.FileMenu.Size = new System.Drawing.Size(37, 20);
             this.FileMenu.Text = "File";
+            this.FileMenu.Click += new System.EventHandler(this.FileMenu_Click);
             // 
             // FileMenu_New
             // 
             this.FileMenu_New.Name = "FileMenu_New";
-            this.FileMenu_New.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_New.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_New.Text = "New";
             this.FileMenu_New.Click += new System.EventHandler(this.FileMenu_New_Click);
             // 
             // FileMenu_Open
             // 
             this.FileMenu_Open.Name = "FileMenu_Open";
-            this.FileMenu_Open.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_Open.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_Open.Text = "Open...";
             this.FileMenu_Open.Click += new System.EventHandler(this.FileMenu_Open_Click);
             // 
             // FileMenu_Save
             // 
             this.FileMenu_Save.Name = "FileMenu_Save";
-            this.FileMenu_Save.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_Save.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_Save.Text = "Save...";
             this.FileMenu_Save.Click += new System.EventHandler(this.FileMenu_Save_Click);
             // 
             // FileMenu_SaveAs
             // 
             this.FileMenu_SaveAs.Name = "FileMenu_SaveAs";
-            this.FileMenu_SaveAs.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_SaveAs.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_SaveAs.Text = "Save as...";
             this.FileMenu_SaveAs.Click += new System.EventHandler(this.FileMenu_SaveAs_Click);
             // 
             // FileMenu_SaveBinary
             // 
             this.FileMenu_SaveBinary.Name = "FileMenu_SaveBinary";
-            this.FileMenu_SaveBinary.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_SaveBinary.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_SaveBinary.Text = "Save binary...";
             this.FileMenu_SaveBinary.Click += new System.EventHandler(this.FileMenu_SaveBinary_Click);
             // 
             // FileMenu_Exit
             // 
             this.FileMenu_Exit.Name = "FileMenu_Exit";
-            this.FileMenu_Exit.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_Exit.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_Exit.Text = "Exit";
             this.FileMenu_Exit.Click += new System.EventHandler(this.FileMenu_Exit_Click);
             // 
@@ -397,7 +407,7 @@
             this.Panel_Editor.Enabled = false;
             this.Panel_Editor.Location = new System.Drawing.Point(0, 24);
             this.Panel_Editor.Name = "Panel_Editor";
-            this.Panel_Editor.Size = new System.Drawing.Size(1608, 794);
+            this.Panel_Editor.Size = new System.Drawing.Size(1665, 794);
             this.Panel_Editor.TabIndex = 5;
             // 
             // Panel_NPCData
@@ -409,7 +419,7 @@
             this.Panel_NPCData.Enabled = false;
             this.Panel_NPCData.Location = new System.Drawing.Point(245, 3);
             this.Panel_NPCData.Name = "Panel_NPCData";
-            this.Panel_NPCData.Size = new System.Drawing.Size(1360, 788);
+            this.Panel_NPCData.Size = new System.Drawing.Size(1417, 788);
             this.Panel_NPCData.TabIndex = 6;
             // 
             // TabControl
@@ -420,7 +430,7 @@
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(1360, 788);
+            this.TabControl.Size = new System.Drawing.Size(1417, 788);
             this.TabControl.TabIndex = 41;
             // 
             // Tab1_Data
@@ -477,7 +487,7 @@
             this.Tab1_Data.Location = new System.Drawing.Point(4, 22);
             this.Tab1_Data.Name = "Tab1_Data";
             this.Tab1_Data.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab1_Data.Size = new System.Drawing.Size(1352, 762);
+            this.Tab1_Data.Size = new System.Drawing.Size(1409, 762);
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
             this.Tab1_Data.UseVisualStyleBackColor = true;
@@ -504,8 +514,6 @@
             // 
             this.DataGridView_ExtraDLists.AllowUserToResizeColumns = false;
             this.DataGridView_ExtraDLists.AllowUserToResizeRows = false;
-            this.DataGridView_ExtraDLists.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.DataGridView_ExtraDLists.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.DataGridView_ExtraDLists.BackgroundColor = System.Drawing.Color.White;
             this.DataGridView_ExtraDLists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -516,12 +524,13 @@
             this.ExtraDlists_Rotation,
             this.ExtraDLists_Scale,
             this.ExtraDlists_Limb,
+            this.ExtraDlists_ObjectID,
             this.ExtraDlists_ShowType});
             this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(337, 27);
             this.DataGridView_ExtraDLists.MultiSelect = false;
             this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
             this.DataGridView_ExtraDLists.RowHeadersVisible = false;
-            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(590, 363);
+            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(645, 363);
             this.DataGridView_ExtraDLists.TabIndex = 51;
             this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
             this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
@@ -564,6 +573,12 @@
             this.ExtraDlists_Limb.HeaderText = "Limb";
             this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
             // 
+            // ExtraDlists_ObjectID
+            // 
+            this.ExtraDlists_ObjectID.FillWeight = 40F;
+            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
+            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
+            // 
             // ExtraDlists_ShowType
             // 
             this.ExtraDlists_ShowType.FillWeight = 80F;
@@ -579,7 +594,7 @@
             // Checkbox_EnvColor
             // 
             this.Checkbox_EnvColor.AutoSize = true;
-            this.Checkbox_EnvColor.Location = new System.Drawing.Point(1182, 374);
+            this.Checkbox_EnvColor.Location = new System.Drawing.Point(1237, 375);
             this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
             this.Checkbox_EnvColor.Size = new System.Drawing.Size(114, 17);
             this.Checkbox_EnvColor.TabIndex = 50;
@@ -591,7 +606,7 @@
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
-            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(1302, 370);
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(1357, 371);
             this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
             this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(42, 23);
             this.Button_EnvironmentColorPreview.TabIndex = 49;
@@ -761,7 +776,7 @@
             this.TabControl_Textures.Location = new System.Drawing.Point(337, 409);
             this.TabControl_Textures.Name = "TabControl_Textures";
             this.TabControl_Textures.SelectedIndex = 0;
-            this.TabControl_Textures.Size = new System.Drawing.Size(590, 255);
+            this.TabControl_Textures.Size = new System.Drawing.Size(645, 255);
             this.TabControl_Textures.TabIndex = 41;
             // 
             // TabPage_Segment_8
@@ -770,7 +785,7 @@
             this.TabPage_Segment_8.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_8.Name = "TabPage_Segment_8";
             this.TabPage_Segment_8.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_8.Size = new System.Drawing.Size(582, 229);
+            this.TabPage_Segment_8.Size = new System.Drawing.Size(637, 229);
             this.TabPage_Segment_8.TabIndex = 0;
             this.TabPage_Segment_8.Text = "Segment 8";
             this.TabPage_Segment_8.UseVisualStyleBackColor = true;
@@ -784,13 +799,14 @@
             this.Seg_8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Seg_8.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_8_Name,
-            this.Seg_8_TextOffs});
+            this.Seg_8_TextOffs,
+            this.Seg8_ObjId});
             this.Seg_8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Seg_8.Location = new System.Drawing.Point(3, 3);
             this.Seg_8.MultiSelect = false;
             this.Seg_8.Name = "Seg_8";
             this.Seg_8.RowHeadersVisible = false;
-            this.Seg_8.Size = new System.Drawing.Size(576, 223);
+            this.Seg_8.Size = new System.Drawing.Size(631, 223);
             this.Seg_8.TabIndex = 10;
             this.Seg_8.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_8.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -808,13 +824,19 @@
             this.Seg_8_TextOffs.Name = "Seg_8_TextOffs";
             this.Seg_8_TextOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Seg8_ObjId
+            // 
+            this.Seg8_ObjId.FillWeight = 70F;
+            this.Seg8_ObjId.HeaderText = "Object ID";
+            this.Seg8_ObjId.Name = "Seg8_ObjId";
+            // 
             // TabPage_Segment_9
             // 
             this.TabPage_Segment_9.Controls.Add(this.Seg_9);
             this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_9.Name = "TabPage_Segment_9";
             this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_9.Size = new System.Drawing.Size(582, 229);
+            this.TabPage_Segment_9.Size = new System.Drawing.Size(637, 229);
             this.TabPage_Segment_9.TabIndex = 1;
             this.TabPage_Segment_9.Text = "Segment 9";
             this.TabPage_Segment_9.UseVisualStyleBackColor = true;
@@ -828,13 +850,14 @@
             this.Seg_9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Seg_9.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_9_Name,
-            this.Seg_9_TexOffs});
+            this.Seg_9_TexOffs,
+            this.Seg_9_ObjId});
             this.Seg_9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Seg_9.Location = new System.Drawing.Point(3, 3);
             this.Seg_9.MultiSelect = false;
             this.Seg_9.Name = "Seg_9";
             this.Seg_9.RowHeadersVisible = false;
-            this.Seg_9.Size = new System.Drawing.Size(576, 223);
+            this.Seg_9.Size = new System.Drawing.Size(631, 223);
             this.Seg_9.TabIndex = 11;
             this.Seg_9.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_9.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -852,13 +875,19 @@
             this.Seg_9_TexOffs.Name = "Seg_9_TexOffs";
             this.Seg_9_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Seg_9_ObjId
+            // 
+            this.Seg_9_ObjId.FillWeight = 70F;
+            this.Seg_9_ObjId.HeaderText = "Object ID";
+            this.Seg_9_ObjId.Name = "Seg_9_ObjId";
+            // 
             // TabPage_Segment_A
             // 
             this.TabPage_Segment_A.Controls.Add(this.Seg_A);
             this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_A.Name = "TabPage_Segment_A";
             this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_A.Size = new System.Drawing.Size(582, 229);
+            this.TabPage_Segment_A.Size = new System.Drawing.Size(637, 229);
             this.TabPage_Segment_A.TabIndex = 2;
             this.TabPage_Segment_A.Text = "Segment A";
             this.TabPage_Segment_A.UseVisualStyleBackColor = true;
@@ -872,13 +901,14 @@
             this.Seg_A.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Seg_A.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_A_Name,
-            this.Seg_A_TexOffs});
+            this.Seg_A_TexOffs,
+            this.Seg_A_ObjId});
             this.Seg_A.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Seg_A.Location = new System.Drawing.Point(3, 3);
             this.Seg_A.MultiSelect = false;
             this.Seg_A.Name = "Seg_A";
             this.Seg_A.RowHeadersVisible = false;
-            this.Seg_A.Size = new System.Drawing.Size(576, 223);
+            this.Seg_A.Size = new System.Drawing.Size(631, 223);
             this.Seg_A.TabIndex = 11;
             this.Seg_A.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_A.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -896,13 +926,19 @@
             this.Seg_A_TexOffs.Name = "Seg_A_TexOffs";
             this.Seg_A_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Seg_A_ObjId
+            // 
+            this.Seg_A_ObjId.FillWeight = 70F;
+            this.Seg_A_ObjId.HeaderText = "Object ID";
+            this.Seg_A_ObjId.Name = "Seg_A_ObjId";
+            // 
             // TabPage_Segment_B
             // 
             this.TabPage_Segment_B.Controls.Add(this.Seg_B);
             this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_B.Name = "TabPage_Segment_B";
             this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_B.Size = new System.Drawing.Size(582, 229);
+            this.TabPage_Segment_B.Size = new System.Drawing.Size(637, 229);
             this.TabPage_Segment_B.TabIndex = 3;
             this.TabPage_Segment_B.Text = "Segment B";
             this.TabPage_Segment_B.UseVisualStyleBackColor = true;
@@ -916,13 +952,14 @@
             this.Seg_B.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Seg_B.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_B_Name,
-            this.Seg_B_TexOffs});
+            this.Seg_B_TexOffs,
+            this.Seg_B_ObjId});
             this.Seg_B.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Seg_B.Location = new System.Drawing.Point(3, 3);
             this.Seg_B.MultiSelect = false;
             this.Seg_B.Name = "Seg_B";
             this.Seg_B.RowHeadersVisible = false;
-            this.Seg_B.Size = new System.Drawing.Size(576, 223);
+            this.Seg_B.Size = new System.Drawing.Size(631, 223);
             this.Seg_B.TabIndex = 11;
             this.Seg_B.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_B.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -940,13 +977,19 @@
             this.Seg_B_TexOffs.Name = "Seg_B_TexOffs";
             this.Seg_B_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Seg_B_ObjId
+            // 
+            this.Seg_B_ObjId.FillWeight = 70F;
+            this.Seg_B_ObjId.HeaderText = "Object ID";
+            this.Seg_B_ObjId.Name = "Seg_B_ObjId";
+            // 
             // TabPage_Segment_C
             // 
             this.TabPage_Segment_C.Controls.Add(this.Seg_C);
             this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_C.Name = "TabPage_Segment_C";
             this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_C.Size = new System.Drawing.Size(582, 229);
+            this.TabPage_Segment_C.Size = new System.Drawing.Size(637, 229);
             this.TabPage_Segment_C.TabIndex = 4;
             this.TabPage_Segment_C.Text = "Segment C";
             this.TabPage_Segment_C.UseVisualStyleBackColor = true;
@@ -960,13 +1003,14 @@
             this.Seg_C.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Seg_C.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_C_Name,
-            this.Seg_C_TexOffs});
+            this.Seg_C_TexOffs,
+            this.Seg_C_ObjId});
             this.Seg_C.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Seg_C.Location = new System.Drawing.Point(3, 3);
             this.Seg_C.MultiSelect = false;
             this.Seg_C.Name = "Seg_C";
             this.Seg_C.RowHeadersVisible = false;
-            this.Seg_C.Size = new System.Drawing.Size(576, 223);
+            this.Seg_C.Size = new System.Drawing.Size(631, 223);
             this.Seg_C.TabIndex = 11;
             this.Seg_C.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_C.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -984,13 +1028,19 @@
             this.Seg_C_TexOffs.Name = "Seg_C_TexOffs";
             this.Seg_C_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Seg_C_ObjId
+            // 
+            this.Seg_C_ObjId.FillWeight = 70F;
+            this.Seg_C_ObjId.HeaderText = "Object ID";
+            this.Seg_C_ObjId.Name = "Seg_C_ObjId";
+            // 
             // TabPage_Segment_D
             // 
             this.TabPage_Segment_D.Controls.Add(this.Seg_D);
             this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_D.Name = "TabPage_Segment_D";
             this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_D.Size = new System.Drawing.Size(582, 229);
+            this.TabPage_Segment_D.Size = new System.Drawing.Size(637, 229);
             this.TabPage_Segment_D.TabIndex = 5;
             this.TabPage_Segment_D.Text = "Segment D";
             this.TabPage_Segment_D.UseVisualStyleBackColor = true;
@@ -1004,13 +1054,14 @@
             this.Seg_D.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Seg_D.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_D_Name,
-            this.Seg_D_TexOffs});
+            this.Seg_D_TexOffs,
+            this.Seg_D_ObjId});
             this.Seg_D.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Seg_D.Location = new System.Drawing.Point(3, 3);
             this.Seg_D.MultiSelect = false;
             this.Seg_D.Name = "Seg_D";
             this.Seg_D.RowHeadersVisible = false;
-            this.Seg_D.Size = new System.Drawing.Size(576, 223);
+            this.Seg_D.Size = new System.Drawing.Size(631, 223);
             this.Seg_D.TabIndex = 11;
             this.Seg_D.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_D.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -1028,13 +1079,19 @@
             this.Seg_D_TexOffs.Name = "Seg_D_TexOffs";
             this.Seg_D_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Seg_D_ObjId
+            // 
+            this.Seg_D_ObjId.FillWeight = 70F;
+            this.Seg_D_ObjId.HeaderText = "Object ID";
+            this.Seg_D_ObjId.Name = "Seg_D_ObjId";
+            // 
             // TabPage_Segment_E
             // 
             this.TabPage_Segment_E.Controls.Add(this.Seg_E);
             this.TabPage_Segment_E.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_E.Name = "TabPage_Segment_E";
             this.TabPage_Segment_E.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_E.Size = new System.Drawing.Size(582, 229);
+            this.TabPage_Segment_E.Size = new System.Drawing.Size(637, 229);
             this.TabPage_Segment_E.TabIndex = 6;
             this.TabPage_Segment_E.Text = "Segment E";
             this.TabPage_Segment_E.UseVisualStyleBackColor = true;
@@ -1048,13 +1105,14 @@
             this.Seg_E.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Seg_E.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_E_Name,
-            this.Seg_E_TexOffs});
+            this.Seg_E_TexOffs,
+            this.Seg_E_ObjId});
             this.Seg_E.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Seg_E.Location = new System.Drawing.Point(3, 3);
             this.Seg_E.MultiSelect = false;
             this.Seg_E.Name = "Seg_E";
             this.Seg_E.RowHeadersVisible = false;
-            this.Seg_E.Size = new System.Drawing.Size(576, 223);
+            this.Seg_E.Size = new System.Drawing.Size(631, 223);
             this.Seg_E.TabIndex = 11;
             this.Seg_E.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_E.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -1072,13 +1130,19 @@
             this.Seg_E_TexOffs.Name = "Seg_E_TexOffs";
             this.Seg_E_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Seg_E_ObjId
+            // 
+            this.Seg_E_ObjId.FillWeight = 70F;
+            this.Seg_E_ObjId.HeaderText = "Object ID";
+            this.Seg_E_ObjId.Name = "Seg_E_ObjId";
+            // 
             // TabPage_Segment_F
             // 
             this.TabPage_Segment_F.Controls.Add(this.Seg_F);
             this.TabPage_Segment_F.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_F.Name = "TabPage_Segment_F";
             this.TabPage_Segment_F.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_F.Size = new System.Drawing.Size(582, 229);
+            this.TabPage_Segment_F.Size = new System.Drawing.Size(637, 229);
             this.TabPage_Segment_F.TabIndex = 7;
             this.TabPage_Segment_F.Text = "Segment F";
             this.TabPage_Segment_F.UseVisualStyleBackColor = true;
@@ -1092,13 +1156,14 @@
             this.Seg_F.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Seg_F.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_F_Name,
-            this.Seg_F_TexOffs});
+            this.Seg_F_TexOffs,
+            this.Seg_F_ObjId});
             this.Seg_F.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Seg_F.Location = new System.Drawing.Point(3, 3);
             this.Seg_F.MultiSelect = false;
             this.Seg_F.Name = "Seg_F";
             this.Seg_F.RowHeadersVisible = false;
-            this.Seg_F.Size = new System.Drawing.Size(576, 223);
+            this.Seg_F.Size = new System.Drawing.Size(631, 223);
             this.Seg_F.TabIndex = 11;
             this.Seg_F.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_F.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -1116,6 +1181,12 @@
             this.Seg_F_TexOffs.Name = "Seg_F_TexOffs";
             this.Seg_F_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // Seg_F_ObjId
+            // 
+            this.Seg_F_ObjId.FillWeight = 70F;
+            this.Seg_F_ObjId.HeaderText = "Object ID";
+            this.Seg_F_ObjId.Name = "Seg_F_ObjId";
+            // 
             // Panel_HeadRot
             // 
             this.Panel_HeadRot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1127,7 +1198,7 @@
             this.Panel_HeadRot.Controls.Add(this.NumUpDown_DegHoz);
             this.Panel_HeadRot.Controls.Add(this.NumUpDown_Limb);
             this.Panel_HeadRot.Controls.Add(this.Label_DegHoz);
-            this.Panel_HeadRot.Location = new System.Drawing.Point(933, 65);
+            this.Panel_HeadRot.Location = new System.Drawing.Point(988, 66);
             this.Panel_HeadRot.Name = "Panel_HeadRot";
             this.Panel_HeadRot.Size = new System.Drawing.Size(200, 133);
             this.Panel_HeadRot.TabIndex = 28;
@@ -1234,7 +1305,7 @@
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_TargetLimb);
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_XTargetOffs);
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetOffset);
-            this.Panel_TargetPanel.Location = new System.Drawing.Point(1144, 284);
+            this.Panel_TargetPanel.Location = new System.Drawing.Point(1199, 285);
             this.Panel_TargetPanel.Name = "Panel_TargetPanel";
             this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 80);
             this.Panel_TargetPanel.TabIndex = 40;
@@ -1331,7 +1402,7 @@
             // Checkbox_Targettable
             // 
             this.Checkbox_Targettable.AutoSize = true;
-            this.Checkbox_Targettable.Location = new System.Drawing.Point(1144, 262);
+            this.Checkbox_Targettable.Location = new System.Drawing.Point(1199, 263);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
             this.Checkbox_Targettable.Size = new System.Drawing.Size(80, 17);
             this.Checkbox_Targettable.TabIndex = 39;
@@ -1370,7 +1441,7 @@
             this.Panel_Movement.Controls.Add(this.NumUpDown_MovSpeed);
             this.Panel_Movement.Controls.Add(this.Label_Distance);
             this.Panel_Movement.Controls.Add(this.Label_Speed);
-            this.Panel_Movement.Location = new System.Drawing.Point(1144, 65);
+            this.Panel_Movement.Location = new System.Drawing.Point(1199, 66);
             this.Panel_Movement.Name = "Panel_Movement";
             this.Panel_Movement.Size = new System.Drawing.Size(200, 186);
             this.Panel_Movement.TabIndex = 38;
@@ -1569,7 +1640,7 @@
             "Follows Link",
             "Follow a path, collisionwise",
             "Follow a path, direct"});
-            this.Combo_MovementType.Location = new System.Drawing.Point(1161, 35);
+            this.Combo_MovementType.Location = new System.Drawing.Point(1216, 36);
             this.Combo_MovementType.Name = "Combo_MovementType";
             this.Combo_MovementType.Size = new System.Drawing.Size(168, 21);
             this.Combo_MovementType.TabIndex = 26;
@@ -1598,7 +1669,7 @@
             // Label_MovementType
             // 
             this.Label_MovementType.AutoSize = true;
-            this.Label_MovementType.Location = new System.Drawing.Point(1158, 14);
+            this.Label_MovementType.Location = new System.Drawing.Point(1213, 15);
             this.Label_MovementType.Name = "Label_MovementType";
             this.Label_MovementType.Size = new System.Drawing.Size(83, 13);
             this.Label_MovementType.TabIndex = 25;
@@ -1616,7 +1687,7 @@
             // Checkbox_Pushable
             // 
             this.Checkbox_Pushable.AutoSize = true;
-            this.Checkbox_Pushable.Location = new System.Drawing.Point(1039, 229);
+            this.Checkbox_Pushable.Location = new System.Drawing.Point(1094, 230);
             this.Checkbox_Pushable.Name = "Checkbox_Pushable";
             this.Checkbox_Pushable.Size = new System.Drawing.Size(70, 17);
             this.Checkbox_Pushable.TabIndex = 24;
@@ -1643,7 +1714,7 @@
             // Checkbox_CanPressSwitches
             // 
             this.Checkbox_CanPressSwitches.AutoSize = true;
-            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(933, 230);
+            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(988, 231);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
             this.Checkbox_CanPressSwitches.TabIndex = 23;
@@ -1674,7 +1745,7 @@
             // Checkbox_DrawShadow
             // 
             this.Checkbox_DrawShadow.AutoSize = true;
-            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(1039, 204);
+            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(1094, 205);
             this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
             this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 17);
             this.Checkbox_DrawShadow.TabIndex = 22;
@@ -1736,7 +1807,7 @@
             // Checkbox_HaveCollision
             // 
             this.Checkbox_HaveCollision.AutoSize = true;
-            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(933, 204);
+            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(988, 205);
             this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
             this.Checkbox_HaveCollision.Size = new System.Drawing.Size(85, 17);
             this.Checkbox_HaveCollision.TabIndex = 21;
@@ -1766,7 +1837,7 @@
             this.Panel_Collision.Controls.Add(this.NumUpDown_ColRadius);
             this.Panel_Collision.Controls.Add(this.Label_Radius);
             this.Panel_Collision.Controls.Add(this.Label_Collision);
-            this.Panel_Collision.Location = new System.Drawing.Point(933, 256);
+            this.Panel_Collision.Location = new System.Drawing.Point(988, 257);
             this.Panel_Collision.Name = "Panel_Collision";
             this.Panel_Collision.Size = new System.Drawing.Size(200, 133);
             this.Panel_Collision.TabIndex = 20;
@@ -1914,7 +1985,7 @@
             // Label_LookAtType
             // 
             this.Label_LookAtType.AutoSize = true;
-            this.Label_LookAtType.Location = new System.Drawing.Point(947, 14);
+            this.Label_LookAtType.Location = new System.Drawing.Point(1002, 15);
             this.Label_LookAtType.Name = "Label_LookAtType";
             this.Label_LookAtType.Size = new System.Drawing.Size(92, 13);
             this.Label_LookAtType.TabIndex = 19;
@@ -1927,7 +1998,7 @@
             "None",
             "Body",
             "Head"});
-            this.ComboBox_LookAtType.Location = new System.Drawing.Point(950, 36);
+            this.ComboBox_LookAtType.Location = new System.Drawing.Point(1005, 37);
             this.ComboBox_LookAtType.Name = "ComboBox_LookAtType";
             this.ComboBox_LookAtType.Size = new System.Drawing.Size(168, 21);
             this.ComboBox_LookAtType.TabIndex = 18;
@@ -2033,7 +2104,7 @@
             this.Tab2_Script.Location = new System.Drawing.Point(4, 22);
             this.Tab2_Script.Name = "Tab2_Script";
             this.Tab2_Script.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab2_Script.Size = new System.Drawing.Size(1352, 762);
+            this.Tab2_Script.Size = new System.Drawing.Size(1409, 762);
             this.Tab2_Script.TabIndex = 1;
             this.Tab2_Script.Text = "Interaction script";
             this.Tab2_Script.UseVisualStyleBackColor = true;
@@ -2182,49 +2253,49 @@
             this.soundEffectsToolStripMenuItem,
             this.musicToolStripMenuItem});
             this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 180);
+            this.ContextMenuStrip.Size = new System.Drawing.Size(147, 158);
             // 
             // functionsToolStripMenuItem
             // 
             this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
-            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.functionsToolStripMenuItem.Text = "Functions";
             // 
             // keywordsToolStripMenuItem
             // 
             this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
-            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.keywordsToolStripMenuItem.Text = "Keywords";
             // 
             // keyValuesToolStripMenuItem
             // 
             this.keyValuesToolStripMenuItem.Name = "keyValuesToolStripMenuItem";
-            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.keyValuesToolStripMenuItem.Text = "Key values";
             // 
             // itemsgiveToolStripMenuItem
             // 
             this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
-            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.itemsgiveToolStripMenuItem.Text = "Items (give)";
             // 
             // itemstradeToolStripMenuItem
             // 
             this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
-            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.itemstradeToolStripMenuItem.Text = "Items (trade)";
             // 
             // soundEffectsToolStripMenuItem
             // 
             this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
-            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.soundEffectsToolStripMenuItem.Text = "Sound effects";
             this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.soundEffectsToolStripMenuItem_Click);
             // 
             // musicToolStripMenuItem
             // 
             this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
-            this.musicToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.musicToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.musicToolStripMenuItem.Text = "Music";
             this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
             // 
@@ -2232,7 +2303,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1608, 818);
+            this.ClientSize = new System.Drawing.Size(1665, 818);
             this.Controls.Add(this.Panel_Editor);
             this.Controls.Add(this.MenuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -2417,31 +2488,15 @@
         private System.Windows.Forms.TabPage TabPage_Segment_C;
         private System.Windows.Forms.TabPage TabPage_Segment_D;
         private System.Windows.Forms.DataGridView Seg_8;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_8_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_8_TextOffs;
         private System.Windows.Forms.DataGridView Seg_9;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_TexOffs;
         private System.Windows.Forms.DataGridView Seg_A;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_TexOffs;
         private System.Windows.Forms.DataGridView Seg_B;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_TexOffs;
         private System.Windows.Forms.DataGridView Seg_C;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_TexOffs;
         private System.Windows.Forms.DataGridView Seg_D;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_TexOffs;
         private System.Windows.Forms.TabPage TabPage_Segment_E;
         private System.Windows.Forms.DataGridView Seg_E;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_TexOffs;
         private System.Windows.Forms.TabPage TabPage_Segment_F;
         private System.Windows.Forms.DataGridView Seg_F;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_TexOffs;
         private System.Windows.Forms.Label Label_TalkingSegment;
         private System.Windows.Forms.Label Label_TalkingPattern;
         private System.Windows.Forms.NumericUpDown NumUpDown_TalkSpeed;
@@ -2464,13 +2519,6 @@
         private System.Windows.Forms.Label Label_ExtraTextures;
         private System.Windows.Forms.Label Label_ExtraDisplayLists;
         private System.Windows.Forms.DataGridView DataGridView_ExtraDLists;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Purpose;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Offset;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Translation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Rotation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDLists_Scale;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Limb;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private new System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem functionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem keywordsToolStripMenuItem;
@@ -2479,6 +2527,38 @@
         private System.Windows.Forms.ToolStripMenuItem keyValuesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem soundEffectsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem musicToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_8_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_8_TextOffs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg8_ObjId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_TexOffs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_ObjId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_TexOffs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_ObjId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_TexOffs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_ObjId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_TexOffs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_ObjId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_TexOffs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_ObjId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_TexOffs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_ObjId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_TexOffs;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_ObjId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Purpose;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Offset;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Translation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Rotation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDLists_Scale;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Limb;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
     }
 }
 

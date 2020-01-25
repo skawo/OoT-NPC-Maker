@@ -216,16 +216,19 @@ namespace NPC_Maker
     {
         public string Name { get; set; }
         public UInt32 Address { get; set; }
+        public int ObjectID { get; set; }
 
         public TextureEntry()
         {
             Name = "";
             Address = 0;
+            ObjectID = -1;
         }
-        public TextureEntry(string _Name, UInt32 _Address)
+        public TextureEntry(string _Name, UInt32 _Address, int _ObjectID)
         {
             Name = _Name;
             Address = _Address;
+            ObjectID = _ObjectID;
         }
     }
 
@@ -242,6 +245,7 @@ namespace NPC_Maker
         public float Scale { get; set; }
         public int ShowType { get; set; }
         public UInt16 Limb { get; set; }
+        public Int16 ObjectID { get; set; }
 
         public DListEntry()
         {
@@ -256,8 +260,9 @@ namespace NPC_Maker
             Scale = 0;
             ShowType = 0;
             Limb = 0;
+            ObjectID = -1;
         }
-        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, UInt16 _Limb, int _ShowType)
+        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, UInt16 _Limb, int _ShowType, Int16 _ObjectID)
         {
             Name = _Name;
             Address = _Address;
@@ -270,6 +275,7 @@ namespace NPC_Maker
             Scale = _Scale;
             Limb = _Limb;
             ShowType = _ShowType;
+            ObjectID = _ObjectID;
         }
     }
 }
