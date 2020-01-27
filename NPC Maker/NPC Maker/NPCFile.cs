@@ -195,6 +195,7 @@ namespace NPC_Maker
         public UInt32 Address { get; set; }
         public UInt16 ObjID { get; set; }
         public float Speed { get; set; }
+        public byte[] Frames { get; set; }
 
         public AnimationEntry()
         {
@@ -202,13 +203,15 @@ namespace NPC_Maker
             Address = 0;
             Speed = 1.0f;
             ObjID = 0xFFFF;
+            Frames = new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF };
         }
-        public AnimationEntry(string _Name, UInt32 _Address, float _Speed, UInt16 _ObjectID)
+        public AnimationEntry(string _Name, UInt32 _Address, float _Speed, UInt16 _ObjectID, byte[] _Frames)
         {
             Name = _Name;
             Address = _Address;
             Speed = _Speed;
             ObjID = _ObjectID;
+            Frames = _Frames;
         }
     }
 

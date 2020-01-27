@@ -339,6 +339,7 @@ namespace NPC_Maker
             segment_tex = 244,
             env_color = 245,
             dlist_show = 246,
+            animation_keyframes = 247,
         }
         public enum WaitForSubTypes
         {

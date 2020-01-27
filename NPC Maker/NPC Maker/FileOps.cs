@@ -127,6 +127,10 @@ namespace NPC_Maker
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Anim.Address));
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Anim.Speed));
                             EntryBytes.AddRange(Program.BEConverter.GetBytes(Anim.ObjID));
+                            EntryBytes.Add((byte)Anim.Frames[0]);
+                            EntryBytes.Add((byte)Anim.Frames[1]);
+                            EntryBytes.Add((byte)Anim.Frames[2]);
+                            EntryBytes.Add((byte)Anim.Frames[3]);
                         }
 
                         byte[] Script = Parser.Parse(Entry);

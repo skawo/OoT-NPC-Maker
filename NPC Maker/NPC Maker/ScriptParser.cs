@@ -657,6 +657,35 @@ namespace NPC_Maker
                                 SetAnimSpeedInstruction SetAnim = new SetAnimSpeedInstruction(Convert.ToDecimal(Instr[3]), Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
+                            else if (SetSubType == (int)Lists.SetSubTypes.animation_keyframes)
+                            {
+                                if (Instr.Length < 4)
+                                    throw new WrongParamCountException(Line);
+
+                                Int32 AnimID = Helper_GetAnimationID(Instr[2], Entry.Animations);
+
+                                if (AnimID == -1)
+                                    AnimID = Helper_ConvertToInt32(Instr[2]);
+
+                                if (AnimID > (Entry.Animations.Count() - 1) || AnimID < 0)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                int[] Frames = new int[4] { 255, 255, 255, 255 };
+
+                                for (int i = 3; i < Instr.Length; i++)
+                                {
+                                    Frames[i - 3] = Helper_ConvertToInt32(Instr[i]);
+
+                                    if (Frames[i - 3] < 0)
+                                        Frames[i - 3] = 255;
+
+                                    if (Frames[i - 3] > 255)
+                                        throw new ParamOutOfRangeException(Line);
+                                }
+
+                                SetAnimKeyFramesInstruction SetAnim = new SetAnimKeyFramesInstruction(Convert.ToUInt16(AnimID), Convert.ToByte(Frames[0]), Convert.ToByte(Frames[1]), Convert.ToByte(Frames[2]), Convert.ToByte(Frames[3]));
+                                return SetAnim.GetByteData();
+                            }
                             else if (SetSubType == (int)Lists.SetSubTypes.script_start)
                             {
                                 if (Instr.Length != 3)
@@ -1613,6 +1642,40 @@ namespace NPC_Maker
             Data.Add(SubID);
             Data.AddRange(Program.BEConverter.GetBytes(AnimID));
             Data.AddRange(Program.BEConverter.GetBytes(Speed));
+            return Data.ToArray();
+        }
+    }
+
+    public class SetAnimKeyFramesInstruction
+    {
+        Byte ID = (byte)Lists.InstructionIDs.SET;
+        Byte SubID = (byte)Lists.SetSubTypes.animation_keyframes;
+        UInt16 AnimID;
+        byte Frame1;
+        byte Frame2;
+        byte Frame3;
+        byte Frame4;
+
+        public SetAnimKeyFramesInstruction(UInt16 _AnimID, byte Fr1, byte Fr2, byte Fr3, byte Fr4)
+        {
+            AnimID = _AnimID;
+            Frame1 = Fr1;
+            Frame2 = Fr2;
+            Frame3 = Fr3;
+            Frame4 = Fr4;
+        }
+
+        public byte[] GetByteData()
+        {
+            List<byte> Data = new List<byte>();
+
+            Data.Add(ID);
+            Data.Add(SubID);
+            Data.AddRange(Program.BEConverter.GetBytes(AnimID));
+            Data.Add(Frame1);
+            Data.Add(Frame2);
+            Data.Add(Frame3);
+            Data.Add(Frame4);
             return Data.ToArray();
         }
     }

@@ -159,7 +159,22 @@ namespace NPC_Maker
             DataGrid_Animations.Rows.Clear();
 
             foreach (AnimationEntry Animation in SelectedEntry.Animations)
-                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Animation.Speed, Animation.ObjID == UInt16.MaxValue ? "---" : Animation.ObjID.ToString()});
+            {
+                string Frames = "";
+
+                foreach (byte B in Animation.Frames)
+                {
+                    if (B != 0xFF)
+                    {
+                        if (Frames == "")
+                            Frames = Convert.ToInt32(B).ToString();
+                        else
+                            Frames = String.Join(",", new string[] { Frames, Convert.ToInt32(B).ToString() });
+                    }
+                }
+
+                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Animation.ObjID == UInt16.MaxValue ? "---" : Animation.ObjID.ToString() });
+            }
 
             Textbox_ParseErrors.Text = "";
 
@@ -358,7 +373,7 @@ namespace NPC_Maker
 
                 foreach (AnimationEntry Anim in CopiedEntry.Animations)
                 {
-                    SelectedEntry.Animations.Add(new AnimationEntry(Anim.Name, Anim.Address, Anim.Speed, Anim.ObjID));
+                    SelectedEntry.Animations.Add(new AnimationEntry(Anim.Name, Anim.Address, Anim.Speed, Anim.ObjID, Anim.Frames));
                 }
 
                 SelectedEntry.Textures.Clear();
@@ -393,8 +408,8 @@ namespace NPC_Maker
         private void Button_Add_Click(object sender, EventArgs e)
         {
             NPCEntry Entry = new NPCEntry();
-            Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, 0xFFFF));
-            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, 0xFFFF));
+            Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, 0xFFFF, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
+            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, 0xFFFF, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
 
             for (int i = 0; i < 8; i++)
                 Entry.Textures.Add(new List<TextureEntry>());
@@ -837,7 +852,7 @@ namespace NPC_Maker
 
         private void AddBlankTex(int Index)
         {
-            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + Index.ToString(), 0, 1.0f, (UInt16)NumUpDown_ObjectID.Value));
+            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + Index.ToString(), 0, 1.0f, (UInt16)NumUpDown_ObjectID.Value, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }));
             DataGrid_Animations.Rows[Index].Cells[1].Value = 0;
             DataGrid_Animations.Rows[Index].Cells[2].Value = 1.0;
             DataGrid_Animations.Rows[Index].Cells[3].Value = "---";
@@ -849,10 +864,11 @@ namespace NPC_Maker
             {
                 if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                 {
-                    SelectedEntry.Animations.Add(new AnimationEntry(e.Value.ToString(), 0, 1.0f, (UInt16)NumUpDown_ObjectID.Value));
+                    SelectedEntry.Animations.Add(new AnimationEntry(e.Value.ToString(), 0, 1.0f, (UInt16)NumUpDown_ObjectID.Value, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
                     DataGrid_Animations.Rows[e.RowIndex].Cells[1].Value = 0;
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = 1.0;
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = "---";
+                    DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = "";
+                    DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = 1.0;
+                    DataGrid_Animations.Rows[e.RowIndex].Cells[4].Value = "---";
                 }
                 else
                     SelectedEntry.Animations[e.RowIndex].Name = e.Value.ToString();
@@ -866,10 +882,11 @@ namespace NPC_Maker
                 {
                     if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), 1.0f, (UInt16)NumUpDown_ObjectID.Value));
+                        SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), 1.0f, (UInt16)NumUpDown_ObjectID.Value, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
                         DataGrid_Animations.Rows[e.RowIndex].Cells[0].Value = "Animation_" + e.RowIndex.ToString();
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = 1.0;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = "---";
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = "";
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = 1.0;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[4].Value = "---";
                     }
                     else
                     {
@@ -887,16 +904,67 @@ namespace NPC_Maker
                     e.ParsingApplied = true;
                 }
             }
-            else if(e.ColumnIndex == 2)
+            else if (e.ColumnIndex == 2)
+            {
+                try
+                {
+                    string[] Values = e.Value.ToString().Split(',');
+                    byte[] Array = new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF };
+
+                    if (Array.Count() > 4)
+                    {
+                        MessageBox.Show("Interpolation mode supports only up to 4 animations.");
+                        throw new Exception();
+                    }
+
+                    int i = 0;
+
+                    foreach (string Val in Values)
+                    {
+                        if (Val == "")
+                            continue;
+
+                        if (Convert.ToSByte(Val) >= 0)
+                        {
+                            Array[i] = Convert.ToByte(Val);
+                            i++;
+                        }
+                    }
+
+                    if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                    {
+                        SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, (UInt16)NumUpDown_ObjectID.Value, Array));
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[0].Value = "Animation_" + e.RowIndex.ToString();
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[1].Value = 0;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = 1.0;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[4].Value = "---";
+                    }
+                    else
+                        SelectedEntry.Animations[e.RowIndex].Frames = Array;
+
+                    e.ParsingApplied = true;
+                    return;
+                }
+                catch (Exception)
+                {
+                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                        AddBlankTex(e.RowIndex);
+
+                    e.Value = "";
+                    e.ParsingApplied = true;
+                }
+            }
+            else if(e.ColumnIndex == 3)
             {
                 try
                 {
                     if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, (float)Convert.ToDecimal(e.Value), (UInt16)NumUpDown_ObjectID.Value));
+                        SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, (float)Convert.ToDecimal(e.Value), (UInt16)NumUpDown_ObjectID.Value, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
                         DataGrid_Animations.Rows[e.RowIndex].Cells[0].Value = "Animation_" + e.RowIndex.ToString();
                         DataGrid_Animations.Rows[e.RowIndex].Cells[1].Value = 0;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = "---";
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = "";
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[4].Value = "---";
                     }
                     else
                     {
@@ -914,20 +982,21 @@ namespace NPC_Maker
                     e.ParsingApplied = true;
                 }
             }
-            else if(e.ColumnIndex == 3)
+            else if(e.ColumnIndex == 4)
             {
                 try
                 {
                     if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                     {
                         if (e.Value.ToString() == "---")
-                            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, UInt16.MaxValue));
+                            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, UInt16.MaxValue, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
                         else
-                            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, Convert.ToUInt16(e.Value)));
+                            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, Convert.ToUInt16(e.Value), new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
 
                         DataGrid_Animations.Rows[e.RowIndex].Cells[0].Value = "Animation_" + e.RowIndex.ToString();
                         DataGrid_Animations.Rows[e.RowIndex].Cells[1].Value = 0;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = 1.0;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = "";
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = 1.0;
                     }
                     else
                     {
