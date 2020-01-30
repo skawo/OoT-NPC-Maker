@@ -53,10 +53,10 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(12, 101);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(289, 39);
+            this.label6.Size = new System.Drawing.Size(327, 39);
             this.label6.TabIndex = 5;
-            this.label6.Text = "Programming: Skawo\r\nProgramming help: Dr. Disco, Nokaubure, RoadrunnerWMC\r\nManual" +
-    ": Skawo, RoadrunnerWMC";
+            this.label6.Text = "Programming: Skawo\r\nProgramming help: Dr. Disco, Nokaubure, RoadrunnerWMC, Fracta" +
+    "l\r\nManual: Skawo, RoadrunnerWMC";
             // 
             // pictureBox2
             // 
@@ -72,12 +72,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(321, 154);
+            this.ClientSize = new System.Drawing.Size(342, 149);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "About";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "About";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
