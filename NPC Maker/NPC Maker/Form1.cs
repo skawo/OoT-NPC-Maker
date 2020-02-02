@@ -132,6 +132,7 @@ namespace NPC_Maker
             Checkbox_Pushable.Checked = SelectedEntry.Pushable;
             NumUpDown_ColRadius.Value = SelectedEntry.Radius;
             NumUpDown_ColHeight.Value = SelectedEntry.Height;
+            Checkbox_AlwaysActive.Checked = SelectedEntry.AlwActive;
             NumUpDown_XColOffs.Value = SelectedEntry.ColOffs[0];
             NumUpDown_YColOffs.Value = SelectedEntry.ColOffs[1];
             NumUpDown_ZColOffs.Value = SelectedEntry.ColOffs[2];
@@ -988,7 +989,7 @@ namespace NPC_Maker
                 {
                     if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                     {
-                        if (e.Value.ToString() == "---")
+                        if (e.Value.ToString() == "---" || e.Value.ToString() == "")
                             SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, UInt16.MaxValue, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
                         else
                             SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, Convert.ToUInt16(e.Value), new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
@@ -1000,7 +1001,10 @@ namespace NPC_Maker
                     }
                     else
                     {
-                        SelectedEntry.Animations[e.RowIndex].ObjID = Convert.ToUInt16(e.Value.ToString());
+                        if (e.Value.ToString() == "---" || e.Value.ToString() == "")
+                            SelectedEntry.Animations[e.RowIndex].ObjID = UInt16.MaxValue;
+                        else
+                            SelectedEntry.Animations[e.RowIndex].ObjID = Convert.ToUInt16(e.Value.ToString());
                     }
 
                     e.ParsingApplied = true;

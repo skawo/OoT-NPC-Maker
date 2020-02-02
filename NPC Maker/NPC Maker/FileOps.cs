@@ -98,6 +98,8 @@ namespace NPC_Maker
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Shadow));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Switches));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Pushable));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.AlwActive));
+
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Radius));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Height));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColOffs[0]));

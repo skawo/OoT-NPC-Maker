@@ -18,7 +18,7 @@ namespace NPC_Maker
         public static Style PurpleStyle = new TextStyle(Brushes.Purple, null, FontStyle.Regular);
         public static Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
         public static Style DarkGrayStyle = new TextStyle(Brushes.DarkGray, null, FontStyle.Regular);
-        public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Regular);
+        public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Bold);
         public static Style BoldRedStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
         public static Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
 
@@ -73,6 +73,12 @@ namespace NPC_Maker
                 e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             foreach (string KWord in Enum.GetNames(typeof(Lists.GiveItems)))
+                e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
+            foreach (string KWord in Lists.SFXes.Keys)
+                e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
+            foreach (string KWord in Lists.Music.Keys)
                 e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
         }
 

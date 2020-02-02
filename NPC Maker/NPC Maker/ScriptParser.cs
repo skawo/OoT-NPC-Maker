@@ -781,6 +781,48 @@ namespace NPC_Maker
                                 SetDListVisibilityInstruction SetDListV = new SetDListVisibilityInstruction(Convert.ToByte(VisibleType), Convert.ToUInt16(DListID));
                                 return SetDListV.GetByteData();
                             }
+                            else if (SetSubType == (int)Lists.SetSubTypes.camera_tracking_on)
+                            {
+                                if (Instr.Length < 3)
+                                    throw new WrongParamCountException(Line);
+
+                                int TrackSubType = (int)System.Enum.Parse(typeof(Lists.TurnTowardsSubtypes), Instr[2].ToLower());
+
+                                switch (TrackSubType)
+                                {
+                                    case 0: return new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SET, 0, 0, 0, (byte)Lists.SetSubTypes.camera_tracking_on).GetByteData();
+                                    case 1: return new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SET, 1, 0, 0, (byte)Lists.SetSubTypes.camera_tracking_on).GetByteData();
+                                    case 2:
+                                        {
+                                            if (Instr.Length != 4)
+                                                throw new WrongParamCountException(Line);
+
+                                            int ActorNum = Helper_ConvertToInt32(Instr[3]);
+
+                                            if (ActorNum > UInt16.MaxValue || ActorNum < 0)
+                                                throw new ParamOutOfRangeException(Line);
+
+                                            return new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SET, 2, Convert.ToUInt16(ActorNum), 0, (byte)Lists.SetSubTypes.camera_tracking_on).GetByteData();
+                                        }
+                                    case 3:
+                                        {
+                                            if (Instr.Length != 5)
+                                                throw new WrongParamCountException(Line);
+
+                                            int ActorNum = Helper_ConvertToInt32(Instr[2]);
+                                            int ActorType = Helper_ConvertToInt32(Instr[3]);
+
+                                            if (ActorNum > UInt16.MaxValue)
+                                                throw new ParamOutOfRangeException(Line);
+
+                                            if (ActorType > 12 || ActorType < 0)
+                                                throw new ParamOutOfRangeException(Line);
+
+                                            return new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SET, 3, Convert.ToUInt16(ActorNum), Convert.ToUInt16(ActorType), (byte)Lists.SetSubTypes.camera_tracking_on).GetByteData();
+                                        }
+                                    default: throw new Exception();
+                                }
+                            }
                             else
                             {
                                 throw new Exception();
@@ -1086,6 +1128,8 @@ namespace NPC_Maker
                                 if (ActorNum > UInt16.MaxValue || ActorNum < 0)
                                     throw new ParamOutOfRangeException(Line);
                             }
+                            else
+                                throw new Exception();
 
                             ExternalActorDependantInstruction Change = new ExternalActorDependantInstruction((byte)FunctionType, (byte)SetSubType, Convert.ToInt16(ActorNum), 0, Convert.ToUInt16(Label));
                             return Change.GetByteData();
@@ -1354,13 +1398,15 @@ namespace NPC_Maker
     public class GenericTripleU16Instruction
     {
         Byte ID { get; set; }
+        Byte SubId { get; set; }
         UInt16 U16_1 { get; set; }
         UInt16 U16_2 { get; set; }
         UInt16 U16_3 { get; set; }
 
-        public GenericTripleU16Instruction(Byte _ID, UInt16 _Data1, UInt16 _Data2, UInt16 _Data3)
+        public GenericTripleU16Instruction(Byte _ID, UInt16 _Data1, UInt16 _Data2, UInt16 _Data3, Byte _SubId = 0)
         {
             ID = _ID;
+            SubId = _SubId;
             U16_1 = _Data1;
             U16_2 = _Data2;
             U16_3 = _Data3;
@@ -1371,7 +1417,7 @@ namespace NPC_Maker
             List<byte> Data = new List<byte>();
 
             Data.Add(ID);
-            Data.Add(0);
+            Data.Add(SubId);
             Data.AddRange(Program.BEConverter.GetBytes(U16_1));
             Data.AddRange(Program.BEConverter.GetBytes(U16_2));
             Data.AddRange(Program.BEConverter.GetBytes(U16_3));

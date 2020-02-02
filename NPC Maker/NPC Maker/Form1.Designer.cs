@@ -204,6 +204,7 @@
             this.itemstradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_Editor.SuspendLayout();
@@ -441,6 +442,7 @@
             // 
             // Tab1_Data
             // 
+            this.Tab1_Data.Controls.Add(this.Checkbox_AlwaysActive);
             this.Tab1_Data.Controls.Add(this.Checkbox_EnvColor);
             this.Tab1_Data.Controls.Add(this.Button_EnvironmentColorPreview);
             this.Tab1_Data.Controls.Add(this.Panel_HeadRot);
@@ -1787,7 +1789,7 @@
             this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_9.Name = "TabPage_Segment_9";
             this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_9.Size = new System.Drawing.Size(798, 229);
+            this.TabPage_Segment_9.Size = new System.Drawing.Size(812, 229);
             this.TabPage_Segment_9.TabIndex = 1;
             this.TabPage_Segment_9.Text = "Segment 9";
             this.TabPage_Segment_9.UseVisualStyleBackColor = true;
@@ -1808,7 +1810,7 @@
             this.Seg_9.MultiSelect = false;
             this.Seg_9.Name = "Seg_9";
             this.Seg_9.RowHeadersVisible = false;
-            this.Seg_9.Size = new System.Drawing.Size(792, 223);
+            this.Seg_9.Size = new System.Drawing.Size(806, 223);
             this.Seg_9.TabIndex = 11;
             this.Seg_9.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_9.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -1838,7 +1840,7 @@
             this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_A.Name = "TabPage_Segment_A";
             this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_A.Size = new System.Drawing.Size(798, 229);
+            this.TabPage_Segment_A.Size = new System.Drawing.Size(812, 229);
             this.TabPage_Segment_A.TabIndex = 2;
             this.TabPage_Segment_A.Text = "Segment A";
             this.TabPage_Segment_A.UseVisualStyleBackColor = true;
@@ -1859,7 +1861,7 @@
             this.Seg_A.MultiSelect = false;
             this.Seg_A.Name = "Seg_A";
             this.Seg_A.RowHeadersVisible = false;
-            this.Seg_A.Size = new System.Drawing.Size(792, 223);
+            this.Seg_A.Size = new System.Drawing.Size(806, 223);
             this.Seg_A.TabIndex = 11;
             this.Seg_A.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_A.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -1889,7 +1891,7 @@
             this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_B.Name = "TabPage_Segment_B";
             this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_B.Size = new System.Drawing.Size(798, 229);
+            this.TabPage_Segment_B.Size = new System.Drawing.Size(812, 229);
             this.TabPage_Segment_B.TabIndex = 3;
             this.TabPage_Segment_B.Text = "Segment B";
             this.TabPage_Segment_B.UseVisualStyleBackColor = true;
@@ -1910,7 +1912,7 @@
             this.Seg_B.MultiSelect = false;
             this.Seg_B.Name = "Seg_B";
             this.Seg_B.RowHeadersVisible = false;
-            this.Seg_B.Size = new System.Drawing.Size(792, 223);
+            this.Seg_B.Size = new System.Drawing.Size(806, 223);
             this.Seg_B.TabIndex = 11;
             this.Seg_B.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_B.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -1940,7 +1942,7 @@
             this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_C.Name = "TabPage_Segment_C";
             this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_C.Size = new System.Drawing.Size(798, 229);
+            this.TabPage_Segment_C.Size = new System.Drawing.Size(812, 229);
             this.TabPage_Segment_C.TabIndex = 4;
             this.TabPage_Segment_C.Text = "Segment C";
             this.TabPage_Segment_C.UseVisualStyleBackColor = true;
@@ -1961,7 +1963,7 @@
             this.Seg_C.MultiSelect = false;
             this.Seg_C.Name = "Seg_C";
             this.Seg_C.RowHeadersVisible = false;
-            this.Seg_C.Size = new System.Drawing.Size(792, 223);
+            this.Seg_C.Size = new System.Drawing.Size(806, 223);
             this.Seg_C.TabIndex = 11;
             this.Seg_C.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_C.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -1991,7 +1993,7 @@
             this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_D.Name = "TabPage_Segment_D";
             this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_D.Size = new System.Drawing.Size(798, 229);
+            this.TabPage_Segment_D.Size = new System.Drawing.Size(812, 229);
             this.TabPage_Segment_D.TabIndex = 5;
             this.TabPage_Segment_D.Text = "Segment D";
             this.TabPage_Segment_D.UseVisualStyleBackColor = true;
@@ -2012,7 +2014,7 @@
             this.Seg_D.MultiSelect = false;
             this.Seg_D.Name = "Seg_D";
             this.Seg_D.RowHeadersVisible = false;
-            this.Seg_D.Size = new System.Drawing.Size(792, 223);
+            this.Seg_D.Size = new System.Drawing.Size(806, 223);
             this.Seg_D.TabIndex = 11;
             this.Seg_D.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_D.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -2042,7 +2044,7 @@
             this.TabPage_Segment_E.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_E.Name = "TabPage_Segment_E";
             this.TabPage_Segment_E.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_E.Size = new System.Drawing.Size(798, 229);
+            this.TabPage_Segment_E.Size = new System.Drawing.Size(812, 229);
             this.TabPage_Segment_E.TabIndex = 6;
             this.TabPage_Segment_E.Text = "Segment E";
             this.TabPage_Segment_E.UseVisualStyleBackColor = true;
@@ -2063,7 +2065,7 @@
             this.Seg_E.MultiSelect = false;
             this.Seg_E.Name = "Seg_E";
             this.Seg_E.RowHeadersVisible = false;
-            this.Seg_E.Size = new System.Drawing.Size(792, 223);
+            this.Seg_E.Size = new System.Drawing.Size(806, 223);
             this.Seg_E.TabIndex = 11;
             this.Seg_E.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_E.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -2093,7 +2095,7 @@
             this.TabPage_Segment_F.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_F.Name = "TabPage_Segment_F";
             this.TabPage_Segment_F.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_F.Size = new System.Drawing.Size(798, 229);
+            this.TabPage_Segment_F.Size = new System.Drawing.Size(812, 229);
             this.TabPage_Segment_F.TabIndex = 7;
             this.TabPage_Segment_F.Text = "Segment F";
             this.TabPage_Segment_F.UseVisualStyleBackColor = true;
@@ -2114,7 +2116,7 @@
             this.Seg_F.MultiSelect = false;
             this.Seg_F.Name = "Seg_F";
             this.Seg_F.RowHeadersVisible = false;
-            this.Seg_F.Size = new System.Drawing.Size(792, 223);
+            this.Seg_F.Size = new System.Drawing.Size(806, 223);
             this.Seg_F.TabIndex = 11;
             this.Seg_F.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
             this.Seg_F.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
@@ -2170,13 +2172,14 @@
         '\''};
             this.Textbox_Script.AutoIndent = false;
             this.Textbox_Script.AutoIndentChars = false;
-            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(2, 14);
             this.Textbox_Script.BackBrush = null;
             this.Textbox_Script.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script.CharHeight = 14;
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(4, 6);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -2340,6 +2343,18 @@
             this.musicToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.musicToolStripMenuItem.Text = "Music";
             this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
+            // 
+            // Checkbox_AlwaysActive
+            // 
+            this.Checkbox_AlwaysActive.AutoSize = true;
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(417, 396);
+            this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
+            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(168, 17);
+            this.Checkbox_AlwaysActive.TabIndex = 51;
+            this.Checkbox_AlwaysActive.Tag = "ACTIVE";
+            this.Checkbox_AlwaysActive.Text = "Run actor even out of camera";
+            this.Checkbox_AlwaysActive.UseVisualStyleBackColor = true;
+            this.Checkbox_AlwaysActive.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Form1
             // 
@@ -2604,6 +2619,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_ObjId;
+        private System.Windows.Forms.CheckBox Checkbox_AlwaysActive;
     }
 }
 

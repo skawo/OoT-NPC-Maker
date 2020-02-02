@@ -59,7 +59,16 @@ namespace NPC_Maker
             SEGMENT_C = 4,
             SEGMENT_D = 5,
             SEGMENT_E = 6,
-            SEGMENT_F = 7
+            SEGMENT_F = 7,
+            SEG_8 = 0,
+            SEG_9 = 1,
+            SEG_A = 2,
+            SEG_B = 3,
+            SEG_C = 4,
+            SEG_D = 5,
+            SEG_E = 6,
+            SEG_F = 7
+
         }
         public enum MovementStyles
         {
@@ -98,6 +107,7 @@ namespace NPC_Maker
             SCRIPT_CHANGE = 12,
             RETURN = 255,
         }
+
         public enum TradeItems
         {
             ZELDALETTER = 1,
@@ -299,6 +309,7 @@ namespace NPC_Maker
             model_offset_y = 44,
             model_offset_z = 45,
             rupees = 46,
+            camera_id = 47,
 
             /* u32 Subtypes */
 
@@ -319,6 +330,7 @@ namespace NPC_Maker
             movement = 182,
             do_blinking_anim = 183,
             do_talking_anim = 184,
+            always_active = 185,
 
             /* s8 Subtypes */
 
@@ -340,6 +352,7 @@ namespace NPC_Maker
             env_color = 245,
             dlist_show = 246,
             animation_keyframes = 247,
+            camera_tracking_on = 248,
         }
         public enum WaitForSubTypes
         {

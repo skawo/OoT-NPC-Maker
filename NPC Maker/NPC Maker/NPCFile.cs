@@ -37,6 +37,7 @@ namespace NPC_Maker
         public bool Shadow { get; set; }
         public bool Switches { get; set; }
         public bool Pushable { get; set; }
+        public bool AlwActive { get; set; }
         public UInt16 Radius { get; set; }
         public UInt16 Height { get; set; }
         public Int16[] ColOffs { get; set; }
@@ -91,6 +92,7 @@ namespace NPC_Maker
             Shadow = false;
             Switches = false;
             Pushable = false;
+            AlwActive = false;
             Radius = 0;
             Height = 0;
             ColOffs = new Int16[] { 0, 0, 0 };
@@ -183,6 +185,8 @@ namespace NPC_Maker
                 case "TALKSEG": TalkSegment = Convert.ToByte(Value); break;
                 case "BLINKSPE": BlinkSpeed = Convert.ToByte(Value); break;
                 case "TALKSPE": TalkSpeed = Convert.ToByte(Value); break;
+
+                case "ACTIVE": AlwActive = Convert.ToBoolean(Value); break;
 
                 default: break;
             }
