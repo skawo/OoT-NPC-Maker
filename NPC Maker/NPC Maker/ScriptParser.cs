@@ -17,11 +17,9 @@ namespace NPC_Maker
         {
         }
 
-        public byte[] Parse(NPCEntry Entry)
+        public byte[] Parse(NPCEntry Entry, string Script)
         {
             ParseErrors.Clear();
-
-            string Script = Entry.Script;
 
             if (Script.Trim() == "")
                 return new byte[0];
@@ -299,7 +297,7 @@ namespace NPC_Maker
                                                                      Convert.ToUInt16(Label_False));
                                 return If.GetByteData();
                             }
-                            else if (IfSubType < 62)
+                            else if (IfSubType < 61)
                             {
                                 if (Instr.Length != 8)
                                     throw new WrongParamCountException(Line);
@@ -335,7 +333,7 @@ namespace NPC_Maker
                                                                      Convert.ToUInt16(Label_False));
                                 return If.GetByteData();
                             }
-                            else if (IfSubType == 62)
+                            else if (IfSubType == (int)Lists.IfSubTypes.item_being_traded)
                             {
                                 if (Instr.Length != 8)
                                     throw new WrongParamCountException(Line);
@@ -372,7 +370,7 @@ namespace NPC_Maker
                                                                      Convert.ToUInt16(Label_False));
                                 return If.GetByteData();
                             }
-                            else if (IfSubType == 63)
+                            else if (IfSubType == (int)Lists.IfSubTypes.trade_status)
                             {
                                 if (Instr.Length != 5)
                                     throw new WrongParamCountException(Line);
@@ -389,6 +387,49 @@ namespace NPC_Maker
                                                                      Convert.ToUInt16(LabelNone));
                                 return If.GetByteData();
 
+                            }
+                            else if (IfSubType == (int)Lists.IfSubTypes.script_var)
+                            {
+                                if (Instr.Length != 9)
+                                    throw new WrongParamCountException(Line);
+
+                                int Label_True = GetLabelOffset(Line, LineNo, Instr[6]);
+                                int Label_False = GetLabelOffset(Line, LineNo, Instr[8]);
+
+                                if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
+                                    throw new LabelOutOfRangeException(Line);
+
+                                if (Instr[5].ToLower() != "then" || Instr[7].ToLower() != "else")
+                                    throw new Exception();
+
+                                int ScriptVarNum = Helper_ConvertToInt32(Instr[2]);
+
+                                if (ScriptVarNum > 3 || ScriptVarNum < 0)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                byte Condition = 0;
+
+                                switch (Instr[3])
+                                {
+                                    case "==": Condition = 0; break;
+                                    case "<": Condition = 1; break;
+                                    case ">": Condition = 2; break;
+                                    default: throw new Exception();
+                                }
+
+                                int Value = Helper_ConvertToInt32(Instr[4]);
+
+                                if (Value > 127 || Value < -127)
+                                    throw new ParamOutOfRangeException(Line);
+
+
+                                IfScriptVarInstruction If = new IfScriptVarInstruction(Convert.ToByte(IfSubType),
+                                                                                       Condition,
+                                                                                       (byte)Value,
+                                                                                       (byte)ScriptVarNum,
+                                                                                       Convert.ToUInt16(Label_True),
+                                                                                       Convert.ToUInt16(Label_False));
+                                return If.GetByteData();
                             }
                             else
                             {
@@ -576,7 +617,7 @@ namespace NPC_Maker
                                 GenericU8Instruction SetHeadA = new GenericU8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetHeadA.GetByteData();
                             }
-                            else if (SetSubType == (int)Lists.SetSubTypes.animation)
+                            else if (SetSubType == (int)Lists.SetSubTypes.animation || SetSubType == (int)Lists.SetSubTypes.animation_instantly)
                             {
                                 if (Instr.Length < 3 && Instr.Length > 4)
                                     throw new WrongParamCountException(Line);
@@ -599,7 +640,7 @@ namespace NPC_Maker
                                         throw new ParamOutOfRangeException(Line);
                                 }
 
-                                SetAnimInstruction SetAnim = new SetAnimInstruction(Convert.ToByte(Loops), Convert.ToUInt16(AnimID));
+                                SetAnimInstruction SetAnim = new SetAnimInstruction((byte)SetSubType, Convert.ToByte(Loops), Convert.ToUInt16(AnimID));
                                 return SetAnim.GetByteData();
                             }
                             else if (SetSubType == (int)Lists.SetSubTypes.animation_object)
@@ -823,6 +864,35 @@ namespace NPC_Maker
                                     default: throw new Exception();
                                 }
                             }
+                            else if (SetSubType == (int)Lists.SetSubTypes.script_var)
+                            {
+                                if (Instr.Length != 5)
+                                    throw new WrongParamCountException(Line);
+
+                                int ScriptVarNum = Helper_ConvertToInt32(Instr[2]);
+
+                                if (ScriptVarNum > 3 || ScriptVarNum < 0)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                byte Type = 0;
+
+                                switch (Instr[3])
+                                {
+                                    case "=": Type = 0; break;
+                                    case "-": Type = 1; break;
+                                    case "+": Type = 2; break;
+                                    default: throw new Exception();
+                                }
+
+                                int Value = Helper_ConvertToInt32(Instr[4]);
+
+                                if (Value > 127 || Value < -127)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                GenericTripleU16Instruction SetScriptVar = new GenericTripleU16Instruction((int)Lists.InstructionIDs.SET, Type, (UInt16)Value, (UInt16)ScriptVarNum, (byte)Lists.SetSubTypes.script_var); 
+                                return SetScriptVar.GetByteData();
+                            }
+
                             else
                             {
                                 throw new Exception();
@@ -1523,6 +1593,41 @@ namespace NPC_Maker
         }
     }
 
+    public class IfScriptVarInstruction
+    {
+        Byte ID = (byte)Lists.InstructionIDs.IF;
+        Byte Check { get; set; }
+        Byte Value { get; set; }
+        Byte ScriptVarID { get; set; }
+        UInt16 Offs_True { get; set; }
+        UInt16 Offs_False { get; set; }
+
+        public IfScriptVarInstruction(Byte Checked, Byte Condition, Byte Val, Byte _ScriptVarId, UInt16 True, UInt16 False)
+        {
+            Check = 0;
+            Check |= (byte)(Checked << 2);
+            Check |= Condition;
+            Value = Val;
+            ScriptVarID = _ScriptVarId;
+            Offs_True = True;
+            Offs_False = False;
+        }
+
+        public byte[] GetByteData()
+        {
+            List<byte> Data = new List<byte>();
+
+            Data.Add(ID);
+            Data.Add(Check);
+            Data.Add(Value);
+            Data.Add(ScriptVarID);
+            Data.AddRange(Program.BEConverter.GetBytes(Offs_True));
+            Data.AddRange(Program.BEConverter.GetBytes(Offs_False));
+
+            return Data.ToArray();
+        }
+    }
+
     public class SetResponseInstruction
     {
         Byte ID = (byte)Lists.InstructionIDs.SET;
@@ -1594,8 +1699,9 @@ namespace NPC_Maker
         Byte Loops { get; set; }
         UInt16 U16 { get; set; }
 
-        public SetAnimInstruction(Byte _Loops, UInt16 _Data)
+        public SetAnimInstruction(Byte _SubId, Byte _Loops, UInt16 _Data)
         {
+            SubID = _SubId;
             Loops = _Loops;
             U16 = _Data;
         }

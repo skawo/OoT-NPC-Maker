@@ -135,7 +135,7 @@ namespace NPC_Maker
                             EntryBytes.Add((byte)Anim.Frames[3]);
                         }
 
-                        byte[] Script = Parser.Parse(Entry);
+                        byte[] Script = Parser.Parse(Entry, Entry.Script);
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Script.Length));
 
                         while (EntryBytes.Count % 4 != 0)
@@ -145,7 +145,19 @@ namespace NPC_Maker
                         Entry.ParseErrors = Parser.ParseErrors.ToList();
 
                         if (Parser.ParseErrors.Count != 0)
-                            ParseErrors.Add(Entry.NPCName);
+                            ParseErrors.Add(Entry.NPCName + " (Interaction)");
+
+                        byte[] Script2 = Parser.Parse(Entry, Entry.Script2);
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Script2.Length));
+
+                        while (EntryBytes.Count % 4 != 0)
+                            EntryBytes.Add(0);
+
+                        EntryBytes.AddRange(Script2);
+                        Entry.ParseErrors = Parser.ParseErrors.ToList();
+
+                        if (Parser.ParseErrors.Count != 0)
+                            ParseErrors.Add(Entry.NPCName + " (Idle)");
 
                         EntryBytes.Add(Entry.EnvColor.R);
                         EntryBytes.Add(Entry.EnvColor.G);

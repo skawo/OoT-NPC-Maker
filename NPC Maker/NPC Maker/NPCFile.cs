@@ -61,6 +61,9 @@ namespace NPC_Maker
         public string Script { get; set; }
         public List<string> ParseErrors { get; set; }
 
+        public string Script2 { get; set; }
+        public List<string> ParseErrors2 { get; set; }
+
         public System.Drawing.Color EnvColor { get; set; }
         public List<List<TextureEntry>> Textures { get; set; }
         public string BlinkPattern { get; set; }
@@ -115,6 +118,9 @@ namespace NPC_Maker
 
             Script = "";
             ParseErrors = new List<string>();
+
+            Script2 = "";
+            ParseErrors2 = new List<string>();
 
             Textures = new List<List<TextureEntry>>();
 

@@ -280,9 +280,12 @@ namespace NPC_Maker
             scene_id = 32,
             worn_mask = 33,
             skulltulas = 34,
-            item_being_traded = 62,
+            current_path_node = 35,
+            current_animation_frame = 36,
 
-            trade_status = 63,
+            item_being_traded = 61,
+            trade_status = 62,
+            script_var = 63,
         }
         public enum SetSubTypes
         {
@@ -331,6 +334,8 @@ namespace NPC_Maker
             do_blinking_anim = 183,
             do_talking_anim = 184,
             always_active = 185,
+            interaction_script = 186,
+            idle_script = 187,
 
             /* s8 Subtypes */
 
@@ -353,6 +358,8 @@ namespace NPC_Maker
             dlist_show = 246,
             animation_keyframes = 247,
             camera_tracking_on = 248,
+            script_var = 249,
+            animation_instantly = 250,
         }
         public enum WaitForSubTypes
         {

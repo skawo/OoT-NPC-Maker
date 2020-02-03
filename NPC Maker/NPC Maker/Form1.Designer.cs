@@ -48,6 +48,7 @@
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
+            this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_EnvColor = new System.Windows.Forms.CheckBox();
             this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
             this.Panel_HeadRot = new System.Windows.Forms.Panel();
@@ -189,6 +190,10 @@
             this.Textbox_Script = new FastColoredTextBoxNS.FastColoredTextBox();
             this.Button_TryParse = new System.Windows.Forms.Button();
             this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
+            this.Tab4_IdleScript = new System.Windows.Forms.TabPage();
+            this.Textbox_Script2 = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.Button_TryParse2 = new System.Windows.Forms.Button();
+            this.Textbox_ParseErrors2 = new System.Windows.Forms.TextBox();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
             this.Button_PasteBase = new System.Windows.Forms.Button();
             this.Button_CopyBase = new System.Windows.Forms.Button();
@@ -204,7 +209,6 @@
             this.itemstradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.MenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_Editor.SuspendLayout();
@@ -265,6 +269,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).BeginInit();
             this.Tab3_Script.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script)).BeginInit();
+            this.Tab4_IdleScript.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).BeginInit();
             this.Panel_NPCList.SuspendLayout();
             this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -433,6 +439,7 @@
             this.TabControl.Controls.Add(this.Tab1_Data);
             this.TabControl.Controls.Add(this.Tab2_ExtraData);
             this.TabControl.Controls.Add(this.Tab3_Script);
+            this.TabControl.Controls.Add(this.Tab4_IdleScript);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
@@ -483,6 +490,18 @@
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
             this.Tab1_Data.UseVisualStyleBackColor = true;
+            // 
+            // Checkbox_AlwaysActive
+            // 
+            this.Checkbox_AlwaysActive.AutoSize = true;
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(417, 396);
+            this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
+            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(168, 17);
+            this.Checkbox_AlwaysActive.TabIndex = 51;
+            this.Checkbox_AlwaysActive.Tag = "ACTIVE";
+            this.Checkbox_AlwaysActive.Text = "Run actor even out of camera";
+            this.Checkbox_AlwaysActive.UseVisualStyleBackColor = true;
+            this.Checkbox_AlwaysActive.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Checkbox_EnvColor
             // 
@@ -2172,14 +2191,13 @@
         '\''};
             this.Textbox_Script.AutoIndent = false;
             this.Textbox_Script.AutoIndentChars = false;
-            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(2, 14);
+            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.Textbox_Script.BackBrush = null;
             this.Textbox_Script.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script.CharHeight = 14;
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(4, 6);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -2191,7 +2209,6 @@
             this.Textbox_Script.WordWrapAutoIndent = false;
             this.Textbox_Script.Zoom = 100;
             this.Textbox_Script.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.Textbox_Script_TextChanged);
-            this.Textbox_Script.Load += new System.EventHandler(this.Textbox_Script_Load);
             this.Textbox_Script.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Textbox_Script_MouseClick);
             // 
             // Button_TryParse
@@ -2216,6 +2233,80 @@
             this.Textbox_ParseErrors.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.Textbox_ParseErrors.Size = new System.Drawing.Size(714, 68);
             this.Textbox_ParseErrors.TabIndex = 1;
+            // 
+            // Tab4_IdleScript
+            // 
+            this.Tab4_IdleScript.Controls.Add(this.Textbox_Script2);
+            this.Tab4_IdleScript.Controls.Add(this.Button_TryParse2);
+            this.Tab4_IdleScript.Controls.Add(this.Textbox_ParseErrors2);
+            this.Tab4_IdleScript.Location = new System.Drawing.Point(4, 22);
+            this.Tab4_IdleScript.Name = "Tab4_IdleScript";
+            this.Tab4_IdleScript.Padding = new System.Windows.Forms.Padding(3);
+            this.Tab4_IdleScript.Size = new System.Drawing.Size(835, 615);
+            this.Tab4_IdleScript.TabIndex = 3;
+            this.Tab4_IdleScript.Text = "Idle script";
+            this.Tab4_IdleScript.UseVisualStyleBackColor = true;
+            // 
+            // Textbox_Script2
+            // 
+            this.Textbox_Script2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Textbox_Script2.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.Textbox_Script2.AutoIndent = false;
+            this.Textbox_Script2.AutoIndentChars = false;
+            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+            this.Textbox_Script2.BackBrush = null;
+            this.Textbox_Script2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Textbox_Script2.CharHeight = 14;
+            this.Textbox_Script2.CharWidth = 8;
+            this.Textbox_Script2.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.Textbox_Script2.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script2.IsReplaceMode = false;
+            this.Textbox_Script2.Location = new System.Drawing.Point(4, 4);
+            this.Textbox_Script2.Name = "Textbox_Script2";
+            this.Textbox_Script2.Paddings = new System.Windows.Forms.Padding(0);
+            this.Textbox_Script2.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.Textbox_Script2.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("Textbox_Script2.ServiceColors")));
+            this.Textbox_Script2.Size = new System.Drawing.Size(826, 533);
+            this.Textbox_Script2.TabIndex = 6;
+            this.Textbox_Script2.WordWrapAutoIndent = false;
+            this.Textbox_Script2.Zoom = 100;
+            this.Textbox_Script2.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.Textbox_Script2_TextChanged);
+            this.Textbox_Script2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Textbox_Script_MouseClick);
+            // 
+            // Button_TryParse2
+            // 
+            this.Button_TryParse2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_TryParse2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.Button_TryParse2.Location = new System.Drawing.Point(724, 543);
+            this.Button_TryParse2.Name = "Button_TryParse2";
+            this.Button_TryParse2.Size = new System.Drawing.Size(105, 68);
+            this.Button_TryParse2.TabIndex = 5;
+            this.Button_TryParse2.Text = "Try parsing";
+            this.Button_TryParse2.UseVisualStyleBackColor = true;
+            this.Button_TryParse2.Click += new System.EventHandler(this.Button_TryParse2_Click);
+            // 
+            // Textbox_ParseErrors2
+            // 
+            this.Textbox_ParseErrors2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Textbox_ParseErrors2.Location = new System.Drawing.Point(4, 543);
+            this.Textbox_ParseErrors2.Multiline = true;
+            this.Textbox_ParseErrors2.Name = "Textbox_ParseErrors2";
+            this.Textbox_ParseErrors2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.Textbox_ParseErrors2.Size = new System.Drawing.Size(714, 68);
+            this.Textbox_ParseErrors2.TabIndex = 4;
             // 
             // Panel_NPCList
             // 
@@ -2344,18 +2435,6 @@
             this.musicToolStripMenuItem.Text = "Music";
             this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
             // 
-            // Checkbox_AlwaysActive
-            // 
-            this.Checkbox_AlwaysActive.AutoSize = true;
-            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(417, 396);
-            this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
-            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(168, 17);
-            this.Checkbox_AlwaysActive.TabIndex = 51;
-            this.Checkbox_AlwaysActive.Tag = "ACTIVE";
-            this.Checkbox_AlwaysActive.Text = "Run actor even out of camera";
-            this.Checkbox_AlwaysActive.UseVisualStyleBackColor = true;
-            this.Checkbox_AlwaysActive.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2437,6 +2516,9 @@
             this.Tab3_Script.ResumeLayout(false);
             this.Tab3_Script.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script)).EndInit();
+            this.Tab4_IdleScript.ResumeLayout(false);
+            this.Tab4_IdleScript.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).EndInit();
             this.Panel_NPCList.ResumeLayout(false);
             this.ContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -2620,6 +2702,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_ObjId;
         private System.Windows.Forms.CheckBox Checkbox_AlwaysActive;
+        private System.Windows.Forms.TabPage Tab4_IdleScript;
+        private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script2;
+        private System.Windows.Forms.Button Button_TryParse2;
+        private System.Windows.Forms.TextBox Textbox_ParseErrors2;
     }
 }
 

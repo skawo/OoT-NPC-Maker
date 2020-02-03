@@ -156,6 +156,7 @@ namespace NPC_Maker
             NumUpDown_Scale.Value = (decimal)SelectedEntry.Scale;
 
             Textbox_Script.Text = SelectedEntry.Script;
+            Textbox_Script2.Text = SelectedEntry.Script2;
 
             DataGrid_Animations.Rows.Clear();
 
@@ -189,6 +190,21 @@ namespace NPC_Maker
                     string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
                     Line = Line.Substring(1, Line.Length - 2);
                     FCTB.ApplyError(Textbox_Script, Line);
+                }
+            }
+
+            Textbox_ParseErrors2.Text = "";
+
+            if (SelectedEntry.ParseErrors2.Count == 0)
+                Textbox_ParseErrors2.Text = "Parsed successfully!";
+            else
+            {
+                foreach (string Error in SelectedEntry.ParseErrors2)
+                {
+                    Textbox_ParseErrors2.Text += Error + Environment.NewLine;
+                    string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
+                    Line = Line.Substring(1, Line.Length - 2);
+                    FCTB.ApplyError(Textbox_Script2, Line);
                 }
             }
 
@@ -239,7 +255,7 @@ namespace NPC_Maker
                                                                  Dlist.Limb.ToString(),
                                                                  Dlist.ObjectID == -1 ? SelectedEntry.ObjectID.ToString() : Dlist.ObjectID.ToString(),
                                                                  SelCombo
-                                                                }) ;
+                                                                });
             }
 
         }
@@ -511,7 +527,7 @@ namespace NPC_Maker
         {
             if (SelectedEntry == null)
                 return;
-            SelectedEntry.Script = Textbox_Script.Text;
+            SelectedEntry.Script = (sender as FastColoredTextBox).Text;
             FCTB.ApplySyntaxHighlight(sender, e);
         }
 
@@ -799,7 +815,7 @@ namespace NPC_Maker
             {
                 try
                 {
-                    if(SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
+                    if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
                     {
                         SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), -1));
                         (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
@@ -955,7 +971,7 @@ namespace NPC_Maker
                     e.ParsingApplied = true;
                 }
             }
-            else if(e.ColumnIndex == 3)
+            else if (e.ColumnIndex == 3)
             {
                 try
                 {
@@ -983,7 +999,7 @@ namespace NPC_Maker
                     e.ParsingApplied = true;
                 }
             }
-            else if(e.ColumnIndex == 4)
+            else if (e.ColumnIndex == 4)
             {
                 try
                 {
@@ -1028,7 +1044,7 @@ namespace NPC_Maker
 
             ScriptParser Parser = new ScriptParser();
 
-            Parser.Parse(SelectedEntry);
+            Parser.Parse(SelectedEntry, SelectedEntry.Script);
             SelectedEntry.ParseErrors = Parser.ParseErrors;
 
             Textbox_ParseErrors.Text = "";
@@ -1136,16 +1152,11 @@ namespace NPC_Maker
 
         }
 
-        private void Textbox_Script_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void Textbox_Script_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                ContextMenuStrip.Show(Textbox_Script, e.Location);
+                ContextMenuStrip.Show(sender as Control, e.Location);
             }
         }
 
@@ -1190,6 +1201,44 @@ namespace NPC_Maker
         {
             //hack
             NumUpDown_Hierarchy.Focus();
+        }
+
+        private void Button_TryParse2_Click(object sender, EventArgs e)
+        {
+            string[] Lines = Textbox_Script2.Text.Split(new[] { "\n" }, StringSplitOptions.None);
+            Range r = new Range(Textbox_Script2, 0, 0, Textbox_Script2.Text.Length, Lines.Length);
+            r.ClearStyle(FCTB.ErrorStyle);
+
+            ScriptParser Parser = new ScriptParser();
+
+            Parser.Parse(SelectedEntry, SelectedEntry.Script2);
+            SelectedEntry.ParseErrors2 = Parser.ParseErrors;
+
+            Textbox_ParseErrors2.Text = "";
+
+            if (Parser.ParseErrors.Count == 0)
+                Textbox_ParseErrors2.Text = "Parsed successfully!";
+            else
+            {
+                foreach (string Error in Parser.ParseErrors)
+                {
+                    Textbox_ParseErrors2.Text += Error + Environment.NewLine;
+                    string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
+                    Line = Line.Substring(1, Line.Length - 2);
+                    FCTB.ApplyError(Textbox_Script2, Line);
+                }
+            }
+
+            Textbox_Script2.Focus();
+
+        }
+
+        private void Textbox_Script2_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (SelectedEntry == null)
+                return;
+            SelectedEntry.Script2 = (sender as FastColoredTextBox).Text;
+            FCTB.ApplySyntaxHighlight(sender, e);
         }
     }
 }
