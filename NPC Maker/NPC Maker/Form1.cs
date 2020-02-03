@@ -22,6 +22,7 @@ namespace NPC_Maker
         NPCEntry CopiedEntry = null;
         int SelectedIndex = -1;
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
+        Control LastRightClickedTextbox = null;
 
         public Form1()
         {
@@ -76,12 +77,14 @@ namespace NPC_Maker
 
         private void InsertTxtToScript(string Text)
         {
-            int start = Textbox_Script.SelectionStart;
-            string newTxt = Textbox_Script.Text;
-            newTxt = newTxt.Remove(Textbox_Script.SelectionStart, Textbox_Script.SelectionLength);
-            newTxt = newTxt.Insert(Textbox_Script.SelectionStart, Text);
-            Textbox_Script.Text = newTxt;
-            Textbox_Script.SelectionStart = start + Text.Length;
+            FastColoredTextBox T = (LastRightClickedTextbox as FastColoredTextBox);
+
+            int start = T.SelectionStart;
+            string newTxt = T.Text;
+            newTxt = newTxt.Remove(T.SelectionStart, T.SelectionLength);
+            newTxt = newTxt.Insert(T.SelectionStart, Text);
+            T.Text = newTxt;
+            T.SelectionStart = start + Text.Length;
         }
 
         private void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
@@ -1156,6 +1159,7 @@ namespace NPC_Maker
         {
             if (e.Button == MouseButtons.Right)
             {
+                LastRightClickedTextbox = (sender as Control);
                 ContextMenuStrip.Show(sender as Control, e.Location);
             }
         }

@@ -2198,6 +2198,7 @@
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(4, 6);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -2272,6 +2273,7 @@
             this.Textbox_Script2.CharWidth = 8;
             this.Textbox_Script2.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script2.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script2.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script2.IsReplaceMode = false;
             this.Textbox_Script2.Location = new System.Drawing.Point(4, 4);
             this.Textbox_Script2.Name = "Textbox_Script2";
@@ -2301,6 +2303,7 @@
             // 
             this.Textbox_ParseErrors2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.Textbox_ParseErrors2.Font = new System.Drawing.Font("Consolas", 9.75F);
             this.Textbox_ParseErrors2.Location = new System.Drawing.Point(4, 543);
             this.Textbox_ParseErrors2.Multiline = true;
             this.Textbox_ParseErrors2.Name = "Textbox_ParseErrors2";
