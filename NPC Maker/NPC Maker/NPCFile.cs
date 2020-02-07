@@ -74,6 +74,8 @@ namespace NPC_Maker
         public byte TalkSpeed { get; set; }
         public List<DListEntry> DLists { get; set; }
 
+        //public List<ColorEntry> Colors { get; set; }
+
         public NPCEntry()
         {
             NPCName = "";
@@ -133,7 +135,47 @@ namespace NPC_Maker
             TalkSpeed = 1;
 
             DLists = new List<DListEntry>();
+            //Colors = new List<ColorEntry>();
         }
+
+        /*
+        public List<OutputColorEntry> ParseColorEntries()
+        {
+            List<OutputColorEntry> Out = new List<OutputColorEntry>();
+
+            foreach (ColorEntry CE in this.Colors)
+            {
+                if (CE.Limbs != "")
+                {
+                    string[] Limbs = CE.Limbs.Split(',');
+
+                    foreach (string LimbE in Limbs)
+                    {
+                        if (LimbE.Contains("-"))
+                        {
+                            string[] MinMax = LimbE.Split('-');
+
+                            int Min = Convert.ToInt32(MinMax[0]);
+                            int Max = Convert.ToInt32(MinMax[1]);
+
+                            for (int f = Min; f < Max + 1; f++)
+                            {
+                                if (Out.Find(x => x.LimbID == Convert.ToByte(f)) == null)
+                                    Out.Add(new OutputColorEntry(Convert.ToByte(f), CE.Color.R, CE.Color.G, CE.Color.B));
+                            }
+                        }
+                        else
+                        {
+                            if (Out.Find(x => x.LimbID == Convert.ToByte(LimbE)) == null)
+                                Out.Add(new OutputColorEntry(Convert.ToByte(LimbE), CE.Color.R, CE.Color.G, CE.Color.B));
+                        }
+                    }
+                }
+            }
+
+            return Out;
+        }
+        */
 
         public void ChangeValueOfMember(string Member, object Value)
         {
@@ -244,6 +286,47 @@ namespace NPC_Maker
             ObjectID = _ObjectID;
         }
     }
+
+    /*
+      public class OutputColorEntry
+      {
+          public byte LimbID { get; set; }
+          public byte R { get; set; }
+          public byte G { get; set; }
+          public byte B { get; set; }
+
+          public OutputColorEntry()
+          {
+              LimbID = 255;
+              R = 255;
+              G = 255;
+              B = 255;
+          }
+          public OutputColorEntry(byte _LimbID, byte _R, byte _G, byte _B)
+          {
+              LimbID = _LimbID;
+              R = _R;
+              G = _G;
+              B = _B;
+          }
+      }
+
+      public class ColorEntry
+      {
+          public System.Drawing.Color Color { get; set; }
+          public string Limbs { get; set; }
+
+          public ColorEntry()
+          {
+              Color = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+              Limbs = "";
+          }
+          public ColorEntry(string _Limb, System.Drawing.Color _Color)
+          {
+              Color = _Color;
+              Limbs = _Limb;
+          }
+      }*/
 
     public class DListEntry
     {

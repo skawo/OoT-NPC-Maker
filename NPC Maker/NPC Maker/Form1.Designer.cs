@@ -39,7 +39,7 @@
             this.FileMenu_SaveBinary = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DataGrid_NPCs = new System.Windows.Forms.DataGridView();
+            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
             this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_NPCName = new System.Windows.Forms.Label();
@@ -93,7 +93,7 @@
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.NumUpDown_YModelOffs = new System.Windows.Forms.NumericUpDown();
             this.Checkbox_DrawShadow = new System.Windows.Forms.CheckBox();
-            this.DataGrid_Animations = new System.Windows.Forms.DataGridView();
+            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
             this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Frames = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -135,7 +135,7 @@
             this.Label_BlinkingSegment = new System.Windows.Forms.Label();
             this.Textbox_TalkingPattern = new System.Windows.Forms.TextBox();
             this.Label_ExtraTextures = new System.Windows.Forms.Label();
-            this.DataGridView_ExtraDLists = new System.Windows.Forms.DataGridView();
+            this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
             this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -147,42 +147,42 @@
             this.Label_ExtraDisplayLists = new System.Windows.Forms.Label();
             this.TabControl_Textures = new System.Windows.Forms.TabControl();
             this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
-            this.Seg_8 = new System.Windows.Forms.DataGridView();
+            this.Seg_8 = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_8_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_8_TextOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg8_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
-            this.Seg_9 = new System.Windows.Forms.DataGridView();
+            this.Seg_9 = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_9_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_9_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_9_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
-            this.Seg_A = new System.Windows.Forms.DataGridView();
+            this.Seg_A = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_A_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_A_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_A_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
-            this.Seg_B = new System.Windows.Forms.DataGridView();
+            this.Seg_B = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_B_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_B_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_B_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
-            this.Seg_C = new System.Windows.Forms.DataGridView();
+            this.Seg_C = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_C_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_C_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_C_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
-            this.Seg_D = new System.Windows.Forms.DataGridView();
+            this.Seg_D = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_D_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_D_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_D_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
-            this.Seg_E = new System.Windows.Forms.DataGridView();
+            this.Seg_E = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_E_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_E_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_E_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
-            this.Seg_F = new System.Windows.Forms.DataGridView();
+            this.Seg_F = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_F_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_F_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_F_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -494,7 +494,7 @@
             // Checkbox_AlwaysActive
             // 
             this.Checkbox_AlwaysActive.AutoSize = true;
-            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(417, 396);
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(628, 365);
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
             this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(168, 17);
             this.Checkbox_AlwaysActive.TabIndex = 51;
@@ -506,7 +506,7 @@
             // Checkbox_EnvColor
             // 
             this.Checkbox_EnvColor.AutoSize = true;
-            this.Checkbox_EnvColor.Location = new System.Drawing.Point(666, 375);
+            this.Checkbox_EnvColor.Location = new System.Drawing.Point(417, 388);
             this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
             this.Checkbox_EnvColor.Size = new System.Drawing.Size(114, 17);
             this.Checkbox_EnvColor.TabIndex = 50;
@@ -518,7 +518,7 @@
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
-            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(786, 371);
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(575, 384);
             this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
             this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(42, 23);
             this.Button_EnvironmentColorPreview.TabIndex = 49;
@@ -643,7 +643,7 @@
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_TargetLimb);
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_XTargetOffs);
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetOffset);
-            this.Panel_TargetPanel.Location = new System.Drawing.Point(628, 285);
+            this.Panel_TargetPanel.Location = new System.Drawing.Point(628, 278);
             this.Panel_TargetPanel.Name = "Panel_TargetPanel";
             this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 80);
             this.Panel_TargetPanel.TabIndex = 40;
@@ -740,7 +740,7 @@
             // Checkbox_Targettable
             // 
             this.Checkbox_Targettable.AutoSize = true;
-            this.Checkbox_Targettable.Location = new System.Drawing.Point(628, 263);
+            this.Checkbox_Targettable.Location = new System.Drawing.Point(628, 257);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
             this.Checkbox_Targettable.Size = new System.Drawing.Size(80, 17);
             this.Checkbox_Targettable.TabIndex = 39;
@@ -1025,7 +1025,7 @@
             // Checkbox_Pushable
             // 
             this.Checkbox_Pushable.AutoSize = true;
-            this.Checkbox_Pushable.Location = new System.Drawing.Point(523, 230);
+            this.Checkbox_Pushable.Location = new System.Drawing.Point(510, 226);
             this.Checkbox_Pushable.Name = "Checkbox_Pushable";
             this.Checkbox_Pushable.Size = new System.Drawing.Size(70, 17);
             this.Checkbox_Pushable.TabIndex = 24;
@@ -1052,7 +1052,7 @@
             // Checkbox_CanPressSwitches
             // 
             this.Checkbox_CanPressSwitches.AutoSize = true;
-            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(417, 231);
+            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(510, 203);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
             this.Checkbox_CanPressSwitches.TabIndex = 23;
@@ -1083,7 +1083,7 @@
             // Checkbox_DrawShadow
             // 
             this.Checkbox_DrawShadow.AutoSize = true;
-            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(523, 205);
+            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(417, 226);
             this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
             this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 17);
             this.Checkbox_DrawShadow.TabIndex = 22;
@@ -1154,7 +1154,7 @@
             // Checkbox_HaveCollision
             // 
             this.Checkbox_HaveCollision.AutoSize = true;
-            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(417, 205);
+            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(417, 203);
             this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
             this.Checkbox_HaveCollision.Size = new System.Drawing.Size(85, 17);
             this.Checkbox_HaveCollision.TabIndex = 21;
@@ -1184,7 +1184,7 @@
             this.Panel_Collision.Controls.Add(this.NumUpDown_ColRadius);
             this.Panel_Collision.Controls.Add(this.Label_Radius);
             this.Panel_Collision.Controls.Add(this.Label_Collision);
-            this.Panel_Collision.Location = new System.Drawing.Point(417, 257);
+            this.Panel_Collision.Location = new System.Drawing.Point(417, 249);
             this.Panel_Collision.Name = "Panel_Collision";
             this.Panel_Collision.Size = new System.Drawing.Size(200, 133);
             this.Panel_Collision.TabIndex = 20;
@@ -2191,7 +2191,7 @@
         '\''};
             this.Textbox_Script.AutoIndent = false;
             this.Textbox_Script.AutoIndentChars = false;
-            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(2, 14);
             this.Textbox_Script.BackBrush = null;
             this.Textbox_Script.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script.CharHeight = 14;
@@ -2266,7 +2266,7 @@
         '\''};
             this.Textbox_Script2.AutoIndent = false;
             this.Textbox_Script2.AutoIndentChars = false;
-            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(2, 14);
             this.Textbox_Script2.BackBrush = null;
             this.Textbox_Script2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script2.CharHeight = 14;
@@ -2537,7 +2537,7 @@
         private System.Windows.Forms.ToolStripMenuItem FileMenu_SaveAs;
         private System.Windows.Forms.ToolStripMenuItem FileMenu_Exit;
         private System.Windows.Forms.ToolStripMenuItem FileMenu_New;
-        private System.Windows.Forms.DataGridView DataGrid_NPCs;
+        private CustomDataGridView DataGrid_NPCs;
         private System.Windows.Forms.Label Label_NPCName;
         private System.Windows.Forms.TextBox Textbox_NPCName;
         private System.Windows.Forms.Panel Panel_Editor;
@@ -2551,7 +2551,7 @@
         private System.Windows.Forms.Label Label_Hierarchy;
         private System.Windows.Forms.Label Label_ObjectID;
         private System.Windows.Forms.NumericUpDown NumUpDown_ObjectID;
-        private System.Windows.Forms.DataGridView DataGrid_Animations;
+        private CustomDataGridView DataGrid_Animations;
         private System.Windows.Forms.Label Label_AnimDefs;
         private System.Windows.Forms.ToolStripMenuItem FileMenu_SaveBinary;
         private System.Windows.Forms.Label Label_HierarchyType;
@@ -2653,7 +2653,7 @@
         private System.Windows.Forms.Label Label_BlinkingSegment;
         private System.Windows.Forms.TextBox Textbox_TalkingPattern;
         private System.Windows.Forms.Label Label_ExtraTextures;
-        private System.Windows.Forms.DataGridView DataGridView_ExtraDLists;
+        private CustomDataGridView DataGridView_ExtraDLists;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Purpose;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Offset;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Translation;
@@ -2665,42 +2665,42 @@
         private System.Windows.Forms.Label Label_ExtraDisplayLists;
         private System.Windows.Forms.TabControl TabControl_Textures;
         private System.Windows.Forms.TabPage TabPage_Segment_8;
-        private System.Windows.Forms.DataGridView Seg_8;
+        private CustomDataGridView Seg_8;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_8_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_8_TextOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg8_ObjId;
         private System.Windows.Forms.TabPage TabPage_Segment_9;
-        private System.Windows.Forms.DataGridView Seg_9;
+        private CustomDataGridView Seg_9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_9_ObjId;
         private System.Windows.Forms.TabPage TabPage_Segment_A;
-        private System.Windows.Forms.DataGridView Seg_A;
+        private CustomDataGridView Seg_A;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_A_ObjId;
         private System.Windows.Forms.TabPage TabPage_Segment_B;
-        private System.Windows.Forms.DataGridView Seg_B;
+        private CustomDataGridView Seg_B;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_B_ObjId;
         private System.Windows.Forms.TabPage TabPage_Segment_C;
-        private System.Windows.Forms.DataGridView Seg_C;
+        private CustomDataGridView Seg_C;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_C_ObjId;
         private System.Windows.Forms.TabPage TabPage_Segment_D;
-        private System.Windows.Forms.DataGridView Seg_D;
+        private CustomDataGridView Seg_D;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_D_ObjId;
         private System.Windows.Forms.TabPage TabPage_Segment_E;
-        private System.Windows.Forms.DataGridView Seg_E;
+        private CustomDataGridView Seg_E;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_E_ObjId;
         private System.Windows.Forms.TabPage TabPage_Segment_F;
-        private System.Windows.Forms.DataGridView Seg_F;
+        private CustomDataGridView Seg_F;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_ObjId;

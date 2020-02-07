@@ -60,7 +60,6 @@ namespace NPC_Maker
                 System.Windows.Forms.MessageBox.Show(Filename + " is missing or incorrect.");
                 return Dict;
             }
-
         }
 
         public static void SaveBinaryFile(string Path, NPCFile Data)
@@ -163,6 +162,20 @@ namespace NPC_Maker
                         EntryBytes.Add(Entry.EnvColor.G);
                         EntryBytes.Add(Entry.EnvColor.B);
                         EntryBytes.Add(Entry.EnvColor.A);
+
+                        /*
+                        List<OutputColorEntry> Cols = Entry.ParseColorEntries().OrderBy(x => x.LimbID).ToList();
+
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Cols.Count()));
+
+                        foreach (OutputColorEntry Col in Cols)
+                        {
+                            EntryBytes.Add(Col.LimbID);
+                            EntryBytes.Add(Col.R);
+                            EntryBytes.Add(Col.G);
+                            EntryBytes.Add(Col.B);
+                        }
+                        */
 
                         EntryBytes.Add(Entry.BlinkSegment);
                         EntryBytes.Add(Entry.TalkSegment);

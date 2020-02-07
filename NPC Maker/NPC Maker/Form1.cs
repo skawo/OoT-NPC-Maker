@@ -161,6 +161,22 @@ namespace NPC_Maker
             Textbox_Script.Text = SelectedEntry.Script;
             Textbox_Script2.Text = SelectedEntry.Script2;
 
+            /*
+            dataGridView1.Rows.Clear();
+
+            foreach (ColorEntry ColorE in SelectedEntry.Colors)
+            {
+                int RowIndex = dataGridView1.Rows.Add(new object[] { ColorE.Limbs, "" });
+
+                dataGridView1.Rows[RowIndex].Cells[1].Style = new DataGridViewCellStyle()
+                {
+                    SelectionBackColor = ColorE.Color,
+                    SelectionForeColor = ColorE.Color,
+                    BackColor = ColorE.Color
+                };
+            }
+            */
+
             DataGrid_Animations.Rows.Clear();
 
             foreach (AnimationEntry Animation in SelectedEntry.Animations)
@@ -260,6 +276,7 @@ namespace NPC_Maker
                                                                  SelCombo
                                                                 });
             }
+
 
         }
 
@@ -1244,5 +1261,92 @@ namespace NPC_Maker
             SelectedEntry.Script2 = (sender as FastColoredTextBox).Text;
             FCTB.ApplySyntaxHighlight(sender, e);
         }
+
+        /*      
+        private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if ((sender as DataGridView).SelectedCells[0].RowIndex > -1)
+                {
+                    if (e.KeyCode == Keys.Delete)
+                    {
+                        int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
+                        (sender as DataGridView).Rows.RemoveAt(Index);
+                        SelectedEntry.Colors.RemoveAt(Index);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 1)
+            {
+                if (ColorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
+                        new DataGridViewCellStyle()
+                        {
+                            SelectionForeColor = ColorDialog.Color,
+                            BackColor = ColorDialog.Color,
+                            SelectionBackColor = ColorDialog.Color
+
+                        };
+
+                    if (SelectedEntry.Colors.Count() - 1 < e.RowIndex)
+                    {
+                        SelectedEntry.Colors.Add(new ColorEntry("", ColorDialog.Color));
+                        dataGridView1.Rows[e.RowIndex].Cells[0].Value = "";
+                    }
+                    else
+                    {
+                        SelectedEntry.Colors[e.RowIndex].Color = ColorDialog.Color;
+                    }
+                }
+            }
+        }
+
+        private void dataGridView1_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                if (SelectedEntry.Colors.Count() - 1 < e.RowIndex)
+                {
+                    Color White = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+                    SelectedEntry.Colors.Add(new ColorEntry(e.Value.ToString(), White));
+
+                    try
+                    {
+                        SelectedEntry.ParseColorEntries();
+                    }
+                    catch
+                    {
+                        SelectedEntry.Colors[e.RowIndex].Limbs = "";
+                        e.Value = "";
+                    }
+
+                    dataGridView1.Rows[e.RowIndex].Cells[1].Style =
+                        new DataGridViewCellStyle()
+                        {
+                            SelectionForeColor = White,
+                            BackColor = White,
+                            SelectionBackColor = White
+
+                        };
+                }
+                else
+                    SelectedEntry.Colors[e.RowIndex].Limbs = e.Value.ToString();
+
+                e.ParsingApplied = true;
+                return;
+            }
+        }
+        */
+
     }
 }
