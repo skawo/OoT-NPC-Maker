@@ -106,7 +106,8 @@ namespace NPC_Maker
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColOffs[2]));
 
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Targettable));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargetLimb));
+                        EntryBytes.Add(Entry.TargetLimb);
+                        EntryBytes.Add(Entry.TargetDist);
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[0]));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[1]));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[2]));

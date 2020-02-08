@@ -141,6 +141,7 @@ namespace NPC_Maker
             NumUpDown_ZColOffs.Value = SelectedEntry.ColOffs[2];
 
             Checkbox_Targettable.Checked = SelectedEntry.Targettable;
+            ComboBox_TargetDist.SelectedIndex = SelectedEntry.TargetDist <= 10 ? SelectedEntry.TargetDist : 1;
             NumUpDown_TargetLimb.Value = SelectedEntry.TargetLimb;
             NumUpDown_XTargetOffs.Value = SelectedEntry.TargOffs[0];
             NumUpDown_YTargetOffs.Value = SelectedEntry.TargOffs[1];

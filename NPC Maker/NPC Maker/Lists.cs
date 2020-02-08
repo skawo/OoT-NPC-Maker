@@ -294,7 +294,6 @@ namespace NPC_Maker
             loop_delay = 1,
             collision_radius = 2,
             collision_height = 3,
-            target_limb = 4,
             path_id = 6,
             time_of_day = 7,
             incorrect_trade_text_id = 8,
@@ -336,6 +335,8 @@ namespace NPC_Maker
             always_active = 185,
             interaction_script = 186,
             idle_script = 187,
+            target_limb = 188,
+            target_dist = 189,
 
             /* s8 Subtypes */
 

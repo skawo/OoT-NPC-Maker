@@ -48,6 +48,8 @@
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ComboBox_TargetDist = new System.Windows.Forms.ComboBox();
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_EnvColor = new System.Windows.Forms.CheckBox();
             this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
@@ -449,6 +451,8 @@
             // 
             // Tab1_Data
             // 
+            this.Tab1_Data.Controls.Add(this.label1);
+            this.Tab1_Data.Controls.Add(this.ComboBox_TargetDist);
             this.Tab1_Data.Controls.Add(this.Checkbox_AlwaysActive);
             this.Tab1_Data.Controls.Add(this.Checkbox_EnvColor);
             this.Tab1_Data.Controls.Add(this.Button_EnvironmentColorPreview);
@@ -491,10 +495,41 @@
             this.Tab1_Data.Text = "General data";
             this.Tab1_Data.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(625, 279);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(84, 13);
+            this.label1.TabIndex = 53;
+            this.label1.Text = "Target distance:";
+            // 
+            // ComboBox_TargetDist
+            // 
+            this.ComboBox_TargetDist.FormattingEnabled = true;
+            this.ComboBox_TargetDist.Items.AddRange(new object[] {
+            "0: Very Short",
+            "1: Short",
+            "2: Very long",
+            "3: Medium",
+            "4: Long",
+            "5: Long",
+            "6: Very Short",
+            "7: Short",
+            "8: Medium",
+            "9: Infinite",
+            "10: No targetting"});
+            this.ComboBox_TargetDist.Location = new System.Drawing.Point(715, 276);
+            this.ComboBox_TargetDist.Name = "ComboBox_TargetDist";
+            this.ComboBox_TargetDist.Size = new System.Drawing.Size(113, 21);
+            this.ComboBox_TargetDist.TabIndex = 52;
+            this.ComboBox_TargetDist.Tag = "TARGETDIST";
+            this.ComboBox_TargetDist.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            // 
             // Checkbox_AlwaysActive
             // 
             this.Checkbox_AlwaysActive.AutoSize = true;
-            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(628, 365);
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(628, 388);
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
             this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(168, 17);
             this.Checkbox_AlwaysActive.TabIndex = 51;
@@ -643,7 +678,7 @@
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_TargetLimb);
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_XTargetOffs);
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetOffset);
-            this.Panel_TargetPanel.Location = new System.Drawing.Point(628, 278);
+            this.Panel_TargetPanel.Location = new System.Drawing.Point(628, 301);
             this.Panel_TargetPanel.Name = "Panel_TargetPanel";
             this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 80);
             this.Panel_TargetPanel.TabIndex = 40;
@@ -699,7 +734,7 @@
             // 
             this.NumUpDown_TargetLimb.Location = new System.Drawing.Point(122, 9);
             this.NumUpDown_TargetLimb.Maximum = new decimal(new int[] {
-            65535,
+            128,
             0,
             0,
             0});
@@ -2709,6 +2744,8 @@
         private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script2;
         private System.Windows.Forms.Button Button_TryParse2;
         private System.Windows.Forms.TextBox Textbox_ParseErrors2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox ComboBox_TargetDist;
     }
 }
 

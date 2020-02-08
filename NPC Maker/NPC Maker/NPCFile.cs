@@ -43,7 +43,8 @@ namespace NPC_Maker
         public Int16[] ColOffs { get; set; }
 
         public bool Targettable { get; set; }
-        public UInt16 TargetLimb { get; set; }
+        public byte TargetDist { get; set; }
+        public byte TargetLimb { get; set; }
         public Int16[] TargOffs { get; set; }
 
         public byte MovementType { get; set; }
@@ -103,6 +104,7 @@ namespace NPC_Maker
             ColOffs = new Int16[] { 0, 0, 0 };
 
             Targettable = false;
+            TargetDist = 1;
             TargetLimb = 0;
             TargOffs = new Int16[] { 0, 0, 0 };
 
@@ -209,7 +211,7 @@ namespace NPC_Maker
                 case "ZCOLOFFS": ColOffs[2] = Convert.ToInt16(Value); break;
 
                 case "TARGETTABLE": Targettable = Convert.ToBoolean(Value); break;
-                case "TARGETLIMB": TargetLimb = Convert.ToUInt16(Value); break;
+                case "TARGETLIMB": TargetLimb = Convert.ToByte(Value); break;
                 case "XTARGETOFFS": TargOffs[0] = Convert.ToInt16(Value); break;
                 case "YTARGETOFFS": TargOffs[1] = Convert.ToInt16(Value); break;
                 case "ZTARGETOFFS": TargOffs[2] = Convert.ToInt16(Value); break;
@@ -235,6 +237,7 @@ namespace NPC_Maker
                 case "TALKSPE": TalkSpeed = Convert.ToByte(Value); break;
 
                 case "ACTIVE": AlwActive = Convert.ToBoolean(Value); break;
+                case "TARGETDIST": TargetDist = Convert.ToByte(Value); break;
 
                 default: break;
             }
