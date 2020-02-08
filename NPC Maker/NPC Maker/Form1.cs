@@ -113,6 +113,9 @@ namespace NPC_Maker
 
         private void InsertDataToEditor()
         {
+            if (SelectedEntry == null)
+                return;
+
             Textbox_NPCName.Text = SelectedEntry.NPCName;
 
             NumUpDown_ObjectID.Value = SelectedEntry.ObjectID;
@@ -399,12 +402,18 @@ namespace NPC_Maker
 
         private void Button_CopyBase_Click(object sender, EventArgs e)
         {
+            if (DataGrid_NPCs.SelectedRows.Count == 0)
+                return;
+
             string Copy = JsonConvert.SerializeObject(SelectedEntry, Formatting.Indented);
             CopiedEntry = JsonConvert.DeserializeObject<NPCEntry>(Copy);
         }
 
         private void Button_PasteBase_Click(object sender, EventArgs e)
         {
+            if (DataGrid_NPCs.SelectedRows.Count == 0)
+                return;
+
             if (CopiedEntry != null && !SelectedEntry.IsNull)
             {
                 SelectedEntry.Animations.Clear();
@@ -426,6 +435,13 @@ namespace NPC_Maker
                         DestTexList.Add(new TextureEntry(Tex.Name, Tex.Address, Tex.ObjectID));
                     }
 
+                }
+
+                SelectedEntry.DLists.Clear();
+
+                foreach (DListEntry D in CopiedEntry.DLists)
+                {
+                    SelectedEntry.DLists.Add(new DListEntry(D.Name, D.Address, D.TransX, D.TransY, D.TransZ, D.RotX, D.RotY, D.RotZ, D.Scale, D.Limb, D.ShowType, D.ObjectID));
                 }
 
                 SelectedEntry.ObjectID = CopiedEntry.ObjectID;
@@ -458,6 +474,9 @@ namespace NPC_Maker
 
         private void Button_Duplicate_Click(object sender, EventArgs e)
         {
+            if (DataGrid_NPCs.SelectedRows.Count == 0)
+                return;
+
             string Obj = JsonConvert.SerializeObject(SelectedEntry, Formatting.Indented);
             NPCEntry Entry = JsonConvert.DeserializeObject<NPCEntry>(Obj);
             EditedFile.Entries.Add(Entry);
@@ -466,6 +485,9 @@ namespace NPC_Maker
 
         private void Button_Delete_Click(object sender, EventArgs e)
         {
+            if (DataGrid_NPCs.SelectedRows.Count == 0)
+                return;
+
             if (DataGrid_NPCs.SelectedRows[0].Index == EditedFile.Entries.Count - 1)
             {
                 EditedFile.Entries.RemoveAt(SelectedIndex);

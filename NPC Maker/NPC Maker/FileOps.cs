@@ -64,6 +64,12 @@ namespace NPC_Maker
 
         public static void SaveBinaryFile(string Path, NPCFile Data)
         {
+            if (Data.Entries.Count() == 0)
+            {
+                System.Windows.Forms.MessageBox.Show("Nothing to save.");
+                return;
+            }
+
             try
             {
                 int Offset = Data.Entries.Count() * 4 + 4;
