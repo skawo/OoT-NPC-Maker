@@ -22,7 +22,7 @@ namespace NPC_Maker
         public static Style BoldRedStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
         public static Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
 
-        public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e)
+        public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e, bool SyntaxHighlightingOn)
         {
             e.ChangedRange.ClearStyle(FCTB.ErrorStyle);
             e.ChangedRange.ClearStyle(FCTB.GreenStyle);
@@ -33,6 +33,9 @@ namespace NPC_Maker
             e.ChangedRange.ClearStyle(FCTB.DarkGrayStyle);
             e.ChangedRange.ClearStyle(FCTB.CyanStyle);
             e.ChangedRange.ClearStyle(FCTB.BoldRedStyle);
+
+            if (!SyntaxHighlightingOn)
+                return;
 
             e.ChangedRange.SetStyle(FCTB.GreenStyle, @"/\*(.|[\r\n])*?\*/", RegexOptions.Multiline);
             e.ChangedRange.SetStyle(FCTB.GreenStyle, @"//.+", RegexOptions.Multiline);

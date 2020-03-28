@@ -71,6 +71,12 @@
       <DependentUpon>CustomDataGridView.cs</DependentUpon>
     </Compile>
     <Compile Include="DropDownScrollWheelFix.cs" />
+    <Compile Include="FastColoredTextboxForWine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FastColoredTextboxForWine.Designer.cs">
+      <DependentUpon>FastColoredTextboxForWine.cs</DependentUpon>
+    </Compile>
     <Compile Include="Lists.cs" />
     <Compile Include="FCTB.cs" />
     <Compile Include="FileOps.cs" />

@@ -24,6 +24,8 @@ namespace NPC_Maker
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
         Control LastRightClickedTextbox = null;
 
+        bool SyntaxHighlighting = true;
+
         public Form1()
         {
             InitializeComponent();
@@ -52,6 +54,7 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.GiveItems)), itemsgiveToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem);
         }
+
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -571,7 +574,8 @@ namespace NPC_Maker
             if (SelectedEntry == null)
                 return;
             SelectedEntry.Script = (sender as FastColoredTextBox).Text;
-            FCTB.ApplySyntaxHighlight(sender, e);
+
+            FCTB.ApplySyntaxHighlight(sender, e, SyntaxHighlighting);
         }
 
         private void AddBlankDList(int Index)
@@ -1282,7 +1286,16 @@ namespace NPC_Maker
             if (SelectedEntry == null)
                 return;
             SelectedEntry.Script2 = (sender as FastColoredTextBox).Text;
-            FCTB.ApplySyntaxHighlight(sender, e);
+
+            FCTB.ApplySyntaxHighlight(sender, e, SyntaxHighlighting);
+        }
+
+        private void syntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            SyntaxHighlighting = (sender as ToolStripMenuItem).Checked;
+
+            Textbox_Script.Text = Textbox_Script.Text + " ";
+            Textbox_Script2.Text = Textbox_Script2.Text + " ";
         }
 
         /*      

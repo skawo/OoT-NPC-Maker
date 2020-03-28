@@ -15,21 +15,33 @@ namespace NPC_Maker
         private static DropDownMenuScrollWheelHandler Instance;
         public static void Enable(bool enabled)
         {
-            if (enabled)
+            ScrollInternal = (Action<ToolStrip, int>)Delegate.CreateDelegate(typeof(Action<ToolStrip, int>),
+                typeof(ToolStrip).GetMethod("ScrollInternal",
+                    System.Reflection.BindingFlags.NonPublic
+                    | System.Reflection.BindingFlags.Instance));
+
+            try
             {
-                if (Instance == null)
+                if (enabled)
                 {
-                    Instance = new DropDownMenuScrollWheelHandler();
-                    Application.AddMessageFilter(Instance);
+                    if (Instance == null)
+                    {
+                        Instance = new DropDownMenuScrollWheelHandler();
+                        Application.AddMessageFilter(Instance);
+                    }
+                }
+                else
+                {
+                    if (Instance != null)
+                    {
+                        Application.RemoveMessageFilter(Instance);
+                        Instance = null;
+                    }
                 }
             }
-            else
+            catch (Exception)
             {
-                if (Instance != null)
-                {
-                    Application.RemoveMessageFilter(Instance);
-                    Instance = null;
-                }
+
             }
         }
         private IntPtr activeHwnd;
@@ -37,45 +49,56 @@ namespace NPC_Maker
 
         public bool PreFilterMessage(ref Message m)
         {
-            if (m.Msg == 0x200 && activeHwnd != m.HWnd) // WM_MOUSEMOVE
+            try
             {
-                activeHwnd = m.HWnd;
-                this.activeMenu = Control.FromHandle(m.HWnd) as ToolStripDropDown;
+                if (m.Msg == 0x200 && activeHwnd != m.HWnd) // WM_MOUSEMOVE
+                {
+                    activeHwnd = m.HWnd;
+                    this.activeMenu = Control.FromHandle(m.HWnd) as ToolStripDropDown;
+                }
+                else if (m.Msg == 0x20A && this.activeMenu != null) // WM_MOUSEWHEEL
+                {
+                    int delta = (short)(ushort)(((uint)(ulong)m.WParam) >> 16);
+                    handleDelta(this.activeMenu, delta);
+                    return true;
+                }
+                return false;
             }
-            else if (m.Msg == 0x20A && this.activeMenu != null) // WM_MOUSEWHEEL
+            catch (Exception)
             {
-                int delta = (short)(ushort)(((uint)(ulong)m.WParam) >> 16);
-                handleDelta(this.activeMenu, delta);
-                return true;
+                return false;
             }
-            return false;
         }
 
-        private static readonly Action<ToolStrip, int> ScrollInternal
-            = (Action<ToolStrip, int>)Delegate.CreateDelegate(typeof(Action<ToolStrip, int>),
-                typeof(ToolStrip).GetMethod("ScrollInternal",
-                    System.Reflection.BindingFlags.NonPublic
-                    | System.Reflection.BindingFlags.Instance));
+        private static Action<ToolStrip, int> ScrollInternal;
 
         private void handleDelta(ToolStripDropDown ts, int delta)
         {
-            if (ts.Items.Count == 0)
-                return;
-            var firstItem = ts.Items[0];
-            var lastItem = ts.Items[ts.Items.Count - 1];
-            if (lastItem.Bounds.Bottom < ts.Height && firstItem.Bounds.Top > 0)
-                return;
-            delta = delta / -4;
-            if (delta < 0 && firstItem.Bounds.Top - delta > 9)
+            try
             {
-                delta = firstItem.Bounds.Top - 9;
+                if (ts.Items.Count == 0)
+                    return;
+                var firstItem = ts.Items[0];
+                var lastItem = ts.Items[ts.Items.Count - 1];
+                if (lastItem.Bounds.Bottom < ts.Height && firstItem.Bounds.Top > 0)
+                    return;
+                delta = delta / -4;
+                if (delta < 0 && firstItem.Bounds.Top - delta > 9)
+                {
+                    delta = firstItem.Bounds.Top - 9;
+                }
+                else if (delta > 0 && delta > lastItem.Bounds.Bottom - ts.Height + 9)
+                {
+                    delta = lastItem.Bounds.Bottom - ts.Height + 9;
+                }
+                if (delta != 0)
+                    ScrollInternal(ts, delta);
             }
-            else if (delta > 0 && delta > lastItem.Bounds.Bottom - ts.Height + 9)
+            catch (Exception)
             {
-                delta = lastItem.Bounds.Bottom - ts.Height + 9;
+
             }
-            if (delta != 0)
-                ScrollInternal(ts, delta);
         }
+
     }
 }

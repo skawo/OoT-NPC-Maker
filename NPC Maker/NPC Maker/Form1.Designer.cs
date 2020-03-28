@@ -38,6 +38,8 @@
             this.FileMenu_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_SaveBinary = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.syntaxHighlightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
             this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -189,11 +191,11 @@
             this.Seg_F_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_F_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tab3_Script = new System.Windows.Forms.TabPage();
-            this.Textbox_Script = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.Textbox_Script = new NPC_Maker.FastColoredTextboxForWine(this.components);
             this.Button_TryParse = new System.Windows.Forms.Button();
             this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
             this.Tab4_IdleScript = new System.Windows.Forms.TabPage();
-            this.Textbox_Script2 = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.Textbox_Script2 = new NPC_Maker.FastColoredTextboxForWine(this.components);
             this.Button_TryParse2 = new System.Windows.Forms.Button();
             this.Textbox_ParseErrors2 = new System.Windows.Forms.TextBox();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
@@ -281,6 +283,7 @@
             // 
             this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu,
+            this.optionsToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.MaximumSize = new System.Drawing.Size(2000, 0);
@@ -344,6 +347,24 @@
             this.FileMenu_Exit.Size = new System.Drawing.Size(143, 22);
             this.FileMenu_Exit.Text = "Exit";
             this.FileMenu_Exit.Click += new System.EventHandler(this.FileMenu_Exit_Click);
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.syntaxHighlightingToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // syntaxHighlightingToolStripMenuItem
+            // 
+            this.syntaxHighlightingToolStripMenuItem.Checked = true;
+            this.syntaxHighlightingToolStripMenuItem.CheckOnClick = true;
+            this.syntaxHighlightingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.syntaxHighlightingToolStripMenuItem.Name = "syntaxHighlightingToolStripMenuItem";
+            this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.syntaxHighlightingToolStripMenuItem.Text = "Syntax highlighting";
+            this.syntaxHighlightingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.syntaxHighlightingToolStripMenuItem_CheckedChanged);
             // 
             // aboutToolStripMenuItem
             // 
@@ -2644,7 +2665,7 @@
         private System.Windows.Forms.TabPage Tab3_Script;
         private System.Windows.Forms.TextBox Textbox_ParseErrors;
         private System.Windows.Forms.Button Button_TryParse;
-        private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script;
+        private FastColoredTextboxForWine Textbox_Script;
         private System.Windows.Forms.Label Label_LoopDelay;
         private System.Windows.Forms.NumericUpDown NumUpDown_LoopDelay;
         private System.Windows.Forms.Label Label_LoopStartNode;
@@ -2741,11 +2762,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_ObjId;
         private System.Windows.Forms.CheckBox Checkbox_AlwaysActive;
         private System.Windows.Forms.TabPage Tab4_IdleScript;
-        private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script2;
+        private FastColoredTextboxForWine Textbox_Script2;
         private System.Windows.Forms.Button Button_TryParse2;
         private System.Windows.Forms.TextBox Textbox_ParseErrors2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox ComboBox_TargetDist;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem syntaxHighlightingToolStripMenuItem;
     }
 }
 
