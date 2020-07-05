@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 namespace NPC_Maker
 {
@@ -29,7 +30,11 @@ namespace NPC_Maker
         public Form1()
         {
             InitializeComponent();
+
             this.DoubleBuffered = true;
+
+            this.ResizeBegin += Form1_ResizeBegin;
+            this.ResizeEnd += Form1_ResizeEnd;
 
             foreach (string Item in Enum.GetNames(typeof(Lists.InstructionIDs)))
             {
@@ -55,6 +60,15 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem);
         }
 
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+            this.ResumeLayout();
+        }
+
+        private void Form1_ResizeBegin(object sender, EventArgs e)
+        {
+            this.SuspendLayout();
+        }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -103,6 +117,10 @@ namespace NPC_Maker
 
         private void InsertDataIntoDataGridView()
         {
+            this.SuspendLayout();
+
+            DataGrid_NPCs.SelectionChanged -= DataGrid_NPCs_SelectionChanged;
+
             DataGrid_NPCs.Rows.Clear();
 
             int i = 0;
@@ -112,10 +130,19 @@ namespace NPC_Maker
                 DataGrid_NPCs.Rows.Add(new object[] { i.ToString(), Entry.IsNull ? "EMPTY" : Entry.NPCName });
                 i++;
             }
+
+            DataGrid_NPCs.SelectionChanged += DataGrid_NPCs_SelectionChanged;
+
+            DataGrid_NPCs_SelectionChanged(DataGrid_NPCs, null);
+
+            this.ResumeLayout();
+
         }
 
         private void InsertDataToEditor()
         {
+            this.SuspendLayout();
+
             if (SelectedEntry == null)
                 return;
 
@@ -284,7 +311,7 @@ namespace NPC_Maker
                                                                 });
             }
 
-
+            this.ResumeLayout();
         }
 
         #region MenuStrip
@@ -1296,6 +1323,11 @@ namespace NPC_Maker
 
             Textbox_Script.Text = Textbox_Script.Text + " ";
             Textbox_Script2.Text = Textbox_Script2.Text + " ";
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
 
         /*      

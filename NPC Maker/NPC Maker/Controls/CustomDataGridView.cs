@@ -5,21 +5,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
-    public partial class CustomDataGridView : System.Windows.Forms.DataGridView
+    class CustomDataGridView : System.Windows.Forms.DataGridView
     {
         public CustomDataGridView()
         {
-            InitializeComponent();
             this.DoubleBuffered = true;
         }
 
         public CustomDataGridView(IContainer container)
         {
             container.Add(this);
-            InitializeComponent();
         }
     }
 }
