@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace NPC_Maker
 {
@@ -229,6 +230,49 @@ namespace NPC_Maker
 
                 switch (FunctionType)
                 {
+                    case (int)Lists.InstructionIDs.RNG:
+                        {
+                            if (Instr.Length != 8)
+                                throw new WrongParamCountException(Line);
+
+                            if (Instr[4].ToLower() != "then" || Instr[6].ToLower() != "else")
+                                throw new Exception();
+
+                            int Label_True = GetLabelOffset(Line, LineNo, Instr[5]);
+                            int Label_False = GetLabelOffset(Line, LineNo, Instr[7]);
+
+                            #region Exceptions
+                            if (Label_False > UInt16.MaxValue || Label_True > UInt16.MaxValue)
+                                throw new LabelOutOfRangeException(Line);
+                            #endregion
+
+                            int Range_En = Convert.ToInt32(Instr[1]);
+                            int Value = Convert.ToInt32(Instr[3]);
+
+                            #region Exceptions
+                            if (Range_En > byte.MaxValue || Range_En < 0 || Value > byte.MaxValue || Value < 0)
+                                throw new ParamOutOfRangeException(Line);
+                            #endregion
+
+                            byte Condition = 0;
+
+                            switch (Instr[2])
+                            {
+                                case "==": Condition = 0; break;
+                                case "<": Condition = 1; break;
+                                case ">": Condition = 2; break;
+                                default: throw new Exception();
+                            }
+
+                            RNGInstruction RNG = new RNGInstruction(Condition,
+                                                                    Convert.ToByte(Range_En),
+                                                                    Convert.ToByte(Value),
+                                                                    Convert.ToUInt16(Label_True),
+                                                                    Convert.ToUInt16(Label_False));
+
+                            return RNG.GetByteData();
+                        }
+
                     case (int)Lists.InstructionIDs.IF:
                         {
                             if (Instr.Length < 2)
@@ -595,26 +639,23 @@ namespace NPC_Maker
                                 GenericU8Instruction SetLookT = new GenericU8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
                                 return SetLookT.GetByteData();
                             }
-                            else if (SetSubType == (int)Lists.SetSubTypes.head_axis)
+                            else if ((SetSubType == (int)Lists.SetSubTypes.head_axis) || (SetSubType == (int)Lists.SetSubTypes.waist_axis))
                             {
-                                if (Instr.Length != 3)
+                                if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
 
-                                Int32 Data = 0;
+                                bool Horiz = false;
 
                                 switch (Instr[2].ToLower())
                                 {
-                                    case "-x+z": Data = 0; break;
-                                    case "-x-y": Data = 1; break;
-                                    case "+y+z": Data = 2; break;
-                                    case "-y+x": Data = 3; break;
-                                    default: Data = Helper_ConvertToInt32(Instr[2]); break;
+                                    case "horizontal": Horiz = true; break;
+                                    case "vertical": Horiz = false; break;
+                                    default: throw new ParamOutOfRangeException(Line);
                                 }
 
-                                if (Data > 2 || Data < 0)
-                                    throw new ParamOutOfRangeException(Line);
+                                int Axis = (int)Enum.Parse(typeof(Lists.Axis), Instr[3], true);
 
-                                GenericU8Instruction SetHeadA = new GenericU8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Data));
+                                GenericU8Instruction SetHeadA = new GenericU8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToByte(Axis), Convert.ToByte(Horiz));
                                 return SetHeadA.GetByteData();
                             }
                             else if (SetSubType == (int)Lists.SetSubTypes.animation || SetSubType == (int)Lists.SetSubTypes.animation_instantly)
@@ -727,6 +768,19 @@ namespace NPC_Maker
                                 SetAnimKeyFramesInstruction SetAnim = new SetAnimKeyFramesInstruction(Convert.ToUInt16(AnimID), Convert.ToByte(Frames[0]), Convert.ToByte(Frames[1]), Convert.ToByte(Frames[2]), Convert.ToByte(Frames[3]));
                                 return SetAnim.GetByteData();
                             }
+                            else if (SetSubType == (int)Lists.SetSubTypes.cutscene_slot)
+                            {
+                                if (Instr.Length != 3)
+                                    throw new WrongParamCountException(Line);
+
+                                int CtsSlot = Helper_ConvertToInt32(Instr[2]);
+
+                                if (CtsSlot > 10 || CtsSlot < -1)
+                                    throw new LabelOutOfRangeException(Line);
+
+                                GenericS8Instruction SetScriptStart = new GenericS8Instruction((byte)Lists.InstructionIDs.SET, (byte)SetSubType, Convert.ToSByte(CtsSlot));
+                                return SetScriptStart.GetByteData();
+                            }
                             else if (SetSubType == (int)Lists.SetSubTypes.script_start)
                             {
                                 if (Instr.Length != 3)
@@ -831,8 +885,8 @@ namespace NPC_Maker
 
                                 switch (TrackSubType)
                                 {
-                                    case 0: return new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SET, 0, 0, 0, (byte)Lists.SetSubTypes.camera_tracking_on).GetByteData();
-                                    case 1: return new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SET, 1, 0, 0, (byte)Lists.SetSubTypes.camera_tracking_on).GetByteData();
+                                    case 0: return new GenericU16Instruction((byte)Lists.InstructionIDs.SET, (byte)Lists.SetSubTypes.camera_tracking_on, 0, 0, 0).GetByteData();
+                                    case 1: return new GenericU16Instruction((byte)Lists.InstructionIDs.SET, (byte)Lists.SetSubTypes.camera_tracking_on, 1, 0, 0).GetByteData();
                                     case 2:
                                         {
                                             if (Instr.Length != 4)
@@ -843,7 +897,7 @@ namespace NPC_Maker
                                             if (ActorNum > UInt16.MaxValue || ActorNum < 0)
                                                 throw new ParamOutOfRangeException(Line);
 
-                                            return new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SET, 2, Convert.ToUInt16(ActorNum), 0, (byte)Lists.SetSubTypes.camera_tracking_on).GetByteData();
+                                            return new GenericU16Instruction((byte)Lists.InstructionIDs.SET, (byte)Lists.SetSubTypes.camera_tracking_on, 2, Convert.ToUInt16(ActorNum), 0).GetByteData();
                                         }
                                     case 3:
                                         {
@@ -859,7 +913,7 @@ namespace NPC_Maker
                                             if (ActorType > 12 || ActorType < 0)
                                                 throw new ParamOutOfRangeException(Line);
 
-                                            return new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SET, 3, Convert.ToUInt16(ActorNum), Convert.ToUInt16(ActorType), (byte)Lists.SetSubTypes.camera_tracking_on).GetByteData();
+                                            return new GenericU16Instruction((byte)Lists.InstructionIDs.SET, (byte)Lists.SetSubTypes.camera_tracking_on, 3, Convert.ToUInt16(ActorNum), Convert.ToUInt16(ActorType)).GetByteData();
                                         }
                                     default: throw new Exception();
                                 }
@@ -889,7 +943,7 @@ namespace NPC_Maker
                                 if (Value > 127 || Value < -127)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericTripleU16Instruction SetScriptVar = new GenericTripleU16Instruction((int)Lists.InstructionIDs.SET, Type, (UInt16)Value, (UInt16)ScriptVarNum, (byte)Lists.SetSubTypes.script_var); 
+                                GenericU16Instruction SetScriptVar = new GenericU16Instruction((int)Lists.InstructionIDs.SET, (byte)Lists.SetSubTypes.script_var, Type, (UInt16)Value, (UInt16)ScriptVarNum); 
                                 return SetScriptVar.GetByteData();
                             }
 
@@ -910,7 +964,7 @@ namespace NPC_Maker
                                 if (Instr.Length != 2)
                                     throw new WrongParamCountException(Line);
 
-                                GenericInstructionWithSubType WaitResp = new GenericInstructionWithSubType((byte)Lists.InstructionIDs.WAITFOR, (byte)WaitForSubType);
+                                GenericInstruction WaitResp = new GenericInstruction((byte)Lists.InstructionIDs.WAITFOR, (byte)WaitForSubType);
                                 return WaitResp.GetByteData();
                             }
                             else if (WaitForSubType < 70)
@@ -945,7 +999,7 @@ namespace NPC_Maker
                             if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericTripleU16Instruction EnableTextbox = new GenericTripleU16Instruction((byte)Lists.InstructionIDs.ENABLE_TEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
+                            GenericU16Instruction EnableTextbox = new GenericU16Instruction((byte)Lists.InstructionIDs.ENABLE_TEXTBOX, 0, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child));
                             return EnableTextbox.GetByteData();
                         }
                     case (int)Lists.InstructionIDs.ENABLE_TRADE:
@@ -960,7 +1014,7 @@ namespace NPC_Maker
                             int Item = Helper_GetTradeItemId(Instr[4]);
 
                             if (Item == -1)
-                                Item = (int)Helper_ConvertToUInt32(Instr[3]);
+                                Item = (int)Helper_ConvertToUInt32(Instr[4]);
 
                             if (TextID_Trade > UInt16.MaxValue || TextID_Trade < 0)
                                 throw new ParamOutOfRangeException(Line);
@@ -971,6 +1025,7 @@ namespace NPC_Maker
                             if (TextID_Incorrect > UInt16.MaxValue || TextID_Incorrect < 0)
                                 throw new ParamOutOfRangeException(Line);
 
+                     
                             if (Item > byte.MaxValue || Item < 0)
                                 throw new ParamOutOfRangeException(Line);
 
@@ -991,7 +1046,7 @@ namespace NPC_Maker
                             if (TextID_Child > UInt16.MaxValue || TextID_Child < 0)
                                 throw new ParamOutOfRangeException(Line);
 
-                            GenericTripleU16Instruction ShowTextbox = new GenericTripleU16Instruction((byte)Lists.InstructionIDs.SHOW_TEXTBOX, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child), 0);
+                            GenericU16Instruction ShowTextbox = new GenericU16Instruction((byte)Lists.InstructionIDs.SHOW_TEXTBOX, 0, Convert.ToUInt16(TextID_Adult), Convert.ToUInt16(TextID_Child));
                             return ShowTextbox.GetByteData();
                         }
                     case (int)Lists.InstructionIDs.GIVE_ITEM:
@@ -1097,13 +1152,13 @@ namespace NPC_Maker
                         }
                     case (int)Lists.InstructionIDs.PLAY:
                         {
-                            if (Instr.Length != 3)
-                                throw new WrongParamCountException(Line);
-
                             int SetSubType = (int)System.Enum.Parse(typeof(Lists.PlaySubtypes), Instr[1].ToLower());
 
                             if (SetSubType == (int)Lists.PlaySubtypes.sfx)
                             {
+                                if (Instr.Length != 3)
+                                    throw new WrongParamCountException(Line);
+
                                 int SNDID = Helper_GetSFXId(Instr[2]);
 
                                 if (SNDID == -1)
@@ -1112,11 +1167,14 @@ namespace NPC_Maker
                                 if (SNDID > UInt16.MaxValue || SNDID < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU16Instruction Sound = new GenericU16Instruction((byte)Lists.InstructionIDs.PLAY, 0, Convert.ToUInt16(SNDID));
+                                GenericU16Instruction Sound = new GenericU16Instruction((byte)Lists.InstructionIDs.PLAY, Convert.ToByte(SetSubType), Convert.ToUInt16(SNDID));
                                 return Sound.GetByteData();
                             }
                             else if (SetSubType == (int)Lists.PlaySubtypes.music)
                             {
+                                if (Instr.Length != 3)
+                                    throw new WrongParamCountException(Line);
+
                                 int SNDID = Helper_GetMusicId(Instr[2]);
 
                                 if (SNDID == -1)
@@ -1125,7 +1183,23 @@ namespace NPC_Maker
                                 if (SNDID > byte.MaxValue || SNDID < 0)
                                     throw new ParamOutOfRangeException(Line);
 
-                                GenericU8Instruction Sound = new GenericU8Instruction((byte)Lists.InstructionIDs.PLAY, 1, Convert.ToByte(SNDID));
+                                GenericU8Instruction Sound = new GenericU8Instruction((byte)Lists.InstructionIDs.PLAY, Convert.ToByte(SetSubType), Convert.ToByte(SNDID));
+                                return Sound.GetByteData();
+                            }
+                            else if (SetSubType == (int)Lists.PlaySubtypes.cutscene)
+                            {
+                                if (Instr.Length < 2 || Instr.Length > 3)
+                                    throw new WrongParamCountException(Line);
+
+                                int CutsceneOffs = -1;
+
+                                if (Instr.Length == 3)
+                                    CutsceneOffs = Helper_ConvertToInt32(Instr[2]);
+
+                                if (CutsceneOffs > Int32.MaxValue || CutsceneOffs < -1)
+                                    throw new ParamOutOfRangeException(Line);
+
+                                GenericS32Instruction Sound = new GenericS32Instruction((byte)Lists.InstructionIDs.PLAY, Convert.ToByte(SetSubType), Convert.ToInt32(CutsceneOffs));
                                 return Sound.GetByteData();
                             }
                             else
@@ -1238,31 +1312,9 @@ namespace NPC_Maker
     public class GenericInstruction
     {
         Byte ID { get; set; }
-
-        public GenericInstruction(Byte _ID)
-        {
-            ID = _ID;
-        }
-
-        public byte[] GetByteData()
-        {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(0);
-            Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
-            Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
-
-            return Data.ToArray();
-        }
-    }
-
-    public class GenericInstructionWithSubType
-    {
-        Byte ID { get; set; }
         Byte SubType { get; set; }
 
-        public GenericInstructionWithSubType(Byte _ID, Byte _SubType)
+        public GenericInstruction(Byte _ID, Byte _SubType = 0)
         {
             ID = _ID;
             SubType = _SubType;
@@ -1286,12 +1338,14 @@ namespace NPC_Maker
         Byte ID { get; set; }
         Byte SubID { get; set; }
         byte U8 { get; set; }
+        byte U8_2 { get; set; }
 
-        public GenericU8Instruction(Byte _ID, Byte _SubID, byte _Data)
+        public GenericU8Instruction(Byte _ID, Byte _SubID, byte _Data, byte _Data2 = 0)
         {
             ID = _ID;
             SubID = _SubID;
             U8 = _Data;
+            U8_2 = _Data2;
         }
 
         public byte[] GetByteData()
@@ -1301,7 +1355,7 @@ namespace NPC_Maker
             Data.Add(ID);
             Data.Add(SubID);
             Data.Add(U8);
-            Data.Add(0);
+            Data.Add(U8_2);
             Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
 
             return Data.ToArray();
@@ -1329,32 +1383,6 @@ namespace NPC_Maker
             Data.Add(SubID);
             Data.Add((byte)S8);
             Data.Add(0);
-            Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
-
-            return Data.ToArray();
-        }
-    }
-
-    public class GenericU16Instruction
-    {
-        Byte ID { get; set; }
-        Byte SubID { get; set; }
-        UInt16 U16 { get; set; }
-
-        public GenericU16Instruction(Byte _ID, Byte _SubID, UInt16 _Data)
-        {
-            ID = _ID;
-            SubID = _SubID;
-            U16 = _Data;
-        }
-
-        public byte[] GetByteData()
-        {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
-            Data.AddRange(Program.BEConverter.GetBytes(U16));
             Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
 
             return Data.ToArray();
@@ -1465,7 +1493,7 @@ namespace NPC_Maker
         }
     }
 
-    public class GenericTripleU16Instruction
+    public class GenericU16Instruction
     {
         Byte ID { get; set; }
         Byte SubId { get; set; }
@@ -1473,7 +1501,7 @@ namespace NPC_Maker
         UInt16 U16_2 { get; set; }
         UInt16 U16_3 { get; set; }
 
-        public GenericTripleU16Instruction(Byte _ID, UInt16 _Data1, UInt16 _Data2, UInt16 _Data3, Byte _SubId = 0)
+        public GenericU16Instruction(Byte _ID, Byte _SubId, UInt16 _Data1, UInt16 _Data2 = 0, UInt16 _Data3 = 0)
         {
             ID = _ID;
             SubId = _SubId;
@@ -1586,6 +1614,39 @@ namespace NPC_Maker
             Data.Add(ID);
             Data.Add(Check);
             Data.AddRange(Program.BEConverter.GetBytes(Value));
+            Data.AddRange(Program.BEConverter.GetBytes(Offs_True));
+            Data.AddRange(Program.BEConverter.GetBytes(Offs_False));
+
+            return Data.ToArray();
+        }
+    }
+
+    public class RNGInstruction
+    {
+        Byte ID = (byte)Lists.InstructionIDs.RNG;
+        Byte Condition { get; set; }
+        byte Value { get; set; }
+        Byte RangeEn { get; set; }
+        UInt16 Offs_True { get; set; }
+        UInt16 Offs_False { get; set; }
+
+        public RNGInstruction(Byte _Condition, Byte _RangeEn, Byte Val, UInt16 True, UInt16 False)
+        {
+            Condition = _Condition;
+            Value = Val;
+            RangeEn = _RangeEn;
+            Offs_True = True;
+            Offs_False = False;
+        }
+
+        public byte[] GetByteData()
+        {
+            List<byte> Data = new List<byte>();
+
+            Data.Add(ID);
+            Data.Add(Condition);
+            Data.Add(RangeEn);
+            Data.Add(Value);
             Data.AddRange(Program.BEConverter.GetBytes(Offs_True));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_False));
 

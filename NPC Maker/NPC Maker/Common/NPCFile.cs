@@ -26,21 +26,33 @@ namespace NPC_Maker
         public byte HierarchyType { get; set; }
         public Int16[] ModelOffs { get; set; }
         public float Scale { get; set; }
+        public byte CutsceneID { get; set; }
 
         public byte LookAtType { get; set; }
-        public byte HeadAxis { get; set; }
+
+        public byte HeadLimb { get; set; }
+        public byte HeadHorizAxis { get; set; }
+        public byte HeadVertAxis { get; set; }
+
+        public byte WaistLimb { get; set; }
+        public byte WaistHorizAxis { get; set; }
+        public byte WaistVertAxis { get; set; }
+
         public UInt16 DegreesVert { get; set; }
         public UInt16 DegreesHor { get; set; }
-        public UInt16 LimbIndex { get; set; }
+        public Int16[] LookAtOffs { get; set; }
 
         public bool Collision { get; set; }
-        public bool Shadow { get; set; }
         public bool Switches { get; set; }
         public bool Pushable { get; set; }
         public bool AlwActive { get; set; }
-        public UInt16 Radius { get; set; }
+        public bool AlwDraw { get; set; }
+        public UInt16 ColRadius { get; set; }
         public UInt16 Height { get; set; }
         public Int16[] ColOffs { get; set; }
+
+        public bool Shadow { get; set; }
+        public UInt16 ShRadius { get; set; }
 
         public bool Targettable { get; set; }
         public byte TargetDist { get; set; }
@@ -89,19 +101,26 @@ namespace NPC_Maker
             Scale = 0.01f;
 
             LookAtType = 0;
-            HeadAxis = 0;
+            HeadLimb = 0;
+            HeadHorizAxis = 0;
+            HeadVertAxis = 0;
+            WaistLimb = 0;
+            WaistHorizAxis = 0;
+            WaistVertAxis = 0;
             DegreesVert = 0;
             DegreesHor = 0;
-            LimbIndex = 0;
+            LookAtOffs = new Int16[] { 0, 0, 0 };
 
             Collision = false;
-            Shadow = false;
             Switches = false;
             Pushable = false;
             AlwActive = false;
-            Radius = 0;
+            ColRadius = 0;
             Height = 0;
             ColOffs = new Int16[] { 0, 0, 0 };
+
+            Shadow = false;
+            ShRadius = 0;
 
             Targettable = false;
             TargetDist = 1;
@@ -192,19 +211,29 @@ namespace NPC_Maker
                 case "YMODELOFFS": ModelOffs[1] = Convert.ToInt16(Value); break;
                 case "ZMODELOFFS": ModelOffs[2] = Convert.ToInt16(Value); break;
                 case "SCALE": Scale = (float)Convert.ToDecimal(Value); break;
+                case "CUTSCENEID": CutsceneID = Convert.ToByte(Value); break;
 
                 case "LOOKATTYPE": LookAtType = Convert.ToByte(Value); break;
-                case "AXIS": HeadAxis = Convert.ToByte(Value); break;
+                case "HEADLIMB": HeadLimb = Convert.ToByte(Value); break;
+                case "HEADVERTAXIS": HeadVertAxis = Convert.ToByte(Value); break;
+                case "HEADHORIZAXIS": HeadHorizAxis = Convert.ToByte(Value); break;
+                case "WAISTLIMB": WaistLimb = Convert.ToByte(Value); break;
+                case "WAISTVERTAXIS": WaistVertAxis = Convert.ToByte(Value); break;
+                case "WAISTHORIZAXIS": WaistHorizAxis = Convert.ToByte(Value); break;
                 case "DEGVERT": DegreesVert = Convert.ToUInt16(Value); break;
                 case "DEGHOZ": DegreesHor = Convert.ToUInt16(Value); break;
-                case "LIMB": LimbIndex = Convert.ToUInt16(Value); break;
+                case "XLOOKATOFFS": LookAtOffs[0] = Convert.ToInt16(Value); break;
+                case "YLOOKATOFFS": LookAtOffs[1] = Convert.ToInt16(Value); break;
+                case "ZLOOKATOFFS": LookAtOffs[2] = Convert.ToInt16(Value); break;
 
                 case "COLLISION": Collision = Convert.ToBoolean(Value); break;
-                case "SHADOW": Shadow = Convert.ToBoolean(Value); break;
                 case "SWITCHES": Switches = Convert.ToBoolean(Value); break;
                 case "PUSHABLE": Pushable = Convert.ToBoolean(Value); break;
-                case "COLRADIUS": Radius = Convert.ToUInt16(Value); break;
+                case "COLRADIUS": ColRadius = Convert.ToUInt16(Value); break;
                 case "COLHEIGHT": Height = Convert.ToUInt16(Value); break;
+
+                case "SHADOW": Shadow = Convert.ToBoolean(Value); break;
+                case "SHADOWRADIUS": ShRadius = Convert.ToUInt16(Value); break;
 
                 case "XCOLOFFS": ColOffs[0] = Convert.ToInt16(Value); break;
                 case "YCOLOFFS": ColOffs[1] = Convert.ToInt16(Value); break;
@@ -237,6 +266,7 @@ namespace NPC_Maker
                 case "TALKSPE": TalkSpeed = Convert.ToByte(Value); break;
 
                 case "ACTIVE": AlwActive = Convert.ToBoolean(Value); break;
+                case "DRAWOUTOFCAM": AlwDraw = Convert.ToBoolean(Value); break;
                 case "TARGETDIST": TargetDist = Convert.ToByte(Value); break;
 
                 default: break;

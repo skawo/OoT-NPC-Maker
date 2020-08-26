@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 
 namespace NPC_Maker
 {
-    public partial class Form1 : Form
+    public partial class MainWindow : Form
     {
         string OpenedPath = "";
         NPCFile EditedFile = null;
@@ -27,7 +27,7 @@ namespace NPC_Maker
 
         bool SyntaxHighlighting = true;
 
-        public Form1()
+        public MainWindow()
         {
             InitializeComponent();
 
@@ -155,20 +155,34 @@ namespace NPC_Maker
             NumUpDown_YModelOffs.Value = SelectedEntry.ModelOffs[1];
             NumUpDown_ZModelOffs.Value = SelectedEntry.ModelOffs[2];
             NumUpDown_Scale.Value = (decimal)SelectedEntry.Scale;
+            NumUpDown_CutsceneSlot.Value = SelectedEntry.CutsceneID;
 
             ComboBox_LookAtType.SelectedIndex = SelectedEntry.LookAtType;
-            ComboBox_HeadLookAxis.SelectedIndex = SelectedEntry.HeadAxis;
+
+            Combo_Head_Horiz.SelectedIndex = SelectedEntry.HeadHorizAxis;
+            Combo_Head_Vert.SelectedIndex = SelectedEntry.HeadVertAxis;
+            Combo_Waist_Horiz.SelectedIndex = SelectedEntry.WaistHorizAxis;
+            Combo_Waist_Vert.SelectedIndex = SelectedEntry.WaistVertAxis;
+
+            NumUpDown_HeadLimb.Value = SelectedEntry.HeadLimb;
+            NumUpDown_WaistLimb.Value = SelectedEntry.WaistLimb;
+            NumUpDown_LookAt_X.Value = SelectedEntry.LookAtOffs[0];
+            NumUpDown_LookAt_Y.Value = SelectedEntry.LookAtOffs[1];
+            NumUpDown_LookAt_Z.Value = SelectedEntry.LookAtOffs[2];
             NumUpDown_DegVert.Value = SelectedEntry.DegreesVert;
             NumUpDown_DegHoz.Value = SelectedEntry.DegreesHor;
-            NumUpDown_Limb.Value = SelectedEntry.LimbIndex;
+
+            Checkbox_DrawShadow.Checked = SelectedEntry.Shadow;
+            NumUpDown_ShRadius.Value = SelectedEntry.ShRadius;
 
             Checkbox_HaveCollision.Checked = SelectedEntry.Collision;
-            Checkbox_DrawShadow.Checked = SelectedEntry.Shadow;
             Checkbox_CanPressSwitches.Checked = SelectedEntry.Switches;
             Checkbox_Pushable.Checked = SelectedEntry.Pushable;
-            NumUpDown_ColRadius.Value = SelectedEntry.Radius;
+            NumUpDown_ColRadius.Value = SelectedEntry.ColRadius;
             NumUpDown_ColHeight.Value = SelectedEntry.Height;
             Checkbox_AlwaysActive.Checked = SelectedEntry.AlwActive;
+            Checkbox_AlwaysDraw.Checked = SelectedEntry.AlwDraw;
+
             NumUpDown_XColOffs.Value = SelectedEntry.ColOffs[0];
             NumUpDown_YColOffs.Value = SelectedEntry.ColOffs[1];
             NumUpDown_ZColOffs.Value = SelectedEntry.ColOffs[2];
@@ -1326,6 +1340,21 @@ namespace NPC_Maker
         }
 
         private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Label_Limb_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Tab1_Data_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Panel_TargetPanel_Paint(object sender, PaintEventArgs e)
         {
 
         }

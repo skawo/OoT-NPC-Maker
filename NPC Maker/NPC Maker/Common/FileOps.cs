@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using MiscUtil;
-using MiscUtil.IO;
-using MiscUtil.Conversion;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace NPC_Maker
 {
@@ -94,18 +92,29 @@ namespace NPC_Maker
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Scale));
 
                         EntryBytes.AddRange(new byte[] { Entry.LookAtType });
-                        EntryBytes.AddRange(new byte[] { Entry.HeadAxis });
+                        EntryBytes.AddRange(new byte[] { Entry.HeadVertAxis });
+                        EntryBytes.AddRange(new byte[] { Entry.HeadHorizAxis });
+                        EntryBytes.AddRange(new byte[] { Entry.HeadLimb });
+                        EntryBytes.AddRange(new byte[] { Entry.WaistVertAxis });
+                        EntryBytes.AddRange(new byte[] { Entry.WaistHorizAxis });
+                        EntryBytes.AddRange(new byte[] { Entry.WaistLimb });
+
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.DegreesVert));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.DegreesHor));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LimbIndex));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LookAtOffs[0]));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LookAtOffs[1]));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LookAtOffs[2]));
+
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Shadow));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ShRadius));
 
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Collision));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Shadow));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Switches));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Pushable));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.AlwActive));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.AlwDraw));
 
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Radius));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColRadius));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Height));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColOffs[0]));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColOffs[1]));

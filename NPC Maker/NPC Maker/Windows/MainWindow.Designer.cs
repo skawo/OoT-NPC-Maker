@@ -1,6 +1,6 @@
 ﻿namespace NPC_Maker
 {
-    partial class Form1
+    partial class MainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,28 +47,62 @@
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ComboBox_TargetDist = new System.Windows.Forms.ComboBox();
+            this.Checkbox_AlwaysDraw = new System.Windows.Forms.CheckBox();
+            this.Label_CutsceneSlot = new System.Windows.Forms.Label();
+            this.NumUpDown_CutsceneSlot = new System.Windows.Forms.NumericUpDown();
+            this.Panel_Collision = new System.Windows.Forms.Panel();
+            this.NumUpDown_ZColOffs = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_YColOffs = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_XColOffs = new System.Windows.Forms.NumericUpDown();
+            this.Label_ColOffs = new System.Windows.Forms.Label();
+            this.Label_ColHeight = new System.Windows.Forms.Label();
+            this.NumUpDown_ColHeight = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_ColRadius = new System.Windows.Forms.NumericUpDown();
+            this.Label_ColRadius = new System.Windows.Forms.Label();
+            this.Checkbox_HaveCollision = new System.Windows.Forms.CheckBox();
+            this.Panel_Shadow = new System.Windows.Forms.Panel();
+            this.NumUpDown_ShRadius = new System.Windows.Forms.NumericUpDown();
+            this.Label_ShRadius = new System.Windows.Forms.Label();
+            this.Checkbox_DrawShadow = new System.Windows.Forms.CheckBox();
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_EnvColor = new System.Windows.Forms.CheckBox();
             this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
             this.Panel_HeadRot = new System.Windows.Forms.Panel();
-            this.ComboBox_HeadLookAxis = new System.Windows.Forms.ComboBox();
+            this.NumUpDown_LookAt_Z = new System.Windows.Forms.NumericUpDown();
+            this.Label_WaistSep = new System.Windows.Forms.Label();
+            this.NumUpDown_LookAt_Y = new System.Windows.Forms.NumericUpDown();
+            this.Combo_Waist_Horiz = new System.Windows.Forms.ComboBox();
+            this.Label_Waist_Horiz = new System.Windows.Forms.Label();
+            this.NumUpDown_LookAt_X = new System.Windows.Forms.NumericUpDown();
+            this.Label_LookAt_Offs = new System.Windows.Forms.Label();
+            this.Combo_Waist_Vert = new System.Windows.Forms.ComboBox();
+            this.Label_Waist_Vert = new System.Windows.Forms.Label();
+            this.Label_WastSepr = new System.Windows.Forms.Label();
             this.NumUpDown_DegVert = new System.Windows.Forms.NumericUpDown();
-            this.Label_HeadLookAxis = new System.Windows.Forms.Label();
+            this.Label_LookAtWaistHeader = new System.Windows.Forms.Label();
             this.Label_DegVert = new System.Windows.Forms.Label();
-            this.Label_Limb = new System.Windows.Forms.Label();
+            this.Label_WaistLimb = new System.Windows.Forms.Label();
+            this.NumUpDown_WaistLimb = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_DegHoz = new System.Windows.Forms.NumericUpDown();
-            this.NumUpDown_Limb = new System.Windows.Forms.NumericUpDown();
+            this.Combo_Head_Horiz = new System.Windows.Forms.ComboBox();
             this.Label_DegHoz = new System.Windows.Forms.Label();
+            this.Label_HeadHoriz = new System.Windows.Forms.Label();
+            this.Combo_Head_Vert = new System.Windows.Forms.ComboBox();
+            this.Label_Head_Vert = new System.Windows.Forms.Label();
+            this.Label_HeadSepr = new System.Windows.Forms.Label();
+            this.Label_LookAtHeadHeader = new System.Windows.Forms.Label();
+            this.Label_Head_Limb = new System.Windows.Forms.Label();
+            this.NumUpDown_HeadLimb = new System.Windows.Forms.NumericUpDown();
             this.Panel_TargetPanel = new System.Windows.Forms.Panel();
             this.NumUpDown_ZTargetOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_TargetLimb = new System.Windows.Forms.Label();
+            this.ComboBox_TargetDist = new System.Windows.Forms.ComboBox();
             this.NumUpDown_YTargetOffs = new System.Windows.Forms.NumericUpDown();
-            this.NumUpDown_TargetLimb = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.NumUpDown_XTargetOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_TargetOffset = new System.Windows.Forms.Label();
             this.Checkbox_Targettable = new System.Windows.Forms.CheckBox();
+            this.NumUpDown_TargetLimb = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ObjectID = new System.Windows.Forms.NumericUpDown();
             this.Panel_Movement = new System.Windows.Forms.Panel();
             this.Label_LoopDelay = new System.Windows.Forms.Label();
@@ -93,25 +127,7 @@
             this.NumUpDown_Hierarchy = new System.Windows.Forms.NumericUpDown();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.NumUpDown_YModelOffs = new System.Windows.Forms.NumericUpDown();
-            this.Checkbox_DrawShadow = new System.Windows.Forms.CheckBox();
-            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Frames = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Checkbox_HaveCollision = new System.Windows.Forms.CheckBox();
             this.Label_AnimDefs = new System.Windows.Forms.Label();
-            this.Panel_Collision = new System.Windows.Forms.Panel();
-            this.NumUpDown_ZColOffs = new System.Windows.Forms.NumericUpDown();
-            this.NumUpDown_YColOffs = new System.Windows.Forms.NumericUpDown();
-            this.NumUpDown_XColOffs = new System.Windows.Forms.NumericUpDown();
-            this.Label_Offset = new System.Windows.Forms.Label();
-            this.Label_Height = new System.Windows.Forms.Label();
-            this.NumUpDown_ColHeight = new System.Windows.Forms.NumericUpDown();
-            this.NumUpDown_ColRadius = new System.Windows.Forms.NumericUpDown();
-            this.Label_Radius = new System.Windows.Forms.Label();
-            this.Label_Collision = new System.Windows.Forms.Label();
             this.NumUpDown_XModelOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_LookAtType = new System.Windows.Forms.Label();
             this.ComboBox_LookAtType = new System.Windows.Forms.ComboBox();
@@ -139,41 +155,68 @@
             this.Label_ExtraDisplayLists = new System.Windows.Forms.Label();
             this.TabControl_Textures = new System.Windows.Forms.TabControl();
             this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
+            this.Tab3_Script = new System.Windows.Forms.TabPage();
+            this.Button_TryParse = new System.Windows.Forms.Button();
+            this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
+            this.Tab4_IdleScript = new System.Windows.Forms.TabPage();
+            this.Button_TryParse2 = new System.Windows.Forms.Button();
+            this.Textbox_ParseErrors2 = new System.Windows.Forms.TextBox();
+            this.Panel_NPCList = new System.Windows.Forms.Panel();
+            this.Button_PasteBase = new System.Windows.Forms.Button();
+            this.Button_CopyBase = new System.Windows.Forms.Button();
+            this.Button_Duplicate = new System.Windows.Forms.Button();
+            this.Button_Delete = new System.Windows.Forms.Button();
+            this.Button_Add = new System.Windows.Forms.Button();
+            this.ColorDialog = new System.Windows.Forms.ColorDialog();
+            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.keywordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.keyValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemsgiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemstradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Frames = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_8 = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_8_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_8_TextOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg8_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
             this.Seg_9 = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_9_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_9_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_9_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
             this.Seg_A = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_A_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_A_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_A_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
             this.Seg_B = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_B_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_B_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_B_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
             this.Seg_C = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_C_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_C_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_C_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
             this.Seg_D = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_D_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_D_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_D_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
             this.Seg_E = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_E_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_E_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_E_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
             this.Seg_F = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_F_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_F_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -187,46 +230,38 @@
             this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Tab3_Script = new System.Windows.Forms.TabPage();
             this.Textbox_Script = new NPC_Maker.FastColoredTextboxForWine(this.components);
-            this.Button_TryParse = new System.Windows.Forms.Button();
-            this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
-            this.Tab4_IdleScript = new System.Windows.Forms.TabPage();
             this.Textbox_Script2 = new NPC_Maker.FastColoredTextboxForWine(this.components);
-            this.Button_TryParse2 = new System.Windows.Forms.Button();
-            this.Textbox_ParseErrors2 = new System.Windows.Forms.TextBox();
-            this.Panel_NPCList = new System.Windows.Forms.Panel();
-            this.Button_PasteBase = new System.Windows.Forms.Button();
-            this.Button_CopyBase = new System.Windows.Forms.Button();
-            this.Button_Duplicate = new System.Windows.Forms.Button();
-            this.Button_Delete = new System.Windows.Forms.Button();
-            this.Button_Add = new System.Windows.Forms.Button();
             this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
             this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColorDialog = new System.Windows.Forms.ColorDialog();
-            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.keywordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.keyValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemsgiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemstradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.Tab1_Data.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
+            this.Panel_Collision.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZColOffs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YColOffs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XColOffs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ColHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ColRadius)).BeginInit();
+            this.Panel_Shadow.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ShRadius)).BeginInit();
             this.Panel_HeadRot.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LookAt_Z)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LookAt_Y)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LookAt_X)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_DegVert)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_WaistLimb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_DegHoz)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Limb)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_HeadLimb)).BeginInit();
             this.Panel_TargetPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZTargetOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YTargetOffs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TargetLimb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XTargetOffs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TargetLimb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ObjectID)).BeginInit();
             this.Panel_Movement.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).BeginInit();
@@ -238,13 +273,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
-            this.Panel_Collision.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZColOffs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YColOffs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XColOffs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ColHeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ColRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).BeginInit();
             this.Tab2_ExtraData.SuspendLayout();
@@ -254,29 +282,30 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
             this.TabControl_Textures.SuspendLayout();
             this.TabPage_Segment_8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).BeginInit();
             this.TabPage_Segment_9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).BeginInit();
             this.TabPage_Segment_A.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).BeginInit();
             this.TabPage_Segment_B.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).BeginInit();
             this.TabPage_Segment_C.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).BeginInit();
             this.TabPage_Segment_D.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).BeginInit();
             this.TabPage_Segment_E.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).BeginInit();
             this.TabPage_Segment_F.SuspendLayout();
+            this.Tab3_Script.SuspendLayout();
+            this.Tab4_IdleScript.SuspendLayout();
+            this.Panel_NPCList.SuspendLayout();
+            this.ContextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
-            this.Tab3_Script.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script)).BeginInit();
-            this.Tab4_IdleScript.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).BeginInit();
-            this.Panel_NPCList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
-            this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuStrip
@@ -435,8 +464,11 @@
             // 
             this.Tab1_Data.BackColor = System.Drawing.Color.White;
             this.Tab1_Data.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Tab1_Data.Controls.Add(this.label1);
-            this.Tab1_Data.Controls.Add(this.ComboBox_TargetDist);
+            this.Tab1_Data.Controls.Add(this.Checkbox_AlwaysDraw);
+            this.Tab1_Data.Controls.Add(this.Label_CutsceneSlot);
+            this.Tab1_Data.Controls.Add(this.NumUpDown_CutsceneSlot);
+            this.Tab1_Data.Controls.Add(this.Panel_Collision);
+            this.Tab1_Data.Controls.Add(this.Panel_Shadow);
             this.Tab1_Data.Controls.Add(this.Checkbox_AlwaysActive);
             this.Tab1_Data.Controls.Add(this.Checkbox_EnvColor);
             this.Tab1_Data.Controls.Add(this.Button_EnvironmentColorPreview);
@@ -444,7 +476,6 @@
             this.Tab1_Data.Controls.Add(this.Label_NPCName);
             this.Tab1_Data.Controls.Add(this.Panel_TargetPanel);
             this.Tab1_Data.Controls.Add(this.Textbox_NPCName);
-            this.Tab1_Data.Controls.Add(this.Checkbox_Targettable);
             this.Tab1_Data.Controls.Add(this.NumUpDown_ObjectID);
             this.Tab1_Data.Controls.Add(this.Panel_Movement);
             this.Tab1_Data.Controls.Add(this.Label_ObjectID);
@@ -456,11 +487,8 @@
             this.Tab1_Data.Controls.Add(this.NumUpDown_Hierarchy);
             this.Tab1_Data.Controls.Add(this.Checkbox_CanPressSwitches);
             this.Tab1_Data.Controls.Add(this.NumUpDown_YModelOffs);
-            this.Tab1_Data.Controls.Add(this.Checkbox_DrawShadow);
             this.Tab1_Data.Controls.Add(this.DataGrid_Animations);
-            this.Tab1_Data.Controls.Add(this.Checkbox_HaveCollision);
             this.Tab1_Data.Controls.Add(this.Label_AnimDefs);
-            this.Tab1_Data.Controls.Add(this.Panel_Collision);
             this.Tab1_Data.Controls.Add(this.NumUpDown_XModelOffs);
             this.Tab1_Data.Controls.Add(this.Label_LookAtType);
             this.Tab1_Data.Controls.Add(this.ComboBox_LookAtType);
@@ -477,54 +505,257 @@
             this.Tab1_Data.Size = new System.Drawing.Size(835, 615);
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
+            this.Tab1_Data.Click += new System.EventHandler(this.Tab1_Data_Click);
             // 
-            // label1
+            // Checkbox_AlwaysDraw
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(625, 279);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 13);
-            this.label1.TabIndex = 53;
-            this.label1.Text = "Target distance:";
+            this.Checkbox_AlwaysDraw.AutoSize = true;
+            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(634, 470);
+            this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
+            this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(146, 17);
+            this.Checkbox_AlwaysDraw.TabIndex = 55;
+            this.Checkbox_AlwaysDraw.Tag = "DRAWOUTOFCAM";
+            this.Checkbox_AlwaysDraw.Text = "Draw even out of camera";
+            this.Checkbox_AlwaysDraw.UseVisualStyleBackColor = true;
+            this.Checkbox_AlwaysDraw.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
-            // ComboBox_TargetDist
+            // Label_CutsceneSlot
             // 
-            this.ComboBox_TargetDist.FormattingEnabled = true;
-            this.ComboBox_TargetDist.Items.AddRange(new object[] {
-            "0: Very Short",
-            "1: Short",
-            "2: Very long",
-            "3: Medium",
-            "4: Long",
-            "5: Long",
-            "6: Very Short",
-            "7: Short",
-            "8: Medium",
-            "9: Infinite",
-            "10: No targetting"});
-            this.ComboBox_TargetDist.Location = new System.Drawing.Point(715, 276);
-            this.ComboBox_TargetDist.Name = "ComboBox_TargetDist";
-            this.ComboBox_TargetDist.Size = new System.Drawing.Size(113, 21);
-            this.ComboBox_TargetDist.TabIndex = 52;
-            this.ComboBox_TargetDist.Tag = "TARGETDIST";
-            this.ComboBox_TargetDist.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            this.Label_CutsceneSlot.AutoSize = true;
+            this.Label_CutsceneSlot.Location = new System.Drawing.Point(631, 423);
+            this.Label_CutsceneSlot.Name = "Label_CutsceneSlot";
+            this.Label_CutsceneSlot.Size = new System.Drawing.Size(74, 13);
+            this.Label_CutsceneSlot.TabIndex = 36;
+            this.Label_CutsceneSlot.Text = "Cutscene slot:";
+            // 
+            // NumUpDown_CutsceneSlot
+            // 
+            this.NumUpDown_CutsceneSlot.Location = new System.Drawing.Point(767, 421);
+            this.NumUpDown_CutsceneSlot.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.NumUpDown_CutsceneSlot.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_CutsceneSlot.Name = "NumUpDown_CutsceneSlot";
+            this.NumUpDown_CutsceneSlot.Size = new System.Drawing.Size(54, 20);
+            this.NumUpDown_CutsceneSlot.TabIndex = 39;
+            this.NumUpDown_CutsceneSlot.Tag = "CUTSCENEID";
+            this.NumUpDown_CutsceneSlot.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_CutsceneSlot.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Panel_Collision
+            // 
+            this.Panel_Collision.BackColor = System.Drawing.Color.White;
+            this.Panel_Collision.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Panel_Collision.Controls.Add(this.NumUpDown_ZColOffs);
+            this.Panel_Collision.Controls.Add(this.NumUpDown_YColOffs);
+            this.Panel_Collision.Controls.Add(this.NumUpDown_XColOffs);
+            this.Panel_Collision.Controls.Add(this.Label_ColOffs);
+            this.Panel_Collision.Controls.Add(this.Label_ColHeight);
+            this.Panel_Collision.Controls.Add(this.NumUpDown_ColHeight);
+            this.Panel_Collision.Controls.Add(this.NumUpDown_ColRadius);
+            this.Panel_Collision.Controls.Add(this.Label_ColRadius);
+            this.Panel_Collision.Controls.Add(this.Checkbox_HaveCollision);
+            this.Panel_Collision.Location = new System.Drawing.Point(417, 423);
+            this.Panel_Collision.Name = "Panel_Collision";
+            this.Panel_Collision.Size = new System.Drawing.Size(200, 133);
+            this.Panel_Collision.TabIndex = 35;
+            // 
+            // NumUpDown_ZColOffs
+            // 
+            this.NumUpDown_ZColOffs.Location = new System.Drawing.Point(132, 103);
+            this.NumUpDown_ZColOffs.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.NumUpDown_ZColOffs.Minimum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_ZColOffs.Name = "NumUpDown_ZColOffs";
+            this.NumUpDown_ZColOffs.Size = new System.Drawing.Size(54, 20);
+            this.NumUpDown_ZColOffs.TabIndex = 34;
+            this.NumUpDown_ZColOffs.Tag = "ZCOLOFFS";
+            this.NumUpDown_ZColOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // NumUpDown_YColOffs
+            // 
+            this.NumUpDown_YColOffs.Location = new System.Drawing.Point(72, 103);
+            this.NumUpDown_YColOffs.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.NumUpDown_YColOffs.Minimum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_YColOffs.Name = "NumUpDown_YColOffs";
+            this.NumUpDown_YColOffs.Size = new System.Drawing.Size(54, 20);
+            this.NumUpDown_YColOffs.TabIndex = 33;
+            this.NumUpDown_YColOffs.Tag = "YCOLOFFS";
+            this.NumUpDown_YColOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // NumUpDown_XColOffs
+            // 
+            this.NumUpDown_XColOffs.Location = new System.Drawing.Point(12, 103);
+            this.NumUpDown_XColOffs.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.NumUpDown_XColOffs.Minimum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_XColOffs.Name = "NumUpDown_XColOffs";
+            this.NumUpDown_XColOffs.Size = new System.Drawing.Size(54, 20);
+            this.NumUpDown_XColOffs.TabIndex = 32;
+            this.NumUpDown_XColOffs.Tag = "XCOLOFFS";
+            this.NumUpDown_XColOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_ColOffs
+            // 
+            this.Label_ColOffs.AutoSize = true;
+            this.Label_ColOffs.Location = new System.Drawing.Point(11, 88);
+            this.Label_ColOffs.Name = "Label_ColOffs";
+            this.Label_ColOffs.Size = new System.Drawing.Size(38, 13);
+            this.Label_ColOffs.TabIndex = 31;
+            this.Label_ColOffs.Text = "Offset:";
+            // 
+            // Label_ColHeight
+            // 
+            this.Label_ColHeight.AutoSize = true;
+            this.Label_ColHeight.Location = new System.Drawing.Point(11, 60);
+            this.Label_ColHeight.Name = "Label_ColHeight";
+            this.Label_ColHeight.Size = new System.Drawing.Size(41, 13);
+            this.Label_ColHeight.TabIndex = 30;
+            this.Label_ColHeight.Text = "Height:";
+            // 
+            // NumUpDown_ColHeight
+            // 
+            this.NumUpDown_ColHeight.Location = new System.Drawing.Point(122, 58);
+            this.NumUpDown_ColHeight.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_ColHeight.Name = "NumUpDown_ColHeight";
+            this.NumUpDown_ColHeight.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_ColHeight.TabIndex = 29;
+            this.NumUpDown_ColHeight.Tag = "COLHEIGHT";
+            this.NumUpDown_ColHeight.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // NumUpDown_ColRadius
+            // 
+            this.NumUpDown_ColRadius.Location = new System.Drawing.Point(122, 32);
+            this.NumUpDown_ColRadius.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_ColRadius.Name = "NumUpDown_ColRadius";
+            this.NumUpDown_ColRadius.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_ColRadius.TabIndex = 28;
+            this.NumUpDown_ColRadius.Tag = "COLRADIUS";
+            this.NumUpDown_ColRadius.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_ColRadius
+            // 
+            this.Label_ColRadius.AutoSize = true;
+            this.Label_ColRadius.Location = new System.Drawing.Point(11, 34);
+            this.Label_ColRadius.Name = "Label_ColRadius";
+            this.Label_ColRadius.Size = new System.Drawing.Size(43, 13);
+            this.Label_ColRadius.TabIndex = 28;
+            this.Label_ColRadius.Text = "Radius:";
+            // 
+            // Checkbox_HaveCollision
+            // 
+            this.Checkbox_HaveCollision.AutoSize = true;
+            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(8, 5);
+            this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
+            this.Checkbox_HaveCollision.Size = new System.Drawing.Size(85, 17);
+            this.Checkbox_HaveCollision.TabIndex = 21;
+            this.Checkbox_HaveCollision.Tag = "COLLISION";
+            this.Checkbox_HaveCollision.Text = "Has collision";
+            this.Checkbox_HaveCollision.UseVisualStyleBackColor = true;
+            this.Checkbox_HaveCollision.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // Panel_Shadow
+            // 
+            this.Panel_Shadow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Panel_Shadow.Controls.Add(this.NumUpDown_ShRadius);
+            this.Panel_Shadow.Controls.Add(this.Label_ShRadius);
+            this.Panel_Shadow.Controls.Add(this.Checkbox_DrawShadow);
+            this.Panel_Shadow.Location = new System.Drawing.Point(417, 362);
+            this.Panel_Shadow.Name = "Panel_Shadow";
+            this.Panel_Shadow.Size = new System.Drawing.Size(200, 55);
+            this.Panel_Shadow.TabIndex = 54;
+            // 
+            // NumUpDown_ShRadius
+            // 
+            this.NumUpDown_ShRadius.Location = new System.Drawing.Point(125, 25);
+            this.NumUpDown_ShRadius.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_ShRadius.Name = "NumUpDown_ShRadius";
+            this.NumUpDown_ShRadius.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_ShRadius.TabIndex = 35;
+            this.NumUpDown_ShRadius.Tag = "SHADOWRADIUS";
+            this.NumUpDown_ShRadius.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_ShRadius
+            // 
+            this.Label_ShRadius.AutoSize = true;
+            this.Label_ShRadius.Location = new System.Drawing.Point(6, 27);
+            this.Label_ShRadius.Name = "Label_ShRadius";
+            this.Label_ShRadius.Size = new System.Drawing.Size(43, 13);
+            this.Label_ShRadius.TabIndex = 35;
+            this.Label_ShRadius.Text = "Radius:";
+            // 
+            // Checkbox_DrawShadow
+            // 
+            this.Checkbox_DrawShadow.AutoSize = true;
+            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(9, 3);
+            this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
+            this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 17);
+            this.Checkbox_DrawShadow.TabIndex = 22;
+            this.Checkbox_DrawShadow.Tag = "SHADOW";
+            this.Checkbox_DrawShadow.Text = "Draws shadow";
+            this.Checkbox_DrawShadow.UseVisualStyleBackColor = true;
+            this.Checkbox_DrawShadow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Checkbox_AlwaysActive
             // 
             this.Checkbox_AlwaysActive.AutoSize = true;
-            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(628, 388);
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(634, 447);
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
-            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(168, 17);
+            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(156, 17);
             this.Checkbox_AlwaysActive.TabIndex = 51;
             this.Checkbox_AlwaysActive.Tag = "ACTIVE";
-            this.Checkbox_AlwaysActive.Text = "Run actor even out of camera";
+            this.Checkbox_AlwaysActive.Text = "Update even out of camera";
             this.Checkbox_AlwaysActive.UseVisualStyleBackColor = true;
             this.Checkbox_AlwaysActive.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Checkbox_EnvColor
             // 
             this.Checkbox_EnvColor.AutoSize = true;
-            this.Checkbox_EnvColor.Location = new System.Drawing.Point(417, 388);
+            this.Checkbox_EnvColor.Location = new System.Drawing.Point(634, 539);
             this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
             this.Checkbox_EnvColor.Size = new System.Drawing.Size(114, 17);
             this.Checkbox_EnvColor.TabIndex = 50;
@@ -536,7 +767,7 @@
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
-            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(575, 384);
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(779, 535);
             this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
             this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(42, 23);
             this.Button_EnvironmentColorPreview.TabIndex = 49;
@@ -547,37 +778,175 @@
             // 
             this.Panel_HeadRot.BackColor = System.Drawing.Color.White;
             this.Panel_HeadRot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Panel_HeadRot.Controls.Add(this.ComboBox_HeadLookAxis);
+            this.Panel_HeadRot.Controls.Add(this.NumUpDown_LookAt_Z);
+            this.Panel_HeadRot.Controls.Add(this.Label_WaistSep);
+            this.Panel_HeadRot.Controls.Add(this.NumUpDown_LookAt_Y);
+            this.Panel_HeadRot.Controls.Add(this.Combo_Waist_Horiz);
+            this.Panel_HeadRot.Controls.Add(this.Label_Waist_Horiz);
+            this.Panel_HeadRot.Controls.Add(this.NumUpDown_LookAt_X);
+            this.Panel_HeadRot.Controls.Add(this.Label_LookAt_Offs);
+            this.Panel_HeadRot.Controls.Add(this.Combo_Waist_Vert);
+            this.Panel_HeadRot.Controls.Add(this.Label_Waist_Vert);
+            this.Panel_HeadRot.Controls.Add(this.Label_WastSepr);
             this.Panel_HeadRot.Controls.Add(this.NumUpDown_DegVert);
-            this.Panel_HeadRot.Controls.Add(this.Label_HeadLookAxis);
+            this.Panel_HeadRot.Controls.Add(this.Label_LookAtWaistHeader);
             this.Panel_HeadRot.Controls.Add(this.Label_DegVert);
-            this.Panel_HeadRot.Controls.Add(this.Label_Limb);
+            this.Panel_HeadRot.Controls.Add(this.Label_WaistLimb);
+            this.Panel_HeadRot.Controls.Add(this.NumUpDown_WaistLimb);
             this.Panel_HeadRot.Controls.Add(this.NumUpDown_DegHoz);
-            this.Panel_HeadRot.Controls.Add(this.NumUpDown_Limb);
+            this.Panel_HeadRot.Controls.Add(this.Combo_Head_Horiz);
             this.Panel_HeadRot.Controls.Add(this.Label_DegHoz);
+            this.Panel_HeadRot.Controls.Add(this.Label_HeadHoriz);
+            this.Panel_HeadRot.Controls.Add(this.Combo_Head_Vert);
+            this.Panel_HeadRot.Controls.Add(this.Label_Head_Vert);
+            this.Panel_HeadRot.Controls.Add(this.Label_HeadSepr);
+            this.Panel_HeadRot.Controls.Add(this.Label_LookAtHeadHeader);
+            this.Panel_HeadRot.Controls.Add(this.Label_Head_Limb);
+            this.Panel_HeadRot.Controls.Add(this.NumUpDown_HeadLimb);
             this.Panel_HeadRot.Location = new System.Drawing.Point(417, 66);
             this.Panel_HeadRot.Name = "Panel_HeadRot";
-            this.Panel_HeadRot.Size = new System.Drawing.Size(200, 133);
+            this.Panel_HeadRot.Size = new System.Drawing.Size(200, 294);
             this.Panel_HeadRot.TabIndex = 28;
             // 
-            // ComboBox_HeadLookAxis
+            // NumUpDown_LookAt_Z
             // 
-            this.ComboBox_HeadLookAxis.FormattingEnabled = true;
-            this.ComboBox_HeadLookAxis.Items.AddRange(new object[] {
-            "-X+Z",
-            "-X-Y",
-            "+Y+Z",
-            "-Y+X"});
-            this.ComboBox_HeadLookAxis.Location = new System.Drawing.Point(16, 23);
-            this.ComboBox_HeadLookAxis.Name = "ComboBox_HeadLookAxis";
-            this.ComboBox_HeadLookAxis.Size = new System.Drawing.Size(168, 21);
-            this.ComboBox_HeadLookAxis.TabIndex = 21;
-            this.ComboBox_HeadLookAxis.Tag = "AXIS";
-            this.ComboBox_HeadLookAxis.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            this.NumUpDown_LookAt_Z.Location = new System.Drawing.Point(132, 263);
+            this.NumUpDown_LookAt_Z.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.NumUpDown_LookAt_Z.Minimum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LookAt_Z.Name = "NumUpDown_LookAt_Z";
+            this.NumUpDown_LookAt_Z.Size = new System.Drawing.Size(54, 20);
+            this.NumUpDown_LookAt_Z.TabIndex = 43;
+            this.NumUpDown_LookAt_Z.Tag = "ZLOOKATOFFS";
+            this.NumUpDown_LookAt_Z.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_WaistSep
+            // 
+            this.Label_WaistSep.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Label_WaistSep.Location = new System.Drawing.Point(15, 187);
+            this.Label_WaistSep.Name = "Label_WaistSep";
+            this.Label_WaistSep.Size = new System.Drawing.Size(171, 1);
+            this.Label_WaistSep.TabIndex = 46;
+            // 
+            // NumUpDown_LookAt_Y
+            // 
+            this.NumUpDown_LookAt_Y.Location = new System.Drawing.Point(72, 263);
+            this.NumUpDown_LookAt_Y.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.NumUpDown_LookAt_Y.Minimum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LookAt_Y.Name = "NumUpDown_LookAt_Y";
+            this.NumUpDown_LookAt_Y.Size = new System.Drawing.Size(54, 20);
+            this.NumUpDown_LookAt_Y.TabIndex = 42;
+            this.NumUpDown_LookAt_Y.Tag = "YLOOKATOFFS";
+            this.NumUpDown_LookAt_Y.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Combo_Waist_Horiz
+            // 
+            this.Combo_Waist_Horiz.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_Waist_Horiz.FormattingEnabled = true;
+            this.Combo_Waist_Horiz.Items.AddRange(new object[] {
+            "+X",
+            "-X",
+            "+Y",
+            "-Y",
+            "+Z",
+            "-Z"});
+            this.Combo_Waist_Horiz.Location = new System.Drawing.Point(125, 163);
+            this.Combo_Waist_Horiz.Name = "Combo_Waist_Horiz";
+            this.Combo_Waist_Horiz.Size = new System.Drawing.Size(60, 21);
+            this.Combo_Waist_Horiz.TabIndex = 44;
+            this.Combo_Waist_Horiz.Tag = "WAISTHORIZAXIS";
+            this.Combo_Waist_Horiz.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            // 
+            // Label_Waist_Horiz
+            // 
+            this.Label_Waist_Horiz.AutoSize = true;
+            this.Label_Waist_Horiz.Location = new System.Drawing.Point(5, 166);
+            this.Label_Waist_Horiz.Name = "Label_Waist_Horiz";
+            this.Label_Waist_Horiz.Size = new System.Drawing.Size(58, 13);
+            this.Label_Waist_Horiz.TabIndex = 43;
+            this.Label_Waist_Horiz.Text = "Horiz. axis:";
+            // 
+            // NumUpDown_LookAt_X
+            // 
+            this.NumUpDown_LookAt_X.Location = new System.Drawing.Point(12, 263);
+            this.NumUpDown_LookAt_X.Maximum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
+            this.NumUpDown_LookAt_X.Minimum = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LookAt_X.Name = "NumUpDown_LookAt_X";
+            this.NumUpDown_LookAt_X.Size = new System.Drawing.Size(54, 20);
+            this.NumUpDown_LookAt_X.TabIndex = 41;
+            this.NumUpDown_LookAt_X.Tag = "XLOOKATOFFS";
+            this.NumUpDown_LookAt_X.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_LookAt_Offs
+            // 
+            this.Label_LookAt_Offs.AutoSize = true;
+            this.Label_LookAt_Offs.Location = new System.Drawing.Point(5, 247);
+            this.Label_LookAt_Offs.Name = "Label_LookAt_Offs";
+            this.Label_LookAt_Offs.Size = new System.Drawing.Size(38, 13);
+            this.Label_LookAt_Offs.TabIndex = 40;
+            this.Label_LookAt_Offs.Text = "Offset:";
+            // 
+            // Combo_Waist_Vert
+            // 
+            this.Combo_Waist_Vert.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_Waist_Vert.FormattingEnabled = true;
+            this.Combo_Waist_Vert.Items.AddRange(new object[] {
+            "+X",
+            "-X",
+            "+Y",
+            "-Y",
+            "+Z",
+            "-Z"});
+            this.Combo_Waist_Vert.Location = new System.Drawing.Point(125, 140);
+            this.Combo_Waist_Vert.Name = "Combo_Waist_Vert";
+            this.Combo_Waist_Vert.Size = new System.Drawing.Size(60, 21);
+            this.Combo_Waist_Vert.TabIndex = 42;
+            this.Combo_Waist_Vert.Tag = "WAISTVERTAXIS";
+            this.Combo_Waist_Vert.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            // 
+            // Label_Waist_Vert
+            // 
+            this.Label_Waist_Vert.AutoSize = true;
+            this.Label_Waist_Vert.Location = new System.Drawing.Point(5, 143);
+            this.Label_Waist_Vert.Name = "Label_Waist_Vert";
+            this.Label_Waist_Vert.Size = new System.Drawing.Size(53, 13);
+            this.Label_Waist_Vert.TabIndex = 41;
+            this.Label_Waist_Vert.Text = "Vert. axis:";
+            // 
+            // Label_WastSepr
+            // 
+            this.Label_WastSepr.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Label_WastSepr.Location = new System.Drawing.Point(14, 114);
+            this.Label_WastSepr.Name = "Label_WastSepr";
+            this.Label_WastSepr.Size = new System.Drawing.Size(171, 1);
+            this.Label_WastSepr.TabIndex = 40;
             // 
             // NumUpDown_DegVert
             // 
-            this.NumUpDown_DegVert.Location = new System.Drawing.Point(125, 103);
+            this.NumUpDown_DegVert.Location = new System.Drawing.Point(125, 223);
             this.NumUpDown_DegVert.Maximum = new decimal(new int[] {
             360,
             0,
@@ -589,36 +958,50 @@
             this.NumUpDown_DegVert.Tag = "DEGVERT";
             this.NumUpDown_DegVert.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
-            // Label_HeadLookAxis
+            // Label_LookAtWaistHeader
             // 
-            this.Label_HeadLookAxis.AutoSize = true;
-            this.Label_HeadLookAxis.Location = new System.Drawing.Point(11, 7);
-            this.Label_HeadLookAxis.Name = "Label_HeadLookAxis";
-            this.Label_HeadLookAxis.Size = new System.Drawing.Size(80, 13);
-            this.Label_HeadLookAxis.TabIndex = 20;
-            this.Label_HeadLookAxis.Text = "Head look axis:";
+            this.Label_LookAtWaistHeader.AutoSize = true;
+            this.Label_LookAtWaistHeader.Location = new System.Drawing.Point(5, 98);
+            this.Label_LookAtWaistHeader.Name = "Label_LookAtWaistHeader";
+            this.Label_LookAtWaistHeader.Size = new System.Drawing.Size(37, 13);
+            this.Label_LookAtWaistHeader.TabIndex = 39;
+            this.Label_LookAtWaistHeader.Text = "Waist:";
             // 
             // Label_DegVert
             // 
             this.Label_DegVert.AutoSize = true;
-            this.Label_DegVert.Location = new System.Drawing.Point(14, 105);
+            this.Label_DegVert.Location = new System.Drawing.Point(5, 225);
             this.Label_DegVert.Name = "Label_DegVert";
             this.Label_DegVert.Size = new System.Drawing.Size(94, 13);
             this.Label_DegVert.TabIndex = 26;
             this.Label_DegVert.Text = "Degrees vertically:";
             // 
-            // Label_Limb
+            // Label_WaistLimb
             // 
-            this.Label_Limb.AutoSize = true;
-            this.Label_Limb.Location = new System.Drawing.Point(14, 53);
-            this.Label_Limb.Name = "Label_Limb";
-            this.Label_Limb.Size = new System.Drawing.Size(32, 13);
-            this.Label_Limb.TabIndex = 22;
-            this.Label_Limb.Text = "Limb:";
+            this.Label_WaistLimb.AutoSize = true;
+            this.Label_WaistLimb.Location = new System.Drawing.Point(5, 120);
+            this.Label_WaistLimb.Name = "Label_WaistLimb";
+            this.Label_WaistLimb.Size = new System.Drawing.Size(32, 13);
+            this.Label_WaistLimb.TabIndex = 37;
+            this.Label_WaistLimb.Text = "Limb:";
+            // 
+            // NumUpDown_WaistLimb
+            // 
+            this.NumUpDown_WaistLimb.Location = new System.Drawing.Point(125, 118);
+            this.NumUpDown_WaistLimb.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_WaistLimb.Name = "NumUpDown_WaistLimb";
+            this.NumUpDown_WaistLimb.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_WaistLimb.TabIndex = 38;
+            this.NumUpDown_WaistLimb.Tag = "WAISTLIMB";
+            this.NumUpDown_WaistLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_DegHoz
             // 
-            this.NumUpDown_DegHoz.Location = new System.Drawing.Point(125, 77);
+            this.NumUpDown_DegHoz.Location = new System.Drawing.Point(125, 197);
             this.NumUpDown_DegHoz.Maximum = new decimal(new int[] {
             360,
             0,
@@ -630,28 +1013,109 @@
             this.NumUpDown_DegHoz.Tag = "DEGHOZ";
             this.NumUpDown_DegHoz.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
-            // NumUpDown_Limb
+            // Combo_Head_Horiz
             // 
-            this.NumUpDown_Limb.Location = new System.Drawing.Point(125, 51);
-            this.NumUpDown_Limb.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.NumUpDown_Limb.Name = "NumUpDown_Limb";
-            this.NumUpDown_Limb.Size = new System.Drawing.Size(60, 20);
-            this.NumUpDown_Limb.TabIndex = 23;
-            this.NumUpDown_Limb.Tag = "LIMB";
-            this.NumUpDown_Limb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            this.Combo_Head_Horiz.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_Head_Horiz.FormattingEnabled = true;
+            this.Combo_Head_Horiz.Items.AddRange(new object[] {
+            "+X",
+            "-X",
+            "+Y",
+            "-Y",
+            "+Z",
+            "-Z"});
+            this.Combo_Head_Horiz.Location = new System.Drawing.Point(125, 70);
+            this.Combo_Head_Horiz.Name = "Combo_Head_Horiz";
+            this.Combo_Head_Horiz.Size = new System.Drawing.Size(60, 21);
+            this.Combo_Head_Horiz.TabIndex = 36;
+            this.Combo_Head_Horiz.Tag = "HEADHORIZAXIS";
+            this.Combo_Head_Horiz.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Label_DegHoz
             // 
             this.Label_DegHoz.AutoSize = true;
-            this.Label_DegHoz.Location = new System.Drawing.Point(14, 79);
+            this.Label_DegHoz.Location = new System.Drawing.Point(5, 199);
             this.Label_DegHoz.Name = "Label_DegHoz";
             this.Label_DegHoz.Size = new System.Drawing.Size(105, 13);
             this.Label_DegHoz.TabIndex = 24;
             this.Label_DegHoz.Text = "Degrees horizontally:";
+            // 
+            // Label_HeadHoriz
+            // 
+            this.Label_HeadHoriz.AutoSize = true;
+            this.Label_HeadHoriz.Location = new System.Drawing.Point(5, 73);
+            this.Label_HeadHoriz.Name = "Label_HeadHoriz";
+            this.Label_HeadHoriz.Size = new System.Drawing.Size(58, 13);
+            this.Label_HeadHoriz.TabIndex = 35;
+            this.Label_HeadHoriz.Text = "Horiz. axis:";
+            // 
+            // Combo_Head_Vert
+            // 
+            this.Combo_Head_Vert.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_Head_Vert.FormattingEnabled = true;
+            this.Combo_Head_Vert.Items.AddRange(new object[] {
+            "+X",
+            "-X",
+            "+Y",
+            "-Y",
+            "+Z",
+            "-Z"});
+            this.Combo_Head_Vert.Location = new System.Drawing.Point(125, 47);
+            this.Combo_Head_Vert.Name = "Combo_Head_Vert";
+            this.Combo_Head_Vert.Size = new System.Drawing.Size(60, 21);
+            this.Combo_Head_Vert.TabIndex = 34;
+            this.Combo_Head_Vert.Tag = "HEADVERTAXIS";
+            this.Combo_Head_Vert.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            // 
+            // Label_Head_Vert
+            // 
+            this.Label_Head_Vert.AutoSize = true;
+            this.Label_Head_Vert.Location = new System.Drawing.Point(5, 50);
+            this.Label_Head_Vert.Name = "Label_Head_Vert";
+            this.Label_Head_Vert.Size = new System.Drawing.Size(53, 13);
+            this.Label_Head_Vert.TabIndex = 33;
+            this.Label_Head_Vert.Text = "Vert. axis:";
+            // 
+            // Label_HeadSepr
+            // 
+            this.Label_HeadSepr.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Label_HeadSepr.Location = new System.Drawing.Point(14, 21);
+            this.Label_HeadSepr.Name = "Label_HeadSepr";
+            this.Label_HeadSepr.Size = new System.Drawing.Size(171, 1);
+            this.Label_HeadSepr.TabIndex = 32;
+            // 
+            // Label_LookAtHeadHeader
+            // 
+            this.Label_LookAtHeadHeader.AutoSize = true;
+            this.Label_LookAtHeadHeader.Location = new System.Drawing.Point(5, 5);
+            this.Label_LookAtHeadHeader.Name = "Label_LookAtHeadHeader";
+            this.Label_LookAtHeadHeader.Size = new System.Drawing.Size(36, 13);
+            this.Label_LookAtHeadHeader.TabIndex = 31;
+            this.Label_LookAtHeadHeader.Text = "Head:";
+            // 
+            // Label_Head_Limb
+            // 
+            this.Label_Head_Limb.AutoSize = true;
+            this.Label_Head_Limb.Location = new System.Drawing.Point(5, 27);
+            this.Label_Head_Limb.Name = "Label_Head_Limb";
+            this.Label_Head_Limb.Size = new System.Drawing.Size(32, 13);
+            this.Label_Head_Limb.TabIndex = 22;
+            this.Label_Head_Limb.Text = "Limb:";
+            this.Label_Head_Limb.Click += new System.EventHandler(this.Label_Limb_Click);
+            // 
+            // NumUpDown_HeadLimb
+            // 
+            this.NumUpDown_HeadLimb.Location = new System.Drawing.Point(125, 25);
+            this.NumUpDown_HeadLimb.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_HeadLimb.Name = "NumUpDown_HeadLimb";
+            this.NumUpDown_HeadLimb.Size = new System.Drawing.Size(60, 20);
+            this.NumUpDown_HeadLimb.TabIndex = 23;
+            this.NumUpDown_HeadLimb.Tag = "HEADLIMB";
+            this.NumUpDown_HeadLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Panel_TargetPanel
             // 
@@ -659,18 +1123,22 @@
             this.Panel_TargetPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_ZTargetOffs);
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetLimb);
+            this.Panel_TargetPanel.Controls.Add(this.ComboBox_TargetDist);
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_YTargetOffs);
-            this.Panel_TargetPanel.Controls.Add(this.NumUpDown_TargetLimb);
+            this.Panel_TargetPanel.Controls.Add(this.label1);
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_XTargetOffs);
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetOffset);
-            this.Panel_TargetPanel.Location = new System.Drawing.Point(628, 301);
+            this.Panel_TargetPanel.Controls.Add(this.Checkbox_Targettable);
+            this.Panel_TargetPanel.Controls.Add(this.NumUpDown_TargetLimb);
+            this.Panel_TargetPanel.Location = new System.Drawing.Point(628, 258);
             this.Panel_TargetPanel.Name = "Panel_TargetPanel";
-            this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 80);
+            this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 159);
             this.Panel_TargetPanel.TabIndex = 40;
+            this.Panel_TargetPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel_TargetPanel_Paint);
             // 
             // NumUpDown_ZTargetOffs
             // 
-            this.NumUpDown_ZTargetOffs.Location = new System.Drawing.Point(132, 50);
+            this.NumUpDown_ZTargetOffs.Location = new System.Drawing.Point(128, 129);
             this.NumUpDown_ZTargetOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -690,15 +1158,38 @@
             // Label_TargetLimb
             // 
             this.Label_TargetLimb.AutoSize = true;
-            this.Label_TargetLimb.Location = new System.Drawing.Point(11, 11);
+            this.Label_TargetLimb.Location = new System.Drawing.Point(5, 30);
             this.Label_TargetLimb.Name = "Label_TargetLimb";
             this.Label_TargetLimb.Size = new System.Drawing.Size(62, 13);
             this.Label_TargetLimb.TabIndex = 28;
             this.Label_TargetLimb.Text = "Target limb:";
             // 
+            // ComboBox_TargetDist
+            // 
+            this.ComboBox_TargetDist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboBox_TargetDist.FormattingEnabled = true;
+            this.ComboBox_TargetDist.Items.AddRange(new object[] {
+            "0: Very Short",
+            "1: Short",
+            "2: Very long",
+            "3: Medium",
+            "4: Long",
+            "5: Long",
+            "6: Very Short",
+            "7: Short",
+            "8: Medium",
+            "9: Infinite",
+            "10: No targetting"});
+            this.ComboBox_TargetDist.Location = new System.Drawing.Point(5, 80);
+            this.ComboBox_TargetDist.Name = "ComboBox_TargetDist";
+            this.ComboBox_TargetDist.Size = new System.Drawing.Size(185, 21);
+            this.ComboBox_TargetDist.TabIndex = 52;
+            this.ComboBox_TargetDist.Tag = "TARGETDIST";
+            this.ComboBox_TargetDist.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            // 
             // NumUpDown_YTargetOffs
             // 
-            this.NumUpDown_YTargetOffs.Location = new System.Drawing.Point(72, 50);
+            this.NumUpDown_YTargetOffs.Location = new System.Drawing.Point(68, 129);
             this.NumUpDown_YTargetOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -715,23 +1206,18 @@
             this.NumUpDown_YTargetOffs.Tag = "YTARGETOFFS";
             this.NumUpDown_YTargetOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
-            // NumUpDown_TargetLimb
+            // label1
             // 
-            this.NumUpDown_TargetLimb.Location = new System.Drawing.Point(122, 9);
-            this.NumUpDown_TargetLimb.Maximum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
-            this.NumUpDown_TargetLimb.Name = "NumUpDown_TargetLimb";
-            this.NumUpDown_TargetLimb.Size = new System.Drawing.Size(60, 20);
-            this.NumUpDown_TargetLimb.TabIndex = 28;
-            this.NumUpDown_TargetLimb.Tag = "TARGETLIMB";
-            this.NumUpDown_TargetLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(5, 64);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(84, 13);
+            this.label1.TabIndex = 53;
+            this.label1.Text = "Target distance:";
             // 
             // NumUpDown_XTargetOffs
             // 
-            this.NumUpDown_XTargetOffs.Location = new System.Drawing.Point(12, 50);
+            this.NumUpDown_XTargetOffs.Location = new System.Drawing.Point(8, 129);
             this.NumUpDown_XTargetOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -751,7 +1237,7 @@
             // Label_TargetOffset
             // 
             this.Label_TargetOffset.AutoSize = true;
-            this.Label_TargetOffset.Location = new System.Drawing.Point(11, 35);
+            this.Label_TargetOffset.Location = new System.Drawing.Point(7, 114);
             this.Label_TargetOffset.Name = "Label_TargetOffset";
             this.Label_TargetOffset.Size = new System.Drawing.Size(38, 13);
             this.Label_TargetOffset.TabIndex = 35;
@@ -760,7 +1246,7 @@
             // Checkbox_Targettable
             // 
             this.Checkbox_Targettable.AutoSize = true;
-            this.Checkbox_Targettable.Location = new System.Drawing.Point(628, 257);
+            this.Checkbox_Targettable.Location = new System.Drawing.Point(5, 3);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
             this.Checkbox_Targettable.Size = new System.Drawing.Size(80, 17);
             this.Checkbox_Targettable.TabIndex = 39;
@@ -768,6 +1254,20 @@
             this.Checkbox_Targettable.Text = "Targettable";
             this.Checkbox_Targettable.UseVisualStyleBackColor = true;
             this.Checkbox_Targettable.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // NumUpDown_TargetLimb
+            // 
+            this.NumUpDown_TargetLimb.Location = new System.Drawing.Point(125, 28);
+            this.NumUpDown_TargetLimb.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.NumUpDown_TargetLimb.Name = "NumUpDown_TargetLimb";
+            this.NumUpDown_TargetLimb.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_TargetLimb.TabIndex = 28;
+            this.NumUpDown_TargetLimb.Tag = "TARGETLIMB";
+            this.NumUpDown_TargetLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_ObjectID
             // 
@@ -808,7 +1308,7 @@
             // Label_LoopDelay
             // 
             this.Label_LoopDelay.AutoSize = true;
-            this.Label_LoopDelay.Location = new System.Drawing.Point(11, 58);
+            this.Label_LoopDelay.Location = new System.Drawing.Point(5, 58);
             this.Label_LoopDelay.Name = "Label_LoopDelay";
             this.Label_LoopDelay.Size = new System.Drawing.Size(81, 13);
             this.Label_LoopDelay.TabIndex = 47;
@@ -817,7 +1317,7 @@
             // Label_LoopStartNode
             // 
             this.Label_LoopStartNode.AutoSize = true;
-            this.Label_LoopStartNode.Location = new System.Drawing.Point(11, 110);
+            this.Label_LoopStartNode.Location = new System.Drawing.Point(5, 110);
             this.Label_LoopStartNode.Name = "Label_LoopStartNode";
             this.Label_LoopStartNode.Size = new System.Drawing.Size(84, 13);
             this.Label_LoopStartNode.TabIndex = 45;
@@ -825,7 +1325,7 @@
             // 
             // NumUpDown_LoopStartNode
             // 
-            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(120, 107);
+            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(125, 107);
             this.NumUpDown_LoopStartNode.Maximum = new decimal(new int[] {
             255,
             0,
@@ -849,7 +1349,7 @@
             // 
             // NumUpDown_LoopDelay
             // 
-            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(120, 55);
+            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(125, 55);
             this.NumUpDown_LoopDelay.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -864,7 +1364,7 @@
             // Label_LoopEndNode
             // 
             this.Label_LoopEndNode.AutoSize = true;
-            this.Label_LoopEndNode.Location = new System.Drawing.Point(11, 135);
+            this.Label_LoopEndNode.Location = new System.Drawing.Point(5, 135);
             this.Label_LoopEndNode.Name = "Label_LoopEndNode";
             this.Label_LoopEndNode.Size = new System.Drawing.Size(82, 13);
             this.Label_LoopEndNode.TabIndex = 43;
@@ -872,7 +1372,7 @@
             // 
             // NumUpDown_LoopEndNode
             // 
-            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(120, 133);
+            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(125, 133);
             this.NumUpDown_LoopEndNode.Maximum = new decimal(new int[] {
             255,
             0,
@@ -897,7 +1397,7 @@
             // Checkbox_Loop
             // 
             this.Checkbox_Loop.AutoSize = true;
-            this.Checkbox_Loop.Location = new System.Drawing.Point(134, 159);
+            this.Checkbox_Loop.Location = new System.Drawing.Point(139, 159);
             this.Checkbox_Loop.Name = "Checkbox_Loop";
             this.Checkbox_Loop.Size = new System.Drawing.Size(50, 17);
             this.Checkbox_Loop.TabIndex = 41;
@@ -909,7 +1409,7 @@
             // Label_PathFollowID
             // 
             this.Label_PathFollowID.AutoSize = true;
-            this.Label_PathFollowID.Location = new System.Drawing.Point(11, 83);
+            this.Label_PathFollowID.Location = new System.Drawing.Point(5, 83);
             this.Label_PathFollowID.Name = "Label_PathFollowID";
             this.Label_PathFollowID.Size = new System.Drawing.Size(76, 13);
             this.Label_PathFollowID.TabIndex = 39;
@@ -917,7 +1417,7 @@
             // 
             // NumUpDown_PathFollowID
             // 
-            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(120, 81);
+            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(125, 81);
             this.NumUpDown_PathFollowID.Maximum = new decimal(new int[] {
             255,
             0,
@@ -931,7 +1431,7 @@
             // 
             // NumUpDown_MovDistance
             // 
-            this.NumUpDown_MovDistance.Location = new System.Drawing.Point(120, 3);
+            this.NumUpDown_MovDistance.Location = new System.Drawing.Point(125, 3);
             this.NumUpDown_MovDistance.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -951,7 +1451,7 @@
             0,
             0,
             131072});
-            this.NumUpDown_MovSpeed.Location = new System.Drawing.Point(120, 29);
+            this.NumUpDown_MovSpeed.Location = new System.Drawing.Point(125, 29);
             this.NumUpDown_MovSpeed.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -966,7 +1466,7 @@
             // Label_Distance
             // 
             this.Label_Distance.AutoSize = true;
-            this.Label_Distance.Location = new System.Drawing.Point(11, 5);
+            this.Label_Distance.Location = new System.Drawing.Point(5, 5);
             this.Label_Distance.Name = "Label_Distance";
             this.Label_Distance.Size = new System.Drawing.Size(103, 13);
             this.Label_Distance.TabIndex = 35;
@@ -975,7 +1475,7 @@
             // Label_Speed
             // 
             this.Label_Speed.AutoSize = true;
-            this.Label_Speed.Location = new System.Drawing.Point(11, 31);
+            this.Label_Speed.Location = new System.Drawing.Point(5, 31);
             this.Label_Speed.Name = "Label_Speed";
             this.Label_Speed.Size = new System.Drawing.Size(92, 13);
             this.Label_Speed.TabIndex = 36;
@@ -1046,11 +1546,11 @@
             // Checkbox_Pushable
             // 
             this.Checkbox_Pushable.AutoSize = true;
-            this.Checkbox_Pushable.Location = new System.Drawing.Point(510, 226);
+            this.Checkbox_Pushable.Location = new System.Drawing.Point(634, 516);
             this.Checkbox_Pushable.Name = "Checkbox_Pushable";
             this.Checkbox_Pushable.Size = new System.Drawing.Size(70, 17);
             this.Checkbox_Pushable.TabIndex = 24;
-            this.Checkbox_Pushable.Tag = "PICKUPPABLE";
+            this.Checkbox_Pushable.Tag = "PUSHABLE";
             this.Checkbox_Pushable.Text = "Pushable";
             this.Checkbox_Pushable.UseVisualStyleBackColor = true;
             this.Checkbox_Pushable.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1073,7 +1573,7 @@
             // Checkbox_CanPressSwitches
             // 
             this.Checkbox_CanPressSwitches.AutoSize = true;
-            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(510, 203);
+            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(634, 493);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
             this.Checkbox_CanPressSwitches.TabIndex = 23;
@@ -1101,89 +1601,6 @@
             this.NumUpDown_YModelOffs.Tag = "YMODELOFFS";
             this.NumUpDown_YModelOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
-            // Checkbox_DrawShadow
-            // 
-            this.Checkbox_DrawShadow.AutoSize = true;
-            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(417, 226);
-            this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
-            this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 17);
-            this.Checkbox_DrawShadow.TabIndex = 22;
-            this.Checkbox_DrawShadow.Tag = "SHADOW";
-            this.Checkbox_DrawShadow.Text = "Draws shadow";
-            this.Checkbox_DrawShadow.UseVisualStyleBackColor = true;
-            this.Checkbox_DrawShadow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // DataGrid_Animations
-            // 
-            this.DataGrid_Animations.AllowUserToResizeColumns = false;
-            this.DataGrid_Animations.AllowUserToResizeRows = false;
-            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
-            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_AnimName,
-            this.Col_Anim,
-            this.Col_Frames,
-            this.Col_Speed,
-            this.Col_OBJ});
-            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 165);
-            this.DataGrid_Animations.MultiSelect = false;
-            this.DataGrid_Animations.Name = "DataGrid_Animations";
-            this.DataGrid_Animations.RowHeadersVisible = false;
-            this.DataGrid_Animations.Size = new System.Drawing.Size(397, 416);
-            this.DataGrid_Animations.TabIndex = 9;
-            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
-            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
-            // 
-            // Col_AnimName
-            // 
-            this.Col_AnimName.FillWeight = 90F;
-            this.Col_AnimName.HeaderText = "Purpose";
-            this.Col_AnimName.Name = "Col_AnimName";
-            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Anim
-            // 
-            this.Col_Anim.FillWeight = 60F;
-            this.Col_Anim.HeaderText = "Offset";
-            this.Col_Anim.Name = "Col_Anim";
-            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Frames
-            // 
-            this.Col_Frames.FillWeight = 60F;
-            this.Col_Frames.HeaderText = "Keyframes";
-            this.Col_Frames.Name = "Col_Frames";
-            this.Col_Frames.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Speed
-            // 
-            this.Col_Speed.FillWeight = 40F;
-            this.Col_Speed.HeaderText = "Speed";
-            this.Col_Speed.Name = "Col_Speed";
-            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_OBJ
-            // 
-            this.Col_OBJ.FillWeight = 40F;
-            this.Col_OBJ.HeaderText = "Object";
-            this.Col_OBJ.Name = "Col_OBJ";
-            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Checkbox_HaveCollision
-            // 
-            this.Checkbox_HaveCollision.AutoSize = true;
-            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(417, 203);
-            this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
-            this.Checkbox_HaveCollision.Size = new System.Drawing.Size(85, 17);
-            this.Checkbox_HaveCollision.TabIndex = 21;
-            this.Checkbox_HaveCollision.Tag = "COLLISION";
-            this.Checkbox_HaveCollision.Text = "Has collision";
-            this.Checkbox_HaveCollision.UseVisualStyleBackColor = true;
-            this.Checkbox_HaveCollision.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
             // Label_AnimDefs
             // 
             this.Label_AnimDefs.AutoSize = true;
@@ -1192,145 +1609,6 @@
             this.Label_AnimDefs.Size = new System.Drawing.Size(106, 13);
             this.Label_AnimDefs.TabIndex = 10;
             this.Label_AnimDefs.Text = "Animation definitions:";
-            // 
-            // Panel_Collision
-            // 
-            this.Panel_Collision.BackColor = System.Drawing.Color.White;
-            this.Panel_Collision.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Panel_Collision.Controls.Add(this.NumUpDown_ZColOffs);
-            this.Panel_Collision.Controls.Add(this.NumUpDown_YColOffs);
-            this.Panel_Collision.Controls.Add(this.NumUpDown_XColOffs);
-            this.Panel_Collision.Controls.Add(this.Label_Offset);
-            this.Panel_Collision.Controls.Add(this.Label_Height);
-            this.Panel_Collision.Controls.Add(this.NumUpDown_ColHeight);
-            this.Panel_Collision.Controls.Add(this.NumUpDown_ColRadius);
-            this.Panel_Collision.Controls.Add(this.Label_Radius);
-            this.Panel_Collision.Controls.Add(this.Label_Collision);
-            this.Panel_Collision.Location = new System.Drawing.Point(417, 249);
-            this.Panel_Collision.Name = "Panel_Collision";
-            this.Panel_Collision.Size = new System.Drawing.Size(200, 133);
-            this.Panel_Collision.TabIndex = 20;
-            // 
-            // NumUpDown_ZColOffs
-            // 
-            this.NumUpDown_ZColOffs.Location = new System.Drawing.Point(132, 103);
-            this.NumUpDown_ZColOffs.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.NumUpDown_ZColOffs.Minimum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            -2147483648});
-            this.NumUpDown_ZColOffs.Name = "NumUpDown_ZColOffs";
-            this.NumUpDown_ZColOffs.Size = new System.Drawing.Size(54, 20);
-            this.NumUpDown_ZColOffs.TabIndex = 34;
-            this.NumUpDown_ZColOffs.Tag = "ZCOLOFFS";
-            this.NumUpDown_ZColOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // NumUpDown_YColOffs
-            // 
-            this.NumUpDown_YColOffs.Location = new System.Drawing.Point(72, 103);
-            this.NumUpDown_YColOffs.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.NumUpDown_YColOffs.Minimum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            -2147483648});
-            this.NumUpDown_YColOffs.Name = "NumUpDown_YColOffs";
-            this.NumUpDown_YColOffs.Size = new System.Drawing.Size(54, 20);
-            this.NumUpDown_YColOffs.TabIndex = 33;
-            this.NumUpDown_YColOffs.Tag = "YCOLOFFS";
-            this.NumUpDown_YColOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // NumUpDown_XColOffs
-            // 
-            this.NumUpDown_XColOffs.Location = new System.Drawing.Point(12, 103);
-            this.NumUpDown_XColOffs.Maximum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            0});
-            this.NumUpDown_XColOffs.Minimum = new decimal(new int[] {
-            32767,
-            0,
-            0,
-            -2147483648});
-            this.NumUpDown_XColOffs.Name = "NumUpDown_XColOffs";
-            this.NumUpDown_XColOffs.Size = new System.Drawing.Size(54, 20);
-            this.NumUpDown_XColOffs.TabIndex = 32;
-            this.NumUpDown_XColOffs.Tag = "XCOLOFFS";
-            this.NumUpDown_XColOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // Label_Offset
-            // 
-            this.Label_Offset.AutoSize = true;
-            this.Label_Offset.Location = new System.Drawing.Point(11, 88);
-            this.Label_Offset.Name = "Label_Offset";
-            this.Label_Offset.Size = new System.Drawing.Size(38, 13);
-            this.Label_Offset.TabIndex = 31;
-            this.Label_Offset.Text = "Offset:";
-            // 
-            // Label_Height
-            // 
-            this.Label_Height.AutoSize = true;
-            this.Label_Height.Location = new System.Drawing.Point(11, 60);
-            this.Label_Height.Name = "Label_Height";
-            this.Label_Height.Size = new System.Drawing.Size(41, 13);
-            this.Label_Height.TabIndex = 30;
-            this.Label_Height.Text = "Height:";
-            // 
-            // NumUpDown_ColHeight
-            // 
-            this.NumUpDown_ColHeight.Location = new System.Drawing.Point(122, 58);
-            this.NumUpDown_ColHeight.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.NumUpDown_ColHeight.Name = "NumUpDown_ColHeight";
-            this.NumUpDown_ColHeight.Size = new System.Drawing.Size(60, 20);
-            this.NumUpDown_ColHeight.TabIndex = 29;
-            this.NumUpDown_ColHeight.Tag = "COLHEIGHT";
-            this.NumUpDown_ColHeight.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // NumUpDown_ColRadius
-            // 
-            this.NumUpDown_ColRadius.Location = new System.Drawing.Point(122, 32);
-            this.NumUpDown_ColRadius.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.NumUpDown_ColRadius.Name = "NumUpDown_ColRadius";
-            this.NumUpDown_ColRadius.Size = new System.Drawing.Size(60, 20);
-            this.NumUpDown_ColRadius.TabIndex = 28;
-            this.NumUpDown_ColRadius.Tag = "COLRADIUS";
-            this.NumUpDown_ColRadius.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // Label_Radius
-            // 
-            this.Label_Radius.AutoSize = true;
-            this.Label_Radius.Location = new System.Drawing.Point(11, 34);
-            this.Label_Radius.Name = "Label_Radius";
-            this.Label_Radius.Size = new System.Drawing.Size(43, 13);
-            this.Label_Radius.TabIndex = 28;
-            this.Label_Radius.Text = "Radius:";
-            // 
-            // Label_Collision
-            // 
-            this.Label_Collision.AutoSize = true;
-            this.Label_Collision.Location = new System.Drawing.Point(11, 9);
-            this.Label_Collision.Name = "Label_Collision";
-            this.Label_Collision.Size = new System.Drawing.Size(48, 13);
-            this.Label_Collision.TabIndex = 28;
-            this.Label_Collision.Text = "Collision:";
             // 
             // NumUpDown_XModelOffs
             // 
@@ -1362,11 +1640,14 @@
             // 
             // ComboBox_LookAtType
             // 
+            this.ComboBox_LookAtType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBox_LookAtType.FormattingEnabled = true;
             this.ComboBox_LookAtType.Items.AddRange(new object[] {
             "None",
             "Body",
-            "Head"});
+            "Head",
+            "Waist",
+            "Head & Waist"});
             this.ComboBox_LookAtType.Location = new System.Drawing.Point(434, 37);
             this.ComboBox_LookAtType.Name = "ComboBox_LookAtType";
             this.ComboBox_LookAtType.Size = new System.Drawing.Size(168, 21);
@@ -1700,6 +1981,343 @@
             this.TabPage_Segment_8.Text = "Segment 8";
             this.TabPage_Segment_8.UseVisualStyleBackColor = true;
             // 
+            // TabPage_Segment_9
+            // 
+            this.TabPage_Segment_9.Controls.Add(this.Seg_9);
+            this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_9.Name = "TabPage_Segment_9";
+            this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_9.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_9.TabIndex = 1;
+            this.TabPage_Segment_9.Text = "Segment 9";
+            this.TabPage_Segment_9.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_A
+            // 
+            this.TabPage_Segment_A.Controls.Add(this.Seg_A);
+            this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_A.Name = "TabPage_Segment_A";
+            this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_A.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_A.TabIndex = 2;
+            this.TabPage_Segment_A.Text = "Segment A";
+            this.TabPage_Segment_A.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_B
+            // 
+            this.TabPage_Segment_B.Controls.Add(this.Seg_B);
+            this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_B.Name = "TabPage_Segment_B";
+            this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_B.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_B.TabIndex = 3;
+            this.TabPage_Segment_B.Text = "Segment B";
+            this.TabPage_Segment_B.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_C
+            // 
+            this.TabPage_Segment_C.Controls.Add(this.Seg_C);
+            this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_C.Name = "TabPage_Segment_C";
+            this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_C.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_C.TabIndex = 4;
+            this.TabPage_Segment_C.Text = "Segment C";
+            this.TabPage_Segment_C.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_D
+            // 
+            this.TabPage_Segment_D.Controls.Add(this.Seg_D);
+            this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_D.Name = "TabPage_Segment_D";
+            this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_D.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_D.TabIndex = 5;
+            this.TabPage_Segment_D.Text = "Segment D";
+            this.TabPage_Segment_D.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_E
+            // 
+            this.TabPage_Segment_E.Controls.Add(this.Seg_E);
+            this.TabPage_Segment_E.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_E.Name = "TabPage_Segment_E";
+            this.TabPage_Segment_E.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_E.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_E.TabIndex = 6;
+            this.TabPage_Segment_E.Text = "Segment E";
+            this.TabPage_Segment_E.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_F
+            // 
+            this.TabPage_Segment_F.Controls.Add(this.Seg_F);
+            this.TabPage_Segment_F.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_F.Name = "TabPage_Segment_F";
+            this.TabPage_Segment_F.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_F.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_F.TabIndex = 7;
+            this.TabPage_Segment_F.Text = "Segment F";
+            this.TabPage_Segment_F.UseVisualStyleBackColor = true;
+            // 
+            // Tab3_Script
+            // 
+            this.Tab3_Script.BackColor = System.Drawing.Color.White;
+            this.Tab3_Script.Controls.Add(this.Textbox_Script);
+            this.Tab3_Script.Controls.Add(this.Button_TryParse);
+            this.Tab3_Script.Controls.Add(this.Textbox_ParseErrors);
+            this.Tab3_Script.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Tab3_Script.Location = new System.Drawing.Point(4, 22);
+            this.Tab3_Script.Name = "Tab3_Script";
+            this.Tab3_Script.Padding = new System.Windows.Forms.Padding(3);
+            this.Tab3_Script.Size = new System.Drawing.Size(835, 615);
+            this.Tab3_Script.TabIndex = 1;
+            this.Tab3_Script.Text = "Interaction script";
+            // 
+            // Button_TryParse
+            // 
+            this.Button_TryParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_TryParse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.Button_TryParse.Location = new System.Drawing.Point(724, 545);
+            this.Button_TryParse.Name = "Button_TryParse";
+            this.Button_TryParse.Size = new System.Drawing.Size(105, 68);
+            this.Button_TryParse.TabIndex = 2;
+            this.Button_TryParse.Text = "Try parsing";
+            this.Button_TryParse.UseVisualStyleBackColor = true;
+            this.Button_TryParse.Click += new System.EventHandler(this.Button_TryParse_Click);
+            // 
+            // Textbox_ParseErrors
+            // 
+            this.Textbox_ParseErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Textbox_ParseErrors.Location = new System.Drawing.Point(4, 545);
+            this.Textbox_ParseErrors.Multiline = true;
+            this.Textbox_ParseErrors.Name = "Textbox_ParseErrors";
+            this.Textbox_ParseErrors.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.Textbox_ParseErrors.Size = new System.Drawing.Size(714, 68);
+            this.Textbox_ParseErrors.TabIndex = 1;
+            // 
+            // Tab4_IdleScript
+            // 
+            this.Tab4_IdleScript.BackColor = System.Drawing.Color.White;
+            this.Tab4_IdleScript.Controls.Add(this.Textbox_Script2);
+            this.Tab4_IdleScript.Controls.Add(this.Button_TryParse2);
+            this.Tab4_IdleScript.Controls.Add(this.Textbox_ParseErrors2);
+            this.Tab4_IdleScript.Location = new System.Drawing.Point(4, 22);
+            this.Tab4_IdleScript.Name = "Tab4_IdleScript";
+            this.Tab4_IdleScript.Padding = new System.Windows.Forms.Padding(3);
+            this.Tab4_IdleScript.Size = new System.Drawing.Size(835, 615);
+            this.Tab4_IdleScript.TabIndex = 3;
+            this.Tab4_IdleScript.Text = "Idle script";
+            // 
+            // Button_TryParse2
+            // 
+            this.Button_TryParse2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_TryParse2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.Button_TryParse2.Location = new System.Drawing.Point(724, 543);
+            this.Button_TryParse2.Name = "Button_TryParse2";
+            this.Button_TryParse2.Size = new System.Drawing.Size(105, 68);
+            this.Button_TryParse2.TabIndex = 5;
+            this.Button_TryParse2.Text = "Try parsing";
+            this.Button_TryParse2.UseVisualStyleBackColor = true;
+            this.Button_TryParse2.Click += new System.EventHandler(this.Button_TryParse2_Click);
+            // 
+            // Textbox_ParseErrors2
+            // 
+            this.Textbox_ParseErrors2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Textbox_ParseErrors2.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.Textbox_ParseErrors2.Location = new System.Drawing.Point(4, 543);
+            this.Textbox_ParseErrors2.Multiline = true;
+            this.Textbox_ParseErrors2.Name = "Textbox_ParseErrors2";
+            this.Textbox_ParseErrors2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.Textbox_ParseErrors2.Size = new System.Drawing.Size(714, 68);
+            this.Textbox_ParseErrors2.TabIndex = 4;
+            // 
+            // Panel_NPCList
+            // 
+            this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.Panel_NPCList.Controls.Add(this.Button_PasteBase);
+            this.Panel_NPCList.Controls.Add(this.Button_CopyBase);
+            this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
+            this.Panel_NPCList.Controls.Add(this.Button_Delete);
+            this.Panel_NPCList.Controls.Add(this.Button_Add);
+            this.Panel_NPCList.Controls.Add(this.DataGrid_NPCs);
+            this.Panel_NPCList.Location = new System.Drawing.Point(0, 3);
+            this.Panel_NPCList.Name = "Panel_NPCList";
+            this.Panel_NPCList.Size = new System.Drawing.Size(244, 641);
+            this.Panel_NPCList.TabIndex = 5;
+            // 
+            // Button_PasteBase
+            // 
+            this.Button_PasteBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_PasteBase.Location = new System.Drawing.Point(125, 604);
+            this.Button_PasteBase.Name = "Button_PasteBase";
+            this.Button_PasteBase.Size = new System.Drawing.Size(109, 31);
+            this.Button_PasteBase.TabIndex = 7;
+            this.Button_PasteBase.Text = "Paste model info";
+            this.Button_PasteBase.UseVisualStyleBackColor = true;
+            this.Button_PasteBase.Click += new System.EventHandler(this.Button_PasteBase_Click);
+            // 
+            // Button_CopyBase
+            // 
+            this.Button_CopyBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_CopyBase.Location = new System.Drawing.Point(10, 604);
+            this.Button_CopyBase.Name = "Button_CopyBase";
+            this.Button_CopyBase.Size = new System.Drawing.Size(109, 31);
+            this.Button_CopyBase.TabIndex = 6;
+            this.Button_CopyBase.Text = "Copy model info";
+            this.Button_CopyBase.UseVisualStyleBackColor = true;
+            this.Button_CopyBase.Click += new System.EventHandler(this.Button_CopyBase_Click);
+            // 
+            // Button_Duplicate
+            // 
+            this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Duplicate.Location = new System.Drawing.Point(87, 567);
+            this.Button_Duplicate.Name = "Button_Duplicate";
+            this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
+            this.Button_Duplicate.TabIndex = 5;
+            this.Button_Duplicate.Text = "Duplicate";
+            this.Button_Duplicate.UseVisualStyleBackColor = true;
+            this.Button_Duplicate.Click += new System.EventHandler(this.Button_Duplicate_Click);
+            // 
+            // Button_Delete
+            // 
+            this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Delete.Location = new System.Drawing.Point(166, 567);
+            this.Button_Delete.Name = "Button_Delete";
+            this.Button_Delete.Size = new System.Drawing.Size(73, 31);
+            this.Button_Delete.TabIndex = 4;
+            this.Button_Delete.Text = "Delete";
+            this.Button_Delete.UseVisualStyleBackColor = true;
+            this.Button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
+            // 
+            // Button_Add
+            // 
+            this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Add.Location = new System.Drawing.Point(3, 567);
+            this.Button_Add.Name = "Button_Add";
+            this.Button_Add.Size = new System.Drawing.Size(79, 31);
+            this.Button_Add.TabIndex = 3;
+            this.Button_Add.Text = "Add";
+            this.Button_Add.UseVisualStyleBackColor = true;
+            this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
+            // 
+            // ContextMenuStrip
+            // 
+            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.functionsToolStripMenuItem,
+            this.keywordsToolStripMenuItem,
+            this.keyValuesToolStripMenuItem,
+            this.itemsgiveToolStripMenuItem,
+            this.itemstradeToolStripMenuItem,
+            this.soundEffectsToolStripMenuItem,
+            this.musicToolStripMenuItem});
+            this.ContextMenuStrip.Name = "ContextMenuStrip";
+            this.ContextMenuStrip.Size = new System.Drawing.Size(147, 158);
+            // 
+            // functionsToolStripMenuItem
+            // 
+            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
+            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.functionsToolStripMenuItem.Text = "Functions";
+            // 
+            // keywordsToolStripMenuItem
+            // 
+            this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
+            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.keywordsToolStripMenuItem.Text = "Keywords";
+            // 
+            // keyValuesToolStripMenuItem
+            // 
+            this.keyValuesToolStripMenuItem.Name = "keyValuesToolStripMenuItem";
+            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.keyValuesToolStripMenuItem.Text = "Key values";
+            // 
+            // itemsgiveToolStripMenuItem
+            // 
+            this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
+            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.itemsgiveToolStripMenuItem.Text = "Items (give)";
+            // 
+            // itemstradeToolStripMenuItem
+            // 
+            this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
+            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.itemstradeToolStripMenuItem.Text = "Items (trade)";
+            // 
+            // soundEffectsToolStripMenuItem
+            // 
+            this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
+            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.soundEffectsToolStripMenuItem.Text = "Sound effects";
+            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.soundEffectsToolStripMenuItem_Click);
+            // 
+            // musicToolStripMenuItem
+            // 
+            this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
+            this.musicToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.musicToolStripMenuItem.Text = "Music";
+            this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
+            // 
+            // DataGrid_Animations
+            // 
+            this.DataGrid_Animations.AllowUserToResizeColumns = false;
+            this.DataGrid_Animations.AllowUserToResizeRows = false;
+            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
+            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col_AnimName,
+            this.Col_Anim,
+            this.Col_Frames,
+            this.Col_Speed,
+            this.Col_OBJ});
+            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 165);
+            this.DataGrid_Animations.MultiSelect = false;
+            this.DataGrid_Animations.Name = "DataGrid_Animations";
+            this.DataGrid_Animations.RowHeadersVisible = false;
+            this.DataGrid_Animations.Size = new System.Drawing.Size(397, 416);
+            this.DataGrid_Animations.TabIndex = 9;
+            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
+            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
+            // 
+            // Col_AnimName
+            // 
+            this.Col_AnimName.FillWeight = 90F;
+            this.Col_AnimName.HeaderText = "Purpose";
+            this.Col_AnimName.Name = "Col_AnimName";
+            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Anim
+            // 
+            this.Col_Anim.FillWeight = 60F;
+            this.Col_Anim.HeaderText = "Offset";
+            this.Col_Anim.Name = "Col_Anim";
+            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Frames
+            // 
+            this.Col_Frames.FillWeight = 60F;
+            this.Col_Frames.HeaderText = "Keyframes";
+            this.Col_Frames.Name = "Col_Frames";
+            this.Col_Frames.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Speed
+            // 
+            this.Col_Speed.FillWeight = 40F;
+            this.Col_Speed.HeaderText = "Speed";
+            this.Col_Speed.Name = "Col_Speed";
+            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_OBJ
+            // 
+            this.Col_OBJ.FillWeight = 40F;
+            this.Col_OBJ.HeaderText = "Object";
+            this.Col_OBJ.Name = "Col_OBJ";
+            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Seg_8
             // 
             this.Seg_8.AllowUserToResizeColumns = false;
@@ -1739,17 +2357,6 @@
             this.Seg8_ObjId.FillWeight = 70F;
             this.Seg8_ObjId.HeaderText = "Object ID";
             this.Seg8_ObjId.Name = "Seg8_ObjId";
-            // 
-            // TabPage_Segment_9
-            // 
-            this.TabPage_Segment_9.Controls.Add(this.Seg_9);
-            this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_9.Name = "TabPage_Segment_9";
-            this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_9.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_9.TabIndex = 1;
-            this.TabPage_Segment_9.Text = "Segment 9";
-            this.TabPage_Segment_9.UseVisualStyleBackColor = true;
             // 
             // Seg_9
             // 
@@ -1791,17 +2398,6 @@
             this.Seg_9_ObjId.HeaderText = "Object ID";
             this.Seg_9_ObjId.Name = "Seg_9_ObjId";
             // 
-            // TabPage_Segment_A
-            // 
-            this.TabPage_Segment_A.Controls.Add(this.Seg_A);
-            this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_A.Name = "TabPage_Segment_A";
-            this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_A.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_A.TabIndex = 2;
-            this.TabPage_Segment_A.Text = "Segment A";
-            this.TabPage_Segment_A.UseVisualStyleBackColor = true;
-            // 
             // Seg_A
             // 
             this.Seg_A.AllowUserToResizeColumns = false;
@@ -1841,17 +2437,6 @@
             this.Seg_A_ObjId.FillWeight = 70F;
             this.Seg_A_ObjId.HeaderText = "Object ID";
             this.Seg_A_ObjId.Name = "Seg_A_ObjId";
-            // 
-            // TabPage_Segment_B
-            // 
-            this.TabPage_Segment_B.Controls.Add(this.Seg_B);
-            this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_B.Name = "TabPage_Segment_B";
-            this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_B.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_B.TabIndex = 3;
-            this.TabPage_Segment_B.Text = "Segment B";
-            this.TabPage_Segment_B.UseVisualStyleBackColor = true;
             // 
             // Seg_B
             // 
@@ -1893,17 +2478,6 @@
             this.Seg_B_ObjId.HeaderText = "Object ID";
             this.Seg_B_ObjId.Name = "Seg_B_ObjId";
             // 
-            // TabPage_Segment_C
-            // 
-            this.TabPage_Segment_C.Controls.Add(this.Seg_C);
-            this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_C.Name = "TabPage_Segment_C";
-            this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_C.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_C.TabIndex = 4;
-            this.TabPage_Segment_C.Text = "Segment C";
-            this.TabPage_Segment_C.UseVisualStyleBackColor = true;
-            // 
             // Seg_C
             // 
             this.Seg_C.AllowUserToResizeColumns = false;
@@ -1943,17 +2517,6 @@
             this.Seg_C_ObjId.FillWeight = 70F;
             this.Seg_C_ObjId.HeaderText = "Object ID";
             this.Seg_C_ObjId.Name = "Seg_C_ObjId";
-            // 
-            // TabPage_Segment_D
-            // 
-            this.TabPage_Segment_D.Controls.Add(this.Seg_D);
-            this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_D.Name = "TabPage_Segment_D";
-            this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_D.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_D.TabIndex = 5;
-            this.TabPage_Segment_D.Text = "Segment D";
-            this.TabPage_Segment_D.UseVisualStyleBackColor = true;
             // 
             // Seg_D
             // 
@@ -1995,17 +2558,6 @@
             this.Seg_D_ObjId.HeaderText = "Object ID";
             this.Seg_D_ObjId.Name = "Seg_D_ObjId";
             // 
-            // TabPage_Segment_E
-            // 
-            this.TabPage_Segment_E.Controls.Add(this.Seg_E);
-            this.TabPage_Segment_E.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_E.Name = "TabPage_Segment_E";
-            this.TabPage_Segment_E.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_E.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_E.TabIndex = 6;
-            this.TabPage_Segment_E.Text = "Segment E";
-            this.TabPage_Segment_E.UseVisualStyleBackColor = true;
-            // 
             // Seg_E
             // 
             this.Seg_E.AllowUserToResizeColumns = false;
@@ -2045,17 +2597,6 @@
             this.Seg_E_ObjId.FillWeight = 70F;
             this.Seg_E_ObjId.HeaderText = "Object ID";
             this.Seg_E_ObjId.Name = "Seg_E_ObjId";
-            // 
-            // TabPage_Segment_F
-            // 
-            this.TabPage_Segment_F.Controls.Add(this.Seg_F);
-            this.TabPage_Segment_F.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_F.Name = "TabPage_Segment_F";
-            this.TabPage_Segment_F.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_F.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_F.TabIndex = 7;
-            this.TabPage_Segment_F.Text = "Segment F";
-            this.TabPage_Segment_F.UseVisualStyleBackColor = true;
             // 
             // Seg_F
             // 
@@ -2181,20 +2722,6 @@
             this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ExtraDlists_ShowType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // Tab3_Script
-            // 
-            this.Tab3_Script.BackColor = System.Drawing.Color.White;
-            this.Tab3_Script.Controls.Add(this.Textbox_Script);
-            this.Tab3_Script.Controls.Add(this.Button_TryParse);
-            this.Tab3_Script.Controls.Add(this.Textbox_ParseErrors);
-            this.Tab3_Script.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Tab3_Script.Location = new System.Drawing.Point(4, 22);
-            this.Tab3_Script.Name = "Tab3_Script";
-            this.Tab3_Script.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab3_Script.Size = new System.Drawing.Size(835, 615);
-            this.Tab3_Script.TabIndex = 1;
-            this.Tab3_Script.Text = "Interaction script";
-            // 
             // Textbox_Script
             // 
             this.Textbox_Script.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -2233,42 +2760,6 @@
             this.Textbox_Script.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.Textbox_Script_TextChanged);
             this.Textbox_Script.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Textbox_Script_MouseClick);
             // 
-            // Button_TryParse
-            // 
-            this.Button_TryParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_TryParse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.Button_TryParse.Location = new System.Drawing.Point(724, 545);
-            this.Button_TryParse.Name = "Button_TryParse";
-            this.Button_TryParse.Size = new System.Drawing.Size(105, 68);
-            this.Button_TryParse.TabIndex = 2;
-            this.Button_TryParse.Text = "Try parsing";
-            this.Button_TryParse.UseVisualStyleBackColor = true;
-            this.Button_TryParse.Click += new System.EventHandler(this.Button_TryParse_Click);
-            // 
-            // Textbox_ParseErrors
-            // 
-            this.Textbox_ParseErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_ParseErrors.Location = new System.Drawing.Point(4, 545);
-            this.Textbox_ParseErrors.Multiline = true;
-            this.Textbox_ParseErrors.Name = "Textbox_ParseErrors";
-            this.Textbox_ParseErrors.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Textbox_ParseErrors.Size = new System.Drawing.Size(714, 68);
-            this.Textbox_ParseErrors.TabIndex = 1;
-            // 
-            // Tab4_IdleScript
-            // 
-            this.Tab4_IdleScript.BackColor = System.Drawing.Color.White;
-            this.Tab4_IdleScript.Controls.Add(this.Textbox_Script2);
-            this.Tab4_IdleScript.Controls.Add(this.Button_TryParse2);
-            this.Tab4_IdleScript.Controls.Add(this.Textbox_ParseErrors2);
-            this.Tab4_IdleScript.Location = new System.Drawing.Point(4, 22);
-            this.Tab4_IdleScript.Name = "Tab4_IdleScript";
-            this.Tab4_IdleScript.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab4_IdleScript.Size = new System.Drawing.Size(835, 615);
-            this.Tab4_IdleScript.TabIndex = 3;
-            this.Tab4_IdleScript.Text = "Idle script";
-            // 
             // Textbox_Script2
             // 
             this.Textbox_Script2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -2287,7 +2778,7 @@
         '\''};
             this.Textbox_Script2.AutoIndent = false;
             this.Textbox_Script2.AutoIndentChars = false;
-            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(2, 14);
             this.Textbox_Script2.BackBrush = null;
             this.Textbox_Script2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script2.CharHeight = 14;
@@ -2306,100 +2797,6 @@
             this.Textbox_Script2.Zoom = 100;
             this.Textbox_Script2.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.Textbox_Script2_TextChanged);
             this.Textbox_Script2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Textbox_Script_MouseClick);
-            // 
-            // Button_TryParse2
-            // 
-            this.Button_TryParse2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_TryParse2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.Button_TryParse2.Location = new System.Drawing.Point(724, 543);
-            this.Button_TryParse2.Name = "Button_TryParse2";
-            this.Button_TryParse2.Size = new System.Drawing.Size(105, 68);
-            this.Button_TryParse2.TabIndex = 5;
-            this.Button_TryParse2.Text = "Try parsing";
-            this.Button_TryParse2.UseVisualStyleBackColor = true;
-            this.Button_TryParse2.Click += new System.EventHandler(this.Button_TryParse2_Click);
-            // 
-            // Textbox_ParseErrors2
-            // 
-            this.Textbox_ParseErrors2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_ParseErrors2.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.Textbox_ParseErrors2.Location = new System.Drawing.Point(4, 543);
-            this.Textbox_ParseErrors2.Multiline = true;
-            this.Textbox_ParseErrors2.Name = "Textbox_ParseErrors2";
-            this.Textbox_ParseErrors2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Textbox_ParseErrors2.Size = new System.Drawing.Size(714, 68);
-            this.Textbox_ParseErrors2.TabIndex = 4;
-            // 
-            // Panel_NPCList
-            // 
-            this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.Panel_NPCList.Controls.Add(this.Button_PasteBase);
-            this.Panel_NPCList.Controls.Add(this.Button_CopyBase);
-            this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
-            this.Panel_NPCList.Controls.Add(this.Button_Delete);
-            this.Panel_NPCList.Controls.Add(this.Button_Add);
-            this.Panel_NPCList.Controls.Add(this.DataGrid_NPCs);
-            this.Panel_NPCList.Location = new System.Drawing.Point(0, 3);
-            this.Panel_NPCList.Name = "Panel_NPCList";
-            this.Panel_NPCList.Size = new System.Drawing.Size(244, 641);
-            this.Panel_NPCList.TabIndex = 5;
-            // 
-            // Button_PasteBase
-            // 
-            this.Button_PasteBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_PasteBase.Location = new System.Drawing.Point(125, 604);
-            this.Button_PasteBase.Name = "Button_PasteBase";
-            this.Button_PasteBase.Size = new System.Drawing.Size(109, 31);
-            this.Button_PasteBase.TabIndex = 7;
-            this.Button_PasteBase.Text = "Paste model info";
-            this.Button_PasteBase.UseVisualStyleBackColor = true;
-            this.Button_PasteBase.Click += new System.EventHandler(this.Button_PasteBase_Click);
-            // 
-            // Button_CopyBase
-            // 
-            this.Button_CopyBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_CopyBase.Location = new System.Drawing.Point(10, 604);
-            this.Button_CopyBase.Name = "Button_CopyBase";
-            this.Button_CopyBase.Size = new System.Drawing.Size(109, 31);
-            this.Button_CopyBase.TabIndex = 6;
-            this.Button_CopyBase.Text = "Copy model info";
-            this.Button_CopyBase.UseVisualStyleBackColor = true;
-            this.Button_CopyBase.Click += new System.EventHandler(this.Button_CopyBase_Click);
-            // 
-            // Button_Duplicate
-            // 
-            this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Duplicate.Location = new System.Drawing.Point(87, 567);
-            this.Button_Duplicate.Name = "Button_Duplicate";
-            this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
-            this.Button_Duplicate.TabIndex = 5;
-            this.Button_Duplicate.Text = "Duplicate";
-            this.Button_Duplicate.UseVisualStyleBackColor = true;
-            this.Button_Duplicate.Click += new System.EventHandler(this.Button_Duplicate_Click);
-            // 
-            // Button_Delete
-            // 
-            this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Delete.Location = new System.Drawing.Point(166, 567);
-            this.Button_Delete.Name = "Button_Delete";
-            this.Button_Delete.Size = new System.Drawing.Size(73, 31);
-            this.Button_Delete.TabIndex = 4;
-            this.Button_Delete.Text = "Delete";
-            this.Button_Delete.UseVisualStyleBackColor = true;
-            this.Button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
-            // 
-            // Button_Add
-            // 
-            this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Add.Location = new System.Drawing.Point(3, 567);
-            this.Button_Add.Name = "Button_Add";
-            this.Button_Add.Size = new System.Drawing.Size(79, 31);
-            this.Button_Add.TabIndex = 3;
-            this.Button_Add.Text = "Add";
-            this.Button_Add.UseVisualStyleBackColor = true;
-            this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
             // 
             // DataGrid_NPCs
             // 
@@ -2441,64 +2838,7 @@
             this.Col_Name.ReadOnly = true;
             this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // ContextMenuStrip
-            // 
-            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.functionsToolStripMenuItem,
-            this.keywordsToolStripMenuItem,
-            this.keyValuesToolStripMenuItem,
-            this.itemsgiveToolStripMenuItem,
-            this.itemstradeToolStripMenuItem,
-            this.soundEffectsToolStripMenuItem,
-            this.musicToolStripMenuItem});
-            this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(147, 158);
-            // 
-            // functionsToolStripMenuItem
-            // 
-            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
-            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.functionsToolStripMenuItem.Text = "Functions";
-            // 
-            // keywordsToolStripMenuItem
-            // 
-            this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
-            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.keywordsToolStripMenuItem.Text = "Keywords";
-            // 
-            // keyValuesToolStripMenuItem
-            // 
-            this.keyValuesToolStripMenuItem.Name = "keyValuesToolStripMenuItem";
-            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.keyValuesToolStripMenuItem.Text = "Key values";
-            // 
-            // itemsgiveToolStripMenuItem
-            // 
-            this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
-            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.itemsgiveToolStripMenuItem.Text = "Items (give)";
-            // 
-            // itemstradeToolStripMenuItem
-            // 
-            this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
-            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.itemstradeToolStripMenuItem.Text = "Items (trade)";
-            // 
-            // soundEffectsToolStripMenuItem
-            // 
-            this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
-            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.soundEffectsToolStripMenuItem.Text = "Sound effects";
-            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.soundEffectsToolStripMenuItem_Click);
-            // 
-            // musicToolStripMenuItem
-            // 
-            this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
-            this.musicToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.musicToolStripMenuItem.Text = "Music";
-            this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
-            // 
-            // Form1
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -2508,7 +2848,7 @@
             this.Controls.Add(this.MenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MenuStrip;
-            this.Name = "Form1";
+            this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OoT NPC Maker";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -2520,17 +2860,32 @@
             this.TabControl.ResumeLayout(false);
             this.Tab1_Data.ResumeLayout(false);
             this.Tab1_Data.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
+            this.Panel_Collision.ResumeLayout(false);
+            this.Panel_Collision.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZColOffs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YColOffs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XColOffs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ColHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ColRadius)).EndInit();
+            this.Panel_Shadow.ResumeLayout(false);
+            this.Panel_Shadow.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ShRadius)).EndInit();
             this.Panel_HeadRot.ResumeLayout(false);
             this.Panel_HeadRot.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LookAt_Z)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LookAt_Y)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LookAt_X)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_DegVert)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_WaistLimb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_DegHoz)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Limb)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_HeadLimb)).EndInit();
             this.Panel_TargetPanel.ResumeLayout(false);
             this.Panel_TargetPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZTargetOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YTargetOffs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TargetLimb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XTargetOffs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TargetLimb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ObjectID)).EndInit();
             this.Panel_Movement.ResumeLayout(false);
             this.Panel_Movement.PerformLayout();
@@ -2543,14 +2898,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
-            this.Panel_Collision.ResumeLayout(false);
-            this.Panel_Collision.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZColOffs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YColOffs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XColOffs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ColHeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ColRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).EndInit();
             this.Tab2_ExtraData.ResumeLayout(false);
@@ -2561,31 +2908,32 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).EndInit();
             this.TabControl_Textures.ResumeLayout(false);
             this.TabPage_Segment_8.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).EndInit();
             this.TabPage_Segment_9.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).EndInit();
             this.TabPage_Segment_A.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).EndInit();
             this.TabPage_Segment_B.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).EndInit();
             this.TabPage_Segment_C.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).EndInit();
             this.TabPage_Segment_D.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).EndInit();
             this.TabPage_Segment_E.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).EndInit();
             this.TabPage_Segment_F.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             this.Tab3_Script.ResumeLayout(false);
             this.Tab3_Script.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script)).EndInit();
             this.Tab4_IdleScript.ResumeLayout(false);
             this.Tab4_IdleScript.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).EndInit();
             this.Panel_NPCList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.ContextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2629,13 +2977,11 @@
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage Tab1_Data;
         private System.Windows.Forms.Panel Panel_HeadRot;
-        private System.Windows.Forms.ComboBox ComboBox_HeadLookAxis;
         private System.Windows.Forms.NumericUpDown NumUpDown_DegVert;
-        private System.Windows.Forms.Label Label_HeadLookAxis;
         private System.Windows.Forms.Label Label_DegVert;
-        private System.Windows.Forms.Label Label_Limb;
+        private System.Windows.Forms.Label Label_Head_Limb;
         private System.Windows.Forms.NumericUpDown NumUpDown_DegHoz;
-        private System.Windows.Forms.NumericUpDown NumUpDown_Limb;
+        private System.Windows.Forms.NumericUpDown NumUpDown_HeadLimb;
         private System.Windows.Forms.Label Label_DegHoz;
         private System.Windows.Forms.Panel Panel_TargetPanel;
         private System.Windows.Forms.NumericUpDown NumUpDown_ZTargetOffs;
@@ -2656,16 +3002,6 @@
         private System.Windows.Forms.CheckBox Checkbox_CanPressSwitches;
         private System.Windows.Forms.CheckBox Checkbox_DrawShadow;
         private System.Windows.Forms.CheckBox Checkbox_HaveCollision;
-        private System.Windows.Forms.Panel Panel_Collision;
-        private System.Windows.Forms.NumericUpDown NumUpDown_ZColOffs;
-        private System.Windows.Forms.NumericUpDown NumUpDown_YColOffs;
-        private System.Windows.Forms.NumericUpDown NumUpDown_XColOffs;
-        private System.Windows.Forms.Label Label_Offset;
-        private System.Windows.Forms.Label Label_Height;
-        private System.Windows.Forms.NumericUpDown NumUpDown_ColHeight;
-        private System.Windows.Forms.NumericUpDown NumUpDown_ColRadius;
-        private System.Windows.Forms.Label Label_Radius;
-        private System.Windows.Forms.Label Label_Collision;
         private System.Windows.Forms.Label Label_LookAtType;
         private System.Windows.Forms.ComboBox ComboBox_LookAtType;
         private System.Windows.Forms.TabPage Tab3_Script;
@@ -2775,6 +3111,40 @@
         private System.Windows.Forms.ComboBox ComboBox_TargetDist;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem syntaxHighlightingToolStripMenuItem;
+        private System.Windows.Forms.Label Label_WaistSep;
+        private System.Windows.Forms.ComboBox Combo_Waist_Horiz;
+        private System.Windows.Forms.Label Label_Waist_Horiz;
+        private System.Windows.Forms.ComboBox Combo_Waist_Vert;
+        private System.Windows.Forms.Label Label_Waist_Vert;
+        private System.Windows.Forms.Label Label_WastSepr;
+        private System.Windows.Forms.Label Label_LookAtWaistHeader;
+        private System.Windows.Forms.Label Label_WaistLimb;
+        private System.Windows.Forms.NumericUpDown NumUpDown_WaistLimb;
+        private System.Windows.Forms.ComboBox Combo_Head_Horiz;
+        private System.Windows.Forms.Label Label_HeadHoriz;
+        private System.Windows.Forms.ComboBox Combo_Head_Vert;
+        private System.Windows.Forms.Label Label_Head_Vert;
+        private System.Windows.Forms.Label Label_HeadSepr;
+        private System.Windows.Forms.Label Label_LookAtHeadHeader;
+        private System.Windows.Forms.Label Label_CutsceneSlot;
+        private System.Windows.Forms.NumericUpDown NumUpDown_CutsceneSlot;
+        private System.Windows.Forms.Panel Panel_Collision;
+        private System.Windows.Forms.NumericUpDown NumUpDown_ZColOffs;
+        private System.Windows.Forms.NumericUpDown NumUpDown_YColOffs;
+        private System.Windows.Forms.NumericUpDown NumUpDown_XColOffs;
+        private System.Windows.Forms.Label Label_ColOffs;
+        private System.Windows.Forms.Label Label_ColHeight;
+        private System.Windows.Forms.NumericUpDown NumUpDown_ColHeight;
+        private System.Windows.Forms.NumericUpDown NumUpDown_ColRadius;
+        private System.Windows.Forms.Label Label_ColRadius;
+        private System.Windows.Forms.Panel Panel_Shadow;
+        private System.Windows.Forms.NumericUpDown NumUpDown_ShRadius;
+        private System.Windows.Forms.Label Label_ShRadius;
+        private System.Windows.Forms.NumericUpDown NumUpDown_LookAt_Z;
+        private System.Windows.Forms.NumericUpDown NumUpDown_LookAt_Y;
+        private System.Windows.Forms.NumericUpDown NumUpDown_LookAt_X;
+        private System.Windows.Forms.Label Label_LookAt_Offs;
+        private System.Windows.Forms.CheckBox Checkbox_AlwaysDraw;
     }
 }
 
