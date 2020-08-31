@@ -112,7 +112,7 @@ namespace NPC_Maker
             {
                 if (Lines[i].Trim() == Line.Trim())
                 {
-                    Range r = new Range(tb, 0, i, Lines[i].Length - 1, i);
+                    Range r = new Range(tb, 0, i, Lines[i].Length, i);
                     r.ClearStyle(FCTB.ErrorStyle);
                     r.ClearStyle(FCTB.GreenStyle);
                     r.ClearStyle(FCTB.BrownStyle);

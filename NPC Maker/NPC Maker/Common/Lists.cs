@@ -406,6 +406,7 @@ namespace NPC_Maker
             cutscene_being_played = 14,
             textbox_on_screen = 15,
             walking = 16,
+            idle = 17,
 
             rupees = 30,
             time_of_day = 31,
@@ -420,7 +421,6 @@ namespace NPC_Maker
             item_being_traded = 61,
             trade_status = 62,
             script_var = 63,
-           
         }
         public enum SetSubTypes
         {
@@ -472,8 +472,6 @@ namespace NPC_Maker
             do_blinking_anim = 183,
             do_talking_anim = 184,
             always_active = 185,
-            interaction_script = 186,
-            idle_script = 187,
             target_limb = 188,
             target_dist = 189,
             head_limb = 190,

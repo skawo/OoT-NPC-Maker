@@ -97,6 +97,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NewScriptParser\Classes.cs" />
+    <Compile Include="NewScriptParser\Helpers.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Await\Classes.cs" />
+    <Compile Include="NewScriptParser\Exceptions.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Common\Helpers.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Enable_Trading\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Enable_Trading\Enable_Trading.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Enable_Talking\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\If\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Nop\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Play\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Play\Play.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Set\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Show_Textbox\Show_Textbox.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Enable_Talking\Enable_Talking.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\If\If.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Await\Await.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Set\Set.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Nop\Nop.cs" />
+    <Compile Include="NewScriptParser\Lists.cs" />
+    <Compile Include="NewScriptParser\NewScriptParser.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Common\Classes.cs" />
     <Compile Include="Windows\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,5 +204,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

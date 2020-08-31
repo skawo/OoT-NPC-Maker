@@ -127,6 +127,12 @@
             this.NumUpDown_Hierarchy = new System.Windows.Forms.NumericUpDown();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.NumUpDown_YModelOffs = new System.Windows.Forms.NumericUpDown();
+            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Frames = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_AnimDefs = new System.Windows.Forms.Label();
             this.NumUpDown_XModelOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_LookAtType = new System.Windows.Forms.Label();
@@ -155,68 +161,41 @@
             this.Label_ExtraDisplayLists = new System.Windows.Forms.Label();
             this.TabControl_Textures = new System.Windows.Forms.TabControl();
             this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
-            this.Tab3_Script = new System.Windows.Forms.TabPage();
-            this.Button_TryParse = new System.Windows.Forms.Button();
-            this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
-            this.Tab4_IdleScript = new System.Windows.Forms.TabPage();
-            this.Button_TryParse2 = new System.Windows.Forms.Button();
-            this.Textbox_ParseErrors2 = new System.Windows.Forms.TextBox();
-            this.Panel_NPCList = new System.Windows.Forms.Panel();
-            this.Button_PasteBase = new System.Windows.Forms.Button();
-            this.Button_CopyBase = new System.Windows.Forms.Button();
-            this.Button_Duplicate = new System.Windows.Forms.Button();
-            this.Button_Delete = new System.Windows.Forms.Button();
-            this.Button_Add = new System.Windows.Forms.Button();
-            this.ColorDialog = new System.Windows.Forms.ColorDialog();
-            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.keywordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.keyValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemsgiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemstradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Frames = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_8 = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_8_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_8_TextOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg8_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
             this.Seg_9 = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_9_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_9_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_9_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
             this.Seg_A = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_A_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_A_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_A_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
             this.Seg_B = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_B_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_B_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_B_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
             this.Seg_C = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_C_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_C_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_C_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
             this.Seg_D = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_D_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_D_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_D_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
             this.Seg_E = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_E_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_E_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_E_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
             this.Seg_F = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_F_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_F_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -230,11 +209,32 @@
             this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Tab3_Script = new System.Windows.Forms.TabPage();
             this.Textbox_Script = new NPC_Maker.FastColoredTextboxForWine(this.components);
+            this.Button_TryParse = new System.Windows.Forms.Button();
+            this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
+            this.Tab4_IdleScript = new System.Windows.Forms.TabPage();
             this.Textbox_Script2 = new NPC_Maker.FastColoredTextboxForWine(this.components);
+            this.Button_TryParse2 = new System.Windows.Forms.Button();
+            this.Textbox_ParseErrors2 = new System.Windows.Forms.TextBox();
+            this.Panel_NPCList = new System.Windows.Forms.Panel();
+            this.Button_PasteBase = new System.Windows.Forms.Button();
+            this.Button_CopyBase = new System.Windows.Forms.Button();
+            this.Button_Duplicate = new System.Windows.Forms.Button();
+            this.Button_Delete = new System.Windows.Forms.Button();
+            this.Button_Add = new System.Windows.Forms.Button();
             this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
             this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColorDialog = new System.Windows.Forms.ColorDialog();
+            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.keywordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.keyValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemsgiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemstradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip.SuspendLayout();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
@@ -273,6 +273,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).BeginInit();
             this.Tab2_ExtraData.SuspendLayout();
@@ -282,30 +283,29 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
             this.TabControl_Textures.SuspendLayout();
             this.TabPage_Segment_8.SuspendLayout();
-            this.TabPage_Segment_9.SuspendLayout();
-            this.TabPage_Segment_A.SuspendLayout();
-            this.TabPage_Segment_B.SuspendLayout();
-            this.TabPage_Segment_C.SuspendLayout();
-            this.TabPage_Segment_D.SuspendLayout();
-            this.TabPage_Segment_E.SuspendLayout();
-            this.TabPage_Segment_F.SuspendLayout();
-            this.Tab3_Script.SuspendLayout();
-            this.Tab4_IdleScript.SuspendLayout();
-            this.Panel_NPCList.SuspendLayout();
-            this.ContextMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).BeginInit();
+            this.TabPage_Segment_9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).BeginInit();
+            this.TabPage_Segment_A.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).BeginInit();
+            this.TabPage_Segment_B.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).BeginInit();
+            this.TabPage_Segment_C.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).BeginInit();
+            this.TabPage_Segment_D.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).BeginInit();
+            this.TabPage_Segment_E.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).BeginInit();
+            this.TabPage_Segment_F.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
+            this.Tab3_Script.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script)).BeginInit();
+            this.Tab4_IdleScript.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).BeginInit();
+            this.Panel_NPCList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
+            this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuStrip
@@ -1601,6 +1601,65 @@
             this.NumUpDown_YModelOffs.Tag = "YMODELOFFS";
             this.NumUpDown_YModelOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
+            // DataGrid_Animations
+            // 
+            this.DataGrid_Animations.AllowUserToResizeColumns = false;
+            this.DataGrid_Animations.AllowUserToResizeRows = false;
+            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
+            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col_AnimName,
+            this.Col_Anim,
+            this.Col_Frames,
+            this.Col_Speed,
+            this.Col_OBJ});
+            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 165);
+            this.DataGrid_Animations.MultiSelect = false;
+            this.DataGrid_Animations.Name = "DataGrid_Animations";
+            this.DataGrid_Animations.RowHeadersVisible = false;
+            this.DataGrid_Animations.Size = new System.Drawing.Size(397, 416);
+            this.DataGrid_Animations.TabIndex = 9;
+            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
+            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
+            // 
+            // Col_AnimName
+            // 
+            this.Col_AnimName.FillWeight = 90F;
+            this.Col_AnimName.HeaderText = "Purpose";
+            this.Col_AnimName.Name = "Col_AnimName";
+            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Anim
+            // 
+            this.Col_Anim.FillWeight = 60F;
+            this.Col_Anim.HeaderText = "Offset";
+            this.Col_Anim.Name = "Col_Anim";
+            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Frames
+            // 
+            this.Col_Frames.FillWeight = 60F;
+            this.Col_Frames.HeaderText = "Keyframes";
+            this.Col_Frames.Name = "Col_Frames";
+            this.Col_Frames.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Speed
+            // 
+            this.Col_Speed.FillWeight = 40F;
+            this.Col_Speed.HeaderText = "Speed";
+            this.Col_Speed.Name = "Col_Speed";
+            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_OBJ
+            // 
+            this.Col_OBJ.FillWeight = 40F;
+            this.Col_OBJ.HeaderText = "Object";
+            this.Col_OBJ.Name = "Col_OBJ";
+            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Label_AnimDefs
             // 
             this.Label_AnimDefs.AutoSize = true;
@@ -1981,343 +2040,6 @@
             this.TabPage_Segment_8.Text = "Segment 8";
             this.TabPage_Segment_8.UseVisualStyleBackColor = true;
             // 
-            // TabPage_Segment_9
-            // 
-            this.TabPage_Segment_9.Controls.Add(this.Seg_9);
-            this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_9.Name = "TabPage_Segment_9";
-            this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_9.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_9.TabIndex = 1;
-            this.TabPage_Segment_9.Text = "Segment 9";
-            this.TabPage_Segment_9.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_A
-            // 
-            this.TabPage_Segment_A.Controls.Add(this.Seg_A);
-            this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_A.Name = "TabPage_Segment_A";
-            this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_A.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_A.TabIndex = 2;
-            this.TabPage_Segment_A.Text = "Segment A";
-            this.TabPage_Segment_A.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_B
-            // 
-            this.TabPage_Segment_B.Controls.Add(this.Seg_B);
-            this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_B.Name = "TabPage_Segment_B";
-            this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_B.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_B.TabIndex = 3;
-            this.TabPage_Segment_B.Text = "Segment B";
-            this.TabPage_Segment_B.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_C
-            // 
-            this.TabPage_Segment_C.Controls.Add(this.Seg_C);
-            this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_C.Name = "TabPage_Segment_C";
-            this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_C.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_C.TabIndex = 4;
-            this.TabPage_Segment_C.Text = "Segment C";
-            this.TabPage_Segment_C.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_D
-            // 
-            this.TabPage_Segment_D.Controls.Add(this.Seg_D);
-            this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_D.Name = "TabPage_Segment_D";
-            this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_D.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_D.TabIndex = 5;
-            this.TabPage_Segment_D.Text = "Segment D";
-            this.TabPage_Segment_D.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_E
-            // 
-            this.TabPage_Segment_E.Controls.Add(this.Seg_E);
-            this.TabPage_Segment_E.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_E.Name = "TabPage_Segment_E";
-            this.TabPage_Segment_E.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_E.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_E.TabIndex = 6;
-            this.TabPage_Segment_E.Text = "Segment E";
-            this.TabPage_Segment_E.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_F
-            // 
-            this.TabPage_Segment_F.Controls.Add(this.Seg_F);
-            this.TabPage_Segment_F.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_F.Name = "TabPage_Segment_F";
-            this.TabPage_Segment_F.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_F.Size = new System.Drawing.Size(812, 229);
-            this.TabPage_Segment_F.TabIndex = 7;
-            this.TabPage_Segment_F.Text = "Segment F";
-            this.TabPage_Segment_F.UseVisualStyleBackColor = true;
-            // 
-            // Tab3_Script
-            // 
-            this.Tab3_Script.BackColor = System.Drawing.Color.White;
-            this.Tab3_Script.Controls.Add(this.Textbox_Script);
-            this.Tab3_Script.Controls.Add(this.Button_TryParse);
-            this.Tab3_Script.Controls.Add(this.Textbox_ParseErrors);
-            this.Tab3_Script.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Tab3_Script.Location = new System.Drawing.Point(4, 22);
-            this.Tab3_Script.Name = "Tab3_Script";
-            this.Tab3_Script.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab3_Script.Size = new System.Drawing.Size(835, 615);
-            this.Tab3_Script.TabIndex = 1;
-            this.Tab3_Script.Text = "Interaction script";
-            // 
-            // Button_TryParse
-            // 
-            this.Button_TryParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_TryParse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.Button_TryParse.Location = new System.Drawing.Point(724, 545);
-            this.Button_TryParse.Name = "Button_TryParse";
-            this.Button_TryParse.Size = new System.Drawing.Size(105, 68);
-            this.Button_TryParse.TabIndex = 2;
-            this.Button_TryParse.Text = "Try parsing";
-            this.Button_TryParse.UseVisualStyleBackColor = true;
-            this.Button_TryParse.Click += new System.EventHandler(this.Button_TryParse_Click);
-            // 
-            // Textbox_ParseErrors
-            // 
-            this.Textbox_ParseErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_ParseErrors.Location = new System.Drawing.Point(4, 545);
-            this.Textbox_ParseErrors.Multiline = true;
-            this.Textbox_ParseErrors.Name = "Textbox_ParseErrors";
-            this.Textbox_ParseErrors.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Textbox_ParseErrors.Size = new System.Drawing.Size(714, 68);
-            this.Textbox_ParseErrors.TabIndex = 1;
-            // 
-            // Tab4_IdleScript
-            // 
-            this.Tab4_IdleScript.BackColor = System.Drawing.Color.White;
-            this.Tab4_IdleScript.Controls.Add(this.Textbox_Script2);
-            this.Tab4_IdleScript.Controls.Add(this.Button_TryParse2);
-            this.Tab4_IdleScript.Controls.Add(this.Textbox_ParseErrors2);
-            this.Tab4_IdleScript.Location = new System.Drawing.Point(4, 22);
-            this.Tab4_IdleScript.Name = "Tab4_IdleScript";
-            this.Tab4_IdleScript.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab4_IdleScript.Size = new System.Drawing.Size(835, 615);
-            this.Tab4_IdleScript.TabIndex = 3;
-            this.Tab4_IdleScript.Text = "Idle script";
-            // 
-            // Button_TryParse2
-            // 
-            this.Button_TryParse2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_TryParse2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.Button_TryParse2.Location = new System.Drawing.Point(724, 543);
-            this.Button_TryParse2.Name = "Button_TryParse2";
-            this.Button_TryParse2.Size = new System.Drawing.Size(105, 68);
-            this.Button_TryParse2.TabIndex = 5;
-            this.Button_TryParse2.Text = "Try parsing";
-            this.Button_TryParse2.UseVisualStyleBackColor = true;
-            this.Button_TryParse2.Click += new System.EventHandler(this.Button_TryParse2_Click);
-            // 
-            // Textbox_ParseErrors2
-            // 
-            this.Textbox_ParseErrors2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_ParseErrors2.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.Textbox_ParseErrors2.Location = new System.Drawing.Point(4, 543);
-            this.Textbox_ParseErrors2.Multiline = true;
-            this.Textbox_ParseErrors2.Name = "Textbox_ParseErrors2";
-            this.Textbox_ParseErrors2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Textbox_ParseErrors2.Size = new System.Drawing.Size(714, 68);
-            this.Textbox_ParseErrors2.TabIndex = 4;
-            // 
-            // Panel_NPCList
-            // 
-            this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.Panel_NPCList.Controls.Add(this.Button_PasteBase);
-            this.Panel_NPCList.Controls.Add(this.Button_CopyBase);
-            this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
-            this.Panel_NPCList.Controls.Add(this.Button_Delete);
-            this.Panel_NPCList.Controls.Add(this.Button_Add);
-            this.Panel_NPCList.Controls.Add(this.DataGrid_NPCs);
-            this.Panel_NPCList.Location = new System.Drawing.Point(0, 3);
-            this.Panel_NPCList.Name = "Panel_NPCList";
-            this.Panel_NPCList.Size = new System.Drawing.Size(244, 641);
-            this.Panel_NPCList.TabIndex = 5;
-            // 
-            // Button_PasteBase
-            // 
-            this.Button_PasteBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_PasteBase.Location = new System.Drawing.Point(125, 604);
-            this.Button_PasteBase.Name = "Button_PasteBase";
-            this.Button_PasteBase.Size = new System.Drawing.Size(109, 31);
-            this.Button_PasteBase.TabIndex = 7;
-            this.Button_PasteBase.Text = "Paste model info";
-            this.Button_PasteBase.UseVisualStyleBackColor = true;
-            this.Button_PasteBase.Click += new System.EventHandler(this.Button_PasteBase_Click);
-            // 
-            // Button_CopyBase
-            // 
-            this.Button_CopyBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_CopyBase.Location = new System.Drawing.Point(10, 604);
-            this.Button_CopyBase.Name = "Button_CopyBase";
-            this.Button_CopyBase.Size = new System.Drawing.Size(109, 31);
-            this.Button_CopyBase.TabIndex = 6;
-            this.Button_CopyBase.Text = "Copy model info";
-            this.Button_CopyBase.UseVisualStyleBackColor = true;
-            this.Button_CopyBase.Click += new System.EventHandler(this.Button_CopyBase_Click);
-            // 
-            // Button_Duplicate
-            // 
-            this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Duplicate.Location = new System.Drawing.Point(87, 567);
-            this.Button_Duplicate.Name = "Button_Duplicate";
-            this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
-            this.Button_Duplicate.TabIndex = 5;
-            this.Button_Duplicate.Text = "Duplicate";
-            this.Button_Duplicate.UseVisualStyleBackColor = true;
-            this.Button_Duplicate.Click += new System.EventHandler(this.Button_Duplicate_Click);
-            // 
-            // Button_Delete
-            // 
-            this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Delete.Location = new System.Drawing.Point(166, 567);
-            this.Button_Delete.Name = "Button_Delete";
-            this.Button_Delete.Size = new System.Drawing.Size(73, 31);
-            this.Button_Delete.TabIndex = 4;
-            this.Button_Delete.Text = "Delete";
-            this.Button_Delete.UseVisualStyleBackColor = true;
-            this.Button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
-            // 
-            // Button_Add
-            // 
-            this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Add.Location = new System.Drawing.Point(3, 567);
-            this.Button_Add.Name = "Button_Add";
-            this.Button_Add.Size = new System.Drawing.Size(79, 31);
-            this.Button_Add.TabIndex = 3;
-            this.Button_Add.Text = "Add";
-            this.Button_Add.UseVisualStyleBackColor = true;
-            this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
-            // 
-            // ContextMenuStrip
-            // 
-            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.functionsToolStripMenuItem,
-            this.keywordsToolStripMenuItem,
-            this.keyValuesToolStripMenuItem,
-            this.itemsgiveToolStripMenuItem,
-            this.itemstradeToolStripMenuItem,
-            this.soundEffectsToolStripMenuItem,
-            this.musicToolStripMenuItem});
-            this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(147, 158);
-            // 
-            // functionsToolStripMenuItem
-            // 
-            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
-            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.functionsToolStripMenuItem.Text = "Functions";
-            // 
-            // keywordsToolStripMenuItem
-            // 
-            this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
-            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.keywordsToolStripMenuItem.Text = "Keywords";
-            // 
-            // keyValuesToolStripMenuItem
-            // 
-            this.keyValuesToolStripMenuItem.Name = "keyValuesToolStripMenuItem";
-            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.keyValuesToolStripMenuItem.Text = "Key values";
-            // 
-            // itemsgiveToolStripMenuItem
-            // 
-            this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
-            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.itemsgiveToolStripMenuItem.Text = "Items (give)";
-            // 
-            // itemstradeToolStripMenuItem
-            // 
-            this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
-            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.itemstradeToolStripMenuItem.Text = "Items (trade)";
-            // 
-            // soundEffectsToolStripMenuItem
-            // 
-            this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
-            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.soundEffectsToolStripMenuItem.Text = "Sound effects";
-            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.soundEffectsToolStripMenuItem_Click);
-            // 
-            // musicToolStripMenuItem
-            // 
-            this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
-            this.musicToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.musicToolStripMenuItem.Text = "Music";
-            this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
-            // 
-            // DataGrid_Animations
-            // 
-            this.DataGrid_Animations.AllowUserToResizeColumns = false;
-            this.DataGrid_Animations.AllowUserToResizeRows = false;
-            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
-            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_AnimName,
-            this.Col_Anim,
-            this.Col_Frames,
-            this.Col_Speed,
-            this.Col_OBJ});
-            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 165);
-            this.DataGrid_Animations.MultiSelect = false;
-            this.DataGrid_Animations.Name = "DataGrid_Animations";
-            this.DataGrid_Animations.RowHeadersVisible = false;
-            this.DataGrid_Animations.Size = new System.Drawing.Size(397, 416);
-            this.DataGrid_Animations.TabIndex = 9;
-            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
-            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
-            // 
-            // Col_AnimName
-            // 
-            this.Col_AnimName.FillWeight = 90F;
-            this.Col_AnimName.HeaderText = "Purpose";
-            this.Col_AnimName.Name = "Col_AnimName";
-            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Anim
-            // 
-            this.Col_Anim.FillWeight = 60F;
-            this.Col_Anim.HeaderText = "Offset";
-            this.Col_Anim.Name = "Col_Anim";
-            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Frames
-            // 
-            this.Col_Frames.FillWeight = 60F;
-            this.Col_Frames.HeaderText = "Keyframes";
-            this.Col_Frames.Name = "Col_Frames";
-            this.Col_Frames.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Speed
-            // 
-            this.Col_Speed.FillWeight = 40F;
-            this.Col_Speed.HeaderText = "Speed";
-            this.Col_Speed.Name = "Col_Speed";
-            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_OBJ
-            // 
-            this.Col_OBJ.FillWeight = 40F;
-            this.Col_OBJ.HeaderText = "Object";
-            this.Col_OBJ.Name = "Col_OBJ";
-            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // Seg_8
             // 
             this.Seg_8.AllowUserToResizeColumns = false;
@@ -2357,6 +2079,17 @@
             this.Seg8_ObjId.FillWeight = 70F;
             this.Seg8_ObjId.HeaderText = "Object ID";
             this.Seg8_ObjId.Name = "Seg8_ObjId";
+            // 
+            // TabPage_Segment_9
+            // 
+            this.TabPage_Segment_9.Controls.Add(this.Seg_9);
+            this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_9.Name = "TabPage_Segment_9";
+            this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_9.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_9.TabIndex = 1;
+            this.TabPage_Segment_9.Text = "Segment 9";
+            this.TabPage_Segment_9.UseVisualStyleBackColor = true;
             // 
             // Seg_9
             // 
@@ -2398,6 +2131,17 @@
             this.Seg_9_ObjId.HeaderText = "Object ID";
             this.Seg_9_ObjId.Name = "Seg_9_ObjId";
             // 
+            // TabPage_Segment_A
+            // 
+            this.TabPage_Segment_A.Controls.Add(this.Seg_A);
+            this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_A.Name = "TabPage_Segment_A";
+            this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_A.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_A.TabIndex = 2;
+            this.TabPage_Segment_A.Text = "Segment A";
+            this.TabPage_Segment_A.UseVisualStyleBackColor = true;
+            // 
             // Seg_A
             // 
             this.Seg_A.AllowUserToResizeColumns = false;
@@ -2437,6 +2181,17 @@
             this.Seg_A_ObjId.FillWeight = 70F;
             this.Seg_A_ObjId.HeaderText = "Object ID";
             this.Seg_A_ObjId.Name = "Seg_A_ObjId";
+            // 
+            // TabPage_Segment_B
+            // 
+            this.TabPage_Segment_B.Controls.Add(this.Seg_B);
+            this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_B.Name = "TabPage_Segment_B";
+            this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_B.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_B.TabIndex = 3;
+            this.TabPage_Segment_B.Text = "Segment B";
+            this.TabPage_Segment_B.UseVisualStyleBackColor = true;
             // 
             // Seg_B
             // 
@@ -2478,6 +2233,17 @@
             this.Seg_B_ObjId.HeaderText = "Object ID";
             this.Seg_B_ObjId.Name = "Seg_B_ObjId";
             // 
+            // TabPage_Segment_C
+            // 
+            this.TabPage_Segment_C.Controls.Add(this.Seg_C);
+            this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_C.Name = "TabPage_Segment_C";
+            this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_C.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_C.TabIndex = 4;
+            this.TabPage_Segment_C.Text = "Segment C";
+            this.TabPage_Segment_C.UseVisualStyleBackColor = true;
+            // 
             // Seg_C
             // 
             this.Seg_C.AllowUserToResizeColumns = false;
@@ -2517,6 +2283,17 @@
             this.Seg_C_ObjId.FillWeight = 70F;
             this.Seg_C_ObjId.HeaderText = "Object ID";
             this.Seg_C_ObjId.Name = "Seg_C_ObjId";
+            // 
+            // TabPage_Segment_D
+            // 
+            this.TabPage_Segment_D.Controls.Add(this.Seg_D);
+            this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_D.Name = "TabPage_Segment_D";
+            this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_D.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_D.TabIndex = 5;
+            this.TabPage_Segment_D.Text = "Segment D";
+            this.TabPage_Segment_D.UseVisualStyleBackColor = true;
             // 
             // Seg_D
             // 
@@ -2558,6 +2335,17 @@
             this.Seg_D_ObjId.HeaderText = "Object ID";
             this.Seg_D_ObjId.Name = "Seg_D_ObjId";
             // 
+            // TabPage_Segment_E
+            // 
+            this.TabPage_Segment_E.Controls.Add(this.Seg_E);
+            this.TabPage_Segment_E.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_E.Name = "TabPage_Segment_E";
+            this.TabPage_Segment_E.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_E.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_E.TabIndex = 6;
+            this.TabPage_Segment_E.Text = "Segment E";
+            this.TabPage_Segment_E.UseVisualStyleBackColor = true;
+            // 
             // Seg_E
             // 
             this.Seg_E.AllowUserToResizeColumns = false;
@@ -2597,6 +2385,17 @@
             this.Seg_E_ObjId.FillWeight = 70F;
             this.Seg_E_ObjId.HeaderText = "Object ID";
             this.Seg_E_ObjId.Name = "Seg_E_ObjId";
+            // 
+            // TabPage_Segment_F
+            // 
+            this.TabPage_Segment_F.Controls.Add(this.Seg_F);
+            this.TabPage_Segment_F.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_F.Name = "TabPage_Segment_F";
+            this.TabPage_Segment_F.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_F.Size = new System.Drawing.Size(812, 229);
+            this.TabPage_Segment_F.TabIndex = 7;
+            this.TabPage_Segment_F.Text = "Segment F";
+            this.TabPage_Segment_F.UseVisualStyleBackColor = true;
             // 
             // Seg_F
             // 
@@ -2722,6 +2521,20 @@
             this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.ExtraDlists_ShowType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
+            // Tab3_Script
+            // 
+            this.Tab3_Script.BackColor = System.Drawing.Color.White;
+            this.Tab3_Script.Controls.Add(this.Textbox_Script);
+            this.Tab3_Script.Controls.Add(this.Button_TryParse);
+            this.Tab3_Script.Controls.Add(this.Textbox_ParseErrors);
+            this.Tab3_Script.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Tab3_Script.Location = new System.Drawing.Point(4, 22);
+            this.Tab3_Script.Name = "Tab3_Script";
+            this.Tab3_Script.Padding = new System.Windows.Forms.Padding(3);
+            this.Tab3_Script.Size = new System.Drawing.Size(835, 615);
+            this.Tab3_Script.TabIndex = 1;
+            this.Tab3_Script.Text = "Script 1";
+            // 
             // Textbox_Script
             // 
             this.Textbox_Script.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -2740,13 +2553,14 @@
         '\''};
             this.Textbox_Script.AutoIndent = false;
             this.Textbox_Script.AutoIndentChars = false;
-            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(2, 14);
+            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.Textbox_Script.BackBrush = null;
             this.Textbox_Script.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script.CharHeight = 14;
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(4, 6);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -2759,6 +2573,42 @@
             this.Textbox_Script.Zoom = 100;
             this.Textbox_Script.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.Textbox_Script_TextChanged);
             this.Textbox_Script.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Textbox_Script_MouseClick);
+            // 
+            // Button_TryParse
+            // 
+            this.Button_TryParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_TryParse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.Button_TryParse.Location = new System.Drawing.Point(724, 545);
+            this.Button_TryParse.Name = "Button_TryParse";
+            this.Button_TryParse.Size = new System.Drawing.Size(105, 68);
+            this.Button_TryParse.TabIndex = 2;
+            this.Button_TryParse.Text = "Try parsing";
+            this.Button_TryParse.UseVisualStyleBackColor = true;
+            this.Button_TryParse.Click += new System.EventHandler(this.Button_TryParse_Click);
+            // 
+            // Textbox_ParseErrors
+            // 
+            this.Textbox_ParseErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Textbox_ParseErrors.Location = new System.Drawing.Point(4, 545);
+            this.Textbox_ParseErrors.Multiline = true;
+            this.Textbox_ParseErrors.Name = "Textbox_ParseErrors";
+            this.Textbox_ParseErrors.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.Textbox_ParseErrors.Size = new System.Drawing.Size(714, 68);
+            this.Textbox_ParseErrors.TabIndex = 1;
+            // 
+            // Tab4_IdleScript
+            // 
+            this.Tab4_IdleScript.BackColor = System.Drawing.Color.White;
+            this.Tab4_IdleScript.Controls.Add(this.Textbox_Script2);
+            this.Tab4_IdleScript.Controls.Add(this.Button_TryParse2);
+            this.Tab4_IdleScript.Controls.Add(this.Textbox_ParseErrors2);
+            this.Tab4_IdleScript.Location = new System.Drawing.Point(4, 22);
+            this.Tab4_IdleScript.Name = "Tab4_IdleScript";
+            this.Tab4_IdleScript.Padding = new System.Windows.Forms.Padding(3);
+            this.Tab4_IdleScript.Size = new System.Drawing.Size(835, 615);
+            this.Tab4_IdleScript.TabIndex = 3;
+            this.Tab4_IdleScript.Text = "Script 2";
             // 
             // Textbox_Script2
             // 
@@ -2778,13 +2628,14 @@
         '\''};
             this.Textbox_Script2.AutoIndent = false;
             this.Textbox_Script2.AutoIndentChars = false;
-            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(2, 14);
+            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.Textbox_Script2.BackBrush = null;
             this.Textbox_Script2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script2.CharHeight = 14;
             this.Textbox_Script2.CharWidth = 8;
             this.Textbox_Script2.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script2.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script2.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script2.IsReplaceMode = false;
             this.Textbox_Script2.Location = new System.Drawing.Point(4, 4);
             this.Textbox_Script2.Name = "Textbox_Script2";
@@ -2797,6 +2648,100 @@
             this.Textbox_Script2.Zoom = 100;
             this.Textbox_Script2.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.Textbox_Script2_TextChanged);
             this.Textbox_Script2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Textbox_Script_MouseClick);
+            // 
+            // Button_TryParse2
+            // 
+            this.Button_TryParse2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_TryParse2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.Button_TryParse2.Location = new System.Drawing.Point(724, 543);
+            this.Button_TryParse2.Name = "Button_TryParse2";
+            this.Button_TryParse2.Size = new System.Drawing.Size(105, 68);
+            this.Button_TryParse2.TabIndex = 5;
+            this.Button_TryParse2.Text = "Try parsing";
+            this.Button_TryParse2.UseVisualStyleBackColor = true;
+            this.Button_TryParse2.Click += new System.EventHandler(this.Button_TryParse2_Click);
+            // 
+            // Textbox_ParseErrors2
+            // 
+            this.Textbox_ParseErrors2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Textbox_ParseErrors2.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.Textbox_ParseErrors2.Location = new System.Drawing.Point(4, 543);
+            this.Textbox_ParseErrors2.Multiline = true;
+            this.Textbox_ParseErrors2.Name = "Textbox_ParseErrors2";
+            this.Textbox_ParseErrors2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.Textbox_ParseErrors2.Size = new System.Drawing.Size(714, 68);
+            this.Textbox_ParseErrors2.TabIndex = 4;
+            // 
+            // Panel_NPCList
+            // 
+            this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.Panel_NPCList.Controls.Add(this.Button_PasteBase);
+            this.Panel_NPCList.Controls.Add(this.Button_CopyBase);
+            this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
+            this.Panel_NPCList.Controls.Add(this.Button_Delete);
+            this.Panel_NPCList.Controls.Add(this.Button_Add);
+            this.Panel_NPCList.Controls.Add(this.DataGrid_NPCs);
+            this.Panel_NPCList.Location = new System.Drawing.Point(0, 3);
+            this.Panel_NPCList.Name = "Panel_NPCList";
+            this.Panel_NPCList.Size = new System.Drawing.Size(244, 641);
+            this.Panel_NPCList.TabIndex = 5;
+            // 
+            // Button_PasteBase
+            // 
+            this.Button_PasteBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_PasteBase.Location = new System.Drawing.Point(125, 604);
+            this.Button_PasteBase.Name = "Button_PasteBase";
+            this.Button_PasteBase.Size = new System.Drawing.Size(109, 31);
+            this.Button_PasteBase.TabIndex = 7;
+            this.Button_PasteBase.Text = "Paste model info";
+            this.Button_PasteBase.UseVisualStyleBackColor = true;
+            this.Button_PasteBase.Click += new System.EventHandler(this.Button_PasteBase_Click);
+            // 
+            // Button_CopyBase
+            // 
+            this.Button_CopyBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_CopyBase.Location = new System.Drawing.Point(10, 604);
+            this.Button_CopyBase.Name = "Button_CopyBase";
+            this.Button_CopyBase.Size = new System.Drawing.Size(109, 31);
+            this.Button_CopyBase.TabIndex = 6;
+            this.Button_CopyBase.Text = "Copy model info";
+            this.Button_CopyBase.UseVisualStyleBackColor = true;
+            this.Button_CopyBase.Click += new System.EventHandler(this.Button_CopyBase_Click);
+            // 
+            // Button_Duplicate
+            // 
+            this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Duplicate.Location = new System.Drawing.Point(87, 567);
+            this.Button_Duplicate.Name = "Button_Duplicate";
+            this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
+            this.Button_Duplicate.TabIndex = 5;
+            this.Button_Duplicate.Text = "Duplicate";
+            this.Button_Duplicate.UseVisualStyleBackColor = true;
+            this.Button_Duplicate.Click += new System.EventHandler(this.Button_Duplicate_Click);
+            // 
+            // Button_Delete
+            // 
+            this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Delete.Location = new System.Drawing.Point(166, 567);
+            this.Button_Delete.Name = "Button_Delete";
+            this.Button_Delete.Size = new System.Drawing.Size(73, 31);
+            this.Button_Delete.TabIndex = 4;
+            this.Button_Delete.Text = "Delete";
+            this.Button_Delete.UseVisualStyleBackColor = true;
+            this.Button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
+            // 
+            // Button_Add
+            // 
+            this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Add.Location = new System.Drawing.Point(3, 567);
+            this.Button_Add.Name = "Button_Add";
+            this.Button_Add.Size = new System.Drawing.Size(79, 31);
+            this.Button_Add.TabIndex = 3;
+            this.Button_Add.Text = "Add";
+            this.Button_Add.UseVisualStyleBackColor = true;
+            this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
             // 
             // DataGrid_NPCs
             // 
@@ -2837,6 +2782,63 @@
             this.Col_Name.Name = "Col_Name";
             this.Col_Name.ReadOnly = true;
             this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ContextMenuStrip
+            // 
+            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.functionsToolStripMenuItem,
+            this.keywordsToolStripMenuItem,
+            this.keyValuesToolStripMenuItem,
+            this.itemsgiveToolStripMenuItem,
+            this.itemstradeToolStripMenuItem,
+            this.soundEffectsToolStripMenuItem,
+            this.musicToolStripMenuItem});
+            this.ContextMenuStrip.Name = "ContextMenuStrip";
+            this.ContextMenuStrip.Size = new System.Drawing.Size(147, 158);
+            // 
+            // functionsToolStripMenuItem
+            // 
+            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
+            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.functionsToolStripMenuItem.Text = "Functions";
+            // 
+            // keywordsToolStripMenuItem
+            // 
+            this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
+            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.keywordsToolStripMenuItem.Text = "Keywords";
+            // 
+            // keyValuesToolStripMenuItem
+            // 
+            this.keyValuesToolStripMenuItem.Name = "keyValuesToolStripMenuItem";
+            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.keyValuesToolStripMenuItem.Text = "Key values";
+            // 
+            // itemsgiveToolStripMenuItem
+            // 
+            this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
+            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.itemsgiveToolStripMenuItem.Text = "Items (give)";
+            // 
+            // itemstradeToolStripMenuItem
+            // 
+            this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
+            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.itemstradeToolStripMenuItem.Text = "Items (trade)";
+            // 
+            // soundEffectsToolStripMenuItem
+            // 
+            this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
+            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.soundEffectsToolStripMenuItem.Text = "Sound effects";
+            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.soundEffectsToolStripMenuItem_Click);
+            // 
+            // musicToolStripMenuItem
+            // 
+            this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
+            this.musicToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.musicToolStripMenuItem.Text = "Music";
+            this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -2898,6 +2900,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).EndInit();
             this.Tab2_ExtraData.ResumeLayout(false);
@@ -2908,32 +2911,31 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).EndInit();
             this.TabControl_Textures.ResumeLayout(false);
             this.TabPage_Segment_8.ResumeLayout(false);
-            this.TabPage_Segment_9.ResumeLayout(false);
-            this.TabPage_Segment_A.ResumeLayout(false);
-            this.TabPage_Segment_B.ResumeLayout(false);
-            this.TabPage_Segment_C.ResumeLayout(false);
-            this.TabPage_Segment_D.ResumeLayout(false);
-            this.TabPage_Segment_E.ResumeLayout(false);
-            this.TabPage_Segment_F.ResumeLayout(false);
-            this.Tab3_Script.ResumeLayout(false);
-            this.Tab3_Script.PerformLayout();
-            this.Tab4_IdleScript.ResumeLayout(false);
-            this.Tab4_IdleScript.PerformLayout();
-            this.Panel_NPCList.ResumeLayout(false);
-            this.ContextMenuStrip.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).EndInit();
+            this.TabPage_Segment_9.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).EndInit();
+            this.TabPage_Segment_A.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).EndInit();
+            this.TabPage_Segment_B.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).EndInit();
+            this.TabPage_Segment_C.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).EndInit();
+            this.TabPage_Segment_D.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).EndInit();
+            this.TabPage_Segment_E.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).EndInit();
+            this.TabPage_Segment_F.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
+            this.Tab3_Script.ResumeLayout(false);
+            this.Tab3_Script.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script)).EndInit();
+            this.Tab4_IdleScript.ResumeLayout(false);
+            this.Tab4_IdleScript.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).EndInit();
+            this.Panel_NPCList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
+            this.ContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

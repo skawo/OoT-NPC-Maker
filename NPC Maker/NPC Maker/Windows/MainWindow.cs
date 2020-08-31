@@ -1130,27 +1130,22 @@ namespace NPC_Maker
             Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
             r.ClearStyle(FCTB.ErrorStyle);
 
-            ScriptParser Parser = new ScriptParser();
 
-            Parser.Parse(SelectedEntry, SelectedEntry.Script);
-            SelectedEntry.ParseErrors = Parser.ParseErrors;
+            NewScriptParser.ScriptParser Parser = new NPC_Maker.NewScriptParser.ScriptParser(SelectedEntry, SelectedEntry.Script);
+            Textbox_ParseErrors.Clear();
 
-            Textbox_ParseErrors.Text = "";
+            NewScriptParser.bScript Output = Parser.ParseScript();
 
-            if (Parser.ParseErrors.Count == 0)
+            if (Output.ParseErrors.Count() == 0)
                 Textbox_ParseErrors.Text = "Parsed successfully!";
             else
             {
-                foreach (string Error in Parser.ParseErrors)
+                foreach (NewScriptParser.ParseException Error in Output.ParseErrors)
                 {
-                    Textbox_ParseErrors.Text += Error + Environment.NewLine;
-                    string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
-                    Line = Line.Substring(1, Line.Length - 2);
-                    FCTB.ApplyError(Textbox_Script, Line);
+                    Textbox_ParseErrors.Text += Error.ToString() + Environment.NewLine;
+                    FCTB.ApplyError(Textbox_Script, Error.Line);
                 }
             }
-
-            Textbox_Script.Focus();
         }
 
         private void DataGridView_ExtraDLists_KeyUp(object sender, KeyEventArgs e)
