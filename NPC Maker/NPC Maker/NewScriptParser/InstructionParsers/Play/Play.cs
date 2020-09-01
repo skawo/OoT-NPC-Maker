@@ -25,12 +25,12 @@ namespace NPC_Maker.NewScriptParser
 
                                 byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
 
-                                if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                                if (VarType == (int)Lists.VarTypes.RNG)
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 UInt32? SNDID = 0;
 
-                                if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                                if (VarType < (int)Lists.VarTypes.Var1)
                                 {
                                     SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
                                                            ScriptHelpers.Helper_GetSFXId(SplitLine[2])

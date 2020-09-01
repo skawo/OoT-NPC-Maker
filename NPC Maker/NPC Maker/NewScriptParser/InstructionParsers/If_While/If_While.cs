@@ -29,17 +29,20 @@ namespace NPC_Maker.NewScriptParser
                     if (Else == -1)
                         Else = EndIf;
 
-                    True = GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList());
+                    #region true
+                    True.Add(new InstructionLabel("__IFTRUE__" + LineNo.ToString()));
+                    True.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
                     True.Add(new InstructionGoto("__IFEND__" + LineNo.ToString()));
+                    #endregion
 
-
-                    False = new List<Instruction>();
-                    False.Add(new InstructionLabel("__IFELSE__" + LineNo.ToString()));
+                    #region false
+                    False.Add(new InstructionLabel("__IFFALSE__" + LineNo.ToString()));
 
                     if (Else != EndIf)
                         False.AddRange(GetInstructions(Lines.Skip(Else + 1).Take(EndIf - Else - 1).ToList()));
 
                     False.Add(new InstructionLabel("__IFEND__" + LineNo.ToString()));
+                    #endregion
 
                 }
                 else if (ID == (int)Lists.Instructions.WHILE)
@@ -51,7 +54,8 @@ namespace NPC_Maker.NewScriptParser
 
                     Else = EndIf;
 
-                    True = GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList());
+                    True.Add(new InstructionLabel("__WHILE__" + LineNo.ToString()));
+                    True.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
                     True.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, 0));
                     True.Add(new InstructionGoto("__WHILE__" + LineNo.ToString()));
 
@@ -101,12 +105,12 @@ namespace NPC_Maker.NewScriptParser
                         byte VarType = ScriptHelpers.GetVariable(SplitLine[3]);
                         UInt32 Value = 0;
 
-                        if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                        if (VarType == (int)Lists.VarTypes.RNG)
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
-                        if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                        if (VarType < (int)Lists.VarTypes.Var1)
                             Value = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 
-                                                                                         VarType == (int)Lists.VarTypes.Keyword_RNG ? 4 : 3, 0, UInt16.MaxValue));
+                                                                                         VarType == (int)Lists.VarTypes.RNG ? 4 : 3, 0, UInt16.MaxValue));
 
                         return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LineNo, True, False);
                     }
@@ -176,13 +180,13 @@ namespace NPC_Maker.NewScriptParser
                                     byte VarType = ScriptHelpers.GetVariable(SplitLine[3]);
                                     UInt32 Time = 0;
 
-                                    if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                                    if (VarType == (int)Lists.VarTypes.RNG)
                                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                    if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                                    if (VarType < (int)Lists.VarTypes.Var1)
                                     {
                                         UInt32 Value = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 
-                                                                                                            VarType == (int)Lists.VarTypes.Keyword_RNG ? 4 : 3, 
+                                                                                                            VarType == (int)Lists.VarTypes.RNG ? 4 : 3, 
                                                                                                             0, UInt16.MaxValue));
 
                                         string[] HourMinute = SplitLine[3].Split(':');
@@ -317,7 +321,13 @@ namespace NPC_Maker.NewScriptParser
             {
                 if (Lines[i].Split(' ')[0].ToUpper() == Lists.Instructions.IF.ToString())
                 {
+                    int j = i;
+
                     i = GetCorrespondingEndIf(Lines, i);
+
+                    if (i < 0)
+                        throw ParseException.IfNotClosed(Lines[j]);
+
                     continue;
                 }
 
@@ -334,7 +344,13 @@ namespace NPC_Maker.NewScriptParser
             {
                 if (Lines[i].Split(' ')[0].ToUpper() == Lists.Instructions.WHILE.ToString())
                 {
+                    int j = i;
+
                     i = GetCorrespondingEnd(Lines, i);
+
+                    if (i < 0)
+                        throw ParseException.IfNotClosed(Lines[j]);
+
                     continue;
                 }
 

@@ -11,7 +11,6 @@ namespace NPC_Maker.NewScriptParser
     public partial class ScriptParser
     {
         private string ScriptText;
-        private List<Label> Labels;
         private NPCEntry Entry;
         private bScript outScript;
 
@@ -20,17 +19,13 @@ namespace NPC_Maker.NewScriptParser
             ScriptText = _ScriptText;
             Entry = _Entry;
 
-            ScriptText = ScriptText.Replace(",", " ");
-            ScriptText = ScriptText.Replace("{", " ");
-            ScriptText = ScriptText.Replace("}", " ");
-            ScriptText = ScriptText.Replace("(", " ");
-            ScriptText = ScriptText.Replace(")", " ");
-            ScriptText = ScriptText.Replace(";", Environment.NewLine);
-            ScriptText = Regex.Replace(ScriptText, @"/\*(.|[\r\n])*?\*/", string.Empty);                                // Remove comment blocks
-            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                               // Remove inline comments
-            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();      // Remove empty lines
-            ScriptText = ScriptText.Replace("\t", "");                                                                  // Remove tabs
-            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ");                                                    // Remove double spaces
+            ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
+            ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
+            ScriptText = Regex.Replace(ScriptText, @"/\*(.|[\r\n])*?\*/", string.Empty);                                        // Remove comment blocks
+            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                                       // Remove inline comments
+            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();              // Remove empty lines
+            ScriptText = ScriptText.Replace("\t", "");                                                                          // Remove tabs
+            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ");                                                            // Remove double spaces
         }
 
 
@@ -62,7 +57,7 @@ namespace NPC_Maker.NewScriptParser
 
             foreach (string Line in Lines)
             {
-                if (Line.StartsWith("#define"))
+                if (Line.ToUpper().StartsWith("#DEFINE"))
                 {
                     string[] Split = Line.Split(' ');
 
@@ -71,12 +66,15 @@ namespace NPC_Maker.NewScriptParser
                 }
             }
 
+            if (Defines.Count == 0)
+                return Lines;
+
             List<string> NewLines = new List<string>();
 
             for (int i = 0; i < Lines.Count(); i++)
             {
-                if (Lines[i].StartsWith("#define"))
-                        continue;
+                if (Lines[i].ToUpper().StartsWith("#DEFINE"))
+                    continue;
 
                 foreach (string[] Def in Defines)
                     Lines[i] = ScriptHelpers.ReplaceExpr(Lines[i], Def[0], Def[1]);
@@ -99,7 +97,7 @@ namespace NPC_Maker.NewScriptParser
                         outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(Line));
                         continue;
                     }
-                }    
+                }
             }
         }
 
@@ -128,18 +126,11 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 Instruction Instr = ParseIfWhileInstruction(InstructionID, Lines, SplitLine, i);
 
-                                if (Instr.ID == (int)Lists.Instructions.IF)
-                                {
-                                    i = (Instr as InstructionIfWhile).EndIfLineNo + 1;
-                                    Instructions.Add(Instr);
-                                }
-                                else if (Instr.ID == (int)Lists.Instructions.WHILE)
-                                {
-                                    i = (Instr as InstructionIfWhile).EndIfLineNo + 1;
+                                // May return a generic nopped instruction if an unhandled error occurs
+                                if ((Instr.ID == (int)Lists.Instructions.IF) || (Instr.ID == (int)Lists.Instructions.WHILE))
+                                    i = (Instr as InstructionIfWhile).EndIfLineNo;
 
-                                    Instructions.Add(new InstructionLabel("__WHILE__" + i.ToString()));
-                                    Instructions.Add(Instr);
-                                }
+                                Instructions.Add(Instr);
                                 break;
                             }
                         case (int)Lists.Instructions.NOP: Instructions.Add(ParseNopInstruction(SplitLine)); break;

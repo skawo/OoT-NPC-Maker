@@ -1334,26 +1334,6 @@ namespace NPC_Maker
             Textbox_Script2.Text = Textbox_Script2.Text + " ";
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Label_Limb_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Tab1_Data_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Panel_TargetPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         /*      
         private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
         {

@@ -63,12 +63,12 @@ namespace NPC_Maker.NewScriptParser
         {
             switch (Variable)
             {
-                case Lists.Keyword_RNG: return (int)Lists.VarTypes.Keyword_RNG;
-                case Lists.Keyword_ScriptVar1: return (int)Lists.VarTypes.Keyword_ScriptVar1;
-                case Lists.Keyword_ScriptVar2: return (int)Lists.VarTypes.Keyword_ScriptVar2;
-                case Lists.Keyword_ScriptVar3: return (int)Lists.VarTypes.Keyword_ScriptVar3;
-                case Lists.Keyword_ScriptVar4: return (int)Lists.VarTypes.Keyword_ScriptVar4;
-                case Lists.Keyword_ScriptVar5: return (int)Lists.VarTypes.Keyword_ScriptVar5;
+                case Lists.Keyword_RNG: return (int)Lists.VarTypes.RNG;
+                case Lists.Keyword_ScriptVar1: return (int)Lists.VarTypes.Var1;
+                case Lists.Keyword_ScriptVar2: return (int)Lists.VarTypes.Var2;
+                case Lists.Keyword_ScriptVar3: return (int)Lists.VarTypes.Var3;
+                case Lists.Keyword_ScriptVar4: return (int)Lists.VarTypes.Var4;
+                case Lists.Keyword_ScriptVar5: return (int)Lists.VarTypes.Var5;
                 default: return 0;
             }
         }

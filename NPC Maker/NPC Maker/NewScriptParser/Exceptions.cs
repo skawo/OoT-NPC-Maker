@@ -74,14 +74,24 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("A parameter is out of range: ", String.Join(" ", _Line));
         }
 
+        public static ParseException IfNotClosed(string _Line)
+        {
+            return new ParseException("This IF does not have a corresponding ENDIF: ", _Line);
+        }
+
         public static ParseException IfNotClosed(string[] _Line)
         {
-            return new ParseException("This IF does not have a corresponding ENDIF: ", String.Join(" ", _Line));
+            return IfNotClosed(String.Join(" ", _Line));
+        }
+
+        public static ParseException WhileNotClosed(string _Line)
+        {
+            return new ParseException("This WHILE does not have a corresponding ENDWHILE: ", _Line);
         }
 
         public static ParseException WhileNotClosed(string[] _Line)
         {
-            return new ParseException("This WHILE does not have a corresponding ENDWHILE: ", String.Join(" ", _Line));
+            return IfNotClosed(String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedCondition(string[] _Line)

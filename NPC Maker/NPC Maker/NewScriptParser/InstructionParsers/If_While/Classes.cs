@@ -14,8 +14,8 @@ namespace NPC_Maker.NewScriptParser
         public List<Instruction> False;
         public int ElseLineNo;
         public int EndIfLineNo;
-        public InstructionLabel GotoElse;
-        public InstructionLabel GotoEndIf;
+        public InstructionLabel GotoTrue;
+        public InstructionLabel GotoFalse;
 
         public InstructionIfWhile(byte _ID, byte _SubID, byte _ValueType, object _Value, byte _Condition,
                              int _EndIfLineNo, int _ElseLineNo, int _CurrentLineNo, List<Instruction> _True, List<Instruction> _False) 
@@ -28,8 +28,8 @@ namespace NPC_Maker.NewScriptParser
             ElseLineNo = _ElseLineNo;
             EndIfLineNo = _EndIfLineNo;
             ValueType = _ValueType;
-            GotoElse = new InstructionLabel("__IFELSE__" + _CurrentLineNo.ToString());
-            GotoEndIf = new InstructionLabel("__IFEND__" + _CurrentLineNo.ToString());
+            GotoTrue = new InstructionLabel("__IFTRUE__" + _CurrentLineNo.ToString());
+            GotoFalse = new InstructionLabel("__IFFALSE__" + _CurrentLineNo.ToString());
         }
 
         public override byte[] ToBytes()
@@ -41,8 +41,8 @@ namespace NPC_Maker.NewScriptParser
             ParserHelpers.AddObjectToByteList(SubID, Data);
             ParserHelpers.AddObjectToByteList(ValueType, Data);
             ParserHelpers.AddObjectToByteList(Condition, Data);
-            ParserHelpers.AddObjectToByteList(GotoElse.InstructionNumber, Data);
-            ParserHelpers.AddObjectToByteList(GotoEndIf.InstructionNumber, Data);
+            ParserHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
+            ParserHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
             ParserHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();

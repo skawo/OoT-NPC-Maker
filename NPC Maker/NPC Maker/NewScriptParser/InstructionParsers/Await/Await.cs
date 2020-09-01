@@ -27,12 +27,12 @@ namespace NPC_Maker.NewScriptParser
                         byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
                         UInt16 Data = 0;
 
-                        if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                        if (VarType == (int)Lists.VarTypes.RNG)
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                        if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                        if (VarType < (int)Lists.VarTypes.Var1)
                             Data = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 
-                                                                                        VarType == (int)Lists.VarTypes.Keyword_RNG ? 3 : 2, 
+                                                                                        VarType == (int)Lists.VarTypes.RNG ? 3 : 2, 
                                                                                         0, UInt16.MaxValue));
 
                         return new InstructionAwait((byte)SubID, Data, VarType);
@@ -57,12 +57,12 @@ namespace NPC_Maker.NewScriptParser
                                     byte VarType = ScriptHelpers.GetVariable(SplitLine[3]);
                                     sbyte Data = 0;
 
-                                    if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                                    if (VarType == (int)Lists.VarTypes.RNG)
                                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
-                                    if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                                    if (VarType < (int)Lists.VarTypes.Var1)
                                         Data = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 
-                                                                                                   VarType == (int)Lists.VarTypes.Keyword_RNG ? 4 : 3, 
+                                                                                                   VarType == (int)Lists.VarTypes.RNG ? 4 : 3, 
                                                                                                    sbyte.MinValue, sbyte.MaxValue));
 
                                     return new InstructionAwaitScriptVar((byte)SubID, Data, Condition, VarType);

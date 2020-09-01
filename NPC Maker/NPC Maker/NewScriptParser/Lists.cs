@@ -13,6 +13,8 @@ namespace NPC_Maker.NewScriptParser
         public const string Keyword_True = "TRUE";
         public const string Keyword_False = "FALSE";
         public const string Keyword_Return = "RETURN";
+        public const string Keyword_SharpDefine = "#DEFINE";
+        public const string Keyword_Define = "DEFINE";
 
         public const string Keyword_ScriptVar1 = "VAR_1";
         public const string Keyword_ScriptVar2 = "VAR_2";
@@ -26,6 +28,8 @@ namespace NPC_Maker.NewScriptParser
             Keyword_True,
             Keyword_False,
             Keyword_Return,
+            Keyword_SharpDefine,
+            Keyword_Define,
             Keyword_ScriptVar1,
             Keyword_ScriptVar2,
             Keyword_ScriptVar3,
@@ -36,12 +40,12 @@ namespace NPC_Maker.NewScriptParser
 
         public enum VarTypes
         {
-            Keyword_RNG = 1,
-            Keyword_ScriptVar1 = 5,
-            Keyword_ScriptVar2 = 6,
-            Keyword_ScriptVar3 = 7,
-            Keyword_ScriptVar4 = 8,
-            Keyword_ScriptVar5 = 9,
+            RNG = 1,
+            Var1 = 5,
+            Var2 = 6,
+            Var3 = 7,
+            Var4 = 8,
+            Var5 = 9,
         }
 
         public enum Instructions
