@@ -198,76 +198,135 @@ namespace NPC_Maker
         }
         */
 
-        public void ChangeValueOfMember(string Member, object Value)
+        public enum Members
+        {
+            NPCNAME,
+            OBJID,
+            HIERARCHY,
+            HIERARCHYTYPE,
+            XMODELOFFS,
+            YMODELOFFS,
+            ZMODELOFFS,
+            SCALE,
+            CUTSCENEID,
+            LOOKATTYPE,
+            HEADLIMB,
+            HEADVERTAXIS,
+            HEADHORIZAXIS,
+            WAISTLIMB,
+            WAISTVERTAXIS,
+            WAISTHORIZAXIS,
+            DEGVERT,
+            DEGHOZ,
+            XLOOKATOFFS,
+            YLOOKATOFFS,
+            ZLOOKATOFFS,
+            COLLISION,
+            SWITCHES,
+            PUSHABLE,
+            COLRADIUS,
+            COLHEIGHT,
+            SHADOW,
+            SHADOWRADIUS,
+            XCOLOFFS,
+            YCOLOFFS,
+            ZCOLOFFS,
+            TARGETTABLE,
+            TARGETLIMB,
+            XTARGETOFFS,
+            YTARGETOFFS,
+            ZTARGETOFFS,
+            MOVEMENT,
+            MOVDISTANCE,
+            MOVSPEED,
+            PATHID,
+            LOOPSTART,
+            LOOPEND,
+            LOOPDEL,
+            LOOP,
+            ANIMTYPE,
+            TALKSCRIPT,
+            BLINKPAT,
+            TALKPAT,
+            BLINKSEG,
+            TALKSEG,
+            BLINKSPE,
+            TALKSPE,
+            ACTIVE,
+            DRAWOUTOFCAM,
+            TARGETDIST
+        }
+
+        public void ChangeValueOfMember(Members Member, object Value)
         {
             switch (Member)
             {
-                case "NPCNAME": NPCName = (string)Value; break;
+                case Members.NPCNAME: NPCName = (string)Value; break;
 
-                case "OBJID": ObjectID = Convert.ToUInt16(Value); break;
-                case "HIERARCHY": Hierarchy = Convert.ToUInt32(Value); break;
-                case "HIERARCHYTYPE": HierarchyType = Convert.ToByte(Value); break;
-                case "XMODELOFFS": ModelOffs[0] = Convert.ToInt16(Value); break;
-                case "YMODELOFFS": ModelOffs[1] = Convert.ToInt16(Value); break;
-                case "ZMODELOFFS": ModelOffs[2] = Convert.ToInt16(Value); break;
-                case "SCALE": Scale = (float)Convert.ToDecimal(Value); break;
-                case "CUTSCENEID": CutsceneID = Convert.ToByte(Value); break;
+                case Members.OBJID: ObjectID = Convert.ToUInt16(Value); break;
+                case Members.HIERARCHY: Hierarchy = Convert.ToUInt32(Value); break;
+                case Members.HIERARCHYTYPE: HierarchyType = Convert.ToByte(Value); break;
+                case Members.XMODELOFFS: ModelOffs[0] = Convert.ToInt16(Value); break;
+                case Members.YMODELOFFS: ModelOffs[1] = Convert.ToInt16(Value); break;
+                case Members.ZMODELOFFS: ModelOffs[2] = Convert.ToInt16(Value); break;
+                case Members.SCALE: Scale = (float)Convert.ToDecimal(Value); break;
+                case Members.CUTSCENEID: CutsceneID = Convert.ToByte(Value); break;
 
-                case "LOOKATTYPE": LookAtType = Convert.ToByte(Value); break;
-                case "HEADLIMB": HeadLimb = Convert.ToByte(Value); break;
-                case "HEADVERTAXIS": HeadVertAxis = Convert.ToByte(Value); break;
-                case "HEADHORIZAXIS": HeadHorizAxis = Convert.ToByte(Value); break;
-                case "WAISTLIMB": WaistLimb = Convert.ToByte(Value); break;
-                case "WAISTVERTAXIS": WaistVertAxis = Convert.ToByte(Value); break;
-                case "WAISTHORIZAXIS": WaistHorizAxis = Convert.ToByte(Value); break;
-                case "DEGVERT": DegreesVert = Convert.ToUInt16(Value); break;
-                case "DEGHOZ": DegreesHor = Convert.ToUInt16(Value); break;
-                case "XLOOKATOFFS": LookAtOffs[0] = Convert.ToInt16(Value); break;
-                case "YLOOKATOFFS": LookAtOffs[1] = Convert.ToInt16(Value); break;
-                case "ZLOOKATOFFS": LookAtOffs[2] = Convert.ToInt16(Value); break;
+                case Members.LOOKATTYPE: LookAtType = Convert.ToByte(Value); break;
+                case Members.HEADLIMB: HeadLimb = Convert.ToByte(Value); break;
+                case Members.HEADVERTAXIS: HeadVertAxis = Convert.ToByte(Value); break;
+                case Members.HEADHORIZAXIS: HeadHorizAxis = Convert.ToByte(Value); break;
+                case Members.WAISTLIMB: WaistLimb = Convert.ToByte(Value); break;
+                case Members.WAISTVERTAXIS: WaistVertAxis = Convert.ToByte(Value); break;
+                case Members.WAISTHORIZAXIS: WaistHorizAxis = Convert.ToByte(Value); break;
+                case Members.DEGVERT: DegreesVert = Convert.ToUInt16(Value); break;
+                case Members.DEGHOZ: DegreesHor = Convert.ToUInt16(Value); break;
+                case Members.XLOOKATOFFS: LookAtOffs[0] = Convert.ToInt16(Value); break;
+                case Members.YLOOKATOFFS: LookAtOffs[1] = Convert.ToInt16(Value); break;
+                case Members.ZLOOKATOFFS: LookAtOffs[2] = Convert.ToInt16(Value); break;
 
-                case "COLLISION": Collision = Convert.ToBoolean(Value); break;
-                case "SWITCHES": Switches = Convert.ToBoolean(Value); break;
-                case "PUSHABLE": Pushable = Convert.ToBoolean(Value); break;
-                case "COLRADIUS": ColRadius = Convert.ToUInt16(Value); break;
-                case "COLHEIGHT": Height = Convert.ToUInt16(Value); break;
+                case Members.COLLISION: Collision = Convert.ToBoolean(Value); break;
+                case Members.SWITCHES: Switches = Convert.ToBoolean(Value); break;
+                case Members.PUSHABLE: Pushable = Convert.ToBoolean(Value); break;
+                case Members.COLRADIUS: ColRadius = Convert.ToUInt16(Value); break;
+                case Members.COLHEIGHT: Height = Convert.ToUInt16(Value); break;
 
-                case "SHADOW": Shadow = Convert.ToBoolean(Value); break;
-                case "SHADOWRADIUS": ShRadius = Convert.ToUInt16(Value); break;
+                case Members.SHADOW: Shadow = Convert.ToBoolean(Value); break;
+                case Members.SHADOWRADIUS: ShRadius = Convert.ToUInt16(Value); break;
 
-                case "XCOLOFFS": ColOffs[0] = Convert.ToInt16(Value); break;
-                case "YCOLOFFS": ColOffs[1] = Convert.ToInt16(Value); break;
-                case "ZCOLOFFS": ColOffs[2] = Convert.ToInt16(Value); break;
+                case Members.XCOLOFFS: ColOffs[0] = Convert.ToInt16(Value); break;
+                case Members.YCOLOFFS: ColOffs[1] = Convert.ToInt16(Value); break;
+                case Members.ZCOLOFFS: ColOffs[2] = Convert.ToInt16(Value); break;
 
-                case "TARGETTABLE": Targettable = Convert.ToBoolean(Value); break;
-                case "TARGETLIMB": TargetLimb = Convert.ToByte(Value); break;
-                case "XTARGETOFFS": TargOffs[0] = Convert.ToInt16(Value); break;
-                case "YTARGETOFFS": TargOffs[1] = Convert.ToInt16(Value); break;
-                case "ZTARGETOFFS": TargOffs[2] = Convert.ToInt16(Value); break;
+                case Members.TARGETTABLE: Targettable = Convert.ToBoolean(Value); break;
+                case Members.TARGETLIMB: TargetLimb = Convert.ToByte(Value); break;
+                case Members.XTARGETOFFS: TargOffs[0] = Convert.ToInt16(Value); break;
+                case Members.YTARGETOFFS: TargOffs[1] = Convert.ToInt16(Value); break;
+                case Members.ZTARGETOFFS: TargOffs[2] = Convert.ToInt16(Value); break;
 
-                case "MOVEMENT": MovementType = Convert.ToByte(Value); break;
-                case "MOVDISTANCE": MovementDistance = Convert.ToUInt16(Value); break;
-                case "MOVSPEED": MovementSpeed = (float)Convert.ToDecimal(Value); break;
-                case "PATHID": PathID = Convert.ToByte(Value); break;
-                case "LOOPSTART": LoopStart = Convert.ToInt16(Value); break;
-                case "LOOPEND": LoopEnd = Convert.ToInt16(Value); break;
-                case "LOOPDEL": LoopDel = Convert.ToUInt16(Value); break;
-                case "LOOP": Loop = Convert.ToBoolean(Value); break;
+                case Members.MOVEMENT: MovementType = Convert.ToByte(Value); break;
+                case Members.MOVDISTANCE: MovementDistance = Convert.ToUInt16(Value); break;
+                case Members.MOVSPEED: MovementSpeed = (float)Convert.ToDecimal(Value); break;
+                case Members.PATHID: PathID = Convert.ToByte(Value); break;
+                case Members.LOOPSTART: LoopStart = Convert.ToInt16(Value); break;
+                case Members.LOOPEND: LoopEnd = Convert.ToInt16(Value); break;
+                case Members.LOOPDEL: LoopDel = Convert.ToUInt16(Value); break;
+                case Members.LOOP: Loop = Convert.ToBoolean(Value); break;
 
-                case "ANIMTYPE": AnimationType = Convert.ToByte(Value); break;
+                case Members.ANIMTYPE: AnimationType = Convert.ToByte(Value); break;
 
-                case "TALKSCRIPT": Script = Convert.ToString(Value); break;
+                case Members.TALKSCRIPT: Script = Convert.ToString(Value); break;
 
-                case "BLINKPAT": BlinkPattern = Convert.ToString(Value); break;
-                case "TALKPAT": TalkPattern = Convert.ToString(Value); break;
-                case "BLINKSEG": BlinkSegment = Convert.ToByte(Value); break;
-                case "TALKSEG": TalkSegment = Convert.ToByte(Value); break;
-                case "BLINKSPE": BlinkSpeed = Convert.ToByte(Value); break;
-                case "TALKSPE": TalkSpeed = Convert.ToByte(Value); break;
+                case Members.BLINKPAT: BlinkPattern = Convert.ToString(Value); break;
+                case Members.TALKPAT: TalkPattern = Convert.ToString(Value); break;
+                case Members.BLINKSEG: BlinkSegment = Convert.ToByte(Value); break;
+                case Members.TALKSEG: TalkSegment = Convert.ToByte(Value); break;
+                case Members.BLINKSPE: BlinkSpeed = Convert.ToByte(Value); break;
+                case Members.TALKSPE: TalkSpeed = Convert.ToByte(Value); break;
 
-                case "ACTIVE": AlwActive = Convert.ToBoolean(Value); break;
-                case "DRAWOUTOFCAM": AlwDraw = Convert.ToBoolean(Value); break;
-                case "TARGETDIST": TargetDist = Convert.ToByte(Value); break;
+                case Members.ACTIVE: AlwActive = Convert.ToBoolean(Value); break;
+                case Members.DRAWOUTOFCAM: AlwDraw = Convert.ToBoolean(Value); break;
+                case Members.TARGETDIST: TargetDist = Convert.ToByte(Value); break;
 
                 default: break;
             }

@@ -10,6 +10,7 @@ namespace NPC_Maker
 {
     public static class Lists
     {
+
         public static Dictionary<string, int> SFXes = FileOps.GetSoundDictionary("SFX.csv");
         public static Dictionary<string, int> Music = FileOps.GetSoundDictionary("Music.csv");
 

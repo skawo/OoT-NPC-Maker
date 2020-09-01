@@ -586,28 +586,28 @@ namespace NPC_Maker
 
         private void Textbox_NPCName_TextChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((sender as TextBox).Tag.ToString(), (sender as TextBox).Text);
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as TextBox).Tag, (sender as TextBox).Text);
             DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = Textbox_NPCName.Text;
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((sender as TextBox).Tag.ToString(), (sender as TextBox).Text);
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as TextBox).Tag, (sender as TextBox).Text);
         }
 
         private void NumUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((sender as NumericUpDown).Tag.ToString(), (sender as NumericUpDown).Value);
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as NumericUpDown).Tag, (sender as NumericUpDown).Value);
         }
 
         private void CheckBox_ValueChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((sender as CheckBox).Tag.ToString(), (sender as CheckBox).Checked);
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as CheckBox).Tag, (sender as CheckBox).Checked);
         }
 
         private void ComboBox_ValueChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((sender as ComboBox).Tag.ToString(), (sender as ComboBox).SelectedIndex);
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as ComboBox).Tag, (sender as ComboBox).SelectedIndex);
         }
 
         private void Textbox_Script_TextChanged(object sender, TextChangedEventArgs e)
