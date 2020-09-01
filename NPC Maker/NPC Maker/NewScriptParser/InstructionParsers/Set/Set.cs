@@ -97,7 +97,7 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                    UInt32? Data = ScriptHelpers.Helper_GetMovementStyleID(SplitLine[2]);
+                                    UInt32? Data = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.MovementStyles), SplitLine[2]);
 
                                     if (Data == null)
                                         throw ParseException.UnrecognizedMovementStyle(SplitLine);

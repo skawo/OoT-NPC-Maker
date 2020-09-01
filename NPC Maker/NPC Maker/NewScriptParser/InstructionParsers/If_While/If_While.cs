@@ -47,7 +47,7 @@ namespace NPC_Maker.NewScriptParser
                 }
                 else if (ID == (int)Lists.Instructions.WHILE)
                 {
-                    EndIf = GetCorrespondingEnd(Lines, LineNo);
+                    EndIf = GetCorrespondingEndWhile(Lines, LineNo);
 
                     if (EndIf == -1)
                         throw ParseException.WhileNotClosed(SplitLine);
@@ -61,6 +61,8 @@ namespace NPC_Maker.NewScriptParser
 
                     False = new List<Instruction>();
                 }
+                else
+                    throw new Exception();
 
                 try
                 {
@@ -123,7 +125,7 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                    UInt32? Item = ScriptHelpers.Helper_GetTradeItemId(SplitLine[2]);
+                                    UInt32? Item = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.TradeItems), SplitLine[2]);
 
                                     #region Exceptions
 
@@ -138,8 +140,8 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                    UInt32? Status = ScriptHelpers.Helper_GetTradeStatusID(SplitLine[2]);
-
+                                    UInt32? Status = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.TradeStatuses), SplitLine[2]);
+                                        
                                     #region Exceptions
 
                                     if (Status == null)
@@ -153,7 +155,7 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                    UInt32? Mask = ScriptHelpers.Helper_GetMaskID(SplitLine[2]);
+                                    UInt32? Mask = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.PlayerMasks), SplitLine[2]); ;
 
                                     #region Exceptions
 
@@ -308,7 +310,7 @@ namespace NPC_Maker.NewScriptParser
                     continue;
                 }
 
-                if (Lines[i].ToUpper().Trim() == "ELSE")
+                if (Lines[i].ToUpper().Trim() == Lists.Keyword_Else)
                     return i;
             }
 
@@ -331,14 +333,14 @@ namespace NPC_Maker.NewScriptParser
                     continue;
                 }
 
-                if (Lines[i].ToUpper().Trim() == "ENDIF")
+                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndIf)
                     return i;
             }
 
             return -1;
         }
 
-        private int GetCorrespondingEnd(List<string> Lines, int LineNo)
+        private int GetCorrespondingEndWhile(List<string> Lines, int LineNo)
         {
             for (int i = LineNo + 1; i < Lines.Count(); i++)
             {
@@ -346,7 +348,7 @@ namespace NPC_Maker.NewScriptParser
                 {
                     int j = i;
 
-                    i = GetCorrespondingEnd(Lines, i);
+                    i = GetCorrespondingEndWhile(Lines, i);
 
                     if (i < 0)
                         throw ParseException.IfNotClosed(Lines[j]);
@@ -354,7 +356,7 @@ namespace NPC_Maker.NewScriptParser
                     continue;
                 }
 
-                if (Lines[i].ToUpper().Trim() == "ENDWHILE")
+                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndWhile)
                     return i;
             }
 

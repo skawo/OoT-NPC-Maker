@@ -15,7 +15,10 @@ namespace NPC_Maker.NewScriptParser
         public const string Keyword_Return = "RETURN";
         public const string Keyword_SharpDefine = "#DEFINE";
         public const string Keyword_Define = "DEFINE";
-
+        public const string Keyword_End = "END";
+        public const string Keyword_EndIf = "ENDIF";
+        public const string Keyword_EndWhile = "ENDWHILE";
+        public const string Keyword_Else = "ELSE";
         public const string Keyword_ScriptVar1 = "VAR_1";
         public const string Keyword_ScriptVar2 = "VAR_2";
         public const string Keyword_ScriptVar3 = "VAR_3";
@@ -30,6 +33,9 @@ namespace NPC_Maker.NewScriptParser
             Keyword_Return,
             Keyword_SharpDefine,
             Keyword_Define,
+            Keyword_End,
+            Keyword_EndIf,
+            Keyword_EndWhile,
             Keyword_ScriptVar1,
             Keyword_ScriptVar2,
             Keyword_ScriptVar3,
@@ -72,6 +78,7 @@ namespace NPC_Maker.NewScriptParser
 
         public enum IfSubTypes
         {
+            /* flags */
             FLAG_INF = 0,
             FLAG_EVENT = 1,
             FLAG_SWITCH = 2,
@@ -81,6 +88,7 @@ namespace NPC_Maker.NewScriptParser
             FLAG_SCENE_COLLECT = 6,
             FLAG_TEMPORARY = 7,
 
+            /* bools */
             LINK_IS_ADULT = 10,
             LINK_IS_CHILD = 11,
             IS_CURRENTLY_DAY = 12,
@@ -94,6 +102,7 @@ namespace NPC_Maker.NewScriptParser
             CURRENT_ANIM_IS_IDLE = 20,
             PLAYER_HAS_MAGIC = 21,
 
+            /* s16s */
             PLAYER_RUPEES = 30,
             SCENE_ID = 31,
             PLAYER_SKULLTULAS = 32,
@@ -114,7 +123,7 @@ namespace NPC_Maker.NewScriptParser
             PLAYER_DEKUSTICKS = 35,
             PLAYER_DEKUNUTS = 36,
 
-
+            /* special */
             ITEM_BEING_TRADED = 61,
             TRADE_STATUS = 62,
             PLAYER_MASK = 64,
@@ -131,7 +140,7 @@ namespace NPC_Maker.NewScriptParser
 
         public enum SetSubTypes
         {
-            /* u16 Subtypes */
+            /* u16s */
             MOVEMENT_DISTANCE = 0,
             MOVEMENT_LOOP_DELAY = 1,
             COLLISION_RADIUS = 2,
@@ -141,7 +150,7 @@ namespace NPC_Maker.NewScriptParser
             UNSUCCESSFUL_TRADE_TEXT_ID = 8,
             CUTSCENE_FRAME = 9,
 
-            /* s16 Subtypes */
+            /* s16s */
             MOVEMENT_LOOP_START = 35,
             MOVEMENT_LOOP_END = 36,
             COLLISION_OFFSET_X = 37,
@@ -162,16 +171,15 @@ namespace NPC_Maker.NewScriptParser
             CURRENT_ANIMATION_FRAME = 52,
             CURRENT_CUTSCENE_FRAME = 53,
 
-            /* u32 Subtypes */
+            /* u32s */
+            /* s32s */
 
-            /* s32 Subtypes */
-
-            /* Float Subtypes */
+            /* floats */
             MODEL_SCALE = 140,
             MOVEMENT_SPEED = 141,
             MODEL_SCALE_SMOOTHLY = 142,
 
-            /* bool Subtypes */
+            /* bools */
             LOOP_MOVEMENT = 175,
             HAVE_COLLISION = 176,
             PRESS_SWITCHES = 177,
@@ -187,13 +195,13 @@ namespace NPC_Maker.NewScriptParser
             NO_TEXTBOX_ON_SCREEN = 187,
             PLAYER_HAS_DEFENSE_UPGRADE = 188,
 
-            /* u8 Subtypes */
+            /* u8s */
             TARGET_LIMB = 195,
             TARGET_DISTANCE = 196,
             HEAD_LIMB = 197,
             WAIST_LIMB = 198,
 
-            /* s8 Subtypes */
+            /* s8s */
             PLAYER_BOMBS = 210,
             PLAYER_BOMBCHUS = 211,
             PLAYER_ARROWS = 212,
@@ -202,7 +210,7 @@ namespace NPC_Maker.NewScriptParser
             PLAYER_DEKUSTICKS = 215,
             PLAYER_MAGIC = 216,
 
-            /* Special handling */
+            /* specials */
             TEXTBOX_RESPONSE_ACTIONS = 220,
             FLAG_INF = 221,
             FLAG_EVENT = 222,

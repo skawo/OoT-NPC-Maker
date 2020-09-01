@@ -106,7 +106,7 @@
     <Compile Include="NewScriptParser\InstructionParsers\Enable_Trading\Enable_Trading.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Enable_Talking\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Goto\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Goto\Show_Textbox.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Goto\Goto.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\If_While\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Nop\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Play\Classes.cs" />

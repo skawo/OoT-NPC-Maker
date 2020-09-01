@@ -48,6 +48,7 @@ namespace NPC_Maker.NewScriptParser
             switch (Condition)
             {
                 case "=": return 0;
+                case "==": return 0;
                 case "<": return 1;
                 case ">": return 2;
                 case "<=": return 3;
@@ -88,23 +89,14 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static UInt32? Helper_GetTradeItemId(string Name)
+        public static Int32? Helper_ConvertToInt32(string Number)
         {
             try
             {
-                return Convert.ToUInt32(System.Enum.Parse(typeof(Lists.TradeItems), Name.ToUpper()));
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static UInt32? Helper_GetMovementStyleID(string Name)
-        {
-            try
-            {
-                return Convert.ToUInt32(System.Enum.Parse(typeof(Lists.MovementStyles), Name.ToUpper()));
+                if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
+                    return Convert.ToInt32(Number, 16);
+                else
+                    return Convert.ToInt32(Number);
             }
             catch (Exception)
             {
@@ -123,22 +115,6 @@ namespace NPC_Maker.NewScriptParser
                 return null;
             }
         }
-
-        public static Int32? Helper_ConvertToInt32(string Number)
-        {
-            try
-            {
-                if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
-                    return Convert.ToInt32(Number, 16);
-                else
-                    return Convert.ToInt32(Number);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         
         public static UInt32? Helper_GetAnimationID(string AnimName, List<AnimationEntry> Animations)
         {
@@ -149,30 +125,6 @@ namespace NPC_Maker.NewScriptParser
             }
 
             return null;
-        }
-
-        public static UInt32? Helper_GetMaskID(string MaskName)
-        {
-            try
-            {
-                return Convert.ToUInt32(System.Enum.Parse(typeof(Lists.PlayerMasks), MaskName.ToUpper()));
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static UInt32? Helper_GetTradeStatusID(string TradeStatus)
-        {
-            try
-            {
-                return Convert.ToUInt32(System.Enum.Parse(typeof(Lists.TradeStatuses), TradeStatus.ToUpper()));
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         public static UInt32? Helper_GetSFXId(string SFXName)

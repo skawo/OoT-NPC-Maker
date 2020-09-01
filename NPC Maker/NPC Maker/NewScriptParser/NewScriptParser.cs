@@ -149,7 +149,6 @@ namespace NPC_Maker.NewScriptParser
                                 break;
                             }
 
-
                         default:
                             {
                                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));

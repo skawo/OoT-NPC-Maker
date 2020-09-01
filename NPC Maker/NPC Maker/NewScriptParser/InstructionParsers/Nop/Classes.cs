@@ -11,10 +11,5 @@ namespace NPC_Maker.NewScriptParser
         {
 
         }
-
-        public override byte[] ToBytes()
-        {
-            return new byte[0];
-        }
     }
 }

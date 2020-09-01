@@ -69,8 +69,6 @@ namespace NPC_Maker.NewScriptParser
                             }
                         default: throw new Exception();
                     }
-
-
                 }
                 catch (ParseException pEx)
                 {
