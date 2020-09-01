@@ -1334,6 +1334,12 @@ namespace NPC_Maker
             Textbox_Script2.Text = Textbox_Script2.Text + " ";
         }
 
+        private void ComboBox_AnimType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox_ValueChanged(sender, e);
+            Col_OBJ.Visible = (ComboBox_AnimType.SelectedIndex == 0);
+        }
+
         /*      
         private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
         {

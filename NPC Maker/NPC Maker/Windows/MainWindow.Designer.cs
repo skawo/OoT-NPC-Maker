@@ -170,7 +170,9 @@
             this.Label_LookAtWaistHeader = new System.Windows.Forms.Label();
             this.Label_DegVert = new System.Windows.Forms.Label();
             this.Label_WaistLimb = new System.Windows.Forms.Label();
+            this.Label_LookAtType = new System.Windows.Forms.Label();
             this.NumUpDown_WaistLimb = new System.Windows.Forms.NumericUpDown();
+            this.ComboBox_LookAtType = new System.Windows.Forms.ComboBox();
             this.NumUpDown_DegHoz = new System.Windows.Forms.NumericUpDown();
             this.Combo_Head_Horiz = new System.Windows.Forms.ComboBox();
             this.Label_DegHoz = new System.Windows.Forms.Label();
@@ -202,15 +204,13 @@
             this.Label_PathFollowID = new System.Windows.Forms.Label();
             this.NumUpDown_PathFollowID = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_MovDistance = new System.Windows.Forms.NumericUpDown();
+            this.Combo_MovementType = new System.Windows.Forms.ComboBox();
+            this.Label_MovementType = new System.Windows.Forms.Label();
             this.NumUpDown_MovSpeed = new System.Windows.Forms.NumericUpDown();
             this.Label_Distance = new System.Windows.Forms.Label();
             this.Label_Speed = new System.Windows.Forms.Label();
-            this.Combo_MovementType = new System.Windows.Forms.ComboBox();
-            this.Label_MovementType = new System.Windows.Forms.Label();
             this.Checkbox_Pushable = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
-            this.Label_LookAtType = new System.Windows.Forms.Label();
-            this.ComboBox_LookAtType = new System.Windows.Forms.ComboBox();
             this.Tab4_Script = new System.Windows.Forms.TabPage();
             this.Textbox_Script = new NPC_Maker.FastColoredTextboxForWine(this.components);
             this.Button_TryParse = new System.Windows.Forms.Button();
@@ -736,7 +736,7 @@
             this.ComboBox_AnimType.Size = new System.Drawing.Size(115, 21);
             this.ComboBox_AnimType.TabIndex = 13;
             this.ComboBox_AnimType.Tag = "ANIMTYPE";
-            this.ComboBox_AnimType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            this.ComboBox_AnimType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_AnimType_SelectedIndexChanged);
             // 
             // Label_AnimType
             // 
@@ -1988,6 +1988,15 @@
             this.Label_WaistLimb.TabIndex = 37;
             this.Label_WaistLimb.Text = "Limb:";
             // 
+            // Label_LookAtType
+            // 
+            this.Label_LookAtType.AutoSize = true;
+            this.Label_LookAtType.Location = new System.Drawing.Point(5, 6);
+            this.Label_LookAtType.Name = "Label_LookAtType";
+            this.Label_LookAtType.Size = new System.Drawing.Size(92, 13);
+            this.Label_LookAtType.TabIndex = 57;
+            this.Label_LookAtType.Text = "Look at Link type:";
+            // 
             // NumUpDown_WaistLimb
             // 
             this.NumUpDown_WaistLimb.Location = new System.Drawing.Point(125, 171);
@@ -2000,6 +2009,23 @@
             this.NumUpDown_WaistLimb.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_WaistLimb.TabIndex = 38;
             this.NumUpDown_WaistLimb.Tag = "WAISTLIMB";
+            // 
+            // ComboBox_LookAtType
+            // 
+            this.ComboBox_LookAtType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboBox_LookAtType.FormattingEnabled = true;
+            this.ComboBox_LookAtType.Items.AddRange(new object[] {
+            "None",
+            "Body",
+            "Head",
+            "Waist",
+            "Head & Waist"});
+            this.ComboBox_LookAtType.Location = new System.Drawing.Point(8, 28);
+            this.ComboBox_LookAtType.Name = "ComboBox_LookAtType";
+            this.ComboBox_LookAtType.Size = new System.Drawing.Size(178, 21);
+            this.ComboBox_LookAtType.TabIndex = 56;
+            this.ComboBox_LookAtType.Tag = "LOOKATTYPE";
+            this.ComboBox_LookAtType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // NumUpDown_DegHoz
             // 
@@ -2431,6 +2457,32 @@
             this.NumUpDown_MovDistance.Tag = "MOVDISTANCE";
             this.NumUpDown_MovDistance.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
+            // Combo_MovementType
+            // 
+            this.Combo_MovementType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_MovementType.FormattingEnabled = true;
+            this.Combo_MovementType.Items.AddRange(new object[] {
+            "None",
+            "Walks randomly",
+            "Follows Link",
+            "Follow a path, collisionwise",
+            "Follow a path, direct"});
+            this.Combo_MovementType.Location = new System.Drawing.Point(8, 27);
+            this.Combo_MovementType.Name = "Combo_MovementType";
+            this.Combo_MovementType.Size = new System.Drawing.Size(181, 21);
+            this.Combo_MovementType.TabIndex = 61;
+            this.Combo_MovementType.Tag = "MOVEMENT";
+            this.Combo_MovementType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            // 
+            // Label_MovementType
+            // 
+            this.Label_MovementType.AutoSize = true;
+            this.Label_MovementType.Location = new System.Drawing.Point(5, 6);
+            this.Label_MovementType.Name = "Label_MovementType";
+            this.Label_MovementType.Size = new System.Drawing.Size(83, 13);
+            this.Label_MovementType.TabIndex = 60;
+            this.Label_MovementType.Text = "Movement type:";
+            // 
             // NumUpDown_MovSpeed
             // 
             this.NumUpDown_MovSpeed.DecimalPlaces = 2;
@@ -2469,32 +2521,6 @@
             this.Label_Speed.TabIndex = 36;
             this.Label_Speed.Text = "Movement speed:";
             // 
-            // Combo_MovementType
-            // 
-            this.Combo_MovementType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Combo_MovementType.FormattingEnabled = true;
-            this.Combo_MovementType.Items.AddRange(new object[] {
-            "None",
-            "Walks randomly",
-            "Follows Link",
-            "Follow a path, collisionwise",
-            "Follow a path, direct"});
-            this.Combo_MovementType.Location = new System.Drawing.Point(8, 27);
-            this.Combo_MovementType.Name = "Combo_MovementType";
-            this.Combo_MovementType.Size = new System.Drawing.Size(181, 21);
-            this.Combo_MovementType.TabIndex = 61;
-            this.Combo_MovementType.Tag = "MOVEMENT";
-            this.Combo_MovementType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
-            // 
-            // Label_MovementType
-            // 
-            this.Label_MovementType.AutoSize = true;
-            this.Label_MovementType.Location = new System.Drawing.Point(5, 6);
-            this.Label_MovementType.Name = "Label_MovementType";
-            this.Label_MovementType.Size = new System.Drawing.Size(83, 13);
-            this.Label_MovementType.TabIndex = 60;
-            this.Label_MovementType.Text = "Movement type:";
-            // 
             // Checkbox_Pushable
             // 
             this.Checkbox_Pushable.AutoSize = true;
@@ -2518,32 +2544,6 @@
             this.Checkbox_CanPressSwitches.Text = "Presses switches";
             this.Checkbox_CanPressSwitches.UseVisualStyleBackColor = true;
             this.Checkbox_CanPressSwitches.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Label_LookAtType
-            // 
-            this.Label_LookAtType.AutoSize = true;
-            this.Label_LookAtType.Location = new System.Drawing.Point(5, 6);
-            this.Label_LookAtType.Name = "Label_LookAtType";
-            this.Label_LookAtType.Size = new System.Drawing.Size(92, 13);
-            this.Label_LookAtType.TabIndex = 57;
-            this.Label_LookAtType.Text = "Look at Link type:";
-            // 
-            // ComboBox_LookAtType
-            // 
-            this.ComboBox_LookAtType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBox_LookAtType.FormattingEnabled = true;
-            this.ComboBox_LookAtType.Items.AddRange(new object[] {
-            "None",
-            "Body",
-            "Head",
-            "Waist",
-            "Head & Waist"});
-            this.ComboBox_LookAtType.Location = new System.Drawing.Point(8, 28);
-            this.ComboBox_LookAtType.Name = "ComboBox_LookAtType";
-            this.ComboBox_LookAtType.Size = new System.Drawing.Size(178, 21);
-            this.ComboBox_LookAtType.TabIndex = 56;
-            this.ComboBox_LookAtType.Tag = "LOOKATTYPE";
-            this.ComboBox_LookAtType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Tab4_Script
             // 
@@ -2584,7 +2584,6 @@
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(4, 4);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -2659,7 +2658,6 @@
             this.Textbox_Script2.CharWidth = 8;
             this.Textbox_Script2.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script2.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.Textbox_Script2.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script2.IsReplaceMode = false;
             this.Textbox_Script2.Location = new System.Drawing.Point(4, 4);
             this.Textbox_Script2.Name = "Textbox_Script2";
