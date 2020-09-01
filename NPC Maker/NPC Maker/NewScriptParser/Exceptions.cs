@@ -76,7 +76,12 @@ namespace NPC_Maker.NewScriptParser
 
         public static ParseException IfNotClosed(string[] _Line)
         {
-            return new ParseException("This IF function does not have a corresponding ENDIF: ", String.Join(" ", _Line));
+            return new ParseException("This IF does not have a corresponding ENDIF: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException WhileNotClosed(string[] _Line)
+        {
+            return new ParseException("This WHILE does not have a corresponding ENDWHILE: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedCondition(string[] _Line)
@@ -102,6 +107,41 @@ namespace NPC_Maker.NewScriptParser
         public static ParseException UnrecognizedAnimation(string[] _Line)
         {
             return new ParseException("Animation not recognized: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedBombBag(string[] _Line)
+        {
+            return new ParseException("Bomb bag not recognized: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedWallet(string[] _Line)
+        {
+            return new ParseException("Wallet not recognized: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedQuiver(string[] _Line)
+        {
+            return new ParseException("Quiver not recognized: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedStickCap(string[] _Line)
+        {
+            return new ParseException("Stick cap not recognized: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedDekuNutCap(string[] _Line)
+        {
+            return new ParseException("Deku Nut cap not recognized: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedScale(string[] _Line)
+        {
+            return new ParseException("Scale not recognized: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedGauntlets(string[] _Line)
+        {
+            return new ParseException("Gauntlets not recognized: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedMovementStyle(string[] _Line)
@@ -132,6 +172,11 @@ namespace NPC_Maker.NewScriptParser
         public static ParseException UnrecognizedOperator(string[] _Line)
         {
             return new ParseException("Unrecognized operator: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException BadTime(string[] _Line)
+        {
+            return new ParseException("Time is not well formed. Should be military time HH:mm: ", String.Join(" ", _Line));
         }
 
         public static ParseException ParamConversionError(string[] _Line)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiscUtil.Linq.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,31 +23,30 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                byte VarT = ScriptHelpers.GetVariable(SplitLine[2], true);
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
 
-                                if (VarT != 0)
-                                {
-                                    if (VarT == 6)
-                                    {
-                                        UInt16 RNGRange = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, byte.MaxValue));
-                                        return new InstructionPlay((byte)SubID, RNGRange, VarT);
-                                    }
-                                    else
-                                        return new InstructionPlay((byte)SubID, 0, VarT);
-                                }
-                                else
-                                {
+                                if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                    UInt32? SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ? 
-                                                                    ScriptHelpers.Helper_GetSFXId(SplitLine[2]) 
-                                                                                        : 
-                                                                    ScriptHelpers.Helper_GetMusicId(SplitLine[2]);
+                                UInt32? SNDID = 0;
+
+                                if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                                {
+                                    SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
+                                                           ScriptHelpers.Helper_GetSFXId(SplitLine[2])
+                                                                                   :
+                                                           ScriptHelpers.Helper_GetMusicId(SplitLine[2]);
 
                                     if (SNDID == null)
-                                        SNDID = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
-
-                                    return new InstructionPlay((byte)SubID, Convert.ToUInt16(SNDID), VarT);
+                                        SNDID = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0,
+                                                                                                     (SubID == (int)Lists.PlaySubTypes.SFX) ? 
+                                                                                                            Lists.SFXes.Max(x => x).Value
+                                                                                                                    :
+                                                                                                            Lists.Music.Max(x => x).Value));
                                 }
+
+
+                                return new InstructionPlay((byte)SubID, Convert.ToUInt16(SNDID), VarType);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE:
                             {

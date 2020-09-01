@@ -3,11 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace NPC_Maker.NewScriptParser
 {
     public static class ScriptHelpers
     {
+        static public string ReplaceExpr(this string Orig, string Expr, string Replacement, RegexOptions regexOptions = RegexOptions.None)
+        {
+            string Pattern = String.Format(@"\b{0}\b", Regex.Escape(Expr));
+            return Regex.Replace(Orig, Pattern, Replacement, regexOptions);
+        }
+
         public static void ErrorIfNumParamsNotEq(string[] Splitline, int Number)
         {
             if (Splitline.Count() != Number)
@@ -52,16 +59,16 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static byte GetVariable(string Variable, bool AllowsRNG = false)
+        public static byte GetVariable(string Variable)
         {
             switch (Variable)
             {
-                case Lists.Keyword_ScriptVar1: return 1;
-                case Lists.Keyword_ScriptVar2: return 2;
-                case Lists.Keyword_ScriptVar3: return 3;
-                case Lists.Keyword_ScriptVar4: return 4;
-                case Lists.Keyword_ScriptVar5: return 5;
-                case Lists.Keyword_RNG: return (byte)(Convert.ToByte(AllowsRNG) * 6);
+                case Lists.Keyword_RNG: return (int)Lists.VarTypes.Keyword_RNG;
+                case Lists.Keyword_ScriptVar1: return (int)Lists.VarTypes.Keyword_ScriptVar1;
+                case Lists.Keyword_ScriptVar2: return (int)Lists.VarTypes.Keyword_ScriptVar2;
+                case Lists.Keyword_ScriptVar3: return (int)Lists.VarTypes.Keyword_ScriptVar3;
+                case Lists.Keyword_ScriptVar4: return (int)Lists.VarTypes.Keyword_ScriptVar4;
+                case Lists.Keyword_ScriptVar5: return (int)Lists.VarTypes.Keyword_ScriptVar5;
                 default: return 0;
             }
         }
@@ -212,16 +219,6 @@ namespace NPC_Maker.NewScriptParser
             }
 
             return null;
-        }
-
-        public static Label GetLabel(string[] Line, string Label, List<Label> Labels)
-        {
-            Label Lbl = Labels.Find(x => x.Name.Remove(x.Name.Length - 1) == Label);
-
-            if (Lbl == null)
-                throw ParseException.LabelNotFound(Line);
-            else
-                return Lbl;
         }
     }
 }

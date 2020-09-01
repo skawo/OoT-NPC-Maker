@@ -44,6 +44,17 @@ namespace NPC_Maker.NewScriptParser
         }
     }
 
+    public class InstructionLabel : Instruction
+    {
+        public string Name { get; set; }
+        public int InstructionNumber { get; set; }
+
+        public InstructionLabel(string _Name) : base((int)Lists.Instructions.LABEL)
+        {
+            Name = _Name;
+        }
+    }
+
     public class InstructionSubWValueType : InstructionSub
     {
         public byte ValueType { get; set; }

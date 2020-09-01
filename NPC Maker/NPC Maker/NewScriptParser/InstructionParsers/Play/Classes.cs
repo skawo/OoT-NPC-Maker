@@ -10,9 +10,9 @@ namespace NPC_Maker.NewScriptParser
         public object Value;
         public byte ValueType;
 
-        public InstructionPlay(byte _SubID, object _ID, byte _ValueType) : base((int)Lists.Instructions.PLAY, _SubID)
+        public InstructionPlay(byte _SubID, object _Value, byte _ValueType) : base((int)Lists.Instructions.PLAY, _SubID)
         {
-            Value = _ID;
+            Value = _Value;
             ValueType = _ValueType;
         }
 

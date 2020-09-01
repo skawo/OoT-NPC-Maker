@@ -121,11 +121,11 @@ namespace NPC_Maker.NewScriptParser
 
     public class InstructionSetResponses : InstructionSub
     {
-        Label Resp1;
-        Label Resp2;
-        Label Resp3;
+        InstructionLabel Resp1;
+        InstructionLabel Resp2;
+        InstructionLabel Resp3;
 
-        public InstructionSetResponses(byte _SubID, Label _Resp1, Label _Resp2, Label _Resp3) : base((int)Lists.Instructions.SET, _SubID)
+        public InstructionSetResponses(byte _SubID, InstructionLabel _Resp1, InstructionLabel _Resp2, InstructionLabel _Resp3) : base((int)Lists.Instructions.SET, _SubID)
         {
             Resp1 = _Resp1;
             Resp2 = _Resp2;
@@ -148,9 +148,9 @@ namespace NPC_Maker.NewScriptParser
 
     public class InstructionSetScriptStart : InstructionSub
     {
-        public Label Goto;
+        public InstructionLabel Goto;
 
-        public InstructionSetScriptStart(Label _Goto) : base((int)Lists.Instructions.SET, (int)Lists.SetSubTypes.SCRIPT_START)
+        public InstructionSetScriptStart(InstructionLabel _Goto) : base((int)Lists.Instructions.SET, (int)Lists.SetSubTypes.SCRIPT_START)
         {
             Goto = _Goto;
         }

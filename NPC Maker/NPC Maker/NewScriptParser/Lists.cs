@@ -34,6 +34,16 @@ namespace NPC_Maker.NewScriptParser
             Keyword_RNG
         };
 
+        public enum VarTypes
+        {
+            Keyword_RNG = 1,
+            Keyword_ScriptVar1 = 5,
+            Keyword_ScriptVar2 = 6,
+            Keyword_ScriptVar3 = 7,
+            Keyword_ScriptVar4 = 8,
+            Keyword_ScriptVar5 = 9,
+        }
+
         public enum Instructions
         {
             IF = 1,
@@ -49,6 +59,9 @@ namespace NPC_Maker.NewScriptParser
             WARP = 11,
             CHANGE_SCRIPT = 12,
             RNG = 13,
+            WHILE = 14,
+            GOTO = 253,
+            LABEL = 254,
             NOP = 255,
         }
 
@@ -64,13 +77,17 @@ namespace NPC_Maker.NewScriptParser
             FLAG_TEMPORARY = 7,
 
             LINK_IS_ADULT = 10,
-            IS_CURRENTLY_DAY = 11,
-            IS_CURRENTLY_TALKING = 12,
-            PLAYER_HAS_EMPTY_BOTTLE = 13,
-            CUTSCENE_IS_BEING_PLAYED = 14,
-            TEXTBOX_IS_ON_SCREEN = 15,
-            IS_CURRENTLY_WALKING = 16,
-            IS_CURRENTLY_IDLE = 17,
+            LINK_IS_CHILD = 11,
+            IS_CURRENTLY_DAY = 12,
+            IS_CURRENTLY_NIGHT = 13,
+            IS_CURRENTLY_TALKING = 14,
+            PLAYER_HAS_EMPTY_BOTTLE = 15,
+            CUTSCENE_IS_BEING_PLAYED = 16,
+            TEXTBOX_IS_ON_SCREEN = 17,
+            NO_TEXTBOX_ON_SCREEN = 18,
+            CURRENT_ANIM_IS_WALKING = 19,
+            CURRENT_ANIM_IS_IDLE = 20,
+            PLAYER_HAS_MAGIC = 21,
 
             PLAYER_RUPEES = 30,
             SCENE_ID = 31,
@@ -83,12 +100,28 @@ namespace NPC_Maker.NewScriptParser
             VAR_3 = 38,
             VAR_4 = 39,
             VAR_5 = 40,
+            CURRENT_HEALTH = 41,
+            CURRENT_MAGIC = 42,
+            PLAYER_BOMBS = 31,
+            PLAYER_BOMBCHUS = 32,
+            PLAYER_ARROWS = 33,
+            PLAYER_HEALTH = 34,
+            PLAYER_DEKUSTICKS = 35,
+            PLAYER_DEKUNUTS = 36,
+
 
             ITEM_BEING_TRADED = 61,
             TRADE_STATUS = 62,
             PLAYER_MASK = 64,
             TIME_OF_DAY = 65,
             CURRENT_ANIMATION = 66,
+            PLAYER_BOMBBAG = 67,
+            PLAYER_WALLET = 68,
+            PLAYER_QUIVER = 69,
+            PLAYER_WATER_SCALE = 70,
+            PLAYER_GAUNTLETS = 71,
+            PLAYER_STICKCAP = 72,
+            PLAYER_DEKUNUTCAP = 73,
         }
 
         public enum SetSubTypes
@@ -120,6 +153,9 @@ namespace NPC_Maker.NewScriptParser
             LOOKAT_OFFSET_X = 48,
             LOOKAT_OFFSET_Y = 49,
             LOOKAT_OFFSET_Z = 50,
+            CURRENT_PATH_NODE = 51,
+            CURRENT_ANIMATION_FRAME = 52,
+            CURRENT_CUTSCENE_FRAME = 53,
 
             /* u32 Subtypes */
 
@@ -143,6 +179,8 @@ namespace NPC_Maker.NewScriptParser
             IS_ALWAYS_ACTIVE = 184,
             PAUSE_CUTSCENE = 185,
             IS_ALWAYS_DRAWN = 186,
+            NO_TEXTBOX_ON_SCREEN = 187,
+            PLAYER_HAS_DEFENSE_UPGRADE = 188,
 
             /* u8 Subtypes */
             TARGET_LIMB = 195,
@@ -151,6 +189,13 @@ namespace NPC_Maker.NewScriptParser
             WAIST_LIMB = 198,
 
             /* s8 Subtypes */
+            PLAYER_BOMBS = 210,
+            PLAYER_BOMBCHUS = 211,
+            PLAYER_ARROWS = 212,
+            PLAYER_HEATLH = 213,
+            PLAYER_DEKUNUTS = 214,
+            PLAYER_DEKUSTICKS = 215,
+            PLAYER_MAGIC = 216,
 
             /* Special handling */
             TEXTBOX_RESPONSE_ACTIONS = 220,
@@ -195,17 +240,16 @@ namespace NPC_Maker.NewScriptParser
             NO_TEXTBOX_ON_SCREEN = 3,
             FOREVER = 4,
 
-            PATH_NODE_ID = 35,
+            CURRENT_PATH_NODE = 35,
             FRAMES = 36,
-            ANIMATION_FRAME = 37,
-            CUTSCENE_FRAME = 38,
+            CURRENT_ANIMATION_FRAME = 37,
+            CURRENT_CUTSCENE_FRAME = 38,
 
             VAR_1 = 75,
             VAR_2 = 76,
             VAR_3 = 77,
             VAR_4 = 78,
             VAR_5 = 79,
-
         }
 
         public enum TradeItems
@@ -291,6 +335,56 @@ namespace NPC_Maker.NewScriptParser
             NOT_VISIBLE = 0,
             WITH_LIMB = 1,
             INSTEAD_OF_LIMB = 2,
+        }
+
+        public enum BombBags
+        {
+            SMALL = 0,
+            BIG = 1,
+            BIGGEST = 2
+        }
+
+        public enum Quivers
+        {
+            SMALL = 0,
+            BIG = 1,
+            BIGGEST = 2
+        }
+
+        public enum Wallets
+        {
+            SMALL = 0,
+            ADULT = 1,
+            GIANT = 2
+        }
+
+        public enum Scales
+        {
+            NONE = 0,
+            SILVER = 1,
+            GOLDEN = 2
+        }
+
+        public enum Gauntlets
+        {
+            NONE = 0,
+            GORON = 1,
+            SILVER = 2,
+            GOLDEN = 3
+        }
+
+        public enum StickCap
+        {
+            NONE = 0,
+            NORMAL = 1,
+            UPGRADED = 2
+        }
+
+        public enum NutCap
+        {
+            NONE = 0,
+            NORMAL = 1,
+            UPGRADED = 2
         }
 
         public enum PlaySubTypes

@@ -20,10 +20,17 @@ namespace NPC_Maker.NewScriptParser
             ScriptText = _ScriptText;
             Entry = _Entry;
 
+            ScriptText = ScriptText.Replace(",", " ");
+            ScriptText = ScriptText.Replace("{", " ");
+            ScriptText = ScriptText.Replace("}", " ");
+            ScriptText = ScriptText.Replace("(", " ");
+            ScriptText = ScriptText.Replace(")", " ");
+            ScriptText = ScriptText.Replace(";", Environment.NewLine);
             ScriptText = Regex.Replace(ScriptText, @"/\*(.|[\r\n])*?\*/", string.Empty);                                // Remove comment blocks
             ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                               // Remove inline comments
             ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();      // Remove empty lines
             ScriptText = ScriptText.Replace("\t", "");                                                                  // Remove tabs
+            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ");                                                    // Remove double spaces
         }
 
 
@@ -42,40 +49,58 @@ namespace NPC_Maker.NewScriptParser
             for (int i = 0; i < Lines.Count(); i++)
                 Lines[i] = Lines[i].Trim();
 
-            Labels = GetLabels(Lines);
+            Lines = ReplaceDefines(Lines);
+            CheckLabels(Lines);
             List<Instruction> Instructions = GetInstructions(Lines);
-
-
-
 
             return outScript;
         }
 
-        private List<Label> GetLabels(List<string> Lines)
+        private List<string> ReplaceDefines(List<string> Lines)
         {
-            List<Label> Labels = new List<Label>();
+            List<string[]> Defines = new List<string[]>();
 
+            foreach (string Line in Lines)
+            {
+                if (Line.StartsWith("#define"))
+                {
+                    string[] Split = Line.Split(' ');
+
+                    ScriptHelpers.ErrorIfNumParamsNotEq(Split, 3);
+                    Defines.Add(new string[] { Split[1], Split[2] });
+                }
+            }
+
+            List<string> NewLines = new List<string>();
+
+            for (int i = 0; i < Lines.Count(); i++)
+            {
+                if (Lines[i].StartsWith("#define"))
+                        continue;
+
+                foreach (string[] Def in Defines)
+                    Lines[i] = ScriptHelpers.ReplaceExpr(Lines[i], Def[0], Def[1]);
+
+                NewLines.Add(Lines[i]);
+            }
+
+            return NewLines;
+        }
+
+        private void CheckLabels(List<string> Lines)
+        {
             foreach (string Line in Lines)
             {
                 if (Line.EndsWith(":"))
                 {
-                    if (Lists.Keywords.Contains(Line.Remove(Line.Length - 1)))
+                    if (Lists.Keywords.Contains(Line.Remove(Line.Length - 1))
+                        || Line.StartsWith("__"))
                     {
                         outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(Line));
                         continue;
                     }
-
-                    if (Labels.Find(x => x.Name == Line) != null)
-                    {
-                        outScript.ParseErrors.Add(ParseException.LabelAlreadyExists(Line));
-                        continue;
-                    }
-
-                    Labels.Add(new Label(Line, -1));
                 }    
             }
-
-            return Labels;
         }
 
         private List<Instruction> GetInstructions(List<string> Lines)
@@ -88,18 +113,33 @@ namespace NPC_Maker.NewScriptParser
                 {
                     string[] SplitLine = Lines[i].Trim().Split(' ');
 
+                    if (SplitLine.Count() == 1 && SplitLine[0].EndsWith(":"))
+                    {
+                        Instructions.Add(new InstructionLabel(SplitLine[0].Remove(SplitLine[0].Length - 1)));
+                        continue;
+                    }
+
                     int InstructionID = (int)System.Enum.Parse(typeof(Lists.Instructions), SplitLine[0].ToUpper());
 
                     switch (InstructionID)
                     {
                         case (int)Lists.Instructions.IF:
+                        case (int)Lists.Instructions.WHILE:
                             {
-                                Instruction IfInstruction = ParseIfInstruction(Lines, SplitLine, i);
+                                Instruction Instr = ParseIfWhileInstruction(InstructionID, Lines, SplitLine, i);
 
-                                if (IfInstruction.ID == (int)Lists.Instructions.IF)
-                                    i = (IfInstruction as InstructionIf).EndIfLineNo + 1;
+                                if (Instr.ID == (int)Lists.Instructions.IF)
+                                {
+                                    i = (Instr as InstructionIfWhile).EndIfLineNo + 1;
+                                    Instructions.Add(Instr);
+                                }
+                                else if (Instr.ID == (int)Lists.Instructions.WHILE)
+                                {
+                                    i = (Instr as InstructionIfWhile).EndIfLineNo + 1;
 
-                                Instructions.Add(IfInstruction);
+                                    Instructions.Add(new InstructionLabel("__WHILE__" + i.ToString()));
+                                    Instructions.Add(Instr);
+                                }
                                 break;
                             }
                         case (int)Lists.Instructions.NOP: Instructions.Add(ParseNopInstruction(SplitLine)); break;

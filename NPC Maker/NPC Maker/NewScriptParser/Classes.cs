@@ -16,16 +16,5 @@ namespace NPC_Maker.NewScriptParser
             ParseErrors = new List<ParseException>();
         }
     }
-    
-    public class Label
-    {
-        public string Name { get; set; }
-        public int InstructionNumber { get; set; }
-
-        public Label(string _Name, int _InstructionNumber)
-        {
-            Name = _Name;
-            InstructionNumber = _InstructionNumber;
-        }
-    }
+   
 }

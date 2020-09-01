@@ -25,15 +25,17 @@ namespace NPC_Maker.NewScriptParser
                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
                         byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
+                        UInt16 Data = 0;
 
-                        if (VarType != 0)
-                            return new InstructionAwait((byte)SubID, Convert.ToByte(0), VarType);
-                        else
-                        {
-                            UInt16 Data = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
-                            return new InstructionAwait((byte)SubID, Data, VarType);
+                        if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                        }
+                        if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                            Data = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 
+                                                                                        VarType == (int)Lists.VarTypes.Keyword_RNG ? 3 : 2, 
+                                                                                        0, UInt16.MaxValue));
+
+                        return new InstructionAwait((byte)SubID, Data, VarType);
                     }
                     else
                     {
@@ -53,14 +55,17 @@ namespace NPC_Maker.NewScriptParser
                                         throw ParseException.UnrecognizedCondition(SplitLine);
 
                                     byte VarType = ScriptHelpers.GetVariable(SplitLine[3]);
+                                    sbyte Data = 0;
 
-                                    if (VarType != 0)
-                                        return new InstructionAwaitScriptVar((byte)SubID, 0, Condition, VarType);
-                                    else
-                                    {
-                                        sbyte Data = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 3, sbyte.MinValue, sbyte.MaxValue));
-                                        return new InstructionAwaitScriptVar((byte)SubID, Data, Condition, 0);
-                                    }
+                                    if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                                        ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+
+                                    if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                                        Data = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 
+                                                                                                   VarType == (int)Lists.VarTypes.Keyword_RNG ? 4 : 3, 
+                                                                                                   sbyte.MinValue, sbyte.MaxValue));
+
+                                    return new InstructionAwaitScriptVar((byte)SubID, Data, Condition, VarType);
                                 }
                             default:
                                 throw new Exception();

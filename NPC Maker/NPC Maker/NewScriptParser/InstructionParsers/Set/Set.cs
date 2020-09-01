@@ -8,6 +8,36 @@ namespace NPC_Maker.NewScriptParser
 {
     public partial class ScriptParser
     {
+        private Instruction h_SimpleSet(int SubID, string[] SplitLine, int Min, int Max, Type ConvertType)
+        {
+            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+
+            byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
+            object Data = 0;
+
+            if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+
+            if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+            {
+                if (ConvertType == typeof(UInt32))
+                    Data = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[VarType == (int)Lists.VarTypes.Keyword_RNG ? 3 : 2]);
+                else if (ConvertType == typeof(float))
+                    Data = Convert.ToDecimal(SplitLine[VarType == (int)Lists.VarTypes.Keyword_RNG ? 3 : 2]);
+                else
+                    Data = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine,
+                                                                                VarType == (int)Lists.VarTypes.Keyword_RNG ? 3 : 2,
+                                                                                Min, Max));
+
+                if (Data == null)
+                    throw ParseException.ParamConversionError(SplitLine);
+            }
+
+
+            return new InstructionSet((byte)SubID, Data, VarType);
+        }
+
+
         private Instruction ParseSetInstruction(string[] SplitLine)
         {
             try
@@ -18,120 +48,51 @@ namespace NPC_Maker.NewScriptParser
                 {
                     if (SubID < 35)        // u16 Subtypes
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                        byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
-
-                        if (ValueType != 0)
-                            return new InstructionSet((byte)SubID, (byte)0, ValueType);
-                        else
-                        {
-                            UInt32 Data = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
-                            return new InstructionSet((byte)SubID, Data, 0);
-                        }
+                        return h_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue, typeof(Int32));
                     }
                     else if (SubID < 70)        // s16 Subtypes
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                        byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
-
-                        if (ValueType != 0)
-                            return new InstructionSet((byte)SubID, (byte)0, ValueType);
-                        else
-                        {
-                            Int32 Value = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, Int16.MinValue, Int16.MaxValue));
-                            return new InstructionSet((byte)SubID, Value, 0);
-                        }
+                        return h_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
                     }
                     else if (SubID < 105)        // u32 Subtypes
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                        byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
-
-                        if (ValueType != 0)
-                            return new InstructionSet((byte)SubID, (byte)0, ValueType);
-                        else
-                        {
-                            UInt32? Data = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[2]);
-
-                            if (Data == null)
-                                throw ParseException.ParamConversionError(SplitLine);
-
-                            return new InstructionSet((byte)SubID, Data, 0);
-                        }
+                        return h_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
                     }
                     else if (SubID < 140)        // s32 Subtypes
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                        byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
-
-                        if (ValueType != 0)
-                            return new InstructionSet((byte)SubID, (byte)0, ValueType);
-                        else
-                        {
-                            Int32 Data = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, Int32.MinValue, Int32.MaxValue));
-                            return new InstructionSet((byte)SubID, Data, 0);
-                        }
+                        return h_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
                     }
                     else if (SubID < 175)        // Float Subtypes
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                        byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
-
-                        if (ValueType != 0)
-                            return new InstructionSet((byte)SubID, (byte)0, ValueType);
-                        else
-                            return new InstructionSet((byte)SubID, Convert.ToDecimal(SplitLine[2]), 0);
+                        return h_SimpleSet(SubID, SplitLine, 0, 0, typeof(float));
                     }
                     else if (SubID < 195)        // bool Subtypes
                     {
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
-                        byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
+                        byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
+                        byte Condition = 0;
 
-                        if (ValueType != 0)
-                            return new InstructionSet((byte)SubID, (byte)0, ValueType);
-                        else
+                        if (VarType == (int)Lists.VarTypes.Keyword_RNG)
+                            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+
+                        if (VarType < (int)Lists.VarTypes.Keyword_ScriptVar1)
                         {
-                            byte WrittenCondition = ScriptHelpers.GetBoolConditionID(SplitLine[2]);
-
-                            if (WrittenCondition != byte.MaxValue)
-                                return new InstructionSet((byte)SubID, WrittenCondition, 0);
-                            else
+                            Condition = ScriptHelpers.GetBoolConditionID(SplitLine[VarType == (int)Lists.VarTypes.Keyword_RNG ? 3 : 2]);
+                            
+                            if (Condition == byte.MaxValue)
                                 throw ParseException.UnrecognizedCondition(SplitLine);
                         }
+
+                        return new InstructionSet((byte)SubID, Condition, VarType);
                     }
                     else if (SubID < 210)        // u8 Subtypes
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                        byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
-
-                        if (ValueType != 0)
-                            return new InstructionSet((byte)SubID, (byte)0, ValueType);
-                        else
-                        {
-                            byte Data = Convert.ToByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, byte.MinValue, byte.MaxValue));
-                            return new InstructionSet((byte)SubID, Data, 0);
-                        }
+                        return h_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue, typeof(Int32));
                     }
-                    else if (SubID < 220)        // u8 Subtypes
+                    else if (SubID < 220)        // s8 Subtypes
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                        byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
-
-                        if (ValueType != 0)
-                            return new InstructionSet((byte)SubID, (byte)0, ValueType);
-                        else
-                        {
-                            sbyte Data = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, sbyte.MinValue, sbyte.MaxValue));
-                            return new InstructionSet((byte)SubID, Data, 0);
-                        }
+                        return h_SimpleSet(SubID, SplitLine, sbyte.MinValue, sbyte.MaxValue, typeof(Int32));
                     }
                     else
                     {
@@ -143,9 +104,9 @@ namespace NPC_Maker.NewScriptParser
                                     ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 5);
 
                                     return new InstructionSetResponses((byte)SubID,
-                                                                        new Label(SplitLine[2], -1),
-                                                                        SplitLine.Length > 3 ? new Label(SplitLine[3], -1) : new Label(SplitLine[2], -1),
-                                                                        SplitLine.Length > 4 ? new Label(SplitLine[4], -1) : new Label(SplitLine[3], -1));
+                                                                        new InstructionLabel(SplitLine[2]),
+                                                                        SplitLine.Length > 3 ? new InstructionLabel(SplitLine[3]) : new InstructionLabel(SplitLine[2]),
+                                                                        SplitLine.Length > 4 ? new InstructionLabel(SplitLine[4]) : new InstructionLabel(SplitLine[3]));
                                 }
                             case (int)Lists.SetSubTypes.FLAG_INF:
                             case (int)Lists.SetSubTypes.FLAG_EVENT:
@@ -306,8 +267,10 @@ namespace NPC_Maker.NewScriptParser
 
                                     for (int i = 0; i < 3; i++)
                                     {
-                                        if (ScVars[i] == 0)
-                                            RGB[i] = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2 + i, byte.MinValue, byte.MaxValue));
+                                        if (ScVars[i] < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                                            RGB[i] = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 
+                                                                                                         (ScVars[i] == (int)Lists.VarTypes.Keyword_RNG ? 3 : 2) + i, 
+                                                                                                         byte.MinValue, byte.MaxValue));
                                     }
 
                                     return new InstructionSetEnvColor((byte)SubID, Convert.ToByte(RGB[0]), Convert.ToByte(RGB[1]), Convert.ToByte(RGB[2]), ScVars[0], ScVars[1], ScVars[2]);
@@ -410,22 +373,12 @@ namespace NPC_Maker.NewScriptParser
                                 }
                             case (int)Lists.SetSubTypes.CUTSCENE_SLOT:
                                 {
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-
-                                    byte ValueType = ScriptHelpers.GetVariable(SplitLine[2]);
-
-                                    if (ValueType != 0)
-                                        return new InstructionSet((byte)SubID, 0, ValueType);
-                                    else
-                                    {
-                                        byte Value = Convert.ToByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, -1, 10));
-                                        return new InstructionSet((byte)SubID, Value, 0);
-                                    }
+                                    return h_SimpleSet(SubID, SplitLine, -1, 10, typeof(Int32));
                                 }
                             case (int)Lists.SetSubTypes.SCRIPT_START:
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                                    return new InstructionSetScriptStart(new Label(SplitLine[2], -1));
+                                    return new InstructionSetScriptStart(new InstructionLabel(SplitLine[2]));
                                 }
                             case (int)Lists.SetSubTypes.VAR_1:
                             case (int)Lists.SetSubTypes.VAR_2:
@@ -445,23 +398,15 @@ namespace NPC_Maker.NewScriptParser
                                         default: throw ParseException.UnrecognizedOperator(SplitLine);
                                     }
 
-                                    byte ValueType = ScriptHelpers.GetVariable(SplitLine[3], true);
+                                    byte ValueType = ScriptHelpers.GetVariable(SplitLine[3]);
+                                    sbyte Value = 0;
 
-                                    if (ValueType != 0)
-                                    {
-                                        if (ValueType == 6)
-                                        {
-                                            sbyte Value = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 3, byte.MinValue, byte.MaxValue));
-                                            return new InstructionSetScriptVar((byte)SubID, Operator, (sbyte)Value, ValueType);
-                                        }
-                                        else
-                                            return new InstructionSetScriptVar((byte)SubID, Operator, 0, ValueType);
-                                    }
-                                    else
-                                    {
-                                        sbyte Value = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 3, sbyte.MinValue, sbyte.MaxValue));
-                                        return new InstructionSetScriptVar((byte)SubID, Operator, Value, 0);
-                                    }
+                                    if (ValueType < (int)Lists.VarTypes.Keyword_ScriptVar1)
+                                        Value = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 
+                                                                                                    ValueType == (int)Lists.VarTypes.Keyword_RNG ? 4 : 3,
+                                                                                                    sbyte.MinValue, sbyte.MaxValue));
+
+                                    return new InstructionSetScriptVar((byte)SubID, Operator, (sbyte)Value, ValueType);
                                 }
                             default: throw new Exception();
                         }
