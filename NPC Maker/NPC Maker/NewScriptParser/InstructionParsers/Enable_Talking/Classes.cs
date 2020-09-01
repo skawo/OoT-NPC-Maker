@@ -18,8 +18,10 @@ namespace NPC_Maker.NewScriptParser
 
         public override byte[] ToBytes()
         {
-            List<byte> Data = new List<byte>();
-            Data.Add(ID);
+            List<byte> Data = new List<byte>
+            {
+                ID
+            };
 
             ParserHelpers.AddObjectToByteList(ID, Data);
             ParserHelpers.AddObjectToByteList(AdultText, Data);

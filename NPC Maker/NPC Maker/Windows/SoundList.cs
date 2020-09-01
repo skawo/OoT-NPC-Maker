@@ -14,7 +14,7 @@ namespace NPC_Maker
 {
     public partial class SoundList : Form
     {
-        List<string[]> Data = new List<string[]>();
+        List<string[]> Data { get; set; }
         public string ChosenSFX;
 
         public SoundList(string CSV)
@@ -23,6 +23,7 @@ namespace NPC_Maker
 
             try
             {
+                Data = new List<string[]>();
                 string[] RawData = File.ReadAllLines(CSV);
 
                 foreach (string Row in RawData)
@@ -47,7 +48,7 @@ namespace NPC_Maker
             this.ActiveControl = textBox1;
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             listView1.BeginUpdate();
             listView1.Items.Clear();

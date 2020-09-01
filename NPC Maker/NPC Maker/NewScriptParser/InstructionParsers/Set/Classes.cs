@@ -121,9 +121,9 @@ namespace NPC_Maker.NewScriptParser
 
     public class InstructionSetResponses : InstructionSub
     {
-        InstructionLabel Resp1;
-        InstructionLabel Resp2;
-        InstructionLabel Resp3;
+        InstructionLabel Resp1 { get; set; }
+        InstructionLabel Resp2 { get; set; }
+        InstructionLabel Resp3 { get; set; }
 
         public InstructionSetResponses(byte _SubID, InstructionLabel _Resp1, InstructionLabel _Resp2, InstructionLabel _Resp3) : base((int)Lists.Instructions.SET, _SubID)
         {
@@ -169,7 +169,7 @@ namespace NPC_Maker.NewScriptParser
 
     public class InstructionSetPattern : InstructionSub
     {
-        byte[] Pattern;
+        byte[] Pattern { get; set; }
 
         public InstructionSetPattern(byte _SubID, byte[] _Pattern) : base((int)Lists.Instructions.SET, _SubID)
         {
@@ -190,11 +190,11 @@ namespace NPC_Maker.NewScriptParser
 
     public class InstructionSetCameraTracking : InstructionSub
     {
-        byte Target;
-        UInt16 Value;
-        byte Value2;
-        byte ValueType;
-        byte ValueType2;
+        byte Target { get; set; }
+        UInt16 Value { get; set; }
+        byte Value2 { get; set; }
+        byte ValueType { get; set; }
+        byte ValueType2 { get; set; }
 
         public InstructionSetCameraTracking(byte _SubID, byte _Target, UInt16 _Value, byte _Value2, 
                                             byte _ValueType, byte _ValueType2) : base((int)Lists.Instructions.SET, _SubID)
@@ -224,8 +224,8 @@ namespace NPC_Maker.NewScriptParser
 
     public class InstructionSetKeyframes : InstructionSub
     {
-        UInt16 AnimationID;
-        byte[] Pattern;
+        UInt16 AnimationID { get; set; }
+        byte[] Pattern { get; set; }
 
         public InstructionSetKeyframes(byte _SubID, UInt16 _AnimationID, byte[] _Pattern) 
                                       : base((int)Lists.Instructions.SET, _SubID)

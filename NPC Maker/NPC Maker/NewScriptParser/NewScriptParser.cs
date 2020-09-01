@@ -11,9 +11,9 @@ namespace NPC_Maker.NewScriptParser
 {
     public partial class ScriptParser
     {
-        private string ScriptText;
-        private NPCEntry Entry;
-        private bScript outScript;
+        private readonly string ScriptText;
+        private readonly NPCEntry Entry;
+        private BScript outScript;
 
         public ScriptParser(NPCEntry _Entry, string _ScriptText)
         {
@@ -30,9 +30,9 @@ namespace NPC_Maker.NewScriptParser
         }
 
 
-        public bScript ParseScript()
+        public BScript ParseScript()
         {
-            outScript = new bScript();
+            outScript = new BScript();
 
             if (ScriptText.Trim() == "")
                 return outScript;
@@ -140,6 +140,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.SHOW_TEXTBOX: Instructions.Add(ParseShowTextboxInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.ENABLE_TALKING: Instructions.Add(ParseEnableTalkingInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.PLAY: Instructions.Add(ParsePlayInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.GOTO: Instructions.Add(ParseGotoInstruction(SplitLine)); break;
 
                         case (int)Lists.Instructions.RETURN:
                             {

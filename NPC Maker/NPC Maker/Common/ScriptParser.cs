@@ -99,7 +99,7 @@ namespace NPC_Maker
 
             else
             { 
-                int Return = 0;
+                int Return;
 
                 if (Label.ToUpper() == "NEXT")
                     Return = LineNo + 1;
@@ -117,7 +117,7 @@ namespace NPC_Maker
 
         private static UInt32 Helper_ConvertToUInt32(string Number)
         {
-            UInt32 Result = 0;
+            UInt32 Result;
 
             if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
                 Result = Convert.ToUInt32(Number, 16);
@@ -129,7 +129,7 @@ namespace NPC_Maker
 
         private static Int32 Helper_ConvertToInt32(string Number)
         {
-            Int32 Result = 0;
+            Int32 Result;
 
             if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
                 Result = Convert.ToInt32(Number, 16);
@@ -610,7 +610,7 @@ namespace NPC_Maker
                                 if (Instr[4].ToLower() != "true" && Instr[4].ToLower() != "false")
                                     throw new Exception(Line);
 
-                                SetFlagInstruction SetFlag = new SetFlagInstruction(Instr[2], Convert.ToUInt16(FlagID), Instr[4].ToLower() == "true" ? true : false);
+                                SetFlagInstruction SetFlag = new SetFlagInstruction(Instr[2], Convert.ToUInt16(FlagID), Instr[4].ToLower() == "true");
                                 return SetFlag.GetByteData();
                             }
                             else if (SetSubType == (int)Lists.SetSubTypes.movement_type)
@@ -1322,10 +1322,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubType);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubType
+            };
             Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
             Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
 
@@ -1350,12 +1351,13 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
-            Data.Add(U8);
-            Data.Add(U8_2);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID,
+                U8,
+                U8_2
+            };
             Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
 
             return Data.ToArray();
@@ -1377,12 +1379,13 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
-            Data.Add((byte)S8);
-            Data.Add(0);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID,
+                (byte)S8,
+                0
+            };
             Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
 
             return Data.ToArray();
@@ -1404,10 +1407,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes(S16));
             Data.AddRange(Program.BEConverter.GetBytes((UInt32)0));
 
@@ -1430,10 +1434,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
             Data.AddRange(Program.BEConverter.GetBytes(U32));
 
@@ -1456,10 +1461,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
             Data.AddRange(Program.BEConverter.GetBytes(S32));
 
@@ -1482,10 +1488,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
             Data.AddRange(Program.BEConverter.GetBytes(Fl));
 
@@ -1512,10 +1519,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubId);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubId
+            };
             Data.AddRange(Program.BEConverter.GetBytes(U16_1));
             Data.AddRange(Program.BEConverter.GetBytes(U16_2));
             Data.AddRange(Program.BEConverter.GetBytes(U16_3));
@@ -1545,12 +1553,13 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(ActorType);
-            Data.Add(Acting);
-            Data.Add(Type);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                ActorType,
+                Acting,
+                Type
+            };
             Data.AddRange(Program.BEConverter.GetBytes(Value));
             Data.AddRange(Program.BEConverter.GetBytes(Value2));
 
@@ -1577,10 +1586,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(Item);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                Item
+            };
             Data.AddRange(Program.BEConverter.GetBytes(Correct));
             Data.AddRange(Program.BEConverter.GetBytes(False));
             Data.AddRange(Program.BEConverter.GetBytes(None));
@@ -1591,7 +1601,7 @@ namespace NPC_Maker
 
     public class IfInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.IF;
+        readonly Byte ID = (byte)Lists.InstructionIDs.IF;
         Byte Check { get; set; }
         UInt16 Value { get; set; }
         UInt16 Offs_True { get; set; }
@@ -1609,10 +1619,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(Check);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                Check
+            };
             Data.AddRange(Program.BEConverter.GetBytes(Value));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_True));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_False));
@@ -1623,7 +1634,7 @@ namespace NPC_Maker
 
     public class RNGInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.RNG;
+        readonly Byte ID = (byte)Lists.InstructionIDs.RNG;
         Byte Condition { get; set; }
         byte Value { get; set; }
         Byte RangeEn { get; set; }
@@ -1641,12 +1652,13 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(Condition);
-            Data.Add(RangeEn);
-            Data.Add(Value);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                Condition,
+                RangeEn,
+                Value
+            };
             Data.AddRange(Program.BEConverter.GetBytes(Offs_True));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_False));
 
@@ -1656,7 +1668,7 @@ namespace NPC_Maker
 
     public class IfScriptVarInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.IF;
+        readonly Byte ID = (byte)Lists.InstructionIDs.IF;
         Byte Check { get; set; }
         Byte Value { get; set; }
         Byte ScriptVarID { get; set; }
@@ -1676,12 +1688,13 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(Check);
-            Data.Add(Value);
-            Data.Add(ScriptVarID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                Check,
+                Value,
+                ScriptVarID
+            };
             Data.AddRange(Program.BEConverter.GetBytes(Offs_True));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_False));
 
@@ -1691,8 +1704,8 @@ namespace NPC_Maker
 
     public class SetResponseInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.responses;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.responses;
         UInt16 Offs_1 { get; set; }
         UInt16 Offs_2 { get; set; }
         UInt16 Offs_3 { get; set; }
@@ -1706,10 +1719,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes(Offs_1));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_2));
             Data.AddRange(Program.BEConverter.GetBytes(Offs_3));
@@ -1720,8 +1734,8 @@ namespace NPC_Maker
 
     public class SetFlagInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubId = (byte)Lists.SetSubTypes.flag;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubId = (byte)Lists.SetSubTypes.flag;
         Byte FlagType { get; set; }
         bool OnOff { get; set; }
         UInt16 FlagID { get; set; }
@@ -1740,11 +1754,12 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubId);
-            Data.Add(FlagType);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubId,
+                FlagType
+            };
             Data.AddRange(Program.BEConverter.GetBytes(OnOff));
             Data.AddRange(Program.BEConverter.GetBytes(FlagID));
             Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
@@ -1755,8 +1770,8 @@ namespace NPC_Maker
 
     public class SetAnimInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.animation;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.animation;
         Byte Loops { get; set; }
         UInt16 U16 { get; set; }
 
@@ -1769,12 +1784,13 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
-            Data.Add(Loops);
-            Data.Add(0);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID,
+                Loops,
+                0
+            };
             Data.AddRange(Program.BEConverter.GetBytes(U16));
             Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
 
@@ -1784,8 +1800,8 @@ namespace NPC_Maker
 
     public class SetAnimOffsetInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.animation_offset;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.animation_offset;
         UInt16 AnimID { get; set; }
         UInt32 Offset { get; set; }
 
@@ -1797,10 +1813,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes(AnimID));
             Data.AddRange(Program.BEConverter.GetBytes(Offset));
 
@@ -1810,8 +1827,8 @@ namespace NPC_Maker
 
     public class SetAnimObjectInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.animation_object;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.animation_object;
         UInt16 AnimID { get; set; }
         UInt16 Object { get; set; }
 
@@ -1823,10 +1840,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes(AnimID));
             Data.AddRange(Program.BEConverter.GetBytes(Object));
             Data.AddRange(Program.BEConverter.GetBytes((UInt16)0));
@@ -1836,8 +1854,8 @@ namespace NPC_Maker
 
     public class SetAnimSpeedInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.animation_speed;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.animation_speed;
         UInt16 AnimID { get; set; }
         float Speed { get; set; }
 
@@ -1849,10 +1867,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes(AnimID));
             Data.AddRange(Program.BEConverter.GetBytes(Speed));
             return Data.ToArray();
@@ -1861,13 +1880,13 @@ namespace NPC_Maker
 
     public class SetAnimKeyFramesInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.animation_keyframes;
-        UInt16 AnimID;
-        byte Frame1;
-        byte Frame2;
-        byte Frame3;
-        byte Frame4;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.animation_keyframes;
+        UInt16 AnimID { get; set; }
+        byte Frame1 { get; set; }
+        byte Frame2 { get; set; }
+        byte Frame3 { get; set; }
+        byte Frame4 { get; set; }
 
         public SetAnimKeyFramesInstruction(UInt16 _AnimID, byte Fr1, byte Fr2, byte Fr3, byte Fr4)
         {
@@ -1880,10 +1899,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes(AnimID));
             Data.Add(Frame1);
             Data.Add(Frame2);
@@ -1895,8 +1915,8 @@ namespace NPC_Maker
 
     public class SetDListVisibilityInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.dlist_show;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.dlist_show;
         UInt16 DlistID { get; set; }
         byte VisibilityType { get; set; }
 
@@ -1908,10 +1928,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Program.BEConverter.GetBytes(DlistID));
             Data.Add(VisibilityType);
             Data.Add(0);
@@ -1923,8 +1944,8 @@ namespace NPC_Maker
 
     public class SetSegmentTextureIDInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.segment_tex;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.segment_tex;
         Byte SegmentID { get; set; }
         UInt16 TextureID { get; set; }
 
@@ -1936,12 +1957,13 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
-            Data.Add(SegmentID);
-            Data.Add(0);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID,
+                SegmentID,
+                0
+            };
             Data.AddRange(Program.BEConverter.GetBytes(TextureID));
             Data.AddRange(Program.BEConverter.GetBytes((Int16)0));
 
@@ -1951,9 +1973,9 @@ namespace NPC_Maker
 
     public class SetPatternInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID;
-        Byte[] Bytes = new byte[6];
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID;
+        Byte[] Bytes { get; set; }
 
         public SetPatternInstruction(byte _SubID, Byte[] _Bytes)
         {
@@ -1963,10 +1985,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID
+            };
             Data.AddRange(Bytes);
 
             return Data.ToArray();
@@ -1975,12 +1998,12 @@ namespace NPC_Maker
 
     public class SetRGBAInstruction
     {
-        Byte ID = (byte)Lists.InstructionIDs.SET;
-        Byte SubID = (byte)Lists.SetSubTypes.env_color;
-        Byte R;
-        Byte G;
-        Byte B;
-        Byte A;
+        readonly Byte ID = (byte)Lists.InstructionIDs.SET;
+        readonly Byte SubID = (byte)Lists.SetSubTypes.env_color;
+        Byte R { get; set; }
+        Byte G { get; set; }
+        Byte B { get; set; }
+        Byte A { get; set; }
 
         public SetRGBAInstruction(Byte _R, Byte _G, Byte _B, Byte _A)
         {
@@ -1992,14 +2015,15 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubID);
-            Data.Add(R);
-            Data.Add(G);
-            Data.Add(B);
-            Data.Add(A);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubID,
+                R,
+                G,
+                B,
+                A
+            };
             Data.AddRange(Program.BEConverter.GetBytes((Int16)0));
 
             return Data.ToArray();
@@ -2008,7 +2032,7 @@ namespace NPC_Maker
 
     public class ExternalActorDependantInstruction
     {
-        Byte ID = 0;
+        Byte ID { get; set; }
         Byte SubId { get; set; }
         Int16 ActorNum { get; set; }
         UInt16 Value { get; set; }
@@ -2025,10 +2049,11 @@ namespace NPC_Maker
 
         public byte[] GetByteData()
         {
-            List<byte> Data = new List<byte>();
-
-            Data.Add(ID);
-            Data.Add(SubId);
+            List<byte> Data = new List<byte>
+            {
+                ID,
+                SubId
+            };
             Data.AddRange(Program.BEConverter.GetBytes(ActorNum));
             Data.AddRange(Program.BEConverter.GetBytes(ActorType));
             Data.AddRange(Program.BEConverter.GetBytes(Value));

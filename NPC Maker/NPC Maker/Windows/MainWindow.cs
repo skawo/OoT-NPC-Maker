@@ -38,8 +38,10 @@ namespace NPC_Maker
 
             foreach (string Item in Enum.GetNames(typeof(Lists.InstructionIDs)))
             {
-                ToolStripMenuItem Tsmi = new ToolStripMenuItem();
-                Tsmi.Text = Item;
+                ToolStripMenuItem Tsmi = new ToolStripMenuItem
+                {
+                    Text = Item
+                };
 
                 if (Lists.FunctionSubtypes.ContainsKey(Item))
                 {
@@ -396,8 +398,10 @@ namespace NPC_Maker
 
         private void FileMenu_SaveAs_Click(object sender, EventArgs e)
         {
-            SaveFileDialog SFD = new SaveFileDialog();
-            SFD.FileName = "ActorData.json";
+            SaveFileDialog SFD = new SaveFileDialog
+            {
+                FileName = "ActorData.json"
+            };
             SFD.ShowDialog();
 
             if (SFD.FileName != "")
@@ -420,8 +424,10 @@ namespace NPC_Maker
 
         private void FileMenu_SaveBinary_Click(object sender, EventArgs e)
         {
-            SaveFileDialog SFD = new SaveFileDialog();
-            SFD.FileName = "zobj.zobj";
+            SaveFileDialog SFD = new SaveFileDialog
+            {
+                FileName = "zobj.zobj"
+            };
             SFD.ShowDialog();
 
             if (SFD.FileName != "")
@@ -539,8 +545,10 @@ namespace NPC_Maker
             }
             else
             {
-                SelectedEntry = new NPCEntry();
-                SelectedEntry.IsNull = true;
+                SelectedEntry = new NPCEntry
+                {
+                    IsNull = true
+                };
                 EditedFile.Entries[SelectedIndex] = SelectedEntry;
                 DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = "Null";
                 DataGrid_NPCs_SelectionChanged(this, null);
@@ -574,8 +582,10 @@ namespace NPC_Maker
             if (DataGrid_NPCs.SelectedRows.Count != 0 &&
                 EditedFile.Entries[DataGrid_NPCs.SelectedRows[0].Index].IsNull)
             {
-                SelectedEntry = new NPCEntry();
-                SelectedEntry.IsNull = false;
+                SelectedEntry = new NPCEntry
+                {
+                    IsNull = false
+                };
                 EditedFile.Entries[SelectedIndex] = SelectedEntry;
                 DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = "";
                 DataGrid_NPCs_SelectionChanged(this, null);
@@ -690,9 +700,7 @@ namespace NPC_Maker
             {
                 string[] Split = e.Value.ToString().Split(',');
 
-                float X = 0;
-                float Y = 0;
-                float Z = 0;
+                float X, Y, Z;
 
                 try
                 {
@@ -730,9 +738,7 @@ namespace NPC_Maker
             {
                 string[] Split = e.Value.ToString().Split(',');
 
-                Int16 X = 0;
-                Int16 Y = 0;
-                Int16 Z = 0;
+                Int16 X, Y, Z;
 
                 try
                 {
@@ -849,7 +855,7 @@ namespace NPC_Maker
             }
             else if (e.ColumnIndex == 7)  // Showtype
             {
-                int ShowType = 0;
+                int ShowType;
 
                 switch (e.Value.ToString())
                 {
@@ -1134,7 +1140,7 @@ namespace NPC_Maker
             NewScriptParser.ScriptParser Parser = new NPC_Maker.NewScriptParser.ScriptParser(SelectedEntry, SelectedEntry.Script);
             Textbox_ParseErrors.Clear();
 
-            NewScriptParser.bScript Output = Parser.ParseScript();
+            NewScriptParser.BScript Output = Parser.ParseScript();
 
             if (Output.ParseErrors.Count() == 0)
                 Textbox_ParseErrors.Text = "Parsed successfully!";
@@ -1259,7 +1265,7 @@ namespace NPC_Maker
             InsertTxtToScript((sender as ToolStripItem).Text);
         }
 
-        private void soundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SoundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SoundList SFX = new SoundList("SFX.csv");
             DialogResult DR = SFX.ShowDialog();
@@ -1270,7 +1276,7 @@ namespace NPC_Maker
             }
         }
 
-        private void musicToolStripMenuItem_Click(object sender, EventArgs e)
+        private void MusicToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SoundList SFX = new SoundList("Music.csv");
             DialogResult DR = SFX.ShowDialog();
@@ -1326,12 +1332,12 @@ namespace NPC_Maker
             FCTB.ApplySyntaxHighlight(sender, e, SyntaxHighlighting);
         }
 
-        private void syntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void SyntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             SyntaxHighlighting = (sender as ToolStripMenuItem).Checked;
 
-            Textbox_Script.Text = Textbox_Script.Text + " ";
-            Textbox_Script2.Text = Textbox_Script2.Text + " ";
+            Textbox_Script.Text += " ";
+            Textbox_Script2.Text += " ";
         }
 
         private void ComboBox_AnimType_SelectedIndexChanged(object sender, EventArgs e)

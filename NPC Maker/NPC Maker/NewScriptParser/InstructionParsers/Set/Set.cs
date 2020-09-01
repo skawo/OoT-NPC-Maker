@@ -17,15 +17,15 @@ namespace NPC_Maker.NewScriptParser
                 try
                 {
                     if (SubID < 35)        // u16 Subtypes
-                        return h_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue, typeof(Int32));
+                        return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue, typeof(Int32));
                     else if (SubID < 70)        // s16 Subtypes
-                        return h_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
+                        return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
                     else if (SubID < 105)        // u32 Subtypes
-                        return h_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
+                        return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
                     else if (SubID < 140)        // s32 Subtypes
-                        return h_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
+                        return H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
                     else if (SubID < 175)        // Float Subtypes
-                        return h_SimpleSet(SubID, SplitLine, 0, 0, typeof(float));
+                        return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(float));
                     else if (SubID < 195)        // bool Subtypes
                     {
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
@@ -47,9 +47,9 @@ namespace NPC_Maker.NewScriptParser
                         return new InstructionSet((byte)SubID, Condition, VarType);
                     }
                     else if (SubID < 210)        // u8 Subtypes
-                        return h_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue, typeof(Int32));
+                        return H_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue, typeof(Int32));
                     else if (SubID < 220)        // s8 Subtypes
-                        return h_SimpleSet(SubID, SplitLine, sbyte.MinValue, sbyte.MaxValue, typeof(Int32));
+                        return H_SimpleSet(SubID, SplitLine, sbyte.MinValue, sbyte.MaxValue, typeof(Int32));
                     else
                     {
                         switch (SubID)
@@ -337,7 +337,7 @@ namespace NPC_Maker.NewScriptParser
                                 }
                             case (int)Lists.SetSubTypes.CUTSCENE_SLOT:
                                 {
-                                    return h_SimpleSet(SubID, SplitLine, -1, 10, typeof(Int32));
+                                    return H_SimpleSet(SubID, SplitLine, -1, 10, typeof(Int32));
                                 }
                             case (int)Lists.SetSubTypes.SCRIPT_START:
                                 {
@@ -390,7 +390,7 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        private Instruction h_SimpleSet(int SubID, string[] SplitLine, int Min, int Max, Type ConvertType)
+        private Instruction H_SimpleSet(int SubID, string[] SplitLine, int Min, int Max, Type ConvertType)
         {
             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 

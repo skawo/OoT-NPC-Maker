@@ -60,7 +60,7 @@ namespace NPC_Maker
                 else if (m.Msg == 0x20A && this.activeMenu != null) // WM_MOUSEWHEEL
                 {
                     int delta = (short)(ushort)(((uint)(ulong)m.WParam) >> 16);
-                    handleDelta(this.activeMenu, delta);
+                    HandleDelta(this.activeMenu, delta);
                     return true;
                 }
                 return false;
@@ -73,7 +73,7 @@ namespace NPC_Maker
 
         private static Action<ToolStrip, int> ScrollInternal;
 
-        private void handleDelta(ToolStripDropDown ts, int delta)
+        private void HandleDelta(ToolStripDropDown ts, int delta)
         {
             try
             {
@@ -83,7 +83,9 @@ namespace NPC_Maker
                 var lastItem = ts.Items[ts.Items.Count - 1];
                 if (lastItem.Bounds.Bottom < ts.Height && firstItem.Bounds.Top > 0)
                     return;
-                delta = delta / -4;
+
+                delta /= -4;
+
                 if (delta < 0 && firstItem.Bounds.Top - delta > 9)
                 {
                     delta = firstItem.Bounds.Top - 9;

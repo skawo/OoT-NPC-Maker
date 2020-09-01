@@ -22,8 +22,8 @@ namespace NPC_Maker.NewScriptParser
         
         public static void AddObjectToByteList(object Value, List<byte> ByteList)
         {
-            if (Value is byte)
-                ByteList.Add((byte)Value);
+            if (Value is byte @byte)
+                ByteList.Add(@byte);
             else if (Value is sbyte)
                 ByteList.Add((byte)Value);
             else
@@ -31,21 +31,21 @@ namespace NPC_Maker.NewScriptParser
                 if (ByteList.Count() % 2 != 0)
                     ByteList.Add(0);
 
-                if (Value is UInt16)
-                    ByteList.AddRange(Program.BEConverter.GetBytes((UInt16)Value));
-                else if (Value is Int16)
-                    ByteList.AddRange(Program.BEConverter.GetBytes((Int16)Value));
+                if (Value is UInt16 @int)
+                    ByteList.AddRange(Program.BEConverter.GetBytes(@int));
+                else if (Value is Int16 int1)
+                    ByteList.AddRange(Program.BEConverter.GetBytes(int1));
                 else
                 {
                     while (ByteList.Count() % 4 != 0)
                         ByteList.Add(0);
 
-                    if (Value is UInt32)
-                        ByteList.AddRange(Program.BEConverter.GetBytes((UInt32)Value));
-                    if (Value is Int32)
-                        ByteList.AddRange(Program.BEConverter.GetBytes((Int32)Value));
-                    if (Value is float)
-                        ByteList.AddRange(Program.BEConverter.GetBytes((float)Value));
+                    if (Value is UInt32 int2)
+                        ByteList.AddRange(Program.BEConverter.GetBytes(int2));
+                    if (Value is Int32 int3)
+                        ByteList.AddRange(Program.BEConverter.GetBytes(int3));
+                    if (Value is float single)
+                        ByteList.AddRange(Program.BEConverter.GetBytes(single));
                     if (Value is decimal)
                         ByteList.AddRange(Program.BEConverter.GetBytes((float)Value));
                     else

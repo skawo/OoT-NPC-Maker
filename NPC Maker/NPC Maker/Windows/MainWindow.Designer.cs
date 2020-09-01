@@ -397,7 +397,7 @@
             this.syntaxHighlightingToolStripMenuItem.Name = "syntaxHighlightingToolStripMenuItem";
             this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.syntaxHighlightingToolStripMenuItem.Text = "Syntax highlighting";
-            this.syntaxHighlightingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.syntaxHighlightingToolStripMenuItem_CheckedChanged);
+            this.syntaxHighlightingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.SyntaxHighlightingToolStripMenuItem_CheckedChanged);
             // 
             // aboutToolStripMenuItem
             // 
@@ -2272,14 +2272,14 @@
             this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
             this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.soundEffectsToolStripMenuItem.Text = "Sound effects";
-            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.soundEffectsToolStripMenuItem_Click);
+            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.SoundEffectsToolStripMenuItem_Click);
             // 
             // musicToolStripMenuItem
             // 
             this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
             this.musicToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.musicToolStripMenuItem.Text = "Music";
-            this.musicToolStripMenuItem.Click += new System.EventHandler(this.musicToolStripMenuItem_Click);
+            this.musicToolStripMenuItem.Click += new System.EventHandler(this.MusicToolStripMenuItem_Click);
             // 
             // DataGrid_Animations
             // 

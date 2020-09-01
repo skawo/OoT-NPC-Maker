@@ -220,43 +220,43 @@ namespace NPC_Maker.NewScriptParser
                             case (int)Lists.IfSubTypes.PLAYER_BOMBBAG:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 
-                                                                  h_InventoryInstruction(SplitLine, typeof(Lists.BombBags), ParseException.UnrecognizedBombBag(SplitLine)), 
+                                                                  H_InventoryInstruction(SplitLine, typeof(Lists.BombBags), ParseException.UnrecognizedBombBag(SplitLine)), 
                                                                   0, EndIf, Else, LineNo, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_QUIVER:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
-                                                                  h_InventoryInstruction(SplitLine, typeof(Lists.Quivers), ParseException.UnrecognizedQuiver(SplitLine)),
+                                                                  H_InventoryInstruction(SplitLine, typeof(Lists.Quivers), ParseException.UnrecognizedQuiver(SplitLine)),
                                                                   0, EndIf, Else, LineNo, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_WALLET:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
-                                                                  h_InventoryInstruction(SplitLine, typeof(Lists.Wallets), ParseException.UnrecognizedWallet(SplitLine)),
+                                                                  H_InventoryInstruction(SplitLine, typeof(Lists.Wallets), ParseException.UnrecognizedWallet(SplitLine)),
                                                                   0, EndIf, Else, LineNo, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_DEKUNUTCAP:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
-                                                                  h_InventoryInstruction(SplitLine, typeof(Lists.NutCap), ParseException.UnrecognizedDekuNutCap(SplitLine)),
+                                                                  H_InventoryInstruction(SplitLine, typeof(Lists.NutCap), ParseException.UnrecognizedDekuNutCap(SplitLine)),
                                                                   0, EndIf, Else, LineNo, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_STICKCAP:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
-                                                                  h_InventoryInstruction(SplitLine, typeof(Lists.StickCap), ParseException.UnrecognizedStickCap(SplitLine)),
+                                                                  H_InventoryInstruction(SplitLine, typeof(Lists.StickCap), ParseException.UnrecognizedStickCap(SplitLine)),
                                                                   0, EndIf, Else, LineNo, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_WATER_SCALE:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
-                                                                  h_InventoryInstruction(SplitLine, typeof(Lists.Scales), ParseException.UnrecognizedScale(SplitLine)),
+                                                                  H_InventoryInstruction(SplitLine, typeof(Lists.Scales), ParseException.UnrecognizedScale(SplitLine)),
                                                                   0, EndIf, Else, LineNo, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_GAUNTLETS:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
-                                                                  h_InventoryInstruction(SplitLine, typeof(Lists.Gauntlets), ParseException.UnrecognizedGauntlets(SplitLine)),
+                                                                  H_InventoryInstruction(SplitLine, typeof(Lists.Gauntlets), ParseException.UnrecognizedGauntlets(SplitLine)),
                                                                   0, EndIf, Else, LineNo, True, False);
                                 }
                             default:
@@ -282,7 +282,7 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        private UInt32 h_InventoryInstruction(string[] SplitLine, Type Enumtype, ParseException ToThrow)
+        private UInt32 H_InventoryInstruction(string[] SplitLine, Type Enumtype, ParseException ToThrow)
         {
             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
