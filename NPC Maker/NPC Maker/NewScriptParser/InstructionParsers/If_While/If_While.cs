@@ -56,7 +56,7 @@ namespace NPC_Maker.NewScriptParser
 
                     True.Add(new InstructionLabel("__WHILE__" + LineNo.ToString()));
                     True.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
-                    True.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, 0));
+                    True.Add(new InstructionGoto("__RETURN__"));
                     True.Add(new InstructionGoto("__WHILE__" + LineNo.ToString()));
 
                     False = new List<Instruction>();

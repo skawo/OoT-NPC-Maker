@@ -64,6 +64,7 @@ namespace NPC_Maker.NewScriptParser
             CHANGE_SCRIPT = 12,
             RNG = 13,
             WHILE = 14,
+            RETURN = 252,
             GOTO = 253,
             LABEL = 254,
             NOP = 255,

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -139,6 +140,13 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.SHOW_TEXTBOX: Instructions.Add(ParseShowTextboxInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.ENABLE_TALKING: Instructions.Add(ParseEnableTalkingInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.PLAY: Instructions.Add(ParsePlayInstruction(SplitLine)); break;
+
+                        case (int)Lists.Instructions.RETURN:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 1);
+                                Instructions.Add(new InstructionGoto("__RETURN__"));
+                                break;
+                            }
 
 
                         default:
