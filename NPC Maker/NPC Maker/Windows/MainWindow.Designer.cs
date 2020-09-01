@@ -420,7 +420,7 @@
             this.Textbox_NPCName.Location = new System.Drawing.Point(134, 8);
             this.Textbox_NPCName.MaxLength = 32;
             this.Textbox_NPCName.Name = "Textbox_NPCName";
-            this.Textbox_NPCName.Size = new System.Drawing.Size(115, 20);
+            this.Textbox_NPCName.Size = new System.Drawing.Size(173, 20);
             this.Textbox_NPCName.TabIndex = 4;
             this.Textbox_NPCName.Tag = "NPCNAME";
             this.Textbox_NPCName.TextChanged += new System.EventHandler(this.Textbox_NPCName_TextChanged);
@@ -498,7 +498,7 @@
             // Checkbox_EnvColor
             // 
             this.Checkbox_EnvColor.AutoSize = true;
-            this.Checkbox_EnvColor.Location = new System.Drawing.Point(275, 115);
+            this.Checkbox_EnvColor.Location = new System.Drawing.Point(316, 116);
             this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
             this.Checkbox_EnvColor.Size = new System.Drawing.Size(114, 17);
             this.Checkbox_EnvColor.TabIndex = 50;
@@ -510,7 +510,7 @@
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
-            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(407, 111);
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(448, 112);
             this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
             this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(42, 23);
             this.Button_EnvironmentColorPreview.TabIndex = 49;
@@ -526,7 +526,7 @@
             0,
             0});
             this.NumUpDown_ObjectID.Name = "NumUpDown_ObjectID";
-            this.NumUpDown_ObjectID.Size = new System.Drawing.Size(115, 20);
+            this.NumUpDown_ObjectID.Size = new System.Drawing.Size(173, 20);
             this.NumUpDown_ObjectID.TabIndex = 5;
             this.NumUpDown_ObjectID.Tag = "OBJID";
             this.NumUpDown_ObjectID.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
@@ -542,7 +542,7 @@
             // 
             // NumUpDown_ZModelOffs
             // 
-            this.NumUpDown_ZModelOffs.Location = new System.Drawing.Point(395, 36);
+            this.NumUpDown_ZModelOffs.Location = new System.Drawing.Point(436, 37);
             this.NumUpDown_ZModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -578,14 +578,14 @@
             0,
             0});
             this.NumUpDown_Hierarchy.Name = "NumUpDown_Hierarchy";
-            this.NumUpDown_Hierarchy.Size = new System.Drawing.Size(115, 20);
+            this.NumUpDown_Hierarchy.Size = new System.Drawing.Size(173, 20);
             this.NumUpDown_Hierarchy.TabIndex = 8;
             this.NumUpDown_Hierarchy.Tag = "HIERARCHY";
             this.NumUpDown_Hierarchy.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_YModelOffs
             // 
-            this.NumUpDown_YModelOffs.Location = new System.Drawing.Point(335, 36);
+            this.NumUpDown_YModelOffs.Location = new System.Drawing.Point(376, 37);
             this.NumUpDown_YModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -673,7 +673,7 @@
             // 
             // NumUpDown_XModelOffs
             // 
-            this.NumUpDown_XModelOffs.Location = new System.Drawing.Point(275, 36);
+            this.NumUpDown_XModelOffs.Location = new System.Drawing.Point(316, 37);
             this.NumUpDown_XModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -700,7 +700,7 @@
             "Weighted (Horses)"});
             this.ComboBox_HierarchyType.Location = new System.Drawing.Point(134, 86);
             this.ComboBox_HierarchyType.Name = "ComboBox_HierarchyType";
-            this.ComboBox_HierarchyType.Size = new System.Drawing.Size(115, 21);
+            this.ComboBox_HierarchyType.Size = new System.Drawing.Size(173, 21);
             this.ComboBox_HierarchyType.TabIndex = 11;
             this.ComboBox_HierarchyType.Tag = "HIERARCHYTYPE";
             this.ComboBox_HierarchyType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
@@ -708,7 +708,7 @@
             // Label_ModelDrawOffs
             // 
             this.Label_ModelDrawOffs.AutoSize = true;
-            this.Label_ModelDrawOffs.Location = new System.Drawing.Point(272, 11);
+            this.Label_ModelDrawOffs.Location = new System.Drawing.Point(313, 12);
             this.Label_ModelDrawOffs.Name = "Label_ModelDrawOffs";
             this.Label_ModelDrawOffs.Size = new System.Drawing.Size(94, 13);
             this.Label_ModelDrawOffs.TabIndex = 35;
@@ -733,7 +733,7 @@
             "Link"});
             this.ComboBox_AnimType.Location = new System.Drawing.Point(134, 113);
             this.ComboBox_AnimType.Name = "ComboBox_AnimType";
-            this.ComboBox_AnimType.Size = new System.Drawing.Size(115, 21);
+            this.ComboBox_AnimType.Size = new System.Drawing.Size(173, 21);
             this.ComboBox_AnimType.TabIndex = 13;
             this.ComboBox_AnimType.Tag = "ANIMTYPE";
             this.ComboBox_AnimType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_AnimType_SelectedIndexChanged);
@@ -751,7 +751,7 @@
             // Label_Scale
             // 
             this.Label_Scale.AutoSize = true;
-            this.Label_Scale.Location = new System.Drawing.Point(272, 62);
+            this.Label_Scale.Location = new System.Drawing.Point(313, 63);
             this.Label_Scale.Name = "Label_Scale";
             this.Label_Scale.Size = new System.Drawing.Size(37, 13);
             this.Label_Scale.TabIndex = 16;
@@ -765,7 +765,7 @@
             0,
             0,
             131072});
-            this.NumUpDown_Scale.Location = new System.Drawing.Point(275, 86);
+            this.NumUpDown_Scale.Location = new System.Drawing.Point(316, 87);
             this.NumUpDown_Scale.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2584,6 +2584,7 @@
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(4, 4);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -2658,6 +2659,7 @@
             this.Textbox_Script2.CharWidth = 8;
             this.Textbox_Script2.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script2.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script2.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script2.IsReplaceMode = false;
             this.Textbox_Script2.Location = new System.Drawing.Point(4, 4);
             this.Textbox_Script2.Name = "Textbox_Script2";
