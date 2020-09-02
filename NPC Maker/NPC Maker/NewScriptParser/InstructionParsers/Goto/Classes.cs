@@ -28,6 +28,11 @@ namespace NPC_Maker.NewScriptParser
 
             return Data.ToArray();
         }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + " " + Goto;
+        }
     }
 }
 

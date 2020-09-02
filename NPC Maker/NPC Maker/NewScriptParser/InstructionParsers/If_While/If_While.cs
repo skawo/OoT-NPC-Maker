@@ -10,6 +10,8 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
+                string LabelR = ParserHelpers.RandomString(this, 5);
+
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
                 int SubID = (int)System.Enum.Parse(typeof(Lists.IfSubTypes), SplitLine[1].ToUpper());
 
@@ -30,18 +32,18 @@ namespace NPC_Maker.NewScriptParser
                         Else = EndIf;
 
                     #region true
-                    True.Add(new InstructionLabel("__IFTRUE__" + LineNo.ToString()));
+                    True.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                     True.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
-                    True.Add(new InstructionGoto("__IFEND__" + LineNo.ToString()));
+                    True.Add(new InstructionGoto("__IFEND__" + LabelR));
                     #endregion
 
                     #region false
-                    False.Add(new InstructionLabel("__IFFALSE__" + LineNo.ToString()));
+                    False.Add(new InstructionLabel("__IFFALSE__" + LabelR));
 
                     if (Else != EndIf)
                         False.AddRange(GetInstructions(Lines.Skip(Else + 1).Take(EndIf - Else - 1).ToList()));
 
-                    False.Add(new InstructionLabel("__IFEND__" + LineNo.ToString()));
+                    False.Add(new InstructionLabel("__IFEND__" + LabelR));
                     #endregion
 
                 }
@@ -54,10 +56,10 @@ namespace NPC_Maker.NewScriptParser
 
                     Else = EndIf;
 
-                    True.Add(new InstructionLabel("__WHILE__" + LineNo.ToString()));
+                    True.Add(new InstructionLabel("__WHILE__" + LabelR));
                     True.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
                     True.Add(new InstructionGoto("__RETURN__"));
-                    True.Add(new InstructionGoto("__WHILE__" + LineNo.ToString()));
+                    True.Add(new InstructionGoto("__WHILE__" + LabelR));
 
                     False = new List<Instruction>();
                 }
@@ -72,7 +74,7 @@ namespace NPC_Maker.NewScriptParser
                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
                         UInt16 FlagID = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
 
-                        return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, FlagID, byte.MaxValue, EndIf, Else, LineNo, True, False);
+                        return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, FlagID, byte.MaxValue, EndIf, Else, LabelR, True, False);
                     }
                     // Bool Types
                     if (SubID <= 29)
@@ -88,7 +90,7 @@ namespace NPC_Maker.NewScriptParser
 
                         #endregion
 
-                        return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 0, Condition, EndIf, Else, LineNo, True, False);
+                        return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 0, Condition, EndIf, Else, LabelR, True, False);
                     }
                     // UInt16 Types
                     if (SubID <= 59)
@@ -114,7 +116,7 @@ namespace NPC_Maker.NewScriptParser
                             Value = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 
                                                                                          VarType == (int)Lists.VarTypes.RNG ? 4 : 3, 0, UInt16.MaxValue));
 
-                        return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LineNo, True, False);
+                        return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR, True, False);
                     }
                     // Special
                     else
@@ -134,7 +136,7 @@ namespace NPC_Maker.NewScriptParser
 
                                     #endregion
 
-                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Item), 0, EndIf, Else, LineNo, True, False);
+                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Item), 0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.TRADE_STATUS:
                                 {
@@ -149,7 +151,7 @@ namespace NPC_Maker.NewScriptParser
 
                                     #endregion
 
-                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Status), 0, EndIf, Else, LineNo, True, False);
+                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Status), 0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_MASK:
                                 {
@@ -164,7 +166,7 @@ namespace NPC_Maker.NewScriptParser
 
                                     #endregion
 
-                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Mask), 0, EndIf, Else, LineNo, True,  False);
+                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Mask), 0, EndIf, Else, LabelR, True,  False);
                                 }
                             case (int)Lists.IfSubTypes.TIME_OF_DAY:
                                 {
@@ -202,7 +204,7 @@ namespace NPC_Maker.NewScriptParser
                                         Time = Convert.ToUInt16(((Hour * 60) + Min) * (Int16.MaxValue / 1440));
                                     }
 
-                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Time, Condition, EndIf, Else, LineNo, True, False);
+                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Time, Condition, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.CURRENT_ANIMATION:
                                 {
@@ -217,49 +219,49 @@ namespace NPC_Maker.NewScriptParser
 
                                     #endregion
 
-                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(AnimationID), 0, EndIf, Else, LineNo, True, False);
+                                    return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(AnimationID), 0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_BOMBBAG:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 
                                                                   H_InventoryInstruction(SplitLine, typeof(Lists.BombBags), ParseException.UnrecognizedBombBag(SplitLine)), 
-                                                                  0, EndIf, Else, LineNo, True, False);
+                                                                  0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_QUIVER:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
                                                                   H_InventoryInstruction(SplitLine, typeof(Lists.Quivers), ParseException.UnrecognizedQuiver(SplitLine)),
-                                                                  0, EndIf, Else, LineNo, True, False);
+                                                                  0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_WALLET:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
                                                                   H_InventoryInstruction(SplitLine, typeof(Lists.Wallets), ParseException.UnrecognizedWallet(SplitLine)),
-                                                                  0, EndIf, Else, LineNo, True, False);
+                                                                  0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_DEKUNUTCAP:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
                                                                   H_InventoryInstruction(SplitLine, typeof(Lists.NutCap), ParseException.UnrecognizedDekuNutCap(SplitLine)),
-                                                                  0, EndIf, Else, LineNo, True, False);
+                                                                  0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_STICKCAP:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
                                                                   H_InventoryInstruction(SplitLine, typeof(Lists.StickCap), ParseException.UnrecognizedStickCap(SplitLine)),
-                                                                  0, EndIf, Else, LineNo, True, False);
+                                                                  0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_WATER_SCALE:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
                                                                   H_InventoryInstruction(SplitLine, typeof(Lists.Scales), ParseException.UnrecognizedScale(SplitLine)),
-                                                                  0, EndIf, Else, LineNo, True, False);
+                                                                  0, EndIf, Else, LabelR, True, False);
                                 }
                             case (int)Lists.IfSubTypes.PLAYER_GAUNTLETS:
                                 {
                                     return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0,
                                                                   H_InventoryInstruction(SplitLine, typeof(Lists.Gauntlets), ParseException.UnrecognizedGauntlets(SplitLine)),
-                                                                  0, EndIf, Else, LineNo, True, False);
+                                                                  0, EndIf, Else, LabelR, True, False);
                                 }
                             default:
                                 throw new Exception();
@@ -269,7 +271,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionIfWhile((byte)ID, 0, 0, 0, 0, EndIf, Else, LineNo, new List<Instruction>(), new List<Instruction>());
+                    return new InstructionIfWhile((byte)ID, 0, 0, 0, 0, EndIf, Else, LabelR, new List<Instruction>(), new List<Instruction>());
                 }
             }
             catch (ParseException pEx)

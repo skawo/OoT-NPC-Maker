@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using NPC_Maker.Windows;
 
 namespace NPC_Maker
 {
@@ -254,12 +255,7 @@ namespace NPC_Maker
             else
             {
                 foreach (string Error in SelectedEntry.ParseErrors)
-                {
                     Textbox_ParseErrors.Text += Error + Environment.NewLine;
-                    string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
-                    Line = Line.Substring(1, Line.Length - 2);
-                    FCTB.ApplyError(Textbox_Script, Line);
-                }
             }
 
             Textbox_ParseErrors2.Text = "";
@@ -271,9 +267,6 @@ namespace NPC_Maker
                 foreach (string Error in SelectedEntry.ParseErrors2)
                 {
                     Textbox_ParseErrors2.Text += Error + Environment.NewLine;
-                    string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
-                    Line = Line.Substring(1, Line.Length - 2);
-                    FCTB.ApplyError(Textbox_Script2, Line);
                 }
             }
 
@@ -1132,7 +1125,7 @@ namespace NPC_Maker
 
         private void Button_TryParse_Click(object sender, EventArgs e)
         {
-            string[] Lines = Textbox_Script.Text.Split(new[] { "\n" }, StringSplitOptions.None);
+            string[] Lines = Textbox_Script.Text.Replace(";", Environment.NewLine).Split(new[] { "\n" }, StringSplitOptions.None);
             Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
             r.ClearStyle(FCTB.ErrorStyle);
 
@@ -1142,6 +1135,15 @@ namespace NPC_Maker
 
             NewScriptParser.BScript Output = Parser.ParseScript();
 
+#if DEBUG
+
+            Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
+            Dbg.Show();
+
+#endif
+
+
+
             if (Output.ParseErrors.Count() == 0)
                 Textbox_ParseErrors.Text = "Parsed successfully!";
             else
@@ -1149,7 +1151,6 @@ namespace NPC_Maker
                 foreach (NewScriptParser.ParseException Error in Output.ParseErrors)
                 {
                     Textbox_ParseErrors.Text += Error.ToString() + Environment.NewLine;
-                    FCTB.ApplyError(Textbox_Script, Error.Line);
                 }
             }
         }
@@ -1311,12 +1312,7 @@ namespace NPC_Maker
             else
             {
                 foreach (string Error in Parser.ParseErrors)
-                {
                     Textbox_ParseErrors2.Text += Error + Environment.NewLine;
-                    string Line = Error.Substring(Error.IndexOf("Line: ") + 6);
-                    Line = Line.Substring(1, Line.Length - 2);
-                    FCTB.ApplyError(Textbox_Script2, Line);
-                }
             }
 
             Textbox_Script2.Focus();

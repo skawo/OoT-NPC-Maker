@@ -13,6 +13,7 @@ namespace NPC_Maker.NewScriptParser
     {
         private readonly string ScriptText;
         private readonly NPCEntry Entry;
+        public List<string> RandomLabels { get; set; }
         private BScript outScript;
 
         public ScriptParser(NPCEntry _Entry, string _ScriptText)
@@ -33,6 +34,7 @@ namespace NPC_Maker.NewScriptParser
         public BScript ParseScript()
         {
             outScript = new BScript();
+            RandomLabels = new List<string>();
 
             if (ScriptText.Trim() == "")
                 return outScript;
@@ -48,6 +50,8 @@ namespace NPC_Maker.NewScriptParser
             Lines = ReplaceDefines(Lines);
             CheckLabels(Lines);
             List<Instruction> Instructions = GetInstructions(Lines);
+
+            outScript.ScriptDebug = GetOutString(Instructions);
 
             return outScript;
         }
@@ -101,6 +105,40 @@ namespace NPC_Maker.NewScriptParser
                 }
             }
         }
+
+
+        private List<string> GetOutString(List<Instruction> Instructions)
+        {
+            List<string> Out = new List<string>();
+
+            foreach (Instruction Int in Instructions)
+            {
+                switch (Int.ID)
+                {
+                    case (int)Lists.Instructions.IF:
+                        {
+                            InstructionIfWhile IfInstr = (InstructionIfWhile)Int;
+
+                            Out.Add(IfInstr.ToString());
+                            Out.AddRange(GetOutString(IfInstr.True));
+                            Out.AddRange(GetOutString(IfInstr.False));
+                            break;
+                        }
+                    case (int)Lists.Instructions.WHILE:
+                        {
+                            InstructionIfWhile IfInstr = (InstructionIfWhile)Int;
+
+                            Out.Add(IfInstr.ToString());
+                            Out.AddRange(GetOutString(IfInstr.True));
+                            break;
+                        }
+                    default: Out.Add(Int.ToString()); break;
+                }
+            }
+
+            return Out;
+        }
+        
 
         private List<Instruction> GetInstructions(List<string> Lines)
         {

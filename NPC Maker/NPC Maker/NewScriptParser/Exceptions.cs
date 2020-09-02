@@ -11,7 +11,7 @@ namespace NPC_Maker.NewScriptParser
 
         public ParseException(string _Message, string _Line) : base(_Message)
         {
-            Line = _Line;
+            Line = _Line.Trim();
         }
 
         public override string ToString()

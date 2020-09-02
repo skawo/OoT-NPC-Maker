@@ -22,6 +22,11 @@ namespace NPC_Maker.NewScriptParser
 
             return Data.ToArray();
         }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString();
+        }
     }
 
     public class InstructionSub : Instruction
@@ -42,6 +47,11 @@ namespace NPC_Maker.NewScriptParser
 
             return Data.ToArray();
         }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + SubID.ToString();
+        }
     }
 
     public class InstructionLabel : Instruction
@@ -52,6 +62,11 @@ namespace NPC_Maker.NewScriptParser
         public InstructionLabel(string _Name) : base((int)Lists.Instructions.LABEL)
         {
             Name = _Name;
+        }
+
+        public override string ToString()
+        {
+            return Name + ":";
         }
     }
 

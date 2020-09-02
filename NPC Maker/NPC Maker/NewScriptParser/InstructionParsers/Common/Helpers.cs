@@ -59,5 +59,24 @@ namespace NPC_Maker.NewScriptParser
             while (ByteList.Count % 4 != 0)
                 ByteList.Add(0);
         }
+
+        public static string RandomString(ScriptParser Prs, int length)
+        {
+            Random random = new Random();
+
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            string Out = "";
+
+            do
+            {
+                Out = new string(Enumerable.Repeat(chars, length)
+                            .Select(s => s[random.Next(s.Length)]).ToArray());
+            }
+            while (Prs.RandomLabels.Contains(Out));
+
+            Prs.RandomLabels.Add(Out);
+            return Out;
+        }
     }
 }

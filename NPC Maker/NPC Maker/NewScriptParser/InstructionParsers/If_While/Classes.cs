@@ -18,7 +18,7 @@ namespace NPC_Maker.NewScriptParser
         public InstructionLabel GotoFalse;
 
         public InstructionIfWhile(byte _ID, byte _SubID, byte _ValueType, object _Value, byte _Condition,
-                             int _EndIfLineNo, int _ElseLineNo, int _CurrentLineNo, List<Instruction> _True, List<Instruction> _False) 
+                             int _EndIfLineNo, int _ElseLineNo, string LabelStr, List<Instruction> _True, List<Instruction> _False) 
                              : base(_ID, _SubID, _ValueType)
         {
             Condition = _Condition;
@@ -28,8 +28,8 @@ namespace NPC_Maker.NewScriptParser
             ElseLineNo = _ElseLineNo;
             EndIfLineNo = _EndIfLineNo;
             ValueType = _ValueType;
-            GotoTrue = new InstructionLabel("__IFTRUE__" + _CurrentLineNo.ToString());
-            GotoFalse = new InstructionLabel("__IFFALSE__" + _CurrentLineNo.ToString());
+            GotoTrue = new InstructionLabel("__IFTRUE__" + LabelStr);
+            GotoFalse = new InstructionLabel("__IFFALSE__" + LabelStr);
         }
 
         public override byte[] ToBytes()
@@ -46,6 +46,11 @@ namespace NPC_Maker.NewScriptParser
             ParserHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + SubID.ToString() + " " + GotoTrue.ToString() + " " + GotoFalse.ToString();
         }
     }
 

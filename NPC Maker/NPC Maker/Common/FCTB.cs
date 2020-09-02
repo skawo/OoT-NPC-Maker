@@ -104,26 +104,5 @@ namespace NPC_Maker
             return Labels;
         }
 
-        public static void ApplyError(FastColoredTextBox tb, string Line)
-        {
-            string[] Lines = tb.Text.Split(new[] { "\n" }, StringSplitOptions.None);
-
-            for (int i = 0; i < Lines.Count(); i++)
-            {
-                if (Lines[i].Trim() == Line.Trim())
-                {
-                    Range r = new Range(tb, 0, i, Lines[i].Length, i);
-                    r.ClearStyle(FCTB.ErrorStyle);
-                    r.ClearStyle(FCTB.GreenStyle);
-                    r.ClearStyle(FCTB.BrownStyle);
-                    r.ClearStyle(FCTB.BlueStyle);
-                    r.ClearStyle(FCTB.PurpleStyle);
-                    r.ClearStyle(FCTB.GrayStyle);
-                    r.ClearStyle(FCTB.DarkGrayStyle);
-                    r.SetStyle(FCTB.ErrorStyle, ".*", RegexOptions.Multiline);
-                }
-            }
-        }
-
     }
 }
