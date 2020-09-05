@@ -5,15 +5,15 @@ using System.Text;
 
 namespace NPC_Maker.NewScriptParser
 {
-    public class InstructionPlay : InstructionSub
+    public class InstructionChangeScript : InstructionSub
     {
-        public object Value;
-        public byte ValueType;
+        public UInt16 NPCID;
+        public InstructionLabel Start;
 
-        public InstructionPlay(byte _SubID, object _Value, byte _ValueType) : base((int)Lists.Instructions.PLAY, _SubID)
+        public InstructionChangeScript(Byte SubID, UInt16 _NPCID, string Label) : base((byte)Lists.Instructions.CHANGE_SCRIPT, SubID)
         {
-            Value = _Value;
-            ValueType = _ValueType;
+            NPCID = _NPCID;
+            Start = new InstructionLabel(Label);
         }
 
         public override byte[] ToBytes()
@@ -22,8 +22,8 @@ namespace NPC_Maker.NewScriptParser
 
             ParserHelpers.AddObjectToByteList(ID, Data);
             ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(ValueType, Data);
-            ParserHelpers.AddObjectToByteList(Value, Data);
+            ParserHelpers.AddObjectToByteList(NPCID, Data);
+            ParserHelpers.AddObjectToByteList(Start.InstructionNumber, Data);
             ParserHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();

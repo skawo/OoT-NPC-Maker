@@ -22,7 +22,7 @@ namespace NPC_Maker.NewScriptParser
                 TextID_Adult = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
                 TextID_Child = (SplitLine.Count() == 2) ? TextID_Adult : Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
 
-                return new InstructionTextbox((int)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child);
+                return new InstructionTextbox((int)Lists.Instructions.SHOW_TEXTBOX, TextID_Adult, TextID_Child);
             }
             catch (ParseException pEx)
             {

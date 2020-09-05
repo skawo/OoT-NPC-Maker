@@ -18,6 +18,7 @@ namespace NPC_Maker.NewScriptParser
         public const string Keyword_End = "END";
         public const string Keyword_EndIf = "ENDIF";
         public const string Keyword_EndWhile = "ENDWHILE";
+        public const string Keyword_EndTalk = "ENDTALK";
         public const string Keyword_Else = "ELSE";
         public const string Keyword_ScriptVar1 = "VAR_1";
         public const string Keyword_ScriptVar2 = "VAR_2";
@@ -36,6 +37,7 @@ namespace NPC_Maker.NewScriptParser
             Keyword_End,
             Keyword_EndIf,
             Keyword_EndWhile,
+            Keyword_EndTalk,
             Keyword_ScriptVar1,
             Keyword_ScriptVar2,
             Keyword_ScriptVar3,
@@ -70,6 +72,7 @@ namespace NPC_Maker.NewScriptParser
             CHANGE_SCRIPT = 12,
             RNG = 13,
             WHILE = 14,
+            TALK = 15,
             RETURN = 252,
             GOTO = 253,
             LABEL = 254,
@@ -90,17 +93,14 @@ namespace NPC_Maker.NewScriptParser
 
             /* bools */
             LINK_IS_ADULT = 10,
-            LINK_IS_CHILD = 11,
-            IS_CURRENTLY_DAY = 12,
-            IS_CURRENTLY_NIGHT = 13,
-            IS_CURRENTLY_TALKING = 14,
-            PLAYER_HAS_EMPTY_BOTTLE = 15,
-            CUTSCENE_IS_BEING_PLAYED = 16,
-            TEXTBOX_IS_ON_SCREEN = 17,
-            NO_TEXTBOX_ON_SCREEN = 18,
-            CURRENT_ANIM_IS_WALKING = 19,
-            CURRENT_ANIM_IS_IDLE = 20,
-            PLAYER_HAS_MAGIC = 21,
+            CURRENTLY_DAY = 11,
+            CURRENTLY_TALKING = 12,
+            PLAYER_HAS_EMPTY_BOTTLE = 13,
+            CUTSCENE_BEING_PLAYED = 14,
+            TEXTBOX_ON_SCREEN = 15,
+            CURRENT_ANIM_WALKING = 16,
+            CURRENT_ANIM_IDLE = 17,
+            PLAYER_HAS_MAGIC = 18,
 
             /* s16s */
             PLAYER_RUPEES = 30,
@@ -114,14 +114,13 @@ namespace NPC_Maker.NewScriptParser
             VAR_3 = 38,
             VAR_4 = 39,
             VAR_5 = 40,
-            CURRENT_HEALTH = 41,
-            CURRENT_MAGIC = 42,
-            PLAYER_BOMBS = 31,
-            PLAYER_BOMBCHUS = 32,
-            PLAYER_ARROWS = 33,
-            PLAYER_HEALTH = 34,
-            PLAYER_DEKUSTICKS = 35,
-            PLAYER_DEKUNUTS = 36,
+            PLAYER_HEALTH = 41,
+            PLAYER_MAGIC = 42,
+            PLAYER_BOMBS = 43,
+            PLAYER_BOMBCHUS = 44,
+            PLAYER_ARROWS = 45,
+            PLAYER_DEKUSTICKS = 46,
+            PLAYER_DEKUNUTS = 47,
 
             /* special */
             ITEM_BEING_TRADED = 61,
@@ -192,8 +191,7 @@ namespace NPC_Maker.NewScriptParser
             IS_ALWAYS_ACTIVE = 184,
             PAUSE_CUTSCENE = 185,
             IS_ALWAYS_DRAWN = 186,
-            NO_TEXTBOX_ON_SCREEN = 187,
-            PLAYER_HAS_DEFENSE_UPGRADE = 188,
+            PLAYER_HAS_DEFENSE_UPGRADE = 187,
 
             /* u8s */
             TARGET_LIMB = 195,
@@ -435,6 +433,20 @@ namespace NPC_Maker.NewScriptParser
             PLAYER = 1,
             CONFIG_ID = 2,
             ACTOR_ID = 3,
+        }
+
+        public enum KillSubtypes
+        {
+            SELF = 0,
+            PLAYER = 1,
+            CONFIG_ID = 2,
+            ACTOR_ID = 3,
+        }
+
+        public enum ScriptChangeSubtypes
+        {
+            OVERWRITE = 0,
+            RESTORE = 1,
         }
     }
 }

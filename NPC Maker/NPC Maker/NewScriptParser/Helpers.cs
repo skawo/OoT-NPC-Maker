@@ -37,8 +37,8 @@ namespace NPC_Maker.NewScriptParser
         {
             switch (Condition.ToUpper())
             {
-                case Lists.Keyword_True: return 0;
-                case Lists.Keyword_False: return 1;
+                case Lists.Keyword_True: return 1;
+                case Lists.Keyword_False: return 0;
                 default: return byte.MaxValue;
             }
         }

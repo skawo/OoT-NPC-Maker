@@ -102,6 +102,7 @@
     <Compile Include="NewScriptParser\InstructionParsers\Await\Classes.cs" />
     <Compile Include="NewScriptParser\Exceptions.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Common\Helpers.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Talk\Talk.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Enable_Trading\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Enable_Trading\Enable_Trading.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Enable_Talking\Classes.cs" />

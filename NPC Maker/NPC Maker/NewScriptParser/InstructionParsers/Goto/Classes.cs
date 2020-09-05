@@ -8,22 +8,20 @@ namespace NPC_Maker.NewScriptParser
     public class InstructionGoto : Instruction
     {
         public string Goto = "";
-        public UInt16 InstrNumber = 0;
+        public InstructionLabel GotoInstr;
 
         public InstructionGoto(string Label) : base((int)Lists.Instructions.GOTO)
         {
             Goto = Label;
+            GotoInstr = new InstructionLabel(Label);
         }
 
         public override byte[] ToBytes()
         {
-            List<byte> Data = new List<byte>
-            {
-                ID
-            };
+            List<byte> Data = new List<byte>();
 
             ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(InstrNumber, Data);
+            ParserHelpers.AddObjectToByteList(GotoInstr.InstructionNumber, Data);
             ParserHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();

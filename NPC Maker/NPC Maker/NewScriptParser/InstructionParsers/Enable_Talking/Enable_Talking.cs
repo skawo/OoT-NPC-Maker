@@ -16,9 +16,6 @@ namespace NPC_Maker.NewScriptParser
                 UInt16 TextID_Adult = 0;
                 UInt16 TextID_Child = 0;
 
-                if (SplitLine.Count() == 2)
-                    TextID_Child = TextID_Adult;
-
                 TextID_Adult = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
                 TextID_Child = (SplitLine.Count() == 2) ? TextID_Adult : Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
 

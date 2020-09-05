@@ -5,15 +5,13 @@ using System.Text;
 
 namespace NPC_Maker.NewScriptParser
 {
-    public class InstructionTextbox : Instruction
+    public class InstructionWarp : Instruction
     {
-        public UInt16 AdultText;
-        public UInt16 ChildText;
+        public UInt16 WarpID;
 
-        public InstructionTextbox(byte _ID, UInt16 Adult, UInt16 Child) : base(_ID)
+        public InstructionWarp(UInt16 _WarpID) : base((byte)Lists.Instructions.WARP)
         {
-            AdultText = Adult;
-            ChildText = Child;
+            WarpID = _WarpID;
         }
 
         public override byte[] ToBytes()
@@ -21,8 +19,7 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(AdultText, Data);
-            ParserHelpers.AddObjectToByteList(ChildText, Data);
+            ParserHelpers.AddObjectToByteList(WarpID, Data);
             ParserHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();

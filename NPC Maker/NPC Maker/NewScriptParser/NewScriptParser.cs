@@ -112,29 +112,7 @@ namespace NPC_Maker.NewScriptParser
             List<string> Out = new List<string>();
 
             foreach (Instruction Int in Instructions)
-            {
-                switch (Int.ID)
-                {
-                    case (int)Lists.Instructions.IF:
-                        {
-                            InstructionIfWhile IfInstr = (InstructionIfWhile)Int;
-
-                            Out.Add(IfInstr.ToString());
-                            Out.AddRange(GetOutString(IfInstr.True));
-                            Out.AddRange(GetOutString(IfInstr.False));
-                            break;
-                        }
-                    case (int)Lists.Instructions.WHILE:
-                        {
-                            InstructionIfWhile IfInstr = (InstructionIfWhile)Int;
-
-                            Out.Add(IfInstr.ToString());
-                            Out.AddRange(GetOutString(IfInstr.True));
-                            break;
-                        }
-                    default: Out.Add(Int.ToString()); break;
-                }
-            }
+                Out.Add(Int.ToString());
 
             return Out;
         }
@@ -163,13 +141,14 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.IF:
                         case (int)Lists.Instructions.WHILE:
                             {
-                                Instruction Instr = ParseIfWhileInstruction(InstructionID, Lines, SplitLine, i);
-
-                                // May return a generic nopped instruction if an unhandled error occurs
-                                if ((Instr.ID == (int)Lists.Instructions.IF) || (Instr.ID == (int)Lists.Instructions.WHILE))
-                                    i = (Instr as InstructionIfWhile).EndIfLineNo;
-
-                                Instructions.Add(Instr);
+                                List<Instruction> Instr = ParseIfWhileInstruction(InstructionID, Lines, SplitLine, ref i);
+                                Instructions.AddRange(Instr);
+                                break;
+                            }
+                        case (int)Lists.Instructions.TALK:
+                            {
+                                List<Instruction> Instr = ParseTalkInstruction(Lines, SplitLine, ref i);
+                                Instructions.AddRange(Instr);
                                 break;
                             }
                         case (int)Lists.Instructions.NOP: Instructions.Add(ParseNopInstruction(SplitLine)); break;
@@ -179,6 +158,9 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.ENABLE_TALKING: Instructions.Add(ParseEnableTalkingInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.PLAY: Instructions.Add(ParsePlayInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.GOTO: Instructions.Add(ParseGotoInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.WARP: Instructions.Add(ParseWarpInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.KILL: Instructions.Add(ParseKillInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.CHANGE_SCRIPT: Instructions.Add(ParseChangeScriptInstruction(SplitLine)); break;
 
                         case (int)Lists.Instructions.RETURN:
                             {
