@@ -20,13 +20,13 @@ namespace NPC_Maker.NewScriptParser
 
                 switch (SetSubType)
                 {
-                    case (int)Lists.KillSubtypes.CONFIG_ID):
+                    case (int)Lists.KillSubtypes.CONFIG_ID:
                     {
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
                         ActorNum = (UInt16)ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue);
                         break;
                     }
-                    case (int)Lists.KillSubtypes.ACTOR_ID):
+                    case (int)Lists.KillSubtypes.ACTOR_ID:
                     {
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
                         ActorNum = (UInt16)ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue);
