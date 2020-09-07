@@ -7,8 +7,9 @@ namespace NPC_Maker.NewScriptParser
 {
     public static class Lists
     {
-        public static Dictionary<string, int> SFXes = FileOps.GetSoundDictionary("SFX.csv");
-        public static Dictionary<string, int> Music = FileOps.GetSoundDictionary("Music.csv");
+        public static Dictionary<string, int> SFXes = FileOps.GetDictionary("SFX.csv");
+        public static Dictionary<string, int> Music = FileOps.GetDictionary("Music.csv");
+        public static Dictionary<string, int> Actors = FileOps.GetDictionary("Actors.csv");
 
         public const string Keyword_True = "TRUE";
         public const string Keyword_False = "FALSE";
@@ -18,6 +19,7 @@ namespace NPC_Maker.NewScriptParser
         public const string Keyword_End = "END";
         public const string Keyword_EndIf = "ENDIF";
         public const string Keyword_EndWhile = "ENDWHILE";
+        public const string Keyword_EndSpawn = "ENDSPAWN";
         public const string Keyword_EndTalk = "ENDTALK";
         public const string Keyword_Else = "ELSE";
         public const string Keyword_ScriptVar1 = "VAR_1";
@@ -38,6 +40,7 @@ namespace NPC_Maker.NewScriptParser
             Keyword_EndIf,
             Keyword_EndWhile,
             Keyword_EndTalk,
+            Keyword_EndSpawn,
             Keyword_ScriptVar1,
             Keyword_ScriptVar2,
             Keyword_ScriptVar3,
@@ -64,15 +67,14 @@ namespace NPC_Maker.NewScriptParser
             ENABLE_TALKING = 4,
             ENABLE_TRADING = 5,
             SHOW_TEXTBOX = 6,
-            INVENTORY = 7,
+            INVENTORY = 7,  // !
             PLAY = 8,
             KILL = 9,
-            SPAWN = 10,
+            SPAWN = 10,  // !
             WARP = 11,
             CHANGE_SCRIPT = 12,
-            RNG = 13,
-            WHILE = 14,
-            TALK = 15,
+            WHILE = 13,
+            TALK = 14,
             RETURN = 252,
             GOTO = 253,
             LABEL = 254,
@@ -261,6 +263,20 @@ namespace NPC_Maker.NewScriptParser
             VAR_3 = 77,
             VAR_4 = 78,
             VAR_5 = 79,
+        }
+
+        public enum SpawnParams
+        {
+            ACTOR_ID,
+            POSITION,
+            ROTATION,
+            VARIABLE,
+        }
+
+        public enum SpawnPosParams
+        {
+            RELATIVE = 1,
+            ABSOLUTE = 0,
         }
 
         public enum TradeItems

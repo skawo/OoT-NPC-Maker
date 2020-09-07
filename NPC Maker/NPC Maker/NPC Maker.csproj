@@ -104,6 +104,8 @@
     <Compile Include="NewScriptParser\InstructionParsers\Common\Helpers.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\ChangeScript\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\ChangeScript\ChangeScript.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Spawn\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Spawn\Spawn.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Warp\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Warp\Warp.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\KIll\Classes.cs" />
@@ -167,11 +169,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Common\ScriptParser.cs" />
-    <Compile Include="Windows\SoundList.cs">
+    <Compile Include="Windows\PickableList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Windows\SoundList.Designer.cs">
-      <DependentUpon>SoundList.cs</DependentUpon>
+    <Compile Include="Windows\PickableList.Designer.cs">
+      <DependentUpon>PickableList.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Windows\About.resx">
       <DependentUpon>About.cs</DependentUpon>
@@ -187,9 +189,12 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Windows\SoundList.resx">
-      <DependentUpon>SoundList.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\PickableList.resx">
+      <DependentUpon>PickableList.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Actors.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Music.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

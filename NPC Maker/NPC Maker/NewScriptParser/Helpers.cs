@@ -62,7 +62,7 @@ namespace NPC_Maker.NewScriptParser
 
         public static byte GetVariable(string Variable)
         {
-            switch (Variable)
+            switch (Variable.ToUpper())
             {
                 case Lists.Keyword_RNG: return (int)Lists.VarTypes.RNG;
                 case Lists.Keyword_ScriptVar1: return (int)Lists.VarTypes.Var1;
@@ -144,6 +144,18 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 return (UInt32?)Lists.Music[MusicName.ToUpper()];
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public static UInt32? Helper_GetActorId(string ActorName)
+        {
+            try
+            {
+                return (UInt32?)Lists.Actors[ActorName.ToUpper()];
             }
             catch (Exception)
             {

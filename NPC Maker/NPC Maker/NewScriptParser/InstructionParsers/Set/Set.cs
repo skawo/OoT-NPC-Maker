@@ -350,7 +350,7 @@ namespace NPC_Maker.NewScriptParser
                             case (int)Lists.SetSubTypes.VAR_4:
                             case (int)Lists.SetSubTypes.VAR_5:
                                 {
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
                                     byte Operator = 0;
 
@@ -407,7 +407,7 @@ namespace NPC_Maker.NewScriptParser
                 else if (ConvertType == typeof(float))
                     Data = Convert.ToDecimal(SplitLine[VarType == (int)Lists.VarTypes.RNG ? 3 : 2]);
                 else
-                    Data = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine,
+                    Data = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine,
                                                                                 VarType == (int)Lists.VarTypes.RNG ? 3 : 2,
                                                                                 Min, Max));
 

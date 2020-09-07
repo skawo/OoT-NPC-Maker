@@ -11,8 +11,9 @@ namespace NPC_Maker
     public static class Lists
     {
 
-        public static Dictionary<string, int> SFXes = FileOps.GetSoundDictionary("SFX.csv");
-        public static Dictionary<string, int> Music = FileOps.GetSoundDictionary("Music.csv");
+        public static Dictionary<string, int> SFXes = FileOps.GetDictionary("SFX.csv");
+        public static Dictionary<string, int> Music = FileOps.GetDictionary("Music.csv");
+        public static Dictionary<string, int> Actors = FileOps.GetDictionary("Actors.csv");
 
         public static Dictionary<string, string[]> FunctionSubtypes = new Dictionary<string, string[]>()
         {

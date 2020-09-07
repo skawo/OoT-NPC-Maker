@@ -24,6 +24,9 @@ namespace NPC_Maker.NewScriptParser
 
                 int End = GetCorrespondingEndTalking(Lines, LineNo);
 
+                if (End == -1)
+                    throw ParseException.TalkNotClosed(SplitLine);
+
                 Instructions.Add(new InstructionTextbox((byte)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child));
                 Instructions.Add(new InstructionIfWhile((byte)Lists.Instructions.IF, (byte)Lists.IfSubTypes.CURRENTLY_TALKING, 0, 0, 1, -1, -1, LabelR));
                 Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));

@@ -37,7 +37,7 @@ namespace NPC_Maker
             }
         }
 
-        public static Dictionary<string, int> GetSoundDictionary(string Filename)
+        public static Dictionary<string, int> GetDictionary(string Filename)
         {
             Dictionary<string, int> Dict = new Dictionary<string, int>();
 

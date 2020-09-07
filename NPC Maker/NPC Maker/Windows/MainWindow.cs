@@ -1268,23 +1268,23 @@ namespace NPC_Maker
 
         private void SoundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SoundList SFX = new SoundList("SFX.csv");
+            PickableList SFX = new PickableList("SFX.csv");
             DialogResult DR = SFX.ShowDialog();
 
             if (DR == DialogResult.OK)
             {
-                InsertTxtToScript(SFX.ChosenSFX);
+                InsertTxtToScript(SFX.Chosen);
             }
         }
 
         private void MusicToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SoundList SFX = new SoundList("Music.csv");
+            PickableList SFX = new PickableList("Music.csv");
             DialogResult DR = SFX.ShowDialog();
 
             if (DR == DialogResult.OK)
             {
-                InsertTxtToScript(SFX.ChosenSFX);
+                InsertTxtToScript(SFX.Chosen);
             }
         }
 
@@ -1340,6 +1340,17 @@ namespace NPC_Maker
         {
             ComboBox_ValueChanged(sender, e);
             Col_OBJ.Visible = (ComboBox_AnimType.SelectedIndex == 0);
+        }
+
+        private void actorstoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PickableList Actors = new PickableList("Actors.csv");
+            DialogResult DR = Actors.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                InsertTxtToScript(Actors.Chosen);
+            }
         }
 
         /*      

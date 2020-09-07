@@ -161,6 +161,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.WARP: Instructions.Add(ParseWarpInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.KILL: Instructions.Add(ParseKillInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.CHANGE_SCRIPT: Instructions.Add(ParseChangeScriptInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.SPAWN: Instructions.Add(ParseSpawnInstruction(Lines, SplitLine, ref i)); break;
 
                         case (int)Lists.Instructions.RETURN:
                             {

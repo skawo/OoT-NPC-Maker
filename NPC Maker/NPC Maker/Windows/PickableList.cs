@@ -12,12 +12,12 @@ using System.IO;
 
 namespace NPC_Maker
 {
-    public partial class SoundList : Form
+    public partial class PickableList : Form
     {
         List<string[]> Data { get; set; }
-        public string ChosenSFX;
+        public string Chosen;
 
-        public SoundList(string CSV)
+        public PickableList(string CSV)
         {
             InitializeComponent();
 
@@ -78,7 +78,7 @@ namespace NPC_Maker
                 return;
 
             string ID = (string)listView1.SelectedItems[0].Text;
-            ChosenSFX = Data.Find(x => x[0] == ID)[1];
+            Chosen = Data.Find(x => x[0] == ID)[1];
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -90,7 +90,7 @@ namespace NPC_Maker
                 return;
 
             string ID = (string)listView1.SelectedItems[0].Text;
-            ChosenSFX = Data.Find(x => x[0] == ID)[1];
+            Chosen = Data.Find(x => x[0] == ID)[1];
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -104,7 +104,7 @@ namespace NPC_Maker
             if (e.KeyCode == Keys.Enter)
             {
                 string ID = (string)listView1.SelectedItems[0].Text;
-                ChosenSFX = Data.Find(x => x[0] == ID)[1];
+                Chosen = Data.Find(x => x[0] == ID)[1];
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
