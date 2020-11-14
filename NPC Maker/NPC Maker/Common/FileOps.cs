@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using System.ComponentModel;
+using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 
 namespace NPC_Maker
 {

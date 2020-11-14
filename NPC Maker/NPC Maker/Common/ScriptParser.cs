@@ -119,7 +119,7 @@ namespace NPC_Maker
         {
             UInt32 Result;
 
-            if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
+            if (Helpers.IsHex(Number))
                 Result = Convert.ToUInt32(Number, 16);
             else
                 Result = Convert.ToUInt32(Number);
@@ -131,7 +131,7 @@ namespace NPC_Maker
         {
             Int32 Result;
 
-            if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
+            if Helpers.IsHex(Number))
                 Result = Convert.ToInt32(Number, 16);
             else
                 Result = Convert.ToInt32(Number);

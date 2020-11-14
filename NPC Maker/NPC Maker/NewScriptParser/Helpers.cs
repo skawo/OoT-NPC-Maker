@@ -74,11 +74,16 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
+        private static bool IsHex(string Number)
+        {
+            return (Number.Length >= 3 && Number.StartsWith("0x"));
+        }
+
         public static UInt32? Helper_ConvertToUInt32(string Number)
         {
             try
             {
-                if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
+                if (IsHex(Number))
                     return Convert.ToUInt32(Number, 16);
                 else
                     return Convert.ToUInt32(Number);
@@ -93,7 +98,7 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                if (Number.Length >= 3 && Number.Substring(0, 2) == "0x")
+                if (IsHex(Number))
                     return Convert.ToInt32(Number, 16);
                 else
                     return Convert.ToInt32(Number);
