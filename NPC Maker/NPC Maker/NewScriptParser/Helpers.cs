@@ -74,7 +74,7 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        private static bool IsHex(string Number)
+        public static bool IsHex(string Number)
         {
             return (Number.Length >= 3 && Number.StartsWith("0x"));
         }

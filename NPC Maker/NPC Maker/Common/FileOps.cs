@@ -22,7 +22,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Failed to read JSON: " + ex.Message);
+                System.Windows.Forms.MessageBox.Show($"Failed to read JSON: {ex.Message}");
                 return null;
             }
         }
@@ -35,7 +35,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Failed to write JSON: " + ex.Message);
+                System.Windows.Forms.MessageBox.Show($"Failed to write JSON: {ex.Message}");
             }
         }
 
@@ -57,7 +57,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show(Filename + " is missing or incorrect.");
+                System.Windows.Forms.MessageBox.Show($"{Filename} is missing or incorrect.");
                 return Dict;
             }
         }
@@ -331,12 +331,12 @@ namespace NPC_Maker
 
                 if (ParseErrors.Count != 0)
                 {
-                    System.Windows.Forms.MessageBox.Show("There were errors parsing NPC(s): " + String.Join(",", ParseErrors));
+                    System.Windows.Forms.MessageBox.Show($"There were errors parsing NPC(s): {String.Join(",", ParseErrors)}");
                 }
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("Error writing file: "  + ex.Message);
+                System.Windows.Forms.MessageBox.Show($"Error writing file: {ex.Message}");
             }
         }
 

@@ -49,7 +49,7 @@ namespace NPC_Maker
 
                 if (ParsedBytes.Length != 8)
                 {
-                    System.Windows.Forms.MessageBox.Show("Fatal error. Instruction not 8 bytes:" + Line);
+                    System.Windows.Forms.MessageBox.Show($"Fatal error. Instruction not 8 bytes: {Line}");
                     return Parsed.ToArray();
                 }
 
@@ -79,7 +79,7 @@ namespace NPC_Maker
                 if (Lines[i].EndsWith(":"))
                 {
                     if (Labels.ContainsKey(Lines[i]))
-                        ParseErrors.Add("Label \"" + Lines[i].Substring(0, Lines[i].Length - 1) + "\" is defined more than once.");
+                        ParseErrors.Add($"Label \"{Lines[i].Substring(0, Lines[i].Length - 1)}\" is defined more than once.");
                     else if (Lines[i].ToUpper() == "NEXT:")
                         ParseErrors.Add("A label cannot be named 'next'.");
                     else if (Lines[i].ToUpper() == "RETURN:")
@@ -119,7 +119,7 @@ namespace NPC_Maker
         {
             UInt32 Result;
 
-            if (Helpers.IsHex(Number))
+            if (NewScriptParser.ScriptHelpers.IsHex(Number))
                 Result = Convert.ToUInt32(Number, 16);
             else
                 Result = Convert.ToUInt32(Number);
@@ -131,7 +131,7 @@ namespace NPC_Maker
         {
             Int32 Result;
 
-            if Helpers.IsHex(Number))
+            if (NewScriptParser.ScriptHelpers.IsHex(Number))
                 Result = Convert.ToInt32(Number, 16);
             else
                 Result = Convert.ToInt32(Number);
@@ -1303,7 +1303,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                ParseErrors.Add("Problem parsing. Line: \"" + Line.Trim() + "\"");
+                ParseErrors.Add($"Problem parsing. Line: \"{Line.Trim()}\"");
                 return new byte[8];
             }
         }
