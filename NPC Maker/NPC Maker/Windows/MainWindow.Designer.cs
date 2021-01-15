@@ -212,11 +212,11 @@
             this.Checkbox_Pushable = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Script = new System.Windows.Forms.TabPage();
-            this.Textbox_Script = new NPC_Maker.FastColoredTextboxForWine(this.components);
+            this.Textbox_Script = new FastColoredTextBoxNS.FastColoredTextBox();
             this.Button_TryParse = new System.Windows.Forms.Button();
             this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
             this.Tab5_IdleScript = new System.Windows.Forms.TabPage();
-            this.Textbox_Script2 = new NPC_Maker.FastColoredTextboxForWine(this.components);
+            this.Textbox_Script2 = new FastColoredTextBoxNS.FastColoredTextBox();
             this.Button_TryParse2 = new System.Windows.Forms.Button();
             this.Textbox_ParseErrors2 = new System.Windows.Forms.TextBox();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
@@ -2650,6 +2650,8 @@
         '\"',
         '\'',
         '\''};
+
+
             this.Textbox_Script2.AutoIndent = false;
             this.Textbox_Script2.AutoIndentChars = false;
             this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(2, 14);
@@ -3014,7 +3016,7 @@
         private System.Windows.Forms.TabPage Tab4_Script;
         private System.Windows.Forms.TextBox Textbox_ParseErrors;
         private System.Windows.Forms.Button Button_TryParse;
-        private FastColoredTextboxForWine Textbox_Script;
+        private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script;
         private System.Windows.Forms.Button Button_EnvironmentColorPreview;
         private System.Windows.Forms.ColorDialog ColorDialog;
         private System.Windows.Forms.CheckBox Checkbox_EnvColor;
@@ -3101,7 +3103,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_TexOffs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_F_ObjId;
         private System.Windows.Forms.TabPage Tab5_IdleScript;
-        private FastColoredTextboxForWine Textbox_Script2;
+        private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script2;
         private System.Windows.Forms.Button Button_TryParse2;
         private System.Windows.Forms.TextBox Textbox_ParseErrors2;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;

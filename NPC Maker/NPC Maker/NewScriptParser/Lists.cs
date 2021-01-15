@@ -7,9 +7,9 @@ namespace NPC_Maker.NewScriptParser
 {
     public static class Lists
     {
-        public static Dictionary<string, int> SFXes = FileOps.GetDictionary("SFX.csv");
-        public static Dictionary<string, int> Music = FileOps.GetDictionary("Music.csv");
-        public static Dictionary<string, int> Actors = FileOps.GetDictionary("Actors.csv");
+        public static Dictionary<string, int> SFXes = FileOps.GetDictionary($"{Program.ExecPath}/SFX.csv");
+        public static Dictionary<string, int> Music = FileOps.GetDictionary($"{Program.ExecPath}/Music.csv");
+        public static Dictionary<string, int> Actors = FileOps.GetDictionary($"{Program.ExecPath}/Actors.csv");
 
         public const string Keyword_True = "TRUE";
         public const string Keyword_False = "FALSE";

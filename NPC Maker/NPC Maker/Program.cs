@@ -10,6 +10,7 @@ namespace NPC_Maker
     static class Program
     {
         public static MiscUtil.Conversion.BigEndianBitConverter BEConverter = new MiscUtil.Conversion.BigEndianBitConverter();
+        public static string ExecPath = "";
 
         /// <summary>
         /// The main entry point for the application.
@@ -19,6 +20,8 @@ namespace NPC_Maker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
 
             try
             {

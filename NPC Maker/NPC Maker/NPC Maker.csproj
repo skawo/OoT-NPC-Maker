@@ -76,8 +76,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
-      <HintPath>..\packages\FCTB.2.16.24\lib\FastColoredTextBox.dll</HintPath>
+    <Reference Include="FastColoredTextBox, Version=2.16.26.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\skawo\Desktop\s\FastColoredTextBox-master\FastColoredTextBox\bin\Release\FastColoredTextBox.dll</HintPath>
     </Reference>
     <Reference Include="MiscUtil, Version=0.2.0.0, Culture=neutral, PublicKeyToken=d3c42c4bfacf7596, processorArchitecture=MSIL">
       <HintPath>..\packages\JonSkeet.MiscUtil.0.2.0\lib\net35\MiscUtil.dll</HintPath>
@@ -139,12 +140,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DropDownScrollWheelFix.cs" />
-    <Compile Include="FastColoredTextboxForWine.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="FastColoredTextboxForWine.Designer.cs">
-      <DependentUpon>FastColoredTextboxForWine.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Lists.cs" />
     <Compile Include="Common\FCTB.cs" />
     <Compile Include="Common\FileOps.cs" />
