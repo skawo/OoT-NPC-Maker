@@ -50,7 +50,7 @@ namespace NPC_Maker.NewScriptParser
                                 UInt32? Actor = ScriptHelpers.Helper_GetActorId(Split[1]);
 
                                 if (Actor == null)
-                                    Actor = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(Split, 1, 0, Lists.Actors.Max(x => x).Value));
+                                    Actor = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Split, 1, 0, Lists.Actors.Max(x => x).Value));
 
                                 ActorID = (UInt16)Actor;
 
@@ -59,7 +59,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SpawnParams.VARIABLE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                ActorVar = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(Split, 1, 0, UInt16.MaxValue));
+                                ActorVar = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(Split, 1, 0, UInt16.MaxValue));
 
                                 continue;
                             }
@@ -67,7 +67,7 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
 
-                                RelativePos = (ScriptHelpers.Helper_GetEnumByName(typeof(Lists.SpawnPosParams), Split[1]) == 0);
+                                RelativePos = (ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)) == 0);
 
                                 PosX = Convert.ToDecimal(Split[2]);
                                 PosY = Convert.ToDecimal(Split[3]);
@@ -78,9 +78,9 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
 
-                                RotX = Convert.ToInt16(ParserHelpers.GetValueAndCheckRange(Split, 1, Int16.MinValue, Int16.MaxValue));
-                                RotY = Convert.ToInt16(ParserHelpers.GetValueAndCheckRange(Split, 2, Int16.MinValue, Int16.MaxValue));
-                                RotZ = Convert.ToInt16(ParserHelpers.GetValueAndCheckRange(Split, 3, Int16.MinValue, Int16.MaxValue));
+                                RotX = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(Split, 1, Int16.MinValue, Int16.MaxValue));
+                                RotY = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(Split, 2, Int16.MinValue, Int16.MaxValue));
+                                RotZ = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(Split, 3, Int16.MinValue, Int16.MaxValue));
                                 continue;
                             }
                     }

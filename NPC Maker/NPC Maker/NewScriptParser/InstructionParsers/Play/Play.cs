@@ -38,7 +38,7 @@ namespace NPC_Maker.NewScriptParser
                                                            ScriptHelpers.Helper_GetMusicId(SplitLine[2]);
 
                                     if (SNDID == null)
-                                        SNDID = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0,
+                                        SNDID = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0,
                                                                                                      (SubID == (int)Lists.PlaySubTypes.SFX) ? 
                                                                                                             Lists.SFXes.Max(x => x).Value
                                                                                                                     :
@@ -56,14 +56,14 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.PlaySubTypes.CUTSCENE_ADDR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                                UInt32 Addr = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int32.MaxValue));
+                                UInt32 Addr = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int32.MaxValue));
 
                                 return new InstructionPlay((byte)SubID, Addr, 0);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE_ID:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                                byte ID = Convert.ToByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, byte.MaxValue));
+                                byte ID = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, byte.MaxValue));
 
                                 return new InstructionPlay((byte)SubID, ID, 0);
                             }

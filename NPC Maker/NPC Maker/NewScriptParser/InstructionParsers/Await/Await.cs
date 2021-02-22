@@ -31,7 +31,7 @@ namespace NPC_Maker.NewScriptParser
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                         if (VarType < (int)Lists.VarTypes.Var1)
-                            Data = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 
+                            Data = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 
                                                                                         VarType == (int)Lists.VarTypes.RNG ? 3 : 2, 
                                                                                         0, UInt16.MaxValue));
 
@@ -61,7 +61,7 @@ namespace NPC_Maker.NewScriptParser
                                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
                                     if (VarType < (int)Lists.VarTypes.Var1)
-                                        Data = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 
+                                        Data = Convert.ToSByte(ScriptHelpers.GetValueAndCheckRange(SplitLine, 
                                                                                                    VarType == (int)Lists.VarTypes.RNG ? 4 : 3, 
                                                                                                    sbyte.MinValue, sbyte.MaxValue));
 

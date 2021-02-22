@@ -134,6 +134,16 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Mask not recognized: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedTexture(string[] _Line)
+        {
+            return new ParseException("Texture not recognized: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedDList(string[] _Line)
+        {
+            return new ParseException("Display List not recognized: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedAnimation(string[] _Line)
         {
             return new ParseException("Animation not recognized: ", String.Join(" ", _Line));
@@ -197,6 +207,11 @@ namespace NPC_Maker.NewScriptParser
         public static ParseException UnregonizedDlistVisibility(string[] _Line)
         {
             return new ParseException("Unrecognized Display List visibility option: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedParameter(string[] _Line)
+        {
+            return new ParseException("Unrecognized parameter: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedOperator(string[] _Line)

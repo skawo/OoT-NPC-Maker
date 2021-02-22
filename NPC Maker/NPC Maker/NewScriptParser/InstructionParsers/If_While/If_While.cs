@@ -71,7 +71,7 @@ namespace NPC_Maker.NewScriptParser
                     if (SubID <= 7)
                     {
                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                        UInt16 FlagID = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
+                        UInt16 FlagID = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
 
                         Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, FlagID, byte.MaxValue, EndIf, Else, LabelR));
                         return Instructions;
@@ -81,14 +81,7 @@ namespace NPC_Maker.NewScriptParser
                     {
                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                        byte Condition = ScriptHelpers.GetBoolConditionID(SplitLine[2]);
-
-                        #region Exceptions
-
-                        if (Condition == 255)
-                            throw ParseException.UnrecognizedCondition(SplitLine);
-
-                        #endregion
+                        byte Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
 
                         Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 0, Condition, EndIf, Else, LabelR));
                         return Instructions;
@@ -114,7 +107,7 @@ namespace NPC_Maker.NewScriptParser
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
                         if (VarType < (int)Lists.VarTypes.Var1)
-                            Value = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine,
+                            Value = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
                                                                                          VarType == (int)Lists.VarTypes.RNG ? 4 : 3, 0, UInt16.MaxValue));
 
                         Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
@@ -129,14 +122,7 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                    UInt32? Item = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.TradeItems), SplitLine[2]);
-
-                                    #region Exceptions
-
-                                    if (Item == null)
-                                        throw ParseException.UnrecognizedTradeItem(SplitLine);
-
-                                    #endregion
+                                    UInt32? Item = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine));
 
                                     Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Item), 0, EndIf, Else, LabelR));
                                     return Instructions;
@@ -145,14 +131,7 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                    UInt32? Status = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.TradeStatuses), SplitLine[2]);
-
-                                    #region Exceptions
-
-                                    if (Status == null)
-                                        throw ParseException.UnrecognizedTradeStatus(SplitLine);
-
-                                    #endregion
+                                    UInt32? Status = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TradeStatuses), ParseException.UnrecognizedTradeStatus(SplitLine));
 
                                     Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Status), 0, EndIf, Else, LabelR));
                                     return Instructions;
@@ -161,14 +140,7 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                    UInt32? Mask = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.PlayerMasks), SplitLine[2]); ;
-
-                                    #region Exceptions
-
-                                    if (Mask == null)
-                                        throw ParseException.UnrecognizedTradeStatus(SplitLine);
-
-                                    #endregion
+                                    UInt32? Mask = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.PlayerMasks), ParseException.UnrecognizedTradeStatus(SplitLine));
 
                                     Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(Mask), 0, EndIf, Else, LabelR));
                                     return Instructions;
@@ -194,7 +166,7 @@ namespace NPC_Maker.NewScriptParser
 
                                     if (VarType < (int)Lists.VarTypes.Var1)
                                     {
-                                        UInt32 Value = Convert.ToUInt32(ParserHelpers.GetValueAndCheckRange(SplitLine,
+                                        UInt32 Value = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
                                                                                                             VarType == (int)Lists.VarTypes.RNG ? 4 : 3,
                                                                                                             0, UInt16.MaxValue));
 
@@ -203,8 +175,8 @@ namespace NPC_Maker.NewScriptParser
                                         if (HourMinute.Length != 2)
                                             throw ParseException.BadTime(SplitLine);
 
-                                        byte Hour = Convert.ToByte(ParserHelpers.GetValueAndCheckRange(HourMinute, 0, 0, 24));
-                                        byte Min = Convert.ToByte(ParserHelpers.GetValueAndCheckRange(HourMinute, 1, 0, 59));
+                                        byte Hour = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(HourMinute, 0, 0, 24));
+                                        byte Min = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(HourMinute, 1, 0, 59));
 
                                         Time = Convert.ToUInt16(((Hour * 60) + Min) * (Int16.MaxValue / 1440));
                                     }
@@ -216,14 +188,7 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                    UInt32? AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine[2], Entry.Animations);
-
-                                    #region Exceptions
-
-                                    if (AnimationID == null)
-                                        throw ParseException.UnrecognizedAnimation(SplitLine);
-
-                                    #endregion
+                                    UInt32? AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
 
                                     Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(AnimationID), 0, EndIf, Else, LabelR));
                                     return Instructions;
@@ -306,14 +271,7 @@ namespace NPC_Maker.NewScriptParser
         {
             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-            UInt32? Val = ScriptHelpers.Helper_GetEnumByName(Enumtype, SplitLine[2]);
-
-            #region Exceptions
-
-            if (Val == null)
-                throw ToThrow;
-
-            #endregion
+            UInt32? Val = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, Enumtype, ToThrow);
 
             return (UInt32)Val;
         }

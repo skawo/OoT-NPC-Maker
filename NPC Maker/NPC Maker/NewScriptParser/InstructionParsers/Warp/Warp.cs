@@ -12,7 +12,7 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
-                UInt16 WarpID = (UInt16)ParserHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue);
+                UInt16 WarpID = (UInt16)ScriptHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue);
 
                 return new InstructionWarp(WarpID);
             }

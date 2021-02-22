@@ -100,11 +100,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="NewScriptParser\Classes.cs" />
-    <Compile Include="NewScriptParser\Helpers.cs" />
+    <Compile Include="NewScriptParser\ScriptHelpers.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Await\Classes.cs" />
     <Compile Include="NewScriptParser\Exceptions.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Common\Helpers.cs" />
+    <Compile Include="NewScriptParser\ParserHelpers.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\ChangeScript\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\ChangeScript\ChangeScript.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Spawn\Classes.cs" />

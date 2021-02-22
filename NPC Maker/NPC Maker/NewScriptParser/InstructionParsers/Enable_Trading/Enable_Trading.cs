@@ -52,8 +52,8 @@ namespace NPC_Maker.NewScriptParser
                 if (SplitLine.Count() == 2)
                     TextID_Child = TextID_Adult;
 
-                TextID_Adult = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
-                TextID_Child = (SplitLine.Count() == 2) ? TextID_Adult : Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
+                TextID_Adult = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
+                TextID_Child = (SplitLine.Count() == 2) ? TextID_Adult : Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
 
                 return new InstructionTextbox((int)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child);
             }

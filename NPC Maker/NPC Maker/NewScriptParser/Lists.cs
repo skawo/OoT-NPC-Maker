@@ -52,11 +52,11 @@ namespace NPC_Maker.NewScriptParser
         public enum VarTypes
         {
             RNG = 1,
-            Var1 = 5,
-            Var2 = 6,
-            Var3 = 7,
-            Var4 = 8,
-            Var5 = 9,
+            Var1 = 10,
+            Var2 = 11,
+            Var3 = 12,
+            Var4 = 13,
+            Var5 = 14,
         }
 
         public enum Instructions

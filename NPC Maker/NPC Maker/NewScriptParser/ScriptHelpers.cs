@@ -33,13 +33,43 @@ namespace NPC_Maker.NewScriptParser
                 throw ParseException.ParamCountWrong(Splitline);
         }
 
-        public static byte GetBoolConditionID(string Condition)
+        public static void ErrorIfNumParamsNotBetween(string[] Splitline, int Min, int Max)
         {
-            switch (Condition.ToUpper())
+            ErrorIfNumParamsSmaller(Splitline, Min);
+            ErrorIfNumParamsBigger(Splitline, Max);
+        }
+
+        public static object GetValueAndCheckRange(string[] Splitstring, int Index, int Min, int Max)
+        {
+            Int32? Value = ScriptHelpers.Helper_ConvertToInt32(Splitstring[Index]);
+
+            if (Value == null)
+                throw ParseException.ParamConversionError(Splitstring);
+
+            if (Value < Min || Value > Max)
+                throw ParseException.ParamOutOfRange(Splitstring);
+
+            return Value;
+        }
+
+        public static byte GetOperator(string[] SplitLine, int Index)
+        {
+            switch (SplitLine[Index].ToUpper())
+            {
+                case "=": return 0;
+                case "-": return 1;
+                case "+": return 2;
+                default: throw ParseException.UnrecognizedOperator(SplitLine);
+            }
+        }
+
+        public static byte GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
+        {
+            switch (SplitLine[IndexOfCondition].ToUpper())
             {
                 case Lists.Keyword_True: return 1;
                 case Lists.Keyword_False: return 0;
-                default: return byte.MaxValue;
+                default: throw ParseException.UnrecognizedCondition(SplitLine);
             }
         }
 
@@ -109,27 +139,43 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static UInt32? Helper_GetEnumByName(Type EnumType, string Name)
+        public static UInt32? Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
         {
             try
             {
-                return Convert.ToUInt32(System.Enum.Parse(EnumType, Name.ToUpper()));
+                return Convert.ToUInt32(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
             }
             catch (Exception)
             {
-                return null;
+                if (ErrorToThrow == null)
+                    throw ParseException.GeneralError(SplitLine);
+                else
+                    throw ErrorToThrow;
             }
         }
         
-        public static UInt32? Helper_GetAnimationID(string AnimName, List<AnimationEntry> Animations)
+        public static UInt32? Helper_GetAnimationID(string[] SplitLine, int Index, List<AnimationEntry> Animations)
         {
-            for (int i = 0; i < Animations.Count; i++)
+            UInt32? AnimID = null;
+
+            if (SplitLine[Index].IsNumeric())
+                AnimID = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[Index]);
+            else
             {
-                if (AnimName.ToLower() == Animations[i].Name.Replace(" ", "").ToLower())
-                    return (UInt32)i;
+                for (int i = 0; i < Animations.Count; i++)
+                {
+                    if (SplitLine[Index].ToLower() == Animations[i].Name.Replace(" ", "").ToLower())
+                    {
+                        AnimID = (UInt32)i;
+                        break;
+                    }
+                }
             }
 
-            return null;
+            if (AnimID == null || (AnimID > UInt16.MaxValue || AnimID < 0))
+                throw ParseException.UnrecognizedAnimation(SplitLine);
+
+            return AnimID;
         }
 
         public static UInt32? Helper_GetSFXId(string SFXName)
@@ -168,24 +214,51 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static Int32? Helper_GetTextureID(string TextureName, int Segment, List<List<TextureEntry>> Textures)
+        public static Int32? Helper_GetTextureID(string[] SplitLine, int Index, int Segment, List<List<TextureEntry>> Textures)
         {
-            for (int i = 0; i < Textures[Segment].Count; i++)
+            Int32? TexID = null;
+
+            if (SplitLine[Index].IsNumeric())
+                TexID = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, 0, 31));
+            else
             {
-                if (TextureName.ToLower() == Textures[Segment][i].Name.Replace(" ", "").ToLower())
-                    return i;
+                for (int i = 0; i < Textures[Segment].Count; i++)
+                {
+                    if (SplitLine[Index].ToLower() == Textures[Segment][i].Name.Replace(" ", "").ToLower())
+                    {
+                        TexID = i;
+                        break;
+                    }
+                }
             }
 
-            return null;
+            if (TexID == null)
+                throw ParseException.UnrecognizedTexture(SplitLine);
+
+            return TexID;
         }
 
-        public static Int32? Helper_GetDListID(string DlistName, List<DListEntry> DLists)
+        public static Int32? Helper_GetDListID(string[] SplitLine, int Index, List<DListEntry> DLists)
         {
-            for (int i = 0; i < DLists.Count; i++)
+            Int32? DListID = null;
+
+            if (SplitLine[Index].IsNumeric())
+                DListID = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
+            else
             {
-                if (DlistName.ToLower() == DLists[i].Name.Replace(" ", "").ToLower())
-                    return i;
+                for (int i = 0; i < DLists.Count; i++)
+                {
+                    if (SplitLine[Index].ToLower() == DLists[i].Name.Replace(" ", "").ToLower())
+                    {
+                        DListID = i;
+                        break;
+                    }
+                }
             }
+
+            if (DListID == null)
+                throw ParseException.UnrecognizedDList(SplitLine);
+
 
             return null;
         }

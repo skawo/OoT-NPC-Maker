@@ -6,20 +6,7 @@ using System.Text;
 namespace NPC_Maker.NewScriptParser
 {
     public static class ParserHelpers
-    {
-        public static object GetValueAndCheckRange(string[] Splitstring, int Index, int Min, int Max)
-        {
-            Int32? Value = ScriptHelpers.Helper_ConvertToInt32(Splitstring[Index]);
-
-            if (Value == null)
-                throw ParseException.ParamConversionError(Splitstring);
-
-            if (Value < Min || Value > Max)
-                throw ParseException.ParamOutOfRange(Splitstring);
-
-            return Value;
-        }
-        
+    {        
         public static void AddObjectToByteList(object Value, List<byte> ByteList)
         {
             if (Value is byte @byte)

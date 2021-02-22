@@ -13,8 +13,8 @@ namespace NPC_Maker.NewScriptParser
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
-                int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(typeof(Lists.ScriptChangeSubtypes), SplitLine[1]);
-                UInt16 ActorID = (UInt16)ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue);
+                int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.ScriptChangeSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                UInt16 ActorID = (UInt16)ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue);
 
                 switch (SetSubType)
                 {

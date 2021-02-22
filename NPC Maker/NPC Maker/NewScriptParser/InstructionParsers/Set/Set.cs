@@ -31,17 +31,12 @@ namespace NPC_Maker.NewScriptParser
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
                         byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
-                        byte Condition = 0;
+                        byte Condition = 1;
 
                         if (VarType < (int)Lists.VarTypes.Var1)
                         {
                             if (VarType != (int)Lists.VarTypes.RNG)
-                                Condition = ScriptHelpers.GetBoolConditionID(SplitLine[2]);
-                            else
-                                Condition = 1;
-
-                            if (Condition == byte.MaxValue)
-                                throw ParseException.UnrecognizedCondition(SplitLine);
+                                Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
                         }
 
                         return new InstructionSet((byte)SubID, Condition, VarType);
@@ -75,76 +70,29 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                    UInt16 FlagID = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
-
-                                    byte VarType = ScriptHelpers.GetVariable(SplitLine[3]);
-                                    byte Condition = 0;
-
-                                    if (VarType < (int)Lists.VarTypes.Var1)
-                                    {
-                                        if (VarType != (int)Lists.VarTypes.RNG)
-                                            Condition = ScriptHelpers.GetBoolConditionID(SplitLine[2]);
-                                        else
-                                            Condition = 1;
-
-                                        if (Condition == byte.MaxValue)
-                                            throw ParseException.UnrecognizedCondition(SplitLine);
-                                    }
+                                    UInt16 FlagID = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
+                                    byte Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
 
                                     return new InstructionSetWObject((byte)SubID, Convert.ToUInt16(FlagID), Condition);
                                 }
                             case (int)Lists.SetSubTypes.MOVEMENT_TYPE:
-                                {
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-
-                                    UInt32? Data = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.MovementStyles), SplitLine[2]);
-
-                                    if (Data == null)
-                                        throw ParseException.UnrecognizedMovementStyle(SplitLine);
-
-                                    return new InstructionSet((byte)SubID, Convert.ToByte(Data), 0);
-                                }
+                                return H_SetByEnum(SubID, SplitLine, typeof(Lists.MovementStyles), ParseException.UnrecognizedMovementStyle(SplitLine));
                             case (int)Lists.SetSubTypes.LOOKAT_TYPE:
-                                {
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-
-                                    UInt32? Data = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.LookAtStyles), SplitLine[2]);
-
-                                    if (Data == null)
-                                        throw ParseException.UnrecognizedLookAtStyle(SplitLine);
-
-                                    return new InstructionSet((byte)SubID, Convert.ToByte(Data), 0);
-                                }
+                                return H_SetByEnum(SubID, SplitLine, typeof(Lists.LookAtStyles), ParseException.UnrecognizedMovementStyle(SplitLine));
                             case (int)Lists.SetSubTypes.HEAD_AXIS:
                             case (int)Lists.SetSubTypes.WAIST_AXIS:
-                                {
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-
-                                    UInt32? Data = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.Axis), SplitLine[2]);
-
-                                    if (Data == null)
-                                        throw ParseException.UnrecognizedAxis(SplitLine);
-
-                                    return new InstructionSet((byte)SubID, Convert.ToByte(Data), 0);
-                                }
+                                return H_SetByEnum(SubID, SplitLine, typeof(Lists.Axis), ParseException.UnrecognizedMovementStyle(SplitLine));
                             case (int)Lists.SetSubTypes.CURRENT_ANIMATION:
                             case (int)Lists.SetSubTypes.CURRENT_ANIMATION_INSTANTLY:
                                 {
-                                    ScriptHelpers.ErrorIfNumParamsBigger(SplitLine, 4);
-                                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                                    ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
 
-                                    UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine[2], Entry.Animations);
-
-                                    if (AnimID == null)
-                                        AnimID = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[2]);
-
-                                    if (AnimID == null || (AnimID > UInt16.MaxValue || AnimID < 0))
-                                        throw ParseException.UnrecognizedAnimation(SplitLine);
+                                    UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
 
                                     byte Loops = 0;
 
                                     if (SplitLine.Length == 4)
-                                        Loops = Convert.ToByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 3, 0, byte.MaxValue));
+                                        Loops = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, byte.MaxValue));
 
                                     return new InstructionSet((byte)SubID, Convert.ToUInt16(AnimID), Loops);
                                 }
@@ -153,15 +101,8 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                    UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine[2], Entry.Animations);
-
-                                    if (AnimID == null)
-                                        AnimID = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[2]);
-
-                                    if (AnimID == null || (AnimID > UInt16.MaxValue || AnimID < 0))
-                                        throw ParseException.UnrecognizedAnimation(SplitLine);
-
-                                    UInt16 Object = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 3, 0, UInt16.MaxValue));
+                                    UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
+                                    UInt16 Object = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, UInt16.MaxValue));
 
                                     return new InstructionSetWObject((byte)SubID, Convert.ToUInt16(AnimID), Object);
                                 }
@@ -169,31 +110,24 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                    UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine[2], Entry.Animations);
-
-                                    if (AnimID == null)
-                                        AnimID = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[2]);
-
-                                    if (AnimID > UInt16.MaxValue || AnimID < 0)
-                                        throw ParseException.UnrecognizedAnimation(SplitLine);
+                                    UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
 
                                     return new InstructionSetWObject((byte)SubID, Convert.ToUInt16(AnimID), Convert.ToDecimal(SplitLine[3]));
                                 }
                             case (int)Lists.SetSubTypes.BLINK_PATTERN:
                             case (int)Lists.SetSubTypes.TALK_PATTERN:
                                 {
-                                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-                                    ScriptHelpers.ErrorIfNumParamsBigger(SplitLine, 8);
+                                    ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 8);
 
                                     byte[] Data = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
                                     for (int i = 2; i < SplitLine.Length; i++)
                                     {
-                                        Int32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine[i],
-                                                                                        SubID == (int)Lists.SetSubTypes.BLINK_PATTERN ? Entry.BlinkSegment - 8 : Entry.TalkSegment - 8, Entry.Textures);
+                                        int Segment = (SubID == (int)Lists.SetSubTypes.BLINK_PATTERN ? Entry.BlinkSegment : Entry.TalkSegment) - 8;
 
-                                        if (TexID == null)
-                                            TexID = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, i, 0, 31));
+                                        Int32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine, i,
+                                                                                         Segment, 
+                                                                                         Entry.Textures);
 
                                         Data[i - 2] = (byte)TexID;
                                     }
@@ -204,15 +138,9 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                    UInt32? SegmentID = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.Segments), SplitLine[2].ToUpper());
+                                    UInt32? SegmentID = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
 
-                                    if (SegmentID == null)
-                                        throw ParseException.UnrecognizedSegment(SplitLine);
-
-                                    Int32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine[3], (int)SegmentID, Entry.Textures);
-
-                                    if (TexID == null)
-                                        TexID = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 3, 0, 31));
+                                    Int32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine, 3, (int)SegmentID, Entry.Textures);
 
                                     return new InstructionSet((byte)SubID, Convert.ToUInt16(TexID), (byte)SegmentID);
                                 }
@@ -232,7 +160,7 @@ namespace NPC_Maker.NewScriptParser
                                     for (int i = 0; i < 3; i++)
                                     {
                                         if (ScVars[i] < (int)Lists.VarTypes.Var1)
-                                            RGB[i] = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine,
+                                            RGB[i] = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
                                                                                                          (ScVars[i] == (int)Lists.VarTypes.RNG ? 3 : 2) + i,
                                                                                                          byte.MinValue, byte.MaxValue));
                                     }
@@ -243,27 +171,17 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                    Int32? DListID = ScriptHelpers.Helper_GetDListID(SplitLine[2], Entry.DLists);
+                                    Int32? DListID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.DLists);
 
-                                    if (DListID == null)
-                                        DListID = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
-
-                                    UInt32? DlistOption = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.DListVisibilityOptions), SplitLine[3].ToUpper());
-
-                                    if (DlistOption == null)
-                                        throw ParseException.UnregonizedDlistVisibility(SplitLine);
+                                    UInt32? DlistOption = ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
 
                                     return new InstructionSet((byte)SubID, Convert.ToInt16(DListID), Convert.ToByte(DlistOption));
                                 }
                             case (int)Lists.SetSubTypes.ANIMATION_KEYFRAMES:
                                 {
-                                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
-                                    ScriptHelpers.ErrorIfNumParamsBigger(SplitLine, 7);
-
-                                    Int32? AnimID = (Int32?)ScriptHelpers.Helper_GetAnimationID(SplitLine[2], Entry.Animations);
-
-                                    if (AnimID == null)
-                                        AnimID = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
+                                    ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 4, 7);
+   
+                                    Int32? AnimID = (Int32?)ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
 
                                     int?[] Frames = new int?[4] { 255, 255, 255, 255 };
 
@@ -294,7 +212,7 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
-                                    UInt32? TrackSubType = ScriptHelpers.Helper_GetEnumByName(typeof(Lists.TurnTowardsSubtypes), SplitLine[2].ToUpper());
+                                    UInt32? TrackSubType = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TurnTowardsSubtypes), ParseException.UnrecognizedParameter(SplitLine));
 
                                     switch (TrackSubType)
                                     {
@@ -310,7 +228,7 @@ namespace NPC_Maker.NewScriptParser
                                                     return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TurnTowardsSubtypes.CONFIG_ID, 0, 0, ValueType, 0);
                                                 else
                                                 {
-                                                    UInt16 ActorNum = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 3, 0, UInt16.MaxValue));
+                                                    UInt16 ActorNum = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, UInt16.MaxValue));
                                                     return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TurnTowardsSubtypes.CONFIG_ID, ActorNum, 0, 0, 0);
                                                 }
                                             }
@@ -325,10 +243,10 @@ namespace NPC_Maker.NewScriptParser
                                                 byte ActorType = 0;
 
                                                 if (ValueType == 0)
-                                                    ActorNum = Convert.ToUInt16(ParserHelpers.GetValueAndCheckRange(SplitLine, 3, 0, Int16.MaxValue));
+                                                    ActorNum = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, Int16.MaxValue));
 
                                                 if (ValueType2 == 0)
-                                                    ActorType = Convert.ToByte(ParserHelpers.GetValueAndCheckRange(SplitLine, 4, 0, 12));
+                                                    ActorType = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(SplitLine, 4, 0, 12));
 
                                                 return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TurnTowardsSubtypes.CONFIG_ID, ActorNum, ActorType, ValueType, ValueType2);
                                             }
@@ -352,21 +270,13 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
-                                    byte Operator = 0;
-
-                                    switch (SplitLine[2])
-                                    {
-                                        case "=": Operator = 0; break;
-                                        case "-": Operator = 1; break;
-                                        case "+": Operator = 2; break;
-                                        default: throw ParseException.UnrecognizedOperator(SplitLine);
-                                    }
+                                    byte Operator = ScriptHelpers.GetOperator(SplitLine, 2);
 
                                     byte ValueType = ScriptHelpers.GetVariable(SplitLine[3]);
                                     sbyte Value = 0;
 
                                     if (ValueType < (int)Lists.VarTypes.Var1)
-                                        Value = Convert.ToSByte(ParserHelpers.GetValueAndCheckRange(SplitLine,
+                                        Value = Convert.ToSByte(ScriptHelpers.GetValueAndCheckRange(SplitLine,
                                                                                                     ValueType == (int)Lists.VarTypes.RNG ? 4 : 3,
                                                                                                     sbyte.MinValue, sbyte.MaxValue));
 
@@ -390,6 +300,15 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
+        private Instruction H_SetByEnum(int SubID, string[] SplitLine, Type Enum, ParseException ThrowOnError)
+        {
+            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+
+            UInt32? Data = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, Enum, ThrowOnError);
+
+            return new InstructionSet((byte)SubID, Convert.ToByte(Data), 0);
+        }
+
         private Instruction H_SimpleSet(int SubID, string[] SplitLine, int Min, int Max, Type ConvertType)
         {
             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
@@ -407,7 +326,7 @@ namespace NPC_Maker.NewScriptParser
                 else if (ConvertType == typeof(float))
                     Data = Convert.ToDecimal(SplitLine[VarType == (int)Lists.VarTypes.RNG ? 3 : 2]);
                 else
-                    Data = Convert.ToInt32(ParserHelpers.GetValueAndCheckRange(SplitLine,
+                    Data = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
                                                                                 VarType == (int)Lists.VarTypes.RNG ? 3 : 2,
                                                                                 Min, Max));
 
