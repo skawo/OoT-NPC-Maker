@@ -219,6 +219,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Unrecognized operator: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedInstruction(string[] _Line)
+        {
+            return new ParseException("Unrecognized instruction: ", String.Join(" ", _Line));
+        }
+
         public static ParseException BadTime(string[] _Line)
         {
             return new ParseException("Time is not well formed. Should be military time HH:mm: ", String.Join(" ", _Line));

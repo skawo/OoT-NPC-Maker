@@ -34,11 +34,11 @@ namespace NPC_Maker.NewScriptParser
         public sbyte Value;
         public byte Condition;
 
-        public InstructionAwaitScriptVar(byte _SubID, sbyte _Value, byte _Condition, byte _ValueType)
+        public InstructionAwaitScriptVar(byte _SubID, sbyte _Value, Lists.ConditionTypes _Condition, byte _ValueType)
                                         : base((int)Lists.Instructions.AWAIT, _SubID, _ValueType)
         {
             Value = _Value;
-            Condition = _Condition;
+            Condition = (byte)_Condition;
         }
 
         public override byte[] ToBytes()

@@ -42,7 +42,8 @@ namespace NPC_Maker.NewScriptParser
             if (outScript.ParseErrors.Count != 0)
                 return outScript;
 
-            List<string> Lines = ScriptText.Split(new[] { "\n" }, StringSplitOptions.None).ToList();                                 // Split text into lines
+            // Split text into lines
+            List<string> Lines = ScriptText.Split(new[] { "\n" }, StringSplitOptions.None).ToList(); 
 
             for (int i = 0; i < Lines.Count(); i++)
                 Lines[i] = Lines[i].Trim();
@@ -106,7 +107,6 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-
         private List<string> GetOutString(List<Instruction> Instructions)
         {
             List<string> Out = new List<string>();
@@ -162,17 +162,15 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.KILL: Instructions.Add(ParseKillInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.CHANGE_SCRIPT: Instructions.Add(ParseChangeScriptInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SPAWN: Instructions.Add(ParseSpawnInstruction(Lines, SplitLine, ref i)); break;
-
                         case (int)Lists.Instructions.RETURN:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 1);
                                 Instructions.Add(new InstructionGoto("__RETURN__"));
                                 break;
                             }
-
                         default:
                             {
-                                outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
+                                outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(SplitLine));
                                 break;
                             }
                     }

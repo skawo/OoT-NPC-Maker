@@ -39,6 +39,19 @@ namespace NPC_Maker.NewScriptParser
             ErrorIfNumParamsBigger(Splitline, Max);
         }
 
+        public static UInt16 GetOcarinaTime(string[] SplitLine, int Index)
+        {
+            string[] HourMinute = SplitLine[Index].Split(':');
+
+            if (HourMinute.Length != 2)
+                throw ParseException.BadTime(SplitLine);
+
+            byte Hour = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(HourMinute, 0, 0, 24));
+            byte Min = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(HourMinute, 1, 0, 59));
+
+            return Convert.ToUInt16(((Hour * 60) + Min) * (Int16.MaxValue / 1440));
+        }
+
         public static object GetValueAndCheckRange(string[] Splitstring, int Index, int Min, int Max)
         {
             Int32? Value = ScriptHelpers.Helper_ConvertToInt32(Splitstring[Index]);
@@ -63,36 +76,36 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static byte GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
+        public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
         {
             switch (SplitLine[IndexOfCondition].ToUpper())
             {
-                case Lists.Keyword_True: return 1;
-                case Lists.Keyword_False: return 0;
+                case Lists.Keyword_True: return Lists.ConditionTypes.TRUE;
+                case Lists.Keyword_False: return Lists.ConditionTypes.FALSE;
                 default: throw ParseException.UnrecognizedCondition(SplitLine);
             }
         }
 
-        public static byte GetConditionID(string Condition)
+        public static Lists.ConditionTypes GetConditionID(string[] SplitLine, int Index)
         {
-            switch (Condition)
+            switch (SplitLine[Index])
             {
-                case "=": return 0;
-                case "==": return 0;
-                case "<": return 1;
-                case ">": return 2;
-                case "<=": return 3;
-                case ">=": return 4;
-                case "!=": return 5;
-                case "<>": return 5;
+                case "=": return Lists.ConditionTypes.EQUALTO;
+                case "==": return Lists.ConditionTypes.EQUALTO;
+                case "<": return Lists.ConditionTypes.LESSTHAN;
+                case ">": return Lists.ConditionTypes.MOREOREQ;
+                case "<=": return Lists.ConditionTypes.LESSOREQ;
+                case ">=": return Lists.ConditionTypes.MOREOREQ;
+                case "!=": return Lists.ConditionTypes.NOTEQUAL;
+                case "<>": return Lists.ConditionTypes.NOTEQUAL;
 
-                default: return byte.MaxValue;
+                default: throw ParseException.UnrecognizedCondition(SplitLine);
             }
         }
 
-        public static byte GetVariable(string Variable)
+        public static byte GetVariable(string[] SplitLine, int Index)
         {
-            switch (Variable.ToUpper())
+            switch (SplitLine[Index].ToUpper())
             {
                 case Lists.Keyword_RNG: return (int)Lists.VarTypes.RNG;
                 case Lists.Keyword_ScriptVar1: return (int)Lists.VarTypes.Var1;

@@ -15,10 +15,10 @@ namespace NPC_Maker.NewScriptParser
         public InstructionLabel GotoTrue;
         public InstructionLabel GotoFalse;
 
-        public InstructionIfWhile(byte _ID, byte _SubID, byte _ValueType, object _Value, byte _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr) 
+        public InstructionIfWhile(byte _ID, byte _SubID, byte _ValueType, object _Value, Lists.ConditionTypes _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr) 
                              : base(_ID, _SubID, _ValueType)
         {
-            Condition = _Condition;
+            Condition = (byte)_Condition;
             Value = _Value;
             ElseLineNo = _ElseLineNo;
             EndIfLineNo = _EndIfLineNo;

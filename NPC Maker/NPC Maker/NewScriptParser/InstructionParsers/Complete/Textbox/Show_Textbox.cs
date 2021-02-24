@@ -11,18 +11,9 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
-
-                UInt16 TextID_Adult = 0;
-                UInt16 TextID_Child = 0;
-
-                if (SplitLine.Count() == 2)
-                    TextID_Child = TextID_Adult;
-
-                TextID_Adult = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
-                TextID_Child = (SplitLine.Count() == 2) ? TextID_Adult : Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
-
-                return new InstructionTextbox((int)Lists.Instructions.SHOW_TEXTBOX, TextID_Adult, TextID_Child);
+                Instruction Ins = ParseEnableTalkingInstruction(SplitLine);
+                Ins.ID = (int)Lists.Instructions.SHOW_TEXTBOX;
+                return Ins;
             }
             catch (ParseException pEx)
             {

@@ -147,7 +147,6 @@ namespace NPC_Maker.NewScriptParser
             COLLISION_RADIUS = 2,
             COLLISION_HEIGHT = 3,
             MOVEMENT_PATH_ID = 6,
-            TIME_OF_DAY = 7,
             UNSUCCESSFUL_TRADE_TEXT_ID = 8,
             CUTSCENE_FRAME = 9,
 
@@ -243,6 +242,7 @@ namespace NPC_Maker.NewScriptParser
             VAR_3 = 249,
             VAR_4 = 250,
             VAR_5 = 251,
+            TIME_OF_DAY = 252,
         }
 
         public enum AwaitSubTypes
@@ -277,6 +277,19 @@ namespace NPC_Maker.NewScriptParser
         {
             RELATIVE = 1,
             ABSOLUTE = 0,
+        }
+
+        public enum ConditionTypes
+        {
+            EQUALTO = 0,
+            TRUE = 0,
+            LESSTHAN = 1,
+            FALSE = 1,
+            MORETHAN = 2,
+            LESSOREQ = 3,
+            MOREOREQ = 4,
+            NOTEQUAL = 5,
+            NONE = 255,
         }
 
         public enum TradeItems

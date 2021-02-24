@@ -23,7 +23,7 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 2);
 
                                 if (VarType == (int)Lists.VarTypes.RNG)
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);

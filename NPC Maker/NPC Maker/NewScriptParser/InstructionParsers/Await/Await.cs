@@ -24,7 +24,7 @@ namespace NPC_Maker.NewScriptParser
                     {
                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                        byte VarType = ScriptHelpers.GetVariable(SplitLine[2]);
+                        byte VarType = ScriptHelpers.GetVariable(SplitLine, 2);
                         UInt16 Data = 0;
 
                         if (VarType == (int)Lists.VarTypes.RNG)
@@ -49,12 +49,8 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                    byte Condition = ScriptHelpers.GetConditionID(SplitLine[2]);
-
-                                    if (Condition == byte.MaxValue)
-                                        throw ParseException.UnrecognizedCondition(SplitLine);
-
-                                    byte VarType = ScriptHelpers.GetVariable(SplitLine[3]);
+                                    Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                                    byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
                                     sbyte Data = 0;
 
                                     if (VarType == (int)Lists.VarTypes.RNG)
