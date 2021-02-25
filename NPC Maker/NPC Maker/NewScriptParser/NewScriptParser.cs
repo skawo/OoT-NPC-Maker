@@ -48,7 +48,7 @@ namespace NPC_Maker.NewScriptParser
             for (int i = 0; i < Lines.Count(); i++)
                 Lines[i] = Lines[i].Trim();
 
-            Lines = ReplaceDefines(Lines);
+            Lines = ReplaceDefines(Lines, ref outScript);
             CheckLabels(Lines);
             List<Instruction> Instructions = GetInstructions(Lines);
 
@@ -57,38 +57,51 @@ namespace NPC_Maker.NewScriptParser
             return outScript;
         }
 
-        private List<string> ReplaceDefines(List<string> Lines)
+        private List<string> ReplaceDefines(List<string> Lines, ref BScript outScript)
         {
-            List<string[]> Defines = new List<string[]>();
-
-            foreach (string Line in Lines)
+            try
             {
-                if (Line.ToUpper().StartsWith("#DEFINE"))
+                List<string[]> Defines = new List<string[]>();
+
+                foreach (string Line in Lines)
                 {
-                    string[] Split = Line.Split(' ');
+                    if (Line.ToUpper().StartsWith("#DEFINE"))
+                    {
+                        string[] Split = Line.Split(' ');
 
-                    ScriptHelpers.ErrorIfNumParamsNotEq(Split, 3);
-                    Defines.Add(new string[] { Split[1], Split[2] });
+                        ScriptHelpers.ErrorIfNumParamsNotEq(Split, 3);
+                        Defines.Add(new string[] { Split[1], Split[2] });
+                    }
                 }
+
+                if (Defines.Count == 0)
+                    return Lines;
+
+                List<string> NewLines = new List<string>();
+
+                for (int i = 0; i < Lines.Count(); i++)
+                {
+                    if (Lines[i].ToUpper().StartsWith("#DEFINE"))
+                        continue;
+
+                    foreach (string[] Def in Defines)
+                        Lines[i] = ScriptHelpers.ReplaceExpr(Lines[i], Def[0], Def[1]);
+
+                    NewLines.Add(Lines[i]);
+                }
+
+                return NewLines;
             }
-
-            if (Defines.Count == 0)
-                return Lines;
-
-            List<string> NewLines = new List<string>();
-
-            for (int i = 0; i < Lines.Count(); i++)
+            catch (ParseException pEx)
             {
-                if (Lines[i].ToUpper().StartsWith("#DEFINE"))
-                    continue;
-
-                foreach (string[] Def in Defines)
-                    Lines[i] = ScriptHelpers.ReplaceExpr(Lines[i], Def[0], Def[1]);
-
-                NewLines.Add(Lines[i]);
+                outScript.ParseErrors.Add(pEx);
+                return Lines;
             }
-
-            return NewLines;
+            catch (Exception)
+            {
+                outScript.ParseErrors.Add(ParseException.DefineError());
+                return Lines;
+            }
         }
 
         private void CheckLabels(List<string> Lines)
@@ -151,11 +164,12 @@ namespace NPC_Maker.NewScriptParser
                                 Instructions.AddRange(Instr);
                                 break;
                             }
+                        case (int)Lists.Instructions.TRADE: Instructions.Add(ParseTradeInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.NOP: Instructions.Add(ParseNopInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SET: Instructions.Add(ParseSetInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.AWAIT: Instructions.Add(ParseAwaitInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SHOW_TEXTBOX: Instructions.Add(ParseShowTextboxInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.ENABLE_TALKING: Instructions.Add(ParseEnableTalkingInstruction(SplitLine)); break;
+                        //case (int)Lists.Instructions.ENABLE_TALKING: Instructions.Add(ParseEnableTalkingInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.PLAY: Instructions.Add(ParsePlayInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.GOTO: Instructions.Add(ParseGotoInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.WARP: Instructions.Add(ParseWarpInstruction(SplitLine)); break;

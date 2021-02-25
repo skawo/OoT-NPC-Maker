@@ -24,6 +24,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Error parsing line: ", _Line);
         }
 
+        public static ParseException DefineError()
+        {
+            return new ParseException("Problem with defines.", "");
+        }
+
         public static ParseException GeneralError(string[] _Line)
         {
             return GeneralError(String.Join(" ", _Line));
@@ -89,6 +94,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("This TALK does not have a corresponding ENDTALK: ", _Line);
         }
 
+        public static ParseException TradeNotClosed(string _Line)
+        {
+            return new ParseException("This TRADE does not have a corresponding ENDTRADE: ", _Line);
+        }
+
         public static ParseException TalkNotClosed(string[] _Line)
         {
             return TalkNotClosed(String.Join(" ", _Line));
@@ -103,6 +113,22 @@ namespace NPC_Maker.NewScriptParser
         {
             return IfNotClosed(String.Join(" ", _Line));
         }
+
+        public static ParseException TradeNotClosed(string[] _Line)
+        {
+            return TradeNotClosed(String.Join(" ", _Line));
+        }
+
+        public static ParseException TradeMissingComponents(string _Line)
+        {
+            return new ParseException("This TRADE instruction lacks one of the necessary members (CORRECT, FAILURE, TALK): ", _Line);
+        }
+
+        public static ParseException TradeMissingComponents(string[] _Line)
+        {
+            return TradeMissingComponents(String.Join(" ", _Line));
+        }
+
 
         public static ParseException WhileNotClosed(string _Line)
         {
@@ -218,6 +244,27 @@ namespace NPC_Maker.NewScriptParser
         {
             return new ParseException("Unrecognized operator: ", String.Join(" ", _Line));
         }
+
+        public static ParseException UnexpectedTradeInstruction(string _Line)
+        {
+            return new ParseException("Unexpected member in trade instruction: ", _Line);
+        }
+
+        public static ParseException UnexpectedTradeInstruction(string[] _Line)
+        {
+            return UnexpectedTradeInstruction(String.Join(" ", _Line));
+        }
+
+        public static ParseException DuplicateTradeInstruction(string _Line)
+        {
+            return new ParseException("Duplicate member in trade instruction: ", _Line);
+        }
+
+        public static ParseException DuplicateTradeInstruction(string[] _Line)
+        {
+            return DuplicateTradeInstruction(String.Join(" ", _Line));
+        }
+
 
         public static ParseException UnrecognizedInstruction(string[] _Line)
         {

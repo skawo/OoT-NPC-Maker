@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="NewScriptParser\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Trade\Classes.cs" />
     <Compile Include="NewScriptParser\ScriptHelpers.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Await\Classes.cs" />
     <Compile Include="NewScriptParser\Exceptions.cs" />
@@ -115,7 +116,7 @@
     <Compile Include="NewScriptParser\InstructionParsers\Complete\KIll\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Complete\KIll\Kill.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Complete\Textbox\Talk.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Enable_Trading\Enable_Trading.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Trade\Enable_Trading.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Complete\Textbox\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Complete\Goto\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Complete\Goto\Goto.cs" />

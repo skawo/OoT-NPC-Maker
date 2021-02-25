@@ -166,6 +166,14 @@ namespace NPC_Maker.NewScriptParser
                     throw ErrorToThrow;
             }
         }
+
+        public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref UInt16? TextID_Adult, ref UInt16? TextID_Child)
+        {
+            ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
+
+            TextID_Adult = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
+            TextID_Child = (SplitLine.Count() == 2) ? TextID_Adult : Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
+        }
         
         public static UInt32? Helper_GetAnimationID(string[] SplitLine, int Index, List<AnimationEntry> Animations)
         {
