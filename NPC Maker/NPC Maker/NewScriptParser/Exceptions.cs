@@ -24,6 +24,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Error parsing line: ", _Line);
         }
 
+        public static ParseException ProcedureError()
+        {
+            return new ParseException("Problem with procedures.", "");
+        }
+
         public static ParseException DefineError()
         {
             return new ParseException("Problem with defines.", "");

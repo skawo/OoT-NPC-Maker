@@ -188,7 +188,7 @@ namespace NPC_Maker.NewScriptParser
             }
             catch (Exception)
             {
-                outScript.ParseErrors.Add(ParseException.GeneralError("Problem with procedures."));
+                outScript.ParseErrors.Add(ParseException.ProcedureError());
                 return Lines;
             }
         }
