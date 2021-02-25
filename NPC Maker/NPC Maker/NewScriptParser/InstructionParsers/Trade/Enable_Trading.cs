@@ -86,9 +86,7 @@ namespace NPC_Maker.NewScriptParser
 
                                     ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref TextID_Adult, ref TextID_Child);
 
-                                    Failure = new List<TradeSetting>();
-                                    Failure.Add(new TradeSetting(-1, (UInt16)TextID_Adult, (UInt16)TextID_Child));
-
+                                    Failure = new List<TradeSetting>() { new TradeSetting(-1, (UInt16)TextID_Adult, (UInt16)TextID_Child) } ;
                                     LineNo++;
                                 }
                                 else

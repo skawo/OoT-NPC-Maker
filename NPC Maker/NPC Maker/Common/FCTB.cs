@@ -16,6 +16,7 @@ namespace NPC_Maker
         public static Style BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
         public static Style ErrorStyle = new TextStyle(Brushes.Black, Brushes.Red, FontStyle.Bold);
         public static Style PurpleStyle = new TextStyle(Brushes.Purple, null, FontStyle.Regular);
+        public static Style MPurpleStyle = new TextStyle(Brushes.MediumPurple, null, FontStyle.Regular);
         public static Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
         public static Style DarkGrayStyle = new TextStyle(Brushes.DarkGray, null, FontStyle.Regular);
         public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Bold);
@@ -24,84 +25,91 @@ namespace NPC_Maker
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e, bool SyntaxHighlightingOn)
         {
-            e.ChangedRange.ClearStyle(FCTB.ErrorStyle);
-            e.ChangedRange.ClearStyle(FCTB.GreenStyle);
-            e.ChangedRange.ClearStyle(FCTB.BrownStyle);
-            e.ChangedRange.ClearStyle(FCTB.BlueStyle);
-            e.ChangedRange.ClearStyle(FCTB.PurpleStyle);
-            e.ChangedRange.ClearStyle(FCTB.GrayStyle);
-            e.ChangedRange.ClearStyle(FCTB.DarkGrayStyle);
-            e.ChangedRange.ClearStyle(FCTB.CyanStyle);
-            e.ChangedRange.ClearStyle(FCTB.BoldRedStyle);
+            string[] Lines = (sender as FastColoredTextBox).Text.Split(new[] { "\n" }, StringSplitOptions.None);
+            Range r = new Range((sender as FastColoredTextBox), 0, 0, Lines[Lines.Length - 1].Length - 1, Lines.Length - 1);
+
+            r.ClearStyle(FCTB.ErrorStyle);
+            r.ClearStyle(FCTB.BrownStyle);
+            r.ClearStyle(FCTB.BlueStyle);
+            r.ClearStyle(FCTB.PurpleStyle);
+            r.ClearStyle(FCTB.MPurpleStyle);
+            r.ClearStyle(FCTB.GrayStyle);
+            r.ClearStyle(FCTB.DarkGrayStyle);
+            r.ClearStyle(FCTB.CyanStyle);
+            r.ClearStyle(FCTB.BoldRedStyle);
+            r.ClearStyle(FCTB.RedStyle);
+            r.ClearStyle(FCTB.GreenStyle);
 
             if (!SyntaxHighlightingOn)
                 return;
 
-            e.ChangedRange.SetStyle(FCTB.GreenStyle, @"/\*(.|[\r\n])*?\*/", RegexOptions.Multiline);
-            e.ChangedRange.SetStyle(FCTB.GreenStyle, @"//.+", RegexOptions.Multiline);
-            e.ChangedRange.SetStyle(FCTB.BoldRedStyle, @".+:", RegexOptions.Multiline);
+            r.SetStyle(FCTB.GreenStyle, @"/\*(.|[\r\n])*?\*/", RegexOptions.Multiline);
+            r.SetStyle(FCTB.GreenStyle, @"//.+", RegexOptions.Multiline);
+            r.SetStyle(FCTB.BoldRedStyle, @".+:", RegexOptions.Multiline);
+            r.SetStyle(FCTB.RedStyle, @":.+", RegexOptions.Multiline);
+            r.SetStyle(FCTB.GreenStyle, @"#define.+", RegexOptions.Multiline);
 
-            string[] Lines = (sender as FastColoredTextBox).Text.Split(new[] { "\n" }, StringSplitOptions.None);
-            Range r = new Range((sender as FastColoredTextBox), 0, 0, Lines[Lines.Length - 1].Length - 1, Lines.Length - 1);
-
-            List<string> Labels = GetLabels((sender as FastColoredTextBox).Text);
-
-            r.ClearStyle(FCTB.RedStyle);
+            // Color in labels
+            List<string> Labels = NewScriptParser.ScriptParser.GetLabels((sender as FastColoredTextBox).Text);
 
             foreach (string KWord in Labels)
-                r.SetStyle(FCTB.RedStyle, @"\b" + KWord + @"\b", RegexOptions.Multiline);
+                r.SetStyle(FCTB.RedStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string Item in Enum.GetNames(typeof(Lists.InstructionIDs)))
+            // Color in instruction subtypes
+            foreach (string Item in Enum.GetNames(typeof(NewScriptParser.Lists.Instructions)))
             {
-                if (Lists.FunctionSubtypes.ContainsKey(Item))
+                if (NewScriptParser.Lists.FunctionSubtypes.ContainsKey(Item))
                 {
-                    foreach (string KWord in Lists.FunctionSubtypes[Item])
-                        e.ChangedRange.SetStyle(FCTB.GrayStyle, @"\b" + KWord + @"\b", RegexOptions.Multiline);
+                    foreach (string KWord in NewScriptParser.Lists.FunctionSubtypes[Item])
+                        r.SetStyle(FCTB.GrayStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
                 }
             }
 
-            foreach (string KWord in Lists.Keywords)
-                e.ChangedRange.SetStyle(FCTB.BlueStyle, @"\b" + KWord + @"\b", RegexOptions.Multiline);
+            // Color in functions
+            foreach (string Func in Enum.GetNames(typeof(NewScriptParser.Lists.Instructions)))
+                r.SetStyle(FCTB.PurpleStyle, @"\b" + Func + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in Lists.KeyValues)
-                e.ChangedRange.SetStyle(FCTB.GrayStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            // Color in blue keywords
+            foreach (string KWord in NewScriptParser.Lists.KeywordsBlue)
+                r.SetStyle(FCTB.BlueStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in Lists.KeywordsDarkGray)
-                e.ChangedRange.SetStyle(FCTB.DarkGrayStyle, @"\b" + KWord + @"\b", RegexOptions.Multiline);
+            // Color in red keywords
+            foreach (string KWord in NewScriptParser.Lists.KeywordsRed)
+                r.SetStyle(FCTB.RedStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string Func in Enum.GetNames(typeof(Lists.InstructionIDs)))
-                e.ChangedRange.SetStyle(FCTB.PurpleStyle, @"\b" + Func + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            // Color in gray keywords
+            foreach (string KWord in NewScriptParser.Lists.KeywordsGray)
+                r.SetStyle(FCTB.GrayStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in Enum.GetNames(typeof(Lists.TradeItems)))
-                e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            // Color in purple keywords
+            foreach (string KWord in NewScriptParser.Lists.KeywordsPurple)
+                r.SetStyle(FCTB.PurpleStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in Enum.GetNames(typeof(Lists.GiveItems)))
-                e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            // Color in purple keywords
+            foreach (string KWord in NewScriptParser.Lists.KeywordsMPurple)
+                r.SetStyle(FCTB.MPurpleStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in Lists.SFXes.Keys)
-                e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            // Color in trade items
+            foreach (string KWord in Enum.GetNames(typeof(NewScriptParser.Lists.TradeItems)))
+                r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            foreach (string KWord in Lists.Music.Keys)
-                e.ChangedRange.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-        }
+            // Color in give items
+            foreach (string KWord in Enum.GetNames(typeof(NewScriptParser.Lists.GiveItems)))
+                r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-        public static List<string> GetLabels(string Text)
-        {
-            Text = Regex.Replace(Text, @"/\*(.|[\r\n])*?\*/", string.Empty);                                // Remove comment blocks
-            Text = Regex.Replace(Text, "//.+", string.Empty);                                               // Remove inline comments
-            Text = Regex.Replace(Text, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();      // Remove empty lines
-            Text = Text.Replace("\t", " ");
+            // Color in sounds
+            foreach (string KWord in NewScriptParser.Lists.SFXes.Keys)
+                r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            List<string> Lines = Text.Split(new[] { "\n" }, StringSplitOptions.None).ToList();
-            List<string> Labels = new List<string>();
+            // Color in music
+            foreach (string KWord in NewScriptParser.Lists.Music.Keys)
+                r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-            for (int i = 0; i < Lines.Count(); i++)
-            {
-                if (Lines[i].EndsWith(":"))
-                    Labels.Add(Lines[i].Substring(0, Lines[i].Length - 1));
-            }
-
-            return Labels;
+            /*
+            // Color in key values
+            foreach (string KWord in NewScriptParser.Lists.KeyValues)
+                r.SetStyle(FCTB.GrayStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            */
         }
 
     }

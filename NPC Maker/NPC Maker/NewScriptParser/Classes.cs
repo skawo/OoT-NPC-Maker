@@ -18,5 +18,17 @@ namespace NPC_Maker.NewScriptParser
             ParseErrors = new List<ParseException>();
         }
     }
+
+    public class Macro
+    {
+        public string Name { get; set; }
+        public List<string> Instructions { get; set; }
+
+        public Macro(string _Name, List<string> _Instructions)
+        {
+            Name = _Name;
+            Instructions = _Instructions;
+        }
+    }
    
 }

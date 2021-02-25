@@ -1342,7 +1342,7 @@ namespace NPC_Maker
             Col_OBJ.Visible = (ComboBox_AnimType.SelectedIndex == 0);
         }
 
-        private void actorstoolStripMenuItem_Click(object sender, EventArgs e)
+        private void ActorstoolStripMenuItem_Click(object sender, EventArgs e)
         {
             PickableList Actors = new PickableList("Actors.csv");
             DialogResult DR = Actors.ShowDialog();

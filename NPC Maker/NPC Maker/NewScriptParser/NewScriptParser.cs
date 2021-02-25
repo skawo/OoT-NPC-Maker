@@ -21,15 +21,8 @@ namespace NPC_Maker.NewScriptParser
             ScriptText = _ScriptText;
             Entry = _Entry;
 
-            ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
-            ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
-            ScriptText = Regex.Replace(ScriptText, @"/\*(.|[\r\n])*?\*/", string.Empty);                                        // Remove comment blocks
-            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                                       // Remove inline comments
-            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();              // Remove empty lines
-            ScriptText = ScriptText.Replace("\t", "");                                                                          // Remove tabs
-            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ");                                                            // Remove double spaces
+            RegexText(ref ScriptText);
         }
-
 
         public BScript ParseScript()
         {
@@ -43,11 +36,9 @@ namespace NPC_Maker.NewScriptParser
                 return outScript;
 
             // Split text into lines
-            List<string> Lines = ScriptText.Split(new[] { "\n" }, StringSplitOptions.None).ToList(); 
+            List<string> Lines = SplitLines(ScriptText);
 
-            for (int i = 0; i < Lines.Count(); i++)
-                Lines[i] = Lines[i].Trim();
-
+            Lines = GetAndReplaceMacros(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
             CheckLabels(Lines);
             List<Instruction> Instructions = GetInstructions(Lines);
@@ -55,6 +46,48 @@ namespace NPC_Maker.NewScriptParser
             outScript.ScriptDebug = GetOutString(Instructions);
 
             return outScript;
+        }
+
+        public static void RegexText(ref string ScriptText)
+        {
+            ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
+            ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
+            ScriptText = Regex.Replace(ScriptText, @"/\*(.|[\r\n])*?\*/", string.Empty);                                        // Remove comment blocks
+            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                                       // Remove inline comments
+            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();              // Remove empty lines
+            ScriptText = ScriptText.Replace("\t", "");                                                                          // Remove tabs
+            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ");                                                            // Remove double spaces
+        }
+
+        public static List<string> SplitLines(string ScriptText)
+        {
+            List<string> Lines = ScriptText.Split(new[] { "\n" }, StringSplitOptions.None).ToList();
+
+            for (int i = 0; i < Lines.Count(); i++)
+                Lines[i] = Lines[i].Trim();
+
+            return Lines;
+        }
+
+        public static List<string> GetLabels(string ScriptText)
+        {
+            NewScriptParser.ScriptParser.RegexText(ref ScriptText);
+            List<string> Lines = SplitLines(ScriptText);
+
+            return GetLabels(Lines);
+        }
+
+        public static List<string> GetLabels(List<string> Lines)
+        {
+            List<string> Labels = new List<string>();
+
+            for (int i = 0; i < Lines.Count(); i++)
+            {
+                if (Lines[i].EndsWith(":"))
+                    Labels.Add(Lines[i].Substring(0, Lines[i].Length - 1));
+            }
+
+            return Labels;
         }
 
         private List<string> ReplaceDefines(List<string> Lines, ref BScript outScript)
@@ -65,7 +98,7 @@ namespace NPC_Maker.NewScriptParser
 
                 foreach (string Line in Lines)
                 {
-                    if (Line.ToUpper().StartsWith("#DEFINE"))
+                    if (Line.ToUpper().StartsWith(Lists.Keyword_SharpDefine))
                     {
                         string[] Split = Line.Split(' ');
 
@@ -81,7 +114,7 @@ namespace NPC_Maker.NewScriptParser
 
                 for (int i = 0; i < Lines.Count(); i++)
                 {
-                    if (Lines[i].ToUpper().StartsWith("#DEFINE"))
+                    if (Lines[i].ToUpper().StartsWith(Lists.Keyword_SharpDefine))
                         continue;
 
                     foreach (string[] Def in Defines)
@@ -104,13 +137,79 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
+        private List<string> GetAndReplaceMacros(List<string> Lines, ref BScript outScript)
+        {
+            try
+            {
+                List<Macro> Macros = new List<Macro>();
+
+                while (Lines.Find(x => x.ToUpper().StartsWith(Lists.Keyword_Macro)) != null)
+                {
+                    for (int i = 0; i < Lines.Count; i++)
+                    {
+                        if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Macro))
+                        {
+                            string[] Split = Lines[i].Split(' ');
+                            ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+
+                            int EndMacro = GetCorrespondingEndMacro(Lines, i);
+
+                            Macros.Add(new Macro(Split[1], Lines.Skip(i + 1).Take(EndMacro - i - 1).ToList()));
+
+                            Lines.RemoveRange(i, EndMacro - i + 1);
+                        }
+                    }
+                }
+
+                foreach (Macro mcr in Macros)
+                {
+                    string MacroString = $"{Lists.Keyword_CallMacro}{mcr.Name}".ToUpper();
+
+                    int Index = Lines.FindIndex(x => x.ToUpper() == MacroString);
+
+                    while (Index != -1)
+                    {
+                        Lines.RemoveAt(Index);
+                        Lines.InsertRange(Index, mcr.Instructions);
+                        Index = Lines.FindIndex(x => x.ToUpper() == MacroString);
+                    }
+                }
+
+                return Lines;
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Add(pEx);
+                return Lines;
+            }
+            catch (Exception)
+            {
+                outScript.ParseErrors.Add(ParseException.DefineError());
+                return Lines;
+            }
+        }
+
+        private int GetCorrespondingEndMacro(List<string> Lines, int LineNo)
+        {
+            for (int i = LineNo + 1; i < Lines.Count(); i++)
+            {
+                if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Macro))
+                    throw ParseException.MacroInMacro(Lines[i]);
+
+                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndMacro)
+                    return i;
+            }
+
+            throw ParseException.MacroNotClosed(Lines[LineNo]);
+        }
+
         private void CheckLabels(List<string> Lines)
         {
             foreach (string Line in Lines)
             {
                 if (Line.EndsWith(":"))
                 {
-                    if (Lists.Keywords.Contains(Line.Remove(Line.Length - 1))
+                    if (Lists.AllKeywords.Contains(Line.Remove(Line.Length - 1))
                         || Line.StartsWith("__"))
                     {
                         outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(Line));
@@ -129,7 +228,6 @@ namespace NPC_Maker.NewScriptParser
 
             return Out;
         }
-        
 
         private List<Instruction> GetInstructions(List<string> Lines)
         {

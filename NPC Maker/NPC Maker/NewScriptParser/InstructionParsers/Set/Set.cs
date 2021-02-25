@@ -257,27 +257,27 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
-                                UInt32? TrackSubType = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TurnTowardsSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                                UInt32? TrackSubType = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
 
                                 switch (TrackSubType)
                                 {
-                                    case (int)Lists.TurnTowardsSubtypes.SELF: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TurnTowardsSubtypes.SELF, 0, 0, 0, 0);
-                                    case (int)Lists.TurnTowardsSubtypes.PLAYER: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TurnTowardsSubtypes.PLAYER, 0, 0, 0, 0);
-                                    case (int)Lists.TurnTowardsSubtypes.CONFIG_ID:
+                                    case (int)Lists.TargetActorSubtypes.SELF: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.SELF, 0, 0, 0, 0);
+                                    case (int)Lists.TargetActorSubtypes.PLAYER: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.PLAYER, 0, 0, 0, 0);
+                                    case (int)Lists.TargetActorSubtypes.CONFIG_ID:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                             byte ValueType = ScriptHelpers.GetVariable(SplitLine, 3);
 
                                             if (ValueType != 0)
-                                                return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TurnTowardsSubtypes.CONFIG_ID, 0, 0, ValueType, 0);
+                                                return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, 0, 0, ValueType, 0);
                                             else
                                             {
                                                 UInt16 ActorNum = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, UInt16.MaxValue));
-                                                return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TurnTowardsSubtypes.CONFIG_ID, ActorNum, 0, 0, 0);
+                                                return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, ActorNum, 0, 0, 0);
                                             }
                                         }
-                                    case (int)Lists.TurnTowardsSubtypes.ACTOR_ID:
+                                    case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
@@ -293,7 +293,7 @@ namespace NPC_Maker.NewScriptParser
                                             if (ValueType2 == 0)
                                                 ActorType = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(SplitLine, 4, 0, 12));
 
-                                            return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TurnTowardsSubtypes.CONFIG_ID, ActorNum, ActorType, ValueType, ValueType2);
+                                            return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, ActorNum, ActorType, ValueType, ValueType2);
                                         }
                                     default: throw new Exception();
                                 }

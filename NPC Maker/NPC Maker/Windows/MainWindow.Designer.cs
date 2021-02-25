@@ -2364,7 +2364,7 @@
             this.actorstoolStripMenuItem.Name = "actorstoolStripMenuItem";
             this.actorstoolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.actorstoolStripMenuItem.Text = "Actors";
-            this.actorstoolStripMenuItem.Click += new System.EventHandler(this.actorstoolStripMenuItem_Click);
+            this.actorstoolStripMenuItem.Click += new System.EventHandler(this.ActorstoolStripMenuItem_Click);
             // 
             // DataGrid_Animations
             // 

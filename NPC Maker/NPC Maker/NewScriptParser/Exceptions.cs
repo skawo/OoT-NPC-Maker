@@ -104,6 +104,26 @@ namespace NPC_Maker.NewScriptParser
             return TalkNotClosed(String.Join(" ", _Line));
         }
 
+        public static ParseException MacroInMacro(string _Line)
+        {
+            return new ParseException("Macro in macro: ", _Line);
+        }
+
+        public static ParseException MacroInMacro(string[] _Line)
+        {
+            return TalkNotClosed(String.Join(" ", _Line));
+        }
+
+        public static ParseException MacroNotClosed(string _Line)
+        {
+            return new ParseException("Macro does not have a corresponding endmacro: ", _Line);
+        }
+
+        public static ParseException MacroNotClosed(string[] _Line)
+        {
+            return TalkNotClosed(String.Join(" ", _Line));
+        }
+
         public static ParseException SpawnNotClosed(string[] _Line)
         {
             return SpawnNotClosed(String.Join(" ", _Line));
