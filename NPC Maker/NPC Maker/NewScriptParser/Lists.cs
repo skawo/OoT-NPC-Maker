@@ -29,7 +29,7 @@ namespace NPC_Maker.NewScriptParser
         public const string Keyword_TradeDefault = "DEFAULT";
         public const string Keyword_TradeSucccess = "SUCCESS";
         public const string Keyword_TradeFailure = "FAILURE";
-        public const string Keyword_TradeNone = "TALK";
+        public const string Keyword_TradeNone = "NO_TRADE";
         public const string Keyword_Else = "ELSE";
         public const string Keyword_ScriptVar1 = "VAR_1";
         public const string Keyword_ScriptVar2 = "VAR_2";
