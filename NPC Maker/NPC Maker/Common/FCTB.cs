@@ -22,23 +22,25 @@ namespace NPC_Maker
         public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Bold);
         public static Style BoldRedStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
         public static Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
+        public static Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
+
 
         public static void ApplySyntaxHighlight(object sender, TextChangedEventArgs e, bool SyntaxHighlightingOn)
         {
             string[] Lines = (sender as FastColoredTextBox).Text.Split(new[] { "\n" }, StringSplitOptions.None);
             Range r = new Range((sender as FastColoredTextBox), 0, 0, Lines[Lines.Length - 1].Length - 1, Lines.Length - 1);
 
-            r.ClearStyle(FCTB.ErrorStyle);
-            r.ClearStyle(FCTB.BrownStyle);
-            r.ClearStyle(FCTB.BlueStyle);
-            r.ClearStyle(FCTB.PurpleStyle);
-            r.ClearStyle(FCTB.MPurpleStyle);
-            r.ClearStyle(FCTB.GrayStyle);
-            r.ClearStyle(FCTB.DarkGrayStyle);
-            r.ClearStyle(FCTB.CyanStyle);
-            r.ClearStyle(FCTB.BoldRedStyle);
-            r.ClearStyle(FCTB.RedStyle);
-            r.ClearStyle(FCTB.GreenStyle);
+            e.ChangedRange.ClearStyle(FCTB.GreenStyle);
+            e.ChangedRange.ClearStyle(FCTB.BlueStyle);
+            e.ChangedRange.ClearStyle(FCTB.BrownStyle);
+            e.ChangedRange.ClearStyle(FCTB.ErrorStyle);
+            e.ChangedRange.ClearStyle(FCTB.PurpleStyle);
+            e.ChangedRange.ClearStyle(FCTB.MPurpleStyle);
+            e.ChangedRange.ClearStyle(FCTB.GrayStyle);
+            e.ChangedRange.ClearStyle(FCTB.DarkGrayStyle);
+            e.ChangedRange.ClearStyle(FCTB.BoldRedStyle);
+            e.ChangedRange.ClearStyle(FCTB.RedStyle);
+            e.ChangedRange.ClearStyle(FCTB.BlackStyle);
 
             if (!SyntaxHighlightingOn)
                 return;
@@ -103,6 +105,10 @@ namespace NPC_Maker
 
             // Color in music
             foreach (string KWord in NewScriptParser.Lists.Music.Keys)
+                r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
+            // Color in actors
+            foreach (string KWord in NewScriptParser.Lists.Actors.Keys)
                 r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             /*

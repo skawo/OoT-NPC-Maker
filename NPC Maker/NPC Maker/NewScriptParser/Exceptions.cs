@@ -104,24 +104,24 @@ namespace NPC_Maker.NewScriptParser
             return TalkNotClosed(String.Join(" ", _Line));
         }
 
-        public static ParseException MacroInMacro(string _Line)
+        public static ParseException ProcRecursion(string _Line)
         {
-            return new ParseException("Macro in macro: ", _Line);
+            return new ParseException("Procedure recursion is not allowed: ", _Line);
         }
 
-        public static ParseException MacroInMacro(string[] _Line)
+        public static ParseException ProcRecursion(string[] _Line)
         {
-            return TalkNotClosed(String.Join(" ", _Line));
+            return ProcRecursion(String.Join(" ", _Line));
         }
 
-        public static ParseException MacroNotClosed(string _Line)
+        public static ParseException ProcedureNotClosed(string _Line)
         {
-            return new ParseException("Macro does not have a corresponding endmacro: ", _Line);
+            return new ParseException("Procedure does not have a corresponding ENDPROC: ", _Line);
         }
 
-        public static ParseException MacroNotClosed(string[] _Line)
+        public static ParseException ProcedureNotClosed(string[] _Line)
         {
-            return TalkNotClosed(String.Join(" ", _Line));
+            return ProcedureNotClosed(String.Join(" ", _Line));
         }
 
         public static ParseException SpawnNotClosed(string[] _Line)

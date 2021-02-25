@@ -19,12 +19,12 @@ namespace NPC_Maker.NewScriptParser
         }
     }
 
-    public class Macro
+    public class Procedure
     {
         public string Name { get; set; }
         public List<string> Instructions { get; set; }
 
-        public Macro(string _Name, List<string> _Instructions)
+        public Procedure(string _Name, List<string> _Instructions)
         {
             Name = _Name;
             Instructions = _Instructions;

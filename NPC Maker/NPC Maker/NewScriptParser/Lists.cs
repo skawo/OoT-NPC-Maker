@@ -16,9 +16,9 @@ namespace NPC_Maker.NewScriptParser
         public const string Keyword_Return = "RETURN";
         public const string Keyword_SharpDefine = "#DEFINE";
         public const string Keyword_Define = "DEFINE";
-        public const string Keyword_Macro = "MACRO";
-        public const string Keyword_CallMacro = ":";
-        public const string Keyword_EndMacro = "ENDMACRO";
+        public const string Keyword_Procedure = "PROC";
+        public const string Keyword_CallProcedure = ":";
+        public const string Keyword_EndProcedure = "ENDPROC";
         public const string Keyword_End = "END";
         public const string Keyword_EndIf = "ENDIF";
         public const string Keyword_EndWhile = "ENDWHILE";
@@ -45,8 +45,8 @@ namespace NPC_Maker.NewScriptParser
             Keyword_Return,
             Keyword_SharpDefine,
             Keyword_Define,
-            Keyword_Macro,
-            Keyword_EndMacro,
+            Keyword_Procedure,
+            Keyword_EndProcedure,
             Keyword_End,
             Keyword_EndIf,
             Keyword_EndWhile,
@@ -65,7 +65,7 @@ namespace NPC_Maker.NewScriptParser
             Keyword_ScriptVar4,
             Keyword_ScriptVar5,
             Keyword_RNG,
-            Keyword_CallMacro
+            Keyword_CallProcedure
         };
 
         public static List<string> KeywordsBlue = new List<string>()
@@ -90,8 +90,8 @@ namespace NPC_Maker.NewScriptParser
 
         public static List<string> KeywordsRed = new List<string>()
         {
-            Keyword_Macro,
-            Keyword_EndMacro,
+            Keyword_Procedure,
+            Keyword_EndProcedure,
             Keyword_Return,
         };
 

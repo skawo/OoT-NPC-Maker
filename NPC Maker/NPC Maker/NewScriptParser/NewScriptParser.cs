@@ -38,7 +38,7 @@ namespace NPC_Maker.NewScriptParser
             // Split text into lines
             List<string> Lines = SplitLines(ScriptText);
 
-            Lines = GetAndReplaceMacros(Lines, ref outScript);
+            Lines = GetAndReplaceProcedures(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
             CheckLabels(Lines);
             List<Instruction> Instructions = GetInstructions(Lines);
@@ -137,41 +137,45 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        private List<string> GetAndReplaceMacros(List<string> Lines, ref BScript outScript)
+        private List<string> GetAndReplaceProcedures(List<string> Lines, ref BScript outScript)
         {
             try
             {
-                List<Macro> Macros = new List<Macro>();
+                List<Procedure> Procedures = new List<Procedure>();
 
-                while (Lines.Find(x => x.ToUpper().StartsWith(Lists.Keyword_Macro)) != null)
+                while (Lines.Find(x => x.ToUpper().StartsWith(Lists.Keyword_Procedure)) != null)
                 {
                     for (int i = 0; i < Lines.Count; i++)
                     {
-                        if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Macro))
+                        if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Procedure))
                         {
                             string[] Split = Lines[i].Split(' ');
                             ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                             int EndMacro = GetCorrespondingEndMacro(Lines, i);
 
-                            Macros.Add(new Macro(Split[1], Lines.Skip(i + 1).Take(EndMacro - i - 1).ToList()));
-
+                            string ProcName = Split[1];
+                            List<string> ProcLines = Lines.Skip(i + 1).Take(EndMacro - i - 1).ToList();
                             Lines.RemoveRange(i, EndMacro - i + 1);
+
+                            string ProcedureString = $"{Lists.Keyword_CallProcedure}{ProcName}".ToUpper();
+
+                            // Replace procedure calls with procedure
+                            Procedure prc = new Procedure(ProcName, ProcLines);
+
+                            // Error if procedure recursion is detected
+                            if (ProcLines.Select(x => x.ToUpper()).Contains(ProcedureString))
+                                throw ParseException.ProcRecursion(Lines[i]);
+
+                            int Index = Lines.FindIndex(x => x.ToUpper() == ProcedureString);
+
+                            while (Index != -1)
+                            {
+                                Lines.RemoveAt(Index);
+                                Lines.InsertRange(Index, prc.Instructions);
+                                Index = Lines.FindIndex(x => x.ToUpper() == ProcedureString);
+                            }
                         }
-                    }
-                }
-
-                foreach (Macro mcr in Macros)
-                {
-                    string MacroString = $"{Lists.Keyword_CallMacro}{mcr.Name}".ToUpper();
-
-                    int Index = Lines.FindIndex(x => x.ToUpper() == MacroString);
-
-                    while (Index != -1)
-                    {
-                        Lines.RemoveAt(Index);
-                        Lines.InsertRange(Index, mcr.Instructions);
-                        Index = Lines.FindIndex(x => x.ToUpper() == MacroString);
                     }
                 }
 
@@ -184,7 +188,7 @@ namespace NPC_Maker.NewScriptParser
             }
             catch (Exception)
             {
-                outScript.ParseErrors.Add(ParseException.DefineError());
+                outScript.ParseErrors.Add(ParseException.GeneralError("Problem with procedures."));
                 return Lines;
             }
         }
@@ -193,14 +197,14 @@ namespace NPC_Maker.NewScriptParser
         {
             for (int i = LineNo + 1; i < Lines.Count(); i++)
             {
-                if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Macro))
-                    throw ParseException.MacroInMacro(Lines[i]);
+                if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Procedure))
+                    throw ParseException.ProcRecursion(Lines[i]);
 
-                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndMacro)
+                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndProcedure)
                     return i;
             }
 
-            throw ParseException.MacroNotClosed(Lines[LineNo]);
+            throw ParseException.ProcedureNotClosed(Lines[LineNo]);
         }
 
         private void CheckLabels(List<string> Lines)
