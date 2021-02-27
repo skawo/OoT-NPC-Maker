@@ -329,16 +329,10 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
                                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 2);
-
                                 byte ValueType = ScriptHelpers.GetVariable(SplitLine, 3);
-                                sbyte Value = 0;
+                                float Value = ScriptHelpers.GetValueByType(SplitLine, 3, ValueType);
 
-                                if (ValueType < (int)Lists.VarTypes.Var1)
-                                    Value = Convert.ToSByte(ScriptHelpers.GetValueAndCheckRange(SplitLine,
-                                                                                                ValueType == (int)Lists.VarTypes.RNG ? 4 : 3,
-                                                                                                sbyte.MinValue, sbyte.MaxValue));
-
-                                return new InstructionSetScriptVar((byte)SubID, Operator, (sbyte)Value, ValueType);
+                                return new InstructionSetScriptVar((byte)SubID, Operator, Value, ValueType);
                             }
                         default: throw new Exception();
                     }

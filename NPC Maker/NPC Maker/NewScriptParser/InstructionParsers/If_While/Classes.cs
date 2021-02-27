@@ -36,6 +36,7 @@ namespace NPC_Maker.NewScriptParser
             ParserHelpers.AddObjectToByteList(SubID, Data);
             ParserHelpers.AddObjectToByteList(ValueType, Data);
             ParserHelpers.AddObjectToByteList(Condition, Data);
+            ParserHelpers.AddObjectToByteList(Value, Data);
             ParserHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
             ParserHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
             ParserHelpers.Ensure4ByteAlign(Data);

@@ -31,18 +31,10 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.AwaitSubTypes.CURRENT_ANIMATION_FRAME:
                         case (int)Lists.AwaitSubTypes.CURRENT_CUTSCENE_FRAME:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 2);
-                                UInt16 Data = 0;
-
-                                if (VarType == (int)Lists.VarTypes.RNG)
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
-
-                                if (VarType < (int)Lists.VarTypes.Var1)
-                                    Data = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine,
-                                                                                                VarType == (int)Lists.VarTypes.RNG ? 3 : 2,
-                                                                                                0, UInt16.MaxValue));
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                float Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType);
 
                                 return new InstructionAwait((byte)SubID, Data, VarType);
                             }
@@ -52,19 +44,11 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.AwaitSubTypes.VAR_4:
                         case (int)Lists.AwaitSubTypes.VAR_5:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
-                                sbyte Data = 0;
-
-                                if (VarType == (int)Lists.VarTypes.RNG)
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
-
-                                if (VarType < (int)Lists.VarTypes.Var1)
-                                    Data = Convert.ToSByte(ScriptHelpers.GetValueAndCheckRange(SplitLine,
-                                                                                               VarType == (int)Lists.VarTypes.RNG ? 4 : 3,
-                                                                                               sbyte.MinValue, sbyte.MaxValue));
+                                float Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType);
 
                                 return new InstructionAwaitScriptVar((byte)SubID, Data, Condition, VarType);
                             }

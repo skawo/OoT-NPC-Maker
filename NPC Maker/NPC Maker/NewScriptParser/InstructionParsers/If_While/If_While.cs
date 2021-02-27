@@ -131,18 +131,10 @@ namespace NPC_Maker.NewScriptParser
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
-                                UInt32 Value = 0;
-
-                                if (VarType == (int)Lists.VarTypes.RNG)
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
-
-                                if (VarType < (int)Lists.VarTypes.Var1)
-                                    Value = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
-                                                                                                 VarType == (int)Lists.VarTypes.RNG ? 4 : 3, 0, UInt16.MaxValue));
+                                float Value = ScriptHelpers.GetValueByType(SplitLine, 4, VarType, 0, UInt16.MaxValue);
 
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
-
                             }
                         case (int)Lists.IfSubTypes.ITEM_BEING_TRADED:
                             {

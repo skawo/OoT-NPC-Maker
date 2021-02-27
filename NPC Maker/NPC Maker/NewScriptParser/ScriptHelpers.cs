@@ -65,15 +65,50 @@ namespace NPC_Maker.NewScriptParser
             return Value;
         }
 
+        public static object GetValueAndCheckRange(string[] Splitstring, int Index, float Min, float Max)
+        {
+            float? Value = (float)Convert.ToDecimal(Splitstring[Index]);
+
+            if (Value == null)
+                throw ParseException.ParamConversionError(Splitstring);
+
+            if (Value < Min || Value > Max)
+                throw ParseException.ParamOutOfRange(Splitstring);
+
+            return Value;
+        }
+
         public static byte GetOperator(string[] SplitLine, int Index)
         {
             switch (SplitLine[Index].ToUpper())
             {
                 case "=": return 0;
-                case "-": return 1;
-                case "+": return 2;
+                case "-=": return 1;
+                case "+=": return 2;
+                case "/=": return 3;
+                case "*=": return 4;
                 default: throw ParseException.UnrecognizedOperator(SplitLine);
             }
+        }
+
+        public static float GetValueByType(string[] SplitLine, int Index, int ValueType, float Min = float.MinValue, float Max = float.MaxValue)
+        {
+            float Value = 0;
+
+            if (ValueType == (int)Lists.VarTypes.RNG)
+            {
+                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, Index + 2);
+                Int32 Val = (Int32)ScriptHelpers.GetValueAndCheckRange(SplitLine, 
+                                                                       Index + 1, 
+                                                                       (int)Math.Min(Min < Int16.MinValue ? Int16.MinValue : Min, Int16.MinValue), 
+                                                                       (int)Math.Max(Max > Int16.MaxValue ? Int16.MaxValue : Max, Int16.MaxValue));
+
+                Value = (float)Convert.ToDecimal(Val);
+            }
+            else if (ValueType < (int)Lists.VarTypes.Var1)
+                Value = (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
+
+            return Value;
         }
 
         public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int IndexOfCondition)

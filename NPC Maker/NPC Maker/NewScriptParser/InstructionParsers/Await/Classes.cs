@@ -31,10 +31,10 @@ namespace NPC_Maker.NewScriptParser
 
     public class InstructionAwaitScriptVar : InstructionSubWValueType
     {
-        public sbyte Value;
+        public float Value;
         public byte Condition;
 
-        public InstructionAwaitScriptVar(byte _SubID, sbyte _Value, Lists.ConditionTypes _Condition, byte _ValueType)
+        public InstructionAwaitScriptVar(byte _SubID, float _Value, Lists.ConditionTypes _Condition, byte _ValueType)
                                         : base((int)Lists.Instructions.AWAIT, _SubID, _ValueType)
         {
             Value = _Value;
@@ -48,8 +48,8 @@ namespace NPC_Maker.NewScriptParser
             ParserHelpers.AddObjectToByteList(ID, Data);
             ParserHelpers.AddObjectToByteList(SubID, Data);
             ParserHelpers.AddObjectToByteList(ValueType, Data);
-            ParserHelpers.AddObjectToByteList(Value, Data);
             ParserHelpers.AddObjectToByteList(Condition, Data);
+            ParserHelpers.AddObjectToByteList(Value, Data);
             ParserHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();

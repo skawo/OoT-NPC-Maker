@@ -27,6 +27,11 @@ namespace NPC_Maker.NewScriptParser
 
             return Data.ToArray();
         }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((NewScriptParser.Lists.SetSubTypes)SubID).ToString();
+        }
     }
 
     public class InstructionSetWObject : InstructionSub
@@ -56,10 +61,10 @@ namespace NPC_Maker.NewScriptParser
     public class InstructionSetScriptVar : InstructionSub
     {
         public byte Operator;
-        public object Value;
+        public float Value;
         public byte ValueType;
 
-        public InstructionSetScriptVar(byte _SubID, byte _Operator, object _Value, byte _ValueType)
+        public InstructionSetScriptVar(byte _SubID, byte _Operator, float _Value, byte _ValueType)
                                       : base((int)Lists.Instructions.SET, _SubID)
         {
             Operator = _Operator;
