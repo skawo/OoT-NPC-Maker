@@ -98,30 +98,7 @@ namespace NPC_Maker
             }
         }
 
-        private void InsertTxtToScript(string Text)
-        {
-            FastColoredTextBox T = (LastRightClickedTextbox as FastColoredTextBox);
-
-            int start = T.SelectionStart;
-            string newTxt = T.Text;
-            newTxt = newTxt.Remove(T.SelectionStart, T.SelectionLength);
-            newTxt = newTxt.Insert(T.SelectionStart, Text);
-            T.Text = newTxt;
-            T.SelectionStart = start + Text.Length;
-        }
-
-        private void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
-        {
-            MenuItem.DropDown.MaximumSize = new Size(300, 700);
-
-            foreach (string Item in Collection)
-            {
-                ToolStripItem SubItem = MenuItem.DropDownItems.Add(Item);
-                SubItem.Click += SubItem_Click;
-            }
-        }
-
-        private void InsertDataIntoDataGridView()
+        private void InsertDataIntoActorListGrid()
         {
             this.SuspendLayout();
 
@@ -248,7 +225,7 @@ namespace NPC_Maker
                     }
                 }
 
-                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Animation.ObjID == UInt16.MaxValue ? "---" : Animation.ObjID.ToString() });
+                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Animation.ObjID == -1 ? "---" : Animation.ObjID.ToString() });
             }
 
             Textbox_ParseErrors.Text = "";
@@ -328,6 +305,17 @@ namespace NPC_Maker
 
         #region MenuStrip
 
+        private void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
+        {
+            MenuItem.DropDown.MaximumSize = new Size(300, 700);
+
+            foreach (string Item in Collection)
+            {
+                ToolStripItem SubItem = MenuItem.DropDownItems.Add(Item);
+                SubItem.Click += SubItem_Click;
+            }
+        }
+
         private bool SaveChangesAsPrompt()
         {
             if (EditedFile != null)
@@ -376,7 +364,7 @@ namespace NPC_Maker
                 {
                     OpenedPath = OFD.FileName;
                     Panel_Editor.Enabled = true;
-                    InsertDataIntoDataGridView();
+                    InsertDataIntoActorListGrid();
                 }
             }
 
@@ -389,7 +377,7 @@ namespace NPC_Maker
 
             EditedFile = new NPCFile();
             Panel_Editor.Enabled = true;
-            InsertDataIntoDataGridView();
+            InsertDataIntoActorListGrid();
         }
 
         private void FileMenu_SaveAs_Click(object sender, EventArgs e)
@@ -440,6 +428,26 @@ namespace NPC_Maker
                 return;
 
             Application.Exit();
+        }
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About Window = new About();
+            Window.ShowDialog();
+        }
+
+        private void SyntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            SyntaxHighlighting = (sender as ToolStripMenuItem).Checked;
+
+            Textbox_Script.Text += " ";
+            Textbox_Script2.Text += " ";
+        }
+
+        private void FileMenu_Click(object sender, EventArgs e)
+        {
+            //hack
+            NumUpDown_Hierarchy.Focus();
         }
 
         #endregion
@@ -508,8 +516,8 @@ namespace NPC_Maker
         private void Button_Add_Click(object sender, EventArgs e)
         {
             NPCEntry Entry = new NPCEntry();
-            Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, 0xFFFF, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
-            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, 0xFFFF, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
+            Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
+            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
 
             for (int i = 0; i < 8; i++)
                 Entry.Textures.Add(new List<TextureEntry>());
@@ -590,629 +598,18 @@ namespace NPC_Maker
 
         #endregion
 
+        #region Field changes
+
         private void Textbox_NPCName_TextChanged(object sender, EventArgs e)
         {
             SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as TextBox).Tag, (sender as TextBox).Text);
             DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = Textbox_NPCName.Text;
         }
 
-        private void TextBox_TextChanged(object sender, EventArgs e)
+        private void ComboBox_AnimType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as TextBox).Tag, (sender as TextBox).Text);
-        }
-
-        private void NumUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as NumericUpDown).Tag, (sender as NumericUpDown).Value);
-        }
-
-        private void CheckBox_ValueChanged(object sender, EventArgs e)
-        {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as CheckBox).Tag, (sender as CheckBox).Checked);
-        }
-
-        private void ComboBox_ValueChanged(object sender, EventArgs e)
-        {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as ComboBox).Tag, (sender as ComboBox).SelectedIndex);
-        }
-
-        private void Textbox_Script_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (SelectedEntry == null)
-                return;
-            SelectedEntry.Script = (sender as FastColoredTextBox).Text;
-
-            FCTB.ApplySyntaxHighlight(sender, e, SyntaxHighlighting);
-        }
-
-        private void AddBlankDList(int Index)
-        {
-            SelectedEntry.DLists.Add(new DListEntry("DList_" + Index, 0, 0, 0, 0, 0, 0, 0, 0.01f, 0, 0, 0));
-            DataGridView_ExtraDLists.Rows[Index].Cells[0].Value = "DList_" + Index;
-            DataGridView_ExtraDLists.Rows[Index].Cells[1].Value = 0;
-            DataGridView_ExtraDLists.Rows[Index].Cells[2].Value = "0, 0, 0";
-            DataGridView_ExtraDLists.Rows[Index].Cells[3].Value = "0, 0, 0";
-            DataGridView_ExtraDLists.Rows[Index].Cells[4].Value = "1";
-            DataGridView_ExtraDLists.Rows[Index].Cells[5].Value = 0;
-            DataGridView_ExtraDLists.Rows[Index].Cells[6].Value = -1;
-            DataGridView_ExtraDLists.Rows[Index].Cells[7].Value = ExtraDlists_ShowType.Items[0];
-        }
-
-        private void SetDlist(DataGridView Grid, int RowIndex, int CellIndex, object CellValue)
-        {
-            Grid.Rows[RowIndex].Cells[0].Value = "DList_" + RowIndex.ToString();
-            Grid.Rows[RowIndex].Cells[1].Value = 0;
-            Grid.Rows[RowIndex].Cells[2].Value = "0, 0, 0";
-            Grid.Rows[RowIndex].Cells[3].Value = "0, 0, 0";
-            Grid.Rows[RowIndex].Cells[4].Value = 1.0f;
-            Grid.Rows[RowIndex].Cells[5].Value = 0;
-            Grid.Rows[RowIndex].Cells[6].Value = -1;
-            Grid.Rows[RowIndex].Cells[7].Value = ExtraDlists_ShowType.Items[0];
-
-            Grid.Rows[RowIndex].Cells[CellIndex].Value = CellValue;
-        }
-
-        private void DataGridView_ExtraDLists_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
-        {
-            if (e.ColumnIndex == 0)     // Purpose
-            {
-                if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                {
-                    SelectedEntry.DLists.Add(new DListEntry(e.Value.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, 0, 0, -1));
-                    SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
-                }
-                else
-                    SelectedEntry.DLists[e.RowIndex].Name = e.Value.ToString();
-
-                e.ParsingApplied = true;
-                return;
-            }
-            else if (e.ColumnIndex == 1)    // Offset
-            {
-                try
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), 0, 0, 0, 0, 0, 0, 1.0f, 0, 0, -1));
-                        SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, Convert.ToUInt32(e.Value.ToString(), 16));
-                    }
-                    else
-                        SelectedEntry.DLists[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
-
-                    e.ParsingApplied = true;
-                    return;
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankDList(e.RowIndex);
-
-                    e.Value = 0;
-                    e.ParsingApplied = true;
-                    return;
-                }
-            }
-            else if (e.ColumnIndex == 2)    // XYZ Transl Offs
-            {
-                string[] Split = e.Value.ToString().Split(',');
-
-                float X, Y, Z;
-
-                try
-                {
-                    X = (float)Convert.ToDecimal(Split[0]);
-                    Y = (float)Convert.ToDecimal(Split[1]);
-                    Z = (float)Convert.ToDecimal(Split[2]);
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankDList(e.RowIndex);
-
-                    e.Value = "0,0,0";
-                    e.ParsingApplied = true;
-                    return;
-                }
-
-
-                if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, X, Y, Z, 0, 0, 0, 1.0f, 0, 0, -1));
-                    SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
-                }
-                else
-                {
-                    SelectedEntry.DLists[e.RowIndex].TransX = X;
-                    SelectedEntry.DLists[e.RowIndex].TransY = Y;
-                    SelectedEntry.DLists[e.RowIndex].TransZ = Z;
-                }
-
-                e.ParsingApplied = true;
-                return;
-            }
-            else if (e.ColumnIndex == 3) // XYZ Rot 
-            {
-                string[] Split = e.Value.ToString().Split(',');
-
-                Int16 X, Y, Z;
-
-                try
-                {
-                    X = Convert.ToInt16(Split[0]);
-                    Y = Convert.ToInt16(Split[1]);
-                    Z = Convert.ToInt16(Split[2]);
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankDList(e.RowIndex);
-
-                    e.Value = "0,0,0";
-                    e.ParsingApplied = true;
-                    return;
-                }
-
-
-                if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, X, Y, Z, 1.0f, 0, 0, -1));
-                    SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, e.Value.ToString());
-                }
-                else
-                {
-                    SelectedEntry.DLists[e.RowIndex].RotX = X;
-                    SelectedEntry.DLists[e.RowIndex].RotY = Y;
-                    SelectedEntry.DLists[e.RowIndex].RotZ = Z;
-                }
-
-                e.ParsingApplied = true;
-                return;
-            }
-            else if (e.ColumnIndex == 4) // Scale
-            {
-                try
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, (float)Convert.ToDecimal(e.Value), 0, 0, -1));
-                        SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, (float)Convert.ToDecimal(e.Value));
-                    }
-                    else
-                    {
-                        SelectedEntry.DLists[e.RowIndex].Scale = (float)Convert.ToDecimal(e.Value);
-                    }
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankDList(e.RowIndex);
-
-                    e.Value = 0;
-                    e.ParsingApplied = true;
-                    return;
-                }
-
-                e.ParsingApplied = true;
-                return;
-            }
-            else if (e.ColumnIndex == 5)  // Limb
-            {
-                try
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, Convert.ToUInt16(e.Value), 0, -1));
-                        SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, Convert.ToUInt16(e.Value));
-                    }
-                    else
-                    {
-                        SelectedEntry.DLists[e.RowIndex].Limb = Convert.ToUInt16(e.Value);
-                    }
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankDList(e.RowIndex);
-
-                    e.Value = 0;
-                    e.ParsingApplied = true;
-                    return;
-                }
-
-                e.ParsingApplied = true;
-                return;
-            }
-            else if (e.ColumnIndex == 6)  // ObjectID
-            {
-                try
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, 0, 0, Convert.ToInt16(e.Value)));
-                        SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, Convert.ToInt32(e.Value));
-                    }
-                    else
-                    {
-                        SelectedEntry.DLists[e.RowIndex].ObjectID = Convert.ToInt16(e.Value);
-                    }
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankDList(e.RowIndex);
-
-                    e.Value = 0;
-                    e.ParsingApplied = true;
-                    return;
-                }
-
-                e.ParsingApplied = true;
-                return;
-            }
-            else if (e.ColumnIndex == 7)  // Showtype
-            {
-                int ShowType;
-
-                switch (e.Value.ToString())
-                {
-                    case "Don't show": ShowType = 0; break;
-                    case "Alongside limb": ShowType = 1; break;
-                    case "Instead of limb": ShowType = 2; break;
-                    default: ShowType = 0; break;
-                }
-
-                if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                {
-                    SelectedEntry.DLists.Add(new DListEntry("DList_" + e.RowIndex.ToString(), 0, 0, 0, 0, 0, 0, 0, 1.0f, 0, ShowType, -1));
-                    SetDlist((sender as DataGridView), e.RowIndex, e.ColumnIndex, ShowType);
-                }
-                else
-                {
-                    SelectedEntry.DLists[e.RowIndex].ShowType = ShowType;
-                }
-
-                e.ParsingApplied = true;
-                return;
-            }
-        }
-
-        private void DataGridViewTextures_CellParse(object sender, DataGridViewCellParsingEventArgs e)
-        {
-            if (e.RowIndex > 31)
-            {
-                MessageBox.Show("Cannot define more than 32 textures per segment.");
-                (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
-                e.ParsingApplied = true;
-                return;
-            }
-
-            int DataGridIndex = TabControl_Textures.SelectedIndex;
-
-            if (e.ColumnIndex == 0)
-            {
-                if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
-                {
-                    SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry(e.Value.ToString(), 0, -1));
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[1].Value = 0;
-                }
-                else
-                    SelectedEntry.Textures[DataGridIndex][e.RowIndex].Name = e.Value.ToString();
-
-                e.ParsingApplied = true;
-                return;
-            }
-            else if (e.ColumnIndex == 1)
-            {
-                try
-                {
-                    if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), -1));
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
-                    }
-                    else
-                        SelectedEntry.Textures[DataGridIndex][e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
-
-                    e.ParsingApplied = true;
-                    return;
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), 0, -1));
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
-                    }
-
-                    e.Value = Convert.ToInt32("0", 16);
-                    e.ParsingApplied = true;
-                }
-            }
-            else if (e.ColumnIndex == 2)
-            {
-                try
-                {
-                    if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), 0, Convert.ToInt32(e.Value)));
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
-                    }
-                    else
-                        SelectedEntry.Textures[DataGridIndex][e.RowIndex].ObjectID = Convert.ToInt32(e.Value);
-
-                    e.ParsingApplied = true;
-                    return;
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.Textures[DataGridIndex].Add(new TextureEntry("Texture_" + e.RowIndex.ToString(), 0, -1));
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[0].Value = "Texture_" + e.RowIndex.ToString();
-                    }
-
-                    e.Value = Convert.ToInt32("-1");
-                    e.ParsingApplied = true;
-                }
-            }
-        }
-
-        private void AddBlankTex(int Index)
-        {
-            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + Index.ToString(), 0, 1.0f, (UInt16)NumUpDown_ObjectID.Value, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }));
-            DataGrid_Animations.Rows[Index].Cells[1].Value = 0;
-            DataGrid_Animations.Rows[Index].Cells[2].Value = 1.0;
-            DataGrid_Animations.Rows[Index].Cells[3].Value = "---";
-        }
-
-        private void DataGridViewAnimations_CellParse(object sender, DataGridViewCellParsingEventArgs e)
-        {
-            if (e.ColumnIndex == 0)
-            {
-                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                {
-                    SelectedEntry.Animations.Add(new AnimationEntry(e.Value.ToString(), 0, 1.0f, (UInt16)NumUpDown_ObjectID.Value, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[1].Value = 0;
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = "";
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = 1.0;
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[4].Value = "---";
-                }
-                else
-                    SelectedEntry.Animations[e.RowIndex].Name = e.Value.ToString();
-
-                e.ParsingApplied = true;
-                return;
-            }
-            else if (e.ColumnIndex == 1)
-            {
-                try
-                {
-                    if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), Convert.ToUInt32(e.Value.ToString(), 16), 1.0f, (UInt16)NumUpDown_ObjectID.Value, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[0].Value = "Animation_" + e.RowIndex.ToString();
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = "";
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = 1.0;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[4].Value = "---";
-                    }
-                    else
-                    {
-                        SelectedEntry.Animations[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
-                    }
-
-                    e.ParsingApplied = true;
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankTex(e.RowIndex);
-
-                    e.Value = Convert.ToInt32("0", 16);
-                    e.ParsingApplied = true;
-                }
-            }
-            else if (e.ColumnIndex == 2)
-            {
-                try
-                {
-                    string[] Values = e.Value.ToString().Split(',');
-                    byte[] Array = new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF };
-
-                    if (Array.Count() > 4)
-                    {
-                        MessageBox.Show("Interpolation mode supports only up to 4 animations.");
-                        throw new Exception();
-                    }
-
-                    int i = 0;
-
-                    foreach (string Val in Values)
-                    {
-                        if (Val == "")
-                            continue;
-
-                        if (Convert.ToSByte(Val) >= 0)
-                        {
-                            Array[i] = Convert.ToByte(Val);
-                            i++;
-                        }
-                    }
-
-                    if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, (UInt16)NumUpDown_ObjectID.Value, Array));
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[0].Value = "Animation_" + e.RowIndex.ToString();
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[1].Value = 0;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = 1.0;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[4].Value = "---";
-                    }
-                    else
-                        SelectedEntry.Animations[e.RowIndex].Frames = Array;
-
-                    e.ParsingApplied = true;
-                    return;
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankTex(e.RowIndex);
-
-                    e.Value = "";
-                    e.ParsingApplied = true;
-                }
-            }
-            else if (e.ColumnIndex == 3)
-            {
-                try
-                {
-                    if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, (float)Convert.ToDecimal(e.Value), (UInt16)NumUpDown_ObjectID.Value, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[0].Value = "Animation_" + e.RowIndex.ToString();
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[1].Value = 0;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = "";
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[4].Value = "---";
-                    }
-                    else
-                    {
-                        SelectedEntry.Animations[e.RowIndex].Speed = (float)Convert.ToDecimal(e.Value.ToString());
-                    }
-
-                    e.ParsingApplied = true;
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankTex(e.RowIndex);
-
-                    e.Value = 1.0f;
-                    e.ParsingApplied = true;
-                }
-            }
-            else if (e.ColumnIndex == 4)
-            {
-                try
-                {
-                    if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                    {
-                        if (e.Value.ToString() == "---" || e.Value.ToString() == "")
-                            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, UInt16.MaxValue, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
-                        else
-                            SelectedEntry.Animations.Add(new AnimationEntry("Animation_" + e.RowIndex.ToString(), 0, 1.0f, Convert.ToUInt16(e.Value), new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
-
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[0].Value = "Animation_" + e.RowIndex.ToString();
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[1].Value = 0;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[2].Value = "";
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[3].Value = 1.0;
-                    }
-                    else
-                    {
-                        if (e.Value.ToString() == "---" || e.Value.ToString() == "")
-                            SelectedEntry.Animations[e.RowIndex].ObjID = UInt16.MaxValue;
-                        else
-                            SelectedEntry.Animations[e.RowIndex].ObjID = Convert.ToUInt16(e.Value.ToString());
-                    }
-
-                    e.ParsingApplied = true;
-                }
-                catch (Exception)
-                {
-                    if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                        AddBlankTex(e.RowIndex);
-
-                    e.Value = "---";
-                    e.ParsingApplied = true;
-                }
-            }
-        }
-
-        private void Button_TryParse_Click(object sender, EventArgs e)
-        {
-            string[] Lines = Textbox_Script.Text.Replace(";", Environment.NewLine).Split(new[] { "\n" }, StringSplitOptions.None);
-            Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
-            r.ClearStyle(FCTB.ErrorStyle);
-
-
-            NewScriptParser.ScriptParser Parser = new NPC_Maker.NewScriptParser.ScriptParser(SelectedEntry, SelectedEntry.Script);
-            Textbox_ParseErrors.Clear();
-
-            NewScriptParser.BScript Output = Parser.ParseScript();
-
-#if DEBUG
-
-            Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
-            Dbg.Show();
-
-#endif
-
-
-
-            if (Output.ParseErrors.Count() == 0)
-                Textbox_ParseErrors.Text = "Parsed successfully!";
-            else
-            {
-                foreach (NewScriptParser.ParseException Error in Output.ParseErrors)
-                {
-                    Textbox_ParseErrors.Text += Error.ToString() + Environment.NewLine;
-                }
-            }
-        }
-
-        private void DataGridView_ExtraDLists_KeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.KeyCode == Keys.Delete)
-                {
-                    int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
-                    (sender as DataGridView).Rows.RemoveAt(Index);
-                    SelectedEntry.DLists.RemoveAt(Index);
-
-
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void DataGridViewTextures_KeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.KeyCode == Keys.Delete)
-                {
-                    int DataGridIndex = TabControl_Textures.SelectedIndex;
-                    int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
-                    (sender as DataGridView).Rows.RemoveAt(Index);
-                    SelectedEntry.Textures[DataGridIndex].RemoveAt(Index);
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void DataGrid_Animations_KeyUp(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if ((sender as DataGridView).SelectedCells[0].RowIndex > 1)
-                {
-                    if (e.KeyCode == Keys.Delete)
-                    {
-                        int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
-                        (sender as DataGridView).Rows.RemoveAt(Index);
-                        SelectedEntry.Animations.RemoveAt(Index);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-            }
+            ComboBox_ValueChanged(sender, e);
+            Col_OBJ.Visible = (ComboBox_AnimType.SelectedIndex == 0);
         }
 
         private void Button_EnvironmentColorPreview_Click(object sender, EventArgs e)
@@ -1238,12 +635,610 @@ namespace NPC_Maker
                 SelectedEntry.EnvColor = Color.FromArgb(0, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
         }
 
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void TextBox_TextChanged(object sender, EventArgs e)
         {
-            About Window = new About();
-            Window.ShowDialog();
-
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as TextBox).Tag, (sender as TextBox).Text);
         }
+
+        private void NumUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as NumericUpDown).Tag, (sender as NumericUpDown).Value);
+        }
+
+        private void CheckBox_ValueChanged(object sender, EventArgs e)
+        {
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as CheckBox).Tag, (sender as CheckBox).Checked);
+        }
+
+        private void ComboBox_ValueChanged(object sender, EventArgs e)
+        {
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as ComboBox).Tag, (sender as ComboBox).SelectedIndex);
+        }
+
+        #endregion
+
+        #region Animation Grid
+
+        private void AddBlankAnim(int SkipIndex, int Index, string Name = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte[] Frames = null)
+        {
+            Name = Name == null ? "Animation_" + Index.ToString() : Name;
+            Address = Address == null ? 0 : Address;
+            Speed = Speed == null ? 0 : Speed;
+            ObjectID = ObjectID == null ? -1 : ObjectID;
+            Frames = Frames == null ? new byte[] { 0xFF, 0xFF, 0xFF, 0xFF } : Frames;
+
+            SelectedEntry.Animations.Add(new AnimationEntry(Name, (uint)Address, (float)Speed, (short)ObjectID, Frames));
+
+            if (SkipIndex != 0)
+                DataGrid_Animations.Rows[Index].Cells[0].Value = Name;
+
+            if (SkipIndex != 1)
+                DataGrid_Animations.Rows[Index].Cells[1].Value = Address;
+
+            if (SkipIndex != 2)
+                DataGrid_Animations.Rows[Index].Cells[2].Value = "";
+
+            if (SkipIndex != 3)
+                DataGrid_Animations.Rows[Index].Cells[3].Value = 1.0;
+
+            if (SkipIndex != 4)
+                DataGrid_Animations.Rows[Index].Cells[4].Value = ObjectID == -1 ? "---" : ObjectID.ToString();
+        }
+
+        private byte[] ConvertAnimationByteArrayString(string Value)
+        {
+            string[] Values = Value.Split(',');
+            byte[] Array = new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF };
+
+            if (Array.Count() > 4)
+            {
+                MessageBox.Show("Interpolation mode supports only up to 4 animations.");
+                throw new Exception();
+            }
+
+            int i = 0;
+
+            foreach (string Val in Values)
+            {
+                if (Val == "")
+                    continue;
+
+                if (Convert.ToSByte(Val) >= 0)
+                {
+                    Array[i] = Convert.ToByte(Val);
+                    i++;
+                }
+            }
+
+            return Array;
+        }
+
+        private void DataGridViewAnimations_CellParse(object sender, DataGridViewCellParsingEventArgs e)
+        {
+            if (e.RowIndex > 255)
+            {
+                MessageBox.Show("Cannot define more than 255 animations.");
+                (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
+                e.ParsingApplied = true;
+                return;
+            }
+
+            switch (e.ColumnIndex)
+            {
+                case 0:     // Name
+                    {
+                        if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                            AddBlankAnim(e.ColumnIndex, e.RowIndex, e.Value.ToString());
+                        else
+                            SelectedEntry.Animations[e.RowIndex].Name = e.Value.ToString();
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 1:     // Address
+                    {
+                        try
+                        {
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
+                            else
+                                SelectedEntry.Animations[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+
+                            e.ParsingApplied = true;
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = Convert.ToInt32("0", 16);
+                            e.ParsingApplied = true;
+                        }
+                        return;
+                    }
+                case 2:     // Keyframes
+                    {
+                        try
+                        {
+                            byte[] Array = ConvertAnimationByteArrayString(e.Value.ToString());
+
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, Array);
+                            else
+                                SelectedEntry.Animations[e.RowIndex].Frames = Array;
+
+                            e.ParsingApplied = true;
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = "";
+                            e.ParsingApplied = true;
+                        }
+                        return;
+                    }
+                case 3:     // Speed
+                    {
+                        try
+                        {
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, (float)Convert.ToDecimal(e.Value));
+                            else
+                                SelectedEntry.Animations[e.RowIndex].Speed = (float)Convert.ToDecimal(e.Value);
+
+                            e.ParsingApplied = true;
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = 1.0f;
+                            e.ParsingApplied = true;
+                        }
+                        return;
+                    }
+                case 4:     // Object
+                    {
+                        try
+                        {
+                            Int16 Object = Convert.ToInt16(e.Value);
+
+                            if (e.Value.ToString() == "---" || e.Value.ToString() == "")
+                                Object = -1;
+
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, Object);
+                            else
+                                SelectedEntry.Animations[e.RowIndex].ObjID = Object;
+
+                            e.ParsingApplied = true;
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = "";
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+            }
+        }
+
+        private void DataGrid_Animations_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if ((sender as DataGridView).SelectedCells[0].RowIndex > 1)
+                {
+                    if (e.KeyCode == Keys.Delete)
+                    {
+                        int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
+                        (sender as DataGridView).Rows.RemoveAt(Index);
+                        SelectedEntry.Animations.RemoveAt(Index);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        #endregion
+
+        #region Extra Display Lists Grid
+
+        private void AddBlankDList(int SkipIndex, int Index, string Name = null, uint? Address = null, float? TransX = null, float? TransY = null, float? TransZ = null,
+                                   short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, ushort? Limb = null, int? ShowType = null, short? ObjectID = null)
+        {
+            if (Name == null)
+                Name = "DList_" + Index;
+
+            Name = Name == null ? "DList_" + Index : Name;
+            Address = Address == null ? 0 : Address;
+            TransX = TransX == null ? 0 : TransX;
+            TransY = TransY == null ? 0 : TransY;
+            TransZ = TransZ == null ? 0 : TransZ;
+            RotX = RotX == null ? 0 : RotX;
+            RotY = RotY == null ? 0 : RotY;
+            RotZ = RotZ == null ? 0 : RotZ;
+            Scale = Scale == null ? 0.01f : Scale;
+            Limb = Limb == null ? 0 : Limb;
+            ShowType = ShowType == null ? 0 : ShowType;
+            ObjectID = ObjectID == null ? -1 : ObjectID;
+
+            SelectedEntry.DLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ,
+                                                    (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (ushort)Limb, (int)ShowType, (short)ObjectID));
+
+            if (SkipIndex != 0)
+                DataGridView_ExtraDLists.Rows[Index].Cells[0].Value = Name;
+
+            if (SkipIndex != 1)
+                DataGridView_ExtraDLists.Rows[Index].Cells[1].Value = Address;
+
+            if (SkipIndex != 2)
+                DataGridView_ExtraDLists.Rows[Index].Cells[2].Value = $"{TransX},{TransY},{TransZ}";
+
+            if (SkipIndex != 3)
+                DataGridView_ExtraDLists.Rows[Index].Cells[3].Value = $"{RotX},{RotY},{RotZ}";
+
+            if (SkipIndex != 4)
+                DataGridView_ExtraDLists.Rows[Index].Cells[4].Value = Scale;
+
+            if (SkipIndex != 5)
+                DataGridView_ExtraDLists.Rows[Index].Cells[5].Value = Limb;
+
+            if (SkipIndex != 6)
+                DataGridView_ExtraDLists.Rows[Index].Cells[6].Value = ObjectID == -1 ? "---" : ObjectID.ToString();
+
+            if (SkipIndex != 7)
+                DataGridView_ExtraDLists.Rows[Index].Cells[7].Value = ExtraDlists_ShowType.Items[(int)ShowType];
+        }
+
+        private float[] GetXYZTranslation(string Value)
+        {
+            string[] Split = Value.Split(',');
+            float[] Values = new float[3] { 0, 0, 0 };
+
+            try
+            {
+                Values[0] = (float)Convert.ToDecimal(Split[0]);
+                Values[1] = (float)Convert.ToDecimal(Split[1]);
+                Values[2] = (float)Convert.ToDecimal(Split[2]);
+            }
+            catch (Exception)
+            {
+                Values = new float[3] { 0, 0, 0 };
+            }
+
+            return Values;
+        }
+
+        private short[] GetXYZRotation(string Value)
+        {
+            string[] Split = Value.Split(',');
+            short[] Values = new short[3] { 0, 0, 0 };
+
+            try
+            {
+                Values[0] = (short)Convert.ToUInt16(Split[0]);
+                Values[1] = (short)Convert.ToUInt16(Split[1]);
+                Values[2] = (short)Convert.ToUInt16(Split[2]);
+            }
+            catch (Exception)
+            {
+                Values = new short[3] { 0, 0, 0 };
+            }
+
+            return Values;
+        }
+
+        private void DataGridView_ExtraDLists_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
+        {
+            if (e.RowIndex > 255)
+            {
+                MessageBox.Show("Cannot define more than 255 extra display lists.");
+                (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
+                e.ParsingApplied = true;
+                return;
+            }
+
+            switch (e.ColumnIndex)
+            {
+                case 0:     // Purpose
+                    {
+                        if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, e.Value.ToString());
+                        else
+                            SelectedEntry.DLists[e.RowIndex].Name = e.Value.ToString();
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 1:     // Offset
+                    {
+                        try
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
+                            else
+                                SelectedEntry.DLists[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankDList(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = 0;
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 2:     // XYZ Translation
+                    {
+                        float[] Transl = GetXYZTranslation(e.Value.ToString());
+                        e.Value = $"{Transl[0]},{Transl[1]},{Transl[2]}";
+
+                        if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, Transl[0], Transl[1], Transl[2]);
+                        else
+                        {
+                            SelectedEntry.DLists[e.RowIndex].TransX = Transl[0];
+                            SelectedEntry.DLists[e.RowIndex].TransY = Transl[1];
+                            SelectedEntry.DLists[e.RowIndex].TransZ = Transl[2];
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 3:     // XYZ Rotation
+                    {
+                        short[] Rot = GetXYZRotation(e.Value.ToString());
+                        e.Value = $"{Rot[0]},{Rot[1]},{Rot[2]}";
+
+                        if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, Rot[0], Rot[1], Rot[2]);
+                        else
+                        {
+                            SelectedEntry.DLists[e.RowIndex].RotX = Rot[0];
+                            SelectedEntry.DLists[e.RowIndex].RotY = Rot[1];
+                            SelectedEntry.DLists[e.RowIndex].RotZ = Rot[2];
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 4:     // Scale
+                    {
+                        try
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, (float)Convert.ToDecimal(e.Value));
+                            else
+                                SelectedEntry.DLists[e.RowIndex].Scale = (float)Convert.ToDecimal(e.Value);
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankDList(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = 0;
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 5:     // Limb
+                    {
+                        try
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, Convert.ToUInt16(e.Value));
+                            else
+                                SelectedEntry.DLists[e.RowIndex].Limb = Convert.ToUInt16(e.Value);
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankDList(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = 0;
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 6:     // Object ID
+                    {
+                        try
+                        {
+                            Int16 ObjectId = Convert.ToInt16(e.Value);
+
+                            if (e.Value.ToString() == "---" || e.Value.ToString() == "")
+                                ObjectId = -1;
+
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, ObjectId);
+                            else
+                                SelectedEntry.DLists[e.RowIndex].ObjectID = Convert.ToInt16(e.Value);
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankDList(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = "";
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 7:     // ShowType
+                    {
+                        int ShowType;
+
+                        switch (e.Value.ToString())
+                        {
+                            case "Don't show": ShowType = 0; break;
+                            case "Alongside limb": ShowType = 1; break;
+                            case "Instead of limb": ShowType = 2; break;
+                            default: ShowType = 0; break;
+                        }
+
+                        if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, ShowType);
+                        else
+                            SelectedEntry.DLists[e.RowIndex].ShowType = ShowType;
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+            }
+        }
+
+        private void DataGridView_ExtraDLists_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Delete)
+                {
+                    int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
+                    (sender as DataGridView).Rows.RemoveAt(Index);
+                    SelectedEntry.DLists.RemoveAt(Index);
+
+
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        #endregion
+
+        #region Textures Grid
+
+        private void AddBlankTex(int SkipIndex, int Index, int Segment, string Name = null, uint? Address = null, short? ObjectID = null)
+        {
+            Name = Name == null ? "Texture_" + Index.ToString() : Name;
+            Address = Address == null ? 0 : Address;
+            ObjectID = ObjectID == null ? -1 : ObjectID;
+
+            SelectedEntry.Textures[Segment].Add(new TextureEntry(Name, (uint)Address, (short)ObjectID));
+
+            DataGridView dgv = TabControl_Textures.TabPages[Segment].Controls[0] as DataGridView;
+
+            if (SkipIndex != 0)
+                dgv.Rows[Index].Cells[0].Value = Name;
+
+            if (SkipIndex != 1)
+                dgv.Rows[Index].Cells[1].Value = Address;
+
+            if (SkipIndex != 2)
+                dgv.Rows[Index].Cells[2].Value = ObjectID == -1 ? "---" : ObjectID.ToString();
+        }
+
+        private void DataGridViewTextures_CellParse(object sender, DataGridViewCellParsingEventArgs e)
+        {
+            if (e.RowIndex > 31)
+            {
+                MessageBox.Show("Cannot define more than 32 textures per segment.");
+                (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
+                e.ParsingApplied = true;
+                return;
+            }
+
+            int DataGridIndex = TabControl_Textures.SelectedIndex;
+
+            switch (e.ColumnIndex)
+            {
+                case 0:     // Name
+                    {
+                        if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
+                            AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex, e.Value.ToString());
+                        else
+                            SelectedEntry.Textures[DataGridIndex][e.RowIndex].Name = e.Value.ToString();
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 1:     // Address
+                    {
+                        try
+                        {
+                            if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
+                                AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
+                            else
+                                SelectedEntry.Textures[DataGridIndex][e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex);
+
+                            e.Value = Convert.ToInt32("0", 16);
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case 2:     // Object
+                    {
+                        try
+                        {
+                            Int16 ObjectId = Convert.ToInt16(e.Value);
+
+                            if (e.Value.ToString() == "---" || e.Value.ToString() == "")
+                                ObjectId = -1;
+
+                            if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
+                                AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, ObjectId);
+                            else
+                                SelectedEntry.Textures[DataGridIndex][e.RowIndex].ObjectID = ObjectId;
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                                AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex);
+
+                            e.Value = "";
+                        }
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+            }
+        }
+
+        private void DataGridViewTextures_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Delete)
+                {
+                    int DataGridIndex = TabControl_Textures.SelectedIndex;
+                    int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
+                    (sender as DataGridView).Rows.RemoveAt(Index);
+                    SelectedEntry.Textures[DataGridIndex].RemoveAt(Index);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        #endregion
+
+        #region Context Menu
 
         private void Textbox_Script_MouseClick(object sender, MouseEventArgs e)
         {
@@ -1252,6 +1247,18 @@ namespace NPC_Maker
                 LastRightClickedTextbox = (sender as Control);
                 ContextMenuStrip.Show(sender as Control, e.Location);
             }
+        }
+
+        private void InsertTxtToScript(string Text)
+        {
+            FastColoredTextBox T = (LastRightClickedTextbox as FastColoredTextBox);
+
+            int start = T.SelectionStart;
+            string newTxt = T.Text;
+            newTxt = newTxt.Remove(T.SelectionStart, T.SelectionLength);
+            newTxt = newTxt.Insert(T.SelectionStart, Text);
+            T.Text = newTxt;
+            T.SelectionStart = start + Text.Length;
         }
 
         private void Tsmi_DoubleClick(object sender, EventArgs e)
@@ -1291,10 +1298,60 @@ namespace NPC_Maker
             }
         }
 
-        private void FileMenu_Click(object sender, EventArgs e)
+        private void ActorstoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //hack
-            NumUpDown_Hierarchy.Focus();
+            PickableList Actors = new PickableList("Actors.csv");
+            DialogResult DR = Actors.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                InsertTxtToScript(Actors.Chosen);
+            }
+        }
+
+        #endregion
+
+        #region Scripts Tab
+
+        private void Textbox_Script_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (SelectedEntry == null)
+                return;
+            SelectedEntry.Script = (sender as FastColoredTextBox).Text;
+
+            FCTB.ApplySyntaxHighlight(sender as FastColoredTextBox, e, SyntaxHighlighting);
+        }
+
+        private void Button_TryParse_Click(object sender, EventArgs e)
+        {
+            string[] Lines = Textbox_Script.Text.Replace(";", Environment.NewLine).Split(new[] { "\n" }, StringSplitOptions.None);
+            Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
+            r.ClearStyle(FCTB.ErrorStyle);
+
+
+            NewScriptParser.ScriptParser Parser = new NPC_Maker.NewScriptParser.ScriptParser(SelectedEntry, SelectedEntry.Script);
+            Textbox_ParseErrors.Clear();
+
+            NewScriptParser.BScript Output = Parser.ParseScript();
+
+#if DEBUG
+
+            Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
+            Dbg.Show();
+
+#endif
+
+
+
+            if (Output.ParseErrors.Count() == 0)
+                Textbox_ParseErrors.Text = "Parsed successfully!";
+            else
+            {
+                foreach (NewScriptParser.ParseException Error in Output.ParseErrors)
+                {
+                    Textbox_ParseErrors.Text += Error.ToString() + Environment.NewLine;
+                }
+            }
         }
 
         private void Button_TryParse2_Click(object sender, EventArgs e)
@@ -1328,33 +1385,14 @@ namespace NPC_Maker
                 return;
             SelectedEntry.Script2 = (sender as FastColoredTextBox).Text;
 
-            FCTB.ApplySyntaxHighlight(sender, e, SyntaxHighlighting);
+            FCTB.ApplySyntaxHighlight(sender as FastColoredTextBox, e, SyntaxHighlighting);
         }
 
-        private void SyntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-        {
-            SyntaxHighlighting = (sender as ToolStripMenuItem).Checked;
+        #endregion
 
-            Textbox_Script.Text += " ";
-            Textbox_Script2.Text += " ";
-        }
 
-        private void ComboBox_AnimType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ComboBox_ValueChanged(sender, e);
-            Col_OBJ.Visible = (ComboBox_AnimType.SelectedIndex == 0);
-        }
 
-        private void ActorstoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PickableList Actors = new PickableList("Actors.csv");
-            DialogResult DR = Actors.ShowDialog();
-
-            if (DR == DialogResult.OK)
-            {
-                InsertTxtToScript(Actors.Chosen);
-            }
-        }
+        #region Unused
 
         /*      
         private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
@@ -1441,6 +1479,8 @@ namespace NPC_Maker
             }
         }
         */
+
+        #endregion
 
     }
 }
