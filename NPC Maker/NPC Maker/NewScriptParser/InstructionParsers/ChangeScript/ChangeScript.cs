@@ -28,7 +28,8 @@ namespace NPC_Maker.NewScriptParser
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
                             return new InstructionChangeScript((byte)SetSubType, ActorID, "__NONE__");
                         }
-                    default: throw new Exception();
+                    default: 
+                        throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                 }
             }
             catch (ParseException pEx)

@@ -67,7 +67,7 @@ namespace NPC_Maker.NewScriptParser
 
         public static object GetValueAndCheckRange(string[] Splitstring, int Index, float Min, float Max)
         {
-            float? Value = (float)Convert.ToDecimal(Splitstring[Index]);
+            float? Value = (float?)Convert.ToDecimal(Splitstring[Index]);
 
             if (Value == null)
                 throw ParseException.ParamConversionError(Splitstring);

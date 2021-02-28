@@ -29,12 +29,12 @@ namespace NPC_Maker.NewScriptParser
         }
     }
 
-    public class InstructionAwaitScriptVar : InstructionSubWValueType
+    public class InstructionAwaitValue : InstructionSubWValueType
     {
-        public float Value;
+        public object Value;
         public byte Condition;
 
-        public InstructionAwaitScriptVar(byte _SubID, float _Value, Lists.ConditionTypes _Condition, byte _ValueType)
+        public InstructionAwaitValue(byte _SubID, object _Value, Lists.ConditionTypes _Condition, byte _ValueType)
                                         : base((int)Lists.Instructions.AWAIT, _SubID, _ValueType)
         {
             Value = _Value;

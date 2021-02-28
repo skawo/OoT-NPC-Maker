@@ -95,6 +95,14 @@ namespace NPC_Maker
             foreach (string KWord in Enum.GetNames(typeof(NewScriptParser.Lists.TradeItems)))
                 r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
+            // Color in dungeon items
+            foreach (string KWord in Enum.GetNames(typeof(NewScriptParser.Lists.DungeonItems)))
+                r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
+            // Color in items
+            foreach (string KWord in Enum.GetNames(typeof(NewScriptParser.Lists.Items)))
+                r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+
             // Color in give items
             foreach (string KWord in Enum.GetNames(typeof(NewScriptParser.Lists.GiveItems)))
                 r.SetStyle(FCTB.CyanStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);

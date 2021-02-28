@@ -34,9 +34,30 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
                                 byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
-                                float Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType);
+                                float Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
 
                                 return new InstructionAwait((byte)SubID, Data, VarType);
+                            }
+                        case (int)Lists.AwaitSubTypes.STICK_X:
+                        case (int)Lists.AwaitSubTypes.STICK_Y:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                float Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, sbyte.MinValue, sbyte.MaxValue);
+
+                                return new InstructionAwaitValue((byte)SubID, Data, Condition, VarType);
+                            }
+                        case (int)Lists.AwaitSubTypes.BUTTON_HELD:
+                        case (int)Lists.AwaitSubTypes.BUTTON_PRESSED:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+
+                                UInt32? Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons), ParseException.UnrecognizedButton(SplitLine));
+
+                                return new InstructionAwait((byte)SubID, Value, 0);
+
                             }
                         case (int)Lists.AwaitSubTypes.VAR_1:
                         case (int)Lists.AwaitSubTypes.VAR_2:
@@ -50,10 +71,10 @@ namespace NPC_Maker.NewScriptParser
                                 byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
                                 float Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType);
 
-                                return new InstructionAwaitScriptVar((byte)SubID, Data, Condition, VarType);
+                                return new InstructionAwaitValue((byte)SubID, Data, Condition, VarType);
                             }
-                        default:
-                            throw new Exception();
+                        default: 
+                            throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
                 }
                 catch (ParseException pEx)

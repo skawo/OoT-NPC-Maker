@@ -37,18 +37,18 @@ namespace NPC_Maker
             this.ResizeBegin += Form1_ResizeBegin;
             this.ResizeEnd += Form1_ResizeEnd;
 
-            foreach (string Item in Enum.GetNames(typeof(Lists.InstructionIDs)))
+            foreach (string Item in Enum.GetNames(typeof(NewScriptParser.Lists.Instructions)))
             {
                 ToolStripMenuItem Tsmi = new ToolStripMenuItem
                 {
                     Text = Item
                 };
 
-                if (Lists.FunctionSubtypes.ContainsKey(Item))
+                if (NewScriptParser.Lists.FunctionSubtypes.ContainsKey(Item))
                 {
                     Tsmi.DoubleClickEnabled = true;
                     Tsmi.DoubleClick += Tsmi_DoubleClick;
-                    AddItemCollectionToToolStripMenuItem(Lists.FunctionSubtypes[Item], Tsmi);
+                    AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.FunctionSubtypes[Item], Tsmi);
                 }
                 else
                     Tsmi.Click += Tsmi_Click;
@@ -56,11 +56,14 @@ namespace NPC_Maker
                 functionsToolStripMenuItem.DropDownItems.Add(Tsmi);
             }
 
-            AddItemCollectionToToolStripMenuItem(Lists.Keywords.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Lists.KeywordsDarkGray.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Lists.KeyValues.ToArray(), keyValuesToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.GiveItems)), itemsgiveToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.KeyValues.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.AllKeywords.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.GiveItems)), itemsgiveToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.TradeItems)), itemstradeToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.DungeonItems)), itemsdungeonToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.Items)), itemsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.QuestItems)), questItemsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.PlayerMasks)), playerMasksToolStripMenuItem);
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)

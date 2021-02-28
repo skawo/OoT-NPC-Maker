@@ -118,19 +118,19 @@ namespace NPC_Maker.NewScriptParser
         public enum Instructions
         {
             IF = 1,
-            SET = 2,
+            WHILE = 2,
             AWAIT = 3,
-            ENABLE_TALKING = 4,
-            TRADE = 5,
-            SHOW_TEXTBOX = 6,
-            INVENTORY = 7,  // !
-            PLAY = 8,
-            KILL = 9,
-            SPAWN = 10,  // !
-            WARP = 11,
-            CHANGE_SCRIPT = 12,
-            WHILE = 13,
-            TALK = 14,
+            SET = 4,
+            TALK = 5,
+            TRADE = 6,
+            ENABLE_TALKING = 7,
+            SHOW_TEXTBOX = 8,
+            ITEM = 9,  
+            PLAY = 10,
+            KILL = 11,
+            SPAWN = 12,  
+            WARP = 13,
+            CHANGE_SCRIPT = 14,
             RETURN = 252,
             GOTO = 253,
             LABEL = 254,
@@ -140,11 +140,13 @@ namespace NPC_Maker.NewScriptParser
         public static Dictionary<string, string[]> FunctionSubtypes = new Dictionary<string, string[]>()
         {
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.IF), Enum.GetNames(typeof(Lists.IfSubTypes)) },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.WHILE), Enum.GetNames(typeof(Lists.IfSubTypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.SET), Enum.GetNames(typeof(Lists.SetSubTypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.AWAIT), Enum.GetNames(typeof(Lists.AwaitSubTypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.PLAY), Enum.GetNames(typeof(Lists.PlaySubTypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.KILL), Enum.GetNames(typeof(Lists.TargetActorSubtypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.CHANGE_SCRIPT), Enum.GetNames(typeof(Lists.ScriptChangeSubtypes)) },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.ITEM), Enum.GetNames(typeof(Lists.ItemSubTypes)) },
         };
 
         public static List<string> KeyValues = GetKeyValues();
@@ -156,20 +158,12 @@ namespace NPC_Maker.NewScriptParser
             Values.AddRange(Enum.GetNames(typeof(Lists.SpawnParams)));
             Values.AddRange(Enum.GetNames(typeof(Lists.SpawnPosParams)));
             Values.AddRange(Enum.GetNames(typeof(Lists.TradeStatuses)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.PlayerMasks)));
             Values.AddRange(Enum.GetNames(typeof(Lists.LookAtStyles)));
             Values.AddRange(Enum.GetNames(typeof(Lists.DListVisibilityOptions)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.BombBags)));
             Values.AddRange(Enum.GetNames(typeof(Lists.Axis)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.Quivers)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.Wallets)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.Scales)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.Gauntlets)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.StickCap)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.NutCap)));
             Values.AddRange(Enum.GetNames(typeof(Lists.Segments)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.StickCap)));
-            Values.AddRange(Enum.GetNames(typeof(Lists.StickCap)));
+            Values.AddRange(Enum.GetNames(typeof(Lists.TargetActorSubtypes)));
+            Values.AddRange(Enum.GetNames(typeof(Lists.Buttons)));
 
             return Values;
         }
@@ -196,6 +190,7 @@ namespace NPC_Maker.NewScriptParser
             CURRENT_ANIM_WALKING = 16,
             CURRENT_ANIM_IDLE = 17,
             PLAYER_HAS_MAGIC = 18,
+            ATTACKED = 19,
 
             /* s16s */
             PLAYER_RUPEES = 30,
@@ -217,19 +212,29 @@ namespace NPC_Maker.NewScriptParser
             PLAYER_DEKUSTICKS = 46,
             PLAYER_DEKUNUTS = 47,
 
+            /* s8s */
+            STICK_X = 50,
+            STICK_Y = 51,
+
             /* special */
             ITEM_BEING_TRADED = 61,
             TRADE_STATUS = 62,
             PLAYER_MASK = 64,
             TIME_OF_DAY = 65,
             CURRENT_ANIMATION = 66,
-            PLAYER_BOMBBAG = 67,
-            PLAYER_WALLET = 68,
-            PLAYER_QUIVER = 69,
-            PLAYER_WATER_SCALE = 70,
-            PLAYER_GAUNTLETS = 71,
-            PLAYER_STICKCAP = 72,
-            PLAYER_DEKUNUTCAP = 73,
+            PLAYER_HAS_INVENTORY_ITEM = 67,
+            PLAYER_HAS_QUEST_ITEM = 68,
+            PLAYER_HAS_DUNGEON_ITEM = 69,
+            LAST_ITEM_USED = 70,
+            BUTTON_PRESSED = 71,
+            BUTTON_HELD = 72,
+        }
+
+        public enum ItemSubTypes
+        {
+            AWARD = 0,
+            GIVE = 1,
+            TAKE = 2,
         }
 
         public enum SetSubTypes
@@ -351,6 +356,12 @@ namespace NPC_Maker.NewScriptParser
             CURRENT_ANIMATION_FRAME = 37,
             CURRENT_CUTSCENE_FRAME = 38,
 
+            STICK_X = 50,
+            STICK_Y = 51,
+
+            BUTTON_PRESSED = 73,
+            BUTTON_HELD = 74,
+
             VAR_1 = 75,
             VAR_2 = 76,
             VAR_3 = 77,
@@ -387,283 +398,712 @@ namespace NPC_Maker.NewScriptParser
 
         public enum TradeItems
         {
-            ITEM_LETTER_ZELDA = 1,
-            ITEM_WEIRD_EGG = 2,
-            ITEM_CHICKEN = 3,
-            ITEM_BEAN = 4,
-            ITEM_POCKET_EGG = 5,
-            ITEM_POCKET_CUCCO = 6,
-            ITEM_COJIRO = 7,
-            ITEM_ODD_MUSHROOM = 8,
-            ITEM_ODD_POTION = 9,
-            ITEM_SAW = 10,
-            ITEM_SWORD_BROKEN = 11,
-            ITEM_PRESCRIPTION = 12,
-            ITEM_FROG = 13,
-            ITEM_EYEDROPS = 14,
-            ITEM_CLAIM_CHECK = 15,
-            ITEM_FISH = 24,
-            ITEM_BLUE_FIRE = 25,
-            ITEM_BUGS = 26,
-            ITEM_POE = 27,
-            ITEM_BIG_POE = 28,
-            ITEM_LETTER_RUTO = 29,
+            /* 0x00 */
+            EXCH_ITEM_NONE,
+            /* 0x01 */
+            EXCH_ITEM_LETTER_ZELDA,
+            /* 0x02 */
+            EXCH_ITEM_WEIRD_EGG,
+            /* 0x03 */
+            EXCH_ITEM_CHICKEN,
+            /* 0x04 */
+            EXCH_ITEM_BEAN,
+            /* 0x05 */
+            EXCH_ITEM_POCKET_EGG,
+            /* 0x06 */
+            EXCH_ITEM_POCKET_CUCCO,
+            /* 0x07 */
+            EXCH_ITEM_COJIRO,
+            /* 0x08 */
+            EXCH_ITEM_ODD_MUSHROOM,
+            /* 0x09 */
+            EXCH_ITEM_ODD_POTION,
+            /* 0x0A */
+            EXCH_ITEM_SAW,
+            /* 0x0B */
+            EXCH_ITEM_SWORD_BROKEN,
+            /* 0x0C */
+            EXCH_ITEM_PRESCRIPTION,
+            /* 0x0D */
+            EXCH_ITEM_FROG,
+            /* 0x0E */
+            EXCH_ITEM_EYEDROPS,
+            /* 0x0F */
+            EXCH_ITEM_CLAIM_CHECK,
+            /* 0x10 */
+            EXCH_ITEM_MASK_SKULL,
+            /* 0x11 */
+            EXCH_ITEM_MASK_SPOOKY,
+            /* 0x12 */
+            EXCH_ITEM_MASK_KEATON,
+            /* 0x13 */
+            EXCH_ITEM_MASK_BUNNY,
+            /* 0x14 */
+            EXCH_ITEM_MASK_TRUTH,
+            /* 0x15 */
+            EXCH_ITEM_MASK_GORON,
+            /* 0x16 */
+            EXCH_ITEM_MASK_ZORA,
+            /* 0x17 */
+            EXCH_ITEM_MASK_GERUDO,
+            /* 0x18 */
+            EXCH_ITEM_FISH,
+            /* 0x19 */
+            EXCH_ITEM_BLUE_FIRE,
+            /* 0x1A */
+            EXCH_ITEM_BUG,
+            /* 0x1B */
+            EXCH_ITEM_POE,
+            /* 0x1C */
+            EXCH_ITEM_BIG_POE,
+            /* 0x1D */
+            EXCH_ITEM_LETTER_RUTO,
         }
 
         public enum GiveItems
         {
             /* 0x00 */
-            ITEM_INVALID, // Link picks up chest and it sends him flying upwards
+            GI_NONE,
             /* 0x01 */
-            ITEM_BOMBS_5,
+            GI_BOMBS_5,
             /* 0x02 */
-            ITEM_NUTS_5,
+            GI_NUTS_5,
             /* 0x03 */
-            ITEM_BOMBCHUS_10,
+            GI_BOMBCHUS_10,
             /* 0x04 */
-            ITEM_BOW,
+            GI_BOW,
             /* 0x05 */
-            ITEM_SLINGSHOT,
+            GI_SLINGSHOT,
             /* 0x06 */
-            ITEM_BOOMERANG,
+            GI_BOOMERANG,
             /* 0x07 */
-            ITEM_STICKS_1,
+            GI_STICKS_1,
             /* 0x08 */
-            ITEM_HOOKSHOT,
+            GI_HOOKSHOT,
             /* 0x09 */
-            ITEM_LONGSHOT,
+            GI_LONGSHOT,
             /* 0x0A */
-            ITEM_LENS,
+            GI_LENS,
             /* 0x0B */
-            ITEM_LETTER_ZELDA,
+            GI_LETTER_ZELDA,
             /* 0x0C */
-            ITEM_OCARINA_OOT,
+            GI_OCARINA_OOT,
             /* 0x0D */
-            ITEM_HAMMER,
+            GI_HAMMER,
             /* 0x0E */
-            ITEM_COJIRO,
+            GI_COJIRO,
             /* 0x0F */
-            ITEM_BOTTLE,
+            GI_BOTTLE,
             /* 0x10 */
-            ITEM_POTION_RED,
+            GI_POTION_RED,
             /* 0x11 */
-            ITEM_POTION_GREEN,
+            GI_POTION_GREEN,
             /* 0x12 */
-            ITEM_POTION_BLUE,
+            GI_POTION_BLUE,
             /* 0x13 */
-            ITEM_FAIRY,
+            GI_FAIRY,
             /* 0x14 */
-            ITEM_MILK_BOTTLE,
+            GI_MILK_BOTTLE,
             /* 0x15 */
-            ITEM_LETTER_RUTO,
+            GI_LETTER_RUTO,
             /* 0x16 */
-            ITEM_BEAN,
+            GI_BEAN,
             /* 0x17 */
-            ITEM_MASK_SKULL,
+            GI_MASK_SKULL,
             /* 0x18 */
-            ITEM_MASK_SPOOKY,
+            GI_MASK_SPOOKY,
             /* 0x19 */
-            ITEM_CHICKEN, // uses bean message ID
+            GI_CHICKEN, // uses bean message ID
             /* 0x1A */
-            ITEM_MASK_KEATON,
+            GI_MASK_KEATON,
             /* 0x1B */
-            ITEM_MASK_BUNNY,
+            GI_MASK_BUNNY,
             /* 0x1C */
-            ITEM_MASK_TRUTH,
+            GI_MASK_TRUTH,
             /* 0x1D */
-            ITEM_POCKET_EGG,
+            GI_POCKET_EGG,
             /* 0x1E */
-            ITEM_POCKET_CUCCO, // uses bean message ID
+            GI_POCKET_CUCCO, // uses bean message ID
             /* 0x1F */
-            ITEM_ODD_MUSHROOM,
+            GI_ODD_MUSHROOM,
             /* 0x20 */
-            ITEM_ODD_POTION,
+            GI_ODD_POTION,
             /* 0x21 */
-            ITEM_SAW,
+            GI_SAW,
             /* 0x22 */
-            ITEM_SWORD_BROKEN,
+            GI_SWORD_BROKEN,
             /* 0x23 */
-            ITEM_PERSCRIPTION,
+            GI_PRESCRIPTION,
             /* 0x24 */
-            ITEM_FROG,
+            GI_FROG,
             /* 0x25 */
-            ITEM_EYEDROPS,
+            GI_EYEDROPS,
             /* 0x26 */
-            ITEM_CLAIM_CHECK,
+            GI_CLAIM_CHECK,
             /* 0x27 */
-            ITEM_SWORD_KOKIRI,
+            GI_SWORD_KOKIRI,
             /* 0x28 */
-            ITEM_SWORD_KNIFE,
+            GI_SWORD_KNIFE,
             /* 0x29 */
-            ITEM_SHIELD_DEKU,   // or blue rupee if you have the shield
+            GI_SHIELD_DEKU,   // or blue rupee if you have the shield
             /* 0x2A */
-            ITEM_SHIELD_HYLIAN, // or blue rupee if you have the shield
+            GI_SHIELD_HYLIAN, // or blue rupee if you have the shield
             /* 0x2B */
-            ITEM_SHIELD_MIRROR,
+            GI_SHIELD_MIRROR,
             /* 0x2C */
-            ITEM_TUNIC_GORON, // or blue rupee if you have the tunic
+            GI_TUNIC_GORON, // or blue rupee if you have the tunic
             /* 0x2D */
-            ITEM_TUNIC_ZORA,  // or blue rupee if you have the tunic
+            GI_TUNIC_ZORA,  // or blue rupee if you have the tunic
             /* 0x2E */
-            ITEM_BOOTS_IRON,
+            GI_BOOTS_IRON,
             /* 0x2F */
-            ITEM_BOOTS_HOVER,
+            GI_BOOTS_HOVER,
             /* 0x30 */
-            ITEM_QUIVER_40,
+            GI_QUIVER_40,
             /* 0x31 */
-            ITEM_QUIVER_50,
+            GI_QUIVER_50,
             /* 0x32 */
-            ITEM_BOMB_BAG_20,
+            GI_BOMB_BAG_20,
             /* 0x33 */
-            ITEM_BOMB_BAG_30,
+            GI_BOMB_BAG_30,
             /* 0x34 */
-            ITEM_BOMB_BAG_40,
+            GI_BOMB_BAG_40,
             /* 0x35 */
-            ITEM_GAUNTLETS_SILVER,
+            GI_GAUNTLETS_SILVER,
             /* 0x36 */
-            ITEM_GAUNTLETS_GOLD,
+            GI_GAUNTLETS_GOLD,
             /* 0x37 */
-            ITEM_SCALE_SILVER,
+            GI_SCALE_SILVER,
             /* 0x38 */
-            ITEM_SCALE_GOLD,
+            GI_SCALE_GOLD,
             /* 0x39 */
-            ITEM_STONE_OF_AGONY,
+            GI_STONE_OF_AGONY,
             /* 0x3A */
-            ITEM_GERUDO_CARD,
+            GI_GERUDO_CARD,
             /* 0x3B */
-            ITEM_OCARINA_FAIRY, // uses Ocarina of Time message ID
+            GI_OCARINA_FAIRY, // uses Ocarina of Time message ID
             /* 0x3C */
-            ITEM_SEEDS_5,
+            GI_SEEDS_5,
             /* 0x3D */
-            ITEM_HEART_CONTAINER,
+            GI_HEART_CONTAINER,
             /* 0x3E */
-            ITEM_HEART_PIECE,
+            GI_HEART_PIECE,
             /* 0x3F */
-            ITEM_KEY_BOSS,
+            GI_KEY_BOSS,
             /* 0x40 */
-            ITEM_COMPASS,
+            GI_COMPASS,
             /* 0x41 */
-            ITEM_MAP,
+            GI_MAP,
             /* 0x42 */
-            ITEM_KEY_SMALL,
+            GI_KEY_SMALL,
             /* 0x43 */
-            ITEM_MAGIC_SMALL, // or blue rupee if not from a drop
+            GI_MAGIC_SMALL, // or blue rupee if not from a drop
             /* 0x44 */
-            ITEM_MAGIC_LARGE, // or blue rupee if not from a drop
+            GI_MAGIC_LARGE, // or blue rupee if not from a drop
             /* 0x45 */
-            ITEM_WALLET_ADULT,
+            GI_WALLET_ADULT,
             /* 0x46 */
-            ITEM_WALLET_GIANT,
+            GI_WALLET_GIANT,
             /* 0x47 */
-            ITEM_WEIRD_EGG,
+            GI_WEIRD_EGG,
             /* 0x48 */
-            ITEM_HEART,
+            GI_HEART,
             /* 0x49 */
-            ITEM_ARROWS_SMALL,  // amount changes depending on context
+            GI_ARROWS_SMALL,  // amount changes depending on context
             /* 0x4A */
-            ITEM_ARROWS_MEDIUM, // amount changes depending on context
+            GI_ARROWS_MEDIUM, // amount changes depending on context
             /* 0x4B */
-            ITEM_ARROWS_LARGE,  // amount changes depending on context
+            GI_ARROWS_LARGE,  // amount changes depending on context
             /* 0x4C */
-            ITEM_RUPEE_GREEN,
+            GI_RUPEE_GREEN,
             /* 0x4D */
-            ITEM_RUPEE_BLUE,
+            GI_RUPEE_BLUE,
             /* 0x4E */
-            ITEM_RUPEE_RED,
+            GI_RUPEE_RED,
             /* 0x4F */
-            ITEM_HEART_CONTAINER_2,
+            GI_HEART_CONTAINER_2,
             /* 0x50 */
-            ITEM_MILK,
+            GI_MILK,
             /* 0x51 */
-            ITEM_MASK_GORON,
+            GI_MASK_GORON,
             /* 0x52 */
-            ITEM_MASK_ZORA,
+            GI_MASK_ZORA,
             /* 0x53 */
-            ITEM_MASK_GERUDO,
+            GI_MASK_GERUDO,
             /* 0x54 */
-            ITEM_BRACELET,
+            GI_BRACELET,
             /* 0x55 */
-            ITEM_RUPEE_PURPLE,
+            GI_RUPEE_PURPLE,
             /* 0x56 */
-            ITEM_RUPEE_GOLD,
+            GI_RUPEE_GOLD,
             /* 0x57 */
-            ITEM_SWORD_BGS,
+            GI_SWORD_BGS,
             /* 0x58 */
-            ITEM_ARROW_FIRE,
+            GI_ARROW_FIRE,
             /* 0x59 */
-            ITEM_ARROW_ICE,
+            GI_ARROW_ICE,
             /* 0x5A */
-            ITEM_ARROW_LIGHT,
+            GI_ARROW_LIGHT,
             /* 0x5B */
-            ITEM_SKULL_TOKEN,
+            GI_SKULL_TOKEN,
             /* 0x5C */
-            ITEM_DINS_FIRE,
+            GI_DINS_FIRE,
             /* 0x5D */
-            ITEM_FARORES_WIND,
+            GI_FARORES_WIND,
             /* 0x5E */
-            ITEM_NAYRUS_LOVE,
+            GI_NAYRUS_LOVE,
             /* 0x5F */
-            ITEM_BULLET_BAG_30,
+            GI_BULLET_BAG_30,
             /* 0x60 */
-            ITEM_BULLET_BAG_40,
+            GI_BULLET_BAG_40,
             /* 0x61 */
-            ITEM_STICKS_5,
+            GI_STICKS_5,
             /* 0x62 */
-            ITEM_STICKS_10,
+            GI_STICKS_10,
             /* 0x63 */
-            ITEM_NUTS_5_2,
+            GI_NUTS_5_2,
             /* 0x64 */
-            ITEM_NUTS_10,
+            GI_NUTS_10,
             /* 0x65 */
-            ITEM_BOMBS_1,
+            GI_BOMBS_1,
             /* 0x66 */
-            ITEM_BOMBS_10,
+            GI_BOMBS_10,
             /* 0x67 */
-            ITEM_BOMBS_20,
+            GI_BOMBS_20,
             /* 0x68 */
-            ITEM_BOMBS_30,
+            GI_BOMBS_30,
             /* 0x69 */
-            ITEM_SEEDS_30,
+            GI_SEEDS_30,
             /* 0x6A */
-            ITEM_BOMBCHUS_5,
+            GI_BOMBCHUS_5,
             /* 0x6B */
-            ITEM_BOMBCHUS_20,
+            GI_BOMBCHUS_20,
             /* 0x6C */
-            ITEM_FISH,
+            GI_FISH,
             /* 0x6D */
-            ITEM_BUGS,
+            GI_BUGS,
             /* 0x6E */
-            ITEM_BLUE_FIRE,
+            GI_BLUE_FIRE,
             /* 0x6F */
-            ITEM_POE,
+            GI_POE,
             /* 0x70 */
-            ITEM_BIG_POE,
+            GI_BIG_POE,
             /* 0x71 */
-            ITEM_DOOR_KEY,          // specific to chest minigame
+            GI_DOOR_KEY,          // specific to chest minigame
             /* 0x72 */
-            ITEM_RUPEE_GREEN_LOSE,  // specific to chest minigame
+            GI_RUPEE_GREEN_LOSE,  // specific to chest minigame
             /* 0x73 */
-            ITEM_RUPEE_BLUE_LOSE,   // specific to chest minigame
+            GI_RUPEE_BLUE_LOSE,   // specific to chest minigame
             /* 0x74 */
-            ITEM_RUPEE_RED_LOSE,    // specific to chest minigame
+            GI_RUPEE_RED_LOSE,    // specific to chest minigame
             /* 0x75 */
-            ITEM_RUPEE_PURPLE_LOSE, // specific to chest minigame
+            GI_RUPEE_PURPLE_LOSE, // specific to chest minigame
             /* 0x76 */
-            ITEM_HEART_PIECE_WIN,   // specific to chest minigame
+            GI_HEART_PIECE_WIN,   // specific to chest minigame
             /* 0x77 */
-            ITEM_STICK_UPGRADE_20,
+            GI_STICK_UPGRADE_20,
             /* 0x78 */
-            ITEM_STICK_UPGRADE_30,
+            GI_STICK_UPGRADE_30,
             /* 0x79 */
-            ITEM_NUT_UPGRADE_30,
+            GI_NUT_UPGRADE_30,
             /* 0x7A */
-            ITEM_NUT_UPGRADE_40,
+            GI_NUT_UPGRADE_40,
             /* 0x7B */
-            ITEM_BULLET_BAG_50,
+            GI_BULLET_BAG_50,
             /* 0x7C */
-            ITEM_ICE_TRAP, // freezes link when opened from a chest
+            GI_ICE_TRAP, // freezes link when opened from a chest
             /* 0x7D */
-            ITEM_TEXT_0 // no model appears over Link, shows text id 0 (pocket egg)
+            GI_TEXT_0, // no model appears over Link, shows text id 0 (pocket egg)
+        }
+
+        public enum Items
+        {
+            /* 0x00 */
+            ITEM_STICK,
+            /* 0x01 */
+            ITEM_NUT,
+            /* 0x02 */
+            ITEM_BOMB,
+            /* 0x03 */
+            ITEM_BOW,
+            /* 0x04 */
+            ITEM_ARROW_FIRE,
+            /* 0x05 */
+            ITEM_DINS_FIRE,
+            /* 0x06 */
+            ITEM_SLINGSHOT,
+            /* 0x07 */
+            ITEM_OCARINA_FAIRY,
+            /* 0x08 */
+            ITEM_OCARINA_TIME,
+            /* 0x09 */
+            ITEM_BOMBCHU,
+            /* 0x0A */
+            ITEM_HOOKSHOT,
+            /* 0x0B */
+            ITEM_LONGSHOT,
+            /* 0x0C */
+            ITEM_ARROW_ICE,
+            /* 0x0D */
+            ITEM_FARORES_WIND,
+            /* 0x0E */
+            ITEM_BOOMERANG,
+            /* 0x0F */
+            ITEM_LENS,
+            /* 0x10 */
+            ITEM_BEAN,
+            /* 0x11 */
+            ITEM_HAMMER,
+            /* 0x12 */
+            ITEM_ARROW_LIGHT,
+            /* 0x13 */
+            ITEM_NAYRUS_LOVE,
+            /* 0x14 */
+            ITEM_BOTTLE,
+            /* 0x15 */
+            ITEM_POTION_RED,
+            /* 0x16 */
+            ITEM_POTION_GREEN,
+            /* 0x17 */
+            ITEM_POTION_BLUE,
+            /* 0x18 */
+            ITEM_FAIRY,
+            /* 0x19 */
+            ITEM_FISH,
+            /* 0x1A */
+            ITEM_MILK_BOTTLE,
+            /* 0x1B */
+            ITEM_LETTER_RUTO,
+            /* 0x1C */
+            ITEM_BLUE_FIRE,
+            /* 0x1D */
+            ITEM_BUG,
+            /* 0x1E */
+            ITEM_BIG_POE,
+            /* 0x1F */
+            ITEM_MILK_HALF,
+            /* 0x20 */
+            ITEM_POE,
+            /* 0x21 */
+            ITEM_WEIRD_EGG,
+            /* 0x22 */
+            ITEM_CHICKEN,
+            /* 0x23 */
+            ITEM_LETTER_ZELDA,
+            /* 0x24 */
+            ITEM_MASK_KEATON,
+            /* 0x25 */
+            ITEM_MASK_SKULL,
+            /* 0x26 */
+            ITEM_MASK_SPOOKY,
+            /* 0x27 */
+            ITEM_MASK_BUNNY,
+            /* 0x28 */
+            ITEM_MASK_GORON,
+            /* 0x29 */
+            ITEM_MASK_ZORA,
+            /* 0x2A */
+            ITEM_MASK_GERUDO,
+            /* 0x2B */
+            ITEM_MASK_TRUTH,
+            /* 0x2C */
+            ITEM_SOLD_OUT,
+            /* 0x2D */
+            ITEM_POCKET_EGG,
+            /* 0x2E */
+            ITEM_POCKET_CUCCO,
+            /* 0x2F */
+            ITEM_COJIRO,
+            /* 0x30 */
+            ITEM_ODD_MUSHROOM,
+            /* 0x31 */
+            ITEM_ODD_POTION,
+            /* 0x32 */
+            ITEM_SAW,
+            /* 0x33 */
+            ITEM_SWORD_BROKEN,
+            /* 0x34 */
+            ITEM_PRESCRIPTION,
+            /* 0x35 */
+            ITEM_FROG,
+            /* 0x36 */
+            ITEM_EYEDROPS,
+            /* 0x37 */
+            ITEM_CLAIM_CHECK,
+            /* 0x38 */
+            ITEM_BOW_ARROW_FIRE,
+            /* 0x39 */
+            ITEM_BOW_ARROW_ICE,
+            /* 0x3A */
+            ITEM_BOW_ARROW_LIGHT,
+            /* 0x3B */
+            ITEM_SWORD_KOKIRI,
+            /* 0x3C */
+            ITEM_SWORD_MASTER,
+            /* 0x3D */
+            ITEM_SWORD_BGS,
+            /* 0x3E */
+            ITEM_SHIELD_DEKU,
+            /* 0x3F */
+            ITEM_SHIELD_HYLIAN,
+            /* 0x40 */
+            ITEM_SHIELD_MIRROR,
+            /* 0x41 */
+            ITEM_TUNIC_KOKIRI,
+            /* 0x42 */
+            ITEM_TUNIC_GORON,
+            /* 0x43 */
+            ITEM_TUNIC_ZORA,
+            /* 0x44 */
+            ITEM_BOOTS_KOKIRI,
+            /* 0x45 */
+            ITEM_BOOTS_IRON,
+            /* 0x46 */
+            ITEM_BOOTS_HOVER,
+            /* 0x47 */
+            ITEM_BULLET_BAG_30,
+            /* 0x48 */
+            ITEM_BULLET_BAG_40,
+            /* 0x49 */
+            ITEM_BULLET_BAG_50,
+            /* 0x4A */
+            ITEM_QUIVER_30,
+            /* 0x4B */
+            ITEM_QUIVER_40,
+            /* 0x4C */
+            ITEM_QUIVER_50,
+            /* 0x4D */
+            ITEM_BOMB_BAG_20,
+            /* 0x4E */
+            ITEM_BOMB_BAG_30,
+            /* 0x4F */
+            ITEM_BOMB_BAG_40,
+            /* 0x50 */
+            ITEM_BRACELET,
+            /* 0x51 */
+            ITEM_GAUNTLETS_SILVER,
+            /* 0x52 */
+            ITEM_GAUNTLETS_GOLD,
+            /* 0x53 */
+            ITEM_SCALE_SILVER,
+            /* 0x54 */
+            ITEM_SCALE_GOLDEN,
+            /* 0x55 */
+            ITEM_SWORD_KNIFE,
+            /* 0x56 */
+            ITEM_WALLET_ADULT,
+            /* 0x57 */
+            ITEM_WALLET_GIANT,
+            /* 0x58 */
+            ITEM_SEEDS,
+            /* 0x59 */
+            ITEM_FISHING_POLE,
+            /* 0x5A */
+            ITEM_SONG_MINUET,
+            /* 0x5B */
+            ITEM_SONG_BOLERO,
+            /* 0x5C */
+            ITEM_SONG_SERENADE,
+            /* 0x5D */
+            ITEM_SONG_REQUIEM,
+            /* 0x5E */
+            ITEM_SONG_NOCTURNE,
+            /* 0x5F */
+            ITEM_SONG_PRELUDE,
+            /* 0x60 */
+            ITEM_SONG_LULLABY,
+            /* 0x61 */
+            ITEM_SONG_EPONA,
+            /* 0x62 */
+            ITEM_SONG_SARIA,
+            /* 0x63 */
+            ITEM_SONG_SUN,
+            /* 0x64 */
+            ITEM_SONG_TIME,
+            /* 0x65 */
+            ITEM_SONG_STORMS,
+            /* 0x66 */
+            ITEM_MEDALLION_FOREST,
+            /* 0x67 */
+            ITEM_MEDALLION_FIRE,
+            /* 0x68 */
+            ITEM_MEDALLION_WATER,
+            /* 0x69 */
+            ITEM_MEDALLION_SPIRIT,
+            /* 0x6A */
+            ITEM_MEDALLION_SHADOW,
+            /* 0x6B */
+            ITEM_MEDALLION_LIGHT,
+            /* 0x6C */
+            ITEM_KOKIRI_EMERALD,
+            /* 0x6D */
+            ITEM_GORON_RUBY,
+            /* 0x6E */
+            ITEM_ZORA_SAPPHIRE,
+            /* 0x6F */
+            ITEM_STONE_OF_AGONY,
+            /* 0x70 */
+            ITEM_GERUDO_CARD,
+            /* 0x71 */
+            ITEM_SKULL_TOKEN,
+            /* 0x72 */
+            ITEM_HEART_CONTAINER,
+            /* 0x73 */
+            ITEM_HEART_PIECE,
+            /* 0x74 */
+            ITEM_KEY_BOSS,
+            /* 0x75 */
+            ITEM_COMPASS,
+            /* 0x76 */
+            ITEM_DUNGEON_MAP,
+            /* 0x77 */
+            ITEM_KEY_SMALL,
+            /* 0x78 */
+            ITEM_MAGIC_SMALL,
+            /* 0x79 */
+            ITEM_MAGIC_LARGE,
+            /* 0x7A */
+            ITEM_HEART_PIECE_2,
+            /* 0x7B */
+            ITEM_INVALID_1,
+            /* 0x7C */
+            ITEM_INVALID_2,
+            /* 0x7D */
+            ITEM_INVALID_3,
+            /* 0x7E */
+            ITEM_INVALID_4,
+            /* 0x7F */
+            ITEM_INVALID_5,
+            /* 0x80 */
+            ITEM_INVALID_6,
+            /* 0x81 */
+            ITEM_INVALID_7,
+            /* 0x82 */
+            ITEM_MILK,
+            /* 0x83 */
+            ITEM_HEART,
+            /* 0x84 */
+            ITEM_RUPEE_GREEN,
+            /* 0x85 */
+            ITEM_RUPEE_BLUE,
+            /* 0x86 */
+            ITEM_RUPEE_RED,
+            /* 0x87 */
+            ITEM_RUPEE_PURPLE,
+            /* 0x88 */
+            ITEM_RUPEE_GOLD,
+            /* 0x89 */
+            ITEM_INVALID_8,
+            /* 0x8A */
+            ITEM_STICKS_5,
+            /* 0x8B */
+            ITEM_STICKS_10,
+            /* 0x8C */
+            ITEM_NUTS_5,
+            /* 0x8D */
+            ITEM_NUTS_10,
+            /* 0x8E */
+            ITEM_BOMBS_5,
+            /* 0x8F */
+            ITEM_BOMBS_10,
+            /* 0x90 */
+            ITEM_BOMBS_20,
+            /* 0x91 */
+            ITEM_BOMBS_30,
+            /* 0x92 */
+            ITEM_ARROWS_SMALL,
+            /* 0x93 */
+            ITEM_ARROWS_MEDIUM,
+            /* 0x94 */
+            ITEM_ARROWS_LARGE,
+            /* 0x95 */
+            ITEM_SEEDS_30,
+            /* 0x96 */
+            ITEM_BOMBCHUS_5,
+            /* 0x97 */
+            ITEM_BOMBCHUS_20,
+            /* 0x98 */
+            ITEM_STICK_UPGRADE_20,
+            /* 0x99 */
+            ITEM_STICK_UPGRADE_30,
+            /* 0x9A */
+            ITEM_NUT_UPGRADE_30,
+            /* 0x9B */
+            ITEM_NUT_UPGRADE_40,
+            /* 0xFC */
+            ITEM_LAST_USED = 0xFC,
+            /* 0xFE */
+            ITEM_NONE_FE = 0xFE,
+            /* 0xFF */
+            ITEM_NONE = 0xFF,
+
+            ITEM_TRADE_CHILD = ITEM_WEIRD_EGG,
+
+            ITEMITEM_TRADE_ADULT = ITEM_POCKET_EGG,
+        }
+
+        public enum QuestItems
+        {
+            /* 0x00 */
+            QUEST_MEDALLION_FOREST,
+            /* 0x01 */
+            QUEST_MEDALLION_FIRE,
+            /* 0x02 */
+            QUEST_MEDALLION_WATER,
+            /* 0x03 */
+            QUEST_MEDALLION_SPIRIT,
+            /* 0x04 */
+            QUEST_MEDALLION_SHADOW,
+            /* 0x05 */
+            QUEST_MEDALLION_LIGHT,
+            /* 0x06 */
+            QUEST_SONG_MINUET,
+            /* 0x07 */
+            QUEST_SONG_BOLERO,
+            /* 0x08 */
+            QUEST_SONG_SERENADE,
+            /* 0x09 */
+            QUEST_SONG_REQUIEM,
+            /* 0x0A */
+            QUEST_SONG_NOCTURNE,
+            /* 0x0B */
+            QUEST_SONG_PRELUDE,
+            /* 0x0C */
+            QUEST_SONG_LULLABY,
+            /* 0x0D */
+            QUEST_SONG_EPONA,
+            /* 0x0E */
+            QUEST_SONG_SARIA,
+            /* 0x0F */
+            QUEST_SONG_SUN,
+            /* 0x10 */
+            QUEST_SONG_TIME,
+            /* 0x11 */
+            QUEST_SONG_STORMS,
+            /* 0x12 */
+            QUEST_KOKIRI_EMERALD,
+            /* 0x13 */
+            QUEST_GORON_RUBY,
+            /* 0x14 */
+            QUEST_ZORA_SAPPHIRE,
+            /* 0x15 */
+            QUEST_STONE_OF_AGONY,
+            /* 0x16 */
+            QUEST_GERUDO_CARD,
+            /* 0x17 */
+            QUEST_SKULL_TOKEN,
+            /* 0x18 */
+            QUEST_HEART_PIECE
+        }
+
+        public enum DungeonItems
+        {
+            /* 0x00 */
+            DUNGEON_KEY_BOSS,
+            /* 0x01 */
+            DUNGEON_COMPASS,
+            /* 0x02 */
+            DUNGEON_MAP
         }
 
         public enum TradeStatuses
@@ -730,57 +1170,7 @@ namespace NPC_Maker.NewScriptParser
             WITH_LIMB = 1,
             INSTEAD_OF_LIMB = 2,
         }
-
-        public enum BombBags
-        {
-            SMALL = 0,
-            BIG = 1,
-            BIGGEST = 2
-        }
-
-        public enum Quivers
-        {
-            SMALL = 0,
-            BIG = 1,
-            BIGGEST = 2
-        }
-
-        public enum Wallets
-        {
-            SMALL = 0,
-            ADULT = 1,
-            GIANT = 2
-        }
-
-        public enum Scales
-        {
-            NONE = 0,
-            SILVER = 1,
-            GOLDEN = 2
-        }
-
-        public enum Gauntlets
-        {
-            NONE = 0,
-            GORON = 1,
-            SILVER = 2,
-            GOLDEN = 3
-        }
-
-        public enum StickCap
-        {
-            NONE = 0,
-            NORMAL = 1,
-            UPGRADED = 2
-        }
-
-        public enum NutCap
-        {
-            NONE = 0,
-            NORMAL = 1,
-            UPGRADED = 2
-        }
-
+   
         public enum PlaySubTypes
         {
             SFX = 0,
@@ -822,6 +1212,24 @@ namespace NPC_Maker.NewScriptParser
         {
             OVERWRITE = 0,
             RESTORE = 1,
+        }
+
+        public enum Buttons
+        {
+            BTN_CRIGHT = 0x0001,
+            BTN_CLEFT = 0x0002,
+            BTN_CDOWN = 0x0004,
+            BTN_CUP = 0x0008,
+            BTN_R = 0x0010,
+            BTN_L = 0x0020,
+            BTN_DRIGHT = 0x0100,
+            BTN_DLEFT = 0x0200,
+            BTN_DDOWN = 0x0400,
+            BTN_DUP = 0x0800,
+            BTN_START = 0x1000,
+            BTN_Z = 0x2000,
+            BTN_B = 0x4000,
+            BTN_A = 0x8000,
         }
     }
 }

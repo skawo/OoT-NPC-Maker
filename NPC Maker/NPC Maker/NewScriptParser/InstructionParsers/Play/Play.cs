@@ -67,7 +67,8 @@ namespace NPC_Maker.NewScriptParser
 
                                 return new InstructionPlay((byte)SubID, ID, 0);
                             }
-                        default: throw new Exception();
+                        default:
+                            throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
                 }
                 catch (ParseException pEx)

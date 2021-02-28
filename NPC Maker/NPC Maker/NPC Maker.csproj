@@ -102,6 +102,8 @@
   <ItemGroup>
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="NewScriptParser\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Item\Classes.cs" />
+    <Compile Include="NewScriptParser\InstructionParsers\Item\Item.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Trade\Classes.cs" />
     <Compile Include="NewScriptParser\ScriptHelpers.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Await\Classes.cs" />

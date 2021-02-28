@@ -101,6 +101,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.IfSubTypes.TEXTBOX_ON_SCREEN:
                         case (int)Lists.IfSubTypes.CURRENT_ANIM_WALKING:
                         case (int)Lists.IfSubTypes.PLAYER_HAS_MAGIC:
+                        case (int)Lists.IfSubTypes.ATTACKED:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
@@ -131,7 +132,19 @@ namespace NPC_Maker.NewScriptParser
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
-                                float Value = ScriptHelpers.GetValueByType(SplitLine, 4, VarType, 0, UInt16.MaxValue);
+                                float Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
+
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
+                                return Instructions;
+                            }
+                        case (int)Lists.IfSubTypes.STICK_X:
+                        case (int)Lists.IfSubTypes.STICK_Y:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                float Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, sbyte.MinValue, sbyte.MaxValue);
 
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
@@ -174,43 +187,39 @@ namespace NPC_Maker.NewScriptParser
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt32(AnimationID), 0, EndIf, Else, LabelR));
                                 return Instructions;
                             }
-                        case (int)Lists.IfSubTypes.PLAYER_BOMBBAG:
+                        case (int)Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.BombBags), EndIf, Else, LabelR, ParseException.UnrecognizedBombBag(SplitLine)));
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+
+                                UInt32? Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.DungeonItems), ParseException.UnrecognizedDungeonItem(SplitLine));
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                float Dungeon = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
+
+                                Instructions.Insert(0, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Convert.ToByte(Dungeon), 0, Convert.ToByte(Value), 0, EndIf, Else, LabelR));
                                 return Instructions;
                             }
-                        case (int)Lists.IfSubTypes.PLAYER_QUIVER:
+                        case (int)Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM:
+                        case (int)Lists.IfSubTypes.LAST_ITEM_USED:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Quivers), EndIf, Else, LabelR, ParseException.UnrecognizedQuiver(SplitLine)));
+                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Items), EndIf, Else, LabelR, ParseException.UnrecognizedInventoryItem(SplitLine)));
                                 return Instructions;
                             }
-                        case (int)Lists.IfSubTypes.PLAYER_WALLET:
+                        case (int)Lists.IfSubTypes.PLAYER_HAS_QUEST_ITEM:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Wallets), EndIf, Else, LabelR, ParseException.UnrecognizedWallet(SplitLine)));
+                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.QuestItems), EndIf, Else, LabelR, ParseException.UnrecognizedQuestItem(SplitLine)));
                                 return Instructions;
                             }
-                        case (int)Lists.IfSubTypes.PLAYER_DEKUNUTCAP:
+                        case (int)Lists.IfSubTypes.BUTTON_HELD:
+                        case (int)Lists.IfSubTypes.BUTTON_PRESSED:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.NutCap), EndIf, Else, LabelR, ParseException.UnrecognizedDekuNutCap(SplitLine)));
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                UInt32? Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons), ParseException.UnrecognizedButton(SplitLine));
+
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt16(Value), 0, EndIf, Else, LabelR));
                                 return Instructions;
                             }
-                        case (int)Lists.IfSubTypes.PLAYER_STICKCAP:
-                            {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.StickCap), EndIf, Else, LabelR, ParseException.UnrecognizedStickCap(SplitLine)));
-                                return Instructions;
-                            }
-                        case (int)Lists.IfSubTypes.PLAYER_WATER_SCALE:
-                            {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Scales), EndIf, Else, LabelR, ParseException.UnrecognizedScale(SplitLine)));
-                                return Instructions;
-                            }
-                        case (int)Lists.IfSubTypes.PLAYER_GAUNTLETS:
-                            {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Gauntlets), EndIf, Else, LabelR, ParseException.UnrecognizedGauntlets(SplitLine)));
-                                return Instructions;
-                            }
-                        default:
-                            throw new Exception();
+                        default: 
+                            throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
 
                 }
@@ -227,8 +236,9 @@ namespace NPC_Maker.NewScriptParser
                 outScript.ParseErrors.Add(pEx);
                 return new List<Instruction>();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
                 return new List<Instruction>();
             }

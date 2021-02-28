@@ -128,7 +128,8 @@ namespace NPC_Maker.NewScriptParser
                                 LineNo++;
                                 break;
                             }
-                        default: throw ParseException.UnexpectedTradeInstruction(Lines[LineNo]);
+                        default: 
+                            throw ParseException.UnexpectedTradeInstruction(Lines[LineNo]);
                     }
 
                     SplitLTrade = Lines[LineNo].Split(' ');

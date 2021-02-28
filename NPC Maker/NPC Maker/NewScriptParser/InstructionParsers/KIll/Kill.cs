@@ -33,8 +33,10 @@ namespace NPC_Maker.NewScriptParser
                         ActorType = (UInt16)ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, 12);
                         break;
                     }
-
-                    default: break;
+                    case (int)Lists.TargetActorSubtypes.PLAYER: break;
+                    case (int)Lists.TargetActorSubtypes.SELF: break;
+                    default:
+                        throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                 }
 
                 return new InstructionKill((byte)SetSubType, ActorNum, ActorType);

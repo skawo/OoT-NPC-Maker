@@ -39,6 +39,11 @@ namespace NPC_Maker.NewScriptParser
             return GeneralError(String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedFunctionSubtype(string[] _Line)
+        {
+            return new ParseException("Unrecognized function subtype: ", String.Join(" ", _Line));
+        }
+
         public static ParseException LabelAlreadyExists(string _Line)
         {
             return new ParseException("Label is defined twice: ", _Line);
@@ -200,39 +205,29 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Animation not recognized: ", String.Join(" ", _Line));
         }
 
-        public static ParseException UnrecognizedBombBag(string[] _Line)
+        public static ParseException UnrecognizedQuestItem(string[] _Line)
         {
-            return new ParseException("Bomb bag not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Quest Item not recognized: ", String.Join(" ", _Line));
         }
 
-        public static ParseException UnrecognizedWallet(string[] _Line)
+        public static ParseException UnrecognizedButton(string[] _Line)
         {
-            return new ParseException("Wallet not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Button not recognized: ", String.Join(" ", _Line));
         }
 
-        public static ParseException UnrecognizedQuiver(string[] _Line)
+        public static ParseException UnrecognizedDungeonItem(string[] _Line)
         {
-            return new ParseException("Quiver not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Dungeon Item not recognized: ", String.Join(" ", _Line));
         }
 
-        public static ParseException UnrecognizedStickCap(string[] _Line)
+        public static ParseException UnrecognizedInventoryItem(string[] _Line)
         {
-            return new ParseException("Stick cap not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Inventory item not recognized: ", String.Join(" ", _Line));
         }
 
-        public static ParseException UnrecognizedDekuNutCap(string[] _Line)
+        public static ParseException UnrecognizedGiveItem(string[] _Line)
         {
-            return new ParseException("Deku Nut cap not recognized: ", String.Join(" ", _Line));
-        }
-
-        public static ParseException UnrecognizedScale(string[] _Line)
-        {
-            return new ParseException("Scale not recognized: ", String.Join(" ", _Line));
-        }
-
-        public static ParseException UnrecognizedGauntlets(string[] _Line)
-        {
-            return new ParseException("Gauntlets not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Give item not recognized: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedMovementStyle(string[] _Line)

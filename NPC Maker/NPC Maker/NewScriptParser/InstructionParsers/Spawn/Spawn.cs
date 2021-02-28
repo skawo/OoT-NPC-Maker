@@ -83,6 +83,8 @@ namespace NPC_Maker.NewScriptParser
                                 RotZ = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(Split, 3, Int16.MinValue, Int16.MaxValue));
                                 continue;
                             }
+                        default:
+                            throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
                 }
 
