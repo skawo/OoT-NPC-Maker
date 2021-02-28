@@ -128,7 +128,7 @@ namespace NPC_Maker.NewScriptParser
                 case "=": return Lists.ConditionTypes.EQUALTO;
                 case "==": return Lists.ConditionTypes.EQUALTO;
                 case "<": return Lists.ConditionTypes.LESSTHAN;
-                case ">": return Lists.ConditionTypes.MOREOREQ;
+                case ">": return Lists.ConditionTypes.MORETHAN;
                 case "<=": return Lists.ConditionTypes.LESSOREQ;
                 case ">=": return Lists.ConditionTypes.MOREOREQ;
                 case "!=": return Lists.ConditionTypes.NOTEQUAL;
