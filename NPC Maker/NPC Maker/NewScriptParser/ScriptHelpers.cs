@@ -39,6 +39,11 @@ namespace NPC_Maker.NewScriptParser
             ErrorIfNumParamsBigger(Splitline, Max);
         }
 
+        public static int GetSubIDValue(string[] SplitLine, Type SubTypeEnum)
+        {
+            return (int)Enum.Parse(SubTypeEnum, SplitLine[1].ToUpper());
+        }
+
         public static UInt16 GetOcarinaTime(string[] SplitLine, int Index)
         {
             string[] HourMinute = SplitLine[Index].Split(':');

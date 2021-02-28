@@ -11,10 +11,10 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 List<Instruction> Instructions = new List<Instruction>();
-                string LabelR = ParserHelpers.RandomString(this, 5);
+                string LabelR = DataHelpers.RandomString(this, 5);
 
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
-                int SubID = (int)System.Enum.Parse(typeof(Lists.IfSubTypes), SplitLine[1].ToUpper());
+                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.IfSubTypes));
 
                 int EndIf = 0;
                 int Else = 0;

@@ -12,21 +12,21 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ScriptChangeSubtypes));
 
-                int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.ScriptChangeSubtypes), ParseException.UnrecognizedParameter(SplitLine));
                 UInt16 ActorID = (UInt16)ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue);
 
-                switch (SetSubType)
+                switch (SubID)
                 {
                     case (int)Lists.ScriptChangeSubtypes.OVERWRITE:
                         {
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
-                            return new InstructionChangeScript((byte)SetSubType, ActorID, SplitLine[3]);
+                            return new InstructionChangeScript((byte)SubID, ActorID, SplitLine[3]);
                         }
                     case (int)Lists.ScriptChangeSubtypes.RESTORE:
                         {
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                            return new InstructionChangeScript((byte)SetSubType, ActorID, "__NONE__");
+                            return new InstructionChangeScript((byte)SubID, ActorID, "__NONE__");
                         }
                     default: 
                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);

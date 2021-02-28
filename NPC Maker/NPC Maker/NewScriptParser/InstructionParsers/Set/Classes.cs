@@ -19,11 +19,11 @@ namespace NPC_Maker.NewScriptParser
         {
             List<byte> Data = new List<byte>();
 
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(ValueType, Data);
-            ParserHelpers.AddObjectToByteList(Value, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.AddObjectToByteList(Value, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -48,11 +48,11 @@ namespace NPC_Maker.NewScriptParser
         public override byte[] ToBytes()
         {
             List<byte> Data = new List<byte>();
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(U16, Data);
-            ParserHelpers.AddObjectToByteList(Object, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(U16, Data);
+            DataHelpers.AddObjectToByteList(Object, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -75,12 +75,12 @@ namespace NPC_Maker.NewScriptParser
         public override byte[] ToBytes()
         {
             List<byte> Data = new List<byte>();
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(Operator, Data);
-            ParserHelpers.AddObjectToByteList(Value, Data);
-            ParserHelpers.AddObjectToByteList(ValueType, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(Operator, Data);
+            DataHelpers.AddObjectToByteList(Value, Data);
+            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
             return Data.ToArray();
         }
     }
@@ -110,15 +110,15 @@ namespace NPC_Maker.NewScriptParser
         {
             List<byte> Data = new List<byte>();
 
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(R, Data);
-            ParserHelpers.AddObjectToByteList(G, Data);
-            ParserHelpers.AddObjectToByteList(B, Data);
-            ParserHelpers.AddObjectToByteList(ValType1, Data);
-            ParserHelpers.AddObjectToByteList(ValType2, Data);
-            ParserHelpers.AddObjectToByteList(ValType3, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(R, Data);
+            DataHelpers.AddObjectToByteList(G, Data);
+            DataHelpers.AddObjectToByteList(B, Data);
+            DataHelpers.AddObjectToByteList(ValType1, Data);
+            DataHelpers.AddObjectToByteList(ValType2, Data);
+            DataHelpers.AddObjectToByteList(ValType3, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -140,12 +140,12 @@ namespace NPC_Maker.NewScriptParser
         public override byte[] ToBytes()
         {
             List<byte> Data = new List<byte>();
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(Resp1.InstructionNumber, Data);
-            ParserHelpers.AddObjectToByteList(Resp2.InstructionNumber, Data);
-            ParserHelpers.AddObjectToByteList(Resp3.InstructionNumber, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(Resp1.InstructionNumber, Data);
+            DataHelpers.AddObjectToByteList(Resp2.InstructionNumber, Data);
+            DataHelpers.AddObjectToByteList(Resp3.InstructionNumber, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -163,10 +163,10 @@ namespace NPC_Maker.NewScriptParser
         public override byte[] ToBytes()
         {
             List<byte> Data = new List<byte>();
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(Goto.InstructionNumber, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(Goto.InstructionNumber, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -184,10 +184,10 @@ namespace NPC_Maker.NewScriptParser
         public override byte[] ToBytes()
         {
             List<byte> Data = new List<byte>();
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
             Data.AddRange(Pattern);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -214,14 +214,14 @@ namespace NPC_Maker.NewScriptParser
         public override byte[] ToBytes()
         {
             List<byte> Data = new List<byte>();
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(Target, Data);
-            ParserHelpers.AddObjectToByteList(Value2, Data);
-            ParserHelpers.AddObjectToByteList(Value, Data);
-            ParserHelpers.AddObjectToByteList(ValueType, Data);
-            ParserHelpers.AddObjectToByteList(ValueType2, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(Target, Data);
+            DataHelpers.AddObjectToByteList(Value2, Data);
+            DataHelpers.AddObjectToByteList(Value, Data);
+            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.AddObjectToByteList(ValueType2, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -242,11 +242,11 @@ namespace NPC_Maker.NewScriptParser
         public override byte[] ToBytes()
         {
             List<byte> Data = new List<byte>();
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(AnimationID, Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(AnimationID, Data);
             Data.AddRange(Pattern);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }

@@ -32,14 +32,14 @@ namespace NPC_Maker.NewScriptParser
 
             List<byte> Data = new List<byte>();
 
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(ValueType, Data);
-            ParserHelpers.AddObjectToByteList(Condition, Data);
-            ParserHelpers.AddObjectToByteList(Value, Data);
-            ParserHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
-            ParserHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.AddObjectToByteList(Condition, Data);
+            DataHelpers.AddObjectToByteList(Value, Data);
+            DataHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
+            DataHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -68,17 +68,17 @@ namespace NPC_Maker.NewScriptParser
 
             List<byte> Data = new List<byte>();
 
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(SubID, Data);
-            ParserHelpers.AddObjectToByteList(ValueType, Data);
-            ParserHelpers.AddObjectToByteList(Value, Data);
-            ParserHelpers.AddObjectToByteList(ValueType2, Data);
-            ParserHelpers.AddObjectToByteList(Value2, Data);
-            ParserHelpers.AddObjectToByteList(Condition, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
-            ParserHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
-            ParserHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.AddObjectToByteList(Value, Data);
+            DataHelpers.AddObjectToByteList(ValueType2, Data);
+            DataHelpers.AddObjectToByteList(Value2, Data);
+            DataHelpers.AddObjectToByteList(Condition, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
+            DataHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }

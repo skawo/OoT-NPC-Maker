@@ -36,18 +36,18 @@ namespace NPC_Maker.NewScriptParser
         {
             List<byte> Data = new List<byte>();
 
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(PosRelativeness, Data);
-            ParserHelpers.AddObjectToByteList(ActorID, Data);
-            ParserHelpers.AddObjectToByteList(ActorVariable, Data);
-            ParserHelpers.AddObjectToByteList(PosX, Data);
-            ParserHelpers.AddObjectToByteList(PosY, Data);
-            ParserHelpers.AddObjectToByteList(PosZ, Data);
-            ParserHelpers.AddObjectToByteList(RotX, Data);
-            ParserHelpers.AddObjectToByteList(RotY, Data);
-            ParserHelpers.AddObjectToByteList(RotZ, Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(PosRelativeness, Data);
+            DataHelpers.AddObjectToByteList(ActorID, Data);
+            DataHelpers.AddObjectToByteList(ActorVariable, Data);
+            DataHelpers.AddObjectToByteList(PosX, Data);
+            DataHelpers.AddObjectToByteList(PosY, Data);
+            DataHelpers.AddObjectToByteList(PosZ, Data);
+            DataHelpers.AddObjectToByteList(RotX, Data);
+            DataHelpers.AddObjectToByteList(RotY, Data);
+            DataHelpers.AddObjectToByteList(RotZ, Data);
 
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }

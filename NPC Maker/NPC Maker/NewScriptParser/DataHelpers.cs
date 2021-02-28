@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NPC_Maker.NewScriptParser
 {
-    public static class ParserHelpers
+    public static class DataHelpers
     {        
         public static void AddObjectToByteList(object Value, List<byte> ByteList)
         {

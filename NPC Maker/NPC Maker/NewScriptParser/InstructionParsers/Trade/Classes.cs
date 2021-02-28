@@ -24,26 +24,26 @@ namespace NPC_Maker.NewScriptParser
         {
             List<byte> Data = new List<byte>();
 
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(AdultText, Data);
-            ParserHelpers.AddObjectToByteList(ChildText, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
-            ParserHelpers.AddObjectToByteList(Correct.Item, Data);
-            ParserHelpers.AddObjectToByteList(Correct.AdultText, Data);
-            ParserHelpers.AddObjectToByteList(Correct.ChildText, Data);
-            ParserHelpers.AddObjectToByteList(Convert.ToUInt16(Failure.Count), Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(AdultText, Data);
+            DataHelpers.AddObjectToByteList(ChildText, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(Correct.Item, Data);
+            DataHelpers.AddObjectToByteList(Correct.AdultText, Data);
+            DataHelpers.AddObjectToByteList(Correct.ChildText, Data);
+            DataHelpers.AddObjectToByteList(Convert.ToUInt16(Failure.Count), Data);
 
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             foreach (TradeSetting Setting in Failure)
             {
-                ParserHelpers.AddObjectToByteList(Setting.Item, Data);
-                ParserHelpers.AddObjectToByteList(Setting.AdultText, Data);
-                ParserHelpers.AddObjectToByteList(Setting.ChildText, Data);
-                ParserHelpers.Ensure4ByteAlign(Data);
+                DataHelpers.AddObjectToByteList(Setting.Item, Data);
+                DataHelpers.AddObjectToByteList(Setting.AdultText, Data);
+                DataHelpers.AddObjectToByteList(Setting.ChildText, Data);
+                DataHelpers.Ensure4ByteAlign(Data);
             }
 
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }

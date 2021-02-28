@@ -20,10 +20,10 @@ namespace NPC_Maker.NewScriptParser
         {
             List<byte> Data = new List<byte>();
 
-            ParserHelpers.AddObjectToByteList(ID, Data);
-            ParserHelpers.AddObjectToByteList(AdultText, Data);
-            ParserHelpers.AddObjectToByteList(ChildText, Data);
-            ParserHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(AdultText, Data);
+            DataHelpers.AddObjectToByteList(ChildText, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }

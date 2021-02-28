@@ -11,7 +11,7 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                int SubID = (int)Enum.Parse(typeof(Lists.AwaitSubTypes), SplitLine[1].ToUpper());
+                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.AwaitSubTypes));
 
                 try
                 {

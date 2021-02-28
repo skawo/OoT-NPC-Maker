@@ -12,7 +12,7 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                int SubID = (int)System.Enum.Parse(typeof(Lists.ItemSubTypes), SplitLine[1].ToUpper());
+                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ItemSubTypes));
 
                 try
                 {

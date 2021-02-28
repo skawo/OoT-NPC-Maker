@@ -41,8 +41,8 @@ namespace NPC_Maker.NewScriptParser
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
             CheckLabels(Lines);
-            List<Instruction> Instructions = GetInstructions(Lines);
 
+            List<Instruction> Instructions = GetInstructions(Lines);
             outScript.ScriptDebug = GetOutString(Instructions);
 
             return outScript;
@@ -75,6 +75,22 @@ namespace NPC_Maker.NewScriptParser
             List<string> Lines = SplitLines(ScriptText);
 
             return GetLabels(Lines);
+        }
+
+        private void CheckLabels(List<string> Lines)
+        {
+            foreach (string Line in Lines)
+            {
+                if (Line.EndsWith(":"))
+                {
+                    if (Lists.AllKeywords.Contains(Line.Remove(Line.Length - 1))
+                        || Line.StartsWith("__"))
+                    {
+                        outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(Line));
+                        continue;
+                    }
+                }
+            }
         }
 
         public static List<string> GetLabels(List<string> Lines)
@@ -152,7 +168,7 @@ namespace NPC_Maker.NewScriptParser
                             string[] Split = Lines[i].Split(' ');
                             ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
-                            int EndMacro = GetCorrespondingEndMacro(Lines, i);
+                            int EndMacro = GetCorrespondingEndProcedure(Lines, i);
 
                             string ProcName = Split[1];
                             List<string> ProcLines = Lines.Skip(i + 1).Take(EndMacro - i - 1).ToList();
@@ -193,7 +209,7 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        private int GetCorrespondingEndMacro(List<string> Lines, int LineNo)
+        private int GetCorrespondingEndProcedure(List<string> Lines, int LineNo)
         {
             for (int i = LineNo + 1; i < Lines.Count(); i++)
             {
@@ -205,22 +221,6 @@ namespace NPC_Maker.NewScriptParser
             }
 
             throw ParseException.ProcedureNotClosed(Lines[LineNo]);
-        }
-
-        private void CheckLabels(List<string> Lines)
-        {
-            foreach (string Line in Lines)
-            {
-                if (Line.EndsWith(":"))
-                {
-                    if (Lists.AllKeywords.Contains(Line.Remove(Line.Length - 1))
-                        || Line.StartsWith("__"))
-                    {
-                        outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(Line));
-                        continue;
-                    }
-                }
-            }
         }
 
         private List<string> GetOutString(List<Instruction> Instructions)
@@ -255,17 +255,9 @@ namespace NPC_Maker.NewScriptParser
                     {
                         case (int)Lists.Instructions.IF:
                         case (int)Lists.Instructions.WHILE:
-                            {
-                                List<Instruction> Instr = ParseIfWhileInstruction(InstructionID, Lines, SplitLine, ref i);
-                                Instructions.AddRange(Instr);
-                                break;
-                            }
+                            Instructions.AddRange(ParseIfWhileInstruction(InstructionID, Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.TALK:
-                            {
-                                List<Instruction> Instr = ParseTalkInstruction(Lines, SplitLine, ref i);
-                                Instructions.AddRange(Instr);
-                                break;
-                            }
+                            Instructions.AddRange(ParseTalkInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.TRADE: Instructions.Add(ParseTradeInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.NOP: Instructions.Add(ParseNopInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SET: Instructions.Add(ParseSetInstruction(SplitLine)); break;
@@ -279,17 +271,9 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.CHANGE_SCRIPT: Instructions.Add(ParseChangeScriptInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SPAWN: Instructions.Add(ParseSpawnInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.ITEM: Instructions.Add(ParseItemInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.RETURN:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 1);
-                                Instructions.Add(new InstructionGoto("__RETURN__"));
-                                break;
-                            }
+                        case (int)Lists.Instructions.RETURN: Instructions.Add(ParseReturnInstruction(SplitLine)); break;
                         default:
-                            {
-                                outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(SplitLine));
-                                break;
-                            }
+                            outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(SplitLine)); break;
                     }
                 }
                 catch (Exception)
