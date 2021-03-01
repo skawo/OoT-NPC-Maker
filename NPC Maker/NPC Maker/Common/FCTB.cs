@@ -58,6 +58,9 @@ namespace NPC_Maker
 
         public static void ApplySyntaxHighlight(FastColoredTextBox txb, TextChangedEventArgs e, bool SyntaxHighlightingOn)
         {
+            if (String.IsNullOrEmpty(txb.Text))
+                return;
+
             string[] Lines = txb.Text.Split(new[] { "\n" }, StringSplitOptions.None);
             Range r = new Range(txb, 0, 0, Lines[Lines.Length - 1].Length - 1, Lines.Length - 1);
 

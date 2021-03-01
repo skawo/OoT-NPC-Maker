@@ -24,8 +24,6 @@ namespace NPC_Maker
 
                 NPCFile Deserialized = JsonConvert.DeserializeObject<NPCFile>(Text);
 
-                var t = JObject.Parse(Text).SelectToken("Entries[0].Script");
-
                 if (Version == null || (int)Version < 2)
                 {
                     Deserialized.Version = 2;
@@ -44,7 +42,6 @@ namespace NPC_Maker
                             Name = "Script 2"
                         };
 
-                        Deserialized.Entries[i].Scripts.RemoveAt(0);
                         Deserialized.Entries[i].Scripts.Add(Sc);
                         Deserialized.Entries[i].Scripts.Add(Sc2);
                     }

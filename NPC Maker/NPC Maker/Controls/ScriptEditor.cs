@@ -40,7 +40,7 @@ namespace NPC_Maker
         public void SetSyntaxHighlighting(bool Value)
         {
             SyntaxHighlighting = Value;
-            Textbox_Script_TextChanged(null, new TextChangedEventArgs(new Range(Textbox_Script)));
+            Textbox_Script_TextChanged(Textbox_Script, new TextChangedEventArgs(new Range(Textbox_Script)));
         }
 
         private void Textbox_Script_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
