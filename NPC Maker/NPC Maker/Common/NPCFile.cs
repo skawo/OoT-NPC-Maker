@@ -47,6 +47,9 @@ namespace NPC_Maker
         public bool Pushable { get; set; }
         public bool AlwActive { get; set; }
         public bool AlwDraw { get; set; }
+        public bool JustScript { get; set; }
+        public bool ReactAttacked { get; set; }
+        public bool OpenDoors { get; set; }
         public UInt16 ColRadius { get; set; }
         public UInt16 Height { get; set; }
         public Int16[] ColOffs { get; set; }
@@ -58,15 +61,20 @@ namespace NPC_Maker
         public byte TargetDist { get; set; }
         public byte TargetLimb { get; set; }
         public Int16[] TargOffs { get; set; }
+        public float TalkRadius { get; set; }
 
         public byte MovementType { get; set; }
         public UInt16 MovementDistance { get; set; }
         public float MovementSpeed { get; set; }
+        public float GravityForce { get; set; }
         public byte PathID { get; set; }
         public Int16 LoopStart { get; set; }
         public Int16 LoopEnd { get; set; }
         public UInt16 LoopDel { get; set; }
         public bool Loop { get; set; }
+        public bool TimedPath { get; set; }
+        public UInt16 TimedPathStart { get; set; }
+        public UInt16 TimedPathEnd { get; set; }
 
         public byte AnimationType { get; set; }
         public List<AnimationEntry> Animations { get; set; }
@@ -115,6 +123,9 @@ namespace NPC_Maker
             Switches = false;
             Pushable = false;
             AlwActive = false;
+            JustScript = false;
+            ReactAttacked = false;
+            OpenDoors = false;
             ColRadius = 0;
             Height = 0;
             ColOffs = new Int16[] { 0, 0, 0 };
@@ -126,15 +137,19 @@ namespace NPC_Maker
             TargetDist = 1;
             TargetLimb = 0;
             TargOffs = new Int16[] { 0, 0, 0 };
+            TalkRadius = 150.0f;
 
             MovementType = 0;
             MovementDistance = 0;
-            MovementSpeed = 0;
+            MovementSpeed = 1.0f;
+            GravityForce = 1.0f;
             PathID = 0;
             LoopStart = -1;
             LoopEnd = -1;
             LoopDel = 0;
             Loop = false;
+            TimedPathStart = 0;
+            TimedPathEnd = Helpers.GetOcarinaTime("23:59");
 
             Animations = new List<AnimationEntry>();
             AnimationType = 0;
@@ -254,7 +269,15 @@ namespace NPC_Maker
             TALKSPE,
             ACTIVE,
             DRAWOUTOFCAM,
-            TARGETDIST
+            TARGETDIST,
+            JUSTSCRIPT,
+            REACTATT,
+            TALKRADIUS,
+            TIMEDPATH,
+            PATHSTARTTIME,
+            PATHENDTIME,
+            GRAVITYFORCE,
+            OPENDOORS,
         }
 
         public void ChangeValueOfMember(Members Member, object Value)
@@ -327,6 +350,17 @@ namespace NPC_Maker
                 case Members.ACTIVE: AlwActive = Convert.ToBoolean(Value); break;
                 case Members.DRAWOUTOFCAM: AlwDraw = Convert.ToBoolean(Value); break;
                 case Members.TARGETDIST: TargetDist = Convert.ToByte(Value); break;
+
+                case Members.JUSTSCRIPT: JustScript = Convert.ToBoolean(Value); break;
+                case Members.REACTATT: ReactAttacked = Convert.ToBoolean(Value); break;
+                case Members.TIMEDPATH: TimedPath = Convert.ToBoolean(Value); break;
+                case Members.OPENDOORS: OpenDoors = Convert.ToBoolean(Value); break;
+
+                case Members.TALKRADIUS: TalkRadius = Convert.ToUInt16(Value); break;
+                case Members.GRAVITYFORCE: GravityForce = (float)Convert.ToDecimal(Value); break;
+
+                case Members.PATHSTARTTIME: TimedPathStart = Helpers.GetOcarinaTime((string)Value); break;
+                case Members.PATHENDTIME: TimedPathEnd = Helpers.GetOcarinaTime((string)Value); break;
 
                 default: break;
             }

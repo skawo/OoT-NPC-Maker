@@ -165,6 +165,9 @@ namespace NPC_Maker
             NumUpDown_ColHeight.Value = SelectedEntry.Height;
             Checkbox_AlwaysActive.Checked = SelectedEntry.AlwActive;
             Checkbox_AlwaysDraw.Checked = SelectedEntry.AlwDraw;
+            Chkb_ReactIfAtt.Checked = SelectedEntry.ReactAttacked;
+            ChkRunJustScript.Checked = SelectedEntry.JustScript;
+            Chkb_Opendoors.Checked = SelectedEntry.OpenDoors;
 
             NumUpDown_XColOffs.Value = SelectedEntry.ColOffs[0];
             NumUpDown_YColOffs.Value = SelectedEntry.ColOffs[1];
@@ -176,15 +179,20 @@ namespace NPC_Maker
             NumUpDown_XTargetOffs.Value = SelectedEntry.TargOffs[0];
             NumUpDown_YTargetOffs.Value = SelectedEntry.TargOffs[1];
             NumUpDown_ZTargetOffs.Value = SelectedEntry.TargOffs[2];
+            NumUpDown_TalkRadi.Value = (decimal)SelectedEntry.TalkRadius;
 
             Combo_MovementType.SelectedIndex = SelectedEntry.MovementType;
             NumUpDown_MovDistance.Value = SelectedEntry.MovementDistance;
             NumUpDown_MovSpeed.Value = (decimal)SelectedEntry.MovementSpeed;
+            NumUpDown_GravityForce.Value = (decimal)SelectedEntry.GravityForce;
             NumUpDown_LoopDelay.Value = SelectedEntry.LoopDel;
             NumUpDown_LoopEndNode.Value = SelectedEntry.LoopEnd;
             NumUpDown_LoopStartNode.Value = SelectedEntry.LoopStart;
             Checkbox_Loop.Checked = SelectedEntry.Loop;
+            ChkBox_TimedPath.Checked = SelectedEntry.TimedPath;
             NumUpDown_PathFollowID.Value = SelectedEntry.PathID;
+            tmpicker_timedPathStart.Value = Helpers.GetTimeFromOcarinaTime(SelectedEntry.TimedPathStart);
+            tmpicker_timedPathEnd.Value = Helpers.GetTimeFromOcarinaTime(SelectedEntry.TimedPathEnd);
 
             ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
             NumUpDown_Scale.Value = (decimal)SelectedEntry.Scale;
@@ -518,6 +526,7 @@ namespace NPC_Maker
             NPCEntry Entry = new NPCEntry();
             Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
             Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
+            Entry.Animations.Add(new AnimationEntry("Attacked", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
 
             for (int i = 0; i < 8; i++)
                 Entry.Textures.Add(new List<TextureEntry>());
@@ -650,6 +659,11 @@ namespace NPC_Maker
             SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as CheckBox).Tag, (sender as CheckBox).Checked);
         }
 
+        private void DatePicker_ValueChanged(object sender, EventArgs e)
+        {
+            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as DateTimePicker).Tag, (sender as DateTimePicker).Value.ToString("HH:mm"));
+        }
+
         private void ComboBox_ValueChanged(object sender, EventArgs e)
         {
             SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as ComboBox).Tag, (sender as ComboBox).SelectedIndex);
@@ -661,11 +675,11 @@ namespace NPC_Maker
 
         private void AddBlankAnim(int SkipIndex, int Index, string Name = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte[] Frames = null)
         {
-            Name = Name == null ? "Animation_" + Index.ToString() : Name;
-            Address = Address == null ? 0 : Address;
-            Speed = Speed == null ? 0 : Speed;
-            ObjectID = ObjectID == null ? -1 : ObjectID;
-            Frames = Frames == null ? new byte[] { 0xFF, 0xFF, 0xFF, 0xFF } : Frames;
+            Name = Name ?? "Animation_" + Index.ToString();
+            Address = Address ?? 0;
+            Speed = Speed ?? 0;
+            ObjectID = ObjectID ?? -1;
+            Frames = Frames ?? (new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
 
             SelectedEntry.Animations.Add(new AnimationEntry(Name, (uint)Address, (float)Speed, (short)ObjectID, Frames));
 
@@ -860,18 +874,18 @@ namespace NPC_Maker
             if (Name == null)
                 Name = "DList_" + Index;
 
-            Name = Name == null ? "DList_" + Index : Name;
-            Address = Address == null ? 0 : Address;
-            TransX = TransX == null ? 0 : TransX;
-            TransY = TransY == null ? 0 : TransY;
-            TransZ = TransZ == null ? 0 : TransZ;
-            RotX = RotX == null ? 0 : RotX;
-            RotY = RotY == null ? 0 : RotY;
-            RotZ = RotZ == null ? 0 : RotZ;
-            Scale = Scale == null ? 0.01f : Scale;
-            Limb = Limb == null ? 0 : Limb;
-            ShowType = ShowType == null ? 0 : ShowType;
-            ObjectID = ObjectID == null ? -1 : ObjectID;
+            Name = Name ?? "DList_" + Index;
+            Address = Address ?? 0;
+            TransX = TransX ?? 0;
+            TransY = TransY ?? 0;
+            TransZ = TransZ ?? 0;
+            RotX = RotX ?? 0;
+            RotY = RotY ?? 0;
+            RotZ = RotZ ?? 0;
+            Scale = Scale ?? 0.01f;
+            Limb = Limb ?? 0;
+            ShowType = ShowType ?? 0;
+            ObjectID = ObjectID ?? -1;
 
             SelectedEntry.DLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ,
                                                     (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (ushort)Limb, (int)ShowType, (short)ObjectID));
@@ -1128,9 +1142,9 @@ namespace NPC_Maker
 
         private void AddBlankTex(int SkipIndex, int Index, int Segment, string Name = null, uint? Address = null, short? ObjectID = null)
         {
-            Name = Name == null ? "Texture_" + Index.ToString() : Name;
-            Address = Address == null ? 0 : Address;
-            ObjectID = ObjectID == null ? -1 : ObjectID;
+            Name = Name ?? "Texture_" + Index.ToString();
+            Address = Address ?? 0;
+            ObjectID = ObjectID ?? -1;
 
             SelectedEntry.Textures[Segment].Add(new TextureEntry(Name, (uint)Address, (short)ObjectID));
 

@@ -276,6 +276,8 @@ namespace NPC_Maker.NewScriptParser
             MODEL_SCALE = 140,
             MOVEMENT_SPEED = 141,
             MODEL_SCALE_SMOOTHLY = 142,
+            GRAVITY_FORCE = 143,
+            TALK_RADIUS = 144,
 
             /* bools */
             LOOP_MOVEMENT = 175,
@@ -290,7 +292,10 @@ namespace NPC_Maker.NewScriptParser
             IS_ALWAYS_ACTIVE = 184,
             PAUSE_CUTSCENE = 185,
             IS_ALWAYS_DRAWN = 186,
-            PLAYER_HAS_DEFENSE_UPGRADE = 187,
+            REACTS_IF_ATTACKED = 187,
+            TIMED_PATH = 188,
+            JUST_SCRIPT = 189,
+            OPEN_DOORS = 190,
 
             /* u8s */
             TARGET_LIMB = 195,
@@ -341,6 +346,8 @@ namespace NPC_Maker.NewScriptParser
             VAR_4 = 250,
             VAR_5 = 251,
             TIME_OF_DAY = 252,
+            TIMED_PATH_START_TIME = 253,
+            TIMED_PATH_END_TIME = 254,
         }
 
         public enum AwaitSubTypes
@@ -355,6 +362,7 @@ namespace NPC_Maker.NewScriptParser
             FRAMES = 36,
             CURRENT_ANIMATION_FRAME = 37,
             CURRENT_CUTSCENE_FRAME = 38,
+            TIME_OF_DAY = 39,
 
             STICK_X = 50,
             STICK_Y = 51,

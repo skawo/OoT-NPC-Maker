@@ -46,15 +46,14 @@ namespace NPC_Maker.NewScriptParser
 
         public static UInt16 GetOcarinaTime(string[] SplitLine, int Index)
         {
-            string[] HourMinute = SplitLine[Index].Split(':');
-
-            if (HourMinute.Length != 2)
+            try
+            {
+                return Helpers.GetOcarinaTime(SplitLine[Index]);
+            }
+            catch (Exception)
+            {
                 throw ParseException.BadTime(SplitLine);
-
-            byte Hour = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(HourMinute, 0, 0, 24));
-            byte Min = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(HourMinute, 1, 0, 59));
-
-            return Convert.ToUInt16(((Hour * 60) + Min) * (Int16.MaxValue / 1440));
+            }
         }
 
         public static object GetValueAndCheckRange(string[] Splitstring, int Index, int Min, int Max)

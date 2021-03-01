@@ -59,6 +59,19 @@ namespace NPC_Maker.NewScriptParser
                                 return new InstructionAwait((byte)SubID, Value, 0);
 
                             }
+                        case (int)Lists.AwaitSubTypes.TIME_OF_DAY:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                UInt32 Time = 0;
+
+                                if (VarType == 0)
+                                    Time = ScriptHelpers.GetOcarinaTime(SplitLine, 3);
+
+                                return new InstructionAwaitValue((byte)SubID, Time, Condition, VarType);
+                            }
                         case (int)Lists.AwaitSubTypes.VAR_1:
                         case (int)Lists.AwaitSubTypes.VAR_2:
                         case (int)Lists.AwaitSubTypes.VAR_3:

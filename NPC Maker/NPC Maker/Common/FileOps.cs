@@ -115,6 +115,9 @@ namespace NPC_Maker
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Pushable));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.AlwActive));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.AlwDraw));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.JustScript));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ReactAttacked));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.OpenDoors));
 
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColRadius));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Height));
@@ -128,15 +131,20 @@ namespace NPC_Maker
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[0]));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[1]));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[2]));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TalkRadius));
 
                         EntryBytes.AddRange(new byte[] { Entry.MovementType });
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.MovementDistance));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.MovementSpeed));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.GravityForce));
                         EntryBytes.AddRange(new byte[] { Entry.PathID });
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopStart));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopEnd));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopDel));
                         EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Loop));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TimedPath));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TimedPathStart));
+                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TimedPathEnd));
 
                         EntryBytes.AddRange(new byte[] { Entry.AnimationType });
                         EntryBytes.AddRange(Program.BEConverter.GetBytes((UInt16)Entry.Animations.Count()));

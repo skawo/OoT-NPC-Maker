@@ -166,7 +166,7 @@ namespace NPC_Maker.NewScriptParser
                             }
                         case (int)Lists.IfSubTypes.TIME_OF_DAY:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);

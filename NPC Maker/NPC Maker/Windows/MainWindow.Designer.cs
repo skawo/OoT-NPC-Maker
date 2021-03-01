@@ -55,12 +55,6 @@
             this.Label_Hierarchy = new System.Windows.Forms.Label();
             this.NumUpDown_Hierarchy = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_YModelOffs = new System.Windows.Forms.NumericUpDown();
-            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Frames = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_AnimDefs = new System.Windows.Forms.Label();
             this.NumUpDown_XModelOffs = new System.Windows.Forms.NumericUpDown();
             this.ComboBox_HierarchyType = new System.Windows.Forms.ComboBox();
@@ -87,55 +81,17 @@
             this.Label_ExtraDisplayLists = new System.Windows.Forms.Label();
             this.TabControl_Textures = new System.Windows.Forms.TabControl();
             this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
-            this.Seg_8 = new NPC_Maker.CustomDataGridView(this.components);
-            this.Seg_8_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_8_TextOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg8_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
-            this.Seg_9 = new NPC_Maker.CustomDataGridView(this.components);
-            this.Seg_9_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_9_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_9_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
-            this.Seg_A = new NPC_Maker.CustomDataGridView(this.components);
-            this.Seg_A_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_A_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_A_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
-            this.Seg_B = new NPC_Maker.CustomDataGridView(this.components);
-            this.Seg_B_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_B_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_B_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
-            this.Seg_C = new NPC_Maker.CustomDataGridView(this.components);
-            this.Seg_C_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_C_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_C_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
-            this.Seg_D = new NPC_Maker.CustomDataGridView(this.components);
-            this.Seg_D_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_D_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_D_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
-            this.Seg_E = new NPC_Maker.CustomDataGridView(this.components);
-            this.Seg_E_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_E_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_E_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
-            this.Seg_F = new NPC_Maker.CustomDataGridView(this.components);
-            this.Seg_F_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_F_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seg_F_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
-            this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDLists_Scale = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.Chkb_Opendoors = new System.Windows.Forms.CheckBox();
+            this.ChkRunJustScript = new System.Windows.Forms.CheckBox();
+            this.Chkb_ReactIfAtt = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.Checkbox_AlwaysDraw = new System.Windows.Forms.CheckBox();
             this.Label_CutsceneSlot = new System.Windows.Forms.Label();
@@ -184,6 +140,8 @@
             this.Label_Head_Limb = new System.Windows.Forms.Label();
             this.NumUpDown_HeadLimb = new System.Windows.Forms.NumericUpDown();
             this.Panel_TargetPanel = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.NumUpDown_TalkRadi = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ZTargetOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_TargetLimb = new System.Windows.Forms.Label();
             this.ComboBox_TargetDist = new System.Windows.Forms.ComboBox();
@@ -194,7 +152,14 @@
             this.Checkbox_Targettable = new System.Windows.Forms.CheckBox();
             this.NumUpDown_TargetLimb = new System.Windows.Forms.NumericUpDown();
             this.Panel_Movement = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tmpicker_timedPathEnd = new System.Windows.Forms.DateTimePicker();
+            this.Label_PathStTime = new System.Windows.Forms.Label();
+            this.tmpicker_timedPathStart = new System.Windows.Forms.DateTimePicker();
+            this.ChkBox_TimedPath = new System.Windows.Forms.CheckBox();
+            this.Lbl_GravityForce = new System.Windows.Forms.Label();
             this.Label_LoopDelay = new System.Windows.Forms.Label();
+            this.NumUpDown_GravityForce = new System.Windows.Forms.NumericUpDown();
             this.Label_LoopStartNode = new System.Windows.Forms.Label();
             this.NumUpDown_LoopStartNode = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
@@ -225,9 +190,6 @@
             this.Button_Duplicate = new System.Windows.Forms.Button();
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
-            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -238,10 +200,60 @@
             this.questItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemsdungeonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemstradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playerMasksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.actorstoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.playerMasksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Frames = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_8 = new NPC_Maker.CustomDataGridView(this.components);
+            this.Seg_8_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_8_TextOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg8_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_9 = new NPC_Maker.CustomDataGridView(this.components);
+            this.Seg_9_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_9_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_9_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_A = new NPC_Maker.CustomDataGridView(this.components);
+            this.Seg_A_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_A_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_A_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_B = new NPC_Maker.CustomDataGridView(this.components);
+            this.Seg_B_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_B_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_B_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_C = new NPC_Maker.CustomDataGridView(this.components);
+            this.Seg_C_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_C_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_C_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_D = new NPC_Maker.CustomDataGridView(this.components);
+            this.Seg_D_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_D_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_D_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_E = new NPC_Maker.CustomDataGridView(this.components);
+            this.Seg_E_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_E_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_E_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_F = new NPC_Maker.CustomDataGridView(this.components);
+            this.Seg_F_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_F_TexOffs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seg_F_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
+            this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDLists_Scale = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MenuStrip.SuspendLayout();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
@@ -251,7 +263,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).BeginInit();
             this.Tab2_ExtraData.SuspendLayout();
@@ -261,22 +272,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
             this.TabControl_Textures.SuspendLayout();
             this.TabPage_Segment_8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).BeginInit();
             this.TabPage_Segment_9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).BeginInit();
             this.TabPage_Segment_A.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).BeginInit();
             this.TabPage_Segment_B.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).BeginInit();
             this.TabPage_Segment_C.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).BeginInit();
             this.TabPage_Segment_D.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).BeginInit();
             this.TabPage_Segment_E.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).BeginInit();
             this.TabPage_Segment_F.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
             this.Tab3_BehaviorData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
             this.Panel_Collision.SuspendLayout();
@@ -296,11 +298,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_DegHoz)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_HeadLimb)).BeginInit();
             this.Panel_TargetPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkRadi)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZTargetOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YTargetOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XTargetOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TargetLimb)).BeginInit();
             this.Panel_Movement.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_GravityForce)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).BeginInit();
@@ -312,8 +316,18 @@
             this.Tab5_IdleScript.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).BeginInit();
             this.Panel_NPCList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.ContextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.SuspendLayout();
             // 
             // MenuStrip
@@ -605,66 +619,6 @@
             this.NumUpDown_YModelOffs.TabIndex = 37;
             this.NumUpDown_YModelOffs.Tag = NPC_Maker.NPCEntry.Members.YMODELOFFS;
             this.NumUpDown_YModelOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // DataGrid_Animations
-            // 
-            this.DataGrid_Animations.AllowUserToResizeColumns = false;
-            this.DataGrid_Animations.AllowUserToResizeRows = false;
-            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
-            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_AnimName,
-            this.Col_Anim,
-            this.Col_Frames,
-            this.Col_Speed,
-            this.Col_OBJ});
-            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 165);
-            this.DataGrid_Animations.MultiSelect = false;
-            this.DataGrid_Animations.Name = "DataGrid_Animations";
-            this.DataGrid_Animations.RowHeadersVisible = false;
-            this.DataGrid_Animations.Size = new System.Drawing.Size(663, 444);
-            this.DataGrid_Animations.TabIndex = 9;
-            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
-            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
-            // 
-            // Col_AnimName
-            // 
-            this.Col_AnimName.FillWeight = 90F;
-            this.Col_AnimName.HeaderText = "Purpose";
-            this.Col_AnimName.Name = "Col_AnimName";
-            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Anim
-            // 
-            this.Col_Anim.FillWeight = 60F;
-            this.Col_Anim.HeaderText = "Offset";
-            this.Col_Anim.Name = "Col_Anim";
-            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Frames
-            // 
-            this.Col_Frames.FillWeight = 60F;
-            this.Col_Frames.HeaderText = "Keyframes";
-            this.Col_Frames.Name = "Col_Frames";
-            this.Col_Frames.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Speed
-            // 
-            this.Col_Speed.FillWeight = 40F;
-            this.Col_Speed.HeaderText = "Speed";
-            this.Col_Speed.Name = "Col_Speed";
-            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_OBJ
-            // 
-            this.Col_OBJ.FillWeight = 40F;
-            this.Col_OBJ.HeaderText = "Object";
-            this.Col_OBJ.Name = "Col_OBJ";
-            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Label_AnimDefs
             // 
@@ -1022,46 +976,6 @@
             this.TabPage_Segment_8.Text = "Segment 8";
             this.TabPage_Segment_8.UseVisualStyleBackColor = true;
             // 
-            // Seg_8
-            // 
-            this.Seg_8.AllowUserToResizeColumns = false;
-            this.Seg_8.AllowUserToResizeRows = false;
-            this.Seg_8.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.Seg_8.BackgroundColor = System.Drawing.Color.White;
-            this.Seg_8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Seg_8.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Seg_8_Name,
-            this.Seg_8_TextOffs,
-            this.Seg8_ObjId});
-            this.Seg_8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Seg_8.Location = new System.Drawing.Point(3, 3);
-            this.Seg_8.MultiSelect = false;
-            this.Seg_8.Name = "Seg_8";
-            this.Seg_8.RowHeadersVisible = false;
-            this.Seg_8.Size = new System.Drawing.Size(657, 223);
-            this.Seg_8.TabIndex = 10;
-            this.Seg_8.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
-            this.Seg_8.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
-            // 
-            // Seg_8_Name
-            // 
-            this.Seg_8_Name.FillWeight = 50F;
-            this.Seg_8_Name.HeaderText = "Name";
-            this.Seg_8_Name.Name = "Seg_8_Name";
-            this.Seg_8_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_8_TextOffs
-            // 
-            this.Seg_8_TextOffs.HeaderText = "Texture Offset";
-            this.Seg_8_TextOffs.Name = "Seg_8_TextOffs";
-            this.Seg_8_TextOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg8_ObjId
-            // 
-            this.Seg8_ObjId.FillWeight = 70F;
-            this.Seg8_ObjId.HeaderText = "Object ID";
-            this.Seg8_ObjId.Name = "Seg8_ObjId";
-            // 
             // TabPage_Segment_9
             // 
             this.TabPage_Segment_9.Controls.Add(this.Seg_9);
@@ -1072,46 +986,6 @@
             this.TabPage_Segment_9.TabIndex = 1;
             this.TabPage_Segment_9.Text = "Segment 9";
             this.TabPage_Segment_9.UseVisualStyleBackColor = true;
-            // 
-            // Seg_9
-            // 
-            this.Seg_9.AllowUserToResizeColumns = false;
-            this.Seg_9.AllowUserToResizeRows = false;
-            this.Seg_9.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.Seg_9.BackgroundColor = System.Drawing.Color.White;
-            this.Seg_9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Seg_9.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Seg_9_Name,
-            this.Seg_9_TexOffs,
-            this.Seg_9_ObjId});
-            this.Seg_9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Seg_9.Location = new System.Drawing.Point(3, 3);
-            this.Seg_9.MultiSelect = false;
-            this.Seg_9.Name = "Seg_9";
-            this.Seg_9.RowHeadersVisible = false;
-            this.Seg_9.Size = new System.Drawing.Size(657, 223);
-            this.Seg_9.TabIndex = 11;
-            this.Seg_9.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
-            this.Seg_9.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
-            // 
-            // Seg_9_Name
-            // 
-            this.Seg_9_Name.FillWeight = 50F;
-            this.Seg_9_Name.HeaderText = "Name";
-            this.Seg_9_Name.Name = "Seg_9_Name";
-            this.Seg_9_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_9_TexOffs
-            // 
-            this.Seg_9_TexOffs.HeaderText = "Texture Offset";
-            this.Seg_9_TexOffs.Name = "Seg_9_TexOffs";
-            this.Seg_9_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_9_ObjId
-            // 
-            this.Seg_9_ObjId.FillWeight = 70F;
-            this.Seg_9_ObjId.HeaderText = "Object ID";
-            this.Seg_9_ObjId.Name = "Seg_9_ObjId";
             // 
             // TabPage_Segment_A
             // 
@@ -1124,46 +998,6 @@
             this.TabPage_Segment_A.Text = "Segment A";
             this.TabPage_Segment_A.UseVisualStyleBackColor = true;
             // 
-            // Seg_A
-            // 
-            this.Seg_A.AllowUserToResizeColumns = false;
-            this.Seg_A.AllowUserToResizeRows = false;
-            this.Seg_A.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.Seg_A.BackgroundColor = System.Drawing.Color.White;
-            this.Seg_A.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Seg_A.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Seg_A_Name,
-            this.Seg_A_TexOffs,
-            this.Seg_A_ObjId});
-            this.Seg_A.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Seg_A.Location = new System.Drawing.Point(3, 3);
-            this.Seg_A.MultiSelect = false;
-            this.Seg_A.Name = "Seg_A";
-            this.Seg_A.RowHeadersVisible = false;
-            this.Seg_A.Size = new System.Drawing.Size(657, 223);
-            this.Seg_A.TabIndex = 11;
-            this.Seg_A.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
-            this.Seg_A.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
-            // 
-            // Seg_A_Name
-            // 
-            this.Seg_A_Name.FillWeight = 50F;
-            this.Seg_A_Name.HeaderText = "Name";
-            this.Seg_A_Name.Name = "Seg_A_Name";
-            this.Seg_A_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_A_TexOffs
-            // 
-            this.Seg_A_TexOffs.HeaderText = "Texture Offset";
-            this.Seg_A_TexOffs.Name = "Seg_A_TexOffs";
-            this.Seg_A_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_A_ObjId
-            // 
-            this.Seg_A_ObjId.FillWeight = 70F;
-            this.Seg_A_ObjId.HeaderText = "Object ID";
-            this.Seg_A_ObjId.Name = "Seg_A_ObjId";
-            // 
             // TabPage_Segment_B
             // 
             this.TabPage_Segment_B.Controls.Add(this.Seg_B);
@@ -1174,46 +1008,6 @@
             this.TabPage_Segment_B.TabIndex = 3;
             this.TabPage_Segment_B.Text = "Segment B";
             this.TabPage_Segment_B.UseVisualStyleBackColor = true;
-            // 
-            // Seg_B
-            // 
-            this.Seg_B.AllowUserToResizeColumns = false;
-            this.Seg_B.AllowUserToResizeRows = false;
-            this.Seg_B.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.Seg_B.BackgroundColor = System.Drawing.Color.White;
-            this.Seg_B.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Seg_B.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Seg_B_Name,
-            this.Seg_B_TexOffs,
-            this.Seg_B_ObjId});
-            this.Seg_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Seg_B.Location = new System.Drawing.Point(3, 3);
-            this.Seg_B.MultiSelect = false;
-            this.Seg_B.Name = "Seg_B";
-            this.Seg_B.RowHeadersVisible = false;
-            this.Seg_B.Size = new System.Drawing.Size(657, 223);
-            this.Seg_B.TabIndex = 11;
-            this.Seg_B.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
-            this.Seg_B.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
-            // 
-            // Seg_B_Name
-            // 
-            this.Seg_B_Name.FillWeight = 50F;
-            this.Seg_B_Name.HeaderText = "Name";
-            this.Seg_B_Name.Name = "Seg_B_Name";
-            this.Seg_B_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_B_TexOffs
-            // 
-            this.Seg_B_TexOffs.HeaderText = "Texture Offset";
-            this.Seg_B_TexOffs.Name = "Seg_B_TexOffs";
-            this.Seg_B_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_B_ObjId
-            // 
-            this.Seg_B_ObjId.FillWeight = 70F;
-            this.Seg_B_ObjId.HeaderText = "Object ID";
-            this.Seg_B_ObjId.Name = "Seg_B_ObjId";
             // 
             // TabPage_Segment_C
             // 
@@ -1226,46 +1020,6 @@
             this.TabPage_Segment_C.Text = "Segment C";
             this.TabPage_Segment_C.UseVisualStyleBackColor = true;
             // 
-            // Seg_C
-            // 
-            this.Seg_C.AllowUserToResizeColumns = false;
-            this.Seg_C.AllowUserToResizeRows = false;
-            this.Seg_C.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.Seg_C.BackgroundColor = System.Drawing.Color.White;
-            this.Seg_C.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Seg_C.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Seg_C_Name,
-            this.Seg_C_TexOffs,
-            this.Seg_C_ObjId});
-            this.Seg_C.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Seg_C.Location = new System.Drawing.Point(3, 3);
-            this.Seg_C.MultiSelect = false;
-            this.Seg_C.Name = "Seg_C";
-            this.Seg_C.RowHeadersVisible = false;
-            this.Seg_C.Size = new System.Drawing.Size(657, 223);
-            this.Seg_C.TabIndex = 11;
-            this.Seg_C.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
-            this.Seg_C.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
-            // 
-            // Seg_C_Name
-            // 
-            this.Seg_C_Name.FillWeight = 50F;
-            this.Seg_C_Name.HeaderText = "Name";
-            this.Seg_C_Name.Name = "Seg_C_Name";
-            this.Seg_C_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_C_TexOffs
-            // 
-            this.Seg_C_TexOffs.HeaderText = "Texture Offset";
-            this.Seg_C_TexOffs.Name = "Seg_C_TexOffs";
-            this.Seg_C_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_C_ObjId
-            // 
-            this.Seg_C_ObjId.FillWeight = 70F;
-            this.Seg_C_ObjId.HeaderText = "Object ID";
-            this.Seg_C_ObjId.Name = "Seg_C_ObjId";
-            // 
             // TabPage_Segment_D
             // 
             this.TabPage_Segment_D.Controls.Add(this.Seg_D);
@@ -1276,46 +1030,6 @@
             this.TabPage_Segment_D.TabIndex = 5;
             this.TabPage_Segment_D.Text = "Segment D";
             this.TabPage_Segment_D.UseVisualStyleBackColor = true;
-            // 
-            // Seg_D
-            // 
-            this.Seg_D.AllowUserToResizeColumns = false;
-            this.Seg_D.AllowUserToResizeRows = false;
-            this.Seg_D.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.Seg_D.BackgroundColor = System.Drawing.Color.White;
-            this.Seg_D.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Seg_D.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Seg_D_Name,
-            this.Seg_D_TexOffs,
-            this.Seg_D_ObjId});
-            this.Seg_D.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Seg_D.Location = new System.Drawing.Point(3, 3);
-            this.Seg_D.MultiSelect = false;
-            this.Seg_D.Name = "Seg_D";
-            this.Seg_D.RowHeadersVisible = false;
-            this.Seg_D.Size = new System.Drawing.Size(657, 223);
-            this.Seg_D.TabIndex = 11;
-            this.Seg_D.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
-            this.Seg_D.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
-            // 
-            // Seg_D_Name
-            // 
-            this.Seg_D_Name.FillWeight = 50F;
-            this.Seg_D_Name.HeaderText = "Name";
-            this.Seg_D_Name.Name = "Seg_D_Name";
-            this.Seg_D_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_D_TexOffs
-            // 
-            this.Seg_D_TexOffs.HeaderText = "Texture Offset";
-            this.Seg_D_TexOffs.Name = "Seg_D_TexOffs";
-            this.Seg_D_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_D_ObjId
-            // 
-            this.Seg_D_ObjId.FillWeight = 70F;
-            this.Seg_D_ObjId.HeaderText = "Object ID";
-            this.Seg_D_ObjId.Name = "Seg_D_ObjId";
             // 
             // TabPage_Segment_E
             // 
@@ -1328,46 +1042,6 @@
             this.TabPage_Segment_E.Text = "Segment E";
             this.TabPage_Segment_E.UseVisualStyleBackColor = true;
             // 
-            // Seg_E
-            // 
-            this.Seg_E.AllowUserToResizeColumns = false;
-            this.Seg_E.AllowUserToResizeRows = false;
-            this.Seg_E.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.Seg_E.BackgroundColor = System.Drawing.Color.White;
-            this.Seg_E.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Seg_E.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Seg_E_Name,
-            this.Seg_E_TexOffs,
-            this.Seg_E_ObjId});
-            this.Seg_E.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Seg_E.Location = new System.Drawing.Point(3, 3);
-            this.Seg_E.MultiSelect = false;
-            this.Seg_E.Name = "Seg_E";
-            this.Seg_E.RowHeadersVisible = false;
-            this.Seg_E.Size = new System.Drawing.Size(657, 223);
-            this.Seg_E.TabIndex = 11;
-            this.Seg_E.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
-            this.Seg_E.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
-            // 
-            // Seg_E_Name
-            // 
-            this.Seg_E_Name.FillWeight = 50F;
-            this.Seg_E_Name.HeaderText = "Name";
-            this.Seg_E_Name.Name = "Seg_E_Name";
-            this.Seg_E_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_E_TexOffs
-            // 
-            this.Seg_E_TexOffs.HeaderText = "Texture Offset";
-            this.Seg_E_TexOffs.Name = "Seg_E_TexOffs";
-            this.Seg_E_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_E_ObjId
-            // 
-            this.Seg_E_ObjId.FillWeight = 70F;
-            this.Seg_E_ObjId.HeaderText = "Object ID";
-            this.Seg_E_ObjId.Name = "Seg_E_ObjId";
-            // 
             // TabPage_Segment_F
             // 
             this.TabPage_Segment_F.Controls.Add(this.Seg_F);
@@ -1379,133 +1053,12 @@
             this.TabPage_Segment_F.Text = "Segment F";
             this.TabPage_Segment_F.UseVisualStyleBackColor = true;
             // 
-            // Seg_F
-            // 
-            this.Seg_F.AllowUserToResizeColumns = false;
-            this.Seg_F.AllowUserToResizeRows = false;
-            this.Seg_F.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.Seg_F.BackgroundColor = System.Drawing.Color.White;
-            this.Seg_F.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Seg_F.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Seg_F_Name,
-            this.Seg_F_TexOffs,
-            this.Seg_F_ObjId});
-            this.Seg_F.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Seg_F.Location = new System.Drawing.Point(3, 3);
-            this.Seg_F.MultiSelect = false;
-            this.Seg_F.Name = "Seg_F";
-            this.Seg_F.RowHeadersVisible = false;
-            this.Seg_F.Size = new System.Drawing.Size(657, 223);
-            this.Seg_F.TabIndex = 11;
-            this.Seg_F.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
-            this.Seg_F.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
-            // 
-            // Seg_F_Name
-            // 
-            this.Seg_F_Name.FillWeight = 50F;
-            this.Seg_F_Name.HeaderText = "Name";
-            this.Seg_F_Name.Name = "Seg_F_Name";
-            this.Seg_F_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_F_TexOffs
-            // 
-            this.Seg_F_TexOffs.HeaderText = "Texture Offset";
-            this.Seg_F_TexOffs.Name = "Seg_F_TexOffs";
-            this.Seg_F_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Seg_F_ObjId
-            // 
-            this.Seg_F_ObjId.FillWeight = 70F;
-            this.Seg_F_ObjId.HeaderText = "Object ID";
-            this.Seg_F_ObjId.Name = "Seg_F_ObjId";
-            // 
-            // DataGridView_ExtraDLists
-            // 
-            this.DataGridView_ExtraDLists.AllowUserToResizeColumns = false;
-            this.DataGridView_ExtraDLists.AllowUserToResizeRows = false;
-            this.DataGridView_ExtraDLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGridView_ExtraDLists.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGridView_ExtraDLists.BackgroundColor = System.Drawing.Color.White;
-            this.DataGridView_ExtraDLists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridView_ExtraDLists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ExtraDlists_Purpose,
-            this.ExtraDlists_Offset,
-            this.ExtraDlists_Translation,
-            this.ExtraDlists_Rotation,
-            this.ExtraDLists_Scale,
-            this.ExtraDlists_Limb,
-            this.ExtraDlists_ObjectID,
-            this.ExtraDlists_ShowType});
-            this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(9, 19);
-            this.DataGridView_ExtraDLists.MultiSelect = false;
-            this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
-            this.DataGridView_ExtraDLists.RowHeadersVisible = false;
-            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(671, 264);
-            this.DataGridView_ExtraDLists.TabIndex = 51;
-            this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
-            this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
-            // 
-            // ExtraDlists_Purpose
-            // 
-            this.ExtraDlists_Purpose.FillWeight = 70F;
-            this.ExtraDlists_Purpose.HeaderText = "Purpose";
-            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
-            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Offset
-            // 
-            this.ExtraDlists_Offset.FillWeight = 50F;
-            this.ExtraDlists_Offset.HeaderText = "Offset";
-            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
-            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Translation
-            // 
-            this.ExtraDlists_Translation.FillWeight = 60F;
-            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
-            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
-            // 
-            // ExtraDlists_Rotation
-            // 
-            this.ExtraDlists_Rotation.FillWeight = 60F;
-            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
-            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
-            // 
-            // ExtraDLists_Scale
-            // 
-            this.ExtraDLists_Scale.FillWeight = 40F;
-            this.ExtraDLists_Scale.HeaderText = "Scale";
-            this.ExtraDLists_Scale.Name = "ExtraDLists_Scale";
-            // 
-            // ExtraDlists_Limb
-            // 
-            this.ExtraDlists_Limb.FillWeight = 35F;
-            this.ExtraDlists_Limb.HeaderText = "Limb";
-            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
-            // 
-            // ExtraDlists_ObjectID
-            // 
-            this.ExtraDlists_ObjectID.FillWeight = 40F;
-            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
-            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
-            // 
-            // ExtraDlists_ShowType
-            // 
-            this.ExtraDlists_ShowType.FillWeight = 80F;
-            this.ExtraDlists_ShowType.HeaderText = "Show type";
-            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
-            "Don\'t show",
-            "Alongside limb",
-            "Instead of limb"});
-            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
-            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ExtraDlists_ShowType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
+            this.Tab3_BehaviorData.Controls.Add(this.Chkb_Opendoors);
+            this.Tab3_BehaviorData.Controls.Add(this.ChkRunJustScript);
+            this.Tab3_BehaviorData.Controls.Add(this.Chkb_ReactIfAtt);
             this.Tab3_BehaviorData.Controls.Add(this.label2);
             this.Tab3_BehaviorData.Controls.Add(this.Checkbox_AlwaysDraw);
             this.Tab3_BehaviorData.Controls.Add(this.Label_CutsceneSlot);
@@ -1524,6 +1077,42 @@
             this.Tab3_BehaviorData.Size = new System.Drawing.Size(683, 615);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
+            // 
+            // Chkb_Opendoors
+            // 
+            this.Chkb_Opendoors.AutoSize = true;
+            this.Chkb_Opendoors.Location = new System.Drawing.Point(440, 183);
+            this.Chkb_Opendoors.Name = "Chkb_Opendoors";
+            this.Chkb_Opendoors.Size = new System.Drawing.Size(167, 17);
+            this.Chkb_Opendoors.TabIndex = 74;
+            this.Chkb_Opendoors.Tag = NPC_Maker.NPCEntry.Members.OPENDOORS;
+            this.Chkb_Opendoors.Text = "Opens doors if they\'re on path";
+            this.Chkb_Opendoors.UseVisualStyleBackColor = true;
+            this.Chkb_Opendoors.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // ChkRunJustScript
+            // 
+            this.ChkRunJustScript.AutoSize = true;
+            this.ChkRunJustScript.Location = new System.Drawing.Point(440, 229);
+            this.ChkRunJustScript.Name = "ChkRunJustScript";
+            this.ChkRunJustScript.Size = new System.Drawing.Size(91, 17);
+            this.ChkRunJustScript.TabIndex = 73;
+            this.ChkRunJustScript.Tag = NPC_Maker.NPCEntry.Members.JUSTSCRIPT;
+            this.ChkRunJustScript.Text = "Just run script";
+            this.ChkRunJustScript.UseVisualStyleBackColor = true;
+            this.ChkRunJustScript.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // Chkb_ReactIfAtt
+            // 
+            this.Chkb_ReactIfAtt.AutoSize = true;
+            this.Chkb_ReactIfAtt.Location = new System.Drawing.Point(440, 206);
+            this.Chkb_ReactIfAtt.Name = "Chkb_ReactIfAtt";
+            this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(108, 17);
+            this.Chkb_ReactIfAtt.TabIndex = 72;
+            this.Chkb_ReactIfAtt.Tag = NPC_Maker.NPCEntry.Members.REACTATT;
+            this.Chkb_ReactIfAtt.Text = "React if attacked";
+            this.Chkb_ReactIfAtt.UseVisualStyleBackColor = true;
+            this.Chkb_ReactIfAtt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // label2
             // 
@@ -1594,7 +1183,7 @@
             this.Panel_Collision.Controls.Add(this.Checkbox_HaveCollision);
             this.Panel_Collision.Location = new System.Drawing.Point(7, 433);
             this.Panel_Collision.Name = "Panel_Collision";
-            this.Panel_Collision.Size = new System.Drawing.Size(200, 133);
+            this.Panel_Collision.Size = new System.Drawing.Size(200, 143);
             this.Panel_Collision.TabIndex = 63;
             // 
             // NumUpDown_ZColOffs
@@ -2152,6 +1741,8 @@
             // 
             this.Panel_TargetPanel.BackColor = System.Drawing.Color.Transparent;
             this.Panel_TargetPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Panel_TargetPanel.Controls.Add(this.label3);
+            this.Panel_TargetPanel.Controls.Add(this.NumUpDown_TalkRadi);
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_ZTargetOffs);
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetLimb);
             this.Panel_TargetPanel.Controls.Add(this.ComboBox_TargetDist);
@@ -2161,14 +1752,38 @@
             this.Panel_TargetPanel.Controls.Add(this.Label_TargetOffset);
             this.Panel_TargetPanel.Controls.Add(this.Checkbox_Targettable);
             this.Panel_TargetPanel.Controls.Add(this.NumUpDown_TargetLimb);
-            this.Panel_TargetPanel.Location = new System.Drawing.Point(222, 261);
+            this.Panel_TargetPanel.Location = new System.Drawing.Point(222, 377);
             this.Panel_TargetPanel.Name = "Panel_TargetPanel";
-            this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 163);
+            this.Panel_TargetPanel.Size = new System.Drawing.Size(200, 199);
             this.Panel_TargetPanel.TabIndex = 67;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(4, 62);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(91, 13);
+            this.label3.TabIndex = 35;
+            this.label3.Text = "Talk/trade radius:";
+            // 
+            // NumUpDown_TalkRadi
+            // 
+            this.NumUpDown_TalkRadi.DecimalPlaces = 2;
+            this.NumUpDown_TalkRadi.Location = new System.Drawing.Point(124, 60);
+            this.NumUpDown_TalkRadi.Maximum = new decimal(new int[] {
+            1410065407,
+            2,
+            0,
+            0});
+            this.NumUpDown_TalkRadi.Name = "NumUpDown_TalkRadi";
+            this.NumUpDown_TalkRadi.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_TalkRadi.TabIndex = 35;
+            this.NumUpDown_TalkRadi.Tag = NPC_Maker.NPCEntry.Members.TALKRADIUS;
+            this.NumUpDown_TalkRadi.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_ZTargetOffs
             // 
-            this.NumUpDown_ZTargetOffs.Location = new System.Drawing.Point(136, 129);
+            this.NumUpDown_ZTargetOffs.Location = new System.Drawing.Point(134, 158);
             this.NumUpDown_ZTargetOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -2188,7 +1803,7 @@
             // Label_TargetLimb
             // 
             this.Label_TargetLimb.AutoSize = true;
-            this.Label_TargetLimb.Location = new System.Drawing.Point(5, 30);
+            this.Label_TargetLimb.Location = new System.Drawing.Point(4, 36);
             this.Label_TargetLimb.Name = "Label_TargetLimb";
             this.Label_TargetLimb.Size = new System.Drawing.Size(62, 13);
             this.Label_TargetLimb.TabIndex = 28;
@@ -2210,16 +1825,16 @@
             "8: Medium",
             "9: Infinite",
             "10: No targetting"});
-            this.ComboBox_TargetDist.Location = new System.Drawing.Point(5, 80);
+            this.ComboBox_TargetDist.Location = new System.Drawing.Point(8, 109);
             this.ComboBox_TargetDist.Name = "ComboBox_TargetDist";
-            this.ComboBox_TargetDist.Size = new System.Drawing.Size(185, 21);
+            this.ComboBox_TargetDist.Size = new System.Drawing.Size(181, 21);
             this.ComboBox_TargetDist.TabIndex = 52;
             this.ComboBox_TargetDist.Tag = NPC_Maker.NPCEntry.Members.TARGETDIST;
             this.ComboBox_TargetDist.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // NumUpDown_YTargetOffs
             // 
-            this.NumUpDown_YTargetOffs.Location = new System.Drawing.Point(72, 129);
+            this.NumUpDown_YTargetOffs.Location = new System.Drawing.Point(70, 158);
             this.NumUpDown_YTargetOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -2239,7 +1854,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 64);
+            this.label1.Location = new System.Drawing.Point(5, 93);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 53;
@@ -2247,7 +1862,7 @@
             // 
             // NumUpDown_XTargetOffs
             // 
-            this.NumUpDown_XTargetOffs.Location = new System.Drawing.Point(8, 129);
+            this.NumUpDown_XTargetOffs.Location = new System.Drawing.Point(6, 158);
             this.NumUpDown_XTargetOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -2267,7 +1882,7 @@
             // Label_TargetOffset
             // 
             this.Label_TargetOffset.AutoSize = true;
-            this.Label_TargetOffset.Location = new System.Drawing.Point(7, 114);
+            this.Label_TargetOffset.Location = new System.Drawing.Point(5, 143);
             this.Label_TargetOffset.Name = "Label_TargetOffset";
             this.Label_TargetOffset.Size = new System.Drawing.Size(38, 13);
             this.Label_TargetOffset.TabIndex = 35;
@@ -2276,7 +1891,7 @@
             // Checkbox_Targettable
             // 
             this.Checkbox_Targettable.AutoSize = true;
-            this.Checkbox_Targettable.Location = new System.Drawing.Point(5, 3);
+            this.Checkbox_Targettable.Location = new System.Drawing.Point(7, 10);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
             this.Checkbox_Targettable.Size = new System.Drawing.Size(80, 17);
             this.Checkbox_Targettable.TabIndex = 39;
@@ -2287,7 +1902,7 @@
             // 
             // NumUpDown_TargetLimb
             // 
-            this.NumUpDown_TargetLimb.Location = new System.Drawing.Point(125, 28);
+            this.NumUpDown_TargetLimb.Location = new System.Drawing.Point(124, 34);
             this.NumUpDown_TargetLimb.Maximum = new decimal(new int[] {
             128,
             0,
@@ -2303,7 +1918,14 @@
             // 
             this.Panel_Movement.BackColor = System.Drawing.Color.Transparent;
             this.Panel_Movement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Panel_Movement.Controls.Add(this.label5);
+            this.Panel_Movement.Controls.Add(this.tmpicker_timedPathEnd);
+            this.Panel_Movement.Controls.Add(this.Label_PathStTime);
+            this.Panel_Movement.Controls.Add(this.tmpicker_timedPathStart);
+            this.Panel_Movement.Controls.Add(this.ChkBox_TimedPath);
+            this.Panel_Movement.Controls.Add(this.Lbl_GravityForce);
             this.Panel_Movement.Controls.Add(this.Label_LoopDelay);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_GravityForce);
             this.Panel_Movement.Controls.Add(this.Label_LoopStartNode);
             this.Panel_Movement.Controls.Add(this.NumUpDown_LoopStartNode);
             this.Panel_Movement.Controls.Add(this.NumUpDown_LoopDelay);
@@ -2320,22 +1942,100 @@
             this.Panel_Movement.Controls.Add(this.Label_Speed);
             this.Panel_Movement.Location = new System.Drawing.Point(222, 8);
             this.Panel_Movement.Name = "Panel_Movement";
-            this.Panel_Movement.Size = new System.Drawing.Size(200, 246);
+            this.Panel_Movement.Size = new System.Drawing.Size(200, 344);
             this.Panel_Movement.TabIndex = 65;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(5, 307);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(75, 13);
+            this.label5.TabIndex = 66;
+            this.label5.Text = "Path end time:";
+            // 
+            // tmpicker_timedPathEnd
+            // 
+            this.tmpicker_timedPathEnd.CustomFormat = "HH:mm";
+            this.tmpicker_timedPathEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.tmpicker_timedPathEnd.Location = new System.Drawing.Point(103, 301);
+            this.tmpicker_timedPathEnd.Name = "tmpicker_timedPathEnd";
+            this.tmpicker_timedPathEnd.ShowUpDown = true;
+            this.tmpicker_timedPathEnd.Size = new System.Drawing.Size(86, 20);
+            this.tmpicker_timedPathEnd.TabIndex = 65;
+            this.tmpicker_timedPathEnd.Tag = NPC_Maker.NPCEntry.Members.PATHENDTIME;
+            this.tmpicker_timedPathEnd.ValueChanged += new System.EventHandler(this.DatePicker_ValueChanged);
+            // 
+            // Label_PathStTime
+            // 
+            this.Label_PathStTime.AutoSize = true;
+            this.Label_PathStTime.Location = new System.Drawing.Point(4, 281);
+            this.Label_PathStTime.Name = "Label_PathStTime";
+            this.Label_PathStTime.Size = new System.Drawing.Size(77, 13);
+            this.Label_PathStTime.TabIndex = 64;
+            this.Label_PathStTime.Text = "Path start time:";
+            // 
+            // tmpicker_timedPathStart
+            // 
+            this.tmpicker_timedPathStart.CustomFormat = "HH:mm";
+            this.tmpicker_timedPathStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.tmpicker_timedPathStart.Location = new System.Drawing.Point(103, 275);
+            this.tmpicker_timedPathStart.Name = "tmpicker_timedPathStart";
+            this.tmpicker_timedPathStart.ShowUpDown = true;
+            this.tmpicker_timedPathStart.Size = new System.Drawing.Size(86, 20);
+            this.tmpicker_timedPathStart.TabIndex = 63;
+            this.tmpicker_timedPathStart.Tag = NPC_Maker.NPCEntry.Members.PATHSTARTTIME;
+            this.tmpicker_timedPathStart.ValueChanged += new System.EventHandler(this.DatePicker_ValueChanged);
+            // 
+            // ChkBox_TimedPath
+            // 
+            this.ChkBox_TimedPath.AutoSize = true;
+            this.ChkBox_TimedPath.Location = new System.Drawing.Point(7, 248);
+            this.ChkBox_TimedPath.Name = "ChkBox_TimedPath";
+            this.ChkBox_TimedPath.Size = new System.Drawing.Size(79, 17);
+            this.ChkBox_TimedPath.TabIndex = 62;
+            this.ChkBox_TimedPath.Tag = NPC_Maker.NPCEntry.Members.TIMEDPATH;
+            this.ChkBox_TimedPath.Text = "Timed path";
+            this.ChkBox_TimedPath.UseVisualStyleBackColor = true;
+            this.ChkBox_TimedPath.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // Lbl_GravityForce
+            // 
+            this.Lbl_GravityForce.AutoSize = true;
+            this.Lbl_GravityForce.Location = new System.Drawing.Point(5, 115);
+            this.Lbl_GravityForce.Name = "Lbl_GravityForce";
+            this.Lbl_GravityForce.Size = new System.Drawing.Size(70, 13);
+            this.Lbl_GravityForce.TabIndex = 36;
+            this.Lbl_GravityForce.Text = "Gravity force:";
             // 
             // Label_LoopDelay
             // 
             this.Label_LoopDelay.AutoSize = true;
-            this.Label_LoopDelay.Location = new System.Drawing.Point(5, 116);
+            this.Label_LoopDelay.Location = new System.Drawing.Point(4, 142);
             this.Label_LoopDelay.Name = "Label_LoopDelay";
             this.Label_LoopDelay.Size = new System.Drawing.Size(81, 13);
             this.Label_LoopDelay.TabIndex = 47;
             this.Label_LoopDelay.Text = "Delay between:";
             // 
+            // NumUpDown_GravityForce
+            // 
+            this.NumUpDown_GravityForce.DecimalPlaces = 2;
+            this.NumUpDown_GravityForce.Location = new System.Drawing.Point(124, 113);
+            this.NumUpDown_GravityForce.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_GravityForce.Name = "NumUpDown_GravityForce";
+            this.NumUpDown_GravityForce.Size = new System.Drawing.Size(66, 20);
+            this.NumUpDown_GravityForce.TabIndex = 35;
+            this.NumUpDown_GravityForce.Tag = NPC_Maker.NPCEntry.Members.GRAVITYFORCE;
+            this.NumUpDown_GravityForce.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
             // Label_LoopStartNode
             // 
             this.Label_LoopStartNode.AutoSize = true;
-            this.Label_LoopStartNode.Location = new System.Drawing.Point(5, 168);
+            this.Label_LoopStartNode.Location = new System.Drawing.Point(4, 194);
             this.Label_LoopStartNode.Name = "Label_LoopStartNode";
             this.Label_LoopStartNode.Size = new System.Drawing.Size(84, 13);
             this.Label_LoopStartNode.TabIndex = 45;
@@ -2343,7 +2043,7 @@
             // 
             // NumUpDown_LoopStartNode
             // 
-            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(125, 165);
+            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(124, 191);
             this.NumUpDown_LoopStartNode.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2355,7 +2055,7 @@
             0,
             -2147483648});
             this.NumUpDown_LoopStartNode.Name = "NumUpDown_LoopStartNode";
-            this.NumUpDown_LoopStartNode.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_LoopStartNode.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopStartNode.TabIndex = 44;
             this.NumUpDown_LoopStartNode.Tag = NPC_Maker.NPCEntry.Members.LOOPSTART;
             this.NumUpDown_LoopStartNode.Value = new decimal(new int[] {
@@ -2367,14 +2067,14 @@
             // 
             // NumUpDown_LoopDelay
             // 
-            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(125, 113);
+            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(124, 139);
             this.NumUpDown_LoopDelay.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.NumUpDown_LoopDelay.Name = "NumUpDown_LoopDelay";
-            this.NumUpDown_LoopDelay.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_LoopDelay.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopDelay.TabIndex = 46;
             this.NumUpDown_LoopDelay.Tag = NPC_Maker.NPCEntry.Members.LOOPDEL;
             this.NumUpDown_LoopDelay.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
@@ -2382,7 +2082,7 @@
             // Label_LoopEndNode
             // 
             this.Label_LoopEndNode.AutoSize = true;
-            this.Label_LoopEndNode.Location = new System.Drawing.Point(5, 193);
+            this.Label_LoopEndNode.Location = new System.Drawing.Point(4, 219);
             this.Label_LoopEndNode.Name = "Label_LoopEndNode";
             this.Label_LoopEndNode.Size = new System.Drawing.Size(82, 13);
             this.Label_LoopEndNode.TabIndex = 43;
@@ -2390,7 +2090,7 @@
             // 
             // NumUpDown_LoopEndNode
             // 
-            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(125, 191);
+            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(124, 217);
             this.NumUpDown_LoopEndNode.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2402,7 +2102,7 @@
             0,
             -2147483648});
             this.NumUpDown_LoopEndNode.Name = "NumUpDown_LoopEndNode";
-            this.NumUpDown_LoopEndNode.Size = new System.Drawing.Size(64, 20);
+            this.NumUpDown_LoopEndNode.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopEndNode.TabIndex = 42;
             this.NumUpDown_LoopEndNode.Tag = NPC_Maker.NPCEntry.Members.LOOPEND;
             this.NumUpDown_LoopEndNode.Value = new decimal(new int[] {
@@ -2415,7 +2115,7 @@
             // Checkbox_Loop
             // 
             this.Checkbox_Loop.AutoSize = true;
-            this.Checkbox_Loop.Location = new System.Drawing.Point(139, 217);
+            this.Checkbox_Loop.Location = new System.Drawing.Point(139, 248);
             this.Checkbox_Loop.Name = "Checkbox_Loop";
             this.Checkbox_Loop.Size = new System.Drawing.Size(50, 17);
             this.Checkbox_Loop.TabIndex = 41;
@@ -2427,7 +2127,7 @@
             // Label_PathFollowID
             // 
             this.Label_PathFollowID.AutoSize = true;
-            this.Label_PathFollowID.Location = new System.Drawing.Point(5, 141);
+            this.Label_PathFollowID.Location = new System.Drawing.Point(4, 167);
             this.Label_PathFollowID.Name = "Label_PathFollowID";
             this.Label_PathFollowID.Size = new System.Drawing.Size(76, 13);
             this.Label_PathFollowID.TabIndex = 39;
@@ -2435,28 +2135,28 @@
             // 
             // NumUpDown_PathFollowID
             // 
-            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(125, 139);
+            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(124, 165);
             this.NumUpDown_PathFollowID.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
             this.NumUpDown_PathFollowID.Name = "NumUpDown_PathFollowID";
-            this.NumUpDown_PathFollowID.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_PathFollowID.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_PathFollowID.TabIndex = 38;
             this.NumUpDown_PathFollowID.Tag = NPC_Maker.NPCEntry.Members.PATHID;
             this.NumUpDown_PathFollowID.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_MovDistance
             // 
-            this.NumUpDown_MovDistance.Location = new System.Drawing.Point(125, 61);
+            this.NumUpDown_MovDistance.Location = new System.Drawing.Point(124, 61);
             this.NumUpDown_MovDistance.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.NumUpDown_MovDistance.Name = "NumUpDown_MovDistance";
-            this.NumUpDown_MovDistance.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_MovDistance.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_MovDistance.TabIndex = 35;
             this.NumUpDown_MovDistance.Tag = NPC_Maker.NPCEntry.Members.MOVDISTANCE;
             this.NumUpDown_MovDistance.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
@@ -2495,14 +2195,14 @@
             0,
             0,
             131072});
-            this.NumUpDown_MovSpeed.Location = new System.Drawing.Point(125, 87);
+            this.NumUpDown_MovSpeed.Location = new System.Drawing.Point(124, 87);
             this.NumUpDown_MovSpeed.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.NumUpDown_MovSpeed.Name = "NumUpDown_MovSpeed";
-            this.NumUpDown_MovSpeed.Size = new System.Drawing.Size(65, 20);
+            this.NumUpDown_MovSpeed.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_MovSpeed.TabIndex = 37;
             this.NumUpDown_MovSpeed.Tag = NPC_Maker.NPCEntry.Members.MOVSPEED;
             this.NumUpDown_MovSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
@@ -2581,7 +2281,7 @@
         '\''};
             this.Textbox_Script.AutoIndent = false;
             this.Textbox_Script.AutoIndentChars = false;
-            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(2, 14);
+            this.Textbox_Script.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.Textbox_Script.BackBrush = null;
             this.Textbox_Script.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script.CharHeight = 14;
@@ -2655,7 +2355,7 @@
         '\''};
             this.Textbox_Script2.AutoIndent = false;
             this.Textbox_Script2.AutoIndentChars = false;
-            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(2, 14);
+            this.Textbox_Script2.AutoScrollMinSize = new System.Drawing.Size(27, 14);
             this.Textbox_Script2.BackBrush = null;
             this.Textbox_Script2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Textbox_Script2.CharHeight = 14;
@@ -2769,6 +2469,565 @@
             this.Button_Add.UseVisualStyleBackColor = true;
             this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
             // 
+            // ContextMenuStrip
+            // 
+            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.functionsToolStripMenuItem,
+            this.keywordsToolStripMenuItem,
+            this.keyValuesToolStripMenuItem,
+            this.itemsToolStripMenuItem,
+            this.itemsgiveToolStripMenuItem,
+            this.questItemsToolStripMenuItem,
+            this.itemsdungeonToolStripMenuItem,
+            this.itemstradeToolStripMenuItem,
+            this.playerMasksToolStripMenuItem,
+            this.soundEffectsToolStripMenuItem,
+            this.musicToolStripMenuItem,
+            this.actorstoolStripMenuItem});
+            this.ContextMenuStrip.Name = "ContextMenuStrip";
+            this.ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
+            this.ContextMenuStrip.Text = "Items";
+            // 
+            // functionsToolStripMenuItem
+            // 
+            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
+            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.functionsToolStripMenuItem.Text = "Functions";
+            // 
+            // keywordsToolStripMenuItem
+            // 
+            this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
+            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.keywordsToolStripMenuItem.Text = "Keywords";
+            // 
+            // keyValuesToolStripMenuItem
+            // 
+            this.keyValuesToolStripMenuItem.Name = "keyValuesToolStripMenuItem";
+            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.keyValuesToolStripMenuItem.Text = "Key values";
+            // 
+            // itemsToolStripMenuItem
+            // 
+            this.itemsToolStripMenuItem.Name = "itemsToolStripMenuItem";
+            this.itemsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.itemsToolStripMenuItem.Text = "Inventory Items";
+            // 
+            // itemsgiveToolStripMenuItem
+            // 
+            this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
+            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.itemsgiveToolStripMenuItem.Text = "Give Items";
+            // 
+            // questItemsToolStripMenuItem
+            // 
+            this.questItemsToolStripMenuItem.Name = "questItemsToolStripMenuItem";
+            this.questItemsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.questItemsToolStripMenuItem.Text = "Quest items";
+            // 
+            // itemsdungeonToolStripMenuItem
+            // 
+            this.itemsdungeonToolStripMenuItem.Name = "itemsdungeonToolStripMenuItem";
+            this.itemsdungeonToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.itemsdungeonToolStripMenuItem.Text = "Dungeon Items";
+            this.itemsdungeonToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
+            // 
+            // itemstradeToolStripMenuItem
+            // 
+            this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
+            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.itemstradeToolStripMenuItem.Text = "Trade Items";
+            // 
+            // playerMasksToolStripMenuItem
+            // 
+            this.playerMasksToolStripMenuItem.Name = "playerMasksToolStripMenuItem";
+            this.playerMasksToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.playerMasksToolStripMenuItem.Text = "Player Masks";
+            // 
+            // soundEffectsToolStripMenuItem
+            // 
+            this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
+            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.soundEffectsToolStripMenuItem.Text = "Sound effects";
+            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.SoundEffectsToolStripMenuItem_Click);
+            // 
+            // musicToolStripMenuItem
+            // 
+            this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
+            this.musicToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.musicToolStripMenuItem.Text = "Music";
+            this.musicToolStripMenuItem.Click += new System.EventHandler(this.MusicToolStripMenuItem_Click);
+            // 
+            // actorstoolStripMenuItem
+            // 
+            this.actorstoolStripMenuItem.Name = "actorstoolStripMenuItem";
+            this.actorstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.actorstoolStripMenuItem.Text = "Actors";
+            this.actorstoolStripMenuItem.Click += new System.EventHandler(this.ActorstoolStripMenuItem_Click);
+            // 
+            // DataGrid_Animations
+            // 
+            this.DataGrid_Animations.AllowUserToResizeColumns = false;
+            this.DataGrid_Animations.AllowUserToResizeRows = false;
+            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
+            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col_AnimName,
+            this.Col_Anim,
+            this.Col_Frames,
+            this.Col_Speed,
+            this.Col_OBJ});
+            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 165);
+            this.DataGrid_Animations.MultiSelect = false;
+            this.DataGrid_Animations.Name = "DataGrid_Animations";
+            this.DataGrid_Animations.RowHeadersVisible = false;
+            this.DataGrid_Animations.Size = new System.Drawing.Size(663, 444);
+            this.DataGrid_Animations.TabIndex = 9;
+            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
+            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
+            // 
+            // Col_AnimName
+            // 
+            this.Col_AnimName.FillWeight = 90F;
+            this.Col_AnimName.HeaderText = "Purpose";
+            this.Col_AnimName.Name = "Col_AnimName";
+            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Anim
+            // 
+            this.Col_Anim.FillWeight = 60F;
+            this.Col_Anim.HeaderText = "Offset";
+            this.Col_Anim.Name = "Col_Anim";
+            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Frames
+            // 
+            this.Col_Frames.FillWeight = 60F;
+            this.Col_Frames.HeaderText = "Keyframes";
+            this.Col_Frames.Name = "Col_Frames";
+            this.Col_Frames.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Speed
+            // 
+            this.Col_Speed.FillWeight = 40F;
+            this.Col_Speed.HeaderText = "Speed";
+            this.Col_Speed.Name = "Col_Speed";
+            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_OBJ
+            // 
+            this.Col_OBJ.FillWeight = 40F;
+            this.Col_OBJ.HeaderText = "Object";
+            this.Col_OBJ.Name = "Col_OBJ";
+            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_8
+            // 
+            this.Seg_8.AllowUserToResizeColumns = false;
+            this.Seg_8.AllowUserToResizeRows = false;
+            this.Seg_8.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_8.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_8.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_8.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_8_Name,
+            this.Seg_8_TextOffs,
+            this.Seg8_ObjId});
+            this.Seg_8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_8.Location = new System.Drawing.Point(3, 3);
+            this.Seg_8.MultiSelect = false;
+            this.Seg_8.Name = "Seg_8";
+            this.Seg_8.RowHeadersVisible = false;
+            this.Seg_8.Size = new System.Drawing.Size(657, 223);
+            this.Seg_8.TabIndex = 10;
+            this.Seg_8.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_8.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_8_Name
+            // 
+            this.Seg_8_Name.FillWeight = 50F;
+            this.Seg_8_Name.HeaderText = "Name";
+            this.Seg_8_Name.Name = "Seg_8_Name";
+            this.Seg_8_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_8_TextOffs
+            // 
+            this.Seg_8_TextOffs.HeaderText = "Texture Offset";
+            this.Seg_8_TextOffs.Name = "Seg_8_TextOffs";
+            this.Seg_8_TextOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg8_ObjId
+            // 
+            this.Seg8_ObjId.FillWeight = 70F;
+            this.Seg8_ObjId.HeaderText = "Object ID";
+            this.Seg8_ObjId.Name = "Seg8_ObjId";
+            // 
+            // Seg_9
+            // 
+            this.Seg_9.AllowUserToResizeColumns = false;
+            this.Seg_9.AllowUserToResizeRows = false;
+            this.Seg_9.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_9.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_9.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_9.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_9_Name,
+            this.Seg_9_TexOffs,
+            this.Seg_9_ObjId});
+            this.Seg_9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_9.Location = new System.Drawing.Point(3, 3);
+            this.Seg_9.MultiSelect = false;
+            this.Seg_9.Name = "Seg_9";
+            this.Seg_9.RowHeadersVisible = false;
+            this.Seg_9.Size = new System.Drawing.Size(657, 223);
+            this.Seg_9.TabIndex = 11;
+            this.Seg_9.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_9.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_9_Name
+            // 
+            this.Seg_9_Name.FillWeight = 50F;
+            this.Seg_9_Name.HeaderText = "Name";
+            this.Seg_9_Name.Name = "Seg_9_Name";
+            this.Seg_9_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_9_TexOffs
+            // 
+            this.Seg_9_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_9_TexOffs.Name = "Seg_9_TexOffs";
+            this.Seg_9_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_9_ObjId
+            // 
+            this.Seg_9_ObjId.FillWeight = 70F;
+            this.Seg_9_ObjId.HeaderText = "Object ID";
+            this.Seg_9_ObjId.Name = "Seg_9_ObjId";
+            // 
+            // Seg_A
+            // 
+            this.Seg_A.AllowUserToResizeColumns = false;
+            this.Seg_A.AllowUserToResizeRows = false;
+            this.Seg_A.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_A.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_A.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_A.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_A_Name,
+            this.Seg_A_TexOffs,
+            this.Seg_A_ObjId});
+            this.Seg_A.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_A.Location = new System.Drawing.Point(3, 3);
+            this.Seg_A.MultiSelect = false;
+            this.Seg_A.Name = "Seg_A";
+            this.Seg_A.RowHeadersVisible = false;
+            this.Seg_A.Size = new System.Drawing.Size(657, 223);
+            this.Seg_A.TabIndex = 11;
+            this.Seg_A.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_A.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_A_Name
+            // 
+            this.Seg_A_Name.FillWeight = 50F;
+            this.Seg_A_Name.HeaderText = "Name";
+            this.Seg_A_Name.Name = "Seg_A_Name";
+            this.Seg_A_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_A_TexOffs
+            // 
+            this.Seg_A_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_A_TexOffs.Name = "Seg_A_TexOffs";
+            this.Seg_A_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_A_ObjId
+            // 
+            this.Seg_A_ObjId.FillWeight = 70F;
+            this.Seg_A_ObjId.HeaderText = "Object ID";
+            this.Seg_A_ObjId.Name = "Seg_A_ObjId";
+            // 
+            // Seg_B
+            // 
+            this.Seg_B.AllowUserToResizeColumns = false;
+            this.Seg_B.AllowUserToResizeRows = false;
+            this.Seg_B.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_B.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_B.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_B.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_B_Name,
+            this.Seg_B_TexOffs,
+            this.Seg_B_ObjId});
+            this.Seg_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_B.Location = new System.Drawing.Point(3, 3);
+            this.Seg_B.MultiSelect = false;
+            this.Seg_B.Name = "Seg_B";
+            this.Seg_B.RowHeadersVisible = false;
+            this.Seg_B.Size = new System.Drawing.Size(657, 223);
+            this.Seg_B.TabIndex = 11;
+            this.Seg_B.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_B.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_B_Name
+            // 
+            this.Seg_B_Name.FillWeight = 50F;
+            this.Seg_B_Name.HeaderText = "Name";
+            this.Seg_B_Name.Name = "Seg_B_Name";
+            this.Seg_B_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_B_TexOffs
+            // 
+            this.Seg_B_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_B_TexOffs.Name = "Seg_B_TexOffs";
+            this.Seg_B_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_B_ObjId
+            // 
+            this.Seg_B_ObjId.FillWeight = 70F;
+            this.Seg_B_ObjId.HeaderText = "Object ID";
+            this.Seg_B_ObjId.Name = "Seg_B_ObjId";
+            // 
+            // Seg_C
+            // 
+            this.Seg_C.AllowUserToResizeColumns = false;
+            this.Seg_C.AllowUserToResizeRows = false;
+            this.Seg_C.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_C.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_C.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_C.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_C_Name,
+            this.Seg_C_TexOffs,
+            this.Seg_C_ObjId});
+            this.Seg_C.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_C.Location = new System.Drawing.Point(3, 3);
+            this.Seg_C.MultiSelect = false;
+            this.Seg_C.Name = "Seg_C";
+            this.Seg_C.RowHeadersVisible = false;
+            this.Seg_C.Size = new System.Drawing.Size(657, 223);
+            this.Seg_C.TabIndex = 11;
+            this.Seg_C.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_C.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_C_Name
+            // 
+            this.Seg_C_Name.FillWeight = 50F;
+            this.Seg_C_Name.HeaderText = "Name";
+            this.Seg_C_Name.Name = "Seg_C_Name";
+            this.Seg_C_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_C_TexOffs
+            // 
+            this.Seg_C_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_C_TexOffs.Name = "Seg_C_TexOffs";
+            this.Seg_C_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_C_ObjId
+            // 
+            this.Seg_C_ObjId.FillWeight = 70F;
+            this.Seg_C_ObjId.HeaderText = "Object ID";
+            this.Seg_C_ObjId.Name = "Seg_C_ObjId";
+            // 
+            // Seg_D
+            // 
+            this.Seg_D.AllowUserToResizeColumns = false;
+            this.Seg_D.AllowUserToResizeRows = false;
+            this.Seg_D.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_D.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_D.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_D.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_D_Name,
+            this.Seg_D_TexOffs,
+            this.Seg_D_ObjId});
+            this.Seg_D.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_D.Location = new System.Drawing.Point(3, 3);
+            this.Seg_D.MultiSelect = false;
+            this.Seg_D.Name = "Seg_D";
+            this.Seg_D.RowHeadersVisible = false;
+            this.Seg_D.Size = new System.Drawing.Size(657, 223);
+            this.Seg_D.TabIndex = 11;
+            this.Seg_D.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_D.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_D_Name
+            // 
+            this.Seg_D_Name.FillWeight = 50F;
+            this.Seg_D_Name.HeaderText = "Name";
+            this.Seg_D_Name.Name = "Seg_D_Name";
+            this.Seg_D_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_D_TexOffs
+            // 
+            this.Seg_D_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_D_TexOffs.Name = "Seg_D_TexOffs";
+            this.Seg_D_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_D_ObjId
+            // 
+            this.Seg_D_ObjId.FillWeight = 70F;
+            this.Seg_D_ObjId.HeaderText = "Object ID";
+            this.Seg_D_ObjId.Name = "Seg_D_ObjId";
+            // 
+            // Seg_E
+            // 
+            this.Seg_E.AllowUserToResizeColumns = false;
+            this.Seg_E.AllowUserToResizeRows = false;
+            this.Seg_E.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_E.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_E.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_E.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_E_Name,
+            this.Seg_E_TexOffs,
+            this.Seg_E_ObjId});
+            this.Seg_E.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_E.Location = new System.Drawing.Point(3, 3);
+            this.Seg_E.MultiSelect = false;
+            this.Seg_E.Name = "Seg_E";
+            this.Seg_E.RowHeadersVisible = false;
+            this.Seg_E.Size = new System.Drawing.Size(657, 223);
+            this.Seg_E.TabIndex = 11;
+            this.Seg_E.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_E.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_E_Name
+            // 
+            this.Seg_E_Name.FillWeight = 50F;
+            this.Seg_E_Name.HeaderText = "Name";
+            this.Seg_E_Name.Name = "Seg_E_Name";
+            this.Seg_E_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_E_TexOffs
+            // 
+            this.Seg_E_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_E_TexOffs.Name = "Seg_E_TexOffs";
+            this.Seg_E_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_E_ObjId
+            // 
+            this.Seg_E_ObjId.FillWeight = 70F;
+            this.Seg_E_ObjId.HeaderText = "Object ID";
+            this.Seg_E_ObjId.Name = "Seg_E_ObjId";
+            // 
+            // Seg_F
+            // 
+            this.Seg_F.AllowUserToResizeColumns = false;
+            this.Seg_F.AllowUserToResizeRows = false;
+            this.Seg_F.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.Seg_F.BackgroundColor = System.Drawing.Color.White;
+            this.Seg_F.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Seg_F.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Seg_F_Name,
+            this.Seg_F_TexOffs,
+            this.Seg_F_ObjId});
+            this.Seg_F.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Seg_F.Location = new System.Drawing.Point(3, 3);
+            this.Seg_F.MultiSelect = false;
+            this.Seg_F.Name = "Seg_F";
+            this.Seg_F.RowHeadersVisible = false;
+            this.Seg_F.Size = new System.Drawing.Size(657, 223);
+            this.Seg_F.TabIndex = 11;
+            this.Seg_F.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewTextures_CellParse);
+            this.Seg_F.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewTextures_KeyUp);
+            // 
+            // Seg_F_Name
+            // 
+            this.Seg_F_Name.FillWeight = 50F;
+            this.Seg_F_Name.HeaderText = "Name";
+            this.Seg_F_Name.Name = "Seg_F_Name";
+            this.Seg_F_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_F_TexOffs
+            // 
+            this.Seg_F_TexOffs.HeaderText = "Texture Offset";
+            this.Seg_F_TexOffs.Name = "Seg_F_TexOffs";
+            this.Seg_F_TexOffs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Seg_F_ObjId
+            // 
+            this.Seg_F_ObjId.FillWeight = 70F;
+            this.Seg_F_ObjId.HeaderText = "Object ID";
+            this.Seg_F_ObjId.Name = "Seg_F_ObjId";
+            // 
+            // DataGridView_ExtraDLists
+            // 
+            this.DataGridView_ExtraDLists.AllowUserToResizeColumns = false;
+            this.DataGridView_ExtraDLists.AllowUserToResizeRows = false;
+            this.DataGridView_ExtraDLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGridView_ExtraDLists.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGridView_ExtraDLists.BackgroundColor = System.Drawing.Color.White;
+            this.DataGridView_ExtraDLists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridView_ExtraDLists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ExtraDlists_Purpose,
+            this.ExtraDlists_Offset,
+            this.ExtraDlists_Translation,
+            this.ExtraDlists_Rotation,
+            this.ExtraDLists_Scale,
+            this.ExtraDlists_Limb,
+            this.ExtraDlists_ObjectID,
+            this.ExtraDlists_ShowType});
+            this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(9, 19);
+            this.DataGridView_ExtraDLists.MultiSelect = false;
+            this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
+            this.DataGridView_ExtraDLists.RowHeadersVisible = false;
+            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(671, 264);
+            this.DataGridView_ExtraDLists.TabIndex = 51;
+            this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
+            this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
+            // 
+            // ExtraDlists_Purpose
+            // 
+            this.ExtraDlists_Purpose.FillWeight = 70F;
+            this.ExtraDlists_Purpose.HeaderText = "Purpose";
+            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
+            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Offset
+            // 
+            this.ExtraDlists_Offset.FillWeight = 50F;
+            this.ExtraDlists_Offset.HeaderText = "Offset";
+            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
+            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Translation
+            // 
+            this.ExtraDlists_Translation.FillWeight = 60F;
+            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
+            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
+            // 
+            // ExtraDlists_Rotation
+            // 
+            this.ExtraDlists_Rotation.FillWeight = 60F;
+            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
+            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
+            // 
+            // ExtraDLists_Scale
+            // 
+            this.ExtraDLists_Scale.FillWeight = 40F;
+            this.ExtraDLists_Scale.HeaderText = "Scale";
+            this.ExtraDLists_Scale.Name = "ExtraDLists_Scale";
+            // 
+            // ExtraDlists_Limb
+            // 
+            this.ExtraDlists_Limb.FillWeight = 35F;
+            this.ExtraDlists_Limb.HeaderText = "Limb";
+            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
+            // 
+            // ExtraDlists_ObjectID
+            // 
+            this.ExtraDlists_ObjectID.FillWeight = 40F;
+            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
+            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
+            // 
+            // ExtraDlists_ShowType
+            // 
+            this.ExtraDlists_ShowType.FillWeight = 80F;
+            this.ExtraDlists_ShowType.HeaderText = "Show type";
+            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
+            "Don\'t show",
+            "Alongside limb",
+            "Instead of limb"});
+            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
+            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ExtraDlists_ShowType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
             // DataGrid_NPCs
             // 
             this.DataGrid_NPCs.AllowUserToAddRows = false;
@@ -2809,101 +3068,6 @@
             this.Col_Name.ReadOnly = true;
             this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // ContextMenuStrip
-            // 
-            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.functionsToolStripMenuItem,
-            this.keywordsToolStripMenuItem,
-            this.keyValuesToolStripMenuItem,
-            this.itemsToolStripMenuItem,
-            this.itemsgiveToolStripMenuItem,
-            this.questItemsToolStripMenuItem,
-            this.itemsdungeonToolStripMenuItem,
-            this.itemstradeToolStripMenuItem,
-            this.playerMasksToolStripMenuItem,
-            this.soundEffectsToolStripMenuItem,
-            this.musicToolStripMenuItem,
-            this.actorstoolStripMenuItem});
-            this.ContextMenuStrip.Name = "ContextMenuStrip";
-            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 290);
-            this.ContextMenuStrip.Text = "Items";
-            // 
-            // functionsToolStripMenuItem
-            // 
-            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
-            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.functionsToolStripMenuItem.Text = "Functions";
-            // 
-            // keywordsToolStripMenuItem
-            // 
-            this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
-            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.keywordsToolStripMenuItem.Text = "Keywords";
-            // 
-            // keyValuesToolStripMenuItem
-            // 
-            this.keyValuesToolStripMenuItem.Name = "keyValuesToolStripMenuItem";
-            this.keyValuesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.keyValuesToolStripMenuItem.Text = "Key values";
-            // 
-            // itemsToolStripMenuItem
-            // 
-            this.itemsToolStripMenuItem.Name = "itemsToolStripMenuItem";
-            this.itemsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.itemsToolStripMenuItem.Text = "Inventory Items";
-            // 
-            // itemsgiveToolStripMenuItem
-            // 
-            this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
-            this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.itemsgiveToolStripMenuItem.Text = "Give Items";
-            // 
-            // questItemsToolStripMenuItem
-            // 
-            this.questItemsToolStripMenuItem.Name = "questItemsToolStripMenuItem";
-            this.questItemsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.questItemsToolStripMenuItem.Text = "Quest items";
-            // 
-            // itemsdungeonToolStripMenuItem
-            // 
-            this.itemsdungeonToolStripMenuItem.Name = "itemsdungeonToolStripMenuItem";
-            this.itemsdungeonToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.itemsdungeonToolStripMenuItem.Text = "Dungeon Items";
-            this.itemsdungeonToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
-            // 
-            // itemstradeToolStripMenuItem
-            // 
-            this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
-            this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.itemstradeToolStripMenuItem.Text = "Trade Items";
-            // 
-            // soundEffectsToolStripMenuItem
-            // 
-            this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
-            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.soundEffectsToolStripMenuItem.Text = "Sound effects";
-            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.SoundEffectsToolStripMenuItem_Click);
-            // 
-            // musicToolStripMenuItem
-            // 
-            this.musicToolStripMenuItem.Name = "musicToolStripMenuItem";
-            this.musicToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.musicToolStripMenuItem.Text = "Music";
-            this.musicToolStripMenuItem.Click += new System.EventHandler(this.MusicToolStripMenuItem_Click);
-            // 
-            // actorstoolStripMenuItem
-            // 
-            this.actorstoolStripMenuItem.Name = "actorstoolStripMenuItem";
-            this.actorstoolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.actorstoolStripMenuItem.Text = "Actors";
-            this.actorstoolStripMenuItem.Click += new System.EventHandler(this.ActorstoolStripMenuItem_Click);
-            // 
-            // playerMasksToolStripMenuItem
-            // 
-            this.playerMasksToolStripMenuItem.Name = "playerMasksToolStripMenuItem";
-            this.playerMasksToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.playerMasksToolStripMenuItem.Text = "Player Masks";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2929,7 +3093,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).EndInit();
             this.Tab2_ExtraData.ResumeLayout(false);
@@ -2940,22 +3103,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).EndInit();
             this.TabControl_Textures.ResumeLayout(false);
             this.TabPage_Segment_8.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).EndInit();
             this.TabPage_Segment_9.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).EndInit();
             this.TabPage_Segment_A.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).EndInit();
             this.TabPage_Segment_B.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).EndInit();
             this.TabPage_Segment_C.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).EndInit();
             this.TabPage_Segment_D.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).EndInit();
             this.TabPage_Segment_E.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).EndInit();
             this.TabPage_Segment_F.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             this.Tab3_BehaviorData.ResumeLayout(false);
             this.Tab3_BehaviorData.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
@@ -2980,12 +3134,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_HeadLimb)).EndInit();
             this.Panel_TargetPanel.ResumeLayout(false);
             this.Panel_TargetPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkRadi)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZTargetOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YTargetOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XTargetOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TargetLimb)).EndInit();
             this.Panel_Movement.ResumeLayout(false);
             this.Panel_Movement.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_GravityForce)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).EndInit();
@@ -2999,8 +3155,18 @@
             this.Tab5_IdleScript.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script2)).EndInit();
             this.Panel_NPCList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.ContextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_A)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_B)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_C)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_D)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_E)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Seg_F)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3219,6 +3385,18 @@
         private System.Windows.Forms.ToolStripMenuItem questItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem itemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playerMasksToolStripMenuItem;
+        private System.Windows.Forms.CheckBox ChkRunJustScript;
+        private System.Windows.Forms.CheckBox Chkb_ReactIfAtt;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown NumUpDown_TalkRadi;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DateTimePicker tmpicker_timedPathEnd;
+        private System.Windows.Forms.Label Label_PathStTime;
+        private System.Windows.Forms.DateTimePicker tmpicker_timedPathStart;
+        private System.Windows.Forms.CheckBox ChkBox_TimedPath;
+        private System.Windows.Forms.Label Lbl_GravityForce;
+        private System.Windows.Forms.NumericUpDown NumUpDown_GravityForce;
+        private System.Windows.Forms.CheckBox Chkb_Opendoors;
     }
 }
 
