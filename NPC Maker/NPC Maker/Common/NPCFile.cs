@@ -8,10 +8,12 @@ namespace NPC_Maker
 {
     public class NPCFile
     {
+        public int Version { get; set; }
         public List<NPCEntry> Entries { get; set; }
 
         public NPCFile()
         {
+            Version = 2;
             Entries = new List<NPCEntry>();
         }
     }
@@ -79,11 +81,7 @@ namespace NPC_Maker
         public byte AnimationType { get; set; }
         public List<AnimationEntry> Animations { get; set; }
 
-        public string Script { get; set; }
-        public List<string> ParseErrors { get; set; }
-
-        public string Script2 { get; set; }
-        public List<string> ParseErrors2 { get; set; }
+        public List<ScriptEntry> Scripts { get; set; }
 
         public System.Drawing.Color EnvColor { get; set; }
         public List<List<TextureEntry>> Textures { get; set; }
@@ -154,11 +152,7 @@ namespace NPC_Maker
             Animations = new List<AnimationEntry>();
             AnimationType = 0;
 
-            Script = "";
-            ParseErrors = new List<string>();
-
-            Script2 = "";
-            ParseErrors2 = new List<string>();
+            Scripts = new List<ScriptEntry>();
 
             Textures = new List<List<TextureEntry>>();
 
@@ -260,7 +254,6 @@ namespace NPC_Maker
             LOOPDEL,
             LOOP,
             ANIMTYPE,
-            TALKSCRIPT,
             BLINKPAT,
             TALKPAT,
             BLINKSEG,
@@ -338,8 +331,6 @@ namespace NPC_Maker
 
                 case Members.ANIMTYPE: AnimationType = Convert.ToByte(Value); break;
 
-                case Members.TALKSCRIPT: Script = Convert.ToString(Value); break;
-
                 case Members.BLINKPAT: BlinkPattern = Convert.ToString(Value); break;
                 case Members.TALKPAT: TalkPattern = Convert.ToString(Value); break;
                 case Members.BLINKSEG: BlinkSegment = Convert.ToByte(Value); break;
@@ -364,6 +355,20 @@ namespace NPC_Maker
 
                 default: break;
             }
+        }
+    }
+
+    public class ScriptEntry
+    {
+        public string Text { get; set; }
+        public List<string> ParseErrors { get; set; }
+        public string Name { get; set; }
+
+        public ScriptEntry()
+        {
+            Text = "";
+            ParseErrors = new List<string>();
+            Name = "Script";
         }
     }
 

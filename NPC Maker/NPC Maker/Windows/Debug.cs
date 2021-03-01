@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace NPC_Maker.Windows
+namespace NPC_Maker
 {
     public partial class Debug : Form
     {

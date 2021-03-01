@@ -1,4 +1,4 @@
-﻿namespace NPC_Maker.Windows
+﻿namespace NPC_Maker
 {
     partial class Debug
     {

@@ -12,7 +12,6 @@ using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
-using NPC_Maker.Windows;
 
 namespace NPC_Maker
 {
@@ -24,9 +23,6 @@ namespace NPC_Maker
         NPCEntry CopiedEntry = null;
         int SelectedIndex = -1;
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
-        Control LastRightClickedTextbox = null;
-
-        bool SyntaxHighlighting = true;
 
         public MainWindow()
         {
@@ -37,33 +33,7 @@ namespace NPC_Maker
             this.ResizeBegin += Form1_ResizeBegin;
             this.ResizeEnd += Form1_ResizeEnd;
 
-            foreach (string Item in Enum.GetNames(typeof(NewScriptParser.Lists.Instructions)))
-            {
-                ToolStripMenuItem Tsmi = new ToolStripMenuItem
-                {
-                    Text = Item
-                };
 
-                if (NewScriptParser.Lists.FunctionSubtypes.ContainsKey(Item))
-                {
-                    Tsmi.DoubleClickEnabled = true;
-                    Tsmi.DoubleClick += Tsmi_DoubleClick;
-                    AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.FunctionSubtypes[Item], Tsmi);
-                }
-                else
-                    Tsmi.Click += Tsmi_Click;
-
-                functionsToolStripMenuItem.DropDownItems.Add(Tsmi);
-            }
-
-            AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.KeyValues.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.AllKeywords.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.GiveItems)), itemsgiveToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.TradeItems)), itemstradeToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.DungeonItems)), itemsdungeonToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.Items)), itemsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.QuestItems)), questItemsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.PlayerMasks)), playerMasksToolStripMenuItem);
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -197,8 +167,23 @@ namespace NPC_Maker
             ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
             NumUpDown_Scale.Value = (decimal)SelectedEntry.Scale;
 
-            Textbox_Script.Text = SelectedEntry.Script;
-            Textbox_Script2.Text = SelectedEntry.Script2;
+            foreach (TabPage Page in TabControl.TabPages)
+            {
+                if ((string)Page.Tag == "SCRIPT")
+                    TabControl.TabPages.Remove(Page);
+            }
+
+            foreach (ScriptEntry ScriptT in SelectedEntry.Scripts)
+            {
+                TabPage Page = new TabPage(ScriptT.Name);
+                Page.Tag = "SCRIPT";
+
+                ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked);
+                Se.Dock = DockStyle.Fill;
+
+                Page.Controls.Add(Se);
+                TabControl.TabPages.Add(Page);
+            }
 
             /*
             dataGridView1.Rows.Clear();
@@ -236,28 +221,6 @@ namespace NPC_Maker
                 DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Animation.ObjID == -1 ? "---" : Animation.ObjID.ToString() });
             }
 
-            Textbox_ParseErrors.Text = "";
-
-            if (SelectedEntry.ParseErrors.Count == 0)
-                Textbox_ParseErrors.Text = "Parsed successfully!";
-            else
-            {
-                foreach (string Error in SelectedEntry.ParseErrors)
-                    Textbox_ParseErrors.Text += Error + Environment.NewLine;
-            }
-
-            Textbox_ParseErrors2.Text = "";
-
-            if (SelectedEntry.ParseErrors2.Count == 0)
-                Textbox_ParseErrors2.Text = "Parsed successfully!";
-            else
-            {
-                foreach (string Error in SelectedEntry.ParseErrors2)
-                {
-                    Textbox_ParseErrors2.Text += Error + Environment.NewLine;
-                }
-            }
-
             Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
 
             if (SelectedEntry.EnvColor.A == 0)
@@ -272,13 +235,13 @@ namespace NPC_Maker
             NumUpDown_TalkSegment.Value = SelectedEntry.TalkSegment;
             NumUpDown_TalkSpeed.Value = SelectedEntry.TalkSpeed;
 
-            for (int i = 0; i < SelectedEntry.Textures.Count; i++)
+            for (int j = 0; j < SelectedEntry.Textures.Count; j++)
             {
-                DataGridView Grid = (TabControl_Textures.TabPages[i].Controls[0] as DataGridView);
+                DataGridView Grid = (TabControl_Textures.TabPages[j].Controls[0] as DataGridView);
 
                 Grid.Rows.Clear();
 
-                foreach (TextureEntry Entry in SelectedEntry.Textures[i])
+                foreach (TextureEntry Entry in SelectedEntry.Textures[j])
                     Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"), Entry.ObjectID == -1 ? SelectedEntry.ObjectID.ToString() : Entry.ObjectID.ToString());
             }
 
@@ -312,17 +275,6 @@ namespace NPC_Maker
         }
 
         #region MenuStrip
-
-        private void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
-        {
-            MenuItem.DropDown.MaximumSize = new Size(300, 700);
-
-            foreach (string Item in Collection)
-            {
-                ToolStripItem SubItem = MenuItem.DropDownItems.Add(Item);
-                SubItem.Click += SubItem_Click;
-            }
-        }
 
         private bool SaveChangesAsPrompt()
         {
@@ -446,16 +398,90 @@ namespace NPC_Maker
 
         private void SyntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-            SyntaxHighlighting = (sender as ToolStripMenuItem).Checked;
+            foreach (TabPage Page in TabControl.TabPages)
+            {
+                if ((string)Page.Tag == "SCRIPT")
+                {
+                    if (Page.Controls.Count != 0)
+                        (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting((sender as ToolStripMenuItem).Checked);
 
-            Textbox_Script.Text += " ";
-            Textbox_Script2.Text += " ";
+                }
+            }
         }
 
         private void FileMenu_Click(object sender, EventArgs e)
         {
             //hack
             NumUpDown_Hierarchy.Focus();
+        }
+
+        private string GetScriptName()
+        {
+            string ScriptName = "";
+            DialogResult Dr = InputBox.ShowInputDialog("Script name?", ref ScriptName);
+
+            if (Dr != DialogResult.OK)
+                return "";
+            else
+                return ScriptName;
+        }
+
+        private void addNewScriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string ScriptName = GetScriptName();
+
+            if (SelectedEntry.Scripts.Count >= 255)
+            {
+                MessageBox.Show("Cannot define more than 255 scripts.");
+                return;
+            }
+
+            TabPage Page = new TabPage(ScriptName);
+            Page.Tag = "SCRIPT";
+
+            ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
+            SelectedEntry.Scripts.Add(Sc);
+
+            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, Sc, syntaxHighlightingToolStripMenuItem.Checked);
+            Se.Dock = DockStyle.Fill;
+
+            Page.Controls.Add(Se);
+            TabControl.TabPages.Add(Page);
+        }
+
+        private void renameCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
+            {
+                MessageBox.Show("Select a script tab first.");
+                return;
+            }
+
+            string Name = GetScriptName();
+
+            if (Name != "")
+            {
+
+                (TabControl.SelectedTab.Controls[0] as ScriptEditor).Script.Name = Name;
+                TabControl.SelectedTab.Text = Name;
+            }
+        }
+
+        private void deleteCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
+            {
+                MessageBox.Show("Select a script tab first.");
+                return;
+            }
+
+            DialogResult Res = MessageBox.Show("Are you sure you want to delete this script? You cannot reverse this action!", "Removing a script", MessageBoxButtons.YesNoCancel);
+
+            if (Res == DialogResult.Yes)
+            {
+                SelectedEntry.Scripts.Remove((TabControl.SelectedTab.Controls[0] as ScriptEditor).Script);
+                TabControl.TabPages.Remove(TabControl.SelectedTab);
+            }
         }
 
         #endregion
@@ -1251,160 +1277,6 @@ namespace NPC_Maker
         }
 
         #endregion
-
-        #region Context Menu
-
-        private void Textbox_Script_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                LastRightClickedTextbox = (sender as Control);
-                ContextMenuStrip.Show(sender as Control, e.Location);
-            }
-        }
-
-        private void InsertTxtToScript(string Text)
-        {
-            FastColoredTextBox T = (LastRightClickedTextbox as FastColoredTextBox);
-
-            int start = T.SelectionStart;
-            string newTxt = T.Text;
-            newTxt = newTxt.Remove(T.SelectionStart, T.SelectionLength);
-            newTxt = newTxt.Insert(T.SelectionStart, Text);
-            T.Text = newTxt;
-            T.SelectionStart = start + Text.Length;
-        }
-
-        private void Tsmi_DoubleClick(object sender, EventArgs e)
-        {
-            InsertTxtToScript((sender as ToolStripItem).Text + " ");
-        }
-
-        private void Tsmi_Click(object sender, EventArgs e)
-        {
-            InsertTxtToScript((sender as ToolStripItem).Text + " ");
-        }
-
-        private void SubItem_Click(object sender, EventArgs e)
-        {
-            InsertTxtToScript((sender as ToolStripItem).Text);
-        }
-
-        private void SoundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PickableList SFX = new PickableList("SFX.csv");
-            DialogResult DR = SFX.ShowDialog();
-
-            if (DR == DialogResult.OK)
-            {
-                InsertTxtToScript(SFX.Chosen);
-            }
-        }
-
-        private void MusicToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PickableList SFX = new PickableList("Music.csv");
-            DialogResult DR = SFX.ShowDialog();
-
-            if (DR == DialogResult.OK)
-            {
-                InsertTxtToScript(SFX.Chosen);
-            }
-        }
-
-        private void ActorstoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PickableList Actors = new PickableList("Actors.csv");
-            DialogResult DR = Actors.ShowDialog();
-
-            if (DR == DialogResult.OK)
-            {
-                InsertTxtToScript(Actors.Chosen);
-            }
-        }
-
-        #endregion
-
-        #region Scripts Tab
-
-        private void Textbox_Script_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (SelectedEntry == null)
-                return;
-            SelectedEntry.Script = (sender as FastColoredTextBox).Text;
-
-            FCTB.ApplySyntaxHighlight(sender as FastColoredTextBox, e, SyntaxHighlighting);
-        }
-
-        private void Button_TryParse_Click(object sender, EventArgs e)
-        {
-            string[] Lines = Textbox_Script.Text.Replace(";", Environment.NewLine).Split(new[] { "\n" }, StringSplitOptions.None);
-            Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
-            r.ClearStyle(FCTB.ErrorStyle);
-
-
-            NewScriptParser.ScriptParser Parser = new NPC_Maker.NewScriptParser.ScriptParser(SelectedEntry, SelectedEntry.Script);
-            Textbox_ParseErrors.Clear();
-
-            NewScriptParser.BScript Output = Parser.ParseScript();
-
-#if DEBUG
-
-            Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
-            Dbg.Show();
-
-#endif
-
-
-
-            if (Output.ParseErrors.Count() == 0)
-                Textbox_ParseErrors.Text = "Parsed successfully!";
-            else
-            {
-                foreach (NewScriptParser.ParseException Error in Output.ParseErrors)
-                {
-                    Textbox_ParseErrors.Text += Error.ToString() + Environment.NewLine;
-                }
-            }
-        }
-
-        private void Button_TryParse2_Click(object sender, EventArgs e)
-        {
-            string[] Lines = Textbox_Script2.Text.Split(new[] { "\n" }, StringSplitOptions.None);
-            Range r = new Range(Textbox_Script2, 0, 0, Textbox_Script2.Text.Length, Lines.Length);
-            r.ClearStyle(FCTB.ErrorStyle);
-
-            ScriptParser Parser = new ScriptParser();
-
-            Parser.Parse(SelectedEntry, SelectedEntry.Script2);
-            SelectedEntry.ParseErrors2 = Parser.ParseErrors;
-
-            Textbox_ParseErrors2.Text = "";
-
-            if (Parser.ParseErrors.Count == 0)
-                Textbox_ParseErrors2.Text = "Parsed successfully!";
-            else
-            {
-                foreach (string Error in Parser.ParseErrors)
-                    Textbox_ParseErrors2.Text += Error + Environment.NewLine;
-            }
-
-            Textbox_Script2.Focus();
-
-        }
-
-        private void Textbox_Script2_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (SelectedEntry == null)
-                return;
-            SelectedEntry.Script2 = (sender as FastColoredTextBox).Text;
-
-            FCTB.ApplySyntaxHighlight(sender as FastColoredTextBox, e, SyntaxHighlighting);
-        }
-
-        #endregion
-
-
 
         #region Unused
 

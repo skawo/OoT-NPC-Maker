@@ -102,6 +102,14 @@
   <ItemGroup>
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\StringExtensions.cs" />
+    <Compile Include="Controls\InputBox.cs" />
+    <Compile Include="Controls\ScriptContextMenu.cs" />
+    <Compile Include="Controls\ScriptEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ScriptEditor.Designer.cs">
+      <DependentUpon>ScriptEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="NewScriptParser\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Item\Classes.cs" />
     <Compile Include="NewScriptParser\InstructionParsers\Item\Item.cs" />
@@ -178,6 +186,9 @@
     <Compile Include="Windows\PickableList.Designer.cs">
       <DependentUpon>PickableList.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controls\ScriptEditor.resx">
+      <DependentUpon>ScriptEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>

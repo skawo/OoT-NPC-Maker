@@ -18,7 +18,39 @@ namespace NPC_Maker
         {
             try
             {
-                return JsonConvert.DeserializeObject<NPCFile>(File.ReadAllText(FileName));
+                string Text = File.ReadAllText(FileName);
+
+                var Version = JObject.Parse(Text).SelectToken("Version");
+
+                NPCFile Deserialized = JsonConvert.DeserializeObject<NPCFile>(Text);
+
+                var t = JObject.Parse(Text).SelectToken("Entries[0].Script");
+
+                if (Version == null || (int)Version < 2)
+                {
+                    Deserialized.Version = 2;
+
+                    for (int i = 0; i < Deserialized.Entries.Count; i++)
+                    {
+                        ScriptEntry Sc = new ScriptEntry()
+                        {
+                            Text = (string)JObject.Parse(Text).SelectToken($"Entries[{i}].Script"),
+                            Name = "Script 1"
+                    };
+
+                        ScriptEntry Sc2 = new ScriptEntry()
+                        {
+                            Text = (string)JObject.Parse(Text).SelectToken($"Entries[{i}].Script2"),
+                            Name = "Script 2"
+                        };
+
+                        Deserialized.Entries[i].Scripts.RemoveAt(0);
+                        Deserialized.Entries[i].Scripts.Add(Sc);
+                        Deserialized.Entries[i].Scripts.Add(Sc2);
+                    }
+                }
+
+                return Deserialized;
             }
             catch (Exception ex)
             {
@@ -160,29 +192,46 @@ namespace NPC_Maker
                             EntryBytes.Add((byte)Anim.Frames[3]);
                         }
 
-                        byte[] Script = Parser.Parse(Entry, Entry.Script);
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Script.Length));
+                        List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
+
+                        EntryBytes.Add((byte)NonEmptyEntries.Count);
 
                         while (EntryBytes.Count % 4 != 0)
                             EntryBytes.Add(0);
 
-                        EntryBytes.AddRange(Script);
-                        Entry.ParseErrors = Parser.ParseErrors.ToList();
+                        int ScrOffset = 0;
 
-                        if (Parser.ParseErrors.Count != 0)
-                            ParseErrors.Add(Entry.NPCName + " (Interaction)");
+                        List<NewScriptParser.BScript> ParsedScripts = new List<NewScriptParser.BScript>();
 
-                        byte[] Script2 = Parser.Parse(Entry, Entry.Script2);
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Script2.Length));
+                        foreach (ScriptEntry Scr in NonEmptyEntries)
+                        {
+                            NewScriptParser.ScriptParser Par = new NewScriptParser.ScriptParser(Entry, Scr.Text);
+                            ParsedScripts.Add(Par.ParseScript());
+                        }
 
-                        while (EntryBytes.Count % 4 != 0)
-                            EntryBytes.Add(0);
+                        foreach (NewScriptParser.BScript Scr in ParsedScripts)
+                        {
+                            EntryBytes.AddRange(Program.BEConverter.GetBytes(ScrOffset));
+                            ScrOffset += Scr.Script.Count;
 
-                        EntryBytes.AddRange(Script2);
-                        Entry.ParseErrors = Parser.ParseErrors.ToList();
+                            while (ScrOffset % 4 != 0)
+                                ScrOffset++;
+                        }
 
-                        if (Parser.ParseErrors.Count != 0)
-                            ParseErrors.Add(Entry.NPCName + " (Idle)");
+                        foreach (NewScriptParser.BScript Scr in ParsedScripts)
+                        { 
+                            while (EntryBytes.Count % 4 != 0)
+                                EntryBytes.Add(0);
+
+                            EntryBytes.AddRange(Scr.Script);
+
+                            while (EntryBytes.Count % 4 != 0)
+                                EntryBytes.Add(0);
+
+                            if (Scr.ParseErrors.Count != 0)
+                                if (!ParseErrors.Contains(Entry.NPCName))
+                                    ParseErrors.Add(Entry.NPCName);
+                        }
 
                         EntryBytes.Add(Entry.EnvColor.R);
                         EntryBytes.Add(Entry.EnvColor.G);
