@@ -1422,14 +1422,14 @@
             this.addNewScriptToolStripMenuItem.Name = "addNewScriptToolStripMenuItem";
             this.addNewScriptToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.addNewScriptToolStripMenuItem.Text = "Add new script";
-            this.addNewScriptToolStripMenuItem.Click += new System.EventHandler(this.addNewScriptToolStripMenuItem_Click);
+            this.addNewScriptToolStripMenuItem.Click += new System.EventHandler(this.AddNewScriptToolStripMenuItem_Click);
             // 
             // deleteCurrentScriptToolStripMenuItem
             // 
             this.deleteCurrentScriptToolStripMenuItem.Name = "deleteCurrentScriptToolStripMenuItem";
             this.deleteCurrentScriptToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.deleteCurrentScriptToolStripMenuItem.Text = "Delete current script";
-            this.deleteCurrentScriptToolStripMenuItem.Click += new System.EventHandler(this.deleteCurrentScriptToolStripMenuItem_Click);
+            this.deleteCurrentScriptToolStripMenuItem.Click += new System.EventHandler(this.DeleteCurrentScriptToolStripMenuItem_Click);
             // 
             // Textbox_NPCName
             // 
@@ -2935,7 +2935,7 @@
             this.renameCurrentScriptToolStripMenuItem.Name = "renameCurrentScriptToolStripMenuItem";
             this.renameCurrentScriptToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.renameCurrentScriptToolStripMenuItem.Text = "Rename current script";
-            this.renameCurrentScriptToolStripMenuItem.Click += new System.EventHandler(this.renameCurrentScriptToolStripMenuItem_Click);
+            this.renameCurrentScriptToolStripMenuItem.Click += new System.EventHandler(this.RenameCurrentScriptToolStripMenuItem_Click);
             // 
             // MainWindow
             // 

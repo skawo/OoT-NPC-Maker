@@ -175,11 +175,15 @@ namespace NPC_Maker
 
             foreach (ScriptEntry ScriptT in SelectedEntry.Scripts)
             {
-                TabPage Page = new TabPage(ScriptT.Name);
-                Page.Tag = "SCRIPT";
+                TabPage Page = new TabPage(ScriptT.Name)
+                {
+                    Tag = "SCRIPT"
+                };
 
-                ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked);
-                Se.Dock = DockStyle.Fill;
+                ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked)
+                {
+                    Dock = DockStyle.Fill
+                };
 
                 Page.Controls.Add(Se);
                 TabControl.TabPages.Add(Page);
@@ -344,8 +348,10 @@ namespace NPC_Maker
         {
             SaveFileDialog SFD = new SaveFileDialog
             {
-                FileName = "ActorData.json"
+                FileName = "ActorData.json",
+                Filter = "Json Files | *.json"
             };
+
             SFD.ShowDialog();
 
             if (SFD.FileName != "")
@@ -370,7 +376,8 @@ namespace NPC_Maker
         {
             SaveFileDialog SFD = new SaveFileDialog
             {
-                FileName = "zobj.zobj"
+                FileName = "zobj.zobj",
+                Filter = "Zelda Object Files | *.zobj"
             };
             SFD.ShowDialog();
 
@@ -384,9 +391,6 @@ namespace NPC_Maker
 
         private void FileMenu_Exit_Click(object sender, EventArgs e)
         {
-            if (SaveChangesAsPrompt() == false)
-                return;
-
             Application.Exit();
         }
 
@@ -426,7 +430,7 @@ namespace NPC_Maker
                 return ScriptName;
         }
 
-        private void addNewScriptToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddNewScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string ScriptName = GetScriptName();
 
@@ -436,20 +440,24 @@ namespace NPC_Maker
                 return;
             }
 
-            TabPage Page = new TabPage(ScriptName);
-            Page.Tag = "SCRIPT";
+            TabPage Page = new TabPage(ScriptName)
+            {
+                Tag = "SCRIPT"
+            };
 
             ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
             SelectedEntry.Scripts.Add(Sc);
 
-            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, Sc, syntaxHighlightingToolStripMenuItem.Checked);
-            Se.Dock = DockStyle.Fill;
+            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, Sc, syntaxHighlightingToolStripMenuItem.Checked)
+            {
+                Dock = DockStyle.Fill
+            };
 
             Page.Controls.Add(Se);
             TabControl.TabPages.Add(Page);
         }
 
-        private void renameCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RenameCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
             {
@@ -467,7 +475,7 @@ namespace NPC_Maker
             }
         }
 
-        private void deleteCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
+        private void DeleteCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
             {
