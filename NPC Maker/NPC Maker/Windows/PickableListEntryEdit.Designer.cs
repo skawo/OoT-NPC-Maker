@@ -153,6 +153,7 @@ namespace NPC_Maker
             this.Controls.Add(this.ID);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PickableListEntryEdit";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add/edit entry";
             ((System.ComponentModel.ISupportInitialize)(this.NumUp_ID)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUp_HexID)).EndInit();

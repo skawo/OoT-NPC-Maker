@@ -161,7 +161,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PickableList";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PickableList_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
