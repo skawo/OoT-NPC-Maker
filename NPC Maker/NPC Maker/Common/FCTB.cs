@@ -32,19 +32,19 @@ namespace NPC_Maker
 
         public static Dictionary<List<string>, Style> StyleDict = new Dictionary<List<string>, Style>()
         {
-            {Enum.GetNames(typeof(NewScriptParser.Lists.TradeItems)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(NewScriptParser.Lists.DungeonItems)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(NewScriptParser.Lists.Items)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(NewScriptParser.Lists.GiveItems)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(NewScriptParser.Lists.Instructions)).ToList(),  FCTB.PurpleStyle},
-            {NewScriptParser.Lists.KeywordsBlue,  FCTB.BlueStyle},
-            {NewScriptParser.Lists.KeywordsRed,  FCTB.RedStyle},
-            {NewScriptParser.Lists.KeywordsGray,  FCTB.GrayStyle},
-            {NewScriptParser.Lists.KeywordsPurple,  FCTB.PurpleStyle},
-            {NewScriptParser.Lists.KeywordsMPurple,  FCTB.MPurpleStyle},
-            {NewScriptParser.Lists.SFXes.Keys.ToList(),  FCTB.CyanStyle},
-            {NewScriptParser.Lists.Music.Keys.ToList(),  FCTB.CyanStyle},
-            {NewScriptParser.Lists.Actors.Keys.ToList(),  FCTB.CyanStyle},
+            {Enum.GetNames(typeof(Lists.TradeItems)).ToList(),  FCTB.CyanStyle},
+            {Enum.GetNames(typeof(Lists.DungeonItems)).ToList(),  FCTB.CyanStyle},
+            {Enum.GetNames(typeof(Lists.Items)).ToList(),  FCTB.CyanStyle},
+            {Enum.GetNames(typeof(Lists.GiveItems)).ToList(),  FCTB.CyanStyle},
+            {Enum.GetNames(typeof(Lists.Instructions)).ToList(),  FCTB.PurpleStyle},
+            {Lists.KeywordsBlue,  FCTB.BlueStyle},
+            {Lists.KeywordsRed,  FCTB.RedStyle},
+            {Lists.KeywordsGray,  FCTB.GrayStyle},
+            {Lists.KeywordsPurple,  FCTB.PurpleStyle},
+            {Lists.KeywordsMPurple,  FCTB.MPurpleStyle},
+            {Dicts.SFXes.Keys.ToList(),  FCTB.CyanStyle},
+            {Dicts.Music.Keys.ToList(),  FCTB.CyanStyle},
+            {Dicts.Actors.Keys.ToList(),  FCTB.CyanStyle},
         };
 
         public static Dictionary<string, Style> RegexDict = new Dictionary<string, Style>()
@@ -52,7 +52,7 @@ namespace NPC_Maker
             { @"/\*(.|[\r\n])*?\*/", FCTB.GreenStyle},      // Comments like /* comment */
             { @"//.+", FCTB.GreenStyle},                    // Comments like // comment
             { @".+:", FCTB.BoldRedStyle},                   // Labels
-            { @":.+", FCTB.RedStyle},                       // Procedure calls
+            { @"::.+", FCTB.RedStyle},                       // Procedure calls
             { @"#define.+", FCTB.GreenStyle},               // Defines
         };
 
@@ -78,10 +78,10 @@ namespace NPC_Maker
             H_SetStyle(Labels, FCTB.RedStyle, r);
 
             // Color in instruction subtypes
-            foreach (string Item in Enum.GetNames(typeof(NewScriptParser.Lists.Instructions)))
+            foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
-                if (NewScriptParser.Lists.FunctionSubtypes.ContainsKey(Item))
-                    H_SetStyle(NewScriptParser.Lists.FunctionSubtypes[Item].ToList(), FCTB.GrayStyle, r);
+                if (Dicts.FunctionSubtypes.ContainsKey(Item))
+                    H_SetStyle(Dicts.FunctionSubtypes[Item].ToList(), FCTB.GrayStyle, r);
             }
 
             // Color in keywords

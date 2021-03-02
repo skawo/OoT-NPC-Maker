@@ -13,7 +13,7 @@ namespace NPC_Maker
 {
     public partial class ScriptEditor : UserControl
     {
-        private NPCEntry Entry;
+        private readonly NPCEntry Entry;
         private bool SyntaxHighlighting;
         public ScriptEntry Script;
 

@@ -34,7 +34,7 @@ namespace NPC_Maker
                         {
                             Text = (string)JObject.Parse(Text).SelectToken($"Entries[{i}].Script"),
                             Name = "Script 1"
-                    };
+                        };
 
                         ScriptEntry Sc2 = new ScriptEntry()
                         {
@@ -216,7 +216,7 @@ namespace NPC_Maker
                         }
 
                         foreach (NewScriptParser.BScript Scr in ParsedScripts)
-                        { 
+                        {
                             while (EntryBytes.Count % 4 != 0)
                                 EntryBytes.Add(0);
 
@@ -273,7 +273,7 @@ namespace NPC_Maker
                         {
                             if (BlinkPat.Length > i)
                             {
-                                int Index = Entry.Textures[Entry.BlinkSegment - 8].FindIndex(x => x.Name.ToLower() == BlinkPat[i].ToLower());
+                                int Index = Entry.Segments[Entry.BlinkSegment - 8].FindIndex(x => x.Name.ToLower() == BlinkPat[i].ToLower());
 
                                 if (Index == -1)
                                 {
@@ -291,7 +291,7 @@ namespace NPC_Maker
                         {
                             if (TalkPat.Length > i)
                             {
-                                int Index = Entry.Textures[Entry.TalkSegment - 8].FindIndex(x => x.Name.ToLower() == TalkPat[i].ToLower());
+                                int Index = Entry.Segments[Entry.TalkSegment - 8].FindIndex(x => x.Name.ToLower() == TalkPat[i].ToLower());
 
                                 if (Index == -1)
                                 {
@@ -309,7 +309,7 @@ namespace NPC_Maker
                         List<byte> TextureEntries = new List<byte>();
                         UInt32 SegOffset = 7 * 4;
 
-                        foreach (List<TextureEntry> Segment in Entry.Textures)
+                        foreach (List<SegmentEntry> Segment in Entry.Segments)
                         {
                             UInt32 SegBytes = (UInt32)(8 * Segment.Count);
 
@@ -320,7 +320,7 @@ namespace NPC_Maker
 
                             SegOffset += SegBytes;
 
-                            foreach (TextureEntry TexEntry in Segment)
+                            foreach (SegmentEntry TexEntry in Segment)
                             {
                                 TextureEntries.AddRange(Program.BEConverter.GetBytes(TexEntry.Address));
                                 TextureEntries.AddRange(Program.BEConverter.GetBytes(TexEntry.ObjectID));

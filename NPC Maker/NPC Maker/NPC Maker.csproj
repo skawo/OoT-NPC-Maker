@@ -100,6 +100,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Dict.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Controls\InputBox.cs" />
@@ -110,42 +111,42 @@
     <Compile Include="Controls\ScriptEditor.Designer.cs">
       <DependentUpon>ScriptEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewScriptParser\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Item\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Item\Item.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Return\Return.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Trade\Classes.cs" />
-    <Compile Include="NewScriptParser\ScriptHelpers.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Await\Classes.cs" />
-    <Compile Include="NewScriptParser\Exceptions.cs" />
-    <Compile Include="NewScriptParser\DataHelpers.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\ChangeScript\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\ChangeScript\ChangeScript.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Spawn\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Spawn\Spawn.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Warp\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Warp\Warp.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\KIll\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\KIll\Kill.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Textbox\Talk.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Trade\Enable_Trading.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Textbox\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Goto\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Goto\Goto.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\If_While\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Nop\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Play\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Play\Play.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Set\Classes.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Textbox\Show_Textbox.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Textbox\Enable_Talking.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\If_While\If_While.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Await\Await.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Set\Set.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Nop\Nop.cs" />
-    <Compile Include="NewScriptParser\Lists.cs" />
-    <Compile Include="NewScriptParser\NewScriptParser.cs" />
-    <Compile Include="NewScriptParser\InstructionParsers\Common\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Item\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Item\Item.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Return\Return.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Trade\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\ScriptHelpers.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Await\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\Exceptions.cs" />
+    <Compile Include="Common\NewScriptParser\DataHelpers.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\ChangeScript\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\ChangeScript\ChangeScript.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Spawn\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Spawn\Spawn.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Warp\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Warp\Warp.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\KIll\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\KIll\Kill.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Textbox\Talk.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Trade\Enable_Trading.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Textbox\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Goto\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Goto\Goto.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\If_While\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Nop\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Play\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Play\Play.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Set\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Textbox\Show_Textbox.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Textbox\Enable_Talking.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\If_While\If_While.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Await\Await.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Set\Set.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Nop\Nop.cs" />
+    <Compile Include="Common\Lists.cs" />
+    <Compile Include="Common\NewScriptParser\NewScriptParser.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Common\Classes.cs" />
     <Compile Include="Windows\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,7 +157,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DropDownScrollWheelFix.cs" />
-    <Compile Include="Common\Lists.cs" />
+    <Compile Include="Common\Old\OldLists.cs" />
     <Compile Include="Common\FCTB.cs" />
     <Compile Include="Common\FileOps.cs" />
     <Compile Include="Windows\Debug.cs">
@@ -179,7 +180,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Common\ScriptParser.cs" />
+    <Compile Include="Common\Old\ScriptParser.cs" />
     <Compile Include="Windows\PickableList.cs">
       <SubType>Form</SubType>
     </Compile>

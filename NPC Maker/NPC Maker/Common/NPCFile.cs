@@ -84,7 +84,7 @@ namespace NPC_Maker
         public List<ScriptEntry> Scripts { get; set; }
 
         public System.Drawing.Color EnvColor { get; set; }
-        public List<List<TextureEntry>> Textures { get; set; }
+        public List<List<SegmentEntry>> Segments { get; set; }
         public string BlinkPattern { get; set; }
         public string TalkPattern { get; set; }
         public byte BlinkSegment { get; set; }
@@ -154,7 +154,7 @@ namespace NPC_Maker
 
             Scripts = new List<ScriptEntry>();
 
-            Textures = new List<List<TextureEntry>>();
+            Segments = new List<List<SegmentEntry>>();
 
             EnvColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
             BlinkPattern = "";
@@ -398,19 +398,19 @@ namespace NPC_Maker
         }
     }
 
-    public class TextureEntry
+    public class SegmentEntry
     {
         public string Name { get; set; }
         public UInt32 Address { get; set; }
         public Int16 ObjectID { get; set; }
 
-        public TextureEntry()
+        public SegmentEntry()
         {
             Name = "";
             Address = 0;
             ObjectID = -1;
         }
-        public TextureEntry(string _Name, UInt32 _Address, Int16 _ObjectID)
+        public SegmentEntry(string _Name, UInt32 _Address, Int16 _ObjectID)
         {
             Name = _Name;
             Address = _Address;

@@ -177,7 +177,7 @@ namespace NPC_Maker.NewScriptParser
 
                                     Int32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine, i,
                                                                                      Segment,
-                                                                                     Entry.Textures);
+                                                                                     Entry.Segments);
 
                                     Data[i - 2] = (byte)TexID;
                                 }
@@ -190,7 +190,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 UInt32? SegmentID = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
 
-                                Int32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine, 3, (int)SegmentID, Entry.Textures);
+                                Int32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine, 3, (int)SegmentID, Entry.Segments);
 
                                 return new InstructionSet((byte)SubID, Convert.ToUInt16(TexID), (byte)SegmentID);
                             }

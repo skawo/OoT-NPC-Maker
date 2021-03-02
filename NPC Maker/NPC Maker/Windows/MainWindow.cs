@@ -222,7 +222,7 @@ namespace NPC_Maker
                     }
                 }
 
-                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Animation.ObjID == -1 ? "---" : Animation.ObjID.ToString() });
+                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, Animation.ObjID, Dicts.ObjectIDs[-1]) });
             }
 
             Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
@@ -239,30 +239,21 @@ namespace NPC_Maker
             NumUpDown_TalkSegment.Value = SelectedEntry.TalkSegment;
             NumUpDown_TalkSpeed.Value = SelectedEntry.TalkSpeed;
 
-            for (int j = 0; j < SelectedEntry.Textures.Count; j++)
+            for (int j = 0; j < SelectedEntry.Segments.Count; j++)
             {
-                DataGridView Grid = (TabControl_Textures.TabPages[j].Controls[0] as DataGridView);
+                DataGridView Grid = (TabControl_Segments.TabPages[j].Controls[0] as DataGridView);
 
                 Grid.Rows.Clear();
 
-                foreach (TextureEntry Entry in SelectedEntry.Textures[j])
-                    Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"), Entry.ObjectID == -1 ? SelectedEntry.ObjectID.ToString() : Entry.ObjectID.ToString());
+                foreach (SegmentEntry Entry in SelectedEntry.Segments[j])
+                    Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"), Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, Entry.ObjectID, Dicts.ObjectIDs[-1]) );
             }
 
             DataGridView_ExtraDLists.Rows.Clear();
 
             foreach (DListEntry Dlist in SelectedEntry.DLists)
             {
-                string SelCombo = "";
-
-                switch (Dlist.ShowType)
-                {
-                    case 0: SelCombo = "Don't show"; break;
-                    case 1: SelCombo = "Alongside limb"; break;
-                    case 2: SelCombo = "Instead of limb"; break;
-                    default: SelCombo = "Don't show"; break;
-                }
-
+                string SelCombo = Dicts.GetStringFromIntStringDict(Dicts.LimbShowSubTypes, Dlist.ShowType, Dicts.LimbShowSubTypes[0]);
 
                 DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
                                                                  Dlist.Address.ToString("X"),
@@ -270,7 +261,7 @@ namespace NPC_Maker
                                                                  Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
                                                                  Dlist.Scale.ToString(),
                                                                  Dlist.Limb.ToString(),
-                                                                 Dlist.ObjectID == -1 ? SelectedEntry.ObjectID.ToString() : Dlist.ObjectID.ToString(),
+                                                                 Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, Dlist.ObjectID, Dicts.ObjectIDs[-1]),
                                                                  SelCombo
                                                                 });
             }
@@ -519,16 +510,16 @@ namespace NPC_Maker
                     SelectedEntry.Animations.Add(new AnimationEntry(Anim.Name, Anim.Address, Anim.Speed, Anim.ObjID, Anim.Frames));
                 }
 
-                SelectedEntry.Textures.Clear();
+                SelectedEntry.Segments.Clear();
 
-                foreach (List<TextureEntry> TexList in CopiedEntry.Textures)
+                foreach (List<SegmentEntry> TexList in CopiedEntry.Segments)
                 {
-                    List<TextureEntry> DestTexList = new List<TextureEntry>();
-                    SelectedEntry.Textures.Add(DestTexList);
+                    List<SegmentEntry> DestTexList = new List<SegmentEntry>();
+                    SelectedEntry.Segments.Add(DestTexList);
 
-                    foreach (TextureEntry Tex in TexList)
+                    foreach (SegmentEntry Tex in TexList)
                     {
-                        DestTexList.Add(new TextureEntry(Tex.Name, Tex.Address, Tex.ObjectID));
+                        DestTexList.Add(new SegmentEntry(Tex.Name, Tex.Address, Tex.ObjectID));
                     }
 
                 }
@@ -563,7 +554,7 @@ namespace NPC_Maker
             Entry.Animations.Add(new AnimationEntry("Attacked", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
 
             for (int i = 0; i < 8; i++)
-                Entry.Textures.Add(new List<TextureEntry>());
+                Entry.Segments.Add(new List<SegmentEntry>());
 
             EditedFile.Entries.Add(Entry);
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
@@ -730,7 +721,7 @@ namespace NPC_Maker
                 DataGrid_Animations.Rows[Index].Cells[3].Value = 1.0;
 
             if (SkipIndex != 4)
-                DataGrid_Animations.Rows[Index].Cells[4].Value = ObjectID == -1 ? "---" : ObjectID.ToString();
+                DataGrid_Animations.Rows[Index].Cells[4].Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, (int)ObjectID, Dicts.ObjectIDs[-1]);
         }
 
         private byte[] ConvertAnimationByteArrayString(string Value)
@@ -852,15 +843,14 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            Int16 Object = Convert.ToInt16(e.Value);
-
-                            if (e.Value.ToString() == "---" || e.Value.ToString() == "")
-                                Object = -1;
+                            int ObjectId = Dicts.GetIntFromIntStringDict(Dicts.ObjectIDs, e.Value.ToString()); 
+                               
+                            e.Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, ObjectId, Dicts.ObjectIDs[-1]);
 
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, Object);
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (short)ObjectId);
                             else
-                                SelectedEntry.Animations[e.RowIndex].ObjID = Object;
+                                SelectedEntry.Animations[e.RowIndex].ObjID = (short)ObjectId;
 
                             e.ParsingApplied = true;
                         }
@@ -869,7 +859,7 @@ namespace NPC_Maker
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
-                            e.Value = "";
+                            e.Value = Dicts.ObjectIDs[-1];
                         }
 
                         e.ParsingApplied = true;
@@ -1107,13 +1097,12 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            Int16 ObjectId = Convert.ToInt16(e.Value);
+                            int ObjectId = Dicts.GetIntFromIntStringDict(Dicts.ObjectIDs, e.Value.ToString());
 
-                            if (e.Value.ToString() == "---" || e.Value.ToString() == "")
-                                ObjectId = -1;
+                            e.Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, ObjectId, Dicts.ObjectIDs[-1]);
 
                             if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, ObjectId);
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, (short)ObjectId);
                             else
                                 SelectedEntry.DLists[e.RowIndex].ObjectID = Convert.ToInt16(e.Value);
                         }
@@ -1122,7 +1111,7 @@ namespace NPC_Maker
                             if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
-                            e.Value = "";
+                            e.Value = Dicts.ObjectIDs[-1];
                         }
 
                         e.ParsingApplied = true;
@@ -1130,15 +1119,7 @@ namespace NPC_Maker
                     }
                 case 7:     // ShowType
                     {
-                        int ShowType;
-
-                        switch (e.Value.ToString())
-                        {
-                            case "Don't show": ShowType = 0; break;
-                            case "Alongside limb": ShowType = 1; break;
-                            case "Instead of limb": ShowType = 2; break;
-                            default: ShowType = 0; break;
-                        }
+                        int ShowType = Dicts.GetIntFromIntStringDict(Dicts.LimbShowSubTypes, e.Value.ToString(), 0);
 
                         if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, ShowType);
@@ -1172,17 +1153,17 @@ namespace NPC_Maker
 
         #endregion
 
-        #region Textures Grid
+        #region Segments Grid
 
-        private void AddBlankTex(int SkipIndex, int Index, int Segment, string Name = null, uint? Address = null, short? ObjectID = null)
+        private void AddBlankSeg(int SkipIndex, int Index, int Segment, string Name = null, uint? Address = null, short? ObjectID = null)
         {
             Name = Name ?? "Texture_" + Index.ToString();
             Address = Address ?? 0;
             ObjectID = ObjectID ?? -1;
 
-            SelectedEntry.Textures[Segment].Add(new TextureEntry(Name, (uint)Address, (short)ObjectID));
+            SelectedEntry.Segments[Segment].Add(new SegmentEntry(Name, (uint)Address, (short)ObjectID));
 
-            DataGridView dgv = TabControl_Textures.TabPages[Segment].Controls[0] as DataGridView;
+            DataGridView dgv = TabControl_Segments.TabPages[Segment].Controls[0] as DataGridView;
 
             if (SkipIndex != 0)
                 dgv.Rows[Index].Cells[0].Value = Name;
@@ -1191,10 +1172,10 @@ namespace NPC_Maker
                 dgv.Rows[Index].Cells[1].Value = Address;
 
             if (SkipIndex != 2)
-                dgv.Rows[Index].Cells[2].Value = ObjectID == -1 ? "---" : ObjectID.ToString();
+                dgv.Rows[Index].Cells[2].Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, (int)ObjectID, Dicts.ObjectIDs[-1]);
         }
 
-        private void DataGridViewTextures_CellParse(object sender, DataGridViewCellParsingEventArgs e)
+        private void DataGridViewSegments_CellParse(object sender, DataGridViewCellParsingEventArgs e)
         {
             if (e.RowIndex > 31)
             {
@@ -1204,16 +1185,16 @@ namespace NPC_Maker
                 return;
             }
 
-            int DataGridIndex = TabControl_Textures.SelectedIndex;
+            int DataGridIndex = TabControl_Segments.SelectedIndex;
 
             switch (e.ColumnIndex)
             {
                 case 0:     // Name
                     {
-                        if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
-                            AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex, e.Value.ToString());
+                        if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
+                            AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, e.Value.ToString());
                         else
-                            SelectedEntry.Textures[DataGridIndex][e.RowIndex].Name = e.Value.ToString();
+                            SelectedEntry.Segments[DataGridIndex][e.RowIndex].Name = e.Value.ToString();
 
                         e.ParsingApplied = true;
                         return;
@@ -1222,15 +1203,15 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
+                            if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
+                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
                             else
-                                SelectedEntry.Textures[DataGridIndex][e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+                                SelectedEntry.Segments[DataGridIndex][e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
                         }
                         catch (Exception)
                         {
                             if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                                AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex);
+                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
 
                             e.Value = Convert.ToInt32("0", 16);
                         }
@@ -1242,22 +1223,21 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            Int16 ObjectId = Convert.ToInt16(e.Value);
+                            short ObjectId = (short)Dicts.GetIntFromIntStringDict(Dicts.ObjectIDs, e.Value.ToString());
 
-                            if (e.Value.ToString() == "---" || e.Value.ToString() == "")
-                                ObjectId = -1;
+                            e.Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, ObjectId, Dicts.ObjectIDs[-1]);
 
-                            if (SelectedEntry.Textures[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, ObjectId);
+                            if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
+                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, ObjectId);
                             else
-                                SelectedEntry.Textures[DataGridIndex][e.RowIndex].ObjectID = ObjectId;
+                                SelectedEntry.Segments[DataGridIndex][e.RowIndex].ObjectID = ObjectId;
                         }
                         catch (Exception)
                         {
                             if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
-                                AddBlankTex(e.ColumnIndex, e.RowIndex, DataGridIndex);
+                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
 
-                            e.Value = "";
+                            e.Value = Dicts.ObjectIDs[-1];
                         }
 
                         e.ParsingApplied = true;
@@ -1266,16 +1246,16 @@ namespace NPC_Maker
             }
         }
 
-        private void DataGridViewTextures_KeyUp(object sender, KeyEventArgs e)
+        private void DataGridViewSegments_KeyUp(object sender, KeyEventArgs e)
         {
             try
             {
                 if (e.KeyCode == Keys.Delete)
                 {
-                    int DataGridIndex = TabControl_Textures.SelectedIndex;
+                    int DataGridIndex = TabControl_Segments.SelectedIndex;
                     int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
                     (sender as DataGridView).Rows.RemoveAt(Index);
-                    SelectedEntry.Textures[DataGridIndex].RemoveAt(Index);
+                    SelectedEntry.Segments[DataGridIndex].RemoveAt(Index);
                 }
             }
             catch (Exception)

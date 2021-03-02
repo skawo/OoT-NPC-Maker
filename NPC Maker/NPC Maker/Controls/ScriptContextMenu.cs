@@ -16,7 +16,6 @@ namespace NPC_Maker
 
         private static ToolStripMenuItem functionsToolStripMenuItem;
         private static ToolStripMenuItem keywordsToolStripMenuItem;
-        private static ToolStripMenuItem keyValuesToolStripMenuItem;
         private static ToolStripMenuItem itemsToolStripMenuItem;
         private static ToolStripMenuItem itemsgiveToolStripMenuItem;
         private static ToolStripMenuItem questItemsToolStripMenuItem;
@@ -33,7 +32,6 @@ namespace NPC_Maker
 
             functionsToolStripMenuItem = new ToolStripMenuItem();
             keywordsToolStripMenuItem = new ToolStripMenuItem();
-            keyValuesToolStripMenuItem = new ToolStripMenuItem();
             itemsToolStripMenuItem = new ToolStripMenuItem();
             itemsgiveToolStripMenuItem = new ToolStripMenuItem();
             questItemsToolStripMenuItem = new ToolStripMenuItem();
@@ -130,18 +128,18 @@ namespace NPC_Maker
             actorstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             actorstoolStripMenuItem.Text = "Actors";
 
-            foreach (string Item in Enum.GetNames(typeof(NewScriptParser.Lists.Instructions)))
+            foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
                 ToolStripMenuItem Tsmi = new ToolStripMenuItem
                 {
                     Text = Item
                 };
 
-                if (NewScriptParser.Lists.FunctionSubtypes.ContainsKey(Item))
+                if (Dicts.FunctionSubtypes.ContainsKey(Item))
                 {
                     Tsmi.DoubleClickEnabled = true;
                     Tsmi.DoubleClick += Tsmi_DoubleClick;
-                    AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.FunctionSubtypes[Item], Tsmi);
+                    AddItemCollectionToToolStripMenuItem(Dicts.FunctionSubtypes[Item], Tsmi);
                 }
                 else
                     Tsmi.Click += Tsmi_Click;
@@ -149,14 +147,14 @@ namespace NPC_Maker
                 functionsToolStripMenuItem.DropDownItems.Add(Tsmi);
             }
 
-            AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.KeyValues.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(NewScriptParser.Lists.AllKeywords.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.GiveItems)), itemsgiveToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.TradeItems)), itemstradeToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.DungeonItems)), itemsdungeonToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.Items)), itemsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.QuestItems)), questItemsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(NewScriptParser.Lists.PlayerMasks)), playerMasksToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Lists.KeyValues.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Lists.AllKeywords.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.GiveItems)), itemsgiveToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.DungeonItems)), itemsdungeonToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.Items)), itemsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuestItems)), questItemsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.PlayerMasks)), playerMasksToolStripMenuItem);
 
         }
 

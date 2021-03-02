@@ -242,7 +242,7 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                return (UInt32?)Lists.SFXes[SFXName.ToUpper()];
+                return (UInt32?)Dicts.SFXes[SFXName.ToUpper()];
             }
             catch (Exception)
             {
@@ -254,7 +254,7 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                return (UInt32?)Lists.Music[MusicName.ToUpper()];
+                return (UInt32?)Dicts.Music[MusicName.ToUpper()];
             }
             catch (Exception)
             {
@@ -266,7 +266,7 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                return (UInt32?)Lists.Actors[ActorName.ToUpper()];
+                return (UInt32?)Dicts.Actors[ActorName.ToUpper()];
             }
             catch (Exception)
             {
@@ -274,7 +274,7 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static Int32? Helper_GetTextureID(string[] SplitLine, int Index, int Segment, List<List<TextureEntry>> Textures)
+        public static Int32? Helper_GetTextureID(string[] SplitLine, int Index, int Segment, List<List<SegmentEntry>> Textures)
         {
             Int32? TexID = null;
 

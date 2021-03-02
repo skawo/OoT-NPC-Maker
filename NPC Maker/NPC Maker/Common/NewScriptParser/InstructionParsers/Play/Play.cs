@@ -40,9 +40,9 @@ namespace NPC_Maker.NewScriptParser
                                     if (SNDID == null)
                                         SNDID = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0,
                                                                                                      (SubID == (int)Lists.PlaySubTypes.SFX) ? 
-                                                                                                            Lists.SFXes.Max(x => x).Value
+                                                                                                            Dicts.SFXes.Max(x => x).Value
                                                                                                                     :
-                                                                                                            Lists.Music.Max(x => x).Value));
+                                                                                                            Dicts.Music.Max(x => x).Value));
                                 }
 
 

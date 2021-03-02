@@ -30,7 +30,7 @@ namespace NPC_Maker.NewScriptParser
 
         public override string ToString()
         {
-            return ((Lists.Instructions)ID).ToString() + ", " + ((NewScriptParser.Lists.SetSubTypes)SubID).ToString();
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
         }
     }
 
