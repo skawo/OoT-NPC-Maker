@@ -26,12 +26,12 @@ namespace NPC_Maker.NewScriptParser
                     case (int)Lists.ScriptChangeSubtypes.OVERWRITE:
                         {
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
-                            return new InstructionChangeScript((byte)SubID, ActorID, ScriptIndex, SplitLine[4]);
+                            return new InstructionChangeScript((byte)SubID, ActorID, Convert.ToByte(ScriptIndex), SplitLine[4]);
                         }
                     case (int)Lists.ScriptChangeSubtypes.RESTORE:
                         {
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
-                            return new InstructionChangeScript((byte)SubID, ActorID, ScriptIndex, "__NONE__");
+                            return new InstructionChangeScript((byte)SubID, ActorID, Convert.ToByte(ScriptIndex), "__NONE__");
                         }
                     default: 
                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -40,7 +40,7 @@ namespace NPC_Maker.NewScriptParser
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionChangeScript(0, 0, "__NONE__");
+                return new InstructionChangeScript(0, 0, 0, "__NONE__");
             }
             catch (Exception)
             {
