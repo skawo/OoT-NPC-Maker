@@ -46,9 +46,9 @@
             // 
             this.Btn_Search.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_Search.Location = new System.Drawing.Point(62, 539);
+            this.Btn_Search.Location = new System.Drawing.Point(62, 542);
             this.Btn_Search.Name = "Btn_Search";
-            this.Btn_Search.Size = new System.Drawing.Size(699, 20);
+            this.Btn_Search.Size = new System.Drawing.Size(609, 20);
             this.Btn_Search.TabIndex = 1;
             this.Btn_Search.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
             this.Btn_Search.KeyUp += new System.Windows.Forms.KeyEventHandler(this.EnterPress);
@@ -56,7 +56,7 @@
             // Btn_OK
             // 
             this.Btn_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_OK.Location = new System.Drawing.Point(767, 537);
+            this.Btn_OK.Location = new System.Drawing.Point(677, 540);
             this.Btn_OK.Name = "Btn_OK";
             this.Btn_OK.Size = new System.Drawing.Size(75, 23);
             this.Btn_OK.TabIndex = 2;
@@ -79,7 +79,7 @@
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(830, 478);
+            this.listView1.Size = new System.Drawing.Size(740, 481);
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -107,7 +107,7 @@
             // Btn_EditEntry
             // 
             this.Btn_EditEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_EditEntry.Location = new System.Drawing.Point(707, 496);
+            this.Btn_EditEntry.Location = new System.Drawing.Point(617, 499);
             this.Btn_EditEntry.Name = "Btn_EditEntry";
             this.Btn_EditEntry.Size = new System.Drawing.Size(135, 23);
             this.Btn_EditEntry.TabIndex = 4;
@@ -117,7 +117,8 @@
             // 
             // Btn_DelEntry
             // 
-            this.Btn_DelEntry.Location = new System.Drawing.Point(12, 496);
+            this.Btn_DelEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_DelEntry.Location = new System.Drawing.Point(12, 499);
             this.Btn_DelEntry.Name = "Btn_DelEntry";
             this.Btn_DelEntry.Size = new System.Drawing.Size(135, 23);
             this.Btn_DelEntry.TabIndex = 5;
@@ -128,7 +129,7 @@
             // Btn_AddEntry
             // 
             this.Btn_AddEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_AddEntry.Location = new System.Drawing.Point(566, 496);
+            this.Btn_AddEntry.Location = new System.Drawing.Point(476, 499);
             this.Btn_AddEntry.Name = "Btn_AddEntry";
             this.Btn_AddEntry.Size = new System.Drawing.Size(135, 23);
             this.Btn_AddEntry.TabIndex = 6;
@@ -138,8 +139,9 @@
             // 
             // Label_Desc
             // 
+            this.Label_Desc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Label_Desc.AutoSize = true;
-            this.Label_Desc.Location = new System.Drawing.Point(12, 542);
+            this.Label_Desc.Location = new System.Drawing.Point(12, 545);
             this.Label_Desc.Name = "Label_Desc";
             this.Label_Desc.Size = new System.Drawing.Size(44, 13);
             this.Label_Desc.TabIndex = 7;
@@ -150,7 +152,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(854, 572);
+            this.ClientSize = new System.Drawing.Size(764, 575);
             this.Controls.Add(this.Label_Desc);
             this.Controls.Add(this.Btn_AddEntry);
             this.Controls.Add(this.Btn_DelEntry);
@@ -158,7 +160,7 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.Btn_OK);
             this.Controls.Add(this.Btn_Search);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PickableList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

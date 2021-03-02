@@ -151,6 +151,7 @@ namespace NPC_Maker
             this.Controls.Add(this.Lbl_Name);
             this.Controls.Add(this.NumUp_ID);
             this.Controls.Add(this.ID);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PickableListEntryEdit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
