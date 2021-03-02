@@ -26,12 +26,12 @@ namespace NPC_Maker.NewScriptParser
                     case (int)Lists.ScriptChangeSubtypes.OVERWRITE:
                         {
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
-                            return new InstructionChangeScript((byte)SubID, ActorID, SplitLine[4]);
+                            return new InstructionChangeScript((byte)SubID, ActorID, ScriptIndex, SplitLine[4]);
                         }
                     case (int)Lists.ScriptChangeSubtypes.RESTORE:
                         {
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
-                            return new InstructionChangeScript((byte)SubID, ActorID, "__NONE__");
+                            return new InstructionChangeScript((byte)SubID, ActorID, ScriptIndex, "__NONE__");
                         }
                     default: 
                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
