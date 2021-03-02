@@ -63,13 +63,15 @@ namespace NPC_Maker.NewScriptParser
         public byte Operator;
         public float Value;
         public byte ValueType;
+        public Int16 TargetActor;
 
-        public InstructionSetScriptVar(byte _SubID, byte _Operator, float _Value, byte _ValueType)
+        public InstructionSetScriptVar(byte _SubID, byte _Operator, float _Value, byte _ValueType, Int16 _TargetActor)
                                       : base((int)Lists.Instructions.SET, _SubID)
         {
             Operator = _Operator;
             Value = _Value;
             ValueType = _ValueType;
+            TargetActor = _TargetActor;
         }
 
         public override byte[] ToBytes()
@@ -78,8 +80,9 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
             DataHelpers.AddObjectToByteList(Operator, Data);
-            DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.AddObjectToByteList(Value, Data);
+            DataHelpers.AddObjectToByteList(TargetActor, Data);
             DataHelpers.Ensure4ByteAlign(Data);
             return Data.ToArray();
         }

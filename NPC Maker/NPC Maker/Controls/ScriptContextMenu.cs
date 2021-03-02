@@ -25,6 +25,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem soundEffectsToolStripMenuItem;
         private static ToolStripMenuItem musicToolStripMenuItem;
         private static ToolStripMenuItem actorstoolStripMenuItem;
+        private static ToolStripMenuItem objectstoolStripMenuItem;
 
         public static void MakeContextMenu()
         {
@@ -41,6 +42,7 @@ namespace NPC_Maker
             soundEffectsToolStripMenuItem = new ToolStripMenuItem();
             musicToolStripMenuItem = new ToolStripMenuItem();
             actorstoolStripMenuItem = new ToolStripMenuItem();
+            objectstoolStripMenuItem = new ToolStripMenuItem();
 
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
@@ -54,7 +56,8 @@ namespace NPC_Maker
                                                                     playerMasksToolStripMenuItem,
                                                                     soundEffectsToolStripMenuItem,
                                                                     musicToolStripMenuItem,
-                                                                    actorstoolStripMenuItem
+                                                                    actorstoolStripMenuItem,
+                                                                    objectstoolStripMenuItem,
                                                                 });
             ContextMenuStrip.Name = "ContextMenuStrip";
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
@@ -115,18 +118,29 @@ namespace NPC_Maker
             soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
             soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             soundEffectsToolStripMenuItem.Text = "Sound effects";
+            soundEffectsToolStripMenuItem.Click += SoundEffectsToolStripMenuItem_Click;
             // 
             // musicToolStripMenuItem
             // 
             musicToolStripMenuItem.Name = "musicToolStripMenuItem";
             musicToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             musicToolStripMenuItem.Text = "Music";
+            musicToolStripMenuItem.Click += MusicToolStripMenuItem_Click;
+
             // 
             // actorstoolStripMenuItem
             // 
             actorstoolStripMenuItem.Name = "actorstoolStripMenuItem";
             actorstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             actorstoolStripMenuItem.Text = "Actors";
+            actorstoolStripMenuItem.Click += ActorstoolStripMenuItem_Click;
+            // 
+            // objectstoolStripMenuItem
+            // 
+            objectstoolStripMenuItem.Name = "objectstoolStripMenuItem";
+            objectstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            objectstoolStripMenuItem.Text = "Objects";
+            objectstoolStripMenuItem.Click += ObjectstoolStripMenuItem_Click;
 
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
@@ -204,34 +218,45 @@ namespace NPC_Maker
 
         private static void SoundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PickableList SFX = new PickableList("SFX.csv");
+            PickableList SFX = new PickableList(Lists.DictType.SFX, true);
             DialogResult DR = SFX.ShowDialog();
 
             if (DR == DialogResult.OK)
             {
-                InsertTxtToScript(SFX.Chosen);
+                InsertTxtToScript(SFX.Chosen.Name);
             }
         }
 
         private static void MusicToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PickableList SFX = new PickableList("Music.csv");
+            PickableList SFX = new PickableList(Lists.DictType.Music, true);
             DialogResult DR = SFX.ShowDialog();
 
             if (DR == DialogResult.OK)
             {
-                InsertTxtToScript(SFX.Chosen);
+                InsertTxtToScript(SFX.Chosen.Name);
             }
         }
 
         private static void ActorstoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PickableList Actors = new PickableList("Actors.csv");
+            PickableList Actors = new PickableList(Lists.DictType.Actors, true);
             DialogResult DR = Actors.ShowDialog();
 
             if (DR == DialogResult.OK)
             {
-                InsertTxtToScript(Actors.Chosen);
+                InsertTxtToScript(Actors.Chosen.Name);
+            }
+        }
+
+        private static void ObjectstoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PickableList Objects = new PickableList(Lists.DictType.Objects, true);
+            DialogResult DR = Objects.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                InsertTxtToScript(Objects.Chosen.Name);
             }
         }
     }

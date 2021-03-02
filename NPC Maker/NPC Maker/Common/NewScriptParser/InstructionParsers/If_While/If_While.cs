@@ -137,6 +137,23 @@ namespace NPC_Maker.NewScriptParser
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
+                        case (int)Lists.IfSubTypes.EXT_VAR_1:
+                        case (int)Lists.IfSubTypes.EXT_VAR_2:
+                        case (int)Lists.IfSubTypes.EXT_VAR_3:
+                        case (int)Lists.IfSubTypes.EXT_VAR_4:
+                        case (int)Lists.IfSubTypes.EXT_VAR_5:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 4);
+                                float Value = ScriptHelpers.GetValueByType(SplitLine, 4, VarType, 0, UInt16.MaxValue);
+
+                                Int16 ActorID = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int16.MaxValue));
+
+                                Instructions.Insert(0, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Value, 0, ActorID, Condition, EndIf, Else, LabelR));
+                                return Instructions;
+                            }
                         case (int)Lists.IfSubTypes.STICK_X:
                         case (int)Lists.IfSubTypes.STICK_Y:
                             {

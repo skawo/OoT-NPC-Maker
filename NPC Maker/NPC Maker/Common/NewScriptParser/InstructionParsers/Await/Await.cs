@@ -86,6 +86,22 @@ namespace NPC_Maker.NewScriptParser
 
                                 return new InstructionAwaitValue((byte)SubID, Data, Condition, VarType);
                             }
+                        case (int)Lists.AwaitSubTypes.EXT_VAR_1:
+                        case (int)Lists.AwaitSubTypes.EXT_VAR_2:
+                        case (int)Lists.AwaitSubTypes.EXT_VAR_3:
+                        case (int)Lists.AwaitSubTypes.EXT_VAR_4:
+                        case (int)Lists.AwaitSubTypes.EXT_VAR_5:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 5);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                float Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType);
+
+                                Int16 ActorID = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int16.MaxValue));
+
+                                return new InstructionAwaitWithSecondValue((byte)SubID, Data, ActorID, Condition, VarType );
+                            }
                         default: 
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }

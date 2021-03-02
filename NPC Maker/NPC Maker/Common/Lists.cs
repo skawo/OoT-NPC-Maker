@@ -152,6 +152,14 @@ namespace NPC_Maker
             return Values;
         }
 
+        public enum DictType
+        {
+            SFX,
+            Music,
+            Actors,
+            Objects,
+        }
+
         public enum IfSubTypes
         {
             /* flags */
@@ -195,10 +203,15 @@ namespace NPC_Maker
             PLAYER_ARROWS = 45,
             PLAYER_DEKUSTICKS = 46,
             PLAYER_DEKUNUTS = 47,
+            EXT_VAR_1 = 48,
+            EXT_VAR_2 = 49,
+            EXT_VAR_3 = 50,
+            EXT_VAR_4 = 51,
+            EXT_VAR_5 = 52,
 
             /* s8s */
-            STICK_X = 50,
-            STICK_Y = 51,
+            STICK_X = 53,
+            STICK_Y = 54,
 
             /* special */
             ITEM_BEING_TRADED = 61,
@@ -329,6 +342,11 @@ namespace NPC_Maker
             VAR_3 = 249,
             VAR_4 = 250,
             VAR_5 = 251,
+            EXT_VAR_1 = 55,
+            EXT_VAR_2 = 56,
+            EXT_VAR_3 = 57,
+            EXT_VAR_4 = 58,
+            EXT_VAR_5 = 59,
             TIME_OF_DAY = 252,
             TIMED_PATH_START_TIME = 253,
             TIMED_PATH_END_TIME = 254,
@@ -359,6 +377,12 @@ namespace NPC_Maker
             VAR_3 = 77,
             VAR_4 = 78,
             VAR_5 = 79,
+
+            EXT_VAR_1 = 80,
+            EXT_VAR_2 = 81,
+            EXT_VAR_3 = 82,
+            EXT_VAR_4 = 83,
+            EXT_VAR_5 = 84,
         }
 
         public enum SpawnParams

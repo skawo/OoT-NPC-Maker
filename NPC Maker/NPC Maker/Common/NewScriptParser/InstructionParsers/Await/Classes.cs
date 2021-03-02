@@ -55,4 +55,34 @@ namespace NPC_Maker.NewScriptParser
             return Data.ToArray();
         }
     }
+
+    public class InstructionAwaitWithSecondValue : InstructionSubWValueType
+    {
+        public object Value;
+        public object Value2;
+        public byte Condition;
+
+        public InstructionAwaitWithSecondValue(byte _SubID, object _Value, object _Value2, Lists.ConditionTypes _Condition, byte _Value1Type)
+                                        : base((int)Lists.Instructions.AWAIT, _SubID, _Value1Type)
+        {
+            Value = _Value;
+            Value2 = _Value2;
+            Condition = (byte)_Condition;
+        }
+
+        public override byte[] ToBytes()
+        {
+            List<byte> Data = new List<byte>();
+
+            DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.AddObjectToByteList(Condition, Data);
+            DataHelpers.AddObjectToByteList(Value, Data);
+            DataHelpers.AddObjectToByteList(Value2, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
+
+            return Data.ToArray();
+        }
+    }
 }

@@ -1,0 +1,404 @@
+-1,Current,Currently selected object
+-2,RAM,Load directly from RAM
+0,(0) None,
+1,(1) gameplay_keep,Global Gameplay Objects
+2,(2) gameplay_field_keep,Global Field Objects
+3,(3) gameplay_dangeon_keep,Global Dungeon Objects
+4,(4) None,
+5,(5) None,
+6,(6) object_human,Aria
+7,(7) object_okuta,Octorok
+8,(8) object_crow,Guay
+9,(9) object_poh,Poe
+10,(10) object_dy_obj,Great Fairy
+11,(11) object_wallmaster,Floormaster & Wallmaster
+12,(12) object_dodongo,Dodongo
+13,(13) object_firefly,Keese
+14,(14) object_box,Treasure Chest
+15,(15) object_fire,Dancing Flame
+16,(16) None,
+17,(17) None,
+18,(18) object_bubble,Shabom
+19,(19) object_niw,Cucco
+20,(20) object_link_boy,Adult Link
+21,(21) object_link_child,Child Link
+22,(22) object_tite,Tektites
+23,(23) object_reeba,Leever
+24,(24) object_peehat,Peahat
+25,(25) object_kingdodongo,King Dodongo
+26,(26) object_horse,Epona
+27,(27) object_zf,Lizalfos & Dinolfos
+28,(28) object_goma,Gohma
+29,(29) object_zl1,Child Zelda
+30,(30) object_gol,Gohma Larva
+31,(31) object_dodojr,Baby Dodongo
+32,(32) object_torch2,Dark Link
+33,(33) object_bl,Biri
+34,(34) object_tp,Tailpasaran
+35,(35) object_oA1,Kakariko Rooftop Man
+36,(36) object_st,Skulltulas
+37,(37) object_bw,Torch Slug
+38,(38) object_ei,Stingers
+39,(39) object_horse_normal,Generic Horse
+40,(40) object_ob1,Bazaar Proprietor
+41,(41) object_o_anime,NPC Animations I
+42,(42) object_spot04_objects,Kokiri Forest Objects
+43,(43) object_ddan_objects,Dodongo's Cavern Objects
+44,(44) object_hidan_objects,Fire Temple Objects
+45,(45) object_horse_ganon,Ganondorf's Horse
+46,(46) object_oA2,Zora [Early]
+47,(47) object_spot00_objects,Hyrule Field Objects (Child)
+48,(48) object_mb,Moblins
+49,(49) object_bombf,Bomb Flower
+50,(50) object_sk2,Stalfos
+51,(51) object_oE1,Mido I [Early]
+52,(52) object_oE_anime,NPC Animations II
+53,(53) object_oE2,Red-Haired Kokiri Girl [Early]
+54,(54) object_ydan_objects,Inside the Deku Tree Objects
+55,(55) object_gnd,Phantom Ganon
+56,(56) object_am,Armos
+57,(57) object_dekubaba,Deku Babas
+58,(58) None,
+59,(59) object_oA3,Impa's Masked Head [Early]
+60,(60) object_oA4,Laughing Man [Early]
+61,(61) object_oA5,Hylian Woman in Purple Dress
+62,(62) object_oA6,Hylian Man in Blue Shirt & Orange Pants
+63,(63) object_oA7,Hylian Woman in White Shirt & Orange Pants
+64,(64) object_jj,Jabu-Jabu
+65,(65) object_oA8,Old Hylian Man [Early]
+66,(66) object_oA9,Old Hylian Man's Head [Early]
+67,(67) object_ob2,Hylian Man in Purple Shirt & Green Pants
+68,(68) object_ob3,Carpenter Boss's Wife [Early]
+69,(69) object_ob4,Hylian Woman in Blue Shirt & White Dress
+70,(70) object_horse_zelda,Zelda's Horse
+71,(71) object_opening_demo1,Opening Cutscene Animations
+72,(72) object_warp1,Warp Circle & Rupee Prism
+73,(73) object_b_heart,Heart Container [Early]
+74,(74) object_dekunuts,Mad Scrub
+75,(75) object_oE3,Saria [Early]
+76,(76) object_oE4,Red-Haired Kokiri Boy I [Early]
+77,(77) object_menkuri_objects,Gerudo Training Ground Objects
+78,(78) object_oE5,Fado [Early]
+79,(79) object_oE6,Kokiri Girl in Brown Band's Head
+80,(80) object_oE7,Kokiri Boy in Green Cap's Head
+81,(81) object_oE8,Kokiri Girl in Green Band's Head
+82,(82) object_oE9,Kokiri Boy in Mint Cap's Head
+83,(83) object_oE10,Kokiri Shop Proprietor's Head [Early]
+84,(84) object_oE11,Kokiri Girl in Green Cap's Head
+85,(85) object_oE12,Fado's Head [Early]
+86,(86) object_vali,Bari
+87,(87) object_oA10,Soldier [Early]
+88,(88) object_oA11,Soldier (Courtyard) [Early]
+89,(89) object_mizu_objects,Water Temple Objects
+90,(90) object_fhg,Phantom Ganon's Horse & Objects
+91,(91) object_ossan,Shooting Gallery & Bazaar Proprietors
+92,(92) object_mori_hineri1,Forest Temple Room 13 (Twisted)
+93,(93) object_Bb,Bubbles
+94,(94) object_toki_objects,Temple of Time Objects
+95,(95) object_yukabyun,Flying Floor Tile
+96,(96) object_zl2,Adult Zelda
+97,(97) object_mjin,Warp Pad Base
+98,(98) object_mjin_flash,Light Warp Pad
+99,(99) object_mjin_dark,Shadow Warp Pad
+100,(100) object_mjin_flame,Fire Warp Pad
+101,(101) object_mjin_ice,Water Warp Pad
+102,(102) object_mjin_soul,Spirit Warp Pad
+103,(103) object_mjin_wind,Forest Warp Pad
+104,(104) object_mjin_oka,Ocarina Pedestal
+105,(105) object_haka_objects,Shadow Temple Objects
+106,(106) object_spot06_objects,Lake Hylia Objects
+107,(107) object_ice_objects,Ice Cavern Objects
+108,(108) object_relay_objects,Dampé's Relay Race Objects
+109,(109) object_po_field,Big Poe & Poe Guide
+110,(110) object_po_composer,Sharp & Flat
+111,(111) object_mori_hineri1a,Forest Temple Room 13 (Straight)
+112,(112) object_mori_hineri2,Forest Temple Room 14 (Straight)
+113,(113) object_mori_hineri2a,Forest Temple Room 14 (Twisted)
+114,(114) object_mori_objects,Forest Temple Objects
+115,(115) object_mori_tex,Forest Temple Textures
+116,(116) object_spot08_obj,Zora's Fountain Objects
+117,(117) object_warp2,[Blank]
+118,(118) object_hata,Flagpole
+119,(119) object_bird,Brown Bird
+120,(120) None,
+121,(121) None,
+122,(122) None,
+123,(123) None,
+124,(124) object_wood02,Bushes & Trees
+125,(125) None,
+126,(126) None,
+127,(127) None,
+128,(128) None,
+129,(129) object_lightbox,Rectangular Stone Blocks (Light Grey)
+130,(130) object_pu_box,Rectangular Stone Blocks (Dark Grey)
+131,(131) None,
+132,(132) None,
+133,(133) object_trap,Blade Trap
+134,(134) object_vase,Orange Pot
+135,(135) object_im,Impa
+136,(136) object_ta,Talon
+137,(137) object_tk,Dampé & Ghost
+138,(138) object_xc,Sheik
+139,(139) object_vm,Beamos
+140,(140) object_bv,Barinade
+141,(141) object_hakach_objects,Bottom of the Well Objects
+142,(142) object_efc_crystal_light,[?]
+143,(143) object_efc_fire_ball,Goddesses' Flame of Creation
+144,(144) object_efc_flash,[Blank]
+145,(145) object_efc_lgt_shower,Goddess Light Dome
+146,(146) object_efc_star_field,Light Beam & Rubble
+147,(147) object_god_lgt,Golden Goddesses
+148,(148) object_light_ring,Jagged-Edged Light Ring
+149,(149) object_triforce_spot,Triforce & Beam of Light
+150,(150) object_bdan_objects,Inside Jabu-Jabu's Belly Objects
+151,(151) object_sd,Soldiers
+152,(152) object_rd,Redead & Gibdo
+153,(153) object_po_sisters,Poe Sisters & Objects
+154,(154) object_heavy_object,Golden Gauntlets Boulder
+155,(155) object_gndd,Ganondorf (Cutscenes)
+156,(156) object_fd,Volvagia (Flying)
+157,(157) object_du,Darunia
+158,(158) object_fw,Flare Dancer
+159,(159) object_medal,Medallions [Early]
+160,(160) object_horse_link_child,Child Epona
+161,(161) object_spot02_objects,Graveyard Objects
+162,(162) object_haka,Gravestone
+163,(163) object_ru1,Child Ruto
+164,(164) object_syokudai,Torches
+165,(165) object_fd2,Volvagia (Whack-a-Mole)
+166,(166) object_dh,Dead Hand & Hands
+167,(167) object_rl,Rauru
+168,(168) object_efc_tw,Time Block Disappearance Effect
+169,(169) object_demo_tre_lgt,[Blank]
+170,(170) object_gi_key,Item Model - Small Key
+171,(171) object_mir_ray,Mirror Shield's Light Reflection
+172,(172) object_brob,Jelly Platform
+173,(173) object_gi_jewel,Item Model - Spiritual Stones
+174,(174) object_spot09_obj,Gerudo Valley Objects
+175,(175) object_spot18_obj,Goron City Objects
+176,(176) object_bdoor,Boss Doors
+177,(177) object_spot17_obj,Death Mountain Crater Objects
+178,(178) object_shop_dungen,Shop Shelves
+179,(179) object_nb,Nabooru
+180,(180) object_mo,Morpha
+181,(181) object_sb,Shellblade
+182,(182) object_gi_melody,Item Model - Music Notes
+183,(183) object_gi_heart,Item Model - Recovery Heart
+184,(184) object_gi_compass,Item Model - Compass
+185,(185) object_gi_bosskey,Item Model - Big Key
+186,(186) object_gi_medal,Item Model - Medallions
+187,(187) object_gi_nuts,Item Model - Deku Nut
+188,(188) object_sa,Saria
+189,(189) object_gi_hearts,Item Model - Heart Container & Piece of Heart
+190,(190) object_gi_arrowcase,Item Model - Quivers
+191,(191) object_gi_bombpouch,Item Model - Bomb Bags
+192,(192) object_in,Ingo
+193,(193) object_tr,Kotake & Koume
+194,(194) object_spot16_obj,Death Mountain Trail Objects
+195,(195) object_oE1s,Mido II [Early]
+196,(196) object_oE4s,Red-Haired Kokiri Boy II [Early]
+197,(197) object_os_anime,NPC Animations III
+198,(198) object_gi_bottle,Item Model - Empty Bottle
+199,(199) object_gi_stick,Item Model - Deku Stick
+200,(200) object_gi_map,Item Model - Dungeon Map & Stone of Agony
+201,(201) object_oF1d_map,"Goron, Medigoron, Biggoron"
+202,(202) object_ru2,Adult Ruto
+203,(203) object_gi_shield_1,Item Model - Deku Shield
+204,(204) object_dekujr,Deku Tree Sprout
+205,(205) object_gi_magicpot,Item Model - Magic Jars
+206,(206) object_gi_bomb_1,Item Model - Bomb
+207,(207) object_oF1s,Goron [Early]
+208,(208) object_ma2,Adult Malon
+209,(209) object_gi_purse,Item Model - Wallets
+210,(210) object_hni,Ingo's Horse & Archery Range Horse
+211,(211) object_tw,Twinrova
+212,(212) object_rr,Like Like
+213,(213) object_bxa,Parasitic Tentacle & Tentacle Obstruction
+214,(214) object_anubice,Anubis & Fire Trap
+215,(215) object_gi_gerudo,Item Model - Gerudo Card
+216,(216) object_gi_arrow,Item Model - Arrows
+217,(217) object_gi_bomb_2,Item Model - Bombchu
+218,(218) object_gi_egg,Item Model - Pocket & Weird Eggs
+219,(219) object_gi_scale,Item Model - Silver & Golden Scales
+220,(220) object_gi_shield_2,Item Model - Hylian Shield
+221,(221) object_gi_hookshot,Item Model - Hookshot & Longshot
+222,(222) object_gi_ocarina,Item Model - Ocarina of Time
+223,(223) object_gi_milk,Item Model - Lon Lon Milk
+224,(224) object_ma1,Child Malon
+225,(225) object_ganon,Ganondorf (Boss)
+226,(226) object_sst,Bongo Bongo
+227,(227) object_ny,Spike Trap [Duplicate]
+228,(228) None,
+229,(229) object_ny,Spike Trap
+230,(230) object_fr,Frog
+231,(231) object_gi_pachinko,Item Model - Fairy Slingshot
+232,(232) object_gi_boomerang,Item Model - Boomerang
+233,(233) object_gi_bow,Item Model - Fairy Bow
+234,(234) object_gi_glasses,Item Model - Lens of Truth
+235,(235) object_gi_liquid,Item Model - Potions
+236,(236) object_ani,Kakariko Rooftop Man
+237,(237) object_demo_6k,Chamber of the Sages Cutscene Objects
+238,(238) object_gi_shield_3,Item Model - Mirror Shield
+239,(239) object_gi_letter,Item Model - Zelda's Letter
+240,(240) object_spot15_obj,Hyrule Castle Objects
+241,(241) object_jya_obj,Spirit Temple Objects
+242,(242) object_gi_clothes,Item Model - Tunics
+243,(243) object_gi_bean,Item Model - Magic Bean
+244,(244) object_gi_fish,Item Model - Fish
+245,(245) object_gi_saw,Item Model - Poacher's Saw
+246,(246) object_gi_hammer,Item Model - Megaton Hammer
+247,(247) object_gi_grass,Item Model - Reed Whistle
+248,(248) object_gi_longsword,Item Model - Giant's Knife & Biggoron's Sword
+249,(249) object_spot01_objects,Kakariko Village Objects (Shared)
+250,(250) object_md,Mido [Duplicate]
+251,(251) object_md,Mido
+252,(252) object_km1,Red-Haired Kokiri Boy
+253,(253) object_kw1,Red-Haired Kokiri Girl
+254,(254) object_zo,Zora
+255,(255) object_kz,King Zora
+256,(256) object_umajump,Horse-Jumping Fence
+257,(257) object_masterkokiri,Kokiri Shop Proprietor Animations
+258,(258) object_masterkokirihead,Kokiri Shop Proprietor's Head
+259,(259) object_mastergolon,Goron Shop Proprietor Animations
+260,(260) object_masterzoora,Zora Shop Proprietor Animations
+261,(261) object_aob,Dog Lady
+262,(262) object_ik,Iron Knuckle
+263,(263) object_ahg,Hylian Men I
+264,(264) object_cne,Young Hylian Women
+265,(265) object_gi_niwatori,Item Model - Cuccos
+266,(266) object_skj,Skull Kid
+267,(267) object_gi_bottle_letter,Item Model - Ruto's Letter
+268,(268) object_bji,Old Hylian Men
+269,(269) object_bba,Old Hylian Woman
+270,(270) object_gi_ocarina_0,Item Model - Fairy Ocarina
+271,(271) object_ds,Potion Shop Granny
+272,(272) object_ane,Cucco Lady
+273,(273) object_boj,Hylian Men II
+274,(274) object_spot03_object,Zora's River Objects
+275,(275) object_spot07_object,Zora's Domain Objects
+276,(276) object_fz,Freezard
+277,(277) object_bob,Carpenter Boss's Wife
+278,(278) object_ge1,Gerudo in White
+279,(279) object_yabusame_point,Minigame Points
+280,(280) object_gi_boots_2,Item Model - Iron Boots
+281,(281) object_gi_seed,Item Model - Deku Seeds
+282,(282) object_gnd_magic,Ganondorf's Magic Blast
+283,(283) object_d_elevator,Stone Elevator Pillar
+284,(284) object_d_hsblock,Hookshot Pillar & Wall Target
+285,(285) object_d_lift,Stone Moving Deku Tree Platform
+286,(286) object_mamenoki,Magic Bean Objects
+287,(287) object_goroiwa,Rolling Boulder
+288,(288) None,
+289,(289) object_toryo,Carpenter Boss
+290,(290) object_daiku,Carpenters
+291,(291) None,
+292,(292) object_nwc,Cucco Chick
+293,(293) object_blkobj,Dark Link's Illusion Room
+294,(294) object_gm,Medigoron Animations
+295,(295) object_ms,Magic Bean Seller
+296,(296) object_hs,Carpenter Boss's Son
+297,(297) object_ingate,Ingo's Ranch Gate
+298,(298) object_lightswitch,Sun Switch
+299,(299) object_kusa,Grass
+300,(300) object_tsubo,Pot
+301,(301) object_gi_gloves,Item Model - Silver & Golden Gauntlets
+302,(302) object_gi_coin,Item Model - N Coins
+303,(303) object_kanban,Square Signpost
+304,(304) object_gjyo_objects,Ganon's Castle Exterior Objects
+305,(305) object_owl,Kaepora Gaebora
+306,(306) object_mk,Lake Scientist
+307,(307) object_fu,Windmill Man
+308,(308) object_gi_ki_tan_mask,Item Model - Keaton Mask
+309,(309) object_gi_redead_mask,Item Model - Redead Mask
+310,(310) object_gi_skj_mask,Item Model - Spooky Mask
+311,(311) object_gi_rabit_mask,Item Model - Bunny Hood
+312,(312) object_gi_truth_mask,Item Model - Mask of Truth
+313,(313) object_ganon_objects,Ganon's Tower Objects
+314,(314) object_siofuki,Water Spout (Small)
+315,(315) object_stream,Water Spout (Large)
+316,(316) object_mm,Running Man
+317,(317) object_fa,Fado
+318,(318) object_os,Happy Mask Salesman
+319,(319) object_gi_eye_lotion,Item Model - Eyedrops
+320,(320) object_gi_powder,Item Model - Odd Potion
+321,(321) object_gi_mushroom,Item Model - Odd Mushroom
+322,(322) object_gi_ticketstone,Item Model - Claim Check
+323,(323) object_gi_brokensword,Item Model - Broken Goron's Sword & Giant's Knife
+324,(324) object_js,Carpet Merchant
+325,(325) object_cs,Graveyard Boy
+326,(326) object_gi_prescription,Item Model - Prescription
+327,(327) object_gi_bracelet,Item Model - Goron Bracelet
+328,(328) object_gi_soldout,Item Model - SOLD OUT
+329,(329) object_gi_frog,Item Model - Eyeball Frog
+330,(330) object_mag,Title Logo
+331,(331) object_door_gerudo,Thieves' Hideout Cell Door
+332,(332) object_gt,Ganon's Tower Exterior (Collapsing) Objects
+333,(333) object_efc_erupc,Death Mountain Eruption Effects
+334,(334) object_zl2_anime1,Adult Zelda Animations I
+335,(335) object_zl2_anime2,Adult Zelda Animations II
+336,(336) object_gi_golonmask,Item Model - Goron Mask
+337,(337) object_gi_zoramask,Item Model - Zora Mask
+338,(338) object_gi_gerudomask,Item Model - Gerudo Mask
+339,(339) object_ganon2,Ganon
+340,(340) object_ka,Pierre & Bonooru
+341,(341) object_ts,Treasure Chest Shop Proprietor
+342,(342) object_zg,Ganon's Tower Door Bars
+343,(343) object_gi_hoverboots,Item Model - Hover Boots
+344,(344) object_gi_m_arrow,Item Model - Magic Arrows
+345,(345) object_ds2,Potion Shop Proprietor
+346,(346) object_ec,Ending Cutscene Animations
+347,(347) object_fish,Fishing Pond Objects
+348,(348) object_gi_sutaru,Item Model - Gold Skulltula Token
+349,(349) object_gi_goddess,Item Model - Goddess Spells
+350,(350) object_ssh,Skulltula House Residents
+351,(351) object_bigokuta,Big Octo
+352,(352) object_bg,Bombchu Bowling Employee
+353,(353) object_spot05_objects,Sacred Forest Meadow Objects
+354,(354) object_spot12_obj,Gerudo's Fortress Objects
+355,(355) object_bombiwa,Bombable Boulder
+356,(356) object_hintnuts,Hint-Giving Deku Scrub
+357,(357) object_rs,Bombchu Shop Proprietor
+358,(358) object_spot00_break,Hyrule Field Objects (Adult)
+359,(359) object_gla,Gerudo in Purple
+360,(360) object_shopnuts,Business Scrub
+361,(361) object_geldb,Gerudo Fighter & Second-in-Command
+362,(362) object_gr,Cucco-Chasing Girl
+363,(363) object_dog,Dog
+364,(364) object_jya_iron,Destructable Iron Knuckle Objects
+365,(365) object_jya_door,Spirit Temple Door & Iron Bars
+366,(366) None,
+367,(367) object_spot11_obj,Desert Colossus Objects
+368,(368) object_kibako2,Large Wooden Crate
+369,(369) object_dns,Forest Stage Judge
+370,(370) object_dnk,Forest Stage Patron
+371,(371) object_gi_fire,Item Model - Blue Fire
+372,(372) object_gi_insect,Item Model - Bug
+373,(373) object_gi_butterfly,Item Model - Butterfly
+374,(374) object_gi_ghost,Item Model - Poe Soul
+375,(375) object_gi_soul,Item Model - Fairy's Spirit
+376,(376) object_bowl,Bombchu Bowling Alley Barriers
+377,(377) object_demo_kekkai,Inside Ganon's Castle Objects
+378,(378) object_efc_doughnut,Death Mountain Cloud Rings
+379,(379) object_gi_dekupouch,Item Model - Bullet Bags
+380,(380) object_ganon_anime1,Ganondorf Animations I
+381,(381) object_ganon_anime2,Ganondorf Animations II
+382,(382) object_ganon_anime3,Ganondorf Animations III
+383,(383) object_gi_rupy,Item Model - Rupees
+384,(384) object_spot01_matoya,Kakariko Village Objects (Adult)
+385,(385) object_spot01_matoyab,Kakariko Village Objects (Child)
+386,(386) object_mu,"Honey & Darling, Haggling Townspeople"
+387,(387) object_wf,Wolfos
+388,(388) object_skb,Stalchild
+389,(389) object_gj,Ganon's Lair Destructable Rubble
+390,(390) object_geff,Ganon's Lair Destructable Rubble Fragment
+391,(391) object_haka_door,Shadow Temple Door & Shutter
+392,(392) object_gs,Gossip Stone
+393,(393) object_ps,Poe Collector
+394,(394) object_bwall,Dodongo's Cavern Bombable Wall
+395,(395) object_cow,Cow
+396,(396) object_cob,Fat Woman in Blue & Yellow Vest
+397,(397) object_gi_sword_1,Item Model - Kokiri Sword
+398,(398) object_door_killer,Door Mimic
+399,(399) object_ouke_haka,Royal Family's Tomb Door
+400,(400) object_timeblock,Time Block
+401,(401) object_zl4,Child Zelda

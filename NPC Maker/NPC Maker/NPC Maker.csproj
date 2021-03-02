@@ -100,7 +100,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Dict.cs" />
+    <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Controls\InputBox.cs" />
@@ -187,6 +187,12 @@
     <Compile Include="Windows\PickableList.Designer.cs">
       <DependentUpon>PickableList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\PickableListEntryEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\PickableListEntryEdit.Designer.cs">
+      <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Controls\ScriptEditor.resx">
       <DependentUpon>ScriptEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -207,10 +213,16 @@
     <EmbeddedResource Include="Windows\PickableList.resx">
       <DependentUpon>PickableList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\PickableListEntryEdit.resx">
+      <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Actors.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Music.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Objects.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

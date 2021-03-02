@@ -101,7 +101,8 @@ namespace NPC_Maker
 
             Textbox_NPCName.Text = SelectedEntry.NPCName;
 
-            NumUpDown_ObjectID.Value = SelectedEntry.ObjectID;
+            Txb_ObjectID.Text = SelectedEntry.ObjectID.ToString();
+            Txb_ObjectID_Leave(null, null);
             NumUpDown_Hierarchy.Value = SelectedEntry.Hierarchy;
             ComboBox_HierarchyType.SelectedIndex = SelectedEntry.HierarchyType;
             NumUpDown_XModelOffs.Value = SelectedEntry.ModelOffs[0];
@@ -222,7 +223,7 @@ namespace NPC_Maker
                     }
                 }
 
-                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, Animation.ObjID, Dicts.ObjectIDs[-1]) });
+                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
             }
 
             Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
@@ -246,14 +247,14 @@ namespace NPC_Maker
                 Grid.Rows.Clear();
 
                 foreach (SegmentEntry Entry in SelectedEntry.Segments[j])
-                    Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"), Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, Entry.ObjectID, Dicts.ObjectIDs[-1]) );
+                    Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Entry.ObjectID));
             }
 
             DataGridView_ExtraDLists.Rows.Clear();
 
             foreach (DListEntry Dlist in SelectedEntry.DLists)
             {
-                string SelCombo = Dicts.GetStringFromIntStringDict(Dicts.LimbShowSubTypes, Dlist.ShowType, Dicts.LimbShowSubTypes[0]);
+                string SelCombo = Dicts.GetStringFromStringIntDict(Dicts.LimbShowSubTypes, Dlist.ShowType, Dicts.LimbShowSubTypes.First().Key);
 
                 DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
                                                                  Dlist.Address.ToString("X"),
@@ -261,7 +262,7 @@ namespace NPC_Maker
                                                                  Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
                                                                  Dlist.Scale.ToString(),
                                                                  Dlist.Limb.ToString(),
-                                                                 Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, Dlist.ObjectID, Dicts.ObjectIDs[-1]),
+                                                                 Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Dlist.ObjectID),
                                                                  SelCombo
                                                                 });
             }
@@ -483,6 +484,30 @@ namespace NPC_Maker
             }
         }
 
+        private void ObjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PickableList Objects = new PickableList(Lists.DictType.Objects);
+            Objects.ShowDialog();
+        }
+
+        private void ActorsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            PickableList Actors = new PickableList(Lists.DictType.Actors);
+            Actors.ShowDialog();
+        }
+
+        private void SFXToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PickableList SFX = new PickableList(Lists.DictType.SFX);
+            SFX.ShowDialog();
+        }
+
+        private void MusicToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            PickableList Music = new PickableList(Lists.DictType.Music);
+            Music.ShowDialog();
+        }
+
         #endregion
 
         #region NPCList
@@ -634,6 +659,47 @@ namespace NPC_Maker
 
         #region Field changes
 
+        private void Txb_ObjectID_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    Txb_ObjectID_Leave(null, null);
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void Txb_ObjectID_Leave(object sender, EventArgs e)
+        {
+            short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, Txb_ObjectID.Text);
+
+            if (ObjectId == -1)
+                ObjectId = (short)SelectedEntry.ObjectID;
+
+            Txb_ObjectID.Text = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
+
+            SelectedEntry.ObjectID = (ushort)ObjectId;
+        }
+
+        private void Btn_SelectObject_Click(object sender, EventArgs e)
+        {
+            PickableList Objects = new PickableList(Lists.DictType.Objects, true);
+            DialogResult DR = Objects.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                Txb_ObjectID.Text = Objects.Chosen.ID.ToString();
+                Txb_ObjectID_Leave(null, null);
+            }
+        }
+
         private void Textbox_NPCName_TextChanged(object sender, EventArgs e)
         {
             SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as TextBox).Tag, (sender as TextBox).Text);
@@ -721,7 +787,7 @@ namespace NPC_Maker
                 DataGrid_Animations.Rows[Index].Cells[3].Value = 1.0;
 
             if (SkipIndex != 4)
-                DataGrid_Animations.Rows[Index].Cells[4].Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, (int)ObjectID, Dicts.ObjectIDs[-1]);
+                DataGrid_Animations.Rows[Index].Cells[4].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
         }
 
         private byte[] ConvertAnimationByteArrayString(string Value)
@@ -843,9 +909,9 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            int ObjectId = Dicts.GetIntFromIntStringDict(Dicts.ObjectIDs, e.Value.ToString()); 
-                               
-                            e.Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, ObjectId, Dicts.ObjectIDs[-1]);
+                            int ObjectId = Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
+
+                            e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
 
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (short)ObjectId);
@@ -859,7 +925,7 @@ namespace NPC_Maker
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
-                            e.Value = Dicts.ObjectIDs[-1];
+                            e.Value = Dicts.ObjectIDs.First().Key;
                         }
 
                         e.ParsingApplied = true;
@@ -1097,9 +1163,9 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            int ObjectId = Dicts.GetIntFromIntStringDict(Dicts.ObjectIDs, e.Value.ToString());
+                            int ObjectId = Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
 
-                            e.Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, ObjectId, Dicts.ObjectIDs[-1]);
+                            e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
 
                             if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, (short)ObjectId);
@@ -1111,7 +1177,7 @@ namespace NPC_Maker
                             if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
-                            e.Value = Dicts.ObjectIDs[-1];
+                            e.Value = Dicts.ObjectIDs.First().Key;
                         }
 
                         e.ParsingApplied = true;
@@ -1119,7 +1185,7 @@ namespace NPC_Maker
                     }
                 case 7:     // ShowType
                     {
-                        int ShowType = Dicts.GetIntFromIntStringDict(Dicts.LimbShowSubTypes, e.Value.ToString(), 0);
+                        int ShowType = Dicts.GetIntFromStringIntDict(Dicts.LimbShowSubTypes, e.Value.ToString(), 0);
 
                         if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, ShowType);
@@ -1172,7 +1238,7 @@ namespace NPC_Maker
                 dgv.Rows[Index].Cells[1].Value = Address;
 
             if (SkipIndex != 2)
-                dgv.Rows[Index].Cells[2].Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, (int)ObjectID, Dicts.ObjectIDs[-1]);
+                dgv.Rows[Index].Cells[2].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
         }
 
         private void DataGridViewSegments_CellParse(object sender, DataGridViewCellParsingEventArgs e)
@@ -1223,9 +1289,9 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            short ObjectId = (short)Dicts.GetIntFromIntStringDict(Dicts.ObjectIDs, e.Value.ToString());
+                            short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
 
-                            e.Value = Dicts.GetStringFromIntStringDict(Dicts.ObjectIDs, ObjectId, Dicts.ObjectIDs[-1]);
+                            e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
 
                             if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
                                 AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, ObjectId);
@@ -1237,7 +1303,7 @@ namespace NPC_Maker
                             if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
                                 AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
 
-                            e.Value = Dicts.ObjectIDs[-1];
+                            e.Value = Dicts.ObjectIDs.First();
                         }
 
                         e.ParsingApplied = true;
@@ -1355,6 +1421,5 @@ namespace NPC_Maker
         */
 
         #endregion
-
     }
 }

@@ -7,11 +7,11 @@ namespace NPC_Maker.NewScriptParser
 {
     public class InstructionKill : Instruction
     {
-        public UInt16 ActorID;
-        public UInt16 ActorSub;
+        public Int16 ActorID;
+        public Int16 ActorSub;
         public byte SubID;
 
-        public InstructionKill(byte _SubID, UInt16 _ActorID, UInt16 _ActorSub) : base((byte)Lists.Instructions.KILL)
+        public InstructionKill(byte _SubID, Int16 _ActorID, Int16 _ActorSub) : base((byte)Lists.Instructions.KILL)
         {
             ActorID = _ActorID;
             ActorSub = _ActorSub;

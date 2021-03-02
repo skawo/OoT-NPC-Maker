@@ -339,7 +339,23 @@ namespace NPC_Maker.NewScriptParser
                                 byte ValueType = ScriptHelpers.GetVariable(SplitLine, 3);
                                 float Value = ScriptHelpers.GetValueByType(SplitLine, 3, ValueType);
 
-                                return new InstructionSetScriptVar((byte)SubID, Operator, Value, ValueType);
+                                return new InstructionSetScriptVar((byte)SubID, Operator, Value, ValueType, -1);
+                            }
+                        case (int)Lists.SetSubTypes.EXT_VAR_1:
+                        case (int)Lists.SetSubTypes.EXT_VAR_2:
+                        case (int)Lists.SetSubTypes.EXT_VAR_3:
+                        case (int)Lists.SetSubTypes.EXT_VAR_4:
+                        case (int)Lists.SetSubTypes.EXT_VAR_5:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 5);
+
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
+                                byte ValueType = ScriptHelpers.GetVariable(SplitLine, 4);
+                                float Value = ScriptHelpers.GetValueByType(SplitLine, 4, ValueType);
+
+                                Int16 ActorID = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int16.MaxValue));
+
+                                return new InstructionSetScriptVar((byte)SubID, Operator, Value, ValueType, ActorID);
                             }
                         default: throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }

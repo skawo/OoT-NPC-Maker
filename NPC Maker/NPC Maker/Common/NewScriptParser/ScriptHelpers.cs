@@ -102,10 +102,10 @@ namespace NPC_Maker.NewScriptParser
             if (ValueType == (int)Lists.VarTypes.RNG)
             {
                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, Index + 2);
-                Int32 Val = (Int32)ScriptHelpers.GetValueAndCheckRange(SplitLine, 
-                                                                       Index + 1, 
-                                                                       (int)Math.Min(Min < Int16.MinValue ? Int16.MinValue : Min, Int16.MinValue), 
-                                                                       (int)Math.Max(Max > Int16.MaxValue ? Int16.MaxValue : Max, Int16.MaxValue));
+                Int32 Val = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
+                                                                       Index + 1,
+                                                                       (int)Math.Min(Min < Int16.MinValue ? Int16.MinValue : Min, Int16.MinValue),
+                                                                       (int)Math.Max(Max > Int16.MaxValue ? Int16.MaxValue : Max, Int16.MaxValue)));
 
                 Value = (float)Convert.ToDecimal(Val);
             }
@@ -213,7 +213,7 @@ namespace NPC_Maker.NewScriptParser
             TextID_Adult = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
             TextID_Child = (SplitLine.Count() == 2) ? TextID_Adult : Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
         }
-        
+
         public static UInt32? Helper_GetAnimationID(string[] SplitLine, int Index, List<AnimationEntry> Animations)
         {
             UInt32? AnimID = null;

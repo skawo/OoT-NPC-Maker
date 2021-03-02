@@ -11,21 +11,26 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ScriptChangeSubtypes));
 
-                UInt16 ActorID = (UInt16)ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue);
+                UInt32? ScriptIndex = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[3]);
+
+                if (ScriptIndex == null || ScriptIndex == 0 || ScriptIndex > 255)
+                    throw ParseException.ParamOutOfRange(SplitLine);
+
+                UInt16 ActorID = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
 
                 switch (SubID)
                 {
                     case (int)Lists.ScriptChangeSubtypes.OVERWRITE:
                         {
-                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
-                            return new InstructionChangeScript((byte)SubID, ActorID, SplitLine[3]);
+                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+                            return new InstructionChangeScript((byte)SubID, ActorID, SplitLine[4]);
                         }
                     case (int)Lists.ScriptChangeSubtypes.RESTORE:
                         {
-                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
                             return new InstructionChangeScript((byte)SubID, ActorID, "__NONE__");
                         }
                     default: 
