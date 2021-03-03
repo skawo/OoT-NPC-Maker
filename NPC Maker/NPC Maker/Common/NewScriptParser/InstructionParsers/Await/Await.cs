@@ -29,7 +29,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.AwaitSubTypes.FOREVER:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
-                                return new InstructionAwait((byte)SubID, Convert.ToByte(0), 0);
+                                return new InstructionAwait((byte)SubID, 0, 0);
                             }
                         case (int)Lists.AwaitSubTypes.CURRENT_PATH_NODE:
                         case (int)Lists.AwaitSubTypes.FRAMES:

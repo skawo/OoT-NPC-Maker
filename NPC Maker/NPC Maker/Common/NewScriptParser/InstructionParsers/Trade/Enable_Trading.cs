@@ -52,7 +52,7 @@ namespace NPC_Maker.NewScriptParser
                     throw ParseException.TradeNotClosed(SplitLine);
 
                 byte ItemT = ScriptHelpers.GetVarType(SplitLine, 1);
-                UInt32 Item = Convert.ToUInt32(ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 1, ItemT, typeof(Lists.TradeItems)));
+                UInt32 Item = Convert.ToUInt32(ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 1, ItemT, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine)));
 
                 LineNo++;
                 string[] SplitLTrade = Lines[LineNo].Split(' ');
@@ -118,7 +118,7 @@ namespace NPC_Maker.NewScriptParser
                                         if (SplitTrFailItem[0].ToUpper().Trim() != Lists.Keyword_TradeDefault)
                                         {
                                             FailItemT = ScriptHelpers.GetVarType(SplitTrFailItem, 0);
-                                            FailItem = Convert.ToInt32(ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitTrFailItem, 0, FailItemT, typeof(Lists.TradeItems)));
+                                            FailItem = Convert.ToInt32(ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitTrFailItem, 0, FailItemT, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine)));
                                         }
 
                                         ScriptHelpers.Helper_GetAdultChildTextIds(SplitTrFailItem, ref TextID_Adult_Fail, ref TextID_Child_Fail, ref TextID_Adult_FailT, ref TextID_Child_FailT);

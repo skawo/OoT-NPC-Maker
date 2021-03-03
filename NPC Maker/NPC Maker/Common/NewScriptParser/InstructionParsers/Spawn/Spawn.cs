@@ -23,7 +23,7 @@ namespace NPC_Maker.NewScriptParser
                 Int32 RotX = 0;
                 Int32 RotY = 0;
                 Int32 RotZ = 0;
-                bool RelativePos = false;
+                byte RelativePos = 0;
 
                 byte ActorIDVarT = 0;
                 byte ActorVarT = 0;
@@ -75,7 +75,7 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
 
-                                RelativePos = (ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)) == 0);
+                                RelativePos = (byte)(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
                                 ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosXT, ref PosYT, ref PosZT, ref PosX, ref PosY, ref PosZ);
 
                                 continue;
@@ -92,12 +92,12 @@ namespace NPC_Maker.NewScriptParser
                     }
                 }
 
-                return new InstructionSpawn(RelativePos, PosX, PosXT, PosY, PosYT, PosZ, PosZT, RotX, RotXT, RotY, RotYT, RotZ, RotZT, ActorID, ActorIDVarT, ActorVar, ActorVarT);
+                return new InstructionSpawn((byte)RelativePos, PosX, PosXT, PosY, PosYT, PosZ, PosZT, RotX, RotXT, RotY, RotYT, RotZ, RotZT, ActorID, ActorIDVarT, ActorVar, ActorVarT);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionSpawn(false, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                return new InstructionSpawn(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
             }
             catch (Exception)
             {

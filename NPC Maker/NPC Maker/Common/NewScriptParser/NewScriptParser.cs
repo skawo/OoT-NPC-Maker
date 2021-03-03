@@ -228,7 +228,10 @@ namespace NPC_Maker.NewScriptParser
             List<string> Out = new List<string>();
 
             foreach (Instruction Int in Instructions)
+            {
+                Int.ToBytes();
                 Out.Add(Int.ToString());
+            }
 
             return Out;
         }

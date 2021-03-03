@@ -17,34 +17,35 @@ namespace NPC_Maker.NewScriptParser
 
         public static void AddObjectToByteList(object Value, List<byte> ByteList)
         {
-            if (Value is byte @byte)
-                ByteList.Add(@byte);
-            else if (Value is sbyte)
+            if (Value.GetType() == typeof(byte))
+                ByteList.Add((byte)Value);
+            else if (Value.GetType() == typeof(sbyte))
                 ByteList.Add((byte)Value);
             else
             {
                 if (ByteList.Count() % 2 != 0)
                     ByteList.Add(0);
 
-                if (Value is UInt16 @int)
-                    ByteList.AddRange(Program.BEConverter.GetBytes(@int));
-                else if (Value is Int16 int1)
-                    ByteList.AddRange(Program.BEConverter.GetBytes(int1));
+                if (Value.GetType() == typeof(UInt16))
+                    ByteList.AddRange(Program.BEConverter.GetBytes((UInt16)Value));
+                else if(Value.GetType() == typeof(Int16))
+                    ByteList.AddRange(Program.BEConverter.GetBytes((Int16)Value));
                 else
                 {
                     while (ByteList.Count() % 4 != 0)
                         ByteList.Add(0);
 
-                    if (Value is UInt32 int2)
-                        ByteList.AddRange(Program.BEConverter.GetBytes(int2));
-                    if (Value is Int32 int3)
-                        ByteList.AddRange(Program.BEConverter.GetBytes(int3));
-                    if (Value is float single)
-                        ByteList.AddRange(Program.BEConverter.GetBytes(single));
-                    if (Value is decimal)
+                    if (Value.GetType() == typeof(UInt32))
+                        ByteList.AddRange(Program.BEConverter.GetBytes((UInt32)Value));
+                    else if(Value.GetType() == typeof(Int32))
+                        ByteList.AddRange(Program.BEConverter.GetBytes((Int32)Value));
+                    else if(Value.GetType() == typeof(float))
                         ByteList.AddRange(Program.BEConverter.GetBytes((float)Value));
                     else
+                    {
+                        System.Windows.Forms.MessageBox.Show(Value.GetType().ToString());
                         throw new Exception();
+                    }
                 }
             }
         }
@@ -58,7 +59,7 @@ namespace NPC_Maker.NewScriptParser
         public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
         {
             if (Len != ByteList.Count)
-                throw new Exception("Got wrong amount of bytes.");
+                System.Windows.Forms.MessageBox.Show($"Critical error: Got wrong amount of bytes: {(Lists.Instructions)ByteList[0]}, data: {BitConverter.ToString(ByteList.ToArray())}");
         }
 
         public static string RandomString(ScriptParser Prs, int length)

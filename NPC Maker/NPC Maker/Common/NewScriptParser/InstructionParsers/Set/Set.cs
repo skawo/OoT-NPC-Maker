@@ -137,12 +137,12 @@ namespace NPC_Maker.NewScriptParser
                                 return new InstructionSetWTwoValues((byte)SubID, FlagID, VarType1, Val, VarType2, 0);
                             }
                         case (int)Lists.SetSubTypes.MOVEMENT_TYPE:
-                            return H_SetByEnum(SubID, SplitLine, typeof(Lists.MovementStyles));
+                            return H_SetByEnum(SubID, SplitLine, typeof(Lists.MovementStyles), ParseException.UnrecognizedMovementStyle(SplitLine));
                         case (int)Lists.SetSubTypes.LOOKAT_TYPE:
-                            return H_SetByEnum(SubID, SplitLine, typeof(Lists.LookAtStyles));
+                            return H_SetByEnum(SubID, SplitLine, typeof(Lists.LookAtStyles), ParseException.UnrecognizedLookAtStyle(SplitLine));
                         case (int)Lists.SetSubTypes.HEAD_AXIS:
                         case (int)Lists.SetSubTypes.WAIST_AXIS:
-                            return H_SetByEnum(SubID, SplitLine, typeof(Lists.Axis));
+                            return H_SetByEnum(SubID, SplitLine, typeof(Lists.Axis), ParseException.UnrecognizedAxis(SplitLine));
                         case (int)Lists.SetSubTypes.CURRENT_ANIMATION:
                         case (int)Lists.SetSubTypes.CURRENT_ANIMATION_INSTANTLY:
                             {
@@ -396,12 +396,12 @@ namespace NPC_Maker.NewScriptParser
                 return null;
         }
 
-        private Instruction H_SetByEnum(int SubID, string[] SplitLine, Type Enum)
+        private Instruction H_SetByEnum(int SubID, string[] SplitLine, Type Enum, ParseException Throw)
         {
             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
             byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-            UInt32? Data = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enum);
+            UInt32? Data = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enum, Throw);
 
             return new InstructionSet((byte)SubID, Data, VarType);
         }

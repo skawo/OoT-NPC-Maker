@@ -183,17 +183,17 @@ namespace NPC_Maker.NewScriptParser
                             }
                         case (int)Lists.IfSubTypes.ITEM_BEING_TRADED:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.TradeItems), EndIf, Else, LabelR));
+                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.TradeItems), EndIf, Else, LabelR, ParseException.UnrecognizedTradeItem(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.TRADE_STATUS:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.TradeStatuses), EndIf, Else, LabelR));
+                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.TradeStatuses), EndIf, Else, LabelR, ParseException.UnrecognizedTradeStatus(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_MASK:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.PlayerMasks), EndIf, Else, LabelR));
+                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.PlayerMasks), EndIf, Else, LabelR, ParseException.UnrecognizedMask(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.TIME_OF_DAY:
@@ -236,12 +236,12 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM:
                         case (int)Lists.IfSubTypes.LAST_ITEM_USED:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Items), EndIf, Else, LabelR));
+                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Items), EndIf, Else, LabelR, ParseException.UnrecognizedInventoryItem(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_QUEST_ITEM:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.QuestItems), EndIf, Else, LabelR));
+                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.QuestItems), EndIf, Else, LabelR, ParseException.UnrecognizedQuestItem(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.BUTTON_HELD:
@@ -302,12 +302,12 @@ namespace NPC_Maker.NewScriptParser
         }
 
 
-        private Instruction H_IfWhileEnum(int ID, int SubID, string[] SplitLine, Type Enumtype, int EndIf, int Else, string LabelR)
+        private Instruction H_IfWhileEnum(int ID, int SubID, string[] SplitLine, Type Enumtype, int EndIf, int Else, string LabelR, ParseException Throw)
         {
             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
             byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-            UInt32? Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enumtype);
+            UInt32? Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enumtype, Throw);
 
             return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, 0, EndIf, Else, LabelR);
         }

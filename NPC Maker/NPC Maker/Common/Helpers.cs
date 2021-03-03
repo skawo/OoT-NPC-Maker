@@ -14,13 +14,13 @@ namespace NPC_Maker
                 string[] HourMinute = MilitaryTimeString.Split(':');
 
                 if (HourMinute.Length != 2)
-                    throw new Exception("Time in wrong format!");
+                    throw new Exception("Time is in wrong format!");
 
                 byte Hour = Convert.ToByte(HourMinute[0]);
                 byte Minute = Convert.ToByte(HourMinute[1]);
 
                 if ((Hour > 23) || (Minute > 59))
-                    throw new Exception("Time in wrong format!");
+                    throw new Exception("Time is in wrong format!");
 
                 decimal Time = (((Hour * 60) + Minute) * (Int16.MaxValue / 1439));
 
@@ -28,7 +28,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                throw new Exception("Time in wrong format!");
+                throw new Exception("Time is in wrong format!");
             }
         }
 

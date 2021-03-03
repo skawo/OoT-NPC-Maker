@@ -374,7 +374,7 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static UInt32? Helper_GetEnumByNameOrVarType(string[] SplitLine, int Index, byte VarType, Type EnumType)
+        public static UInt32? Helper_GetEnumByNameOrVarType(string[] SplitLine, int Index, byte VarType, Type EnumType, ParseException Throw)
         {
             try
             {
@@ -382,7 +382,14 @@ namespace NPC_Maker.NewScriptParser
             }
             catch (Exception)
             {
-                return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, Enum.GetValues(EnumType).Cast<int>().Min(), Enum.GetValues(EnumType).Cast<int>().Max()));
+                try
+                {
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, Enum.GetValues(EnumType).Cast<int>().Min(), Enum.GetValues(EnumType).Cast<int>().Max()));
+                }
+                catch (Exception)
+                {
+                    throw Throw;
+                }
             }
         }
 

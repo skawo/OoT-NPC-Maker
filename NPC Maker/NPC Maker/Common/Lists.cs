@@ -450,8 +450,8 @@ namespace NPC_Maker
 
         public enum SpawnPosParams
         {
-            RELATIVE = 1,
             ABSOLUTE = 0,
+            RELATIVE = 1,
         }
 
         public enum ConditionTypes
@@ -531,7 +531,7 @@ namespace NPC_Maker
             EXCH_ITEM_LETTER_RUTO,
         }
 
-        public enum GiveItems
+        public enum AwardItems
         {
             /* 0x00 */
             GI_NONE,

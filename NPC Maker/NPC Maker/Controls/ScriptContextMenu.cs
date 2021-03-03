@@ -83,13 +83,13 @@ namespace NPC_Maker
             // 
             itemsToolStripMenuItem.Name = "itemsToolStripMenuItem";
             itemsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            itemsToolStripMenuItem.Text = "Inventory Items";
+            itemsToolStripMenuItem.Text = "Inventory items";
             // 
             // itemsgiveToolStripMenuItem
             // 
             itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
             itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            itemsgiveToolStripMenuItem.Text = "Give Items";
+            itemsgiveToolStripMenuItem.Text = "Award items";
             // 
             // questItemsToolStripMenuItem
             // 
@@ -101,14 +101,14 @@ namespace NPC_Maker
             // 
             itemsdungeonToolStripMenuItem.Name = "itemsdungeonToolStripMenuItem";
             itemsdungeonToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            itemsdungeonToolStripMenuItem.Text = "Dungeon Items";
+            itemsdungeonToolStripMenuItem.Text = "Dungeon items";
             itemsdungeonToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
             // 
             // itemstradeToolStripMenuItem
             // 
             itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
             itemstradeToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            itemstradeToolStripMenuItem.Text = "Trade Items";
+            itemstradeToolStripMenuItem.Text = "Trade items";
             // 
             // playerMasksToolStripMenuItem
             // 
@@ -172,7 +172,7 @@ namespace NPC_Maker
 
             AddItemCollectionToToolStripMenuItem(Lists.KeyValues.ToArray(), keywordsToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Lists.AllKeywords.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.GiveItems)), itemsgiveToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.AwardItems)), itemsgiveToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.DungeonItems)), itemsdungeonToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.Items)), itemsToolStripMenuItem);

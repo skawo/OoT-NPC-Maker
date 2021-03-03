@@ -21,8 +21,8 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
             DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.Ensure4ByteAlign(Data);
 

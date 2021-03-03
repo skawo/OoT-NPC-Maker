@@ -225,9 +225,9 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Inventory item not recognized: ", String.Join(" ", _Line));
         }
 
-        public static ParseException UnrecognizedGiveItem(string[] _Line)
+        public static ParseException UnrecognizedAwardItem(string[] _Line)
         {
-            return new ParseException("Give item not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Award item not recognized: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedMovementStyle(string[] _Line)

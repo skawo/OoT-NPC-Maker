@@ -35,7 +35,7 @@ namespace NPC_Maker
             {Enum.GetNames(typeof(Lists.TradeItems)).ToList(),  FCTB.CyanStyle},
             {Enum.GetNames(typeof(Lists.DungeonItems)).ToList(),  FCTB.CyanStyle},
             {Enum.GetNames(typeof(Lists.Items)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(Lists.GiveItems)).ToList(),  FCTB.CyanStyle},
+            {Enum.GetNames(typeof(Lists.AwardItems)).ToList(),  FCTB.CyanStyle},
             {Enum.GetNames(typeof(Lists.Instructions)).ToList(),  FCTB.PurpleStyle},
             {Lists.KeywordsBlue,  FCTB.BlueStyle},
             {Lists.KeywordsRed,  FCTB.RedStyle},

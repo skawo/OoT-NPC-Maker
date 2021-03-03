@@ -7,7 +7,7 @@ namespace NPC_Maker.NewScriptParser
 {
     public class InstructionSpawn : Instruction
     {
-        bool PosRelativeness { get; set; }
+        byte PosRelativeness { get; set; }
         float PosX { get; set; }
         float PosY { get; set; }
         float PosZ { get; set; }
@@ -26,8 +26,9 @@ namespace NPC_Maker.NewScriptParser
         byte RotYT { get; set; }
         byte RotZT { get; set; }
 
-        public InstructionSpawn(bool _PosRelativeness, float _PosX, byte _PosXT, float _PosY, byte _PosYT, float _PosZ, byte _PosZT,
-                                Int32 _RotX, byte _RotXT, Int32 _RotY, byte _RotYT, Int32 _RotZ, byte _RotZT, UInt32 _ActorID, byte _ActorIDVarT, UInt32 _ActorVariable, byte _ActorVarT) : base((byte)Lists.Instructions.SPAWN)
+        public InstructionSpawn(byte _PosRelativeness, float _PosX, byte _PosXT, float _PosY, byte _PosYT, float _PosZ, byte _PosZT,
+                                Int32 _RotX, byte _RotXT, Int32 _RotY, byte _RotYT, Int32 _RotZ, byte _RotZT, UInt32 _ActorID, byte _ActorIDVarT, 
+                                UInt32 _ActorVariable, byte _ActorVarT) : base((byte)Lists.Instructions.SPAWN)
         {
             PosRelativeness = _PosRelativeness;
             PosX = _PosX;
@@ -58,7 +59,6 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(PosRelativeness, Data);
             DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
             DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PosZT, RotXT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(RotYT, RotZT, 4), Data);
 
             DataHelpers.AddObjectToByteList(ActorID, Data);
             DataHelpers.AddObjectToByteList(ActorVariable, Data);
@@ -71,6 +71,7 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(RotZ, Data);
 
             DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ActorIDVarT, ActorVarT, 4), Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(RotYT, RotZT, 4), Data);
             DataHelpers.Ensure4ByteAlign(Data);
 
             DataHelpers.ErrorIfExpectedLenWrong(Data, 40);

@@ -2774,13 +2774,13 @@
             // 
             this.itemsToolStripMenuItem.Name = "itemsToolStripMenuItem";
             this.itemsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.itemsToolStripMenuItem.Text = "Inventory Items";
+            this.itemsToolStripMenuItem.Text = "Inventory items";
             // 
             // itemsgiveToolStripMenuItem
             // 
             this.itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
             this.itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.itemsgiveToolStripMenuItem.Text = "Give Items";
+            this.itemsgiveToolStripMenuItem.Text = "Award items";
             // 
             // questItemsToolStripMenuItem
             // 
@@ -2792,14 +2792,14 @@
             // 
             this.itemsdungeonToolStripMenuItem.Name = "itemsdungeonToolStripMenuItem";
             this.itemsdungeonToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.itemsdungeonToolStripMenuItem.Text = "Dungeon Items";
+            this.itemsdungeonToolStripMenuItem.Text = "Dungeon items";
             this.itemsdungeonToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
             // 
             // itemstradeToolStripMenuItem
             // 
             this.itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
             this.itemstradeToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.itemstradeToolStripMenuItem.Text = "Trade Items";
+            this.itemstradeToolStripMenuItem.Text = "Trade items";
             // 
             // playerMasksToolStripMenuItem
             // 
