@@ -97,13 +97,7 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
-
-            byte RGT = 0;
-
-            RGT |= (byte)(ValType1 << 4);
-            RGT |= ValType2;
-
-            DataHelpers.AddObjectToByteList(RGT, Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValType1, ValType2, 4), Data);
             DataHelpers.AddObjectToByteList(ValType3, Data);
 
             DataHelpers.AddObjectToByteList(R, Data);
@@ -210,14 +204,7 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
             DataHelpers.AddObjectToByteList(Target, Data);
-
-            byte ValueTypes = 0;
-
-            ValueTypes |= (byte)(ValueType << 4);
-            ValueTypes |= ValueType2;
-
-            DataHelpers.AddObjectToByteList(ValueTypes, Data);
-
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.AddObjectToByteList(Value2, Data);
             DataHelpers.Ensure4ByteAlign(Data);

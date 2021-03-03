@@ -72,12 +72,7 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
-
-            byte ValCon = 0;
-            ValCon |= (byte)(ValueType << 3);
-            ValCon |= Condition;
-
-            DataHelpers.AddObjectToByteList(ValCon, Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValueType, Condition, 4), Data);
             DataHelpers.AddObjectToByteList(ValueType2, Data);
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.AddObjectToByteList(Value2, Data);

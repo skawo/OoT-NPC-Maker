@@ -42,23 +42,9 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             DataHelpers.AddObjectToByteList(ID, Data);
-
-            byte SubIDAcIDT = 0;
-            byte AcCatTXT = 0;
-            byte YTZT = 0;
-
-            SubIDAcIDT |= (byte)(SubID << 4);
-            SubIDAcIDT |= ActorIDT;
-
-            AcCatTXT |= (byte)(YType << 4);
-            AcCatTXT |= XType;
-
-            YTZT |= (byte)(YType << 4);
-            YTZT |= ZType;
-
-            DataHelpers.AddObjectToByteList(SubIDAcIDT, Data);
-            DataHelpers.AddObjectToByteList(AcCatTXT, Data);
-            DataHelpers.AddObjectToByteList(YTZT, Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(SubID, ActorIDT, 4), Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ActorCatT, XType, 4), Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(YType, ZType, 4), Data);
 
             DataHelpers.AddObjectToByteList(X, Data);
             DataHelpers.AddObjectToByteList(Y, Data);

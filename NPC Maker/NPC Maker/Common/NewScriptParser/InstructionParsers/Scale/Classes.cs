@@ -33,13 +33,7 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
-
-            byte AcIDTAcCatT = 0;
-
-            AcIDTAcCatT |= (byte)(ActorIDT << 4);
-            AcIDTAcCatT |= ActorCatT;
-
-            DataHelpers.AddObjectToByteList(AcIDTAcCatT, Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ActorIDT, ActorCatT, 4), Data);
             DataHelpers.AddObjectToByteList(ScaleType, Data);
 
             DataHelpers.AddObjectToByteList(ActorID, Data);
