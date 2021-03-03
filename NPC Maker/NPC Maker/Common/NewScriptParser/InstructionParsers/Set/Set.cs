@@ -363,7 +363,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionSet((byte)SubID, 0, 0);
+                    return new InstructionSet(0, 0, 0);
                 }
 
             }
