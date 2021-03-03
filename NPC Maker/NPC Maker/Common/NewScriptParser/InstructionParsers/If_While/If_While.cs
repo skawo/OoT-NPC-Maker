@@ -73,18 +73,18 @@ namespace NPC_Maker.NewScriptParser
 
                 #endregion
 
-                Instruction Ram = H_IfRam(ID, SplitLine, EndIf, Else, LabelR);
-
-                if (Ram != null)
-                {
-                    Instructions.Insert(0, Ram);
-                    return Instructions;
-                }
-
-                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.IfSubTypes));
-
                 try
                 {
+                    Instruction Ram = H_IfRam(ID, SplitLine, EndIf, Else, LabelR);
+
+                    if (Ram != null)
+                    {
+                        Instructions.Insert(0, Ram);
+                        return Instructions;
+                    }
+
+                    int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.IfSubTypes));
+
                     switch (SubID)
                     {
                         case (int)Lists.IfSubTypes.FLAG_INF:

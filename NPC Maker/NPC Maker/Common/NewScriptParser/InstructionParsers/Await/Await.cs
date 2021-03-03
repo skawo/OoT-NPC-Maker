@@ -11,15 +11,15 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                Instruction AwaitRam = H_AwaitRam(SplitLine);
-
-                if (AwaitRam != null)
-                    return AwaitRam;
-
-                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.AwaitSubTypes));
-
                 try
                 {
+                    Instruction AwaitRam = H_AwaitRam(SplitLine);
+
+                    if (AwaitRam != null)
+                        return AwaitRam;
+
+                    int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.AwaitSubTypes));
+
                     switch (SubID)
                     {
                         case (int)Lists.AwaitSubTypes.MOVEMENT_PATH_END:
