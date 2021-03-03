@@ -31,6 +31,8 @@ namespace NPC_Maker
 
             Textbox_Script.Text = Script.Text;
 
+            Textbox_ParseErrors.Clear();
+
             if (Script.ParseErrors.Count == 0)
                 Textbox_ParseErrors.Text = "Parsed successfully!";
             else
@@ -64,7 +66,9 @@ namespace NPC_Maker
             NewScriptParser.ScriptParser Parser = new NewScriptParser.ScriptParser(Entry, Script.Text);
             Textbox_ParseErrors.Clear();
 
+            Script.ParseErrors.Clear();
             NewScriptParser.BScript Output = Parser.ParseScript();
+
 
 #if DEBUG
 
@@ -78,6 +82,7 @@ namespace NPC_Maker
             {
                 foreach (NewScriptParser.ParseException Error in Output.ParseErrors)
                 {
+                    Script.ParseErrors.Add(Error.ToString());
                     Textbox_ParseErrors.Text += Error.ToString() + Environment.NewLine;
                 }
             }
