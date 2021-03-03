@@ -42,9 +42,6 @@ namespace NPC_Maker
         public const string Keyword_Player8 = "PLAYER8";
         public const string Keyword_Player16 = "PLAYER16";
         public const string Keyword_Player32 = "PLAYER32";
-        public const string Keyword_Self8 = "SELF8";
-        public const string Keyword_Self16 = "SELF16";
-        public const string Keyword_Self32 = "SELF32";
 
         public static List<string> AllKeywords = new List<string>()
         {
@@ -73,7 +70,16 @@ namespace NPC_Maker
             Keyword_ScriptVar4,
             Keyword_ScriptVar5,
             Keyword_RNG,
-            Keyword_CallProcedure
+            Keyword_CallProcedure,
+            Keyword_RAM8,
+            Keyword_RAM16,
+            Keyword_RAM32,
+            Keyword_Global8,
+            Keyword_Global16,
+            Keyword_Global32,
+            Keyword_Player8,
+            Keyword_Player16,
+            Keyword_Player32
         };
 
         public static List<string> KeywordsBlue = new List<string>()
@@ -110,7 +116,16 @@ namespace NPC_Maker
             Keyword_ScriptVar3,
             Keyword_ScriptVar4,
             Keyword_ScriptVar5,
-            Keyword_RNG
+            Keyword_RNG,
+            Keyword_RAM8,
+            Keyword_RAM16,
+            Keyword_RAM32,
+            Keyword_Global8,
+            Keyword_Global16,
+            Keyword_Global32,
+            Keyword_Player8,
+            Keyword_Player16,
+            Keyword_Player32
         };
 
         public enum VarTypes

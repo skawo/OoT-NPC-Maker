@@ -13,14 +13,18 @@ namespace NPC_Maker
 {
     public partial class ScriptEditor : UserControl
     {
-        private readonly NPCEntry Entry;
+        private NPCEntry Entry;
         private bool SyntaxHighlighting;
         public ScriptEntry Script;
 
         public ScriptEditor(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting)
         {
             InitializeComponent();
+            Init(ref _Entry, _Script, _SyntaxHighlighting);
+        }
 
+        public void Init(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting)
+        {
             Entry = _Entry;
             SyntaxHighlighting = _SyntaxHighlighting;
             Script = _Script;
@@ -34,7 +38,6 @@ namespace NPC_Maker
                 foreach (string Error in Script.ParseErrors)
                     Textbox_ParseErrors.Text += Error + Environment.NewLine;
             }
-
         }
 
         public void SetSyntaxHighlighting(bool Value)

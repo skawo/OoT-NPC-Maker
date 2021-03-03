@@ -350,7 +350,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 4);
-                                float Value = (float)ScriptHelpers.GetValueByType(SplitLine, 4, VarType, float.MinValue, float.MaxValue);
+                                float Value = (float)Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, 4, VarType, float.MinValue, float.MaxValue));
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 ActorID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue));

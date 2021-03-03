@@ -94,7 +94,9 @@ namespace NPC_Maker
 
         private void InsertDataToEditor()
         {
-            this.SuspendLayout();
+            TabControl.SuspendLayout();
+
+            int SelectedTabIndex = TabControl.SelectedIndex;
 
             if (SelectedEntry == null)
                 return;
@@ -168,27 +170,36 @@ namespace NPC_Maker
             ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
             NumUpDown_Scale.Value = (decimal)SelectedEntry.Scale;
 
+            List<TabPage> ReusableTabPages = new List<TabPage>();
+
             foreach (TabPage Page in TabControl.TabPages)
             {
                 if ((string)Page.Tag == "SCRIPT")
-                    TabControl.TabPages.Remove(Page);
+                    ReusableTabPages.Add(Page);
             }
 
             foreach (ScriptEntry ScriptT in SelectedEntry.Scripts)
             {
-                TabPage Page = new TabPage(ScriptT.Name)
-                {
-                    Tag = "SCRIPT"
-                };
+                TabPage Page;
 
-                ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked)
+                if (ReusableTabPages.Count != 0)
                 {
-                    Dock = DockStyle.Fill
-                };
+                    Page = ReusableTabPages.First();
+                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked);
+                    ReusableTabPages.Remove(Page);
+                }
+                else
+                {
+                    Page = new TabPage(ScriptT.Name) { Tag = "SCRIPT" };
+                    TabControl.TabPages.Add(Page);
 
-                Page.Controls.Add(Se);
-                TabControl.TabPages.Add(Page);
+                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked) { Dock = DockStyle.Fill };
+                    Page.Controls.Add(Se);
+                }
             }
+
+            foreach (TabPage Page in ReusableTabPages)
+                TabControl.TabPages.Remove(Page);
 
             /*
             dataGridView1.Rows.Clear();
@@ -267,7 +278,9 @@ namespace NPC_Maker
                                                                 });
             }
 
-            this.ResumeLayout();
+            TabControl.SelectedIndex = Math.Min(TabControl.TabPages.Count - 1, SelectedTabIndex);
+
+            TabControl.ResumeLayout();
         }
 
         #region MenuStrip
