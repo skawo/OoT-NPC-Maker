@@ -21,11 +21,11 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
             DataHelpers.AddObjectToByteList(GotoInstr.InstructionNumber, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 8);
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 6);
 
             return Data.ToArray();
         }

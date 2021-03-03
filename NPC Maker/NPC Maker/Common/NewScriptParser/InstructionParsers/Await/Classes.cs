@@ -22,8 +22,9 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
             DataHelpers.AddObjectToByteList(ValueType, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
             DataHelpers.AddObjectToByteList(Value, Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
             DataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
@@ -50,8 +51,9 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
             DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValueType, Condition, 4), Data);
+            DataHelpers.Ensure2ByteAlign(Data);
             DataHelpers.AddObjectToByteList(Value, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
             DataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
@@ -81,17 +83,11 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
-
-            byte ValTypes = 0;
-
-            ValTypes |= (byte)(ValueType << 4);
-            ValTypes |= Value2T;
-
-            DataHelpers.AddObjectToByteList(ValTypes, Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValueType, Value2T, 4), Data);
             DataHelpers.AddObjectToByteList(Condition, Data);
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.AddObjectToByteList(Value2, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
             DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 

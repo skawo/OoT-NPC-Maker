@@ -25,14 +25,12 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(AdultTextT, Data);
-            DataHelpers.AddObjectToByteList(ChildTextT, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(AdultTextT, ChildTextT, 4), Data);
             DataHelpers.AddObjectToByteList(AdultText, Data);
             DataHelpers.AddObjectToByteList(ChildText, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 10);
 
             return Data.ToArray();
         }

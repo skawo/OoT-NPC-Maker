@@ -33,7 +33,7 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ScriptId, Data);
             DataHelpers.AddObjectToByteList(NPCID, Data);
             DataHelpers.AddObjectToByteList(Start.InstructionNumber, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
             DataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 

@@ -32,7 +32,7 @@ namespace NPC_Maker.NewScriptParser
                     ByteList.AddRange(Program.BEConverter.GetBytes((Int16)Value));
                 else
                 {
-                    while (ByteList.Count() % 4 != 0)
+                    while (ByteList.Count() % 2 != 0)
                         ByteList.Add(0);
 
                     if (Value.GetType() == typeof(UInt32))
@@ -48,6 +48,12 @@ namespace NPC_Maker.NewScriptParser
                     }
                 }
             }
+        }
+
+        public static void Ensure2ByteAlign(List<byte> ByteList)
+        {
+            while (ByteList.Count % 2 != 0)
+                ByteList.Add(0);
         }
 
         public static void Ensure4ByteAlign(List<byte> ByteList)

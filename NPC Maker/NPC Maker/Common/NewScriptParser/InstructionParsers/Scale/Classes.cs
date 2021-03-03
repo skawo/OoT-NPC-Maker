@@ -39,7 +39,7 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ActorID, Data);
             DataHelpers.AddObjectToByteList(ActorCat, Data);
             DataHelpers.AddObjectToByteList(Scale, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
             DataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 

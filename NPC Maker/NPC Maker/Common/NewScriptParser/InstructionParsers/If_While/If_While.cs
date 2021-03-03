@@ -250,7 +250,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
                                 UInt32? Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons));
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Convert.ToUInt16(Value), 0, EndIf, Else, LabelR));
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, (UInt32)Value, 0, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         default:

@@ -12,14 +12,16 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
-                UInt16 WarpID = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
 
-                return new InstructionWarp(WarpID);
+                byte VarType = ScriptHelpers.GetVarType(SplitLine, 1);
+                UInt32 WarpID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarType, 0, UInt16.MaxValue));
+
+                return new InstructionWarp(WarpID, VarType);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionWarp(0);
+                return new InstructionWarp(0, 0);
             }
             catch (Exception)
             {

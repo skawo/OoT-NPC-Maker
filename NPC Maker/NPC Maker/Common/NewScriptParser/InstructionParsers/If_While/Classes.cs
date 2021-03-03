@@ -39,7 +39,7 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
             DataHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
             DataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
@@ -76,10 +76,9 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ValueType2, Data);
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.AddObjectToByteList(Value2, Data);
-
             DataHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
             DataHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
             DataHelpers.ErrorIfExpectedLenWrong(Data, 20);
 

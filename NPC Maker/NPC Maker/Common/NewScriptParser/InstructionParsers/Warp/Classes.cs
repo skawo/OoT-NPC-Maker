@@ -7,11 +7,13 @@ namespace NPC_Maker.NewScriptParser
 {
     public class InstructionWarp : Instruction
     {
-        public UInt16 WarpID;
+        public UInt32 WarpID;
+        public byte VarType;
 
-        public InstructionWarp(UInt16 _WarpID) : base((byte)Lists.Instructions.WARP)
+        public InstructionWarp(UInt32 _WarpID, byte _VarType) : base((byte)Lists.Instructions.WARP)
         {
             WarpID = _WarpID;
+            VarType = _VarType;
         }
 
         public override byte[] ToBytes()
@@ -19,9 +21,11 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             DataHelpers.AddObjectToByteList(ID, Data);
+            DataHelpers.AddObjectToByteList(VarType, Data);
             DataHelpers.AddObjectToByteList(WarpID, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 6);
             return Data.ToArray();
         }
     }

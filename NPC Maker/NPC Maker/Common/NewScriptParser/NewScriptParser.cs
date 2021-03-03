@@ -227,11 +227,15 @@ namespace NPC_Maker.NewScriptParser
         {
             List<string> Out = new List<string>();
 
+            int Size = 0;
+
             foreach (Instruction Int in Instructions)
             {
-                Int.ToBytes();
+                Size += Int.ToBytes().Length;
                 Out.Add(Int.ToString());
             }
+
+            Out.Insert(0, $"-----SCRIPT SIZE: {Size} bytes-----" + Environment.NewLine);
 
             return Out;
         }

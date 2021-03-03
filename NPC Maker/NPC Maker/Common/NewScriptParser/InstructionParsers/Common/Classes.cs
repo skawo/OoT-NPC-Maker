@@ -64,6 +64,11 @@ namespace NPC_Maker.NewScriptParser
             Name = _Name;
         }
 
+        public override byte[] ToBytes()
+        {
+            return new byte[0];
+        }
+
         public override string ToString()
         {
             return Name + ":";

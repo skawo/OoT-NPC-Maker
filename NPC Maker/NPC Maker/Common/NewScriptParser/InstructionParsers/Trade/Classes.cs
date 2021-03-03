@@ -39,9 +39,8 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(Correct.AdultText, Data);
             DataHelpers.AddObjectToByteList(Correct.ChildText, Data);
             DataHelpers.AddObjectToByteList(Correct.ItemT, Data);
-            DataHelpers.AddObjectToByteList(Correct.AdultTextT, Data);
-            DataHelpers.AddObjectToByteList(Correct.ChildTextT, Data);
-            DataHelpers.Ensure4ByteAlign(Data); // 28
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(Correct.AdultTextT, Correct.ChildTextT, 4), Data);
+            DataHelpers.Ensure2ByteAlign(Data); // 26
 
             foreach (TradeSetting Setting in Failure)
             {
@@ -49,14 +48,13 @@ namespace NPC_Maker.NewScriptParser
                 DataHelpers.AddObjectToByteList(Setting.AdultText, Data);
                 DataHelpers.AddObjectToByteList(Setting.ChildText, Data);
                 DataHelpers.AddObjectToByteList(Setting.ItemT, Data);
-                DataHelpers.AddObjectToByteList(Setting.AdultTextT, Data);
-                DataHelpers.AddObjectToByteList(Setting.ChildTextT, Data);
-                DataHelpers.Ensure4ByteAlign(Data); // 16
+                DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(Setting.AdultTextT, Setting.ChildTextT, 4), Data);
+                DataHelpers.Ensure2ByteAlign(Data); // 14
             }
 
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 28 + 16 * Failure.Count);
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 26 + 14 * Failure.Count);
 
             return Data.ToArray();
         }

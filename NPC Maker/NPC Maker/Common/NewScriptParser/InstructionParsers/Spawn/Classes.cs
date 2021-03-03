@@ -55,7 +55,6 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             DataHelpers.AddObjectToByteList(ID, Data);
-
             DataHelpers.AddObjectToByteList(PosRelativeness, Data);
             DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
             DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PosZT, RotXT, 4), Data);
@@ -72,9 +71,9 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ActorIDVarT, ActorVarT, 4), Data);
             DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(RotYT, RotZT, 4), Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            DataHelpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 40);
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 38);
 
             return Data.ToArray();
         }
