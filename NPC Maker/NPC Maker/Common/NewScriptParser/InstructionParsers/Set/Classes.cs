@@ -21,9 +21,12 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
             DataHelpers.AddObjectToByteList(ValueType, Data);
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
             return Data.ToArray();
         }
@@ -34,44 +37,20 @@ namespace NPC_Maker.NewScriptParser
         }
     }
 
-    public class InstructionSetWObject : InstructionSub
+    public class InstructionSetWTwoValues : InstructionSubWValueType
     {
-        public object U16;
-        public object Object;
-
-        public InstructionSetWObject(byte _SubID, UInt16 _U16, object _Object) : base((int)Lists.Instructions.SET, _SubID)
-        {
-            U16 = _U16;
-            Object = _Object;
-        }
-
-        public override byte[] ToBytes()
-        {
-            List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(U16, Data);
-            DataHelpers.AddObjectToByteList(Object, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
-
-            return Data.ToArray();
-        }
-    }
-
-    public class InstructionSetScriptVar : InstructionSub
-    {
+        public object Value;
+        public object Value2;
+        public byte ValueType2;
         public byte Operator;
-        public float Value;
-        public byte ValueType;
-        public Int16 TargetActor;
 
-        public InstructionSetScriptVar(byte _SubID, byte _Operator, float _Value, byte _ValueType, Int16 _TargetActor)
-                                      : base((int)Lists.Instructions.SET, _SubID)
+        public InstructionSetWTwoValues(byte _SubID, object _Value, byte _ValueType, object _Value2, byte _ValueType2, byte _Operator) 
+                                        : base((int)Lists.Instructions.SET, _SubID, _ValueType)
         {
-            Operator = _Operator;
             Value = _Value;
-            ValueType = _ValueType;
-            TargetActor = _TargetActor;
+            Value2 = _Value2;
+            ValueType2 = _ValueType2;
+            Operator = _Operator;
         }
 
         public override byte[] ToBytes()
@@ -80,24 +59,27 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
             DataHelpers.AddObjectToByteList(Operator, Data);
-            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
             DataHelpers.AddObjectToByteList(Value, Data);
-            DataHelpers.AddObjectToByteList(TargetActor, Data);
+            DataHelpers.AddObjectToByteList(Value2, Data);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+
             return Data.ToArray();
         }
     }
 
     public class InstructionSetEnvColor : InstructionSub
     {
-        public byte R;
-        public byte G;
-        public byte B;
+        public UInt32 R;
+        public UInt32 G;
+        public UInt32 B;
         public byte ValType1;
         public byte ValType2;
         public byte ValType3;
 
-        public InstructionSetEnvColor(byte _SubID, byte _R, byte _G, byte _B,
+        public InstructionSetEnvColor(byte _SubID, UInt32 _R, UInt32 _G, UInt32 _B,
                                       byte _ValType1, byte _ValType2, byte _ValType3)
                                      : base((int)Lists.Instructions.SET, _SubID)
         {
@@ -115,13 +97,21 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
+
+            byte RGT = 0;
+
+            RGT |= (byte)(ValType1 << 4);
+            RGT |= ValType2;
+
+            DataHelpers.AddObjectToByteList(RGT, Data);
+            DataHelpers.AddObjectToByteList(ValType3, Data);
+
             DataHelpers.AddObjectToByteList(R, Data);
             DataHelpers.AddObjectToByteList(G, Data);
             DataHelpers.AddObjectToByteList(B, Data);
-            DataHelpers.AddObjectToByteList(ValType1, Data);
-            DataHelpers.AddObjectToByteList(ValType2, Data);
-            DataHelpers.AddObjectToByteList(ValType3, Data);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
             return Data.ToArray();
         }
@@ -145,10 +135,13 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
             DataHelpers.AddObjectToByteList(Resp1.InstructionNumber, Data);
             DataHelpers.AddObjectToByteList(Resp2.InstructionNumber, Data);
             DataHelpers.AddObjectToByteList(Resp3.InstructionNumber, Data);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
             return Data.ToArray();
         }
@@ -196,20 +189,19 @@ namespace NPC_Maker.NewScriptParser
         }
     }
 
-    public class InstructionSetCameraTracking : InstructionSub
+    public class InstructionSetCameraTracking : InstructionSubWValueType
     {
         byte Target { get; set; }
-        UInt16 Value { get; set; }
-        byte Value2 { get; set; }
-        byte ValueType { get; set; }
+        UInt32 Value { get; set; }
+        UInt32 Value2 { get; set; }
+        byte ValueType2 { get; set; }
 
-        public InstructionSetCameraTracking(byte _SubID, byte _Target, UInt16 _Value, byte _Value2, 
-                                            byte _ValueType) : base((int)Lists.Instructions.SET, _SubID)
+        public InstructionSetCameraTracking(byte _SubID, byte _Target, UInt32 _Value, byte _ValueType, UInt32 _Value2, byte _ValueType2) : base((int)Lists.Instructions.SET, _SubID, _ValueType)
         {
             Target = _Target;
             Value = _Value;
             Value2 = _Value2;
-            ValueType = _ValueType;
+            ValueType2 = _ValueType2;
         }
 
         public override byte[] ToBytes()
@@ -218,22 +210,31 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
             DataHelpers.AddObjectToByteList(Target, Data);
-            DataHelpers.AddObjectToByteList(Value2, Data);
+
+            byte ValueTypes = 0;
+
+            ValueTypes |= (byte)(ValueType << 4);
+            ValueTypes |= ValueType2;
+
+            DataHelpers.AddObjectToByteList(ValueTypes, Data);
+
             DataHelpers.AddObjectToByteList(Value, Data);
-            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.AddObjectToByteList(Value2, Data);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
         }
     }
 
-    public class InstructionSetKeyframes : InstructionSub
+    public class InstructionSetKeyframes : InstructionSubWValueType
     {
-        UInt16 AnimationID { get; set; }
+        UInt32 AnimationID { get; set; }
         byte[] Pattern { get; set; }
 
-        public InstructionSetKeyframes(byte _SubID, UInt16 _AnimationID, byte[] _Pattern) 
-                                      : base((int)Lists.Instructions.SET, _SubID)
+        public InstructionSetKeyframes(byte _SubID, UInt32 _AnimationID, byte _AnimVarType, byte[] _Pattern) 
+                                      : base((int)Lists.Instructions.SET, _SubID, _AnimVarType)
         {
             AnimationID = _AnimationID;
             Pattern = _Pattern;
@@ -244,9 +245,13 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(ValueType, Data);
+            DataHelpers.Ensure4ByteAlign(Data);
             DataHelpers.AddObjectToByteList(AnimationID, Data);
             Data.AddRange(Pattern);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
         }

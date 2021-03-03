@@ -14,24 +14,23 @@ namespace NPC_Maker.NewScriptParser
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ScriptChangeSubtypes));
 
-                UInt32? ScriptIndex = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[3]);
+                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
+                UInt32 ActorID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue));
 
-                if (ScriptIndex == null || ScriptIndex == 0 || ScriptIndex > 255)
-                    throw ParseException.ParamOutOfRange(SplitLine);
-
-                UInt16 ActorID = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
+                byte IndexVarType = ScriptHelpers.GetVarType(SplitLine, 3);
+                UInt32 ActorScriptIndexID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, byte.MaxValue));
 
                 switch (SubID)
                 {
                     case (int)Lists.ScriptChangeSubtypes.OVERWRITE:
                         {
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
-                            return new InstructionChangeScript((byte)SubID, ActorID, Convert.ToByte(ScriptIndex), SplitLine[4]);
+                            return new InstructionChangeScript((byte)SubID, ActorID, VarType, ActorScriptIndexID, IndexVarType, SplitLine[4]);
                         }
                     case (int)Lists.ScriptChangeSubtypes.RESTORE:
                         {
                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
-                            return new InstructionChangeScript((byte)SubID, ActorID, Convert.ToByte(ScriptIndex), "__NONE__");
+                            return new InstructionChangeScript((byte)SubID, ActorID, VarType, ActorScriptIndexID, IndexVarType, "__NONE__");
                         }
                     default: 
                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -40,7 +39,7 @@ namespace NPC_Maker.NewScriptParser
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionChangeScript(0, 0, 0, "__NONE__");
+                return new InstructionChangeScript(0, 0, 0, 0, 0, "__NONE__");
             }
             catch (Exception)
             {

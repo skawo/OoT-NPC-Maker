@@ -7,14 +7,24 @@ namespace NPC_Maker.NewScriptParser
 {
     public class InstructionScale : InstructionSub
     {
+        public UInt32 ActorCat;
+        public UInt32 ActorID;
         public float Scale;
-        public byte VarType;
+        public byte ScaleType;
+        public byte ActorIDT;
+        public byte ActorCatT;
 
-        public InstructionScale(byte _SubID, float _Scale, byte _ValueType) 
-                                : base((int)Lists.Instructions.ROTATION, _SubID)
+        public InstructionScale(byte _SubID, UInt32 _ActorID, byte _ActorIDT, UInt32 _ActorCat, byte _ActorCatT, float _Scale, byte _ScaleType)
+                                : base((int)Lists.Instructions.SCALE, _SubID)
         {
+            ActorCat = _ActorCat;
+            ActorID = _ActorID;
+            ActorCatT = _ActorCatT;
+            ActorIDT = _ActorIDT;
+
             Scale = _Scale;
-            VarType = _ValueType;
+            ScaleType = _ScaleType;
+
         }
 
         public override byte[] ToBytes()
@@ -23,10 +33,21 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(VarType, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+
+            byte AcIDTAcCatT = 0;
+
+            AcIDTAcCatT |= (byte)(ActorIDT << 4);
+            AcIDTAcCatT |= ActorCatT;
+
+            DataHelpers.AddObjectToByteList(AcIDTAcCatT, Data);
+            DataHelpers.AddObjectToByteList(ScaleType, Data);
+
+            DataHelpers.AddObjectToByteList(ActorID, Data);
+            DataHelpers.AddObjectToByteList(ActorCat, Data);
             DataHelpers.AddObjectToByteList(Scale, Data);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
             return Data.ToArray();
         }

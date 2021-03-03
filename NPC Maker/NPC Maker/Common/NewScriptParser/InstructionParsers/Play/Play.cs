@@ -30,39 +30,36 @@ namespace NPC_Maker.NewScriptParser
                                 if (VarType < (int)Lists.VarTypes.Var1)
                                 {
                                     SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
-                                                           ScriptHelpers.Helper_GetSFXId(SplitLine, 2)
+                                                           ScriptHelpers.Helper_GetSFXId(SplitLine, 2, VarType)
                                                                                    :
-                                                           ScriptHelpers.Helper_GetMusicId(SplitLine, 2);
-
-                                    if (SNDID == null)
-                                        SNDID = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0,
-                                                                                                     (SubID == (int)Lists.PlaySubTypes.SFX) ? 
-                                                                                                            Dicts.SFXes.Max(x => x).Value
-                                                                                                                    :
-                                                                                                            Dicts.Music.Max(x => x).Value));
+                                                           ScriptHelpers.Helper_GetMusicId(SplitLine, 2, VarType);
                                 }
 
 
-                                return new InstructionPlay((byte)SubID, Convert.ToUInt16(SNDID), VarType);
+                                return new InstructionPlay((byte)SubID, (UInt32)SNDID, VarType, 0, 0);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
-                                return new InstructionPlay((byte)SubID, 0, 0);
+                                return new InstructionPlay((byte)SubID, 0, 0, 0, 0);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE_ADDR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                                UInt32 Addr = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int32.MaxValue));
 
-                                return new InstructionPlay((byte)SubID, Addr, 0);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
+                                UInt32 Addr = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue));
+
+                                return new InstructionPlay((byte)SubID, Addr, VarType, 0, 0);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE_ID:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                                byte ID = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, byte.MaxValue));
 
-                                return new InstructionPlay((byte)SubID, ID, 0);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
+                                UInt32 ID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue));
+
+                                return new InstructionPlay((byte)SubID, ID, VarType, 0, 0);
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -71,7 +68,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionTextbox((int)Lists.Instructions.ENABLE_TALKING, 0, 0);
+                    return new InstructionPlay((int)Lists.Instructions.PLAY, 0, 0, 0, 0);
                 }
             }
             catch (Exception)

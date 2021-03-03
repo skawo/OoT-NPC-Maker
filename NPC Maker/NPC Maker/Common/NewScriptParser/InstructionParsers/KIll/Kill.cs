@@ -16,22 +16,30 @@ namespace NPC_Maker.NewScriptParser
                 int SetSubType = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes));
 
                 UInt16 ActorNum = 0;
-                UInt16 ActorType = 0;
+                UInt16 ActorCat = 0;
+                byte ANumVarT = 0;
+                byte ACatVarT = 0;
 
                 switch (SetSubType)
                 {
                     case (int)Lists.TargetActorSubtypes.CONFIG_ID:
                         {
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2);
+
+                            ANumVarT = ScriptHelpers.GetVarType(SplitLine, 2);
+                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2, ANumVarT);
+
                             break;
                         }
                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                         {
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
-                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2);
-                            ActorType = (UInt16)ScriptHelpers.Helper_GetActorCategory(SplitLine, 3);
+                            ANumVarT = ScriptHelpers.GetVarType(SplitLine, 2);
+                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2, ANumVarT);
+
+                            ACatVarT = ScriptHelpers.GetVarType(SplitLine, 3);
+                            ActorCat = (UInt16)ScriptHelpers.Helper_GetActorCategory(SplitLine, 3, ACatVarT);
 
                             break;
                         }
@@ -41,12 +49,12 @@ namespace NPC_Maker.NewScriptParser
                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                 }
 
-                return new InstructionKill((byte)SetSubType, ActorNum, ActorType);
+                return new InstructionKill((byte)SetSubType, ActorNum, ANumVarT, ActorCat, ACatVarT);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionKill(0, 0, 0);
+                return new InstructionKill(0, 0, 0, 0, 0);
             }
             catch (Exception)
             {

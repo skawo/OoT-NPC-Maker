@@ -15,8 +15,10 @@ namespace NPC_Maker.NewScriptParser
             {
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.RotationSubTypes));
 
-                UInt16 ActorNum = 0;
-                UInt16 ActorType = 0;
+                UInt32 ActorNum = 0;
+                byte ActorNumT = 0;
+                UInt32 ActorCat = 0;
+                byte ActorCatT = 0;
                 float Scale = 0;
                 byte ScaleT = 0;
  
@@ -36,9 +38,12 @@ namespace NPC_Maker.NewScriptParser
                                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6);
-                                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 3);
-                                            ActorType = (UInt16)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4);
 
+                                            ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                            ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
+
+                                            ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
+                                            ActorCat = (UInt32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
 
                                             ScriptHelpers.GetScale(SplitLine, 5, ref ScaleT, ref Scale);
 
@@ -47,7 +52,9 @@ namespace NPC_Maker.NewScriptParser
                                     case (int)Lists.TargetActorSubtypes.CONFIG_ID:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
-                                            ActorNum = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, UInt16.MaxValue));
+
+                                            ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                            ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
 
                                             ScriptHelpers.GetScale(SplitLine, 4, ref ScaleT, ref Scale);
                                             break;
@@ -64,7 +71,7 @@ namespace NPC_Maker.NewScriptParser
                                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                                 }
 
-                                return new InstructionScale((byte)SubID, Scale, ScaleT);
+                                return new InstructionScale((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, Scale, ScaleT);
 
                             }
                         default:
@@ -75,7 +82,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionScale((byte)SubID, 0, 0);
+                    return new InstructionScale((byte)SubID, 0, 0, 0, 0, 0, 0);
                 }
             }
             catch (Exception)

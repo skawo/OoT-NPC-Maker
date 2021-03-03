@@ -7,6 +7,14 @@ namespace NPC_Maker.NewScriptParser
 {
     public static class DataHelpers
     {        
+        public static byte SmooshTwoValues(byte a, byte b, int offset)
+        {
+            byte o = 0;
+
+            o |= (byte)(a << offset);
+            return o |= b;
+        }
+
         public static void AddObjectToByteList(object Value, List<byte> ByteList)
         {
             if (Value is byte @byte)
@@ -45,6 +53,12 @@ namespace NPC_Maker.NewScriptParser
         {
             while (ByteList.Count % 4 != 0)
                 ByteList.Add(0);
+        }
+
+        public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
+        {
+            if (Len != ByteList.Count)
+                throw new Exception("Got wrong amount of bytes.");
         }
 
         public static string RandomString(ScriptParser Prs, int length)

@@ -16,18 +16,19 @@ namespace NPC_Maker.NewScriptParser
 
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
-                UInt16 TextID_Adult = 0;
-                UInt16 TextID_Child = 0;
+                UInt32 TextID_Adult = 0;
+                UInt32 TextID_Child = 0;
+                byte TextIDAdultT = 0;
+                byte TextIDChildT = 0;
 
-                TextID_Adult = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 1, 0, UInt16.MaxValue));
-                TextID_Child = (SplitLine.Count() == 2) ? TextID_Adult : Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, UInt16.MaxValue));
+                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT);
 
                 int End = GetCorrespondingEndTalking(Lines, LineNo);
 
                 if (End == -1)
                     throw ParseException.TalkNotClosed(SplitLine);
 
-                Instructions.Add(new InstructionTextbox((byte)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child));
+                Instructions.Add(new InstructionTextbox((byte)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child, TextIDAdultT, TextIDChildT));
                 Instructions.Add(new InstructionIfWhile((byte)Lists.Instructions.IF, (byte)Lists.IfSubTypes.CURRENTLY_TALKING, 0, 0, Lists.ConditionTypes.TRUE, -1, -1, LabelR));
                 Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                 Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(End - LineNo - 1).ToList()));

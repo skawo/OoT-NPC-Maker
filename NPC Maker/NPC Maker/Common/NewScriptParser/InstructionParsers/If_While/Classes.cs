@@ -41,6 +41,8 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
             DataHelpers.Ensure4ByteAlign(Data);
 
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 16);
+
             return Data.ToArray();
         }
 
@@ -70,15 +72,21 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(ValueType, Data);
-            DataHelpers.AddObjectToByteList(Value, Data);
+
+            byte ValCon = 0;
+            ValCon |= (byte)(ValueType << 3);
+            ValCon |= Condition;
+
+            DataHelpers.AddObjectToByteList(ValCon, Data);
             DataHelpers.AddObjectToByteList(ValueType2, Data);
+            DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.AddObjectToByteList(Value2, Data);
-            DataHelpers.AddObjectToByteList(Condition, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+
             DataHelpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
             DataHelpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 20);
 
             return Data.ToArray();
         }

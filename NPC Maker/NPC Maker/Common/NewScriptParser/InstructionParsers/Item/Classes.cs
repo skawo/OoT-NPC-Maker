@@ -25,6 +25,8 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.Ensure4ByteAlign(Data);
 
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 8);
+
             return Data.ToArray();
         }
 

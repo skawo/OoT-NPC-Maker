@@ -7,14 +7,18 @@ namespace NPC_Maker.NewScriptParser
 {
     public class InstructionKill : Instruction
     {
-        public UInt16 ActorID;
-        public UInt16 ActorSub;
+        public UInt32 ActorID;
+        public UInt32 ActorCat;
+        public byte AIDVarT;
+        public byte ACatVarT;
         public byte SubID;
 
-        public InstructionKill(byte _SubID, UInt16 _ActorID, UInt16 _ActorSub) : base((byte)Lists.Instructions.KILL)
+        public InstructionKill(byte _SubID, UInt32 _ActorID, byte _AIDVarT, UInt32 _ActorCat, byte _ACatVarT) : base((byte)Lists.Instructions.KILL)
         {
             ActorID = _ActorID;
-            ActorSub = _ActorSub;
+            ActorCat = _ActorCat;
+            AIDVarT = _AIDVarT;
+            ACatVarT = _ACatVarT;
             SubID = _SubID;
         }
 
@@ -24,9 +28,13 @@ namespace NPC_Maker.NewScriptParser
 
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
+            DataHelpers.AddObjectToByteList(AIDVarT, Data);
+            DataHelpers.AddObjectToByteList(ACatVarT, Data);
             DataHelpers.AddObjectToByteList(ActorID, Data);
-            DataHelpers.AddObjectToByteList(ActorSub, Data);
+            DataHelpers.AddObjectToByteList(ActorCat, Data);
             DataHelpers.Ensure4ByteAlign(Data);
+
+            DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
         }
