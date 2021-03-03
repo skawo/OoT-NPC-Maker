@@ -50,9 +50,7 @@ namespace NPC_Maker.NewScriptParser
                             //return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
                         // case s32:
                             //H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
-                        case (int)Lists.SetSubTypes.MODEL_SCALE:
                         case (int)Lists.SetSubTypes.MOVEMENT_SPEED:
-                        case (int)Lists.SetSubTypes.MODEL_SCALE_SMOOTHLY:
                         case (int)Lists.SetSubTypes.GRAVITY_FORCE:
                         case (int)Lists.SetSubTypes.TALK_RADIUS:
                             return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(float));
@@ -75,12 +73,12 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 2);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.EQUALTO;
 
                                 if (VarType < (int)Lists.VarTypes.Var1)
                                 {
-                                    if (VarType != (int)Lists.VarTypes.RNG)
+                                    if (VarType != (int)Lists.VarTypes.Random)
                                         Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
                                 }
 
@@ -200,9 +198,9 @@ namespace NPC_Maker.NewScriptParser
 
                                 byte[] ScVars = new byte[3]
                                                             {
-                                                                    ScriptHelpers.GetVariable(SplitLine, 2),
-                                                                    ScriptHelpers.GetVariable(SplitLine, 3),
-                                                                    ScriptHelpers.GetVariable(SplitLine, 4)
+                                                                    ScriptHelpers.GetVarType(SplitLine, 2),
+                                                                    ScriptHelpers.GetVarType(SplitLine, 3),
+                                                                    ScriptHelpers.GetVarType(SplitLine, 4)
                                                             };
 
                                 int[] RGB = new int[3] { 0, 0, 0 };
@@ -210,9 +208,7 @@ namespace NPC_Maker.NewScriptParser
                                 for (int i = 0; i < 3; i++)
                                 {
                                     if (ScVars[i] < (int)Lists.VarTypes.Var1)
-                                        RGB[i] = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
-                                                                                                     (ScVars[i] == (int)Lists.VarTypes.RNG ? 3 : 2) + i,
-                                                                                                     byte.MinValue, byte.MaxValue));
+                                        RGB[i] = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 2, ScVars[i], byte.MinValue, byte.MaxValue));
                                 }
 
                                 return new InstructionSetEnvColor((byte)SubID, Convert.ToByte(RGB[0]), Convert.ToByte(RGB[1]), Convert.ToByte(RGB[2]), ScVars[0], ScVars[1], ScVars[2]);
@@ -266,39 +262,25 @@ namespace NPC_Maker.NewScriptParser
 
                                 switch (TrackSubType)
                                 {
-                                    case (int)Lists.TargetActorSubtypes.SELF: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.SELF, 0, 0, 0, 0);
-                                    case (int)Lists.TargetActorSubtypes.PLAYER: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.PLAYER, 0, 0, 0, 0);
+                                    case (int)Lists.TargetActorSubtypes.SELF: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.SELF, 0, 0, 0);
+                                    case (int)Lists.TargetActorSubtypes.PLAYER: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.PLAYER, 0, 0, 0);
                                     case (int)Lists.TargetActorSubtypes.CONFIG_ID:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                            byte ValueType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                            byte ValueType = ScriptHelpers.GetVarType(SplitLine, 3);
+                                            UInt16 ActorNum = Convert.ToUInt16(ScriptHelpers.GetValueByType(SplitLine, 3, ValueType, UInt16.MaxValue));
 
-                                            if (ValueType != 0)
-                                                return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, 0, 0, ValueType, 0);
-                                            else
-                                            {
-                                                UInt16 ActorNum = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, UInt16.MaxValue));
-                                                return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, ActorNum, 0, 0, 0);
-                                            }
+                                            return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, ActorNum, 0, ValueType);
                                         }
                                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
-                                            byte ValueType = ScriptHelpers.GetVariable(SplitLine, 3);
-                                            byte ValueType2 = ScriptHelpers.GetVariable(SplitLine, 4);
+                                            UInt16 ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 3);
+                                            byte ActorType = (byte)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4);
 
-                                            UInt16 ActorNum = 0;
-                                            byte ActorType = 0;
-
-                                            if (ValueType == 0)
-                                                ActorNum = Convert.ToUInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, Int16.MaxValue));
-
-                                            if (ValueType2 == 0)
-                                                ActorType = Convert.ToByte(ScriptHelpers.GetValueAndCheckRange(SplitLine, 4, 0, 12));
-
-                                            return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, ActorNum, ActorType, ValueType, ValueType2);
+                                            return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, ActorNum, ActorType, 0);
                                         }
                                     default: throw new Exception();
                                 }
@@ -316,12 +298,12 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 2);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt16 Time = 0;
 
                                 if (VarType < (int)Lists.VarTypes.Var1)
                                 {
-                                    if (VarType != (int)Lists.VarTypes.RNG)
+                                    if (VarType != (int)Lists.VarTypes.Random)
                                         Time = ScriptHelpers.GetOcarinaTime(SplitLine, 2);
                                 }
 
@@ -336,7 +318,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
                                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 2);
-                                byte ValueType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                byte ValueType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 float Value = ScriptHelpers.GetValueByType(SplitLine, 3, ValueType);
 
                                 return new InstructionSetScriptVar((byte)SubID, Operator, Value, ValueType, -1);
@@ -350,7 +332,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 5);
 
                                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
-                                byte ValueType = ScriptHelpers.GetVariable(SplitLine, 4);
+                                byte ValueType = ScriptHelpers.GetVarType(SplitLine, 4);
                                 float Value = ScriptHelpers.GetValueByType(SplitLine, 4, ValueType);
 
                                 Int16 ActorID = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int16.MaxValue));
@@ -386,22 +368,18 @@ namespace NPC_Maker.NewScriptParser
         {
             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
-            byte VarType = ScriptHelpers.GetVariable(SplitLine, 2);
+            byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
             object Data = 0;
-
-            if (VarType == (int)Lists.VarTypes.RNG)
-                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
             if (VarType < (int)Lists.VarTypes.Var1)
             {
                 if (ConvertType == typeof(UInt32))
-                    Data = ScriptHelpers.Helper_ConvertToUInt32(SplitLine[VarType == (int)Lists.VarTypes.RNG ? 3 : 2]);
+                    Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, Min, Max));
                 else if (ConvertType == typeof(float))
-                    Data = Convert.ToDecimal(SplitLine[VarType == (int)Lists.VarTypes.RNG ? 3 : 2]);
+                    Data = Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, float.MinValue, float.MaxValue));
                 else
-                    Data = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
-                                                                                VarType == (int)Lists.VarTypes.RNG ? 3 : 2,
-                                                                                Min, Max));
+                    Data = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, Min, Max));
+
 
                 if (Data == null)
                     throw ParseException.ParamConversionError(SplitLine);

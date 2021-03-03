@@ -47,7 +47,7 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
-                                UInt32? Actor = ScriptHelpers.Helper_GetActorId(Split[1]);
+                                UInt32? Actor = ScriptHelpers.Helper_GetActorId(Split, 1);
 
                                 if (Actor == null)
                                     Actor = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Split, 1, 0, Dicts.Actors.Max(x => x).Value));

@@ -131,7 +131,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 float Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
 
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
@@ -146,7 +146,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 4);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 4);
                                 float Value = ScriptHelpers.GetValueByType(SplitLine, 4, VarType, 0, UInt16.MaxValue);
 
                                 Int16 ActorID = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int16.MaxValue));
@@ -160,7 +160,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 float Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, sbyte.MinValue, sbyte.MaxValue);
 
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
@@ -186,7 +186,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 UInt32 Time = 0;
 
                                 if (VarType == 0)
@@ -209,7 +209,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 UInt32? Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.DungeonItems), ParseException.UnrecognizedDungeonItem(SplitLine));
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 3);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 float Dungeon = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
 
                                 Instructions.Insert(0, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Convert.ToByte(Dungeon), 0, Convert.ToByte(Value), 0, EndIf, Else, LabelR));

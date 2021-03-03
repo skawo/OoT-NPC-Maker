@@ -20,12 +20,14 @@ namespace NPC_Maker
             { Lists.DictType.Music, $"{Program.ExecPath}/Music.csv" },
             { Lists.DictType.Actors, $"{Program.ExecPath}/Actors.csv" },
             { Lists.DictType.Objects, $"{Program.ExecPath}/Objects.csv" },
+            { Lists.DictType.ActorCategories, $"{Program.ExecPath}/ActorCategories.csv" },
         };
 
         public static Dictionary<string, int> ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]);
         public static Dictionary<string, int> SFXes = FileOps.GetDictionary(DictFilenames[Lists.DictType.SFX]);
         public static Dictionary<string, int> Music = FileOps.GetDictionary(DictFilenames[Lists.DictType.Music]);
         public static Dictionary<string, int> Actors = FileOps.GetDictionary(DictFilenames[Lists.DictType.Actors]);
+        public static Dictionary<string, int> ActorCategories = FileOps.GetDictionary(DictFilenames[Lists.DictType.ActorCategories]);
 
         public static Dictionary<string, string[]> FunctionSubtypes = new Dictionary<string, string[]>()
         {
@@ -37,6 +39,8 @@ namespace NPC_Maker
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.KILL), Enum.GetNames(typeof(Lists.TargetActorSubtypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.CHANGE_SCRIPT), Enum.GetNames(typeof(Lists.ScriptChangeSubtypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.ITEM), Enum.GetNames(typeof(Lists.ItemSubTypes)) },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.ROTATION), Enum.GetNames(typeof(Lists.RotationSubTypes)) },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.POSITION), Enum.GetNames(typeof(Lists.PositionSubTypes)) },
         };
 
         public static void ReloadDict(Lists.DictType Type)
@@ -47,6 +51,7 @@ namespace NPC_Maker
                 case Lists.DictType.SFX: SFXes = FileOps.GetDictionary(DictFilenames[Lists.DictType.SFX]); break;
                 case Lists.DictType.Music: Music = FileOps.GetDictionary(DictFilenames[Lists.DictType.Music]); break;
                 case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]); break;
+                case Lists.DictType.ActorCategories: ActorCategories = FileOps.GetDictionary(DictFilenames[Lists.DictType.ActorCategories]); break;
                 default: break;
             }
         }

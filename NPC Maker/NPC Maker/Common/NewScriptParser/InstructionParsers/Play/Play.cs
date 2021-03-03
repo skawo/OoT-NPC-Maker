@@ -23,19 +23,16 @@ namespace NPC_Maker.NewScriptParser
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                byte VarType = ScriptHelpers.GetVariable(SplitLine, 2);
-
-                                if (VarType == (int)Lists.VarTypes.RNG)
-                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
 
                                 UInt32? SNDID = 0;
 
                                 if (VarType < (int)Lists.VarTypes.Var1)
                                 {
                                     SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
-                                                           ScriptHelpers.Helper_GetSFXId(SplitLine[2])
+                                                           ScriptHelpers.Helper_GetSFXId(SplitLine, 2)
                                                                                    :
-                                                           ScriptHelpers.Helper_GetMusicId(SplitLine[2]);
+                                                           ScriptHelpers.Helper_GetMusicId(SplitLine, 2);
 
                                     if (SNDID == null)
                                         SNDID = Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0,

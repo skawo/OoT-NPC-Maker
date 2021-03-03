@@ -95,24 +95,56 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static float GetValueByType(string[] SplitLine, int Index, int ValueType, float Min = float.MinValue, float Max = float.MaxValue)
+        public static void GetXYZRot(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT, 
+                                    ref Int16 XRot, ref Int16 YRot, ref Int16 ZRot)
         {
-            float Value = 0;
+            XRot = Convert.ToInt16(ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Int16.MinValue, Int16.MaxValue));
+            YRot = Convert.ToInt16(ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Int16.MinValue, Int16.MaxValue));
+            ZRot = Convert.ToInt16(ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Int16.MinValue, Int16.MaxValue));
+        }
 
-            if (ValueType == (int)Lists.VarTypes.RNG)
+        public static void GetXYZPos(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
+                            ref float XRot, ref float YRot, ref float ZRot)
+        {
+            XRot = ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex));
+            YRot = ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex));
+            ZRot = ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex));
+        }
+
+        public static void GetScale(string[] SplitLine, int Index, ref byte ScaleVarT, ref float Scale)
+        {
+            Scale = ScriptHelpers.GetValueByType(SplitLine, Index, ScaleVarT = ScriptHelpers.GetVarType(SplitLine, Index));
+        }
+
+
+        public static float GetValueByType(string[] SplitLine, int Index, int VarType, float Min = float.MinValue, float Max = float.MaxValue)
+        {
+            switch (VarType)
             {
-                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, Index + 2);
-                Int32 Val = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(SplitLine,
-                                                                       Index + 1,
-                                                                       (int)Math.Min(Min < Int16.MinValue ? Int16.MinValue : Min, Int16.MinValue),
-                                                                       (int)Math.Max(Max > Int16.MaxValue ? Int16.MaxValue : Max, Int16.MaxValue)));
+                case (int)Lists.VarTypes.Random:
+                    {
+                        string[] Values = SplitLine[Index].Split('>');
 
-                Value = (float)Convert.ToDecimal(Val);
+                        if (!Values[0].EndsWith("-"))
+                            throw ParseException.UnrecognizedParameter(SplitLine);
+
+                        Int32 Val = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(Values,
+                                                                                        1,
+                                                                                        (int)Math.Min(Min < Int16.MinValue ? Int16.MinValue : Min, Int16.MinValue),
+                                                                                        (int)Math.Max(Max > Int16.MaxValue ? Int16.MaxValue : Max, Int16.MaxValue)));
+
+                        return (float)Convert.ToDecimal(Val);
+                    }
+                case (int)Lists.VarTypes.Var1:
+                case (int)Lists.VarTypes.Var2:
+                case (int)Lists.VarTypes.Var3:
+                case (int)Lists.VarTypes.Var4:
+                case (int)Lists.VarTypes.Var5:
+                        return 0;
+                default:
+                        return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
+
             }
-            else if (ValueType < (int)Lists.VarTypes.Var1)
-                Value = (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
-
-            return Value;
         }
 
         public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
@@ -142,17 +174,21 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static byte GetVariable(string[] SplitLine, int Index)
+        public static byte GetVarType(string[] SplitLine, int Index)
         {
-            switch (SplitLine[Index].ToUpper())
+            if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_RNG))
+                return (int)Lists.VarTypes.Random;
+            else
             {
-                case Lists.Keyword_RNG: return (int)Lists.VarTypes.RNG;
-                case Lists.Keyword_ScriptVar1: return (int)Lists.VarTypes.Var1;
-                case Lists.Keyword_ScriptVar2: return (int)Lists.VarTypes.Var2;
-                case Lists.Keyword_ScriptVar3: return (int)Lists.VarTypes.Var3;
-                case Lists.Keyword_ScriptVar4: return (int)Lists.VarTypes.Var4;
-                case Lists.Keyword_ScriptVar5: return (int)Lists.VarTypes.Var5;
-                default: return 0;
+                switch (SplitLine[Index].ToUpper())
+                {
+                    case Lists.Keyword_ScriptVar1: return (int)Lists.VarTypes.Var1;
+                    case Lists.Keyword_ScriptVar2: return (int)Lists.VarTypes.Var2;
+                    case Lists.Keyword_ScriptVar3: return (int)Lists.VarTypes.Var3;
+                    case Lists.Keyword_ScriptVar4: return (int)Lists.VarTypes.Var4;
+                    case Lists.Keyword_ScriptVar5: return (int)Lists.VarTypes.Var5;
+                    default: return 0;
+                }
             }
         }
 
@@ -184,6 +220,37 @@ namespace NPC_Maker.NewScriptParser
                     return Convert.ToInt32(Number, 16);
                 else
                     return Convert.ToInt32(Number);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
+        public static UInt16? Helper_ConvertToUInt16(string Number)
+        {
+            try
+            {
+                if (IsHex(Number))
+                    return Convert.ToUInt16(Number, 16);
+                else
+                    return Convert.ToUInt16(Number);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public static Int16? Helper_ConvertToInt16(string Number)
+        {
+            try
+            {
+                if (IsHex(Number))
+                    return Convert.ToInt16(Number, 16);
+                else
+                    return Convert.ToInt16(Number);
             }
             catch (Exception)
             {
@@ -238,39 +305,71 @@ namespace NPC_Maker.NewScriptParser
             return AnimID;
         }
 
-        public static UInt32? Helper_GetSFXId(string SFXName)
+        public static UInt16? Helper_GetActorId(string[] SplitLine, int Index)
         {
             try
             {
-                return (UInt32?)Dicts.SFXes[SFXName.ToUpper()];
+                return (UInt16?)Dicts.Actors[SplitLine[Index].ToUpper()];
             }
             catch (Exception)
             {
-                return null;
+                int? Res = Helper_ConvertToUInt16(SplitLine[Index]);
+
+                if (Res == null)
+                    throw ParseException.ParamOutOfRange(SplitLine);
+                else
+                    return Convert.ToUInt16(Res);
             }
         }
 
-        public static UInt32? Helper_GetMusicId(string MusicName)
+        public static byte? Helper_GetActorCategory(string[] SplitLine, int Index)
         {
             try
             {
-                return (UInt32?)Dicts.Music[MusicName.ToUpper()];
+                return (byte?)Dicts.ActorCategories[SplitLine[Index].ToUpper()];
             }
             catch (Exception)
             {
-                return null;
+                int? Cat = Helper_ConvertToInt32(SplitLine[Index]);
+
+                if (Cat == null || (Cat < 0 || Cat > 11))
+                    throw ParseException.ParamOutOfRange(SplitLine);
+                else
+                    return Convert.ToByte(Cat);
             }
         }
 
-        public static UInt32? Helper_GetActorId(string ActorName)
+        public static UInt16? Helper_GetSFXId(string[] SplitLine, int Index)
         {
             try
             {
-                return (UInt32?)Dicts.Actors[ActorName.ToUpper()];
+                return (UInt16?)Dicts.SFXes[SplitLine[Index].ToUpper()];
             }
             catch (Exception)
             {
-                return null;
+                int? Res = Helper_ConvertToUInt16(SplitLine[Index]);
+
+                if (Res == null)
+                    throw ParseException.ParamOutOfRange(SplitLine);
+                else
+                    return Convert.ToUInt16(Res);
+            }
+        }
+
+        public static UInt16? Helper_GetMusicId(string[] SplitLine, int Index)
+        {
+            try
+            {
+                return (UInt16?)Dicts.Music[SplitLine[Index].ToUpper()];
+            }
+            catch (Exception)
+            {
+                int? Res = Helper_ConvertToUInt16(SplitLine[Index]);
+
+                if (Res == null)
+                    throw ParseException.ParamOutOfRange(SplitLine);
+                else
+                    return Convert.ToUInt16(Res);
             }
         }
 

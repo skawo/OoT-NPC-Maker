@@ -45,6 +45,8 @@ namespace NPC_Maker
             {Dicts.SFXes.Keys.ToList(),  FCTB.CyanStyle},
             {Dicts.Music.Keys.ToList(),  FCTB.CyanStyle},
             {Dicts.Actors.Keys.ToList(),  FCTB.CyanStyle},
+            {Dicts.ObjectIDs.Keys.ToList(),  FCTB.CyanStyle},
+            {Dicts.ActorCategories.Keys.ToList(),  FCTB.CyanStyle},
         };
 
         public static Dictionary<string, Style> RegexDict = new Dictionary<string, Style>()

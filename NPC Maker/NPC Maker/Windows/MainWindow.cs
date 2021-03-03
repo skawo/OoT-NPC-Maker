@@ -508,6 +508,12 @@ namespace NPC_Maker
             Music.ShowDialog();
         }
 
+        private void ActorCategoriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PickableList ACats = new PickableList(Lists.DictType.ActorCategories);
+            ACats.ShowDialog();
+        }
+
         #endregion
 
         #region NPCList
@@ -1421,5 +1427,6 @@ namespace NPC_Maker
         */
 
         #endregion
+
     }
 }

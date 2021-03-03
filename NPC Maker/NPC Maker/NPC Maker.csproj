@@ -102,6 +102,12 @@
   <ItemGroup>
     <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Position\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Position\Position.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Scale\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Scale\Scale.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Rotation\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Rotation\Rotation.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Controls\InputBox.cs" />
     <Compile Include="Controls\ScriptContextMenu.cs" />
@@ -216,6 +222,9 @@
     <EmbeddedResource Include="Windows\PickableListEntryEdit.resx">
       <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ActorCategories.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Actors.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

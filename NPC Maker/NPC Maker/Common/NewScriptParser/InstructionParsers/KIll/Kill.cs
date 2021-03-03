@@ -15,24 +15,26 @@ namespace NPC_Maker.NewScriptParser
 
                 int SetSubType = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes));
 
-                Int16 ActorNum = 0;
-                Int16 ActorType = 0;
+                UInt16 ActorNum = 0;
+                UInt16 ActorType = 0;
 
                 switch (SetSubType)
                 {
                     case (int)Lists.TargetActorSubtypes.CONFIG_ID:
-                    {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-                        ActorNum = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int16.MaxValue));
-                        break;
-                    }
+                        {
+                            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2);
+                            break;
+                        }
                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
-                    {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
-                        ActorNum = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 2, 0, Int16.MaxValue));
-                        ActorType = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(SplitLine, 3, 0, 12));
-                        break;
-                    }
+                        {
+                            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+
+                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2);
+                            ActorType = (UInt16)ScriptHelpers.Helper_GetActorCategory(SplitLine, 3);
+
+                            break;
+                        }
                     case (int)Lists.TargetActorSubtypes.PLAYER: break;
                     case (int)Lists.TargetActorSubtypes.SELF: break;
                     default:

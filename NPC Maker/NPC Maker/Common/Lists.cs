@@ -32,7 +32,7 @@ namespace NPC_Maker
         public const string Keyword_ScriptVar3 = "VAR_3";
         public const string Keyword_ScriptVar4 = "VAR_4";
         public const string Keyword_ScriptVar5 = "VAR_5";
-        public const string Keyword_RNG = "RNG";
+        public const string Keyword_RNG = "RANDOM";
 
         public static List<string> AllKeywords = new List<string>()
         {
@@ -103,7 +103,8 @@ namespace NPC_Maker
 
         public enum VarTypes
         {
-            RNG = 1,
+            Normal = 0,
+            Random = 1,
             Var1 = 10,
             Var2 = 11,
             Var3 = 12,
@@ -127,6 +128,11 @@ namespace NPC_Maker
             SPAWN = 12,  
             WARP = 13,
             CHANGE_SCRIPT = 14,
+            ROTATION = 15,
+            POSITION = 16,
+            SCALE = 17,
+            TURN = 18,
+            PARTICLE = 19,
             RETURN = 252,
             GOTO = 253,
             LABEL = 254,
@@ -158,6 +164,7 @@ namespace NPC_Maker
             Music,
             Actors,
             Objects,
+            ActorCategories,
         }
 
         public enum IfSubTypes
@@ -270,9 +277,7 @@ namespace NPC_Maker
             /* s32s */
 
             /* floats */
-            MODEL_SCALE = 140,
             MOVEMENT_SPEED = 141,
-            MODEL_SCALE_SMOOTHLY = 142,
             GRAVITY_FORCE = 143,
             TALK_RADIUS = 144,
 
@@ -1194,6 +1199,24 @@ namespace NPC_Maker
             CUTSCENE = 2,
             CUTSCENE_ADDR = 3,
             CUTSCENE_ID = 4
+        }
+
+        public enum RotationSubTypes
+        {
+            SET = 0,
+            CHANGE = 1,
+        }
+
+        public enum PositionSubTypes
+        {
+            SET = 0,
+            CHANGE = 1,
+        }
+
+        public enum ScaleSubTypes
+        {
+            SET = 0,
+            CHANGE = 1,
         }
 
         public enum Segments

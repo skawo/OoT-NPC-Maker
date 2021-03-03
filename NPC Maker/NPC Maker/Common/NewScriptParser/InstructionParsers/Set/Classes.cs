@@ -202,16 +202,14 @@ namespace NPC_Maker.NewScriptParser
         UInt16 Value { get; set; }
         byte Value2 { get; set; }
         byte ValueType { get; set; }
-        byte ValueType2 { get; set; }
 
         public InstructionSetCameraTracking(byte _SubID, byte _Target, UInt16 _Value, byte _Value2, 
-                                            byte _ValueType, byte _ValueType2) : base((int)Lists.Instructions.SET, _SubID)
+                                            byte _ValueType) : base((int)Lists.Instructions.SET, _SubID)
         {
             Target = _Target;
             Value = _Value;
             Value2 = _Value2;
             ValueType = _ValueType;
-            ValueType2 = _ValueType2;
         }
 
         public override byte[] ToBytes()
@@ -223,7 +221,6 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(Value2, Data);
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.AddObjectToByteList(ValueType, Data);
-            DataHelpers.AddObjectToByteList(ValueType2, Data);
             DataHelpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
