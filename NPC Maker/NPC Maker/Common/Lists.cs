@@ -27,11 +27,7 @@ namespace NPC_Maker
         public const string Keyword_TradeFailure = "FAILURE";
         public const string Keyword_TradeNone = "NO_TRADE";
         public const string Keyword_Else = "ELSE";
-        public const string Keyword_ScriptVar1 = "VAR_1";
-        public const string Keyword_ScriptVar2 = "VAR_2";
-        public const string Keyword_ScriptVar3 = "VAR_3";
-        public const string Keyword_ScriptVar4 = "VAR_4";
-        public const string Keyword_ScriptVar5 = "VAR_5";
+        public const string Keyword_ScriptVar = "VAR";
         public const string Keyword_RNG = "RANDOM";
         public const string Keyword_RAM8 = "RAM8";
         public const string Keyword_RAM16 = "RAM16";
@@ -42,6 +38,9 @@ namespace NPC_Maker
         public const string Keyword_Player8 = "PLAYER8";
         public const string Keyword_Player16 = "PLAYER16";
         public const string Keyword_Player32 = "PLAYER32";
+        public const string Keyword_Self8 = "SELF8";
+        public const string Keyword_Self16 = "SELF16";
+        public const string Keyword_Self32 = "SELF32";
 
         public static List<string> AllKeywords = new List<string>()
         {
@@ -64,11 +63,7 @@ namespace NPC_Maker
             Keyword_TradeFailure,
             Keyword_TradeNone,
             Keyword_Else,
-            Keyword_ScriptVar1,
-            Keyword_ScriptVar2,
-            Keyword_ScriptVar3,
-            Keyword_ScriptVar4,
-            Keyword_ScriptVar5,
+            Keyword_ScriptVar,
             Keyword_RNG,
             Keyword_CallProcedure,
             Keyword_RAM8,
@@ -79,7 +74,10 @@ namespace NPC_Maker
             Keyword_Global32,
             Keyword_Player8,
             Keyword_Player16,
-            Keyword_Player32
+            Keyword_Player32,
+            Keyword_Self8,
+            Keyword_Self16,
+            Keyword_Self32
         };
 
         public static List<string> KeywordsBlue = new List<string>()
@@ -111,11 +109,7 @@ namespace NPC_Maker
 
         public static List<string> KeywordsGray = new List<string>()
         {
-            Keyword_ScriptVar1,
-            Keyword_ScriptVar2,
-            Keyword_ScriptVar3,
-            Keyword_ScriptVar4,
-            Keyword_ScriptVar5,
+            Keyword_ScriptVar,
             Keyword_RNG,
             Keyword_RAM8,
             Keyword_RAM16,
@@ -125,7 +119,10 @@ namespace NPC_Maker
             Keyword_Global32,
             Keyword_Player8,
             Keyword_Player16,
-            Keyword_Player32
+            Keyword_Player32,
+            Keyword_Self8,
+            Keyword_Self16,
+            Keyword_Self32
         };
 
         public enum VarTypes
@@ -141,11 +138,10 @@ namespace NPC_Maker
             Player8 = 8,
             Player16 = 9,
             Player32 = 10,
-            Var1 = 11,
-            Var2 = 12,
-            Var3 = 13,
-            Var4 = 14,
-            Var5 = 15,
+            Self8 = 11,
+            Self16 = 12,
+            Self32 = 13,
+            Var = 14,
         }
 
         public enum Instructions
@@ -167,7 +163,7 @@ namespace NPC_Maker
             ROTATION = 15,
             POSITION = 16,
             SCALE = 17,
-            TURN = 18,
+            FACE = 18,
             PARTICLE = 19,
             RETURN = 252,
             GOTO = 253,
@@ -215,11 +211,10 @@ namespace NPC_Maker
             Player8 = 248,
             Player16 = 249,
             Player32 = 250,
-            Var1 = 251,
-            Var2 = 252,
-            Var3 = 253,
-            Var4 = 254,
-            Var5 = 255,
+            Self8 = 251,
+            Self16 = 252,
+            Self32 = 253,
+            Var = 254,
         }
 
         public enum IfSubTypes
@@ -1290,6 +1285,25 @@ namespace NPC_Maker
             SEG_E = 6,
             SEG_F = 7,
 
+        }
+
+        public enum FaceSubtypes
+        {
+            TOWARDS = 0,
+            AND = 1,
+            AWAY_FROM = 2,
+        }
+
+        public static List<string> FaceSubTypesForCtxMenu = GetFaceSubTypesFoxCtxMenu();
+
+        private static List<string> GetFaceSubTypesFoxCtxMenu()
+        {
+            List<string> FList = new List<string>();
+
+            FList.AddRange(Enum.GetNames(typeof(Lists.TargetActorSubtypes)));
+            FList.AddRange(Enum.GetNames(typeof(Lists.FaceSubtypes)));
+
+            return FList;
         }
 
         public enum TargetActorSubtypes

@@ -102,6 +102,8 @@
   <ItemGroup>
     <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Face\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Face\Face.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Position\Classes.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Position\Position.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Scale\Classes.cs" />

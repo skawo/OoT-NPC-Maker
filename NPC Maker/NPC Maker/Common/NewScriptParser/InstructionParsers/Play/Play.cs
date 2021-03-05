@@ -27,13 +27,10 @@ namespace NPC_Maker.NewScriptParser
 
                                 UInt32? SNDID = 0;
 
-                                if (VarType < (int)Lists.VarTypes.Var1)
-                                {
-                                    SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
-                                                           ScriptHelpers.Helper_GetSFXId(SplitLine, 2, VarType)
-                                                                                   :
-                                                           ScriptHelpers.Helper_GetMusicId(SplitLine, 2, VarType);
-                                }
+                                SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
+                                                       ScriptHelpers.Helper_GetSFXId(SplitLine, 2, VarType)
+                                                                               :
+                                                       ScriptHelpers.Helper_GetMusicId(SplitLine, 2, VarType);
 
 
                                 return new InstructionPlay((byte)SubID, (UInt32)SNDID, VarType, 0, 0);

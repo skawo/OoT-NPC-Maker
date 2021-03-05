@@ -39,9 +39,9 @@ namespace NPC_Maker.NewScriptParser
             ErrorIfNumParamsBigger(Splitline, Max);
         }
 
-        public static int GetSubIDValue(string[] SplitLine, Type SubTypeEnum)
+        public static int GetSubIDValue(string[] SplitLine, Type SubTypeEnum, int Index = 1)
         {
-            return (int)Enum.Parse(SubTypeEnum, SplitLine[1].ToUpper());
+            return (int)Enum.Parse(SubTypeEnum, SplitLine[Index].ToUpper());
         }
 
         public static UInt16 GetOcarinaTime(string[] SplitLine, int Index)
@@ -139,16 +139,18 @@ namespace NPC_Maker.NewScriptParser
                 case (int)Lists.VarTypes.Global8:
                 case (int)Lists.VarTypes.Global16:
                 case (int)Lists.VarTypes.Global32:
+                case (int)Lists.VarTypes.Self8:
+                case (int)Lists.VarTypes.Self16:
+                case (int)Lists.VarTypes.Self32:
                     {
                         string[] Values = SplitLine[Index].Split('.');
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1, 0, 0x8800000));
                     }
-                case (int)Lists.VarTypes.Var1:
-                case (int)Lists.VarTypes.Var2:
-                case (int)Lists.VarTypes.Var3:
-                case (int)Lists.VarTypes.Var4:
-                case (int)Lists.VarTypes.Var5:
-                    return 0;
+                case (int)Lists.VarTypes.Var:
+                    {
+                        string[] Values = SplitLine[Index].Split('.');
+                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1, 1, 5));
+                    }
                 default:
                     return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
 
@@ -179,18 +181,16 @@ namespace NPC_Maker.NewScriptParser
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Player16;
             else if (RamType.StartsWith(Lists.Keyword_Player32))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Player32;
+            else if (RamType.StartsWith(Lists.Keyword_Self8))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self8;
+            else if (RamType.StartsWith(Lists.Keyword_Self16))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self16;
+            else if (RamType.StartsWith(Lists.Keyword_Self32))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self32;
+            else if (RamType.StartsWith(Lists.Keyword_ScriptVar))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var;
             else
-            {
-                switch (RamType)
-                {
-                    case Lists.Keyword_ScriptVar1: return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var1;
-                    case Lists.Keyword_ScriptVar2: return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var2;
-                    case Lists.Keyword_ScriptVar3: return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var3;
-                    case Lists.Keyword_ScriptVar4: return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var4;
-                    case Lists.Keyword_ScriptVar5: return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var5;
-                    default: return null;
-                }
-            }
+                return null;
         }
 
         public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
@@ -248,19 +248,17 @@ namespace NPC_Maker.NewScriptParser
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Player32))
                 return (int)Lists.VarTypes.Player32;
 
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Self8))
+                return (int)Lists.VarTypes.Self8;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Self16))
+                return (int)Lists.VarTypes.Self16;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Self32))
+                return (int)Lists.VarTypes.Self32;
 
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_ScriptVar))
+                return (int)Lists.VarTypes.Var;
             else
-            {
-                switch (SplitLine[Index].ToUpper())
-                {
-                    case Lists.Keyword_ScriptVar1: return (int)Lists.VarTypes.Var1;
-                    case Lists.Keyword_ScriptVar2: return (int)Lists.VarTypes.Var2;
-                    case Lists.Keyword_ScriptVar3: return (int)Lists.VarTypes.Var3;
-                    case Lists.Keyword_ScriptVar4: return (int)Lists.VarTypes.Var4;
-                    case Lists.Keyword_ScriptVar5: return (int)Lists.VarTypes.Var5;
-                    default: return 0;
-                }
-            }
+                return (int)Lists.VarTypes.Normal;
         }
 
         public static bool IsHex(string Number)

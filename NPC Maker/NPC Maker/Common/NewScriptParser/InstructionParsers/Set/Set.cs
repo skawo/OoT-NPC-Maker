@@ -237,8 +237,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 for (int i = 0; i < 3; i++)
                                 {
-                                    if (ScVars[i] < (int)Lists.VarTypes.Var1)
-                                        RGB[i] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, ScVars[i], byte.MinValue, byte.MaxValue));
+                                    RGB[i] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, ScVars[i], byte.MinValue, byte.MaxValue));
                                 }
 
                                 return new InstructionSetEnvColor((byte)SubID, RGB[0], RGB[1], RGB[2], ScVars[0], ScVars[1], ScVars[2]);
@@ -414,21 +413,18 @@ namespace NPC_Maker.NewScriptParser
             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
             byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-            object Data = 0;
+            object Data;
 
-            if (VarType < (int)Lists.VarTypes.Var1)
-            {
-                if (ConvertType == typeof(UInt32))
-                    Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, Min, Max));
-                else if (ConvertType == typeof(float))
-                    Data = (float)(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, float.MinValue, float.MaxValue));
-                else
-                    Data = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, Min, Max));
+            if (ConvertType == typeof(UInt32))
+                Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, Min, Max));
+            else if (ConvertType == typeof(float))
+                Data = (float)(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, float.MinValue, float.MaxValue));
+            else
+                Data = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, Min, Max));
 
 
-                if (Data == null)
-                    throw ParseException.ParamConversionError(SplitLine);
-            }
+            if (Data == null)
+                throw ParseException.ParamConversionError(SplitLine);
 
 
             return new InstructionSet((byte)SubID, Data, VarType);

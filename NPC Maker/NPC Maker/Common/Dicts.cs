@@ -41,6 +41,7 @@ namespace NPC_Maker
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.ITEM), Enum.GetNames(typeof(Lists.ItemSubTypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.ROTATION), Enum.GetNames(typeof(Lists.RotationSubTypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.POSITION), Enum.GetNames(typeof(Lists.PositionSubTypes)) },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.FACE), Lists.FaceSubTypesForCtxMenu.ToArray() },
         };
 
         public static void ReloadDict(Lists.DictType Type)
