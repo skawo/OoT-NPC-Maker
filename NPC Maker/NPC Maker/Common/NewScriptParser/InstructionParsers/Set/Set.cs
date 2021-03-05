@@ -143,6 +143,9 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.HEAD_AXIS:
                         case (int)Lists.SetSubTypes.WAIST_AXIS:
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.Axis), ParseException.UnrecognizedAxis(SplitLine));
+                        case (int)Lists.SetSubTypes.BLINK_SEGMENT:
+                        case (int)Lists.SetSubTypes.TALK_SEGMENT:
+                            return H_SetByEnum(SubID, SplitLine, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
                         case (int)Lists.SetSubTypes.CURRENT_ANIMATION:
                         case (int)Lists.SetSubTypes.CURRENT_ANIMATION_INSTANTLY:
                             {
@@ -198,24 +201,24 @@ namespace NPC_Maker.NewScriptParser
                                 {
                                     int Segment = (SubID == (int)Lists.SetSubTypes.BLINK_PATTERN ? Entry.BlinkSegment : Entry.TalkSegment) - 8;
 
-                                    UInt32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine, i,
-                                                                                      Segment,
-                                                                                      0,
-                                                                                      Entry.Segments);
+                                    UInt32? TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, i,
+                                                                                               Segment,
+                                                                                               0,
+                                                                                               Entry.Segments);
 
                                     Data[i - 2] = (byte)TexID;
                                 }
 
                                 return new InstructionSetPattern((byte)SubID, Data);
                             }
-                        case (int)Lists.SetSubTypes.TEXTURE:
+                        case (int)Lists.SetSubTypes.SEGMENT_ENTRY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 UInt32? SegmentID = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                UInt32? TexID = ScriptHelpers.Helper_GetTextureID(SplitLine, 3, (int)SegmentID, VarType, Entry.Segments);
+                                UInt32? TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, 3, (int)SegmentID, VarType, Entry.Segments);
 
                                 return new InstructionSetWTwoValues((byte)SubID, SegmentID, 0, TexID, VarType, 0); 
                             }

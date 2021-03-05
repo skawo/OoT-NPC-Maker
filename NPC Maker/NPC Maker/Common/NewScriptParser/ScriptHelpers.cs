@@ -363,14 +363,20 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                return Convert.ToUInt32(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
+                if (!Enum.IsDefined(EnumType, SplitLine[Index].ToUpper()))
+                {
+                    if (ErrorToThrow == null)
+                        throw ParseException.GeneralError(SplitLine);
+                    else
+                        throw ErrorToThrow;
+                }
+                else
+                    return Convert.ToUInt32(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
+
             }
             catch (Exception)
             {
-                if (ErrorToThrow == null)
-                    throw ParseException.GeneralError(SplitLine);
-                else
-                    throw ErrorToThrow;
+                throw ErrorToThrow;
             }
         }
 
@@ -378,18 +384,23 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                return Convert.ToUInt32(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
+                if (!Enum.IsDefined(EnumType, SplitLine[Index].ToUpper()))
+                {
+                    try
+                    {
+                        return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, Enum.GetValues(EnumType).Cast<int>().Min(), Enum.GetValues(EnumType).Cast<int>().Max()));
+                    }
+                    catch (Exception)
+                    {
+                        throw Throw;
+                    }
+                }
+                else
+                    return Convert.ToUInt32(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
             }
             catch (Exception)
             {
-                try
-                {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, Enum.GetValues(EnumType).Cast<int>().Min(), Enum.GetValues(EnumType).Cast<int>().Max()));
-                }
-                catch (Exception)
-                {
-                    throw Throw;
-                }
+                throw Throw;
             }
         }
 
@@ -409,7 +420,7 @@ namespace NPC_Maker.NewScriptParser
             {
                 VarTChild = VarTAdult;
                 TextID_Child = TextID_Adult;
-            }  
+            }
         }
 
         public static UInt32? Helper_GetAnimationID(string[] SplitLine, int Index, byte VarType, List<AnimationEntry> Animations)
@@ -428,7 +439,16 @@ namespace NPC_Maker.NewScriptParser
             if (AnimID != null)
                 return AnimID;
             else
-                return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, Animations.Count));
+            {
+                try
+                {
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, Animations.Count));
+                }
+                catch (Exception)
+                {
+                    throw ParseException.UnrecognizedAnimation(SplitLine);
+                }
+            }
         }
 
         public static UInt32 Helper_GetActorId(string[] SplitLine, int Index, int VarType)
@@ -439,7 +459,14 @@ namespace NPC_Maker.NewScriptParser
             }
             catch (Exception)
             {
-                return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
+                try
+                {
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
+                }
+                catch (Exception)
+                {
+                    throw ParseException.UnrecognizedActor(SplitLine);
+                }
             }
         }
 
@@ -451,7 +478,14 @@ namespace NPC_Maker.NewScriptParser
             }
             catch (Exception)
             {
-                return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, 11));
+                try
+                {
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, 11));
+                }
+                catch (Exception)
+                {
+                    throw ParseException.UnrecognizedActorCategory(SplitLine);
+                }
             }
         }
 
@@ -463,7 +497,14 @@ namespace NPC_Maker.NewScriptParser
             }
             catch (Exception)
             {
-                return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
+                try
+                {
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
+                }
+                catch (Exception)
+                {
+                    throw ParseException.UnrecognizedSFX(SplitLine);
+                }
             }
         }
 
@@ -475,11 +516,18 @@ namespace NPC_Maker.NewScriptParser
             }
             catch (Exception)
             {
-                return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
+                try
+                {
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
+                }
+                catch (Exception)
+                {
+                    throw ParseException.UnrecognizedBGM(SplitLine);
+                }
             }
         }
 
-        public static UInt32 Helper_GetTextureID(string[] SplitLine, int Index, int Segment, byte VarType, List<List<SegmentEntry>> Textures)
+        public static UInt32 Helper_GetSegmentDataEntryID(string[] SplitLine, int Index, int Segment, byte VarType, List<List<SegmentEntry>> Textures)
         {
             UInt32? TexID = null;
 
@@ -495,7 +543,16 @@ namespace NPC_Maker.NewScriptParser
             if (TexID != null)
                 return (UInt32)TexID;
             else
-                return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, Textures[Segment].Count));
+            {
+                try
+                {
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, Textures[Segment].Count));
+                }
+                catch (Exception)
+                {
+                    throw ParseException.UnrecognizedSegmentDataEntry(SplitLine);
+                }
+            }
         }
 
         public static UInt32 Helper_GetDListID(string[] SplitLine, int Index, byte VarType, List<DListEntry> DLists)
@@ -514,7 +571,16 @@ namespace NPC_Maker.NewScriptParser
             if (DListID != null)
                 return (UInt32)DListID;
             else
-                return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, DLists.Count));
+            {
+                try
+                {
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, DLists.Count));
+                }
+                catch (Exception)
+                {
+                    throw ParseException.UnrecognizedDList(SplitLine);
+                }
+            }
         }
     }
 }

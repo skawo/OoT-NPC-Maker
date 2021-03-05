@@ -384,7 +384,7 @@ namespace NPC_Maker
             SCRIPT_START = 75,
             BLINK_PATTERN = 76,
             TALK_PATTERN = 77,
-            TEXTURE = 78,
+            SEGMENT_ENTRY = 78,
             ENV_COLOR = 79,
             DLIST_VISIBILITY = 80,
             ANIMATION_KEYFRAMES = 81,
@@ -405,6 +405,8 @@ namespace NPC_Maker
             TIME_OF_DAY = 96,
             TIMED_PATH_START_TIME = 97,
             TIMED_PATH_END_TIME = 98,
+            BLINK_SEGMENT = 99,
+            TALK_SEGMENT = 100,
         }
 
         public enum AwaitSubTypes
@@ -1287,6 +1289,7 @@ namespace NPC_Maker
             SEG_D = 5,
             SEG_E = 6,
             SEG_F = 7,
+
         }
 
         public enum TargetActorSubtypes

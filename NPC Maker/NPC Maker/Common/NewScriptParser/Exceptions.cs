@@ -172,72 +172,72 @@ namespace NPC_Maker.NewScriptParser
 
         public static ParseException UnrecognizedCondition(string[] _Line)
         {
-            return new ParseException("Condition not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid condition: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedTradeItem(string[] _Line)
         {
-            return new ParseException("Trade Item not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid trade Item: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedTradeStatus(string[] _Line)
         {
-            return new ParseException("Trade status not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid trade status: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedMask(string[] _Line)
         {
-            return new ParseException("Mask not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid mask: ", String.Join(" ", _Line));
         }
 
-        public static ParseException UnrecognizedTexture(string[] _Line)
+        public static ParseException UnrecognizedSegmentDataEntry(string[] _Line)
         {
-            return new ParseException("Texture not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid segment data entry, or segment data entry defined for the wrong segment: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedDList(string[] _Line)
         {
-            return new ParseException("Display List not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid display list: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedAnimation(string[] _Line)
         {
-            return new ParseException("Animation not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid animation: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedQuestItem(string[] _Line)
         {
-            return new ParseException("Quest Item not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid quest item: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedButton(string[] _Line)
         {
-            return new ParseException("Button not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid button: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedDungeonItem(string[] _Line)
         {
-            return new ParseException("Dungeon Item not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid dungeon item: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedInventoryItem(string[] _Line)
         {
-            return new ParseException("Inventory item not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid inventory item: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedAwardItem(string[] _Line)
         {
-            return new ParseException("Award item not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid award item: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedMovementStyle(string[] _Line)
         {
-            return new ParseException("Movement style not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid movement style: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedLookAtStyle(string[] _Line)
         {
-            return new ParseException("Look-at style not recognized: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid look-at style: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedAxis(string[] _Line)
@@ -252,17 +252,37 @@ namespace NPC_Maker.NewScriptParser
 
         public static ParseException UnregonizedDlistVisibility(string[] _Line)
         {
-            return new ParseException("Unrecognized Display List visibility option: ", String.Join(" ", _Line));
+            return new ParseException("Unrecognized display list visibility option: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedParameter(string[] _Line)
         {
-            return new ParseException("Unrecognized parameter: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid parameter: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedOperator(string[] _Line)
         {
-            return new ParseException("Unrecognized operator: ", String.Join(" ", _Line));
+            return new ParseException("Not a valid operator: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedActor(string[] _Line)
+        {
+            return new ParseException("Not a valid actor: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedActorCategory(string[] _Line)
+        {
+            return new ParseException("Not a valid actor category: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedSFX(string[] _Line)
+        {
+            return new ParseException("Not a valid sound effect: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedBGM(string[] _Line)
+        {
+            return new ParseException("Not a valid BGM: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnexpectedTradeInstruction(string _Line)
