@@ -7,7 +7,7 @@ namespace NPC_Maker.NewScriptParser
 {
     public class InstructionPosition : InstructionSub
     {
-        public UInt32 ActorCat;
+        public Int32 ActorCat;
         public UInt32 ActorID;
         public float X;
         public float Y;
@@ -20,7 +20,7 @@ namespace NPC_Maker.NewScriptParser
 
         public byte ValueType;
 
-        public InstructionPosition(byte _SubID, UInt32 _ActorID, byte _ActorIDT, UInt32 _ActorCat, byte _ActorCatT, float _XPos, float _YPos, float _ZPos, 
+        public InstructionPosition(byte _SubID, UInt32 _ActorID, byte _ActorIDT, Int32 _ActorCat, byte _ActorCatT, float _XPos, float _YPos, float _ZPos, 
                                    byte _XPosValueType, byte _YPosValueType, byte _ZPosValueType) 
                                 : base((int)Lists.Instructions.POSITION, _SubID)
         {

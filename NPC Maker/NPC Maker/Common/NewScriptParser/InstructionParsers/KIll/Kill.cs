@@ -16,7 +16,7 @@ namespace NPC_Maker.NewScriptParser
                 int SetSubType = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes));
 
                 UInt32 ActorNum = 0;
-                UInt32 ActorCat = 0;
+                Int32 ActorCat = 0;
                 byte ANumVarT = 0;
                 byte ACatVarT = 0;
 
@@ -39,7 +39,7 @@ namespace NPC_Maker.NewScriptParser
                             ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2, ANumVarT);
 
                             ACatVarT = ScriptHelpers.GetVarType(SplitLine, 3);
-                            ActorCat = (UInt16)ScriptHelpers.Helper_GetActorCategory(SplitLine, 3, ACatVarT);
+                            ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 3, ACatVarT);
 
                             break;
                         }

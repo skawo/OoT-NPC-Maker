@@ -468,17 +468,17 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static UInt32 Helper_GetActorCategory(string[] SplitLine, int Index, int VarType)
+        public static Int32 Helper_GetActorCategory(string[] SplitLine, int Index, int VarType)
         {
             try
             {
-                return Convert.ToUInt32(Dicts.ActorCategories[SplitLine[Index].ToUpper()]);
+                return Convert.ToInt32(Dicts.ActorCategories[SplitLine[Index].ToUpper()]);
             }
             catch (Exception)
             {
                 try
                 {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, 11));
+                    return Convert.ToInt32(GetValueByType(SplitLine, Index, VarType, 0, 11));
                 }
                 catch (Exception)
                 {

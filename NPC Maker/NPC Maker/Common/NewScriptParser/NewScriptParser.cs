@@ -256,7 +256,10 @@ namespace NPC_Maker.NewScriptParser
                         continue;
                     }
 
-                    int InstructionID = (int)System.Enum.Parse(typeof(Lists.Instructions), SplitLine[0].ToUpper());
+                    int InstructionID = -1;
+
+                    if (Enum.IsDefined(typeof(Lists.Instructions), SplitLine[0].ToUpper()))
+                        InstructionID = (int)System.Enum.Parse(typeof(Lists.Instructions), SplitLine[0].ToUpper());
 
                     switch (InstructionID)
                     {

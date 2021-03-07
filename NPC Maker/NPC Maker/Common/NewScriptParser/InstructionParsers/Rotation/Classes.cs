@@ -7,7 +7,7 @@ namespace NPC_Maker.NewScriptParser
 {
     public class InstructionRotation : InstructionSub
     {
-        public UInt32 ActorCat;
+        public Int32 ActorCat;
         public UInt32 ActorID;
         public Int32 X;
         public Int32 Y;
@@ -18,7 +18,7 @@ namespace NPC_Maker.NewScriptParser
         public byte ActorIDT;
         public byte ActorCatT;
 
-        public InstructionRotation(byte _SubID, UInt32 _ActorID, byte _ActorIDT, UInt32 _ActorCat, byte _ActorCatT, Int32 _XRot, Int32 _YRot, Int32 _ZRot,
+        public InstructionRotation(byte _SubID, UInt32 _ActorID, byte _ActorIDT, Int32 _ActorCat, byte _ActorCatT, Int32 _XRot, Int32 _YRot, Int32 _ZRot,
                                    byte _XRotValueType, byte _YRotValueType, byte _ZRotValueType)
                                 : base((int)Lists.Instructions.ROTATION, _SubID)
         {

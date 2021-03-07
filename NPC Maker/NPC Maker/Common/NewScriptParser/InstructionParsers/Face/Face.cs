@@ -18,11 +18,11 @@ namespace NPC_Maker.NewScriptParser
                 byte TargetType = 0;
 
                 UInt32 ActorNum1 = 0;
-                UInt32 ActorCat1 = 0;
+                Int32 ActorCat1 = 0;
                 byte ANumVarT1 = 0;
                 byte ACatVarT1 = 0;
                 UInt32 ActorNum2 = 0;
-                UInt32 ActorCat2 = 0;
+                Int32 ActorCat2 = 0;
                 byte ANumVarT2 = 0;
                 byte ACatVarT2 = 0;
 
@@ -37,6 +37,9 @@ namespace NPC_Maker.NewScriptParser
                             FaceType = GetFaceType(SplitLine, 3);
                             TargetType = (byte)GetActor(SplitLine, 4, ref ActorNum2, ref ActorCat2, ref ANumVarT1, ref ACatVarT2);
 
+                            if (TargetType == SubjectType && ActorNum1 == ActorNum2)
+                                throw ParseException.FaceCantBeSame(SplitLine);
+
                             break;
                         }
                     case (byte)Lists.TargetActorSubtypes.ACTOR_ID:
@@ -45,6 +48,9 @@ namespace NPC_Maker.NewScriptParser
 
                             FaceType = GetFaceType(SplitLine, 4);
                             TargetType = (byte)GetActor(SplitLine, 5, ref ActorNum2, ref ActorCat2, ref ANumVarT1, ref ACatVarT2);
+
+                            if (TargetType == SubjectType && ActorNum1 == ActorNum2)
+                                throw ParseException.FaceCantBeSame(SplitLine);
 
                             break;
                         }
@@ -55,6 +61,9 @@ namespace NPC_Maker.NewScriptParser
 
                             FaceType = GetFaceType(SplitLine, 2);
                             TargetType = (byte)GetActor(SplitLine, 3, ref ActorNum2, ref ActorCat2, ref ANumVarT1, ref ACatVarT2);
+
+                            if (TargetType == SubjectType)
+                                throw ParseException.FaceCantBeSame(SplitLine);
 
                             break;
                         }
@@ -81,7 +90,7 @@ namespace NPC_Maker.NewScriptParser
             return (byte)ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.FaceSubtypes), Index);
         }
 
-        private int GetActor(string[] SplitLine, int Index, ref UInt32 NumActor, ref UInt32 NumCat, ref byte NumActorT, ref byte NumCatT)
+        private int GetActor(string[] SplitLine, int Index, ref UInt32 NumActor, ref Int32 NumCat, ref byte NumActorT, ref byte NumCatT)
         {
             int Type = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes), Index);
 
@@ -89,21 +98,21 @@ namespace NPC_Maker.NewScriptParser
             {
                 case (int)Lists.TargetActorSubtypes.CONFIG_ID:
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 1);
+                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 2);
 
-                        NumActorT = ScriptHelpers.GetVarType(SplitLine, 2);
-                        NumActor = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2, NumActorT);
+                        NumActorT = ScriptHelpers.GetVarType(SplitLine, Index + 1);
+                        NumActor = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, Index + 1, NumActorT, 0, UInt16.MaxValue));
                         break;
                     }
                 case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                     {
-                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 2);
+                        ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 3);
 
-                        NumActorT = ScriptHelpers.GetVarType(SplitLine, 2);
-                        NumActor = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2, NumActorT);
+                        NumActorT = ScriptHelpers.GetVarType(SplitLine, Index + 1);
+                        NumActor = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, Index + 1, NumActorT);
 
-                        NumCatT = ScriptHelpers.GetVarType(SplitLine, 3);
-                        NumCat = (UInt16)ScriptHelpers.Helper_GetActorCategory(SplitLine, 3, NumCatT);
+                        NumCatT = ScriptHelpers.GetVarType(SplitLine, Index + 2);
+                        NumCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, Index + 2, NumCatT);
 
                         break;
                     }

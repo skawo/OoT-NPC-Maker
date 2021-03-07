@@ -18,7 +18,7 @@ namespace NPC_Maker.NewScriptParser
                 byte ActorNumT = 0;
                 byte ActorCatT = 0;
                 UInt32 ActorNum = 0;
-                UInt32 ActorCat = 0;
+                Int32 ActorCat = 0;
                 float XPos = 0;
                 float YPos = 0;
                 float ZPos = 0;
@@ -47,7 +47,7 @@ namespace NPC_Maker.NewScriptParser
                                             ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
 
                                             ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
-                                            ActorCat = (UInt32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
+                                            ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
 
 
                                             ScriptHelpers.GetXYZPos(SplitLine, 5, 6, 7, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);

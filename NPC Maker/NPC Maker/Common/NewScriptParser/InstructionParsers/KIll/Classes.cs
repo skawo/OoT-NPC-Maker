@@ -8,12 +8,12 @@ namespace NPC_Maker.NewScriptParser
     public class InstructionKill : Instruction
     {
         public UInt32 ActorID;
-        public UInt32 ActorCat;
+        public Int32 ActorCat;
         public byte AIDVarT;
         public byte ACatVarT;
         public byte SubID;
 
-        public InstructionKill(byte _SubID, UInt32 _ActorID, byte _AIDVarT, UInt32 _ActorCat, byte _ACatVarT) : base((byte)Lists.Instructions.KILL)
+        public InstructionKill(byte _SubID, UInt32 _ActorID, byte _AIDVarT, Int32 _ActorCat, byte _ACatVarT) : base((byte)Lists.Instructions.KILL)
         {
             ActorID = _ActorID;
             ActorCat = _ActorCat;

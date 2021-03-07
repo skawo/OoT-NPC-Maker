@@ -17,7 +17,7 @@ namespace NPC_Maker.NewScriptParser
 
                 UInt32 ActorNum = 0;
                 byte ActorNumT = 0;
-                UInt32 ActorCat = 0;
+                Int32 ActorCat = 0;
                 byte ActorCatT = 0;
                 float Scale = 0;
                 byte ScaleT = 0;
@@ -43,7 +43,7 @@ namespace NPC_Maker.NewScriptParser
                                             ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
 
                                             ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
-                                            ActorCat = (UInt32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
+                                            ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
 
                                             ScriptHelpers.GetScale(SplitLine, 5, ref ScaleT, ref Scale);
 

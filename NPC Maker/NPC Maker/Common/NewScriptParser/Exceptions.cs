@@ -39,6 +39,7 @@ namespace NPC_Maker.NewScriptParser
             return GeneralError(String.Join(" ", _Line));
         }
 
+
         public static ParseException UnrecognizedFunctionSubtype(string[] _Line)
         {
             return new ParseException("Unrecognized function subtype: ", String.Join(" ", _Line));
@@ -107,6 +108,16 @@ namespace NPC_Maker.NewScriptParser
         public static ParseException TradeNotClosed(string _Line)
         {
             return new ParseException("This TRADE does not have a corresponding ENDTRADE: ", _Line);
+        }
+
+        public static ParseException FaceCantBeSame(string _Line)
+        {
+            return new ParseException("Subject and target cannot be the same: ", _Line);
+        }
+
+        public static ParseException FaceCantBeSame(string[] _Line)
+        {
+            return FaceCantBeSame(String.Join(" ", _Line));
         }
 
         public static ParseException TalkNotClosed(string[] _Line)

@@ -7,14 +7,14 @@ namespace NPC_Maker.NewScriptParser
 {
     public class InstructionScale : InstructionSub
     {
-        public UInt32 ActorCat;
+        public Int32 ActorCat;
         public UInt32 ActorID;
         public float Scale;
         public byte ScaleType;
         public byte ActorIDT;
         public byte ActorCatT;
 
-        public InstructionScale(byte _SubID, UInt32 _ActorID, byte _ActorIDT, UInt32 _ActorCat, byte _ActorCatT, float _Scale, byte _ScaleType)
+        public InstructionScale(byte _SubID, UInt32 _ActorID, byte _ActorIDT, Int32 _ActorCat, byte _ActorCatT, float _Scale, byte _ScaleType)
                                 : base((int)Lists.Instructions.SCALE, _SubID)
         {
             ActorCat = _ActorCat;

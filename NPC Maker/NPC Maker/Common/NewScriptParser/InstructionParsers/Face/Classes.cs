@@ -12,18 +12,18 @@ namespace NPC_Maker.NewScriptParser
         public byte Target;
 
         public UInt32 SubjectActor;
-        public UInt32 SubjectActorCat;
+        public Int32 SubjectActorCat;
         public byte SubjectActorT;
         public byte SubjectActorCatT;
 
         public UInt32 TargetActor;
-        public UInt32 TargetActorCat;
+        public Int32 TargetActorCat;
         public byte TargetActorT;
         public byte TargetActorCatT;
 
         public InstructionFace(byte _Subject, byte _FaceType, byte _Target, 
-                               UInt32 _SubjectActor, UInt32 _SubjectActorCat, byte _SubjectActorT, byte _SubjectActorCatT,
-                               UInt32 _TargetActor, UInt32 _TargetActorCat, byte _TargetActorT, byte _TargetActorCatT) : base((byte)Lists.Instructions.FACE)
+                               UInt32 _SubjectActor, Int32 _SubjectActorCat, byte _SubjectActorT, byte _SubjectActorCatT,
+                               UInt32 _TargetActor, Int32 _TargetActorCat, byte _TargetActorT, byte _TargetActorCatT) : base((byte)Lists.Instructions.FACE)
         {
             Subject = _Subject;
             FaceType = _FaceType;

@@ -59,10 +59,11 @@ namespace NPC_Maker.NewScriptParser
 
                             Else = EndIf;
 
-                            Instructions.Add(new InstructionLabel("__WHILE__" + LabelR));
+                            Instructions.Add(new InstructionGoto("__IFTRUE__" + LabelR));
                             Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
-                            Instructions.Add(new InstructionGoto("__RETURN__"));
-                            Instructions.Add(new InstructionGoto("__WHILE__" + LabelR));
+                            Instructions.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, (byte)Lists.VarTypes.Normal));
+                            Instructions.Add(new InstructionGoto("__IFTRUE__" + LabelR));
+                            Instructions.Add(new InstructionGoto("__IFFALSE__" + LabelR));
                             break;
                         }
                     default:
