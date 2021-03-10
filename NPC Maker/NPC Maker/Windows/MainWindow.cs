@@ -185,7 +185,7 @@ namespace NPC_Maker
                 if (ReusableTabPages.Count != 0)
                 {
                     Page = ReusableTabPages.First();
-                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked);
+                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
                     ReusableTabPages.Remove(Page);
                 }
                 else
@@ -193,7 +193,7 @@ namespace NPC_Maker
                     Page = new TabPage(ScriptT.Name) { Tag = "SCRIPT" };
                     TabControl.TabPages.Add(Page);
 
-                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked) { Dock = DockStyle.Fill };
+                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked) { Dock = DockStyle.Fill };
                     Page.Controls.Add(Se);
                 }
             }
@@ -418,6 +418,19 @@ namespace NPC_Maker
             }
         }
 
+        private void checkSyntaxToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (TabPage Page in TabControl.TabPages)
+            {
+                if ((string)Page.Tag == "SCRIPT")
+                {
+                    if (Page.Controls.Count != 0)
+                        (Page.Controls[0] as ScriptEditor).SetAutoParsing((sender as ToolStripMenuItem).Checked);
+
+                }
+            }
+        }
+
         private void FileMenu_Click(object sender, EventArgs e)
         {
             //hack
@@ -453,7 +466,7 @@ namespace NPC_Maker
             ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
             SelectedEntry.Scripts.Add(Sc);
 
-            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, Sc, syntaxHighlightingToolStripMenuItem.Checked)
+            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, Sc, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
             {
                 Dock = DockStyle.Fill
             };
@@ -1440,6 +1453,5 @@ namespace NPC_Maker
         */
 
         #endregion
-
     }
 }

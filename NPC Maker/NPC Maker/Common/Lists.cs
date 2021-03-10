@@ -277,6 +277,7 @@ namespace NPC_Maker
             LAST_ITEM_USED = 46,
             BUTTON_PRESSED = 47,
             BUTTON_HELD = 48,
+            TARGETTED = 49,
         }
 
         public enum ItemSubTypes

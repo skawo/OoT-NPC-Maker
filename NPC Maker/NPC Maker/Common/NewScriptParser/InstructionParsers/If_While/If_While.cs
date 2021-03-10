@@ -115,6 +115,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.IfSubTypes.CURRENT_ANIM_WALKING:
                         case (int)Lists.IfSubTypes.PLAYER_HAS_MAGIC:
                         case (int)Lists.IfSubTypes.ATTACKED:
+                        case (int)Lists.IfSubTypes.TARGETTED:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 

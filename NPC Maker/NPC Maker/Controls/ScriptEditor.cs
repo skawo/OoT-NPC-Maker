@@ -15,18 +15,32 @@ namespace NPC_Maker
     {
         private NPCEntry Entry;
         private bool SyntaxHighlighting;
+        private bool AutoParse;
         public ScriptEntry Script;
 
-        public ScriptEditor(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting)
+        private System.Windows.Forms.Timer AutoParseTimer;
+        private System.Windows.Forms.Timer ColorizeTimer;
+
+        public ScriptEditor(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
             InitializeComponent();
-            Init(ref _Entry, _Script, _SyntaxHighlighting);
+
+            AutoParseTimer = new System.Windows.Forms.Timer();
+            AutoParseTimer.Interval = 1000;
+            AutoParseTimer.Tick += AutoParseTimer_Tick;
+
+            ColorizeTimer = new System.Windows.Forms.Timer();
+            ColorizeTimer.Interval = 500;
+            ColorizeTimer.Tick += ColorizeTimer_Tick;
+
+            Init(ref _Entry, _Script, _SyntaxHighlighting, _AutoParse);
         }
 
-        public void Init(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting)
+        public void Init(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
             Entry = _Entry;
             SyntaxHighlighting = _SyntaxHighlighting;
+            AutoParse = _AutoParse;
             Script = _Script;
 
             Textbox_Script.Text = Script.Text;
@@ -36,10 +50,25 @@ namespace NPC_Maker
             if (Script.ParseErrors.Count == 0)
                 Textbox_ParseErrors.Text = "Parsed successfully!";
             else
-            {
-                foreach (string Error in Script.ParseErrors)
-                    Textbox_ParseErrors.Text += Error + Environment.NewLine;
-            }
+                Textbox_ParseErrors.Text = String.Join(Environment.NewLine, Script.ParseErrors);
+
+
+        }
+
+        private void AutoParseTimer_Tick(object sender, EventArgs e)
+        {
+            AutoParseTimer.Stop();
+
+            if (AutoParse)
+                DoParse();
+
+            FCTB.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
+        }
+
+        private void ColorizeTimer_Tick(object sender, EventArgs e)
+        {
+            ColorizeTimer.Stop();
+            FCTB.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
         }
 
         public void SetSyntaxHighlighting(bool Value)
@@ -48,16 +77,25 @@ namespace NPC_Maker
             Textbox_Script_TextChanged(Textbox_Script, new TextChangedEventArgs(new Range(Textbox_Script)));
         }
 
+        public void SetAutoParsing(bool Value)
+        {
+            AutoParse = Value;
+        }
+
         private void Textbox_Script_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             if (Entry == null)
                 return;
 
-            Script.Text = (sender as FastColoredTextBox).Text;
-            FCTB.ApplySyntaxHighlight(sender as FastColoredTextBox, e, SyntaxHighlighting);
+            Script.Text = Textbox_Script.Text;
+
+            AutoParseTimer.Stop();
+            AutoParseTimer.Start();
+            ColorizeTimer.Stop();
+            ColorizeTimer.Start();
         }
 
-        private void Button_TryParse_Click(object sender, EventArgs e)
+        private NewScriptParser.BScript DoParse()
         {
             string[] Lines = Textbox_Script.Text.Replace(";", Environment.NewLine).Split(new[] { "\n" }, StringSplitOptions.None);
             Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
@@ -69,6 +107,17 @@ namespace NPC_Maker
             Script.ParseErrors.Clear();
             NewScriptParser.BScript Output = Parser.ParseScript();
 
+            if (Output.ParseErrors.Count() == 0)
+                Textbox_ParseErrors.Text = "Parsed successfully!";
+            else
+                Textbox_ParseErrors.Text = String.Join(Environment.NewLine, Output.ParseErrors);
+
+            return Output;
+        }
+
+        private void Button_TryParse_Click(object sender, EventArgs e)
+        {
+            NewScriptParser.BScript Output =  DoParse();
 
 #if DEBUG
 
@@ -76,16 +125,7 @@ namespace NPC_Maker
             Dbg.Show();
 
 #endif
-            if (Output.ParseErrors.Count() == 0)
-                Textbox_ParseErrors.Text = "Parsed successfully!";
-            else
-            {
-                foreach (NewScriptParser.ParseException Error in Output.ParseErrors)
-                {
-                    Script.ParseErrors.Add(Error.ToString());
-                    Textbox_ParseErrors.Text += Error.ToString() + Environment.NewLine;
-                }
-            }
+
         }
 
 

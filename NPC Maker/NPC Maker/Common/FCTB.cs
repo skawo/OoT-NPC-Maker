@@ -19,12 +19,6 @@ namespace NPC_Maker
         public static Style MPurpleStyle = new TextStyle(Brushes.MediumPurple, null, FontStyle.Regular);
         public static Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
         public static Style DarkGrayStyle = new TextStyle(Brushes.DarkGray, null, FontStyle.Regular);
-
-        internal static void ApplySyntaxHighlight(FastColoredTextBox fastColoredTextBox, TextChangedEventArgs e, object syntaxHighlighting)
-        {
-            throw new NotImplementedException();
-        }
-
         public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Bold);
         public static Style BoldRedStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
         public static Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
@@ -58,7 +52,7 @@ namespace NPC_Maker
             { @"#define.+", FCTB.GreenStyle},               // Defines
         };
 
-        public static void ApplySyntaxHighlight(FastColoredTextBox txb, TextChangedEventArgs e, bool SyntaxHighlightingOn)
+        public static void ApplySyntaxHighlight(FastColoredTextBox txb, bool SyntaxHighlightingOn)
         {
             if (String.IsNullOrEmpty(txb.Text))
                 return;
