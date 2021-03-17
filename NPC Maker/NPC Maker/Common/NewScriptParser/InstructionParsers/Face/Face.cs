@@ -37,7 +37,7 @@ namespace NPC_Maker.NewScriptParser
                             FaceType = GetFaceType(SplitLine, 3);
                             TargetType = (byte)GetActor(SplitLine, 4, ref ActorNum2, ref ActorCat2, ref ANumVarT1, ref ACatVarT2);
 
-                            if (TargetType == SubjectType && ActorNum1 == ActorNum2)
+                            if (TargetType == SubjectType && ActorNum1 == ActorNum2 && ANumVarT1 == ANumVarT2)
                                 throw ParseException.FaceCantBeSame(SplitLine);
 
                             break;
@@ -49,7 +49,7 @@ namespace NPC_Maker.NewScriptParser
                             FaceType = GetFaceType(SplitLine, 4);
                             TargetType = (byte)GetActor(SplitLine, 5, ref ActorNum2, ref ActorCat2, ref ANumVarT1, ref ACatVarT2);
 
-                            if (TargetType == SubjectType && ActorNum1 == ActorNum2)
+                            if (TargetType == SubjectType && ActorNum1 == ActorNum2 && ANumVarT1 == ANumVarT2)
                                 throw ParseException.FaceCantBeSame(SplitLine);
 
                             break;

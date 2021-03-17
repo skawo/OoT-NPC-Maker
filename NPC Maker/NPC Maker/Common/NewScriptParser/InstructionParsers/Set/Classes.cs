@@ -8,11 +8,13 @@ namespace NPC_Maker.NewScriptParser
     public class InstructionSet : InstructionSubWValueType
     {
         public object Value;
+        public byte Operator;
 
-        public InstructionSet(byte _SubID, object _Value, byte _ValueType)
+        public InstructionSet(byte _SubID, object _Value, byte _ValueType, byte _Operator)
                              : base((int)Lists.Instructions.SET, _SubID, _ValueType)
         {
             Value = _Value;
+            Operator = _Operator;
         }
 
         public override byte[] ToBytes()
@@ -22,7 +24,7 @@ namespace NPC_Maker.NewScriptParser
             DataHelpers.AddObjectToByteList(ID, Data);
             DataHelpers.AddObjectToByteList(SubID, Data);
             DataHelpers.AddObjectToByteList(ValueType, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            DataHelpers.AddObjectToByteList(Operator, Data);
             DataHelpers.AddObjectToByteList(Value, Data);
             DataHelpers.Ensure2ByteAlign(Data);
 

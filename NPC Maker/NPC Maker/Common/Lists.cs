@@ -19,6 +19,7 @@ namespace NPC_Maker
         public const string Keyword_EndIf = "ENDIF";
         public const string Keyword_EndWhile = "ENDWHILE";
         public const string Keyword_EndSpawn = "ENDSPAWN";
+        public const string Keyword_EndParticle = "ENDPARTICLE";
         public const string Keyword_EndTalk = "ENDTALK";
         public const string Keyword_EndTrade = "ENDTRADE";
         public const string Keyword_EndTradeFailure = "ENDFAILURE";
@@ -55,6 +56,7 @@ namespace NPC_Maker
             Keyword_EndIf,
             Keyword_EndWhile,
             Keyword_EndSpawn,
+            Keyword_EndParticle,
             Keyword_EndTalk,
             Keyword_EndTrade,
             Keyword_EndTradeFailure,
@@ -89,6 +91,28 @@ namespace NPC_Maker
         public static List<string> KeywordsPurple = new List<string>()
         {
             Keyword_Else,
+            ParticleSubOptions.ACCEL.ToString(),
+            ParticleSubOptions.ACCELERATION.ToString(),
+            ParticleSubOptions.ALPHA.ToString(),
+            ParticleSubOptions.COLOR1.ToString(),
+            ParticleSubOptions.COLOR2.ToString(),
+            ParticleSubOptions.DETECTED_LABEL.ToString(),
+            ParticleSubOptions.DLIST.ToString(),
+            ParticleSubOptions.DURATION.ToString(),
+            ParticleSubOptions.LIGHTPOINT_COLOR.ToString(),
+            ParticleSubOptions.NUM_BOLTS.ToString(),
+            ParticleSubOptions.POSITION.ToString(),
+            ParticleSubOptions.RADIUS.ToString(),
+            ParticleSubOptions.RADIUS_UPDATE.ToString(),
+            ParticleSubOptions.RADIUS_UPDATE_DOWN.ToString(),
+            ParticleSubOptions.SCALE.ToString(),
+            ParticleSubOptions.SCALE_UPDATE.ToString(),
+            ParticleSubOptions.TYPE.ToString(),
+            ParticleSubOptions.VELOCITY.ToString(),
+            ParticleSubOptions.YAW.ToString(),
+            SpawnParams.VARIABLE.ToString(),
+            SpawnParams.ACTOR.ToString(),
+            SpawnParams.ROTATION.ToString(),
         };
 
         public static List<string> KeywordsMPurple = new List<string>()
@@ -98,6 +122,7 @@ namespace NPC_Maker
             Keyword_EndSpawn,
             Keyword_EndTalk,
             Keyword_EndTrade,
+            Keyword_EndParticle,
         };
 
         public static List<string> KeywordsRed = new List<string>()
@@ -440,7 +465,7 @@ namespace NPC_Maker
 
         public enum SpawnParams
         {
-            ACTOR_ID,
+            ACTOR,
             POSITION,
             ROTATION,
             VARIABLE,
@@ -1163,6 +1188,71 @@ namespace NPC_Maker
             QUEST_SKULL_TOKEN,
             /* 0x18 */
             QUEST_HEART_PIECE
+        }
+
+        public enum ParticleTypes
+        {
+            DUST,
+            CIRCLE_SMOKE,
+            CIRCLE_SMOKE2,
+            RING,
+            SPARK,
+            SPARK2,
+            DODONGO_FIRE,
+            LIGHTNING,
+            BUBBLE,
+            DISPLAY_LIST,
+            WATER_SPLASH,
+            SMOKE,
+            GROUND_FLASH,
+            GROUND_FLASH2,
+            DUST2,
+            GROUND_SPARK,
+            GROUND_SPARK2,
+            LIGHT_POINT,
+            RED_FLAME,
+            SEARCH_EFFECT,
+            ICE_CHUNK,
+            ICE_BURST,
+            SCORE,
+            FLAME,
+            BURN_MARK,
+            ICE_SMOKE,
+        }
+
+        public enum ParticleSubOptions
+        {
+            TYPE,
+            POSITION,
+            VELOCITY,
+            ACCEL,
+            ACCELERATION,
+            COLOR1,
+            COLOR2,
+            SCALE,
+            SCALE_UPDATE,
+            RADIUS,
+            RADIUS_UPDATE,
+            RADIUS_UPDATE_DOWN,
+            DURATION,
+            NUM_BOLTS,
+            YAW,
+            DLIST,
+            LIGHTPOINT_COLOR,
+            DETECTED_LABEL,
+            ALPHA
+        }
+
+        public enum LightPointColors
+        {
+            WHITE = 0,
+            BLUE = 1,
+            RED = 2,
+            YELLOW = 3,
+            PURPLE = 4,
+            PINK = 5,
+            ORANGE = 6,
+            GRAY = 7
         }
 
         public enum DungeonItems

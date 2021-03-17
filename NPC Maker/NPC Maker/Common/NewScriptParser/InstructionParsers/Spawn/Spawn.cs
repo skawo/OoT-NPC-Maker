@@ -49,11 +49,14 @@ namespace NPC_Maker.NewScriptParser
                     if (Split.Count() == 0)
                         continue;
 
+                    if (!Enum.IsDefined(typeof(Lists.SpawnParams), Split[0].ToUpper()))
+                        throw ParseException.UnrecognizedFunctionSubtype(Split);
+
                     int SubID = (int)System.Enum.Parse(typeof(Lists.SpawnParams), Split[0].ToUpper());
 
                     switch (SubID)
                     {
-                        case (int)Lists.SpawnParams.ACTOR_ID:
+                        case (int)Lists.SpawnParams.ACTOR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 

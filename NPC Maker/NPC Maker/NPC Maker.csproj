@@ -110,6 +110,8 @@
     <Compile Include="Common\NewScriptParser\InstructionParsers\Scale\Scale.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Rotation\Classes.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Rotation\Rotation.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Particle\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Particle\Particle.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Controls\InputBox.cs" />
     <Compile Include="Controls\ScriptContextMenu.cs" />

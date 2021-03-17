@@ -86,7 +86,7 @@ namespace NPC_Maker.NewScriptParser
                                 else
                                     Val = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, 1));
 
-                                return new InstructionSet((byte)SubID, Val, VarType);
+                                return new InstructionSet((byte)SubID, Val, VarType, 0);
                             }
                         case (int)Lists.SetSubTypes.TARGET_LIMB:
                         case (int)Lists.SetSubTypes.TARGET_DISTANCE:
@@ -330,17 +330,18 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.TIMED_PATH_START_TIME:
                         case (int)Lists.SetSubTypes.TIMED_PATH_END_TIME:
                             {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 2);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 UInt32 Time = 0;
 
                                 if (VarType == (int)Lists.VarTypes.Normal)
-                                    Time = ScriptHelpers.GetOcarinaTime(SplitLine, 2);
+                                    Time = ScriptHelpers.GetOcarinaTime(SplitLine, 3);
                                 else
-                                    Time = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue));
+                                    Time = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue));
 
-                                return new InstructionSet((byte)SubID, Time, VarType);
+                                return new InstructionSet((byte)SubID, Time, VarType, Operator);
                             }
                         case (int)Lists.SetSubTypes.EXT_VAR_1:
                         case (int)Lists.SetSubTypes.EXT_VAR_2:
@@ -365,7 +366,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionSet(0, 0, 0);
+                    return new InstructionSet(0, 0, 0, 0);
                 }
 
             }
@@ -405,29 +406,31 @@ namespace NPC_Maker.NewScriptParser
             byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
             UInt32? Data = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enum, Throw);
 
-            return new InstructionSet((byte)SubID, Data, VarType);
+            return new InstructionSet((byte)SubID, Data, VarType, 0);
         }
 
         private Instruction H_SimpleSet(int SubID, string[] SplitLine, int Min, int Max, Type ConvertType)
         {
-            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
-            byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
+            byte Operator = ScriptHelpers.GetOperator(SplitLine, 2);
+
+            byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
             object Data;
 
             if (ConvertType == typeof(UInt32))
-                Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, Min, Max));
+                Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, Min, Max));
             else if (ConvertType == typeof(float))
-                Data = (float)(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, float.MinValue, float.MaxValue));
+                Data = (float)(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue));
             else
-                Data = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, Min, Max));
+                Data = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, Min, Max));
 
 
             if (Data == null)
                 throw ParseException.ParamConversionError(SplitLine);
 
 
-            return new InstructionSet((byte)SubID, Data, VarType);
+            return new InstructionSet((byte)SubID, Data, VarType, Operator);
         }
     }
 }

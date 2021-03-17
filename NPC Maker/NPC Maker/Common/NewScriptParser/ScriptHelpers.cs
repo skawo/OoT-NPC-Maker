@@ -103,6 +103,22 @@ namespace NPC_Maker.NewScriptParser
             ZPos = (float)Convert.ToDecimal((ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Int32.MinValue, Int32.MaxValue)));
         }
 
+        public static void GetRGBA(string[] SplitLine, int StartIndex, ref UInt32[] Output, ref byte[] TypeOutPut)
+        {
+            Output = new UInt32[] { 0, 0, 0, 0 };
+            TypeOutPut = new byte[] { 0, 0, 0, 0 };
+
+            TypeOutPut[0] = GetVarType(SplitLine, StartIndex);
+            TypeOutPut[1] = GetVarType(SplitLine, StartIndex + 1);
+            TypeOutPut[2] = GetVarType(SplitLine, StartIndex + 2);
+            TypeOutPut[3] = GetVarType(SplitLine, StartIndex + 3);
+
+            Output[0] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex, TypeOutPut[0], 0, 255));
+            Output[1] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex + 1, TypeOutPut[1], 0, 255));
+            Output[2] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex + 2, TypeOutPut[2], 0, 255));
+            Output[3] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex + 3, TypeOutPut[3], 0, 255));
+        }
+
         public static void GetScale(string[] SplitLine, int Index, ref byte ScaleVarT, ref float Scale)
         {
             Scale = (float)Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, Index, ScaleVarT = ScriptHelpers.GetVarType(SplitLine, Index), float.MinValue, float.MaxValue));

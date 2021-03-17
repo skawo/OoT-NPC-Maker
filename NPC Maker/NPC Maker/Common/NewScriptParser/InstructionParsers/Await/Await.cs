@@ -103,7 +103,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionSet(0, 0, 0);
+                    return new InstructionAwait(0, 0, 0);
                 }
             }
             catch (Exception)

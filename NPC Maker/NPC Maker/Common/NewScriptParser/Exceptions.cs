@@ -115,6 +115,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Subject and target cannot be the same: ", _Line);
         }
 
+        public static ParseException ParticleNotClosed(string _Line)
+        {
+            return new ParseException("This PARTICLE does not have a corresponding ENDPARTICLE: ", _Line);
+        }
+
         public static ParseException FaceCantBeSame(string[] _Line)
         {
             return FaceCantBeSame(String.Join(" ", _Line));
@@ -148,6 +153,11 @@ namespace NPC_Maker.NewScriptParser
         public static ParseException SpawnNotClosed(string[] _Line)
         {
             return SpawnNotClosed(String.Join(" ", _Line));
+        }
+
+        public static ParseException ParticleNotClosed(string[] _Line)
+        {
+            return ParticleNotClosed(String.Join(" ", _Line));
         }
 
         public static ParseException IfNotClosed(string[] _Line)
@@ -219,6 +229,11 @@ namespace NPC_Maker.NewScriptParser
         public static ParseException UnrecognizedQuestItem(string[] _Line)
         {
             return new ParseException("Not a valid quest item: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedParticle(string[] _Line)
+        {
+            return new ParseException("Not a valid particle type: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedButton(string[] _Line)
