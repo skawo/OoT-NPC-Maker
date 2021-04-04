@@ -29,6 +29,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Problem with procedures.", "");
         }
 
+        public static ParseException ScriptTooBigError()
+        {
+            return new ParseException("Script has exceeded the maximum allowed amount of bytes.", "");
+        }
+
         public static ParseException DefineError()
         {
             return new ParseException("Problem with defines.", "");
@@ -60,9 +65,14 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Label name cannot be using a keyword: ", _Line);
         }
 
+        public static ParseException LabelNotFound(string _Line)
+        {
+            return new ParseException("Label not found: ", _Line);
+        }
+
         public static ParseException LabelNotFound(string[] _Line)
         {
-            return new ParseException("Label not found: ", String.Join(" ", _Line));
+            return ParseException.LabelNotFound(String.Join(" ", _Line));
         }
 
         public static ParseException LabelNameCannotBe(string[] _Line)

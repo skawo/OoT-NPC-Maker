@@ -7,13 +7,13 @@ namespace NPC_Maker.NewScriptParser
 {
     public class BScript
     {
-        public List<byte> Script { get; set; }
+        public byte[] Script { get; set; }
         public List<string> ScriptDebug { get; set; }
         public List<ParseException> ParseErrors { get; set;}
 
         public BScript()
         {
-            Script = new List<byte>();
+            Script = new byte[0];
             ScriptDebug = new List<string>();
             ParseErrors = new List<ParseException>();
         }

@@ -24,37 +24,37 @@ namespace NPC_Maker.NewScriptParser
             ChildTextT = _ChildTextT;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(AdultTextT, ChildTextT, 4), Data);
-            DataHelpers.AddObjectToByteList(Convert.ToUInt16(Failure.Count), Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(AdultTextT, ChildTextT, 4), Data);
+            Helpers.AddObjectToByteList(Convert.ToUInt16(Failure.Count), Data);
 
-            DataHelpers.AddObjectToByteList(AdultText, Data);
-            DataHelpers.AddObjectToByteList(ChildText, Data);
+            Helpers.AddObjectToByteList(AdultText, Data);
+            Helpers.AddObjectToByteList(ChildText, Data);
 
-            DataHelpers.AddObjectToByteList(Correct.Item, Data);
-            DataHelpers.AddObjectToByteList(Correct.AdultText, Data);
-            DataHelpers.AddObjectToByteList(Correct.ChildText, Data);
-            DataHelpers.AddObjectToByteList(Correct.ItemT, Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(Correct.AdultTextT, Correct.ChildTextT, 4), Data);
-            DataHelpers.Ensure2ByteAlign(Data); // 26
+            Helpers.AddObjectToByteList(Correct.Item, Data);
+            Helpers.AddObjectToByteList(Correct.AdultText, Data);
+            Helpers.AddObjectToByteList(Correct.ChildText, Data);
+            Helpers.AddObjectToByteList(Correct.ItemT, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Correct.AdultTextT, Correct.ChildTextT, 4), Data);
+            Helpers.Ensure2ByteAlign(Data); // 26
 
             foreach (TradeSetting Setting in Failure)
             {
-                DataHelpers.AddObjectToByteList(Setting.Item, Data);
-                DataHelpers.AddObjectToByteList(Setting.AdultText, Data);
-                DataHelpers.AddObjectToByteList(Setting.ChildText, Data);
-                DataHelpers.AddObjectToByteList(Setting.ItemT, Data);
-                DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(Setting.AdultTextT, Setting.ChildTextT, 4), Data);
-                DataHelpers.Ensure2ByteAlign(Data); // 14
+                Helpers.AddObjectToByteList(Setting.Item, Data);
+                Helpers.AddObjectToByteList(Setting.AdultText, Data);
+                Helpers.AddObjectToByteList(Setting.ChildText, Data);
+                Helpers.AddObjectToByteList(Setting.ItemT, Data);
+                Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Setting.AdultTextT, Setting.ChildTextT, 4), Data);
+                Helpers.Ensure2ByteAlign(Data); // 14
             }
 
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 26 + 14 * Failure.Count);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 26 + 14 * Failure.Count);
 
             return Data.ToArray();
         }

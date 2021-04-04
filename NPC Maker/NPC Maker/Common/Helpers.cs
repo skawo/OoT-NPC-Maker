@@ -9,18 +9,20 @@ namespace NPC_Maker
     {
         public static UInt16 GetOcarinaTime(string MilitaryTimeString)
         {
+            string ExceptionMsg = "Time is in wrong format!";
+
             try
             {
                 string[] HourMinute = MilitaryTimeString.Split(':');
 
                 if (HourMinute.Length != 2)
-                    throw new Exception("Time is in wrong format!");
+                    throw new Exception(ExceptionMsg);
 
                 byte Hour = Convert.ToByte(HourMinute[0]);
                 byte Minute = Convert.ToByte(HourMinute[1]);
 
                 if ((Hour > 23) || (Minute > 59))
-                    throw new Exception("Time is in wrong format!");
+                    throw new Exception(ExceptionMsg);
 
                 decimal Time = (((Hour * 60) + Minute) * (Int16.MaxValue / 1439));
 
@@ -28,7 +30,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                throw new Exception("Time is in wrong format!");
+                throw new Exception(ExceptionMsg);
             }
         }
 
@@ -38,6 +40,82 @@ namespace NPC_Maker
 
             DateTime Out = new DateTime(2000, 01, 01, 0, 0, 0);
             return Out.AddMinutes(Minutes);
+        }
+
+        public static void Ensure2ByteAlign(List<byte> ByteList)
+        {
+            while (ByteList.Count % 2 != 0)
+                ByteList.Add(0);
+        }
+
+        public static void Ensure4ByteAlign(List<byte> ByteList)
+        {
+            while (ByteList.Count % 4 != 0)
+                ByteList.Add(0);
+        }
+
+        public static byte SmooshTwoValues(byte a, byte b, int offset)
+        {
+            byte o = 0;
+
+            o |= (byte)(a << offset);
+            return o |= b;
+        }
+
+        public static void AddObjectToByteList(object Value, List<byte> ByteList)
+        {
+            if (Value.GetType() == typeof(byte))
+                ByteList.Add((byte)Value);
+            else if (Value.GetType() == typeof(sbyte))
+                ByteList.Add((byte)Value);
+            else
+            {
+                if (ByteList.Count() % 2 != 0)
+                    ByteList.Add(0);
+
+                if (Value.GetType() == typeof(UInt16))
+                    ByteList.AddRange(Program.BEConverter.GetBytes((UInt16)Value));
+                else if (Value.GetType() == typeof(Int16))
+                    ByteList.AddRange(Program.BEConverter.GetBytes((Int16)Value));
+                else
+                {
+                    while (ByteList.Count() % 2 != 0)
+                        ByteList.Add(0);
+
+                    if (Value.GetType() == typeof(UInt32))
+                        ByteList.AddRange(Program.BEConverter.GetBytes((UInt32)Value));
+                    else if (Value.GetType() == typeof(Int32))
+                        ByteList.AddRange(Program.BEConverter.GetBytes((Int32)Value));
+                    else if (Value.GetType() == typeof(float))
+                        ByteList.AddRange(Program.BEConverter.GetBytes((float)Value));
+                    else
+                    {
+                        System.Windows.Forms.MessageBox.Show(Value.GetType().ToString());
+                        throw new Exception();
+                    }
+                }
+            }
+        }
+
+        public static byte MakeByte(bool a = false, bool b = false, bool c = false, bool d = false, bool e = false, bool f = false, bool g = false, bool h = false)
+        {
+            return MakeByte(Convert.ToByte(a), Convert.ToByte(b), Convert.ToByte(c), Convert.ToByte(d), Convert.ToByte(e), Convert.ToByte(f), Convert.ToByte(g), Convert.ToByte(h));
+        }
+
+        public static byte MakeByte(byte a = 0, byte b = 0, byte c = 0, byte d = 0, byte e = 0, byte f = 0, byte g = 0, byte h = 0)
+        {
+            byte res = 0;
+
+            res |= (byte)(a << 7);
+            res |= (byte)(b << 6);
+            res |= (byte)(c << 5);
+            res |= (byte)(d << 4);
+            res |= (byte)(e << 3);
+            res |= (byte)(f << 2);
+            res |= (byte)(g << 1);
+            res |= (byte)(h << 0);
+
+            return res;
         }
     }
 }

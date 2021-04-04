@@ -106,7 +106,6 @@ namespace NPC_Maker
                 List<byte> EntryAddresses = new List<byte>();
                 List<List<byte>> EntryData = new List<List<byte>>();
                 List<string> ParseErrors = new List<string>();
-                ScriptParser Parser = new ScriptParser();
 
                 foreach (NPCEntry Entry in Data.Entries)
                 {
@@ -114,145 +113,79 @@ namespace NPC_Maker
                     {
                         List<byte> EntryBytes = new List<byte>();
 
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ObjectID));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Hierarchy));
-                        EntryBytes.AddRange(new byte[] { Entry.HierarchyType });
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ModelOffs[0]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ModelOffs[1]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ModelOffs[2]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Scale));
-
-                        EntryBytes.AddRange(new byte[] { Entry.LookAtType });
-                        EntryBytes.AddRange(new byte[] { Entry.HeadVertAxis });
-                        EntryBytes.AddRange(new byte[] { Entry.HeadHorizAxis });
-                        EntryBytes.AddRange(new byte[] { Entry.HeadLimb });
-                        EntryBytes.AddRange(new byte[] { Entry.WaistVertAxis });
-                        EntryBytes.AddRange(new byte[] { Entry.WaistHorizAxis });
-                        EntryBytes.AddRange(new byte[] { Entry.WaistLimb });
-
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.DegreesVert));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.DegreesHor));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LookAtOffs[0]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LookAtOffs[1]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LookAtOffs[2]));
-
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Shadow));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ShRadius));
-
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Collision));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Switches));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Pushable));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.AlwActive));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.AlwDraw));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.JustScript));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ReactAttacked));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.OpenDoors));
-
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColRadius));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Height));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColOffs[0]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColOffs[1]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.ColOffs[2]));
-
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Targettable));
+                        EntryBytes.Add(Entry.CutsceneID);
+                        EntryBytes.Add(Entry.HeadLimb);
+                        EntryBytes.Add(Entry.WaistLimb);
                         EntryBytes.Add(Entry.TargetLimb);
-                        EntryBytes.Add(Entry.TargetDist);
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[0]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[1]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TargOffs[2]));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TalkRadius));
-
-                        EntryBytes.AddRange(new byte[] { Entry.MovementType });
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.MovementDistance));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.MovementSpeed));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.GravityForce));
-                        EntryBytes.AddRange(new byte[] { Entry.PathID });
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopStart));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopEnd));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.LoopDel));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.Loop));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TimedPath));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TimedPathStart));
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Entry.TimedPathEnd));
-
-                        EntryBytes.AddRange(new byte[] { Entry.AnimationType });
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes((UInt16)Entry.Animations.Count()));
-
-                        foreach (AnimationEntry Anim in Entry.Animations)
-                        {
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Anim.Address));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Anim.Speed));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Anim.ObjID));
-                            EntryBytes.Add((byte)Anim.Frames[0]);
-                            EntryBytes.Add((byte)Anim.Frames[1]);
-                            EntryBytes.Add((byte)Anim.Frames[2]);
-                            EntryBytes.Add((byte)Anim.Frames[3]);
-                        }
-
-                        List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
-
-                        EntryBytes.Add((byte)NonEmptyEntries.Count);
-
-                        while (EntryBytes.Count % 4 != 0)
-                            EntryBytes.Add(0);
-
-                        int ScrOffset = 0;
-
-                        List<NewScriptParser.BScript> ParsedScripts = new List<NewScriptParser.BScript>();
-
-                        foreach (ScriptEntry Scr in NonEmptyEntries)
-                        {
-                            NewScriptParser.ScriptParser Par = new NewScriptParser.ScriptParser(Entry, Scr.Text);
-                            ParsedScripts.Add(Par.ParseScript());
-                        }
-
-                        foreach (NewScriptParser.BScript Scr in ParsedScripts)
-                        {
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(ScrOffset));
-                            ScrOffset += Scr.Script.Count;
-
-                            while (ScrOffset % 4 != 0)
-                                ScrOffset++;
-                        }
-
-                        foreach (NewScriptParser.BScript Scr in ParsedScripts)
-                        {
-                            while (EntryBytes.Count % 4 != 0)
-                                EntryBytes.Add(0);
-
-                            EntryBytes.AddRange(Scr.Script);
-
-                            while (EntryBytes.Count % 4 != 0)
-                                EntryBytes.Add(0);
-
-                            if (Scr.ParseErrors.Count != 0)
-                                if (!ParseErrors.Contains(Entry.NPCName))
-                                    ParseErrors.Add(Entry.NPCName);
-                        }
-
-                        EntryBytes.Add(Entry.EnvColor.R);
-                        EntryBytes.Add(Entry.EnvColor.G);
-                        EntryBytes.Add(Entry.EnvColor.B);
-                        EntryBytes.Add(Entry.EnvColor.A);
-
-                        /*
-                        List<OutputColorEntry> Cols = Entry.ParseColorEntries().OrderBy(x => x.LimbID).ToList();
-
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(Cols.Count()));
-
-                        foreach (OutputColorEntry Col in Cols)
-                        {
-                            EntryBytes.Add(Col.LimbID);
-                            EntryBytes.Add(Col.R);
-                            EntryBytes.Add(Col.G);
-                            EntryBytes.Add(Col.B);
-                        }
-                        */
-
-                        EntryBytes.Add(Entry.BlinkSegment);
-                        EntryBytes.Add(Entry.TalkSegment);
+                        EntryBytes.Add(Entry.PathID);
                         EntryBytes.Add(Entry.BlinkSpeed);
                         EntryBytes.Add(Entry.TalkSpeed);
+                        EntryBytes.Add(Entry.HierarchyType);
+                        EntryBytes.Add(Entry.TalkSegment);
+                        EntryBytes.Add(Entry.BlinkSegment);
+                        EntryBytes.Add(Entry.AnimationType);
+                        EntryBytes.Add(Entry.MovementType);
+                        EntryBytes.Add(Entry.WaistHorizAxis);
+                        EntryBytes.Add(Entry.WaistVertAxis);
+                        EntryBytes.Add(Entry.HeadHorizAxis);
+                        EntryBytes.Add(Entry.HeadVertAxis);
+                        EntryBytes.Add(Entry.LookAtType);
+                        EntryBytes.Add(Entry.TargetDistance);
+                        EntryBytes.Add(Entry.EnvironmentColor.R);
+                        EntryBytes.Add(Entry.EnvironmentColor.G);
+                        EntryBytes.Add(Entry.EnvironmentColor.B);
+
+                        EntryBytes.Add(Helpers.MakeByte(Entry.HasCollision,
+                                                        Entry.PushesSwitches,
+                                                        Entry.IsPushable,
+                                                        Entry.IsAlwaysActive,
+                                                        Entry.IsAlwaysDrawn,
+                                                        Entry.ExecuteJustScript,
+                                                        Entry.ReactsIfAttacked,
+                                                        Entry.OpensDoors));
+
+                        EntryBytes.Add(Helpers.MakeByte(Entry.CastsShadow,
+                                                        Entry.IsTargettable,
+                                                        Entry.LoopPath,
+                                                        Entry.PathIsTimed,
+                                                        false,
+                                                        false,
+                                                        false,
+                                                        false));
+
+                        Helpers.Ensure2ByteAlign(EntryBytes);
+
+                        EntryBytes.AddRangeBigEndian(Entry.ObjectID);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtDegreesVertical);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtDegreesHorizontal);
+                        EntryBytes.AddRangeBigEndian(Entry.CollisionRadius);
+                        EntryBytes.AddRangeBigEndian(Entry.CollisionHeight);
+                        EntryBytes.AddRangeBigEndian(Entry.ShadowRadius);
+                        EntryBytes.AddRangeBigEndian(Entry.MovementDistance);
+                        EntryBytes.AddRangeBigEndian(Entry.PathLoopStartID);
+                        EntryBytes.AddRangeBigEndian(Entry.PathLoopEndID);
+                        EntryBytes.AddRangeBigEndian(Entry.PathLoopDelayTime);
+                        EntryBytes.AddRangeBigEndian(Entry.TimedPathStart);
+                        EntryBytes.AddRangeBigEndian(Entry.TimedPathEnd);
+                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[0]);
+                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[1]);
+                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[2]);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[0]);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[1]);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[2]);
+                        EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[0]);
+                        EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[1]);
+                        EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[2]);
+                        EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[0]);
+                        EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[1]);
+                        EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[2]);
+
+                        EntryBytes.AddRangeBigEndian(Entry.ModelScale);
+                        EntryBytes.AddRangeBigEndian(Entry.TalkRadius);
+                        EntryBytes.AddRangeBigEndian(Entry.MovementSpeed);
+                        EntryBytes.AddRangeBigEndian(Entry.GravityForce);
+
+                        #region Blink and talk patterns
 
                         string[] BlinkPat = new string[0];
                         string[] TalkPat = new string[0];
@@ -263,9 +196,9 @@ namespace NPC_Maker
                         if (Entry.TalkPattern != "")
                             TalkPat = Entry.TalkPattern.Split(',');
 
-                        if (BlinkPat.Length > 6 || TalkPat.Length > 6)
+                        if (BlinkPat.Length > 4 || TalkPat.Length > 4)
                         {
-                            System.Windows.Forms.MessageBox.Show("and blinking patterns may only be 6 entries long!");
+                            System.Windows.Forms.MessageBox.Show("Talking and blinking patterns may only be 4 entries long!");
                             return;
                         }
 
@@ -305,8 +238,66 @@ namespace NPC_Maker
                                 EntryBytes.Add((byte)0xFF);
                         }
 
-                        List<byte> TextureOffsets = new List<byte>();
-                        List<byte> TextureEntries = new List<byte>();
+                        #endregion
+
+                        #region Animations
+
+                        EntryBytes.AddRangeBigEndian((UInt16)Entry.Animations.Count());
+
+                        foreach (AnimationEntry Anim in Entry.Animations)
+                        {
+                            EntryBytes.AddRangeBigEndian(Anim.ObjID);
+                            EntryBytes.Add(Anim.StartFrame);
+                            EntryBytes.Add(Anim.EndFrame);
+                            EntryBytes.AddRangeBigEndian(Anim.Address);
+                            EntryBytes.AddRangeBigEndian(Anim.Speed);
+                            Helpers.Ensure2ByteAlign(EntryBytes);
+                        }
+
+                        #endregion
+
+                        #region Extra display lists
+
+                        EntryBytes.AddRangeBigEndian((UInt16)Entry.ExtraDisplayLists.Count);
+
+                        foreach (DListEntry Dlist in Entry.ExtraDisplayLists)
+                        {
+                            EntryBytes.AddRangeBigEndian(Dlist.Address);
+                            EntryBytes.AddRangeBigEndian(Dlist.TransX);
+                            EntryBytes.AddRangeBigEndian(Dlist.TransY);
+                            EntryBytes.AddRangeBigEndian(Dlist.TransZ);
+                            EntryBytes.AddRangeBigEndian(Dlist.Scale);
+                            EntryBytes.AddRangeBigEndian(Dlist.ObjectID);
+                            EntryBytes.AddRangeBigEndian(Dlist.RotX);
+                            EntryBytes.AddRangeBigEndian(Dlist.RotY);
+                            EntryBytes.AddRangeBigEndian(Dlist.RotZ);
+                            EntryBytes.AddRangeBigEndian(Dlist.Limb);
+                            EntryBytes.Add((byte)Dlist.ShowType);
+                            Helpers.Ensure2ByteAlign(EntryBytes);
+                        }
+
+                        #endregion
+
+                        #region Colors
+
+                        List<OutputColorEntry> ParsedColors = Entry.ParseColorEntries().OrderBy(x => x.LimbID).ToList();
+                        EntryBytes.AddRangeBigEndian((UInt16)ParsedColors.Count());
+
+                        foreach (OutputColorEntry Col in ParsedColors)
+                        {
+                            EntryBytes.Add(Col.LimbID);
+                            EntryBytes.Add(Col.R);
+                            EntryBytes.Add(Col.G);
+                            EntryBytes.Add(Col.B);
+                            Helpers.Ensure2ByteAlign(EntryBytes);
+                        }
+
+                        #endregion
+
+                        #region Extra segment data
+
+                        List<byte> ExtraSegDataOffsets = new List<byte>();
+                        List<byte> ExtraSegDataEntries = new List<byte>();
                         UInt32 SegOffset = 7 * 4;
 
                         foreach (List<SegmentEntry> Segment in Entry.Segments)
@@ -314,79 +305,82 @@ namespace NPC_Maker
                             UInt32 SegBytes = (UInt32)(8 * Segment.Count);
 
                             if (SegBytes != 0)
-                                TextureOffsets.AddRange(Program.BEConverter.GetBytes(SegOffset));
+                                ExtraSegDataOffsets.AddRangeBigEndian(SegOffset);
                             else
-                                TextureOffsets.AddRange(Program.BEConverter.GetBytes((UInt32)0));
+                                ExtraSegDataOffsets.AddRangeBigEndian((UInt32)0);
 
                             SegOffset += SegBytes;
 
                             foreach (SegmentEntry TexEntry in Segment)
                             {
-                                TextureEntries.AddRange(Program.BEConverter.GetBytes(TexEntry.Address));
-                                TextureEntries.AddRange(Program.BEConverter.GetBytes(TexEntry.ObjectID));
+                                ExtraSegDataEntries.AddRangeBigEndian(TexEntry.Address);
+                                ExtraSegDataEntries.AddRangeBigEndian(TexEntry.ObjectID);
+                                Helpers.Ensure2ByteAlign(ExtraSegDataEntries);
                             }
                         }
 
-                        UInt32 TexBytes = (7 * 4) + (UInt32)TextureEntries.Count;
+                        UInt32 TexBytes = (7 * 4) + (UInt32)ExtraSegDataEntries.Count;
 
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(TexBytes));
+                        EntryBytes.AddRangeBigEndian(TexBytes);
+                        EntryBytes.AddRange(ExtraSegDataOffsets.ToArray());
+                        EntryBytes.AddRange(ExtraSegDataEntries.ToArray());
 
-                        while ((EntryBytes.Count) % 4 != 0)
-                            EntryBytes.Add(0);
+                        #endregion
 
-                        EntryBytes.AddRange(TextureOffsets.ToArray());
-                        EntryBytes.AddRange(TextureEntries.ToArray());
+                        #region Scripts
 
-                        int DLists = Entry.DLists.Count;
+                        List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
+                        EntryBytes.AddRangeBigEndian((UInt16)NonEmptyEntries.Count);
 
-                        EntryBytes.AddRange(Program.BEConverter.GetBytes(DLists));
+                        int ScrOffset = 0;
 
-                        while ((EntryBytes.Count) % 4 != 0)
-                            EntryBytes.Add(0);
+                        List<NewScriptParser.BScript> ParsedScripts = new List<NewScriptParser.BScript>();
 
-                        foreach (DListEntry Dlist in Entry.DLists)
+                        foreach (ScriptEntry Scr in NonEmptyEntries)
                         {
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Address));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotX));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotY));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.RotZ));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Limb));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransX));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransY));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.TransZ));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.Scale));
-                            EntryBytes.AddRange(Program.BEConverter.GetBytes(Dlist.ObjectID));
-                            EntryBytes.Add((byte)Dlist.ShowType);
-                            EntryBytes.AddRange(new byte[1]);
+                            NewScriptParser.ScriptParser Par = new NewScriptParser.ScriptParser(Entry, Scr.Text);
+                            ParsedScripts.Add(Par.ParseScript());
                         }
 
-                        while ((EntryBytes.Count) % 4 != 0)
-                            EntryBytes.Add(0);
+                        foreach (NewScriptParser.BScript Scr in ParsedScripts)
+                        {
+                            EntryBytes.AddRangeBigEndian(ScrOffset);
+                            ScrOffset += Scr.Script.Length;
+                        }
+
+                        foreach (NewScriptParser.BScript Scr in ParsedScripts)
+                        {
+                            EntryBytes.AddRange(Scr.Script);
+
+                            if (Scr.ParseErrors.Count != 0)
+                                if (!ParseErrors.Contains(Entry.NPCName))
+                                    ParseErrors.Add(Entry.NPCName);
+                        }
+
+                        #endregion
 
                         EntryData.Add(EntryBytes);
-                        EntryAddresses.AddRange(Program.BEConverter.GetBytes(Offset));
+                        EntryAddresses.AddRangeBigEndian(Offset);
                         Offset += EntryBytes.Count();
                     }
                     else
                     {
-                        EntryAddresses.AddRange(Program.BEConverter.GetBytes((UInt32)0));
+                        EntryAddresses.AddRangeBigEndian((UInt32)0);
                     }
                 }
 
                 List<byte> Output = new List<byte>();
 
-                Output.AddRange(Program.BEConverter.GetBytes((UInt32)Data.Entries.Count()));
+                Output.AddRangeBigEndian((UInt16)Data.Entries.Count());
                 Output.AddRange(EntryAddresses);
 
                 foreach (List<byte> Entry in EntryData)
                     Output.AddRange(Entry);
 
-                File.WriteAllBytes(Path, Output.ToArray());
-
                 if (ParseErrors.Count != 0)
-                {
                     System.Windows.Forms.MessageBox.Show($"There were errors parsing NPC(s): {String.Join(",", ParseErrors)}");
-                }
+                else
+                    File.WriteAllBytes(Path, Output.ToArray());
             }
             catch (Exception ex)
             {

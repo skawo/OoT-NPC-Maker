@@ -16,9 +16,14 @@ namespace NPC_Maker.NewScriptParser
 
         public virtual byte[] ToBytes()
         {
+            throw ParseException.GeneralError("Used wrong function to convert to bytes.");
+        }
+
+        public virtual byte[] ToBytes(List<InstructionLabel> Labels)
+        {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -38,12 +43,12 @@ namespace NPC_Maker.NewScriptParser
             SubID = _SubID;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }
@@ -57,21 +62,21 @@ namespace NPC_Maker.NewScriptParser
     public class InstructionLabel : Instruction
     {
         public string Name { get; set; }
-        public int InstructionNumber { get; set; }
+        public UInt16 InstructionNumber { get; set; }
 
         public InstructionLabel(string _Name) : base((int)Lists.Instructions.LABEL)
         {
             Name = _Name;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             return new byte[0];
         }
 
         public override string ToString()
         {
-            return Name + ":";
+            return Name;
         }
     }
 
@@ -85,13 +90,13 @@ namespace NPC_Maker.NewScriptParser
             ValueType = _ValueType;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(ValueType, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(ValueType, Data);
+            Helpers.Ensure4ByteAlign(Data);
 
             return Data.ToArray();
         }

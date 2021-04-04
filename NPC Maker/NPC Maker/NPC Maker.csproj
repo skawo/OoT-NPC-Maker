@@ -112,7 +112,7 @@
     <Compile Include="Common\NewScriptParser\InstructionParsers\Rotation\Rotation.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Particle\Classes.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Particle\Particle.cs" />
-    <Compile Include="Common\StringExtensions.cs" />
+    <Compile Include="Common\ExtensionMethods.cs" />
     <Compile Include="Controls\InputBox.cs" />
     <Compile Include="Controls\ScriptContextMenu.cs" />
     <Compile Include="Controls\ScriptEditor.cs">
@@ -129,7 +129,7 @@
     <Compile Include="Common\NewScriptParser\ScriptHelpers.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Await\Classes.cs" />
     <Compile Include="Common\NewScriptParser\Exceptions.cs" />
-    <Compile Include="Common\NewScriptParser\DataHelpers.cs" />
+    <Compile Include="Common\NewScriptParser\ScriptDataHelpers.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\ChangeScript\Classes.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\ChangeScript\ChangeScript.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Spawn\Classes.cs" />

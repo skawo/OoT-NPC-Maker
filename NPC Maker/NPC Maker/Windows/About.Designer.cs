@@ -61,7 +61,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::NPC_Maker.Properties.Resources.Untitled;
-            this.pictureBox2.Location = new System.Drawing.Point(43, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(54, 12);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(234, 67);
             this.pictureBox2.TabIndex = 7;

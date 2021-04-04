@@ -38,23 +38,23 @@ namespace NPC_Maker.NewScriptParser
             TargetActorT = _TargetActorT;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(Subject, Target, 4), Data);
-            DataHelpers.AddObjectToByteList(FaceType, Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(SubjectActorT, SubjectActorCatT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(TargetActorT, TargetActorCatT, 4), Data);
-            DataHelpers.Ensure2ByteAlign(Data);
-            DataHelpers.AddObjectToByteList(SubjectActor, Data);
-            DataHelpers.AddObjectToByteList(SubjectActorCat, Data);
-            DataHelpers.AddObjectToByteList(TargetActor, Data);
-            DataHelpers.AddObjectToByteList(TargetActorCat, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Subject, Target, 4), Data);
+            Helpers.AddObjectToByteList(FaceType, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SubjectActorT, SubjectActorCatT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(TargetActorT, TargetActorCatT, 4), Data);
+            Helpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(SubjectActor, Data);
+            Helpers.AddObjectToByteList(SubjectActorCat, Data);
+            Helpers.AddObjectToByteList(TargetActor, Data);
+            Helpers.AddObjectToByteList(TargetActorCat, Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 22);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 22);
 
             return Data.ToArray();
         }

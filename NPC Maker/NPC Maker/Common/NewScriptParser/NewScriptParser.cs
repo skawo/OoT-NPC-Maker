@@ -43,7 +43,20 @@ namespace NPC_Maker.NewScriptParser
             CheckLabels(Lines);
 
             List<Instruction> Instructions = GetInstructions(Lines);
+            Instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
+
+#if DEBUG
             outScript.ScriptDebug = GetOutString(Instructions);
+#endif
+
+            List<InstructionLabel> Labels = GetLabelsAndRemove(ref outScript, ref Instructions);
+
+            if (outScript.ParseErrors.Count == 0)
+                outScript.Script = ConvertScriptToBytes(Labels, ref outScript, ref Instructions);
+
+#if DEBUG
+            System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
+#endif
 
             return outScript;
         }
@@ -229,9 +242,10 @@ namespace NPC_Maker.NewScriptParser
 
             int Size = 0;
 
+
             foreach (Instruction Int in Instructions)
             {
-                Size += Int.ToBytes().Length;
+                Size += Int.ToBytes(new List<InstructionLabel>() { new InstructionLabel(Lists.Keyword_Debug_Skip_Label_Check) }).Length;
                 Out.Add(Int.ToString());
             }
 
@@ -300,5 +314,104 @@ namespace NPC_Maker.NewScriptParser
 
             return Instructions;
         }
+
+        public static List<InstructionLabel> GetLabelsAndRemove(ref BScript outScript, ref List<Instruction> Instructions)
+        {
+            List<InstructionLabel> OutList = new List<InstructionLabel>();
+
+            try
+            {
+                for (int i = 0; i < Instructions.Count; i++)
+                {
+                    if (Instructions[i] is InstructionLabel lbl)
+                    {
+                        Instructions.Remove(lbl);
+                        lbl.InstructionNumber = (UInt16)(i - 1);
+
+                        if (OutList.Find(x => x.Name == lbl.Name) != null)
+                            throw ParseException.LabelAlreadyExists(lbl.Name);
+
+                        OutList.Add(lbl);
+                        i--;
+                    }
+                }
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Add(pEx);
+            }
+            catch (Exception)
+            {
+                outScript.ParseErrors.Add(ParseException.GeneralError("Unknown error parsing labels."));
+            }
+
+            return OutList;
+        }
+
+        public static byte[] ConvertScriptToBytes(List<InstructionLabel> Labels, ref BScript outScript, ref List<Instruction> Instructions)
+        {
+            try
+            {
+                List<byte> Out = new List<byte>();
+                List<UInt32> Offsets = new List<UInt32>();
+                List<byte> InstructionBytes = new List<byte>();
+
+                UInt32 HeaderOffs = 2;
+
+                foreach (Instruction Inst in Instructions)
+                {
+                    byte[] Data = Inst.ToBytes(Labels);
+
+                    Offsets.Add(HeaderOffs);
+                    InstructionBytes.AddRange(Data);
+
+                    if (HeaderOffs + (UInt32)Data.Length > UInt32.MaxValue)
+                        throw ParseException.ScriptTooBigError();
+
+                    HeaderOffs += (UInt32)Data.Length;
+                }
+
+                // 0 - 2 byte offsets, 1 - 4 byte offsets
+                byte ByteSize = 0;
+                UInt32 MaxOffs = Offsets.Max();
+
+                if (MaxOffs + (Offsets.Count * 2) > UInt16.MaxValue)
+                    ByteSize = 1;
+
+                if (MaxOffs + (Offsets.Count * 4) > UInt32.MaxValue)
+                    throw ParseException.ScriptTooBigError();
+
+                for (int i = 0; i < Offsets.Count; i++)
+                    Offsets[i] += (UInt32)(Offsets.Count * (ByteSize == 1 ? 4 : 2));
+
+                Out.AddRange(new byte[] { 0, ByteSize });
+
+                foreach (UInt32 Offset in Offsets)
+                {
+                    if (ByteSize == 1)
+                        Out.AddRange(Program.BEConverter.GetBytes(Offset));
+                    else
+                        Out.AddRange(Program.BEConverter.GetBytes(Convert.ToUInt16(Offset)));
+                }
+
+                Out.AddRange(InstructionBytes);
+
+                Helpers.Ensure2ByteAlign(Out);
+
+                return Out.ToArray();
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Clear();
+                outScript.ParseErrors.Add(pEx);
+            }
+            catch (Exception)
+            {
+                outScript.ParseErrors.Add(ParseException.GeneralError("Unknown error converting to bytes."));
+            }
+
+            return new byte[0];
+        }
+
     }
 }

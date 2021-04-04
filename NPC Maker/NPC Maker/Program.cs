@@ -24,6 +24,7 @@ namespace NPC_Maker
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
 
+
             try
             {
                 DropDownMenuScrollWheelHandler.Enable(true);

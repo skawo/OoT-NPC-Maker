@@ -107,10 +107,10 @@ namespace NPC_Maker
             Txb_ObjectID_Leave(null, null);
             NumUpDown_Hierarchy.Value = SelectedEntry.Hierarchy;
             ComboBox_HierarchyType.SelectedIndex = SelectedEntry.HierarchyType;
-            NumUpDown_XModelOffs.Value = SelectedEntry.ModelOffs[0];
-            NumUpDown_YModelOffs.Value = SelectedEntry.ModelOffs[1];
-            NumUpDown_ZModelOffs.Value = SelectedEntry.ModelOffs[2];
-            NumUpDown_Scale.Value = (decimal)SelectedEntry.Scale;
+            NumUpDown_XModelOffs.Value = SelectedEntry.ModelPositionOffsets[0];
+            NumUpDown_YModelOffs.Value = SelectedEntry.ModelPositionOffsets[1];
+            NumUpDown_ZModelOffs.Value = SelectedEntry.ModelPositionOffsets[2];
+            NumUpDown_Scale.Value = (decimal)SelectedEntry.ModelScale;
             NumUpDown_CutsceneSlot.Value = SelectedEntry.CutsceneID;
 
             ComboBox_LookAtType.SelectedIndex = SelectedEntry.LookAtType;
@@ -122,53 +122,53 @@ namespace NPC_Maker
 
             NumUpDown_HeadLimb.Value = SelectedEntry.HeadLimb;
             NumUpDown_WaistLimb.Value = SelectedEntry.WaistLimb;
-            NumUpDown_LookAt_X.Value = SelectedEntry.LookAtOffs[0];
-            NumUpDown_LookAt_Y.Value = SelectedEntry.LookAtOffs[1];
-            NumUpDown_LookAt_Z.Value = SelectedEntry.LookAtOffs[2];
-            NumUpDown_DegVert.Value = SelectedEntry.DegreesVert;
-            NumUpDown_DegHoz.Value = SelectedEntry.DegreesHor;
+            NumUpDown_LookAt_X.Value = SelectedEntry.LookAtPositionOffsets[0];
+            NumUpDown_LookAt_Y.Value = SelectedEntry.LookAtPositionOffsets[1];
+            NumUpDown_LookAt_Z.Value = SelectedEntry.LookAtPositionOffsets[2];
+            NumUpDown_DegVert.Value = SelectedEntry.LookAtDegreesVertical;
+            NumUpDown_DegHoz.Value = SelectedEntry.LookAtDegreesHorizontal;
 
-            Checkbox_DrawShadow.Checked = SelectedEntry.Shadow;
-            NumUpDown_ShRadius.Value = SelectedEntry.ShRadius;
+            Checkbox_DrawShadow.Checked = SelectedEntry.CastsShadow;
+            NumUpDown_ShRadius.Value = SelectedEntry.ShadowRadius;
 
-            Checkbox_HaveCollision.Checked = SelectedEntry.Collision;
-            Checkbox_CanPressSwitches.Checked = SelectedEntry.Switches;
-            Checkbox_Pushable.Checked = SelectedEntry.Pushable;
-            NumUpDown_ColRadius.Value = SelectedEntry.ColRadius;
-            NumUpDown_ColHeight.Value = SelectedEntry.Height;
-            Checkbox_AlwaysActive.Checked = SelectedEntry.AlwActive;
-            Checkbox_AlwaysDraw.Checked = SelectedEntry.AlwDraw;
-            Chkb_ReactIfAtt.Checked = SelectedEntry.ReactAttacked;
-            ChkRunJustScript.Checked = SelectedEntry.JustScript;
-            Chkb_Opendoors.Checked = SelectedEntry.OpenDoors;
+            Checkbox_HaveCollision.Checked = SelectedEntry.HasCollision;
+            Checkbox_CanPressSwitches.Checked = SelectedEntry.PushesSwitches;
+            Checkbox_Pushable.Checked = SelectedEntry.IsPushable;
+            NumUpDown_ColRadius.Value = SelectedEntry.CollisionRadius;
+            NumUpDown_ColHeight.Value = SelectedEntry.CollisionHeight;
+            Checkbox_AlwaysActive.Checked = SelectedEntry.IsAlwaysActive;
+            Checkbox_AlwaysDraw.Checked = SelectedEntry.IsAlwaysDrawn;
+            Chkb_ReactIfAtt.Checked = SelectedEntry.ReactsIfAttacked;
+            ChkRunJustScript.Checked = SelectedEntry.ExecuteJustScript;
+            Chkb_Opendoors.Checked = SelectedEntry.OpensDoors;
 
-            NumUpDown_XColOffs.Value = SelectedEntry.ColOffs[0];
-            NumUpDown_YColOffs.Value = SelectedEntry.ColOffs[1];
-            NumUpDown_ZColOffs.Value = SelectedEntry.ColOffs[2];
+            NumUpDown_XColOffs.Value = SelectedEntry.CollisionPositionOffsets[0];
+            NumUpDown_YColOffs.Value = SelectedEntry.CollisionPositionOffsets[1];
+            NumUpDown_ZColOffs.Value = SelectedEntry.CollisionPositionOffsets[2];
 
-            Checkbox_Targettable.Checked = SelectedEntry.Targettable;
-            ComboBox_TargetDist.SelectedIndex = SelectedEntry.TargetDist <= 10 ? SelectedEntry.TargetDist : 1;
+            Checkbox_Targettable.Checked = SelectedEntry.IsTargettable;
+            ComboBox_TargetDist.SelectedIndex = SelectedEntry.TargetDistance <= 10 ? SelectedEntry.TargetDistance : 1;
             NumUpDown_TargetLimb.Value = SelectedEntry.TargetLimb;
-            NumUpDown_XTargetOffs.Value = SelectedEntry.TargOffs[0];
-            NumUpDown_YTargetOffs.Value = SelectedEntry.TargOffs[1];
-            NumUpDown_ZTargetOffs.Value = SelectedEntry.TargOffs[2];
+            NumUpDown_XTargetOffs.Value = SelectedEntry.TargetPositionOffsets[0];
+            NumUpDown_YTargetOffs.Value = SelectedEntry.TargetPositionOffsets[1];
+            NumUpDown_ZTargetOffs.Value = SelectedEntry.TargetPositionOffsets[2];
             NumUpDown_TalkRadi.Value = (decimal)SelectedEntry.TalkRadius;
 
             Combo_MovementType.SelectedIndex = SelectedEntry.MovementType;
             NumUpDown_MovDistance.Value = SelectedEntry.MovementDistance;
             NumUpDown_MovSpeed.Value = (decimal)SelectedEntry.MovementSpeed;
             NumUpDown_GravityForce.Value = (decimal)SelectedEntry.GravityForce;
-            NumUpDown_LoopDelay.Value = SelectedEntry.LoopDel;
-            NumUpDown_LoopEndNode.Value = SelectedEntry.LoopEnd;
-            NumUpDown_LoopStartNode.Value = SelectedEntry.LoopStart;
-            Checkbox_Loop.Checked = SelectedEntry.Loop;
-            ChkBox_TimedPath.Checked = SelectedEntry.TimedPath;
+            NumUpDown_LoopDelay.Value = SelectedEntry.PathLoopDelayTime;
+            NumUpDown_LoopEndNode.Value = SelectedEntry.PathLoopEndID;
+            NumUpDown_LoopStartNode.Value = SelectedEntry.PathLoopStartID;
+            Checkbox_Loop.Checked = SelectedEntry.LoopPath;
+            ChkBox_TimedPath.Checked = SelectedEntry.PathIsTimed;
             NumUpDown_PathFollowID.Value = SelectedEntry.PathID;
             tmpicker_timedPathStart.Value = Helpers.GetTimeFromOcarinaTime(SelectedEntry.TimedPathStart);
             tmpicker_timedPathEnd.Value = Helpers.GetTimeFromOcarinaTime(SelectedEntry.TimedPathEnd);
 
             ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
-            NumUpDown_Scale.Value = (decimal)SelectedEntry.Scale;
+            NumUpDown_Scale.Value = (decimal)SelectedEntry.ModelScale;
 
             List<TabPage> ReusableTabPages = new List<TabPage>();
 
@@ -201,45 +201,31 @@ namespace NPC_Maker
             foreach (TabPage Page in ReusableTabPages)
                 TabControl.TabPages.Remove(Page);
 
-            /*
-            dataGridView1.Rows.Clear();
+            
+            ColorsDataGridView.Rows.Clear();
 
-            foreach (ColorEntry ColorE in SelectedEntry.Colors)
+            foreach (ColorEntry ColorE in SelectedEntry.DisplayListColors)
             {
-                int RowIndex = dataGridView1.Rows.Add(new object[] { ColorE.Limbs, "" });
+                int RowIndex = ColorsDataGridView.Rows.Add(new object[] { ColorE.Limbs, "" });
 
-                dataGridView1.Rows[RowIndex].Cells[1].Style = new DataGridViewCellStyle()
+                ColorsDataGridView.Rows[RowIndex].Cells[1].Style = new DataGridViewCellStyle()
                 {
                     SelectionBackColor = ColorE.Color,
                     SelectionForeColor = ColorE.Color,
                     BackColor = ColorE.Color
                 };
             }
-            */
+            
 
             DataGrid_Animations.Rows.Clear();
 
             foreach (AnimationEntry Animation in SelectedEntry.Animations)
-            {
-                string Frames = "";
+                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
 
-                foreach (byte B in Animation.Frames)
-                {
-                    if (B != 0xFF)
-                    {
-                        if (Frames == "")
-                            Frames = Convert.ToInt32(B).ToString();
-                        else
-                            Frames = String.Join(",", new string[] { Frames, Convert.ToInt32(B).ToString() });
-                    }
-                }
 
-                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Frames, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
-            }
+            Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
 
-            Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
-
-            if (SelectedEntry.EnvColor.A == 0)
+            if (SelectedEntry.EnvironmentColor.A == 0)
                 Checkbox_EnvColor.Checked = false;
             else
                 Checkbox_EnvColor.Checked = true;
@@ -263,7 +249,7 @@ namespace NPC_Maker
 
             DataGridView_ExtraDLists.Rows.Clear();
 
-            foreach (DListEntry Dlist in SelectedEntry.DLists)
+            foreach (DListEntry Dlist in SelectedEntry.ExtraDisplayLists)
             {
                 string SelCombo = Dicts.GetStringFromStringIntDict(Dicts.LimbShowSubTypes, Dlist.ShowType, Dicts.LimbShowSubTypes.First().Key);
 
@@ -418,7 +404,7 @@ namespace NPC_Maker
             }
         }
 
-        private void checkSyntaxToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void CheckSyntaxToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             foreach (TabPage Page in TabControl.TabPages)
             {
@@ -564,7 +550,7 @@ namespace NPC_Maker
 
                 foreach (AnimationEntry Anim in CopiedEntry.Animations)
                 {
-                    SelectedEntry.Animations.Add(new AnimationEntry(Anim.Name, Anim.Address, Anim.Speed, Anim.ObjID, Anim.Frames));
+                    SelectedEntry.Animations.Add(new AnimationEntry(Anim.Name, Anim.Address, Anim.Speed, Anim.ObjID, Anim.StartFrame, Anim.EndFrame));
                 }
 
                 SelectedEntry.Segments.Clear();
@@ -581,11 +567,11 @@ namespace NPC_Maker
 
                 }
 
-                SelectedEntry.DLists.Clear();
+                SelectedEntry.ExtraDisplayLists.Clear();
 
-                foreach (DListEntry D in CopiedEntry.DLists)
+                foreach (DListEntry D in CopiedEntry.ExtraDisplayLists)
                 {
-                    SelectedEntry.DLists.Add(new DListEntry(D.Name, D.Address, D.TransX, D.TransY, D.TransZ, D.RotX, D.RotY, D.RotZ, D.Scale, D.Limb, D.ShowType, D.ObjectID));
+                    SelectedEntry.ExtraDisplayLists.Add(new DListEntry(D.Name, D.Address, D.TransX, D.TransY, D.TransZ, D.RotX, D.RotY, D.RotZ, D.Scale, D.Limb, D.ShowType, D.ObjectID));
                 }
 
                 SelectedEntry.ObjectID = CopiedEntry.ObjectID;
@@ -606,9 +592,9 @@ namespace NPC_Maker
         private void Button_Add_Click(object sender, EventArgs e)
         {
             NPCEntry Entry = new NPCEntry();
-            Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
-            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
-            Entry.Animations.Add(new AnimationEntry("Attacked", 0, 1.0f, -1, new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF }));
+            Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, -1, 0, 255));
+            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, -1, 0, 255));
+            Entry.Animations.Add(new AnimationEntry("Attacked", 0, 1.0f, -1, 0, 255));
 
             for (int i = 0; i < 8; i++)
                 Entry.Segments.Add(new List<SegmentEntry>());
@@ -749,12 +735,12 @@ namespace NPC_Maker
             if (ColorDialog.ShowDialog() == DialogResult.OK)
             {
                 Button_EnvironmentColorPreview.BackColor = ColorDialog.Color;
-                SelectedEntry.EnvColor = ColorDialog.Color;
+                SelectedEntry.EnvironmentColor = ColorDialog.Color;
 
                 if (Checkbox_EnvColor.Checked)
-                    SelectedEntry.EnvColor = Color.FromArgb(255, ColorDialog.Color.R, ColorDialog.Color.G, ColorDialog.Color.B);
+                    SelectedEntry.EnvironmentColor = Color.FromArgb(255, ColorDialog.Color.R, ColorDialog.Color.G, ColorDialog.Color.B);
                 else
-                    SelectedEntry.EnvColor = Color.FromArgb(0, ColorDialog.Color.R, ColorDialog.Color.G, ColorDialog.Color.B);
+                    SelectedEntry.EnvironmentColor = Color.FromArgb(0, ColorDialog.Color.R, ColorDialog.Color.G, ColorDialog.Color.B);
             }
 
         }
@@ -762,9 +748,9 @@ namespace NPC_Maker
         private void Checkbox_EnvColor_CheckedChanged(object sender, EventArgs e)
         {
             if (Checkbox_EnvColor.Checked)
-                SelectedEntry.EnvColor = Color.FromArgb(255, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
+                SelectedEntry.EnvironmentColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
             else
-                SelectedEntry.EnvColor = Color.FromArgb(0, SelectedEntry.EnvColor.R, SelectedEntry.EnvColor.G, SelectedEntry.EnvColor.B);
+                SelectedEntry.EnvironmentColor = Color.FromArgb(0, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e)
@@ -796,15 +782,14 @@ namespace NPC_Maker
 
         #region Animation Grid
 
-        private void AddBlankAnim(int SkipIndex, int Index, string Name = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte[] Frames = null)
+        private void AddBlankAnim(int SkipIndex, int Index, string Name = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte StartFrame = 0, byte EndFrame = 0xFF)
         {
             Name = Name ?? "Animation_" + Index.ToString();
             Address = Address ?? 0;
             Speed = Speed ?? 0;
             ObjectID = ObjectID ?? -1;
-            Frames = Frames ?? (new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
 
-            SelectedEntry.Animations.Add(new AnimationEntry(Name, (uint)Address, (float)Speed, (short)ObjectID, Frames));
+            SelectedEntry.Animations.Add(new AnimationEntry(Name, (uint)Address, (float)Speed, (short)ObjectID, StartFrame, EndFrame));
 
             if (SkipIndex != 0)
                 DataGrid_Animations.Rows[Index].Cells[0].Value = Name;
@@ -816,38 +801,13 @@ namespace NPC_Maker
                 DataGrid_Animations.Rows[Index].Cells[2].Value = "";
 
             if (SkipIndex != 3)
-                DataGrid_Animations.Rows[Index].Cells[3].Value = 1.0;
+                DataGrid_Animations.Rows[Index].Cells[3].Value = "";
 
             if (SkipIndex != 4)
-                DataGrid_Animations.Rows[Index].Cells[4].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
-        }
+                DataGrid_Animations.Rows[Index].Cells[4].Value = 1.0;
 
-        private byte[] ConvertAnimationByteArrayString(string Value)
-        {
-            string[] Values = Value.Split(',');
-            byte[] Array = new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF };
-
-            if (Array.Count() > 4)
-            {
-                MessageBox.Show("Interpolation mode supports only up to 4 animations.");
-                throw new Exception();
-            }
-
-            int i = 0;
-
-            foreach (string Val in Values)
-            {
-                if (Val == "")
-                    continue;
-
-                if (Convert.ToSByte(Val) >= 0)
-                {
-                    Array[i] = Convert.ToByte(Val);
-                    i++;
-                }
-            }
-
-            return Array;
+            if (SkipIndex != 5)
+                DataGrid_Animations.Rows[Index].Cells[5].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
         }
 
         private void DataGridViewAnimations_CellParse(object sender, DataGridViewCellParsingEventArgs e)
@@ -893,16 +853,14 @@ namespace NPC_Maker
                         }
                         return;
                     }
-                case 2:     // Keyframes
+                case 2:     // Start frame
                     {
                         try
                         {
-                            byte[] Array = ConvertAnimationByteArrayString(e.Value.ToString());
-
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, Array);
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, Convert.ToByte(e.Value.ToString(), 16));
                             else
-                                SelectedEntry.Animations[e.RowIndex].Frames = Array;
+                                SelectedEntry.Animations[e.RowIndex].StartFrame = Convert.ToByte(e.Value.ToString(), 16);
 
                             e.ParsingApplied = true;
                         }
@@ -916,7 +874,28 @@ namespace NPC_Maker
                         }
                         return;
                     }
-                case 3:     // Speed
+                case 3:     // End frame
+                    {
+                        try
+                        {
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, 0, Convert.ToByte(e.Value.ToString(), 16));
+                            else
+                                SelectedEntry.Animations[e.RowIndex].EndFrame = Convert.ToByte(e.Value.ToString(), 16);
+
+                            e.ParsingApplied = true;
+                        }
+                        catch (Exception)
+                        {
+                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
+
+                            e.Value = "";
+                            e.ParsingApplied = true;
+                        }
+                        return;
+                    }
+                case 4:     // Speed
                     {
                         try
                         {
@@ -937,7 +916,7 @@ namespace NPC_Maker
                         }
                         return;
                     }
-                case 4:     // Object
+                case 5:     // Object
                     {
                         try
                         {
@@ -1009,7 +988,7 @@ namespace NPC_Maker
             ShowType = ShowType ?? 0;
             ObjectID = ObjectID ?? -1;
 
-            SelectedEntry.DLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ,
+            SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ,
                                                     (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (ushort)Limb, (int)ShowType, (short)ObjectID));
 
             if (SkipIndex != 0)
@@ -1089,10 +1068,10 @@ namespace NPC_Maker
             {
                 case 0:     // Purpose
                     {
-                        if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, e.Value.ToString());
                         else
-                            SelectedEntry.DLists[e.RowIndex].Name = e.Value.ToString();
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].Name = e.Value.ToString();
 
                         e.ParsingApplied = true;
                         return;
@@ -1101,14 +1080,14 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
                             else
-                                SelectedEntry.DLists[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
                         }
                         catch (Exception)
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
                             e.Value = 0;
@@ -1122,13 +1101,13 @@ namespace NPC_Maker
                         float[] Transl = GetXYZTranslation(e.Value.ToString());
                         e.Value = $"{Transl[0]},{Transl[1]},{Transl[2]}";
 
-                        if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, Transl[0], Transl[1], Transl[2]);
                         else
                         {
-                            SelectedEntry.DLists[e.RowIndex].TransX = Transl[0];
-                            SelectedEntry.DLists[e.RowIndex].TransY = Transl[1];
-                            SelectedEntry.DLists[e.RowIndex].TransZ = Transl[2];
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].TransX = Transl[0];
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].TransY = Transl[1];
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].TransZ = Transl[2];
                         }
 
                         e.ParsingApplied = true;
@@ -1139,13 +1118,13 @@ namespace NPC_Maker
                         short[] Rot = GetXYZRotation(e.Value.ToString());
                         e.Value = $"{Rot[0]},{Rot[1]},{Rot[2]}";
 
-                        if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, Rot[0], Rot[1], Rot[2]);
                         else
                         {
-                            SelectedEntry.DLists[e.RowIndex].RotX = Rot[0];
-                            SelectedEntry.DLists[e.RowIndex].RotY = Rot[1];
-                            SelectedEntry.DLists[e.RowIndex].RotZ = Rot[2];
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].RotX = Rot[0];
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].RotY = Rot[1];
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].RotZ = Rot[2];
                         }
 
                         e.ParsingApplied = true;
@@ -1155,14 +1134,14 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, (float)Convert.ToDecimal(e.Value));
                             else
-                                SelectedEntry.DLists[e.RowIndex].Scale = (float)Convert.ToDecimal(e.Value);
+                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Scale = (float)Convert.ToDecimal(e.Value);
                         }
                         catch (Exception)
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
                             e.Value = 0;
@@ -1175,14 +1154,14 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, Convert.ToUInt16(e.Value));
                             else
-                                SelectedEntry.DLists[e.RowIndex].Limb = Convert.ToUInt16(e.Value);
+                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Limb = Convert.ToUInt16(e.Value);
                         }
                         catch (Exception)
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
                             e.Value = 0;
@@ -1199,14 +1178,14 @@ namespace NPC_Maker
 
                             e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
 
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, (short)ObjectId);
                             else
-                                SelectedEntry.DLists[e.RowIndex].ObjectID = Convert.ToInt16(e.Value);
+                                SelectedEntry.ExtraDisplayLists[e.RowIndex].ObjectID = Convert.ToInt16(e.Value);
                         }
                         catch (Exception)
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
                             e.Value = Dicts.ObjectIDs.First().Key;
@@ -1219,10 +1198,10 @@ namespace NPC_Maker
                     {
                         int ShowType = Dicts.GetIntFromStringIntDict(Dicts.LimbShowSubTypes, e.Value.ToString(), 0);
 
-                        if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, ShowType);
                         else
-                            SelectedEntry.DLists[e.RowIndex].ShowType = ShowType;
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].ShowType = ShowType;
 
                         e.ParsingApplied = true;
                         return;
@@ -1238,7 +1217,7 @@ namespace NPC_Maker
                 {
                     int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
                     (sender as DataGridView).Rows.RemoveAt(Index);
-                    SelectedEntry.DLists.RemoveAt(Index);
+                    SelectedEntry.ExtraDisplayLists.RemoveAt(Index);
 
 
                 }
@@ -1308,7 +1287,7 @@ namespace NPC_Maker
                         }
                         catch (Exception)
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
 
                             e.Value = Convert.ToInt32("0", 16);
@@ -1332,7 +1311,7 @@ namespace NPC_Maker
                         }
                         catch (Exception)
                         {
-                            if (SelectedEntry.DLists.Count() - 1 < e.RowIndex)
+                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
 
                             e.Value = Dicts.ObjectIDs.First();
@@ -1364,10 +1343,8 @@ namespace NPC_Maker
 
         #endregion
 
-        #region Unused
-
-        /*      
-        private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
+        #region Colors Grid
+        private void ColorsDataGridView_KeyUp(object sender, KeyEventArgs e)
         {
             try
             {
@@ -1377,7 +1354,7 @@ namespace NPC_Maker
                     {
                         int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
                         (sender as DataGridView).Rows.RemoveAt(Index);
-                        SelectedEntry.Colors.RemoveAt(Index);
+                        SelectedEntry.DisplayListColors.RemoveAt(Index);
                     }
                 }
             }
@@ -1387,13 +1364,13 @@ namespace NPC_Maker
             }
         }
 
-        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void ColorsDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 1)
             {
                 if (ColorDialog.ShowDialog() == DialogResult.OK)
                 {
-                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
+                    ColorsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
                         new DataGridViewCellStyle()
                         {
                             SelectionForeColor = ColorDialog.Color,
@@ -1402,27 +1379,27 @@ namespace NPC_Maker
 
                         };
 
-                    if (SelectedEntry.Colors.Count() - 1 < e.RowIndex)
+                    if (SelectedEntry.DisplayListColors.Count() - 1 < e.RowIndex)
                     {
-                        SelectedEntry.Colors.Add(new ColorEntry("", ColorDialog.Color));
-                        dataGridView1.Rows[e.RowIndex].Cells[0].Value = "";
+                        SelectedEntry.DisplayListColors.Add(new ColorEntry("", ColorDialog.Color));
+                        ColorsDataGridView.Rows[e.RowIndex].Cells[0].Value = "";
                     }
                     else
                     {
-                        SelectedEntry.Colors[e.RowIndex].Color = ColorDialog.Color;
+                        SelectedEntry.DisplayListColors[e.RowIndex].Color = ColorDialog.Color;
                     }
                 }
             }
         }
 
-        private void dataGridView1_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
+        private void ColorsDataGridView_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
-                if (SelectedEntry.Colors.Count() - 1 < e.RowIndex)
+                if (SelectedEntry.DisplayListColors.Count() - 1 < e.RowIndex)
                 {
                     Color White = System.Drawing.Color.FromArgb(0, 0, 0, 0);
-                    SelectedEntry.Colors.Add(new ColorEntry(e.Value.ToString(), White));
+                    SelectedEntry.DisplayListColors.Add(new ColorEntry(e.Value.ToString(), White));
 
                     try
                     {
@@ -1430,11 +1407,11 @@ namespace NPC_Maker
                     }
                     catch
                     {
-                        SelectedEntry.Colors[e.RowIndex].Limbs = "";
+                        SelectedEntry.DisplayListColors[e.RowIndex].Limbs = "";
                         e.Value = "";
                     }
 
-                    dataGridView1.Rows[e.RowIndex].Cells[1].Style =
+                    ColorsDataGridView.Rows[e.RowIndex].Cells[1].Style =
                         new DataGridViewCellStyle()
                         {
                             SelectionForeColor = White,
@@ -1444,13 +1421,25 @@ namespace NPC_Maker
                         };
                 }
                 else
-                    SelectedEntry.Colors[e.RowIndex].Limbs = e.Value.ToString();
+                {
+                    SelectedEntry.DisplayListColors[e.RowIndex].Limbs = e.Value.ToString();
+
+                    try
+                    {
+                        SelectedEntry.ParseColorEntries();
+                    }
+                    catch
+                    {
+                        SelectedEntry.DisplayListColors[e.RowIndex].Limbs = "";
+                        e.Value = "";
+                    }
+                }
 
                 e.ParsingApplied = true;
                 return;
             }
         }
-        */
+
 
         #endregion
     }

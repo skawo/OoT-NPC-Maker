@@ -50,30 +50,30 @@ namespace NPC_Maker.NewScriptParser
 
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(PosRelativeness, Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PosZT, RotXT, 4), Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(PosRelativeness, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosZT, RotXT, 4), Data);
 
-            DataHelpers.AddObjectToByteList(ActorID, Data);
-            DataHelpers.AddObjectToByteList(ActorVariable, Data);
+            Helpers.AddObjectToByteList(ActorID, Data);
+            Helpers.AddObjectToByteList(ActorVariable, Data);
 
-            DataHelpers.AddObjectToByteList(PosX, Data);
-            DataHelpers.AddObjectToByteList(PosY, Data);
-            DataHelpers.AddObjectToByteList(PosZ, Data);
-            DataHelpers.AddObjectToByteList(RotX, Data);
-            DataHelpers.AddObjectToByteList(RotY, Data);
-            DataHelpers.AddObjectToByteList(RotZ, Data);
+            Helpers.AddObjectToByteList(PosX, Data);
+            Helpers.AddObjectToByteList(PosY, Data);
+            Helpers.AddObjectToByteList(PosZ, Data);
+            Helpers.AddObjectToByteList(RotX, Data);
+            Helpers.AddObjectToByteList(RotY, Data);
+            Helpers.AddObjectToByteList(RotZ, Data);
 
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ActorIDVarT, ActorVarT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(RotYT, RotZT, 4), Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ActorIDVarT, ActorVarT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(RotYT, RotZT, 4), Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 38);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 38);
 
             return Data.ToArray();
         }

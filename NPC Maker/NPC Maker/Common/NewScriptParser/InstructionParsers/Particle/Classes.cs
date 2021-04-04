@@ -71,64 +71,64 @@ namespace NPC_Maker.NewScriptParser
         {
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
-            DataHelpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(ID, Data);
 
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(TypeT, RelativePos, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PosZT, AccelXT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(AccelYT, AccelZT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(VelXT, VelYT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(VelZT, ScaleT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ScaleUpdateT, RadiusUpdateDT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(LifeT, NumBoltsT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(YawT, DListIndexT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ColorTypeT, AlphaT, 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PrimRGBAVarT[0], PrimRGBAVarT[1], 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(PrimRGBAVarT[2], PrimRGBAVarT[3], 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(SecRGBAVarT[0], SecRGBAVarT[1], 4), Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(SecRGBAVarT[2], SecRGBAVarT[3], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(TypeT, RelativePos, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosZT, AccelXT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(AccelYT, AccelZT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(VelXT, VelYT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(VelZT, ScaleT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ScaleUpdateT, RadiusUpdateDT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(LifeT, NumBoltsT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(YawT, DListIndexT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ColorTypeT, AlphaT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PrimRGBAVarT[0], PrimRGBAVarT[1], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PrimRGBAVarT[2], PrimRGBAVarT[3], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SecRGBAVarT[0], SecRGBAVarT[1], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SecRGBAVarT[2], SecRGBAVarT[3], 4), Data);
 
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.AddObjectToByteList(Type, Data);
-            DataHelpers.AddObjectToByteList(PosX, Data);
-            DataHelpers.AddObjectToByteList(PosY, Data);
-            DataHelpers.AddObjectToByteList(PosZ, Data);
-            DataHelpers.AddObjectToByteList(AccelX, Data);
-            DataHelpers.AddObjectToByteList(AccelY, Data);
-            DataHelpers.AddObjectToByteList(AccelZ, Data);
-            DataHelpers.AddObjectToByteList(VelX, Data);
-            DataHelpers.AddObjectToByteList(VelY, Data);
-            DataHelpers.AddObjectToByteList(VelZ, Data);
+            Helpers.AddObjectToByteList(Type, Data);
+            Helpers.AddObjectToByteList(PosX, Data);
+            Helpers.AddObjectToByteList(PosY, Data);
+            Helpers.AddObjectToByteList(PosZ, Data);
+            Helpers.AddObjectToByteList(AccelX, Data);
+            Helpers.AddObjectToByteList(AccelY, Data);
+            Helpers.AddObjectToByteList(AccelZ, Data);
+            Helpers.AddObjectToByteList(VelX, Data);
+            Helpers.AddObjectToByteList(VelY, Data);
+            Helpers.AddObjectToByteList(VelZ, Data);
 
-            DataHelpers.AddObjectToByteList(PrimRGBA[0], Data);
-            DataHelpers.AddObjectToByteList(PrimRGBA[1], Data);
-            DataHelpers.AddObjectToByteList(PrimRGBA[2], Data);
-            DataHelpers.AddObjectToByteList(PrimRGBA[3], Data);
-            DataHelpers.AddObjectToByteList(SecRGBA[0], Data);
-            DataHelpers.AddObjectToByteList(SecRGBA[1], Data);
-            DataHelpers.AddObjectToByteList(SecRGBA[2], Data);
-            DataHelpers.AddObjectToByteList(SecRGBA[3], Data);
+            Helpers.AddObjectToByteList(PrimRGBA[0], Data);
+            Helpers.AddObjectToByteList(PrimRGBA[1], Data);
+            Helpers.AddObjectToByteList(PrimRGBA[2], Data);
+            Helpers.AddObjectToByteList(PrimRGBA[3], Data);
+            Helpers.AddObjectToByteList(SecRGBA[0], Data);
+            Helpers.AddObjectToByteList(SecRGBA[1], Data);
+            Helpers.AddObjectToByteList(SecRGBA[2], Data);
+            Helpers.AddObjectToByteList(SecRGBA[3], Data);
 
-            DataHelpers.AddObjectToByteList(Scale, Data);
-            DataHelpers.AddObjectToByteList(ScaleUpdate, Data);
-            DataHelpers.AddObjectToByteList(RadiusUpdateD, Data);
+            Helpers.AddObjectToByteList(Scale, Data);
+            Helpers.AddObjectToByteList(ScaleUpdate, Data);
+            Helpers.AddObjectToByteList(RadiusUpdateD, Data);
 
-            DataHelpers.AddObjectToByteList(Life, Data);
-            DataHelpers.AddObjectToByteList(NumBolts, Data);
-            DataHelpers.AddObjectToByteList(Yaw, Data);
-            DataHelpers.AddObjectToByteList(DListIndex, Data);
-            DataHelpers.AddObjectToByteList(ColorType, Data);
-            DataHelpers.AddObjectToByteList(Alpha, Data);
-            DataHelpers.AddObjectToByteList(LabelJumpIfFound.InstructionNumber, Data);
+            Helpers.AddObjectToByteList(Life, Data);
+            Helpers.AddObjectToByteList(NumBolts, Data);
+            Helpers.AddObjectToByteList(Yaw, Data);
+            Helpers.AddObjectToByteList(DListIndex, Data);
+            Helpers.AddObjectToByteList(ColorType, Data);
+            Helpers.AddObjectToByteList(Alpha, Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, LabelJumpIfFound, ref Data);
 
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 128);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 126);
 
             return Data.ToArray();
         }

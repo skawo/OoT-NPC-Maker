@@ -12,7 +12,7 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 List<Instruction> Instructions = new List<Instruction>();
-                string LabelR = DataHelpers.RandomString(this, 5);
+                string LabelR = ScriptDataHelpers.RandomString(this, 5);
 
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 

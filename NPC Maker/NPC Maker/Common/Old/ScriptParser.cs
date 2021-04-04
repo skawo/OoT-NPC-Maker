@@ -863,12 +863,12 @@ namespace NPC_Maker
                                 if (Instr.Length != 4)
                                     throw new WrongParamCountException(Line);
 
-                                Int32 DListID = Helper_GetDListID(Instr[2], Entry.DLists);
+                                Int32 DListID = Helper_GetDListID(Instr[2], Entry.ExtraDisplayLists);
 
                                 if (DListID == -1)
                                     DListID = Helper_ConvertToInt32(Instr[2]);
 
-                                if (DListID > (Entry.DLists.Count() - 1) || DListID < 0)
+                                if (DListID > (Entry.ExtraDisplayLists.Count() - 1) || DListID < 0)
                                     throw new ParamOutOfRangeException(Line);
 
                                 int VisibleType = (int)Enum.Parse(typeof(OldLists.DListVisibilityTypes), Instr[3].ToLower());

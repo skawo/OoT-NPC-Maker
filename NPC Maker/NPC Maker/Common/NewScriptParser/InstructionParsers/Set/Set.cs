@@ -193,9 +193,9 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.BLINK_PATTERN:
                         case (int)Lists.SetSubTypes.TALK_PATTERN:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 8);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 6);
 
-                                byte[] Data = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+                                byte[] Data = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF };
 
                                 for (int i = 2; i < SplitLine.Length; i++)
                                 {
@@ -247,7 +247,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32? DListID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, VarType, Entry.DLists);
+                                UInt32? DListID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, VarType, Entry.ExtraDisplayLists);
 
                                 UInt32? DlistOption = ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
 

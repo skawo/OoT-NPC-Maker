@@ -18,19 +18,23 @@ namespace NPC_Maker
         private bool AutoParse;
         public ScriptEntry Script;
 
-        private System.Windows.Forms.Timer AutoParseTimer;
-        private System.Windows.Forms.Timer ColorizeTimer;
+        private readonly System.Windows.Forms.Timer AutoParseTimer;
+        private readonly System.Windows.Forms.Timer ColorizeTimer;
 
         public ScriptEditor(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
             InitializeComponent();
 
-            AutoParseTimer = new System.Windows.Forms.Timer();
-            AutoParseTimer.Interval = 1000;
+            AutoParseTimer = new System.Windows.Forms.Timer
+            {
+                Interval = 1000
+            };
             AutoParseTimer.Tick += AutoParseTimer_Tick;
 
-            ColorizeTimer = new System.Windows.Forms.Timer();
-            ColorizeTimer.Interval = 500;
+            ColorizeTimer = new System.Windows.Forms.Timer
+            {
+                Interval = 500
+            };
             ColorizeTimer.Tick += ColorizeTimer_Tick;
 
             Init(ref _Entry, _Script, _SyntaxHighlighting, _AutoParse);

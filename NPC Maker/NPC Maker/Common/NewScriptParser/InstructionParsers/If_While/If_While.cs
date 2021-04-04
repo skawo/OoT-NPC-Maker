@@ -11,7 +11,7 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 List<Instruction> Instructions = new List<Instruction>();
-                string LabelR = DataHelpers.RandomString(this, 5);
+                string LabelR = ScriptDataHelpers.RandomString(this, 5);
 
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
@@ -59,11 +59,11 @@ namespace NPC_Maker.NewScriptParser
 
                             Else = EndIf;
 
-                            Instructions.Add(new InstructionGoto("__IFTRUE__" + LabelR));
+                            Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                             Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
                             Instructions.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, (byte)Lists.VarTypes.Normal));
                             Instructions.Add(new InstructionGoto("__IFTRUE__" + LabelR));
-                            Instructions.Add(new InstructionGoto("__IFFALSE__" + LabelR));
+                            Instructions.Add(new InstructionLabel("__IFFALSE__" + LabelR));
                             break;
                         }
                     default:

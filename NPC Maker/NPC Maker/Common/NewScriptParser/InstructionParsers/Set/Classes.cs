@@ -17,18 +17,18 @@ namespace NPC_Maker.NewScriptParser
             Operator = _Operator;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(ValueType, Data);
-            DataHelpers.AddObjectToByteList(Operator, Data);
-            DataHelpers.AddObjectToByteList(Value, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(ValueType, Data);
+            Helpers.AddObjectToByteList(Operator, Data);
+            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 8);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
             return Data.ToArray();
         }
@@ -55,18 +55,18 @@ namespace NPC_Maker.NewScriptParser
             Operator = _Operator;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(Operator, Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
-            DataHelpers.AddObjectToByteList(Value, Data);
-            DataHelpers.AddObjectToByteList(Value2, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Operator, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
+            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.AddObjectToByteList(Value2, Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
         }
@@ -93,21 +93,21 @@ namespace NPC_Maker.NewScriptParser
             ValType3 = _ValType3;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValType1, ValType2, 4), Data);
-            DataHelpers.AddObjectToByteList(ValType3, Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValType1, ValType2, 4), Data);
+            Helpers.AddObjectToByteList(ValType3, Data);
 
-            DataHelpers.AddObjectToByteList(R, Data);
-            DataHelpers.AddObjectToByteList(G, Data);
-            DataHelpers.AddObjectToByteList(B, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(R, Data);
+            Helpers.AddObjectToByteList(G, Data);
+            Helpers.AddObjectToByteList(B, Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 16);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
             return Data.ToArray();
         }
@@ -126,17 +126,19 @@ namespace NPC_Maker.NewScriptParser
             Resp3 = _Resp3;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(Resp1.InstructionNumber, Data);
-            DataHelpers.AddObjectToByteList(Resp2.InstructionNumber, Data);
-            DataHelpers.AddObjectToByteList(Resp3.InstructionNumber, Data);
-            DataHelpers.Ensure4ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 14);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, Resp1, ref Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, Resp2, ref Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, Resp3, ref Data);
+
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
             return Data.ToArray();
         }
@@ -151,15 +153,15 @@ namespace NPC_Maker.NewScriptParser
             Goto = _Goto;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(Goto.InstructionNumber, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, Goto, ref Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 6);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 4);
 
             return Data.ToArray();
         }
@@ -174,15 +176,15 @@ namespace NPC_Maker.NewScriptParser
             Pattern = _Pattern;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
             Data.AddRange(Pattern);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 8);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 6);
 
             return Data.ToArray();
         }
@@ -203,18 +205,18 @@ namespace NPC_Maker.NewScriptParser
             ValueType2 = _ValueType2;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(Target, Data);
-            DataHelpers.AddObjectToByteList(DataHelpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
-            DataHelpers.AddObjectToByteList(Value, Data);
-            DataHelpers.AddObjectToByteList(Value2, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Target, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
+            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.AddObjectToByteList(Value2, Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
         }
@@ -232,18 +234,18 @@ namespace NPC_Maker.NewScriptParser
             Pattern = _Pattern;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(ValueType, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
-            DataHelpers.AddObjectToByteList(AnimationID, Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(ValueType, Data);
+            Helpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(AnimationID, Data);
             Data.AddRange(Pattern);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
         }

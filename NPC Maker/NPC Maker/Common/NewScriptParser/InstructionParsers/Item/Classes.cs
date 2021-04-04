@@ -17,19 +17,19 @@ namespace NPC_Maker.NewScriptParser
             ValueType = _ValueType;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
 
             List<byte> Data = new List<byte>();
 
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.AddObjectToByteList(SubID, Data);
-            DataHelpers.AddObjectToByteList(ValueType, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
-            DataHelpers.AddObjectToByteList(Value, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(ValueType, Data);
+            Helpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 8);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
             return Data.ToArray();
         }

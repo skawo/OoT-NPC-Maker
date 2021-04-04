@@ -17,7 +17,7 @@ namespace NPC_Maker.NewScriptParser
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionGoto("__NULL__");
+                return new InstructionGoto(Lists.Keyword_Label_Null);
             }
             catch (Exception)
             {

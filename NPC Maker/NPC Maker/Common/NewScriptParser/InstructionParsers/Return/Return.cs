@@ -12,7 +12,7 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 1);
-                return new InstructionGoto("__RETURN__");
+                return new InstructionGoto(Lists.Keyword_Label_Return);
             }
             catch (ParseException pEx)
             {

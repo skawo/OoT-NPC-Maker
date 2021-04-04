@@ -42,6 +42,9 @@ namespace NPC_Maker
         public const string Keyword_Self8 = "SELF8";
         public const string Keyword_Self16 = "SELF16";
         public const string Keyword_Self32 = "SELF32";
+        public const string Keyword_Debug_Skip_Label_Check = "__SKIPCHECK__";
+        public const string Keyword_Label_Return = "__RETURN__";
+        public const string Keyword_Label_Null = "__NULL__";
 
         public static List<string> AllKeywords = new List<string>()
         {

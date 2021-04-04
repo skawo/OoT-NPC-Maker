@@ -26,8 +26,8 @@ namespace NPC_Maker
         public UInt16 ObjectID { get; set; }
         public UInt32 Hierarchy { get; set; }
         public byte HierarchyType { get; set; }
-        public Int16[] ModelOffs { get; set; }
-        public float Scale { get; set; }
+        public Int16[] ModelPositionOffsets { get; set; }
+        public float ModelScale { get; set; }
         public byte CutsceneID { get; set; }
 
         public byte LookAtType { get; set; }
@@ -40,29 +40,29 @@ namespace NPC_Maker
         public byte WaistHorizAxis { get; set; }
         public byte WaistVertAxis { get; set; }
 
-        public UInt16 DegreesVert { get; set; }
-        public UInt16 DegreesHor { get; set; }
-        public Int16[] LookAtOffs { get; set; }
+        public UInt16 LookAtDegreesVertical { get; set; }
+        public UInt16 LookAtDegreesHorizontal { get; set; }
+        public Int16[] LookAtPositionOffsets { get; set; }
 
-        public bool Collision { get; set; }
-        public bool Switches { get; set; }
-        public bool Pushable { get; set; }
-        public bool AlwActive { get; set; }
-        public bool AlwDraw { get; set; }
-        public bool JustScript { get; set; }
-        public bool ReactAttacked { get; set; }
-        public bool OpenDoors { get; set; }
-        public UInt16 ColRadius { get; set; }
-        public UInt16 Height { get; set; }
-        public Int16[] ColOffs { get; set; }
+        public bool HasCollision { get; set; }
+        public bool PushesSwitches { get; set; }
+        public bool IsPushable { get; set; }
+        public bool IsAlwaysActive { get; set; }
+        public bool IsAlwaysDrawn { get; set; }
+        public bool ExecuteJustScript { get; set; }
+        public bool ReactsIfAttacked { get; set; }
+        public bool OpensDoors { get; set; }
+        public UInt16 CollisionRadius { get; set; }
+        public UInt16 CollisionHeight { get; set; }
+        public Int16[] CollisionPositionOffsets { get; set; }
 
-        public bool Shadow { get; set; }
-        public UInt16 ShRadius { get; set; }
+        public bool CastsShadow { get; set; }
+        public UInt16 ShadowRadius { get; set; }
 
-        public bool Targettable { get; set; }
-        public byte TargetDist { get; set; }
+        public bool IsTargettable { get; set; }
+        public byte TargetDistance { get; set; }
         public byte TargetLimb { get; set; }
-        public Int16[] TargOffs { get; set; }
+        public Int16[] TargetPositionOffsets { get; set; }
         public float TalkRadius { get; set; }
 
         public byte MovementType { get; set; }
@@ -70,11 +70,11 @@ namespace NPC_Maker
         public float MovementSpeed { get; set; }
         public float GravityForce { get; set; }
         public byte PathID { get; set; }
-        public Int16 LoopStart { get; set; }
-        public Int16 LoopEnd { get; set; }
-        public UInt16 LoopDel { get; set; }
-        public bool Loop { get; set; }
-        public bool TimedPath { get; set; }
+        public Int16 PathLoopStartID { get; set; }
+        public Int16 PathLoopEndID { get; set; }
+        public UInt16 PathLoopDelayTime { get; set; }
+        public bool LoopPath { get; set; }
+        public bool PathIsTimed { get; set; }
         public UInt16 TimedPathStart { get; set; }
         public UInt16 TimedPathEnd { get; set; }
 
@@ -83,7 +83,7 @@ namespace NPC_Maker
 
         public List<ScriptEntry> Scripts { get; set; }
 
-        public System.Drawing.Color EnvColor { get; set; }
+        public System.Drawing.Color EnvironmentColor { get; set; }
         public List<List<SegmentEntry>> Segments { get; set; }
         public string BlinkPattern { get; set; }
         public string TalkPattern { get; set; }
@@ -91,9 +91,10 @@ namespace NPC_Maker
         public byte TalkSegment { get; set; }
         public byte BlinkSpeed { get; set; }
         public byte TalkSpeed { get; set; }
-        public List<DListEntry> DLists { get; set; }
+        public List<DListEntry> ExtraDisplayLists { get; set; }
 
-        //public List<ColorEntry> Colors { get; set; }
+        public List<ColorEntry> DisplayListColors { get; set; }
+
 
         public NPCEntry()
         {
@@ -103,8 +104,8 @@ namespace NPC_Maker
             ObjectID = 0;
             Hierarchy = 0;
             HierarchyType = 0;
-            ModelOffs = new Int16[] { 0, 0, 0 };
-            Scale = 0.01f;
+            ModelPositionOffsets = new Int16[] { 0, 0, 0 };
+            ModelScale = 0.01f;
 
             LookAtType = 0;
             HeadLimb = 0;
@@ -113,28 +114,28 @@ namespace NPC_Maker
             WaistLimb = 0;
             WaistHorizAxis = 0;
             WaistVertAxis = 0;
-            DegreesVert = 0;
-            DegreesHor = 0;
-            LookAtOffs = new Int16[] { 0, 0, 0 };
+            LookAtDegreesVertical = 0;
+            LookAtDegreesHorizontal = 0;
+            LookAtPositionOffsets = new Int16[] { 0, 0, 0 };
 
-            Collision = false;
-            Switches = false;
-            Pushable = false;
-            AlwActive = false;
-            JustScript = false;
-            ReactAttacked = false;
-            OpenDoors = false;
-            ColRadius = 0;
-            Height = 0;
-            ColOffs = new Int16[] { 0, 0, 0 };
+            HasCollision = false;
+            PushesSwitches = false;
+            IsPushable = false;
+            IsAlwaysActive = false;
+            ExecuteJustScript = false;
+            ReactsIfAttacked = false;
+            OpensDoors = false;
+            CollisionRadius = 0;
+            CollisionHeight = 0;
+            CollisionPositionOffsets = new Int16[] { 0, 0, 0 };
 
-            Shadow = false;
-            ShRadius = 0;
+            CastsShadow = false;
+            ShadowRadius = 0;
 
-            Targettable = false;
-            TargetDist = 1;
+            IsTargettable = false;
+            TargetDistance = 1;
             TargetLimb = 0;
-            TargOffs = new Int16[] { 0, 0, 0 };
+            TargetPositionOffsets = new Int16[] { 0, 0, 0 };
             TalkRadius = 150.0f;
 
             MovementType = 0;
@@ -142,10 +143,10 @@ namespace NPC_Maker
             MovementSpeed = 1.0f;
             GravityForce = 1.0f;
             PathID = 0;
-            LoopStart = -1;
-            LoopEnd = -1;
-            LoopDel = 0;
-            Loop = false;
+            PathLoopStartID = -1;
+            PathLoopEndID = -1;
+            PathLoopDelayTime = 0;
+            LoopPath = false;
             TimedPathStart = 0;
             TimedPathEnd = Helpers.GetOcarinaTime("23:59");
 
@@ -156,7 +157,7 @@ namespace NPC_Maker
 
             Segments = new List<List<SegmentEntry>>();
 
-            EnvColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+            EnvironmentColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
             BlinkPattern = "";
             TalkPattern = "";
             BlinkSegment = 8;
@@ -164,16 +165,16 @@ namespace NPC_Maker
             BlinkSpeed = 1;
             TalkSpeed = 1;
 
-            DLists = new List<DListEntry>();
-            //Colors = new List<ColorEntry>();
+            ExtraDisplayLists = new List<DListEntry>();
+            DisplayListColors = new List<ColorEntry>();
         }
 
-        /*
+        
         public List<OutputColorEntry> ParseColorEntries()
         {
             List<OutputColorEntry> Out = new List<OutputColorEntry>();
 
-            foreach (ColorEntry CE in this.Colors)
+            foreach (ColorEntry CE in this.DisplayListColors)
             {
                 if (CE.Limbs != "")
                 {
@@ -205,7 +206,7 @@ namespace NPC_Maker
 
             return Out;
         }
-        */
+        
 
         public enum Members
         {
@@ -282,10 +283,10 @@ namespace NPC_Maker
                 case Members.OBJID: ObjectID = Convert.ToUInt16(Value); break;
                 case Members.HIERARCHY: Hierarchy = Convert.ToUInt32(Value); break;
                 case Members.HIERARCHYTYPE: HierarchyType = Convert.ToByte(Value); break;
-                case Members.XMODELOFFS: ModelOffs[0] = Convert.ToInt16(Value); break;
-                case Members.YMODELOFFS: ModelOffs[1] = Convert.ToInt16(Value); break;
-                case Members.ZMODELOFFS: ModelOffs[2] = Convert.ToInt16(Value); break;
-                case Members.SCALE: Scale = (float)Convert.ToDecimal(Value); break;
+                case Members.XMODELOFFS: ModelPositionOffsets[0] = Convert.ToInt16(Value); break;
+                case Members.YMODELOFFS: ModelPositionOffsets[1] = Convert.ToInt16(Value); break;
+                case Members.ZMODELOFFS: ModelPositionOffsets[2] = Convert.ToInt16(Value); break;
+                case Members.SCALE: ModelScale = (float)Convert.ToDecimal(Value); break;
                 case Members.CUTSCENEID: CutsceneID = Convert.ToByte(Value); break;
 
                 case Members.LOOKATTYPE: LookAtType = Convert.ToByte(Value); break;
@@ -295,39 +296,39 @@ namespace NPC_Maker
                 case Members.WAISTLIMB: WaistLimb = Convert.ToByte(Value); break;
                 case Members.WAISTVERTAXIS: WaistVertAxis = Convert.ToByte(Value); break;
                 case Members.WAISTHORIZAXIS: WaistHorizAxis = Convert.ToByte(Value); break;
-                case Members.DEGVERT: DegreesVert = Convert.ToUInt16(Value); break;
-                case Members.DEGHOZ: DegreesHor = Convert.ToUInt16(Value); break;
-                case Members.XLOOKATOFFS: LookAtOffs[0] = Convert.ToInt16(Value); break;
-                case Members.YLOOKATOFFS: LookAtOffs[1] = Convert.ToInt16(Value); break;
-                case Members.ZLOOKATOFFS: LookAtOffs[2] = Convert.ToInt16(Value); break;
+                case Members.DEGVERT: LookAtDegreesVertical = Convert.ToUInt16(Value); break;
+                case Members.DEGHOZ: LookAtDegreesHorizontal = Convert.ToUInt16(Value); break;
+                case Members.XLOOKATOFFS: LookAtPositionOffsets[0] = Convert.ToInt16(Value); break;
+                case Members.YLOOKATOFFS: LookAtPositionOffsets[1] = Convert.ToInt16(Value); break;
+                case Members.ZLOOKATOFFS: LookAtPositionOffsets[2] = Convert.ToInt16(Value); break;
 
-                case Members.COLLISION: Collision = Convert.ToBoolean(Value); break;
-                case Members.SWITCHES: Switches = Convert.ToBoolean(Value); break;
-                case Members.PUSHABLE: Pushable = Convert.ToBoolean(Value); break;
-                case Members.COLRADIUS: ColRadius = Convert.ToUInt16(Value); break;
-                case Members.COLHEIGHT: Height = Convert.ToUInt16(Value); break;
+                case Members.COLLISION: HasCollision = Convert.ToBoolean(Value); break;
+                case Members.SWITCHES: PushesSwitches = Convert.ToBoolean(Value); break;
+                case Members.PUSHABLE: IsPushable = Convert.ToBoolean(Value); break;
+                case Members.COLRADIUS: CollisionRadius = Convert.ToUInt16(Value); break;
+                case Members.COLHEIGHT: CollisionHeight = Convert.ToUInt16(Value); break;
 
-                case Members.SHADOW: Shadow = Convert.ToBoolean(Value); break;
-                case Members.SHADOWRADIUS: ShRadius = Convert.ToUInt16(Value); break;
+                case Members.SHADOW: CastsShadow = Convert.ToBoolean(Value); break;
+                case Members.SHADOWRADIUS: ShadowRadius = Convert.ToUInt16(Value); break;
 
-                case Members.XCOLOFFS: ColOffs[0] = Convert.ToInt16(Value); break;
-                case Members.YCOLOFFS: ColOffs[1] = Convert.ToInt16(Value); break;
-                case Members.ZCOLOFFS: ColOffs[2] = Convert.ToInt16(Value); break;
+                case Members.XCOLOFFS: CollisionPositionOffsets[0] = Convert.ToInt16(Value); break;
+                case Members.YCOLOFFS: CollisionPositionOffsets[1] = Convert.ToInt16(Value); break;
+                case Members.ZCOLOFFS: CollisionPositionOffsets[2] = Convert.ToInt16(Value); break;
 
-                case Members.TARGETTABLE: Targettable = Convert.ToBoolean(Value); break;
+                case Members.TARGETTABLE: IsTargettable = Convert.ToBoolean(Value); break;
                 case Members.TARGETLIMB: TargetLimb = Convert.ToByte(Value); break;
-                case Members.XTARGETOFFS: TargOffs[0] = Convert.ToInt16(Value); break;
-                case Members.YTARGETOFFS: TargOffs[1] = Convert.ToInt16(Value); break;
-                case Members.ZTARGETOFFS: TargOffs[2] = Convert.ToInt16(Value); break;
+                case Members.XTARGETOFFS: TargetPositionOffsets[0] = Convert.ToInt16(Value); break;
+                case Members.YTARGETOFFS: TargetPositionOffsets[1] = Convert.ToInt16(Value); break;
+                case Members.ZTARGETOFFS: TargetPositionOffsets[2] = Convert.ToInt16(Value); break;
 
                 case Members.MOVEMENT: MovementType = Convert.ToByte(Value); break;
                 case Members.MOVDISTANCE: MovementDistance = Convert.ToUInt16(Value); break;
                 case Members.MOVSPEED: MovementSpeed = (float)Convert.ToDecimal(Value); break;
                 case Members.PATHID: PathID = Convert.ToByte(Value); break;
-                case Members.LOOPSTART: LoopStart = Convert.ToInt16(Value); break;
-                case Members.LOOPEND: LoopEnd = Convert.ToInt16(Value); break;
-                case Members.LOOPDEL: LoopDel = Convert.ToUInt16(Value); break;
-                case Members.LOOP: Loop = Convert.ToBoolean(Value); break;
+                case Members.LOOPSTART: PathLoopStartID = Convert.ToInt16(Value); break;
+                case Members.LOOPEND: PathLoopEndID = Convert.ToInt16(Value); break;
+                case Members.LOOPDEL: PathLoopDelayTime = Convert.ToUInt16(Value); break;
+                case Members.LOOP: LoopPath = Convert.ToBoolean(Value); break;
 
                 case Members.ANIMTYPE: AnimationType = Convert.ToByte(Value); break;
 
@@ -338,14 +339,14 @@ namespace NPC_Maker
                 case Members.BLINKSPE: BlinkSpeed = Convert.ToByte(Value); break;
                 case Members.TALKSPE: TalkSpeed = Convert.ToByte(Value); break;
 
-                case Members.ACTIVE: AlwActive = Convert.ToBoolean(Value); break;
-                case Members.DRAWOUTOFCAM: AlwDraw = Convert.ToBoolean(Value); break;
-                case Members.TARGETDIST: TargetDist = Convert.ToByte(Value); break;
+                case Members.ACTIVE: IsAlwaysActive = Convert.ToBoolean(Value); break;
+                case Members.DRAWOUTOFCAM: IsAlwaysDrawn = Convert.ToBoolean(Value); break;
+                case Members.TARGETDIST: TargetDistance = Convert.ToByte(Value); break;
 
-                case Members.JUSTSCRIPT: JustScript = Convert.ToBoolean(Value); break;
-                case Members.REACTATT: ReactAttacked = Convert.ToBoolean(Value); break;
-                case Members.TIMEDPATH: TimedPath = Convert.ToBoolean(Value); break;
-                case Members.OPENDOORS: OpenDoors = Convert.ToBoolean(Value); break;
+                case Members.JUSTSCRIPT: ExecuteJustScript = Convert.ToBoolean(Value); break;
+                case Members.REACTATT: ReactsIfAttacked = Convert.ToBoolean(Value); break;
+                case Members.TIMEDPATH: PathIsTimed = Convert.ToBoolean(Value); break;
+                case Members.OPENDOORS: OpensDoors = Convert.ToBoolean(Value); break;
 
                 case Members.TALKRADIUS: TalkRadius = Convert.ToUInt16(Value); break;
                 case Members.GRAVITYFORCE: GravityForce = (float)Convert.ToDecimal(Value); break;
@@ -378,7 +379,8 @@ namespace NPC_Maker
         public UInt32 Address { get; set; }
         public Int16 ObjID { get; set; }
         public float Speed { get; set; }
-        public byte[] Frames { get; set; }
+        public byte StartFrame { get; set; }
+        public byte EndFrame { get; set; }
 
         public AnimationEntry()
         {
@@ -386,15 +388,17 @@ namespace NPC_Maker
             Address = 0;
             Speed = 1.0f;
             ObjID = -1;
-            Frames = new byte[4] { 0xFF, 0xFF, 0xFF, 0xFF };
+            StartFrame = 0;
+            EndFrame = 0xFF;
         }
-        public AnimationEntry(string _Name, UInt32 _Address, float _Speed, Int16 _ObjectID, byte[] _Frames)
+        public AnimationEntry(string _Name, UInt32 _Address, float _Speed, Int16 _ObjectID, byte _StartFrame, byte _EndFrame)
         {
             Name = _Name;
             Address = _Address;
             Speed = _Speed;
             ObjID = _ObjectID;
-            Frames = _Frames;
+            StartFrame = _StartFrame;
+            EndFrame = _EndFrame;
         }
     }
 
@@ -418,7 +422,7 @@ namespace NPC_Maker
         }
     }
 
-    /*
+    
       public class OutputColorEntry
       {
           public byte LimbID { get; set; }
@@ -457,7 +461,7 @@ namespace NPC_Maker
               Color = _Color;
               Limbs = _Limb;
           }
-      }*/
+      }
 
     public class DListEntry
     {

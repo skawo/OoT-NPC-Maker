@@ -16,16 +16,16 @@ namespace NPC_Maker.NewScriptParser
             GotoInstr = new InstructionLabel(Label);
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
-            DataHelpers.AddObjectToByteList(ID, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
-            DataHelpers.AddObjectToByteList(GotoInstr.InstructionNumber, Data);
-            DataHelpers.Ensure2ByteAlign(Data);
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.Ensure2ByteAlign(Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoInstr, ref Data);
+            Helpers.Ensure2ByteAlign(Data);
 
-            DataHelpers.ErrorIfExpectedLenWrong(Data, 6);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 4);
 
             return Data.ToArray();
         }

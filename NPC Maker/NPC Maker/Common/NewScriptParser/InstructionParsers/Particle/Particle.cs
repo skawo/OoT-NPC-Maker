@@ -199,7 +199,7 @@ namespace NPC_Maker.NewScriptParser
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 DListIndexT = ScriptHelpers.GetVarType(Split, 1);
-                                DListIndex = Convert.ToInt32(ScriptHelpers.Helper_GetDListID(Split, 1, DListIndexT, Entry.DLists));
+                                DListIndex = Convert.ToInt32(ScriptHelpers.Helper_GetDListID(Split, 1, DListIndexT, Entry.ExtraDisplayLists));
 
                                 continue;
                             }
