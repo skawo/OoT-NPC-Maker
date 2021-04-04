@@ -949,7 +949,7 @@ namespace NPC_Maker
         {
             try
             {
-                if ((sender as DataGridView).SelectedCells[0].RowIndex > 1)
+                if ((sender as DataGridView).SelectedCells[0].RowIndex > 2)
                 {
                     if (e.KeyCode == Keys.Delete)
                     {
