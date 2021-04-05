@@ -58,6 +58,10 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(PosRelativeness, Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosZT, RotXT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ActorIDVarT, ActorVarT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(RotYT, RotZT, 4), Data);
+
+            Helpers.Ensure4ByteAlign(Data);
 
             Helpers.AddObjectToByteList(ActorID, Data);
             Helpers.AddObjectToByteList(ActorVariable, Data);
@@ -69,11 +73,9 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(RotY, Data);
             Helpers.AddObjectToByteList(RotZ, Data);
 
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ActorIDVarT, ActorVarT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(RotYT, RotZT, 4), Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 38);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 40);
 
             return Data.ToArray();
         }

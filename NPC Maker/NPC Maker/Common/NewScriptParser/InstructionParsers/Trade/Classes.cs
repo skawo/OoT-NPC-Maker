@@ -40,7 +40,7 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(Correct.ChildText, Data);
             Helpers.AddObjectToByteList(Correct.ItemT, Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Correct.AdultTextT, Correct.ChildTextT, 4), Data);
-            Helpers.Ensure2ByteAlign(Data); // 26
+            Helpers.Ensure4ByteAlign(Data); // 28
 
             foreach (TradeSetting Setting in Failure)
             {
@@ -49,12 +49,12 @@ namespace NPC_Maker.NewScriptParser
                 Helpers.AddObjectToByteList(Setting.ChildText, Data);
                 Helpers.AddObjectToByteList(Setting.ItemT, Data);
                 Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Setting.AdultTextT, Setting.ChildTextT, 4), Data);
-                Helpers.Ensure2ByteAlign(Data); // 14
+                Helpers.Ensure4ByteAlign(Data); // 16
             }
 
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 26 + 14 * Failure.Count);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 28 + 16 * Failure.Count);
 
             return Data.ToArray();
         }

@@ -92,7 +92,7 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SecRGBAVarT[0], SecRGBAVarT[1], 4), Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SecRGBAVarT[2], SecRGBAVarT[3], 4), Data);
 
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
             Helpers.AddObjectToByteList(Type, Data);
             Helpers.AddObjectToByteList(PosX, Data);
@@ -126,9 +126,9 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(Alpha, Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, LabelJumpIfFound, ref Data);
 
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 126);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 128);
 
             return Data.ToArray();
         }

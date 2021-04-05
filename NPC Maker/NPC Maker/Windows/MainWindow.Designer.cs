@@ -46,6 +46,12 @@
             this.NumUpDown_Hierarchy = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_YModelOffs = new System.Windows.Forms.NumericUpDown();
             this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_StartFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_EndFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_AnimDefs = new System.Windows.Forms.Label();
             this.NumUpDown_XModelOffs = new System.Windows.Forms.NumericUpDown();
             this.ComboBox_HierarchyType = new System.Windows.Forms.ComboBox();
@@ -121,6 +127,9 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.ColorsDataGridView = new NPC_Maker.CustomDataGridView(this.components);
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Chkb_Opendoors = new System.Windows.Forms.CheckBox();
             this.ChkRunJustScript = new System.Windows.Forms.CheckBox();
             this.Chkb_ReactIfAtt = new System.Windows.Forms.CheckBox();
@@ -253,15 +262,6 @@
             this.actorCategoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sFXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.ColorsDataGridView = new NPC_Maker.CustomDataGridView(this.components);
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_StartFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_EndFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -296,6 +296,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
             this.Tab3_BehaviorData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).BeginInit();
             this.Panel_Collision.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZColOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YColOffs)).BeginInit();
@@ -331,7 +332,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -430,16 +430,16 @@
             this.Checkbox_EnvColor.AutoSize = true;
             this.Checkbox_EnvColor.Location = new System.Drawing.Point(404, 117);
             this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
-            this.Checkbox_EnvColor.Size = new System.Drawing.Size(114, 17);
+            this.Checkbox_EnvColor.Size = new System.Drawing.Size(146, 17);
             this.Checkbox_EnvColor.TabIndex = 50;
-            this.Checkbox_EnvColor.Text = "Environment color:";
+            this.Checkbox_EnvColor.Text = "Global environment color:";
             this.Checkbox_EnvColor.UseVisualStyleBackColor = true;
             this.Checkbox_EnvColor.CheckedChanged += new System.EventHandler(this.Checkbox_EnvColor_CheckedChanged);
             // 
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
-            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(536, 113);
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(556, 113);
             this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
             this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(42, 23);
             this.Button_EnvironmentColorPreview.TabIndex = 49;
@@ -562,6 +562,47 @@
             this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
             this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
             // 
+            // Col_AnimName
+            // 
+            this.Col_AnimName.FillWeight = 90F;
+            this.Col_AnimName.HeaderText = "Purpose";
+            this.Col_AnimName.Name = "Col_AnimName";
+            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Anim
+            // 
+            this.Col_Anim.FillWeight = 60F;
+            this.Col_Anim.HeaderText = "Offset";
+            this.Col_Anim.Name = "Col_Anim";
+            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_StartFrame
+            // 
+            this.Col_StartFrame.FillWeight = 40F;
+            this.Col_StartFrame.HeaderText = "Start Frame";
+            this.Col_StartFrame.Name = "Col_StartFrame";
+            this.Col_StartFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_EndFrame
+            // 
+            this.Col_EndFrame.FillWeight = 40F;
+            this.Col_EndFrame.HeaderText = "End Frame";
+            this.Col_EndFrame.Name = "Col_EndFrame";
+            // 
+            // Col_Speed
+            // 
+            this.Col_Speed.FillWeight = 40F;
+            this.Col_Speed.HeaderText = "Speed";
+            this.Col_Speed.Name = "Col_Speed";
+            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_OBJ
+            // 
+            this.Col_OBJ.FillWeight = 60F;
+            this.Col_OBJ.HeaderText = "Object";
+            this.Col_OBJ.Name = "Col_OBJ";
+            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Label_AnimDefs
             // 
             this.Label_AnimDefs.AutoSize = true;
@@ -670,7 +711,7 @@
             0,
             0});
             this.NumUpDown_Scale.Name = "NumUpDown_Scale";
-            this.NumUpDown_Scale.Size = new System.Drawing.Size(174, 20);
+            this.NumUpDown_Scale.Size = new System.Drawing.Size(114, 20);
             this.NumUpDown_Scale.TabIndex = 17;
             this.NumUpDown_Scale.Tag = NPC_Maker.NPCEntry.Members.SCALE;
             this.NumUpDown_Scale.Value = new decimal(new int[] {
@@ -1424,6 +1465,43 @@
             this.Tab3_BehaviorData.Size = new System.Drawing.Size(810, 615);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
+            // 
+            // ColorsDataGridView
+            // 
+            this.ColorsDataGridView.AllowUserToResizeColumns = false;
+            this.ColorsDataGridView.AllowUserToResizeRows = false;
+            this.ColorsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ColorsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ColorsDataGridView.BackgroundColor = System.Drawing.Color.White;
+            this.ColorsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+            this.ColorsDataGridView.Location = new System.Drawing.Point(440, 252);
+            this.ColorsDataGridView.MultiSelect = false;
+            this.ColorsDataGridView.Name = "ColorsDataGridView";
+            this.ColorsDataGridView.RowHeadersVisible = false;
+            this.ColorsDataGridView.Size = new System.Drawing.Size(362, 324);
+            this.ColorsDataGridView.TabIndex = 75;
+            this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
+            this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
+            this.ColorsDataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorsDataGridView_KeyUp);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.FillWeight = 90F;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Start limb";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.FillWeight = 60F;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Color";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Chkb_Opendoors
             // 
@@ -2984,84 +3062,6 @@
             this.musicToolStripMenuItem1.Text = "Music";
             this.musicToolStripMenuItem1.Click += new System.EventHandler(this.MusicToolStripMenuItem1_Click);
             // 
-            // ColorsDataGridView
-            // 
-            this.ColorsDataGridView.AllowUserToResizeColumns = false;
-            this.ColorsDataGridView.AllowUserToResizeRows = false;
-            this.ColorsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ColorsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.ColorsDataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.ColorsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2});
-            this.ColorsDataGridView.Location = new System.Drawing.Point(440, 259);
-            this.ColorsDataGridView.MultiSelect = false;
-            this.ColorsDataGridView.Name = "ColorsDataGridView";
-            this.ColorsDataGridView.RowHeadersVisible = false;
-            this.ColorsDataGridView.Size = new System.Drawing.Size(362, 317);
-            this.ColorsDataGridView.TabIndex = 75;
-            this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
-            this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
-            this.ColorsDataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorsDataGridView_KeyUp);
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.FillWeight = 90F;
-            this.dataGridViewTextBoxColumn1.HeaderText = "Limbs";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.FillWeight = 60F;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Color";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_AnimName
-            // 
-            this.Col_AnimName.FillWeight = 90F;
-            this.Col_AnimName.HeaderText = "Purpose";
-            this.Col_AnimName.Name = "Col_AnimName";
-            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Anim
-            // 
-            this.Col_Anim.FillWeight = 60F;
-            this.Col_Anim.HeaderText = "Offset";
-            this.Col_Anim.Name = "Col_Anim";
-            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_StartFrame
-            // 
-            this.Col_StartFrame.FillWeight = 40F;
-            this.Col_StartFrame.HeaderText = "Start Frame";
-            this.Col_StartFrame.Name = "Col_StartFrame";
-            this.Col_StartFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_EndFrame
-            // 
-            this.Col_EndFrame.FillWeight = 40F;
-            this.Col_EndFrame.HeaderText = "End Frame";
-            this.Col_EndFrame.Name = "Col_EndFrame";
-            // 
-            // Col_Speed
-            // 
-            this.Col_Speed.FillWeight = 40F;
-            this.Col_Speed.HeaderText = "Speed";
-            this.Col_Speed.Name = "Col_Speed";
-            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_OBJ
-            // 
-            this.Col_OBJ.FillWeight = 60F;
-            this.Col_OBJ.HeaderText = "Object";
-            this.Col_OBJ.Name = "Col_OBJ";
-            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3113,6 +3113,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             this.Tab3_BehaviorData.ResumeLayout(false);
             this.Tab3_BehaviorData.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).EndInit();
             this.Panel_Collision.ResumeLayout(false);
             this.Panel_Collision.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZColOffs)).EndInit();
@@ -3154,7 +3155,6 @@
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3385,14 +3385,14 @@
         private System.Windows.Forms.ToolStripMenuItem actorCategoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkSyntaxToolStripMenuItem;
         private CustomDataGridView ColorsDataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_AnimName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Anim;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_StartFrame;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_EndFrame;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Speed;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_OBJ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     }
 }
 

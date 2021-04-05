@@ -54,6 +54,12 @@ namespace NPC_Maker
                 ByteList.Add(0);
         }
 
+        public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
+        {
+            if (Len != ByteList.Count)
+                System.Windows.Forms.MessageBox.Show($"Critical error: Got wrong amount of bytes.");
+        }
+
         public static byte SmooshTwoValues(byte a, byte b, int offset)
         {
             byte o = 0;

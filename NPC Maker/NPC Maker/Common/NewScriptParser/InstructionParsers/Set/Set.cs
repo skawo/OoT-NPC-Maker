@@ -253,37 +253,18 @@ namespace NPC_Maker.NewScriptParser
 
                                 return new InstructionSetWTwoValues((byte)SubID, DListID, VarType, DlistOption, (byte)Lists.VarTypes.Normal, 0);
                             }
-                        case (int)Lists.SetSubTypes.ANIMATION_KEYFRAMES:
+                        case (int)Lists.SetSubTypes.ANIMATION_STARTFRAME:
+                        case (int)Lists.SetSubTypes.ANIMATION_ENDFRAME:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 4, 7);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
-                                int?[] Frames = new int?[4] { 255, 255, 255, 255 };
+                                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
+                                UInt32? Frame = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, 255));
 
-                                for (int i = 3; i < SplitLine.Length; i++)
-                                {
-                                    Frames[i - 3] = ScriptHelpers.Helper_ConvertToInt32(SplitLine[i]);
-
-                                    if (Frames[i - 3] == null)
-                                        throw ParseException.ParamConversionError(SplitLine);
-
-                                    if (Frames[i - 3] < 0)
-                                        Frames[i - 3] = 255;
-
-                                    if (Frames[i - 3] > 255)
-                                        throw ParseException.ParamOutOfRange(SplitLine);
-                                }
-
-                                byte[] FrameB = new byte[4] { 
-                                                                    Convert.ToByte(Frames[0]),
-                                                                    Convert.ToByte(Frames[1]),
-                                                                    Convert.ToByte(Frames[2]),
-                                                                    Convert.ToByte(Frames[3]),
-                                                            };
-
-                                return new InstructionSetKeyframes((byte)SubID, (UInt32)AnimID, VarType, FrameB);
+                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Frame, VarType2, 0);
                             }
                         case (int)Lists.SetSubTypes.CAMERA_TRACKING_ON:
                             {

@@ -26,11 +26,12 @@ namespace NPC_Maker.NewScriptParser
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(AdultTextT, ChildTextT, 4), Data);
+            Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(AdultText, Data);
             Helpers.AddObjectToByteList(ChildText, Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 10);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
         }

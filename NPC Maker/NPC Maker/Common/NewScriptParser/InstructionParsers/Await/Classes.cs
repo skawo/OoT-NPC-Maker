@@ -22,9 +22,9 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(ValueType, Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(Value, Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
@@ -51,9 +51,9 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, Condition, 4), Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(Value, Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
@@ -87,7 +87,7 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(Condition, Data);
             Helpers.AddObjectToByteList(Value, Data);
             Helpers.AddObjectToByteList(Value2, Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 

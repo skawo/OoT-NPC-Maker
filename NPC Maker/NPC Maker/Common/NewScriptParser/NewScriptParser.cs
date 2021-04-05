@@ -396,7 +396,7 @@ namespace NPC_Maker.NewScriptParser
 
                 Out.AddRange(InstructionBytes);
 
-                Helpers.Ensure2ByteAlign(Out);
+                Helpers.Ensure4ByteAlign(Out);
 
                 return Out.ToArray();
             }

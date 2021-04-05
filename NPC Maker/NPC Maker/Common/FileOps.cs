@@ -113,6 +113,8 @@ namespace NPC_Maker
                     {
                         List<byte> EntryBytes = new List<byte>();
 
+                        int CurLen = 0;
+
                         EntryBytes.Add(Entry.CutsceneID);
                         EntryBytes.Add(Entry.HeadLimb);
                         EntryBytes.Add(Entry.WaistLimb);
@@ -148,12 +150,14 @@ namespace NPC_Maker
                                                         Entry.IsTargettable,
                                                         Entry.LoopPath,
                                                         Entry.PathIsTimed,
-                                                        false,
+                                                        Entry.EnvironmentColor.A > 0 ? true : false,
                                                         false,
                                                         false,
                                                         false));
 
-                        Helpers.Ensure2ByteAlign(EntryBytes);
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 24;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         EntryBytes.AddRangeBigEndian(Entry.ObjectID);
                         EntryBytes.AddRangeBigEndian(Entry.LookAtDegreesVertical);
@@ -180,10 +184,19 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[1]);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[2]);
 
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 48;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
                         EntryBytes.AddRangeBigEndian(Entry.ModelScale);
                         EntryBytes.AddRangeBigEndian(Entry.TalkRadius);
                         EntryBytes.AddRangeBigEndian(Entry.MovementSpeed);
                         EntryBytes.AddRangeBigEndian(Entry.GravityForce);
+                        EntryBytes.AddRangeBigEndian(Entry.Hierarchy);
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 20;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #region Blink and talk patterns
 
@@ -202,7 +215,7 @@ namespace NPC_Maker
                             return;
                         }
 
-                        for (int i = 0; i < 8; i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             if (BlinkPat.Length > i)
                             {
@@ -220,7 +233,7 @@ namespace NPC_Maker
                                 EntryBytes.Add((byte)0xFF);
                         }
 
-                        for (int i = 0; i < 8; i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             if (TalkPat.Length > i)
                             {
@@ -238,27 +251,43 @@ namespace NPC_Maker
                                 EntryBytes.Add((byte)0xFF);
                         }
 
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 8;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
                         #endregion
 
                         #region Animations
 
-                        EntryBytes.AddRangeBigEndian((UInt16)Entry.Animations.Count());
+                        EntryBytes.AddRangeBigEndian((UInt32)Entry.Animations.Count());
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 4;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         foreach (AnimationEntry Anim in Entry.Animations)
                         {
-                            EntryBytes.AddRangeBigEndian(Anim.ObjID);
+                            EntryBytes.AddRangeBigEndian((UInt32)Anim.Address);
+                            EntryBytes.AddRangeBigEndian((float)Anim.Speed);
+                            EntryBytes.AddRangeBigEndian((UInt16)Anim.ObjID);
                             EntryBytes.Add(Anim.StartFrame);
                             EntryBytes.Add(Anim.EndFrame);
-                            EntryBytes.AddRangeBigEndian(Anim.Address);
-                            EntryBytes.AddRangeBigEndian(Anim.Speed);
-                            Helpers.Ensure2ByteAlign(EntryBytes);
+                            Helpers.Ensure4ByteAlign(EntryBytes);
                         }
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += (12 * Entry.Animations.Count());
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion
 
                         #region Extra display lists
 
-                        EntryBytes.AddRangeBigEndian((UInt16)Entry.ExtraDisplayLists.Count);
+                        EntryBytes.AddRangeBigEndian((UInt32)Entry.ExtraDisplayLists.Count);
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 4;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         foreach (DListEntry Dlist in Entry.ExtraDisplayLists)
                         {
@@ -273,15 +302,23 @@ namespace NPC_Maker
                             EntryBytes.AddRangeBigEndian(Dlist.RotZ);
                             EntryBytes.AddRangeBigEndian(Dlist.Limb);
                             EntryBytes.Add((byte)Dlist.ShowType);
-                            Helpers.Ensure2ByteAlign(EntryBytes);
+                            Helpers.Ensure4ByteAlign(EntryBytes);
                         }
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 32 * Entry.ExtraDisplayLists.Count;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion
 
                         #region Colors
 
                         List<OutputColorEntry> ParsedColors = Entry.ParseColorEntries().OrderBy(x => x.LimbID).ToList();
-                        EntryBytes.AddRangeBigEndian((UInt16)ParsedColors.Count());
+                        EntryBytes.AddRangeBigEndian((UInt32)ParsedColors.Count());
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 4;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         foreach (OutputColorEntry Col in ParsedColors)
                         {
@@ -289,8 +326,12 @@ namespace NPC_Maker
                             EntryBytes.Add(Col.R);
                             EntryBytes.Add(Col.G);
                             EntryBytes.Add(Col.B);
-                            Helpers.Ensure2ByteAlign(EntryBytes);
+                            Helpers.Ensure4ByteAlign(EntryBytes);
                         }
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 4 * ParsedColors.Count;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion
 
@@ -299,6 +340,7 @@ namespace NPC_Maker
                         List<byte> ExtraSegDataOffsets = new List<byte>();
                         List<byte> ExtraSegDataEntries = new List<byte>();
                         UInt32 SegOffset = 7 * 4;
+                        CurLen += (int)SegOffset + 4;
 
                         foreach (List<SegmentEntry> Segment in Entry.Segments)
                         {
@@ -310,27 +352,35 @@ namespace NPC_Maker
                                 ExtraSegDataOffsets.AddRangeBigEndian((UInt32)0);
 
                             SegOffset += SegBytes;
+                            CurLen += (int)SegBytes;
 
                             foreach (SegmentEntry TexEntry in Segment)
                             {
                                 ExtraSegDataEntries.AddRangeBigEndian(TexEntry.Address);
+                                Helpers.Ensure4ByteAlign(ExtraSegDataEntries);
                                 ExtraSegDataEntries.AddRangeBigEndian(TexEntry.ObjectID);
-                                Helpers.Ensure2ByteAlign(ExtraSegDataEntries);
+                                Helpers.Ensure4ByteAlign(ExtraSegDataEntries);
                             }
                         }
 
-                        UInt32 TexBytes = (7 * 4) + (UInt32)ExtraSegDataEntries.Count;
-
-                        EntryBytes.AddRangeBigEndian(TexBytes);
+                        EntryBytes.AddRangeBigEndian((UInt32)(ExtraSegDataOffsets.Count + ExtraSegDataEntries.Count));
+                        CurLen += 4;
                         EntryBytes.AddRange(ExtraSegDataOffsets.ToArray());
                         EntryBytes.AddRange(ExtraSegDataEntries.ToArray());
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion
 
                         #region Scripts
 
                         List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
-                        EntryBytes.AddRangeBigEndian((UInt16)NonEmptyEntries.Count);
+                        EntryBytes.AddRangeBigEndian((UInt32)NonEmptyEntries.Count);
+
+                        CurLen += 4;
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         int ScrOffset = 0;
 
@@ -346,19 +396,28 @@ namespace NPC_Maker
                         {
                             EntryBytes.AddRangeBigEndian(ScrOffset);
                             ScrOffset += Scr.Script.Length;
+
+                            CurLen += 4;
+
                         }
 
                         foreach (NewScriptParser.BScript Scr in ParsedScripts)
                         {
                             EntryBytes.AddRange(Scr.Script);
 
+                            CurLen += Scr.Script.Length;
+
                             if (Scr.ParseErrors.Count != 0)
                                 if (!ParseErrors.Contains(Entry.NPCName))
                                     ParseErrors.Add(Entry.NPCName);
                         }
 
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
                         #endregion
 
+                        EntryBytes.InsertRange(0, Program.BEConverter.GetBytes(EntryBytes.Count));
                         EntryData.Add(EntryBytes);
                         EntryAddresses.AddRangeBigEndian(Offset);
                         Offset += EntryBytes.Count();
@@ -371,7 +430,7 @@ namespace NPC_Maker
 
                 List<byte> Output = new List<byte>();
 
-                Output.AddRangeBigEndian((UInt16)Data.Entries.Count());
+                Output.AddRangeBigEndian((UInt32)Data.Entries.Count());
                 Output.AddRange(EntryAddresses);
 
                 foreach (List<byte> Entry in EntryData)

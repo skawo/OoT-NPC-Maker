@@ -39,7 +39,7 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(Value, Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoTrue, ref Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoFalse, ref Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
@@ -65,7 +65,7 @@ namespace NPC_Maker.NewScriptParser
             ValueType2 = _ValueType2;
         }
 
-        public override byte[] ToBytes()
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
 
             List<byte> Data = new List<byte>();
@@ -76,11 +76,11 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(ValueType2, Data);
             Helpers.AddObjectToByteList(Value, Data);
             Helpers.AddObjectToByteList(Value2, Data);
-            Helpers.AddObjectToByteList(GotoTrue.InstructionNumber, Data);
-            Helpers.AddObjectToByteList(GotoFalse.InstructionNumber, Data);
-            Helpers.Ensure2ByteAlign(Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoTrue, ref Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoFalse, ref Data);
+            Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 20);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
             return Data.ToArray();
         }

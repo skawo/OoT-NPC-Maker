@@ -178,29 +178,8 @@ namespace NPC_Maker
             {
                 if (CE.Limbs != "")
                 {
-                    string[] Limbs = CE.Limbs.Split(',');
-
-                    foreach (string LimbE in Limbs)
-                    {
-                        if (LimbE.Contains("-"))
-                        {
-                            string[] MinMax = LimbE.Split('-');
-
-                            int Min = Convert.ToInt32(MinMax[0]);
-                            int Max = Convert.ToInt32(MinMax[1]);
-
-                            for (int f = Min; f < Max + 1; f++)
-                            {
-                                if (Out.Find(x => x.LimbID == Convert.ToByte(f)) == null)
-                                    Out.Add(new OutputColorEntry(Convert.ToByte(f), CE.Color.R, CE.Color.G, CE.Color.B));
-                            }
-                        }
-                        else
-                        {
-                            if (Out.Find(x => x.LimbID == Convert.ToByte(LimbE)) == null)
-                                Out.Add(new OutputColorEntry(Convert.ToByte(LimbE), CE.Color.R, CE.Color.G, CE.Color.B));
-                        }
-                    }
+                    if (Out.Find(x => x.LimbID == Convert.ToByte(CE.Limbs)) == null)
+                        Out.Add(new OutputColorEntry(Convert.ToByte(CE.Limbs), CE.Color.R, CE.Color.G, CE.Color.B));
                 }
             }
 
@@ -481,7 +460,7 @@ namespace NPC_Maker
         public DListEntry()
         {
             Name = "";
-            Address = 0;
+            //Address = 0;
             TransX = 0;
             TransY = 0;
             TransZ = 0;

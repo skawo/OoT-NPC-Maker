@@ -34,9 +34,9 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(NPCID, Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, Start, ref Data);
 
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 14);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
             return Data.ToArray();
         }

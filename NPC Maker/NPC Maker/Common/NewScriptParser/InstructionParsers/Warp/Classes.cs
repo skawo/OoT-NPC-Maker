@@ -22,10 +22,11 @@ namespace NPC_Maker.NewScriptParser
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(VarType, Data);
+            Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(WarpID, Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 6);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
             return Data.ToArray();
         }
     }

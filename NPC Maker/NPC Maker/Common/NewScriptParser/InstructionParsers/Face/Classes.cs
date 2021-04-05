@@ -47,14 +47,14 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(FaceType, Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SubjectActorT, SubjectActorCatT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(TargetActorT, TargetActorCatT, 4), Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(SubjectActor, Data);
             Helpers.AddObjectToByteList(SubjectActorCat, Data);
             Helpers.AddObjectToByteList(TargetActor, Data);
             Helpers.AddObjectToByteList(TargetActorCat, Data);
-            Helpers.Ensure2ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 22);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 24);
 
             return Data.ToArray();
         }

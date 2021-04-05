@@ -798,10 +798,10 @@ namespace NPC_Maker
                 DataGrid_Animations.Rows[Index].Cells[1].Value = Address;
 
             if (SkipIndex != 2)
-                DataGrid_Animations.Rows[Index].Cells[2].Value = "";
+                DataGrid_Animations.Rows[Index].Cells[2].Value = 0;
 
             if (SkipIndex != 3)
-                DataGrid_Animations.Rows[Index].Cells[3].Value = "";
+                DataGrid_Animations.Rows[Index].Cells[3].Value = 255;
 
             if (SkipIndex != 4)
                 DataGrid_Animations.Rows[Index].Cells[4].Value = 1.0;
@@ -858,9 +858,9 @@ namespace NPC_Maker
                         try
                         {
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, Convert.ToByte(e.Value.ToString(), 16));
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, Convert.ToByte(e.Value.ToString()));
                             else
-                                SelectedEntry.Animations[e.RowIndex].StartFrame = Convert.ToByte(e.Value.ToString(), 16);
+                                SelectedEntry.Animations[e.RowIndex].StartFrame = Convert.ToByte(e.Value.ToString());
 
                             e.ParsingApplied = true;
                         }
@@ -879,9 +879,9 @@ namespace NPC_Maker
                         try
                         {
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, 0, Convert.ToByte(e.Value.ToString(), 16));
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, 0, Convert.ToByte(e.Value.ToString()));
                             else
-                                SelectedEntry.Animations[e.RowIndex].EndFrame = Convert.ToByte(e.Value.ToString(), 16);
+                                SelectedEntry.Animations[e.RowIndex].EndFrame = Convert.ToByte(e.Value.ToString());
 
                             e.ParsingApplied = true;
                         }
@@ -1035,16 +1035,16 @@ namespace NPC_Maker
             return Values;
         }
 
-        private short[] GetXYZRotation(string Value)
+        private Int16[] GetXYZRotation(string Value)
         {
             string[] Split = Value.Split(',');
-            short[] Values = new short[3] { 0, 0, 0 };
+            Int16[] Values = new short[3] { 0, 0, 0 };
 
             try
             {
-                Values[0] = (short)Convert.ToUInt16(Split[0]);
-                Values[1] = (short)Convert.ToUInt16(Split[1]);
-                Values[2] = (short)Convert.ToUInt16(Split[2]);
+                Values[0] = (Int16)Convert.ToInt16(Split[0]);
+                Values[1] = (Int16)Convert.ToInt16(Split[1]);
+                Values[2] = (Int16)Convert.ToInt16(Split[2]);
             }
             catch (Exception)
             {
@@ -1115,7 +1115,7 @@ namespace NPC_Maker
                     }
                 case 3:     // XYZ Rotation
                     {
-                        short[] Rot = GetXYZRotation(e.Value.ToString());
+                        Int16[] Rot = GetXYZRotation(e.Value.ToString());
                         e.Value = $"{Rot[0]},{Rot[1]},{Rot[2]}";
 
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
@@ -1174,21 +1174,21 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            int ObjectId = Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
+                            short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
 
                             e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
 
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, (short)ObjectId);
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, ObjectId);
                             else
-                                SelectedEntry.ExtraDisplayLists[e.RowIndex].ObjectID = Convert.ToInt16(e.Value);
+                                SelectedEntry.ExtraDisplayLists[e.RowIndex].ObjectID = ObjectId;
                         }
                         catch (Exception)
                         {
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
-                            e.Value = Dicts.ObjectIDs.First().Key;
+                            e.Value = Dicts.ObjectIDs.First();
                         }
 
                         e.ParsingApplied = true;
