@@ -75,6 +75,8 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.TIMED_PATH:
                         case (int)Lists.SetSubTypes.REACTS_IF_ATTACKED:
                         case (int)Lists.SetSubTypes.OPEN_DOORS:
+                        case (int)Lists.SetSubTypes.MOVEMENT_STAY_ON_GROUND:
+                        case (int)Lists.SetSubTypes.SMOOTHEN_MOVEMENT:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 

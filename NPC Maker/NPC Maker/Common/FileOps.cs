@@ -151,8 +151,8 @@ namespace NPC_Maker
                                                         Entry.LoopPath,
                                                         Entry.PathIsTimed,
                                                         Entry.EnvironmentColor.A > 0 ? true : false,
-                                                        false,
-                                                        false,
+                                                        Entry.IgnoreYAxis,
+                                                        Entry.PathSmoothen,
                                                         false));
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
@@ -171,21 +171,18 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.PathLoopDelayTime);
                         EntryBytes.AddRangeBigEndian(Entry.TimedPathStart);
                         EntryBytes.AddRangeBigEndian(Entry.TimedPathEnd);
-                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[0]);
-                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[1]);
-                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[2]);
-                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[0]);
-                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[1]);
-                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[2]);
                         EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[0]);
                         EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[1]);
                         EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[2]);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[0]);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[1]);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[2]);
+                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[0]);
+                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[1]);
+                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[2]);
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 48;
+                        CurLen += 44;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         EntryBytes.AddRangeBigEndian(Entry.ModelScale);
@@ -193,9 +190,12 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.MovementSpeed);
                         EntryBytes.AddRangeBigEndian(Entry.GravityForce);
                         EntryBytes.AddRangeBigEndian(Entry.Hierarchy);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[0]);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[1]);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[2]);
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 20;
+                        CurLen += 32;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #region Blink and talk patterns

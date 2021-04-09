@@ -122,9 +122,9 @@ namespace NPC_Maker
 
             NumUpDown_HeadLimb.Value = SelectedEntry.HeadLimb;
             NumUpDown_WaistLimb.Value = SelectedEntry.WaistLimb;
-            NumUpDown_LookAt_X.Value = SelectedEntry.LookAtPositionOffsets[0];
-            NumUpDown_LookAt_Y.Value = SelectedEntry.LookAtPositionOffsets[1];
-            NumUpDown_LookAt_Z.Value = SelectedEntry.LookAtPositionOffsets[2];
+            NumUpDown_LookAt_X.Value = (decimal)SelectedEntry.LookAtPositionOffsets[0];
+            NumUpDown_LookAt_Y.Value = (decimal)SelectedEntry.LookAtPositionOffsets[1];
+            NumUpDown_LookAt_Z.Value = (decimal)SelectedEntry.LookAtPositionOffsets[2];
             NumUpDown_DegVert.Value = SelectedEntry.LookAtDegreesVertical;
             NumUpDown_DegHoz.Value = SelectedEntry.LookAtDegreesHorizontal;
 
@@ -141,6 +141,8 @@ namespace NPC_Maker
             Chkb_ReactIfAtt.Checked = SelectedEntry.ReactsIfAttacked;
             ChkRunJustScript.Checked = SelectedEntry.ExecuteJustScript;
             Chkb_Opendoors.Checked = SelectedEntry.OpensDoors;
+            Chkb_Smoothen.Checked = SelectedEntry.PathSmoothen;
+            Chkb_IgnoreY.Checked = SelectedEntry.IgnoreYAxis;
 
             NumUpDown_XColOffs.Value = SelectedEntry.CollisionPositionOffsets[0];
             NumUpDown_YColOffs.Value = SelectedEntry.CollisionPositionOffsets[1];

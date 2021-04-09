@@ -42,7 +42,7 @@ namespace NPC_Maker
 
         public UInt16 LookAtDegreesVertical { get; set; }
         public UInt16 LookAtDegreesHorizontal { get; set; }
-        public Int16[] LookAtPositionOffsets { get; set; }
+        public float[] LookAtPositionOffsets { get; set; }
 
         public bool HasCollision { get; set; }
         public bool PushesSwitches { get; set; }
@@ -75,6 +75,8 @@ namespace NPC_Maker
         public UInt16 PathLoopDelayTime { get; set; }
         public bool LoopPath { get; set; }
         public bool PathIsTimed { get; set; }
+        public bool IgnoreYAxis { get; set; }
+        public bool PathSmoothen { get; set; }
         public UInt16 TimedPathStart { get; set; }
         public UInt16 TimedPathEnd { get; set; }
 
@@ -116,7 +118,7 @@ namespace NPC_Maker
             WaistVertAxis = 0;
             LookAtDegreesVertical = 0;
             LookAtDegreesHorizontal = 0;
-            LookAtPositionOffsets = new Int16[] { 0, 0, 0 };
+            LookAtPositionOffsets = new float[] { 0, 0, 0 };
 
             HasCollision = false;
             PushesSwitches = false;
@@ -125,6 +127,8 @@ namespace NPC_Maker
             ExecuteJustScript = false;
             ReactsIfAttacked = false;
             OpensDoors = false;
+            PathSmoothen = false;
+            IgnoreYAxis = true;
             CollisionRadius = 0;
             CollisionHeight = 0;
             CollisionPositionOffsets = new Int16[] { 0, 0, 0 };
@@ -141,7 +145,7 @@ namespace NPC_Maker
             MovementType = 0;
             MovementDistance = 0;
             MovementSpeed = 1.0f;
-            GravityForce = 1.0f;
+            GravityForce = 0.1f;
             PathID = 0;
             PathLoopStartID = -1;
             PathLoopEndID = -1;
@@ -251,6 +255,8 @@ namespace NPC_Maker
             PATHENDTIME,
             GRAVITYFORCE,
             OPENDOORS,
+            IGNORENODEYAXIS,
+            SMOOTH,
         }
 
         public void ChangeValueOfMember(Members Member, object Value)
@@ -277,9 +283,9 @@ namespace NPC_Maker
                 case Members.WAISTHORIZAXIS: WaistHorizAxis = Convert.ToByte(Value); break;
                 case Members.DEGVERT: LookAtDegreesVertical = Convert.ToUInt16(Value); break;
                 case Members.DEGHOZ: LookAtDegreesHorizontal = Convert.ToUInt16(Value); break;
-                case Members.XLOOKATOFFS: LookAtPositionOffsets[0] = Convert.ToInt16(Value); break;
-                case Members.YLOOKATOFFS: LookAtPositionOffsets[1] = Convert.ToInt16(Value); break;
-                case Members.ZLOOKATOFFS: LookAtPositionOffsets[2] = Convert.ToInt16(Value); break;
+                case Members.XLOOKATOFFS: LookAtPositionOffsets[0] = (float)Convert.ToDecimal(Value); break;
+                case Members.YLOOKATOFFS: LookAtPositionOffsets[1] = (float)Convert.ToDecimal(Value); break;
+                case Members.ZLOOKATOFFS: LookAtPositionOffsets[2] = (float)Convert.ToDecimal(Value); break;
 
                 case Members.COLLISION: HasCollision = Convert.ToBoolean(Value); break;
                 case Members.SWITCHES: PushesSwitches = Convert.ToBoolean(Value); break;
@@ -308,6 +314,7 @@ namespace NPC_Maker
                 case Members.LOOPEND: PathLoopEndID = Convert.ToInt16(Value); break;
                 case Members.LOOPDEL: PathLoopDelayTime = Convert.ToUInt16(Value); break;
                 case Members.LOOP: LoopPath = Convert.ToBoolean(Value); break;
+                case Members.IGNORENODEYAXIS: IgnoreYAxis = Convert.ToBoolean(Value); break;
 
                 case Members.ANIMTYPE: AnimationType = Convert.ToByte(Value); break;
 
@@ -332,6 +339,7 @@ namespace NPC_Maker
 
                 case Members.PATHSTARTTIME: TimedPathStart = Helpers.GetOcarinaTime((string)Value); break;
                 case Members.PATHENDTIME: TimedPathEnd = Helpers.GetOcarinaTime((string)Value); break;
+                case Members.SMOOTH: PathSmoothen = Convert.ToBoolean(Value); break;
 
                 default: break;
             }

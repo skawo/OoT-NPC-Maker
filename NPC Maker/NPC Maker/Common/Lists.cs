@@ -372,6 +372,9 @@ namespace NPC_Maker
             TIMED_PATH = 45,
             JUST_SCRIPT = 46,
             OPEN_DOORS = 47,
+            MOVEMENT_STAY_ON_GROUND = 102,
+            SMOOTHEN_MOVEMENT = 103,
+
 
             /* u8s */
             TARGET_LIMB = 48,
@@ -1297,9 +1300,8 @@ namespace NPC_Maker
         {
             NONE = 0,
             RANDOM = 1,
-            FOLLOW_PLAYER = 2,
-            PATH_COLLISION = 3,
-            PATH_DIRECT = 4
+            FOLLOW = 2,
+            PATH = 3,
         }
 
         public enum LookAtStyles
