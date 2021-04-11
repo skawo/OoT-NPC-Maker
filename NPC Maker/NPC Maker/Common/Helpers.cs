@@ -24,7 +24,7 @@ namespace NPC_Maker
                 if ((Hour > 23) || (Minute > 59))
                     throw new Exception(ExceptionMsg);
 
-                decimal Time = (((Hour * 60) + Minute) * (Int16.MaxValue / 1439));
+                double Time = Math.Ceiling((((Hour * 60) + Minute) * (float)((float)UInt16.MaxValue / (float)1440)));
 
                 return Convert.ToUInt16(Time);
             }
@@ -36,10 +36,14 @@ namespace NPC_Maker
 
         public static DateTime GetTimeFromOcarinaTime(UInt16 Value)
         {
-            int Minutes = Value / (Int16.MaxValue / 1439);
+            float Minutes = (float)Value / (float)((float)UInt16.MaxValue / (float)1440);
 
-            DateTime Out = new DateTime(2000, 01, 01, 0, 0, 0);
-            return Out.AddMinutes(Minutes);
+            int Hour = (int)(Minutes / 60);
+            int Minute = (int)(Minutes - (Hour * 60));
+
+            DateTime Out = new DateTime(2000, 01, 01, Hour, Minute, 0);
+
+            return Out;
         }
 
         public static void Ensure2ByteAlign(List<byte> ByteList)

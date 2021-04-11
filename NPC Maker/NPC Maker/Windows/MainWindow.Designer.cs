@@ -2333,7 +2333,7 @@
             this.Chkb_Smoothen.Name = "Chkb_Smoothen";
             this.Chkb_Smoothen.Size = new System.Drawing.Size(98, 17);
             this.Chkb_Smoothen.TabIndex = 68;
-            this.Chkb_Smoothen.Tag = NPCEntry.Members.SMOOTH;
+            this.Chkb_Smoothen.Tag = NPC_Maker.NPCEntry.Members.SMOOTH;
             this.Chkb_Smoothen.Text = "Smoothen path";
             this.Chkb_Smoothen.UseVisualStyleBackColor = true;
             this.Chkb_Smoothen.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -2345,10 +2345,10 @@
             this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
             this.Chkb_IgnoreY.Size = new System.Drawing.Size(115, 17);
             this.Chkb_IgnoreY.TabIndex = 67;
+            this.Chkb_IgnoreY.Tag = NPC_Maker.NPCEntry.Members.IGNORENODEYAXIS;
             this.Chkb_IgnoreY.Text = "Ignore node Y Axis";
             this.Chkb_IgnoreY.UseVisualStyleBackColor = true;
             this.Chkb_IgnoreY.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            this.Chkb_IgnoreY.Tag = NPC_Maker.NPCEntry.Members.IGNORENODEYAXIS;
             // 
             // label5
             // 
