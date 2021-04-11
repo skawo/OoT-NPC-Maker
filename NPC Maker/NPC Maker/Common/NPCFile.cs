@@ -70,13 +70,12 @@ namespace NPC_Maker
         public float MovementSpeed { get; set; }
         public float GravityForce { get; set; }
         public byte PathID { get; set; }
-        public Int16 PathLoopStartID { get; set; }
-        public Int16 PathLoopEndID { get; set; }
-        public UInt16 PathLoopDelayTime { get; set; }
+        public Int16 PathStartNodeID { get; set; }
+        public Int16 PathEndNodeID { get; set; }
+        public UInt16 MovementDelayTime { get; set; }
         public bool LoopPath { get; set; }
-        public bool PathIsTimed { get; set; }
         public bool IgnoreYAxis { get; set; }
-        public bool PathSmoothen { get; set; }
+        public float SmoothingConstant { get; set; }
         public UInt16 TimedPathStart { get; set; }
         public UInt16 TimedPathEnd { get; set; }
 
@@ -127,7 +126,7 @@ namespace NPC_Maker
             ExecuteJustScript = false;
             ReactsIfAttacked = false;
             OpensDoors = false;
-            PathSmoothen = false;
+            SmoothingConstant = 15.0f;
             IgnoreYAxis = true;
             CollisionRadius = 0;
             CollisionHeight = 0;
@@ -147,9 +146,9 @@ namespace NPC_Maker
             MovementSpeed = 1.0f;
             GravityForce = 0.1f;
             PathID = 0;
-            PathLoopStartID = -1;
-            PathLoopEndID = -1;
-            PathLoopDelayTime = 0;
+            PathStartNodeID = -1;
+            PathEndNodeID = -1;
+            MovementDelayTime = 0;
             LoopPath = false;
             TimedPathStart = 0;
             TimedPathEnd = Helpers.GetOcarinaTime("23:59");
@@ -233,9 +232,9 @@ namespace NPC_Maker
             MOVDISTANCE,
             MOVSPEED,
             PATHID,
-            LOOPSTART,
-            LOOPEND,
-            LOOPDEL,
+            PATHSTARTID,
+            PATHENDID,
+            MOVDEL,
             LOOP,
             ANIMTYPE,
             BLINKPAT,
@@ -310,9 +309,9 @@ namespace NPC_Maker
                 case Members.MOVDISTANCE: MovementDistance = Convert.ToUInt16(Value); break;
                 case Members.MOVSPEED: MovementSpeed = (float)Convert.ToDecimal(Value); break;
                 case Members.PATHID: PathID = Convert.ToByte(Value); break;
-                case Members.LOOPSTART: PathLoopStartID = Convert.ToInt16(Value); break;
-                case Members.LOOPEND: PathLoopEndID = Convert.ToInt16(Value); break;
-                case Members.LOOPDEL: PathLoopDelayTime = Convert.ToUInt16(Value); break;
+                case Members.PATHSTARTID: PathStartNodeID = Convert.ToInt16(Value); break;
+                case Members.PATHENDID: PathEndNodeID = Convert.ToInt16(Value); break;
+                case Members.MOVDEL: MovementDelayTime = Convert.ToUInt16(Value); break;
                 case Members.LOOP: LoopPath = Convert.ToBoolean(Value); break;
                 case Members.IGNORENODEYAXIS: IgnoreYAxis = Convert.ToBoolean(Value); break;
 
@@ -331,7 +330,6 @@ namespace NPC_Maker
 
                 case Members.JUSTSCRIPT: ExecuteJustScript = Convert.ToBoolean(Value); break;
                 case Members.REACTATT: ReactsIfAttacked = Convert.ToBoolean(Value); break;
-                case Members.TIMEDPATH: PathIsTimed = Convert.ToBoolean(Value); break;
                 case Members.OPENDOORS: OpensDoors = Convert.ToBoolean(Value); break;
 
                 case Members.TALKRADIUS: TalkRadius = Convert.ToUInt16(Value); break;
@@ -339,7 +337,7 @@ namespace NPC_Maker
 
                 case Members.PATHSTARTTIME: TimedPathStart = Helpers.GetOcarinaTime((string)Value); break;
                 case Members.PATHENDTIME: TimedPathEnd = Helpers.GetOcarinaTime((string)Value); break;
-                case Members.SMOOTH: PathSmoothen = Convert.ToBoolean(Value); break;
+                case Members.SMOOTH: SmoothingConstant = (float)Convert.ToDecimal(Value); break;
 
                 default: break;
             }

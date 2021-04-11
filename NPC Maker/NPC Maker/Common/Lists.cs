@@ -354,6 +354,7 @@ namespace NPC_Maker
             MOVEMENT_SPEED = 29,
             GRAVITY_FORCE = 30,
             TALK_RADIUS = 31,
+            SMOOTHING_CONSTANT = 103,
 
             /* bools */
             LOOP_MOVEMENT = 32,
@@ -369,12 +370,9 @@ namespace NPC_Maker
             PAUSE_CUTSCENE = 42,
             IS_ALWAYS_DRAWN = 43,
             REACTS_IF_ATTACKED = 44,
-            TIMED_PATH = 45,
             JUST_SCRIPT = 46,
             OPEN_DOORS = 47,
-            MOVEMENT_STAY_ON_GROUND = 102,
-            SMOOTHEN_MOVEMENT = 103,
-
+            MOVEMENT_IGNORE_Y = 102,
 
             /* u8s */
             TARGET_LIMB = 48,
@@ -1302,6 +1300,7 @@ namespace NPC_Maker
             RANDOM = 1,
             FOLLOW = 2,
             PATH = 3,
+            TIMED_PATH = 4,
         }
 
         public enum LookAtStyles

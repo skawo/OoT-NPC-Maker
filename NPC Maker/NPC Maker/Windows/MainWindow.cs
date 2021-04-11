@@ -141,7 +141,7 @@ namespace NPC_Maker
             Chkb_ReactIfAtt.Checked = SelectedEntry.ReactsIfAttacked;
             ChkRunJustScript.Checked = SelectedEntry.ExecuteJustScript;
             Chkb_Opendoors.Checked = SelectedEntry.OpensDoors;
-            Chkb_Smoothen.Checked = SelectedEntry.PathSmoothen;
+            NumUp_Smoothing.Value = (decimal)SelectedEntry.SmoothingConstant;
             Chkb_IgnoreY.Checked = SelectedEntry.IgnoreYAxis;
 
             NumUpDown_XColOffs.Value = SelectedEntry.CollisionPositionOffsets[0];
@@ -160,11 +160,10 @@ namespace NPC_Maker
             NumUpDown_MovDistance.Value = SelectedEntry.MovementDistance;
             NumUpDown_MovSpeed.Value = (decimal)SelectedEntry.MovementSpeed;
             NumUpDown_GravityForce.Value = (decimal)SelectedEntry.GravityForce;
-            NumUpDown_LoopDelay.Value = SelectedEntry.PathLoopDelayTime;
-            NumUpDown_LoopEndNode.Value = SelectedEntry.PathLoopEndID;
-            NumUpDown_LoopStartNode.Value = SelectedEntry.PathLoopStartID;
+            NumUpDown_LoopDelay.Value = SelectedEntry.MovementDelayTime;
+            NumUpDown_LoopEndNode.Value = SelectedEntry.PathEndNodeID;
+            NumUpDown_LoopStartNode.Value = SelectedEntry.PathStartNodeID;
             Checkbox_Loop.Checked = SelectedEntry.LoopPath;
-            ChkBox_TimedPath.Checked = SelectedEntry.PathIsTimed;
             NumUpDown_PathFollowID.Value = SelectedEntry.PathID;
             tmpicker_timedPathStart.Value = Helpers.GetTimeFromOcarinaTime(SelectedEntry.TimedPathStart);
             tmpicker_timedPathEnd.Value = Helpers.GetTimeFromOcarinaTime(SelectedEntry.TimedPathEnd);
@@ -1444,5 +1443,10 @@ namespace NPC_Maker
 
 
         #endregion
+
+        private void Label_LoopStartNode_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

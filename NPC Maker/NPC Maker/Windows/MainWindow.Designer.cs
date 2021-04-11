@@ -190,20 +190,20 @@
             this.Checkbox_Targettable = new System.Windows.Forms.CheckBox();
             this.NumUpDown_TargetLimb = new System.Windows.Forms.NumericUpDown();
             this.Panel_Movement = new System.Windows.Forms.Panel();
-            this.Chkb_Smoothen = new System.Windows.Forms.CheckBox();
             this.Chkb_IgnoreY = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.SmoothingCnts = new System.Windows.Forms.Label();
+            this.NumUp_Smoothing = new System.Windows.Forms.NumericUpDown();
+            this.Lb_PathEnd = new System.Windows.Forms.Label();
             this.tmpicker_timedPathStart = new System.Windows.Forms.DateTimePicker();
             this.Label_PathStTime = new System.Windows.Forms.Label();
             this.tmpicker_timedPathEnd = new System.Windows.Forms.DateTimePicker();
-            this.ChkBox_TimedPath = new System.Windows.Forms.CheckBox();
             this.Lbl_GravityForce = new System.Windows.Forms.Label();
             this.Label_LoopDelay = new System.Windows.Forms.Label();
-            this.NumUpDown_GravityForce = new System.Windows.Forms.NumericUpDown();
             this.Label_LoopStartNode = new System.Windows.Forms.Label();
-            this.NumUpDown_LoopStartNode = new System.Windows.Forms.NumericUpDown();
-            this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
             this.Checkbox_Loop = new System.Windows.Forms.CheckBox();
+            this.NumUpDown_LoopStartNode = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_GravityForce = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
             this.Label_LoopEndNode = new System.Windows.Forms.Label();
             this.NumUpDown_LoopEndNode = new System.Windows.Forms.NumericUpDown();
             this.Label_PathFollowID = new System.Windows.Forms.Label();
@@ -322,8 +322,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XTargetOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TargetLimb)).BeginInit();
             this.Panel_Movement.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_GravityForce)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUp_Smoothing)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_GravityForce)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_PathFollowID)).BeginInit();
@@ -2297,20 +2298,20 @@
             // 
             this.Panel_Movement.BackColor = System.Drawing.Color.Transparent;
             this.Panel_Movement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Panel_Movement.Controls.Add(this.Chkb_Smoothen);
             this.Panel_Movement.Controls.Add(this.Chkb_IgnoreY);
-            this.Panel_Movement.Controls.Add(this.label5);
+            this.Panel_Movement.Controls.Add(this.SmoothingCnts);
+            this.Panel_Movement.Controls.Add(this.NumUp_Smoothing);
+            this.Panel_Movement.Controls.Add(this.Lb_PathEnd);
             this.Panel_Movement.Controls.Add(this.tmpicker_timedPathStart);
             this.Panel_Movement.Controls.Add(this.Label_PathStTime);
             this.Panel_Movement.Controls.Add(this.tmpicker_timedPathEnd);
-            this.Panel_Movement.Controls.Add(this.ChkBox_TimedPath);
             this.Panel_Movement.Controls.Add(this.Lbl_GravityForce);
             this.Panel_Movement.Controls.Add(this.Label_LoopDelay);
-            this.Panel_Movement.Controls.Add(this.NumUpDown_GravityForce);
             this.Panel_Movement.Controls.Add(this.Label_LoopStartNode);
-            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopStartNode);
-            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopDelay);
             this.Panel_Movement.Controls.Add(this.Checkbox_Loop);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopStartNode);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_GravityForce);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopDelay);
             this.Panel_Movement.Controls.Add(this.Label_LoopEndNode);
             this.Panel_Movement.Controls.Add(this.NumUpDown_LoopEndNode);
             this.Panel_Movement.Controls.Add(this.Label_PathFollowID);
@@ -2326,22 +2327,10 @@
             this.Panel_Movement.Size = new System.Drawing.Size(200, 358);
             this.Panel_Movement.TabIndex = 65;
             // 
-            // Chkb_Smoothen
-            // 
-            this.Chkb_Smoothen.AutoSize = true;
-            this.Chkb_Smoothen.Location = new System.Drawing.Point(6, 265);
-            this.Chkb_Smoothen.Name = "Chkb_Smoothen";
-            this.Chkb_Smoothen.Size = new System.Drawing.Size(98, 17);
-            this.Chkb_Smoothen.TabIndex = 68;
-            this.Chkb_Smoothen.Tag = NPC_Maker.NPCEntry.Members.SMOOTH;
-            this.Chkb_Smoothen.Text = "Smoothen path";
-            this.Chkb_Smoothen.UseVisualStyleBackColor = true;
-            this.Chkb_Smoothen.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
             // Chkb_IgnoreY
             // 
             this.Chkb_IgnoreY.AutoSize = true;
-            this.Chkb_IgnoreY.Location = new System.Drawing.Point(6, 240);
+            this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 318);
             this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
             this.Chkb_IgnoreY.Size = new System.Drawing.Size(115, 17);
             this.Chkb_IgnoreY.TabIndex = 67;
@@ -2350,23 +2339,52 @@
             this.Chkb_IgnoreY.UseVisualStyleBackColor = true;
             this.Chkb_IgnoreY.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
-            // label5
+            // SmoothingCnts
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(4, 323);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(75, 13);
-            this.label5.TabIndex = 66;
-            this.label5.Text = "Path end time:";
+            this.SmoothingCnts.AutoSize = true;
+            this.SmoothingCnts.Location = new System.Drawing.Point(5, 138);
+            this.SmoothingCnts.Name = "SmoothingCnts";
+            this.SmoothingCnts.Size = new System.Drawing.Size(104, 13);
+            this.SmoothingCnts.TabIndex = 68;
+            this.SmoothingCnts.Text = "Smoothing constant:";
+            // 
+            // NumUp_Smoothing
+            // 
+            this.NumUp_Smoothing.DecimalPlaces = 2;
+            this.NumUp_Smoothing.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.NumUp_Smoothing.Location = new System.Drawing.Point(123, 136);
+            this.NumUp_Smoothing.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUp_Smoothing.Name = "NumUp_Smoothing";
+            this.NumUp_Smoothing.Size = new System.Drawing.Size(66, 20);
+            this.NumUp_Smoothing.TabIndex = 67;
+            this.NumUp_Smoothing.Tag = NPC_Maker.NPCEntry.Members.SMOOTH;
+            this.NumUp_Smoothing.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Lb_PathEnd
+            // 
+            this.Lb_PathEnd.AutoSize = true;
+            this.Lb_PathEnd.Location = new System.Drawing.Point(5, 294);
+            this.Lb_PathEnd.Name = "Lb_PathEnd";
+            this.Lb_PathEnd.Size = new System.Drawing.Size(75, 13);
+            this.Lb_PathEnd.TabIndex = 66;
+            this.Lb_PathEnd.Text = "Path end time:";
             // 
             // tmpicker_timedPathStart
             // 
             this.tmpicker_timedPathStart.CustomFormat = "HH:mm";
             this.tmpicker_timedPathStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.tmpicker_timedPathStart.Location = new System.Drawing.Point(125, 293);
+            this.tmpicker_timedPathStart.Location = new System.Drawing.Point(123, 266);
             this.tmpicker_timedPathStart.Name = "tmpicker_timedPathStart";
             this.tmpicker_timedPathStart.ShowUpDown = true;
-            this.tmpicker_timedPathStart.Size = new System.Drawing.Size(65, 20);
+            this.tmpicker_timedPathStart.Size = new System.Drawing.Size(66, 20);
             this.tmpicker_timedPathStart.TabIndex = 63;
             this.tmpicker_timedPathStart.Tag = NPC_Maker.NPCEntry.Members.PATHSTARTTIME;
             this.tmpicker_timedPathStart.ValueChanged += new System.EventHandler(this.DatePicker_ValueChanged);
@@ -2374,7 +2392,7 @@
             // Label_PathStTime
             // 
             this.Label_PathStTime.AutoSize = true;
-            this.Label_PathStTime.Location = new System.Drawing.Point(4, 297);
+            this.Label_PathStTime.Location = new System.Drawing.Point(5, 269);
             this.Label_PathStTime.Name = "Label_PathStTime";
             this.Label_PathStTime.Size = new System.Drawing.Size(77, 13);
             this.Label_PathStTime.TabIndex = 64;
@@ -2384,7 +2402,7 @@
             // 
             this.tmpicker_timedPathEnd.CustomFormat = "HH:mm";
             this.tmpicker_timedPathEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.tmpicker_timedPathEnd.Location = new System.Drawing.Point(125, 319);
+            this.tmpicker_timedPathEnd.Location = new System.Drawing.Point(123, 292);
             this.tmpicker_timedPathEnd.Name = "tmpicker_timedPathEnd";
             this.tmpicker_timedPathEnd.ShowUpDown = true;
             this.tmpicker_timedPathEnd.Size = new System.Drawing.Size(65, 20);
@@ -2392,22 +2410,10 @@
             this.tmpicker_timedPathEnd.Tag = NPC_Maker.NPCEntry.Members.PATHENDTIME;
             this.tmpicker_timedPathEnd.ValueChanged += new System.EventHandler(this.DatePicker_ValueChanged);
             // 
-            // ChkBox_TimedPath
-            // 
-            this.ChkBox_TimedPath.AutoSize = true;
-            this.ChkBox_TimedPath.Location = new System.Drawing.Point(110, 265);
-            this.ChkBox_TimedPath.Name = "ChkBox_TimedPath";
-            this.ChkBox_TimedPath.Size = new System.Drawing.Size(79, 17);
-            this.ChkBox_TimedPath.TabIndex = 62;
-            this.ChkBox_TimedPath.Tag = NPC_Maker.NPCEntry.Members.TIMEDPATH;
-            this.ChkBox_TimedPath.Text = "Timed path";
-            this.ChkBox_TimedPath.UseVisualStyleBackColor = true;
-            this.ChkBox_TimedPath.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
             // Lbl_GravityForce
             // 
             this.Lbl_GravityForce.AutoSize = true;
-            this.Lbl_GravityForce.Location = new System.Drawing.Point(4, 112);
+            this.Lbl_GravityForce.Location = new System.Drawing.Point(5, 164);
             this.Lbl_GravityForce.Name = "Lbl_GravityForce";
             this.Lbl_GravityForce.Size = new System.Drawing.Size(70, 13);
             this.Lbl_GravityForce.TabIndex = 36;
@@ -2416,44 +2422,37 @@
             // Label_LoopDelay
             // 
             this.Label_LoopDelay.AutoSize = true;
-            this.Label_LoopDelay.Location = new System.Drawing.Point(3, 139);
+            this.Label_LoopDelay.Location = new System.Drawing.Point(5, 112);
             this.Label_LoopDelay.Name = "Label_LoopDelay";
-            this.Label_LoopDelay.Size = new System.Drawing.Size(81, 13);
+            this.Label_LoopDelay.Size = new System.Drawing.Size(88, 13);
             this.Label_LoopDelay.TabIndex = 47;
-            this.Label_LoopDelay.Text = "Delay between:";
-            // 
-            // NumUpDown_GravityForce
-            // 
-            this.NumUpDown_GravityForce.DecimalPlaces = 2;
-            this.NumUpDown_GravityForce.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.NumUpDown_GravityForce.Location = new System.Drawing.Point(123, 110);
-            this.NumUpDown_GravityForce.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.NumUpDown_GravityForce.Name = "NumUpDown_GravityForce";
-            this.NumUpDown_GravityForce.Size = new System.Drawing.Size(66, 20);
-            this.NumUpDown_GravityForce.TabIndex = 35;
-            this.NumUpDown_GravityForce.Tag = NPC_Maker.NPCEntry.Members.GRAVITYFORCE;
-            this.NumUpDown_GravityForce.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            this.Label_LoopDelay.Text = "Movement delay:";
             // 
             // Label_LoopStartNode
             // 
             this.Label_LoopStartNode.AutoSize = true;
-            this.Label_LoopStartNode.Location = new System.Drawing.Point(3, 191);
+            this.Label_LoopStartNode.Location = new System.Drawing.Point(4, 216);
             this.Label_LoopStartNode.Name = "Label_LoopStartNode";
             this.Label_LoopStartNode.Size = new System.Drawing.Size(84, 13);
             this.Label_LoopStartNode.TabIndex = 45;
             this.Label_LoopStartNode.Text = "Loop start node:";
+            this.Label_LoopStartNode.Click += new System.EventHandler(this.Label_LoopStartNode_Click);
+            // 
+            // Checkbox_Loop
+            // 
+            this.Checkbox_Loop.AutoSize = true;
+            this.Checkbox_Loop.Location = new System.Drawing.Point(7, 318);
+            this.Checkbox_Loop.Name = "Checkbox_Loop";
+            this.Checkbox_Loop.Size = new System.Drawing.Size(50, 17);
+            this.Checkbox_Loop.TabIndex = 41;
+            this.Checkbox_Loop.Tag = NPC_Maker.NPCEntry.Members.LOOP;
+            this.Checkbox_Loop.Text = "Loop";
+            this.Checkbox_Loop.UseVisualStyleBackColor = true;
+            this.Checkbox_Loop.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUpDown_LoopStartNode
             // 
-            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(123, 188);
+            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(123, 214);
             this.NumUpDown_LoopStartNode.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2467,7 +2466,6 @@
             this.NumUpDown_LoopStartNode.Name = "NumUpDown_LoopStartNode";
             this.NumUpDown_LoopStartNode.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopStartNode.TabIndex = 44;
-            this.NumUpDown_LoopStartNode.Tag = NPC_Maker.NPCEntry.Members.LOOPSTART;
             this.NumUpDown_LoopStartNode.Value = new decimal(new int[] {
             1,
             0,
@@ -2475,9 +2473,29 @@
             -2147483648});
             this.NumUpDown_LoopStartNode.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
+            // NumUpDown_GravityForce
+            // 
+            this.NumUpDown_GravityForce.DecimalPlaces = 2;
+            this.NumUpDown_GravityForce.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.NumUpDown_GravityForce.Location = new System.Drawing.Point(123, 162);
+            this.NumUpDown_GravityForce.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_GravityForce.Name = "NumUpDown_GravityForce";
+            this.NumUpDown_GravityForce.Size = new System.Drawing.Size(66, 20);
+            this.NumUpDown_GravityForce.TabIndex = 35;
+            this.NumUpDown_GravityForce.Tag = NPC_Maker.NPCEntry.Members.GRAVITYFORCE;
+            this.NumUpDown_GravityForce.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
             // NumUpDown_LoopDelay
             // 
-            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(123, 136);
+            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(123, 110);
             this.NumUpDown_LoopDelay.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2486,25 +2504,12 @@
             this.NumUpDown_LoopDelay.Name = "NumUpDown_LoopDelay";
             this.NumUpDown_LoopDelay.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopDelay.TabIndex = 46;
-            this.NumUpDown_LoopDelay.Tag = NPC_Maker.NPCEntry.Members.LOOPDEL;
             this.NumUpDown_LoopDelay.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // Checkbox_Loop
-            // 
-            this.Checkbox_Loop.AutoSize = true;
-            this.Checkbox_Loop.Location = new System.Drawing.Point(138, 240);
-            this.Checkbox_Loop.Name = "Checkbox_Loop";
-            this.Checkbox_Loop.Size = new System.Drawing.Size(50, 17);
-            this.Checkbox_Loop.TabIndex = 41;
-            this.Checkbox_Loop.Tag = NPC_Maker.NPCEntry.Members.LOOP;
-            this.Checkbox_Loop.Text = "Loop";
-            this.Checkbox_Loop.UseVisualStyleBackColor = true;
-            this.Checkbox_Loop.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Label_LoopEndNode
             // 
             this.Label_LoopEndNode.AutoSize = true;
-            this.Label_LoopEndNode.Location = new System.Drawing.Point(3, 216);
+            this.Label_LoopEndNode.Location = new System.Drawing.Point(5, 243);
             this.Label_LoopEndNode.Name = "Label_LoopEndNode";
             this.Label_LoopEndNode.Size = new System.Drawing.Size(82, 13);
             this.Label_LoopEndNode.TabIndex = 43;
@@ -2512,7 +2517,7 @@
             // 
             // NumUpDown_LoopEndNode
             // 
-            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(123, 214);
+            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(123, 240);
             this.NumUpDown_LoopEndNode.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2526,7 +2531,6 @@
             this.NumUpDown_LoopEndNode.Name = "NumUpDown_LoopEndNode";
             this.NumUpDown_LoopEndNode.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopEndNode.TabIndex = 42;
-            this.NumUpDown_LoopEndNode.Tag = NPC_Maker.NPCEntry.Members.LOOPEND;
             this.NumUpDown_LoopEndNode.Value = new decimal(new int[] {
             1,
             0,
@@ -2537,7 +2541,7 @@
             // Label_PathFollowID
             // 
             this.Label_PathFollowID.AutoSize = true;
-            this.Label_PathFollowID.Location = new System.Drawing.Point(3, 164);
+            this.Label_PathFollowID.Location = new System.Drawing.Point(5, 190);
             this.Label_PathFollowID.Name = "Label_PathFollowID";
             this.Label_PathFollowID.Size = new System.Drawing.Size(46, 13);
             this.Label_PathFollowID.TabIndex = 39;
@@ -2545,7 +2549,7 @@
             // 
             // NumUpDown_PathFollowID
             // 
-            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(123, 162);
+            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(123, 188);
             this.NumUpDown_PathFollowID.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2579,7 +2583,8 @@
             "None",
             "Walk randomly",
             "Follow link",
-            "Follow path"});
+            "Follow path",
+            "Timed path"});
             this.Combo_MovementType.Location = new System.Drawing.Point(8, 27);
             this.Combo_MovementType.Name = "Combo_MovementType";
             this.Combo_MovementType.Size = new System.Drawing.Size(181, 21);
@@ -3174,8 +3179,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TargetLimb)).EndInit();
             this.Panel_Movement.ResumeLayout(false);
             this.Panel_Movement.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_GravityForce)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUp_Smoothing)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_GravityForce)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_PathFollowID)).EndInit();
@@ -3357,11 +3363,10 @@
         private System.Windows.Forms.CheckBox Checkbox_Targettable;
         private System.Windows.Forms.NumericUpDown NumUpDown_TargetLimb;
         private System.Windows.Forms.Panel Panel_Movement;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label Lb_PathEnd;
         private System.Windows.Forms.DateTimePicker tmpicker_timedPathStart;
         private System.Windows.Forms.Label Label_PathStTime;
         private System.Windows.Forms.DateTimePicker tmpicker_timedPathEnd;
-        private System.Windows.Forms.CheckBox ChkBox_TimedPath;
         private System.Windows.Forms.Label Lbl_GravityForce;
         private System.Windows.Forms.Label Label_LoopDelay;
         private System.Windows.Forms.NumericUpDown NumUpDown_GravityForce;
@@ -3426,7 +3431,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.CheckBox Chkb_IgnoreY;
-        private System.Windows.Forms.CheckBox Chkb_Smoothen;
+        private System.Windows.Forms.Label SmoothingCnts;
+        private System.Windows.Forms.NumericUpDown NumUp_Smoothing;
     }
 }
 

@@ -58,6 +58,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.MOVEMENT_SPEED:
                         case (int)Lists.SetSubTypes.GRAVITY_FORCE:
                         case (int)Lists.SetSubTypes.TALK_RADIUS:
+                        case (int)Lists.SetSubTypes.SMOOTHING_CONSTANT:
                             return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(float));
                         case (int)Lists.SetSubTypes.LOOP_MOVEMENT:
                         case (int)Lists.SetSubTypes.HAVE_COLLISION:
@@ -72,11 +73,9 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.PAUSE_CUTSCENE:
                         case (int)Lists.SetSubTypes.IS_ALWAYS_DRAWN:
                         case (int)Lists.SetSubTypes.JUST_SCRIPT:
-                        case (int)Lists.SetSubTypes.TIMED_PATH:
                         case (int)Lists.SetSubTypes.REACTS_IF_ATTACKED:
                         case (int)Lists.SetSubTypes.OPEN_DOORS:
-                        case (int)Lists.SetSubTypes.MOVEMENT_STAY_ON_GROUND:
-                        case (int)Lists.SetSubTypes.SMOOTHEN_MOVEMENT:
+                        case (int)Lists.SetSubTypes.MOVEMENT_IGNORE_Y:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
