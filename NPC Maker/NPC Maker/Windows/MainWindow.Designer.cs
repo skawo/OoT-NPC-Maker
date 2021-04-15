@@ -127,12 +127,18 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.Btn_ReactIfAtt = new System.Windows.Forms.Panel();
+            this.Combo_EffIfAtt = new System.Windows.Forms.ComboBox();
+            this.Label_EffIfAtt = new System.Windows.Forms.Label();
+            this.Btn_ReactIfAttList = new System.Windows.Forms.Button();
+            this.Txtbox_ReactIfAtt = new System.Windows.Forms.TextBox();
+            this.Lbl_ReactIfAttSnd = new System.Windows.Forms.Label();
+            this.Chkb_ReactIfAtt = new System.Windows.Forms.CheckBox();
             this.ColorsDataGridView = new NPC_Maker.CustomDataGridView(this.components);
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Chkb_Opendoors = new System.Windows.Forms.CheckBox();
             this.ChkRunJustScript = new System.Windows.Forms.CheckBox();
-            this.Chkb_ReactIfAtt = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.Label_CutsceneSlot = new System.Windows.Forms.Label();
             this.Panel_Collision = new System.Windows.Forms.Panel();
@@ -298,6 +304,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
             this.Tab3_BehaviorData.SuspendLayout();
+            this.Btn_ReactIfAtt.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).BeginInit();
             this.Panel_Collision.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZColOffs)).BeginInit();
@@ -424,7 +431,7 @@
             this.Txb_ObjectID.Name = "Txb_ObjectID";
             this.Txb_ObjectID.Size = new System.Drawing.Size(173, 20);
             this.Txb_ObjectID.TabIndex = 51;
-            this.Txb_ObjectID.Tag = NPC_Maker.NPCEntry.Members.NPCNAME;
+            this.Txb_ObjectID.Tag = "";
             this.Txb_ObjectID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Txb_ObjectID_KeyUp);
             this.Txb_ObjectID.Leave += new System.EventHandler(this.Txb_ObjectID_Leave);
             // 
@@ -1446,10 +1453,10 @@
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
+            this.Tab3_BehaviorData.Controls.Add(this.Btn_ReactIfAtt);
             this.Tab3_BehaviorData.Controls.Add(this.ColorsDataGridView);
             this.Tab3_BehaviorData.Controls.Add(this.Chkb_Opendoors);
             this.Tab3_BehaviorData.Controls.Add(this.ChkRunJustScript);
-            this.Tab3_BehaviorData.Controls.Add(this.Chkb_ReactIfAtt);
             this.Tab3_BehaviorData.Controls.Add(this.label2);
             this.Tab3_BehaviorData.Controls.Add(this.Label_CutsceneSlot);
             this.Tab3_BehaviorData.Controls.Add(this.Panel_Collision);
@@ -1469,6 +1476,98 @@
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
             // 
+            // Btn_ReactIfAtt
+            // 
+            this.Btn_ReactIfAtt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Btn_ReactIfAtt.Controls.Add(this.Combo_EffIfAtt);
+            this.Btn_ReactIfAtt.Controls.Add(this.Label_EffIfAtt);
+            this.Btn_ReactIfAtt.Controls.Add(this.Btn_ReactIfAttList);
+            this.Btn_ReactIfAtt.Controls.Add(this.Txtbox_ReactIfAtt);
+            this.Btn_ReactIfAtt.Controls.Add(this.Lbl_ReactIfAttSnd);
+            this.Btn_ReactIfAtt.Controls.Add(this.Chkb_ReactIfAtt);
+            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(428, 229);
+            this.Btn_ReactIfAtt.Name = "Btn_ReactIfAtt";
+            this.Btn_ReactIfAtt.Size = new System.Drawing.Size(374, 87);
+            this.Btn_ReactIfAtt.TabIndex = 76;
+            // 
+            // Combo_EffIfAtt
+            // 
+            this.Combo_EffIfAtt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_EffIfAtt.FormattingEnabled = true;
+            this.Combo_EffIfAtt.Items.AddRange(new object[] {
+            "Blue blood, white effect",
+            "No blood, dust",
+            "Green blood, dust",
+            "No blood, white effect",
+            "Water burst, no effect",
+            "No blood, red effect",
+            "Green blood, white effect",
+            "Red blood, white effect",
+            "Blue blood, red effect",
+            "Metal",
+            "None",
+            "Wood",
+            "Hard surface",
+            "Tree"});
+            this.Combo_EffIfAtt.Location = new System.Drawing.Point(77, 55);
+            this.Combo_EffIfAtt.Name = "Combo_EffIfAtt";
+            this.Combo_EffIfAtt.Size = new System.Drawing.Size(244, 21);
+            this.Combo_EffIfAtt.TabIndex = 69;
+            this.Combo_EffIfAtt.Tag = NPC_Maker.NPCEntry.Members.EFFIFATT;
+            this.Combo_EffIfAtt.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
+            // 
+            // Label_EffIfAtt
+            // 
+            this.Label_EffIfAtt.AutoSize = true;
+            this.Label_EffIfAtt.Location = new System.Drawing.Point(3, 58);
+            this.Label_EffIfAtt.Name = "Label_EffIfAtt";
+            this.Label_EffIfAtt.Size = new System.Drawing.Size(53, 13);
+            this.Label_EffIfAtt.TabIndex = 75;
+            this.Label_EffIfAtt.Text = "Hit effect:";
+            // 
+            // Btn_ReactIfAttList
+            // 
+            this.Btn_ReactIfAttList.Location = new System.Drawing.Point(256, 28);
+            this.Btn_ReactIfAttList.Name = "Btn_ReactIfAttList";
+            this.Btn_ReactIfAttList.Size = new System.Drawing.Size(65, 20);
+            this.Btn_ReactIfAttList.TabIndex = 74;
+            this.Btn_ReactIfAttList.Text = "List";
+            this.Btn_ReactIfAttList.UseVisualStyleBackColor = true;
+            this.Btn_ReactIfAttList.Click += new System.EventHandler(this.Btn_ReactIfAttList_Click);
+            // 
+            // Txtbox_ReactIfAtt
+            // 
+            this.Txtbox_ReactIfAtt.Location = new System.Drawing.Point(77, 28);
+            this.Txtbox_ReactIfAtt.MaxLength = 32;
+            this.Txtbox_ReactIfAtt.Multiline = true;
+            this.Txtbox_ReactIfAtt.Name = "Txtbox_ReactIfAtt";
+            this.Txtbox_ReactIfAtt.Size = new System.Drawing.Size(173, 20);
+            this.Txtbox_ReactIfAtt.TabIndex = 73;
+            this.Txtbox_ReactIfAtt.Tag = "";
+            this.Txtbox_ReactIfAtt.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Txb_ReactIfAtt_KeyUp);
+            this.Txtbox_ReactIfAtt.Leave += new System.EventHandler(this.Txtbox_ReactIfAtt_Leave);
+            // 
+            // Lbl_ReactIfAttSnd
+            // 
+            this.Lbl_ReactIfAttSnd.AutoSize = true;
+            this.Lbl_ReactIfAttSnd.Location = new System.Drawing.Point(0, 31);
+            this.Lbl_ReactIfAttSnd.Name = "Lbl_ReactIfAttSnd";
+            this.Lbl_ReactIfAttSnd.Size = new System.Drawing.Size(71, 13);
+            this.Lbl_ReactIfAttSnd.TabIndex = 69;
+            this.Lbl_ReactIfAttSnd.Text = "Sound effect:";
+            // 
+            // Chkb_ReactIfAtt
+            // 
+            this.Chkb_ReactIfAtt.AutoSize = true;
+            this.Chkb_ReactIfAtt.Location = new System.Drawing.Point(3, 3);
+            this.Chkb_ReactIfAtt.Name = "Chkb_ReactIfAtt";
+            this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(108, 17);
+            this.Chkb_ReactIfAtt.TabIndex = 72;
+            this.Chkb_ReactIfAtt.Tag = NPC_Maker.NPCEntry.Members.REACTATT;
+            this.Chkb_ReactIfAtt.Text = "React if attacked";
+            this.Chkb_ReactIfAtt.UseVisualStyleBackColor = true;
+            this.Chkb_ReactIfAtt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // ColorsDataGridView
             // 
             this.ColorsDataGridView.AllowUserToResizeColumns = false;
@@ -1482,11 +1581,11 @@
             this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2});
-            this.ColorsDataGridView.Location = new System.Drawing.Point(440, 252);
+            this.ColorsDataGridView.Location = new System.Drawing.Point(428, 322);
             this.ColorsDataGridView.MultiSelect = false;
             this.ColorsDataGridView.Name = "ColorsDataGridView";
             this.ColorsDataGridView.RowHeadersVisible = false;
-            this.ColorsDataGridView.Size = new System.Drawing.Size(362, 324);
+            this.ColorsDataGridView.Size = new System.Drawing.Size(374, 254);
             this.ColorsDataGridView.TabIndex = 75;
             this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
             this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
@@ -1509,7 +1608,7 @@
             // Chkb_Opendoors
             // 
             this.Chkb_Opendoors.AutoSize = true;
-            this.Chkb_Opendoors.Location = new System.Drawing.Point(440, 183);
+            this.Chkb_Opendoors.Location = new System.Drawing.Point(432, 182);
             this.Chkb_Opendoors.Name = "Chkb_Opendoors";
             this.Chkb_Opendoors.Size = new System.Drawing.Size(167, 17);
             this.Chkb_Opendoors.TabIndex = 74;
@@ -1521,7 +1620,7 @@
             // ChkRunJustScript
             // 
             this.ChkRunJustScript.AutoSize = true;
-            this.ChkRunJustScript.Location = new System.Drawing.Point(440, 229);
+            this.ChkRunJustScript.Location = new System.Drawing.Point(432, 205);
             this.ChkRunJustScript.Name = "ChkRunJustScript";
             this.ChkRunJustScript.Size = new System.Drawing.Size(91, 17);
             this.ChkRunJustScript.TabIndex = 73;
@@ -1530,22 +1629,10 @@
             this.ChkRunJustScript.UseVisualStyleBackColor = true;
             this.ChkRunJustScript.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
-            // Chkb_ReactIfAtt
-            // 
-            this.Chkb_ReactIfAtt.AutoSize = true;
-            this.Chkb_ReactIfAtt.Location = new System.Drawing.Point(440, 206);
-            this.Chkb_ReactIfAtt.Name = "Chkb_ReactIfAtt";
-            this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(108, 17);
-            this.Chkb_ReactIfAtt.TabIndex = 72;
-            this.Chkb_ReactIfAtt.Tag = NPC_Maker.NPCEntry.Members.REACTATT;
-            this.Chkb_ReactIfAtt.Text = "React if attacked";
-            this.Chkb_ReactIfAtt.UseVisualStyleBackColor = true;
-            this.Chkb_ReactIfAtt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(437, 65);
+            this.label2.Location = new System.Drawing.Point(429, 67);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
             this.label2.TabIndex = 71;
@@ -1554,7 +1641,7 @@
             // Label_CutsceneSlot
             // 
             this.Label_CutsceneSlot.AutoSize = true;
-            this.Label_CutsceneSlot.Location = new System.Drawing.Point(437, 8);
+            this.Label_CutsceneSlot.Location = new System.Drawing.Point(429, 15);
             this.Label_CutsceneSlot.Name = "Label_CutsceneSlot";
             this.Label_CutsceneSlot.Size = new System.Drawing.Size(74, 13);
             this.Label_CutsceneSlot.TabIndex = 64;
@@ -2582,7 +2669,8 @@
             this.Combo_MovementType.Items.AddRange(new object[] {
             "None",
             "Walk randomly",
-            "Follow link",
+            "Follow Link",
+            "Run away from Link",
             "Follow path",
             "Timed path"});
             this.Combo_MovementType.Location = new System.Drawing.Point(8, 27);
@@ -2642,7 +2730,7 @@
             // Checkbox_AlwaysDraw
             // 
             this.Checkbox_AlwaysDraw.AutoSize = true;
-            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(440, 113);
+            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(432, 112);
             this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
             this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(146, 17);
             this.Checkbox_AlwaysDraw.TabIndex = 70;
@@ -2653,7 +2741,7 @@
             // 
             // NumUpDown_CutsceneSlot
             // 
-            this.NumUpDown_CutsceneSlot.Location = new System.Drawing.Point(440, 29);
+            this.NumUpDown_CutsceneSlot.Location = new System.Drawing.Point(432, 36);
             this.NumUpDown_CutsceneSlot.Maximum = new decimal(new int[] {
             15,
             0,
@@ -2678,7 +2766,7 @@
             // Checkbox_AlwaysActive
             // 
             this.Checkbox_AlwaysActive.AutoSize = true;
-            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(440, 90);
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(432, 89);
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
             this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(156, 17);
             this.Checkbox_AlwaysActive.TabIndex = 68;
@@ -2690,7 +2778,7 @@
             // Checkbox_Pushable
             // 
             this.Checkbox_Pushable.AutoSize = true;
-            this.Checkbox_Pushable.Location = new System.Drawing.Point(440, 159);
+            this.Checkbox_Pushable.Location = new System.Drawing.Point(432, 158);
             this.Checkbox_Pushable.Name = "Checkbox_Pushable";
             this.Checkbox_Pushable.Size = new System.Drawing.Size(70, 17);
             this.Checkbox_Pushable.TabIndex = 59;
@@ -2702,7 +2790,7 @@
             // Checkbox_CanPressSwitches
             // 
             this.Checkbox_CanPressSwitches.AutoSize = true;
-            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(440, 136);
+            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(432, 135);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
             this.Checkbox_CanPressSwitches.TabIndex = 58;
@@ -3150,6 +3238,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             this.Tab3_BehaviorData.ResumeLayout(false);
             this.Tab3_BehaviorData.PerformLayout();
+            this.Btn_ReactIfAtt.ResumeLayout(false);
+            this.Btn_ReactIfAtt.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).EndInit();
             this.Panel_Collision.ResumeLayout(false);
             this.Panel_Collision.PerformLayout();
@@ -3433,6 +3523,12 @@
         private System.Windows.Forms.CheckBox Chkb_IgnoreY;
         private System.Windows.Forms.Label SmoothingCnts;
         private System.Windows.Forms.NumericUpDown NumUp_Smoothing;
+        private System.Windows.Forms.Panel Btn_ReactIfAtt;
+        private System.Windows.Forms.Button Btn_ReactIfAttList;
+        private System.Windows.Forms.TextBox Txtbox_ReactIfAtt;
+        private System.Windows.Forms.Label Lbl_ReactIfAttSnd;
+        private System.Windows.Forms.ComboBox Combo_EffIfAtt;
+        private System.Windows.Forms.Label Label_EffIfAtt;
     }
 }
 

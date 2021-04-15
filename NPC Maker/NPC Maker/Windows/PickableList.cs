@@ -18,10 +18,16 @@ namespace NPC_Maker
         public ListEntry Chosen { get; set; }
         string FileName { get; set; }
         Lists.DictType DictType { get; set; }
+        List<int> SkipEntries { get; set; }
 
-        public PickableList(Lists.DictType Dict, bool PickMode = false)
+        public PickableList(Lists.DictType Dict, bool PickMode = false, List<int> _SkipEntries = null)
         {
             InitializeComponent();
+
+            SkipEntries = _SkipEntries;
+
+            if (SkipEntries == null)
+                SkipEntries = new List<int>();
 
             DictType = Dict;
             FileName = Dicts.DictFilenames[DictType];
@@ -47,7 +53,7 @@ namespace NPC_Maker
                 return;
             }
 
-            SetListView();
+            SetListView(SkipEntries);
 
             this.ActiveControl = Btn_Search;
 
@@ -59,7 +65,7 @@ namespace NPC_Maker
             }
         }
 
-        private void SetListView()
+        private void SetListView(List<int> SkipEntries)
         {
             listView1.BeginUpdate();
 
@@ -68,7 +74,10 @@ namespace NPC_Maker
             Data = Data.OrderBy(x => x.ID).ToList();
 
             foreach (ListEntry Entry in Data)
-                AddEntryToList(Entry);
+            {
+                if (!SkipEntries.Contains(Entry.ID))
+                    AddEntryToList(Entry);
+            }
 
             listView1.EndUpdate();
         }
@@ -160,7 +169,7 @@ namespace NPC_Maker
                     ListEntry NewEntry = new ListEntry(pE.Out_EntryID, pE.Out_Name, pE.Out_Desc);
 
                     Data[DataIndex] = NewEntry;
-                    SetListView();
+                    SetListView(SkipEntries);
                 }
 
             }
@@ -192,13 +201,13 @@ namespace NPC_Maker
                         int DataIndex = Data.FindIndex(x => x.ID == pE.Out_EntryID);
 
                         Data[DataIndex] = NewEntry;
-                        SetListView();
+                        SetListView(SkipEntries);
                     }
                 }
                 else
                 {
                     Data.Add(NewEntry);
-                    SetListView();
+                    SetListView(SkipEntries);
                 }
             }
         }
@@ -223,7 +232,7 @@ namespace NPC_Maker
             {
                 int DataIndex = Data.FindIndex(x => x.ID == Sel.ID);
                 Data.RemoveAt(DataIndex);
-                SetListView();
+                SetListView(SkipEntries);
             }
         }
 

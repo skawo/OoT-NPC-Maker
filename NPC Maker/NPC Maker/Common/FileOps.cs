@@ -133,6 +133,7 @@ namespace NPC_Maker
                         EntryBytes.Add(Entry.HeadVertAxis);
                         EntryBytes.Add(Entry.LookAtType);
                         EntryBytes.Add(Entry.TargetDistance);
+                        EntryBytes.Add(Entry.EffectIfAttacked);
                         EntryBytes.Add(Entry.EnvironmentColor.R);
                         EntryBytes.Add(Entry.EnvironmentColor.G);
                         EntryBytes.Add(Entry.EnvironmentColor.B);
@@ -171,6 +172,7 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.MovementDelayTime);
                         EntryBytes.AddRangeBigEndian(Entry.TimedPathStart);
                         EntryBytes.AddRangeBigEndian(Entry.TimedPathEnd);
+                        EntryBytes.AddRangeBigEndian(Entry.SfxIfAttacked);
                         EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[0]);
                         EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[1]);
                         EntryBytes.AddRangeBigEndian(Entry.CollisionPositionOffsets[2]);

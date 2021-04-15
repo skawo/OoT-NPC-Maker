@@ -214,6 +214,7 @@ namespace NPC_Maker
             Values.AddRange(Enum.GetNames(typeof(Lists.Segments)));
             Values.AddRange(Enum.GetNames(typeof(Lists.TargetActorSubtypes)));
             Values.AddRange(Enum.GetNames(typeof(Lists.Buttons)));
+            Values.AddRange(Enum.GetNames(typeof(Lists.EffectsIfAttacked)));
 
             return Values;
         }
@@ -379,6 +380,7 @@ namespace NPC_Maker
             TARGET_DISTANCE = 49,
             HEAD_LIMB = 50,
             WAIST_LIMB = 51,
+         
 
             /* s8s */
             PLAYER_BOMBS = 52,
@@ -433,6 +435,9 @@ namespace NPC_Maker
             TIMED_PATH_END_TIME = 99,
             BLINK_SEGMENT = 100,
             TALK_SEGMENT = 101,
+
+            EFFECT_IF_ATTACKED = 104,
+            SFX_IF_ATTACKED = 105,
         }
 
         public enum AwaitSubTypes
@@ -466,6 +471,24 @@ namespace NPC_Maker
             EXT_VAR_3 = 21,
             EXT_VAR_4 = 22,
             EXT_VAR_5 = 23,
+        }
+
+        public enum EffectsIfAttacked
+        {
+            BLUE_WHITE = 0,
+            NONE_DUST = 1,
+            GREEN_DUST = 2,
+            NONE_WHITE = 3,
+            WATER_NONE = 4,
+            NONE_RED = 5,
+            GREEN_WHITE = 6,
+            RED_WHITE = 7,
+            BLUE_RED = 8,
+            METAL = 9,
+            NONE = 10,
+            WOOD = 11,
+            HARD_SURFACE = 12,
+            TREE = 13,
         }
 
         public enum SpawnParams
@@ -1299,8 +1322,9 @@ namespace NPC_Maker
             NONE = 0,
             RANDOM = 1,
             FOLLOW = 2,
-            PATH = 3,
-            TIMED_PATH = 4,
+            RUN_AWAY = 3,
+            PATH = 4,
+            TIMED_PATH = 5,
         }
 
         public enum LookAtStyles

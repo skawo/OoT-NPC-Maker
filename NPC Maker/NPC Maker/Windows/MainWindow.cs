@@ -105,6 +105,11 @@ namespace NPC_Maker
 
             Txb_ObjectID.Text = SelectedEntry.ObjectID.ToString();
             Txb_ObjectID_Leave(null, null);
+            Txtbox_ReactIfAtt.Text = SelectedEntry.SfxIfAttacked.ToString();
+            Txtbox_ReactIfAtt_Leave(null, null);
+
+            Combo_EffIfAtt.SelectedIndex = SelectedEntry.EffectIfAttacked;
+
             NumUpDown_Hierarchy.Value = SelectedEntry.Hierarchy;
             ComboBox_HierarchyType.SelectedIndex = SelectedEntry.HierarchyType;
             NumUpDown_XModelOffs.Value = SelectedEntry.ModelPositionOffsets[0];
@@ -170,6 +175,7 @@ namespace NPC_Maker
 
             ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
             NumUpDown_Scale.Value = (decimal)SelectedEntry.ModelScale;
+
 
             List<TabPage> ReusableTabPages = new List<TabPage>();
 
@@ -678,6 +684,47 @@ namespace NPC_Maker
 
         #region Field changes
 
+
+        private void Txb_ReactIfAtt_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    Txtbox_ReactIfAtt_Leave(null, null);
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void Txtbox_ReactIfAtt_Leave(object sender, EventArgs e)
+        {
+            short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.SFXes, Txtbox_ReactIfAtt.Text);
+
+            if (ObjectId < -1)
+                ObjectId = -1;
+
+            Txtbox_ReactIfAtt.Text = Dicts.GetStringFromStringIntDict(Dicts.SFXes, ObjectId);
+            SelectedEntry.SfxIfAttacked = ObjectId;
+        }
+
+        private void Btn_ReactIfAttList_Click(object sender, EventArgs e)
+        {
+            PickableList Objects = new PickableList(Lists.DictType.SFX, true);
+            DialogResult DR = Objects.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                Txtbox_ReactIfAtt.Text = Objects.Chosen.ID.ToString();
+                Txtbox_ReactIfAtt_Leave(null, null);
+            }
+        }
+
         private void Txb_ObjectID_KeyUp(object sender, KeyEventArgs e)
         {
             try
@@ -699,7 +746,7 @@ namespace NPC_Maker
         {
             short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, Txb_ObjectID.Text);
 
-            if (ObjectId == -1)
+            if (ObjectId < 0)
                 ObjectId = (short)SelectedEntry.ObjectID;
 
             Txb_ObjectID.Text = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
@@ -709,7 +756,7 @@ namespace NPC_Maker
 
         private void Btn_SelectObject_Click(object sender, EventArgs e)
         {
-            PickableList Objects = new PickableList(Lists.DictType.Objects, true);
+            PickableList Objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -1, -2, -3 });
             DialogResult DR = Objects.ShowDialog();
 
             if (DR == DialogResult.OK)
@@ -922,6 +969,9 @@ namespace NPC_Maker
                         try
                         {
                             int ObjectId = Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
+
+                            if (ObjectId < -1)
+                                ObjectId = 0;
 
                             e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
 

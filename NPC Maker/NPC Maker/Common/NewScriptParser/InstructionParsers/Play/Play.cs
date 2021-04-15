@@ -25,12 +25,15 @@ namespace NPC_Maker.NewScriptParser
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
 
-                                UInt32? SNDID = 0;
+                                Int32? SNDID = 0;
 
                                 SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
                                                        ScriptHelpers.Helper_GetSFXId(SplitLine, 2, VarType)
                                                                                :
                                                        ScriptHelpers.Helper_GetMusicId(SplitLine, 2, VarType);
+
+                                if (SNDID < 0)
+                                    throw ParseException.ParamOutOfRange(SplitLine);
 
 
                                 return new InstructionPlay((byte)SubID, (UInt32)SNDID, VarType, 0, 0);

@@ -51,6 +51,8 @@ namespace NPC_Maker
         public bool IsAlwaysDrawn { get; set; }
         public bool ExecuteJustScript { get; set; }
         public bool ReactsIfAttacked { get; set; }
+        public Int16 SfxIfAttacked { get; set; }
+        public byte EffectIfAttacked { get; set; }
         public bool OpensDoors { get; set; }
         public UInt16 CollisionRadius { get; set; }
         public UInt16 CollisionHeight { get; set; }
@@ -125,6 +127,8 @@ namespace NPC_Maker
             IsAlwaysActive = false;
             ExecuteJustScript = false;
             ReactsIfAttacked = false;
+            SfxIfAttacked = -1;
+            EffectIfAttacked = 10;
             OpensDoors = false;
             SmoothingConstant = 15.0f;
             IgnoreYAxis = true;
@@ -256,6 +260,8 @@ namespace NPC_Maker
             OPENDOORS,
             IGNORENODEYAXIS,
             SMOOTH,
+            SFXIFATT,
+            EFFIFATT,
         }
 
         public void ChangeValueOfMember(Members Member, object Value)
@@ -338,6 +344,8 @@ namespace NPC_Maker
                 case Members.PATHSTARTTIME: TimedPathStart = Helpers.GetOcarinaTime((string)Value); break;
                 case Members.PATHENDTIME: TimedPathEnd = Helpers.GetOcarinaTime((string)Value); break;
                 case Members.SMOOTH: SmoothingConstant = (float)Convert.ToDecimal(Value); break;
+                case Members.SFXIFATT: SfxIfAttacked = Convert.ToInt16(Value); break;
+                case Members.EFFIFATT: EffectIfAttacked = Convert.ToByte(Value); break;
 
                 default: break;
             }

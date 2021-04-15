@@ -503,17 +503,17 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static UInt32 Helper_GetSFXId(string[] SplitLine, int Index, int VarType)
+        public static Int32 Helper_GetSFXId(string[] SplitLine, int Index, int VarType)
         {
             try
             {
-                return Convert.ToUInt32(Dicts.SFXes[SplitLine[Index].ToUpper()]);
+                return Convert.ToInt32(Dicts.SFXes[SplitLine[Index].ToUpper()]);
             }
             catch (Exception)
             {
                 try
                 {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
+                    return Convert.ToInt32(GetValueByType(SplitLine, Index, VarType, -1, Int16.MaxValue));
                 }
                 catch (Exception)
                 {
@@ -522,17 +522,17 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static UInt32 Helper_GetMusicId(string[] SplitLine, int Index, int VarType)
+        public static Int32 Helper_GetMusicId(string[] SplitLine, int Index, int VarType)
         {
             try
             {
-                return Convert.ToUInt32(Dicts.Music[SplitLine[Index].ToUpper()]);
+                return Convert.ToInt32(Dicts.Music[SplitLine[Index].ToUpper()]);
             }
             catch (Exception)
             {
                 try
                 {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
+                    return Convert.ToInt32(GetValueByType(SplitLine, Index, VarType, -1, Int16.MaxValue));
                 }
                 catch (Exception)
                 {

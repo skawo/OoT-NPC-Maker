@@ -137,6 +137,8 @@ namespace NPC_Maker.NewScriptParser
 
                                 return new InstructionSetWTwoValues((byte)SubID, FlagID, VarType1, Val, VarType2, 0);
                             }
+                        case (int)Lists.SetSubTypes.EFFECT_IF_ATTACKED:
+                            return H_SetByEnum(SubID, SplitLine, typeof(Lists.EffectsIfAttacked), ParseException.UnrecognizedEffectIfAttacked(SplitLine));
                         case (int)Lists.SetSubTypes.MOVEMENT_TYPE:
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.MovementStyles), ParseException.UnrecognizedMovementStyle(SplitLine));
                         case (int)Lists.SetSubTypes.LOOKAT_TYPE:
@@ -324,6 +326,16 @@ namespace NPC_Maker.NewScriptParser
                                     Time = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue));
 
                                 return new InstructionSet((byte)SubID, Time, VarType, Operator);
+                            }
+                        case (int)Lists.SetSubTypes.SFX_IF_ATTACKED:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
+                                Int32 SFXID = ScriptHelpers.Helper_GetSFXId(SplitLine, 2, VarType);
+
+                                return new InstructionSet((byte)SubID, SFXID, VarType, 0);
+
                             }
                         case (int)Lists.SetSubTypes.EXT_VAR_1:
                         case (int)Lists.SetSubTypes.EXT_VAR_2:

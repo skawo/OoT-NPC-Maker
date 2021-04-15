@@ -271,6 +271,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Not a valid movement style: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedEffectIfAttacked(string[] _Line)
+        {
+            return new ParseException("Not a valid effect if attacked: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedLookAtStyle(string[] _Line)
         {
             return new ParseException("Not a valid look-at style: ", String.Join(" ", _Line));
