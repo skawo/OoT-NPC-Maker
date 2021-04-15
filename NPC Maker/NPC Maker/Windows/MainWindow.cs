@@ -830,6 +830,32 @@ namespace NPC_Maker
 
         #region Animation Grid
 
+        private enum AnimGridColumns
+        {
+            Name = 0,
+            Address = 1,
+            StartFrame = 2,
+            EndFrame = 3,
+            Speed = 4,
+            Object = 5,
+        }
+
+        private void DataGrid_Animations_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex == (int)AnimGridColumns.Object)
+            {
+                PickableList Objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -2, -3 });
+                DialogResult DR = Objects.ShowDialog();
+
+                if (DR == DialogResult.OK)
+                {
+                    DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
+                    DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
+                    DataGrid_Animations.Update();
+                }
+            }
+        }
+
         private void AddBlankAnim(int SkipIndex, int Index, string Name = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte StartFrame = 0, byte EndFrame = 0xFF)
         {
             Name = Name ?? "Animation_" + Index.ToString();
@@ -839,23 +865,23 @@ namespace NPC_Maker
 
             SelectedEntry.Animations.Add(new AnimationEntry(Name, (uint)Address, (float)Speed, (short)ObjectID, StartFrame, EndFrame));
 
-            if (SkipIndex != 0)
-                DataGrid_Animations.Rows[Index].Cells[0].Value = Name;
+            if (SkipIndex != (int)AnimGridColumns.Name)
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Name].Value = Name;
 
-            if (SkipIndex != 1)
-                DataGrid_Animations.Rows[Index].Cells[1].Value = Address;
+            if (SkipIndex != (int)AnimGridColumns.Address)
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Address;
 
-            if (SkipIndex != 2)
-                DataGrid_Animations.Rows[Index].Cells[2].Value = 0;
+            if (SkipIndex != (int)AnimGridColumns.StartFrame)
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.StartFrame].Value = 0;
 
-            if (SkipIndex != 3)
-                DataGrid_Animations.Rows[Index].Cells[3].Value = 255;
+            if (SkipIndex != (int)AnimGridColumns.EndFrame)
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.EndFrame].Value = 255;
 
-            if (SkipIndex != 4)
-                DataGrid_Animations.Rows[Index].Cells[4].Value = 1.0;
+            if (SkipIndex != (int)AnimGridColumns.Speed)
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Speed].Value = 1.0;
 
-            if (SkipIndex != 5)
-                DataGrid_Animations.Rows[Index].Cells[5].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
+            if (SkipIndex != (int)AnimGridColumns.Object)
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Object].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
         }
 
         private void DataGridViewAnimations_CellParse(object sender, DataGridViewCellParsingEventArgs e)
@@ -870,7 +896,7 @@ namespace NPC_Maker
 
             switch (e.ColumnIndex)
             {
-                case 0:     // Name
+                case (int)AnimGridColumns.Name:
                     {
                         if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                             AddBlankAnim(e.ColumnIndex, e.RowIndex, e.Value.ToString());
@@ -878,9 +904,10 @@ namespace NPC_Maker
                             SelectedEntry.Animations[e.RowIndex].Name = e.Value.ToString();
 
                         e.ParsingApplied = true;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         return;
                     }
-                case 1:     // Address
+                case (int)AnimGridColumns.Address:
                     {
                         try
                         {
@@ -897,11 +924,12 @@ namespace NPC_Maker
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
                             e.Value = Convert.ToInt32("0", 16);
+                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                             e.ParsingApplied = true;
                         }
                         return;
                     }
-                case 2:     // Start frame
+                case (int)AnimGridColumns.StartFrame:
                     {
                         try
                         {
@@ -918,11 +946,12 @@ namespace NPC_Maker
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
                             e.Value = "";
+                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                             e.ParsingApplied = true;
                         }
                         return;
                     }
-                case 3:     // End frame
+                case (int)AnimGridColumns.EndFrame:
                     {
                         try
                         {
@@ -939,11 +968,12 @@ namespace NPC_Maker
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
                             e.Value = "";
+                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                             e.ParsingApplied = true;
                         }
                         return;
                     }
-                case 4:     // Speed
+                case (int)AnimGridColumns.Speed:
                     {
                         try
                         {
@@ -960,11 +990,12 @@ namespace NPC_Maker
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
                             e.Value = 1.0f;
+                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                             e.ParsingApplied = true;
                         }
                         return;
                     }
-                case 5:     // Object
+                case (int)AnimGridColumns.Object:
                     {
                         try
                         {
@@ -974,6 +1005,7 @@ namespace NPC_Maker
                                 ObjectId = 0;
 
                             e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
+                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (short)ObjectId);
@@ -988,6 +1020,7 @@ namespace NPC_Maker
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
                             e.Value = Dicts.ObjectIDs.First().Key;
+                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
                         e.ParsingApplied = true;
@@ -1020,6 +1053,34 @@ namespace NPC_Maker
 
         #region Extra Display Lists Grid
 
+        private enum EDlistsColumns
+        {
+            Purpose = 0,
+            Offset = 1,
+            Translation = 2,
+            Rotation = 3,
+            Scale = 4,
+            Limb = 5,
+            Object = 6,
+            ShowType = 7,
+        }
+
+        private void DataGridView_ExtraDLists_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex == (int)EDlistsColumns.Object)
+            {
+                PickableList Objects = new PickableList(Lists.DictType.Objects, true);
+                DialogResult DR = Objects.ShowDialog();
+
+                if (DR == DialogResult.OK)
+                {
+                    DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
+                    DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
+                    DataGridView_ExtraDLists.Update();
+                }
+            }
+        }
+
         private void AddBlankDList(int SkipIndex, int Index, string Name = null, uint? Address = null, float? TransX = null, float? TransY = null, float? TransZ = null,
                                    short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, ushort? Limb = null, int? ShowType = null, short? ObjectID = null)
         {
@@ -1042,29 +1103,29 @@ namespace NPC_Maker
             SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ,
                                                     (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (ushort)Limb, (int)ShowType, (short)ObjectID));
 
-            if (SkipIndex != 0)
-                DataGridView_ExtraDLists.Rows[Index].Cells[0].Value = Name;
+            if (SkipIndex != (int)EDlistsColumns.Purpose)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Purpose].Value = Name;
 
-            if (SkipIndex != 1)
-                DataGridView_ExtraDLists.Rows[Index].Cells[1].Value = Address;
+            if (SkipIndex != (int)EDlistsColumns.Offset)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Offset].Value = Address;
 
-            if (SkipIndex != 2)
-                DataGridView_ExtraDLists.Rows[Index].Cells[2].Value = $"{TransX},{TransY},{TransZ}";
+            if (SkipIndex != (int)EDlistsColumns.Translation)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Translation].Value = $"{TransX},{TransY},{TransZ}";
 
-            if (SkipIndex != 3)
-                DataGridView_ExtraDLists.Rows[Index].Cells[3].Value = $"{RotX},{RotY},{RotZ}";
+            if (SkipIndex != (int)EDlistsColumns.Rotation)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Rotation].Value = $"{RotX},{RotY},{RotZ}";
 
-            if (SkipIndex != 4)
-                DataGridView_ExtraDLists.Rows[Index].Cells[4].Value = Scale;
+            if (SkipIndex != (int)EDlistsColumns.Scale)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Scale].Value = Scale;
 
-            if (SkipIndex != 5)
-                DataGridView_ExtraDLists.Rows[Index].Cells[5].Value = Limb;
+            if (SkipIndex != (int)EDlistsColumns.Limb)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Limb].Value = Limb;
 
-            if (SkipIndex != 6)
-                DataGridView_ExtraDLists.Rows[Index].Cells[6].Value = ObjectID == -1 ? "---" : ObjectID.ToString();
+            if (SkipIndex != (int)EDlistsColumns.Object)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Object].Value = ObjectID == -1 ? "---" : ObjectID.ToString();
 
-            if (SkipIndex != 7)
-                DataGridView_ExtraDLists.Rows[Index].Cells[7].Value = ExtraDlists_ShowType.Items[(int)ShowType];
+            if (SkipIndex != (int)EDlistsColumns.ShowType)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.ShowType].Value = ExtraDlists_ShowType.Items[(int)ShowType];
         }
 
         private float[] GetXYZTranslation(string Value)
@@ -1117,7 +1178,7 @@ namespace NPC_Maker
 
             switch (e.ColumnIndex)
             {
-                case 0:     // Purpose
+                case (int)EDlistsColumns.Purpose:
                     {
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, e.Value.ToString());
@@ -1127,7 +1188,7 @@ namespace NPC_Maker
                         e.ParsingApplied = true;
                         return;
                     }
-                case 1:     // Offset
+                case (int)EDlistsColumns.Offset:
                     {
                         try
                         {
@@ -1142,15 +1203,17 @@ namespace NPC_Maker
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
                             e.Value = 0;
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
                         e.ParsingApplied = true;
                         return;
                     }
-                case 2:     // XYZ Translation
+                case (int)EDlistsColumns.Translation:
                     {
                         float[] Transl = GetXYZTranslation(e.Value.ToString());
                         e.Value = $"{Transl[0]},{Transl[1]},{Transl[2]}";
+                        DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, Transl[0], Transl[1], Transl[2]);
@@ -1164,10 +1227,11 @@ namespace NPC_Maker
                         e.ParsingApplied = true;
                         return;
                     }
-                case 3:     // XYZ Rotation
+                case (int)EDlistsColumns.Rotation:
                     {
                         Int16[] Rot = GetXYZRotation(e.Value.ToString());
                         e.Value = $"{Rot[0]},{Rot[1]},{Rot[2]}";
+                        DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, Rot[0], Rot[1], Rot[2]);
@@ -1181,7 +1245,7 @@ namespace NPC_Maker
                         e.ParsingApplied = true;
                         return;
                     }
-                case 4:     // Scale
+                case (int)EDlistsColumns.Scale:
                     {
                         try
                         {
@@ -1196,12 +1260,13 @@ namespace NPC_Maker
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
                             e.Value = 0;
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
                         e.ParsingApplied = true;
                         return;
                     }
-                case 5:     // Limb
+                case (int)EDlistsColumns.Limb:
                     {
                         try
                         {
@@ -1216,18 +1281,20 @@ namespace NPC_Maker
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
                             e.Value = 0;
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
                         e.ParsingApplied = true;
                         return;
                     }
-                case 6:     // Object ID
+                case (int)EDlistsColumns.Object:
                     {
                         try
                         {
                             short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
 
                             e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, ObjectId);
@@ -1240,12 +1307,13 @@ namespace NPC_Maker
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
                             e.Value = Dicts.ObjectIDs.First();
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
                         e.ParsingApplied = true;
                         return;
                     }
-                case 7:     // ShowType
+                case (int)EDlistsColumns.ShowType:
                     {
                         int ShowType = Dicts.GetIntFromStringIntDict(Dicts.LimbShowSubTypes, e.Value.ToString(), 0);
 
@@ -1269,8 +1337,6 @@ namespace NPC_Maker
                     int Index = (sender as DataGridView).SelectedCells[0].RowIndex;
                     (sender as DataGridView).Rows.RemoveAt(Index);
                     SelectedEntry.ExtraDisplayLists.RemoveAt(Index);
-
-
                 }
             }
             catch (Exception)
@@ -1283,6 +1349,29 @@ namespace NPC_Maker
 
         #region Segments Grid
 
+        private enum SegmentsColumns
+        {
+            Name = 0,
+            Address = 1,
+            Object = 2,
+        }
+
+        private void Segments_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex == (int)SegmentsColumns.Object)
+            {
+                PickableList Objects = new PickableList(Lists.DictType.Objects, true);
+                DialogResult DR = Objects.ShowDialog();
+
+                if (DR == DialogResult.OK)
+                {
+                    (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
+                    DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
+                    (sender as DataGridView).Update();
+                }
+            }
+        }
+
         private void AddBlankSeg(int SkipIndex, int Index, int Segment, string Name = null, uint? Address = null, short? ObjectID = null)
         {
             Name = Name ?? "Texture_" + Index.ToString();
@@ -1293,14 +1382,14 @@ namespace NPC_Maker
 
             DataGridView dgv = TabControl_Segments.TabPages[Segment].Controls[0] as DataGridView;
 
-            if (SkipIndex != 0)
-                dgv.Rows[Index].Cells[0].Value = Name;
+            if (SkipIndex != (int)SegmentsColumns.Name)
+                dgv.Rows[Index].Cells[(int)SegmentsColumns.Name].Value = Name;
 
-            if (SkipIndex != 1)
-                dgv.Rows[Index].Cells[1].Value = Address;
+            if (SkipIndex != (int)SegmentsColumns.Address)
+                dgv.Rows[Index].Cells[(int)SegmentsColumns.Address].Value = Address;
 
-            if (SkipIndex != 2)
-                dgv.Rows[Index].Cells[2].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
+            if (SkipIndex != (int)SegmentsColumns.Object)
+                dgv.Rows[Index].Cells[(int)SegmentsColumns.Object].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
         }
 
         private void DataGridViewSegments_CellParse(object sender, DataGridViewCellParsingEventArgs e)
@@ -1317,7 +1406,7 @@ namespace NPC_Maker
 
             switch (e.ColumnIndex)
             {
-                case 0:     // Name
+                case (int)SegmentsColumns.Name:
                     {
                         if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
                             AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, e.Value.ToString());
@@ -1327,7 +1416,7 @@ namespace NPC_Maker
                         e.ParsingApplied = true;
                         return;
                     }
-                case 1:     // Address
+                case (int)SegmentsColumns.Address:
                     {
                         try
                         {
@@ -1342,18 +1431,20 @@ namespace NPC_Maker
                                 AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
 
                             e.Value = Convert.ToInt32("0", 16);
+                            (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
                         e.ParsingApplied = true;
                         return;
                     }
-                case 2:     // Object
+                case (int)SegmentsColumns.Object:
                     {
                         try
                         {
                             short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
 
                             e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
+                            (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                             if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
                                 AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, ObjectId);
@@ -1366,6 +1457,7 @@ namespace NPC_Maker
                                 AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
 
                             e.Value = Dicts.ObjectIDs.First();
+                            (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
                         e.ParsingApplied = true;
@@ -1494,9 +1586,5 @@ namespace NPC_Maker
 
         #endregion
 
-        private void Label_LoopStartNode_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
