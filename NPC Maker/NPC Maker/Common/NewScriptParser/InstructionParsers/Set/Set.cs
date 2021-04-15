@@ -33,9 +33,7 @@ namespace NPC_Maker.NewScriptParser
                             return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_START:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_END:
-                        case (int)Lists.SetSubTypes.COLLISION_OFFSET_X:
-                        case (int)Lists.SetSubTypes.COLLISION_OFFSET_Y:
-                        case (int)Lists.SetSubTypes.COLLISION_OFFSET_Z:
+                        case (int)Lists.SetSubTypes.COLLISION_YOFFSET:
                         case (int)Lists.SetSubTypes.TARGET_OFFSET_X:
                         case (int)Lists.SetSubTypes.TARGET_OFFSET_Y:
                         case (int)Lists.SetSubTypes.TARGET_OFFSET_Z:
@@ -63,7 +61,6 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.LOOP_MOVEMENT:
                         case (int)Lists.SetSubTypes.HAVE_COLLISION:
                         case (int)Lists.SetSubTypes.PRESS_SWITCHES:
-                        case (int)Lists.SetSubTypes.IS_PUSHABLE:
                         case (int)Lists.SetSubTypes.IS_TARGETTABLE:
                         case (int)Lists.SetSubTypes.PLAYER_CAN_MOVE:
                         case (int)Lists.SetSubTypes.ACTOR_CAN_MOVE:
@@ -93,6 +90,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.TARGET_DISTANCE:
                         case (int)Lists.SetSubTypes.HEAD_LIMB:
                         case (int)Lists.SetSubTypes.WAIST_LIMB:
+                        case (int)Lists.SetSubTypes.MASS:
                             return H_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.PLAYER_BOMBS:
                         case (int)Lists.SetSubTypes.PLAYER_BOMBCHUS:

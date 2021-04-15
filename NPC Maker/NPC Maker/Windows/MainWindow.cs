@@ -138,7 +138,7 @@ namespace NPC_Maker
 
             Checkbox_HaveCollision.Checked = SelectedEntry.HasCollision;
             Checkbox_CanPressSwitches.Checked = SelectedEntry.PushesSwitches;
-            Checkbox_Pushable.Checked = SelectedEntry.IsPushable;
+            NumUpDown_Mass.Value = SelectedEntry.Mass;
             NumUpDown_ColRadius.Value = SelectedEntry.CollisionRadius;
             NumUpDown_ColHeight.Value = SelectedEntry.CollisionHeight;
             Checkbox_AlwaysActive.Checked = SelectedEntry.IsAlwaysActive;
@@ -148,10 +148,7 @@ namespace NPC_Maker
             Chkb_Opendoors.Checked = SelectedEntry.OpensDoors;
             NumUp_Smoothing.Value = (decimal)SelectedEntry.SmoothingConstant;
             Chkb_IgnoreY.Checked = SelectedEntry.IgnoreYAxis;
-
-            NumUpDown_XColOffs.Value = SelectedEntry.CollisionPositionOffsets[0];
-            NumUpDown_YColOffs.Value = SelectedEntry.CollisionPositionOffsets[1];
-            NumUpDown_ZColOffs.Value = SelectedEntry.CollisionPositionOffsets[2];
+            NumUpDown_YColOffs.Value = SelectedEntry.CollisionYShift;
 
             Checkbox_Targettable.Checked = SelectedEntry.IsTargettable;
             ComboBox_TargetDist.SelectedIndex = SelectedEntry.TargetDistance <= 10 ? SelectedEntry.TargetDistance : 1;

@@ -46,7 +46,7 @@ namespace NPC_Maker
 
         public bool HasCollision { get; set; }
         public bool PushesSwitches { get; set; }
-        public bool IsPushable { get; set; }
+        public byte Mass { get; set; }
         public bool IsAlwaysActive { get; set; }
         public bool IsAlwaysDrawn { get; set; }
         public bool ExecuteJustScript { get; set; }
@@ -56,7 +56,7 @@ namespace NPC_Maker
         public bool OpensDoors { get; set; }
         public UInt16 CollisionRadius { get; set; }
         public UInt16 CollisionHeight { get; set; }
-        public Int16[] CollisionPositionOffsets { get; set; }
+        public Int16 CollisionYShift { get; set; }
 
         public bool CastsShadow { get; set; }
         public UInt16 ShadowRadius { get; set; }
@@ -123,7 +123,7 @@ namespace NPC_Maker
 
             HasCollision = false;
             PushesSwitches = false;
-            IsPushable = false;
+            Mass = 254;
             IsAlwaysActive = false;
             ExecuteJustScript = false;
             ReactsIfAttacked = false;
@@ -134,7 +134,7 @@ namespace NPC_Maker
             IgnoreYAxis = true;
             CollisionRadius = 0;
             CollisionHeight = 0;
-            CollisionPositionOffsets = new Int16[] { 0, 0, 0 };
+            CollisionYShift = 0;
 
             CastsShadow = false;
             ShadowRadius = 0;
@@ -219,14 +219,12 @@ namespace NPC_Maker
             ZLOOKATOFFS,
             COLLISION,
             SWITCHES,
-            PUSHABLE,
+            MASS,
             COLRADIUS,
             COLHEIGHT,
             SHADOW,
             SHADOWRADIUS,
-            XCOLOFFS,
             YCOLOFFS,
-            ZCOLOFFS,
             TARGETTABLE,
             TARGETLIMB,
             XTARGETOFFS,
@@ -294,16 +292,13 @@ namespace NPC_Maker
 
                 case Members.COLLISION: HasCollision = Convert.ToBoolean(Value); break;
                 case Members.SWITCHES: PushesSwitches = Convert.ToBoolean(Value); break;
-                case Members.PUSHABLE: IsPushable = Convert.ToBoolean(Value); break;
+                case Members.MASS: Mass = Convert.ToByte(Value); break;
                 case Members.COLRADIUS: CollisionRadius = Convert.ToUInt16(Value); break;
                 case Members.COLHEIGHT: CollisionHeight = Convert.ToUInt16(Value); break;
 
                 case Members.SHADOW: CastsShadow = Convert.ToBoolean(Value); break;
                 case Members.SHADOWRADIUS: ShadowRadius = Convert.ToUInt16(Value); break;
-
-                case Members.XCOLOFFS: CollisionPositionOffsets[0] = Convert.ToInt16(Value); break;
-                case Members.YCOLOFFS: CollisionPositionOffsets[1] = Convert.ToInt16(Value); break;
-                case Members.ZCOLOFFS: CollisionPositionOffsets[2] = Convert.ToInt16(Value); break;
+                case Members.YCOLOFFS: CollisionYShift = Convert.ToInt16(Value); break;
 
                 case Members.TARGETTABLE: IsTargettable = Convert.ToBoolean(Value); break;
                 case Members.TARGETLIMB: TargetLimb = Convert.ToByte(Value); break;
