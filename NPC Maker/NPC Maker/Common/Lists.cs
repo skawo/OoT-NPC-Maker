@@ -436,6 +436,8 @@ namespace NPC_Maker
 
             EFFECT_IF_ATTACKED = 104,
             SFX_IF_ATTACKED = 105,
+            FADES_OUT = 106,
+            ALPHA = 107,
         }
 
         public enum AwaitSubTypes

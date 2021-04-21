@@ -109,6 +109,8 @@ namespace NPC_Maker
             Txtbox_ReactIfAtt_Leave(null, null);
 
             Combo_EffIfAtt.SelectedIndex = SelectedEntry.EffectIfAttacked;
+            NumUpAlpha.Value = SelectedEntry.Alpha;
+            ChkB_FadeOut.Checked = SelectedEntry.FadeOut;
 
             NumUpDown_Hierarchy.Value = SelectedEntry.Hierarchy;
             ComboBox_HierarchyType.SelectedIndex = SelectedEntry.HierarchyType;
@@ -256,6 +258,7 @@ namespace NPC_Maker
             foreach (DListEntry Dlist in SelectedEntry.ExtraDisplayLists)
             {
                 string SelCombo = Dicts.GetStringFromStringIntDict(Dicts.LimbShowSubTypes, Dlist.ShowType, Dicts.LimbShowSubTypes.First().Key);
+                string SelComboDrType = Dicts.GetStringFromStringIntDict(Dicts.LimbDrawTypes, Dlist.DrawType, Dicts.LimbDrawTypes.First().Key);
 
                 DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
                                                                  Dlist.Address.ToString("X"),
@@ -264,7 +267,8 @@ namespace NPC_Maker
                                                                  Dlist.Scale.ToString(),
                                                                  Dlist.Limb.ToString(),
                                                                  Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Dlist.ObjectID),
-                                                                 SelCombo
+                                                                 SelCombo,
+                                                                 SelComboDrType
                                                                 });
             }
 
@@ -424,7 +428,9 @@ namespace NPC_Maker
         private void FileMenu_Click(object sender, EventArgs e)
         {
             //hack
-            NumUpDown_Hierarchy.Focus();
+            Label_AnimDefs.Focus();
+            Label_BlinkingFramesBetween.Focus();
+            Label_ColHeight.Focus();
         }
 
         private string GetScriptName()
@@ -575,7 +581,7 @@ namespace NPC_Maker
 
                 foreach (DListEntry D in CopiedEntry.ExtraDisplayLists)
                 {
-                    SelectedEntry.ExtraDisplayLists.Add(new DListEntry(D.Name, D.Address, D.TransX, D.TransY, D.TransZ, D.RotX, D.RotY, D.RotZ, D.Scale, D.Limb, D.ShowType, D.ObjectID));
+                    SelectedEntry.ExtraDisplayLists.Add(new DListEntry(D.Name, D.Address, D.TransX, D.TransY, D.TransZ, D.RotX, D.RotY, D.RotZ, D.Scale, D.Limb, D.ShowType, D.ObjectID, D.DrawType));
                 }
 
                 SelectedEntry.ObjectID = CopiedEntry.ObjectID;
@@ -1060,6 +1066,7 @@ namespace NPC_Maker
             Limb = 5,
             Object = 6,
             ShowType = 7,
+            DrawType = 8,
         }
 
         private void DataGridView_ExtraDLists_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -1079,7 +1086,7 @@ namespace NPC_Maker
         }
 
         private void AddBlankDList(int SkipIndex, int Index, string Name = null, uint? Address = null, float? TransX = null, float? TransY = null, float? TransZ = null,
-                                   short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, ushort? Limb = null, int? ShowType = null, short? ObjectID = null)
+                                   short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, ushort? Limb = null, int? ShowType = null, short? ObjectID = null, int? DrawType = null)
         {
             if (Name == null)
                 Name = "DList_" + Index;
@@ -1096,9 +1103,10 @@ namespace NPC_Maker
             Limb = Limb ?? 0;
             ShowType = ShowType ?? 0;
             ObjectID = ObjectID ?? -1;
+            DrawType = DrawType ?? 1;
 
             SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ,
-                                                    (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (ushort)Limb, (int)ShowType, (short)ObjectID));
+                                                    (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (ushort)Limb, (int)ShowType, (short)ObjectID, (int)DrawType));
 
             if (SkipIndex != (int)EDlistsColumns.Purpose)
                 DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Purpose].Value = Name;
@@ -1123,6 +1131,9 @@ namespace NPC_Maker
 
             if (SkipIndex != (int)EDlistsColumns.ShowType)
                 DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.ShowType].Value = ExtraDlists_ShowType.Items[(int)ShowType];
+
+            if (SkipIndex != (int)EDlistsColumns.DrawType)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.DrawType].Value = ExtraDlists_DrawType.Items[(int)DrawType];
         }
 
         private float[] GetXYZTranslation(string Value)
@@ -1318,6 +1329,18 @@ namespace NPC_Maker
                             AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, ShowType);
                         else
                             SelectedEntry.ExtraDisplayLists[e.RowIndex].ShowType = ShowType;
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case (int)EDlistsColumns.DrawType:
+                    {
+                        int DrawType = Dicts.GetIntFromStringIntDict(Dicts.LimbDrawTypes, e.Value.ToString(), 0);
+
+                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, DrawType);
+                        else
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].DrawType = DrawType;
 
                         e.ParsingApplied = true;
                         return;

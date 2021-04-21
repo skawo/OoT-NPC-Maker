@@ -135,6 +135,7 @@ namespace NPC_Maker
                         EntryBytes.Add(Entry.TargetDistance);
                         EntryBytes.Add(Entry.EffectIfAttacked);
                         EntryBytes.Add(Entry.Mass);
+                        EntryBytes.Add(Entry.Alpha);
                         EntryBytes.Add(Entry.EnvironmentColor.R);
                         EntryBytes.Add(Entry.EnvironmentColor.G);
                         EntryBytes.Add(Entry.EnvironmentColor.B);
@@ -152,7 +153,7 @@ namespace NPC_Maker
                                                         Entry.IsTargettable,
                                                         Entry.LoopPath,
                                                         Entry.EnvironmentColor.A > 0,
-                                                        false,
+                                                        Entry.FadeOut,
                                                         false,
                                                         false,
                                                         false));
@@ -304,6 +305,7 @@ namespace NPC_Maker
                             EntryBytes.AddRangeBigEndian(Dlist.RotZ);
                             EntryBytes.AddRangeBigEndian(Dlist.Limb);
                             EntryBytes.Add((byte)Dlist.ShowType);
+                            EntryBytes.Add((byte)Dlist.DrawType);
                             Helpers.Ensure4ByteAlign(EntryBytes);
                         }
 

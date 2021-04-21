@@ -62,6 +62,8 @@ namespace NPC_Maker
         public UInt16 ShadowRadius { get; set; }
 
         public bool IsTargettable { get; set; }
+        public bool FadeOut { get; set; }
+        public byte Alpha { get; set; }
         public byte TargetDistance { get; set; }
         public byte TargetLimb { get; set; }
         public Int16[] TargetPositionOffsets { get; set; }
@@ -122,6 +124,8 @@ namespace NPC_Maker
             LookAtPositionOffsets = new float[] { 0, 0, 0 };
 
             HasCollision = false;
+            FadeOut = false;
+            Alpha = 255;
             PushesSwitches = false;
             Mass = 254;
             IsAlwaysActive = false;
@@ -260,6 +264,8 @@ namespace NPC_Maker
             SMOOTH,
             SFXIFATT,
             EFFIFATT,
+            FADEOUT,
+            ALPHA,
         }
 
         public void ChangeValueOfMember(Members Member, object Value)
@@ -341,6 +347,8 @@ namespace NPC_Maker
                 case Members.SMOOTH: SmoothingConstant = (float)Convert.ToDecimal(Value); break;
                 case Members.SFXIFATT: SfxIfAttacked = Convert.ToInt16(Value); break;
                 case Members.EFFIFATT: EffectIfAttacked = Convert.ToByte(Value); break;
+                case Members.FADEOUT: FadeOut = Convert.ToBoolean(Value); break;
+                case Members.ALPHA: Alpha = Convert.ToByte(Value); break;
 
                 default: break;
             }
@@ -463,6 +471,7 @@ namespace NPC_Maker
         public Int16 RotZ { get; set; }
         public float Scale { get; set; }
         public int ShowType { get; set; }
+        public int DrawType { get; set; }
         public UInt16 Limb { get; set; }
         public Int16 ObjectID { get; set; }
 
@@ -480,9 +489,10 @@ namespace NPC_Maker
             ShowType = 0;
             Limb = 0;
             ObjectID = -1;
+            DrawType = 0;
         }
         public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, 
-                          Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, UInt16 _Limb, int _ShowType, Int16 _ObjectID)
+                          Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, UInt16 _Limb, int _ShowType, Int16 _ObjectID, int _DrawType)
         {
             Name = _Name;
             Address = _Address;
@@ -495,6 +505,7 @@ namespace NPC_Maker
             Scale = _Scale;
             Limb = _Limb;
             ShowType = _ShowType;
+            DrawType = _DrawType;
             ObjectID = _ObjectID;
         }
     }

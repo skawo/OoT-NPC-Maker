@@ -14,6 +14,12 @@ namespace NPC_Maker
             { "Instead of limb", 2 },
         };
 
+        public static Dictionary<string, int> LimbDrawTypes = new Dictionary<string, int>()
+        {
+            { "OPA", 0 },
+            { "XLU", 1 },
+        };
+
         public static Dictionary<Lists.DictType, string> DictFilenames = new Dictionary<Lists.DictType, string>()
         {
             { Lists.DictType.SFX, $"{Program.ExecPath}/SFX.csv" },

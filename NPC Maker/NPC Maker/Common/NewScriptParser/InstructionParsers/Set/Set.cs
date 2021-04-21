@@ -73,6 +73,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.REACTS_IF_ATTACKED:
                         case (int)Lists.SetSubTypes.OPEN_DOORS:
                         case (int)Lists.SetSubTypes.MOVEMENT_IGNORE_Y:
+                        case (int)Lists.SetSubTypes.FADES_OUT:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
@@ -91,6 +92,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.HEAD_LIMB:
                         case (int)Lists.SetSubTypes.WAIST_LIMB:
                         case (int)Lists.SetSubTypes.MASS:
+                        case (int)Lists.SetSubTypes.ALPHA:
                             return H_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.PLAYER_BOMBS:
                         case (int)Lists.SetSubTypes.PLAYER_BOMBCHUS:
