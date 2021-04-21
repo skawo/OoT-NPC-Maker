@@ -759,7 +759,7 @@ namespace NPC_Maker
 
         private void Btn_SelectObject_Click(object sender, EventArgs e)
         {
-            PickableList Objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -1, -2, -3 });
+            PickableList Objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -1, -2, -3, -4, -5 });
             DialogResult DR = Objects.ShowDialog();
 
             if (DR == DialogResult.OK)
@@ -847,7 +847,7 @@ namespace NPC_Maker
         {
             if (e.ColumnIndex == (int)AnimGridColumns.Object)
             {
-                PickableList Objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -2, -3 });
+                PickableList Objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -2, -3, -4, -5 });
                 DialogResult DR = Objects.ShowDialog();
 
                 if (DR == DialogResult.OK)

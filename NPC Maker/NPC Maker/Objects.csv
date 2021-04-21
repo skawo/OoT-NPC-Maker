@@ -1,6 +1,8 @@
 -1,Current,Currently selected object
 -2,RAM,Load directly from RAM (Only for segments and extra limbs)
 -3,No object,Use as the NPC's object to not draw anything
+-4,XLU Display List,Use this to achieve transparency in models that require it
+-5,End Display List,Use this to stub any display list jumps
 0,(0) None,
 1,(1) gameplay_keep,Global Gameplay Objects
 2,(2) gameplay_field_keep,Global Field Objects
