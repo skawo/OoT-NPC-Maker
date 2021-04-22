@@ -153,6 +153,17 @@ namespace NPC_Maker.NewScriptParser
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
+                        case (int)Lists.IfSubTypes.DISTANCE_FROM_PLAYER:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
+                                float Value = (float)ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, float.MaxValue);
+
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
+                                return Instructions;
+                            }
                         case (int)Lists.IfSubTypes.EXT_VAR_1:
                         case (int)Lists.IfSubTypes.EXT_VAR_2:
                         case (int)Lists.IfSubTypes.EXT_VAR_3:

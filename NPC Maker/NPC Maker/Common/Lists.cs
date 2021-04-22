@@ -307,6 +307,9 @@ namespace NPC_Maker
             BUTTON_PRESSED = 47,
             BUTTON_HELD = 48,
             TARGETTED = 49,
+
+            DISTANCE_FROM_PLAYER = 50,
+
         }
 
         public enum ItemSubTypes
