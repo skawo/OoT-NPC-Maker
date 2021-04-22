@@ -305,7 +305,6 @@ namespace NPC_Maker
                             EntryBytes.AddRangeBigEndian(Dlist.RotZ);
                             EntryBytes.AddRangeBigEndian(Dlist.Limb);
                             EntryBytes.Add((byte)Dlist.ShowType);
-                            EntryBytes.Add((byte)Dlist.DrawType);
                             Helpers.Ensure4ByteAlign(EntryBytes);
                         }
 
