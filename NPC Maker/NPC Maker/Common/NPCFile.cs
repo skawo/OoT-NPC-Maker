@@ -57,6 +57,7 @@ namespace NPC_Maker
         public UInt16 CollisionRadius { get; set; }
         public UInt16 CollisionHeight { get; set; }
         public Int16 CollisionYShift { get; set; }
+        public Int16 NPCToRide { get; set; }
 
         public bool CastsShadow { get; set; }
         public UInt16 ShadowRadius { get; set; }
@@ -139,6 +140,7 @@ namespace NPC_Maker
             CollisionRadius = 0;
             CollisionHeight = 0;
             CollisionYShift = 0;
+            NPCToRide = -1;
 
             CastsShadow = false;
             ShadowRadius = 0;
@@ -266,6 +268,7 @@ namespace NPC_Maker
             EFFIFATT,
             FADEOUT,
             ALPHA,
+            NPCTORIDE,
         }
 
         public void ChangeValueOfMember(Members Member, object Value)
@@ -349,6 +352,7 @@ namespace NPC_Maker
                 case Members.EFFIFATT: EffectIfAttacked = Convert.ToByte(Value); break;
                 case Members.FADEOUT: FadeOut = Convert.ToBoolean(Value); break;
                 case Members.ALPHA: Alpha = Convert.ToByte(Value); break;
+                case Members.NPCTORIDE: NPCToRide = Convert.ToInt16(Value); break;
 
                 default: break;
             }

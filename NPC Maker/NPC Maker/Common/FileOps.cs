@@ -176,6 +176,7 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.TimedPathStart);
                         EntryBytes.AddRangeBigEndian(Entry.TimedPathEnd);
                         EntryBytes.AddRangeBigEndian(Entry.SfxIfAttacked);
+                        EntryBytes.AddRangeBigEndian(Entry.NPCToRide);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[0]);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[1]);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[2]);
@@ -184,7 +185,7 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[2]);
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 40;
+                        CurLen += 44;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         EntryBytes.AddRangeBigEndian(Entry.ModelScale);

@@ -111,6 +111,7 @@ namespace NPC_Maker
             Combo_EffIfAtt.SelectedIndex = SelectedEntry.EffectIfAttacked;
             NumUpAlpha.Value = SelectedEntry.Alpha;
             ChkB_FadeOut.Checked = SelectedEntry.FadeOut;
+            NumUp_RiddenBy.Value = SelectedEntry.NPCToRide;
 
             NumUpDown_Hierarchy.Value = SelectedEntry.Hierarchy;
             ComboBox_HierarchyType.SelectedIndex = SelectedEntry.HierarchyType;
