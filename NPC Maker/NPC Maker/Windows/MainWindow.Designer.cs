@@ -1547,6 +1547,7 @@
             0,
             -2147483648});
             this.NumUp_RiddenBy.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            this.NumUp_RiddenBy.Tag = NPCEntry.Members.NPCTORIDE;
             // 
             // Label_RiddenBy
             // 
