@@ -112,6 +112,14 @@ namespace NPC_Maker
             NumUpAlpha.Value = SelectedEntry.Alpha;
             ChkB_FadeOut.Checked = SelectedEntry.FadeOut;
             NumUp_RiddenBy.Value = SelectedEntry.NPCToRide;
+            ChkBox_Glow.Checked = SelectedEntry.Glow;
+            ChkBox_GenLight.Checked = SelectedEntry.GenLight;
+            NumUp_LightLimb.Value = SelectedEntry.LightLimb;
+            NumUp_LightXOffs.Value = SelectedEntry.LightPositionOffsets[0];
+            NumUp_LightYOffs.Value = SelectedEntry.LightPositionOffsets[1];
+            NumUp_LightZOffs.Value = SelectedEntry.LightPositionOffsets[2];
+            ChkBox_DebugCol.Checked = SelectedEntry.DEBUGShowCols;
+            NumUp_LightRadius.Value = SelectedEntry.LightRadius;
 
             NumUpDown_Hierarchy.Value = SelectedEntry.Hierarchy;
             ComboBox_HierarchyType.SelectedIndex = SelectedEntry.HierarchyType;
@@ -231,6 +239,7 @@ namespace NPC_Maker
 
 
             Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
+            Btn_LightColor.BackColor = Color.FromArgb(255, SelectedEntry.LightColor.R, SelectedEntry.LightColor.G, SelectedEntry.LightColor.B);
 
             if (SelectedEntry.EnvironmentColor.A == 0)
                 Checkbox_EnvColor.Checked = false;
@@ -801,6 +810,15 @@ namespace NPC_Maker
                 SelectedEntry.EnvironmentColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
             else
                 SelectedEntry.EnvironmentColor = Color.FromArgb(0, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
+        }
+
+        private void Btn_LightColor_Click(object sender, EventArgs e)
+        {
+            if (ColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                Btn_LightColor.BackColor = ColorDialog.Color;
+                SelectedEntry.LightColor = ColorDialog.Color;
+            }
         }
 
         private void TextBox_TextChanged(object sender, EventArgs e)
@@ -1588,6 +1606,5 @@ namespace NPC_Maker
 
 
         #endregion
-
     }
 }

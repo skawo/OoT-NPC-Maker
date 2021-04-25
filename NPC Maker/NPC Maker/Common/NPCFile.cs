@@ -84,6 +84,13 @@ namespace NPC_Maker
         public UInt16 TimedPathStart { get; set; }
         public UInt16 TimedPathEnd { get; set; }
 
+        public bool GenLight { get; set; }
+        public bool Glow { get; set; }
+        public byte LightLimb { get; set; }
+        public Int16[] LightPositionOffsets { get; set; }
+        public System.Drawing.Color LightColor { get; set; }
+        public UInt16 LightRadius { get; set; }
+
         public byte AnimationType { get; set; }
         public List<AnimationEntry> Animations { get; set; }
 
@@ -101,6 +108,7 @@ namespace NPC_Maker
 
         public List<ColorEntry> DisplayListColors { get; set; }
 
+        public bool DEBUGShowCols { get; set; }
 
         public NPCEntry()
         {
@@ -151,6 +159,13 @@ namespace NPC_Maker
             TargetPositionOffsets = new Int16[] { 0, 0, 0 };
             TalkRadius = 150.0f;
 
+            GenLight = false;
+            Glow = false;
+            LightLimb = 0;
+            LightPositionOffsets = new Int16[] { 0, 0, 0 };
+            LightColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+            LightRadius = 0;
+
             MovementType = 0;
             MovementDistance = 0;
             MovementSpeed = 1.0f;
@@ -180,6 +195,8 @@ namespace NPC_Maker
 
             ExtraDisplayLists = new List<DListEntry>();
             DisplayListColors = new List<ColorEntry>();
+
+            DEBUGShowCols = false;
         }
 
         
@@ -269,6 +286,14 @@ namespace NPC_Maker
             FADEOUT,
             ALPHA,
             NPCTORIDE,
+            LIGHT,
+            GLOW,
+            LIGHTLIMB,
+            XLIGHTOFFS,
+            YLIGHTOFFS,
+            ZLIGHTOFFS,
+            DEBUGSHOWCOLS,
+            LIGHTRADIUS,
         }
 
         public void ChangeValueOfMember(Members Member, object Value)
@@ -354,6 +379,14 @@ namespace NPC_Maker
                 case Members.ALPHA: Alpha = Convert.ToByte(Value); break;
                 case Members.NPCTORIDE: NPCToRide = Convert.ToInt16(Value); break;
 
+                case Members.GLOW: Glow = Convert.ToBoolean(Value); break;
+                case Members.LIGHT: GenLight = Convert.ToBoolean(Value); break;
+                case Members.LIGHTLIMB: LightLimb = Convert.ToByte(Value); break;
+                case Members.XLIGHTOFFS: LightPositionOffsets[0] = Convert.ToInt16(Value); break;
+                case Members.YLIGHTOFFS: LightPositionOffsets[1] = Convert.ToInt16(Value); break;
+                case Members.ZLIGHTOFFS: LightPositionOffsets[2] = Convert.ToInt16(Value); break;
+                case Members.DEBUGSHOWCOLS: DEBUGShowCols = Convert.ToBoolean(Value); break;
+                case Members.LIGHTRADIUS: LightRadius = Convert.ToUInt16(Value); break;
                 default: break;
             }
         }

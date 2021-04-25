@@ -48,6 +48,10 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.CURRENT_PATH_NODE:
                         case (int)Lists.SetSubTypes.CURRENT_ANIMATION_FRAME:
                         case (int)Lists.SetSubTypes.CURRENT_CUTSCENE_FRAME:
+                        case (int)Lists.SetSubTypes.LIGHT_OFFSET_X:
+                        case (int)Lists.SetSubTypes.LIGHT_OFFSET_Y:
+                        case (int)Lists.SetSubTypes.LIGHT_OFFSET_Z:
+                        case (int)Lists.SetSubTypes.LIGHT_RADIUS:
                             return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
                         // case u32:
                             //return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
@@ -74,6 +78,8 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.OPEN_DOORS:
                         case (int)Lists.SetSubTypes.MOVEMENT_IGNORE_Y:
                         case (int)Lists.SetSubTypes.FADES_OUT:
+                        case (int)Lists.SetSubTypes.LIGHT_GLOW:
+                        case (int)Lists.SetSubTypes.GENERATES_LIGHT:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
@@ -226,6 +232,7 @@ namespace NPC_Maker.NewScriptParser
                                 return new InstructionSetWTwoValues((byte)SubID, SegmentID, 0, TexID, VarType, 0); 
                             }
                         case (int)Lists.SetSubTypes.ENV_COLOR:
+                        case (int)Lists.SetSubTypes.LIGHT_COLOR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 

@@ -441,6 +441,13 @@ namespace NPC_Maker
             SFX_IF_ATTACKED = 105,
             FADES_OUT = 106,
             ALPHA = 107,
+            LIGHT_COLOR = 108,
+            GENERATES_LIGHT = 109,
+            LIGHT_GLOW = 110,
+            LIGHT_RADIUS = 111,
+            LIGHT_OFFSET_X = 112,
+            LIGHT_OFFSET_Y = 113,
+            LIGHT_OFFSET_Z = 114,
         }
 
         public enum AwaitSubTypes

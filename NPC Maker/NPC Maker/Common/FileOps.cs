@@ -136,9 +136,13 @@ namespace NPC_Maker
                         EntryBytes.Add(Entry.EffectIfAttacked);
                         EntryBytes.Add(Entry.Mass);
                         EntryBytes.Add(Entry.Alpha);
+                        EntryBytes.Add(Entry.LightLimb);
                         EntryBytes.Add(Entry.EnvironmentColor.R);
                         EntryBytes.Add(Entry.EnvironmentColor.G);
                         EntryBytes.Add(Entry.EnvironmentColor.B);
+                        EntryBytes.Add(Entry.LightColor.R);
+                        EntryBytes.Add(Entry.LightColor.G);
+                        EntryBytes.Add(Entry.LightColor.B);
 
                         EntryBytes.Add(Helpers.MakeByte(Entry.HasCollision,
                                                         Entry.PushesSwitches,
@@ -154,12 +158,12 @@ namespace NPC_Maker
                                                         Entry.LoopPath,
                                                         Entry.EnvironmentColor.A > 0,
                                                         Entry.FadeOut,
-                                                        false,
-                                                        false,
-                                                        false));
+                                                        Entry.GenLight,
+                                                        Entry.Glow,
+                                                        Entry.DEBUGShowCols));
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 28;
+                        CurLen += 32;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         EntryBytes.AddRangeBigEndian(Entry.ObjectID);
@@ -177,15 +181,19 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.TimedPathEnd);
                         EntryBytes.AddRangeBigEndian(Entry.SfxIfAttacked);
                         EntryBytes.AddRangeBigEndian(Entry.NPCToRide);
+                        EntryBytes.AddRangeBigEndian(Entry.LightRadius);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[0]);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[1]);
                         EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets[2]);
                         EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[0]);
                         EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[1]);
                         EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets[2]);
+                        EntryBytes.AddRangeBigEndian(Entry.LightPositionOffsets[0]);
+                        EntryBytes.AddRangeBigEndian(Entry.LightPositionOffsets[1]);
+                        EntryBytes.AddRangeBigEndian(Entry.LightPositionOffsets[2]);
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 44;
+                        CurLen += 52;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         EntryBytes.AddRangeBigEndian(Entry.ModelScale);
