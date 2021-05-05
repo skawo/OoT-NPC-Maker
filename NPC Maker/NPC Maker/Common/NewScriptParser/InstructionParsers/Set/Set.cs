@@ -27,9 +27,8 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_DELAY:
                         case (int)Lists.SetSubTypes.COLLISION_RADIUS:
                         case (int)Lists.SetSubTypes.COLLISION_HEIGHT:
-                        case (int)Lists.SetSubTypes.MOVEMENT_PATH_ID:
                         case (int)Lists.SetSubTypes.UNSUCCESSFUL_TRADE_TEXT_ID:
-                        case (int)Lists.SetSubTypes.CUTSCENE_FRAME:
+                        case (int)Lists.SetSubTypes.CURRENT_CUTSCENE_FRAME:
                             return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_START:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_END:
@@ -47,7 +46,6 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.LOOKAT_OFFSET_Z:
                         case (int)Lists.SetSubTypes.CURRENT_PATH_NODE:
                         case (int)Lists.SetSubTypes.CURRENT_ANIMATION_FRAME:
-                        case (int)Lists.SetSubTypes.CURRENT_CUTSCENE_FRAME:
                         case (int)Lists.SetSubTypes.LIGHT_OFFSET_X:
                         case (int)Lists.SetSubTypes.LIGHT_OFFSET_Y:
                         case (int)Lists.SetSubTypes.LIGHT_OFFSET_Z:
@@ -99,6 +97,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.WAIST_LIMB:
                         case (int)Lists.SetSubTypes.MASS:
                         case (int)Lists.SetSubTypes.ALPHA:
+                        case (int)Lists.SetSubTypes.MOVEMENT_PATH_ID:
                             return H_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.PLAYER_BOMBS:
                         case (int)Lists.SetSubTypes.PLAYER_BOMBCHUS:
@@ -392,7 +391,7 @@ namespace NPC_Maker.NewScriptParser
                 UInt32 Value1 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarType1, UInt32.MinValue, UInt32.MaxValue));
 
                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, UInt16.MaxValue));
+                UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, Int32.MinValue, Int32.MaxValue));
 
                 return new InstructionSetWTwoValues((byte)SubID, Value1, VarType1, Value2, VarType2, Operator);
             }
@@ -419,9 +418,9 @@ namespace NPC_Maker.NewScriptParser
             byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
             object Data;
 
-            if (ConvertType == typeof(UInt32))
+            if (ConvertType == typeof(UInt32) && VarType == (byte)Lists.VarTypes.Normal)
                 Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, Min, Max));
-            else if (ConvertType == typeof(float))
+            else if (ConvertType == typeof(float) && VarType == (byte)Lists.VarTypes.Normal)
                 Data = (float)(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue));
             else
                 Data = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, Min, Max));

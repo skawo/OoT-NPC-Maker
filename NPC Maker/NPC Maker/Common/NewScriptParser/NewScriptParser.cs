@@ -293,7 +293,6 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.WARP: Instructions.Add(ParseWarpInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.FACE: Instructions.Add(ParseFaceInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.KILL: Instructions.Add(ParseKillInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.CHANGE_SCRIPT: Instructions.Add(ParseChangeScriptInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SPAWN: Instructions.Add(ParseSpawnInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.PARTICLE: Instructions.Add(ParseParticleInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.ROTATION: Instructions.Add(ParseRotationInstruction(SplitLine)); break;
@@ -356,7 +355,7 @@ namespace NPC_Maker.NewScriptParser
                 List<UInt32> Offsets = new List<UInt32>();
                 List<byte> InstructionBytes = new List<byte>();
 
-                UInt32 HeaderOffs = 2;
+                UInt32 HeaderOffs = 0;
 
                 foreach (Instruction Inst in Instructions)
                 {
@@ -372,7 +371,7 @@ namespace NPC_Maker.NewScriptParser
                 }
 
                 // 0 - 2 byte offsets, 1 - 4 byte offsets
-                byte ByteSize = 0;
+                int ByteSize = 0;
                 UInt32 MaxOffs = Offsets.Max();
 
                 if (MaxOffs + (Offsets.Count * 2) > UInt16.MaxValue)
@@ -382,9 +381,12 @@ namespace NPC_Maker.NewScriptParser
                     throw ParseException.ScriptTooBigError();
 
                 for (int i = 0; i < Offsets.Count; i++)
-                    Offsets[i] += (UInt32)(Offsets.Count * (ByteSize == 1 ? 4 : 2));
+                    Offsets[i] += (UInt32)(Offsets.Count * (ByteSize == 1 ? 4 : 2) + (ByteSize == 1 ? 0 : (Offsets.Count % 2 != 0) ? 2 : 0));
 
-                Out.AddRange(new byte[] { 0, ByteSize });
+                if (ByteSize == 0 && (Offsets.Count % 2 != 0))
+                    Offsets.Add(0);
+
+                Out.AddRangeBigEndian(ByteSize);
 
                 foreach (UInt32 Offset in Offsets)
                 {

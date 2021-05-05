@@ -8,12 +8,12 @@ namespace NPC_Maker.NewScriptParser
     public class InstructionSpawn : Instruction
     {
         byte PosRelativeness { get; set; }
-        float PosX { get; set; }
-        float PosY { get; set; }
-        float PosZ { get; set; }
-        Int32 RotX { get; set; }
-        Int32 RotY { get; set; }
-        Int32 RotZ { get; set; }
+        object PosX { get; set; }
+        object PosY { get; set; }
+        object PosZ { get; set; }
+        object RotX { get; set; }
+        object RotY { get; set; }
+        object RotZ { get; set; }
         UInt32 ActorID { get; set; }
         UInt32 ActorVariable { get; set; }
 
@@ -26,8 +26,8 @@ namespace NPC_Maker.NewScriptParser
         byte RotYT { get; set; }
         byte RotZT { get; set; }
 
-        public InstructionSpawn(byte _PosRelativeness, float _PosX, byte _PosXT, float _PosY, byte _PosYT, float _PosZ, byte _PosZT,
-                                Int32 _RotX, byte _RotXT, Int32 _RotY, byte _RotYT, Int32 _RotZ, byte _RotZT, UInt32 _ActorID, byte _ActorIDVarT, 
+        public InstructionSpawn(byte _PosRelativeness, object _PosX, byte _PosXT, object _PosY, byte _PosYT, object _PosZ, byte _PosZT,
+                                object _RotX, byte _RotXT, object _RotY, byte _RotYT, object _RotZ, byte _RotZT, UInt32 _ActorID, byte _ActorIDVarT, 
                                 UInt32 _ActorVariable, byte _ActorVarT) : base((byte)Lists.Instructions.SPAWN)
         {
             PosRelativeness = _PosRelativeness;

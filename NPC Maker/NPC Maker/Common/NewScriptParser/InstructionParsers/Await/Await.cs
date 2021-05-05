@@ -89,12 +89,12 @@ namespace NPC_Maker.NewScriptParser
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                float Data = (float)Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue));
+                                object Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32 ActorID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue));
+                                UInt32 NPCID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue));
 
-                                return new InstructionAwaitWithSecondValue((byte)SubID, Data, ActorID, Condition, VarType, VarType2 );
+                                return new InstructionAwaitWithSecondValue((byte)SubID, Data, NPCID, Condition, VarType, VarType2 );
                             }
                         default: 
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -127,7 +127,7 @@ namespace NPC_Maker.NewScriptParser
                 UInt32 Value1 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarType1, UInt32.MinValue, UInt32.MaxValue));
 
                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, UInt16.MaxValue));
+                UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, Int32.MinValue, Int32.MaxValue));
 
                 return new InstructionAwaitWithSecondValue((byte)SubID, Value1, Value2, Condition, VarType1, VarType2);
             }

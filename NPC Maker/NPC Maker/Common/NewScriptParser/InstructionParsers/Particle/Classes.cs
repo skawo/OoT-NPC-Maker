@@ -12,23 +12,23 @@ namespace NPC_Maker.NewScriptParser
 
         public byte RelativePos { get; set; }
 
-        public float PosX { get; set; }
-        public float PosY { get; set; }
-        public float PosZ { get; set; }
+        public object PosX { get; set; }
+        public object PosY { get; set; }
+        public object PosZ { get; set; }
         public byte PosXT { get; set; }
         public byte PosYT { get; set; }
         public byte PosZT { get; set; }
 
-        public float AccelX { get; set; }
-        public float AccelY { get; set; }
-        public float AccelZ { get; set; }
+        public object AccelX { get; set; }
+        public object AccelY { get; set; }
+        public object AccelZ { get; set; }
         public byte AccelXT { get; set; }
         public byte AccelYT { get; set; }
         public byte AccelZT { get; set; }
 
-        public float VelX { get; set; }
-        public float VelY { get; set; }
-        public float VelZ { get; set; }
+        public object VelX { get; set; }
+        public object VelY { get; set; }
+        public object VelZ { get; set; }
         public byte VelXT { get; set; }
         public byte VelYT { get; set; }
         public byte VelZT { get; set; }
@@ -38,7 +38,7 @@ namespace NPC_Maker.NewScriptParser
         public UInt32[] SecRGBA { get; set; }
         public byte[] SecRGBAVarT { get; set; }
 
-        public float Scale { get; set; }
+        public object Scale { get; set; }
         public byte ScaleT { get; set; }
 
         public Int32 ScaleUpdate { get; set; }

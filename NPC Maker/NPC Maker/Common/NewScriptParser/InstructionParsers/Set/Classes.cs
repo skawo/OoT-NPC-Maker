@@ -181,6 +181,7 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.Ensure4ByteAlign(Data);
             Data.AddRange(Pattern);
             Helpers.Ensure4ByteAlign(Data);
 

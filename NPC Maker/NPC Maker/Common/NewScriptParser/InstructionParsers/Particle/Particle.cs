@@ -20,23 +20,23 @@ namespace NPC_Maker.NewScriptParser
 
                 byte RelativePos = 0;
 
-                float PosX = 0;
-                float PosY = 0;
-                float PosZ = 0;
+                object PosX = 0;
+                object PosY = 0;
+                object PosZ = 0;
                 byte PosXT = 0;
                 byte PosYT = 0;
                 byte PosZT = 0;
 
-                float AccelX = 0;
-                float AccelY = 0;
-                float AccelZ = 0;
+                object AccelX = 0;
+                object AccelY = 0;
+                object AccelZ = 0;
                 byte AccelXT = 0;
                 byte AccelYT = 0;
                 byte AccelZT = 0;
 
-                float VelX = 0;
-                float VelY = 0;
-                float VelZ = 0;
+                object VelX = 0;
+                object VelY = 0;
+                object VelZ = 0;
                 byte VelXT = 0;
                 byte VelYT = 0;
                 byte VelZT = 0;

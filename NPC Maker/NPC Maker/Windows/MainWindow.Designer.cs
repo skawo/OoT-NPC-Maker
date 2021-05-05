@@ -1602,9 +1602,9 @@
             this.ChkBox_DebugCol.Name = "ChkBox_DebugCol";
             this.ChkBox_DebugCol.Size = new System.Drawing.Size(138, 17);
             this.ChkBox_DebugCol.TabIndex = 80;
+            this.ChkBox_DebugCol.Tag = NPC_Maker.NPCEntry.Members.DEBUGSHOWCOLS;
             this.ChkBox_DebugCol.Text = "Draw collision (DEBUG)";
             this.ChkBox_DebugCol.UseVisualStyleBackColor = true;
-            this.ChkBox_DebugCol.Tag = NPCEntry.Members.DEBUGSHOWCOLS;
             this.ChkBox_DebugCol.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Panel_Colors
@@ -1647,7 +1647,7 @@
             this.NumUp_LightRadius.Name = "NumUp_LightRadius";
             this.NumUp_LightRadius.Size = new System.Drawing.Size(59, 20);
             this.NumUp_LightRadius.TabIndex = 83;
-            this.NumUp_LightRadius.Tag = NPCEntry.Members.LIGHTRADIUS;
+            this.NumUp_LightRadius.Tag = NPC_Maker.NPCEntry.Members.LIGHTRADIUS;
             this.NumUp_LightRadius.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUp_LightZOffs
@@ -2360,7 +2360,7 @@
             // 
             this.NumUpDown_WaistLimb.Location = new System.Drawing.Point(125, 171);
             this.NumUpDown_WaistLimb.Maximum = new decimal(new int[] {
-            65535,
+            128,
             0,
             0,
             0});
@@ -2493,7 +2493,7 @@
             // 
             this.NumUpDown_HeadLimb.Location = new System.Drawing.Point(125, 78);
             this.NumUpDown_HeadLimb.Maximum = new decimal(new int[] {
-            65535,
+            128,
             0,
             0,
             0});

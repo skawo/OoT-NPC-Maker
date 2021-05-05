@@ -159,7 +159,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                float Value = (float)ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, float.MaxValue);
+                                object Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue);
 
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
@@ -174,7 +174,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 4);
-                                float Value = (float)Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, 4, VarType, float.MinValue, float.MaxValue));
+                                object Value = ScriptHelpers.GetValueByType(SplitLine, 4, VarType, float.MinValue, float.MaxValue);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 ActorID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue));
@@ -306,7 +306,7 @@ namespace NPC_Maker.NewScriptParser
                 UInt32 Value1 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarType1, UInt32.MinValue, UInt32.MaxValue));
 
                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, UInt16.MaxValue));
+                UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, Int32.MinValue, Int32.MaxValue));
 
                 return new InstructionIfWhileWithSecondValue((byte)ID, (byte)SubID, VarType1, Value1, VarType2, Value2, Condition, EndIf, Else, LabelR);
             }

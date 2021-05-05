@@ -17,12 +17,12 @@ namespace NPC_Maker.NewScriptParser
 
                 UInt32 ActorID = 1;
                 UInt32 ActorVar = 0;
-                float PosX = 0;
-                float PosY = 0;
-                float PosZ = 0;
-                Int32 RotX = 0;
-                Int32 RotY = 0;
-                Int32 RotZ = 0;
+                object PosX = 0;
+                object PosY = 0;
+                object PosZ = 0;
+                object RotX = 0;
+                object RotY = 0;
+                object RotZ = 0;
                 byte RelativePos = 0;
 
                 byte ActorIDVarT = 0;

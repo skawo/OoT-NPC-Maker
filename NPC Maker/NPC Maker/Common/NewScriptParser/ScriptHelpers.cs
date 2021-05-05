@@ -56,6 +56,24 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
+        public static object GetValueAndCheckRangeInt(string[] Splitstring, int Index, UInt32 Min, UInt32 Max)
+        {
+            UInt32? Value;
+
+            if (IsHex(Splitstring[Index]))
+                Value = (UInt32?)Convert.ToInt32(Splitstring[Index], 16);
+            else
+                Value = (UInt32?)Convert.ToInt32(Splitstring[Index]);
+
+            if (Value == null)
+                throw ParseException.ParamConversionError(Splitstring);
+
+            if (Value < Min || Value > Max)
+                throw ParseException.ParamOutOfRange(Splitstring);
+
+            return Value;
+        }
+
         public static object GetValueAndCheckRange(string[] Splitstring, int Index, float Min, float Max)
         {
             float? Value;
@@ -88,7 +106,7 @@ namespace NPC_Maker.NewScriptParser
         }
 
         public static void GetXYZRot(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
-                                    ref Int32 XRot, ref Int32 YRot, ref Int32 ZRot)
+                                    ref object XRot, ref object YRot, ref object ZRot)
         {
             XRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Int16.MinValue, Int16.MaxValue));
             YRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Int16.MinValue, Int16.MaxValue));
@@ -96,11 +114,11 @@ namespace NPC_Maker.NewScriptParser
         }
 
         public static void GetXYZPos(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
-                            ref float XPos, ref float YPos, ref float ZPos)
+                            ref object XPos, ref object YPos, ref object ZPos)
         {
-            XPos = (float)Convert.ToDecimal((ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Int32.MinValue, Int32.MaxValue)));
-            YPos = (float)Convert.ToDecimal((ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Int32.MinValue, Int32.MaxValue)));
-            ZPos = (float)Convert.ToDecimal((ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Int32.MinValue, Int32.MaxValue)));
+            XPos = ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Int32.MinValue, Int32.MaxValue);
+            YPos = ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Int32.MinValue, Int32.MaxValue);
+            ZPos = ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Int32.MinValue, Int32.MaxValue);
         }
 
         public static void GetRGBA(string[] SplitLine, int StartIndex, ref UInt32[] Output, ref byte[] TypeOutPut)
@@ -119,9 +137,9 @@ namespace NPC_Maker.NewScriptParser
             Output[3] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex + 3, TypeOutPut[3], 0, 255));
         }
 
-        public static void GetScale(string[] SplitLine, int Index, ref byte ScaleVarT, ref float Scale)
+        public static void GetScale(string[] SplitLine, int Index, ref byte ScaleVarT, ref object Scale)
         {
-            Scale = (float)Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, Index, ScaleVarT = ScriptHelpers.GetVarType(SplitLine, Index), float.MinValue, float.MaxValue));
+            Scale = ScriptHelpers.GetValueByType(SplitLine, Index, ScaleVarT = ScriptHelpers.GetVarType(SplitLine, Index), float.MinValue, float.MaxValue);
         }
 
 
@@ -136,18 +154,16 @@ namespace NPC_Maker.NewScriptParser
                         if (!Values[0].EndsWith("-"))
                             throw ParseException.UnrecognizedParameter(SplitLine);
 
-                        Int32 Val = Convert.ToInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1,
-                                                                                        (float)Min < Int16.MinValue ? Int16.MinValue : Min,
-                                                                                        (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
-
-                        return Val;
+                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min,
+                                                                                   (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
                     }
+                
                 case (int)Lists.VarTypes.Ram8:
                 case (int)Lists.VarTypes.Ram16:
                 case (int)Lists.VarTypes.Ram32:
                     {
                         string[] Values = SplitLine[Index].Split('.');
-                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1, 0x8000000, 0x8800000));
+                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 0x80000000, 0x88000000));
                     }
                 case (int)Lists.VarTypes.Player8:
                 case (int)Lists.VarTypes.Player16:
@@ -160,12 +176,12 @@ namespace NPC_Maker.NewScriptParser
                 case (int)Lists.VarTypes.Self32:
                     {
                         string[] Values = SplitLine[Index].Split('.');
-                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1, 0, 0x8800000));
+                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 0, 0x88000000));
                     }
                 case (int)Lists.VarTypes.Var:
                     {
                         string[] Values = SplitLine[Index].Split('.');
-                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1, 1, 5));
+                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 1, 5));
                     }
                 default:
                     return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
@@ -246,7 +262,7 @@ namespace NPC_Maker.NewScriptParser
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_RAM16))
                 return (int)Lists.VarTypes.Ram16;
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_RAM32))
-                return (int)Lists.VarTypes.Ram16;
+                return (int)Lists.VarTypes.Ram32;
 
 
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Global8))

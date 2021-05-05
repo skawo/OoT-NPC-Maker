@@ -19,7 +19,7 @@ namespace NPC_Maker.NewScriptParser
                 byte ActorNumT = 0;
                 Int32 ActorCat = 0;
                 byte ActorCatT = 0;
-                float Scale = 0;
+                object Scale = 0;
                 byte ScaleT = 0;
  
                 try

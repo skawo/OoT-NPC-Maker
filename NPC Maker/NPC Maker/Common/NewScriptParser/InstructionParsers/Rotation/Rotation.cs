@@ -17,11 +17,11 @@ namespace NPC_Maker.NewScriptParser
 
                 byte ActorNumT = 0;
                 byte ActorCatT = 0;
-                UInt32 ActorNum = 0;
-                Int32 ActorCat = 0;
-                Int32 XRot = 0;
-                Int32 YRot = 0;
-                Int32 ZRot = 0;
+                object ActorNum = 0;
+                object ActorCat = 0;
+                object XRot = 0;
+                object YRot = 0;
+                object ZRot = 0;
                 byte XRotT = 0;
                 byte ZRotT = 0;
                 byte YRotT = 0;

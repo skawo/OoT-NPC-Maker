@@ -130,8 +130,6 @@
     <Compile Include="Common\NewScriptParser\InstructionParsers\Await\Classes.cs" />
     <Compile Include="Common\NewScriptParser\Exceptions.cs" />
     <Compile Include="Common\NewScriptParser\ScriptDataHelpers.cs" />
-    <Compile Include="Common\NewScriptParser\InstructionParsers\ChangeScript\Classes.cs" />
-    <Compile Include="Common\NewScriptParser\InstructionParsers\ChangeScript\ChangeScript.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Spawn\Classes.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Spawn\Spawn.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Warp\Classes.cs" />

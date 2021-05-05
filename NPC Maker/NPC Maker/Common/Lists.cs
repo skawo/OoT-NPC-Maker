@@ -187,12 +187,11 @@ namespace NPC_Maker
             KILL = 11,
             SPAWN = 12,  
             WARP = 13,
-            CHANGE_SCRIPT = 14,
-            ROTATION = 15,
-            POSITION = 16,
-            SCALE = 17,
-            FACE = 18,
-            PARTICLE = 19,
+            ROTATION = 14,
+            POSITION = 15,
+            SCALE = 16,
+            FACE = 17,
+            PARTICLE = 18,
             RETURN = 252,
             GOTO = 253,
             LABEL = 254,
@@ -321,16 +320,13 @@ namespace NPC_Maker
 
         public enum SetSubTypes
         {
-            /* u16s */
             MOVEMENT_DISTANCE = 0,
             MOVEMENT_LOOP_DELAY = 1,
             COLLISION_RADIUS = 2,
             COLLISION_HEIGHT = 3,
             MOVEMENT_PATH_ID = 6,
             UNSUCCESSFUL_TRADE_TEXT_ID = 8,
-            CUTSCENE_FRAME = 9,
 
-            /* s16s */
             MOVEMENT_LOOP_START = 10,
             MOVEMENT_LOOP_END = 11,
             COLLISION_YOFFSET = 12,
@@ -349,16 +345,11 @@ namespace NPC_Maker
             CURRENT_ANIMATION_FRAME = 25,
             CURRENT_CUTSCENE_FRAME = 26,
 
-            /* u32s */
-            /* s32s */
-
-            /* floats */
             MOVEMENT_SPEED = 29,
             GRAVITY_FORCE = 30,
             TALK_RADIUS = 31,
             SMOOTHING_CONSTANT = 103,
 
-            /* bools */
             LOOP_MOVEMENT = 32,
             HAVE_COLLISION = 33,
             PRESS_SWITCHES = 34,
@@ -375,15 +366,12 @@ namespace NPC_Maker
             OPEN_DOORS = 47,
             MOVEMENT_IGNORE_Y = 102,
 
-            /* u8s */
             TARGET_LIMB = 48,
             TARGET_DISTANCE = 49,
             HEAD_LIMB = 50,
             WAIST_LIMB = 51,
             MASS = 35,
          
-
-            /* s8s */
             PLAYER_BOMBS = 52,
             PLAYER_BOMBCHUS = 53,
             PLAYER_ARROWS = 54,
@@ -392,7 +380,6 @@ namespace NPC_Maker
             PLAYER_DEKUSTICKS = 57,
             PLAYER_MAGIC = 58,
 
-            /* specials */
             TEXTBOX_RESPONSE_ACTIONS = 59,
             FLAG_INF = 60,
             FLAG_EVENT = 61,
@@ -518,9 +505,9 @@ namespace NPC_Maker
         public enum ConditionTypes
         {
             EQUALTO = 0,
-            TRUE = 0,
+            TRUE = 1,
             LESSTHAN = 1,
-            FALSE = 1,
+            FALSE = 0,
             MORETHAN = 2,
             LESSOREQ = 3,
             MOREOREQ = 4,

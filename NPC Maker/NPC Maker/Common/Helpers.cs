@@ -116,14 +116,14 @@ namespace NPC_Maker
         {
             byte res = 0;
 
-            res |= (byte)(a << 7);
-            res |= (byte)(b << 6);
-            res |= (byte)(c << 5);
-            res |= (byte)(d << 4);
-            res |= (byte)(e << 3);
-            res |= (byte)(f << 2);
-            res |= (byte)(g << 1);
-            res |= (byte)(h << 0);
+            res |= (byte)((a != 0 ? 1 : 0) << 7);
+            res |= (byte)((b != 0 ? 1 : 0) << 6);
+            res |= (byte)((c != 0 ? 1 : 0) << 5);
+            res |= (byte)((d != 0 ? 1 : 0) << 4);
+            res |= (byte)((e != 0 ? 1 : 0) << 3);
+            res |= (byte)((f != 0 ? 1 : 0) << 2);
+            res |= (byte)((g != 0 ? 1 : 0) << 1);
+            res |= (byte)((h != 0 ? 1 : 0) << 0);
 
             return res;
         }
