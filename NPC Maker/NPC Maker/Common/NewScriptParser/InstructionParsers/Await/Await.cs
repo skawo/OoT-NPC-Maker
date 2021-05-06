@@ -79,20 +79,18 @@ namespace NPC_Maker.NewScriptParser
 
                                 return new InstructionAwaitValue((byte)SubID, Time, Condition, VarType);
                             }
-                        case (int)Lists.AwaitSubTypes.EXT_VAR_1:
-                        case (int)Lists.AwaitSubTypes.EXT_VAR_2:
-                        case (int)Lists.AwaitSubTypes.EXT_VAR_3:
-                        case (int)Lists.AwaitSubTypes.EXT_VAR_4:
-                        case (int)Lists.AwaitSubTypes.EXT_VAR_5:
+                        case (int)Lists.AwaitSubTypes.EXT_VAR:
                             {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 5);
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
 
-                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue);
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 4);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 5);
+                                object Data = ScriptHelpers.GetValueByType(SplitLine, 5, VarType, float.MinValue, float.MaxValue);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 NPCID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue));
+
+                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 0, 5));
 
                                 return new InstructionAwaitWithSecondValue((byte)SubID, Data, NPCID, Condition, VarType, VarType2 );
                             }

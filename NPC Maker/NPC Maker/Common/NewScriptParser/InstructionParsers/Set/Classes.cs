@@ -72,6 +72,43 @@ namespace NPC_Maker.NewScriptParser
         }
     }
 
+    public class InstructionSetExtVar : InstructionSubWValueType
+    {
+        public object Value;
+        public object Value2;
+        public byte ValueType2;
+        public byte Operator;
+        public byte ExtVarNum;
+
+        public InstructionSetExtVar(byte _SubID, byte _ExtVarNum, object _Value, byte _ValueType, object _Value2, byte _ValueType2, byte _Operator)
+                                        : base((int)Lists.Instructions.SET, _SubID, _ValueType)
+        {
+            Value = _Value;
+            Value2 = _Value2;
+            ValueType2 = _ValueType2;
+            Operator = _Operator;
+            ExtVarNum = _ExtVarNum;
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+            List<byte> Data = new List<byte>();
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Operator, Data);
+            Helpers.AddObjectToByteList(ValueType, Data);
+            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.AddObjectToByteList(Value2, Data);
+            Helpers.AddObjectToByteList(ValueType2, Data);
+            Helpers.AddObjectToByteList(ExtVarNum, Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
+
+            return Data.ToArray();
+        }
+    }
+
     public class InstructionSetEnvColor : InstructionSub
     {
         public UInt32 R;

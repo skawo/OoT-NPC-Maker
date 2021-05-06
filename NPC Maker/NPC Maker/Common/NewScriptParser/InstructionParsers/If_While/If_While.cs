@@ -164,22 +164,20 @@ namespace NPC_Maker.NewScriptParser
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
-                        case (int)Lists.IfSubTypes.EXT_VAR_1:
-                        case (int)Lists.IfSubTypes.EXT_VAR_2:
-                        case (int)Lists.IfSubTypes.EXT_VAR_3:
-                        case (int)Lists.IfSubTypes.EXT_VAR_4:
-                        case (int)Lists.IfSubTypes.EXT_VAR_5:
+                        case (int)Lists.IfSubTypes.EXT_VAR:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6);
 
-                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 4);
-                                object Value = ScriptHelpers.GetValueByType(SplitLine, 4, VarType, float.MinValue, float.MaxValue);
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 4);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 5);
+                                object Value = ScriptHelpers.GetValueByType(SplitLine, 5, VarType, float.MinValue, float.MaxValue);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 ActorID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue));
 
-                                Instructions.Insert(0, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Value, VarType2, ActorID, Condition, EndIf, Else, LabelR));
+                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 0, 5));
+
+                                Instructions.Insert(0, new InstructionIfWhileExtVar((byte)ID, Convert.ToByte(SubID), ExtVarNum, VarType, Value, VarType2, ActorID, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.STICK_X:

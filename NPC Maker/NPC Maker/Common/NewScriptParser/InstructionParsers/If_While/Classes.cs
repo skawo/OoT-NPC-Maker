@@ -91,6 +91,47 @@ namespace NPC_Maker.NewScriptParser
         }
     }
 
+    public class InstructionIfWhileExtVar : InstructionIfWhile
+    {
+        public object Value2;
+        public byte ValueType2;
+        public byte ExtVarNum;
+
+        public InstructionIfWhileExtVar(byte _ID, byte _SubID, byte _ExtVarNum, byte _ValueType, object _Value, byte _ValueType2, object _Value2,
+                                                 Lists.ConditionTypes _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr)
+                                                 : base(_ID, _SubID, _ValueType, _Value, _Condition, _EndIfLineNo, _ElseLineNo, LabelStr)
+        {
+            Value2 = _Value2;
+            ValueType2 = _ValueType2;
+            ExtVarNum = _ExtVarNum;
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+
+            List<byte> Data = new List<byte>();
+
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, Condition, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType2, ExtVarNum, 4), Data);
+            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.AddObjectToByteList(Value2, Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoTrue, ref Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoFalse, ref Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
+
+            return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + SubID.ToString() + " " + GotoTrue.ToString() + " " + GotoFalse.ToString();
+        }
+    }
+
 
 
 }

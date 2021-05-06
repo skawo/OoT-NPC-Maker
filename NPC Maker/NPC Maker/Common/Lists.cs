@@ -283,11 +283,7 @@ namespace NPC_Maker
             PLAYER_ARROWS = 28,
             PLAYER_DEKUSTICKS = 29,
             PLAYER_DEKUNUTS = 30,
-            EXT_VAR_1 = 31,
-            EXT_VAR_2 = 32,
-            EXT_VAR_3 = 33,
-            EXT_VAR_4 = 34,
-            EXT_VAR_5 = 35,
+            EXT_VAR = 31,
 
             /* s8s */
             STICK_X = 36,
@@ -408,16 +404,7 @@ namespace NPC_Maker
             CURRENT_ANIMATION_INSTANTLY = 84,
             WAIST_AXIS = 85,
             CUTSCENE_SLOT = 86,
-            VAR_1 = 87,
-            VAR_2 = 88,
-            VAR_3 = 89,
-            VAR_4 = 90,
-            VAR_5 = 91,
-            EXT_VAR_1 = 92,
-            EXT_VAR_2 = 93,
-            EXT_VAR_3 = 94,
-            EXT_VAR_4 = 95,
-            EXT_VAR_5 = 96,
+            EXT_VAR = 87,
             TIME_OF_DAY = 97,
             TIMED_PATH_START_TIME = 98,
             TIMED_PATH_END_TIME = 99,
@@ -463,11 +450,8 @@ namespace NPC_Maker
             VAR_4 = 17,
             VAR_5 = 18,
 
-            EXT_VAR_1 = 19,
-            EXT_VAR_2 = 20,
-            EXT_VAR_3 = 21,
-            EXT_VAR_4 = 22,
-            EXT_VAR_5 = 23,
+            EXT_VAR = 19,
+
         }
 
         public enum EffectsIfAttacked

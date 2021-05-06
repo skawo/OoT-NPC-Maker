@@ -343,22 +343,20 @@ namespace NPC_Maker.NewScriptParser
                                 return new InstructionSet((byte)SubID, SFXID, VarType, 0);
 
                             }
-                        case (int)Lists.SetSubTypes.EXT_VAR_1:
-                        case (int)Lists.SetSubTypes.EXT_VAR_2:
-                        case (int)Lists.SetSubTypes.EXT_VAR_3:
-                        case (int)Lists.SetSubTypes.EXT_VAR_4:
-                        case (int)Lists.SetSubTypes.EXT_VAR_5:
+                        case (int)Lists.SetSubTypes.EXT_VAR:
                             {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 5);
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
 
-                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 4);
-                                float Value = (float)Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, 4, VarType, float.MinValue, float.MaxValue));
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 4);
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 5);
+                                UInt32 Value = Convert.ToUInt32(Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, 5, VarType, float.MinValue, float.MaxValue)));
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 ActorID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue));
 
-                                return new InstructionSetWTwoValues((byte)SubID, Value, VarType, ActorID, VarType, Operator);
+                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 0, 5));
+
+                                return new InstructionSetExtVar((byte)SubID, ExtVarNum, Value, VarType, ActorID, VarType, Operator);
                             }
                         default: throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
