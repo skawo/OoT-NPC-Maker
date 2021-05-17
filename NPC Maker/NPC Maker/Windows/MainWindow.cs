@@ -1087,6 +1087,9 @@ namespace NPC_Maker
 
         private void DataGridView_ExtraDLists_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (e.RowIndex < 0)
+                return;
+
             if (e.ColumnIndex == (int)EDlistsColumns.Object)
             {
                 PickableList Objects = new PickableList(Lists.DictType.Objects, true);
@@ -1379,6 +1382,9 @@ namespace NPC_Maker
 
         private void Segments_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (e.RowIndex < 0)
+                return;
+
             if (e.ColumnIndex == (int)SegmentsColumns.Object)
             {
                 PickableList Objects = new PickableList(Lists.DictType.Objects, true);
@@ -1530,6 +1536,9 @@ namespace NPC_Maker
 
         private void ColorsDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+                return;
+
             if (e.ColumnIndex == 1)
             {
                 if (ColorDialog.ShowDialog() == DialogResult.OK)

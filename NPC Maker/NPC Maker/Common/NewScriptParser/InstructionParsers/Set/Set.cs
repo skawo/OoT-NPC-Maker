@@ -356,7 +356,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 0, 5));
 
-                                return new InstructionSetExtVar((byte)SubID, ExtVarNum, Value, VarType, ActorID, VarType, Operator);
+                                return new InstructionSetExtVar((byte)SubID, ExtVarNum, Value, VarType, ActorID, VarType2, Operator);
                             }
                         default: throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
@@ -389,7 +389,7 @@ namespace NPC_Maker.NewScriptParser
                 UInt32 Value1 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarType1, UInt32.MinValue, UInt32.MaxValue));
 
                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, Int32.MinValue, Int32.MaxValue));
+                Int32 Value2 = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, Int32.MinValue, Int32.MaxValue));
 
                 return new InstructionSetWTwoValues((byte)SubID, Value1, VarType1, Value2, VarType2, Operator);
             }

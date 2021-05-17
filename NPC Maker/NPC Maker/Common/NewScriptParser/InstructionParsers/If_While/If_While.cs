@@ -304,7 +304,7 @@ namespace NPC_Maker.NewScriptParser
                 UInt32 Value1 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarType1, UInt32.MinValue, UInt32.MaxValue));
 
                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, Int32.MinValue, Int32.MaxValue));
+                Int32 Value2 = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, Int32.MinValue, Int32.MaxValue));
 
                 return new InstructionIfWhileWithSecondValue((byte)ID, (byte)SubID, VarType1, Value1, VarType2, Value2, Condition, EndIf, Else, LabelR);
             }
