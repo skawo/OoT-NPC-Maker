@@ -47,8 +47,8 @@ namespace NPC_Maker
         {
             { @"/\*(.|[\r\n])*?\*/", FCTB.GreenStyle},      // Comments like /* comment */
             { @"//.+", FCTB.GreenStyle},                    // Comments like // comment
-            { @".+:", FCTB.BoldRedStyle},                   // Labels
-            { @"::.+", FCTB.RedStyle},                       // Procedure calls
+            { @".+:[\n\r ]+", FCTB.BoldRedStyle},                   // Labels
+            { @"::.+", FCTB.RedStyle},                      // Procedure calls
             { @"#define.+", FCTB.GreenStyle},               // Defines
         };
 

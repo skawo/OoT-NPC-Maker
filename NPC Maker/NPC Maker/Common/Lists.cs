@@ -371,10 +371,10 @@ namespace NPC_Maker
             PLAYER_BOMBS = 52,
             PLAYER_BOMBCHUS = 53,
             PLAYER_ARROWS = 54,
-            PLAYER_HEATLH = 55,
+            PLAYER_HEALTH = 55,
             PLAYER_DEKUNUTS = 56,
             PLAYER_DEKUSTICKS = 57,
-            PLAYER_MAGIC = 58,
+            PLAYER_BEANS = 58,
 
             TEXTBOX_RESPONSE_ACTIONS = 59,
             FLAG_INF = 60,
@@ -387,7 +387,7 @@ namespace NPC_Maker
             FLAG_TEMPORARY = 67,
             MOVEMENT_TYPE = 68,
             LOOKAT_TYPE = 69,
-            HEAD_AXIS = 70,
+            HEAD_VERT_AXIS = 70,
             CURRENT_ANIMATION = 71,
             ANIMATION_OBJECT = 72,
             ANIMATION_OFFSET = 73,
@@ -402,7 +402,7 @@ namespace NPC_Maker
             ANIMATION_ENDFRAME = 82,
             CAMERA_TRACKING_ON = 83,
             CURRENT_ANIMATION_INSTANTLY = 84,
-            WAIST_AXIS = 85,
+            WAIST_VERT_AXIS = 85,
             CUTSCENE_SLOT = 86,
             EXT_VAR = 87,
             TIME_OF_DAY = 97,
@@ -422,6 +422,9 @@ namespace NPC_Maker
             LIGHT_OFFSET_X = 112,
             LIGHT_OFFSET_Y = 113,
             LIGHT_OFFSET_Z = 114,
+            PLAYER_SEEDS = 115,
+            HEAD_HORIZ_AXIS = 116,
+            WAIST_HORIZ_AXIS = 117,
         }
 
         public enum AwaitSubTypes

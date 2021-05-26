@@ -102,10 +102,11 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.PLAYER_BOMBS:
                         case (int)Lists.SetSubTypes.PLAYER_BOMBCHUS:
                         case (int)Lists.SetSubTypes.PLAYER_ARROWS:
-                        case (int)Lists.SetSubTypes.PLAYER_HEATLH:
+                        case (int)Lists.SetSubTypes.PLAYER_HEALTH:
                         case (int)Lists.SetSubTypes.PLAYER_DEKUNUTS:
                         case (int)Lists.SetSubTypes.PLAYER_DEKUSTICKS:
-                        case (int)Lists.SetSubTypes.PLAYER_MAGIC:
+                        case (int)Lists.SetSubTypes.PLAYER_SEEDS:
+                        case (int)Lists.SetSubTypes.PLAYER_BEANS:
                             return H_SimpleSet(SubID, SplitLine, sbyte.MinValue, sbyte.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.TEXTBOX_RESPONSE_ACTIONS:
                             {
@@ -148,8 +149,10 @@ namespace NPC_Maker.NewScriptParser
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.MovementStyles), ParseException.UnrecognizedMovementStyle(SplitLine));
                         case (int)Lists.SetSubTypes.LOOKAT_TYPE:
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.LookAtStyles), ParseException.UnrecognizedLookAtStyle(SplitLine));
-                        case (int)Lists.SetSubTypes.HEAD_AXIS:
-                        case (int)Lists.SetSubTypes.WAIST_AXIS:
+                        case (int)Lists.SetSubTypes.HEAD_HORIZ_AXIS:
+                        case (int)Lists.SetSubTypes.HEAD_VERT_AXIS:
+                        case (int)Lists.SetSubTypes.WAIST_HORIZ_AXIS:
+                        case (int)Lists.SetSubTypes.WAIST_VERT_AXIS:
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.Axis), ParseException.UnrecognizedAxis(SplitLine));
                         case (int)Lists.SetSubTypes.BLINK_SEGMENT:
                         case (int)Lists.SetSubTypes.TALK_SEGMENT:
@@ -168,7 +171,7 @@ namespace NPC_Maker.NewScriptParser
                                 if (SplitLine.Length == 4)
                                 {
                                     VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                                    Loops = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, UInt32.MaxValue));
+                                    Loops = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, Int32.MaxValue));
                                 }
 
                                 return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Loops, VarType2, 0);
@@ -194,7 +197,7 @@ namespace NPC_Maker.NewScriptParser
                                 UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                                float Speed = (float)(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, float.MaxValue));
+                                object Speed = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, float.MaxValue);
 
                                 return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Speed, VarType2, 0);
                             }
@@ -246,7 +249,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 for (int i = 0; i < 3; i++)
                                 {
-                                    RGB[i] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, ScVars[i], byte.MinValue, byte.MaxValue));
+                                    RGB[i] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2 + i, ScVars[i], byte.MinValue, byte.MaxValue));
                                 }
 
                                 return new InstructionSetEnvColor((byte)SubID, RGB[0], RGB[1], RGB[2], ScVars[0], ScVars[1], ScVars[2]);
@@ -349,7 +352,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 4);
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 5);
-                                UInt32 Value = Convert.ToUInt32(Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, 5, VarType, float.MinValue, float.MaxValue)));
+                                Int32 Value = Convert.ToInt32(Convert.ToDecimal(ScriptHelpers.GetValueByType(SplitLine, 5, VarType, float.MinValue, float.MaxValue)));
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 ActorID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue));
