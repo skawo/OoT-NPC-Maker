@@ -225,7 +225,7 @@ namespace NPC_Maker.NewScriptParser
                                 byte Vartype = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32? AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Vartype, Entry.Animations);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Vartype, Convert.ToUInt32(AnimationID), 1, EndIf, Else, LabelR));
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Vartype, Convert.ToUInt32(AnimationID), Lists.ConditionTypes.EQUALTO, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM:
