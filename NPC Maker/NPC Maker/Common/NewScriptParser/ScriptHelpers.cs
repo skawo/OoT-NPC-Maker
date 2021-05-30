@@ -41,7 +41,12 @@ namespace NPC_Maker.NewScriptParser
 
         public static int GetSubIDValue(string[] SplitLine, Type SubTypeEnum, int Index = 1)
         {
-            return (int)Enum.Parse(SubTypeEnum, SplitLine[Index].ToUpper());
+            string SubIdText = SplitLine[Index].ToUpper();
+
+            if (Enum.IsDefined(SubTypeEnum, SubIdText))
+                return (int)Enum.Parse(SubTypeEnum, SubIdText);
+            else
+                return -1;
         }
 
         public static UInt16 GetOcarinaTime(string[] SplitLine, int Index)

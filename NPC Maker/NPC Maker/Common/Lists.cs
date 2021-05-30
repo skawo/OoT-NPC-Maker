@@ -277,7 +277,7 @@ namespace NPC_Maker
             CURRENT_ANIMATION_FRAME = 22,
             CURRENT_CUTSCENE_FRAME = 23,
             PLAYER_HEALTH = 24,
-            PLAYER_MAGIC = 25,
+            PLAYER_BEANS = 25,
             PLAYER_BOMBS = 26,
             PLAYER_BOMBCHUS = 27,
             PLAYER_ARROWS = 28,

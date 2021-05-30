@@ -97,12 +97,14 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.IfSubTypes.FLAG_SCENE_COLLECT:
                         case (int)Lists.IfSubTypes.FLAG_TEMPORARY:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 FlagID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue));
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, FlagID, Lists.ConditionTypes.NONE,
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, FlagID, Condition,
                                                                               EndIf, Else, LabelR));
                                 return Instructions;
                             }
@@ -118,16 +120,9 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.IfSubTypes.TARGETTED:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
 
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32 Val = 0;
-
-                                if (VarType == (int)Lists.VarTypes.Normal)
-                                    Val = (UInt32)ScriptHelpers.GetBoolConditionID(SplitLine, 2);
-                                else
-                                    Val = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, 1));
-
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Val, Lists.ConditionTypes.NONE, EndIf, Else, LabelR));
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 0, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_RUPEES:
@@ -137,7 +132,7 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.IfSubTypes.CURRENT_ANIMATION_FRAME:
                         case (int)Lists.IfSubTypes.CURRENT_CUTSCENE_FRAME:
                         case (int)Lists.IfSubTypes.PLAYER_HEALTH:
-                        case (int)Lists.IfSubTypes.PLAYER_MAGIC:
+                        case (int)Lists.IfSubTypes.PLAYER_BEANS:
                         case (int)Lists.IfSubTypes.PLAYER_BOMBS:
                         case (int)Lists.IfSubTypes.PLAYER_BOMBCHUS:
                         case (int)Lists.IfSubTypes.PLAYER_ARROWS:
@@ -230,22 +225,25 @@ namespace NPC_Maker.NewScriptParser
                                 byte Vartype = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32? AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Vartype, Entry.Animations);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Vartype, Convert.ToUInt32(AnimationID), 0, EndIf, Else, LabelR));
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Vartype, Convert.ToUInt32(AnimationID), 1, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
-                                UInt32? Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.DungeonItems), ParseException.UnrecognizedDungeonItem(SplitLine));
+                                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
+                                UInt32? Value2 = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType2, typeof(Lists.DungeonItems), ParseException.UnrecognizedDungeonItem(SplitLine));
+
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 UInt32 Dungeon = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue));
 
-                                Instructions.Insert(0, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Convert.ToByte(Dungeon), 0, Convert.ToByte(Value), 0, EndIf, Else, LabelR));
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 4);
+
+                                Instructions.Insert(0, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Dungeon, VarType2, Value2, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM:
-                        case (int)Lists.IfSubTypes.LAST_ITEM_USED:
                             {
                                 Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Items), EndIf, Else, LabelR, ParseException.UnrecognizedInventoryItem(SplitLine)));
                                 return Instructions;
@@ -258,10 +256,12 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.IfSubTypes.BUTTON_HELD:
                         case (int)Lists.IfSubTypes.BUTTON_PRESSED:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
                                 UInt32? Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons));
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, (UInt32)Value, 0, EndIf, Else, LabelR));
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
+
+                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, (UInt32)Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         default:
@@ -315,12 +315,14 @@ namespace NPC_Maker.NewScriptParser
 
         private Instruction H_IfWhileEnum(int ID, int SubID, string[] SplitLine, Type Enumtype, int EndIf, int Else, string LabelR, ParseException Throw)
         {
-            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
             byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
             UInt32? Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enumtype, Throw);
 
-            return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, 0, EndIf, Else, LabelR);
+            Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
+
+            return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR);
         }
 
         private int GetCorrespondingElse(List<string> Lines, int LineSt, int LineEnd)

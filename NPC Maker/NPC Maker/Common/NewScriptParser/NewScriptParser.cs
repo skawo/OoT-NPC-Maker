@@ -325,7 +325,7 @@ namespace NPC_Maker.NewScriptParser
                     if (Instructions[i] is InstructionLabel lbl)
                     {
                         Instructions.Remove(lbl);
-                        lbl.InstructionNumber = (UInt16)(i - 1);
+                        lbl.InstructionNumber = (UInt16)(i);
 
                         if (OutList.Find(x => x.Name == lbl.Name) != null)
                             throw ParseException.LabelAlreadyExists(lbl.Name);
