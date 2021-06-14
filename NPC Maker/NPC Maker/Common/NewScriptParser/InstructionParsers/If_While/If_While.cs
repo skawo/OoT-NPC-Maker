@@ -61,7 +61,7 @@ namespace NPC_Maker.NewScriptParser
 
                             Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                             Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
-                            Instructions.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, (byte)Lists.VarTypes.Normal));
+                            Instructions.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, Lists.ConditionTypes.EQUALTO, (byte)Lists.VarTypes.Normal));
                             Instructions.Add(new InstructionGoto("__IFTRUE__" + LabelR));
                             Instructions.Add(new InstructionLabel("__IFFALSE__" + LabelR));
                             break;

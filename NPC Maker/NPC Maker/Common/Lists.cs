@@ -450,12 +450,6 @@ namespace NPC_Maker
             BUTTON_PRESSED = 12,
             BUTTON_HELD = 13,
 
-            VAR_1 = 14,
-            VAR_2 = 15,
-            VAR_3 = 16,
-            VAR_4 = 17,
-            VAR_5 = 18,
-
             EXT_VAR = 19,
 
         }

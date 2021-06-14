@@ -8,37 +8,10 @@ namespace NPC_Maker.NewScriptParser
     public class InstructionAwait : InstructionSubWValueType
     {
         public object Value;
-
-        public InstructionAwait(byte _SubID, object _Value, byte _ValueType)
-                                : base((int)Lists.Instructions.AWAIT, _SubID, _ValueType)
-        {
-            Value = _Value;
-        }
-
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
-        {
-            List<byte> Data = new List<byte>();
-
-            Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(ValueType, Data);
-            Helpers.Ensure4ByteAlign(Data);
-            Helpers.AddObjectToByteList(Value, Data);
-            Helpers.Ensure4ByteAlign(Data);
-
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
-
-            return Data.ToArray();
-        }
-    }
-
-    public class InstructionAwaitValue : InstructionSubWValueType
-    {
-        public object Value;
         public byte Condition;
 
-        public InstructionAwaitValue(byte _SubID, object _Value, Lists.ConditionTypes _Condition, byte _ValueType)
-                                        : base((int)Lists.Instructions.AWAIT, _SubID, _ValueType)
+        public InstructionAwait(byte _SubID, object _Value, Lists.ConditionTypes _Condition, byte _ValueType)
+                                : base((int)Lists.Instructions.AWAIT, _SubID, _ValueType)
         {
             Value = _Value;
             Condition = (byte)_Condition;
@@ -50,8 +23,8 @@ namespace NPC_Maker.NewScriptParser
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, Condition, 4), Data);
-            Helpers.Ensure4ByteAlign(Data);
+            Helpers.AddObjectToByteList(ValueType, Data);
+            Helpers.AddObjectToByteList(Condition, Data);
             Helpers.AddObjectToByteList(Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
@@ -85,6 +58,42 @@ namespace NPC_Maker.NewScriptParser
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, Value2T, 4), Data);
             Helpers.AddObjectToByteList(Condition, Data);
+            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.AddObjectToByteList(Value2, Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+
+            return Data.ToArray();
+        }
+    }
+
+    public class InstructionAwaitExtVar: InstructionSubWValueType
+    {
+        public object Value;
+        public object Value2;
+        public byte Value2T;
+        public byte Condition;
+        public byte ExtVarNum;
+
+        public InstructionAwaitExtVar(byte _SubID, byte _ExtVarNum, object _Value, object _NPCID, Lists.ConditionTypes _Condition, byte _Value1Type, byte _NPCIDType)
+                                                : base((int)Lists.Instructions.AWAIT, _SubID, _Value1Type)
+        {
+            Value = _Value;
+            Value2 = _NPCID;
+            Value2T = _NPCIDType;
+            Condition = (byte)_Condition;
+            ExtVarNum = _ExtVarNum;
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+            List<byte> Data = new List<byte>();
+
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, Value2T, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Condition, ExtVarNum, 4), Data);
             Helpers.AddObjectToByteList(Value, Data);
             Helpers.AddObjectToByteList(Value2, Data);
             Helpers.Ensure4ByteAlign(Data);

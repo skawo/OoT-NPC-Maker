@@ -29,10 +29,18 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.AwaitSubTypes.FOREVER:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
-                                return new InstructionAwait((byte)SubID, 0, 0);
+                                return new InstructionAwait((byte)SubID, 0, Lists.ConditionTypes.EQUALTO, 0);
+                            }
+                        case (int)Lists.AwaitSubTypes.FRAMES:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+
+                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
+                                UInt32 Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue));
+
+                                return new InstructionAwait((byte)SubID, Data, Lists.ConditionTypes.EQUALTO, VarType);
                             }
                         case (int)Lists.AwaitSubTypes.CURRENT_PATH_NODE:
-                        case (int)Lists.AwaitSubTypes.FRAMES:
                         case (int)Lists.AwaitSubTypes.CURRENT_ANIMATION_FRAME:
                         case (int)Lists.AwaitSubTypes.CURRENT_CUTSCENE_FRAME:
                             {
@@ -41,7 +49,7 @@ namespace NPC_Maker.NewScriptParser
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 UInt32 Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue));
 
-                                return new InstructionAwait((byte)SubID, Data, VarType);
+                                return new InstructionAwait((byte)SubID, Data, Lists.ConditionTypes.EQUALTO, VarType);
                             }
                         case (int)Lists.AwaitSubTypes.STICK_X:
                         case (int)Lists.AwaitSubTypes.STICK_Y:
@@ -52,7 +60,7 @@ namespace NPC_Maker.NewScriptParser
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 Int32 Data = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, sbyte.MinValue, sbyte.MaxValue));
 
-                                return new InstructionAwaitValue((byte)SubID, Data, Condition, VarType);
+                                return new InstructionAwait((byte)SubID, Data, Condition, VarType);
                             }
                         case (int)Lists.AwaitSubTypes.BUTTON_HELD:
                         case (int)Lists.AwaitSubTypes.BUTTON_PRESSED:
@@ -61,7 +69,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 UInt32? Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons), ParseException.UnrecognizedButton(SplitLine));
 
-                                return new InstructionAwait((byte)SubID, Value, 0);
+                                return new InstructionAwait((byte)SubID, Value, Lists.ConditionTypes.EQUALTO, 0);
 
                             }
                         case (int)Lists.AwaitSubTypes.TIME_OF_DAY:
@@ -77,7 +85,7 @@ namespace NPC_Maker.NewScriptParser
                                 else
                                     Time = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue));
 
-                                return new InstructionAwaitValue((byte)SubID, Time, Condition, VarType);
+                                return new InstructionAwait((byte)SubID, Time, Condition, VarType);
                             }
                         case (int)Lists.AwaitSubTypes.EXT_VAR:
                             {
@@ -92,7 +100,7 @@ namespace NPC_Maker.NewScriptParser
 
                                 byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 0, 5));
 
-                                return new InstructionAwaitWithSecondValue((byte)SubID, Data, NPCID, Condition, VarType, VarType2 );
+                                return new InstructionAwaitExtVar((byte)SubID, ExtVarNum, Data, NPCID, Condition, VarType, VarType2 );
                             }
                         default: 
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -101,7 +109,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionAwait(0, 0, 0);
+                    return new InstructionAwait(0, 0, 0, 0);
                 }
             }
             catch (Exception)

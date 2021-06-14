@@ -198,7 +198,7 @@ namespace NPC_Maker.NewScriptParser
 
         public static ParseException WhileNotClosed(string[] _Line)
         {
-            return IfNotClosed(String.Join(" ", _Line));
+            return WhileNotClosed(String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedCondition(string[] _Line)
