@@ -25,7 +25,8 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(AdultTextT, ChildTextT, 4), Data);
+            Helpers.AddObjectToByteList(AdultTextT, Data);
+            Helpers.AddObjectToByteList(ChildTextT, Data);
             Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(AdultText, Data);
             Helpers.AddObjectToByteList(ChildText, Data);

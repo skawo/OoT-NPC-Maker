@@ -376,6 +376,8 @@ namespace NPC_Maker
             GENERATES_LIGHT,
             LIGHT_GLOW,
             PAUSE_CUTSCENE,
+            NO_AUTO_ANIM,
+            TALK_MODE,
 
             PLAYER_BOMBS,
             PLAYER_BOMBCHUS,
