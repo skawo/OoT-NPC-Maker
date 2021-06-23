@@ -182,7 +182,7 @@ namespace NPC_Maker.NewScriptParser
 
         public static ParseException TradeMissingComponents(string _Line)
         {
-            return new ParseException("This TRADE instruction lacks one of the necessary members (CORRECT, FAILURE, TALK): ", _Line);
+            return new ParseException("This TRADE instruction lacks one of the necessary members (SUCCESS, NO_TRADE): ", _Line);
         }
 
         public static ParseException TradeMissingComponents(string[] _Line)

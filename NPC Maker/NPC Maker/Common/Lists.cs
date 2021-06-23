@@ -22,10 +22,8 @@ namespace NPC_Maker
         public const string Keyword_EndParticle = "ENDPARTICLE";
         public const string Keyword_EndTalk = "ENDTALK";
         public const string Keyword_EndTrade = "ENDTRADE";
-        public const string Keyword_EndTradeFailure = "ENDFAILURE";
         public const string Keyword_TradeDefault = "DEFAULT";
         public const string Keyword_TradeSucccess = "SUCCESS";
-        public const string Keyword_TradeFailure = "FAILURE";
         public const string Keyword_TradeNone = "NO_TRADE";
         public const string Keyword_Else = "ELSE";
         public const string Keyword_ScriptVar = "VAR";
@@ -62,10 +60,8 @@ namespace NPC_Maker
             Keyword_EndParticle,
             Keyword_EndTalk,
             Keyword_EndTrade,
-            Keyword_EndTradeFailure,
             Keyword_TradeDefault,
             Keyword_TradeSucccess,
-            Keyword_TradeFailure,
             Keyword_TradeNone,
             Keyword_Else,
             Keyword_ScriptVar,
@@ -335,7 +331,6 @@ namespace NPC_Maker
             MOVEMENT_LOOP_DELAY,
             SFX_IF_ATTACKED,
             LIGHT_RADIUS,
-            UNSUCCESSFUL_TRADE_TEXT_ID,
             CURRENT_CUTSCENE_FRAME,
 
             COLLISION_RADIUS,
@@ -429,7 +424,8 @@ namespace NPC_Maker
             CAMERA_TRACKING_ON,
             EXT_VAR,
             TIME_OF_DAY,
-            EFFECT_IF_ATTACKED
+            EFFECT_IF_ATTACKED,
+            UNSUCCESSFUL_TRADE_TEXT_ID,
         }
 
         public enum AwaitSubTypes
@@ -1278,14 +1274,9 @@ namespace NPC_Maker
 
         public enum TradeStatuses
         {
-            TRADE_SUCCESSFUL = 0,
             SUCCESS = 0,
-            TRADE_UNSUCCESSFUL = 1,
-            WRONG = 1,
-            FAILURE = 1,
-            NONE = 2,
-            TALK = 2,
-            NO_TRADE = 2,
+            TALKED_TO = 1,
+            NO_TRADE = 1,
         }
 
         public enum PlayerMasks

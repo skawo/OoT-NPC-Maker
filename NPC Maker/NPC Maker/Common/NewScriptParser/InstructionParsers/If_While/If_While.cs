@@ -194,7 +194,7 @@ namespace NPC_Maker.NewScriptParser
                             }
                         case (int)Lists.IfSubTypes.TRADE_STATUS:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.TradeStatuses), EndIf, Else, LabelR, ParseException.UnrecognizedTradeStatus(SplitLine)));
+                                Instructions.Insert(0, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.TradeStatuses), EndIf, Else, LabelR, ParseException.UnrecognizedTradeStatus(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_MASK:
@@ -245,12 +245,12 @@ namespace NPC_Maker.NewScriptParser
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.Items), EndIf, Else, LabelR, ParseException.UnrecognizedInventoryItem(SplitLine)));
+                                Instructions.Insert(0, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.Items), EndIf, Else, LabelR, ParseException.UnrecognizedInventoryItem(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_QUEST_ITEM:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.QuestItems), EndIf, Else, LabelR, ParseException.UnrecognizedQuestItem(SplitLine)));
+                                Instructions.Insert(0, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.QuestItems), EndIf, Else, LabelR, ParseException.UnrecognizedQuestItem(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.BUTTON_HELD:
@@ -312,17 +312,25 @@ namespace NPC_Maker.NewScriptParser
                 return null;
         }
 
-
-        private Instruction H_IfWhileEnum(int ID, int SubID, string[] SplitLine, Type Enumtype, int EndIf, int Else, string LabelR, ParseException Throw)
+        private Instruction H_IfWhileBoolEnum(int ID, int SubID, string[] SplitLine, Type Enumtype, int EndIf, int Else, string LabelR, ParseException Throw)
         {
-            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
             byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
             UInt32? Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enumtype, Throw);
 
-            Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
+            return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Lists.ConditionTypes.TRUE, EndIf, Else, LabelR);
+        }
 
-            return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR);
+
+        private Instruction H_IfWhileEnum(int ID, int SubID, string[] SplitLine, Type Enumtype, int EndIf, int Else, string LabelR, ParseException Throw)
+        {
+            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+
+            byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
+            UInt32? Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enumtype, Throw);
+
+            return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Lists.ConditionTypes.EQUALTO, EndIf, Else, LabelR);
         }
 
         private int GetCorrespondingElse(List<string> Lines, int LineSt, int LineEnd)
