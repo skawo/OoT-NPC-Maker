@@ -32,6 +32,11 @@ namespace NPC_Maker.NewScriptParser
 
             return Data.ToArray();
         }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.AwaitSubTypes)SubID).ToString();
+        }
     }
 
     public class InstructionAwaitWithSecondValue : InstructionSubWValueType
@@ -65,6 +70,11 @@ namespace NPC_Maker.NewScriptParser
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.AwaitSubTypes)SubID).ToString();
         }
     }
 
@@ -101,6 +111,11 @@ namespace NPC_Maker.NewScriptParser
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.AwaitSubTypes)SubID).ToString();
         }
     }
 }

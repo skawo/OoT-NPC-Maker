@@ -76,7 +76,12 @@ namespace NPC_Maker.NewScriptParser
 
         public override string ToString()
         {
-            return Name;
+            return $"{Name}";
+        }
+
+        public string ToMarkingString()
+        {
+            return $"===================={Environment.NewLine + Name}:";
         }
     }
 

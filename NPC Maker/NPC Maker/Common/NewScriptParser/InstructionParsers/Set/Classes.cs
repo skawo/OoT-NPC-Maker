@@ -70,6 +70,11 @@ namespace NPC_Maker.NewScriptParser
 
             return Data.ToArray();
         }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
+        }
     }
 
     public class InstructionSetExtVar : InstructionSubWValueType
@@ -106,6 +111,11 @@ namespace NPC_Maker.NewScriptParser
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
             return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
         }
     }
 
@@ -148,6 +158,11 @@ namespace NPC_Maker.NewScriptParser
 
             return Data.ToArray();
         }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
+        }
     }
 
     public class InstructionSetResponses : InstructionSub
@@ -179,6 +194,11 @@ namespace NPC_Maker.NewScriptParser
 
             return Data.ToArray();
         }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
+        }
     }
 
     public class InstructionSetScriptStart : InstructionSub
@@ -201,6 +221,11 @@ namespace NPC_Maker.NewScriptParser
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 4);
 
             return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
         }
     }
 
@@ -225,6 +250,11 @@ namespace NPC_Maker.NewScriptParser
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
             return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
         }
     }
 
@@ -257,6 +287,11 @@ namespace NPC_Maker.NewScriptParser
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
         }
     }
 

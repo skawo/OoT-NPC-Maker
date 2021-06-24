@@ -43,7 +43,9 @@ namespace NPC_Maker.NewScriptParser
             CheckLabels(Lines);
 
             List<Instruction> Instructions = GetInstructions(Lines);
-            Instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
+
+            if (!(Instructions[Instructions.Count - 1] is InstructionGoto) || ((Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_Return))
+                Instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
 
 #if DEBUG
             outScript.ScriptDebug = GetOutString(Instructions);
@@ -55,6 +57,8 @@ namespace NPC_Maker.NewScriptParser
                 outScript.Script = ConvertScriptToBytes(Labels, ref outScript, ref Instructions);
 
 #if DEBUG
+            outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
+
             System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
 #endif
 
@@ -240,16 +244,13 @@ namespace NPC_Maker.NewScriptParser
         {
             List<string> Out = new List<string>();
 
-            int Size = 0;
-
-
             foreach (Instruction Int in Instructions)
             {
-                Size += Int.ToBytes(new List<InstructionLabel>() { new InstructionLabel(Lists.Keyword_Debug_Skip_Label_Check) }).Length;
-                Out.Add(Int.ToString());
+                if (Int is InstructionLabel p)
+                    Out.Add(p.ToMarkingString());
+                else
+                    Out.Add(Int.ToString());
             }
-
-            Out.Insert(0, $"-----SCRIPT SIZE: {Size} bytes-----" + Environment.NewLine);
 
             return Out;
         }
