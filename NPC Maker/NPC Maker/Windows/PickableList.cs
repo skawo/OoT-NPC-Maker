@@ -161,8 +161,8 @@ namespace NPC_Maker
 
             if (dr == DialogResult.OK)
             {
-                if (Sel.ID == pE.Out_EntryID||
-                    MessageBox.Show("New entry ID already exists on the list. Replace?", "Replace ID?", MessageBoxButtons.YesNo) == DialogResult.Yes) ;
+                if (Sel.ID == pE.Out_EntryID ||
+                    MessageBox.Show("New entry ID already exists on the list. Replace?", "Replace ID?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     int DataIndex = Data.FindIndex(x => x.ID == pE.Out_EntryID);
 
