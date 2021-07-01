@@ -44,7 +44,7 @@ namespace NPC_Maker.NewScriptParser
 
             List<Instruction> Instructions = GetInstructions(Lines);
 
-            if (!(Instructions[Instructions.Count - 1] is InstructionGoto) || ((Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_Return))
+            if (Instructions.Count == 0 || !(Instructions[Instructions.Count - 1] is InstructionGoto) || ((Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_Return))
                 Instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
 
 #if DEBUG
@@ -353,10 +353,10 @@ namespace NPC_Maker.NewScriptParser
             try
             {
                 List<byte> Out = new List<byte>();
-                List<UInt32> Offsets = new List<UInt32>();
+                List<UInt16> Offsets = new List<UInt16>();
                 List<byte> InstructionBytes = new List<byte>();
 
-                UInt32 HeaderOffs = 0;
+                UInt16 HeaderOffs = 0;
 
                 foreach (Instruction Inst in Instructions)
                 {
@@ -364,41 +364,23 @@ namespace NPC_Maker.NewScriptParser
 
                     Offsets.Add(HeaderOffs);
                     InstructionBytes.AddRange(Data);
+                    HeaderOffs += (UInt16)Data.Length;
 
-                    if (HeaderOffs + (UInt32)Data.Length > UInt32.MaxValue)
+                    // If we exceed 16 bit range of addresses, the script is deemed too big (So, max script size is about 63KB. Plenty enough.)
+                    if (HeaderOffs > UInt16.MaxValue)
                         throw ParseException.ScriptTooBigError();
-
-                    HeaderOffs += (UInt32)Data.Length;
                 }
-
-                // 0 - 2 byte offsets, 1 - 4 byte offsets
-                int ByteSize = 0;
-                UInt32 MaxOffs = Offsets.Max();
-
-                if (MaxOffs + (Offsets.Count * 2) > UInt16.MaxValue)
-                    ByteSize = 1;
-
-                if (MaxOffs + (Offsets.Count * 4) > UInt32.MaxValue)
-                    throw ParseException.ScriptTooBigError();
 
                 for (int i = 0; i < Offsets.Count; i++)
-                    Offsets[i] += (UInt32)(Offsets.Count * (ByteSize == 1 ? 4 : 2) + (ByteSize == 1 ? 0 : (Offsets.Count % 2 != 0) ? 2 : 0));
+                    Offsets[i] += (UInt16)(Offsets.Count * 2 + ((Offsets.Count % 2 != 0) ? 2 : 0));
 
-                if (ByteSize == 0 && (Offsets.Count % 2 != 0))
+                if (Offsets.Count % 2 != 0)
                     Offsets.Add(0);
 
-                Out.AddRangeBigEndian(ByteSize);
-
-                foreach (UInt32 Offset in Offsets)
-                {
-                    if (ByteSize == 1)
-                        Out.AddRange(Program.BEConverter.GetBytes(Offset));
-                    else
-                        Out.AddRange(Program.BEConverter.GetBytes(Convert.ToUInt16(Offset)));
-                }
+                foreach (UInt16 Offset in Offsets)
+                    Out.AddRange(Program.BEConverter.GetBytes(Offset));
 
                 Out.AddRange(InstructionBytes);
-
                 Helpers.Ensure4ByteAlign(Out);
 
                 return Out.ToArray();

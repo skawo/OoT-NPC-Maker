@@ -17,9 +17,12 @@ namespace NPC_Maker.NewScriptParser
         public byte ZType;
         public byte ActorIDT;
         public byte ActorCatT;
+        public byte Target;
+        public object Speed;
+        public byte SpeedT;
 
         public InstructionRotation(byte _SubID, object _ActorID, byte _ActorIDT, object _ActorCat, byte _ActorCatT, object _XRot, object _YRot, object _ZRot,
-                                   byte _XRotValueType, byte _YRotValueType, byte _ZRotValueType)
+                                   byte _XRotValueType, byte _YRotValueType, byte _ZRotValueType, byte _Target, object _Speed, byte _SpeedT)
                                 : base((int)Lists.Instructions.ROTATION, _SubID)
         {
             ActorCat = _ActorCat;
@@ -33,6 +36,10 @@ namespace NPC_Maker.NewScriptParser
             XType = _XRotValueType;
             YType = _YRotValueType;
             ZType = _ZRotValueType;
+            Target = _Target;
+
+            Speed = _Speed;
+            SpeedT = _SpeedT;
         }
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
@@ -40,17 +47,22 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SubID, ActorIDT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ActorCatT, XType, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(YType, ZType, 4), Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Target, Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SpeedT, ActorIDT, 4), Data);
+
             Helpers.AddObjectToByteList(X, Data);
             Helpers.AddObjectToByteList(Y, Data);
             Helpers.AddObjectToByteList(Z, Data);
             Helpers.AddObjectToByteList(ActorID, Data);
             Helpers.AddObjectToByteList(ActorCat, Data);
+            Helpers.AddObjectToByteList(Speed, Data);
+
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ActorCatT, XType, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(YType, ZType, 4), Data);
             Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 24);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 32);
 
             return Data.ToArray();
         }

@@ -13,7 +13,7 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.PositionSubTypes));
+                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.RotationSubTypes), 2);
 
                 byte ActorNumT = 0;
                 byte ActorCatT = 0;
@@ -25,23 +25,26 @@ namespace NPC_Maker.NewScriptParser
                 byte XRotT = 0;
                 byte ZRotT = 0;
                 byte YRotT = 0;
+                object Speed = 0;
+                byte SpeedT = 0;
 
                 try
                 {
                     switch (SubID)
                     {
-                        case (int)Lists.PositionSubTypes.SET:
-                        case (int)Lists.PositionSubTypes.CHANGE:
+                        case (int)Lists.RotationSubTypes.SET:
+                        case (int)Lists.RotationSubTypes.CHANGE_TO:
+                        case (int)Lists.RotationSubTypes.CHANGE_BY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
 
-                                int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                                int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
 
                                 switch (SetSubType)
                                 {
                                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                                         {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 8);
+                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 9);
 
                                             ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
                                             ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
@@ -52,31 +55,41 @@ namespace NPC_Maker.NewScriptParser
 
                                             ScriptHelpers.GetXYZRot(SplitLine, 5, 6, 7, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot);
 
+                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 8);
+                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 8, SpeedT, 0, float.MaxValue);
+
                                             break;
                                         }
                                     case (int)Lists.TargetActorSubtypes.CONFIG_ID:
                                         {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 7);
+                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 8);
 
                                             ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
                                             ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
 
                                             ScriptHelpers.GetXYZRot(SplitLine, 4, 5, 6, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot);
+
+                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 7);
+                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 7, SpeedT, 0, float.MaxValue);
                                             break;
                                         }
 
                                     case (int)Lists.TargetActorSubtypes.PLAYER:
                                     case (int)Lists.TargetActorSubtypes.SELF:
                                         {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6);
+                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 7);
                                             ScriptHelpers.GetXYZRot(SplitLine, 3, 4, 5, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot);
+
+                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
+                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
+
                                             break;
                                         }
                                     default:
                                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                                 }
 
-                                return new InstructionRotation((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, XRot, YRot, ZRot, XRotT, ZRotT, YRotT);
+                                return new InstructionRotation((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, XRot, YRot, ZRot, XRotT, ZRotT, YRotT, (byte)SetSubType, Speed, SpeedT);
 
                             }
                         default:
@@ -87,7 +100,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionRotation((byte)SubID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    return new InstructionRotation((byte)SubID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                 }
             }
             catch (Exception)

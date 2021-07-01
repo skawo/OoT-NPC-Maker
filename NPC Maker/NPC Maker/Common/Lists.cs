@@ -40,6 +40,8 @@ namespace NPC_Maker
         public const string Keyword_Self8 = "SELF8";
         public const string Keyword_Self16 = "SELF16";
         public const string Keyword_Self32 = "SELF32";
+        public const string Keyword_Degree = "DEG_";
+        public const string Keyword_Ignore_Y = "IGNORE_Y";
         public const string Keyword_Debug_Skip_Label_Check = "__SKIPCHECK__";
         public const string Keyword_Label_Return = "__RETURN__";
         public const string Keyword_Label_Null = "__NULL__";
@@ -1344,19 +1346,22 @@ namespace NPC_Maker
         public enum RotationSubTypes
         {
             SET = 0,
-            CHANGE = 1,
+            CHANGE_TO = 1,
+            CHANGE_BY = 2,
         }
 
         public enum PositionSubTypes
         {
             SET = 0,
-            CHANGE = 1,
+            CHANGE_TO = 1,
+            CHANGE_BY = 2,
         }
 
         public enum ScaleSubTypes
         {
             SET = 0,
-            CHANGE = 1,
+            CHANGE_TO = 1,
+            CHANGE_BY = 2,
         }
 
         public enum Segments

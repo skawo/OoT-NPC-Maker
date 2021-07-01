@@ -110,6 +110,11 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
+        public static Int32 Rot2Deg(Int32 Degrees)
+        {
+            return (Int32)(32768.0f / 180.0f) * Degrees;
+        }
+
         public static void GetXYZRot(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
                                     ref object XRot, ref object YRot, ref object ZRot)
         {
@@ -189,7 +194,19 @@ namespace NPC_Maker.NewScriptParser
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 1, 5));
                     }
                 default:
-                    return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
+                    {
+                        if (SplitLine[Index].StartsWith(Lists.Keyword_Degree))
+                        {
+                            string[] s = SplitLine[Index].Split('_');
+                            float value = (float)ScriptHelpers.GetValueAndCheckRange(s, 1, Min, Max);
+
+                            return (float)Rot2Deg(Convert.ToInt32(value));
+
+                        }
+                        else
+                            return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
+
+                    }
 
             }
         }
