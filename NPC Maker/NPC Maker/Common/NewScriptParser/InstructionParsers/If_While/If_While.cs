@@ -118,9 +118,14 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.IfSubTypes.PLAYER_HAS_MAGIC:
                         case (int)Lists.IfSubTypes.ATTACKED:
                         case (int)Lists.IfSubTypes.TARGETTED:
+                        case (int)Lists.IfSubTypes.LENS_OF_TRUTH_ON:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                                Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
+
+                                Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
+
+                                if (SplitLine.Length == 3)
+                                    Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
 
                                 Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 0, Condition, EndIf, Else, LabelR));
                                 return Instructions;

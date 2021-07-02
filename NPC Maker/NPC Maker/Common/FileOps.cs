@@ -162,6 +162,15 @@ namespace NPC_Maker
                                                         Entry.Glow,
                                                         Entry.DEBUGShowCols));
 
+                        EntryBytes.Add(Helpers.MakeByte(Entry.VisibleUnderLensOfTruth,
+                                                        Entry.Invisible,
+                                                        false,
+                                                        false,
+                                                        false,
+                                                        false,
+                                                        false,
+                                                        false));
+
                         Helpers.Ensure4ByteAlign(EntryBytes);
                         CurLen += 32;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);

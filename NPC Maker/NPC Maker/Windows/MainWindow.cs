@@ -32,8 +32,6 @@ namespace NPC_Maker
 
             this.ResizeBegin += Form1_ResizeBegin;
             this.ResizeEnd += Form1_ResizeEnd;
-
-
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)

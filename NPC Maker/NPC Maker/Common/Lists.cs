@@ -302,7 +302,7 @@ namespace NPC_Maker
             TARGETTED = 49,
 
             DISTANCE_FROM_PLAYER = 50,
-
+            LENS_OF_TRUTH_ON = 51,
         }
 
         public enum ItemSubTypes
@@ -428,6 +428,8 @@ namespace NPC_Maker
             TIME_OF_DAY,
             EFFECT_IF_ATTACKED,
             UNSUCCESSFUL_TRADE_TEXT_ID,
+            VISIBLE_ONLY_UNDER_LENS,
+            INVISIBLE,
         }
 
         public enum AwaitSubTypes

@@ -80,6 +80,8 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.GENERATES_LIGHT:
                         case (int)Lists.SetSubTypes.NO_AUTO_ANIM:
                         case (int)Lists.SetSubTypes.TALK_MODE:
+                        case (int)Lists.SetSubTypes.VISIBLE_ONLY_UNDER_LENS:
+                        case (int)Lists.SetSubTypes.INVISIBLE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 

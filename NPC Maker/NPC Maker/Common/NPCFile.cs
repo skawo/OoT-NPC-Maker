@@ -61,6 +61,8 @@ namespace NPC_Maker
 
         public bool CastsShadow { get; set; }
         public UInt16 ShadowRadius { get; set; }
+        public bool VisibleUnderLensOfTruth { get; set; }
+        public bool Invisible { get; set; }
 
         public bool IsTargettable { get; set; }
         public bool FadeOut { get; set; }
@@ -196,6 +198,8 @@ namespace NPC_Maker
             ExtraDisplayLists = new List<DListEntry>();
             DisplayListColors = new List<ColorEntry>();
 
+            VisibleUnderLensOfTruth = false;
+            Invisible = false;
             DEBUGShowCols = false;
         }
 
@@ -294,6 +298,8 @@ namespace NPC_Maker
             ZLIGHTOFFS,
             DEBUGSHOWCOLS,
             LIGHTRADIUS,
+            VISIBLEONLYLENS,
+            INVISIBLE,
         }
 
         public void ChangeValueOfMember(Members Member, object Value)
@@ -387,6 +393,8 @@ namespace NPC_Maker
                 case Members.ZLIGHTOFFS: LightPositionOffsets[2] = Convert.ToInt16(Value); break;
                 case Members.DEBUGSHOWCOLS: DEBUGShowCols = Convert.ToBoolean(Value); break;
                 case Members.LIGHTRADIUS: LightRadius = Convert.ToUInt16(Value); break;
+                case Members.VISIBLEONLYLENS: VisibleUnderLensOfTruth = Convert.ToBoolean(Value); break;
+                case Members.INVISIBLE: Invisible = Convert.ToBoolean(Value); break;
                 default: break;
             }
         }
