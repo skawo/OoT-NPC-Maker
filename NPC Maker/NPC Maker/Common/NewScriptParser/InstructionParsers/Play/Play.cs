@@ -36,12 +36,12 @@ namespace NPC_Maker.NewScriptParser
                                     throw ParseException.ParamOutOfRange(SplitLine);
 
 
-                                return new InstructionPlay((byte)SubID, (UInt32)SNDID, VarType, 0, 0);
+                                return new InstructionPlay((byte)SubID, (UInt32)SNDID, VarType);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
-                                return new InstructionPlay((byte)SubID, 0, 0, 0, 0);
+                                return new InstructionPlay((byte)SubID, 0, 0);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE_ADDR:
                             {
@@ -50,7 +50,7 @@ namespace NPC_Maker.NewScriptParser
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 Addr = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue));
 
-                                return new InstructionPlay((byte)SubID, Addr, VarType, 0, 0);
+                                return new InstructionPlay((byte)SubID, Addr, VarType);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE_ID:
                             {
@@ -59,7 +59,7 @@ namespace NPC_Maker.NewScriptParser
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 UInt32 ID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue));
 
-                                return new InstructionPlay((byte)SubID, ID, VarType, 0, 0);
+                                return new InstructionPlay((byte)SubID, ID, VarType);
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -68,7 +68,7 @@ namespace NPC_Maker.NewScriptParser
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionPlay((int)Lists.Instructions.PLAY, 0, 0, 0, 0);
+                    return new InstructionPlay((int)Lists.Instructions.PLAY, 0, 0);
                 }
             }
             catch (Exception)

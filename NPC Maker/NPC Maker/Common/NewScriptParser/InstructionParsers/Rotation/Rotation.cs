@@ -52,7 +52,6 @@ namespace NPC_Maker.NewScriptParser
                                             ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
                                             ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
 
-
                                             ScriptHelpers.GetXYZRot(SplitLine, 5, 6, 7, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot);
 
                                             SpeedT = ScriptHelpers.GetVarType(SplitLine, 8);

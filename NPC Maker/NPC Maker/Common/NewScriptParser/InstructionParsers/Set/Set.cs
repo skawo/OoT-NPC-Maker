@@ -104,12 +104,13 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.SetSubTypes.PLAYER_BOMBS:
                         case (int)Lists.SetSubTypes.PLAYER_BOMBCHUS:
                         case (int)Lists.SetSubTypes.PLAYER_ARROWS:
-                        case (int)Lists.SetSubTypes.PLAYER_HEALTH:
                         case (int)Lists.SetSubTypes.PLAYER_DEKUNUTS:
                         case (int)Lists.SetSubTypes.PLAYER_DEKUSTICKS:
                         case (int)Lists.SetSubTypes.PLAYER_SEEDS:
                         case (int)Lists.SetSubTypes.PLAYER_BEANS:
-                            return H_SimpleSet(SubID, SplitLine, sbyte.MinValue, sbyte.MaxValue, typeof(Int32));
+                            return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
+                        case (int)Lists.SetSubTypes.PLAYER_HEALTH:
+                            return H_SimpleSet(SubID, SplitLine, -20, 20, typeof(float));
                         case (int)Lists.SetSubTypes.TEXTBOX_RESPONSE_ACTIONS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
@@ -424,7 +425,7 @@ namespace NPC_Maker.NewScriptParser
             if (ConvertType == typeof(UInt32) && VarType == (byte)Lists.VarTypes.Normal)
                 Data = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, Min, Max));
             else if (ConvertType == typeof(float) && VarType == (byte)Lists.VarTypes.Normal)
-                Data = (float)(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue));
+                Data = (float)(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, Min, Max));
             else
                 Data = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, Min, Max));
 
