@@ -21,6 +21,7 @@ namespace NPC_Maker
         public const string Keyword_EndSpawn = "ENDSPAWN";
         public const string Keyword_EndParticle = "ENDPARTICLE";
         public const string Keyword_EndTalk = "ENDTALK";
+        public const string Keyword_EndOcarina = "ENDOCARINA";
         public const string Keyword_EndTrade = "ENDTRADE";
         public const string Keyword_TradeDefault = "DEFAULT";
         public const string Keyword_TradeSucccess = "SUCCESS";
@@ -190,6 +191,7 @@ namespace NPC_Maker
             SCALE = 16,
             FACE = 17,
             PARTICLE = 18,
+            OCARINA = 19,
             RETURN = 252,
             GOTO = 253,
             LABEL = 254,
@@ -258,7 +260,7 @@ namespace NPC_Maker
             /* bools */
             LINK_IS_ADULT = 8,
             CURRENTLY_DAY = 9,
-            CURRENTLY_TALKING = 10,
+            TALKED_TO = 10,
             PLAYER_HAS_EMPTY_BOTTLE = 11,
             CUTSCENE_BEING_PLAYED = 12,
             TEXTBOX_ON_SCREEN = 13,
@@ -1264,6 +1266,24 @@ namespace NPC_Maker
             PINK = 5,
             ORANGE = 6,
             GRAY = 7
+        }
+
+        public enum OcarinaSongs
+        {
+            MINUET_OF_FOREST = 0,
+            BOLERO_OF_FIRE = 1,
+            SERENADE_OF_WATER = 2,
+            REQUIEM_OF_SPIRIT = 3,
+            NOCTURNE_OF_SHADOW = 4,
+            PRELUDE_OF_LIGHT = 5,
+
+            SARIAS_SONG = 0x22,
+            EPONAS_SONG = 0x23,
+            ZELDAS_LULLABY = 0x24,
+            SUNS_SONG = 0x25,
+            SONG_OF_TIME = 0x26,
+            SONG_OF_STORMS = 0x27,
+
         }
 
         public enum DungeonItems

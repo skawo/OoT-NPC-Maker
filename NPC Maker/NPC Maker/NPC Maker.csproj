@@ -113,6 +113,8 @@
     <Compile Include="Common\NewScriptParser\InstructionParsers\Particle\Classes.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Particle\Particle.cs" />
     <Compile Include="Common\ExtensionMethods.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Ocarina\Classes.cs" />
+    <Compile Include="Common\NewScriptParser\InstructionParsers\Ocarina\Ocarina.cs" />
     <Compile Include="Controls\InputBox.cs" />
     <Compile Include="Controls\ScriptContextMenu.cs" />
     <Compile Include="Controls\ScriptEditor.cs">

@@ -105,6 +105,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("This IF does not have a corresponding ENDIF: ", _Line);
         }
 
+        public static ParseException OcarinaNotClosed(string _Line)
+        {
+            return new ParseException("This OCARINA does not have a corresponding ENDOCARINA: ", _Line);
+        }
+
         public static ParseException SpawnNotClosed(string _Line)
         {
             return new ParseException("This SPAWN does not have a corresponding ENDSPAWN: ", _Line);
@@ -173,6 +178,11 @@ namespace NPC_Maker.NewScriptParser
         public static ParseException IfNotClosed(string[] _Line)
         {
             return IfNotClosed(String.Join(" ", _Line));
+        }
+
+        public static ParseException OcarinaNotClosed(string[] _Line)
+        {
+            return OcarinaNotClosed(String.Join(" ", _Line));
         }
 
         public static ParseException TradeNotClosed(string[] _Line)

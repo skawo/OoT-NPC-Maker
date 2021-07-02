@@ -119,6 +119,9 @@ namespace NPC_Maker
             ChkBox_DebugCol.Checked = SelectedEntry.DEBUGShowCols;
             NumUp_LightRadius.Value = SelectedEntry.LightRadius;
 
+            ChkOnlyWhenLens.Checked = SelectedEntry.VisibleUnderLensOfTruth;
+            ChkInvisible.Checked = SelectedEntry.Invisible;
+
             NumUpDown_Hierarchy.Value = SelectedEntry.Hierarchy;
             ComboBox_HierarchyType.SelectedIndex = SelectedEntry.HierarchyType;
             NumUpDown_XModelOffs.Value = SelectedEntry.ModelPositionOffsets[0];

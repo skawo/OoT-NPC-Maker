@@ -110,7 +110,7 @@ namespace NPC_Maker.NewScriptParser
                             }
                         case (int)Lists.IfSubTypes.LINK_IS_ADULT:
                         case (int)Lists.IfSubTypes.CURRENTLY_DAY:
-                        case (int)Lists.IfSubTypes.CURRENTLY_TALKING:
+                        case (int)Lists.IfSubTypes.TALKED_TO:
                         case (int)Lists.IfSubTypes.PLAYER_HAS_EMPTY_BOTTLE:
                         case (int)Lists.IfSubTypes.CUTSCENE_BEING_PLAYED:
                         case (int)Lists.IfSubTypes.TEXTBOX_ON_SCREEN:

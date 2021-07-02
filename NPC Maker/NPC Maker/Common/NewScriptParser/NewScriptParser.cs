@@ -281,6 +281,8 @@ namespace NPC_Maker.NewScriptParser
                         case (int)Lists.Instructions.IF:
                         case (int)Lists.Instructions.WHILE:
                             Instructions.AddRange(ParseIfWhileInstruction(InstructionID, Lines, SplitLine, ref i)); break;
+                        case (int)Lists.Instructions.OCARINA:
+                            Instructions.AddRange(ParseOcarinaInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.TALK:
                             Instructions.AddRange(ParseTalkInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.TRADE: Instructions.Add(ParseTradeInstruction(Lines, SplitLine, ref i)); break;
