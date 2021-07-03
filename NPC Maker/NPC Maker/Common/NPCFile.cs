@@ -223,6 +223,7 @@ namespace NPC_Maker
 
         public enum Members
         {
+            NOMEMBER,
             NPCNAME,
             OBJID,
             HIERARCHY,
@@ -300,6 +301,28 @@ namespace NPC_Maker
             LIGHTRADIUS,
             VISIBLEONLYLENS,
             INVISIBLE,
+        }
+
+        public static Members GetMemberFromTag(object Tag, string PassingObjectName)
+        {
+            Members Member;
+
+            try
+            {
+                if (Tag is string t)
+                    Member = (Members)Enum.Parse(typeof(NPCEntry.Members), t);
+                else if (Tag is Members m)
+                    Member = m;
+                else
+                    throw new Exception();
+            }
+            catch (Exception)
+            {
+                Member = Members.NOMEMBER;
+                System.Windows.Forms.MessageBox.Show($"Warning: {PassingObjectName} tag is incorrect!");
+            }
+
+            return Member;
         }
 
         public void ChangeValueOfMember(Members Member, object Value)
@@ -463,46 +486,45 @@ namespace NPC_Maker
         }
     }
 
-    
-      public class OutputColorEntry
-      {
-          public byte LimbID { get; set; }
-          public byte R { get; set; }
-          public byte G { get; set; }
-          public byte B { get; set; }
+    public class OutputColorEntry
+    {
+        public byte LimbID { get; set; }
+        public byte R { get; set; }
+        public byte G { get; set; }
+        public byte B { get; set; }
 
-          public OutputColorEntry()
-          {
-              LimbID = 255;
-              R = 255;
-              G = 255;
-              B = 255;
-          }
-          public OutputColorEntry(byte _LimbID, byte _R, byte _G, byte _B)
-          {
-              LimbID = _LimbID;
-              R = _R;
-              G = _G;
-              B = _B;
-          }
-      }
+        public OutputColorEntry()
+        {
+            LimbID = 255;
+            R = 255;
+            G = 255;
+            B = 255;
+        }
+        public OutputColorEntry(byte _LimbID, byte _R, byte _G, byte _B)
+        {
+            LimbID = _LimbID;
+            R = _R;
+            G = _G;
+            B = _B;
+        }
+    }
 
-      public class ColorEntry
-      {
-          public System.Drawing.Color Color { get; set; }
-          public string Limbs { get; set; }
+    public class ColorEntry
+    {
+        public System.Drawing.Color Color { get; set; }
+        public string Limbs { get; set; }
 
-          public ColorEntry()
-          {
-              Color = System.Drawing.Color.FromArgb(0, 0, 0, 0);
-              Limbs = "";
-          }
-          public ColorEntry(string _Limb, System.Drawing.Color _Color)
-          {
-              Color = _Color;
-              Limbs = _Limb;
-          }
-      }
+        public ColorEntry()
+        {
+            Color = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+            Limbs = "";
+        }
+        public ColorEntry(string _Limb, System.Drawing.Color _Color)
+        {
+            Color = _Color;
+            Limbs = _Limb;
+        }
+    }
 
     public class DListEntry
     {

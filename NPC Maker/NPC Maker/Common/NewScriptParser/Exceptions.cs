@@ -44,7 +44,6 @@ namespace NPC_Maker.NewScriptParser
             return GeneralError(String.Join(" ", _Line));
         }
 
-
         public static ParseException UnrecognizedFunctionSubtype(string[] _Line)
         {
             return new ParseException("Unrecognized function subtype: ", String.Join(" ", _Line));
@@ -200,7 +199,6 @@ namespace NPC_Maker.NewScriptParser
             return TradeMissingComponents(String.Join(" ", _Line));
         }
 
-
         public static ParseException WhileNotClosed(string _Line)
         {
             return new ParseException("This WHILE does not have a corresponding ENDWHILE: ", _Line);
@@ -331,6 +329,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Not a valid sound effect: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedOcarinaSong(string[] _Line)
+        {
+            return new ParseException("Not a valid ocarina song: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedBGM(string[] _Line)
         {
             return new ParseException("Not a valid BGM: ", String.Join(" ", _Line));
@@ -355,7 +358,6 @@ namespace NPC_Maker.NewScriptParser
         {
             return DuplicateTradeInstruction(String.Join(" ", _Line));
         }
-
 
         public static ParseException UnrecognizedInstruction(string[] _Line)
         {

@@ -465,7 +465,7 @@
             this.NumUpAlpha.Name = "NumUpAlpha";
             this.NumUpAlpha.Size = new System.Drawing.Size(72, 20);
             this.NumUpAlpha.TabIndex = 54;
-            this.NumUpAlpha.Tag = NPC_Maker.NPCEntry.Members.ALPHA;
+            this.NumUpAlpha.Tag = "ALPHA";
             this.NumUpAlpha.Value = new decimal(new int[] {
             1,
             0,
@@ -541,7 +541,7 @@
             this.Textbox_NPCName.Name = "Textbox_NPCName";
             this.Textbox_NPCName.Size = new System.Drawing.Size(245, 20);
             this.Textbox_NPCName.TabIndex = 4;
-            this.Textbox_NPCName.Tag = NPC_Maker.NPCEntry.Members.NPCNAME;
+            this.Textbox_NPCName.Tag = "NPCNAME";
             this.Textbox_NPCName.TextChanged += new System.EventHandler(this.Textbox_NPCName_TextChanged);
             // 
             // Label_ObjectID
@@ -569,7 +569,7 @@
             this.NumUpDown_ZModelOffs.Name = "NumUpDown_ZModelOffs";
             this.NumUpDown_ZModelOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_ZModelOffs.TabIndex = 38;
-            this.NumUpDown_ZModelOffs.Tag = NPC_Maker.NPCEntry.Members.ZMODELOFFS;
+            this.NumUpDown_ZModelOffs.Tag = "ZMODELOFFS";
             this.NumUpDown_ZModelOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_Hierarchy
@@ -593,7 +593,7 @@
             this.NumUpDown_Hierarchy.Name = "NumUpDown_Hierarchy";
             this.NumUpDown_Hierarchy.Size = new System.Drawing.Size(245, 20);
             this.NumUpDown_Hierarchy.TabIndex = 8;
-            this.NumUpDown_Hierarchy.Tag = NPC_Maker.NPCEntry.Members.HIERARCHY;
+            this.NumUpDown_Hierarchy.Tag = "HIERARCHY";
             this.NumUpDown_Hierarchy.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_YModelOffs
@@ -612,7 +612,7 @@
             this.NumUpDown_YModelOffs.Name = "NumUpDown_YModelOffs";
             this.NumUpDown_YModelOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_YModelOffs.TabIndex = 37;
-            this.NumUpDown_YModelOffs.Tag = NPC_Maker.NPCEntry.Members.YMODELOFFS;
+            this.NumUpDown_YModelOffs.Tag = "YMODELOFFS";
             this.NumUpDown_YModelOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_AnimDefs
@@ -640,7 +640,7 @@
             this.NumUpDown_XModelOffs.Name = "NumUpDown_XModelOffs";
             this.NumUpDown_XModelOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_XModelOffs.TabIndex = 36;
-            this.NumUpDown_XModelOffs.Tag = NPC_Maker.NPCEntry.Members.XMODELOFFS;
+            this.NumUpDown_XModelOffs.Tag = "XMODELOFFS";
             this.NumUpDown_XModelOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // ComboBox_HierarchyType
@@ -657,7 +657,7 @@
             this.ComboBox_HierarchyType.Name = "ComboBox_HierarchyType";
             this.ComboBox_HierarchyType.Size = new System.Drawing.Size(245, 21);
             this.ComboBox_HierarchyType.TabIndex = 11;
-            this.ComboBox_HierarchyType.Tag = NPC_Maker.NPCEntry.Members.HIERARCHYTYPE;
+            this.ComboBox_HierarchyType.Tag = "HIERARCHYTYPE";
             this.ComboBox_HierarchyType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Label_ModelDrawOffs
@@ -689,7 +689,7 @@
             this.ComboBox_AnimType.Name = "ComboBox_AnimType";
             this.ComboBox_AnimType.Size = new System.Drawing.Size(245, 21);
             this.ComboBox_AnimType.TabIndex = 13;
-            this.ComboBox_AnimType.Tag = NPC_Maker.NPCEntry.Members.ANIMTYPE;
+            this.ComboBox_AnimType.Tag = "ANIMTYPE";
             this.ComboBox_AnimType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_AnimType_SelectedIndexChanged);
             // 
             // Label_AnimType
@@ -727,7 +727,7 @@
             this.NumUpDown_Scale.Name = "NumUpDown_Scale";
             this.NumUpDown_Scale.Size = new System.Drawing.Size(114, 20);
             this.NumUpDown_Scale.TabIndex = 17;
-            this.NumUpDown_Scale.Tag = NPC_Maker.NPCEntry.Members.SCALE;
+            this.NumUpDown_Scale.Tag = "SCALE";
             this.NumUpDown_Scale.Value = new decimal(new int[] {
             1,
             0,
@@ -966,7 +966,7 @@
             this.NumUpDown_TalkSegment.Name = "NumUpDown_TalkSegment";
             this.NumUpDown_TalkSegment.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_TalkSegment.TabIndex = 64;
-            this.NumUpDown_TalkSegment.Tag = NPC_Maker.NPCEntry.Members.TALKSEG;
+            this.NumUpDown_TalkSegment.Tag = "TALKSEG";
             this.NumUpDown_TalkSegment.Value = new decimal(new int[] {
             8,
             0,
@@ -992,7 +992,7 @@
             this.NumUpDown_BlinkSegment.Name = "NumUpDown_BlinkSegment";
             this.NumUpDown_BlinkSegment.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_BlinkSegment.TabIndex = 62;
-            this.NumUpDown_BlinkSegment.Tag = NPC_Maker.NPCEntry.Members.BLINKSEG;
+            this.NumUpDown_BlinkSegment.Tag = "BLINKSEG";
             this.NumUpDown_BlinkSegment.Value = new decimal(new int[] {
             8,
             0,
@@ -1012,7 +1012,7 @@
             this.NumUpDown_TalkSpeed.Name = "NumUpDown_TalkSpeed";
             this.NumUpDown_TalkSpeed.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_TalkSpeed.TabIndex = 57;
-            this.NumUpDown_TalkSpeed.Tag = NPC_Maker.NPCEntry.Members.TALKSPE;
+            this.NumUpDown_TalkSpeed.Tag = "TALKSPE";
             this.NumUpDown_TalkSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Textbox_BlinkPattern
@@ -1022,7 +1022,7 @@
             this.Textbox_BlinkPattern.Name = "Textbox_BlinkPattern";
             this.Textbox_BlinkPattern.Size = new System.Drawing.Size(206, 20);
             this.Textbox_BlinkPattern.TabIndex = 60;
-            this.Textbox_BlinkPattern.Tag = NPC_Maker.NPCEntry.Members.BLINKPAT;
+            this.Textbox_BlinkPattern.Tag = "BLINKPAT";
             this.Textbox_BlinkPattern.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // Textbox_TalkingPattern
@@ -1032,7 +1032,7 @@
             this.Textbox_TalkingPattern.Name = "Textbox_TalkingPattern";
             this.Textbox_TalkingPattern.Size = new System.Drawing.Size(206, 20);
             this.Textbox_TalkingPattern.TabIndex = 59;
-            this.Textbox_TalkingPattern.Tag = NPC_Maker.NPCEntry.Members.TALKPAT;
+            this.Textbox_TalkingPattern.Tag = "TALKPAT";
             this.Textbox_TalkingPattern.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // NumUpDown_BlinkSpeed
@@ -1047,7 +1047,7 @@
             this.NumUpDown_BlinkSpeed.Name = "NumUpDown_BlinkSpeed";
             this.NumUpDown_BlinkSpeed.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_BlinkSpeed.TabIndex = 54;
-            this.NumUpDown_BlinkSpeed.Tag = NPC_Maker.NPCEntry.Members.BLINKSPE;
+            this.NumUpDown_BlinkSpeed.Tag = "BLINKSPE";
             this.NumUpDown_BlinkSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Tab3_BehaviorData
@@ -1088,7 +1088,7 @@
             this.ChkInvisible.Name = "ChkInvisible";
             this.ChkInvisible.Size = new System.Drawing.Size(64, 17);
             this.ChkInvisible.TabIndex = 82;
-            this.ChkInvisible.Tag = NPC_Maker.NPCEntry.Members.INVISIBLE;
+            this.ChkInvisible.Tag = "INVISIBLE";
             this.ChkInvisible.Text = "Invisible";
             this.ChkInvisible.UseVisualStyleBackColor = true;
             this.ChkInvisible.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1100,7 +1100,7 @@
             this.ChkOnlyWhenLens.Name = "ChkOnlyWhenLens";
             this.ChkOnlyWhenLens.Size = new System.Drawing.Size(144, 17);
             this.ChkOnlyWhenLens.TabIndex = 81;
-            this.ChkOnlyWhenLens.Tag = NPC_Maker.NPCEntry.Members.VISIBLEONLYLENS;
+            this.ChkOnlyWhenLens.Tag = "VISIBLEONLYLENS";
             this.ChkOnlyWhenLens.Text = "Visible with Lens of Truth";
             this.ChkOnlyWhenLens.UseVisualStyleBackColor = true;
             this.ChkOnlyWhenLens.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1112,7 +1112,7 @@
             this.ChkBox_DebugCol.Name = "ChkBox_DebugCol";
             this.ChkBox_DebugCol.Size = new System.Drawing.Size(138, 17);
             this.ChkBox_DebugCol.TabIndex = 80;
-            this.ChkBox_DebugCol.Tag = NPC_Maker.NPCEntry.Members.DEBUGSHOWCOLS;
+            this.ChkBox_DebugCol.Tag = "DEBUGSHOWCOLS";
             this.ChkBox_DebugCol.Text = "Draw collision (DEBUG)";
             this.ChkBox_DebugCol.UseVisualStyleBackColor = true;
             this.ChkBox_DebugCol.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1157,7 +1157,7 @@
             this.NumUp_LightRadius.Name = "NumUp_LightRadius";
             this.NumUp_LightRadius.Size = new System.Drawing.Size(59, 20);
             this.NumUp_LightRadius.TabIndex = 83;
-            this.NumUp_LightRadius.Tag = NPC_Maker.NPCEntry.Members.LIGHTRADIUS;
+            this.NumUp_LightRadius.Tag = "LIGHTRADIUS";
             this.NumUp_LightRadius.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUp_LightZOffs
@@ -1176,7 +1176,7 @@
             this.NumUp_LightZOffs.Name = "NumUp_LightZOffs";
             this.NumUp_LightZOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUp_LightZOffs.TabIndex = 80;
-            this.NumUp_LightZOffs.Tag = NPC_Maker.NPCEntry.Members.ZLIGHTOFFS;
+            this.NumUp_LightZOffs.Tag = "ZLIGHTOFFS";
             this.NumUp_LightZOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUp_LightYOffs
@@ -1195,7 +1195,7 @@
             this.NumUp_LightYOffs.Name = "NumUp_LightYOffs";
             this.NumUp_LightYOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUp_LightYOffs.TabIndex = 79;
-            this.NumUp_LightYOffs.Tag = NPC_Maker.NPCEntry.Members.YLIGHTOFFS;
+            this.NumUp_LightYOffs.Tag = "YLIGHTOFFS";
             this.NumUp_LightYOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Lbl_LightColor
@@ -1233,7 +1233,7 @@
             this.NumUp_LightXOffs.Name = "NumUp_LightXOffs";
             this.NumUp_LightXOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUp_LightXOffs.TabIndex = 78;
-            this.NumUp_LightXOffs.Tag = NPC_Maker.NPCEntry.Members.XLIGHTOFFS;
+            this.NumUp_LightXOffs.Tag = "XLIGHTOFFS";
             this.NumUp_LightXOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_LightLimbOffset
@@ -1261,7 +1261,7 @@
             this.ChkBox_Glow.Name = "ChkBox_Glow";
             this.ChkBox_Glow.Size = new System.Drawing.Size(50, 17);
             this.ChkBox_Glow.TabIndex = 76;
-            this.ChkBox_Glow.Tag = NPC_Maker.NPCEntry.Members.GLOW;
+            this.ChkBox_Glow.Tag = "GLOW";
             this.ChkBox_Glow.Text = "Glow";
             this.ChkBox_Glow.UseVisualStyleBackColor = true;
             this.ChkBox_Glow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1277,7 +1277,7 @@
             this.NumUp_LightLimb.Name = "NumUp_LightLimb";
             this.NumUp_LightLimb.Size = new System.Drawing.Size(54, 20);
             this.NumUp_LightLimb.TabIndex = 55;
-            this.NumUp_LightLimb.Tag = NPC_Maker.NPCEntry.Members.LIGHTLIMB;
+            this.NumUp_LightLimb.Tag = "LIGHTLIMB";
             this.NumUp_LightLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // ChkBox_GenLight
@@ -1287,7 +1287,7 @@
             this.ChkBox_GenLight.Name = "ChkBox_GenLight";
             this.ChkBox_GenLight.Size = new System.Drawing.Size(92, 17);
             this.ChkBox_GenLight.TabIndex = 72;
-            this.ChkBox_GenLight.Tag = NPC_Maker.NPCEntry.Members.LIGHT;
+            this.ChkBox_GenLight.Tag = "LIGHT";
             this.ChkBox_GenLight.Text = "Generate light";
             this.ChkBox_GenLight.UseVisualStyleBackColor = true;
             this.ChkBox_GenLight.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1308,7 +1308,7 @@
             this.NumUp_RiddenBy.Name = "NumUp_RiddenBy";
             this.NumUp_RiddenBy.Size = new System.Drawing.Size(71, 20);
             this.NumUp_RiddenBy.TabIndex = 79;
-            this.NumUp_RiddenBy.Tag = NPC_Maker.NPCEntry.Members.NPCTORIDE;
+            this.NumUp_RiddenBy.Tag = "NPCTORIDE";
             this.NumUp_RiddenBy.Value = new decimal(new int[] {
             1,
             0,
@@ -1332,7 +1332,7 @@
             this.ChkB_FadeOut.Name = "ChkB_FadeOut";
             this.ChkB_FadeOut.Size = new System.Drawing.Size(150, 17);
             this.ChkB_FadeOut.TabIndex = 77;
-            this.ChkB_FadeOut.Tag = NPC_Maker.NPCEntry.Members.FADEOUT;
+            this.ChkB_FadeOut.Tag = "FADEOUT";
             this.ChkB_FadeOut.Text = "Fade out if player far away";
             this.ChkB_FadeOut.UseVisualStyleBackColor = true;
             this.ChkB_FadeOut.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1374,7 +1374,7 @@
             this.Combo_EffIfAtt.Name = "Combo_EffIfAtt";
             this.Combo_EffIfAtt.Size = new System.Drawing.Size(244, 21);
             this.Combo_EffIfAtt.TabIndex = 69;
-            this.Combo_EffIfAtt.Tag = NPC_Maker.NPCEntry.Members.EFFIFATT;
+            this.Combo_EffIfAtt.Tag = "EFFIFATT";
             this.Combo_EffIfAtt.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Label_EffIfAtt
@@ -1424,7 +1424,7 @@
             this.Chkb_ReactIfAtt.Name = "Chkb_ReactIfAtt";
             this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(108, 17);
             this.Chkb_ReactIfAtt.TabIndex = 72;
-            this.Chkb_ReactIfAtt.Tag = NPC_Maker.NPCEntry.Members.REACTATT;
+            this.Chkb_ReactIfAtt.Tag = "REACTATT";
             this.Chkb_ReactIfAtt.Text = "React if attacked";
             this.Chkb_ReactIfAtt.UseVisualStyleBackColor = true;
             this.Chkb_ReactIfAtt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1436,7 +1436,7 @@
             this.Chkb_Opendoors.Name = "Chkb_Opendoors";
             this.Chkb_Opendoors.Size = new System.Drawing.Size(167, 17);
             this.Chkb_Opendoors.TabIndex = 74;
-            this.Chkb_Opendoors.Tag = NPC_Maker.NPCEntry.Members.OPENDOORS;
+            this.Chkb_Opendoors.Tag = "OPENDOORS";
             this.Chkb_Opendoors.Text = "Opens doors if they\'re on path";
             this.Chkb_Opendoors.UseVisualStyleBackColor = true;
             this.Chkb_Opendoors.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1448,7 +1448,7 @@
             this.ChkRunJustScript.Name = "ChkRunJustScript";
             this.ChkRunJustScript.Size = new System.Drawing.Size(91, 17);
             this.ChkRunJustScript.TabIndex = 73;
-            this.ChkRunJustScript.Tag = NPC_Maker.NPCEntry.Members.JUSTSCRIPT;
+            this.ChkRunJustScript.Tag = "JUSTSCRIPT";
             this.ChkRunJustScript.Text = "Just run script";
             this.ChkRunJustScript.UseVisualStyleBackColor = true;
             this.ChkRunJustScript.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1500,7 +1500,7 @@
             this.NumUpDown_Mass.Name = "NumUpDown_Mass";
             this.NumUpDown_Mass.Size = new System.Drawing.Size(61, 20);
             this.NumUpDown_Mass.TabIndex = 77;
-            this.NumUpDown_Mass.Tag = NPC_Maker.NPCEntry.Members.MASS;
+            this.NumUpDown_Mass.Tag = "MASS";
             this.NumUpDown_Mass.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Lbl_Mass
@@ -1528,7 +1528,7 @@
             this.NumUpDown_YColOffs.Name = "NumUpDown_YColOffs";
             this.NumUpDown_YColOffs.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_YColOffs.TabIndex = 33;
-            this.NumUpDown_YColOffs.Tag = NPC_Maker.NPCEntry.Members.YCOLOFFS;
+            this.NumUpDown_YColOffs.Tag = "YCOLOFFS";
             this.NumUpDown_YColOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_ColOffs
@@ -1560,7 +1560,7 @@
             this.NumUpDown_ColHeight.Name = "NumUpDown_ColHeight";
             this.NumUpDown_ColHeight.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_ColHeight.TabIndex = 29;
-            this.NumUpDown_ColHeight.Tag = NPC_Maker.NPCEntry.Members.COLHEIGHT;
+            this.NumUpDown_ColHeight.Tag = "COLHEIGHT";
             this.NumUpDown_ColHeight.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_ColRadius
@@ -1574,7 +1574,7 @@
             this.NumUpDown_ColRadius.Name = "NumUpDown_ColRadius";
             this.NumUpDown_ColRadius.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_ColRadius.TabIndex = 28;
-            this.NumUpDown_ColRadius.Tag = NPC_Maker.NPCEntry.Members.COLRADIUS;
+            this.NumUpDown_ColRadius.Tag = "COLRADIUS";
             this.NumUpDown_ColRadius.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_ColRadius
@@ -1593,7 +1593,7 @@
             this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
             this.Checkbox_HaveCollision.Size = new System.Drawing.Size(85, 17);
             this.Checkbox_HaveCollision.TabIndex = 21;
-            this.Checkbox_HaveCollision.Tag = NPC_Maker.NPCEntry.Members.COLLISION;
+            this.Checkbox_HaveCollision.Tag = "COLLISION";
             this.Checkbox_HaveCollision.Text = "Has collision";
             this.Checkbox_HaveCollision.UseVisualStyleBackColor = true;
             this.Checkbox_HaveCollision.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1620,7 +1620,7 @@
             this.NumUpDown_ShRadius.Name = "NumUpDown_ShRadius";
             this.NumUpDown_ShRadius.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_ShRadius.TabIndex = 35;
-            this.NumUpDown_ShRadius.Tag = NPC_Maker.NPCEntry.Members.SHADOWRADIUS;
+            this.NumUpDown_ShRadius.Tag = "SHADOWRADIUS";
             this.NumUpDown_ShRadius.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_ShRadius
@@ -1639,7 +1639,7 @@
             this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
             this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 17);
             this.Checkbox_DrawShadow.TabIndex = 22;
-            this.Checkbox_DrawShadow.Tag = NPC_Maker.NPCEntry.Members.SHADOW;
+            this.Checkbox_DrawShadow.Tag = "SHADOW";
             this.Checkbox_DrawShadow.Text = "Draws shadow";
             this.Checkbox_DrawShadow.UseVisualStyleBackColor = true;
             this.Checkbox_DrawShadow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -1696,7 +1696,7 @@
             this.NumUpDown_LookAt_Z.Name = "NumUpDown_LookAt_Z";
             this.NumUpDown_LookAt_Z.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_LookAt_Z.TabIndex = 43;
-            this.NumUpDown_LookAt_Z.Tag = NPC_Maker.NPCEntry.Members.ZLOOKATOFFS;
+            this.NumUpDown_LookAt_Z.Tag = "ZLOOKATOFFS";
             this.NumUpDown_LookAt_Z.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_WaistSep
@@ -1723,7 +1723,7 @@
             this.NumUpDown_LookAt_Y.Name = "NumUpDown_LookAt_Y";
             this.NumUpDown_LookAt_Y.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_LookAt_Y.TabIndex = 42;
-            this.NumUpDown_LookAt_Y.Tag = NPC_Maker.NPCEntry.Members.YLOOKATOFFS;
+            this.NumUpDown_LookAt_Y.Tag = "YLOOKATOFFS";
             this.NumUpDown_LookAt_Y.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Combo_Waist_Horiz
@@ -1741,7 +1741,7 @@
             this.Combo_Waist_Horiz.Name = "Combo_Waist_Horiz";
             this.Combo_Waist_Horiz.Size = new System.Drawing.Size(60, 21);
             this.Combo_Waist_Horiz.TabIndex = 44;
-            this.Combo_Waist_Horiz.Tag = NPC_Maker.NPCEntry.Members.WAISTHORIZAXIS;
+            this.Combo_Waist_Horiz.Tag = "WAISTHORIZAXIS";
             this.Combo_Waist_Horiz.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Label_Waist_Horiz
@@ -1769,7 +1769,7 @@
             this.NumUpDown_LookAt_X.Name = "NumUpDown_LookAt_X";
             this.NumUpDown_LookAt_X.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_LookAt_X.TabIndex = 41;
-            this.NumUpDown_LookAt_X.Tag = NPC_Maker.NPCEntry.Members.XLOOKATOFFS;
+            this.NumUpDown_LookAt_X.Tag = "XLOOKATOFFS";
             this.NumUpDown_LookAt_X.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_LookAt_Offs
@@ -1796,7 +1796,7 @@
             this.Combo_Waist_Vert.Name = "Combo_Waist_Vert";
             this.Combo_Waist_Vert.Size = new System.Drawing.Size(60, 21);
             this.Combo_Waist_Vert.TabIndex = 42;
-            this.Combo_Waist_Vert.Tag = NPC_Maker.NPCEntry.Members.WAISTVERTAXIS;
+            this.Combo_Waist_Vert.Tag = "WAISTVERTAXIS";
             this.Combo_Waist_Vert.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Label_Waist_Vert
@@ -1827,7 +1827,7 @@
             this.NumUpDown_DegVert.Name = "NumUpDown_DegVert";
             this.NumUpDown_DegVert.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_DegVert.TabIndex = 27;
-            this.NumUpDown_DegVert.Tag = NPC_Maker.NPCEntry.Members.DEGVERT;
+            this.NumUpDown_DegVert.Tag = "DEGVERT";
             this.NumUpDown_DegVert.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_LookAtWaistHeader
@@ -1877,7 +1877,7 @@
             this.NumUpDown_WaistLimb.Name = "NumUpDown_WaistLimb";
             this.NumUpDown_WaistLimb.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_WaistLimb.TabIndex = 38;
-            this.NumUpDown_WaistLimb.Tag = NPC_Maker.NPCEntry.Members.WAISTLIMB;
+            this.NumUpDown_WaistLimb.Tag = "WAISTLIMB";
             // 
             // ComboBox_LookAtType
             // 
@@ -1893,7 +1893,7 @@
             this.ComboBox_LookAtType.Name = "ComboBox_LookAtType";
             this.ComboBox_LookAtType.Size = new System.Drawing.Size(178, 21);
             this.ComboBox_LookAtType.TabIndex = 56;
-            this.ComboBox_LookAtType.Tag = NPC_Maker.NPCEntry.Members.LOOKATTYPE;
+            this.ComboBox_LookAtType.Tag = "LOOKATTYPE";
             this.ComboBox_LookAtType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // NumUpDown_DegHoz
@@ -1907,7 +1907,7 @@
             this.NumUpDown_DegHoz.Name = "NumUpDown_DegHoz";
             this.NumUpDown_DegHoz.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_DegHoz.TabIndex = 25;
-            this.NumUpDown_DegHoz.Tag = NPC_Maker.NPCEntry.Members.DEGHOZ;
+            this.NumUpDown_DegHoz.Tag = "DEGHOZ";
             this.NumUpDown_DegHoz.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Combo_Head_Horiz
@@ -1925,7 +1925,7 @@
             this.Combo_Head_Horiz.Name = "Combo_Head_Horiz";
             this.Combo_Head_Horiz.Size = new System.Drawing.Size(60, 21);
             this.Combo_Head_Horiz.TabIndex = 36;
-            this.Combo_Head_Horiz.Tag = NPC_Maker.NPCEntry.Members.HEADHORIZAXIS;
+            this.Combo_Head_Horiz.Tag = "HEADHORIZAXIS";
             this.Combo_Head_Horiz.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Label_DegHoz
@@ -1961,7 +1961,7 @@
             this.Combo_Head_Vert.Name = "Combo_Head_Vert";
             this.Combo_Head_Vert.Size = new System.Drawing.Size(60, 21);
             this.Combo_Head_Vert.TabIndex = 34;
-            this.Combo_Head_Vert.Tag = NPC_Maker.NPCEntry.Members.HEADVERTAXIS;
+            this.Combo_Head_Vert.Tag = "HEADVERTAXIS";
             this.Combo_Head_Vert.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Label_Head_Vert
@@ -2010,7 +2010,7 @@
             this.NumUpDown_HeadLimb.Name = "NumUpDown_HeadLimb";
             this.NumUpDown_HeadLimb.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_HeadLimb.TabIndex = 23;
-            this.NumUpDown_HeadLimb.Tag = NPC_Maker.NPCEntry.Members.HEADLIMB;
+            this.NumUpDown_HeadLimb.Tag = "HEADLIMB";
             this.NumUpDown_HeadLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Panel_TargetPanel
@@ -2054,7 +2054,7 @@
             this.NumUpDown_TalkRadi.Name = "NumUpDown_TalkRadi";
             this.NumUpDown_TalkRadi.Size = new System.Drawing.Size(65, 20);
             this.NumUpDown_TalkRadi.TabIndex = 35;
-            this.NumUpDown_TalkRadi.Tag = NPC_Maker.NPCEntry.Members.TALKRADIUS;
+            this.NumUpDown_TalkRadi.Tag = "TALKRADIUS";
             this.NumUpDown_TalkRadi.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_ZTargetOffs
@@ -2073,7 +2073,7 @@
             this.NumUpDown_ZTargetOffs.Name = "NumUpDown_ZTargetOffs";
             this.NumUpDown_ZTargetOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_ZTargetOffs.TabIndex = 38;
-            this.NumUpDown_ZTargetOffs.Tag = NPC_Maker.NPCEntry.Members.ZTARGETOFFS;
+            this.NumUpDown_ZTargetOffs.Tag = "ZTARGETOFFS";
             this.NumUpDown_ZTargetOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_TargetLimb
@@ -2105,7 +2105,7 @@
             this.ComboBox_TargetDist.Name = "ComboBox_TargetDist";
             this.ComboBox_TargetDist.Size = new System.Drawing.Size(181, 21);
             this.ComboBox_TargetDist.TabIndex = 52;
-            this.ComboBox_TargetDist.Tag = NPC_Maker.NPCEntry.Members.TARGETDIST;
+            this.ComboBox_TargetDist.Tag = "TARGETDIST";
             this.ComboBox_TargetDist.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // NumUpDown_YTargetOffs
@@ -2124,7 +2124,7 @@
             this.NumUpDown_YTargetOffs.Name = "NumUpDown_YTargetOffs";
             this.NumUpDown_YTargetOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_YTargetOffs.TabIndex = 37;
-            this.NumUpDown_YTargetOffs.Tag = NPC_Maker.NPCEntry.Members.YTARGETOFFS;
+            this.NumUpDown_YTargetOffs.Tag = "YTARGETOFFS";
             this.NumUpDown_YTargetOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // label1
@@ -2152,7 +2152,7 @@
             this.NumUpDown_XTargetOffs.Name = "NumUpDown_XTargetOffs";
             this.NumUpDown_XTargetOffs.Size = new System.Drawing.Size(54, 20);
             this.NumUpDown_XTargetOffs.TabIndex = 36;
-            this.NumUpDown_XTargetOffs.Tag = NPC_Maker.NPCEntry.Members.XTARGETOFFS;
+            this.NumUpDown_XTargetOffs.Tag = "XTARGETOFFS";
             this.NumUpDown_XTargetOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_TargetOffset
@@ -2171,7 +2171,7 @@
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
             this.Checkbox_Targettable.Size = new System.Drawing.Size(80, 17);
             this.Checkbox_Targettable.TabIndex = 39;
-            this.Checkbox_Targettable.Tag = NPC_Maker.NPCEntry.Members.TARGETTABLE;
+            this.Checkbox_Targettable.Tag = "TARGETTABLE";
             this.Checkbox_Targettable.Text = "Targettable";
             this.Checkbox_Targettable.UseVisualStyleBackColor = true;
             this.Checkbox_Targettable.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -2187,7 +2187,7 @@
             this.NumUpDown_TargetLimb.Name = "NumUpDown_TargetLimb";
             this.NumUpDown_TargetLimb.Size = new System.Drawing.Size(65, 20);
             this.NumUpDown_TargetLimb.TabIndex = 28;
-            this.NumUpDown_TargetLimb.Tag = NPC_Maker.NPCEntry.Members.TARGETLIMB;
+            this.NumUpDown_TargetLimb.Tag = "TARGETLIMB";
             this.NumUpDown_TargetLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Panel_Movement
@@ -2230,7 +2230,7 @@
             this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
             this.Chkb_IgnoreY.Size = new System.Drawing.Size(115, 17);
             this.Chkb_IgnoreY.TabIndex = 67;
-            this.Chkb_IgnoreY.Tag = NPC_Maker.NPCEntry.Members.IGNORENODEYAXIS;
+            this.Chkb_IgnoreY.Tag = "IGNORENODEYAXIS";
             this.Chkb_IgnoreY.Text = "Ignore node Y Axis";
             this.Chkb_IgnoreY.UseVisualStyleBackColor = true;
             this.Chkb_IgnoreY.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -2261,7 +2261,7 @@
             this.NumUp_Smoothing.Name = "NumUp_Smoothing";
             this.NumUp_Smoothing.Size = new System.Drawing.Size(66, 20);
             this.NumUp_Smoothing.TabIndex = 67;
-            this.NumUp_Smoothing.Tag = NPC_Maker.NPCEntry.Members.SMOOTH;
+            this.NumUp_Smoothing.Tag = "SMOOTH";
             this.NumUp_Smoothing.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Lb_PathEnd
@@ -2282,7 +2282,7 @@
             this.tmpicker_timedPathStart.ShowUpDown = true;
             this.tmpicker_timedPathStart.Size = new System.Drawing.Size(66, 20);
             this.tmpicker_timedPathStart.TabIndex = 63;
-            this.tmpicker_timedPathStart.Tag = NPC_Maker.NPCEntry.Members.PATHSTARTTIME;
+            this.tmpicker_timedPathStart.Tag = "PATHSTARTTIME";
             this.tmpicker_timedPathStart.ValueChanged += new System.EventHandler(this.DatePicker_ValueChanged);
             // 
             // Label_PathStTime
@@ -2303,7 +2303,7 @@
             this.tmpicker_timedPathEnd.ShowUpDown = true;
             this.tmpicker_timedPathEnd.Size = new System.Drawing.Size(65, 20);
             this.tmpicker_timedPathEnd.TabIndex = 65;
-            this.tmpicker_timedPathEnd.Tag = NPC_Maker.NPCEntry.Members.PATHENDTIME;
+            this.tmpicker_timedPathEnd.Tag = "PATHENDTIME";
             this.tmpicker_timedPathEnd.ValueChanged += new System.EventHandler(this.DatePicker_ValueChanged);
             // 
             // Lbl_GravityForce
@@ -2340,7 +2340,7 @@
             this.Checkbox_Loop.Name = "Checkbox_Loop";
             this.Checkbox_Loop.Size = new System.Drawing.Size(50, 17);
             this.Checkbox_Loop.TabIndex = 41;
-            this.Checkbox_Loop.Tag = NPC_Maker.NPCEntry.Members.LOOP;
+            this.Checkbox_Loop.Tag = "LOOP";
             this.Checkbox_Loop.Text = "Loop";
             this.Checkbox_Loop.UseVisualStyleBackColor = true;
             this.Checkbox_Loop.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -2385,7 +2385,7 @@
             this.NumUpDown_GravityForce.Name = "NumUpDown_GravityForce";
             this.NumUpDown_GravityForce.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_GravityForce.TabIndex = 35;
-            this.NumUpDown_GravityForce.Tag = NPC_Maker.NPCEntry.Members.GRAVITYFORCE;
+            this.NumUpDown_GravityForce.Tag = "GRAVITYFORCE";
             this.NumUpDown_GravityForce.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_LoopDelay
@@ -2453,7 +2453,7 @@
             this.NumUpDown_PathFollowID.Name = "NumUpDown_PathFollowID";
             this.NumUpDown_PathFollowID.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_PathFollowID.TabIndex = 38;
-            this.NumUpDown_PathFollowID.Tag = NPC_Maker.NPCEntry.Members.PATHID;
+            this.NumUpDown_PathFollowID.Tag = "PATHID";
             this.NumUpDown_PathFollowID.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_MovDistance
@@ -2467,7 +2467,7 @@
             this.NumUpDown_MovDistance.Name = "NumUpDown_MovDistance";
             this.NumUpDown_MovDistance.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_MovDistance.TabIndex = 35;
-            this.NumUpDown_MovDistance.Tag = NPC_Maker.NPCEntry.Members.MOVDISTANCE;
+            this.NumUpDown_MovDistance.Tag = "MOVDISTANCE";
             this.NumUpDown_MovDistance.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Combo_MovementType
@@ -2485,7 +2485,7 @@
             this.Combo_MovementType.Name = "Combo_MovementType";
             this.Combo_MovementType.Size = new System.Drawing.Size(181, 21);
             this.Combo_MovementType.TabIndex = 61;
-            this.Combo_MovementType.Tag = NPC_Maker.NPCEntry.Members.MOVEMENT;
+            this.Combo_MovementType.Tag = "MOVEMENT";
             this.Combo_MovementType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
             // 
             // Label_MovementType
@@ -2514,7 +2514,7 @@
             this.NumUpDown_MovSpeed.Name = "NumUpDown_MovSpeed";
             this.NumUpDown_MovSpeed.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_MovSpeed.TabIndex = 37;
-            this.NumUpDown_MovSpeed.Tag = NPC_Maker.NPCEntry.Members.MOVSPEED;
+            this.NumUpDown_MovSpeed.Tag = "MOVSPEED";
             this.NumUpDown_MovSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_Distance
@@ -2542,7 +2542,7 @@
             this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
             this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(146, 17);
             this.Checkbox_AlwaysDraw.TabIndex = 70;
-            this.Checkbox_AlwaysDraw.Tag = NPC_Maker.NPCEntry.Members.DRAWOUTOFCAM;
+            this.Checkbox_AlwaysDraw.Tag = "DRAWOUTOFCAM";
             this.Checkbox_AlwaysDraw.Text = "Draw even out of camera";
             this.Checkbox_AlwaysDraw.UseVisualStyleBackColor = true;
             this.Checkbox_AlwaysDraw.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -2563,7 +2563,7 @@
             this.NumUpDown_CutsceneSlot.Name = "NumUpDown_CutsceneSlot";
             this.NumUpDown_CutsceneSlot.Size = new System.Drawing.Size(71, 20);
             this.NumUpDown_CutsceneSlot.TabIndex = 66;
-            this.NumUpDown_CutsceneSlot.Tag = NPC_Maker.NPCEntry.Members.CUTSCENEID;
+            this.NumUpDown_CutsceneSlot.Tag = "CUTSCENEID";
             this.NumUpDown_CutsceneSlot.Value = new decimal(new int[] {
             1,
             0,
@@ -2578,7 +2578,7 @@
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
             this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(156, 17);
             this.Checkbox_AlwaysActive.TabIndex = 68;
-            this.Checkbox_AlwaysActive.Tag = NPC_Maker.NPCEntry.Members.ACTIVE;
+            this.Checkbox_AlwaysActive.Tag = "ACTIVE";
             this.Checkbox_AlwaysActive.Text = "Update even out of camera";
             this.Checkbox_AlwaysActive.UseVisualStyleBackColor = true;
             this.Checkbox_AlwaysActive.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
@@ -2590,7 +2590,7 @@
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
             this.Checkbox_CanPressSwitches.TabIndex = 58;
-            this.Checkbox_CanPressSwitches.Tag = NPC_Maker.NPCEntry.Members.SWITCHES;
+            this.Checkbox_CanPressSwitches.Tag = "SWITCHES";
             this.Checkbox_CanPressSwitches.Text = "Presses switches";
             this.Checkbox_CanPressSwitches.UseVisualStyleBackColor = true;
             this.Checkbox_CanPressSwitches.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);

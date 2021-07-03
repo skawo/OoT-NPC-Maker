@@ -81,7 +81,8 @@ namespace NPC_Maker
             Keyword_Player32,
             Keyword_Self8,
             Keyword_Self16,
-            Keyword_Self32
+            Keyword_Self32,
+            Keyword_EndOcarina,
         };
 
         public static List<string> KeywordsBlue = new List<string>()

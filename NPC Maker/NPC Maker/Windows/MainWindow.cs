@@ -780,7 +780,9 @@ namespace NPC_Maker
 
         private void Textbox_NPCName_TextChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as TextBox).Tag, (sender as TextBox).Text);
+            NPCEntry.Members Member = NPCEntry.GetMemberFromTag((sender as TextBox).Tag, (sender as TextBox).Name);
+
+            SelectedEntry.ChangeValueOfMember(Member, (sender as TextBox).Text);
             DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = Textbox_NPCName.Text;
         }
 
@@ -824,27 +826,32 @@ namespace NPC_Maker
 
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as TextBox).Tag, (sender as TextBox).Text);
+            NPCEntry.Members Member = NPCEntry.GetMemberFromTag((sender as TextBox).Tag, (sender as TextBox).Name);
+            SelectedEntry.ChangeValueOfMember(Member, (sender as TextBox).Text);
         }
 
         private void NumUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as NumericUpDown).Tag, (sender as NumericUpDown).Value);
+            NPCEntry.Members Member = NPCEntry.GetMemberFromTag((sender as NumericUpDown).Tag, (sender as NumericUpDown).Name);
+            SelectedEntry.ChangeValueOfMember(Member, (sender as NumericUpDown).Value);
         }
 
         private void CheckBox_ValueChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as CheckBox).Tag, (sender as CheckBox).Checked);
+            NPCEntry.Members Member = NPCEntry.GetMemberFromTag((sender as CheckBox).Tag, (sender as CheckBox).Name);
+            SelectedEntry.ChangeValueOfMember(Member, (sender as CheckBox).Checked);
         }
 
         private void DatePicker_ValueChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as DateTimePicker).Tag, (sender as DateTimePicker).Value.ToString("HH:mm"));
+            NPCEntry.Members Member = NPCEntry.GetMemberFromTag((sender as DateTimePicker).Tag, (sender as DateTimePicker).Name);
+            SelectedEntry.ChangeValueOfMember(Member, (sender as DateTimePicker).Value.ToString("HH:mm"));
         }
 
         private void ComboBox_ValueChanged(object sender, EventArgs e)
         {
-            SelectedEntry.ChangeValueOfMember((NPCEntry.Members)(sender as ComboBox).Tag, (sender as ComboBox).SelectedIndex);
+            NPCEntry.Members Member = NPCEntry.GetMemberFromTag((sender as ComboBox).Tag, (sender as ComboBox).Name);
+            SelectedEntry.ChangeValueOfMember(Member, (sender as ComboBox).SelectedIndex);
         }
 
         #endregion

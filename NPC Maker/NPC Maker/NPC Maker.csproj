@@ -167,7 +167,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\DropDownScrollWheelFix.cs" />
-    <Compile Include="Common\Old\OldLists.cs" />
     <Compile Include="Common\FCTB.cs" />
     <Compile Include="Common\FileOps.cs" />
     <Compile Include="Windows\Debug.cs">
@@ -190,7 +189,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Common\Old\ScriptParser.cs" />
     <Compile Include="Windows\PickableList.cs">
       <SubType>Form</SubType>
     </Compile>
