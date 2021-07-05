@@ -182,31 +182,62 @@ namespace NPC_Maker.NewScriptParser
                     {
                         if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Procedure))
                         {
-                            string[] Split = Lines[i].Split(' ');
-                            ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+                            string[] SplitDefinition = Lines[i].Split(' ');
+                            ScriptHelpers.ErrorIfNumParamsSmaller(SplitDefinition, 2);
 
                             int EndMacro = GetCorrespondingEndProcedure(Lines, i);
 
-                            string ProcName = Split[1];
-                            List<string> ProcLines = Lines.Skip(i + 1).Take(EndMacro - i - 1).ToList();
-                            Lines.RemoveRange(i, EndMacro - i + 1);
-
+                            string ProcName = SplitDefinition[1];
                             string ProcedureString = $"{Lists.Keyword_CallProcedure}{ProcName}".ToUpper();
 
-                            // Replace procedure calls with procedure
+                            List<string> ProcLines = Lines.Skip(i + 1).Take(EndMacro - i - 1).ToList();
+                            List<string> ProcArgs = new List<string>();
+                            
+                            if (SplitDefinition.Length > 2)
+                                ProcArgs = SplitDefinition.Skip(2).Take(SplitDefinition.Length - 2).ToList();
+
+                            Lines.RemoveRange(i, EndMacro - i + 1);
+
                             Procedure prc = new Procedure(ProcName, ProcLines);
 
                             // Error if procedure recursion is detected
                             if (ProcLines.Select(x => x.ToUpper()).Contains(ProcedureString))
                                 throw ParseException.ProcRecursion(Lines[i]);
 
-                            int Index = Lines.FindIndex(x => x.ToUpper() == ProcedureString);
+                            int Index = Lines.FindIndex(x => x.Split(' ')[0].ToUpper() == ProcedureString);
 
                             while (Index != -1)
                             {
+                                string RepLine = Lines[Index];
+                                string[] SplitRepLine = RepLine.Split(' ');
+
+                                List<string> Args = new List<string>();
+                                
+                                if (SplitRepLine.Length > 1)
+                                    Args = SplitRepLine.Skip(1).ToList();
+
                                 Lines.RemoveAt(Index);
-                                Lines.InsertRange(Index, prc.Instructions);
-                                Index = Lines.FindIndex(x => x.ToUpper() == ProcedureString);
+
+                                if (Args.Count != ProcArgs.Count)
+                                    outScript.ParseErrors.Add(ParseException.ProcNumArgsError(SplitRepLine));
+                                else
+                                {
+                                    List<string> Instructions = new List<string>();
+
+                                    foreach (string Instruction in prc.Instructions)
+                                    {
+                                        string NewInstruction = Instruction;
+
+                                        for (int f = 0; f < Args.Count; f++)
+                                            NewInstruction = Helpers.SafeReplace(NewInstruction, ProcArgs[f], Args[f], true);
+
+                                        Instructions.Add(NewInstruction);
+                                    }
+
+                                    Lines.InsertRange(Index, Instructions);
+                                }
+
+                                Index = Lines.FindIndex(x => x.Split()[0].ToUpper() == ProcedureString);
                             }
                         }
                     }

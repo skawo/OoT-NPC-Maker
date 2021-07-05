@@ -29,6 +29,11 @@ namespace NPC_Maker.NewScriptParser
             return new ParseException("Problem with procedures.", "");
         }
 
+        public static ParseException ProcNumArgsError(string[] _Line)
+        {
+            return new ParseException("Number of arguments doesn't match.", String.Join(" ", _Line));
+        }
+
         public static ParseException ScriptTooBigError()
         {
             return new ParseException("Script has exceeded the maximum allowed amount of bytes.", "");
