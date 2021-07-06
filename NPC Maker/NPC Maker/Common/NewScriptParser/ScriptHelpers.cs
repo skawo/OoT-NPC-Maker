@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NPC_Maker.NewScriptParser
+namespace NPC_Maker.Scripts
 {
     public static class ScriptHelpers
     {

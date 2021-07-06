@@ -56,7 +56,7 @@ namespace NPC_Maker
 
                     if (Res == DialogResult.Yes)
                     {
-                        FileMenu_SaveAs_Click(this, null);
+                        FileMenu_Save_Click(this, null);
                     }
                     else if (Res == DialogResult.Cancel)
                     {
@@ -98,6 +98,9 @@ namespace NPC_Maker
 
             if (SelectedEntry == null)
                 return;
+
+            // All the easy stuff first
+            #region Basic data
 
             Textbox_NPCName.Text = SelectedEntry.NPCName;
 
@@ -185,7 +188,24 @@ namespace NPC_Maker
             ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
             NumUpDown_Scale.Value = (decimal)SelectedEntry.ModelScale;
 
+            Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
+            Btn_LightColor.BackColor = Color.FromArgb(255, SelectedEntry.LightColor.R, SelectedEntry.LightColor.G, SelectedEntry.LightColor.B);
 
+            if (SelectedEntry.EnvironmentColor.A == 0)
+                Checkbox_EnvColor.Checked = false;
+            else
+                Checkbox_EnvColor.Checked = true;
+
+            Textbox_BlinkPattern.Text = SelectedEntry.BlinkPattern;
+            Textbox_TalkingPattern.Text = SelectedEntry.TalkPattern;
+            NumUpDown_BlinkSegment.Value = SelectedEntry.BlinkSegment;
+            NumUpDown_BlinkSpeed.Value = SelectedEntry.BlinkSpeed;
+            NumUpDown_TalkSegment.Value = SelectedEntry.TalkSegment;
+            NumUpDown_TalkSpeed.Value = SelectedEntry.TalkSpeed;
+
+            #endregion
+            // Create tab pages for the script, reusing ones that already existed prior to switching to this NPC.
+            #region Script Tab Pages
             List<TabPage> ReusableTabPages = new List<TabPage>();
 
             foreach (TabPage Page in TabControl.TabPages)
@@ -217,7 +237,9 @@ namespace NPC_Maker
             foreach (TabPage Page in ReusableTabPages)
                 TabControl.TabPages.Remove(Page);
 
-            
+            #endregion
+
+            #region Colors grid
             ColorsDataGridView.Rows.Clear();
 
             foreach (ColorEntry ColorE in SelectedEntry.DisplayListColors)
@@ -231,28 +253,18 @@ namespace NPC_Maker
                     BackColor = ColorE.Color
                 };
             }
-            
 
+            #endregion
+
+            #region Animations grid
             DataGrid_Animations.Rows.Clear();
 
             foreach (AnimationEntry Animation in SelectedEntry.Animations)
                 DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
 
+            #endregion
 
-            Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
-            Btn_LightColor.BackColor = Color.FromArgb(255, SelectedEntry.LightColor.R, SelectedEntry.LightColor.G, SelectedEntry.LightColor.B);
-
-            if (SelectedEntry.EnvironmentColor.A == 0)
-                Checkbox_EnvColor.Checked = false;
-            else
-                Checkbox_EnvColor.Checked = true;
-
-            Textbox_BlinkPattern.Text = SelectedEntry.BlinkPattern;
-            Textbox_TalkingPattern.Text = SelectedEntry.TalkPattern;
-            NumUpDown_BlinkSegment.Value = SelectedEntry.BlinkSegment;
-            NumUpDown_BlinkSpeed.Value = SelectedEntry.BlinkSpeed;
-            NumUpDown_TalkSegment.Value = SelectedEntry.TalkSegment;
-            NumUpDown_TalkSpeed.Value = SelectedEntry.TalkSpeed;
+            #region Segments grid
 
             for (int j = 0; j < SelectedEntry.Segments.Count; j++)
             {
@@ -263,6 +275,10 @@ namespace NPC_Maker
                 foreach (SegmentEntry Entry in SelectedEntry.Segments[j])
                     Grid.Rows.Add(Entry.Name, Entry.Address.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Entry.ObjectID));
             }
+
+            #endregion
+
+            #region Display lists grid
 
             DataGridView_ExtraDLists.Rows.Clear();
 
@@ -282,6 +298,8 @@ namespace NPC_Maker
             }
 
             TabControl.SelectedIndex = Math.Min(TabControl.TabPages.Count - 1, SelectedTabIndex);
+
+            #endregion
 
             TabControl.ResumeLayout();
         }

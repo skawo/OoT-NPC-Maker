@@ -13,6 +13,7 @@ namespace NPC_Maker
         public const string Keyword_SharpDefine = "#DEFINE";
         public const string Keyword_Define = "DEFINE";
         public const string Keyword_Procedure = "PROC";
+        public const string Keyword_Elif = "ELIF";
         public const string Keyword_CallProcedure = "::";
         public const string Keyword_EndProcedure = "ENDPROC";
         public const string Keyword_End = "END";
@@ -116,6 +117,7 @@ namespace NPC_Maker
             SpawnParams.VARIABLE.ToString(),
             SpawnParams.ACTOR.ToString(),
             SpawnParams.ROTATION.ToString(),
+            Keyword_Elif,
         };
 
         public static List<string> KeywordsMPurple = new List<string>()

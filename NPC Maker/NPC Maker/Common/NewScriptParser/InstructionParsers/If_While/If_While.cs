@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NPC_Maker.NewScriptParser
+namespace NPC_Maker.Scripts
 {
     public partial class ScriptParser
     {
@@ -355,7 +355,7 @@ namespace NPC_Maker.NewScriptParser
             return -1;
         }
 
-        private int GetCorrespondingEndIf(List<string> Lines, int LineNo)
+        public int GetCorrespondingEndIf(List<string> Lines, int LineNo)
         {
             for (int i = LineNo + 1; i < Lines.Count(); i++)
             {

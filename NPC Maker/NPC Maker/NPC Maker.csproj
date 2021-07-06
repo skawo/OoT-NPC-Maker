@@ -155,7 +155,7 @@
     <Compile Include="Common\NewScriptParser\InstructionParsers\Set\Set.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Nop\Nop.cs" />
     <Compile Include="Common\Lists.cs" />
-    <Compile Include="Common\NewScriptParser\NewScriptParser.cs" />
+    <Compile Include="Common\NewScriptParser\ScriptParser.cs" />
     <Compile Include="Common\NewScriptParser\InstructionParsers\Common\Classes.cs" />
     <Compile Include="Windows\About.cs">
       <SubType>Form</SubType>

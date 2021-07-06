@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NPC_Maker.NewScriptParser
+namespace NPC_Maker.Scripts
 {
     public class InstructionGoto : Instruction
     {

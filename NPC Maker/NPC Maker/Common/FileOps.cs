@@ -405,15 +405,15 @@ namespace NPC_Maker
 
                         int ScrOffset = 0;
 
-                        List<NewScriptParser.BScript> ParsedScripts = new List<NewScriptParser.BScript>();
+                        List<Scripts.BScript> ParsedScripts = new List<Scripts.BScript>();
 
                         foreach (ScriptEntry Scr in NonEmptyEntries)
                         {
-                            NewScriptParser.ScriptParser Par = new NewScriptParser.ScriptParser(Entry, Scr.Text);
+                            Scripts.ScriptParser Par = new Scripts.ScriptParser(Entry, Scr.Text);
                             ParsedScripts.Add(Par.ParseScript());
                         }
 
-                        foreach (NewScriptParser.BScript Scr in ParsedScripts)
+                        foreach (Scripts.BScript Scr in ParsedScripts)
                         {
                             EntryBytes.AddRangeBigEndian(ScrOffset);
                             ScrOffset += Scr.Script.Length;
@@ -422,7 +422,7 @@ namespace NPC_Maker
 
                         }
 
-                        foreach (NewScriptParser.BScript Scr in ParsedScripts)
+                        foreach (Scripts.BScript Scr in ParsedScripts)
                         {
                             EntryBytes.AddRange(Scr.Script);
 

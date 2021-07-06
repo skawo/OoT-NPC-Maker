@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NPC_Maker.NewScriptParser
+namespace NPC_Maker.Scripts
 {
     public class InstructionFace : Instruction
     {
@@ -43,10 +43,13 @@ namespace NPC_Maker.NewScriptParser
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Subject, Target, 4), Data);
+            Helpers.AddObjectToByteList(Target, Data);
             Helpers.AddObjectToByteList(FaceType, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SubjectActorT, SubjectActorCatT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(TargetActorT, TargetActorCatT, 4), Data);
+            Helpers.AddObjectToByteList(SubjectActorT, Data);
+            Helpers.AddObjectToByteList(SubjectActorCatT, Data);
+            Helpers.AddObjectToByteList(TargetActorT, Data);
+            Helpers.AddObjectToByteList(TargetActorCatT, Data);
+            Helpers.AddObjectToByteList(Subject, Data);
             Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(SubjectActor, Data);
             Helpers.AddObjectToByteList(SubjectActorCat, Data);

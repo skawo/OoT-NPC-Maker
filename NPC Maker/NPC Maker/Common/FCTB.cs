@@ -70,7 +70,7 @@ namespace NPC_Maker
                 r.SetStyle(regex.Value, regex.Key, RegexOptions.Multiline);
 
             // Color in labels
-            List<string> Labels = NewScriptParser.ScriptParser.GetLabels(txb.Text);
+            List<string> Labels = Scripts.ScriptParser.GetLabels(txb.Text);
             H_SetStyle(Labels, FCTB.RedStyle, r);
 
             // Color in instruction subtypes

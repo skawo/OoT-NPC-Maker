@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NPC_Maker.NewScriptParser
+namespace NPC_Maker.Scripts
 {
     public class ParseException : Exception
     {
@@ -102,6 +102,11 @@ namespace NPC_Maker.NewScriptParser
         public static ParseException ParamOutOfRange(string[] _Line)
         {
             return new ParseException("A parameter is out of range: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException ElifNotInIfScope (string _Line)
+        {
+            return new ParseException("This ELIF does not fall into IF scope: ", _Line);
         }
 
         public static ParseException IfNotClosed(string _Line)

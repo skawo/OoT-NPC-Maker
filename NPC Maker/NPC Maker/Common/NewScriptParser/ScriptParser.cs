@@ -7,12 +7,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NPC_Maker.NewScriptParser
+namespace NPC_Maker.Scripts
 {
     public partial class ScriptParser
     {
-        private readonly string ScriptText;
         private readonly NPCEntry Entry;
+        private string ScriptText;
         public List<string> RandomLabels { get; set; }
         private BScript outScript;
 
@@ -20,12 +20,12 @@ namespace NPC_Maker.NewScriptParser
         {
             ScriptText = _ScriptText;
             Entry = _Entry;
-
-            RegexText(ref ScriptText);
         }
 
         public BScript ParseScript()
         {
+            RegexText(ref ScriptText);
+
             outScript = new BScript();
             RandomLabels = new List<string>();
 
@@ -38,14 +38,21 @@ namespace NPC_Maker.NewScriptParser
             // Split text into lines
             List<string> Lines = SplitLines(ScriptText);
 
+            // "Preprocessor"
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
+            Lines = ReplaceElifs(Lines, ref outScript);
             CheckLabels(Lines);
 
             List<Instruction> Instructions = GetInstructions(Lines);
 
-            if (Instructions.Count == 0 || !(Instructions[Instructions.Count - 1] is InstructionGoto) || ((Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_Return))
+            // Add a return instruction at the end if one doesn't exist.
+            if (Instructions.Count == 0 ||
+                !(Instructions[Instructions.Count - 1] is InstructionGoto) ||
+                ((Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_Return))
+            {
                 Instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
+            }
 
 #if DEBUG
             outScript.ScriptDebug = GetOutString(Instructions);
@@ -53,19 +60,42 @@ namespace NPC_Maker.NewScriptParser
 
             List<InstructionLabel> Labels = GetLabelsAndRemove(ref outScript, ref Instructions);
 
+            // If everything was successful up 'till now, try parsing.
             if (outScript.ParseErrors.Count == 0)
+            {
                 outScript.Script = ConvertScriptToBytes(Labels, ref outScript, ref Instructions);
 
 #if DEBUG
-            outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
-
-            System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
+                outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
+                System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
 #endif
+            }
 
             return outScript;
         }
 
-        public static void RegexText(ref string ScriptText)
+        public static List<string> GetLabels(string ScriptText)
+        {
+            ScriptParser.RegexText(ref ScriptText);
+            List<string> Lines = SplitLines(ScriptText);
+
+            return GetLabels(Lines);
+        }
+
+        public static List<string> GetLabels(List<string> Lines)
+        {
+            List<string> Labels = new List<string>();
+
+            for (int i = 0; i < Lines.Count(); i++)
+            {
+                if (Lines[i].EndsWith(":"))
+                    Labels.Add(Lines[i].Substring(0, Lines[i].Length - 1));
+            }
+
+            return Labels;
+        }
+
+        private static void RegexText(ref string ScriptText)
         {
             ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
@@ -76,7 +106,7 @@ namespace NPC_Maker.NewScriptParser
             ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ");                                                            // Remove double spaces
         }
 
-        public static List<string> SplitLines(string ScriptText)
+        private static List<string> SplitLines(string ScriptText)
         {
             List<string> Lines = ScriptText.Split(new[] { "\n" }, StringSplitOptions.None).ToList();
 
@@ -84,14 +114,6 @@ namespace NPC_Maker.NewScriptParser
                 Lines[i] = Lines[i].Trim();
 
             return Lines;
-        }
-
-        public static List<string> GetLabels(string ScriptText)
-        {
-            NewScriptParser.ScriptParser.RegexText(ref ScriptText);
-            List<string> Lines = SplitLines(ScriptText);
-
-            return GetLabels(Lines);
         }
 
         private void CheckLabels(List<string> Lines)
@@ -110,25 +132,13 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
-        public static List<string> GetLabels(List<string> Lines)
-        {
-            List<string> Labels = new List<string>();
-
-            for (int i = 0; i < Lines.Count(); i++)
-            {
-                if (Lines[i].EndsWith(":"))
-                    Labels.Add(Lines[i].Substring(0, Lines[i].Length - 1));
-            }
-
-            return Labels;
-        }
-
         private List<string> ReplaceDefines(List<string> Lines, ref BScript outScript)
         {
             try
             {
                 List<string[]> Defines = new List<string[]>();
 
+                // Get all define lines...
                 foreach (string Line in Lines)
                 {
                     if (Line.ToUpper().StartsWith(Lists.Keyword_SharpDefine))
@@ -140,9 +150,11 @@ namespace NPC_Maker.NewScriptParser
                     }
                 }
 
+                // If none found, there's nothing to do.
                 if (Defines.Count == 0)
                     return Lines;
 
+                // Otherwise, loop through all lines and replace the defines.
                 List<string> NewLines = new List<string>();
 
                 for (int i = 0; i < Lines.Count(); i++)
@@ -174,73 +186,68 @@ namespace NPC_Maker.NewScriptParser
         {
             try
             {
-                List<Procedure> Procedures = new List<Procedure>();
+                List<string> NewLines = Lines.Select(item => (string)item.Clone()).ToList();
+                int ProcLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Procedure));
 
-                while (Lines.Find(x => x.ToUpper().StartsWith(Lists.Keyword_Procedure)) != null)
+                // Looping through all lines until we can't find a line containing the keyword...
+                while (ProcLineIndex != -1)
                 {
-                    for (int i = 0; i < Lines.Count; i++)
+                    string[] SplitDefinition = Lines[ProcLineIndex].Split(' ');
+                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitDefinition, 2);
+
+                    string ProcName = SplitDefinition[1];
+                    string ProcedureString = $"{Lists.Keyword_CallProcedure}{ProcName}".ToUpper();
+
+                    int EndMacro = GetCorrespondingEndProcedure(Lines, ProcLineIndex);
+                    List<string> ProcLines = Lines.Skip(ProcLineIndex + 1).Take(EndMacro - ProcLineIndex - 1).ToList();
+                    List<string> ProcArgs = new List<string>();
+
+                    if (SplitDefinition.Length > 2)
+                        ProcArgs = SplitDefinition.Skip(2).Take(SplitDefinition.Length - 2).ToList();
+
+                    Lines.RemoveRange(ProcLineIndex, EndMacro - ProcLineIndex + 1);
+
+                    // Error if procedure recursion is detected
+                    if (ProcLines.Select(x => x.ToUpper()).Contains(ProcedureString))
+                        throw ParseException.ProcRecursion(Lines[ProcLineIndex]);
+
+                    int ProcCallIndex = Lines.FindIndex(x => x.Split(' ')[0].ToUpper() == ProcedureString);
+
+                    while (ProcCallIndex != -1)
                     {
-                        if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Procedure))
+                        string RepLine = Lines[ProcCallIndex];
+                        string[] SplitRepLine = RepLine.Split(' ');
+
+                        List<string> Args = new List<string>();
+
+                        if (SplitRepLine.Length > 1)
+                            Args = SplitRepLine.Skip(1).ToList();
+
+                        Lines.RemoveAt(ProcCallIndex);
+
+                        if (Args.Count != ProcArgs.Count)
+                            outScript.ParseErrors.Add(ParseException.ProcNumArgsError(SplitRepLine));
+                        else
                         {
-                            string[] SplitDefinition = Lines[i].Split(' ');
-                            ScriptHelpers.ErrorIfNumParamsSmaller(SplitDefinition, 2);
+                            List<string> Instructions = new List<string>();
 
-                            int EndMacro = GetCorrespondingEndProcedure(Lines, i);
-
-                            string ProcName = SplitDefinition[1];
-                            string ProcedureString = $"{Lists.Keyword_CallProcedure}{ProcName}".ToUpper();
-
-                            List<string> ProcLines = Lines.Skip(i + 1).Take(EndMacro - i - 1).ToList();
-                            List<string> ProcArgs = new List<string>();
-                            
-                            if (SplitDefinition.Length > 2)
-                                ProcArgs = SplitDefinition.Skip(2).Take(SplitDefinition.Length - 2).ToList();
-
-                            Lines.RemoveRange(i, EndMacro - i + 1);
-
-                            Procedure prc = new Procedure(ProcName, ProcLines);
-
-                            // Error if procedure recursion is detected
-                            if (ProcLines.Select(x => x.ToUpper()).Contains(ProcedureString))
-                                throw ParseException.ProcRecursion(Lines[i]);
-
-                            int Index = Lines.FindIndex(x => x.Split(' ')[0].ToUpper() == ProcedureString);
-
-                            while (Index != -1)
+                            foreach (string Instruction in ProcLines)
                             {
-                                string RepLine = Lines[Index];
-                                string[] SplitRepLine = RepLine.Split(' ');
+                                string NewInstruction = Instruction;
 
-                                List<string> Args = new List<string>();
-                                
-                                if (SplitRepLine.Length > 1)
-                                    Args = SplitRepLine.Skip(1).ToList();
+                                for (int f = 0; f < Args.Count; f++)
+                                    NewInstruction = ScriptHelpers.ReplaceExpr(NewInstruction, ProcArgs[f], Args[f]);
 
-                                Lines.RemoveAt(Index);
-
-                                if (Args.Count != ProcArgs.Count)
-                                    outScript.ParseErrors.Add(ParseException.ProcNumArgsError(SplitRepLine));
-                                else
-                                {
-                                    List<string> Instructions = new List<string>();
-
-                                    foreach (string Instruction in prc.Instructions)
-                                    {
-                                        string NewInstruction = Instruction;
-
-                                        for (int f = 0; f < Args.Count; f++)
-                                            NewInstruction = Helpers.SafeReplace(NewInstruction, ProcArgs[f], Args[f], true);
-
-                                        Instructions.Add(NewInstruction);
-                                    }
-
-                                    Lines.InsertRange(Index, Instructions);
-                                }
-
-                                Index = Lines.FindIndex(x => x.Split()[0].ToUpper() == ProcedureString);
+                                Instructions.Add(NewInstruction);
                             }
+
+                            Lines.InsertRange(ProcCallIndex, Instructions);
                         }
+
+                        ProcCallIndex = Lines.FindIndex(x => x.Split()[0].ToUpper() == ProcedureString);
                     }
+
+                    ProcLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Procedure));
                 }
 
                 return Lines;
@@ -257,6 +264,49 @@ namespace NPC_Maker.NewScriptParser
             }
         }
 
+        private List<string> ReplaceElifs(List<string> Lines, ref BScript outScript)
+        {
+            int ElifLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Elif));
+
+            while(ElifLineIndex != -1)
+            {
+                bool InIfScope = false;
+
+                for (int i = ElifLineIndex; i >= 0; i--)
+                {
+                    if (Lines[i].ToUpper().StartsWith(Lists.Keyword_EndIf))
+                        break;
+
+                    if (Lines[i].ToUpper().StartsWith(Lists.Instructions.IF.ToString()))
+                    {
+                        InIfScope = true;
+                        break;
+                    }    
+                }
+
+                if (!InIfScope)
+                {
+                    outScript.ParseErrors.Add(ParseException.ElifNotInIfScope(Lines[ElifLineIndex]));
+                    Lines.RemoveAt(ElifLineIndex);
+                    ElifLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Elif));
+                    continue;
+                }
+
+                Lines[ElifLineIndex] = ScriptHelpers.ReplaceExpr(Lines[ElifLineIndex], Lists.Keyword_Elif, Lists.Instructions.IF.ToString(), RegexOptions.IgnoreCase);
+                int EndIf = GetCorrespondingEndIf(Lines, ElifLineIndex);
+
+                if (EndIf != -1)
+                    Lines.Insert(EndIf, Lists.Keyword_EndIf);
+                else
+                    outScript.ParseErrors.Add(ParseException.IfNotClosed(Lines[ElifLineIndex]));
+
+                Lines.Insert(ElifLineIndex, Lists.Keyword_Else);
+                ElifLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Elif));
+            }
+
+            return Lines;
+        }
+
         private int GetCorrespondingEndProcedure(List<string> Lines, int LineNo)
         {
             for (int i = LineNo + 1; i < Lines.Count(); i++)
@@ -269,21 +319,6 @@ namespace NPC_Maker.NewScriptParser
             }
 
             throw ParseException.ProcedureNotClosed(Lines[LineNo]);
-        }
-
-        private List<string> GetOutString(List<Instruction> Instructions)
-        {
-            List<string> Out = new List<string>();
-
-            foreach (Instruction Int in Instructions)
-            {
-                if (Int is InstructionLabel p)
-                    Out.Add(p.ToMarkingString());
-                else
-                    Out.Add(Int.ToString());
-            }
-
-            return Out;
         }
 
         private List<Instruction> GetInstructions(List<string> Lines)
@@ -348,7 +383,7 @@ namespace NPC_Maker.NewScriptParser
             return Instructions;
         }
 
-        public static List<InstructionLabel> GetLabelsAndRemove(ref BScript outScript, ref List<Instruction> Instructions)
+        private static List<InstructionLabel> GetLabelsAndRemove(ref BScript outScript, ref List<Instruction> Instructions)
         {
             List<InstructionLabel> OutList = new List<InstructionLabel>();
 
@@ -381,7 +416,7 @@ namespace NPC_Maker.NewScriptParser
             return OutList;
         }
 
-        public static byte[] ConvertScriptToBytes(List<InstructionLabel> Labels, ref BScript outScript, ref List<Instruction> Instructions)
+        private static byte[] ConvertScriptToBytes(List<InstructionLabel> Labels, ref BScript outScript, ref List<Instruction> Instructions)
         {
             try
             {
@@ -430,6 +465,23 @@ namespace NPC_Maker.NewScriptParser
 
             return new byte[0];
         }
+
+#if DEBUG
+        private List<string> GetOutString(List<Instruction> Instructions)
+        {
+            List<string> Out = new List<string>();
+
+            foreach (Instruction Int in Instructions)
+            {
+                if (Int is InstructionLabel p)
+                    Out.Add(p.ToMarkingString());
+                else
+                    Out.Add(Int.ToString());
+            }
+
+            return Out;
+        }
+#endif
 
     }
 }

@@ -8,12 +8,6 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
-        public static string SafeReplace(string input, string find, string replace, bool matchWholeWord)
-        {
-            string textToFind = matchWholeWord ? string.Format(@"\b{0}\b", Regex.Escape(find)) : find;
-            return Regex.Replace(input, textToFind, replace);
-        }
-
         public static UInt16 GetOcarinaTime(string MilitaryTimeString)
         {
             string ExceptionMsg = "Time is in wrong format!";
