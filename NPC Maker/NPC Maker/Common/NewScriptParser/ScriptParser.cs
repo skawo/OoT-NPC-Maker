@@ -186,6 +186,8 @@ namespace NPC_Maker.Scripts
         {
             try
             {
+                List<string> Procedures = new List<string>();
+
                 List<string> NewLines = Lines.Select(item => (string)item.Clone()).ToList();
                 int ProcLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Procedure));
 
@@ -206,6 +208,11 @@ namespace NPC_Maker.Scripts
                         ProcArgs = SplitDefinition.Skip(2).Take(SplitDefinition.Length - 2).ToList();
 
                     Lines.RemoveRange(ProcLineIndex, EndMacro - ProcLineIndex + 1);
+
+                    if (!Procedures.Contains(ProcName))
+                        Procedures.Add(ProcName);
+                    else
+                        outScript.ParseErrors.Add(ParseException.ProcDoubleError(SplitDefinition));
 
                     // Error if procedure recursion is detected
                     if (ProcLines.Select(x => x.ToUpper()).Contains(ProcedureString))
@@ -272,17 +279,27 @@ namespace NPC_Maker.Scripts
             while(ElifLineIndex != -1)
             {
                 bool InIfScope = false;
+                int ScopeCounter = 0;
 
                 // Checking if the elif is in scope.
                 for (int i = ElifLineIndex; i >= 0; i--)
                 {
-                    if (Lines[i].ToUpper().StartsWith(Lists.Keyword_EndIf) || Lines[i].ToUpper().StartsWith(Lists.Keyword_Else))
+                    if (Lines[i].ToUpper().StartsWith(Lists.Keyword_EndIf))
+                        ScopeCounter++;
+
+                    if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Else) && ScopeCounter == 0)
                         break;
+
 
                     if (Lines[i].ToUpper().StartsWith(Lists.Instructions.IF.ToString()))
                     {
-                        InIfScope = true;
-                        break;
+                        if (ScopeCounter == 0)
+                        {
+                            InIfScope = true;
+                            break;
+                        }
+                        else
+                            ScopeCounter--;
                     }    
                 }
 
@@ -427,19 +444,15 @@ namespace NPC_Maker.Scripts
                 List<UInt16> Offsets = new List<UInt16>();
                 List<byte> InstructionBytes = new List<byte>();
 
-                UInt16 HeaderOffs = 0;
+                UInt32 HeaderOffs = 0;
 
                 foreach (Instruction Inst in Instructions)
                 {
                     byte[] Data = Inst.ToBytes(Labels);
 
-                    Offsets.Add(HeaderOffs);
+                    Offsets.Add((UInt16)HeaderOffs);
                     InstructionBytes.AddRange(Data);
                     HeaderOffs += (UInt16)Data.Length;
-
-                    // If we exceed 16 bit range of addresses, the script is deemed too big (So, max script size is about 63KB. Plenty enough.)
-                    if (HeaderOffs > UInt16.MaxValue)
-                        throw ParseException.ScriptTooBigError();
                 }
 
                 for (int i = 0; i < Offsets.Count; i++)
@@ -453,6 +466,10 @@ namespace NPC_Maker.Scripts
 
                 Out.AddRange(InstructionBytes);
                 Helpers.Ensure4ByteAlign(Out);
+
+                // If we exceed 16 bit range of addresses, the script is deemed too big (So, max script size is about 63KB. Plenty enough.)
+                if (Out.Count > UInt16.MaxValue)
+                    throw ParseException.ScriptTooBigError();
 
                 return Out.ToArray();
             }

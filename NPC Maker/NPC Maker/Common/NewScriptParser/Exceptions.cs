@@ -34,6 +34,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Number of arguments doesn't match.", String.Join(" ", _Line));
         }
 
+        public static ParseException ProcDoubleError(string[] _Line)
+        {
+            return new ParseException("Procedure defined twice or more: ", String.Join(" ", _Line));
+        }
+
         public static ParseException ScriptTooBigError()
         {
             return new ParseException("Script has exceeded the maximum allowed amount of bytes.", "");
