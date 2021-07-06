@@ -303,7 +303,7 @@ namespace NPC_Maker.Scripts
                     }    
                 }
 
-                // If not, remove the line, add an error, and continue.
+                // If not in scope, remove the line, add an error, and continue.
                 if (!InIfScope)
                 {
                     outScript.ParseErrors.Add(ParseException.ElifNotInIfScope(Lines[ElifLineIndex]));
