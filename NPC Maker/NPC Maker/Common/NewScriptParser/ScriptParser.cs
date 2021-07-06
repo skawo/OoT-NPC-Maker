@@ -264,6 +264,7 @@ namespace NPC_Maker.Scripts
             }
         }
 
+        // Change Elifs into proper sets of Else EndIf
         private List<string> ReplaceElifs(List<string> Lines, ref BScript outScript)
         {
             int ElifLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Elif));
@@ -272,9 +273,10 @@ namespace NPC_Maker.Scripts
             {
                 bool InIfScope = false;
 
+                // Checking if the elif is in scope.
                 for (int i = ElifLineIndex; i >= 0; i--)
                 {
-                    if (Lines[i].ToUpper().StartsWith(Lists.Keyword_EndIf))
+                    if (Lines[i].ToUpper().StartsWith(Lists.Keyword_EndIf) || Lines[i].ToUpper().StartsWith(Lists.Keyword_Else))
                         break;
 
                     if (Lines[i].ToUpper().StartsWith(Lists.Instructions.IF.ToString()))
@@ -284,6 +286,7 @@ namespace NPC_Maker.Scripts
                     }    
                 }
 
+                // If not, remove the line, add an error, and continue.
                 if (!InIfScope)
                 {
                     outScript.ParseErrors.Add(ParseException.ElifNotInIfScope(Lines[ElifLineIndex]));
