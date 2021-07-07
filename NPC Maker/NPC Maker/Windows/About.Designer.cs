@@ -29,67 +29,97 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.CreditsHeader = new System.Windows.Forms.Label();
+            this.Credits = new System.Windows.Forms.Label();
+            this.Logo = new System.Windows.Forms.PictureBox();
+            this.LblVersionX = new System.Windows.Forms.Label();
+            this.LblVersion = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.Logo)).BeginInit();
             this.SuspendLayout();
             // 
-            // label5
+            // CreditsHeader
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.White;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(12, 88);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(50, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Credits:";
+            this.CreditsHeader.AutoSize = true;
+            this.CreditsHeader.BackColor = System.Drawing.Color.White;
+            this.CreditsHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CreditsHeader.Location = new System.Drawing.Point(12, 186);
+            this.CreditsHeader.Name = "CreditsHeader";
+            this.CreditsHeader.Size = new System.Drawing.Size(50, 13);
+            this.CreditsHeader.TabIndex = 4;
+            this.CreditsHeader.Text = "Credits:";
             // 
-            // label6
+            // Credits
             // 
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.White;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(12, 101);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(327, 39);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "Programming: Skawo\r\nProgramming help: Dr. Disco, Nokaubure, RoadrunnerWMC, Fracta" +
-    "l\r\nManual: Skawo, RoadrunnerWMC";
+            this.Credits.AutoSize = true;
+            this.Credits.BackColor = System.Drawing.Color.White;
+            this.Credits.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Credits.Location = new System.Drawing.Point(12, 199);
+            this.Credits.Name = "Credits";
+            this.Credits.Size = new System.Drawing.Size(384, 52);
+            this.Credits.TabIndex = 5;
+            this.Credits.Text = "Programming: Skawo.\r\nProgramming help: Fig, rankaisija, z64me, Nokaubure, Roadrun" +
+    "nerWMC, Fractal\r\nSpecial thanks to: OoT decompilation team, z64ovl team\r\nManual:" +
+    " Skawo, RoadrunnerWMC";
             // 
-            // pictureBox2
+            // Logo
             // 
-            this.pictureBox2.Image = global::NPC_Maker.Properties.Resources.Untitled;
-            this.pictureBox2.Location = new System.Drawing.Point(54, 12);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(234, 67);
-            this.pictureBox2.TabIndex = 7;
-            this.pictureBox2.TabStop = false;
+            this.Logo.Image = ((System.Drawing.Image)(resources.GetObject("Logo.Image")));
+            this.Logo.Location = new System.Drawing.Point(33, 12);
+            this.Logo.Name = "Logo";
+            this.Logo.Size = new System.Drawing.Size(421, 162);
+            this.Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Logo.TabIndex = 7;
+            this.Logo.TabStop = false;
+            // 
+            // LblVersionX
+            // 
+            this.LblVersionX.AutoSize = true;
+            this.LblVersionX.BackColor = System.Drawing.Color.White;
+            this.LblVersionX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblVersionX.Location = new System.Drawing.Point(342, 161);
+            this.LblVersionX.Name = "LblVersionX";
+            this.LblVersionX.Size = new System.Drawing.Size(57, 13);
+            this.LblVersionX.TabIndex = 8;
+            this.LblVersionX.Text = "Version: ";
+            // 
+            // LblVersion
+            // 
+            this.LblVersion.AutoSize = true;
+            this.LblVersion.BackColor = System.Drawing.Color.White;
+            this.LblVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LblVersion.Location = new System.Drawing.Point(415, 161);
+            this.LblVersion.Name = "LblVersion";
+            this.LblVersion.Size = new System.Drawing.Size(39, 13);
+            this.LblVersion.TabIndex = 9;
+            this.LblVersion.Text = "X.X.X";
             // 
             // About
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(342, 149);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
+            this.ClientSize = new System.Drawing.Size(487, 262);
+            this.Controls.Add(this.LblVersion);
+            this.Controls.Add(this.LblVersionX);
+            this.Controls.Add(this.Logo);
+            this.Controls.Add(this.Credits);
+            this.Controls.Add(this.CreditsHeader);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "About";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "About";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Logo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Label CreditsHeader;
+        private System.Windows.Forms.Label Credits;
+        private System.Windows.Forms.PictureBox Logo;
+        private System.Windows.Forms.Label LblVersionX;
+        private System.Windows.Forms.Label LblVersion;
     }
 }
