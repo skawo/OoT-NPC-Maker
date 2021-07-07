@@ -3072,20 +3072,10 @@
             0,
             0,
             0});
-            this.NumUpDown_CutsceneSlot.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
             this.NumUpDown_CutsceneSlot.Name = "NumUpDown_CutsceneSlot";
             this.NumUpDown_CutsceneSlot.Size = new System.Drawing.Size(71, 20);
             this.NumUpDown_CutsceneSlot.TabIndex = 66;
             this.NumUpDown_CutsceneSlot.Tag = "CUTSCENEID";
-            this.NumUpDown_CutsceneSlot.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
             this.NumUpDown_CutsceneSlot.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Checkbox_AlwaysActive
@@ -3331,42 +3321,42 @@
             // FileMenu_New
             // 
             this.FileMenu_New.Name = "FileMenu_New";
-            this.FileMenu_New.Size = new System.Drawing.Size(180, 22);
+            this.FileMenu_New.Size = new System.Drawing.Size(143, 22);
             this.FileMenu_New.Text = "New";
             this.FileMenu_New.Click += new System.EventHandler(this.FileMenu_New_Click);
             // 
             // FileMenu_Open
             // 
             this.FileMenu_Open.Name = "FileMenu_Open";
-            this.FileMenu_Open.Size = new System.Drawing.Size(180, 22);
+            this.FileMenu_Open.Size = new System.Drawing.Size(143, 22);
             this.FileMenu_Open.Text = "Open...";
             this.FileMenu_Open.Click += new System.EventHandler(this.FileMenu_Open_Click);
             // 
             // FileMenu_Save
             // 
             this.FileMenu_Save.Name = "FileMenu_Save";
-            this.FileMenu_Save.Size = new System.Drawing.Size(180, 22);
+            this.FileMenu_Save.Size = new System.Drawing.Size(143, 22);
             this.FileMenu_Save.Text = "Save...";
             this.FileMenu_Save.Click += new System.EventHandler(this.FileMenu_Save_Click);
             // 
             // FileMenu_SaveAs
             // 
             this.FileMenu_SaveAs.Name = "FileMenu_SaveAs";
-            this.FileMenu_SaveAs.Size = new System.Drawing.Size(180, 22);
+            this.FileMenu_SaveAs.Size = new System.Drawing.Size(143, 22);
             this.FileMenu_SaveAs.Text = "Save as...";
             this.FileMenu_SaveAs.Click += new System.EventHandler(this.FileMenu_SaveAs_Click);
             // 
             // FileMenu_SaveBinary
             // 
             this.FileMenu_SaveBinary.Name = "FileMenu_SaveBinary";
-            this.FileMenu_SaveBinary.Size = new System.Drawing.Size(180, 22);
+            this.FileMenu_SaveBinary.Size = new System.Drawing.Size(143, 22);
             this.FileMenu_SaveBinary.Text = "Save binary...";
             this.FileMenu_SaveBinary.Click += new System.EventHandler(this.FileMenu_SaveBinary_Click);
             // 
             // FileMenu_Exit
             // 
             this.FileMenu_Exit.Name = "FileMenu_Exit";
-            this.FileMenu_Exit.Size = new System.Drawing.Size(180, 22);
+            this.FileMenu_Exit.Size = new System.Drawing.Size(143, 22);
             this.FileMenu_Exit.Text = "Exit";
             this.FileMenu_Exit.Click += new System.EventHandler(this.FileMenu_Exit_Click);
             // 
