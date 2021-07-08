@@ -2878,6 +2878,7 @@
             this.NumUpDown_LoopStartNode.Name = "NumUpDown_LoopStartNode";
             this.NumUpDown_LoopStartNode.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopStartNode.TabIndex = 44;
+            this.NumUpDown_LoopStartNode.Tag = "PATHSTARTID";
             this.NumUpDown_LoopStartNode.Value = new decimal(new int[] {
             1,
             0,
@@ -2916,6 +2917,7 @@
             this.NumUpDown_LoopDelay.Name = "NumUpDown_LoopDelay";
             this.NumUpDown_LoopDelay.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopDelay.TabIndex = 46;
+            this.NumUpDown_LoopDelay.Tag = "MOVDEL";
             this.NumUpDown_LoopDelay.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_LoopEndNode
@@ -2943,6 +2945,7 @@
             this.NumUpDown_LoopEndNode.Name = "NumUpDown_LoopEndNode";
             this.NumUpDown_LoopEndNode.Size = new System.Drawing.Size(66, 20);
             this.NumUpDown_LoopEndNode.TabIndex = 42;
+            this.NumUpDown_LoopEndNode.Tag = "PATHENDID";
             this.NumUpDown_LoopEndNode.Value = new decimal(new int[] {
             1,
             0,

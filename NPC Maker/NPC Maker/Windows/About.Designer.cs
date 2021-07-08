@@ -55,11 +55,11 @@
             this.Credits.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Credits.Location = new System.Drawing.Point(12, 199);
             this.Credits.Name = "Credits";
-            this.Credits.Size = new System.Drawing.Size(384, 52);
+            this.Credits.Size = new System.Drawing.Size(377, 52);
             this.Credits.TabIndex = 5;
-            this.Credits.Text = "Programming: Skawo.\r\nProgramming help: Fig, rankaisija, z64me, Nokaubure, Roadrun" +
-    "nerWMC, Fractal\r\nSpecial thanks to: OoT decompilation team, z64ovl team\r\nManual:" +
-    " Skawo, RoadrunnerWMC";
+            this.Credits.Text = "Programming: Skawo.\r\nProgramming help: Fig, rankaisija, z64me, logyk, Nokaubure, " +
+    "RoadrunnerWMC\r\nSpecial thanks to: OoT decompilation team, z64ovl team\r\nManual: S" +
+    "kawo, RoadrunnerWMC";
             // 
             // Logo
             // 
