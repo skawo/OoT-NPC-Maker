@@ -48,6 +48,8 @@ namespace NPC_Maker
         public const string Keyword_Label_Return = "__RETURN__";
         public const string Keyword_Label_Null = "__NULL__";
 
+        public const int Num_User_Vars = 10;
+
         public static List<string> AllKeywords = new List<string>()
         {
             Keyword_True,

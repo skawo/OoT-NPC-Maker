@@ -196,7 +196,7 @@ namespace NPC_Maker.Scripts
                 case (int)Lists.VarTypes.Var:
                     {
                         string[] Values = SplitLine[Index].Split('.');
-                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 1, 10));
+                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 1, Lists.Num_User_Vars));
                     }
                 default:
                     {
