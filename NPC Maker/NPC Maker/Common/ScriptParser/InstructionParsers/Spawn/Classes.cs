@@ -56,10 +56,10 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(PosRelativeness, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosZT, RotXT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ActorIDVarT, ActorVarT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(RotYT, RotZT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosXT, PosYT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosZT, RotXT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ActorIDVarT, ActorVarT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(RotYT, RotZT, 4), Data);
 
             Helpers.Ensure4ByteAlign(Data);
 

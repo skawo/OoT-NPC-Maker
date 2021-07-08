@@ -65,7 +65,7 @@ namespace NPC_Maker
                 System.Windows.Forms.MessageBox.Show($"Critical error: Got wrong amount of bytes.");
         }
 
-        public static byte SmooshTwoValues(byte a, byte b, int offset)
+        public static byte PutTwoValuesTogether(byte a, byte b, int offset)
         {
             byte o = 0;
 
@@ -110,7 +110,14 @@ namespace NPC_Maker
 
         public static byte MakeByte(bool a = false, bool b = false, bool c = false, bool d = false, bool e = false, bool f = false, bool g = false, bool h = false)
         {
-            return MakeByte(Convert.ToByte(a), Convert.ToByte(b), Convert.ToByte(c), Convert.ToByte(d), Convert.ToByte(e), Convert.ToByte(f), Convert.ToByte(g), Convert.ToByte(h));
+            return MakeByte(Convert.ToByte(a), 
+                            Convert.ToByte(b),
+                            Convert.ToByte(c), 
+                            Convert.ToByte(d), 
+                            Convert.ToByte(e), 
+                            Convert.ToByte(f), 
+                            Convert.ToByte(g), 
+                            Convert.ToByte(h));
         }
 
         public static byte MakeByte(byte a = 0, byte b = 0, byte c = 0, byte d = 0, byte e = 0, byte f = 0, byte g = 0, byte h = 0)

@@ -72,7 +72,7 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ValueType, ValueType2, 4), Data);
             Helpers.AddObjectToByteList(Condition, Data);
             Helpers.AddObjectToByteList(Value, Data);
             Helpers.AddObjectToByteList(Value2, Data);
@@ -113,8 +113,8 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Condition, ExtVarNum, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ValueType, ValueType2, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Condition, ExtVarNum, 4), Data);
             Helpers.AddObjectToByteList(Value, Data);
             Helpers.AddObjectToByteList(Value2, Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoTrue, ref Data);

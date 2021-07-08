@@ -38,7 +38,7 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(Correct.AdultText, Data);
             Helpers.AddObjectToByteList(Correct.ChildText, Data);
             Helpers.AddObjectToByteList(Correct.ItemT, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(Correct.AdultTextT, Correct.ChildTextT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Correct.AdultTextT, Correct.ChildTextT, 4), Data);
             Helpers.Ensure4ByteAlign(Data); // 28
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 28);

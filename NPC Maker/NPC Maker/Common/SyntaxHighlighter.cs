@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace NPC_Maker
 {
-    public static class FCTB
+    public static class SyntaxHighlighter
     {
         public static Style GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
         public static Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
@@ -26,30 +26,30 @@ namespace NPC_Maker
 
         public static Dictionary<List<string>, Style> StyleDict = new Dictionary<List<string>, Style>()
         {
-            {Enum.GetNames(typeof(Lists.TradeItems)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(Lists.DungeonItems)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(Lists.Items)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(Lists.AwardItems)).ToList(),  FCTB.CyanStyle},
-            {Enum.GetNames(typeof(Lists.Instructions)).ToList(),  FCTB.PurpleStyle},
-            {Lists.KeywordsBlue,  FCTB.BlueStyle},
-            {Lists.KeywordsRed,  FCTB.RedStyle},
-            {Lists.KeywordsGray,  FCTB.GrayStyle},
-            {Lists.KeywordsPurple,  FCTB.PurpleStyle},
-            {Lists.KeywordsMPurple,  FCTB.MPurpleStyle},
-            {Dicts.SFXes.Keys.ToList(),  FCTB.CyanStyle},
-            {Dicts.Music.Keys.ToList(),  FCTB.CyanStyle},
-            {Dicts.Actors.Keys.ToList(),  FCTB.CyanStyle},
-            {Dicts.ObjectIDs.Keys.ToList(),  FCTB.CyanStyle},
-            {Dicts.ActorCategories.Keys.ToList(),  FCTB.CyanStyle},
+            {Enum.GetNames(typeof(Lists.TradeItems)).ToList(),  SyntaxHighlighter.CyanStyle},
+            {Enum.GetNames(typeof(Lists.DungeonItems)).ToList(),  SyntaxHighlighter.CyanStyle},
+            {Enum.GetNames(typeof(Lists.Items)).ToList(),  SyntaxHighlighter.CyanStyle},
+            {Enum.GetNames(typeof(Lists.AwardItems)).ToList(),  SyntaxHighlighter.CyanStyle},
+            {Enum.GetNames(typeof(Lists.Instructions)).ToList(),  SyntaxHighlighter.PurpleStyle},
+            {Lists.KeywordsBlue,  SyntaxHighlighter.BlueStyle},
+            {Lists.KeywordsRed,  SyntaxHighlighter.RedStyle},
+            {Lists.KeywordsGray,  SyntaxHighlighter.GrayStyle},
+            {Lists.KeywordsPurple,  SyntaxHighlighter.PurpleStyle},
+            {Lists.KeywordsMPurple,  SyntaxHighlighter.MPurpleStyle},
+            {Dicts.SFXes.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            {Dicts.Music.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            {Dicts.Actors.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            {Dicts.ObjectIDs.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            {Dicts.ActorCategories.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
         };
 
         public static Dictionary<string, Style> RegexDict = new Dictionary<string, Style>()
         {
-            { @"/\*(.|[\r\n])*?\*/", FCTB.GreenStyle},      // Comments like /* comment */
-            { @"//.+", FCTB.GreenStyle},                    // Comments like // comment
-            { @".+:[\n\r ]+", FCTB.BoldRedStyle},           // Labels
-            { @"::([\S]+)", FCTB.RedStyle},                 // Procedure calls
-            { @"#define.+", FCTB.GreenStyle},               // Defines
+            { @"/\*(.|[\r\n])*?\*/", SyntaxHighlighter.GreenStyle},      // Comments like /* comment */
+            { @"//.+", SyntaxHighlighter.GreenStyle},                    // Comments like // comment
+            { @".+:[\n\r ]+", SyntaxHighlighter.BoldRedStyle},           // Labels
+            { @"::([\S]+)", SyntaxHighlighter.RedStyle},                 // Procedure calls
+            { @"#define.+", SyntaxHighlighter.GreenStyle},               // Defines
         };
 
         public static void ApplySyntaxHighlight(FastColoredTextBox txb, bool SyntaxHighlightingOn)
@@ -71,13 +71,13 @@ namespace NPC_Maker
 
             // Color in labels
             List<string> Labels = Scripts.ScriptParser.GetLabels(txb.Text);
-            H_SetStyle(Labels, FCTB.RedStyle, r);
+            H_SetStyle(Labels, SyntaxHighlighter.RedStyle, r);
 
             // Color in instruction subtypes
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
                 if (Dicts.FunctionSubtypes.ContainsKey(Item))
-                    H_SetStyle(Dicts.FunctionSubtypes[Item].ToList(), FCTB.GrayStyle, r);
+                    H_SetStyle(Dicts.FunctionSubtypes[Item].ToList(), SyntaxHighlighter.GrayStyle, r);
             }
 
             // Color in keywords

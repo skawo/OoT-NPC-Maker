@@ -50,8 +50,8 @@ namespace NPC_Maker.Scripts
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SubID, SpeedT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(IgnoreY, Target, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SubID, SpeedT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(IgnoreY, Target, 4), Data);
             Helpers.AddObjectToByteList(ActorIDT, Data);
 
             Helpers.AddObjectToByteList(X, Data);
@@ -61,8 +61,8 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ActorCat, Data);
             Helpers.AddObjectToByteList(Speed, Data);
 
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ActorCatT, XType, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(YType, ZType, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ActorCatT, XType, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(YType, ZType, 4), Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 32);

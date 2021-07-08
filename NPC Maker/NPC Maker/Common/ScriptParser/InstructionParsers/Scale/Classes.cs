@@ -40,9 +40,9 @@ namespace NPC_Maker.Scripts
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SubID, Target, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ActorIDT, ActorCatT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SpeedT, ScaleType, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SubID, Target, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ActorIDT, ActorCatT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SpeedT, ScaleType, 4), Data);
 
             Helpers.AddObjectToByteList(ActorID, Data);
             Helpers.AddObjectToByteList(ActorCat, Data);

@@ -168,7 +168,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
+                                UInt32 AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
                                 UInt32 Loops = 0;
                                 byte VarType2 = 0;
@@ -187,7 +187,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
+                                UInt32 AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
                                 UInt32 Value2 = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, UInt32.MaxValue));
@@ -199,7 +199,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
+                                UInt32 AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Speed = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, float.MaxValue);
@@ -231,7 +231,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                UInt32? SegmentID = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
+                                UInt32 SegmentID = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 UInt32? TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, 3, (int)SegmentID, VarType, Entry.Segments);
@@ -264,9 +264,9 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32? DListID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, VarType, Entry.ExtraDisplayLists);
+                                UInt32 DListID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, VarType, Entry.ExtraDisplayLists);
 
-                                UInt32? DlistOption = ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
+                                UInt32 DlistOption = ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
 
                                 return new InstructionSetWTwoValues((byte)SubID, DListID, VarType, DlistOption, (byte)Lists.VarTypes.Normal, 0);
                             }
@@ -276,7 +276,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32? AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
+                                UInt32 AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
                                 UInt32? Frame = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, 255));
@@ -287,7 +287,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
-                                UInt32? TrackSubType = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                                UInt32 TrackSubType = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
 
                                 switch (TrackSubType)
                                 {

@@ -202,8 +202,7 @@ namespace NPC_Maker
             Invisible = false;
             DEBUGShowCols = false;
         }
-
-        
+ 
         public List<OutputColorEntry> ParseColorEntries()
         {
             List<OutputColorEntry> Out = new List<OutputColorEntry>();
@@ -220,7 +219,6 @@ namespace NPC_Maker
             return Out;
         }
         
-
         public enum Members
         {
             NOMEMBER,

@@ -66,13 +66,13 @@ namespace NPC_Maker
             if (AutoParse)
                 DoParse();
 
-            FCTB.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
+            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
         }
 
         private void ColorizeTimer_Tick(object sender, EventArgs e)
         {
             ColorizeTimer.Stop();
-            FCTB.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
+            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
         }
 
         public void SetSyntaxHighlighting(bool Value)
@@ -103,7 +103,7 @@ namespace NPC_Maker
         {
             string[] Lines = Textbox_Script.Text.Replace(";", Environment.NewLine).Split(new[] { "\n" }, StringSplitOptions.None);
             Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
-            r.ClearStyle(FCTB.ErrorStyle);
+            r.ClearStyle(SyntaxHighlighter.ErrorStyle);
 
             Scripts.ScriptParser Parser = new Scripts.ScriptParser(Entry, Script.Text);
             Textbox_ParseErrors.Clear();

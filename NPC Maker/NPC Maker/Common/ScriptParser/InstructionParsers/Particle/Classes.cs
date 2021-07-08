@@ -77,20 +77,20 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
 
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(TypeT, RelativePos, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosXT, PosYT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PosZT, AccelXT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(AccelYT, AccelZT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(VelXT, VelYT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(VelZT, ScaleT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ScaleUpdateT, RadiusUpdateDT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(LifeT, NumBoltsT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(YawT, DListIndexT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ColorTypeT, AlphaT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PrimRGBAVarT[0], PrimRGBAVarT[1], 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(PrimRGBAVarT[2], PrimRGBAVarT[3], 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SecRGBAVarT[0], SecRGBAVarT[1], 4), Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(SecRGBAVarT[2], SecRGBAVarT[3], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(TypeT, RelativePos, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosXT, PosYT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosZT, AccelXT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(AccelYT, AccelZT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelXT, VelYT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelZT, ScaleT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ScaleUpdateT, RadiusUpdateDT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(LifeT, NumBoltsT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(YawT, DListIndexT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ColorTypeT, AlphaT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimRGBAVarT[0], PrimRGBAVarT[1], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimRGBAVarT[2], PrimRGBAVarT[3], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SecRGBAVarT[0], SecRGBAVarT[1], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SecRGBAVarT[2], SecRGBAVarT[3], 4), Data);
 
             Helpers.Ensure4ByteAlign(Data);
 

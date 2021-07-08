@@ -22,11 +22,11 @@ namespace NPC_Maker
 
         public static Dictionary<Lists.DictType, string> DictFilenames = new Dictionary<Lists.DictType, string>()
         {
-            { Lists.DictType.SFX, $"{Program.ExecPath}/SFX.csv" },
-            { Lists.DictType.Music, $"{Program.ExecPath}/Music.csv" },
-            { Lists.DictType.Actors, $"{Program.ExecPath}/Actors.csv" },
-            { Lists.DictType.Objects, $"{Program.ExecPath}/Objects.csv" },
-            { Lists.DictType.ActorCategories, $"{Program.ExecPath}/ActorCategories.csv" },
+            { Lists.DictType.SFX, $"{Program.ExecPath}/Dicts/SFX.csv" },
+            { Lists.DictType.Music, $"{Program.ExecPath}/Dicts/Music.csv" },
+            { Lists.DictType.Actors, $"{Program.ExecPath}/Dicts/Actors.csv" },
+            { Lists.DictType.Objects, $"{Program.ExecPath}/Dicts/Objects.csv" },
+            { Lists.DictType.ActorCategories, $"{Program.ExecPath}/Dicts/ActorCategories.csv" },
         };
 
         public static Dictionary<string, int> ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]);

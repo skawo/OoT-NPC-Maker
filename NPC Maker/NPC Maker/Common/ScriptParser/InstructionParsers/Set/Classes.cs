@@ -61,7 +61,7 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Operator, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ValueType, ValueType2, 4), Data);
             Helpers.AddObjectToByteList(Value, Data);
             Helpers.AddObjectToByteList(Value2, Data);
             Helpers.Ensure4ByteAlign(Data);
@@ -146,7 +146,7 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValType1, ValType2, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ValType1, ValType2, 4), Data);
             Helpers.AddObjectToByteList(ValType3, Data);
 
             Helpers.AddObjectToByteList(R, Data);
@@ -279,7 +279,7 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Target, Data);
-            Helpers.AddObjectToByteList(Helpers.SmooshTwoValues(ValueType, ValueType2, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ValueType, ValueType2, 4), Data);
             Helpers.AddObjectToByteList(Value, Data);
             Helpers.AddObjectToByteList(Value2, Data);
             Helpers.Ensure4ByteAlign(Data);

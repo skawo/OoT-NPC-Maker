@@ -458,7 +458,7 @@ namespace NPC_Maker
                     Output.AddRange(Entry);
 
                 if (ParseErrors.Count != 0)
-                    System.Windows.Forms.MessageBox.Show($"There were errors parsing NPC(s): {String.Join(",", ParseErrors)}");
+                    System.Windows.Forms.MessageBox.Show($"There were errors parsing scripts for NPC(s): {String.Join(",", ParseErrors)}. File could not be saved.");
                 else
                     File.WriteAllBytes(Path, Output.ToArray());
             }

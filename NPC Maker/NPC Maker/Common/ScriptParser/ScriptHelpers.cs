@@ -158,7 +158,6 @@ namespace NPC_Maker.Scripts
             Scale = ScriptHelpers.GetValueByType(SplitLine, Index, ScaleVarT = ScriptHelpers.GetVarType(SplitLine, Index), float.MinValue, float.MaxValue);
         }
 
-
         public static object GetValueByType(string[] SplitLine, int Index, int VarType, float Min, float Max)
         {
             switch (VarType)
@@ -215,6 +214,12 @@ namespace NPC_Maker.Scripts
                     }
 
             }
+        }
+
+        public static void GetVarTypeAndValue(string[] SplitLine, int Index, float Min, float Max, out byte Vartype, out object Value)
+        {
+            Vartype = GetVarType(SplitLine, Index);
+            Value = GetValueByType(SplitLine, Index, Vartype, Min, Max);
         }
 
         public static byte? GetSubIDForRamType(string RamType)
@@ -326,98 +331,7 @@ namespace NPC_Maker.Scripts
             return (Number.Length >= 3 && Number.StartsWith("0x"));
         }
 
-        public static UInt32? Helper_ConvertToUInt32(string Number)
-        {
-            try
-            {
-                if (IsHex(Number))
-                    return Convert.ToUInt32(Number, 16);
-                else
-                    return Convert.ToUInt32(Number);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static Int32? Helper_ConvertToInt32(string Number)
-        {
-            try
-            {
-                if (IsHex(Number))
-                    return Convert.ToInt32(Number, 16);
-                else
-                    return Convert.ToInt32(Number);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static Int64? Helper_ConvertNumeric(string Number)
-        {
-            try
-            {
-                if (IsHex(Number))
-                    return Convert.ToInt64(Number, 16);
-                else
-                    return Convert.ToInt64(Number);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static UInt64? Helper_ConvertSignedNumeric(string Number)
-        {
-            try
-            {
-                if (IsHex(Number))
-                    return Convert.ToUInt64(Number, 16);
-                else
-                    return Convert.ToUInt64(Number);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-
-        public static UInt16? Helper_ConvertToUInt16(string Number)
-        {
-            try
-            {
-                if (IsHex(Number))
-                    return Convert.ToUInt16(Number, 16);
-                else
-                    return Convert.ToUInt16(Number);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static Int16? Helper_ConvertToInt16(string Number)
-        {
-            try
-            {
-                if (IsHex(Number))
-                    return Convert.ToInt16(Number, 16);
-                else
-                    return Convert.ToInt16(Number);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static UInt32? Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
+        public static UInt32 Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
         {
             try
             {
@@ -438,7 +352,7 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static UInt32? Helper_GetEnumByNameOrVarType(string[] SplitLine, int Index, byte VarType, Type EnumType, ParseException Throw)
+        public static UInt32 Helper_GetEnumByNameOrVarType(string[] SplitLine, int Index, byte VarType, Type EnumType, ParseException Throw)
         {
             try
             {
@@ -481,26 +395,66 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static UInt32? Helper_GetAnimationID(string[] SplitLine, int Index, byte VarType, List<AnimationEntry> Animations)
+        private static Int32 Helper_GetValFromDict(string[] SplitLine, int Index, int VarType, int RangeMin, int RangeMax, 
+                                                   Dictionary<string, int> Dict, ParseException ToThrow)
         {
-            UInt32? AnimID = null;
-
-            for (int i = 0; i < Animations.Count; i++)
+            try
             {
-                if (SplitLine[Index].ToLower() == Animations[i].Name.Replace(" ", "").ToLower())
+                return Convert.ToInt32(Dict[SplitLine[Index].ToUpper()]);
+            }
+            catch (Exception)
+            {
+                try
                 {
-                    AnimID = (UInt32)i;
+                    return Convert.ToInt32(GetValueByType(SplitLine, Index, VarType, RangeMin, RangeMax));
+                }
+                catch (Exception)
+                {
+                    throw ToThrow;
+                }
+            }
+        }
+
+        public static UInt32 Helper_GetActorId(string[] SplitLine, int Index, int VarType)
+        {
+            return (UInt32)Helper_GetValFromDict(SplitLine, Index, VarType, 0, UInt16.MaxValue, Dicts.Actors, ParseException.UnrecognizedActor(SplitLine));
+        }
+
+        public static Int32 Helper_GetActorCategory(string[] SplitLine, int Index, int VarType)
+        {
+            return Helper_GetValFromDict(SplitLine, Index, VarType, 0, 11, Dicts.ActorCategories, ParseException.UnrecognizedActorCategory(SplitLine));
+        }
+
+        public static Int32 Helper_GetSFXId(string[] SplitLine, int Index, int VarType)
+        {
+            return Helper_GetValFromDict(SplitLine, Index, VarType, -1, Int16.MaxValue, Dicts.SFXes, ParseException.UnrecognizedSFX(SplitLine));
+        }
+
+        public static Int32 Helper_GetMusicId(string[] SplitLine, int Index, int VarType)
+        {
+            return Helper_GetValFromDict(SplitLine, Index, VarType, -1, Int16.MaxValue, Dicts.Music, ParseException.UnrecognizedBGM(SplitLine));
+        }
+
+        private static UInt32 Helper_GetFromStringList(string[] SplitLine, int Index, byte VarType, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow)
+        {
+            UInt32? Ret = null;
+
+            for (int i = 0; i < SList.Count; i++)
+            {
+                if (SplitLine[Index].ToLower() == SList[i].Replace(" ", "").ToLower())
+                {
+                    Ret = (UInt32)i;
                     break;
                 }
             }
 
-            if (AnimID != null)
-                return AnimID;
+            if (Ret != null)
+                return (UInt32)Ret;
             else
             {
                 try
                 {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, Animations.Count));
+                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, RangeMin, RangeMax));
                 }
                 catch (Exception)
                 {
@@ -509,136 +463,19 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static UInt32 Helper_GetActorId(string[] SplitLine, int Index, int VarType)
+        public static UInt32 Helper_GetAnimationID(string[] SplitLine, int Index, byte VarType, List<AnimationEntry> Animations)
         {
-            try
-            {
-                return Convert.ToUInt32(Dicts.Actors[SplitLine[Index].ToUpper()]);
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, UInt16.MaxValue));
-                }
-                catch (Exception)
-                {
-                    throw ParseException.UnrecognizedActor(SplitLine);
-                }
-            }
-        }
-
-        public static Int32 Helper_GetActorCategory(string[] SplitLine, int Index, int VarType)
-        {
-            try
-            {
-                return Convert.ToInt32(Dicts.ActorCategories[SplitLine[Index].ToUpper()]);
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    return Convert.ToInt32(GetValueByType(SplitLine, Index, VarType, 0, 11));
-                }
-                catch (Exception)
-                {
-                    throw ParseException.UnrecognizedActorCategory(SplitLine);
-                }
-            }
-        }
-
-        public static Int32 Helper_GetSFXId(string[] SplitLine, int Index, int VarType)
-        {
-            try
-            {
-                return Convert.ToInt32(Dicts.SFXes[SplitLine[Index].ToUpper()]);
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    return Convert.ToInt32(GetValueByType(SplitLine, Index, VarType, -1, Int16.MaxValue));
-                }
-                catch (Exception)
-                {
-                    throw ParseException.UnrecognizedSFX(SplitLine);
-                }
-            }
-        }
-
-        public static Int32 Helper_GetMusicId(string[] SplitLine, int Index, int VarType)
-        {
-            try
-            {
-                return Convert.ToInt32(Dicts.Music[SplitLine[Index].ToUpper()]);
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    return Convert.ToInt32(GetValueByType(SplitLine, Index, VarType, -1, Int16.MaxValue));
-                }
-                catch (Exception)
-                {
-                    throw ParseException.UnrecognizedBGM(SplitLine);
-                }
-            }
+            return Helper_GetFromStringList(SplitLine, Index, VarType, Animations.Select(x => x.Name).ToList(), 0, Animations.Count, ParseException.UnrecognizedAnimation(SplitLine));
         }
 
         public static UInt32 Helper_GetSegmentDataEntryID(string[] SplitLine, int Index, int Segment, byte VarType, List<List<SegmentEntry>> Textures)
         {
-            UInt32? TexID = null;
-
-            for (int i = 0; i < Textures[Segment].Count; i++)
-            {
-                if (SplitLine[Index].ToLower() == Textures[Segment][i].Name.Replace(" ", "").ToLower())
-                {
-                    TexID = (UInt32)i;
-                    break;
-                }
-            }
-
-            if (TexID != null)
-                return (UInt32)TexID;
-            else
-            {
-                try
-                {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, Textures[Segment].Count));
-                }
-                catch (Exception)
-                {
-                    throw ParseException.UnrecognizedSegmentDataEntry(SplitLine);
-                }
-            }
+            return Helper_GetFromStringList(SplitLine, Index, VarType, Textures[Segment].Select(x => x.Name).ToList(), 0, Textures.Count, ParseException.UnrecognizedSegmentDataEntry(SplitLine));
         }
 
         public static UInt32 Helper_GetDListID(string[] SplitLine, int Index, byte VarType, List<DListEntry> DLists)
         {
-            UInt32? DListID = null;
-
-            for (int i = 0; i < DLists.Count; i++)
-            {
-                if (SplitLine[Index].ToLower() == DLists[i].Name.Replace(" ", "").ToLower())
-                {
-                    DListID = (UInt32)i;
-                    break;
-                }
-            }
-
-            if (DListID != null)
-                return (UInt32)DListID;
-            else
-            {
-                try
-                {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, 0, DLists.Count));
-                }
-                catch (Exception)
-                {
-                    throw ParseException.UnrecognizedDList(SplitLine);
-                }
-            }
+            return Helper_GetFromStringList(SplitLine, Index, VarType, DLists.Select(x => x.Name).ToList(), 0, DLists.Count, ParseException.UnrecognizedDList(SplitLine));
         }
     }
 }
