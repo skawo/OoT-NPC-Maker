@@ -30,9 +30,9 @@ namespace NPC_Maker
         public const string Keyword_Else = "ELSE";
         public const string Keyword_ScriptVar = "VAR";
         public const string Keyword_RNG = "RANDOM";
-        public const string Keyword_RAM8 = "RAM8";
-        public const string Keyword_RAM16 = "RAM16";
-        public const string Keyword_RAM32 = "RAM32";
+        public const string Keyword_GlobalF = "GLOBALF";
+        public const string Keyword_PlayerF = "PLAYERF";
+        public const string Keyword_SelfF = "SELFF";
         public const string Keyword_Global8 = "GLOBAL8";
         public const string Keyword_Global16 = "GLOBAL16";
         public const string Keyword_Global32 = "GLOBAL32";
@@ -73,18 +73,18 @@ namespace NPC_Maker
             Keyword_ScriptVar,
             Keyword_RNG,
             Keyword_CallProcedure,
-            Keyword_RAM8,
-            Keyword_RAM16,
-            Keyword_RAM32,
             Keyword_Global8,
             Keyword_Global16,
             Keyword_Global32,
+            Keyword_GlobalF,
             Keyword_Player8,
             Keyword_Player16,
             Keyword_Player32,
+            Keyword_PlayerF,
             Keyword_Self8,
             Keyword_Self16,
             Keyword_Self32,
+            Keyword_SelfF,
             Keyword_EndOcarina,
         };
 
@@ -143,9 +143,9 @@ namespace NPC_Maker
         {
             Keyword_ScriptVar,
             Keyword_RNG,
-            Keyword_RAM8,
-            Keyword_RAM16,
-            Keyword_RAM32,
+            Keyword_GlobalF,
+            Keyword_PlayerF,
+            Keyword_SelfF,
             Keyword_Global8,
             Keyword_Global16,
             Keyword_Global32,
@@ -161,18 +161,18 @@ namespace NPC_Maker
         {
             Normal = 0,
             Random = 1,
-            Ram8 = 2,
-            Ram16 = 3,
-            Ram32 = 4,
-            Global8 = 5,
-            Global16 = 6,
-            Global32 = 7,
-            Player8 = 8,
-            Player16 = 9,
-            Player32 = 10,
-            Self8 = 11,
-            Self16 = 12,
-            Self32 = 13,
+            Global8 = 2,
+            Global16 = 3,
+            Global32 = 4,
+            Globalf = 5,
+            Player8 = 6,
+            Player16 = 7,
+            Player32 = 8,
+            Playerf = 9,
+            Self8 = 10,
+            Self16 = 11,
+            Self32 = 12,
+            Selff = 13,
             Var = 14,
         }
 
@@ -235,18 +235,18 @@ namespace NPC_Maker
         public enum IfWhileAwaitSetRamSubTypes
         {
             Random = 241,
-            Ram8 = 242,
-            Ram16 = 243,
-            Ram32 = 244,
-            Global8 = 245,
-            Global16 = 246,
-            Global32 = 247,
-            Player8 = 248,
-            Player16 = 249,
-            Player32 = 250,
-            Self8 = 251,
-            Self16 = 252,
-            Self32 = 253,
+            Global8 = 242,
+            Global16 = 243,
+            Global32 = 244,
+            GlobalF = 245,
+            Player8 = 246,
+            Player16 = 247,
+            Player32 = 248,
+            PlayerF = 249,
+            Self8 = 250,
+            Self16 = 251,
+            Self32 = 252,
+            SelfF = 253,
             Var = 254,
         }
 

@@ -173,22 +173,18 @@ namespace NPC_Maker.Scripts
                                                                                    (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
                     }
                 
-                case (int)Lists.VarTypes.Ram8:
-                case (int)Lists.VarTypes.Ram16:
-                case (int)Lists.VarTypes.Ram32:
-                    {
-                        string[] Values = SplitLine[Index].Split('.');
-                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 0x80000000, 0x88000000));
-                    }
                 case (int)Lists.VarTypes.Player8:
                 case (int)Lists.VarTypes.Player16:
                 case (int)Lists.VarTypes.Player32:
+                case (int)Lists.VarTypes.Playerf:
                 case (int)Lists.VarTypes.Global8:
                 case (int)Lists.VarTypes.Global16:
                 case (int)Lists.VarTypes.Global32:
+                case (int)Lists.VarTypes.Globalf:
                 case (int)Lists.VarTypes.Self8:
                 case (int)Lists.VarTypes.Self16:
                 case (int)Lists.VarTypes.Self32:
+                case (int)Lists.VarTypes.Selff:
                     {
                         string[] Values = SplitLine[Index].Split('.');
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 0, 0x88000000));
@@ -228,30 +224,30 @@ namespace NPC_Maker.Scripts
 
             if (RamType.StartsWith(Lists.Keyword_RNG))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Random;
-            else if (RamType.StartsWith(Lists.Keyword_RAM8))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Ram8;
-            else if (RamType.StartsWith(Lists.Keyword_RAM16))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Ram16;
-            else if (RamType.StartsWith(Lists.Keyword_RAM32))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Ram32;
             else if (RamType.StartsWith(Lists.Keyword_Global8))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Global8;
             else if (RamType.StartsWith(Lists.Keyword_Global16))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Global16;
             else if (RamType.StartsWith(Lists.Keyword_Global32))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Global32;
+            else if (RamType.StartsWith(Lists.Keyword_GlobalF))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.GlobalF;
             else if (RamType.StartsWith(Lists.Keyword_Player8))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Player8;
             else if (RamType.StartsWith(Lists.Keyword_Player16))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Player16;
             else if (RamType.StartsWith(Lists.Keyword_Player32))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Player32;
+            else if (RamType.StartsWith(Lists.Keyword_PlayerF))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.PlayerF;
             else if (RamType.StartsWith(Lists.Keyword_Self8))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self8;
             else if (RamType.StartsWith(Lists.Keyword_Self16))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self16;
             else if (RamType.StartsWith(Lists.Keyword_Self32))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self32;
+            else if (RamType.StartsWith(Lists.Keyword_SelfF))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.SelfF;
             else if (RamType.StartsWith(Lists.Keyword_ScriptVar))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var;
             else
@@ -290,21 +286,14 @@ namespace NPC_Maker.Scripts
             if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_RNG))
                 return (int)Lists.VarTypes.Random;
 
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_RAM8))
-                return (int)Lists.VarTypes.Ram8;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_RAM16))
-                return (int)Lists.VarTypes.Ram16;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_RAM32))
-                return (int)Lists.VarTypes.Ram32;
-
-
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Global8))
                 return (int)Lists.VarTypes.Global8;
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Global16))
                 return (int)Lists.VarTypes.Global16;
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Global32))
                 return (int)Lists.VarTypes.Global32;
-
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_GlobalF))
+                return (int)Lists.VarTypes.Globalf;
 
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Player8))
                 return (int)Lists.VarTypes.Player8;
@@ -312,6 +301,8 @@ namespace NPC_Maker.Scripts
                 return (int)Lists.VarTypes.Player16;
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Player32))
                 return (int)Lists.VarTypes.Player32;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_PlayerF))
+                return (int)Lists.VarTypes.Playerf;
 
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Self8))
                 return (int)Lists.VarTypes.Self8;
@@ -319,6 +310,8 @@ namespace NPC_Maker.Scripts
                 return (int)Lists.VarTypes.Self16;
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Self32))
                 return (int)Lists.VarTypes.Self32;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_SelfF))
+                return (int)Lists.VarTypes.Selff;
 
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_ScriptVar))
                 return (int)Lists.VarTypes.Var;
@@ -458,7 +451,7 @@ namespace NPC_Maker.Scripts
                 }
                 catch (Exception)
                 {
-                    throw ParseException.UnrecognizedAnimation(SplitLine);
+                    throw ToThrow;
                 }
             }
         }
