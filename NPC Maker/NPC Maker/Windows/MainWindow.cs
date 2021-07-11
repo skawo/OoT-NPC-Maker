@@ -28,6 +28,17 @@ namespace NPC_Maker
         {
             InitializeComponent();
 
+            foreach(TabPage Page in TabControl_Segments.TabPages)
+            {
+                Controls.SegmentDataGrid sg = new Controls.SegmentDataGrid();
+                sg.Grid.CellParsing += DataGridViewSegments_CellParse;
+                sg.Grid.CellMouseDoubleClick += Segments_CellMouseDoubleClick;
+                sg.Grid.KeyUp += DataGridViewSegments_KeyUp;
+                sg.Dock = DockStyle.Fill;
+
+                Page.Controls.Add(sg);
+            }
+
             this.DoubleBuffered = true;
 
             this.ResizeBegin += Form1_ResizeBegin;
@@ -268,7 +279,7 @@ namespace NPC_Maker
 
             for (int j = 0; j < SelectedEntry.Segments.Count; j++)
             {
-                DataGridView Grid = (TabControl_Segments.TabPages[j].Controls[0] as DataGridView);
+                DataGridView Grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
 
                 Grid.Rows.Clear();
 
@@ -1433,7 +1444,7 @@ namespace NPC_Maker
 
             SelectedEntry.Segments[Segment].Add(new SegmentEntry(Name, (uint)Address, (short)ObjectID));
 
-            DataGridView dgv = TabControl_Segments.TabPages[Segment].Controls[0] as DataGridView;
+            DataGridView dgv = (TabControl_Segments.TabPages[Segment].Controls[0] as Controls.SegmentDataGrid).Grid;
 
             if (SkipIndex != (int)SegmentsColumns.Name)
                 dgv.Rows[Index].Cells[(int)SegmentsColumns.Name].Value = Name;

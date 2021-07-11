@@ -14,5 +14,17 @@ namespace NPC_Maker
         public static void AddRangeBigEndian(this List<byte> list, Int16 item) => list.AddRange(Program.BEConverter.GetBytes(item));
         public static void AddRangeBigEndian(this List<byte> list, Int32 item) => list.AddRange(Program.BEConverter.GetBytes(item));
         public static void AddRangeBigEndian(this List<byte> list, float item) => list.AddRange(Program.BEConverter.GetBytes(item));
+
+        public static string ReplaceFirst(this string text, string search, string replace)
+        {
+            int pos = text.IndexOf(search);
+
+            if (pos < 0)
+            {
+                return text;
+            }
+
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
     }
 }

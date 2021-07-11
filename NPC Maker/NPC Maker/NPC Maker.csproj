@@ -157,6 +157,12 @@
     <Compile Include="Common\Lists.cs" />
     <Compile Include="Common\ScriptParser\ScriptParser.cs" />
     <Compile Include="Common\ScriptParser\InstructionParsers\Common\Classes.cs" />
+    <Compile Include="Controls\SegmentDataGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SegmentDataGrid.Designer.cs">
+      <DependentUpon>SegmentDataGrid.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -203,6 +209,9 @@
     </Compile>
     <EmbeddedResource Include="Controls\ScriptEditor.resx">
       <DependentUpon>ScriptEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SegmentDataGrid.resx">
+      <DependentUpon>SegmentDataGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\About.resx">
       <DependentUpon>About.cs</DependentUpon>

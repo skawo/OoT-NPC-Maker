@@ -15,6 +15,12 @@ namespace NPC_Maker.Scripts
             return Regex.Replace(Orig, Pattern, Replacement, regexOptions);
         }
 
+        static public string ReplaceFirstExpr(this string Orig, string Expr, string Replacement, RegexOptions regexOptions = RegexOptions.None)
+        {
+            var regex = new Regex(String.Format(@"\b{0}\b", Regex.Escape(Expr)), regexOptions);
+            return regex.Replace(Orig, Replacement, 1);
+        }
+
         public static void ErrorIfNumParamsNotEq(string[] Splitline, int Number)
         {
             if (Splitline.Count() != Number)

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace NPC_Maker
 {
-    class CustomDataGridView : System.Windows.Forms.DataGridView
+    public class CustomDataGridView : System.Windows.Forms.DataGridView
     {
         public CustomDataGridView()
         {
