@@ -28,6 +28,8 @@ namespace NPC_Maker
         public const string Keyword_TradeSucccess = "SUCCESS";
         public const string Keyword_TradeNone = "TALKED_TO";
         public const string Keyword_Else = "ELSE";
+        public const string Keyword_Or = "OR";
+        public const string Keyword_And = "AND";
         public const string Keyword_ScriptVar = "VAR";
         public const string Keyword_RNG = "RANDOM";
         public const string Keyword_GlobalF = "GLOBALF";
@@ -70,6 +72,8 @@ namespace NPC_Maker
             Keyword_TradeSucccess,
             Keyword_TradeNone,
             Keyword_Else,
+            Keyword_And,
+            Keyword_Or,
             Keyword_ScriptVar,
             Keyword_RNG,
             Keyword_CallProcedure,
@@ -154,7 +158,9 @@ namespace NPC_Maker
             Keyword_Player32,
             Keyword_Self8,
             Keyword_Self16,
-            Keyword_Self32
+            Keyword_Self32,
+            Keyword_And,
+            Keyword_Or,
         };
 
         public enum VarTypes

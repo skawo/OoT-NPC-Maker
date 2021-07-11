@@ -42,6 +42,8 @@ namespace NPC_Maker.Scripts
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
+            Lines = ReplaceOrs(Lines, ref outScript);
+            Lines = ReplaceAnds(Lines, ref outScript);
             CheckLabels(Lines);
 
             List<Instruction> Instructions = GetInstructions(Lines);
@@ -269,6 +271,109 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Add(ParseException.ProcedureError());
                 return Lines;
             }
+        }
+
+        private List<string> ReplaceOrs(List<string> Lines, ref BScript outScript)
+        {
+            string OrKeyword = $" {Lists.Keyword_Or} ";
+
+            int OrLineIndex = Lines.FindIndex(x => x.ToUpper().Contains(OrKeyword));
+
+            while (OrLineIndex != -1)
+            {
+                string Label = ScriptDataHelpers.RandomString(this);
+                string Line = Lines[OrLineIndex].ToUpper();
+
+                bool If = Line.StartsWith(Lists.Instructions.IF.ToString());
+                bool While = Line.StartsWith(Lists.Instructions.WHILE.ToString());
+
+                if (!If && !While)
+                {
+                    Lines.RemoveAt(OrLineIndex);
+                    outScript.ParseErrors.Add(ParseException.GeneralError(Line));
+                }
+                else
+                {
+                    string First = Line.Substring(0, Line.IndexOf(OrKeyword)).Trim();
+                    string Second = Line.Substring(Line.IndexOf(OrKeyword)).Trim();
+
+                    string Repl = "";
+                    int EndOfInstr = First.IndexOf(' ');
+
+                    if (EndOfInstr == -1)
+                        Repl = First;
+                    else
+                        Repl = First.Substring(0, EndOfInstr + 1);
+
+                    Second = Second.ReplaceFirstExpr($"{Lists.Keyword_Or} ", Repl, RegexOptions.IgnoreCase);
+
+                    Lines.RemoveAt(OrLineIndex);
+                    Lines.Insert(OrLineIndex, First);
+                    Lines.Insert(OrLineIndex + 1, $"{Lists.Instructions.GOTO} {Label}");
+                    Lines.Insert(OrLineIndex + 2, If ? Lists.Keyword_EndIf : Lists.Keyword_EndWhile);
+                    Lines.Insert(OrLineIndex + 3, Second);
+                    Lines.Insert(OrLineIndex + 4, $"{Label}:");
+                }
+
+                OrLineIndex = Lines.FindIndex(x => x.ToUpper().Contains(OrKeyword));
+            }
+
+            return Lines;
+        }
+
+        private List<string> ReplaceAnds(List<string> Lines, ref BScript outScript)
+        {
+            string AndKeyword = $" {Lists.Keyword_And} ";
+
+            int AndLineIndex = Lines.FindIndex(x => x.ToUpper().Contains(AndKeyword));
+
+            while (AndLineIndex != -1)
+            {
+                string Line = Lines[AndLineIndex].ToUpper();
+
+                bool If = Line.StartsWith(Lists.Instructions.IF.ToString());
+                bool While = Line.StartsWith(Lists.Instructions.WHILE.ToString());
+
+                if (!If && !While)
+                {
+                    Lines.RemoveAt(AndLineIndex);
+                    outScript.ParseErrors.Add(ParseException.GeneralError(Line));
+                }
+                else
+                {
+                    string First = Line.Substring(0, Line.IndexOf(AndKeyword)).Trim();
+                    string Second = Line.Substring(Line.IndexOf(AndKeyword)).Trim();
+
+                    string Repl = "";
+                    int EndOfInstr = First.IndexOf(' ');
+
+                    if (EndOfInstr == -1)
+                        Repl = First;
+                    else
+                        Repl = First.Substring(0, EndOfInstr + 1);
+
+                    int End = If ? GetCorrespondingEndIf(Lines, AndLineIndex) : GetCorrespondingEndWhile(Lines, AndLineIndex);
+
+                    if (End < 0)
+                    {
+                        Lines.RemoveAt(AndLineIndex);
+                        outScript.ParseErrors.Add(If ? ParseException.IfNotClosed(Lines[AndLineIndex]) : ParseException.WhileNotClosed(Lines[AndLineIndex]));
+                    }
+                    else
+                    {
+                        Second = Second.ReplaceFirstExpr($"{Lists.Keyword_And} ", Repl, RegexOptions.IgnoreCase);
+
+                        Lines.RemoveAt(AndLineIndex);
+                        Lines.Insert(AndLineIndex, First);
+                        Lines.Insert(End, If ? Lists.Keyword_EndIf : Lists.Keyword_EndWhile);
+                        Lines.Insert(AndLineIndex + 1, Second);
+                    }
+                }
+
+                AndLineIndex = Lines.FindIndex(x => x.ToUpper().Contains(AndKeyword));
+            }
+
+            return Lines;
         }
 
         // Change Elifs into proper sets of Else EndIf
