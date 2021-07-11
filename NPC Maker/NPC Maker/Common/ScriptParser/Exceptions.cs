@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NPC_Maker.Scripts
 {
@@ -114,7 +111,7 @@ namespace NPC_Maker.Scripts
             return new ParseException("A parameter is out of range: ", String.Join(" ", _Line));
         }
 
-        public static ParseException ElifNotInIfScope (string _Line)
+        public static ParseException ElifNotInIfScope(string _Line)
         {
             return new ParseException("This ELIF does not fall into IF scope: ", _Line);
         }

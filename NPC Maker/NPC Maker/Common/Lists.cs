@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NPC_Maker
 {
@@ -192,10 +190,10 @@ namespace NPC_Maker
             TRADE = 6,
             ENABLE_TALKING = 7,
             SHOW_TEXTBOX = 8,
-            ITEM = 9,  
+            ITEM = 9,
             PLAY = 10,
             KILL = 11,
-            SPAWN = 12,  
+            SPAWN = 12,
             WARP = 13,
             ROTATION = 14,
             POSITION = 15,
@@ -1315,13 +1313,13 @@ namespace NPC_Maker
 
         public enum PlayerMasks
         {
-            ITEM_MASK_KEATON, 
-            ITEM_MASK_SPOOKY, 
-            ITEM_MASK_SKULL, 
+            ITEM_MASK_KEATON,
+            ITEM_MASK_SPOOKY,
+            ITEM_MASK_SKULL,
             ITEM_MASK_BUNNY,
-            ITEM_MASK_TRUTH, 
-            ITEM_MASK_ZORA, 
-            ITEM_MASK_GORON, 
+            ITEM_MASK_TRUTH,
+            ITEM_MASK_ZORA,
+            ITEM_MASK_GORON,
             ITEM_MASK_GERUDO
         }
 
@@ -1366,7 +1364,7 @@ namespace NPC_Maker
             WITH_LIMB = 1,
             INSTEAD_OF_LIMB = 2,
         }
-   
+
         public enum PlaySubTypes
         {
             SFX = 0,

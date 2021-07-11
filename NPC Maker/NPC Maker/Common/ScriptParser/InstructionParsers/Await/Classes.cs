@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace NPC_Maker.Scripts
 {
@@ -78,7 +75,7 @@ namespace NPC_Maker.Scripts
         }
     }
 
-    public class InstructionAwaitExtVar: InstructionSubWValueType
+    public class InstructionAwaitExtVar : InstructionSubWValueType
     {
         public object Value;
         public object Value2;

@@ -1,17 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
-using FastColoredTextBoxNS;
-using Newtonsoft.Json;
-using System.Runtime.InteropServices;
 
 namespace NPC_Maker
 {
@@ -28,7 +20,7 @@ namespace NPC_Maker
         {
             InitializeComponent();
 
-            foreach(TabPage Page in TabControl_Segments.TabPages)
+            foreach (TabPage Page in TabControl_Segments.TabPages)
             {
                 Controls.SegmentDataGrid sg = new Controls.SegmentDataGrid();
                 sg.Grid.CellParsing += DataGridViewSegments_CellParse;

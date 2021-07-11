@@ -1,8 +1,6 @@
 ﻿using MiscUtil.Linq.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NPC_Maker.Scripts
 {
@@ -69,7 +67,7 @@ namespace NPC_Maker.Scripts
                                             ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 8, 9);
 
                                             ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                            ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue); 
+                                            ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
 
                                             ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
 

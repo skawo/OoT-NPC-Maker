@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -84,9 +79,9 @@ namespace NPC_Maker
 
         private void AddEntryToList(ListEntry Entry)
         {
-            listView1.Items.Add(new ListViewItem(new string[] { Entry.ID.ToString(), 
-                                                                "0x" + Entry.ID.ToString("X1"), 
-                                                                Entry.Name, 
+            listView1.Items.Add(new ListViewItem(new string[] { Entry.ID.ToString(),
+                                                                "0x" + Entry.ID.ToString("X1"),
+                                                                Entry.Name,
                                                                 Entry.Description }));
         }
 

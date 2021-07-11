@@ -1,8 +1,6 @@
-﻿using MiscUtil.Collections.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NPC_Maker.Scripts
@@ -97,7 +95,7 @@ namespace NPC_Maker.Scripts
                     Value = (float?)Convert.ToDecimal(Splitstring[Index]);
             }
             catch (Exception)
-            { 
+            {
             }
 
             if (Value == null)
@@ -178,7 +176,7 @@ namespace NPC_Maker.Scripts
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min,
                                                                                    (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
                     }
-                
+
                 case (int)Lists.VarTypes.Player8:
                 case (int)Lists.VarTypes.Player16:
                 case (int)Lists.VarTypes.Player32:
@@ -394,7 +392,7 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        private static Int32 Helper_GetValFromDict(string[] SplitLine, int Index, int VarType, int RangeMin, int RangeMax, 
+        private static Int32 Helper_GetValFromDict(string[] SplitLine, int Index, int VarType, int RangeMin, int RangeMax,
                                                    Dictionary<string, int> Dict, ParseException ToThrow)
         {
             try

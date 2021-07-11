@@ -1,8 +1,4 @@
-﻿using MiscUtil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 
 namespace NPC_Maker.Scripts
 {
@@ -52,9 +48,9 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.LIGHT_RADIUS:
                             return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
                         // case u32:
-                            //return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
+                        //return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
                         // case s32:
-                            //H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
+                        //H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.MOVEMENT_SPEED:
                         case (int)Lists.SetSubTypes.GRAVITY_FORCE:
                         case (int)Lists.SetSubTypes.TALK_RADIUS:
@@ -236,7 +232,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 UInt32? TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, 3, (int)SegmentID, VarType, Entry.Segments);
 
-                                return new InstructionSetWTwoValues((byte)SubID, SegmentID, 0, TexID, VarType, 0); 
+                                return new InstructionSetWTwoValues((byte)SubID, SegmentID, 0, TexID, VarType, 0);
                             }
                         case (int)Lists.SetSubTypes.ENV_COLOR:
                         case (int)Lists.SetSubTypes.LIGHT_COLOR:
@@ -318,7 +314,7 @@ namespace NPC_Maker.Scripts
                                 }
                             }
                         case (int)Lists.SetSubTypes.CUTSCENE_SLOT:
-                                return H_SimpleSet(SubID, SplitLine, -1, 10, typeof(Int32));
+                            return H_SimpleSet(SubID, SplitLine, -1, 10, typeof(Int32));
                         case (int)Lists.SetSubTypes.SCRIPT_START:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);

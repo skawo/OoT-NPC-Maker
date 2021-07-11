@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NPC_Maker.Scripts
 {
@@ -46,7 +44,7 @@ namespace NPC_Maker.Scripts
         public byte ValueType2;
         public byte Operator;
 
-        public InstructionSetWTwoValues(byte _SubID, object _Value, byte _ValueType, object _Value2, byte _ValueType2, byte _Operator) 
+        public InstructionSetWTwoValues(byte _SubID, object _Value, byte _ValueType, object _Value2, byte _ValueType2, byte _Operator)
                                         : base((int)Lists.Instructions.SET, _SubID, _ValueType)
         {
             Value = _Value;

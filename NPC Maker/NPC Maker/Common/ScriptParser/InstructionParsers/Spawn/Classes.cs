@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NPC_Maker.Scripts
 {
@@ -27,7 +25,7 @@ namespace NPC_Maker.Scripts
         byte RotZT { get; set; }
 
         public InstructionSpawn(byte _PosRelativeness, object _PosX, byte _PosXT, object _PosY, byte _PosYT, object _PosZ, byte _PosZT,
-                                object _RotX, byte _RotXT, object _RotY, byte _RotYT, object _RotZ, byte _RotZT, UInt32 _ActorID, byte _ActorIDVarT, 
+                                object _RotX, byte _RotXT, object _RotY, byte _RotYT, object _RotZ, byte _RotZT, UInt32 _ActorID, byte _ActorIDVarT,
                                 UInt32 _ActorVariable, byte _ActorVarT) : base((byte)Lists.Instructions.SPAWN)
         {
             PosRelativeness = _PosRelativeness;

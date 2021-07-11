@@ -1,10 +1,8 @@
-﻿using System;
+﻿using FastColoredTextBoxNS;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
-using FastColoredTextBoxNS;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace NPC_Maker

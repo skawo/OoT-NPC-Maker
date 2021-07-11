@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NPC_Maker
 {
@@ -202,7 +199,7 @@ namespace NPC_Maker
             Invisible = false;
             DEBUGShowCols = false;
         }
- 
+
         public List<OutputColorEntry> ParseColorEntries()
         {
             List<OutputColorEntry> Out = new List<OutputColorEntry>();
@@ -218,7 +215,7 @@ namespace NPC_Maker
 
             return Out;
         }
-        
+
         public enum Members
         {
             NOMEMBER,
@@ -554,7 +551,7 @@ namespace NPC_Maker
             Limb = 0;
             ObjectID = -1;
         }
-        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, 
+        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ,
                           Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, UInt16 _Limb, int _ShowType, Int16 _ObjectID)
         {
             Name = _Name;

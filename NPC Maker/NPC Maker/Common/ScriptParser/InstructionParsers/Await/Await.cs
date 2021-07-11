@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NPC_Maker.Scripts
 {
@@ -100,9 +97,9 @@ namespace NPC_Maker.Scripts
 
                                 byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 0, 5));
 
-                                return new InstructionAwaitExtVar((byte)SubID, ExtVarNum, Data, NPCID, Condition, VarType, VarType2 );
+                                return new InstructionAwaitExtVar((byte)SubID, ExtVarNum, Data, NPCID, Condition, VarType, VarType2);
                             }
-                        default: 
+                        default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
                 }

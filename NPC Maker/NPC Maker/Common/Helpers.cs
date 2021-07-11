@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace NPC_Maker
 {
@@ -110,13 +108,13 @@ namespace NPC_Maker
 
         public static byte MakeByte(bool a = false, bool b = false, bool c = false, bool d = false, bool e = false, bool f = false, bool g = false, bool h = false)
         {
-            return MakeByte(Convert.ToByte(a), 
+            return MakeByte(Convert.ToByte(a),
                             Convert.ToByte(b),
-                            Convert.ToByte(c), 
-                            Convert.ToByte(d), 
-                            Convert.ToByte(e), 
-                            Convert.ToByte(f), 
-                            Convert.ToByte(g), 
+                            Convert.ToByte(c),
+                            Convert.ToByte(d),
+                            Convert.ToByte(e),
+                            Convert.ToByte(f),
+                            Convert.ToByte(g),
                             Convert.ToByte(h));
         }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace NPC_Maker.Scripts
 {
@@ -23,8 +20,8 @@ namespace NPC_Maker.Scripts
         public byte SpeedT;
         public byte IgnoreY;
 
-        public InstructionPosition(byte _SubID, object _ActorID, byte _ActorIDT, object _ActorCat, byte _ActorCatT, object _XPos, object _YPos, object _ZPos, 
-                                   byte _XPosValueType, byte _YPosValueType, byte _ZPosValueType, byte _Target, object _Speed, byte _SpeedT, byte _IgnoreY) 
+        public InstructionPosition(byte _SubID, object _ActorID, byte _ActorIDT, object _ActorCat, byte _ActorCatT, object _XPos, object _YPos, object _ZPos,
+                                   byte _XPosValueType, byte _YPosValueType, byte _ZPosValueType, byte _Target, object _Speed, byte _SpeedT, byte _IgnoreY)
                                 : base((int)Lists.Instructions.POSITION, _SubID)
         {
             ActorCat = _ActorCat;

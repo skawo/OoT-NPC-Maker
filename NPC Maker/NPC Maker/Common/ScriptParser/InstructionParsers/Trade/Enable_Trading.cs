@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NPC_Maker.Scripts
 {
@@ -99,7 +98,7 @@ namespace NPC_Maker.Scripts
                                 LineNo++;
                                 break;
                             }
-                        default: 
+                        default:
                             throw ParseException.UnexpectedTradeInstruction(Lines[LineNo]);
                     }
 

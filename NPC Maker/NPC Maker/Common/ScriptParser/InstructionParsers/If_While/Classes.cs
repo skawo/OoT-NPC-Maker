@@ -1,8 +1,4 @@
-﻿using MiscUtil.Collections.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace NPC_Maker.Scripts
 {
@@ -15,7 +11,7 @@ namespace NPC_Maker.Scripts
         public InstructionLabel GotoTrue;
         public InstructionLabel GotoFalse;
 
-        public InstructionIfWhile(byte _ID, byte _SubID, byte _ValueType, object _Value, Lists.ConditionTypes _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr) 
+        public InstructionIfWhile(byte _ID, byte _SubID, byte _ValueType, object _Value, Lists.ConditionTypes _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr)
                              : base(_ID, _SubID, _ValueType)
         {
             Condition = (byte)_Condition;
@@ -57,7 +53,7 @@ namespace NPC_Maker.Scripts
         public object Value2;
         public byte ValueType2;
 
-        public InstructionIfWhileWithSecondValue(byte _ID, byte _SubID, byte _ValueType, object _Value, byte _ValueType2, object _Value2, 
+        public InstructionIfWhileWithSecondValue(byte _ID, byte _SubID, byte _ValueType, object _Value, byte _ValueType2, object _Value2,
                                                  Lists.ConditionTypes _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr)
                                                  : base(_ID, _SubID, _ValueType, _Value, _Condition, _EndIfLineNo, _ElseLineNo, LabelStr)
         {

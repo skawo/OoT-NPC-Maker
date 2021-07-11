@@ -1,10 +1,6 @@
-﻿using MiscUtil.Collections.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NPC_Maker.Scripts
@@ -381,7 +377,7 @@ namespace NPC_Maker.Scripts
         {
             int ElifLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Elif));
 
-            while(ElifLineIndex != -1)
+            while (ElifLineIndex != -1)
             {
                 bool InIfScope = false;
                 int ScopeCounter = 0;
@@ -405,7 +401,7 @@ namespace NPC_Maker.Scripts
                         }
                         else
                             ScopeCounter--;
-                    }    
+                    }
                 }
 
                 // If not in scope, remove the line, add an error, and continue.
