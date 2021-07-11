@@ -290,7 +290,7 @@ namespace NPC_Maker.Scripts
                 if (!If && !While)
                 {
                     Lines.RemoveAt(OrLineIndex);
-                    outScript.ParseErrors.Add(ParseException.GeneralError(Line));
+                    outScript.ParseErrors.Add(ParseException.AndOrCanOnlyBeInIfWhile(Line));
                 }
                 else
                 {
@@ -337,7 +337,7 @@ namespace NPC_Maker.Scripts
                 if (!If && !While)
                 {
                     Lines.RemoveAt(AndLineIndex);
-                    outScript.ParseErrors.Add(ParseException.GeneralError(Line));
+                    outScript.ParseErrors.Add(ParseException.AndOrCanOnlyBeInIfWhile(Line));
                 }
                 else
                 {

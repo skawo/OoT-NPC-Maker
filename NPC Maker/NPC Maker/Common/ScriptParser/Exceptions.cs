@@ -39,6 +39,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Procedure defined twice or more: ", String.Join(" ", _Line));
         }
 
+        public static ParseException AndOrCanOnlyBeInIfWhile(string _Line)
+        {
+            return new ParseException("And and Or keywords may only be used for IF and WHILE instructions: ", _Line);
+        }
+
         public static ParseException ScriptTooBigError()
         {
             return new ParseException("Script has exceeded the maximum allowed amount of bytes.", "");
