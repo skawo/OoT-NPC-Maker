@@ -139,35 +139,28 @@ namespace NPC_Maker
                         EntryBytes.Add(Entry.LightColor.G);
                         EntryBytes.Add(Entry.LightColor.B);
 
-                        EntryBytes.Add(Helpers.MakeByte(Entry.HasCollision,
-                                                        Entry.PushesSwitches,
-                                                        Entry.IgnoreYAxis,
-                                                        Entry.IsAlwaysActive,
-                                                        Entry.IsAlwaysDrawn,
-                                                        Entry.ExecuteJustScript,
-                                                        Entry.ReactsIfAttacked,
-                                                        Entry.OpensDoors));
+                        EntryBytes.Add(Convert.ToByte(Entry.HasCollision));
+                        EntryBytes.Add(Convert.ToByte(Entry.PushesSwitches));
+                        EntryBytes.Add(Convert.ToByte(Entry.IgnoreYAxis));
+                        EntryBytes.Add(Convert.ToByte(Entry.IsAlwaysActive));
+                        EntryBytes.Add(Convert.ToByte(Entry.IsAlwaysDrawn));
+                        EntryBytes.Add(Convert.ToByte(Entry.ExecuteJustScript));
+                        EntryBytes.Add(Convert.ToByte(Entry.ReactsIfAttacked));
+                        EntryBytes.Add(Convert.ToByte(Entry.OpensDoors));
+                        EntryBytes.Add(Convert.ToByte(Entry.CastsShadow));
+                        EntryBytes.Add(Convert.ToByte(Entry.IsTargettable));
+                        EntryBytes.Add(Convert.ToByte(Entry.LoopPath));
+                        EntryBytes.Add(Convert.ToByte(Entry.EnvironmentColor.A > 0));
+                        EntryBytes.Add(Convert.ToByte(Entry.FadeOut));
+                        EntryBytes.Add(Convert.ToByte(Entry.GenLight));
+                        EntryBytes.Add(Convert.ToByte(Entry.Glow));
+                        EntryBytes.Add(Convert.ToByte(Entry.DEBUGShowCols));
+                        EntryBytes.Add(Convert.ToByte(Entry.VisibleUnderLensOfTruth));
+                        EntryBytes.Add(Convert.ToByte(Entry.Invisible));
 
-                        EntryBytes.Add(Helpers.MakeByte(Entry.CastsShadow,
-                                                        Entry.IsTargettable,
-                                                        Entry.LoopPath,
-                                                        Entry.EnvironmentColor.A > 0,
-                                                        Entry.FadeOut,
-                                                        Entry.GenLight,
-                                                        Entry.Glow,
-                                                        Entry.DEBUGShowCols));
-
-                        EntryBytes.Add(Helpers.MakeByte(Entry.VisibleUnderLensOfTruth,
-                                                        Entry.Invisible,
-                                                        false,
-                                                        false,
-                                                        false,
-                                                        false,
-                                                        false,
-                                                        false));
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 32;
+                        CurLen += 48;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         EntryBytes.AddRangeBigEndian(Entry.ObjectID);

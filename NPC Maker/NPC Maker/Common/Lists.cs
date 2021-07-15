@@ -384,8 +384,10 @@ namespace NPC_Maker
             GENERATES_LIGHT,
             LIGHT_GLOW,
             PAUSE_CUTSCENE,
+            INVISIBLE,
             NO_AUTO_ANIM,
             TALK_MODE,
+
 
             PLAYER_BOMBS,
             PLAYER_BOMBCHUS,
@@ -418,14 +420,16 @@ namespace NPC_Maker
 
             MASS,
 
-            GRAVITY_FORCE,
-            MOVEMENT_PATH_ID,
             PRESS_SWITCHES,
             IS_TARGETTABLE,
-            PLAYER_CAN_MOVE,
-            ACTOR_CAN_MOVE,
+            VISIBLE_ONLY_UNDER_LENS,
             IS_ALWAYS_ACTIVE,
             IS_ALWAYS_DRAWN,
+
+            GRAVITY_FORCE,
+            MOVEMENT_PATH_ID,
+            PLAYER_CAN_MOVE,
+            ACTOR_CAN_MOVE,
             REACTS_IF_ATTACKED,
             CURRENT_ANIMATION,
             CURRENT_ANIMATION_INSTANTLY,
@@ -439,8 +443,6 @@ namespace NPC_Maker
             TIME_OF_DAY,
             EFFECT_IF_ATTACKED,
             UNSUCCESSFUL_TRADE_TEXT_ID,
-            VISIBLE_ONLY_UNDER_LENS,
-            INVISIBLE,
         }
 
         public enum AwaitSubTypes
