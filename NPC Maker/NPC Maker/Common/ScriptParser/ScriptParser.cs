@@ -95,6 +95,7 @@ namespace NPC_Maker.Scripts
 
         private static void RegexText(ref string ScriptText)
         {
+            ScriptText = Regex.Replace(ScriptText, @"\\\s+\n", " ");
             ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
             ScriptText = Regex.Replace(ScriptText, @"/\*(.|[\r\n])*?\*/", string.Empty);                                        // Remove comment blocks
