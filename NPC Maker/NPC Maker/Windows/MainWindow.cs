@@ -463,9 +463,9 @@ namespace NPC_Maker
             Label_ColHeight.Focus();
         }
 
-        private string GetScriptName()
+        private string GetScriptName(string Current = "")
         {
-            string ScriptName = "";
+            string ScriptName = Current;
             DialogResult Dr = InputBox.ShowInputDialog("Script name?", ref ScriptName);
 
             if (Dr != DialogResult.OK)
@@ -509,7 +509,7 @@ namespace NPC_Maker
                 return;
             }
 
-            string Name = GetScriptName();
+            string Name = GetScriptName(TabControl.SelectedTab.Text);
 
             if (Name != "")
             {
