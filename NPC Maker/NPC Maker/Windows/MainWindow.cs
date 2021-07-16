@@ -474,8 +474,31 @@ namespace NPC_Maker
                 return ScriptName;
         }
 
+        private bool CheckScriptOpForValidity(bool OnTab = false)
+        {
+            if (SelectedEntry == null || SelectedEntry.IsNull)
+            {
+                MessageBox.Show("No actor chosen, or actor is null.");
+                return false;
+            }
+
+            if (OnTab)
+            {
+                if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
+                {
+                    MessageBox.Show("Select a script tab first.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private void AddNewScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!CheckScriptOpForValidity())
+                return;
+
             string ScriptName = GetScriptName();
 
             if (SelectedEntry.Scripts.Count >= 255)
@@ -503,11 +526,8 @@ namespace NPC_Maker
 
         private void RenameCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
-            {
-                MessageBox.Show("Select a script tab first.");
+            if (!CheckScriptOpForValidity(true))
                 return;
-            }
 
             string Name = GetScriptName(TabControl.SelectedTab.Text);
 
@@ -521,11 +541,8 @@ namespace NPC_Maker
 
         private void DeleteCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
-            {
-                MessageBox.Show("Select a script tab first.");
+            if (!CheckScriptOpForValidity(true))
                 return;
-            }
 
             DialogResult Res = MessageBox.Show("Are you sure you want to delete this script? You cannot reverse this action!", "Removing a script", MessageBoxButtons.YesNoCancel);
 
