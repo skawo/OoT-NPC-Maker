@@ -52,10 +52,10 @@ namespace NPC_Maker.Scripts
                         // case s32:
                         //H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.GRAVITY_FORCE:
-                            return H_SimpleSet(SubID, SplitLine, Convert.ToInt32(float.MinValue), Convert.ToInt32(float.MaxValue), typeof(float));
+                            return H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(float));
                         case (int)Lists.SetSubTypes.MOVEMENT_SPEED:
                         case (int)Lists.SetSubTypes.TALK_RADIUS:
-                            return H_SimpleSet(SubID, SplitLine, 0, Convert.ToInt32(float.MaxValue), typeof(float));
+                            return H_SimpleSet(SubID, SplitLine, 0, Int32.MaxValue, typeof(float));
                         case (int)Lists.SetSubTypes.SMOOTHING_CONSTANT:
                             return H_SimpleSet(SubID, SplitLine, -2, 65535, typeof(float));
                         case (int)Lists.SetSubTypes.LOOP_MOVEMENT:

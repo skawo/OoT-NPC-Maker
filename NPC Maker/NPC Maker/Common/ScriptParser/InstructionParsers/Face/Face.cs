@@ -83,8 +83,13 @@ namespace NPC_Maker.Scripts
         }
 
         private byte GetFaceType(string[] SplitLine, int Index)
-        {
-            return (byte)ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.FaceSubtypes), Index);
+        { 
+            int ft = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.FaceSubtypes), Index);
+
+            if (ft < 0)
+                throw ParseException.UnrecognizedInstruction(SplitLine);
+
+            return (byte)ft;
         }
 
         private int GetActor(string[] SplitLine, int Index, ref UInt32 NumActor, ref Int32 NumCat, ref byte NumActorT, ref byte NumCatT)
