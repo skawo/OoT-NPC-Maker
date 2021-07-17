@@ -199,12 +199,19 @@ namespace NPC_Maker
             if (LastClickedTextbox == null)
                 return;
 
+            LastClickedTextbox.SuspendLayout();
+
+            int Scroll = LastClickedTextbox.VerticalScroll.Value;
             int start = LastClickedTextbox.SelectionStart;
             string newTxt = LastClickedTextbox.Text;
             newTxt = newTxt.Remove(LastClickedTextbox.SelectionStart, LastClickedTextbox.SelectionLength);
             newTxt = newTxt.Insert(LastClickedTextbox.SelectionStart, Text);
             LastClickedTextbox.Text = newTxt;
             LastClickedTextbox.SelectionStart = start + Text.Length;
+
+            LastClickedTextbox.VerticalScroll.Value = Scroll;
+
+            LastClickedTextbox.ResumeLayout();
         }
 
         private static void Tsmi_DoubleClick(object sender, EventArgs e)
