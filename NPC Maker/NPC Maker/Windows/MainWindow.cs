@@ -375,6 +375,9 @@ namespace NPC_Maker
 
         private void FileMenu_SaveAs_Click(object sender, EventArgs e)
         {
+            if (EditedFile == null)
+                return;
+
             SaveFileDialog SFD = new SaveFileDialog
             {
                 FileName = "ActorData.json",
@@ -392,6 +395,9 @@ namespace NPC_Maker
 
         private void FileMenu_Save_Click(object sender, EventArgs e)
         {
+            if (EditedFile == null)
+                return;
+
             if (OpenedPath == "")
                 FileMenu_SaveAs_Click(this, null);
             else
@@ -403,6 +409,10 @@ namespace NPC_Maker
 
         private void FileMenu_SaveBinary_Click(object sender, EventArgs e)
         {
+            if (EditedFile == null)
+                return;
+
+
             SaveFileDialog SFD = new SaveFileDialog
             {
                 FileName = "zobj.zobj",
