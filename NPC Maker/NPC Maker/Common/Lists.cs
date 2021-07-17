@@ -329,7 +329,6 @@ namespace NPC_Maker
             TARGET_DISTANCE,
             HEAD_LIMB,
             WAIST_LIMB,
-            MOVEMENT_TYPE,
             LOOKAT_TYPE,
             HEAD_VERT_AXIS,
             HEAD_HORIZ_AXIS,
@@ -443,6 +442,7 @@ namespace NPC_Maker
             TIME_OF_DAY,
             EFFECT_IF_ATTACKED,
             UNSUCCESSFUL_TRADE_TEXT_ID,
+            MOVEMENT_TYPE,
         }
 
         public enum AwaitSubTypes

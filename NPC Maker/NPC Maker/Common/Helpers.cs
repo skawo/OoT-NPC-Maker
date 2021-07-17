@@ -71,6 +71,16 @@ namespace NPC_Maker
             return o |= b;
         }
 
+        public static Int32 PutTwoValuesTogetherIntoWord(Int16 a, Int16 b, int offset)
+        {
+            List<byte> Bytes = new List<byte>();
+
+            Bytes.AddRange(BitConverter.GetBytes(a));
+            Bytes.AddRange(BitConverter.GetBytes(b));
+
+            return BitConverter.ToInt32(Bytes.ToArray(), 0);
+        }
+
         public static void AddObjectToByteList(object Value, List<byte> ByteList)
         {
             if (Value.GetType() == typeof(byte))

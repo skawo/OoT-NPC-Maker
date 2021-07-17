@@ -168,13 +168,20 @@ namespace NPC_Maker.Scripts
             {
                 case (int)Lists.VarTypes.Random:
                     {
-                        string[] Values = SplitLine[Index].Split('>');
+                        string[] Values = SplitLine[Index].Split('.').Last().Split('>');
 
-                        if (!Values[0].EndsWith("-"))
+                        if (!Values[0].EndsWith("-") || Values.Length != 2)
                             throw ParseException.UnrecognizedParameter(SplitLine);
 
-                        return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRange(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min,
-                                                                                   (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
+                        Values[0] = Values[0].Substring(0, Values[0].Length - 1);
+
+                        Int16 MinV = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(Values, 0, (float)Min < Int16.MinValue ? Int16.MinValue : Min,
+                                                                                      (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
+                        Int16 MaxV = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min,
+                                                                                      (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
+
+
+                        return Helpers.PutTwoValuesTogetherIntoWord(MinV, MaxV, 16);
                     }
 
                 case (int)Lists.VarTypes.Player8:
