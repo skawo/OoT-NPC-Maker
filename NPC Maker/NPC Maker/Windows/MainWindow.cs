@@ -224,6 +224,7 @@ namespace NPC_Maker
                 if (ReusableTabPages.Count != 0)
                 {
                     Page = ReusableTabPages.First();
+                    Page.Name = ScriptT.Name;
                     (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
                     ReusableTabPages.Remove(Page);
                 }

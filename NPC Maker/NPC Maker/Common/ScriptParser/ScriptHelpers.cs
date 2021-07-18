@@ -157,6 +157,24 @@ namespace NPC_Maker.Scripts
             Output[3] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex + 3, TypeOutPut[3], 0, 255));
         }
 
+        public static float GetDegrees(string[] SplitLine, int Index, float Min, float Max)
+        {
+            if (SplitLine[Index].StartsWith(Lists.Keyword_Degree))
+            {
+                string[] s = SplitLine[Index].Split('_');
+                float value = (float)ScriptHelpers.GetValueAndCheckRange(s, 1, Min, Max);
+                float degrees = (float)Rot2Deg(Convert.ToInt32(value));
+
+                if (degrees < Min || degrees > Max)
+                    throw ParseException.ParamOutOfRange(SplitLine);
+
+                return degrees;
+
+            }
+            else
+                return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
+        }
+
         public static void GetScale(string[] SplitLine, int Index, ref byte ScaleVarT, ref object Scale)
         {
             Scale = ScriptHelpers.GetValueByType(SplitLine, Index, ScaleVarT = ScriptHelpers.GetVarType(SplitLine, Index), float.MinValue, float.MaxValue);
@@ -175,11 +193,8 @@ namespace NPC_Maker.Scripts
 
                         Values[0] = Values[0].Substring(0, Values[0].Length - 1);
 
-                        Int16 MinV = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(Values, 0, (float)Min < Int16.MinValue ? Int16.MinValue : Min,
-                                                                                      (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
-                        Int16 MaxV = Convert.ToInt16(ScriptHelpers.GetValueAndCheckRange(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min,
-                                                                                      (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
-
+                        Int16 MinV = Convert.ToInt16(GetDegrees(Values, 0, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
+                        Int16 MaxV = Convert.ToInt16(GetDegrees(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
 
                         return Helpers.PutTwoValuesTogetherIntoWord(MinV, MaxV, 16);
                     }
@@ -207,17 +222,7 @@ namespace NPC_Maker.Scripts
                     }
                 default:
                     {
-                        if (SplitLine[Index].StartsWith(Lists.Keyword_Degree))
-                        {
-                            string[] s = SplitLine[Index].Split('_');
-                            float value = (float)ScriptHelpers.GetValueAndCheckRange(s, 1, Min, Max);
-
-                            return (float)Rot2Deg(Convert.ToInt32(value));
-
-                        }
-                        else
-                            return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
-
+                        return GetDegrees(SplitLine, Index, Min, Max);
                     }
 
             }
