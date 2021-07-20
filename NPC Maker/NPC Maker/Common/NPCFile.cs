@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NPC_Maker
 {
@@ -107,6 +108,8 @@ namespace NPC_Maker
 
         public List<ColorEntry> DisplayListColors { get; set; }
 
+        public List<MessageEntry> Messages { get; set; }
+
         public bool DEBUGShowCols { get; set; }
 
         public NPCEntry()
@@ -183,6 +186,8 @@ namespace NPC_Maker
             Scripts = new List<ScriptEntry>();
 
             Segments = new List<List<SegmentEntry>>();
+
+            Messages = new List<MessageEntry>();
 
             EnvironmentColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
             BlinkPattern = "";
@@ -518,6 +523,378 @@ namespace NPC_Maker
         {
             Color = _Color;
             Limbs = _Limb;
+        }
+    }
+
+    public class MessageEntry
+    {
+        public string Name { get; set; }
+        public string MessageText { get; set; }
+        public int Type { get; set; }
+        public int Position { get; set; }
+
+        public MessageEntry()
+        {
+        }
+
+        // Below taken and edited from 
+        // https://github.com/Sage-of-Mirrors/Ocarina-Text-Editor
+
+        public byte GetMessageTypePos()
+        {
+            byte Out = (byte)(Type << 4);
+            return (byte)(Out | Position);
+        }
+
+        public List<byte> ConvertTextData()
+        {
+            List<byte> data = new List<byte>();
+
+            for (int i = 0; i < MessageText.Length; i++)
+            {
+                if (MessageText[i] == '\r')
+                {
+                    MessageText = MessageText.Remove(i, 1);
+                    i--;
+                }
+            }
+
+            for (int i = 0; i < MessageText.Length; i++)
+            {
+                // Not a control code, copy char to output buffer
+                if (MessageText[i] != '<')
+                {
+                    if (Dicts.MessageControlCodes.ContainsValue(MessageText[i].ToString()))
+                    {
+                        data.Add((byte)Dicts.MessageControlCodes.First(x => x.Value == MessageText[i].ToString()).Key);
+                    }
+                    else if (MessageText[i] == '\n')
+                    {
+                        try
+                        {
+                            data.Add((byte)Lists.MsgControlCode.Line_Break);
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            data.Add((byte)Lists.MsgControlCode.Line_Break);
+                        }
+                    }
+                    else if (MessageText[i] == '\r')
+                    {
+                        // Do nothing
+                    }
+                    else
+                    {
+                        data.Add((byte)MessageText[i]);
+                    }
+                    continue;
+                }
+                // Control code end tag. This should never be encountered on its own.
+                else if (MessageText[i] == '>')
+                {
+                    // This should be an error handler
+                }
+                // We've got a control code
+                else
+                {
+                    // Buffer for the control code
+                    List<char> controlCode = new List<char>();
+
+                    while (MessageText[i] != '>')
+                    {
+                        // Add code chars to the buffer
+                        controlCode.Add(MessageText[i]);
+                        // Increase i so we can skip the code when we're done parsing
+                        i++;
+                    }
+
+                    // Remove the < chevron from the beginning of the code
+                    controlCode.RemoveAt(0);
+
+                    string parsedCode = new string(controlCode.ToArray());
+
+                    if (parsedCode.ToLower() == "new box")
+                    {
+                        data.RemoveAt(data.Count - 1); // Removes the last \n, which was added during import
+                        i++; // Skips next \n, added at import
+                    }
+
+                    data.AddRange(GetControlCode(parsedCode.Split(':')));
+                }
+            }
+
+            data.Add(0x02);
+
+            return data;
+        }
+
+        private List<byte> GetControlCode(string[] code)
+        {
+            List<byte> output = new List<byte>();
+
+            switch (code[0].ToLower())
+            {
+                case "line break":
+                    output.Add((byte)Lists.MsgControlCode.Line_Break);
+                    break;
+                case "box break":
+                    output.Add((byte)Lists.MsgControlCode.Box_Break);
+                    break;
+                case "w":
+                    output.Add(5);
+                    output.Add((byte)Lists.MsgColor.W);
+                    break;
+                case "r":
+                    output.Add(5);
+                    output.Add((byte)Lists.MsgColor.R);
+                    break;
+                case "g":
+                    output.Add(5);
+                    output.Add((byte)Lists.MsgColor.G);
+                    break;
+                case "b":
+                    output.Add(5);
+                    output.Add((byte)Lists.MsgColor.B);
+                    break;
+                case "c":
+                    output.Add(5);
+                    output.Add((byte)Lists.MsgColor.C);
+                    break;
+                case "m":
+                    output.Add(5);
+                    output.Add((byte)Lists.MsgColor.M);
+                    break;
+                case "y":
+                    output.Add(5);
+                    output.Add((byte)Lists.MsgColor.Y);
+                    break;
+                case "blk":
+                    output.Add(5);
+                    output.Add((byte)Lists.MsgColor.Blk);
+                    break;
+                case "pixels right":
+                    output.Add((byte)Lists.MsgControlCode.Spaces);
+                    output.Add(Convert.ToByte(code[1]));
+                    break;
+                case "jump":
+                    output.Add((byte)Lists.MsgControlCode.Jump);
+                    byte[] jumpIDBytes = BitConverter.GetBytes(short.Parse(code[1], System.Globalization.NumberStyles.HexNumber));
+                    output.Add(jumpIDBytes[1]);
+                    output.Add(jumpIDBytes[0]);
+                    break;
+                case "di":
+                    output.Add((byte)Lists.MsgControlCode.Draw_Instant);
+                    break;
+                case "dc":
+                    output.Add((byte)Lists.MsgControlCode.Draw_Char);
+                    break;
+                case "shop description":
+                    output.Add((byte)Lists.MsgControlCode.Shop_Description);
+                    break;
+                case "event":
+                    output.Add((byte)Lists.MsgControlCode.Event);
+                    break;
+                case "delay":
+                    output.Add((byte)Lists.MsgControlCode.Delay);
+                    output.Add(Convert.ToByte(code[1]));
+                    break;
+                case "fade":
+                    output.Add((byte)Lists.MsgControlCode.Fade);
+                    output.Add(Convert.ToByte(code[1]));
+                    break;
+                case "player":
+                    output.Add((byte)Lists.MsgControlCode.Player);
+                    break;
+                case "ocarina":
+                    output.Add((byte)Lists.MsgControlCode.Ocarina);
+                    break;
+                case "sound":
+                    output.Add((byte)Lists.MsgControlCode.Sound);
+                    short soundValue = 0;
+                    switch (code[1].ToLower())
+                    {
+                        case "item fanfare":
+                            soundValue = (short)Lists.MsgSound.Item_Fanfare;
+                            break;
+                        case "frog ribbit 1":
+                            soundValue = (short)Lists.MsgSound.Frog_Ribbit_1;
+                            break;
+                        case "frog ribbit 2":
+                            soundValue = (short)Lists.MsgSound.Frog_Ribbit_2;
+                            break;
+                        case "deku squeak":
+                            soundValue = (short)Lists.MsgSound.Deku_Squeak;
+                            break;
+                        case "deku cry":
+                            soundValue = (short)Lists.MsgSound.Deku_Cry;
+                            break;
+                        case "generic event":
+                            soundValue = (short)Lists.MsgSound.Generic_Event;
+                            break;
+                        case "poe vanishing":
+                            soundValue = (short)Lists.MsgSound.Poe_Vanishing;
+                            break;
+                        case "twinrova 1":
+                            soundValue = (short)Lists.MsgSound.Twinrova_1;
+                            break;
+                        case "twinrova 2":
+                            soundValue = (short)Lists.MsgSound.Twinrova_2;
+                            break;
+                        case "navi hello":
+                            soundValue = (short)Lists.MsgSound.Navi_Hello;
+                            break;
+                        case "talon ehh":
+                            soundValue = (short)Lists.MsgSound.Talon_Ehh;
+                            break;
+                        case "carpenter waaaa":
+                            soundValue = (short)Lists.MsgSound.Carpenter_Waaaa;
+                            break;
+                        case "navi hey":
+                            soundValue = (short)Lists.MsgSound.Navi_HEY;
+                            break;
+                        case "saria giggle":
+                            soundValue = (short)Lists.MsgSound.Saria_Giggle;
+                            break;
+                        case "yaaaa":
+                            soundValue = (short)Lists.MsgSound.Yaaaa;
+                            break;
+                        case "zelda heh":
+                            soundValue = (short)Lists.MsgSound.Zelda_Heh;
+                            break;
+                        case "zelda awww":
+                            soundValue = (short)Lists.MsgSound.Zelda_Awww;
+                            break;
+                        case "zelda huh":
+                            soundValue = (short)Lists.MsgSound.Zelda_Huh;
+                            break;
+                        case "generic giggle":
+                            soundValue = (short)Lists.MsgSound.Generic_Giggle;
+                            break;
+                        case "unused 1":
+                            soundValue = (short)Lists.MsgSound.Unused_1;
+                            break;
+                        case "moo":
+                            soundValue = (short)Lists.MsgSound.Moo;
+                            break;
+                    }
+                    byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
+                    output.Add(soundIDBytes[1]);
+                    output.Add(soundIDBytes[0]);
+                    break;
+                case "icon":
+                    output.Add((byte)Lists.MsgControlCode.Icon);
+                    output.Add(Convert.ToByte(code[1]));
+                    break;
+                case "speed":
+                    output.Add((byte)Lists.MsgControlCode.Speed);
+                    output.Add(Convert.ToByte(code[1]));
+                    break;
+                case "background":
+                    output.Add((byte)Lists.MsgControlCode.Background);
+                    byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
+                    output.Add(backgroundIDBytes[2]);
+                    output.Add(backgroundIDBytes[1]);
+                    output.Add(backgroundIDBytes[0]);
+                    break;
+                case "marathon time":
+                    output.Add((byte)Lists.MsgControlCode.Marathon_Time);
+                    break;
+                case "race time":
+                    output.Add((byte)Lists.MsgControlCode.Race_Time);
+                    break;
+                case "points":
+                    output.Add((byte)Lists.MsgControlCode.Points);
+                    break;
+                case "gold skulltulas":
+                    output.Add((byte)Lists.MsgControlCode.Gold_Skulltulas);
+                    break;
+                case "ns":
+                    output.Add((byte)Lists.MsgControlCode.No_Skip);
+                    break;
+                case "two choices":
+                    output.Add((byte)Lists.MsgControlCode.Two_Choices);
+                    break;
+                case "three choices":
+                    output.Add((byte)Lists.MsgControlCode.Three_Choices);
+                    break;
+                case "fish weight":
+                    output.Add((byte)Lists.MsgControlCode.Fish_Weight);
+                    break;
+                case "high score":
+                    output.Add((byte)Lists.MsgControlCode.High_Score);
+                    switch (code[1].ToLower())
+                    {
+                        case "archery":
+                            output.Add((byte)Lists.MsgHighScore.Archery);
+                            break;
+                        case "poe points":
+                            output.Add((byte)Lists.MsgHighScore.Poe_Points);
+                            break;
+                        case "fishing":
+                            output.Add((byte)Lists.MsgHighScore.Fishing);
+                            break;
+                        case "horse race":
+                            output.Add((byte)Lists.MsgHighScore.Horse_Race);
+                            break;
+                        case "marathon":
+                            output.Add((byte)Lists.MsgHighScore.Marathon);
+                            break;
+                        case "dampe race":
+                            output.Add((byte)Lists.MsgHighScore.Dampe_Race);
+                            break;
+                    }
+                    break;
+                case "time":
+                    output.Add((byte)Lists.MsgControlCode.Time);
+                    break;
+                case "dash":
+                    output.Add((byte)Lists.MsgControlCode.Dash);
+                    break;
+                case "a button":
+                    output.Add((byte)Lists.MsgControlCode.A_Button);
+                    break;
+                case "b button":
+                    output.Add((byte)Lists.MsgControlCode.B_Button);
+                    break;
+                case "c button":
+                    output.Add((byte)Lists.MsgControlCode.C_Button);
+                    break;
+                case "l button":
+                    output.Add((byte)Lists.MsgControlCode.L_Button);
+                    break;
+                case "r button":
+                    output.Add((byte)Lists.MsgControlCode.R_Button);
+                    break;
+                case "z button":
+                    output.Add((byte)Lists.MsgControlCode.Z_Button);
+                    break;
+                case "c up":
+                    output.Add((byte)Lists.MsgControlCode.C_Up);
+                    break;
+                case "c down":
+                    output.Add((byte)Lists.MsgControlCode.C_Down);
+                    break;
+                case "c left":
+                    output.Add((byte)Lists.MsgControlCode.C_Left);
+                    break;
+                case "c right":
+                    output.Add((byte)Lists.MsgControlCode.C_Right);
+                    break;
+                case "triangle":
+                    output.Add((byte)Lists.MsgControlCode.Triangle);
+                    break;
+                case "control stick":
+                    output.Add((byte)Lists.MsgControlCode.Control_Stick);
+                    break;
+                case "d pad":
+                    output.Add((byte)Lists.MsgControlCode.D_Pad);
+                    break;
+                case "new box":
+                    output.Add((byte)Lists.MsgControlCode.Box_Break);
+                    break;
+            }
+
+            return output;
         }
     }
 

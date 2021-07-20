@@ -88,6 +88,7 @@ namespace NPC_Maker
             Keyword_Self32,
             Keyword_SelfF,
             Keyword_EndOcarina,
+
         };
 
         public static List<string> KeywordsBlue = new List<string>()
@@ -159,6 +160,7 @@ namespace NPC_Maker
             Keyword_Self32,
             Keyword_And,
             Keyword_Or,
+            Keyword_TradeSucccess,
         };
 
         public enum VarTypes
@@ -1467,6 +1469,134 @@ namespace NPC_Maker
             BTN_Z = 0x2000,
             BTN_B = 0x4000,
             BTN_A = 0x8000,
+        }
+
+        public enum MsgControlCode
+        {
+            Line_Break = 0x01,
+            End = 0x02,
+            Box_Break = 0x04,
+            Color = 0x05,
+            Spaces = 0x06,
+            Jump = 0x07,
+            Draw_Instant = 0x08,
+            Draw_Char = 0x09,
+            Shop_Description = 0x0A,
+            Event = 0x0B,
+            Delay = 0x0C,
+            Unused1 = 0x0D,
+            Fade = 0x0E,
+            Player = 0x0F,
+            Ocarina = 0x10,
+            Unused2 = 0x11,
+            Sound = 0x12,
+            Icon = 0x13,
+            Speed = 0x14,
+            Background = 0x15,
+            Marathon_Time = 0x16,
+            Race_Time = 0x17,
+            Points = 0x18,
+            Gold_Skulltulas = 0x19,
+            No_Skip = 0x1A,
+            Two_Choices = 0x1B,
+            Three_Choices = 0x1C,
+            Fish_Weight = 0x1D,
+            High_Score = 0x1E,
+            Time = 0x1F,
+
+            Dash = 0x7F,
+            À = 0x80,
+            Î = 0x81,
+            Â = 0x82,
+            Ä = 0x83,
+            Ç = 0x84,
+            È = 0x85,
+            É = 0x86,
+            Ê = 0x87,
+            Ë = 0x88,
+            Ï = 0x89,
+            Ô = 0x8A,
+            Ö = 0x8B,
+            Ù = 0x8C,
+            Û = 0x8D,
+            Ü = 0x8E,
+            ß = 0x8F,
+            à = 0x90,
+            á = 0x91,
+            â = 0x92,
+            ä = 0x93,
+            ç = 0x94,
+            è = 0x95,
+            é = 0x96,
+            ê = 0x97,
+            ë = 0x98,
+            ï = 0x99,
+            ô = 0x9A,
+            ö = 0x9B,
+            ù = 0x9C,
+            û = 0x9D,
+            ü = 0x9E,
+
+            A_Button = 0x9F,
+            B_Button = 0xA0,
+            C_Button = 0xA1,
+            L_Button = 0xA2,
+            R_Button = 0xA3,
+            Z_Button = 0xA4,
+            C_Up = 0xA5,
+            C_Down = 0xA6,
+            C_Left = 0xA7,
+            C_Right = 0xA8,
+            Triangle = 0xA9,
+            Control_Stick = 0xAA,
+            D_Pad = 0xAB
+        }
+
+        public enum MsgColor
+        {
+            W = 0x40,
+            R = 0x41,
+            G = 0x42,
+            B = 0x43,
+            C = 0x44,
+            M = 0x45,
+            Y = 0x46,
+            Blk = 0x47
+        }
+
+        public enum MsgSound
+        {
+            Item_Fanfare = 0x0858,
+            Moo = 0x28DF,
+            Frog_Ribbit_1 = 0x28E3,
+            Frog_Ribbit_2 = 0x28E4,
+            Deku_Squeak = 0x3880,
+            Deku_Cry = 0x3882,
+            Generic_Event = 0x38EC,
+            Poe_Vanishing = 0x4807,
+            Twinrova_1 = 0x486F,
+            Twinrova_2 = 0x5965,
+            Navi_Hello = 0x6844,
+            Talon_Ehh = 0x6852,
+            Carpenter_Waaaa = 0x6855,
+            Navi_HEY = 0x685F,
+            Saria_Giggle = 0x6863,
+            Unused_1 = 0x6864,
+            Yaaaa = 0x6867,
+            Zelda_Heh = 0x6869,
+            Zelda_Awww = 0x686B,
+            Zelda_Huh = 0x686C,
+            Generic_Giggle = 0x686D,
+        }
+
+        public enum MsgHighScore
+        {
+            Archery = 0x00,
+            Poe_Points = 0x01,
+            Fishing = 0x02,
+            Horse_Race = 0x03,
+            Marathon = 0x04,
+            Dampe_Race = 0x06
         }
     }
 }

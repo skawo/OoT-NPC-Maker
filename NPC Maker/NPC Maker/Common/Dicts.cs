@@ -46,6 +46,8 @@ namespace NPC_Maker
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.FACE), Lists.FaceSubTypesForCtxMenu.ToArray() },
         };
 
+        public static Dictionary<Lists.MsgControlCode, string> MessageControlCodes = PopulateCodeDictionary();
+
         public static void ReloadDict(Lists.DictType Type)
         {
             switch (Type)
@@ -77,6 +79,19 @@ namespace NPC_Maker
                 return Value.IsNumeric() ? Convert.ToInt32(Value) : -1;
             else
                 return (int)Default;
+        }
+
+
+        private static Dictionary<Lists.MsgControlCode, string> PopulateCodeDictionary()
+        {
+            Dictionary<Lists.MsgControlCode, string> output = new Dictionary<Lists.MsgControlCode, string>();
+
+            foreach (Lists.MsgControlCode code in Enum.GetValues(typeof(Lists.MsgControlCode)))
+            {
+                output.Add(code, code.ToString().Replace("_", " "));
+            }
+
+            return output;
         }
     }
 }

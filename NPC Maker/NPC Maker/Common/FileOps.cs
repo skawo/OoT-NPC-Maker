@@ -382,6 +382,39 @@ namespace NPC_Maker
 
                         #endregion
 
+                        #region Messages
+
+                        List<byte> Header = new List<byte>();
+                        List<byte> MsgData = new List<byte>();
+
+                        int MsgOffset = 8 * Entry.Messages.Count();
+
+                        foreach (MessageEntry Msg in Entry.Messages)
+                        {
+                            List<byte> Message = Msg.ConvertTextData();
+                            Helpers.Ensure4ByteAlign(Message);
+                            MsgData.AddRange(Message);
+
+                            if (MsgData.Count > 1024)
+                                throw new Exception("One of the messages has exceeded 1024 bytes, and could not be saved.");
+
+                            Header.AddRangeBigEndian(MsgOffset);
+                            Header.Add(Msg.GetMessageTypePos());
+                            Helpers.Ensure2ByteAlign(Header);
+                            Header.AddRangeBigEndian((UInt16)Message.Count);
+
+                            MsgOffset += Message.Count();
+                        }
+
+                        EntryBytes.AddRangeBigEndian(4 + Header.Count + MsgData.Count);
+                        EntryBytes.AddRange(Header);
+                        EntryBytes.AddRange(MsgData);
+
+                        CurLen += 4 + Header.Count + MsgData.Count;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #endregion
+
                         #region Scripts
 
                         List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));

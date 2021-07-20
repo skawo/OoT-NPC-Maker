@@ -19,11 +19,23 @@ namespace NPC_Maker.Scripts
 
                     switch (SubID)
                     {
+                        case (int)Lists.SetSubTypes.UNSUCCESSFUL_TRADE_TEXT_ID:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+
+                                Int32 TextID_Adult = 0;
+                                Int32 TextID_Child = 0;
+                                byte TextIDAdultT = 0;
+                                byte TextIDChildT = 0;
+
+                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT, Entry.Messages, 2);
+
+                                return new InstructionSet((byte)SubID, TextID_Adult, TextIDAdultT, 0);
+                            }
                         case (int)Lists.SetSubTypes.MOVEMENT_DISTANCE:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_DELAY:
                         case (int)Lists.SetSubTypes.COLLISION_RADIUS:
                         case (int)Lists.SetSubTypes.COLLISION_HEIGHT:
-                        case (int)Lists.SetSubTypes.UNSUCCESSFUL_TRADE_TEXT_ID:
                         case (int)Lists.SetSubTypes.CURRENT_CUTSCENE_FRAME:
                             return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_START:

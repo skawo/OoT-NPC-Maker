@@ -10,12 +10,12 @@ namespace NPC_Maker.Scripts
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
-                UInt32 TextID_Adult = 0;
-                UInt32 TextID_Child = 0;
+                Int32 TextID_Adult = 0;
+                Int32 TextID_Child = 0;
                 byte TextIDAdultT = 0;
                 byte TextIDChildT = 0;
 
-                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT);
+                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT, Entry.Messages);
 
                 return new InstructionTextbox((int)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child, TextIDAdultT, TextIDChildT);
             }

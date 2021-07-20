@@ -385,17 +385,39 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref UInt32 TextID_Adult, ref UInt32 TextID_Child, ref byte VarTAdult, ref byte VarTChild)
+        private static int GetNPCMakerEmbeddedTextID(string Name, List<MessageEntry> Messages)
+        {
+            MessageEntry Mes = Messages.Find(x => x.Name == Name);
+
+            if (Mes == null)
+                return -1;
+            else
+                return 1 + Int16.MaxValue + Messages.IndexOf(Mes);
+        }
+
+        public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref Int32 TextID_Adult, ref Int32 TextID_Child, ref byte VarTAdult, ref byte VarTChild, List<MessageEntry> Messages, int Index = 1)
         {
             ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
 
-            VarTAdult = ScriptHelpers.GetVarType(SplitLine, 1);
-            TextID_Adult = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarTAdult, 0, UInt16.MaxValue));
+            TextID_Adult = GetNPCMakerEmbeddedTextID(SplitLine[Index], Messages);
+            VarTAdult = 0;
+
+            if (TextID_Adult < 0)
+            {
+                VarTAdult = ScriptHelpers.GetVarType(SplitLine, 1);
+                TextID_Adult = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarTAdult, 0, UInt16.MaxValue));
+            }
 
             if (SplitLine.Count() == 3)
             {
-                VarTChild = ScriptHelpers.GetVarType(SplitLine, 2);
-                TextID_Child = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarTChild, 0, UInt16.MaxValue));
+                TextID_Child = GetNPCMakerEmbeddedTextID(SplitLine[2], Messages);
+                VarTChild = 0;
+
+                if (TextID_Child < 0)
+                {
+                    VarTChild = ScriptHelpers.GetVarType(SplitLine, 2);
+                    TextID_Child = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarTChild, 0, UInt16.MaxValue));
+                }
             }
             else
             {

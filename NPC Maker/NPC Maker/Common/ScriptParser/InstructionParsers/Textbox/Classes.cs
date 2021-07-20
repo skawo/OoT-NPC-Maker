@@ -5,12 +5,12 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionTextbox : Instruction
     {
-        public UInt32 AdultText;
-        public UInt32 ChildText;
+        public Int32 AdultText;
+        public Int32 ChildText;
         public byte AdultTextT;
         public byte ChildTextT;
 
-        public InstructionTextbox(byte _ID, UInt32 Adult, UInt32 Child, byte AdultT, byte ChildT) : base(_ID)
+        public InstructionTextbox(byte _ID, Int32 Adult, Int32 Child, byte AdultT, byte ChildT) : base(_ID)
         {
             AdultText = Adult;
             ChildText = Child;

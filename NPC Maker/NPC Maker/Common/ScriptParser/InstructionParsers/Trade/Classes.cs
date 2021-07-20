@@ -48,13 +48,13 @@ namespace NPC_Maker.Scripts
     public class TradeSetting
     {
         public Int32 Item;
-        public UInt32 AdultText;
-        public UInt32 ChildText;
+        public Int32 AdultText;
+        public Int32 ChildText;
         public byte ItemT;
         public byte AdultTextT;
         public byte ChildTextT;
 
-        public TradeSetting(Int32 _Item, UInt32 _AdultText, UInt32 _ChildText, byte _ItemT, byte _AdultTextT, byte _ChildTextT)
+        public TradeSetting(Int32 _Item, Int32 _AdultText, Int32 _ChildText, byte _ItemT, byte _AdultTextT, byte _ChildTextT)
         {
             Item = _Item;
             AdultText = _AdultText;

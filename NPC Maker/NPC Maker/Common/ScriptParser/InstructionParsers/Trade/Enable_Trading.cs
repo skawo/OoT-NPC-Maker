@@ -36,8 +36,8 @@ namespace NPC_Maker.Scripts
         private Instruction ParseTradeInstruction(List<string> Lines, string[] SplitLine, ref int LineNo)
         {
             TradeSetting Correct = null;
-            UInt32? Talk_TextID_Adult = null;
-            UInt32? Talk_TextID_Child = null;
+            Int32? Talk_TextID_Adult = null;
+            Int32? Talk_TextID_Child = null;
             byte Talk_TextIDAdultT = 0;
             byte Talk_TextIDChildT = 0;
             int LineNoEnd = GetCorrespondingEndTrade(Lines, LineNo);
@@ -64,12 +64,12 @@ namespace NPC_Maker.Scripts
                                 if (Correct != null)
                                     throw ParseException.DuplicateTradeInstruction(Lines[LineNo]);
 
-                                UInt32 TextID_Adult = 0;
-                                UInt32 TextID_Child = 0;
+                                Int32 TextID_Adult = 0;
+                                Int32 TextID_Child = 0;
                                 byte TextIDAdultT = 0;
                                 byte TextIDChildT = 0;
 
-                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT);
+                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT, Entry.Messages);
 
                                 Correct = new TradeSetting((Int32)Item, TextID_Adult, TextID_Child, ItemT, TextIDAdultT, TextIDAdultT);
 
@@ -82,13 +82,13 @@ namespace NPC_Maker.Scripts
                                 if (Talk_TextID_Adult != null)
                                     throw ParseException.DuplicateTradeInstruction(Lines[LineNo]);
 
-                                UInt32 tTextID_Adult_Fail = 0;
-                                UInt32 tTextID_Child_Fail = 0;
+                                Int32 tTextID_Adult_Fail = 0;
+                                Int32 tTextID_Child_Fail = 0;
 
                                 byte tTextID_Adult_FailT = 0;
                                 byte tTextID_Child_FailT = 0;
 
-                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref tTextID_Adult_Fail, ref tTextID_Child_Fail, ref tTextID_Adult_FailT, ref tTextID_Child_FailT);
+                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref tTextID_Adult_Fail, ref tTextID_Child_Fail, ref tTextID_Adult_FailT, ref tTextID_Child_FailT, Entry.Messages);
 
                                 Talk_TextID_Adult = tTextID_Adult_Fail;
                                 Talk_TextID_Child = tTextID_Child_Fail;

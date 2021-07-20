@@ -214,6 +214,18 @@
             this.NumUpDown_CutsceneSlot = new System.Windows.Forms.NumericUpDown();
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.MsgText = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.Btn_MsgRename = new System.Windows.Forms.Button();
+            this.Lbl_Text = new System.Windows.Forms.Label();
+            this.Combo_MsgPos = new System.Windows.Forms.ComboBox();
+            this.Lbl_MsgPos = new System.Windows.Forms.Label();
+            this.Combo_MsgType = new System.Windows.Forms.ComboBox();
+            this.Lbl_MsgType = new System.Windows.Forms.Label();
+            this.Btn_DeleteMsg = new System.Windows.Forms.Button();
+            this.Btn_AddMsg = new System.Windows.Forms.Button();
+            this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
             this.Button_PasteBase = new System.Windows.Forms.Button();
             this.Button_CopyBase = new System.Windows.Forms.Button();
@@ -259,6 +271,7 @@
             this.actorCategoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sFXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -318,6 +331,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.Panel_NPCList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.ContextMenuStrip.SuspendLayout();
@@ -354,6 +370,7 @@
             this.TabControl.Controls.Add(this.Tab1_Data);
             this.TabControl.Controls.Add(this.Tab2_ExtraData);
             this.TabControl.Controls.Add(this.Tab3_BehaviorData);
+            this.TabControl.Controls.Add(this.tabPage1);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
@@ -2733,6 +2750,188 @@
             this.Checkbox_CanPressSwitches.UseVisualStyleBackColor = true;
             this.Checkbox_CanPressSwitches.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.MsgText);
+            this.tabPage1.Controls.Add(this.Btn_MsgRename);
+            this.tabPage1.Controls.Add(this.Lbl_Text);
+            this.tabPage1.Controls.Add(this.Combo_MsgPos);
+            this.tabPage1.Controls.Add(this.Lbl_MsgPos);
+            this.tabPage1.Controls.Add(this.Combo_MsgType);
+            this.tabPage1.Controls.Add(this.Lbl_MsgType);
+            this.tabPage1.Controls.Add(this.Btn_DeleteMsg);
+            this.tabPage1.Controls.Add(this.Btn_AddMsg);
+            this.tabPage1.Controls.Add(this.MessagesGrid);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(768, 615);
+            this.tabPage1.TabIndex = 5;
+            this.tabPage1.Text = "Messages";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // MsgText
+            // 
+            this.MsgText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MsgText.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgText.AutoIndent = false;
+            this.MsgText.AutoIndentChars = false;
+            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 14);
+            this.MsgText.BackBrush = null;
+            this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgText.CharHeight = 14;
+            this.MsgText.CharWidth = 8;
+            this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgText.Font = new System.Drawing.Font("Courier New", 9.75F);
+            this.MsgText.IsReplaceMode = false;
+            this.MsgText.Location = new System.Drawing.Point(260, 98);
+            this.MsgText.Name = "MsgText";
+            this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
+            this.MsgText.ShowLineNumbers = false;
+            this.MsgText.Size = new System.Drawing.Size(432, 255);
+            this.MsgText.TabIndex = 68;
+            this.MsgText.WordWrapAutoIndent = false;
+            this.MsgText.Zoom = 100;
+            this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
+            // 
+            // Btn_MsgRename
+            // 
+            this.Btn_MsgRename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_MsgRename.Location = new System.Drawing.Point(81, 578);
+            this.Btn_MsgRename.Name = "Btn_MsgRename";
+            this.Btn_MsgRename.Size = new System.Drawing.Size(73, 31);
+            this.Btn_MsgRename.TabIndex = 67;
+            this.Btn_MsgRename.Text = "Rename";
+            this.Btn_MsgRename.UseVisualStyleBackColor = true;
+            this.Btn_MsgRename.Click += new System.EventHandler(this.Btn_MsgRename_Click);
+            // 
+            // Lbl_Text
+            // 
+            this.Lbl_Text.AutoSize = true;
+            this.Lbl_Text.Location = new System.Drawing.Point(257, 82);
+            this.Lbl_Text.Name = "Lbl_Text";
+            this.Lbl_Text.Size = new System.Drawing.Size(31, 13);
+            this.Lbl_Text.TabIndex = 66;
+            this.Lbl_Text.Text = "Text:";
+            // 
+            // Combo_MsgPos
+            // 
+            this.Combo_MsgPos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_MsgPos.FormattingEnabled = true;
+            this.Combo_MsgPos.Items.AddRange(new object[] {
+            "Dynamic",
+            "Top",
+            "Center",
+            "Bottom"});
+            this.Combo_MsgPos.Location = new System.Drawing.Point(260, 58);
+            this.Combo_MsgPos.Name = "Combo_MsgPos";
+            this.Combo_MsgPos.Size = new System.Drawing.Size(181, 21);
+            this.Combo_MsgPos.TabIndex = 65;
+            this.Combo_MsgPos.Tag = "MOVEMENT";
+            this.Combo_MsgPos.SelectedIndexChanged += new System.EventHandler(this.Combo_MsgPos_SelectedIndexChanged);
+            // 
+            // Lbl_MsgPos
+            // 
+            this.Lbl_MsgPos.AutoSize = true;
+            this.Lbl_MsgPos.Location = new System.Drawing.Point(257, 42);
+            this.Lbl_MsgPos.Name = "Lbl_MsgPos";
+            this.Lbl_MsgPos.Size = new System.Drawing.Size(47, 13);
+            this.Lbl_MsgPos.TabIndex = 64;
+            this.Lbl_MsgPos.Text = "Position:";
+            // 
+            // Combo_MsgType
+            // 
+            this.Combo_MsgType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_MsgType.FormattingEnabled = true;
+            this.Combo_MsgType.Items.AddRange(new object[] {
+            "Black",
+            "Wood",
+            "Blue",
+            "Ocarina",
+            "None (White text)",
+            "None (Black text)"});
+            this.Combo_MsgType.Location = new System.Drawing.Point(260, 18);
+            this.Combo_MsgType.Name = "Combo_MsgType";
+            this.Combo_MsgType.Size = new System.Drawing.Size(181, 21);
+            this.Combo_MsgType.TabIndex = 63;
+            this.Combo_MsgType.Tag = "MOVEMENT";
+            this.Combo_MsgType.SelectedIndexChanged += new System.EventHandler(this.Combo_MsgType_SelectedIndexChanged);
+            // 
+            // Lbl_MsgType
+            // 
+            this.Lbl_MsgType.AutoSize = true;
+            this.Lbl_MsgType.Location = new System.Drawing.Point(257, 2);
+            this.Lbl_MsgType.Name = "Lbl_MsgType";
+            this.Lbl_MsgType.Size = new System.Drawing.Size(51, 13);
+            this.Lbl_MsgType.TabIndex = 62;
+            this.Lbl_MsgType.Text = "Box type:";
+            // 
+            // Btn_DeleteMsg
+            // 
+            this.Btn_DeleteMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_DeleteMsg.Location = new System.Drawing.Point(3, 578);
+            this.Btn_DeleteMsg.Name = "Btn_DeleteMsg";
+            this.Btn_DeleteMsg.Size = new System.Drawing.Size(73, 31);
+            this.Btn_DeleteMsg.TabIndex = 8;
+            this.Btn_DeleteMsg.Text = "Delete";
+            this.Btn_DeleteMsg.UseVisualStyleBackColor = true;
+            this.Btn_DeleteMsg.Click += new System.EventHandler(this.Btn_DeleteMsg_Click);
+            // 
+            // Btn_AddMsg
+            // 
+            this.Btn_AddMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_AddMsg.Location = new System.Drawing.Point(160, 578);
+            this.Btn_AddMsg.Name = "Btn_AddMsg";
+            this.Btn_AddMsg.Size = new System.Drawing.Size(79, 31);
+            this.Btn_AddMsg.TabIndex = 8;
+            this.Btn_AddMsg.Text = "Add";
+            this.Btn_AddMsg.UseVisualStyleBackColor = true;
+            this.Btn_AddMsg.Click += new System.EventHandler(this.Btn_AddMsg_Click);
+            // 
+            // MessagesGrid
+            // 
+            this.MessagesGrid.AllowUserToAddRows = false;
+            this.MessagesGrid.AllowUserToDeleteRows = false;
+            this.MessagesGrid.AllowUserToResizeColumns = false;
+            this.MessagesGrid.AllowUserToResizeRows = false;
+            this.MessagesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.MessagesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.MessagesGrid.BackgroundColor = System.Drawing.Color.White;
+            this.MessagesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MessagesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn2});
+            this.MessagesGrid.Location = new System.Drawing.Point(3, 3);
+            this.MessagesGrid.MultiSelect = false;
+            this.MessagesGrid.Name = "MessagesGrid";
+            this.MessagesGrid.ReadOnly = true;
+            this.MessagesGrid.RowHeadersVisible = false;
+            this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.MessagesGrid.Size = new System.Drawing.Size(236, 573);
+            this.MessagesGrid.TabIndex = 3;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Message title";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Panel_NPCList
             // 
             this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -3121,6 +3320,11 @@
             this.musicToolStripMenuItem1.Text = "Music";
             this.musicToolStripMenuItem1.Click += new System.EventHandler(this.MusicToolStripMenuItem1_Click);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3204,6 +3408,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.Panel_NPCList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.ContextMenuStrip.ResumeLayout(false);
@@ -3444,6 +3652,19 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Limb;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.ComboBox Combo_MsgType;
+        private System.Windows.Forms.Label Lbl_MsgType;
+        private System.Windows.Forms.Button Btn_DeleteMsg;
+        private System.Windows.Forms.Button Btn_AddMsg;
+        private CustomDataGridView MessagesGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.Label Lbl_Text;
+        private System.Windows.Forms.ComboBox Combo_MsgPos;
+        private System.Windows.Forms.Label Lbl_MsgPos;
+        private System.Windows.Forms.Button Btn_MsgRename;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private FastColoredTextBoxNS.FastColoredTextBox MsgText;
     }
 }
 

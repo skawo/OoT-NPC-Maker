@@ -31,6 +31,10 @@ namespace NPC_Maker
                 Page.Controls.Add(sg);
             }
 
+            MessagesContextMenu.MakeContextMenu();
+            MsgText.ContextMenuStrip = MessagesContextMenu.MenuStrip;
+            MessagesContextMenu.SetTextBox(MsgText);
+
             this.DoubleBuffered = true;
 
             this.ResizeBegin += Form1_ResizeBegin;
@@ -224,8 +228,8 @@ namespace NPC_Maker
                 if (ReusableTabPages.Count != 0)
                 {
                     Page = ReusableTabPages.First();
-                    Page.Name = ScriptT.Name;
                     (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
+                    Page.Text = ScriptT.Name;
                     ReusableTabPages.Remove(Page);
                 }
                 else
@@ -302,6 +306,21 @@ namespace NPC_Maker
             }
 
             TabControl.SelectedIndex = Math.Min(TabControl.TabPages.Count - 1, SelectedTabIndex);
+
+            #endregion
+
+            #region Messages
+
+            MessagesGrid.SelectionChanged -= MessagesGrid_SelectionChanged;
+            MessagesGrid.Rows.Clear();
+
+            foreach (MessageEntry Entry in SelectedEntry.Messages)
+            {
+                MessagesGrid.Rows.Add(new object[] { Entry.Name });
+            }
+
+            MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
+            MessagesGrid_SelectionChanged(MessagesGrid, null);
 
             #endregion
 
@@ -928,7 +947,7 @@ namespace NPC_Maker
                 {
                     DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
                     DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
-                    DataGrid_Animations.Update();
+                    DataGrid_Animations.RefreshEdit();
                 }
             }
         }
@@ -937,7 +956,7 @@ namespace NPC_Maker
         {
             Name = Name ?? "Animation_" + Index.ToString();
             Address = Address ?? 0;
-            Speed = Speed ?? 0;
+            Speed = Speed ?? 1;
             ObjectID = ObjectID ?? -1;
 
             SelectedEntry.Animations.Add(new AnimationEntry(Name, (uint)Address, (float)Speed, (short)ObjectID, StartFrame, EndFrame));
@@ -1672,5 +1691,92 @@ namespace NPC_Maker
 
 
         #endregion
+
+        #region Messages
+
+        private void MessagesGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (MessagesGrid.SelectedRows.Count == 0)
+            {
+                MsgText.Enabled = false;
+                Combo_MsgType.Enabled = false;
+                Combo_MsgPos.Enabled = false;
+                return;
+            }
+            else
+            {
+                MsgText.Enabled = true;
+                Combo_MsgType.Enabled = true;
+                Combo_MsgPos.Enabled = true;
+            }
+
+            MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+            MsgText.Text = Entry.MessageText;
+            Combo_MsgType.SelectedIndex = Entry.Type;
+            Combo_MsgPos.SelectedIndex = Entry.Position;
+        }
+
+        private void MsgText_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+        {
+            if (MessagesGrid.SelectedRows.Count == 0)
+                return;
+
+            MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+            Entry.MessageText = MsgText.Text;
+        }
+
+        private void Combo_MsgPos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (MessagesGrid.SelectedRows.Count == 0)
+                return;
+
+            MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+            Entry.Position = Combo_MsgPos.SelectedIndex;
+        }
+
+        private void Combo_MsgType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (MessagesGrid.SelectedRows.Count == 0)
+                return;
+
+            MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+            Entry.Type = Combo_MsgType.SelectedIndex;
+        }
+
+        private void Btn_AddMsg_Click(object sender, EventArgs e)
+        {
+            string Title = "";
+            InputBox.ShowInputDialog("Message title?", ref Title);
+
+            SelectedEntry.Messages.Add(new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
+            int Index = MessagesGrid.Rows.Add(new object[] { Title });
+            MessagesGrid.Rows[Index].Selected = true;
+        }
+
+        private void Btn_DeleteMsg_Click(object sender, EventArgs e)
+        {
+            if (MessagesGrid.SelectedRows.Count == 0)
+                return;
+
+            SelectedEntry.Messages.RemoveAt(MessagesGrid.SelectedRows[0].Index);
+            MessagesGrid.Rows.RemoveAt(MessagesGrid.SelectedRows[0].Index);
+        }
+
+        private void Btn_MsgRename_Click(object sender, EventArgs e)
+        {
+            if (MessagesGrid.SelectedRows.Count == 0)
+                return;
+
+
+            string Title = (MessagesGrid.SelectedRows[0].Cells[0].Value as string);
+            InputBox.ShowInputDialog("New message title?", ref Title);
+
+            MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+            Entry.Name = Title;
+            MessagesGrid.SelectedRows[0].Cells[0].Value = Title;
+        }
+
+        #endregion
+
     }
 }
