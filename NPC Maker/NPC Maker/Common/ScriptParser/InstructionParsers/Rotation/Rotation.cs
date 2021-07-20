@@ -41,6 +41,12 @@ namespace NPC_Maker.Scripts
                                 break;
                             }
                         case (int)Lists.RotationSubTypes.CHANGE_TO:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 7);
+                                Min = Int16.MinValue;
+                                Max = Int16.MaxValue;
+                                break;
+                            }
                         case (int)Lists.RotationSubTypes.CHANGE_BY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 7);
