@@ -676,12 +676,14 @@ namespace NPC_Maker
                     output.Add((byte)Lists.MsgControlCode.Spaces);
                     output.Add(Convert.ToByte(code[1]));
                     break;
+                    /* Jump will not work for messages like this.
                 case "jump":
                     output.Add((byte)Lists.MsgControlCode.Jump);
                     byte[] jumpIDBytes = BitConverter.GetBytes(short.Parse(code[1], System.Globalization.NumberStyles.HexNumber));
                     output.Add(jumpIDBytes[1]);
                     output.Add(jumpIDBytes[0]);
                     break;
+                    */
                 case "di":
                     output.Add((byte)Lists.MsgControlCode.Draw_Instant);
                     break;
