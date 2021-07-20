@@ -24,83 +24,95 @@ namespace NPC_Maker.Scripts
                 object Speed = 0;
                 byte SpeedT = 0;
 
-
                 int Min = Int16.MinValue;
                 int Max = Int16.MaxValue;
-
-                if (SubID == (int)Lists.RotationSubTypes.CHANGE_BY)
-                {
-                    Min = Int32.MinValue;
-                    Max = Int32.MaxValue;
-                }
+                int NoSpeed = 0;
 
                 try
                 {
                     switch (SubID)
                     {
                         case (int)Lists.RotationSubTypes.SET:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
+                                Min = Int16.MinValue;
+                                Max = Int16.MaxValue;
+                                NoSpeed = 1;
+                                break;
+                            }
                         case (int)Lists.RotationSubTypes.CHANGE_TO:
                         case (int)Lists.RotationSubTypes.CHANGE_BY:
                             {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
-
-                                int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
-
-                                switch (SetSubType)
-                                {
-                                    case (int)Lists.TargetActorSubtypes.ACTOR_ID:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 9);
-
-                                            ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                            ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
-
-                                            ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
-                                            ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
-
-                                            ScriptHelpers.GetXYZRot(SplitLine, 5, 6, 7, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot, Min, Max);
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 8);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 8, SpeedT, 0, float.MaxValue);
-
-                                            break;
-                                        }
-                                    case (int)Lists.TargetActorSubtypes.CONFIG_ID:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 8);
-
-                                            ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                            ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
-
-                                            ScriptHelpers.GetXYZRot(SplitLine, 4, 5, 6, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot, Min, Max);
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 7);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 7, SpeedT, 0, float.MaxValue);
-                                            break;
-                                        }
-
-                                    case (int)Lists.TargetActorSubtypes.PLAYER:
-                                    case (int)Lists.TargetActorSubtypes.SELF:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 7);
-                                            ScriptHelpers.GetXYZRot(SplitLine, 3, 4, 5, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot, Min, Max);
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
-
-                                            break;
-                                        }
-                                    default:
-                                        throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
-                                }
-
-                                return new InstructionRotation((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, XRot, YRot, ZRot, XRotT, ZRotT, YRotT, (byte)SetSubType, Speed, SpeedT);
-
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 7);
+                                Min = Int32.MinValue;
+                                Max = Int32.MaxValue;
+                                break;
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
 
+                    int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+
+                    switch (SetSubType)
+                    {
+                        case (int)Lists.TargetActorSubtypes.ACTOR_ID:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 9 - NoSpeed);
+
+                                ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
+
+                                ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
+                                ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
+
+                                ScriptHelpers.GetXYZRot(SplitLine, 5, 6, 7, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot, Min, Max);
+
+                                if (NoSpeed == 0)
+                                {
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 8);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 8, SpeedT, 0, float.MaxValue);
+                                }
+
+                                break;
+                            }
+                        case (int)Lists.TargetActorSubtypes.CONFIG_ID:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 8 - NoSpeed);
+
+                                ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
+
+                                ScriptHelpers.GetXYZRot(SplitLine, 4, 5, 6, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot, Min, Max);
+
+                                if (NoSpeed == 0)
+                                {
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 7);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 7, SpeedT, 0, float.MaxValue);
+                                }
+
+                                break;
+                            }
+
+                        case (int)Lists.TargetActorSubtypes.PLAYER:
+                        case (int)Lists.TargetActorSubtypes.SELF:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 7 - NoSpeed);
+                                ScriptHelpers.GetXYZRot(SplitLine, 3, 4, 5, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot, Min, Max);
+
+                                if (NoSpeed == 0)
+                                {
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
+                                }
+
+                                break;
+                            }
+                        default:
+                            throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
+                    }
+
+                    return new InstructionRotation((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, XRot, YRot, ZRot, XRotT, ZRotT, YRotT, (byte)SetSubType, Speed, SpeedT);
                 }
                 catch (ParseException pEx)
                 {

@@ -27,78 +27,92 @@ namespace NPC_Maker.Scripts
                 byte SpeedT = 0;
                 byte IgnoreYPos = 0;
 
+                int NoSpeed = 0;
+
                 try
                 {
                     switch (SubID)
                     {
                         case (int)Lists.PositionSubTypes.SET:
+                            {
+                                NoSpeed = 1;
+                                break;
+                            }
                         case (int)Lists.PositionSubTypes.CHANGE_TO:
                         case (int)Lists.PositionSubTypes.CHANGE_BY:
+                            break;
+                        default:
+                            throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
+                    }
+
+
+                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
+
+                    if (SplitLine.Last().ToUpper() == Lists.Keyword_Ignore_Y)
+                        IgnoreYPos = 1;
+
+                    int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+
+                    switch (SetSubType)
+                    {
+                        case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                             {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 9 - NoSpeed, 10 - NoSpeed);
 
-                                if (SplitLine.Last().ToUpper() == Lists.Keyword_Ignore_Y)
-                                    IgnoreYPos = 1;
+                                ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
 
-                                int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                                ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
+                                ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
 
-                                switch (SetSubType)
+
+                                ScriptHelpers.GetXYZPos(SplitLine, 5, 6, 7, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
+
+                                if (NoSpeed == 0)
                                 {
-                                    case (int)Lists.TargetActorSubtypes.ACTOR_ID:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 9, 10);
-
-                                            ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                            ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
-
-                                            ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
-                                            ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
-
-
-                                            ScriptHelpers.GetXYZPos(SplitLine, 5, 6, 7, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 8);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 8, SpeedT, 0, float.MaxValue);
-
-                                            break;
-                                        }
-                                    case (int)Lists.TargetActorSubtypes.CONFIG_ID:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 8, 9);
-
-                                            ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                            ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
-
-                                            ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 7);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 7, SpeedT, 0, float.MaxValue);
-
-                                            break;
-                                        }
-
-                                    case (int)Lists.TargetActorSubtypes.PLAYER:
-                                    case (int)Lists.TargetActorSubtypes.SELF:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 7, 8);
-                                            ScriptHelpers.GetXYZPos(SplitLine, 3, 4, 5, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
-
-                                            break;
-                                        }
-                                    default:
-                                        throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 8);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 8, SpeedT, 0, float.MaxValue);
                                 }
 
-                                return new InstructionPosition((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, XPos, YPos, ZPos, XPosT, YPosT, ZPosT, (byte)SetSubType, Speed, SpeedT, IgnoreYPos);
+                                break;
+                            }
+                        case (int)Lists.TargetActorSubtypes.CONFIG_ID:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 8 - NoSpeed, 9 - NoSpeed);
 
+                                ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
+
+                                ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
+
+                                if (NoSpeed == 0)
+                                {
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 7);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 7, SpeedT, 0, float.MaxValue);
+                                }
+
+                                break;
+                            }
+
+                        case (int)Lists.TargetActorSubtypes.PLAYER:
+                        case (int)Lists.TargetActorSubtypes.SELF:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 7 - NoSpeed, 8 - NoSpeed);
+                                ScriptHelpers.GetXYZPos(SplitLine, 3, 4, 5, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
+
+                                if (NoSpeed == 0)
+                                {
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
+                                }
+
+                                break;
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
 
+                    return new InstructionPosition((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, XPos, YPos, ZPos, XPosT, YPosT, ZPosT, (byte)SetSubType, Speed, SpeedT, IgnoreYPos);
                 }
                 catch (ParseException pEx)
                 {

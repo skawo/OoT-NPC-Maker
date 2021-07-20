@@ -20,74 +20,88 @@ namespace NPC_Maker.Scripts
                 object Speed = 0;
                 byte SpeedT = 0;
 
+                int NoSpeed = 0;
+
                 try
                 {
                     switch (SubID)
                     {
                         case (int)Lists.ScaleSubTypes.SET:
+                            {
+                                NoSpeed = 1;
+                                break;
+                            }
                         case (int)Lists.ScaleSubTypes.CHANGE_TO:
                         case (int)Lists.ScaleSubTypes.CHANGE_BY:
+                            break;
+                        default:
+                            throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
+                    }
+
+
+                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+
+                    int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+
+                    switch (SetSubType)
+                    {
+                        case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                             {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 7 - NoSpeed);
 
-                                int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                                ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
 
-                                switch (SetSubType)
+                                ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
+                                ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
+
+                                ScriptHelpers.GetScale(SplitLine, 5, ref ScaleT, ref Scale);
+
+                                if (NoSpeed == 0)
                                 {
-                                    case (int)Lists.TargetActorSubtypes.ACTOR_ID:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 7);
-
-                                            ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                            ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
-
-                                            ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
-                                            ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
-
-                                            ScriptHelpers.GetScale(SplitLine, 5, ref ScaleT, ref Scale);
-
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
-
-                                            break;
-                                        }
-                                    case (int)Lists.TargetActorSubtypes.CONFIG_ID:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6);
-
-                                            ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                            ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
-
-                                            ScriptHelpers.GetScale(SplitLine, 4, ref ScaleT, ref Scale);
-
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 5);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 5, SpeedT, 0, float.MaxValue);
-                                            break;
-                                        }
-
-                                    case (int)Lists.TargetActorSubtypes.PLAYER:
-                                    case (int)Lists.TargetActorSubtypes.SELF:
-                                        {
-                                            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
-                                            ScriptHelpers.GetScale(SplitLine, 3, ref ScaleT, ref Scale);
-
-
-                                            SpeedT = ScriptHelpers.GetVarType(SplitLine, 4);
-                                            Speed = ScriptHelpers.GetValueByType(SplitLine, 4, SpeedT, 0, float.MaxValue);
-                                            break;
-                                        }
-                                    default:
-                                        throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
                                 }
 
-                                return new InstructionScale((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, Scale, ScaleT, (byte)SetSubType, Speed, SpeedT);
+                                break;
+                            }
+                        case (int)Lists.TargetActorSubtypes.CONFIG_ID:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6 - NoSpeed);
 
+                                ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
+
+                                ScriptHelpers.GetScale(SplitLine, 4, ref ScaleT, ref Scale);
+
+                                if (NoSpeed == 0)
+                                {
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 5);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 5, SpeedT, 0, float.MaxValue);
+                                }
+
+                                break;
+                            }
+
+                        case (int)Lists.TargetActorSubtypes.PLAYER:
+                        case (int)Lists.TargetActorSubtypes.SELF:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5 - NoSpeed);
+                                ScriptHelpers.GetScale(SplitLine, 3, ref ScaleT, ref Scale);
+
+                                if (NoSpeed == 0)
+                                {
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 4);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 4, SpeedT, 0, float.MaxValue);
+                                }
+
+                                break;
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
+
+                    return new InstructionScale((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, Scale, ScaleT, (byte)SetSubType, Speed, SpeedT);
 
                 }
                 catch (ParseException pEx)
