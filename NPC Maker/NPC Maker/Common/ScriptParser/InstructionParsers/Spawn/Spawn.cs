@@ -85,7 +85,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SpawnParams.ROTATION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
-                                ScriptHelpers.GetXYZRot(Split, 1, 2, 3, ref RotXT, ref RotYT, ref RotZT, ref RotX, ref RotY, ref RotZ);
+                                ScriptHelpers.GetXYZRot(Split, 1, 2, 3, ref RotXT, ref RotYT, ref RotZT, ref RotX, ref RotY, ref RotZ, Int16.MinValue, Int16.MaxValue);
 
                                 continue;
                             }

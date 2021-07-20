@@ -126,11 +126,11 @@ namespace NPC_Maker.Scripts
         }
 
         public static void GetXYZRot(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
-                                    ref object XRot, ref object YRot, ref object ZRot)
+                                    ref object XRot, ref object YRot, ref object ZRot, int Min, int Max)
         {
-            XRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Int16.MinValue, Int16.MaxValue));
-            YRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Int16.MinValue, Int16.MaxValue));
-            ZRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Int16.MinValue, Int16.MaxValue));
+            XRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Min, Max));
+            YRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Min, Max));
+            ZRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Min, Max));
         }
 
         public static void GetXYZPos(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
@@ -196,7 +196,7 @@ namespace NPC_Maker.Scripts
                         Int16 MinV = Convert.ToInt16(GetDegrees(Values, 0, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
                         Int16 MaxV = Convert.ToInt16(GetDegrees(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
 
-                        return Helpers.PutTwoValuesTogetherIntoWord(MinV, MaxV, 16);
+                        return Helpers.TwoInt16ToWord(MinV, MaxV);
                     }
 
                 case (int)Lists.VarTypes.Player8:

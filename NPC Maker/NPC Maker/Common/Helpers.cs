@@ -71,7 +71,7 @@ namespace NPC_Maker
             return o |= b;
         }
 
-        public static Int32 PutTwoValuesTogetherIntoWord(Int16 a, Int16 b, int offset)
+        public static Int32 TwoInt16ToWord(Int16 a, Int16 b)
         {
             List<byte> Bytes = new List<byte>();
 
