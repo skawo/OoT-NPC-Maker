@@ -55,11 +55,9 @@
             this.Credits.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Credits.Location = new System.Drawing.Point(12, 199);
             this.Credits.Name = "Credits";
-            this.Credits.Size = new System.Drawing.Size(377, 52);
+            this.Credits.Size = new System.Drawing.Size(377, 65);
             this.Credits.TabIndex = 5;
-            this.Credits.Text = "Programming: Skawo.\r\nProgramming help: Fig, rankaisija, z64me, logyk, Nokaubure, " +
-    "RoadrunnerWMC\r\nSpecial thanks to: OoT decompilation team, z64ovl team\r\nManual: S" +
-    "kawo, RoadrunnerWMC";
+            this.Credits.Text = resources.GetString("Credits.Text");
             // 
             // Logo
             // 
@@ -98,7 +96,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(487, 262);
+            this.ClientSize = new System.Drawing.Size(487, 271);
             this.Controls.Add(this.LblVersion);
             this.Controls.Add(this.LblVersionX);
             this.Controls.Add(this.Logo);
