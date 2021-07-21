@@ -97,7 +97,7 @@ namespace NPC_Maker
             try
             {
                 int Offset = Data.Entries.Count() * 4 + 4;
-
+    
                 List<byte> EntryAddresses = new List<byte>();
                 List<List<byte>> EntryData = new List<List<byte>>();
                 List<string> ParseErrors = new List<string>();
@@ -406,11 +406,12 @@ namespace NPC_Maker
                             MsgOffset += Message.Count();
                         }
 
-                        EntryBytes.AddRangeBigEndian(4 + Header.Count + MsgData.Count);
+                        EntryBytes.AddRangeBigEndian(8 + Header.Count + MsgData.Count);
+                        EntryBytes.AddRangeBigEndian(Offset + EntryBytes.Count + 8);
                         EntryBytes.AddRange(Header);
                         EntryBytes.AddRange(MsgData);
 
-                        CurLen += 4 + Header.Count + MsgData.Count;
+                        CurLen += 8 + Header.Count + MsgData.Count;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion

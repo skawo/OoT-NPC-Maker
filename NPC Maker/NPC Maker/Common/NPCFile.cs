@@ -539,6 +539,7 @@ namespace NPC_Maker
 
         // Below taken and edited from 
         // https://github.com/Sage-of-Mirrors/Ocarina-Text-Editor
+        // Rewrite it.
 
         public byte GetMessageTypePos()
         {
