@@ -24,6 +24,8 @@ namespace NPC_Maker
         public const string Keyword_EndTrade = "ENDTRADE";
         public const string Keyword_TradeDefault = "DEFAULT";
         public const string Keyword_TradeSucccess = "SUCCESS";
+        public const string Keyword_TradeFailure = "FAILURE";
+        public const string Keyword_EndTradeFailure = "ENDFAILURE";
         public const string Keyword_TradeNone = "TALKED_TO";
         public const string Keyword_Else = "ELSE";
         public const string Keyword_Or = "OR";
@@ -161,6 +163,9 @@ namespace NPC_Maker
             Keyword_And,
             Keyword_Or,
             Keyword_TradeSucccess,
+            Keyword_TradeFailure,
+            Keyword_TradeNone,
+            Keyword_EndTradeFailure
         };
 
         public enum VarTypes
@@ -1313,6 +1318,7 @@ namespace NPC_Maker
         {
             SUCCESS = 0,
             TALKED_TO = 1,
+            FAILURE = 2,
         }
 
         public enum PlayerMasks
