@@ -541,7 +541,7 @@ namespace NPC_Maker
             /* 0x08 */
             EXCH_ITEM_ODD_MUSHROOM = 8,
             /* 0x09 */
-            EXCH_ITEM_ODD_POTION, = 9,
+            EXCH_ITEM_ODD_POTION = 9,
             /* 0x0A */
             EXCH_ITEM_SAW = 10,
             /* 0x0B */
