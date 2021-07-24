@@ -523,66 +523,67 @@ namespace NPC_Maker
 
         public enum TradeItems
         {
-            /* 0x00 */
-            EXCH_ITEM_NONE,
+    
             /* 0x01 */
-            EXCH_ITEM_LETTER_ZELDA,
+            EXCH_ITEM_LETTER_ZELDA = 1,
             /* 0x02 */
-            EXCH_ITEM_WEIRD_EGG,
+            EXCH_ITEM_WEIRD_EGG = 2,
             /* 0x03 */
-            EXCH_ITEM_CHICKEN,
+            EXCH_ITEM_CHICKEN = 3,
             /* 0x04 */
-            EXCH_ITEM_BEAN,
+            EXCH_ITEM_BEAN = 4,
             /* 0x05 */
-            EXCH_ITEM_POCKET_EGG,
+            EXCH_ITEM_POCKET_EGG = 5,
             /* 0x06 */
-            EXCH_ITEM_POCKET_CUCCO,
+            EXCH_ITEM_POCKET_CUCCO = 6,
             /* 0x07 */
-            EXCH_ITEM_COJIRO,
+            EXCH_ITEM_COJIRO = 7,
             /* 0x08 */
-            EXCH_ITEM_ODD_MUSHROOM,
+            EXCH_ITEM_ODD_MUSHROOM = 8,
             /* 0x09 */
-            EXCH_ITEM_ODD_POTION,
+            EXCH_ITEM_ODD_POTION, = 9,
             /* 0x0A */
-            EXCH_ITEM_SAW,
+            EXCH_ITEM_SAW = 10,
             /* 0x0B */
-            EXCH_ITEM_SWORD_BROKEN,
+            EXCH_ITEM_SWORD_BROKEN = 11,
             /* 0x0C */
-            EXCH_ITEM_PRESCRIPTION,
+            EXCH_ITEM_PRESCRIPTION = 12,
             /* 0x0D */
-            EXCH_ITEM_FROG,
+            EXCH_ITEM_FROG = 13,
             /* 0x0E */
-            EXCH_ITEM_EYEDROPS,
+            EXCH_ITEM_EYEDROPS = 14,
             /* 0x0F */
-            EXCH_ITEM_CLAIM_CHECK,
+            EXCH_ITEM_CLAIM_CHECK = 15,
             /* 0x10 */
-            EXCH_ITEM_MASK_SKULL,
+            EXCH_ITEM_MASK_SKULL = 16,
             /* 0x11 */
-            EXCH_ITEM_MASK_SPOOKY,
+            EXCH_ITEM_MASK_SPOOKY = 17,
             /* 0x12 */
-            EXCH_ITEM_MASK_KEATON,
+            EXCH_ITEM_MASK_KEATON = 18,
             /* 0x13 */
-            EXCH_ITEM_MASK_BUNNY,
+            EXCH_ITEM_MASK_BUNNY = 19,
             /* 0x14 */
-            EXCH_ITEM_MASK_TRUTH,
+            EXCH_ITEM_MASK_TRUTH = 20,
             /* 0x15 */
-            EXCH_ITEM_MASK_GORON,
+            EXCH_ITEM_MASK_GORON = 21,
             /* 0x16 */
-            EXCH_ITEM_MASK_ZORA,
+            EXCH_ITEM_MASK_ZORA = 22,
             /* 0x17 */
-            EXCH_ITEM_MASK_GERUDO,
+            EXCH_ITEM_MASK_GERUDO = 23,
             /* 0x18 */
-            EXCH_ITEM_FISH,
+            EXCH_ITEM_FISH = 24,
             /* 0x19 */
-            EXCH_ITEM_BLUE_FIRE,
+            EXCH_ITEM_BLUE_FIRE = 25,
             /* 0x1A */
-            EXCH_ITEM_BUG,
+            EXCH_ITEM_BUG = 26,
             /* 0x1B */
-            EXCH_ITEM_POE,
+            EXCH_ITEM_POE = 27,
             /* 0x1C */
-            EXCH_ITEM_BIG_POE,
+            EXCH_ITEM_BIG_POE = 28,
             /* 0x1D */
-            EXCH_ITEM_LETTER_RUTO,
+            EXCH_ITEM_LETTER_RUTO = 29,
+
+            EXCH_ITEM_NONE = 30
         }
 
         public enum AwardItems
@@ -1164,7 +1165,7 @@ namespace NPC_Maker
 
             ITEM_TRADE_CHILD = ITEM_WEIRD_EGG,
 
-            ITEMITEM_TRADE_ADULT = ITEM_POCKET_EGG,
+            ITEM_TRADE_ADULT = ITEM_POCKET_EGG,
         }
 
         public enum QuestItems
