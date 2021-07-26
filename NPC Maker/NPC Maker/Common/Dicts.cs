@@ -25,14 +25,12 @@ namespace NPC_Maker
             { Lists.DictType.Music, $"{Program.ExecPath}/Dicts/Music.csv" },
             { Lists.DictType.Actors, $"{Program.ExecPath}/Dicts/Actors.csv" },
             { Lists.DictType.Objects, $"{Program.ExecPath}/Dicts/Objects.csv" },
-            { Lists.DictType.ActorCategories, $"{Program.ExecPath}/Dicts/ActorCategories.csv" },
         };
 
         public static Dictionary<string, int> ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]);
         public static Dictionary<string, int> SFXes = FileOps.GetDictionary(DictFilenames[Lists.DictType.SFX]);
         public static Dictionary<string, int> Music = FileOps.GetDictionary(DictFilenames[Lists.DictType.Music]);
         public static Dictionary<string, int> Actors = FileOps.GetDictionary(DictFilenames[Lists.DictType.Actors]);
-        public static Dictionary<string, int> ActorCategories = FileOps.GetDictionary(DictFilenames[Lists.DictType.ActorCategories]);
 
         public static Dictionary<string, string[]> FunctionSubtypes = new Dictionary<string, string[]>()
         {
@@ -56,7 +54,6 @@ namespace NPC_Maker
                 case Lists.DictType.SFX: SFXes = FileOps.GetDictionary(DictFilenames[Lists.DictType.SFX]); break;
                 case Lists.DictType.Music: Music = FileOps.GetDictionary(DictFilenames[Lists.DictType.Music]); break;
                 case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]); break;
-                case Lists.DictType.ActorCategories: ActorCategories = FileOps.GetDictionary(DictFilenames[Lists.DictType.ActorCategories]); break;
                 default: break;
             }
         }

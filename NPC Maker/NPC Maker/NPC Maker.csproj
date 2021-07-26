@@ -234,9 +234,6 @@
     <EmbeddedResource Include="Windows\PickableListEntryEdit.resx">
       <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Dicts\ActorCategories.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Dicts\Actors.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -13,9 +13,7 @@ namespace NPC_Maker.Scripts
                 int SetSubType = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes));
 
                 UInt32 ActorNum = 0;
-                Int32 ActorCat = 0;
                 byte ANumVarT = 0;
-                byte ACatVarT = 0;
 
                 switch (SetSubType)
                 {
@@ -24,19 +22,16 @@ namespace NPC_Maker.Scripts
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
                             ANumVarT = ScriptHelpers.GetVarType(SplitLine, 2);
-                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2, ANumVarT);
+                            ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ANumVarT, 0, UInt16.MaxValue);
 
                             break;
                         }
                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                         {
-                            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+                            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
                             ANumVarT = ScriptHelpers.GetVarType(SplitLine, 2);
                             ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2, ANumVarT);
-
-                            ACatVarT = ScriptHelpers.GetVarType(SplitLine, 3);
-                            ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 3, ACatVarT);
 
                             break;
                         }
@@ -46,12 +41,12 @@ namespace NPC_Maker.Scripts
                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                 }
 
-                return new InstructionKill((byte)SetSubType, ActorNum, ANumVarT, ActorCat, ACatVarT);
+                return new InstructionKill((byte)SetSubType, ActorNum, ANumVarT);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionKill(0, 0, 0, 0, 0);
+                return new InstructionKill(0, 0, 0);
             }
             catch (Exception)
             {

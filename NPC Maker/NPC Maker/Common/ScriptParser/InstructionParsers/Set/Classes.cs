@@ -260,15 +260,12 @@ namespace NPC_Maker.Scripts
     {
         byte Target { get; set; }
         UInt32 Value { get; set; }
-        UInt32 Value2 { get; set; }
-        byte ValueType2 { get; set; }
 
-        public InstructionSetCameraTracking(byte _SubID, byte _Target, UInt32 _Value, byte _ValueType, UInt32 _Value2, byte _ValueType2) : base((int)Lists.Instructions.SET, _SubID, _ValueType)
+
+        public InstructionSetCameraTracking(byte _SubID, byte _Target, UInt32 _Value, byte _ValueType) : base((int)Lists.Instructions.SET, _SubID, _ValueType)
         {
             Target = _Target;
             Value = _Value;
-            Value2 = _Value2;
-            ValueType2 = _ValueType2;
         }
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
@@ -277,12 +274,11 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Target, Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ValueType, ValueType2, 4), Data);
+            Helpers.AddObjectToByteList(ValueType, Data);
             Helpers.AddObjectToByteList(Value, Data);
-            Helpers.AddObjectToByteList(Value2, Data);
             Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
 
             return Data.ToArray();
         }

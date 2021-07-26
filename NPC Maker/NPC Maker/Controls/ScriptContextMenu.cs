@@ -22,7 +22,6 @@ namespace NPC_Maker
         private static ToolStripMenuItem soundEffectsToolStripMenuItem;
         private static ToolStripMenuItem musicToolStripMenuItem;
         private static ToolStripMenuItem actorstoolStripMenuItem;
-        private static ToolStripMenuItem acatstoolStripMenuItem;
         private static ToolStripMenuItem objectstoolStripMenuItem;
 
         public static void MakeContextMenu()
@@ -40,7 +39,6 @@ namespace NPC_Maker
             soundEffectsToolStripMenuItem = new ToolStripMenuItem();
             musicToolStripMenuItem = new ToolStripMenuItem();
             actorstoolStripMenuItem = new ToolStripMenuItem();
-            acatstoolStripMenuItem = new ToolStripMenuItem();
             objectstoolStripMenuItem = new ToolStripMenuItem();
 
 
@@ -56,7 +54,6 @@ namespace NPC_Maker
                                                                     soundEffectsToolStripMenuItem,
                                                                     musicToolStripMenuItem,
                                                                     actorstoolStripMenuItem,
-                                                                    acatstoolStripMenuItem,
                                                                     objectstoolStripMenuItem,
                                                                 });
             ContextMenuStrip.Name = "ContextMenuStrip";
@@ -133,13 +130,6 @@ namespace NPC_Maker
             actorstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             actorstoolStripMenuItem.Text = "Actors";
             actorstoolStripMenuItem.Click += ActorstoolStripMenuItem_Click;
-            // 
-            // acatstoolStripMenuItem
-            // 
-            acatstoolStripMenuItem.Name = "acatstoolStripMenuItem";
-            acatstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            acatstoolStripMenuItem.Text = "Actor categories";
-            acatstoolStripMenuItem.Click += AcatstoolStripMenuItem_Click;
             // 
             // objectstoolStripMenuItem
             // 
@@ -259,17 +249,6 @@ namespace NPC_Maker
             if (DR == DialogResult.OK)
             {
                 InsertTxtToScript(Actors.Chosen.Name);
-            }
-        }
-
-        private static void AcatstoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PickableList Acats = new PickableList(Lists.DictType.ActorCategories, true);
-            DialogResult DR = Acats.ShowDialog();
-
-            if (DR == DialogResult.OK)
-            {
-                InsertTxtToScript(Acats.Chosen.Name);
             }
         }
 

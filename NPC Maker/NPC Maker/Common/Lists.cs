@@ -240,7 +240,6 @@ namespace NPC_Maker
             Music,
             Actors,
             Objects,
-            ActorCategories,
         }
 
         public enum IfWhileAwaitSetRamSubTypes

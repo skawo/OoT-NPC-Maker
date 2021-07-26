@@ -451,11 +451,6 @@ namespace NPC_Maker.Scripts
             return (UInt32)Helper_GetValFromDict(SplitLine, Index, VarType, 0, UInt16.MaxValue, Dicts.Actors, ParseException.UnrecognizedActor(SplitLine));
         }
 
-        public static Int32 Helper_GetActorCategory(string[] SplitLine, int Index, int VarType)
-        {
-            return Helper_GetValFromDict(SplitLine, Index, VarType, 0, 11, Dicts.ActorCategories, ParseException.UnrecognizedActorCategory(SplitLine));
-        }
-
         public static Int32 Helper_GetSFXId(string[] SplitLine, int Index, int VarType)
         {
             return Helper_GetValFromDict(SplitLine, Index, VarType, -1, Int16.MaxValue, Dicts.SFXes, ParseException.UnrecognizedSFX(SplitLine));

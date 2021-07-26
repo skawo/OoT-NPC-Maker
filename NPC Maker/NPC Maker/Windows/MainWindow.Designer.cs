@@ -268,7 +268,6 @@
             this.listsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.objectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.actorsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.actorCategoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sFXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
@@ -3278,7 +3277,6 @@
             this.listsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.objectsToolStripMenuItem,
             this.actorsToolStripMenuItem1,
-            this.actorCategoriesToolStripMenuItem,
             this.sFXToolStripMenuItem,
             this.musicToolStripMenuItem1});
             this.listsToolStripMenuItem.Name = "listsToolStripMenuItem";
@@ -3298,13 +3296,6 @@
             this.actorsToolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
             this.actorsToolStripMenuItem1.Text = "Actors";
             this.actorsToolStripMenuItem1.Click += new System.EventHandler(this.ActorsToolStripMenuItem1_Click);
-            // 
-            // actorCategoriesToolStripMenuItem
-            // 
-            this.actorCategoriesToolStripMenuItem.Name = "actorCategoriesToolStripMenuItem";
-            this.actorCategoriesToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.actorCategoriesToolStripMenuItem.Text = "Actor categories";
-            this.actorCategoriesToolStripMenuItem.Click += new System.EventHandler(this.ActorCategoriesToolStripMenuItem_Click);
             // 
             // sFXToolStripMenuItem
             // 
@@ -3600,7 +3591,6 @@
         private System.Windows.Forms.ToolStripMenuItem actorsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem sFXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem musicToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem actorCategoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkSyntaxToolStripMenuItem;
         private System.Windows.Forms.CheckBox Chkb_IgnoreY;
         private System.Windows.Forms.Label SmoothingCnts;

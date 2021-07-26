@@ -13,8 +13,6 @@ namespace NPC_Maker.Scripts
 
                 UInt32 ActorNum = 0;
                 byte ActorNumT = 0;
-                Int32 ActorCat = 0;
-                byte ActorCatT = 0;
                 object Scale = 0;
                 byte ScaleT = 0;
                 object Speed = 0;
@@ -47,20 +45,17 @@ namespace NPC_Maker.Scripts
                     {
                         case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 7 - NoSpeed);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6 - NoSpeed);
 
                                 ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorCatT = ScriptHelpers.GetVarType(SplitLine, 4);
-
                                 ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
-                                ActorCat = (Int32)ScriptHelpers.Helper_GetActorCategory(SplitLine, 4, ActorCatT);
 
-                                ScriptHelpers.GetScale(SplitLine, 5, ref ScaleT, ref Scale);
+                                ScriptHelpers.GetScale(SplitLine, 4, ref ScaleT, ref Scale);
 
                                 if (NoSpeed == 0)
                                 {
-                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
-                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
+                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 5);
+                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 5, SpeedT, 0, float.MaxValue);
                                 }
 
                                 break;
@@ -101,13 +96,13 @@ namespace NPC_Maker.Scripts
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
 
-                    return new InstructionScale((byte)SubID, ActorNum, ActorNumT, ActorCat, ActorCatT, Scale, ScaleT, (byte)SetSubType, Speed, SpeedT);
+                    return new InstructionScale((byte)SubID, ActorNum, ActorNumT, Scale, ScaleT, (byte)SetSubType, Speed, SpeedT);
 
                 }
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionScale((byte)SubID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    return new InstructionScale((byte)SubID, 0, 0, 0, 0, 0, 0, 0);
                 }
             }
             catch (Exception)
