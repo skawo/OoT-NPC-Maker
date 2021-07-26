@@ -1449,7 +1449,7 @@ namespace NPC_Maker
         {
             SELF = 0,
             PLAYER = 1,
-            CONFIG_ID = 2,
+            NPCMAKER = 2,
             ACTOR_ID = 3,
         }
 

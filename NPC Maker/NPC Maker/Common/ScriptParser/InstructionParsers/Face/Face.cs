@@ -23,7 +23,7 @@ namespace NPC_Maker.Scripts
 
                 switch (SubjectType)
                 {
-                    case (byte)Lists.TargetActorSubtypes.CONFIG_ID:
+                    case (byte)Lists.TargetActorSubtypes.NPCMAKER:
                         {
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
@@ -94,7 +94,7 @@ namespace NPC_Maker.Scripts
 
             switch (Type)
             {
-                case (int)Lists.TargetActorSubtypes.CONFIG_ID:
+                case (int)Lists.TargetActorSubtypes.NPCMAKER:
                     {
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 2);
 

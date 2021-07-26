@@ -17,7 +17,7 @@ namespace NPC_Maker.Scripts
 
                 switch (SetSubType)
                 {
-                    case (int)Lists.TargetActorSubtypes.CONFIG_ID:
+                    case (int)Lists.TargetActorSubtypes.NPCMAKER:
                         {
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 

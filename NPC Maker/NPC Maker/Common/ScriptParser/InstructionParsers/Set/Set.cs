@@ -303,14 +303,14 @@ namespace NPC_Maker.Scripts
                                 {
                                     case (int)Lists.TargetActorSubtypes.SELF: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.SELF, 0, 0);
                                     case (int)Lists.TargetActorSubtypes.PLAYER: return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.PLAYER, 0, 0);
-                                    case (int)Lists.TargetActorSubtypes.CONFIG_ID:
+                                    case (int)Lists.TargetActorSubtypes.NPCMAKER:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                             byte ValueType = ScriptHelpers.GetVarType(SplitLine, 3);
                                             UInt32 ActorNum = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 3, ValueType, 0, UInt16.MaxValue));
 
-                                            return new InstructionSetCameraTracking((byte)SubID, (byte)Lists.TargetActorSubtypes.CONFIG_ID, ActorNum, ValueType);
+                                            return new InstructionSetCameraTracking((byte)SubID, (byte)Lists.TargetActorSubtypes.NPCMAKER, ActorNum, ValueType);
                                         }
                                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                                         {
@@ -319,7 +319,7 @@ namespace NPC_Maker.Scripts
                                             byte ValueType = ScriptHelpers.GetVarType(SplitLine, 3);
                                             UInt32 ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ValueType);
 
-                                            return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.CONFIG_ID, ActorNum, ValueType);
+                                            return new InstructionSetCameraTracking((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.NPCMAKER, ActorNum, ValueType);
                                         }
                                     default: throw new Exception();
                                 }

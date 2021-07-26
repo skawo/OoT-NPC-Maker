@@ -60,7 +60,7 @@ namespace NPC_Maker.Scripts
 
                                 break;
                             }
-                        case (int)Lists.TargetActorSubtypes.CONFIG_ID:
+                        case (int)Lists.TargetActorSubtypes.NPCMAKER:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6 - NoSpeed);
 
