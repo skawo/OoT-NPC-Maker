@@ -386,7 +386,6 @@ namespace NPC_Maker
             OPEN_DOORS,
             MOVEMENT_IGNORE_Y,
             FADES_OUT,
-            GENERATES_LIGHT,
             LIGHT_GLOW,
             PAUSE_CUTSCENE,
             INVISIBLE,
@@ -449,6 +448,7 @@ namespace NPC_Maker
             EFFECT_IF_ATTACKED,
             UNSUCCESSFUL_TRADE_TEXT_ID,
             MOVEMENT_TYPE,
+            GENERATES_LIGHT,
         }
 
         public enum AwaitSubTypes
