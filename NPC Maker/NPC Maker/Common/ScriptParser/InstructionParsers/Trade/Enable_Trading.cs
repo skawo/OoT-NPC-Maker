@@ -111,13 +111,13 @@ namespace NPC_Maker.Scripts
                                         byte TextID_Adult_FailT = 0;
                                         byte TextID_Child_FailT = 0;
 
-                                        object FailItem = -1;
+                                        object FailItem = (float)-1;
                                         byte FailItemT = (byte)Lists.VarTypes.Normal;
 
                                         if (SplitTrFailItem[0].ToUpper().Trim() != Lists.Keyword_TradeDefault)
                                         {
                                             FailItemT = ScriptHelpers.GetVarType(SplitTrFailItem, 0);
-                                            FailItem = Convert.ToInt32(ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitTrFailItem, 0, FailItemT, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine)));
+                                            FailItem = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitTrFailItem, 0, FailItemT, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine));
                                         }
 
                                         ScriptHelpers.Helper_GetAdultChildTextIds(SplitTrFailItem, ref TextID_Adult_Fail, ref TextID_Child_Fail, ref TextID_Adult_FailT, ref TextID_Child_FailT, Entry.Messages);

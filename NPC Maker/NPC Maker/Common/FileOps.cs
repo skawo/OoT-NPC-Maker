@@ -268,6 +268,41 @@ namespace NPC_Maker
 
                         #endregion
 
+                        #region Messages
+
+                        List<byte> Header = new List<byte>();
+                        List<byte> MsgData = new List<byte>();
+
+                        int MsgOffset = 8 * Entry.Messages.Count();
+
+                        foreach (MessageEntry Msg in Entry.Messages)
+                        {
+                            List<byte> Message = Msg.ConvertTextData();
+                            Helpers.Ensure4ByteAlign(Message);
+                            MsgData.AddRange(Message);
+
+                            if (MsgData.Count > 1024)
+                                throw new Exception("One of the messages has exceeded 1024 bytes, and could not be saved.");
+
+                            Header.AddRangeBigEndian(MsgOffset);
+                            Header.Add(Msg.GetMessageTypePos());
+                            Helpers.Ensure2ByteAlign(Header);
+                            Header.AddRangeBigEndian((UInt16)Message.Count);
+
+                            MsgOffset += Message.Count();
+                        }
+
+                        EntryBytes.AddRangeBigEndian(8 + Header.Count + MsgData.Count);
+                        EntryBytes.AddRangeBigEndian(Offset + EntryBytes.Count + 8);
+                        EntryBytes.AddRange(Header);
+                        EntryBytes.AddRange(MsgData);
+
+                        CurLen += 8 + Header.Count + MsgData.Count;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #endregion
+
+
                         #region Animations
 
                         EntryBytes.AddRangeBigEndian((UInt32)Entry.Animations.Count());
@@ -380,40 +415,6 @@ namespace NPC_Maker
                         EntryBytes.AddRange(ExtraSegDataEntries.ToArray());
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                        #endregion
-
-                        #region Messages
-
-                        List<byte> Header = new List<byte>();
-                        List<byte> MsgData = new List<byte>();
-
-                        int MsgOffset = 8 * Entry.Messages.Count();
-
-                        foreach (MessageEntry Msg in Entry.Messages)
-                        {
-                            List<byte> Message = Msg.ConvertTextData();
-                            Helpers.Ensure4ByteAlign(Message);
-                            MsgData.AddRange(Message);
-
-                            if (MsgData.Count > 1024)
-                                throw new Exception("One of the messages has exceeded 1024 bytes, and could not be saved.");
-
-                            Header.AddRangeBigEndian(MsgOffset);
-                            Header.Add(Msg.GetMessageTypePos());
-                            Helpers.Ensure2ByteAlign(Header);
-                            Header.AddRangeBigEndian((UInt16)Message.Count);
-
-                            MsgOffset += Message.Count();
-                        }
-
-                        EntryBytes.AddRangeBigEndian(8 + Header.Count + MsgData.Count);
-                        EntryBytes.AddRangeBigEndian(Offset + EntryBytes.Count + 8);
-                        EntryBytes.AddRange(Header);
-                        EntryBytes.AddRange(MsgData);
-
-                        CurLen += 8 + Header.Count + MsgData.Count;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion
