@@ -238,7 +238,7 @@ namespace NPC_Maker.Scripts
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 4, 5);
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object Value2 = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType2, typeof(Lists.DungeonItems), ParseException.UnrecognizedDungeonItem(SplitLine));
@@ -246,7 +246,10 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Dungeon = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
 
-                                Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 4);
+                                Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
+
+                                if (SplitLine.Length == 5)
+                                    Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 4);
 
                                 Instructions.Insert(InsertIdx, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Dungeon, VarType2, Value2, Condition, EndIf, Else, LabelR));
                                 return Instructions;
@@ -264,12 +267,15 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.BUTTON_HELD:
                         case (int)Lists.IfSubTypes.BUTTON_PRESSED:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
                                 object Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons));
 
-                                Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
+                                Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, (UInt32)Value, Condition, EndIf, Else, LabelR));
+                                if (SplitLine.Length == 4)
+                                    Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
+
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         default:
@@ -324,10 +330,10 @@ namespace NPC_Maker.Scripts
         {
             Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
 
+            ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
+
             if (SplitLine.Length == 4)
                 Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
-
-            ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
             byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
             object Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType, Enumtype, Throw);
