@@ -5,11 +5,11 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionKill : Instruction
     {
-        public UInt32 ActorID;
+        public object ActorID;
         public byte AIDVarT;
         public byte SubID;
 
-        public InstructionKill(byte _SubID, UInt32 _ActorID, byte _AIDVarT) : base((byte)Lists.Instructions.KILL)
+        public InstructionKill(byte _SubID, object _ActorID, byte _AIDVarT) : base((byte)Lists.Instructions.KILL)
         {
             ActorID = _ActorID;
             AIDVarT = _AIDVarT;

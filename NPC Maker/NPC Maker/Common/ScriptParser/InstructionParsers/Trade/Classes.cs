@@ -7,12 +7,12 @@ namespace NPC_Maker.Scripts
     {
         public TradeSetting Correct;
         public List<TradeSetting> Failure;
-        public UInt32 AdultText;
-        public UInt32 ChildText;
+        public object AdultText;
+        public object ChildText;
         public byte AdultTextT;
         public byte ChildTextT;
 
-        public InstructionTrade(byte _ID, TradeSetting _Correct, List<TradeSetting> _Failure, UInt32 _AdultText, UInt32 _ChildText, byte _AdultTextT, byte _ChildTextT) : base(_ID)
+        public InstructionTrade(byte _ID, TradeSetting _Correct, List<TradeSetting> _Failure, object _AdultText, object _ChildText, byte _AdultTextT, byte _ChildTextT) : base(_ID)
         {
             AdultText = _AdultText;
             ChildText = _ChildText;
@@ -63,14 +63,14 @@ namespace NPC_Maker.Scripts
 
     public class TradeSetting
     {
-        public Int32 Item;
-        public Int32 AdultText;
-        public Int32 ChildText;
+        public object Item;
+        public object AdultText;
+        public object ChildText;
         public byte ItemT;
         public byte AdultTextT;
         public byte ChildTextT;
 
-        public TradeSetting(Int32 _Item, Int32 _AdultText, Int32 _ChildText, byte _ItemT, byte _AdultTextT, byte _ChildTextT)
+        public TradeSetting(object _Item, object _AdultText, object _ChildText, byte _ItemT, byte _AdultTextT, byte _ChildTextT)
         {
             Item = _Item;
             AdultText = _AdultText;

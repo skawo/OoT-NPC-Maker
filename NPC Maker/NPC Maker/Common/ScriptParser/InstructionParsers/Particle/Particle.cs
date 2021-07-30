@@ -14,7 +14,7 @@ namespace NPC_Maker.Scripts
 
                 int End = GetCorrespondingEndParticle(Lines, LineNo);
 
-                Int32 Type = 0;
+                object Type = 0;
                 byte TypeT = 0;
 
                 byte RelativePos = 0;
@@ -40,38 +40,38 @@ namespace NPC_Maker.Scripts
                 byte VelYT = 0;
                 byte VelZT = 0;
 
-                UInt32[] PrimRGBA = new UInt32[] { 0, 0, 0, 0 };
+                object[] PrimRGBA = new object[] { 0, 0, 0, 0 };
                 byte[] PrimRGBAVarT = new byte[] { 0, 0, 0, 0 };
-                UInt32[] SecRGBA = new UInt32[] { 0, 0, 0, 0 };
+                object[] SecRGBA = new object[] { 0, 0, 0, 0 };
                 byte[] SecRGBAVarT = new byte[] { 0, 0, 0, 0 };
 
-                Int32 Scale = 0;
+                object Scale = 0;
                 byte ScaleT = 0;
 
-                Int32 ScaleUpdate = 0;
+                object ScaleUpdate = 0;
                 byte ScaleUpdateT = 0;
 
-                Int32 RadiusUpdateD = 0;
+                object RadiusUpdateD = 0;
                 byte RadiusUpdateDT = 0;
 
-                Int32 Life = 0;
+                object Life = 0;
                 byte LifeT = 0;
 
-                Int32 NumBolts = 0;
+                object NumBolts = 0;
                 byte NumBoltsT = 0;
 
-                Int32 Yaw = 0;
+                object Yaw = 0;
                 byte YawT = 0;
 
-                Int32 DListIndex = 0;
+                object DListIndex = 0;
                 byte DListIndexT = 0;
 
-                Int32 ColorType = 0;
+                object ColorType = 0;
                 byte ColorTypeT = 0;
 
                 string LabelJumpIfFound = "__RETURN__";
 
-                Int32 Alpha = 0;
+                object Alpha = 0;
                 byte AlphaT = 0;
 
 
@@ -112,7 +112,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
 
-                                RelativePos = (byte)(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
+                                RelativePos = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
                                 ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosXT, ref PosYT, ref PosZT, ref PosX, ref PosY, ref PosZ);
 
                                 continue;
@@ -152,7 +152,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 ScaleT = ScriptHelpers.GetVarType(Split, 1);
-                                Scale = Convert.ToInt32(ScriptHelpers.GetValueByType(Split, 1, ScaleT, Int16.MinValue, Int16.MaxValue));
+                                Scale = ScriptHelpers.GetValueByType(Split, 1, ScaleT, Int16.MinValue, Int16.MaxValue);
 
                                 continue;
                             }
@@ -162,7 +162,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 ScaleUpdateT = ScriptHelpers.GetVarType(Split, 1);
-                                ScaleUpdate = Convert.ToInt32(ScriptHelpers.GetValueByType(Split, 1, ScaleUpdateT, Int16.MinValue, Int16.MaxValue));
+                                ScaleUpdate = ScriptHelpers.GetValueByType(Split, 1, ScaleUpdateT, Int16.MinValue, Int16.MaxValue);
 
                                 continue;
                             }
@@ -171,7 +171,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 RadiusUpdateDT = ScriptHelpers.GetVarType(Split, 1);
-                                RadiusUpdateD = Convert.ToInt32(ScriptHelpers.GetValueByType(Split, 1, RadiusUpdateDT, Int16.MinValue, Int16.MaxValue));
+                                RadiusUpdateD = ScriptHelpers.GetValueByType(Split, 1, RadiusUpdateDT, Int16.MinValue, Int16.MaxValue);
 
                                 continue;
                             }
@@ -180,7 +180,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 NumBoltsT = ScriptHelpers.GetVarType(Split, 1);
-                                NumBolts = Convert.ToInt32(ScriptHelpers.GetValueByType(Split, 1, NumBoltsT, 0, UInt16.MaxValue));
+                                NumBolts = ScriptHelpers.GetValueByType(Split, 1, NumBoltsT, 0, UInt16.MaxValue);
 
                                 continue;
                             }
@@ -189,7 +189,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 YawT = ScriptHelpers.GetVarType(Split, 1);
-                                Yaw = Convert.ToInt32(ScriptHelpers.GetValueByType(Split, 1, YawT, 0, UInt16.MaxValue));
+                                Yaw = ScriptHelpers.GetValueByType(Split, 1, YawT, 0, UInt16.MaxValue);
 
                                 continue;
                             }
@@ -198,7 +198,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 DListIndexT = ScriptHelpers.GetVarType(Split, 1);
-                                DListIndex = Convert.ToInt32(ScriptHelpers.Helper_GetDListID(Split, 1, DListIndexT, Entry.ExtraDisplayLists));
+                                DListIndex = ScriptHelpers.Helper_GetDListID(Split, 1, DListIndexT, Entry.ExtraDisplayLists);
 
                                 continue;
                             }
@@ -207,7 +207,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 ColorTypeT = ScriptHelpers.GetVarType(Split, 1);
-                                ColorType = Convert.ToInt32(ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, ColorTypeT, typeof(Lists.LightPointColors), ParseException.UnrecognizedParticle(Split)));
+                                ColorType = ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, ColorTypeT, typeof(Lists.LightPointColors), ParseException.UnrecognizedParticle(Split));
 
                                 continue;
                             }
@@ -222,7 +222,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 AlphaT = ScriptHelpers.GetVarType(Split, 1);
-                                Alpha = Convert.ToInt32(ScriptHelpers.GetValueByType(Split, 1, AlphaT, 0, byte.MaxValue));
+                                Alpha = ScriptHelpers.GetValueByType(Split, 1, AlphaT, 0, byte.MaxValue);
 
                                 continue;
                             }

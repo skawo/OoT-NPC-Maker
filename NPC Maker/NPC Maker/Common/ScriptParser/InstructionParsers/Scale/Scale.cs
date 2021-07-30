@@ -9,9 +9,9 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ScaleSubTypes), 2);
+                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ScaleSubTypes), 1);
 
-                UInt32 ActorNum = 0;
+                object ActorNum = 0;
                 byte ActorNumT = 0;
                 object Scale = 0;
                 byte ScaleT = 0;
@@ -39,7 +39,7 @@ namespace NPC_Maker.Scripts
 
                     ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
-                    int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                    int SetSubType = Convert.ToInt32(ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine)));
 
                     switch (SetSubType)
                     {
@@ -48,7 +48,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6 - NoSpeed);
 
                                 ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
+                                ActorNum = ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
 
                                 ScriptHelpers.GetScale(SplitLine, 4, ref ScaleT, ref Scale);
 
@@ -65,7 +65,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6 - NoSpeed);
 
                                 ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
+                                ActorNum = ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
 
                                 ScriptHelpers.GetScale(SplitLine, 4, ref ScaleT, ref Scale);
 

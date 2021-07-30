@@ -21,18 +21,18 @@ namespace NPC_Maker.Scripts
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
 
-                                Int32? SNDID = 0;
+                                object SNDID = 0;
 
                                 SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
                                                        ScriptHelpers.Helper_GetSFXId(SplitLine, 2, VarType)
                                                                                :
                                                        ScriptHelpers.Helper_GetMusicId(SplitLine, 2, VarType);
 
-                                if (SNDID < 0)
+                                if (Convert.ToInt32(SNDID) < 0)
                                     throw ParseException.ParamOutOfRange(SplitLine);
 
 
-                                return new InstructionPlay((byte)SubID, (UInt32)SNDID, VarType);
+                                return new InstructionPlay((byte)SubID, SNDID, VarType);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE:
                             {
@@ -44,7 +44,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32 Addr = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue));
+                                object Addr = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue);
 
                                 return new InstructionPlay((byte)SubID, Addr, VarType);
                             }
@@ -53,7 +53,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32 ID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue));
+                                object ID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue);
 
                                 return new InstructionPlay((byte)SubID, ID, VarType);
                             }

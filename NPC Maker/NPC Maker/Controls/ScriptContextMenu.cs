@@ -22,6 +22,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem soundEffectsToolStripMenuItem;
         private static ToolStripMenuItem musicToolStripMenuItem;
         private static ToolStripMenuItem actorstoolStripMenuItem;
+        private static ToolStripMenuItem ocarinaSongstoolStripMenuItem;
         private static ToolStripMenuItem objectstoolStripMenuItem;
 
         public static void MakeContextMenu()
@@ -40,6 +41,7 @@ namespace NPC_Maker
             musicToolStripMenuItem = new ToolStripMenuItem();
             actorstoolStripMenuItem = new ToolStripMenuItem();
             objectstoolStripMenuItem = new ToolStripMenuItem();
+            ocarinaSongstoolStripMenuItem = new ToolStripMenuItem();
 
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
@@ -51,6 +53,7 @@ namespace NPC_Maker
                                                                     itemsdungeonToolStripMenuItem,
                                                                     itemstradeToolStripMenuItem,
                                                                     playerMasksToolStripMenuItem,
+                                                                    ocarinaSongstoolStripMenuItem,
                                                                     soundEffectsToolStripMenuItem,
                                                                     musicToolStripMenuItem,
                                                                     actorstoolStripMenuItem,
@@ -137,6 +140,12 @@ namespace NPC_Maker
             objectstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             objectstoolStripMenuItem.Text = "Objects";
             objectstoolStripMenuItem.Click += ObjectstoolStripMenuItem_Click;
+            // 
+            // ocarinaSongstoolStripMenuItem
+            // 
+            ocarinaSongstoolStripMenuItem.Name = "ocarinaSongstoolStripMenuItem";
+            ocarinaSongstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            ocarinaSongstoolStripMenuItem.Text = "Ocarina songs";
 
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
@@ -165,6 +174,7 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.Items)), itemsToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuestItems)), questItemsToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.PlayerMasks)), playerMasksToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.OcarinaSongs)), ocarinaSongstoolStripMenuItem);
 
         }
 

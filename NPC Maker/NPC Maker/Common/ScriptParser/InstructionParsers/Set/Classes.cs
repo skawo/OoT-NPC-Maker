@@ -119,14 +119,14 @@ namespace NPC_Maker.Scripts
 
     public class InstructionSetEnvColor : InstructionSub
     {
-        public UInt32 R;
-        public UInt32 G;
-        public UInt32 B;
+        public object R;
+        public object G;
+        public object B;
         public byte ValType1;
         public byte ValType2;
         public byte ValType3;
 
-        public InstructionSetEnvColor(byte _SubID, UInt32 _R, UInt32 _G, UInt32 _B,
+        public InstructionSetEnvColor(byte _SubID, object _R, object _G, object _B,
                                       byte _ValType1, byte _ValType2, byte _ValType3)
                                      : base((int)Lists.Instructions.SET, _SubID)
         {
@@ -256,13 +256,13 @@ namespace NPC_Maker.Scripts
         }
     }
 
-    public class InstructionSetCameraTracking : InstructionSubWValueType
+    public class InstructionSetActor : InstructionSubWValueType
     {
         byte Target { get; set; }
-        UInt32 Value { get; set; }
+        object Value { get; set; }
 
 
-        public InstructionSetCameraTracking(byte _SubID, byte _Target, UInt32 _Value, byte _ValueType) : base((int)Lists.Instructions.SET, _SubID, _ValueType)
+        public InstructionSetActor(byte _SubID, byte _Target, object _Value, byte _ValueType) : base((int)Lists.Instructions.SET, _SubID, _ValueType)
         {
             Target = _Target;
             Value = _Value;

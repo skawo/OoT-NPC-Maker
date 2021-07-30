@@ -14,12 +14,12 @@ namespace NPC_Maker.Scripts
                 byte FaceType = 0;
                 byte TargetType = 0;
 
-                UInt32 ActorNum1 = 0;
+                object ActorNum1 = 0;
                 byte ANumVarT1 = 0;
-                UInt32 ActorNum2 = 0;
+                object ActorNum2 = 0;
                 byte ANumVarT2 = 0;
 
-                SubjectType = (byte)GetActor(SplitLine, 1, ref ActorNum1, ref ANumVarT1);
+                SubjectType = (byte)(GetActor(SplitLine, 1, ref ActorNum1, ref ANumVarT1));
 
                 switch (SubjectType)
                 {
@@ -88,9 +88,9 @@ namespace NPC_Maker.Scripts
             return (byte)ft;
         }
 
-        private int GetActor(string[] SplitLine, int Index, ref UInt32 NumActor, ref byte NumActorT)
+        private int GetActor(string[] SplitLine, int Index, ref object NumActor, ref byte NumActorT)
         {
-            int Type = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes), Index);
+            int Type = Convert.ToInt32(ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes), Index));
 
             switch (Type)
             {
@@ -99,7 +99,7 @@ namespace NPC_Maker.Scripts
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 2);
 
                         NumActorT = ScriptHelpers.GetVarType(SplitLine, Index + 1);
-                        NumActor = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, Index + 1, NumActorT, 0, UInt16.MaxValue));
+                        NumActor = ScriptHelpers.GetValueByType(SplitLine, Index + 1, NumActorT, 0, UInt16.MaxValue);
                         break;
                     }
                 case (int)Lists.TargetActorSubtypes.ACTOR_ID:
@@ -107,7 +107,7 @@ namespace NPC_Maker.Scripts
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 2);
 
                         NumActorT = ScriptHelpers.GetVarType(SplitLine, Index + 1);
-                        NumActor = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, Index + 1, NumActorT);
+                        NumActor = ScriptHelpers.Helper_GetActorId(SplitLine, Index + 1, NumActorT);
                         break;
                     }
                 case (int)Lists.TargetActorSubtypes.PLAYER: break;

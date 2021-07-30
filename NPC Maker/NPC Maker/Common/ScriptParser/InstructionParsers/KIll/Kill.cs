@@ -12,7 +12,7 @@ namespace NPC_Maker.Scripts
 
                 int SetSubType = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes));
 
-                UInt32 ActorNum = 0;
+                object ActorNum = 0;
                 byte ANumVarT = 0;
 
                 switch (SetSubType)
@@ -22,7 +22,7 @@ namespace NPC_Maker.Scripts
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
                             ANumVarT = ScriptHelpers.GetVarType(SplitLine, 2);
-                            ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ANumVarT, 0, UInt16.MaxValue);
+                            ActorNum = ScriptHelpers.GetValueByType(SplitLine, 3, ANumVarT, 0, UInt16.MaxValue);
 
                             break;
                         }
@@ -31,7 +31,7 @@ namespace NPC_Maker.Scripts
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
                             ANumVarT = ScriptHelpers.GetVarType(SplitLine, 2);
-                            ActorNum = (UInt16)ScriptHelpers.Helper_GetActorId(SplitLine, 2, ANumVarT);
+                            ActorNum = ScriptHelpers.Helper_GetActorId(SplitLine, 2, ANumVarT);
 
                             break;
                         }

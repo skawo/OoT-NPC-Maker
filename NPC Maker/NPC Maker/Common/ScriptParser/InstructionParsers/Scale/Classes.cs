@@ -5,7 +5,7 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionScale : InstructionSub
     {
-        public UInt32 ActorID;
+        public object ActorID;
         public object Scale;
         public byte ScaleType;
         public byte ActorIDT;
@@ -14,7 +14,7 @@ namespace NPC_Maker.Scripts
         public object Speed;
         public byte SpeedT;
 
-        public InstructionScale(byte _SubID, UInt32 _ActorID, byte _ActorIDT, object _Scale, byte _ScaleType, byte _Target, object _Speed, byte _SpeedT)
+        public InstructionScale(byte _SubID, object _ActorID, byte _ActorIDT, object _Scale, byte _ScaleType, byte _Target, object _Speed, byte _SpeedT)
                                 : base((int)Lists.Instructions.SCALE, _SubID)
         {
             ActorID = _ActorID;

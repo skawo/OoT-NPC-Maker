@@ -19,9 +19,9 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
                                 byte ValueType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32? Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, ValueType, typeof(Lists.AwardItems), ParseException.UnrecognizedAwardItem(SplitLine));
+                                object Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, ValueType, typeof(Lists.AwardItems), ParseException.UnrecognizedAwardItem(SplitLine));
 
-                                return new InstructionItem((byte)Lists.Instructions.ITEM, Convert.ToByte(SubID), (UInt32)Value, ValueType);
+                                return new InstructionItem((byte)Lists.Instructions.ITEM, Convert.ToByte(SubID), Value, ValueType);
                             }
                         case (int)Lists.ItemSubTypes.GIVE:
                         case (int)Lists.ItemSubTypes.TAKE:
@@ -29,9 +29,9 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
                                 byte ValueType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                UInt32? Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, ValueType, typeof(Lists.Items), ParseException.UnrecognizedInventoryItem(SplitLine));
+                                object Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, ValueType, typeof(Lists.Items), ParseException.UnrecognizedInventoryItem(SplitLine));
 
-                                return new InstructionItem((byte)Lists.Instructions.ITEM, Convert.ToByte(SubID), (UInt32)Value, ValueType);
+                                return new InstructionItem((byte)Lists.Instructions.ITEM, Convert.ToByte(SubID), Value, ValueType);
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);

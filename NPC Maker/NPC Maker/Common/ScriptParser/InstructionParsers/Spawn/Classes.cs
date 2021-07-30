@@ -12,8 +12,8 @@ namespace NPC_Maker.Scripts
         object RotX { get; set; }
         object RotY { get; set; }
         object RotZ { get; set; }
-        UInt32 ActorID { get; set; }
-        UInt32 ActorVariable { get; set; }
+        object ActorID { get; set; }
+        object ActorVariable { get; set; }
 
         byte ActorIDVarT { get; set; }
         byte ActorVarT { get; set; }
@@ -25,8 +25,8 @@ namespace NPC_Maker.Scripts
         byte RotZT { get; set; }
 
         public InstructionSpawn(byte _PosRelativeness, object _PosX, byte _PosXT, object _PosY, byte _PosYT, object _PosZ, byte _PosZT,
-                                object _RotX, byte _RotXT, object _RotY, byte _RotYT, object _RotZ, byte _RotZT, UInt32 _ActorID, byte _ActorIDVarT,
-                                UInt32 _ActorVariable, byte _ActorVarT) : base((byte)Lists.Instructions.SPAWN)
+                                object _RotX, byte _RotXT, object _RotY, byte _RotYT, object _RotZ, byte _RotZT, object _ActorID, byte _ActorIDVarT,
+                                object _ActorVariable, byte _ActorVarT) : base((byte)Lists.Instructions.SPAWN)
         {
             PosRelativeness = _PosRelativeness;
             PosX = _PosX;

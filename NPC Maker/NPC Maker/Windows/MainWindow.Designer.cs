@@ -271,6 +271,10 @@
             this.sFXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.Lbl_ScriptsVars = new System.Windows.Forms.Label();
+            this.Lbl_ScriptsFVars = new System.Windows.Forms.Label();
+            this.NumUpDown_ScriptsVar = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_ScriptsFVar = new System.Windows.Forms.NumericUpDown();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -337,6 +341,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsVar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsFVar)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -1209,6 +1215,10 @@
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
+            this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_ScriptsFVar);
+            this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_ScriptsVar);
+            this.Tab3_BehaviorData.Controls.Add(this.Lbl_ScriptsFVars);
+            this.Tab3_BehaviorData.Controls.Add(this.Lbl_ScriptsVars);
             this.Tab3_BehaviorData.Controls.Add(this.ChkInvisible);
             this.Tab3_BehaviorData.Controls.Add(this.ChkOnlyWhenLens);
             this.Tab3_BehaviorData.Controls.Add(this.ChkBox_DebugCol);
@@ -1240,7 +1250,7 @@
             // ChkInvisible
             // 
             this.ChkInvisible.AutoSize = true;
-            this.ChkInvisible.Location = new System.Drawing.Point(584, 158);
+            this.ChkInvisible.Location = new System.Drawing.Point(584, 212);
             this.ChkInvisible.Name = "ChkInvisible";
             this.ChkInvisible.Size = new System.Drawing.Size(64, 17);
             this.ChkInvisible.TabIndex = 82;
@@ -1252,7 +1262,7 @@
             // ChkOnlyWhenLens
             // 
             this.ChkOnlyWhenLens.AutoSize = true;
-            this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 158);
+            this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 212);
             this.ChkOnlyWhenLens.Name = "ChkOnlyWhenLens";
             this.ChkOnlyWhenLens.Size = new System.Drawing.Size(144, 17);
             this.ChkOnlyWhenLens.TabIndex = 81;
@@ -1264,7 +1274,7 @@
             // ChkBox_DebugCol
             // 
             this.ChkBox_DebugCol.AutoSize = true;
-            this.ChkBox_DebugCol.Location = new System.Drawing.Point(422, 183);
+            this.ChkBox_DebugCol.Location = new System.Drawing.Point(422, 237);
             this.ChkBox_DebugCol.Name = "ChkBox_DebugCol";
             this.ChkBox_DebugCol.Size = new System.Drawing.Size(138, 17);
             this.ChkBox_DebugCol.TabIndex = 80;
@@ -1288,7 +1298,7 @@
             this.Panel_Colors.Controls.Add(this.ChkBox_Glow);
             this.Panel_Colors.Controls.Add(this.NumUp_LightLimb);
             this.Panel_Colors.Controls.Add(this.ChkBox_GenLight);
-            this.Panel_Colors.Location = new System.Drawing.Point(419, 295);
+            this.Panel_Colors.Location = new System.Drawing.Point(419, 372);
             this.Panel_Colors.Name = "Panel_Colors";
             this.Panel_Colors.Size = new System.Drawing.Size(341, 134);
             this.Panel_Colors.TabIndex = 77;
@@ -1450,7 +1460,7 @@
             // 
             // NumUp_RiddenBy
             // 
-            this.NumUp_RiddenBy.Location = new System.Drawing.Point(507, 36);
+            this.NumUp_RiddenBy.Location = new System.Drawing.Point(526, 36);
             this.NumUp_RiddenBy.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1475,7 +1485,7 @@
             // Label_RiddenBy
             // 
             this.Label_RiddenBy.AutoSize = true;
-            this.Label_RiddenBy.Location = new System.Drawing.Point(504, 15);
+            this.Label_RiddenBy.Location = new System.Drawing.Point(523, 15);
             this.Label_RiddenBy.Name = "Label_RiddenBy";
             this.Label_RiddenBy.Size = new System.Drawing.Size(78, 13);
             this.Label_RiddenBy.TabIndex = 78;
@@ -1484,7 +1494,7 @@
             // ChkB_FadeOut
             // 
             this.ChkB_FadeOut.AutoSize = true;
-            this.ChkB_FadeOut.Location = new System.Drawing.Point(584, 110);
+            this.ChkB_FadeOut.Location = new System.Drawing.Point(584, 164);
             this.ChkB_FadeOut.Name = "ChkB_FadeOut";
             this.ChkB_FadeOut.Size = new System.Drawing.Size(150, 17);
             this.ChkB_FadeOut.TabIndex = 77;
@@ -1502,7 +1512,7 @@
             this.Btn_ReactIfAtt.Controls.Add(this.Txtbox_ReactIfAtt);
             this.Btn_ReactIfAtt.Controls.Add(this.Lbl_ReactIfAttSnd);
             this.Btn_ReactIfAtt.Controls.Add(this.Chkb_ReactIfAtt);
-            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 202);
+            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 279);
             this.Btn_ReactIfAtt.Name = "Btn_ReactIfAtt";
             this.Btn_ReactIfAtt.Size = new System.Drawing.Size(341, 87);
             this.Btn_ReactIfAtt.TabIndex = 76;
@@ -1588,7 +1598,7 @@
             // Chkb_Opendoors
             // 
             this.Chkb_Opendoors.AutoSize = true;
-            this.Chkb_Opendoors.Location = new System.Drawing.Point(584, 88);
+            this.Chkb_Opendoors.Location = new System.Drawing.Point(584, 142);
             this.Chkb_Opendoors.Name = "Chkb_Opendoors";
             this.Chkb_Opendoors.Size = new System.Drawing.Size(167, 17);
             this.Chkb_Opendoors.TabIndex = 74;
@@ -1600,7 +1610,7 @@
             // ChkRunJustScript
             // 
             this.ChkRunJustScript.AutoSize = true;
-            this.ChkRunJustScript.Location = new System.Drawing.Point(584, 133);
+            this.ChkRunJustScript.Location = new System.Drawing.Point(584, 187);
             this.ChkRunJustScript.Name = "ChkRunJustScript";
             this.ChkRunJustScript.Size = new System.Drawing.Size(91, 17);
             this.ChkRunJustScript.TabIndex = 73;
@@ -1612,7 +1622,7 @@
             // Lbl_Misc
             // 
             this.Lbl_Misc.AutoSize = true;
-            this.Lbl_Misc.Location = new System.Drawing.Point(419, 67);
+            this.Lbl_Misc.Location = new System.Drawing.Point(419, 121);
             this.Lbl_Misc.Name = "Lbl_Misc";
             this.Lbl_Misc.Size = new System.Drawing.Size(32, 13);
             this.Lbl_Misc.TabIndex = 71;
@@ -2702,7 +2712,7 @@
             // Checkbox_AlwaysDraw
             // 
             this.Checkbox_AlwaysDraw.AutoSize = true;
-            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(422, 112);
+            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(422, 166);
             this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
             this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(146, 17);
             this.Checkbox_AlwaysDraw.TabIndex = 70;
@@ -2728,7 +2738,7 @@
             // Checkbox_AlwaysActive
             // 
             this.Checkbox_AlwaysActive.AutoSize = true;
-            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(422, 89);
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(422, 143);
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
             this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(156, 17);
             this.Checkbox_AlwaysActive.TabIndex = 68;
@@ -2740,7 +2750,7 @@
             // Checkbox_CanPressSwitches
             // 
             this.Checkbox_CanPressSwitches.AutoSize = true;
-            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(422, 135);
+            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(422, 189);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
             this.Checkbox_CanPressSwitches.TabIndex = 58;
@@ -2794,7 +2804,6 @@
             this.MsgText.CharWidth = 8;
             this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgText.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.MsgText.IsReplaceMode = false;
             this.MsgText.Location = new System.Drawing.Point(260, 98);
             this.MsgText.Name = "MsgText";
@@ -3286,28 +3295,28 @@
             // objectsToolStripMenuItem
             // 
             this.objectsToolStripMenuItem.Name = "objectsToolStripMenuItem";
-            this.objectsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.objectsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.objectsToolStripMenuItem.Text = "Objects";
             this.objectsToolStripMenuItem.Click += new System.EventHandler(this.ObjectsToolStripMenuItem_Click);
             // 
             // actorsToolStripMenuItem1
             // 
             this.actorsToolStripMenuItem1.Name = "actorsToolStripMenuItem1";
-            this.actorsToolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
+            this.actorsToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
             this.actorsToolStripMenuItem1.Text = "Actors";
             this.actorsToolStripMenuItem1.Click += new System.EventHandler(this.ActorsToolStripMenuItem1_Click);
             // 
             // sFXToolStripMenuItem
             // 
             this.sFXToolStripMenuItem.Name = "sFXToolStripMenuItem";
-            this.sFXToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.sFXToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.sFXToolStripMenuItem.Text = "SFX";
             this.sFXToolStripMenuItem.Click += new System.EventHandler(this.SFXToolStripMenuItem_Click);
             // 
             // musicToolStripMenuItem1
             // 
             this.musicToolStripMenuItem1.Name = "musicToolStripMenuItem1";
-            this.musicToolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
+            this.musicToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
             this.musicToolStripMenuItem1.Text = "Music";
             this.musicToolStripMenuItem1.Click += new System.EventHandler(this.MusicToolStripMenuItem1_Click);
             // 
@@ -3315,6 +3324,52 @@
             // 
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
+            // 
+            // Lbl_ScriptsVars
+            // 
+            this.Lbl_ScriptsVars.AutoSize = true;
+            this.Lbl_ScriptsVars.Location = new System.Drawing.Point(419, 71);
+            this.Lbl_ScriptsVars.Name = "Lbl_ScriptsVars";
+            this.Lbl_ScriptsVars.Size = new System.Drawing.Size(87, 13);
+            this.Lbl_ScriptsVars.TabIndex = 83;
+            this.Lbl_ScriptsVars.Text = "Scripts variables:";
+            // 
+            // Lbl_ScriptsFVars
+            // 
+            this.Lbl_ScriptsFVars.AutoSize = true;
+            this.Lbl_ScriptsFVars.Location = new System.Drawing.Point(523, 71);
+            this.Lbl_ScriptsFVars.Name = "Lbl_ScriptsFVars";
+            this.Lbl_ScriptsFVars.Size = new System.Drawing.Size(110, 13);
+            this.Lbl_ScriptsFVars.TabIndex = 84;
+            this.Lbl_ScriptsFVars.Text = "Scripts float variables:";
+            // 
+            // NumUpDown_ScriptsVar
+            // 
+            this.NumUpDown_ScriptsVar.Location = new System.Drawing.Point(422, 87);
+            this.NumUpDown_ScriptsVar.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_ScriptsVar.Name = "NumUpDown_ScriptsVar";
+            this.NumUpDown_ScriptsVar.Size = new System.Drawing.Size(71, 20);
+            this.NumUpDown_ScriptsVar.TabIndex = 85;
+            this.NumUpDown_ScriptsVar.Tag = "SCRIPTVARS";
+            this.NumUpDown_ScriptsVar.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // NumUpDown_ScriptsFVar
+            // 
+            this.NumUpDown_ScriptsFVar.Location = new System.Drawing.Point(526, 87);
+            this.NumUpDown_ScriptsFVar.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_ScriptsFVar.Name = "NumUpDown_ScriptsFVar";
+            this.NumUpDown_ScriptsFVar.Size = new System.Drawing.Size(71, 20);
+            this.NumUpDown_ScriptsFVar.TabIndex = 86;
+            this.NumUpDown_ScriptsFVar.Tag = "SCRIPTFVARS";
+            this.NumUpDown_ScriptsFVar.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // MainWindow
             // 
@@ -3408,6 +3463,8 @@
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsVar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsFVar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3655,6 +3712,10 @@
         private System.Windows.Forms.Button Btn_MsgRename;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private FastColoredTextBoxNS.FastColoredTextBox MsgText;
+        private System.Windows.Forms.NumericUpDown NumUpDown_ScriptsFVar;
+        private System.Windows.Forms.NumericUpDown NumUpDown_ScriptsVar;
+        private System.Windows.Forms.Label Lbl_ScriptsFVars;
+        private System.Windows.Forms.Label Lbl_ScriptsVars;
     }
 }
 

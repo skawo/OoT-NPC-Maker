@@ -112,6 +112,9 @@ namespace NPC_Maker
 
         public bool DEBUGShowCols { get; set; }
 
+        public byte NumVars { get; set; }
+        public byte NumFVars { get; set; }
+
         public NPCEntry()
         {
             NPCName = "";
@@ -203,6 +206,9 @@ namespace NPC_Maker
             VisibleUnderLensOfTruth = false;
             Invisible = false;
             DEBUGShowCols = false;
+
+            NumVars = 5;
+            NumFVars = 0;
         }
 
         public List<OutputColorEntry> ParseColorEntries()
@@ -301,6 +307,8 @@ namespace NPC_Maker
             LIGHTRADIUS,
             VISIBLEONLYLENS,
             INVISIBLE,
+            SCRIPTVARS,
+            SCRIPTFVARS,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -418,6 +426,10 @@ namespace NPC_Maker
                 case Members.LIGHTRADIUS: LightRadius = Convert.ToUInt16(Value); break;
                 case Members.VISIBLEONLYLENS: VisibleUnderLensOfTruth = Convert.ToBoolean(Value); break;
                 case Members.INVISIBLE: Invisible = Convert.ToBoolean(Value); break;
+
+                case Members.SCRIPTVARS: NumVars = Convert.ToByte(Value); break;
+                case Members.SCRIPTFVARS: NumFVars = Convert.ToByte(Value); break;
+
                 default: break;
             }
         }

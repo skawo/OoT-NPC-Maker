@@ -5,9 +5,9 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionPlay : InstructionSubWValueType
     {
-        public UInt32 Value;
+        public object Value;
 
-        public InstructionPlay(byte _SubID, UInt32 _Value, byte _ValueType) : base((int)Lists.Instructions.PLAY, _SubID, _ValueType)
+        public InstructionPlay(byte _SubID, object _Value, byte _ValueType) : base((int)Lists.Instructions.PLAY, _SubID, _ValueType)
         {
             Value = _Value;
             ValueType = _ValueType;

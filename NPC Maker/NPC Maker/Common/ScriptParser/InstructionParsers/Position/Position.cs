@@ -11,7 +11,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.PositionSubTypes), 2);
+                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.PositionSubTypes), 1);
 
                 byte ActorNumT = 0;
                 object ActorNum = 0;
@@ -49,7 +49,7 @@ namespace NPC_Maker.Scripts
                     if (SplitLine.Last().ToUpper() == Lists.Keyword_Ignore_Y)
                         IgnoreYPos = 1;
 
-                    int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                    int SetSubType = Convert.ToInt32(ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine)));
 
                     switch (SetSubType)
                     {
@@ -58,7 +58,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 8 - NoSpeed, 9 - NoSpeed);
 
                                 ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
+                                ActorNum = ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
 
                                 ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
 
@@ -75,7 +75,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 8 - NoSpeed, 9 - NoSpeed);
 
                                 ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
+                                ActorNum = ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
 
                                 ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
 

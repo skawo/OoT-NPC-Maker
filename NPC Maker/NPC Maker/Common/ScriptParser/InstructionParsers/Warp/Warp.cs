@@ -11,7 +11,7 @@ namespace NPC_Maker.Scripts
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 1);
-                UInt32 WarpID = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarType, 0, UInt16.MaxValue));
+                object WarpID = ScriptHelpers.GetValueByType(SplitLine, 1, VarType, 0, UInt16.MaxValue);
 
                 return new InstructionWarp(WarpID, VarType);
             }

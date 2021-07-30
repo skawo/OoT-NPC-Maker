@@ -24,7 +24,7 @@ namespace NPC_Maker.Scripts
                     throw ParseException.IfNotClosed(SplitLine);
 
                 byte VarTOcarina = ScriptHelpers.GetVarType(SplitLine, 1);
-                UInt32? Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 1, VarTOcarina, typeof(Lists.OcarinaSongs), ParseException.UnrecognizedOcarinaSong(SplitLine));
+                object Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 1, VarTOcarina, typeof(Lists.OcarinaSongs), ParseException.UnrecognizedOcarinaSong(SplitLine));
 
                 Instructions.Add(new InstructionOcarina((int)Lists.Instructions.OCARINA, Value, VarTOcarina, True, End));
                 Instructions.Add(new InstructionLabel(True));

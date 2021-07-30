@@ -128,9 +128,9 @@ namespace NPC_Maker.Scripts
         public static void GetXYZRot(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
                                     ref object XRot, ref object YRot, ref object ZRot, int Min, int Max)
         {
-            XRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Min, Max));
-            YRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Min, Max));
-            ZRot = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Min, Max));
+            XRot = ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Min, Max);
+            YRot = ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Min, Max);
+            ZRot = ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Min, Max);
         }
 
         public static void GetXYZPos(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
@@ -141,9 +141,9 @@ namespace NPC_Maker.Scripts
             ZPos = ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Int32.MinValue, Int32.MaxValue);
         }
 
-        public static void GetRGBA(string[] SplitLine, int StartIndex, ref UInt32[] Output, ref byte[] TypeOutPut)
+        public static void GetRGBA(string[] SplitLine, int StartIndex, ref object[] Output, ref byte[] TypeOutPut)
         {
-            Output = new UInt32[] { 0, 0, 0, 0 };
+            Output = new object[] { 0, 0, 0, 0 };
             TypeOutPut = new byte[] { 0, 0, 0, 0 };
 
             TypeOutPut[0] = GetVarType(SplitLine, StartIndex);
@@ -151,10 +151,10 @@ namespace NPC_Maker.Scripts
             TypeOutPut[2] = GetVarType(SplitLine, StartIndex + 2);
             TypeOutPut[3] = GetVarType(SplitLine, StartIndex + 3);
 
-            Output[0] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex, TypeOutPut[0], 0, 255));
-            Output[1] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex + 1, TypeOutPut[1], 0, 255));
-            Output[2] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex + 2, TypeOutPut[2], 0, 255));
-            Output[3] = Convert.ToUInt32(ScriptHelpers.GetValueByType(SplitLine, StartIndex + 3, TypeOutPut[3], 0, 255));
+            Output[0] = ScriptHelpers.GetValueByType(SplitLine, StartIndex, TypeOutPut[0], 0, 255);
+            Output[1] = ScriptHelpers.GetValueByType(SplitLine, StartIndex + 1, TypeOutPut[1], 0, 255);
+            Output[2] = ScriptHelpers.GetValueByType(SplitLine, StartIndex + 2, TypeOutPut[2], 0, 255);
+            Output[3] = ScriptHelpers.GetValueByType(SplitLine, StartIndex + 3, TypeOutPut[3], 0, 255);
         }
 
         public static float GetDegrees(string[] SplitLine, int Index, float Min, float Max)
@@ -199,23 +199,24 @@ namespace NPC_Maker.Scripts
                         return Helpers.TwoInt16ToWord(MinV, MaxV);
                     }
 
-                case (int)Lists.VarTypes.Player8:
-                case (int)Lists.VarTypes.Player16:
-                case (int)Lists.VarTypes.Player32:
-                case (int)Lists.VarTypes.Playerf:
+                case (int)Lists.VarTypes.Actor8:
+                case (int)Lists.VarTypes.Actor16:
+                case (int)Lists.VarTypes.Actor32:
+                case (int)Lists.VarTypes.ActorF:
                 case (int)Lists.VarTypes.Global8:
                 case (int)Lists.VarTypes.Global16:
                 case (int)Lists.VarTypes.Global32:
                 case (int)Lists.VarTypes.Globalf:
-                case (int)Lists.VarTypes.Self8:
-                case (int)Lists.VarTypes.Self16:
-                case (int)Lists.VarTypes.Self32:
-                case (int)Lists.VarTypes.Selff:
+                case (int)Lists.VarTypes.Save8:
+                case (int)Lists.VarTypes.Save16:
+                case (int)Lists.VarTypes.Save32:
+                case (int)Lists.VarTypes.SaveF:
                     {
                         string[] Values = SplitLine[Index].Split('.');
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 0, 0x88000000));
                     }
                 case (int)Lists.VarTypes.Var:
+                case (int)Lists.VarTypes.VarF:
                     {
                         string[] Values = SplitLine[Index].Split('.');
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 1, Lists.Num_User_Vars));
@@ -248,22 +249,24 @@ namespace NPC_Maker.Scripts
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Global32;
             else if (RamType.StartsWith(Lists.Keyword_GlobalF))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.GlobalF;
-            else if (RamType.StartsWith(Lists.Keyword_Player8))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Player8;
-            else if (RamType.StartsWith(Lists.Keyword_Player16))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Player16;
-            else if (RamType.StartsWith(Lists.Keyword_Player32))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Player32;
-            else if (RamType.StartsWith(Lists.Keyword_PlayerF))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.PlayerF;
-            else if (RamType.StartsWith(Lists.Keyword_Self8))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self8;
-            else if (RamType.StartsWith(Lists.Keyword_Self16))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self16;
-            else if (RamType.StartsWith(Lists.Keyword_Self32))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Self32;
-            else if (RamType.StartsWith(Lists.Keyword_SelfF))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.SelfF;
+            else if (RamType.StartsWith(Lists.Keyword_Actor8))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.RefActor8;
+            else if (RamType.StartsWith(Lists.Keyword_Actor16))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.RefActor16;
+            else if (RamType.StartsWith(Lists.Keyword_Actor32))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.RefActor32;
+            else if (RamType.StartsWith(Lists.Keyword_ActorF))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.RefActorF;
+            else if (RamType.StartsWith(Lists.Keyword_Save8))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Save8;
+            else if (RamType.StartsWith(Lists.Keyword_Save16))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Save16;
+            else if (RamType.StartsWith(Lists.Keyword_Save32))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Save32;
+            else if (RamType.StartsWith(Lists.Keyword_SaveF))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.SaveF;
+            else if (RamType.StartsWith(Lists.Keyword_ScriptVarF))
+                return (byte)Lists.IfWhileAwaitSetRamSubTypes.VarF;
             else if (RamType.StartsWith(Lists.Keyword_ScriptVar))
                 return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var;
             else
@@ -311,24 +314,25 @@ namespace NPC_Maker.Scripts
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_GlobalF))
                 return (int)Lists.VarTypes.Globalf;
 
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Player8))
-                return (int)Lists.VarTypes.Player8;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Player16))
-                return (int)Lists.VarTypes.Player16;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Player32))
-                return (int)Lists.VarTypes.Player32;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_PlayerF))
-                return (int)Lists.VarTypes.Playerf;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Actor8))
+                return (int)Lists.VarTypes.Actor8;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Actor16))
+                return (int)Lists.VarTypes.Actor16;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Actor32))
+                return (int)Lists.VarTypes.Actor32;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_ActorF))
+                return (int)Lists.VarTypes.ActorF;
 
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Self8))
-                return (int)Lists.VarTypes.Self8;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Self16))
-                return (int)Lists.VarTypes.Self16;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Self32))
-                return (int)Lists.VarTypes.Self32;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_SelfF))
-                return (int)Lists.VarTypes.Selff;
-
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Save8))
+                return (int)Lists.VarTypes.Save8;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Save16))
+                return (int)Lists.VarTypes.Save16;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Save32))
+                return (int)Lists.VarTypes.Save32;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_SaveF))
+                return (int)Lists.VarTypes.SaveF;
+            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_ScriptVarF))
+                return (int)Lists.VarTypes.VarF;
             else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_ScriptVar))
                 return (int)Lists.VarTypes.Var;
             else
@@ -340,7 +344,7 @@ namespace NPC_Maker.Scripts
             return (Number.Length >= 3 && Number.StartsWith("0x"));
         }
 
-        public static UInt32 Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
+        public static object Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
         {
             try
             {
@@ -352,7 +356,7 @@ namespace NPC_Maker.Scripts
                         throw ErrorToThrow;
                 }
                 else
-                    return Convert.ToUInt32(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
+                    return (float)Convert.ToDecimal(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
 
             }
             catch (Exception)
@@ -361,7 +365,7 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static UInt32 Helper_GetEnumByNameOrVarType(string[] SplitLine, int Index, byte VarType, Type EnumType, ParseException Throw)
+        public static object Helper_GetEnumByNameOrVarType(string[] SplitLine, int Index, byte VarType, Type EnumType, ParseException Throw)
         {
             try
             {
@@ -369,7 +373,7 @@ namespace NPC_Maker.Scripts
                 {
                     try
                     {
-                        return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, Enum.GetValues(EnumType).Cast<int>().Min(), Enum.GetValues(EnumType).Cast<int>().Max()));
+                        return GetValueByType(SplitLine, Index, VarType, Enum.GetValues(EnumType).Cast<int>().Min(), Enum.GetValues(EnumType).Cast<int>().Max());
                     }
                     catch (Exception)
                     {
@@ -377,7 +381,7 @@ namespace NPC_Maker.Scripts
                     }
                 }
                 else
-                    return Convert.ToUInt32(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
+                    return (float)Convert.ToDecimal(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
             }
             catch (Exception)
             {
@@ -385,27 +389,27 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        private static int GetNPCMakerEmbeddedTextID(string Name, List<MessageEntry> Messages)
+        private static object GetNPCMakerEmbeddedTextID(string Name, List<MessageEntry> Messages)
         {
             MessageEntry Mes = Messages.Find(x => x.Name == Name);
 
             if (Mes == null)
-                return -1;
+                return (float)-1;
             else
-                return 1 + Int16.MaxValue + Messages.IndexOf(Mes);
+                return (float)(1 + Int16.MaxValue + Messages.IndexOf(Mes));
         }
 
-        public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref Int32 TextID_Adult, ref Int32 TextID_Child, ref byte VarTAdult, ref byte VarTChild, List<MessageEntry> Messages, int Index = 1)
+        public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref object TextID_Adult, ref object TextID_Child, ref byte VarTAdult, ref byte VarTChild, List<MessageEntry> Messages, int Index = 1)
         {
             ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
 
             TextID_Adult = GetNPCMakerEmbeddedTextID(SplitLine[Index], Messages);
             VarTAdult = 0;
 
-            if (TextID_Adult < 0)
+            if ((float)TextID_Adult < 0)
             {
                 VarTAdult = ScriptHelpers.GetVarType(SplitLine, 1);
-                TextID_Adult = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 1, VarTAdult, 0, UInt16.MaxValue));
+                TextID_Adult = ScriptHelpers.GetValueByType(SplitLine, 1, VarTAdult, 0, UInt16.MaxValue);
             }
 
             if (SplitLine.Count() == 3)
@@ -413,10 +417,10 @@ namespace NPC_Maker.Scripts
                 TextID_Child = GetNPCMakerEmbeddedTextID(SplitLine[2], Messages);
                 VarTChild = 0;
 
-                if (TextID_Child < 0)
+                if ((float)TextID_Child < 0)
                 {
                     VarTChild = ScriptHelpers.GetVarType(SplitLine, 2);
-                    TextID_Child = Convert.ToInt32(ScriptHelpers.GetValueByType(SplitLine, 2, VarTChild, 0, UInt16.MaxValue));
+                    TextID_Child = ScriptHelpers.GetValueByType(SplitLine, 2, VarTChild, 0, UInt16.MaxValue);
                 }
             }
             else
@@ -426,18 +430,18 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        private static Int32 Helper_GetValFromDict(string[] SplitLine, int Index, int VarType, int RangeMin, int RangeMax,
+        private static object Helper_GetValFromDict(string[] SplitLine, int Index, int VarType, int RangeMin, int RangeMax,
                                                    Dictionary<string, int> Dict, ParseException ToThrow)
         {
             try
             {
-                return Convert.ToInt32(Dict[SplitLine[Index].ToUpper()]);
+                return (float)Convert.ToDecimal(Dict[SplitLine[Index].ToUpper()]);
             }
             catch (Exception)
             {
                 try
                 {
-                    return Convert.ToInt32(GetValueByType(SplitLine, Index, VarType, RangeMin, RangeMax));
+                    return GetValueByType(SplitLine, Index, VarType, RangeMin, RangeMax);
                 }
                 catch (Exception)
                 {
@@ -446,41 +450,41 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static UInt32 Helper_GetActorId(string[] SplitLine, int Index, int VarType)
+        public static object Helper_GetActorId(string[] SplitLine, int Index, int VarType)
         {
-            return (UInt32)Helper_GetValFromDict(SplitLine, Index, VarType, 0, UInt16.MaxValue, Dicts.Actors, ParseException.UnrecognizedActor(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, VarType, 0, UInt16.MaxValue, Dicts.Actors, ParseException.UnrecognizedActor(SplitLine));
         }
 
-        public static Int32 Helper_GetSFXId(string[] SplitLine, int Index, int VarType)
+        public static object Helper_GetSFXId(string[] SplitLine, int Index, int VarType)
         {
             return Helper_GetValFromDict(SplitLine, Index, VarType, -1, Int16.MaxValue, Dicts.SFXes, ParseException.UnrecognizedSFX(SplitLine));
         }
 
-        public static Int32 Helper_GetMusicId(string[] SplitLine, int Index, int VarType)
+        public static object Helper_GetMusicId(string[] SplitLine, int Index, int VarType)
         {
             return Helper_GetValFromDict(SplitLine, Index, VarType, -1, Int16.MaxValue, Dicts.Music, ParseException.UnrecognizedBGM(SplitLine));
         }
 
-        private static UInt32 Helper_GetFromStringList(string[] SplitLine, int Index, byte VarType, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow)
+        private static object Helper_GetFromStringList(string[] SplitLine, int Index, byte VarType, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow)
         {
-            UInt32? Ret = null;
+            float? Ret = null;
 
             for (int i = 0; i < SList.Count; i++)
             {
                 if (SplitLine[Index].ToLower() == SList[i].Replace(" ", "").ToLower())
                 {
-                    Ret = (UInt32)i;
+                    Ret = (float)i;
                     break;
                 }
             }
 
             if (Ret != null)
-                return (UInt32)Ret;
+                return (float)Ret;
             else
             {
                 try
                 {
-                    return Convert.ToUInt32(GetValueByType(SplitLine, Index, VarType, RangeMin, RangeMax));
+                    return GetValueByType(SplitLine, Index, VarType, RangeMin, RangeMax);
                 }
                 catch (Exception)
                 {
@@ -489,17 +493,17 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static UInt32 Helper_GetAnimationID(string[] SplitLine, int Index, byte VarType, List<AnimationEntry> Animations)
+        public static object Helper_GetAnimationID(string[] SplitLine, int Index, byte VarType, List<AnimationEntry> Animations)
         {
             return Helper_GetFromStringList(SplitLine, Index, VarType, Animations.Select(x => x.Name).ToList(), 0, Animations.Count, ParseException.UnrecognizedAnimation(SplitLine));
         }
 
-        public static UInt32 Helper_GetSegmentDataEntryID(string[] SplitLine, int Index, int Segment, byte VarType, List<List<SegmentEntry>> Textures)
+        public static object Helper_GetSegmentDataEntryID(string[] SplitLine, int Index, int Segment, byte VarType, List<List<SegmentEntry>> Textures)
         {
             return Helper_GetFromStringList(SplitLine, Index, VarType, Textures[Segment].Select(x => x.Name).ToList(), 0, Textures.Count, ParseException.UnrecognizedSegmentDataEntry(SplitLine));
         }
 
-        public static UInt32 Helper_GetDListID(string[] SplitLine, int Index, byte VarType, List<DListEntry> DLists)
+        public static object Helper_GetDListID(string[] SplitLine, int Index, byte VarType, List<DListEntry> DLists)
         {
             return Helper_GetFromStringList(SplitLine, Index, VarType, DLists.Select(x => x.Name).ToList(), 0, DLists.Count, ParseException.UnrecognizedDList(SplitLine));
         }

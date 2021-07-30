@@ -5,7 +5,7 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionParticle : Instruction
     {
-        public Int32 Type { get; set; }
+        public object Type { get; set; }
         public byte TypeT { get; set; }
 
         public byte RelativePos { get; set; }
@@ -31,38 +31,38 @@ namespace NPC_Maker.Scripts
         public byte VelYT { get; set; }
         public byte VelZT { get; set; }
 
-        public UInt32[] PrimRGBA { get; set; }
+        public object[] PrimRGBA { get; set; }
         public byte[] PrimRGBAVarT { get; set; }
-        public UInt32[] SecRGBA { get; set; }
+        public object[] SecRGBA { get; set; }
         public byte[] SecRGBAVarT { get; set; }
 
         public object Scale { get; set; }
         public byte ScaleT { get; set; }
 
-        public Int32 ScaleUpdate { get; set; }
+        public object ScaleUpdate { get; set; }
         public byte ScaleUpdateT { get; set; }
 
-        public Int32 RadiusUpdateD { get; set; }
+        public object RadiusUpdateD { get; set; }
         public byte RadiusUpdateDT { get; set; }
 
-        public Int32 Life { get; set; }
+        public object Life { get; set; }
         public byte LifeT { get; set; }
 
-        public Int32 NumBolts { get; set; }
+        public object NumBolts { get; set; }
         public byte NumBoltsT { get; set; }
 
-        public Int32 Yaw { get; set; }
+        public object Yaw { get; set; }
         public byte YawT { get; set; }
 
-        public Int32 DListIndex { get; set; }
+        public object DListIndex { get; set; }
         public byte DListIndexT { get; set; }
 
-        public Int32 ColorType { get; set; }
+        public object ColorType { get; set; }
         public byte ColorTypeT { get; set; }
 
         public InstructionLabel LabelJumpIfFound { get; set; }
 
-        public Int32 Alpha { get; set; }
+        public object Alpha { get; set; }
         public byte AlphaT { get; set; }
 
         public InstructionParticle() : base((byte)Lists.Instructions.PARTICLE)

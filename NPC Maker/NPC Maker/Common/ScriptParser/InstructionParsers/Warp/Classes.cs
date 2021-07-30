@@ -5,10 +5,10 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionWarp : Instruction
     {
-        public UInt32 WarpID;
+        public object WarpID;
         public byte VarType;
 
-        public InstructionWarp(UInt32 _WarpID, byte _VarType) : base((byte)Lists.Instructions.WARP)
+        public InstructionWarp(object _WarpID, byte _VarType) : base((byte)Lists.Instructions.WARP)
         {
             WarpID = _WarpID;
             VarType = _VarType;

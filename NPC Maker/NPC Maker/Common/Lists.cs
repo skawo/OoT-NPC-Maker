@@ -31,26 +31,27 @@ namespace NPC_Maker
         public const string Keyword_Or = "OR";
         public const string Keyword_And = "AND";
         public const string Keyword_ScriptVar = "VAR";
+        public const string Keyword_ScriptVarF = "VARF";
         public const string Keyword_RNG = "RANDOM";
         public const string Keyword_GlobalF = "GLOBALF";
-        public const string Keyword_PlayerF = "PLAYERF";
-        public const string Keyword_SelfF = "SELFF";
+        public const string Keyword_ActorF = "ACTORF";
         public const string Keyword_Global8 = "GLOBAL8";
         public const string Keyword_Global16 = "GLOBAL16";
         public const string Keyword_Global32 = "GLOBAL32";
-        public const string Keyword_Player8 = "PLAYER8";
-        public const string Keyword_Player16 = "PLAYER16";
-        public const string Keyword_Player32 = "PLAYER32";
-        public const string Keyword_Self8 = "SELF8";
-        public const string Keyword_Self16 = "SELF16";
-        public const string Keyword_Self32 = "SELF32";
+        public const string Keyword_Actor8 = "ACTOR8";
+        public const string Keyword_Actor16 = "ACTOR16";
+        public const string Keyword_Actor32 = "ACTOR32";
+        public const string Keyword_Save8 = "SAVEF8";
+        public const string Keyword_Save16 = "SAVE16";
+        public const string Keyword_Save32 = "SAVE32";
+        public const string Keyword_SaveF = "SAVEF";
         public const string Keyword_Degree = "DEG_";
         public const string Keyword_Ignore_Y = "IGNORE_Y";
         public const string Keyword_Debug_Skip_Label_Check = "__SKIPCHECK__";
         public const string Keyword_Label_Return = "__RETURN__";
         public const string Keyword_Label_Null = "__NULL__";
 
-        public const int Num_User_Vars = 10;
+        public const int Num_User_Vars = 255;
 
         public static List<string> AllKeywords = new List<string>()
         {
@@ -75,20 +76,21 @@ namespace NPC_Maker
             Keyword_And,
             Keyword_Or,
             Keyword_ScriptVar,
+            Keyword_ScriptVarF,
             Keyword_RNG,
             Keyword_CallProcedure,
             Keyword_Global8,
             Keyword_Global16,
             Keyword_Global32,
             Keyword_GlobalF,
-            Keyword_Player8,
-            Keyword_Player16,
-            Keyword_Player32,
-            Keyword_PlayerF,
-            Keyword_Self8,
-            Keyword_Self16,
-            Keyword_Self32,
-            Keyword_SelfF,
+            Keyword_Actor8,
+            Keyword_Actor16,
+            Keyword_Actor32,
+            Keyword_ActorF,
+            Keyword_Save8,
+            Keyword_Save16,
+            Keyword_Save32,
+            Keyword_SaveF,
             Keyword_EndOcarina,
 
         };
@@ -147,19 +149,20 @@ namespace NPC_Maker
         public static List<string> KeywordsGray = new List<string>()
         {
             Keyword_ScriptVar,
+            Keyword_ScriptVarF,
             Keyword_RNG,
             Keyword_GlobalF,
-            Keyword_PlayerF,
-            Keyword_SelfF,
             Keyword_Global8,
             Keyword_Global16,
             Keyword_Global32,
-            Keyword_Player8,
-            Keyword_Player16,
-            Keyword_Player32,
-            Keyword_Self8,
-            Keyword_Self16,
-            Keyword_Self32,
+            Keyword_Actor8,
+            Keyword_Actor16,
+            Keyword_Actor32,
+            Keyword_ActorF,
+            Keyword_Save8,
+            Keyword_Save16,
+            Keyword_Save32,
+            Keyword_SaveF,
             Keyword_And,
             Keyword_Or,
             Keyword_TradeSucccess,
@@ -176,15 +179,16 @@ namespace NPC_Maker
             Global16 = 3,
             Global32 = 4,
             Globalf = 5,
-            Player8 = 6,
-            Player16 = 7,
-            Player32 = 8,
-            Playerf = 9,
-            Self8 = 10,
-            Self16 = 11,
-            Self32 = 12,
-            Selff = 13,
+            Actor8 = 6,
+            Actor16 = 7,
+            Actor32 = 8,
+            ActorF = 9,
+            Save8 = 10,
+            Save16 = 11,
+            Save32 = 12,
+            SaveF = 13,
             Var = 14,
+            VarF = 15,
         }
 
         public enum Instructions
@@ -249,17 +253,18 @@ namespace NPC_Maker
             Global16 = 243,
             Global32 = 244,
             GlobalF = 245,
-            Player8 = 246,
-            Player16 = 247,
-            Player32 = 248,
-            PlayerF = 249,
-            Self8 = 250,
-            Self16 = 251,
-            Self32 = 252,
-            SelfF = 253,
+            RefActor8 = 246,
+            RefActor16 = 247,
+            RefActor32 = 248,
+            RefActorF = 249,
+            Save8 = 250,
+            Save16 = 251,
+            Save32 = 252,
+            SaveF = 253,
             Var = 254,
+            VarF = 255,
         }
-
+        
         public enum IfSubTypes
         {
             /* flags */
@@ -449,6 +454,8 @@ namespace NPC_Maker
             UNSUCCESSFUL_TRADE_TEXT_ID,
             MOVEMENT_TYPE,
             GENERATES_LIGHT,
+            REF_ACTOR,
+
         }
 
         public enum AwaitSubTypes

@@ -14,8 +14,8 @@ namespace NPC_Maker.Scripts
 
                 int End = GetCorrespondingEndSpawn(Lines, LineNo);
 
-                UInt32 ActorID = 1;
-                UInt32 ActorVar = 0;
+                object ActorID = 1;
+                object ActorVar = 0;
                 object PosX = 0;
                 object PosY = 0;
                 object PosZ = 0;
@@ -69,7 +69,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
                                 ActorVarT = ScriptHelpers.GetVarType(Split, 1);
-                                ActorVar = Convert.ToUInt32(ScriptHelpers.GetValueByType(Split, 1, ActorVarT, 0, UInt16.MaxValue));
+                                ActorVar = ScriptHelpers.GetValueByType(Split, 1, ActorVarT, 0, UInt16.MaxValue);
 
                                 continue;
                             }
@@ -77,7 +77,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
 
-                                RelativePos = (byte)(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
+                                RelativePos = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
                                 ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosXT, ref PosYT, ref PosZT, ref PosX, ref PosY, ref PosZ);
 
                                 continue;

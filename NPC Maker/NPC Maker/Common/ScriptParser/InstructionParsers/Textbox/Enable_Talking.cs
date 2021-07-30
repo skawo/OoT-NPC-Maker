@@ -10,8 +10,8 @@ namespace NPC_Maker.Scripts
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
-                Int32 TextID_Adult = 0;
-                Int32 TextID_Child = 0;
+                object TextID_Adult = 0;
+                object TextID_Child = 0;
                 byte TextIDAdultT = 0;
                 byte TextIDChildT = 0;
 

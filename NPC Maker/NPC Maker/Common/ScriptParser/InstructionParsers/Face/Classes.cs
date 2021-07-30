@@ -9,15 +9,15 @@ namespace NPC_Maker.Scripts
         public byte FaceType;
         public byte Target;
 
-        public UInt32 SubjectActor;
+        public object SubjectActor;
         public byte SubjectActorT;
 
-        public UInt32 TargetActor;
+        public object TargetActor;
         public byte TargetActorT;
 
         public InstructionFace(byte _Subject, byte _FaceType, byte _Target,
-                               UInt32 _SubjectActor, byte _SubjectActorT,
-                               UInt32 _TargetActor, byte _TargetActorT) : base((byte)Lists.Instructions.FACE)
+                               object _SubjectActor, byte _SubjectActorT,
+                               object _TargetActor, byte _TargetActorT) : base((byte)Lists.Instructions.FACE)
         {
             Subject = _Subject;
             FaceType = _FaceType;

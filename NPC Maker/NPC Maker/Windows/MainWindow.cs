@@ -195,6 +195,9 @@ namespace NPC_Maker
             ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
             NumUpDown_Scale.Value = (decimal)SelectedEntry.ModelScale;
 
+            NumUpDown_ScriptsVar.Value = (int)SelectedEntry.NumVars;
+            NumUpDown_ScriptsFVar.Value = (int)SelectedEntry.NumFVars;
+
             Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
             Btn_LightColor.BackColor = Color.FromArgb(255, SelectedEntry.LightColor.R, SelectedEntry.LightColor.G, SelectedEntry.LightColor.B);
 

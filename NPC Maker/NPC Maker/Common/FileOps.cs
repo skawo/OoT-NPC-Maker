@@ -157,6 +157,8 @@ namespace NPC_Maker
                         EntryBytes.Add(Convert.ToByte(Entry.DEBUGShowCols));
                         EntryBytes.Add(Convert.ToByte(Entry.VisibleUnderLensOfTruth));
                         EntryBytes.Add(Convert.ToByte(Entry.Invisible));
+                        EntryBytes.Add(Convert.ToByte(Entry.NumVars));
+                        EntryBytes.Add(Convert.ToByte(Entry.NumFVars));
 
 
                         Helpers.Ensure4ByteAlign(EntryBytes);

@@ -9,7 +9,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.RotationSubTypes), 2);
+                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.RotationSubTypes), 1);
 
                 byte ActorNumT = 0;
                 object ActorNum = 0;
@@ -56,7 +56,7 @@ namespace NPC_Maker.Scripts
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
 
-                    int SetSubType = (int)ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                    int SetSubType = Convert.ToInt32(ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine)));
 
                     switch (SetSubType)
                     {
@@ -65,7 +65,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 8 - NoSpeed);
 
                                 ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorNum = (UInt32)ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
+                                ActorNum = ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
 
                                 ScriptHelpers.GetXYZRot(SplitLine, 4, 5, 6, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot, Min, Max);
 
@@ -83,7 +83,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 8 - NoSpeed);
 
                                 ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorNum = (UInt32)ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
+                                ActorNum = ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
 
                                 ScriptHelpers.GetXYZRot(SplitLine, 4, 5, 6, ref XRotT, ref ZRotT, ref YRotT, ref XRot, ref YRot, ref ZRot, Min, Max);
 
