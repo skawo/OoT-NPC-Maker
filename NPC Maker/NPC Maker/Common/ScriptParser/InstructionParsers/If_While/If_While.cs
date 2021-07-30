@@ -17,6 +17,7 @@ namespace NPC_Maker.Scripts
 
                 int EndIf = 0;
                 int Else = 0;
+                int InsertIdx = 0;
 
                 #region Setup
 
@@ -59,11 +60,13 @@ namespace NPC_Maker.Scripts
 
                             Else = EndIf;
 
+                            Instructions.Add(new InstructionLabel("__WHILESTART__" + LabelR));
                             Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                             Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
                             Instructions.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, Lists.ConditionTypes.EQUALTO, (byte)Lists.VarTypes.Normal));
-                            Instructions.Add(new InstructionGoto("__IFTRUE__" + LabelR));
+                            Instructions.Add(new InstructionGoto("__WHILESTART__" + LabelR));
                             Instructions.Add(new InstructionLabel("__IFFALSE__" + LabelR));
+                            InsertIdx = 1;
                             break;
                         }
                     default:
@@ -80,7 +83,7 @@ namespace NPC_Maker.Scripts
 
                     if (Ram != null)
                     {
-                        Instructions.Insert(0, Ram);
+                        Instructions.Insert(InsertIdx, Ram);
                         return Instructions;
                     }
 
@@ -104,7 +107,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object FlagID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, FlagID, Condition,
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, FlagID, Condition,
                                                                               EndIf, Else, LabelR));
                                 return Instructions;
                             }
@@ -127,7 +130,7 @@ namespace NPC_Maker.Scripts
                                 if (SplitLine.Length == 3)
                                     Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 0, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, 0, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_RUPEES:
@@ -150,7 +153,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.DISTANCE_FROM_PLAYER:
@@ -161,7 +164,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.EXT_VAR:
@@ -177,7 +180,7 @@ namespace NPC_Maker.Scripts
 
                                 byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 1, Lists.Num_User_Vars));
 
-                                Instructions.Insert(0, new InstructionIfWhileExtVar((byte)ID, Convert.ToByte(SubID), ExtVarNum, VarType, Value, VarType2, ActorID, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhileExtVar((byte)ID, Convert.ToByte(SubID), ExtVarNum, VarType, Value, VarType2, ActorID, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.STICK_X:
@@ -189,22 +192,22 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, sbyte.MinValue, sbyte.MaxValue);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.ITEM_BEING_TRADED:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.TradeItems), EndIf, Else, LabelR, ParseException.UnrecognizedTradeItem(SplitLine)));
+                                Instructions.Insert(InsertIdx, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.TradeItems), EndIf, Else, LabelR, ParseException.UnrecognizedTradeItem(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.TRADE_STATUS:
                             {
-                                Instructions.Insert(0, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.TradeStatuses), EndIf, Else, LabelR, ParseException.UnrecognizedTradeStatus(SplitLine)));
+                                Instructions.Insert(InsertIdx, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.TradeStatuses), EndIf, Else, LabelR, ParseException.UnrecognizedTradeStatus(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_MASK:
                             {
-                                Instructions.Insert(0, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.PlayerMasks), EndIf, Else, LabelR, ParseException.UnrecognizedMask(SplitLine)));
+                                Instructions.Insert(InsertIdx, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.PlayerMasks), EndIf, Else, LabelR, ParseException.UnrecognizedMask(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.TIME_OF_DAY:
@@ -220,7 +223,7 @@ namespace NPC_Maker.Scripts
                                 else
                                     Time = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Time, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Time, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.CURRENT_ANIMATION:
@@ -230,7 +233,7 @@ namespace NPC_Maker.Scripts
                                 byte Vartype = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Vartype, Entry.Animations);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Vartype, AnimationID, Lists.ConditionTypes.EQUALTO, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Vartype, AnimationID, Lists.ConditionTypes.EQUALTO, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM:
@@ -245,17 +248,17 @@ namespace NPC_Maker.Scripts
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 4);
 
-                                Instructions.Insert(0, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Dungeon, VarType2, Value2, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Dungeon, VarType2, Value2, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM:
                             {
-                                Instructions.Insert(0, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.Items), EndIf, Else, LabelR, ParseException.UnrecognizedInventoryItem(SplitLine)));
+                                Instructions.Insert(InsertIdx, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.Items), EndIf, Else, LabelR, ParseException.UnrecognizedInventoryItem(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_QUEST_ITEM:
                             {
-                                Instructions.Insert(0, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.QuestItems), EndIf, Else, LabelR, ParseException.UnrecognizedQuestItem(SplitLine)));
+                                Instructions.Insert(InsertIdx, H_IfWhileBoolEnum(ID, SubID, SplitLine, typeof(Lists.QuestItems), EndIf, Else, LabelR, ParseException.UnrecognizedQuestItem(SplitLine)));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.BUTTON_HELD:
@@ -266,7 +269,7 @@ namespace NPC_Maker.Scripts
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
 
-                                Instructions.Insert(0, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, (UInt32)Value, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), 0, (UInt32)Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         default:
@@ -278,7 +281,7 @@ namespace NPC_Maker.Scripts
                 {
                     outScript.ParseErrors.Add(pEx);
 
-                    Instructions.Insert(0, new InstructionIfWhile((byte)ID, 0, 0, 0, 0, EndIf, Else, LabelR));
+                    Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, 0, 0, 0, 0, EndIf, Else, LabelR));
                     return Instructions;
                 }
             }
