@@ -356,8 +356,9 @@ namespace NPC_Maker.Scripts
                         throw ErrorToThrow;
                 }
                 else
-                    return (float)Convert.ToDecimal(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
-
+                {
+                    return (float)(int)System.Enum.Parse(EnumType, SplitLine[Index].ToUpper());
+                }
             }
             catch (Exception)
             {
@@ -381,7 +382,9 @@ namespace NPC_Maker.Scripts
                     }
                 }
                 else
-                    return (float)Convert.ToDecimal(System.Enum.Parse(EnumType, SplitLine[Index].ToUpper()));
+                {
+                    return (float)(int)System.Enum.Parse(EnumType, SplitLine[Index].ToUpper());
+                }
             }
             catch (Exception)
             {

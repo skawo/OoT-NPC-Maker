@@ -117,7 +117,7 @@ namespace NPC_Maker.Scripts
                                         if (SplitTrFailItem[0].ToUpper().Trim() != Lists.Keyword_TradeDefault)
                                         {
                                             FailItemT = ScriptHelpers.GetVarType(SplitTrFailItem, 0);
-                                            FailItem = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitTrFailItem, 0, FailItemT, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine));
+                                            FailItem = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitTrFailItem, 0, FailItemT, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitTrFailItem));
                                         }
 
                                         ScriptHelpers.Helper_GetAdultChildTextIds(SplitTrFailItem, ref TextID_Adult_Fail, ref TextID_Child_Fail, ref TextID_Adult_FailT, ref TextID_Child_FailT, Entry.Messages);
