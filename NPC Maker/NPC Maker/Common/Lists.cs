@@ -280,7 +280,7 @@ namespace NPC_Maker
             /* bools */
             LINK_IS_ADULT = 8,
             CURRENTLY_DAY = 9,
-            TALKED_TO = 10,
+            IS_TALKING = 10,
             PLAYER_HAS_EMPTY_BOTTLE = 11,
             CUTSCENE_BEING_PLAYED = 12,
             TEXTBOX_ON_SCREEN = 13,
@@ -463,7 +463,7 @@ namespace NPC_Maker
             MOVEMENT_PATH_END = 0,
             TEXTBOX_RESPONSE = 1,
             TALKING_END = 2,
-            NO_TEXTBOX_ON_SCREEN = 3,
+            TEXTBOX_ON_SCREEN = 3,
             FOREVER = 4,
 
             CURRENT_PATH_NODE = 5,
@@ -477,6 +477,8 @@ namespace NPC_Maker
 
             BUTTON_PRESSED = 12,
             BUTTON_HELD = 13,
+            TEXTBOX_NUM = 14,
+            TEXTBOX_DISMISSED = 15,
 
             EXT_VAR = 19,
 

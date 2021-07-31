@@ -22,13 +22,25 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.AwaitSubTypes.MOVEMENT_PATH_END:
                         case (int)Lists.AwaitSubTypes.TEXTBOX_RESPONSE:
                         case (int)Lists.AwaitSubTypes.TALKING_END:
-                        case (int)Lists.AwaitSubTypes.NO_TEXTBOX_ON_SCREEN:
                         case (int)Lists.AwaitSubTypes.FOREVER:
+                        case (int)Lists.AwaitSubTypes.TEXTBOX_DISMISSED:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
                                 return new InstructionAwait((byte)SubID, 0, Lists.ConditionTypes.EQUALTO, 0);
                             }
+                        case (int)Lists.AwaitSubTypes.TEXTBOX_ON_SCREEN:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
+
+                                Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
+
+                                if (SplitLine.Length == 3)
+                                    Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 2);
+
+                                return new InstructionAwait((byte)SubID, 0, Condition, 0);
+                            }
                         case (int)Lists.AwaitSubTypes.FRAMES:
+                        case (int)Lists.AwaitSubTypes.TEXTBOX_NUM:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 

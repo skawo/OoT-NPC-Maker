@@ -28,7 +28,7 @@ namespace NPC_Maker.Scripts
                     throw ParseException.TalkNotClosed(SplitLine);
 
                 Instructions.Add(new InstructionTextbox((byte)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child, TextIDAdultT, TextIDChildT));
-                Instructions.Add(new InstructionIfWhile((byte)Lists.Instructions.IF, (byte)Lists.IfSubTypes.TALKED_TO, 0, 0, Lists.ConditionTypes.TRUE, -1, -1, LabelR));
+                Instructions.Add(new InstructionIfWhile((byte)Lists.Instructions.IF, (byte)Lists.IfSubTypes.IS_TALKING, 0, 0, Lists.ConditionTypes.TRUE, -1, -1, LabelR));
                 Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                 Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(End - LineNo - 1).ToList()));
                 Instructions.Add(new InstructionGoto("__ENDIF__" + LabelR));
