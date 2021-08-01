@@ -448,7 +448,7 @@ namespace NPC_Maker
                 FileOps.SaveBinaryFile(SFD.FileName, EditedFile);
             }
 
-            InsertDataToEditor();
+            //InsertDataToEditor();
         }
 
         private void FileMenu_Exit_Click(object sender, EventArgs e)
