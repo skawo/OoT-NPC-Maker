@@ -101,6 +101,10 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.NumUpDown_ScriptsFVar = new System.Windows.Forms.NumericUpDown();
+            this.NumUpDown_ScriptsVar = new System.Windows.Forms.NumericUpDown();
+            this.Lbl_ScriptsFVars = new System.Windows.Forms.Label();
+            this.Lbl_ScriptsVars = new System.Windows.Forms.Label();
             this.ChkInvisible = new System.Windows.Forms.CheckBox();
             this.ChkOnlyWhenLens = new System.Windows.Forms.CheckBox();
             this.ChkBox_DebugCol = new System.Windows.Forms.CheckBox();
@@ -271,10 +275,6 @@
             this.sFXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.Lbl_ScriptsVars = new System.Windows.Forms.Label();
-            this.Lbl_ScriptsFVars = new System.Windows.Forms.Label();
-            this.NumUpDown_ScriptsVar = new System.Windows.Forms.NumericUpDown();
-            this.NumUpDown_ScriptsFVar = new System.Windows.Forms.NumericUpDown();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -295,6 +295,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
             this.Tab3_BehaviorData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsFVar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsVar)).BeginInit();
             this.Panel_Colors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUp_LightRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUp_LightZOffs)).BeginInit();
@@ -341,8 +343,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsVar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsFVar)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -733,7 +733,7 @@
             "Matrix, transparency-enabled (Most models)",
             "Non-matrix, full opacity (Hylian guards)",
             "Non-matrix, transparency-enabled (Lizalfos)",
-            "Weighted (Horses)"});
+            "Skin, full opacity (Horses)"});
             this.ComboBox_HierarchyType.Location = new System.Drawing.Point(134, 86);
             this.ComboBox_HierarchyType.Name = "ComboBox_HierarchyType";
             this.ComboBox_HierarchyType.Size = new System.Drawing.Size(245, 21);
@@ -1246,6 +1246,52 @@
             this.Tab3_BehaviorData.Size = new System.Drawing.Size(768, 615);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
+            // 
+            // NumUpDown_ScriptsFVar
+            // 
+            this.NumUpDown_ScriptsFVar.Location = new System.Drawing.Point(526, 87);
+            this.NumUpDown_ScriptsFVar.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_ScriptsFVar.Name = "NumUpDown_ScriptsFVar";
+            this.NumUpDown_ScriptsFVar.Size = new System.Drawing.Size(71, 20);
+            this.NumUpDown_ScriptsFVar.TabIndex = 86;
+            this.NumUpDown_ScriptsFVar.Tag = "SCRIPTFVARS";
+            this.NumUpDown_ScriptsFVar.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // NumUpDown_ScriptsVar
+            // 
+            this.NumUpDown_ScriptsVar.Location = new System.Drawing.Point(422, 87);
+            this.NumUpDown_ScriptsVar.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_ScriptsVar.Name = "NumUpDown_ScriptsVar";
+            this.NumUpDown_ScriptsVar.Size = new System.Drawing.Size(71, 20);
+            this.NumUpDown_ScriptsVar.TabIndex = 85;
+            this.NumUpDown_ScriptsVar.Tag = "SCRIPTVARS";
+            this.NumUpDown_ScriptsVar.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Lbl_ScriptsFVars
+            // 
+            this.Lbl_ScriptsFVars.AutoSize = true;
+            this.Lbl_ScriptsFVars.Location = new System.Drawing.Point(523, 71);
+            this.Lbl_ScriptsFVars.Name = "Lbl_ScriptsFVars";
+            this.Lbl_ScriptsFVars.Size = new System.Drawing.Size(110, 13);
+            this.Lbl_ScriptsFVars.TabIndex = 84;
+            this.Lbl_ScriptsFVars.Text = "Scripts float variables:";
+            // 
+            // Lbl_ScriptsVars
+            // 
+            this.Lbl_ScriptsVars.AutoSize = true;
+            this.Lbl_ScriptsVars.Location = new System.Drawing.Point(419, 71);
+            this.Lbl_ScriptsVars.Name = "Lbl_ScriptsVars";
+            this.Lbl_ScriptsVars.Size = new System.Drawing.Size(87, 13);
+            this.Lbl_ScriptsVars.TabIndex = 83;
+            this.Lbl_ScriptsVars.Text = "Scripts variables:";
             // 
             // ChkInvisible
             // 
@@ -2804,6 +2850,7 @@
             this.MsgText.CharWidth = 8;
             this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgText.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.MsgText.IsReplaceMode = false;
             this.MsgText.Location = new System.Drawing.Point(260, 98);
             this.MsgText.Name = "MsgText";
@@ -3325,52 +3372,6 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
-            // Lbl_ScriptsVars
-            // 
-            this.Lbl_ScriptsVars.AutoSize = true;
-            this.Lbl_ScriptsVars.Location = new System.Drawing.Point(419, 71);
-            this.Lbl_ScriptsVars.Name = "Lbl_ScriptsVars";
-            this.Lbl_ScriptsVars.Size = new System.Drawing.Size(87, 13);
-            this.Lbl_ScriptsVars.TabIndex = 83;
-            this.Lbl_ScriptsVars.Text = "Scripts variables:";
-            // 
-            // Lbl_ScriptsFVars
-            // 
-            this.Lbl_ScriptsFVars.AutoSize = true;
-            this.Lbl_ScriptsFVars.Location = new System.Drawing.Point(523, 71);
-            this.Lbl_ScriptsFVars.Name = "Lbl_ScriptsFVars";
-            this.Lbl_ScriptsFVars.Size = new System.Drawing.Size(110, 13);
-            this.Lbl_ScriptsFVars.TabIndex = 84;
-            this.Lbl_ScriptsFVars.Text = "Scripts float variables:";
-            // 
-            // NumUpDown_ScriptsVar
-            // 
-            this.NumUpDown_ScriptsVar.Location = new System.Drawing.Point(422, 87);
-            this.NumUpDown_ScriptsVar.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.NumUpDown_ScriptsVar.Name = "NumUpDown_ScriptsVar";
-            this.NumUpDown_ScriptsVar.Size = new System.Drawing.Size(71, 20);
-            this.NumUpDown_ScriptsVar.TabIndex = 85;
-            this.NumUpDown_ScriptsVar.Tag = "SCRIPTVARS";
-            this.NumUpDown_ScriptsVar.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // NumUpDown_ScriptsFVar
-            // 
-            this.NumUpDown_ScriptsFVar.Location = new System.Drawing.Point(526, 87);
-            this.NumUpDown_ScriptsFVar.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.NumUpDown_ScriptsFVar.Name = "NumUpDown_ScriptsFVar";
-            this.NumUpDown_ScriptsFVar.Size = new System.Drawing.Size(71, 20);
-            this.NumUpDown_ScriptsFVar.TabIndex = 86;
-            this.NumUpDown_ScriptsFVar.Tag = "SCRIPTFVARS";
-            this.NumUpDown_ScriptsFVar.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3408,6 +3409,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             this.Tab3_BehaviorData.ResumeLayout(false);
             this.Tab3_BehaviorData.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsFVar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsVar)).EndInit();
             this.Panel_Colors.ResumeLayout(false);
             this.Panel_Colors.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUp_LightRadius)).EndInit();
@@ -3463,8 +3466,6 @@
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsVar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsFVar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

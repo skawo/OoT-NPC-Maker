@@ -46,6 +46,7 @@ namespace NPC_Maker
         public const string Keyword_Save32 = "SAVE32";
         public const string Keyword_SaveF = "SAVEF";
         public const string Keyword_Degree = "DEG_";
+        public const string Keyword_Once = "ONCE";
         public const string Keyword_Ignore_Y = "IGNORE_Y";
         public const string Keyword_Debug_Skip_Label_Check = "__SKIPCHECK__";
         public const string Keyword_Label_Return = "__RETURN__";
@@ -92,7 +93,7 @@ namespace NPC_Maker
             Keyword_Save32,
             Keyword_SaveF,
             Keyword_EndOcarina,
-
+            Keyword_Once
         };
 
         public static List<string> KeywordsBlue = new List<string>()

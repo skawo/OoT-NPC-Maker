@@ -172,8 +172,10 @@ namespace NPC_Maker.Scripts
 
                                 if (SplitLine.Length == 4)
                                 {
-                                    if (SplitLine[3].ToUpper() == "ONCE")
+                                    if (SplitLine[3].ToUpper() == Lists.Keyword_Once)
                                         Once = 1;
+                                    else
+                                        throw ParseException.UnrecognizedParameter(SplitLine);
                                 }
 
                                 return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Once, VarType2, 0);
