@@ -19,19 +19,6 @@ namespace NPC_Maker.Scripts
 
                     switch (SubID)
                     {
-                        case (int)Lists.SetSubTypes.UNSUCCESSFUL_TRADE_TEXT_ID:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                                object TextID_Adult = 0;
-                                object TextID_Child = 0;
-                                byte TextIDAdultT = 0;
-                                byte TextIDChildT = 0;
-
-                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT, Entry.Messages, 2);
-
-                                return new InstructionSet((byte)SubID, TextID_Adult, TextIDAdultT, 0);
-                            }
                         case (int)Lists.SetSubTypes.MOVEMENT_DISTANCE:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_DELAY:
                         case (int)Lists.SetSubTypes.COLLISION_RADIUS:

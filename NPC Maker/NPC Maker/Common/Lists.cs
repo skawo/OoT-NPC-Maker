@@ -451,7 +451,6 @@ namespace NPC_Maker
             EXT_VAR,
             TIME_OF_DAY,
             EFFECT_IF_ATTACKED,
-            UNSUCCESSFUL_TRADE_TEXT_ID,
             MOVEMENT_TYPE,
             GENERATES_LIGHT,
             REF_ACTOR,
