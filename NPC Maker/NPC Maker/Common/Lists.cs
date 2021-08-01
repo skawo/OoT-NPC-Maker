@@ -480,6 +480,8 @@ namespace NPC_Maker
             TEXTBOX_NUM = 14,
             TEXTBOX_DISMISSED = 15,
 
+            ANIMATION_END = 16,
+
             EXT_VAR = 19,
 
         }

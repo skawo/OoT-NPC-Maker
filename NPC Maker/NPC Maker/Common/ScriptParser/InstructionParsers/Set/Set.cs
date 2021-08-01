@@ -180,16 +180,16 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
-                                object Loops = 0;
+                                object Once = 0;
                                 byte VarType2 = 0;
 
                                 if (SplitLine.Length == 4)
                                 {
-                                    VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                                    Loops = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, Int32.MaxValue);
+                                    if (SplitLine[3].ToUpper() == "ONCE")
+                                        Once = 1;
                                 }
 
-                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Loops, VarType2, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Once, VarType2, 0);
                             }
                         case (int)Lists.SetSubTypes.ANIMATION_OBJECT:
                         case (int)Lists.SetSubTypes.ANIMATION_OFFSET:
