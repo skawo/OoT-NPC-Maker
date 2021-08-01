@@ -434,12 +434,12 @@ namespace NPC_Maker
             VISIBLE_ONLY_UNDER_LENS,
             IS_ALWAYS_ACTIVE,
             IS_ALWAYS_DRAWN,
+            REACTS_IF_ATTACKED,
 
             GRAVITY_FORCE,
             MOVEMENT_PATH_ID,
             PLAYER_CAN_MOVE,
             ACTOR_CAN_MOVE,
-            REACTS_IF_ATTACKED,
             CURRENT_ANIMATION,
             CURRENT_ANIMATION_INSTANTLY,
             SCRIPT_START,
