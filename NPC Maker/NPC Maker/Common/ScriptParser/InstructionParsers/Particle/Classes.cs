@@ -5,8 +5,7 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionParticle : Instruction
     {
-        public object Type { get; set; }
-        public byte TypeT { get; set; }
+        public byte Type { get; set; }
 
         public byte RelativePos { get; set; }
 
@@ -48,22 +47,20 @@ namespace NPC_Maker.Scripts
         public object Life { get; set; }
         public byte LifeT { get; set; }
 
-        public object NumBolts { get; set; }
-        public byte NumBoltsT { get; set; }
+        public object Var { get; set; }
+        public byte VarT { get; set; }
 
         public object Yaw { get; set; }
         public byte YawT { get; set; }
 
+        public byte ObjectT { get; set; }
+        public object Object { get; set; }
+
         public object DListIndex { get; set; }
         public byte DListIndexT { get; set; }
 
-        public object ColorType { get; set; }
-        public byte ColorTypeT { get; set; }
-
         public InstructionLabel LabelJumpIfFound { get; set; }
 
-        public object Alpha { get; set; }
-        public byte AlphaT { get; set; }
 
         public InstructionParticle() : base((byte)Lists.Instructions.PARTICLE)
         {
@@ -74,17 +71,17 @@ namespace NPC_Maker.Scripts
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(TypeT, RelativePos, 4), Data);
+            Helpers.AddObjectToByteList(Type, Data);
+            Helpers.AddObjectToByteList(LifeT, Data);
+            Helpers.AddObjectToByteList(VarT, Data);
+            Helpers.AddObjectToByteList(YawT, Data);
+            Helpers.AddObjectToByteList(DListIndexT, Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosXT, PosYT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosZT, AccelXT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(AccelYT, AccelZT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelXT, VelYT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelZT, ScaleT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ScaleUpdateT, RadiusUpdateDT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(LifeT, NumBoltsT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(YawT, DListIndexT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ColorTypeT, AlphaT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelZT, RelativePos, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ScaleT, ScaleUpdateT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimRGBAVarT[0], PrimRGBAVarT[1], 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimRGBAVarT[2], PrimRGBAVarT[3], 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SecRGBAVarT[0], SecRGBAVarT[1], 4), Data);
@@ -92,7 +89,6 @@ namespace NPC_Maker.Scripts
 
             Helpers.Ensure4ByteAlign(Data);
 
-            Helpers.AddObjectToByteList(Type, Data);
             Helpers.AddObjectToByteList(PosX, Data);
             Helpers.AddObjectToByteList(PosY, Data);
             Helpers.AddObjectToByteList(PosZ, Data);
@@ -114,19 +110,16 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(Scale, Data);
             Helpers.AddObjectToByteList(ScaleUpdate, Data);
-            Helpers.AddObjectToByteList(RadiusUpdateD, Data);
 
             Helpers.AddObjectToByteList(Life, Data);
-            Helpers.AddObjectToByteList(NumBolts, Data);
+            Helpers.AddObjectToByteList(Var, Data);
             Helpers.AddObjectToByteList(Yaw, Data);
             Helpers.AddObjectToByteList(DListIndex, Data);
-            Helpers.AddObjectToByteList(ColorType, Data);
-            Helpers.AddObjectToByteList(Alpha, Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, LabelJumpIfFound, ref Data);
 
             Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 128);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 112);
 
             return Data.ToArray();
         }

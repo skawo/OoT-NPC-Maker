@@ -53,7 +53,7 @@
     </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>uhhuh.ico</ApplicationIcon>
+    <ApplicationIcon>nUhhuh.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -261,6 +261,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="nUhhuh.ico" />
     <Content Include="uhhuh.ico" />
     <None Include="Resources\Logo.png" />
   </ItemGroup>

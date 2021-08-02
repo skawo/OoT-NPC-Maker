@@ -121,8 +121,8 @@ namespace NPC_Maker
             IsNull = false;
 
             ObjectID = 0;
-            Hierarchy = 0;
-            HierarchyType = 0;
+            Hierarchy = 0;  // "Skeleton"
+            HierarchyType = 0;  // "Draw type"
             ModelPositionOffsets = new Int16[] { 0, 0, 0 };
             ModelScale = 0.01f;
 
@@ -207,8 +207,8 @@ namespace NPC_Maker
             Invisible = false;
             DEBUGShowCols = false;
 
-            NumVars = 5;
-            NumFVars = 0;
+            NumVars = 2;
+            NumFVars = 2;
         }
 
         public List<OutputColorEntry> ParseColorEntries()

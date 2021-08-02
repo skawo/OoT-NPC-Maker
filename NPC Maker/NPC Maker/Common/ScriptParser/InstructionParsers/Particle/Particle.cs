@@ -14,65 +14,56 @@ namespace NPC_Maker.Scripts
 
                 int End = GetCorrespondingEndParticle(Lines, LineNo);
 
-                object Type = 0;
-                byte TypeT = 0;
+                byte Type = 0;
 
                 byte RelativePos = 0;
 
-                object PosX = 0;
-                object PosY = 0;
-                object PosZ = 0;
+                object PosX = (float)0;
+                object PosY = (float)0;
+                object PosZ = (float)0;
                 byte PosXT = 0;
                 byte PosYT = 0;
                 byte PosZT = 0;
 
-                object AccelX = 0;
-                object AccelY = 0;
-                object AccelZ = 0;
+                object AccelX = (float)0;
+                object AccelY = (float)0;
+                object AccelZ = (float)0;
                 byte AccelXT = 0;
                 byte AccelYT = 0;
                 byte AccelZT = 0;
 
-                object VelX = 0;
-                object VelY = 0;
-                object VelZ = 0;
+                object VelX = (float)0;
+                object VelY = (float)0;
+                object VelZ = (float)0;
                 byte VelXT = 0;
                 byte VelYT = 0;
                 byte VelZT = 0;
 
-                object[] PrimRGBA = new object[] { 0, 0, 0, 0 };
+                object[] PrimRGBA = new object[] { (float)0, (float)0, (float)0, (float)0 };
                 byte[] PrimRGBAVarT = new byte[] { 0, 0, 0, 0 };
-                object[] SecRGBA = new object[] { 0, 0, 0, 0 };
+                object[] SecRGBA = new object[] { (float)0, (float)0, (float)0, (float)0 };
                 byte[] SecRGBAVarT = new byte[] { 0, 0, 0, 0 };
 
-                object Scale = 0;
+                object Scale = (float)0;
                 byte ScaleT = 0;
 
-                object ScaleUpdate = 0;
+                object ScaleUpdate = (float)0;
                 byte ScaleUpdateT = 0;
 
-                object RadiusUpdateD = 0;
-                byte RadiusUpdateDT = 0;
-
-                object Life = 0;
+                object Life = (float)0;
                 byte LifeT = 0;
 
-                object NumBolts = 0;
-                byte NumBoltsT = 0;
+                object Var = (float)0;
+                byte VarT = 0;
 
-                object Yaw = 0;
+                object Yaw = (float)0;
                 byte YawT = 0;
 
-                object DListIndex = 0;
+                object DListIndex = (float)-1;
                 byte DListIndexT = 0;
-
-                object ColorType = 0;
-                byte ColorTypeT = 0;
 
                 string LabelJumpIfFound = "__RETURN__";
 
-                object Alpha = 0;
-                byte AlphaT = 0;
 
 
 
@@ -102,13 +93,11 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.ParticleSubOptions.TYPE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
-                                TypeT = ScriptHelpers.GetVarType(Split, 1);
-                                Type = Convert.ToInt32(ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, TypeT, typeof(Lists.ParticleTypes), ParseException.UnrecognizedParticle(Split)));
-
+                                Type = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.ParticleTypes), ParseException.UnrecognizedParticle(Split)));
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.POSITION:
+                        case (int)Lists.ParticleSubOptions.POS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
 
@@ -126,6 +115,7 @@ namespace NPC_Maker.Scripts
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.VELOCITY:
+                        case (int)Lists.ParticleSubOptions.VEL:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
                                 ScriptHelpers.GetXYZPos(Split, 1, 2, 3, ref VelXT, ref VelYT, ref VelZT, ref VelX, ref VelY, ref VelZ);
@@ -170,17 +160,26 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
-                                RadiusUpdateDT = ScriptHelpers.GetVarType(Split, 1);
-                                RadiusUpdateD = ScriptHelpers.GetValueByType(Split, 1, RadiusUpdateDT, Int16.MinValue, Int16.MaxValue);
+                                VarT = ScriptHelpers.GetVarType(Split, 1);
+                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, Int16.MinValue, Int16.MaxValue);
 
                                 continue;
                             }
-                        case (int)Lists.ParticleSubOptions.NUM_BOLTS:
+                        case (int)Lists.ParticleSubOptions.COUNT:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
-                                NumBoltsT = ScriptHelpers.GetVarType(Split, 1);
-                                NumBolts = ScriptHelpers.GetValueByType(Split, 1, NumBoltsT, 0, UInt16.MaxValue);
+                                VarT = ScriptHelpers.GetVarType(Split, 1);
+                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, UInt16.MaxValue);
+
+                                continue;
+                            }
+                        case (int)Lists.ParticleSubOptions.DURATION:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+
+                                LifeT = ScriptHelpers.GetVarType(Split, 1);
+                                Life = ScriptHelpers.GetValueByType(Split, 1, LifeT, 0, Int16.MaxValue);
 
                                 continue;
                             }
@@ -206,8 +205,8 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
-                                ColorTypeT = ScriptHelpers.GetVarType(Split, 1);
-                                ColorType = ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, ColorTypeT, typeof(Lists.LightPointColors), ParseException.UnrecognizedParticle(Split));
+                                VarT = ScriptHelpers.GetVarType(Split, 1);
+                                Var = ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, VarT, typeof(Lists.LightPointColors), ParseException.UnrecognizedParticle(Split));
 
                                 continue;
                             }
@@ -221,8 +220,8 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 
-                                AlphaT = ScriptHelpers.GetVarType(Split, 1);
-                                Alpha = ScriptHelpers.GetValueByType(Split, 1, AlphaT, 0, byte.MaxValue);
+                                VarT = ScriptHelpers.GetVarType(Split, 1);
+                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, byte.MaxValue);
 
                                 continue;
                             }
@@ -235,7 +234,6 @@ namespace NPC_Maker.Scripts
                 {
                     ID = (byte)Lists.Instructions.PARTICLE,
                     Type = Type,
-                    TypeT = TypeT,
                     RelativePos = RelativePos,
                     PosX = PosX,
                     PosY = PosY,
@@ -263,20 +261,14 @@ namespace NPC_Maker.Scripts
                     ScaleT = ScaleT,
                     ScaleUpdate = ScaleUpdate,
                     ScaleUpdateT = ScaleUpdateT,
-                    RadiusUpdateD = RadiusUpdateD,
-                    RadiusUpdateDT = RadiusUpdateDT,
-                    Alpha = Alpha,
-                    AlphaT = AlphaT,
                     Life = Life,
                     LifeT = LifeT,
-                    NumBolts = NumBolts,
-                    NumBoltsT = NumBoltsT,
+                    Var = Var,
+                    VarT = VarT,
                     Yaw = Yaw,
                     YawT = YawT,
                     DListIndex = DListIndex,
                     DListIndexT = DListIndexT,
-                    ColorType = ColorType,
-                    ColorTypeT = ColorTypeT,
                     LabelJumpIfFound = new InstructionLabel(LabelJumpIfFound)
                 };
             }

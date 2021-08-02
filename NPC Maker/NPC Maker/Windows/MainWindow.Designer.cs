@@ -589,9 +589,9 @@
             this.Label_Hierarchy.AutoSize = true;
             this.Label_Hierarchy.Location = new System.Drawing.Point(14, 62);
             this.Label_Hierarchy.Name = "Label_Hierarchy";
-            this.Label_Hierarchy.Size = new System.Drawing.Size(84, 13);
+            this.Label_Hierarchy.Size = new System.Drawing.Size(108, 13);
             this.Label_Hierarchy.TabIndex = 7;
-            this.Label_Hierarchy.Text = "Hierarchy offset:";
+            this.Label_Hierarchy.Text = "Hierarchy / Skeleton:";
             // 
             // NumUpDown_Hierarchy
             // 
