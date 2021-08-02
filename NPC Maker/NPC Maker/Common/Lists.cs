@@ -107,10 +107,10 @@ namespace NPC_Maker
             Keyword_Else,
             ParticleSubOptions.ACCEL.ToString(),
             ParticleSubOptions.ACCELERATION.ToString(),
-            ParticleSubOptions.ALPHA.ToString(),
+            ParticleSubOptions.OPACITY.ToString(),
             ParticleSubOptions.COLOR1.ToString(),
             ParticleSubOptions.COLOR2.ToString(),
-            ParticleSubOptions.DETECTED_LABEL.ToString(),
+            ParticleSubOptions.SPOTTED.ToString(),
             ParticleSubOptions.DLIST.ToString(),
             ParticleSubOptions.DURATION.ToString(),
             ParticleSubOptions.LIGHTPOINT_COLOR.ToString(),
@@ -385,6 +385,7 @@ namespace NPC_Maker
             MOVEMENT_SPEED,
             TALK_RADIUS,
             SMOOTHING_CONSTANT,
+            SHADOW_RADIUS,
 
             LOOP_MOVEMENT,
             HAVE_COLLISION,
@@ -397,6 +398,7 @@ namespace NPC_Maker
             LIGHT_GLOW,
             PAUSE_CUTSCENE,
             INVISIBLE,
+            CASTS_SHADOW,
             NO_AUTO_ANIM,
             TALK_MODE,
 
@@ -1285,8 +1287,8 @@ namespace NPC_Maker
             YAW,
             DLIST,
             LIGHTPOINT_COLOR,
-            DETECTED_LABEL,
-            ALPHA,
+            SPOTTED,
+            OPACITY,
         }
 
         public enum LightPointColors

@@ -210,13 +210,13 @@ namespace NPC_Maker.Scripts
 
                                 continue;
                             }
-                        case (int)Lists.ParticleSubOptions.DETECTED_LABEL:
+                        case (int)Lists.ParticleSubOptions.SPOTTED:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
                                 LabelJumpIfFound = Split[1];
                                 continue;
                             }
-                        case (int)Lists.ParticleSubOptions.ALPHA:
+                        case (int)Lists.ParticleSubOptions.OPACITY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
 

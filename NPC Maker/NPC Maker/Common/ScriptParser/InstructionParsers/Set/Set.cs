@@ -45,6 +45,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.LIGHT_OFFSET_Y:
                         case (int)Lists.SetSubTypes.LIGHT_OFFSET_Z:
                         case (int)Lists.SetSubTypes.LIGHT_RADIUS:
+                        case (int)Lists.SetSubTypes.SHADOW_RADIUS:
                             return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
                         // case u32:
                         //return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
@@ -79,6 +80,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.TALK_MODE:
                         case (int)Lists.SetSubTypes.VISIBLE_ONLY_UNDER_LENS:
                         case (int)Lists.SetSubTypes.INVISIBLE:
+                        case (int)Lists.SetSubTypes.CASTS_SHADOW:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
