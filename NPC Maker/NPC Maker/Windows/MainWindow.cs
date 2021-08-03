@@ -297,15 +297,19 @@ namespace NPC_Maker
             {
                 string SelCombo = Dicts.GetStringFromStringIntDict(Dicts.LimbShowSubTypes, Dlist.ShowType, Dicts.LimbShowSubTypes.First().Key);
 
-                DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
-                                                                 Dlist.Address.ToString("X"),
-                                                                 Dlist.TransX.ToString() + "," + Dlist.TransY.ToString() + "," + Dlist.TransZ.ToString(),
-                                                                 Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
-                                                                 Dlist.Scale.ToString(),
-                                                                 Dlist.Limb.ToString(),
-                                                                 Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Dlist.ObjectID),
-                                                                 SelCombo
-                                                                });
+                int Row = DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
+                                                                           "",
+                                                                           Dlist.Address.ToString("X"),
+                                                                           Dlist.TransX.ToString() + "," + Dlist.TransY.ToString() + "," + Dlist.TransZ.ToString(),
+                                                                           Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
+                                                                           Dlist.Scale.ToString(),
+                                                                           Dlist.Limb.ToString(),
+                                                                           Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Dlist.ObjectID),
+                                                                           SelCombo
+                                                                          });
+
+                DataGridView_ExtraDLists.Rows[Row].Cells[(int)EDlistsColumns.Color].Style.BackColor = Dlist.Color;
+
             }
 
             TabControl.SelectedIndex = Math.Min(TabControl.TabPages.Count - 1, SelectedTabIndex);
@@ -655,7 +659,7 @@ namespace NPC_Maker
 
                 foreach (DListEntry D in CopiedEntry.ExtraDisplayLists)
                 {
-                    SelectedEntry.ExtraDisplayLists.Add(new DListEntry(D.Name, D.Address, D.TransX, D.TransY, D.TransZ, D.RotX, D.RotY, D.RotZ, D.Scale, D.Limb, D.ShowType, D.ObjectID));
+                    SelectedEntry.ExtraDisplayLists.Add(new DListEntry(D.Name, D.Address, D.TransX, D.TransY, D.TransZ, D.Color, D.RotX, D.RotY, D.RotZ, D.Scale, D.Limb, D.ShowType, D.ObjectID));
                 }
 
                 SelectedEntry.ObjectID = CopiedEntry.ObjectID;
@@ -1149,13 +1153,14 @@ namespace NPC_Maker
         private enum EDlistsColumns
         {
             Purpose = 0,
-            Offset = 1,
-            Translation = 2,
-            Rotation = 3,
-            Scale = 4,
-            Limb = 5,
-            Object = 6,
-            ShowType = 7,
+            Color = 1,
+            Offset = 2,
+            Translation = 3,
+            Rotation = 4,
+            Scale = 5,
+            Limb = 6,
+            Object = 7,
+            ShowType = 8,
         }
 
         private void DataGridView_ExtraDLists_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -1175,10 +1180,28 @@ namespace NPC_Maker
                     DataGridView_ExtraDLists.Update();
                 }
             }
+            else if (e.ColumnIndex == (int)EDlistsColumns.Color)
+            {
+                if (ColorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
+                        new DataGridViewCellStyle()
+                        {
+                            SelectionForeColor = ColorDialog.Color,
+                            BackColor = ColorDialog.Color,
+                            SelectionBackColor = ColorDialog.Color
+
+                        };
+
+                    DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, "", e.GetType(), null));
+                    DataGridView_ExtraDLists.Update();
+
+                }
+            }
         }
 
         private void AddBlankDList(int SkipIndex, int Index, string Name = null, uint? Address = null, float? TransX = null, float? TransY = null, float? TransZ = null,
-                                   short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, ushort? Limb = null, int? ShowType = null, short? ObjectID = null)
+                                   short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, ushort? Limb = null, int? ShowType = null, short? ObjectID = null, Color? EnvColor = null)
         {
             if (Name == null)
                 Name = "DList_" + Index;
@@ -1195,13 +1218,17 @@ namespace NPC_Maker
             Limb = Limb ?? 0;
             ShowType = ShowType ?? 0;
             ObjectID = ObjectID ?? -1;
+            EnvColor = EnvColor ?? Color.FromArgb(255, 255, 255, 255);
 
 
-            SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ,
+            SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ, (Color)EnvColor,
                                                     (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (ushort)Limb, (int)ShowType, (short)ObjectID));
 
             if (SkipIndex != (int)EDlistsColumns.Purpose)
                 DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Purpose].Value = Name;
+
+            if (SkipIndex != (int)EDlistsColumns.Color)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Color].Style.BackColor = (Color)EnvColor;
 
             if (SkipIndex != (int)EDlistsColumns.Offset)
                 DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Offset].Value = Address;
@@ -1281,6 +1308,16 @@ namespace NPC_Maker
                             AddBlankDList(e.ColumnIndex, e.RowIndex, e.Value.ToString());
                         else
                             SelectedEntry.ExtraDisplayLists[e.RowIndex].Name = e.Value.ToString();
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
+                case (int)EDlistsColumns.Color:
+                    {
+                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor);
+                        else
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].Color = (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
 
                         e.ParsingApplied = true;
                         return;

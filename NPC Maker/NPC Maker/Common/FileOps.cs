@@ -348,11 +348,14 @@ namespace NPC_Maker
                             EntryBytes.AddRangeBigEndian(Dlist.RotZ);
                             EntryBytes.AddRangeBigEndian(Dlist.Limb);
                             EntryBytes.Add((byte)Dlist.ShowType);
+                            EntryBytes.Add(Dlist.Color.R);
+                            EntryBytes.Add(Dlist.Color.G);
+                            EntryBytes.Add(Dlist.Color.B);
                             Helpers.Ensure4ByteAlign(EntryBytes);
                         }
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 32 * Entry.ExtraDisplayLists.Count;
+                        CurLen += 36 * Entry.ExtraDisplayLists.Count;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion

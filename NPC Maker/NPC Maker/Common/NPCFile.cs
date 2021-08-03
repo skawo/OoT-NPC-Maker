@@ -168,7 +168,7 @@ namespace NPC_Maker
             Glow = false;
             LightLimb = 0;
             LightPositionOffsets = new Int16[] { 0, 0, 0 };
-            LightColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+            LightColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             LightRadius = 0;
 
             MovementType = 0;
@@ -192,7 +192,7 @@ namespace NPC_Maker
 
             Messages = new List<MessageEntry>();
 
-            EnvironmentColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+            EnvironmentColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             BlinkPattern = "";
             TalkPattern = "";
             BlinkSegment = 8;
@@ -528,7 +528,7 @@ namespace NPC_Maker
 
         public ColorEntry()
         {
-            Color = System.Drawing.Color.FromArgb(0, 0, 0, 0);
+            Color = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             Limbs = "";
         }
         public ColorEntry(string _Limb, System.Drawing.Color _Color)
@@ -926,6 +926,7 @@ namespace NPC_Maker
         public float Scale { get; set; }
         public int ShowType { get; set; }
         public UInt16 Limb { get; set; }
+        public System.Drawing.Color Color { get; set; }
         public Int16 ObjectID { get; set; }
 
         public DListEntry()
@@ -942,8 +943,9 @@ namespace NPC_Maker
             ShowType = 0;
             Limb = 0;
             ObjectID = -1;
+            Color = System.Drawing.Color.FromArgb(255, 255, 255, 255);
         }
-        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ,
+        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, System.Drawing.Color _Color,
                           Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, UInt16 _Limb, int _ShowType, Int16 _ObjectID)
         {
             Name = _Name;
@@ -957,6 +959,7 @@ namespace NPC_Maker
             Scale = _Scale;
             Limb = _Limb;
             ShowType = _ShowType;
+            Color = _Color;
             ObjectID = _ObjectID;
         }
     }
