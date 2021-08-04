@@ -42,7 +42,7 @@ namespace NPC_Maker
 
         public static Dictionary<string, Style> RegexDict = new Dictionary<string, Style>()
         {
-            { @"\/\*([\s\S]*)\*\/", SyntaxHighlighter.GreenStyle},      // Comments like /* comment */
+            { @"\/\*([\s\S]*?)\*\/", SyntaxHighlighter.GreenStyle},      // Comments like /* comment */
             { @"//.+", SyntaxHighlighter.GreenStyle},                    // Comments like // comment
             { @".+:[\n\r ]+", SyntaxHighlighter.BoldRedStyle},           // Labels
             { @"::([\S]+)", SyntaxHighlighter.RedStyle},                 // Procedure calls

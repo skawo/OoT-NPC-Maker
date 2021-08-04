@@ -98,7 +98,7 @@ namespace NPC_Maker.Scripts
             ScriptText = Regex.Replace(ScriptText, @"\\\s+\n", " ");                                                            // Override line carriage return if preceded by \
             ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
-            ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*)\*\/", string.Empty);                                        // Remove comment blocks
+            ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty);                                        // Remove comment blocks
             ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                                       // Remove inline comments
             ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();              // Remove empty lines
             ScriptText = ScriptText.Replace("\t", "");                                                                          // Remove tabs
