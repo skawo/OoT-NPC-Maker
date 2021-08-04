@@ -24,6 +24,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem actorstoolStripMenuItem;
         private static ToolStripMenuItem ocarinaSongstoolStripMenuItem;
         private static ToolStripMenuItem objectstoolStripMenuItem;
+        private static ToolStripMenuItem particlestoolStripMenuItem;
 
         public static void MakeContextMenu()
         {
@@ -42,7 +43,7 @@ namespace NPC_Maker
             actorstoolStripMenuItem = new ToolStripMenuItem();
             objectstoolStripMenuItem = new ToolStripMenuItem();
             ocarinaSongstoolStripMenuItem = new ToolStripMenuItem();
-
+            particlestoolStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -54,98 +55,40 @@ namespace NPC_Maker
                                                                     itemstradeToolStripMenuItem,
                                                                     playerMasksToolStripMenuItem,
                                                                     ocarinaSongstoolStripMenuItem,
+                                                                    particlestoolStripMenuItem,
                                                                     soundEffectsToolStripMenuItem,
                                                                     musicToolStripMenuItem,
                                                                     actorstoolStripMenuItem,
                                                                     objectstoolStripMenuItem,
                                                                 });
-            ContextMenuStrip.Name = "ContextMenuStrip";
+
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
             ContextMenuStrip.Text = "Items";
 
-            // 
-            // functionsToolStripMenuItem
-            // 
-            functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
-            functionsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             functionsToolStripMenuItem.Text = "Functions";
-            // 
-            // keywordsToolStripMenuItem
-            // 
-            keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
-            keywordsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             keywordsToolStripMenuItem.Text = "Keywords";
-            // 
-            // itemsToolStripMenuItem
-            // 
-            itemsToolStripMenuItem.Name = "itemsToolStripMenuItem";
-            itemsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             itemsToolStripMenuItem.Text = "Inventory items";
-            // 
-            // itemsgiveToolStripMenuItem
-            // 
-            itemsgiveToolStripMenuItem.Name = "itemsgiveToolStripMenuItem";
-            itemsgiveToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             itemsgiveToolStripMenuItem.Text = "Award items";
-            // 
-            // questItemsToolStripMenuItem
-            // 
-            questItemsToolStripMenuItem.Name = "questItemsToolStripMenuItem";
-            questItemsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             questItemsToolStripMenuItem.Text = "Quest items";
-            // 
-            // itemsdungeonToolStripMenuItem
-            // 
-            itemsdungeonToolStripMenuItem.Name = "itemsdungeonToolStripMenuItem";
-            itemsdungeonToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             itemsdungeonToolStripMenuItem.Text = "Dungeon items";
-            itemsdungeonToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
-            // 
-            // itemstradeToolStripMenuItem
-            // 
-            itemstradeToolStripMenuItem.Name = "itemstradeToolStripMenuItem";
-            itemstradeToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             itemstradeToolStripMenuItem.Text = "Trade items";
-            // 
-            // playerMasksToolStripMenuItem
-            // 
-            playerMasksToolStripMenuItem.Name = "playerMasksToolStripMenuItem";
-            playerMasksToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             playerMasksToolStripMenuItem.Text = "Player Masks";
-            // 
-            // soundEffectsToolStripMenuItem
-            // 
-            soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
-            soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            ocarinaSongstoolStripMenuItem.Text = "Ocarina songs";
+            particlestoolStripMenuItem.Text = "Particles";
+
             soundEffectsToolStripMenuItem.Text = "Sound effects";
             soundEffectsToolStripMenuItem.Click += SoundEffectsToolStripMenuItem_Click;
-            // 
-            // musicToolStripMenuItem
-            // 
-            musicToolStripMenuItem.Name = "musicToolStripMenuItem";
-            musicToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+
             musicToolStripMenuItem.Text = "Music";
             musicToolStripMenuItem.Click += MusicToolStripMenuItem_Click;
-            // 
-            // actorstoolStripMenuItem
-            // 
-            actorstoolStripMenuItem.Name = "actorstoolStripMenuItem";
-            actorstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+ 
             actorstoolStripMenuItem.Text = "Actors";
             actorstoolStripMenuItem.Click += ActorstoolStripMenuItem_Click;
-            // 
-            // objectstoolStripMenuItem
-            // 
-            objectstoolStripMenuItem.Name = "objectstoolStripMenuItem";
-            objectstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+
             objectstoolStripMenuItem.Text = "Objects";
             objectstoolStripMenuItem.Click += ObjectstoolStripMenuItem_Click;
-            // 
-            // ocarinaSongstoolStripMenuItem
-            // 
-            ocarinaSongstoolStripMenuItem.Name = "ocarinaSongstoolStripMenuItem";
-            ocarinaSongstoolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            ocarinaSongstoolStripMenuItem.Text = "Ocarina songs";
+
+
 
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
@@ -175,7 +118,7 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuestItems)), questItemsToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.PlayerMasks)), playerMasksToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.OcarinaSongs)), ocarinaSongstoolStripMenuItem);
-
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), particlestoolStripMenuItem);
         }
 
         private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)

@@ -43,7 +43,7 @@ namespace NPC_Maker
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.SCALE_UPDATE,
                                                 ParticleSubOptions.DURATION} },
-            {ParticleTypes.CIRCLE_SMOKE, 
+            {ParticleTypes.EXPLOSION, 
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,

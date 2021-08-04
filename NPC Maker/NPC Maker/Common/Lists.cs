@@ -196,32 +196,33 @@ namespace NPC_Maker
 
         public enum Instructions
         {
-            IF = 1,
-            WHILE = 2,
-            AWAIT = 3,
-            SET = 4,
-            TALK = 5,
-            TRADE = 6,
-            ENABLE_TALKING = 7,
-            SHOW_TEXTBOX = 8,
-            ITEM = 9,
-            PLAY = 10,
-            KILL = 11,
-            SPAWN = 12,
-            WARP = 13,
-            ROTATION = 14,
-            POSITION = 15,
-            SCALE = 16,
-            FACE = 17,
-            PARTICLE = 18,
-            OCARINA = 19,
-            RETURN = 252,
-            GOTO = 253,
-            LABEL = 254,
-            NOP = 255,
+            IF,
+            WHILE,
+            AWAIT,
+            SET,
+            TALK,
+            TRADE,
+            ENABLE_TALKING,
+            SHOW_TEXTBOX,
+            ITEM,
+            PLAY ,
+            KILL,
+            SPAWN,
+            WARP,
+            ROTATION,
+            POSITION,
+            SCALE,
+            FACE,
+            PARTICLE,
+            OCARINA,
+            RETURN,
+            GOTO,
+            LABEL,
+            NOP,
         }
 
         public static List<string> KeyValues = GetKeyValues();
+
         private static List<string> GetKeyValues()
         {
             List<string> Values = new List<string>();
@@ -270,71 +271,66 @@ namespace NPC_Maker
         
         public enum IfSubTypes
         {
-            /* flags */
-            FLAG_INF = 0,
-            FLAG_EVENT = 1,
-            FLAG_SWITCH = 2,
-            FLAG_SCENE = 3,
-            FLAG_TREASURE = 4,
-            FLAG_ROOM_CLEAR = 5,
-            FLAG_SCENE_COLLECT = 6,
-            FLAG_TEMPORARY = 7,
+            FLAG_INF,
+            FLAG_EVENT,
+            FLAG_SWITCH,
+            FLAG_SCENE,
+            FLAG_TREASURE,
+            FLAG_ROOM_CLEAR,
+            FLAG_SCENE_COLLECT,
+            FLAG_TEMPORARY,
 
-            /* bools */
-            LINK_IS_ADULT = 8,
-            CURRENTLY_DAY = 9,
-            IS_TALKING = 10,
-            PLAYER_HAS_EMPTY_BOTTLE = 11,
-            CUTSCENE_BEING_PLAYED = 12,
-            TEXTBOX_ON_SCREEN = 13,
-            CURRENT_ANIM_WALKING = 14,
-            CURRENT_ANIM_IDLE = 15,
-            PLAYER_HAS_MAGIC = 16,
-            ATTACKED = 17,
+            LINK_IS_ADULT,
+            CURRENTLY_DAY,
+            IS_TALKING,
+            PLAYER_HAS_EMPTY_BOTTLE,
+            CUTSCENE_BEING_PLAYED,
+            TEXTBOX_ON_SCREEN,
+            CURRENT_ANIM_WALKING,
+            CURRENT_ANIM_IDLE,
+            PLAYER_HAS_MAGIC,
+            ATTACKED,
 
-            /* s16s */
-            PLAYER_RUPEES = 18,
-            SCENE_ID = 19,
-            PLAYER_SKULLTULAS = 20,
-            CURRENT_PATH_NODE = 21,
-            CURRENT_ANIMATION_FRAME = 22,
-            CURRENT_CUTSCENE_FRAME = 23,
-            PLAYER_HEALTH = 24,
-            PLAYER_BEANS = 25,
-            PLAYER_BOMBS = 26,
-            PLAYER_BOMBCHUS = 27,
-            PLAYER_ARROWS = 28,
-            PLAYER_DEKUSTICKS = 29,
-            PLAYER_DEKUNUTS = 30,
-            EXT_VAR = 31,
+            PLAYER_RUPEES,
+            SCENE_ID,
+            PLAYER_SKULLTULAS,
+            CURRENT_PATH_NODE,
+            CURRENT_ANIMATION_FRAME,
+            CURRENT_CUTSCENE_FRAME,
+            PLAYER_HEALTH,
+            PLAYER_BEANS,
+            PLAYER_BOMBS,
+            PLAYER_BOMBCHUS,
+            PLAYER_ARROWS,
+            PLAYER_DEKUSTICKS,
+            PLAYER_DEKUNUTS,
+            EXT_VAR,
 
-            /* s8s */
-            STICK_X = 36,
-            STICK_Y = 37,
+            STICK_X,
+            STICK_Y,
 
-            /* special */
-            ITEM_BEING_TRADED = 38,
-            TRADE_STATUS = 39,
-            PLAYER_MASK = 40,
-            TIME_OF_DAY = 41,
-            CURRENT_ANIMATION = 42,
-            PLAYER_HAS_INVENTORY_ITEM = 43,
-            PLAYER_HAS_QUEST_ITEM = 44,
-            PLAYER_HAS_DUNGEON_ITEM = 45,
-            LAST_ITEM_USED = 46,
-            BUTTON_PRESSED = 47,
-            BUTTON_HELD = 48,
-            TARGETTED = 49,
+            ITEM_BEING_TRADED,
+            TRADE_STATUS,
+            PLAYER_MASK,
+            TIME_OF_DAY,
+            CURRENT_ANIMATION,
+            PLAYER_HAS_INVENTORY_ITEM,
+            PLAYER_HAS_QUEST_ITEM,
+            PLAYER_HAS_DUNGEON_ITEM,
+            LAST_ITEM_USED,
+            BUTTON_PRESSED,
+            BUTTON_HELD,
+            TARGETTED,
 
-            DISTANCE_FROM_PLAYER = 50,
-            LENS_OF_TRUTH_ON = 51,
+            DISTANCE_FROM_PLAYER,
+            LENS_OF_TRUTH_ON,
         }
 
         public enum ItemSubTypes
         {
-            AWARD = 0,
-            GIVE = 1,
-            TAKE = 2,
+            AWARD,
+            GIVE,
+            TAKE,
         }
 
         public enum SetSubTypes
@@ -464,30 +460,28 @@ namespace NPC_Maker
 
         public enum AwaitSubTypes
         {
-            MOVEMENT_PATH_END = 0,
-            TEXTBOX_RESPONSE = 1,
-            TALKING_END = 2,
-            TEXTBOX_ON_SCREEN = 3,
-            FOREVER = 4,
+            MOVEMENT_PATH_END,
+            TEXTBOX_RESPONSE,
+            TALKING_END,
+            TEXTBOX_ON_SCREEN,
+            FOREVER,
 
-            CURRENT_PATH_NODE = 5,
-            FRAMES = 6,
-            CURRENT_ANIMATION_FRAME = 7,
-            CURRENT_CUTSCENE_FRAME = 8,
-            TIME_OF_DAY = 9,
+            CURRENT_PATH_NODE,
+            FRAMES,
+            CURRENT_ANIMATION_FRAME,
+            CURRENT_CUTSCENE_FRAME,
+            TIME_OF_DAY,
 
-            STICK_X = 10,
-            STICK_Y = 11,
+            STICK_X,
+            STICK_Y,
 
-            BUTTON_PRESSED = 12,
-            BUTTON_HELD = 13,
-            TEXTBOX_NUM = 14,
-            TEXTBOX_DISMISSED = 15,
+            BUTTON_PRESSED,
+            BUTTON_HELD,
+            TEXTBOX_NUM,
+            TEXTBOX_DISMISSED,
 
-            ANIMATION_END = 16,
-
-            EXT_VAR = 19,
-
+            ANIMATION_END,
+            EXT_VAR,
         }
 
         public enum EffectsIfAttacked
@@ -537,7 +531,6 @@ namespace NPC_Maker
 
         public enum TradeItems
         {
-    
             /* 0x01 */
             EXCH_ITEM_LETTER_ZELDA = 1,
             /* 0x02 */
@@ -1239,7 +1232,7 @@ namespace NPC_Maker
         public enum ParticleTypes
         {
             DUST,
-            CIRCLE_SMOKE,
+            EXPLOSION,
             RING,
             SPARK,
             LIGHTNING,
@@ -1318,7 +1311,6 @@ namespace NPC_Maker
             SUNS_SONG = 0x25,
             SONG_OF_TIME = 0x26,
             SONG_OF_STORMS = 0x27,
-
         }
 
         public enum DungeonItems
@@ -1333,9 +1325,9 @@ namespace NPC_Maker
 
         public enum TradeStatuses
         {
-            SUCCESS = 0,
-            TALKED_TO = 1,
-            FAILURE = 2,
+            SUCCESS,
+            TALKED_TO,
+            FAILURE,
         }
 
         public enum PlayerMasks
@@ -1394,32 +1386,32 @@ namespace NPC_Maker
 
         public enum PlaySubTypes
         {
-            SFX = 0,
-            BGM = 1,
-            CUTSCENE = 2,
-            CUTSCENE_ADDR = 3,
-            CUTSCENE_ID = 4
+            SFX,
+            BGM,
+            CUTSCENE,
+            CUTSCENE_ADDR,
+            CUTSCENE_ID
         }
 
         public enum RotationSubTypes
         {
-            SET = 0,
-            CHANGE_TO = 1,
-            CHANGE_BY = 2,
+            SET,
+            CHANGE_TO,
+            CHANGE_BY,
         }
 
         public enum PositionSubTypes
         {
-            SET = 0,
-            CHANGE_TO = 1,
-            CHANGE_BY = 2,
+            SET,
+            CHANGE_TO,
+            CHANGE_BY,
         }
 
         public enum ScaleSubTypes
         {
-            SET = 0,
-            CHANGE_TO = 1,
-            CHANGE_BY = 2,
+            SET,
+            CHANGE_TO,
+            CHANGE_BY,
         }
 
         public enum Segments
@@ -1440,14 +1432,13 @@ namespace NPC_Maker
             SEG_D = 5,
             SEG_E = 6,
             SEG_F = 7,
-
         }
 
         public enum FaceSubtypes
         {
-            TOWARDS = 0,
-            AND = 1,
-            AWAY_FROM = 2,
+            TOWARDS,
+            AND,
+            AWAY_FROM,
         }
 
         public static List<string> FaceSubTypesForCtxMenu = GetFaceSubTypesFoxCtxMenu();
