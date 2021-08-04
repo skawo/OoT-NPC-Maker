@@ -287,10 +287,10 @@ namespace NPC_Maker.Scripts
                 {
                     int j = i;
 
-                    i = GetCorrespondingEndWhile(Lines, i);
+                    i = GetCorrespondingEndParticle(Lines, i);
 
                     if (i < 0)
-                        throw ParseException.IfNotClosed(Lines[j]);
+                        throw ParseException.ParticleNotClosed(Lines[j]);
 
                     continue;
                 }

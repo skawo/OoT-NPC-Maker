@@ -25,6 +25,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.AwaitSubTypes.FOREVER:
                         case (int)Lists.AwaitSubTypes.TEXTBOX_DISMISSED:
                         case (int)Lists.AwaitSubTypes.ANIMATION_END:
+                        case (int)Lists.AwaitSubTypes.PLAYER_ANIMATION_END:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
                                 return new InstructionAwait((byte)SubID, 0, Lists.ConditionTypes.EQUALTO, 0);

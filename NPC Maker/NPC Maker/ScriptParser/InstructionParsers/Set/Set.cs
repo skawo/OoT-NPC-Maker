@@ -365,6 +365,48 @@ namespace NPC_Maker.Scripts
 
                                 return new InstructionSetExtVar((byte)SubID, ExtVarNum, Value, VarType, ActorID, VarType2, Operator);
                             }
+                        case (int)Lists.SetSubTypes.PLAYER_ANIMATION:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 4, 7);
+
+
+                                byte OffsType = ScriptHelpers.GetVarType(SplitLine, 2);
+                                object Offset = ScriptHelpers.GetValueByType(SplitLine, 2, OffsType, 0, float.MaxValue);
+
+                                byte SpeedT = ScriptHelpers.GetVarType(SplitLine, 3);
+                                object Speed = ScriptHelpers.GetValueByType(SplitLine, 3, SpeedT, 0, float.MaxValue);
+
+                                byte StFrT = (byte)Lists.VarTypes.Normal;
+                                object StFr = (float)0;
+
+                                byte EFrT = (byte)Lists.VarTypes.Normal;
+                                object EFr = (float)255;
+
+                                if (SplitLine.Length > 4)
+                                {
+                                    StFrT = ScriptHelpers.GetVarType(SplitLine, 4);
+                                    StFr = ScriptHelpers.GetValueByType(SplitLine, 4, SpeedT, (float)0, (float)255);
+                                }
+
+                                if (SplitLine.Length > 5)
+                                {
+                                    EFrT = ScriptHelpers.GetVarType(SplitLine, 5);
+                                    EFr = ScriptHelpers.GetValueByType(SplitLine, 5, SpeedT, (float)StFr, (float)255);
+                                }
+
+                                byte Once = 0;
+
+                                if (SplitLine.Length == 7)
+                                {
+                                    if (SplitLine[6] == Lists.Keyword_Once)
+                                        Once = 1;
+                                    else
+                                        throw ParseException.UnrecognizedParameter(SplitLine);
+                                }
+
+                                return new InstructionSetPlayerAnim((byte)SubID, OffsType, Offset, SpeedT, Speed, StFrT, StFr, EFrT, EFr, Once);
+
+                            }
                         default: throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
                 }

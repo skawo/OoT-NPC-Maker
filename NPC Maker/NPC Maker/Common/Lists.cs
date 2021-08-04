@@ -455,7 +455,7 @@ namespace NPC_Maker
             MOVEMENT_TYPE,
             GENERATES_LIGHT,
             REF_ACTOR,
-
+            PLAYER_ANIMATION,
         }
 
         public enum AwaitSubTypes
@@ -481,6 +481,7 @@ namespace NPC_Maker
             TEXTBOX_DISMISSED,
 
             ANIMATION_END,
+            PLAYER_ANIMATION_END,
             EXT_VAR,
         }
 

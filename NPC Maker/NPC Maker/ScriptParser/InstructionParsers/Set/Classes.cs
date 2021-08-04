@@ -117,6 +117,63 @@ namespace NPC_Maker.Scripts
         }
     }
 
+    public class InstructionSetPlayerAnim : InstructionSub
+    {
+        public object Offs;
+        public object Speed;
+        public object StFrame;
+        public object EnFrame;
+        public byte OffsT;
+        public byte SpeedT;
+        public byte StFrameT;
+        public byte EnFrameT;
+        public byte Once;
+
+        public InstructionSetPlayerAnim(byte _SubID, byte _OffsT, object _Offs, byte _SpeedT, object _Speed, byte _StFT, object _StF, byte _EnFT, object _EnF, byte _Once)
+                                        : base((int)Lists.Instructions.SET, _SubID)
+        {
+            Offs = _Offs;
+            Speed = _Speed;
+            StFrame = _StF;
+            EnFrame = _EnF;
+            OffsT = _OffsT;
+            SpeedT = _SpeedT;
+            StFrameT = _StFT;
+            EnFrameT = _EnFT;
+            Once = _Once;
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+            List<byte> Data = new List<byte>();
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(OffsT, Data);
+            Helpers.AddObjectToByteList(SpeedT, Data);
+            Helpers.AddObjectToByteList(StFrameT, Data);
+            Helpers.AddObjectToByteList(EnFrameT, Data);
+            Helpers.AddObjectToByteList(Once, Data);
+
+            Helpers.Ensure4ByteAlign(Data);
+
+            Helpers.AddObjectToByteList(Offs, Data);
+            Helpers.AddObjectToByteList(Speed, Data);
+            Helpers.AddObjectToByteList(StFrame, Data);
+            Helpers.AddObjectToByteList(EnFrame, Data);
+
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 24);
+
+            return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
+        }
+    }
+
     public class InstructionSetEnvColor : InstructionSub
     {
         public object R;
