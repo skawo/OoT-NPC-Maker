@@ -140,18 +140,18 @@ namespace NPC_Maker.Scripts
                                 Var = ScriptHelpers.GetValueByType(Split, 1, VarT, Int16.MinValue, Int16.MaxValue);
                                 continue;
                             }
+                        case (int)Lists.ParticleSubOptions.OPACITY:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+                                VarT = ScriptHelpers.GetVarType(Split, 1);
+                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, byte.MaxValue);
+                                continue;
+                            }
                         case (int)Lists.ParticleSubOptions.RANDOMIZE_XZ:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
                                 VarT = ScriptHelpers.GetVarType(Split, 1);
                                 Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 1);
-                                continue;
-                            }
-                        case (int)Lists.ParticleSubOptions.FADE_DELAY:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                PrimRGBAVarT[0] = ScriptHelpers.GetVarType(Split, 1);
-                                PrimRGBA[0] = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 255);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SCORE_AMOUNT:
@@ -166,6 +166,20 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
                                 VarT = ScriptHelpers.GetVarType(Split, 1);
                                 Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, UInt16.MaxValue);
+                                continue;
+                            }
+                        case (int)Lists.ParticleSubOptions.LIGHTPOINT_COLOR:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+                                VarT = ScriptHelpers.GetVarType(Split, 1);
+                                Var = ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, VarT, typeof(Lists.LightPointColors), ParseException.UnrecognizedParticle(Split));
+                                continue;
+                            }
+                        case (int)Lists.ParticleSubOptions.FADE_DELAY:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+                                PrimRGBAVarT[0] = ScriptHelpers.GetVarType(Split, 1);
+                                PrimRGBA[0] = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 255);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.DURATION:
@@ -189,24 +203,10 @@ namespace NPC_Maker.Scripts
                                 DListIndex = ScriptHelpers.Helper_GetDListID(Split, 1, DListIndexT, Entry.ExtraDisplayLists);
                                 continue;
                             }
-                        case (int)Lists.ParticleSubOptions.LIGHTPOINT_COLOR:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                VarT = ScriptHelpers.GetVarType(Split, 1);
-                                Var = ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, VarT, typeof(Lists.LightPointColors), ParseException.UnrecognizedParticle(Split));
-                                continue;
-                            }
                         case (int)Lists.ParticleSubOptions.SPOTTED:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
                                 LabelJumpIfFound = Split[1];
-                                continue;
-                            }
-                        case (int)Lists.ParticleSubOptions.OPACITY:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                VarT = ScriptHelpers.GetVarType(Split, 1);
-                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, byte.MaxValue);
                                 continue;
                             }
                         default:

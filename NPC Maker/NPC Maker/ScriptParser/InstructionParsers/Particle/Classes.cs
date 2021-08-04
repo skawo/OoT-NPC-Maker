@@ -72,10 +72,11 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(Type, Data);
-            Helpers.AddObjectToByteList(LifeT, Data);
-            Helpers.AddObjectToByteList(VarT, Data);
-            Helpers.AddObjectToByteList(YawT, Data);
-            Helpers.AddObjectToByteList(DListIndexT, Data);
+
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, LabelJumpIfFound, ref Data);
+
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(LifeT, VarT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(YawT, DListIndexT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosXT, PosYT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosZT, AccelXT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(AccelYT, AccelZT, 4), Data);
@@ -115,11 +116,11 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(Var, Data);
             Helpers.AddObjectToByteList(Yaw, Data);
             Helpers.AddObjectToByteList(DListIndex, Data);
-            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, LabelJumpIfFound, ref Data);
+
 
             Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 112);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 108);
 
             return Data.ToArray();
         }
