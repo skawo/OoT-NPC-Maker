@@ -14,14 +14,14 @@ namespace NPC_Maker.Scripts
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.PositionSubTypes), 1);
 
                 byte ActorNumT = 0;
-                object ActorNum = 0;
-                object XPos = 0;
-                object YPos = 0;
-                object ZPos = 0;
+                object ActorNum = (float)0;
+                object XPos = (float)0;
+                object YPos = (float)0;
+                object ZPos = (float)0;
                 byte XPosT = 0;
                 byte YPosT = 0;
                 byte ZPosT = 0;
-                object Speed = 0;
+                object Speed = (float)0;
                 byte SpeedT = 0;
                 byte IgnoreYPos = 0;
 

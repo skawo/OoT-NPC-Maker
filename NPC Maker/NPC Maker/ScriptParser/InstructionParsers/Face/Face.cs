@@ -14,9 +14,9 @@ namespace NPC_Maker.Scripts
                 byte FaceType = 0;
                 byte TargetType = 0;
 
-                object ActorNum1 = 0;
+                object ActorNum1 = (float)0;
                 byte ANumVarT1 = 0;
-                object ActorNum2 = 0;
+                object ActorNum2 = (float)0;
                 byte ANumVarT2 = 0;
 
                 SubjectType = (byte)(GetActor(SplitLine, 1, ref ActorNum1, ref ANumVarT1));

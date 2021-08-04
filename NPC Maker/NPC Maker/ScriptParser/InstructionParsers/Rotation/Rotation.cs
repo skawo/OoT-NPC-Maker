@@ -12,14 +12,14 @@ namespace NPC_Maker.Scripts
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.RotationSubTypes), 1);
 
                 byte ActorNumT = 0;
-                object ActorNum = 0;
-                object XRot = 0;
-                object YRot = 0;
-                object ZRot = 0;
+                object ActorNum = (float)0;
+                object XRot = (float)0;
+                object YRot = (float)0;
+                object ZRot = (float)0;
                 byte XRotT = 0;
                 byte ZRotT = 0;
                 byte YRotT = 0;
-                object Speed = 0;
+                object Speed = (float)0;
                 byte SpeedT = 0;
 
                 int Min = Int16.MinValue;

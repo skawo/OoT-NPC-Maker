@@ -317,7 +317,6 @@ namespace NPC_Maker
             PLAYER_HAS_INVENTORY_ITEM,
             PLAYER_HAS_QUEST_ITEM,
             PLAYER_HAS_DUNGEON_ITEM,
-            LAST_ITEM_USED,
             BUTTON_PRESSED,
             BUTTON_HELD,
             TARGETTED,

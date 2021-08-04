@@ -15,13 +15,13 @@ namespace NPC_Maker.Scripts
                 int End = GetCorrespondingEndSpawn(Lines, LineNo);
 
                 object ActorID = 1;
-                object ActorVar = 0;
-                object PosX = 0;
-                object PosY = 0;
-                object PosZ = 0;
-                object RotX = 0;
-                object RotY = 0;
-                object RotZ = 0;
+                object ActorVar = (float)0;
+                object PosX = (float)0;
+                object PosY = (float)0;
+                object PosZ = (float)0;
+                object RotX = (float)0;
+                object RotY = (float)0;
+                object RotZ = (float)0;
                 byte RelativePos = 0;
 
                 byte ActorIDVarT = 0;

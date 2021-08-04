@@ -11,11 +11,11 @@ namespace NPC_Maker.Scripts
             {
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ScaleSubTypes), 1);
 
-                object ActorNum = 0;
+                object ActorNum = (float)0;
                 byte ActorNumT = 0;
-                object Scale = 0;
+                object Scale = (float)0;
                 byte ScaleT = 0;
-                object Speed = 0;
+                object Speed = (float)0;
                 byte SpeedT = 0;
 
                 int NoSpeed = 0;

@@ -85,7 +85,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object Val = 0;
+                                object Val = (float)0;
 
                                 if (VarType == (int)Lists.VarTypes.Normal)
                                     Val = (float)ScriptHelpers.GetBoolConditionID(SplitLine, 2);
@@ -136,7 +136,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType1 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object FlagID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType1, 0, UInt16.MaxValue);
 
-                                object Val = 0;
+                                object Val = (float)0;
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
 
@@ -169,13 +169,13 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
-                                object Once = 0;
-                                byte VarType2 = 0;
+                                object Once = (float)0;
+                                byte VarType2 = (float)0;
 
                                 if (SplitLine.Length == 4)
                                 {
                                     if (SplitLine[3].ToUpper() == Lists.Keyword_Once)
-                                        Once = 1;
+                                        Once = (float)1;
                                     else
                                         throw ParseException.UnrecognizedParameter(SplitLine);
                                 }
@@ -251,7 +251,7 @@ namespace NPC_Maker.Scripts
                                                                     ScriptHelpers.GetVarType(SplitLine, 4)
                                                             };
 
-                                object[] RGB = new object[3] { 0, 0, 0 };
+                                object[] RGB = new object[3] { (float)0, (float)0, (float)0 };
 
                                 for (int i = 0; i < 3; i++)
                                 {
@@ -331,7 +331,7 @@ namespace NPC_Maker.Scripts
 
                                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 2);
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Time = 0;
+                                object Time = (float)0;
 
                                 if (VarType == (int)Lists.VarTypes.Normal)
                                     Time = (float)Convert.ToDecimal(ScriptHelpers.GetOcarinaTime(SplitLine, 3));

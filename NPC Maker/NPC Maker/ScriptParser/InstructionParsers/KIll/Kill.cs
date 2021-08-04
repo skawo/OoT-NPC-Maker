@@ -12,7 +12,7 @@ namespace NPC_Maker.Scripts
 
                 int SetSubType = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes));
 
-                object ActorNum = 0;
+                object ActorNum = (float)0;
                 byte ANumVarT = 0;
 
                 switch (SetSubType)

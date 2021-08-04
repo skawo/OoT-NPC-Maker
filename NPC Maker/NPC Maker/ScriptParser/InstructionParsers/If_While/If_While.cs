@@ -216,7 +216,7 @@ namespace NPC_Maker.Scripts
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Time = 0;
+                                object Time = (float)0;
 
                                 if (VarType == (int)Lists.VarTypes.Normal)
                                     Time = (float)Convert.ToDecimal(ScriptHelpers.GetOcarinaTime(SplitLine, 3));
