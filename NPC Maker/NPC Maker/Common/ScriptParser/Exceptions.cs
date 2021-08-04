@@ -321,6 +321,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Unrecognized display list visibility option: ", String.Join(" ", _Line));
         }
 
+        public static ParseException InvalidParticleSub(string[] _Line, string Particle, string ValidParticles)
+        {
+            return new ParseException($"Not a valid particle sub-option. {Particle} can only use {ValidParticles}: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedParameter(string[] _Line)
         {
             return new ParseException("Not a valid parameter: ", String.Join(" ", _Line));

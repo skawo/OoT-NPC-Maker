@@ -10,7 +10,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 1);
+                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
 
                 int End = GetCorrespondingEndParticle(Lines, LineNo);
 
@@ -64,8 +64,7 @@ namespace NPC_Maker.Scripts
 
                 string LabelJumpIfFound = "__RETURN__";
 
-
-
+                Type = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(SplitLine, 1, typeof(Lists.ParticleTypes), ParseException.UnrecognizedParticle(SplitLine)));
 
                 List<string> Params = Lines.Skip(LineNo + 1).Take(End - LineNo - 1).ToList();
 
@@ -81,133 +80,120 @@ namespace NPC_Maker.Scripts
                     if (Split.Count() == 0)
                         continue;
 
-
                     if (!Enum.IsDefined(typeof(Lists.ParticleSubOptions), Split[0].ToUpper()))
                         throw ParseException.UnrecognizedFunctionSubtype(Split);
 
-
                     int SubID = (int)System.Enum.Parse(typeof(Lists.ParticleSubOptions), Split[0].ToUpper());
+                    CheckParticleSubValid(SplitLine, (Lists.ParticleTypes)Type, (Lists.ParticleSubOptions)SubID);
 
                     switch (SubID)
                     {
-                        case (int)Lists.ParticleSubOptions.TYPE:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                Type = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.ParticleTypes), ParseException.UnrecognizedParticle(Split)));
-                                continue;
-                            }
                         case (int)Lists.ParticleSubOptions.POSITION:
-                        case (int)Lists.ParticleSubOptions.POS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
-
                                 RelativePos = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
                                 ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosXT, ref PosYT, ref PosZT, ref PosX, ref PosY, ref PosZ);
-
                                 continue;
                             }
-                        case (int)Lists.ParticleSubOptions.ACCEL:
                         case (int)Lists.ParticleSubOptions.ACCELERATION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
                                 ScriptHelpers.GetXYZPos(Split, 1, 2, 3, ref AccelXT, ref AccelYT, ref AccelZT, ref AccelX, ref AccelY, ref AccelZ);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.VELOCITY:
-                        case (int)Lists.ParticleSubOptions.VEL:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
                                 ScriptHelpers.GetXYZPos(Split, 1, 2, 3, ref VelXT, ref VelYT, ref VelZT, ref VelX, ref VelY, ref VelZ);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.COLOR1:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
                                 ScriptHelpers.GetRGBA(Split, 1, ref PrimRGBA, ref PrimRGBAVarT);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.COLOR2:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
                                 ScriptHelpers.GetRGBA(Split, 1, ref SecRGBA, ref SecRGBAVarT);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SCALE:
-                        case (int)Lists.ParticleSubOptions.RADIUS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 ScaleT = ScriptHelpers.GetVarType(Split, 1);
                                 Scale = ScriptHelpers.GetValueByType(Split, 1, ScaleT, Int16.MinValue, Int16.MaxValue);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SCALE_UPDATE:
-                        case (int)Lists.ParticleSubOptions.RADIUS_UPDATE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 ScaleUpdateT = ScriptHelpers.GetVarType(Split, 1);
                                 ScaleUpdate = ScriptHelpers.GetValueByType(Split, 1, ScaleUpdateT, Int16.MinValue, Int16.MaxValue);
-
                                 continue;
                             }
-                        case (int)Lists.ParticleSubOptions.RADIUS_UPDATE_DOWN:
+                        case (int)Lists.ParticleSubOptions.SCALE_UPDATE_DOWN:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 VarT = ScriptHelpers.GetVarType(Split, 1);
                                 Var = ScriptHelpers.GetValueByType(Split, 1, VarT, Int16.MinValue, Int16.MaxValue);
-
+                                continue;
+                            }
+                        case (int)Lists.ParticleSubOptions.RANDOMIZE_XZ:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+                                VarT = ScriptHelpers.GetVarType(Split, 1);
+                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 1);
+                                continue;
+                            }
+                        case (int)Lists.ParticleSubOptions.FADE_DELAY:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+                                PrimRGBAVarT[0] = ScriptHelpers.GetVarType(Split, 1);
+                                PrimRGBA[0] = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 255);
+                                continue;
+                            }
+                        case (int)Lists.ParticleSubOptions.SCORE_AMOUNT:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
+                                VarT = ScriptHelpers.GetVarType(Split, 1);
+                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 3);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.COUNT:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 VarT = ScriptHelpers.GetVarType(Split, 1);
                                 Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, UInt16.MaxValue);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.DURATION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 LifeT = ScriptHelpers.GetVarType(Split, 1);
                                 Life = ScriptHelpers.GetValueByType(Split, 1, LifeT, 0, Int16.MaxValue);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.YAW:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 YawT = ScriptHelpers.GetVarType(Split, 1);
                                 Yaw = ScriptHelpers.GetValueByType(Split, 1, YawT, 0, UInt16.MaxValue);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.DLIST:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 DListIndexT = ScriptHelpers.GetVarType(Split, 1);
                                 DListIndex = ScriptHelpers.Helper_GetDListID(Split, 1, DListIndexT, Entry.ExtraDisplayLists);
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.LIGHTPOINT_COLOR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 VarT = ScriptHelpers.GetVarType(Split, 1);
                                 Var = ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, VarT, typeof(Lists.LightPointColors), ParseException.UnrecognizedParticle(Split));
-
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SPOTTED:
@@ -219,10 +205,8 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.ParticleSubOptions.OPACITY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
                                 VarT = ScriptHelpers.GetVarType(Split, 1);
                                 Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, byte.MaxValue);
-
                                 continue;
                             }
                         default:
@@ -282,6 +266,17 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
                 return new InstructionNop();
             }
+        }
+
+        private void CheckParticleSubValid(string[] SplitLine, Lists.ParticleTypes Type, Lists.ParticleSubOptions ParticleSub)
+        {
+            if (!Dicts.UsableParticleSubOptions[Type].Contains(ParticleSub))
+                throw ParseException.InvalidParticleSub(SplitLine, Type.ToString(), GetValidParticleSubs(Type));
+        }
+
+        private string GetValidParticleSubs(Lists.ParticleTypes Type)
+        {
+            return String.Join(",", Dicts.UsableParticleSubOptions[Type].ToArray());
         }
 
         private int GetCorrespondingEndParticle(List<string> Lines, int LineNo)
