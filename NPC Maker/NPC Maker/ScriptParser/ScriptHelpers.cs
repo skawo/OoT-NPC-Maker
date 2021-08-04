@@ -157,9 +157,9 @@ namespace NPC_Maker.Scripts
             Output[3] = ScriptHelpers.GetValueByType(SplitLine, StartIndex + 3, TypeOutPut[3], 0, 255);
         }
 
-        public static float GetDegrees(string[] SplitLine, int Index, float Min, float Max)
+        public static float GetNormalVar(string[] SplitLine, int Index, float Min, float Max)
         {
-            if (SplitLine[Index].StartsWith(Lists.Keyword_Degree))
+            if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Degree))
             {
                 string[] s = SplitLine[Index].Split('_');
                 float value = (float)ScriptHelpers.GetValueAndCheckRange(s, 1, Min, Max);
@@ -193,8 +193,8 @@ namespace NPC_Maker.Scripts
 
                         Values[0] = Values[0].Substring(0, Values[0].Length - 1);
 
-                        Int16 MinV = Convert.ToInt16(GetDegrees(Values, 0, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
-                        Int16 MaxV = Convert.ToInt16(GetDegrees(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
+                        Int16 MinV = Convert.ToInt16(GetNormalVar(Values, 0, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
+                        Int16 MaxV = Convert.ToInt16(GetNormalVar(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
 
                         return Helpers.TwoInt16ToWord(MinV, MaxV);
                     }
@@ -223,7 +223,7 @@ namespace NPC_Maker.Scripts
                     }
                 default:
                     {
-                        return GetDegrees(SplitLine, Index, Min, Max);
+                        return GetNormalVar(SplitLine, Index, Min, Max);
                     }
 
             }
