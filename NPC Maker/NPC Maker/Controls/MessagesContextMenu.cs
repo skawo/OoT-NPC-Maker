@@ -25,6 +25,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem drawchar;
         private static ToolStripMenuItem twochoices;
         private static ToolStripMenuItem threechoices;
+        private static ToolStripMenuItem delay;
 
         public static void MakeContextMenu()
         {
@@ -44,7 +45,7 @@ namespace NPC_Maker
             drawchar = new ToolStripMenuItem();
             twochoices = new ToolStripMenuItem();
             threechoices = new ToolStripMenuItem();
-
+            delay = new ToolStripMenuItem();
 
             MenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     colors,
@@ -56,6 +57,7 @@ namespace NPC_Maker
                                                                     icon,
                                                                     speed,
                                                                     fade,
+                                                                    delay,
                                                                     shopdescription,
                                                                     drawinstant,
                                                                     drawchar,
@@ -200,6 +202,12 @@ namespace NPC_Maker
             threechoices.Size = new System.Drawing.Size(156, 22);
             threechoices.Text = "Three choices";
             threechoices.Tag = "<Three Choices>";
+            // 
+            // Delay
+            // 
+            delay.Size = new System.Drawing.Size(156, 22);
+            delay.Text = "Delay";
+            delay.Tag = "<Delay:0>";
 
             foreach (ToolStripMenuItem Item in MenuStrip.Items)
             {
@@ -228,8 +236,6 @@ namespace NPC_Maker
             if (Owner == null)
                 return;
 
-            Owner.SuspendLayout();
-
             Point Scroll = Owner.AutoScrollOffset;
             int start = Owner.SelectionStart;
             string newTxt = Owner.Text;
@@ -239,8 +245,6 @@ namespace NPC_Maker
             Owner.SelectionStart = start + Text.Length;
 
             Owner.AutoScrollOffset = Scroll;
-
-            Owner.ResumeLayout();
         }
 
         private static void Tsmi_DoubleClick(object sender, EventArgs e)
