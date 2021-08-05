@@ -8,11 +8,13 @@ namespace NPC_Maker
     {
         public int Version { get; set; }
         public List<NPCEntry> Entries { get; set; }
+        public ScriptEntry GlobalHeader { get; set; }
 
         public NPCFile()
         {
             Version = 2;
             Entries = new List<NPCEntry>();
+            GlobalHeader = new ScriptEntry();
         }
     }
 

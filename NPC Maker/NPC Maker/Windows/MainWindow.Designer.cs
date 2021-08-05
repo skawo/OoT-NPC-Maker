@@ -265,6 +265,7 @@
             this.addNewScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteCurrentScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameCurrentScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editGlobalHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syntaxHighlightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkSyntaxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -3259,7 +3260,8 @@
             this.scriptsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewScriptToolStripMenuItem,
             this.deleteCurrentScriptToolStripMenuItem,
-            this.renameCurrentScriptToolStripMenuItem});
+            this.renameCurrentScriptToolStripMenuItem,
+            this.editGlobalHeaderToolStripMenuItem});
             this.scriptsToolStripMenuItem.Name = "scriptsToolStripMenuItem";
             this.scriptsToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.scriptsToolStripMenuItem.Text = "Scripts";
@@ -3285,6 +3287,13 @@
             this.renameCurrentScriptToolStripMenuItem.Text = "Rename current script";
             this.renameCurrentScriptToolStripMenuItem.Click += new System.EventHandler(this.RenameCurrentScriptToolStripMenuItem_Click);
             // 
+            // editGlobalHeaderToolStripMenuItem
+            // 
+            this.editGlobalHeaderToolStripMenuItem.Name = "editGlobalHeaderToolStripMenuItem";
+            this.editGlobalHeaderToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.editGlobalHeaderToolStripMenuItem.Text = "Edit global header";
+            this.editGlobalHeaderToolStripMenuItem.Click += new System.EventHandler(this.EditGlobalHeaderToolStripMenuItem_Click);
+            // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -3300,7 +3309,7 @@
             this.syntaxHighlightingToolStripMenuItem.CheckOnClick = true;
             this.syntaxHighlightingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.syntaxHighlightingToolStripMenuItem.Name = "syntaxHighlightingToolStripMenuItem";
-            this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.syntaxHighlightingToolStripMenuItem.Text = "Syntax highlighting";
             this.syntaxHighlightingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.SyntaxHighlightingToolStripMenuItem_CheckedChanged);
             // 
@@ -3310,7 +3319,7 @@
             this.checkSyntaxToolStripMenuItem.CheckOnClick = true;
             this.checkSyntaxToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkSyntaxToolStripMenuItem.Name = "checkSyntaxToolStripMenuItem";
-            this.checkSyntaxToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.checkSyntaxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.checkSyntaxToolStripMenuItem.Text = "Check syntax";
             this.checkSyntaxToolStripMenuItem.CheckedChanged += new System.EventHandler(this.CheckSyntaxToolStripMenuItem_CheckedChanged);
             // 
@@ -3352,35 +3361,35 @@
             // objectsToolStripMenuItem
             // 
             this.objectsToolStripMenuItem.Name = "objectsToolStripMenuItem";
-            this.objectsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.objectsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.objectsToolStripMenuItem.Text = "Objects";
             this.objectsToolStripMenuItem.Click += new System.EventHandler(this.ObjectsToolStripMenuItem_Click);
             // 
             // actorsToolStripMenuItem1
             // 
             this.actorsToolStripMenuItem1.Name = "actorsToolStripMenuItem1";
-            this.actorsToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.actorsToolStripMenuItem1.Size = new System.Drawing.Size(158, 22);
             this.actorsToolStripMenuItem1.Text = "Actors";
             this.actorsToolStripMenuItem1.Click += new System.EventHandler(this.ActorsToolStripMenuItem1_Click);
             // 
             // sFXToolStripMenuItem
             // 
             this.sFXToolStripMenuItem.Name = "sFXToolStripMenuItem";
-            this.sFXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sFXToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.sFXToolStripMenuItem.Text = "SFX";
             this.sFXToolStripMenuItem.Click += new System.EventHandler(this.SFXToolStripMenuItem_Click);
             // 
             // musicToolStripMenuItem1
             // 
             this.musicToolStripMenuItem1.Name = "musicToolStripMenuItem1";
-            this.musicToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.musicToolStripMenuItem1.Size = new System.Drawing.Size(158, 22);
             this.musicToolStripMenuItem1.Text = "Music";
             this.musicToolStripMenuItem1.Click += new System.EventHandler(this.MusicToolStripMenuItem1_Click);
             // 
             // linkAnimationsToolStripMenuItem
             // 
             this.linkAnimationsToolStripMenuItem.Name = "linkAnimationsToolStripMenuItem";
-            this.linkAnimationsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.linkAnimationsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.linkAnimationsToolStripMenuItem.Text = "Link animations";
             this.linkAnimationsToolStripMenuItem.Click += new System.EventHandler(this.LinkAnimsToolStripMenuItem1_Click);
             // 
@@ -3736,6 +3745,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private System.Windows.Forms.ToolStripMenuItem linkAnimationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editGlobalHeaderToolStripMenuItem;
     }
 }
 

@@ -12,9 +12,9 @@ namespace NPC_Maker.Scripts
         public List<string> RandomLabels { get; set; }
         private BScript outScript;
 
-        public ScriptParser(NPCEntry _Entry, string _ScriptText)
+        public ScriptParser(NPCEntry _Entry, string _ScriptText, string _GlobalHeader)
         {
-            ScriptText = _ScriptText;
+            ScriptText = _GlobalHeader + Environment.NewLine + _ScriptText;
             Entry = _Entry;
         }
 

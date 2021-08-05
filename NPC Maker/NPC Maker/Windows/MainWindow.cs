@@ -231,7 +231,7 @@ namespace NPC_Maker
                 if (ReusableTabPages.Count != 0)
                 {
                     Page = ReusableTabPages.First();
-                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
+                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
                     Page.Text = ScriptT.Name;
                     ReusableTabPages.Remove(Page);
                 }
@@ -240,7 +240,7 @@ namespace NPC_Maker
                     Page = new TabPage(ScriptT.Name) { Tag = "SCRIPT" };
                     TabControl.TabPages.Add(Page);
 
-                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked) { Dock = DockStyle.Fill };
+                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked) { Dock = DockStyle.Fill };
                     Page.Controls.Add(Se);
                 }
             }
@@ -465,6 +465,39 @@ namespace NPC_Maker
             Application.Exit();
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.S))
+                FileMenu_Save_Click(null, null);
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void EditGlobalHeaderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditedFile == null)
+                return;
+
+            Form Window = new Form
+            {
+                Size = new Size(800, 600),
+                Text = "Global header"
+            };
+
+
+            NPCFile Dummy = new NPCFile();
+            NPCEntry Dummy2 = new NPCEntry();
+            Dummy.GlobalHeader.Text = "";
+
+            ScriptEditor Se = new ScriptEditor(ref Dummy2, ref Dummy, EditedFile.GlobalHeader, checkSyntaxToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
+            {
+                Dock = DockStyle.Fill
+            };
+
+            Window.Controls.Add(Se);
+            Window.ShowDialog();
+        }
+
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             About Window = new About();
@@ -557,7 +590,7 @@ namespace NPC_Maker
             ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
             SelectedEntry.Scripts.Add(Sc);
 
-            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, Sc, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
+            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, Sc, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
             {
                 Dock = DockStyle.Fill
             };
@@ -1869,6 +1902,5 @@ namespace NPC_Maker
         }
 
         #endregion
-
     }
 }

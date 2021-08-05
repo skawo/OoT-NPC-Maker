@@ -11,11 +11,12 @@ namespace NPC_Maker
         private bool SyntaxHighlighting;
         private bool AutoParse;
         public ScriptEntry Script;
+        private NPCFile File;
 
         private readonly System.Windows.Forms.Timer AutoParseTimer;
         private readonly System.Windows.Forms.Timer ColorizeTimer;
 
-        public ScriptEditor(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
+        public ScriptEditor(ref NPCEntry _Entry, ref NPCFile _File, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
             InitializeComponent();
 
@@ -31,15 +32,16 @@ namespace NPC_Maker
             };
             ColorizeTimer.Tick += ColorizeTimer_Tick;
 
-            Init(ref _Entry, _Script, _SyntaxHighlighting, _AutoParse);
+            Init(ref _Entry, ref _File, _Script, _SyntaxHighlighting, _AutoParse);
         }
 
-        public void Init(ref NPCEntry _Entry, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
+        public void Init(ref NPCEntry _Entry, ref NPCFile _File, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
             Entry = _Entry;
             SyntaxHighlighting = _SyntaxHighlighting;
             AutoParse = _AutoParse;
             Script = _Script;
+            File = _File;
 
             Textbox_Script.Text = Script.Text;
 
@@ -49,8 +51,6 @@ namespace NPC_Maker
                 Textbox_ParseErrors.Text = "Parsed successfully!";
             else
                 Textbox_ParseErrors.Text = String.Join(Environment.NewLine, Script.ParseErrors);
-
-
         }
 
         private void AutoParseTimer_Tick(object sender, EventArgs e)
@@ -99,7 +99,7 @@ namespace NPC_Maker
             Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
             r.ClearStyle(SyntaxHighlighter.ErrorStyle);
 
-            Scripts.ScriptParser Parser = new Scripts.ScriptParser(Entry, Script.Text);
+            Scripts.ScriptParser Parser = new Scripts.ScriptParser(Entry, Script.Text, File.GlobalHeader.Text);
             Textbox_ParseErrors.Clear();
 
             Script.ParseErrors.Clear();

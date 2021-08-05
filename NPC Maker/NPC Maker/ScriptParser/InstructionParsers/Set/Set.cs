@@ -24,7 +24,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.COLLISION_RADIUS:
                         case (int)Lists.SetSubTypes.COLLISION_HEIGHT:
                         case (int)Lists.SetSubTypes.CURRENT_CUTSCENE_FRAME:
-                            return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue, typeof(Int32));
+                            return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue);
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_START:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_END:
                         case (int)Lists.SetSubTypes.COLLISION_YOFFSET:
@@ -46,18 +46,18 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.LIGHT_OFFSET_Z:
                         case (int)Lists.SetSubTypes.LIGHT_RADIUS:
                         case (int)Lists.SetSubTypes.SHADOW_RADIUS:
-                            return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
+                            return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue);
                         // case u32:
                         //return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
                         // case s32:
                         //H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.GRAVITY_FORCE:
-                            return H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(float));
+                            return H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue);
                         case (int)Lists.SetSubTypes.MOVEMENT_SPEED:
                         case (int)Lists.SetSubTypes.TALK_RADIUS:
-                            return H_SimpleSet(SubID, SplitLine, 0, Int32.MaxValue, typeof(float));
+                            return H_SimpleSet(SubID, SplitLine, 0, Int32.MaxValue);
                         case (int)Lists.SetSubTypes.SMOOTHING_CONSTANT:
-                            return H_SimpleSet(SubID, SplitLine, -2, 65535, typeof(float));
+                            return H_SimpleSet(SubID, SplitLine, -2, 65535);
                         case (int)Lists.SetSubTypes.LOOP_MOVEMENT:
                         case (int)Lists.SetSubTypes.HAVE_COLLISION:
                         case (int)Lists.SetSubTypes.PRESS_SWITCHES:
@@ -102,7 +102,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.MASS:
                         case (int)Lists.SetSubTypes.ALPHA:
                         case (int)Lists.SetSubTypes.MOVEMENT_PATH_ID:
-                            return H_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue, typeof(Int32));
+                            return H_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue);
                         case (int)Lists.SetSubTypes.PLAYER_BOMBS:
                         case (int)Lists.SetSubTypes.PLAYER_BOMBCHUS:
                         case (int)Lists.SetSubTypes.PLAYER_ARROWS:
@@ -110,9 +110,9 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.PLAYER_DEKUSTICKS:
                         case (int)Lists.SetSubTypes.PLAYER_SEEDS:
                         case (int)Lists.SetSubTypes.PLAYER_BEANS:
-                            return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue, typeof(Int32));
+                            return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue);
                         case (int)Lists.SetSubTypes.PLAYER_HEALTH:
-                            return H_SimpleSet(SubID, SplitLine, -20, 20, typeof(float));
+                            return H_SimpleSet(SubID, SplitLine, -20, 20);
                         case (int)Lists.SetSubTypes.TEXTBOX_RESPONSE_ACTIONS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
@@ -318,7 +318,7 @@ namespace NPC_Maker.Scripts
                                 }
                             }
                         case (int)Lists.SetSubTypes.CUTSCENE_SLOT:
-                            return H_SimpleSet(SubID, SplitLine, -1, 10, typeof(Int32));
+                            return H_SimpleSet(SubID, SplitLine, -1, 10);
                         case (int)Lists.SetSubTypes.SCRIPT_START:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
@@ -456,7 +456,7 @@ namespace NPC_Maker.Scripts
             return new InstructionSet((byte)SubID, Data, VarType, 0);
         }
 
-        private Instruction H_SimpleSet(int SubID, string[] SplitLine, int Min, int Max, Type ConvertType)
+        private Instruction H_SimpleSet(int SubID, string[] SplitLine, int Min, int Max)
         {
             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
