@@ -248,6 +248,7 @@ namespace NPC_Maker
             Music,
             Actors,
             Objects,
+            LinkAnims,
         }
 
         public enum IfWhileAwaitSetRamSubTypes
@@ -455,6 +456,7 @@ namespace NPC_Maker
             GENERATES_LIGHT,
             REF_ACTOR,
             PLAYER_ANIMATION,
+            PLAYER_ANIMATE_MODE,
         }
 
         public enum AwaitSubTypes

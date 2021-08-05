@@ -26,12 +26,14 @@ namespace NPC_Maker
             { Lists.DictType.Music, $"{Program.ExecPath}/Dicts/Music.csv" },
             { Lists.DictType.Actors, $"{Program.ExecPath}/Dicts/Actors.csv" },
             { Lists.DictType.Objects, $"{Program.ExecPath}/Dicts/Objects.csv" },
+            { Lists.DictType.LinkAnims, $"{Program.ExecPath}/Dicts/LinkAnims.csv" },
         };
 
         public static Dictionary<string, int> ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]);
         public static Dictionary<string, int> SFXes = FileOps.GetDictionary(DictFilenames[Lists.DictType.SFX]);
         public static Dictionary<string, int> Music = FileOps.GetDictionary(DictFilenames[Lists.DictType.Music]);
         public static Dictionary<string, int> Actors = FileOps.GetDictionary(DictFilenames[Lists.DictType.Actors]);
+        public static Dictionary<string, int> LinkAnims = FileOps.GetDictionary(DictFilenames[Lists.DictType.LinkAnims]);
         public static Dictionary<Lists.ParticleTypes, List<ParticleSubOptions>> UsableParticleSubOptions = new Dictionary<ParticleTypes, List<ParticleSubOptions>>()
         {
             {ParticleTypes.DUST, 

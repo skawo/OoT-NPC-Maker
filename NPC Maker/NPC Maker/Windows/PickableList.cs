@@ -95,6 +95,7 @@ namespace NPC_Maker
                 foreach (ListEntry Entry in Data)
                 {
                     if (Entry.ID.ToString().ToUpper().Contains(Btn_Search.Text.ToUpper())
+                        || Entry.ID.ToString("X").ToUpper().Contains(Btn_Search.Text.ToUpper())
                         || Entry.Name.ToUpper().Contains(Btn_Search.Text.ToUpper())
                         || Entry.Description.ToUpper().Contains(Btn_Search.Text.ToUpper()))
                         AddEntryToList(Entry);

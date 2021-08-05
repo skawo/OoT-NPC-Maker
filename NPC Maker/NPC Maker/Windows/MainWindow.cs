@@ -271,7 +271,12 @@ namespace NPC_Maker
             DataGrid_Animations.Rows.Clear();
 
             foreach (AnimationEntry Animation in SelectedEntry.Animations)
-                DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+            {
+                if (SelectedEntry.AnimationType == 1)
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+                else
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+            }
 
             #endregion
 
@@ -614,6 +619,12 @@ namespace NPC_Maker
             Music.ShowDialog();
         }
 
+        private void LinkAnimsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            PickableList Music = new PickableList(Lists.DictType.LinkAnims);
+            Music.ShowDialog();
+        }
+
         #endregion
 
         #region NPCList
@@ -855,10 +866,12 @@ namespace NPC_Maker
             DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = Textbox_NPCName.Text;
         }
 
+
         private void ComboBox_AnimType_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox_ValueChanged(sender, e);
             Col_OBJ.Visible = (ComboBox_AnimType.SelectedIndex == 0);
+            InsertDataToEditor();
         }
 
         private void Button_EnvironmentColorPreview_Click(object sender, EventArgs e)
@@ -951,6 +964,18 @@ namespace NPC_Maker
                     DataGrid_Animations.RefreshEdit();
                 }
             }
+            else if (e.ColumnIndex == (int)AnimGridColumns.Address && SelectedEntry.AnimationType == 1)
+            {
+                PickableList Anims = new PickableList(Lists.DictType.LinkAnims, true);
+                DialogResult DR = Anims.ShowDialog();
+
+                if (DR == DialogResult.OK)
+                {
+                    DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Anims.Chosen.ID.ToString("X");
+                    DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Anims.Chosen.ID.ToString(), e.GetType(), null));
+                    DataGrid_Animations.RefreshEdit();
+                }
+            }
         }
 
         private void AddBlankAnim(int SkipIndex, int Index, string Name = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte StartFrame = 0, byte EndFrame = 0xFF)
@@ -966,7 +991,11 @@ namespace NPC_Maker
                 DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Name].Value = Name;
 
             if (SkipIndex != (int)AnimGridColumns.Address)
-                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Address;
+                if (SelectedEntry.AnimationType == 1)
+                    DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Address; 
+                else
+                    DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Address);
+
 
             if (SkipIndex != (int)AnimGridColumns.StartFrame)
                 DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.StartFrame].Value = 0;
@@ -1006,23 +1035,52 @@ namespace NPC_Maker
                     }
                 case (int)AnimGridColumns.Address:
                     {
-                        try
-                        {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
-                            else
-                                SelectedEntry.Animations[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
 
-                            e.ParsingApplied = true;
+                        if (SelectedEntry.AnimationType == 1)
+                        {
+                            try
+                            {
+                                int LinkAnim = Dicts.GetIntFromStringIntDict(Dicts.LinkAnims, e.Value.ToString());
+
+                                e.Value = Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, LinkAnim);
+                                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+
+                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (short)LinkAnim);
+                                else
+                                    SelectedEntry.Animations[e.RowIndex].ObjID = (short)LinkAnim;
+
+                                e.ParsingApplied = true;
+                            }
+                            catch (Exception)
+                            {
+                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex);
+
+                                e.Value = Dicts.LinkAnims.First().Key;
+                                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                            }
                         }
-                        catch (Exception)
+                        else
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
+                            try
+                            {
+                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
+                                else
+                                    SelectedEntry.Animations[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
 
-                            e.Value = Convert.ToInt32("0", 16);
-                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-                            e.ParsingApplied = true;
+                                e.ParsingApplied = true;
+                            }
+                            catch (Exception)
+                            {
+                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex);
+
+                                e.Value = Convert.ToInt32("0", 16);
+                                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                                e.ParsingApplied = true;
+                            }
                         }
                         return;
                     }

@@ -237,6 +237,9 @@
     <None Include="Dicts\Actors.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Dicts\LinkAnims.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Dicts\Music.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

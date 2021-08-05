@@ -25,6 +25,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem ocarinaSongstoolStripMenuItem;
         private static ToolStripMenuItem objectstoolStripMenuItem;
         private static ToolStripMenuItem particlestoolStripMenuItem;
+        private static ToolStripMenuItem linkAnimsStripMenuItem;
 
         public static void MakeContextMenu()
         {
@@ -44,6 +45,7 @@ namespace NPC_Maker
             objectstoolStripMenuItem = new ToolStripMenuItem();
             ocarinaSongstoolStripMenuItem = new ToolStripMenuItem();
             particlestoolStripMenuItem = new ToolStripMenuItem();
+            linkAnimsStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -60,6 +62,7 @@ namespace NPC_Maker
                                                                     musicToolStripMenuItem,
                                                                     actorstoolStripMenuItem,
                                                                     objectstoolStripMenuItem,
+                                                                    linkAnimsStripMenuItem
                                                                 });
 
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
@@ -88,6 +91,8 @@ namespace NPC_Maker
             objectstoolStripMenuItem.Text = "Objects";
             objectstoolStripMenuItem.Click += ObjectstoolStripMenuItem_Click;
 
+            linkAnimsStripMenuItem.Text = "Player animations";
+            linkAnimsStripMenuItem.Click += LinkAnimsStripMenuItem_Click;
 
 
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
@@ -142,19 +147,16 @@ namespace NPC_Maker
             if (LastClickedTextbox == null)
                 return;
 
-            LastClickedTextbox.SuspendLayout();
-
             int Scroll = LastClickedTextbox.VerticalScroll.Value;
             int start = LastClickedTextbox.SelectionStart;
             string newTxt = LastClickedTextbox.Text;
             newTxt = newTxt.Remove(LastClickedTextbox.SelectionStart, LastClickedTextbox.SelectionLength);
             newTxt = newTxt.Insert(LastClickedTextbox.SelectionStart, Text);
+
             LastClickedTextbox.Text = newTxt;
             LastClickedTextbox.SelectionStart = start + Text.Length;
 
             LastClickedTextbox.VerticalScroll.Value = Scroll;
-
-            LastClickedTextbox.ResumeLayout();
         }
 
         private static void Tsmi_DoubleClick(object sender, EventArgs e)
@@ -213,6 +215,17 @@ namespace NPC_Maker
             if (DR == DialogResult.OK)
             {
                 InsertTxtToScript(Objects.Chosen.Name);
+            }
+        }
+
+        private static void LinkAnimsStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PickableList SFX = new PickableList(Lists.DictType.LinkAnims, true);
+            DialogResult DR = SFX.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                InsertTxtToScript(SFX.Chosen.Name);
             }
         }
     }

@@ -351,6 +351,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Not a valid sound effect: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedLinkAnim(string[] _Line)
+        {
+            return new ParseException("Not a valid Link animation: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedOcarinaSong(string[] _Line)
         {
             return new ParseException("Not a valid ocarina song: ", String.Join(" ", _Line));

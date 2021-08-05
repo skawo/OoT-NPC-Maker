@@ -81,6 +81,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.VISIBLE_ONLY_UNDER_LENS:
                         case (int)Lists.SetSubTypes.INVISIBLE:
                         case (int)Lists.SetSubTypes.CASTS_SHADOW:
+                        case (int)Lists.SetSubTypes.PLAYER_ANIMATE_MODE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
@@ -170,7 +171,7 @@ namespace NPC_Maker.Scripts
                                 object AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
                                 object Once = (float)0;
-                                byte VarType2 = (float)0;
+                                byte VarType2 = 0;
 
                                 if (SplitLine.Length == 4)
                                 {
@@ -369,9 +370,8 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 4, 7);
 
-
                                 byte OffsType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object Offset = ScriptHelpers.GetValueByType(SplitLine, 2, OffsType, 0, float.MaxValue);
+                                object Offset = ScriptHelpers.Helper_GetLinkAnimation(SplitLine, 2, OffsType);
 
                                 byte SpeedT = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Speed = ScriptHelpers.GetValueByType(SplitLine, 3, SpeedT, 0, float.MaxValue);
@@ -398,7 +398,7 @@ namespace NPC_Maker.Scripts
 
                                 if (SplitLine.Length == 7)
                                 {
-                                    if (SplitLine[6] == Lists.Keyword_Once)
+                                    if (SplitLine[6].ToUpper() == Lists.Keyword_Once)
                                         Once = 1;
                                     else
                                         throw ParseException.UnrecognizedParameter(SplitLine);

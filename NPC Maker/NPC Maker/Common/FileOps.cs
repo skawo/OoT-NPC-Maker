@@ -67,12 +67,15 @@ namespace NPC_Maker
         {
             Dictionary<string, int> Dict = new Dictionary<string, int>();
 
+            string OffendingRow = "";
+
             try
             {
                 string[] RawData = File.ReadAllLines(Filename);
 
                 foreach (string Row in RawData)
                 {
+                    OffendingRow = Row;
                     string[] NameAndID = Row.Split(',');
                     Dict.Add(NameAndID[1], Convert.ToInt32(NameAndID[0]));
                 }
@@ -81,7 +84,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show($"{Filename} is missing or incorrect.");
+                System.Windows.Forms.MessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
                 return Dict;
             }
         }

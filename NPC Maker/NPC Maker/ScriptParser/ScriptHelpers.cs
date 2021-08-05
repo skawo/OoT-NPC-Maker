@@ -468,6 +468,11 @@ namespace NPC_Maker.Scripts
             return Helper_GetValFromDict(SplitLine, Index, VarType, -1, Int16.MaxValue, Dicts.Music, ParseException.UnrecognizedBGM(SplitLine));
         }
 
+        public static object Helper_GetLinkAnimation(string[] SplitLine, int Index, int VarType)
+        {
+            return Helper_GetValFromDict(SplitLine, Index, VarType, 0, Int16.MaxValue, Dicts.LinkAnims, ParseException.UnrecognizedLinkAnim(SplitLine));
+        }
+
         private static object Helper_GetFromStringList(string[] SplitLine, int Index, byte VarType, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow)
         {
             float? Ret = null;
