@@ -401,7 +401,7 @@ namespace NPC_Maker
                 return;
 
             EditedFile = new NPCFile();
-            EditedFile.GlobalHeaders.Add(new ScriptEntry() { Name = "Definitions", Text = "" });
+            EditedFile.GlobalHeaders.AddRange(new List<ScriptEntry>(){ Defaults.DefaultDefines, Defaults.DefaultMacros});
 
             Panel_Editor.Enabled = true;
             InsertDataIntoActorListGrid();

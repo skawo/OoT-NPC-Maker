@@ -232,7 +232,7 @@ namespace NPC_Maker.Scripts
                         Lines.RemoveAt(ProcCallIndex);
 
                         if (Args.Count != ProcArgs.Count)
-                            outScript.ParseErrors.Add(ParseException.ProcNumArgsError(SplitRepLine));
+                            outScript.ParseErrors.Add(ParseException.ProcNumArgsError(SplitRepLine, ProcArgs.ToArray()));
                         else
                         {
                             List<string> Instructions = new List<string>();
