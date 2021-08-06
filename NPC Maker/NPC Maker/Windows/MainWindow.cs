@@ -648,65 +648,6 @@ namespace NPC_Maker
 
         #region NPCList
 
-        private void Button_CopyBase_Click(object sender, EventArgs e)
-        {
-            if (DataGrid_NPCs.SelectedRows.Count == 0)
-                return;
-
-            string Copy = JsonConvert.SerializeObject(SelectedEntry, Formatting.Indented);
-            CopiedEntry = JsonConvert.DeserializeObject<NPCEntry>(Copy);
-        }
-
-        private void Button_PasteBase_Click(object sender, EventArgs e)
-        {
-            if (DataGrid_NPCs.SelectedRows.Count == 0)
-                return;
-
-            if (CopiedEntry != null && !SelectedEntry.IsNull)
-            {
-                SelectedEntry.Animations.Clear();
-
-                foreach (AnimationEntry Anim in CopiedEntry.Animations)
-                {
-                    SelectedEntry.Animations.Add(new AnimationEntry(Anim.Name, Anim.Address, Anim.Speed, Anim.ObjID, Anim.StartFrame, Anim.EndFrame));
-                }
-
-                SelectedEntry.Segments.Clear();
-
-                foreach (List<SegmentEntry> TexList in CopiedEntry.Segments)
-                {
-                    List<SegmentEntry> DestTexList = new List<SegmentEntry>();
-                    SelectedEntry.Segments.Add(DestTexList);
-
-                    foreach (SegmentEntry Tex in TexList)
-                    {
-                        DestTexList.Add(new SegmentEntry(Tex.Name, Tex.Address, Tex.ObjectID));
-                    }
-
-                }
-
-                SelectedEntry.ExtraDisplayLists.Clear();
-
-                foreach (DListEntry D in CopiedEntry.ExtraDisplayLists)
-                {
-                    SelectedEntry.ExtraDisplayLists.Add(new DListEntry(D.Name, D.Address, D.TransX, D.TransY, D.TransZ, D.Color, D.RotX, D.RotY, D.RotZ, D.Scale, D.Limb, D.ShowType, D.ObjectID));
-                }
-
-                SelectedEntry.ObjectID = CopiedEntry.ObjectID;
-                SelectedEntry.Hierarchy = CopiedEntry.Hierarchy;
-                SelectedEntry.HierarchyType = CopiedEntry.HierarchyType;
-                SelectedEntry.AnimationType = CopiedEntry.AnimationType;
-                SelectedEntry.BlinkPattern = CopiedEntry.BlinkPattern;
-                SelectedEntry.BlinkSegment = CopiedEntry.BlinkSegment;
-                SelectedEntry.BlinkSpeed = CopiedEntry.BlinkSpeed;
-                SelectedEntry.TalkPattern = CopiedEntry.TalkPattern;
-                SelectedEntry.TalkSegment = CopiedEntry.TalkSegment;
-                SelectedEntry.TalkSpeed = CopiedEntry.TalkSpeed;
-
-                InsertDataToEditor();
-            }
-        }
-
         private void Button_Add_Click(object sender, EventArgs e)
         {
             NPCEntry Entry = new NPCEntry();
