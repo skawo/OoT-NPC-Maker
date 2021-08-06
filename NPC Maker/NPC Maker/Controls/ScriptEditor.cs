@@ -99,7 +99,7 @@ namespace NPC_Maker
             Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
             r.ClearStyle(SyntaxHighlighter.ErrorStyle);
 
-            Scripts.ScriptParser Parser = new Scripts.ScriptParser(Entry, Script.Text, File.GlobalHeader.Text);
+            Scripts.ScriptParser Parser = new Scripts.ScriptParser(Entry, Script.Text, File.GlobalHeaders);
             Textbox_ParseErrors.Clear();
 
             Script.ParseErrors.Clear();

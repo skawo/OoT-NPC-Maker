@@ -401,6 +401,8 @@ namespace NPC_Maker
                 return;
 
             EditedFile = new NPCFile();
+            EditedFile.GlobalHeaders.Add(new ScriptEntry() { Name = "Definitions", Text = "" });
+
             Panel_Editor.Enabled = true;
             InsertDataIntoActorListGrid();
         }
@@ -478,24 +480,8 @@ namespace NPC_Maker
             if (EditedFile == null)
                 return;
 
-            Form Window = new Form
-            {
-                Size = new Size(800, 600),
-                Text = "Global header"
-            };
-
-
-            NPCFile Dummy = new NPCFile();
-            NPCEntry Dummy2 = new NPCEntry();
-            Dummy.GlobalHeader.Text = "";
-
-            ScriptEditor Se = new ScriptEditor(ref Dummy2, ref Dummy, EditedFile.GlobalHeader, checkSyntaxToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
-            {
-                Dock = DockStyle.Fill
-            };
-
-            Window.Controls.Add(Se);
-            Window.ShowDialog();
+            Windows.GlobalHeader gh = new Windows.GlobalHeader(ref EditedFile, checkSyntaxToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
+            gh.ShowDialog();
         }
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
