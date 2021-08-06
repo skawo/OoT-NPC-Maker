@@ -62,6 +62,7 @@ namespace NPC_Maker
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(3, 3);
             this.Textbox_Script.Name = "Textbox_Script";
@@ -83,6 +84,7 @@ namespace NPC_Maker
             this.Textbox_ParseErrors.Location = new System.Drawing.Point(3, 513);
             this.Textbox_ParseErrors.Multiline = true;
             this.Textbox_ParseErrors.Name = "Textbox_ParseErrors";
+            this.Textbox_ParseErrors.ReadOnly = true;
             this.Textbox_ParseErrors.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.Textbox_ParseErrors.Size = new System.Drawing.Size(685, 68);
             this.Textbox_ParseErrors.TabIndex = 5;
