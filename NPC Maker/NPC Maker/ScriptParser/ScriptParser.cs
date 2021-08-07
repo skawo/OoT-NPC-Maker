@@ -95,6 +95,15 @@ namespace NPC_Maker.Scripts
 
         private static void RegexText(ref string ScriptText)
         {
+            // Separate oparators
+            ScriptText = ScriptText.Replace("+=", " += ");
+            ScriptText = ScriptText.Replace("-=", " -= ");
+            ScriptText = ScriptText.Replace("/=", " /= ");
+            ScriptText = ScriptText.Replace("*=", " *= ");
+            ScriptText = ScriptText.Replace("!=", " != ");
+            ScriptText = ScriptText.Replace("==", " == ");
+            ScriptText = Regex.Replace(ScriptText, @"([^=^\-^+^/^*^!])(=)([^=^\-^+^/^*^!])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
+
             ScriptText = Regex.Replace(ScriptText, @"\\\s+\n", " ");                                                            // Override line carriage return if preceded by \
             ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
