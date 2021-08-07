@@ -47,7 +47,7 @@ $@"#define actor.posX actorf.0x24
 $@"{Lists.Keyword_Procedure} basic_talk textbox
     {Lists.Instructions.TALK} textbox
         {Lists.Instructions.SET} {Lists.SetSubTypes.TALK_MODE} {Lists.Keyword_True}
-        {Lists.Instructions.SET} {Lists.SetSubTypes.CURRENT_ANIMATION} idle
+        {Lists.Instructions.SET} {Lists.SetSubTypes.CURRENT_ANIMATION} 0
         {Lists.Instructions.FACE} {Lists.TargetActorSubtypes.SELF} {Lists.FaceSubtypes.TOWARDS} {Lists.TargetActorSubtypes.PLAYER}
         {Lists.Instructions.AWAIT} {Lists.AwaitSubTypes.TALKING_END}
         {Lists.Instructions.SET} {Lists.SetSubTypes.TALK_MODE} {Lists.Keyword_False}
@@ -61,7 +61,7 @@ $@"{Lists.Keyword_Procedure} basic_talk textbox
         {Lists.Instructions.SET} {Lists.SetSubTypes.CURRENT_ANIMATION} talk_animation
         {Lists.Instructions.FACE} {Lists.TargetActorSubtypes.SELF} {Lists.FaceSubtypes.TOWARDS} {Lists.TargetActorSubtypes.PLAYER}
         {Lists.Instructions.AWAIT} {Lists.AwaitSubTypes.TALKING_END}
-        {Lists.Instructions.SET} {Lists.SetSubTypes.CURRENT_ANIMATION} idle
+        {Lists.Instructions.SET} {Lists.SetSubTypes.CURRENT_ANIMATION} 0
         {Lists.Instructions.SET} {Lists.SetSubTypes.TALK_MODE} {Lists.Keyword_False}
     {Lists.Keyword_EndTalk}
 {Lists.Keyword_EndProcedure}

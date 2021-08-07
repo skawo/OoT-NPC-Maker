@@ -145,7 +145,11 @@ namespace NPC_Maker.Scripts
                         string[] Split = Line.Split(' ');
 
                         ScriptHelpers.ErrorIfNumParamsNotEq(Split, 3);
-                        Defines.Add(new string[] { Split[1], Split[2] });
+
+                        if (Defines.Find(x => x[0] == Split[1]) == null)
+                            Defines.Add(new string[] { Split[1], Split[2] });
+                        else
+                            outScript.ParseErrors.Add(ParseException.RepeatDefine(Line));
                     }
                 }
 

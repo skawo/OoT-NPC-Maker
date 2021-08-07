@@ -76,6 +76,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Label name cannot be using a keyword: ", _Line);
         }
 
+        public static ParseException RepeatDefine(string _Line)
+        {
+            return new ParseException("Duplicate definition: ", _Line);
+        }
+
         public static ParseException LabelNotFound(string _Line)
         {
             return new ParseException("Label not found: ", _Line);
