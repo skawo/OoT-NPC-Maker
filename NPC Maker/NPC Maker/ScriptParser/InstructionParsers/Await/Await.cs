@@ -91,7 +91,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Time = 0;
 
-                                if (VarType == (int)Lists.VarTypes.Normal)
+                                if (VarType == (int)Lists.VarTypes.NORMAL)
                                     Time = (float)Convert.ToDecimal(ScriptHelpers.GetOcarinaTime(SplitLine, 3));
                                 else
                                     Time = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
@@ -109,7 +109,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object NPCID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue);
 
-                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 0, 5));
+                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.NORMAL, 0, 5));
 
                                 return new InstructionAwaitExtVar((byte)SubID, ExtVarNum, Data, NPCID, Condition, VarType, VarType2);
                             }

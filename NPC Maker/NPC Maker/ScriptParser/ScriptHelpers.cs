@@ -184,7 +184,7 @@ namespace NPC_Maker.Scripts
         {
             switch (VarType)
             {
-                case (int)Lists.VarTypes.Random:
+                case (int)Lists.VarTypes.RANDOM:
                     {
                         string[] Values = SplitLine[Index].Split('.').Last().Split('>');
 
@@ -199,24 +199,24 @@ namespace NPC_Maker.Scripts
                         return Helpers.TwoInt16ToWord(MinV, MaxV);
                     }
 
-                case (int)Lists.VarTypes.Actor8:
-                case (int)Lists.VarTypes.Actor16:
-                case (int)Lists.VarTypes.Actor32:
-                case (int)Lists.VarTypes.ActorF:
-                case (int)Lists.VarTypes.Global8:
-                case (int)Lists.VarTypes.Global16:
-                case (int)Lists.VarTypes.Global32:
-                case (int)Lists.VarTypes.Globalf:
-                case (int)Lists.VarTypes.Save8:
-                case (int)Lists.VarTypes.Save16:
-                case (int)Lists.VarTypes.Save32:
-                case (int)Lists.VarTypes.SaveF:
+                case (int)Lists.VarTypes.ACTOR8:
+                case (int)Lists.VarTypes.ACTOR16:
+                case (int)Lists.VarTypes.ACTOR32:
+                case (int)Lists.VarTypes.ACTORF:
+                case (int)Lists.VarTypes.GLOBAL8:
+                case (int)Lists.VarTypes.GLOBAL16:
+                case (int)Lists.VarTypes.GLOBAL32:
+                case (int)Lists.VarTypes.GLOBALF:
+                case (int)Lists.VarTypes.SAVE8:
+                case (int)Lists.VarTypes.SAVE16:
+                case (int)Lists.VarTypes.SAVE32:
+                case (int)Lists.VarTypes.SAVEF:
                     {
                         string[] Values = SplitLine[Index].Split('.');
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 0, 0x88000000));
                     }
-                case (int)Lists.VarTypes.Var:
-                case (int)Lists.VarTypes.VarF:
+                case (int)Lists.VarTypes.VAR:
+                case (int)Lists.VarTypes.VARF:
                     {
                         string[] Values = SplitLine[Index].Split('.');
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 1, Lists.Num_User_Vars));
@@ -237,38 +237,10 @@ namespace NPC_Maker.Scripts
 
         public static byte? GetSubIDForRamType(string RamType)
         {
-            RamType = RamType.ToUpper();
+            RamType = RamType.ToUpper().Split('.')[0];
 
-            if (RamType.StartsWith(Lists.Keyword_RNG))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Random;
-            else if (RamType.StartsWith(Lists.Keyword_Global8))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Global8;
-            else if (RamType.StartsWith(Lists.Keyword_Global16))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Global16;
-            else if (RamType.StartsWith(Lists.Keyword_Global32))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Global32;
-            else if (RamType.StartsWith(Lists.Keyword_GlobalF))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.GlobalF;
-            else if (RamType.StartsWith(Lists.Keyword_Actor8))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.RefActor8;
-            else if (RamType.StartsWith(Lists.Keyword_Actor16))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.RefActor16;
-            else if (RamType.StartsWith(Lists.Keyword_Actor32))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.RefActor32;
-            else if (RamType.StartsWith(Lists.Keyword_ActorF))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.RefActorF;
-            else if (RamType.StartsWith(Lists.Keyword_Save8))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Save8;
-            else if (RamType.StartsWith(Lists.Keyword_Save16))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Save16;
-            else if (RamType.StartsWith(Lists.Keyword_Save32))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Save32;
-            else if (RamType.StartsWith(Lists.Keyword_SaveF))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.SaveF;
-            else if (RamType.StartsWith(Lists.Keyword_ScriptVarF))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.VarF;
-            else if (RamType.StartsWith(Lists.Keyword_ScriptVar))
-                return (byte)Lists.IfWhileAwaitSetRamSubTypes.Var;
+            if (Enum.IsDefined(typeof(Lists.IfWhileAwaitSetRamSubTypes), RamType))
+                return (byte)(int)Enum.Parse(typeof(Lists.IfWhileAwaitSetRamSubTypes), RamType);
             else
                 return null;
         }
@@ -302,41 +274,13 @@ namespace NPC_Maker.Scripts
 
         public static byte GetVarType(string[] SplitLine, int Index)
         {
-            if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_RNG))
-                return (int)Lists.VarTypes.Random;
+            string Type = SplitLine[Index].ToUpper().Split('.')[0];
 
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Global8))
-                return (int)Lists.VarTypes.Global8;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Global16))
-                return (int)Lists.VarTypes.Global16;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Global32))
-                return (int)Lists.VarTypes.Global32;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_GlobalF))
-                return (int)Lists.VarTypes.Globalf;
-
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Actor8))
-                return (int)Lists.VarTypes.Actor8;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Actor16))
-                return (int)Lists.VarTypes.Actor16;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Actor32))
-                return (int)Lists.VarTypes.Actor32;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_ActorF))
-                return (int)Lists.VarTypes.ActorF;
-
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Save8))
-                return (int)Lists.VarTypes.Save8;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Save16))
-                return (int)Lists.VarTypes.Save16;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Save32))
-                return (int)Lists.VarTypes.Save32;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_SaveF))
-                return (int)Lists.VarTypes.SaveF;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_ScriptVarF))
-                return (int)Lists.VarTypes.VarF;
-            else if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_ScriptVar))
-                return (int)Lists.VarTypes.Var;
+            if (Enum.IsDefined(typeof(Lists.VarTypes), Type))
+                return (byte)(int)Enum.Parse(typeof(Lists.VarTypes), Type);
             else
-                return (int)Lists.VarTypes.Normal;
+                return (byte)Lists.VarTypes.NORMAL;
+
         }
 
         public static bool IsHex(string Number)

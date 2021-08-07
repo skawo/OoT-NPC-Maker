@@ -112,7 +112,7 @@ namespace NPC_Maker.Scripts
                                         byte TextID_Child_FailT = 0;
 
                                         object FailItem = (float)-1;
-                                        byte FailItemT = (byte)Lists.VarTypes.Normal;
+                                        byte FailItemT = (byte)Lists.VarTypes.NORMAL;
 
                                         if (SplitTrFailItem[0].ToUpper().Trim() != Lists.Keyword_TradeDefault)
                                         {

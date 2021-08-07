@@ -83,12 +83,12 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.CASTS_SHADOW:
                         case (int)Lists.SetSubTypes.PLAYER_ANIMATE_MODE:
                             {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object Val = (float)0;
 
-                                if (VarType == (int)Lists.VarTypes.Normal)
+                                if (VarType == (int)Lists.VarTypes.NORMAL)
                                     Val = (float)ScriptHelpers.GetBoolConditionID(SplitLine, 2);
                                 else
                                     Val = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, 1);
@@ -141,7 +141,7 @@ namespace NPC_Maker.Scripts
 
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
 
-                                if (VarType2 == (int)Lists.VarTypes.Normal)
+                                if (VarType2 == (int)Lists.VarTypes.NORMAL)
                                     Val = (float)ScriptHelpers.GetBoolConditionID(SplitLine, 3);
                                 else
                                     Val = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, 1);
@@ -270,7 +270,7 @@ namespace NPC_Maker.Scripts
 
                                 object DlistOption = ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
 
-                                return new InstructionSetWTwoValues((byte)SubID, DListID, VarType, DlistOption, (byte)Lists.VarTypes.Normal, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, DListID, VarType, DlistOption, (byte)Lists.VarTypes.NORMAL, 0);
                             }
                         case (int)Lists.SetSubTypes.ANIMATION_STARTFRAME:
                         case (int)Lists.SetSubTypes.ANIMATION_ENDFRAME:
@@ -334,7 +334,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Time = (float)0;
 
-                                if (VarType == (int)Lists.VarTypes.Normal)
+                                if (VarType == (int)Lists.VarTypes.NORMAL)
                                     Time = (float)Convert.ToDecimal(ScriptHelpers.GetOcarinaTime(SplitLine, 3));
                                 else
                                     Time = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
@@ -362,7 +362,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object ActorID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue);
 
-                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 1, Lists.Num_User_Vars));
+                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.NORMAL, 1, Lists.Num_User_Vars));
 
                                 return new InstructionSetExtVar((byte)SubID, ExtVarNum, Value, VarType, ActorID, VarType2, Operator);
                             }
@@ -376,10 +376,10 @@ namespace NPC_Maker.Scripts
                                 byte SpeedT = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Speed = ScriptHelpers.GetValueByType(SplitLine, 3, SpeedT, 0, float.MaxValue);
 
-                                byte StFrT = (byte)Lists.VarTypes.Normal;
+                                byte StFrT = (byte)Lists.VarTypes.NORMAL;
                                 object StFr = (float)0;
 
-                                byte EFrT = (byte)Lists.VarTypes.Normal;
+                                byte EFrT = (byte)Lists.VarTypes.NORMAL;
                                 object EFr = (float)255;
 
                                 if (SplitLine.Length > 4)

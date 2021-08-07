@@ -30,6 +30,8 @@ namespace NPC_Maker
         public const string Keyword_Else = "ELSE";
         public const string Keyword_Or = "OR";
         public const string Keyword_And = "AND";
+
+        /*
         public const string Keyword_ScriptVar = "VAR";
         public const string Keyword_ScriptVarF = "VARF";
         public const string Keyword_RNG = "RANDOM";
@@ -45,6 +47,8 @@ namespace NPC_Maker
         public const string Keyword_Save16 = "SAVE16";
         public const string Keyword_Save32 = "SAVE32";
         public const string Keyword_SaveF = "SAVEF";
+        */
+
         public const string Keyword_Degree = "DEG_";
         public const string Keyword_Once = "ONCE";
         public const string Keyword_Ignore_Y = "IGNORE_Y";
@@ -76,24 +80,26 @@ namespace NPC_Maker
             Keyword_Else,
             Keyword_And,
             Keyword_Or,
-            Keyword_ScriptVar,
-            Keyword_ScriptVarF,
-            Keyword_RNG,
             Keyword_CallProcedure,
-            Keyword_Global8,
-            Keyword_Global16,
-            Keyword_Global32,
-            Keyword_GlobalF,
-            Keyword_Actor8,
-            Keyword_Actor16,
-            Keyword_Actor32,
-            Keyword_ActorF,
-            Keyword_Save8,
-            Keyword_Save16,
-            Keyword_Save32,
-            Keyword_SaveF,
             Keyword_EndOcarina,
-            Keyword_Once
+            Keyword_Once,
+
+            VarTypes.NORMAL.ToString(),
+            VarTypes.RANDOM.ToString(),
+            VarTypes.GLOBAL8.ToString(),
+            VarTypes.GLOBAL16.ToString(),
+            VarTypes.GLOBAL32.ToString(),
+            VarTypes.GLOBALF.ToString(),
+            VarTypes.ACTOR8.ToString(),
+            VarTypes.ACTOR16.ToString(),
+            VarTypes.ACTOR32.ToString(),
+            VarTypes.ACTORF.ToString(),
+            VarTypes.SAVE8.ToString(),
+            VarTypes.SAVE16.ToString(),
+            VarTypes.SAVE32.ToString(),
+            VarTypes.SAVEF.ToString(),
+            VarTypes.VAR.ToString(),
+            VarTypes.VARF.ToString(),
         };
 
         public static List<string> KeywordsBlue = new List<string>()
@@ -127,21 +133,7 @@ namespace NPC_Maker
 
         public static List<string> KeywordsGray = new List<string>()
         {
-            Keyword_ScriptVar,
-            Keyword_ScriptVarF,
-            Keyword_RNG,
-            Keyword_GlobalF,
-            Keyword_Global8,
-            Keyword_Global16,
-            Keyword_Global32,
-            Keyword_Actor8,
-            Keyword_Actor16,
-            Keyword_Actor32,
-            Keyword_ActorF,
-            Keyword_Save8,
-            Keyword_Save16,
-            Keyword_Save32,
-            Keyword_SaveF,
+            
             Keyword_And,
             Keyword_Or,
             Keyword_TradeSucccess,
@@ -172,26 +164,43 @@ namespace NPC_Maker
             SpawnParams.VARIABLE.ToString(),
             SpawnParams.ACTOR.ToString(),
             SpawnParams.ROTATION.ToString(),
+
+            VarTypes.NORMAL.ToString(),
+            VarTypes.RANDOM.ToString(),
+            VarTypes.GLOBAL8.ToString(),
+            VarTypes.GLOBAL16.ToString(),
+            VarTypes.GLOBAL32.ToString(),
+            VarTypes.GLOBALF.ToString(),
+            VarTypes.ACTOR8.ToString(),
+            VarTypes.ACTOR16.ToString(),
+            VarTypes.ACTOR32.ToString(),
+            VarTypes.ACTORF.ToString(),
+            VarTypes.SAVE8.ToString(),
+            VarTypes.SAVE16.ToString(),
+            VarTypes.SAVE32.ToString(),
+            VarTypes.SAVEF.ToString(),
+            VarTypes.VAR.ToString(),
+            VarTypes.VARF.ToString(),
         };
 
         public enum VarTypes
         {
-            Normal = 0,
-            Random = 1,
-            Global8 = 2,
-            Global16 = 3,
-            Global32 = 4,
-            Globalf = 5,
-            Actor8 = 6,
-            Actor16 = 7,
-            Actor32 = 8,
-            ActorF = 9,
-            Save8 = 10,
-            Save16 = 11,
-            Save32 = 12,
-            SaveF = 13,
-            Var = 14,
-            VarF = 15,
+            NORMAL = 0,
+            RANDOM = 1,
+            GLOBAL8 = 2,
+            GLOBAL16 = 3,
+            GLOBAL32 = 4,
+            GLOBALF = 5,
+            ACTOR8 = 6,
+            ACTOR16 = 7,
+            ACTOR32 = 8,
+            ACTORF = 9,
+            SAVE8 = 10,
+            SAVE16 = 11,
+            SAVE32 = 12,
+            SAVEF = 13,
+            VAR = 14,
+            VARF = 15,
         }
 
         public enum Instructions
@@ -253,21 +262,21 @@ namespace NPC_Maker
 
         public enum IfWhileAwaitSetRamSubTypes
         {
-            Random = 241,
-            Global8 = 242,
-            Global16 = 243,
-            Global32 = 244,
-            GlobalF = 245,
-            RefActor8 = 246,
-            RefActor16 = 247,
-            RefActor32 = 248,
-            RefActorF = 249,
-            Save8 = 250,
-            Save16 = 251,
-            Save32 = 252,
-            SaveF = 253,
-            Var = 254,
-            VarF = 255,
+            RANDOM = 241,
+            GLOBAL8 = 242,
+            GLOBAL16 = 243,
+            GLOBAL32 = 244,
+            GLOBALF = 245,
+            ACTOR8 = 246,
+            ACTOR16 = 247,
+            ACTOR32 = 248,
+            ACTORF = 249,
+            SAVE8 = 250,
+            SAVE16 = 251,
+            SAVE32 = 252,
+            SAVEF = 253,
+            VAR = 254,
+            VARF = 255,
         }
         
         public enum IfSubTypes

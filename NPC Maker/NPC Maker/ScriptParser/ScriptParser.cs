@@ -504,7 +504,32 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.ITEM: Instructions.Add(ParseItemInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.RETURN: Instructions.Add(ParseReturnInstruction(SplitLine)); break;
                         default:
-                            outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(SplitLine)); break;
+                            {
+                                bool matchesSetRAM = false;
+
+                                foreach(Lists.IfWhileAwaitSetRamSubTypes s in Enum.GetValues(typeof(Lists.IfWhileAwaitSetRamSubTypes)))
+                                {
+                                    string f = s.ToString();
+
+                                    if (f.ToUpper() == Lists.IfWhileAwaitSetRamSubTypes.RANDOM.ToString().ToUpper())
+                                        continue;
+
+                                    if (SplitLine[0].ToUpper().StartsWith(f.ToUpper()))
+                                    {
+                                        matchesSetRAM = true;
+                                        break;
+                                    }
+                                }
+
+                                if (matchesSetRAM || Enum.IsDefined(typeof(Lists.SetSubTypes), SplitLine[0].ToUpper()))
+                                {
+                                    List<string> sp = SplitLine.ToList();
+                                    sp.Insert(0, Lists.Instructions.SET.ToString());
+                                    Instructions.Add(ParseSetInstruction(sp.ToArray())); break;
+                                }
+                                else
+                                    outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(SplitLine)); break;
+                            }
                     }
                 }
                 catch (Exception)

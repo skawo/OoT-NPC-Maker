@@ -63,7 +63,7 @@ namespace NPC_Maker.Scripts
                             Instructions.Add(new InstructionLabel("__WHILESTART__" + LabelR));
                             Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                             Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
-                            Instructions.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, Lists.ConditionTypes.EQUALTO, (byte)Lists.VarTypes.Normal));
+                            Instructions.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, 1, Lists.ConditionTypes.EQUALTO, (byte)Lists.VarTypes.NORMAL));
                             Instructions.Add(new InstructionGoto("__WHILESTART__" + LabelR));
                             Instructions.Add(new InstructionLabel("__IFFALSE__" + LabelR));
                             InsertIdx = 1;
@@ -178,7 +178,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object ActorID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue);
 
-                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.Normal, 1, Lists.Num_User_Vars));
+                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.NORMAL, 1, Lists.Num_User_Vars));
 
                                 Instructions.Insert(InsertIdx, new InstructionIfWhileExtVar((byte)ID, Convert.ToByte(SubID), ExtVarNum, VarType, Value, VarType2, ActorID, Condition, EndIf, Else, LabelR));
                                 return Instructions;
@@ -218,7 +218,7 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
                                 object Time = (float)0;
 
-                                if (VarType == (int)Lists.VarTypes.Normal)
+                                if (VarType == (int)Lists.VarTypes.NORMAL)
                                     Time = (float)Convert.ToDecimal(ScriptHelpers.GetOcarinaTime(SplitLine, 3));
                                 else
                                     Time = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
