@@ -505,23 +505,9 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.RETURN: Instructions.Add(ParseReturnInstruction(SplitLine)); break;
                         default:
                             {
-                                bool matchesSetRAM = false;
+                                byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);
 
-                                foreach(Lists.IfWhileAwaitSetRamSubTypes s in Enum.GetValues(typeof(Lists.IfWhileAwaitSetRamSubTypes)))
-                                {
-                                    string f = s.ToString();
-
-                                    if (f.ToUpper() == Lists.IfWhileAwaitSetRamSubTypes.RANDOM.ToString().ToUpper())
-                                        continue;
-
-                                    if (SplitLine[0].ToUpper().StartsWith(f.ToUpper()))
-                                    {
-                                        matchesSetRAM = true;
-                                        break;
-                                    }
-                                }
-
-                                if (matchesSetRAM || Enum.IsDefined(typeof(Lists.SetSubTypes), SplitLine[0].ToUpper()))
+                                if (matchesSetRAM != null || Enum.IsDefined(typeof(Lists.SetSubTypes), SplitLine[0].ToUpper()))
                                 {
                                     List<string> sp = SplitLine.ToList();
                                     sp.Insert(0, Lists.Instructions.SET.ToString());
