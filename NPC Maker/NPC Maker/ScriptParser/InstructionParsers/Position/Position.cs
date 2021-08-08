@@ -36,8 +36,9 @@ namespace NPC_Maker.Scripts
                                 NoSpeed = 1;
                                 break;
                             }
-                        case (int)Lists.PositionSubTypes.CHANGE_TO:
-                        case (int)Lists.PositionSubTypes.CHANGE_BY:
+                        case (int)Lists.PositionSubTypes.MOVE_TO:
+                        case (int)Lists.PositionSubTypes.MOVE_BY:
+                        case (int)Lists.PositionSubTypes.DIRECTION_MOVE_BY:
                             break;
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);

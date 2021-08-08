@@ -38,14 +38,14 @@ namespace NPC_Maker.Scripts
                                 NoSpeed = 1;
                                 break;
                             }
-                        case (int)Lists.RotationSubTypes.CHANGE_TO:
+                        case (int)Lists.RotationSubTypes.ROTATE_TO:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 7);
                                 Min = Int16.MinValue;
                                 Max = Int16.MaxValue;
                                 break;
                             }
-                        case (int)Lists.RotationSubTypes.CHANGE_BY:
+                        case (int)Lists.RotationSubTypes.ROTATE_BY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 7);
                                 Min = Int32.MinValue;

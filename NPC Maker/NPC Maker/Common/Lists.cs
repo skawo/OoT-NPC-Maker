@@ -524,6 +524,7 @@ namespace NPC_Maker
         {
             ABSOLUTE = 0,
             RELATIVE = 1,
+            DIRECTION = 2,
         }
 
         public enum ConditionTypes
@@ -1406,22 +1407,23 @@ namespace NPC_Maker
         public enum RotationSubTypes
         {
             SET,
-            CHANGE_TO,
-            CHANGE_BY,
+            ROTATE_TO,
+            ROTATE_BY,
         }
 
         public enum PositionSubTypes
         {
             SET,
-            CHANGE_TO,
-            CHANGE_BY,
+            MOVE_TO,
+            MOVE_BY,
+            DIRECTION_MOVE_BY,
         }
 
         public enum ScaleSubTypes
         {
             SET,
-            CHANGE_TO,
-            CHANGE_BY,
+            SCALE_TO,
+            SCALE_BY,
         }
 
         public enum Segments

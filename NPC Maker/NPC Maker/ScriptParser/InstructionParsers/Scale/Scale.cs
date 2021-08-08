@@ -29,8 +29,8 @@ namespace NPC_Maker.Scripts
                                 NoSpeed = 1;
                                 break;
                             }
-                        case (int)Lists.ScaleSubTypes.CHANGE_TO:
-                        case (int)Lists.ScaleSubTypes.CHANGE_BY:
+                        case (int)Lists.ScaleSubTypes.SCALE_TO:
+                        case (int)Lists.ScaleSubTypes.SCALE_BY:
                             break;
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
