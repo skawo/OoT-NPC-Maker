@@ -59,7 +59,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.SMOOTHING_CONSTANT:
                             return H_SimpleSet(SubID, SplitLine, -2, 65535);
                         case (int)Lists.SetSubTypes.LOOP_MOVEMENT:
-                        case (int)Lists.SetSubTypes.COLLISION:
+                        case (int)Lists.SetSubTypes.HAS_COLLISION:
                         case (int)Lists.SetSubTypes.PRESS_SWITCHES:
                         case (int)Lists.SetSubTypes.IS_TARGETTABLE:
                         case (int)Lists.SetSubTypes.PLAYER_CAN_MOVE:
