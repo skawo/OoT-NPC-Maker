@@ -7,7 +7,7 @@ namespace NPC_Maker.Scripts
     {
         public byte Type { get; set; }
 
-        public byte RelativePos { get; set; }
+        public byte PosType { get; set; }
 
         public object PosX { get; set; }
         public object PosY { get; set; }
@@ -81,7 +81,7 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosZT, AccelXT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(AccelYT, AccelZT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelXT, VelYT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelZT, RelativePos, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelZT, PosType, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ScaleT, ScaleUpdateT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimRGBAVarT[0], PrimRGBAVarT[1], 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimRGBAVarT[2], PrimRGBAVarT[3], 4), Data);

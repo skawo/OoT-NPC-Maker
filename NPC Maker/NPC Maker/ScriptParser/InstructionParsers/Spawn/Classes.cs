@@ -5,7 +5,7 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionSpawn : Instruction
     {
-        byte PosRelativeness { get; set; }
+        byte PosType { get; set; }
         object PosX { get; set; }
         object PosY { get; set; }
         object PosZ { get; set; }
@@ -24,11 +24,11 @@ namespace NPC_Maker.Scripts
         byte RotYT { get; set; }
         byte RotZT { get; set; }
 
-        public InstructionSpawn(byte _PosRelativeness, object _PosX, byte _PosXT, object _PosY, byte _PosYT, object _PosZ, byte _PosZT,
+        public InstructionSpawn(byte _PosType, object _PosX, byte _PosXT, object _PosY, byte _PosYT, object _PosZ, byte _PosZT,
                                 object _RotX, byte _RotXT, object _RotY, byte _RotYT, object _RotZ, byte _RotZT, object _ActorID, byte _ActorIDVarT,
                                 object _ActorVariable, byte _ActorVarT) : base((byte)Lists.Instructions.SPAWN)
         {
-            PosRelativeness = _PosRelativeness;
+            PosType = _PosType;
             PosX = _PosX;
             PosY = _PosY;
             PosZ = _PosZ;
@@ -53,7 +53,7 @@ namespace NPC_Maker.Scripts
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(PosRelativeness, Data);
+            Helpers.AddObjectToByteList(PosType, Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosXT, PosYT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosZT, RotXT, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ActorIDVarT, ActorVarT, 4), Data);

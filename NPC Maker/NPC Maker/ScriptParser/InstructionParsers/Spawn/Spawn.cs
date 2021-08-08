@@ -10,7 +10,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 1);
+                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
 
                 int End = GetCorrespondingEndSpawn(Lines, LineNo);
 
@@ -22,7 +22,7 @@ namespace NPC_Maker.Scripts
                 object RotX = (float)0;
                 object RotY = (float)0;
                 object RotZ = (float)0;
-                byte RelativePos = 0;
+                byte PosType = 0;
 
                 byte ActorIDVarT = 0;
                 byte ActorVarT = 0;
@@ -33,6 +33,9 @@ namespace NPC_Maker.Scripts
                 byte RotYT = 0;
                 byte RotZT = 0;
 
+
+                ActorIDVarT = ScriptHelpers.GetVarType(SplitLine, 1);
+                ActorID = ScriptHelpers.Helper_GetActorId(SplitLine, 1, ActorIDVarT);
 
                 List<string> Params = Lines.Skip(LineNo + 1).Take(End - LineNo - 1).ToList();
 
@@ -55,15 +58,6 @@ namespace NPC_Maker.Scripts
 
                     switch (SubID)
                     {
-                        case (int)Lists.SpawnParams.ACTOR:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
-                                ActorIDVarT = ScriptHelpers.GetVarType(Split, 1);
-                                ActorID = ScriptHelpers.Helper_GetActorId(Split, 1, ActorIDVarT);
-
-                                continue;
-                            }
                         case (int)Lists.SpawnParams.VARIABLE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
@@ -77,7 +71,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
 
-                                RelativePos = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
+                                PosType = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
                                 ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosXT, ref PosYT, ref PosZT, ref PosX, ref PosY, ref PosZ);
 
                                 continue;
@@ -94,7 +88,7 @@ namespace NPC_Maker.Scripts
                     }
                 }
 
-                return new InstructionSpawn((byte)RelativePos, PosX, PosXT, PosY, PosYT, PosZ, PosZT, RotX, RotXT, RotY, RotYT, RotZ, RotZT, ActorID, ActorIDVarT, ActorVar, ActorVarT);
+                return new InstructionSpawn((byte)PosType, PosX, PosXT, PosY, PosYT, PosZ, PosZT, RotX, RotXT, RotY, RotYT, RotZ, RotZT, ActorID, ActorIDVarT, ActorVar, ActorVarT);
             }
             catch (ParseException pEx)
             {

@@ -16,7 +16,7 @@ namespace NPC_Maker.Scripts
 
                 byte Type = 0;
 
-                byte RelativePos = 0;
+                byte PosType = 0;
 
                 object PosX = (float)0;
                 object PosY = (float)0;
@@ -91,7 +91,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.ParticleSubOptions.POSITION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
-                                RelativePos = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
+                                PosType = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
                                 ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosXT, ref PosYT, ref PosZT, ref PosX, ref PosY, ref PosZ);
                                 continue;
                             }
@@ -218,7 +218,7 @@ namespace NPC_Maker.Scripts
                 {
                     ID = (byte)Lists.Instructions.PARTICLE,
                     Type = Type,
-                    RelativePos = RelativePos,
+                    PosType = PosType,
                     PosX = PosX,
                     PosY = PosY,
                     PosZ = PosZ,

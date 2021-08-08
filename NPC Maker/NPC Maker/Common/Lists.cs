@@ -162,7 +162,6 @@ namespace NPC_Maker
             ParticleSubOptions.FADE_DELAY.ToString(),
 
             SpawnParams.VARIABLE.ToString(),
-            SpawnParams.ACTOR.ToString(),
             SpawnParams.ROTATION.ToString(),
 
             VarTypes.NORMAL.ToString(),
@@ -514,7 +513,6 @@ namespace NPC_Maker
 
         public enum SpawnParams
         {
-            ACTOR,
             POSITION,
             ROTATION,
             VARIABLE,
