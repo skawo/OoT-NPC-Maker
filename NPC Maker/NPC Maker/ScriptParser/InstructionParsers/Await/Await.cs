@@ -20,7 +20,7 @@ namespace NPC_Maker.Scripts
                     switch (SubID)
                     {
                         case (int)Lists.AwaitSubTypes.MOVEMENT_PATH_END:
-                        case (int)Lists.AwaitSubTypes.TEXTBOX_RESPONSE:
+                        case (int)Lists.AwaitSubTypes.RESPONSE:
                         case (int)Lists.AwaitSubTypes.TALKING_END:
                         case (int)Lists.AwaitSubTypes.FOREVER:
                         case (int)Lists.AwaitSubTypes.TEXTBOX_DISMISSED:
@@ -51,9 +51,9 @@ namespace NPC_Maker.Scripts
 
                                 return new InstructionAwait((byte)SubID, Data, Lists.ConditionTypes.EQUALTO, VarType);
                             }
-                        case (int)Lists.AwaitSubTypes.CURRENT_PATH_NODE:
-                        case (int)Lists.AwaitSubTypes.CURRENT_ANIMATION_FRAME:
-                        case (int)Lists.AwaitSubTypes.CURRENT_CUTSCENE_FRAME:
+                        case (int)Lists.AwaitSubTypes.PATH_NODE:
+                        case (int)Lists.AwaitSubTypes.ANIMATION_FRAME:
+                        case (int)Lists.AwaitSubTypes.CUTSCENE_FRAME:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 

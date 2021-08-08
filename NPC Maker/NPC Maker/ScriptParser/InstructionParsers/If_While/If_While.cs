@@ -112,12 +112,11 @@ namespace NPC_Maker.Scripts
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.LINK_IS_ADULT:
-                        case (int)Lists.IfSubTypes.CURRENTLY_DAY:
+                        case (int)Lists.IfSubTypes.IS_DAY:
                         case (int)Lists.IfSubTypes.IS_TALKING:
                         case (int)Lists.IfSubTypes.PLAYER_HAS_EMPTY_BOTTLE:
-                        case (int)Lists.IfSubTypes.CUTSCENE_BEING_PLAYED:
+                        case (int)Lists.IfSubTypes.IN_CUTSCENE:
                         case (int)Lists.IfSubTypes.TEXTBOX_ON_SCREEN:
-                        case (int)Lists.IfSubTypes.CURRENT_ANIM_WALKING:
                         case (int)Lists.IfSubTypes.PLAYER_HAS_MAGIC:
                         case (int)Lists.IfSubTypes.ATTACKED:
                         case (int)Lists.IfSubTypes.TARGETTED:
@@ -136,9 +135,9 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.PLAYER_RUPEES:
                         case (int)Lists.IfSubTypes.SCENE_ID:
                         case (int)Lists.IfSubTypes.PLAYER_SKULLTULAS:
-                        case (int)Lists.IfSubTypes.CURRENT_PATH_NODE:
-                        case (int)Lists.IfSubTypes.CURRENT_ANIMATION_FRAME:
-                        case (int)Lists.IfSubTypes.CURRENT_CUTSCENE_FRAME:
+                        case (int)Lists.IfSubTypes.PATH_NODE:
+                        case (int)Lists.IfSubTypes.ANIMATION_FRAME:
+                        case (int)Lists.IfSubTypes.CUTSCENE_FRAME:
                         case (int)Lists.IfSubTypes.PLAYER_HEALTH:
                         case (int)Lists.IfSubTypes.PLAYER_BEANS:
                         case (int)Lists.IfSubTypes.PLAYER_BOMBS:
@@ -226,7 +225,7 @@ namespace NPC_Maker.Scripts
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Time, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
-                        case (int)Lists.IfSubTypes.CURRENT_ANIMATION:
+                        case (int)Lists.IfSubTypes.ANIMATION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 

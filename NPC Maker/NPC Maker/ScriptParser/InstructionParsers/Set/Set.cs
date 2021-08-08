@@ -23,7 +23,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_DELAY:
                         case (int)Lists.SetSubTypes.COLLISION_RADIUS:
                         case (int)Lists.SetSubTypes.COLLISION_HEIGHT:
-                        case (int)Lists.SetSubTypes.CURRENT_CUTSCENE_FRAME:
+                        case (int)Lists.SetSubTypes.CUTSCENE_FRAME:
                             return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue);
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_START:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_END:
@@ -59,7 +59,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.SMOOTHING_CONSTANT:
                             return H_SimpleSet(SubID, SplitLine, -2, 65535);
                         case (int)Lists.SetSubTypes.LOOP_MOVEMENT:
-                        case (int)Lists.SetSubTypes.HAVE_COLLISION:
+                        case (int)Lists.SetSubTypes.COLLISION:
                         case (int)Lists.SetSubTypes.PRESS_SWITCHES:
                         case (int)Lists.SetSubTypes.IS_TARGETTABLE:
                         case (int)Lists.SetSubTypes.PLAYER_CAN_MOVE:
@@ -113,7 +113,7 @@ namespace NPC_Maker.Scripts
                             return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue);
                         case (int)Lists.SetSubTypes.PLAYER_HEALTH:
                             return H_SimpleSet(SubID, SplitLine, -20, 20);
-                        case (int)Lists.SetSubTypes.TEXTBOX_RESPONSE_ACTIONS:
+                        case (int)Lists.SetSubTypes.RESPONSE_ACTIONS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
                                 ScriptHelpers.ErrorIfNumParamsBigger(SplitLine, 5);
@@ -148,7 +148,7 @@ namespace NPC_Maker.Scripts
 
                                 return new InstructionSetWTwoValues((byte)SubID, FlagID, VarType1, Val, VarType2, 0);
                             }
-                        case (int)Lists.SetSubTypes.EFFECT_IF_ATTACKED:
+                        case (int)Lists.SetSubTypes.ATTACKED_EFFECT:
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.EffectsIfAttacked), ParseException.UnrecognizedEffectIfAttacked(SplitLine));
                         case (int)Lists.SetSubTypes.MOVEMENT_TYPE:
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.MovementStyles), ParseException.UnrecognizedMovementStyle(SplitLine));
@@ -162,8 +162,8 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.BLINK_SEGMENT:
                         case (int)Lists.SetSubTypes.TALK_SEGMENT:
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
-                        case (int)Lists.SetSubTypes.CURRENT_ANIMATION:
-                        case (int)Lists.SetSubTypes.CURRENT_ANIMATION_INSTANTLY:
+                        case (int)Lists.SetSubTypes.ANIMATION:
+                        case (int)Lists.SetSubTypes.ANIMATION_INSTANTLY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
 
@@ -341,7 +341,7 @@ namespace NPC_Maker.Scripts
 
                                 return new InstructionSet((byte)SubID, Time, VarType, Operator);
                             }
-                        case (int)Lists.SetSubTypes.SFX_IF_ATTACKED:
+                        case (int)Lists.SetSubTypes.ATTACKED_SFX:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
