@@ -1508,7 +1508,7 @@ namespace NPC_Maker
             SHOP_DESCRIPTION = 0x0A,
             EVENT = 0x0B,
             DELAY = 0x0C,
-            UNUSED1 = 0x0D,
+            BUTTON_PROMPT = 0x0D,
             FADE = 0x0E,
             PLAYER = 0x0F,
             OCARINA = 0x10,

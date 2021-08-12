@@ -553,7 +553,6 @@ namespace NPC_Maker
 
         // Below taken and edited from 
         // https://github.com/Sage-of-Mirrors/Ocarina-Text-Editor
-        // Rewrite it.
 
         public byte GetMessageTypePos()
         {
@@ -564,51 +563,29 @@ namespace NPC_Maker
         public List<byte> ConvertTextData()
         {
             List<byte> data = new List<byte>();
-
-            for (int i = 0; i < MessageText.Length; i++)
-            {
-                if (MessageText[i] == '\r')
-                {
-                    MessageText = MessageText.Remove(i, 1);
-                    i--;
-                }
-            }
+            List<string> errors = new List<string>();
 
             for (int i = 0; i < MessageText.Length; i++)
             {
                 // Not a control code, copy char to output buffer
-                if (MessageText[i] != '<')
+                if (MessageText[i] != '<' && MessageText[i] != '>')
                 {
                     if (Dicts.MessageControlCodes.ContainsValue(MessageText[i].ToString()))
-                    {
                         data.Add((byte)Dicts.MessageControlCodes.First(x => x.Value == MessageText[i].ToString()).Key);
-                    }
                     else if (MessageText[i] == '\n')
-                    {
-                        try
-                        {
-                            data.Add((byte)Lists.MsgControlCode.LINE_BREAK);
-                        }
-                        catch (IndexOutOfRangeException)
-                        {
-                            data.Add((byte)Lists.MsgControlCode.LINE_BREAK);
-                        }
-                    }
+                        data.Add((byte)Lists.MsgControlCode.LINE_BREAK);
                     else if (MessageText[i] == '\r')
                     {
                         // Do nothing
                     }
                     else
-                    {
                         data.Add((byte)MessageText[i]);
-                    }
+
                     continue;
                 }
                 // Control code end tag. This should never be encountered on its own.
                 else if (MessageText[i] == '>')
-                {
-                    // This should be an error handler
-                }
+                    errors.Add($"Message formatting is not valid: found stray >");
                 // We've got a control code
                 else
                 {
@@ -628,22 +605,25 @@ namespace NPC_Maker
 
                     string parsedCode = new string(controlCode.ToArray());
 
-                    if (parsedCode.ToLower() == "new box")
+                    if (parsedCode.Replace(" ", "_").ToUpper() == Lists.MsgControlCode.NEW_BOX.ToString())
                     {
                         data.RemoveAt(data.Count - 1); // Removes the last \n, which was added during import
                         i++; // Skips next \n, added at import
                     }
 
-                    data.AddRange(GetControlCode(parsedCode.Split(':')));
+                    data.AddRange(GetControlCode(parsedCode.Split(':'), ref errors));
                 }
             }
 
             data.Add((byte)Lists.MsgControlCode.END);
 
+            if (errors.Count != 0)
+                System.Windows.Forms.MessageBox.Show($"Errors parsing message {Name}: " + Environment.NewLine + String.Join(Environment.NewLine, errors.ToArray()));
+
             return data;
         }
 
-        private List<byte> GetControlCode(string[] code)
+        private List<byte> GetControlCode(string[] code, ref List<string> errors)
         {
             List<byte> output = new List<byte>();
 
@@ -713,7 +693,7 @@ namespace NPC_Maker
                             }
                             catch (Exception)
                             {
-                                System.Windows.Forms.MessageBox.Show($"{code[1]} is not a valid sound.");
+                                errors.Add($"{code[1]} is not a valid sound.");
                                 output.Add(0);
                                 output.Add(0);
                             }
@@ -731,7 +711,7 @@ namespace NPC_Maker
                         else if (Enum.IsDefined(typeof(Lists.MsgControlCode), code[0]))
                             output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
                         else
-                            System.Windows.Forms.MessageBox.Show($"{code[0]} is not a valid control code.");
+                            errors.Add($"{code[0]} is not a valid control code.");
 
                         break;
                     }
