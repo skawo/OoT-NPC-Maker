@@ -4,35 +4,23 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionRotation : InstructionSub
     {
-        public object ActorID;
-        public object X;
-        public object Y;
-        public object Z;
-        public byte XType;
-        public byte YType;
-        public byte ZType;
-        public byte ActorIDT;
-        public byte Target;
-        public object Speed;
-        public byte SpeedT;
+        ScriptVarVal X { get; set; }
+        ScriptVarVal Y { get; set; }
+        ScriptVarVal Z { get; set; }
+        ScriptVarVal ActorID { get; set; }
+        ScriptVarVal Speed { get; set; }
 
-        public InstructionRotation(byte _SubID, object _ActorID, byte _ActorIDT, object _XRot, object _YRot, object _ZRot,
-                                   byte _XRotValueType, byte _YRotValueType, byte _ZRotValueType, byte _Target, object _Speed, byte _SpeedT)
+        public byte Target;
+
+        public InstructionRotation(byte _SubID, byte _Target, ScriptVarVal _ActorID, ScriptVarVal _XRot, ScriptVarVal _YRot, ScriptVarVal _ZRot, ScriptVarVal _Speed)
                                 : base((int)Lists.Instructions.ROTATION, _SubID)
         {
             ActorID = _ActorID;
-            ActorIDT = _ActorIDT;
-
             X = _XRot;
             Y = _YRot;
             Z = _ZRot;
-            XType = _XRotValueType;
-            YType = _YRotValueType;
-            ZType = _ZRotValueType;
             Target = _Target;
-
             Speed = _Speed;
-            SpeedT = _SpeedT;
         }
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
@@ -42,18 +30,18 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Target, Data);
-            Helpers.AddObjectToByteList(SpeedT, Data);
+            Helpers.AddObjectToByteList(Speed.Vartype, Data);
 
-            Helpers.AddObjectToByteList(X, Data);
-            Helpers.AddObjectToByteList(Y, Data);
-            Helpers.AddObjectToByteList(Z, Data);
-            Helpers.AddObjectToByteList(ActorID, Data);
-            Helpers.AddObjectToByteList(Speed, Data);
+            Helpers.AddObjectToByteList(X.Value, Data);
+            Helpers.AddObjectToByteList(Y.Value, Data);
+            Helpers.AddObjectToByteList(Z.Value, Data);
+            Helpers.AddObjectToByteList(ActorID.Value, Data);
+            Helpers.AddObjectToByteList(Speed.Value, Data);
 
-            Helpers.AddObjectToByteList(XType, Data);
-            Helpers.AddObjectToByteList(YType, Data);
-            Helpers.AddObjectToByteList(ZType, Data);
-            Helpers.AddObjectToByteList(ActorIDT, Data);
+            Helpers.AddObjectToByteList(X.Vartype, Data);
+            Helpers.AddObjectToByteList(Y.Vartype, Data);
+            Helpers.AddObjectToByteList(Z.Vartype, Data);
+            Helpers.AddObjectToByteList(ActorID.Vartype, Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 28);

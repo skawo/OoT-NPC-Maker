@@ -103,6 +103,7 @@
     <Compile Include="Common\Defaults.cs" />
     <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Position\Classes.cs" />

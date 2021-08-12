@@ -5,13 +5,11 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionWarp : Instruction
     {
-        public object WarpID;
-        public byte VarType;
+        ScriptVarVal WarpID { get; set; }
 
-        public InstructionWarp(object _WarpID, byte _VarType) : base((byte)Lists.Instructions.WARP)
+        public InstructionWarp(ScriptVarVal _WarpID) : base((byte)Lists.Instructions.WARP)
         {
             WarpID = _WarpID;
-            VarType = _VarType;
         }
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
@@ -19,9 +17,9 @@ namespace NPC_Maker.Scripts
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(VarType, Data);
+            Helpers.AddObjectToByteList(WarpID.Vartype, Data);
             Helpers.Ensure4ByteAlign(Data);
-            Helpers.AddObjectToByteList(WarpID, Data);
+            Helpers.AddObjectToByteList(WarpID.Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);

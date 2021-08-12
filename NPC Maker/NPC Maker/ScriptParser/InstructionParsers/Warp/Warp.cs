@@ -9,15 +9,14 @@ namespace NPC_Maker.Scripts
             try
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
-
                 var WarpID = ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt16.MaxValue);
 
-                return new InstructionWarp(WarpID.Value, WarpID.Vartype);
+                return new InstructionWarp(WarpID);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionWarp(0, 0);
+                return new InstructionNop();
             }
             catch (Exception)
             {

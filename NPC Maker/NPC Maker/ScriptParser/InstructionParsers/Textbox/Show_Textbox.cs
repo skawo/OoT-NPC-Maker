@@ -15,7 +15,7 @@ namespace NPC_Maker.Scripts
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionTextbox((int)Lists.Instructions.SHOW_TEXTBOX, 0, 0, 0, 0);
+                return new InstructionNop();
             }
             catch (Exception)
             {

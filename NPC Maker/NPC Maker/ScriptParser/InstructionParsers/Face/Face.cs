@@ -97,17 +97,18 @@ namespace NPC_Maker.Scripts
                 case (int)Lists.TargetActorSubtypes.NPCMAKER:
                     {
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 2);
+                        ScriptHelpers.GetScriptVarVal(SplitLine, Index + 1, 0, UInt16.MaxValue, ref NumActor, ref NumActorT);
 
-                        NumActorT = ScriptHelpers.GetVarType(SplitLine, Index + 1);
-                        NumActor = ScriptHelpers.GetValueByType(SplitLine, Index + 1, NumActorT, 0, UInt16.MaxValue);
                         break;
                     }
                 case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                     {
                         ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, Index + 2);
 
-                        NumActorT = ScriptHelpers.GetVarType(SplitLine, Index + 1);
-                        NumActor = ScriptHelpers.Helper_GetActorId(SplitLine, Index + 1, NumActorT);
+                        ScriptVarVal S = ScriptHelpers.Helper_GetActorId(SplitLine, Index + 1);
+
+                        NumActorT = S.Vartype;
+                        NumActor = S.Value;
                         break;
                     }
                 case (int)Lists.TargetActorSubtypes.PLAYER: break;

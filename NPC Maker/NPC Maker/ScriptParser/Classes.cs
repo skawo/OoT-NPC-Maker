@@ -21,7 +21,7 @@ namespace NPC_Maker.Scripts
         public byte Vartype { get; set; }
         public object Value { get; set; }
 
-        public ScriptVarVal(int _Val, byte _Var)
+        public ScriptVarVal(float _Val = 0, byte _Var = (byte)Lists.VarTypes.NORMAL)
         {
             Vartype = _Var;
             Value = _Val;

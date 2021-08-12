@@ -5,14 +5,12 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionKill : Instruction
     {
-        public object ActorID;
-        public byte AIDVarT;
+        ScriptVarVal ActorID { get; set; }
         public byte SubID;
 
-        public InstructionKill(byte _SubID, object _ActorID, byte _AIDVarT) : base((byte)Lists.Instructions.KILL)
+        public InstructionKill(byte _SubID, ScriptVarVal _ActorID) : base((byte)Lists.Instructions.KILL)
         {
             ActorID = _ActorID;
-            AIDVarT = _AIDVarT;
             SubID = _SubID;
         }
 
@@ -22,9 +20,9 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(AIDVarT, Data);
+            Helpers.AddObjectToByteList(ActorID.Vartype, Data);
             Helpers.Ensure4ByteAlign(Data);
-            Helpers.AddObjectToByteList(ActorID, Data);
+            Helpers.AddObjectToByteList(ActorID.Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);

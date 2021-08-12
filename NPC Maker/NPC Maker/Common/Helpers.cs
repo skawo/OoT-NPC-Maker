@@ -71,14 +71,14 @@ namespace NPC_Maker
             return o |= b;
         }
 
-        public static Int32 TwoInt16ToWord(Int16 a, Int16 b)
+        public static UInt32 TwoInt16ToWord(Int16 a, Int16 b)
         {
             List<byte> Bytes = new List<byte>();
 
             Bytes.AddRange(BitConverter.GetBytes(a));
             Bytes.AddRange(BitConverter.GetBytes(b));
 
-            return BitConverter.ToInt32(Bytes.ToArray(), 0);
+            return BitConverter.ToUInt32(Bytes.ToArray(), 0);
         }
 
         public static void AddObjectToByteList(object Value, List<byte> ByteList)

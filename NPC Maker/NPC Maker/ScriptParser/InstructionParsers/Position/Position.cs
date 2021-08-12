@@ -13,18 +13,13 @@ namespace NPC_Maker.Scripts
             {
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.PositionSubTypes), 1);
 
-                byte ActorNumT = 0;
-                object ActorNum = (float)0;
-                object XPos = (float)0;
-                object YPos = (float)0;
-                object ZPos = (float)0;
-                byte XPosT = 0;
-                byte YPosT = 0;
-                byte ZPosT = 0;
-                object Speed = (float)0;
-                byte SpeedT = 0;
-                byte IgnoreYPos = 0;
+                ScriptVarVal ActorNum = new ScriptVarVal();
+                ScriptVarVal XPos = new ScriptVarVal();
+                ScriptVarVal YPos = new ScriptVarVal();
+                ScriptVarVal ZPos = new ScriptVarVal();
+                ScriptVarVal Speed = new ScriptVarVal();
 
+                byte IgnoreYPos = 0;
                 int NoSpeed = 0;
 
                 try
@@ -57,34 +52,22 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 8 - NoSpeed, 9 - NoSpeed);
-
-                                ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorNum = ScriptHelpers.Helper_GetActorId(SplitLine, 3, ActorNumT);
-
-                                ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
+                                ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt16.MaxValue, ref ActorNum);
+                                ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPos, ref YPos, ref ZPos);
 
                                 if (NoSpeed == 0)
-                                {
-                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 7);
-                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 7, SpeedT, 0, float.MaxValue);
-                                }
+                                    ScriptHelpers.GetScriptVarVal(SplitLine, 7, 0, float.MaxValue, ref Speed);
 
                                 break;
                             }
                         case (int)Lists.TargetActorSubtypes.NPCMAKER:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 8 - NoSpeed, 9 - NoSpeed);
-
-                                ActorNumT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                ActorNum = ScriptHelpers.GetValueByType(SplitLine, 3, ActorNumT, 0, UInt16.MaxValue);
-
-                                ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
+                                ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt16.MaxValue, ref ActorNum);
+                                ScriptHelpers.GetXYZPos(SplitLine, 4, 5, 6, ref XPos, ref YPos, ref ZPos);
 
                                 if (NoSpeed == 0)
-                                {
-                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 7);
-                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 7, SpeedT, 0, float.MaxValue);
-                                }
+                                    ScriptHelpers.GetScriptVarVal(SplitLine, 7, 0, float.MaxValue, ref Speed);
 
                                 break;
                             }
@@ -93,13 +76,10 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.TargetActorSubtypes.SELF:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 7 - NoSpeed, 8 - NoSpeed);
-                                ScriptHelpers.GetXYZPos(SplitLine, 3, 4, 5, ref XPosT, ref YPosT, ref ZPosT, ref XPos, ref YPos, ref ZPos);
+                                ScriptHelpers.GetXYZPos(SplitLine, 3, 4, 5, ref XPos, ref YPos, ref ZPos);
 
                                 if (NoSpeed == 0)
-                                {
-                                    SpeedT = ScriptHelpers.GetVarType(SplitLine, 6);
-                                    Speed = ScriptHelpers.GetValueByType(SplitLine, 6, SpeedT, 0, float.MaxValue);
-                                }
+                                    ScriptHelpers.GetScriptVarVal(SplitLine, 6, 0, float.MaxValue, ref Speed);
 
                                 break;
                             }
@@ -107,12 +87,12 @@ namespace NPC_Maker.Scripts
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
 
-                    return new InstructionPosition((byte)SubID, ActorNum, ActorNumT, XPos, YPos, ZPos, XPosT, YPosT, ZPosT, (byte)SetSubType, Speed, SpeedT, IgnoreYPos);
+                    return new InstructionPosition((byte)SubID, (byte)SetSubType, IgnoreYPos, ActorNum, XPos, YPos, ZPos, Speed);
                 }
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionPosition((byte)SubID, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    return new InstructionNop();
                 }
             }
             catch (Exception)

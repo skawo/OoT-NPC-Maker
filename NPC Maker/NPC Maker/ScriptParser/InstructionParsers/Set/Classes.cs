@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace NPC_Maker.Scripts
 {
-    public class InstructionSet : InstructionSubWValueType
+    public class InstructionSet : InstructionSub
     {
-        public object Value;
+        ScriptVarVal Value { get; set; }
         public byte Operator;
 
-        public InstructionSet(byte _SubID, object _Value, byte _ValueType, byte _Operator)
-                             : base((int)Lists.Instructions.SET, _SubID, _ValueType)
+        public InstructionSet(byte _SubID, ScriptVarVal _Value, byte _Operator)
+                             : base((int)Lists.Instructions.SET, _SubID)
         {
             Value = _Value;
             Operator = _Operator;
@@ -21,9 +21,9 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(ValueType, Data);
+            Helpers.AddObjectToByteList(Value.Vartype, Data);
             Helpers.AddObjectToByteList(Operator, Data);
-            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.AddObjectToByteList(Value.Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
@@ -37,19 +37,17 @@ namespace NPC_Maker.Scripts
         }
     }
 
-    public class InstructionSetWTwoValues : InstructionSubWValueType
+    public class InstructionSetWTwoValues : InstructionSub
     {
-        public object Value;
-        public object Value2;
-        public byte ValueType2;
-        public byte Operator;
+        ScriptVarVal Value { get; set; }
+        ScriptVarVal Value2 { get; set; }
+        public byte Operator { get; set; }
 
-        public InstructionSetWTwoValues(byte _SubID, object _Value, byte _ValueType, object _Value2, byte _ValueType2, byte _Operator)
-                                        : base((int)Lists.Instructions.SET, _SubID, _ValueType)
+        public InstructionSetWTwoValues(byte _SubID, ScriptVarVal _Value, ScriptVarVal _Value2, byte _Operator)
+                                        : base((int)Lists.Instructions.SET, _SubID)
         {
             Value = _Value;
             Value2 = _Value2;
-            ValueType2 = _ValueType2;
             Operator = _Operator;
         }
 
@@ -59,9 +57,9 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Operator, Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ValueType, ValueType2, 4), Data);
-            Helpers.AddObjectToByteList(Value, Data);
-            Helpers.AddObjectToByteList(Value2, Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Value.Vartype, Value2.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Value.Value, Data);
+            Helpers.AddObjectToByteList(Value2.Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
@@ -75,20 +73,18 @@ namespace NPC_Maker.Scripts
         }
     }
 
-    public class InstructionSetExtVar : InstructionSubWValueType
+    public class InstructionSetExtVar : InstructionSub
     {
-        public object Value;
-        public object Value2;
-        public byte ValueType2;
+        ScriptVarVal Value { get; set; }
+        ScriptVarVal Value2 { get; set; }
         public byte Operator;
         public byte ExtVarNum;
 
-        public InstructionSetExtVar(byte _SubID, byte _ExtVarNum, object _Value, byte _ValueType, object _Value2, byte _ValueType2, byte _Operator)
-                                        : base((int)Lists.Instructions.SET, _SubID, _ValueType)
+        public InstructionSetExtVar(byte _SubID, byte _ExtVarNum, ScriptVarVal _Value, ScriptVarVal _Value2, byte _Operator)
+                                        : base((int)Lists.Instructions.SET, _SubID)
         {
             Value = _Value;
             Value2 = _Value2;
-            ValueType2 = _ValueType2;
             Operator = _Operator;
             ExtVarNum = _ExtVarNum;
         }
@@ -99,10 +95,10 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Operator, Data);
-            Helpers.AddObjectToByteList(ValueType, Data);
-            Helpers.AddObjectToByteList(Value, Data);
-            Helpers.AddObjectToByteList(Value2, Data);
-            Helpers.AddObjectToByteList(ValueType2, Data);
+            Helpers.AddObjectToByteList(Value.Vartype, Data);
+            Helpers.AddObjectToByteList(Value.Value, Data);
+            Helpers.AddObjectToByteList(Value2.Value, Data);
+            Helpers.AddObjectToByteList(Value2.Vartype, Data);
             Helpers.AddObjectToByteList(ExtVarNum, Data);
             Helpers.Ensure4ByteAlign(Data);
 
@@ -119,27 +115,19 @@ namespace NPC_Maker.Scripts
 
     public class InstructionSetPlayerAnim : InstructionSub
     {
-        public object Offs;
-        public object Speed;
-        public object StFrame;
-        public object EnFrame;
-        public byte OffsT;
-        public byte SpeedT;
-        public byte StFrameT;
-        public byte EnFrameT;
+        ScriptVarVal Offs { get; set; }
+        ScriptVarVal Speed { get; set; }
+        ScriptVarVal StFrame { get; set; }
+        ScriptVarVal EnFrame { get; set; }
         public byte Once;
 
-        public InstructionSetPlayerAnim(byte _SubID, byte _OffsT, object _Offs, byte _SpeedT, object _Speed, byte _StFT, object _StF, byte _EnFT, object _EnF, byte _Once)
+        public InstructionSetPlayerAnim(byte _SubID, ScriptVarVal _Offs, ScriptVarVal _Speed, ScriptVarVal _StF, ScriptVarVal _EnF, byte _Once)
                                         : base((int)Lists.Instructions.SET, _SubID)
         {
             Offs = _Offs;
             Speed = _Speed;
             StFrame = _StF;
             EnFrame = _EnF;
-            OffsT = _OffsT;
-            SpeedT = _SpeedT;
-            StFrameT = _StFT;
-            EnFrameT = _EnFT;
             Once = _Once;
         }
 
@@ -148,18 +136,18 @@ namespace NPC_Maker.Scripts
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(OffsT, Data);
-            Helpers.AddObjectToByteList(SpeedT, Data);
-            Helpers.AddObjectToByteList(StFrameT, Data);
-            Helpers.AddObjectToByteList(EnFrameT, Data);
+            Helpers.AddObjectToByteList(Offs.Vartype, Data);
+            Helpers.AddObjectToByteList(Speed.Vartype, Data);
+            Helpers.AddObjectToByteList(StFrame.Vartype, Data);
+            Helpers.AddObjectToByteList(EnFrame.Vartype, Data);
             Helpers.AddObjectToByteList(Once, Data);
 
             Helpers.Ensure4ByteAlign(Data);
 
-            Helpers.AddObjectToByteList(Offs, Data);
-            Helpers.AddObjectToByteList(Speed, Data);
-            Helpers.AddObjectToByteList(StFrame, Data);
-            Helpers.AddObjectToByteList(EnFrame, Data);
+            Helpers.AddObjectToByteList(Offs.Value, Data);
+            Helpers.AddObjectToByteList(Speed.Value, Data);
+            Helpers.AddObjectToByteList(StFrame.Value, Data);
+            Helpers.AddObjectToByteList(EnFrame.Value, Data);
 
             Helpers.Ensure4ByteAlign(Data);
 
@@ -176,23 +164,16 @@ namespace NPC_Maker.Scripts
 
     public class InstructionSetEnvColor : InstructionSub
     {
-        public object R;
-        public object G;
-        public object B;
-        public byte ValType1;
-        public byte ValType2;
-        public byte ValType3;
+        ScriptVarVal R { get; set; }
+        ScriptVarVal G { get; set; }
+        ScriptVarVal B { get; set; }
 
-        public InstructionSetEnvColor(byte _SubID, object _R, object _G, object _B,
-                                      byte _ValType1, byte _ValType2, byte _ValType3)
-                                     : base((int)Lists.Instructions.SET, _SubID)
+
+        public InstructionSetEnvColor(byte _SubID, ScriptVarVal _R, ScriptVarVal _G, ScriptVarVal _B) : base((int)Lists.Instructions.SET, _SubID)
         {
             R = _R;
             G = _G;
             B = _B;
-            ValType1 = _ValType1;
-            ValType2 = _ValType2;
-            ValType3 = _ValType3;
         }
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
@@ -201,12 +182,12 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ValType1, ValType2, 4), Data);
-            Helpers.AddObjectToByteList(ValType3, Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(R.Vartype, G.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(B.Vartype, Data);
 
-            Helpers.AddObjectToByteList(R, Data);
-            Helpers.AddObjectToByteList(G, Data);
-            Helpers.AddObjectToByteList(B, Data);
+            Helpers.AddObjectToByteList(R.Value, Data);
+            Helpers.AddObjectToByteList(G.Value, Data);
+            Helpers.AddObjectToByteList(B.Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
@@ -313,13 +294,12 @@ namespace NPC_Maker.Scripts
         }
     }
 
-    public class InstructionSetActor : InstructionSubWValueType
+    public class InstructionSetActor : InstructionSub
     {
         byte Target { get; set; }
-        object Value { get; set; }
+        ScriptVarVal Value { get; set; }
 
-
-        public InstructionSetActor(byte _SubID, byte _Target, object _Value, byte _ValueType) : base((int)Lists.Instructions.SET, _SubID, _ValueType)
+        public InstructionSetActor(byte _SubID, byte _Target, ScriptVarVal _Value) : base((int)Lists.Instructions.SET, _SubID)
         {
             Target = _Target;
             Value = _Value;
@@ -331,8 +311,8 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Target, Data);
-            Helpers.AddObjectToByteList(ValueType, Data);
-            Helpers.AddObjectToByteList(Value, Data);
+            Helpers.AddObjectToByteList(Value.Vartype, Data);
+            Helpers.AddObjectToByteList(Value.Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);

@@ -125,46 +125,72 @@ namespace NPC_Maker.Scripts
             return (Int32)(32768.0f / 180.0f) * Degrees;
         }
 
-        public static void GetXYZRot(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
-                                    ref object XRot, ref object YRot, ref object ZRot, int Min, int Max)
+        public static void GetXYZ(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref ScriptVarVal X, ref ScriptVarVal Y, ref ScriptVarVal Z, int Min, int Max)
         {
-            XRot = ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Min, Max);
-            YRot = ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Min, Max);
-            ZRot = ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Min, Max);
+            X = GetScriptVarVal(SplitLine, XIndex, Min, Max);
+            Y = GetScriptVarVal(SplitLine, YIndex, Min, Max);
+            Z = GetScriptVarVal(SplitLine, ZIndex, Min, Max);
         }
 
-        public static void GetXYZPos(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref byte XVarT, ref byte YVarT, ref byte ZVarT,
-                            ref object XPos, ref object YPos, ref object ZPos)
+        public static void GetXYZPos(string[] SplitLine, int XIndex, int YIndex, int ZIndex, ref ScriptVarVal XPos, ref ScriptVarVal YPos, ref ScriptVarVal ZPos)
         {
-            XPos = ScriptHelpers.GetValueByType(SplitLine, XIndex, XVarT = ScriptHelpers.GetVarType(SplitLine, XIndex), Int32.MinValue, Int32.MaxValue);
-            YPos = ScriptHelpers.GetValueByType(SplitLine, YIndex, YVarT = ScriptHelpers.GetVarType(SplitLine, YIndex), Int32.MinValue, Int32.MaxValue);
-            ZPos = ScriptHelpers.GetValueByType(SplitLine, ZIndex, ZVarT = ScriptHelpers.GetVarType(SplitLine, ZIndex), Int32.MinValue, Int32.MaxValue);
+            XPos = GetScriptVarVal(SplitLine, XIndex, float.MinValue, float.MaxValue);
+            YPos = GetScriptVarVal(SplitLine, YIndex, float.MinValue, float.MaxValue);
+            ZPos = GetScriptVarVal(SplitLine, ZIndex, float.MinValue, float.MaxValue);
         }
 
-        public static void GetRGBA(string[] SplitLine, int StartIndex, ref object[] Output, ref byte[] TypeOutPut)
+        public static void GetRGBorRGBA(string[] SplitLine, int StartIndex, ref ScriptVarVal R, ref ScriptVarVal G, ref ScriptVarVal B, ref ScriptVarVal A)
         {
-            Output = new object[] { 0, 0, 0, 0 };
-            TypeOutPut = new byte[] { 0, 0, 0, 0 };
+            R = ScriptHelpers.GetScriptVarVal(SplitLine, StartIndex + 0, 0, 255);
+            G = ScriptHelpers.GetScriptVarVal(SplitLine, StartIndex + 1, 0, 255);
+            B = ScriptHelpers.GetScriptVarVal(SplitLine, StartIndex + 2, 0, 255);
 
-            TypeOutPut[0] = GetVarType(SplitLine, StartIndex);
-            TypeOutPut[1] = GetVarType(SplitLine, StartIndex + 1);
-            TypeOutPut[2] = GetVarType(SplitLine, StartIndex + 2);
-            TypeOutPut[3] = GetVarType(SplitLine, StartIndex + 3);
-
-            Output[0] = ScriptHelpers.GetValueByType(SplitLine, StartIndex, TypeOutPut[0], 0, 255);
-            Output[1] = ScriptHelpers.GetValueByType(SplitLine, StartIndex + 1, TypeOutPut[1], 0, 255);
-            Output[2] = ScriptHelpers.GetValueByType(SplitLine, StartIndex + 2, TypeOutPut[2], 0, 255);
-            Output[3] = ScriptHelpers.GetValueByType(SplitLine, StartIndex + 3, TypeOutPut[3], 0, 255);
+            if (A != null)
+                A = ScriptHelpers.GetScriptVarVal(SplitLine, StartIndex + 3, 0, 255);
         }
 
         public static ScriptVarVal GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max)
         {
-            ScriptVarVal outv = new ScriptVarVal(0, 0);
+            ScriptVarVal outv = new ScriptVarVal();
 
             outv.Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
             outv.Value = ScriptHelpers.GetValueByType(SplitLine, Index, outv.Vartype, Min, Max);
 
             return outv;
+        }
+
+        public static void GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max, ref object Value, ref byte Type)
+        {
+            Type = ScriptHelpers.GetVarType(SplitLine, Index);
+            Value = ScriptHelpers.GetValueByType(SplitLine, Index, Type, Min, Max);
+        }
+
+        public static void GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max, ref ScriptVarVal scv)
+        {
+            scv.Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
+            scv.Value = ScriptHelpers.GetValueByType(SplitLine, Index, scv.Vartype, Min, Max);
+        }
+
+        public static ScriptVarVal GetScriptVarVal(string[] SplitLine, int Index, Type EnumType, ParseException Throw)
+        {
+            ScriptVarVal outv = new ScriptVarVal();
+
+            outv.Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
+            outv.Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, Index, outv.Vartype, EnumType, Throw);
+
+            return outv;
+        }
+
+        public static void GetScriptVarVal(string[] SplitLine, int Index, Type EnumType, ParseException Throw, ref object Value, ref byte Type)
+        {
+            Type = ScriptHelpers.GetVarType(SplitLine, Index);
+            Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, Index, Type, EnumType, Throw);
+        }
+
+        public static void GetScriptVarVal(string[] SplitLine, int Index, Type EnumType, ParseException Throw, ref ScriptVarVal scv)
+        {
+            scv.Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
+            scv.Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, Index, scv.Vartype, EnumType, Throw);
         }
 
         public static float GetNormalVar(string[] SplitLine, int Index, float Min, float Max)
@@ -183,11 +209,6 @@ namespace NPC_Maker.Scripts
             }
             else
                 return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
-        }
-
-        public static void GetScale(string[] SplitLine, int Index, ref byte ScaleVarT, ref object Scale)
-        {
-            Scale = ScriptHelpers.GetValueByType(SplitLine, Index, ScaleVarT = ScriptHelpers.GetVarType(SplitLine, Index), float.MinValue, float.MaxValue);
         }
 
         public static object GetValueByType(string[] SplitLine, int Index, int VarType, float Min, float Max)
@@ -232,17 +253,8 @@ namespace NPC_Maker.Scripts
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 1, Lists.Num_User_Vars));
                     }
                 default:
-                    {
-                        return GetNormalVar(SplitLine, Index, Min, Max);
-                    }
-
+                        return (float)GetNormalVar(SplitLine, Index, Min, Max);
             }
-        }
-
-        public static void GetVarTypeAndValue(string[] SplitLine, int Index, float Min, float Max, out byte Vartype, out object Value)
-        {
-            Vartype = GetVarType(SplitLine, Index);
-            Value = GetValueByType(SplitLine, Index, Vartype, Min, Max);
         }
 
         public static byte? GetSubIDForRamType(string RamType)
@@ -286,11 +298,10 @@ namespace NPC_Maker.Scripts
         {
             string Type = SplitLine[Index].ToUpper().Split('.')[0];
 
-            if (Enum.IsDefined(typeof(Lists.VarTypes), Type))
+            if (SplitLine[Index].Contains(".") && Enum.IsDefined(typeof(Lists.VarTypes), Type))
                 return (byte)(int)Enum.Parse(typeof(Lists.VarTypes), Type);
             else
                 return (byte)Lists.VarTypes.NORMAL;
-
         }
 
         public static bool IsHex(string Number)
@@ -356,49 +367,51 @@ namespace NPC_Maker.Scripts
                 return (float)(1 + Int16.MaxValue + Messages.IndexOf(Mes));
         }
 
-        public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref object TextID_Adult, ref object TextID_Child, ref byte VarTAdult, ref byte VarTChild, List<MessageEntry> Messages, int Index = 1)
+        public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref ScriptVarVal TextID_Adult, ref ScriptVarVal TextID_Child, List<MessageEntry> Messages, int Index = 1)
         {
             ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
 
-            TextID_Adult = GetNPCMakerEmbeddedTextID(SplitLine[Index], Messages);
-            VarTAdult = 0;
+            TextID_Adult = new ScriptVarVal();
+            TextID_Child = new ScriptVarVal();
 
-            if ((float)TextID_Adult < 0)
-            {
-                VarTAdult = ScriptHelpers.GetVarType(SplitLine, 1);
-                TextID_Adult = ScriptHelpers.GetValueByType(SplitLine, 1, VarTAdult, 0, UInt16.MaxValue);
-            }
+            TextID_Adult.Value = (float)GetNPCMakerEmbeddedTextID(SplitLine[Index], Messages);
+            TextID_Adult.Vartype = 0;
+
+            if ((float)TextID_Adult.Value < 0)
+                ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt16.MaxValue, ref TextID_Adult);
 
             if (SplitLine.Count() == 3)
             {
-                TextID_Child = GetNPCMakerEmbeddedTextID(SplitLine[2], Messages);
-                VarTChild = 0;
+                TextID_Child.Value = (float)GetNPCMakerEmbeddedTextID(SplitLine[2], Messages);
+                TextID_Child.Vartype = 0;
 
-                if ((float)TextID_Child < 0)
-                {
-                    VarTChild = ScriptHelpers.GetVarType(SplitLine, 2);
-                    TextID_Child = ScriptHelpers.GetValueByType(SplitLine, 2, VarTChild, 0, UInt16.MaxValue);
-                }
+                if ((float)TextID_Child.Value < 0)
+                    ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue, ref TextID_Child);
             }
             else
             {
-                VarTChild = VarTAdult;
-                TextID_Child = TextID_Adult;
+                TextID_Child.Vartype = TextID_Adult.Vartype;
+                TextID_Child.Value = TextID_Adult.Value;
             }
         }
 
-        private static object Helper_GetValFromDict(string[] SplitLine, int Index, int VarType, int RangeMin, int RangeMax,
+        private static ScriptVarVal Helper_GetValFromDict(string[] SplitLine, int Index, int RangeMin, int RangeMax,
                                                    Dictionary<string, int> Dict, ParseException ToThrow)
         {
+            ScriptVarVal outV = new ScriptVarVal();
+            outV.Vartype = GetVarType(SplitLine, Index);
+
             try
             {
-                return (float)Convert.ToDecimal(Dict[SplitLine[Index].ToUpper()]);
+                outV.Value = (float)Convert.ToDecimal(Dict[SplitLine[Index].ToUpper()]);
+                return outV;
             }
             catch (Exception)
             {
                 try
                 {
-                    return GetValueByType(SplitLine, Index, VarType, RangeMin, RangeMax);
+                    outV.Value = (float)GetValueByType(SplitLine, Index, outV.Vartype, RangeMin, RangeMax);
+                    return outV;
                 }
                 catch (Exception)
                 {
@@ -407,46 +420,50 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static object Helper_GetActorId(string[] SplitLine, int Index, int VarType)
+        public static ScriptVarVal Helper_GetActorId(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, VarType, 0, UInt16.MaxValue, Dicts.Actors, ParseException.UnrecognizedActor(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, 0, UInt16.MaxValue, Dicts.Actors, ParseException.UnrecognizedActor(SplitLine));
         }
 
-        public static object Helper_GetSFXId(string[] SplitLine, int Index, int VarType)
+        public static ScriptVarVal Helper_GetSFXId(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, VarType, -1, Int16.MaxValue, Dicts.SFXes, ParseException.UnrecognizedSFX(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, -1, Int16.MaxValue, Dicts.SFXes, ParseException.UnrecognizedSFX(SplitLine));
         }
 
-        public static object Helper_GetMusicId(string[] SplitLine, int Index, int VarType)
+        public static ScriptVarVal Helper_GetMusicId(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, VarType, -1, Int16.MaxValue, Dicts.Music, ParseException.UnrecognizedBGM(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, -1, Int16.MaxValue, Dicts.Music, ParseException.UnrecognizedBGM(SplitLine));
         }
 
-        public static object Helper_GetLinkAnimation(string[] SplitLine, int Index, int VarType)
+        public static ScriptVarVal Helper_GetLinkAnimation(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, VarType, 0, Int16.MaxValue, Dicts.LinkAnims, ParseException.UnrecognizedLinkAnim(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, 0, Int16.MaxValue, Dicts.LinkAnims, ParseException.UnrecognizedLinkAnim(SplitLine));
         }
 
-        private static object Helper_GetFromStringList(string[] SplitLine, int Index, byte VarType, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow)
+        private static ScriptVarVal Helper_GetFromStringList(string[] SplitLine, int Index, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow, int? VarTypeOverride = null)
         {
-            float? Ret = null;
+            ScriptVarVal outV = new ScriptVarVal();
+            bool found = false;
+            outV.Vartype = VarTypeOverride == null ? GetVarType(SplitLine, Index) : (byte)VarTypeOverride;
 
             for (int i = 0; i < SList.Count; i++)
             {
                 if (SplitLine[Index].ToLower() == SList[i].Replace(" ", "").ToLower())
                 {
-                    Ret = (float)i;
+                    outV.Value = (float)i;
+                    found = true;
                     break;
                 }
             }
 
-            if (Ret != null)
-                return (float)Ret;
+            if (found)
+                return outV;
             else
             {
                 try
                 {
-                    return GetValueByType(SplitLine, Index, VarType, RangeMin, RangeMax);
+                    outV.Value = (float)GetValueByType(SplitLine, Index, outV.Vartype, RangeMin, RangeMax);
+                    return outV;
                 }
                 catch (Exception)
                 {
@@ -455,19 +472,19 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static object Helper_GetAnimationID(string[] SplitLine, int Index, byte VarType, List<AnimationEntry> Animations)
+        public static ScriptVarVal Helper_GetAnimationID(string[] SplitLine, int Index, List<AnimationEntry> Animations)
         {
-            return Helper_GetFromStringList(SplitLine, Index, VarType, Animations.Select(x => x.Name).ToList(), 0, Animations.Count, ParseException.UnrecognizedAnimation(SplitLine));
+            return Helper_GetFromStringList(SplitLine, Index, Animations.Select(x => x.Name).ToList(), 0, Animations.Count, ParseException.UnrecognizedAnimation(SplitLine));
         }
 
-        public static object Helper_GetSegmentDataEntryID(string[] SplitLine, int Index, int Segment, byte VarType, List<List<SegmentEntry>> Textures)
+        public static ScriptVarVal Helper_GetSegmentDataEntryID(string[] SplitLine, int Index, int Segment, List<List<SegmentEntry>> Textures)
         {
-            return Helper_GetFromStringList(SplitLine, Index, VarType, Textures[Segment].Select(x => x.Name).ToList(), 0, Textures.Count, ParseException.UnrecognizedSegmentDataEntry(SplitLine));
+            return Helper_GetFromStringList(SplitLine, Index, Textures[Segment].Select(x => x.Name).ToList(), 0, Textures.Count, ParseException.UnrecognizedSegmentDataEntry(SplitLine), (int)Lists.VarTypes.NORMAL);
         }
 
-        public static object Helper_GetDListID(string[] SplitLine, int Index, byte VarType, List<DListEntry> DLists)
+        public static ScriptVarVal Helper_GetDListID(string[] SplitLine, int Index, List<DListEntry> DLists)
         {
-            return Helper_GetFromStringList(SplitLine, Index, VarType, DLists.Select(x => x.Name).ToList(), 0, DLists.Count, ParseException.UnrecognizedDList(SplitLine));
+            return Helper_GetFromStringList(SplitLine, Index, DLists.Select(x => x.Name).ToList(), 0, DLists.Count, ParseException.UnrecognizedDList(SplitLine));
         }
     }
 }

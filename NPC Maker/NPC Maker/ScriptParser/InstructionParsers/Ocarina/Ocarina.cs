@@ -23,10 +23,9 @@ namespace NPC_Maker.Scripts
                 if (LineNoEnd < 0)
                     throw ParseException.IfNotClosed(SplitLine);
 
-                byte VarTOcarina = ScriptHelpers.GetVarType(SplitLine, 1);
-                object Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 1, VarTOcarina, typeof(Lists.OcarinaSongs), ParseException.UnrecognizedOcarinaSong(SplitLine));
+                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 1, typeof(Lists.OcarinaSongs), ParseException.UnrecognizedOcarinaSong(SplitLine));
 
-                Instructions.Add(new InstructionOcarina((int)Lists.Instructions.OCARINA, Value, VarTOcarina, True, End));
+                Instructions.Add(new InstructionOcarina((int)Lists.Instructions.OCARINA, Value.Value, Value.Vartype, True, End));
                 Instructions.Add(new InstructionLabel(True));
                 Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(LineNoEnd - LineNo - 1).ToList()));
                 Instructions.Add(new InstructionLabel(End));

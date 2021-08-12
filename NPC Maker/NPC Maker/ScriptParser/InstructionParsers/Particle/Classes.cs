@@ -6,58 +6,36 @@ namespace NPC_Maker.Scripts
     public class InstructionParticle : Instruction
     {
         public byte Type { get; set; }
-
         public byte PosType { get; set; }
 
-        public object PosX { get; set; }
-        public object PosY { get; set; }
-        public object PosZ { get; set; }
-        public byte PosXT { get; set; }
-        public byte PosYT { get; set; }
-        public byte PosZT { get; set; }
+        public ScriptVarVal PosX { get; set; }
+        public ScriptVarVal PosY { get; set; }
+        public ScriptVarVal PosZ { get; set; }
 
-        public object AccelX { get; set; }
-        public object AccelY { get; set; }
-        public object AccelZ { get; set; }
-        public byte AccelXT { get; set; }
-        public byte AccelYT { get; set; }
-        public byte AccelZT { get; set; }
+        public ScriptVarVal AccelX { get; set; }
+        public ScriptVarVal AccelY { get; set; }
+        public ScriptVarVal AccelZ { get; set; }
 
-        public object VelX { get; set; }
-        public object VelY { get; set; }
-        public object VelZ { get; set; }
-        public byte VelXT { get; set; }
-        public byte VelYT { get; set; }
-        public byte VelZT { get; set; }
+        public ScriptVarVal VelX { get; set; }
+        public ScriptVarVal VelY { get; set; }
+        public ScriptVarVal VelZ { get; set; }
 
-        public object[] PrimRGBA { get; set; }
-        public byte[] PrimRGBAVarT { get; set; }
-        public object[] SecRGBA { get; set; }
-        public byte[] SecRGBAVarT { get; set; }
+        public ScriptVarVal PrimR { get; set; }
+        public ScriptVarVal PrimG { get; set; }
+        public ScriptVarVal PrimB { get; set; }
+        public ScriptVarVal PrimA { get; set; }
 
-        public object Scale { get; set; }
-        public byte ScaleT { get; set; }
+        public ScriptVarVal SecR { get; set; }
+        public ScriptVarVal SecG { get; set; }
+        public ScriptVarVal SecB { get; set; }
+        public ScriptVarVal SecA { get; set; }
 
-        public object ScaleUpdate { get; set; }
-        public byte ScaleUpdateT { get; set; }
-
-        public object RadiusUpdateD { get; set; }
-        public byte RadiusUpdateDT { get; set; }
-
-        public object Life { get; set; }
-        public byte LifeT { get; set; }
-
-        public object Var { get; set; }
-        public byte VarT { get; set; }
-
-        public object Yaw { get; set; }
-        public byte YawT { get; set; }
-
-        public byte ObjectT { get; set; }
-        public object Object { get; set; }
-
-        public object DListIndex { get; set; }
-        public byte DListIndexT { get; set; }
+        public ScriptVarVal Scale { get; set; }
+        public ScriptVarVal ScaleUpdate { get; set; }
+        public ScriptVarVal Life { get; set; }
+        public ScriptVarVal Var { get; set; }
+        public ScriptVarVal Yaw { get; set; }
+        public ScriptVarVal DListIndex { get; set; }
 
         public InstructionLabel LabelJumpIfFound { get; set; }
 
@@ -75,48 +53,47 @@ namespace NPC_Maker.Scripts
 
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, LabelJumpIfFound, ref Data);
 
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(LifeT, VarT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(YawT, DListIndexT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosXT, PosYT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosZT, AccelXT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(AccelYT, AccelZT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelXT, VelYT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelZT, PosType, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ScaleT, ScaleUpdateT, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimRGBAVarT[0], PrimRGBAVarT[1], 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimRGBAVarT[2], PrimRGBAVarT[3], 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SecRGBAVarT[0], SecRGBAVarT[1], 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SecRGBAVarT[2], SecRGBAVarT[3], 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Life.Vartype, Var.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Yaw.Vartype, DListIndex.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosX.Vartype, PosY.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PosZ.Vartype, AccelX.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(AccelY.Vartype, AccelZ.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelX.Vartype, VelY.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(VelZ.Vartype, PosType, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Scale.Vartype, ScaleUpdate.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimR.Vartype, PrimG.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(PrimB.Vartype, PrimA.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SecR.Vartype, SecG.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SecB.Vartype, SecA.Vartype, 4), Data);
 
             Helpers.Ensure4ByteAlign(Data);
 
-            Helpers.AddObjectToByteList(PosX, Data);
-            Helpers.AddObjectToByteList(PosY, Data);
-            Helpers.AddObjectToByteList(PosZ, Data);
-            Helpers.AddObjectToByteList(AccelX, Data);
-            Helpers.AddObjectToByteList(AccelY, Data);
-            Helpers.AddObjectToByteList(AccelZ, Data);
-            Helpers.AddObjectToByteList(VelX, Data);
-            Helpers.AddObjectToByteList(VelY, Data);
-            Helpers.AddObjectToByteList(VelZ, Data);
+            Helpers.AddObjectToByteList(PosX.Value, Data);
+            Helpers.AddObjectToByteList(PosY.Value, Data);
+            Helpers.AddObjectToByteList(PosZ.Value, Data);
+            Helpers.AddObjectToByteList(AccelX.Value, Data);
+            Helpers.AddObjectToByteList(AccelY.Value, Data);
+            Helpers.AddObjectToByteList(AccelZ.Value, Data);
+            Helpers.AddObjectToByteList(VelX.Value, Data);
+            Helpers.AddObjectToByteList(VelY.Value, Data);
+            Helpers.AddObjectToByteList(VelZ.Value, Data);
 
-            Helpers.AddObjectToByteList(PrimRGBA[0], Data);
-            Helpers.AddObjectToByteList(PrimRGBA[1], Data);
-            Helpers.AddObjectToByteList(PrimRGBA[2], Data);
-            Helpers.AddObjectToByteList(PrimRGBA[3], Data);
-            Helpers.AddObjectToByteList(SecRGBA[0], Data);
-            Helpers.AddObjectToByteList(SecRGBA[1], Data);
-            Helpers.AddObjectToByteList(SecRGBA[2], Data);
-            Helpers.AddObjectToByteList(SecRGBA[3], Data);
+            Helpers.AddObjectToByteList(PrimR.Value, Data);
+            Helpers.AddObjectToByteList(PrimG.Value, Data);
+            Helpers.AddObjectToByteList(PrimB.Value, Data);
+            Helpers.AddObjectToByteList(PrimA.Value, Data);
+            Helpers.AddObjectToByteList(SecR.Value, Data);
+            Helpers.AddObjectToByteList(SecG.Value, Data);
+            Helpers.AddObjectToByteList(SecB.Value, Data);
+            Helpers.AddObjectToByteList(SecA.Value, Data);
 
-            Helpers.AddObjectToByteList(Scale, Data);
-            Helpers.AddObjectToByteList(ScaleUpdate, Data);
+            Helpers.AddObjectToByteList(Scale.Value, Data);
+            Helpers.AddObjectToByteList(ScaleUpdate.Value, Data);
 
-            Helpers.AddObjectToByteList(Life, Data);
-            Helpers.AddObjectToByteList(Var, Data);
-            Helpers.AddObjectToByteList(Yaw, Data);
-            Helpers.AddObjectToByteList(DListIndex, Data);
-
+            Helpers.AddObjectToByteList(Life.Value, Data);
+            Helpers.AddObjectToByteList(Var.Value, Data);
+            Helpers.AddObjectToByteList(Yaw.Value, Data);
+            Helpers.AddObjectToByteList(DListIndex.Value, Data);
 
             Helpers.Ensure4ByteAlign(Data);
 

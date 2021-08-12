@@ -17,21 +17,17 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.ItemSubTypes.AWARD:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 2, typeof(Lists.AwardItems), ParseException.UnrecognizedAwardItem(SplitLine));
 
-                                byte ValueType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, ValueType, typeof(Lists.AwardItems), ParseException.UnrecognizedAwardItem(SplitLine));
-
-                                return new InstructionItem((byte)Lists.Instructions.ITEM, Convert.ToByte(SubID), Value, ValueType);
+                                return new InstructionItem((byte)Lists.Instructions.ITEM, Convert.ToByte(SubID), Value);
                             }
                         case (int)Lists.ItemSubTypes.GIVE:
                         case (int)Lists.ItemSubTypes.TAKE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 2, typeof(Lists.Items), ParseException.UnrecognizedInventoryItem(SplitLine));
 
-                                byte ValueType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, ValueType, typeof(Lists.Items), ParseException.UnrecognizedInventoryItem(SplitLine));
-
-                                return new InstructionItem((byte)Lists.Instructions.ITEM, Convert.ToByte(SubID), Value, ValueType);
+                                return new InstructionItem((byte)Lists.Instructions.ITEM, Convert.ToByte(SubID), Value);
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -40,7 +36,7 @@ namespace NPC_Maker.Scripts
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionItem((byte)Lists.Instructions.ITEM, (byte)SubID, 0, 0);
+                    return new InstructionNop();
                 }
             }
             catch (Exception)

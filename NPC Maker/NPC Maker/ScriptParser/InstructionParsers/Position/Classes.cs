@@ -4,37 +4,26 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionPosition : InstructionSub
     {
-        public object ActorID;
-        public object X;
-        public object Y;
-        public object Z;
-        public byte XType;
-        public byte YType;
-        public byte ZType;
-        public byte ActorIDT;
-        public byte Target;
+        ScriptVarVal X { get; set; }
+        ScriptVarVal Y { get; set; }
+        ScriptVarVal Z { get; set; }
+        ScriptVarVal ActorID { get; set; }
+        ScriptVarVal Speed { get; set; }
 
-        public object Speed;
-        public byte SpeedT;
+        public byte Target;
         public byte IgnoreY;
 
-        public InstructionPosition(byte _SubID, object _ActorID, byte _ActorIDT, object _XPos, object _YPos, object _ZPos,
-                                   byte _XPosValueType, byte _YPosValueType, byte _ZPosValueType, byte _Target, object _Speed, byte _SpeedT, byte _IgnoreY)
+        public InstructionPosition(byte _SubID, byte _Target, byte _IgnoreY, ScriptVarVal _ActorID, ScriptVarVal _XPos, ScriptVarVal _YPos, ScriptVarVal _ZPos, ScriptVarVal _Speed)
                                 : base((int)Lists.Instructions.POSITION, _SubID)
         {
             ActorID = _ActorID;
-            ActorIDT = _ActorIDT;
 
             X = _XPos;
             Y = _YPos;
             Z = _ZPos;
-            XType = _XPosValueType;
-            YType = _YPosValueType;
-            ZType = _ZPosValueType;
             Target = _Target;
 
             Speed = _Speed;
-            SpeedT = _SpeedT;
             IgnoreY = _IgnoreY;
         }
 
@@ -43,18 +32,18 @@ namespace NPC_Maker.Scripts
             List<byte> Data = new List<byte>();
 
             Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SubID, SpeedT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SubID, Speed.Vartype, 4), Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(IgnoreY, Target, 4), Data);
-            Helpers.AddObjectToByteList(ActorIDT, Data);
+            Helpers.AddObjectToByteList(ActorID.Vartype, Data);
 
-            Helpers.AddObjectToByteList(X, Data);
-            Helpers.AddObjectToByteList(Y, Data);
-            Helpers.AddObjectToByteList(Z, Data);
-            Helpers.AddObjectToByteList(ActorID, Data);
-            Helpers.AddObjectToByteList(Speed, Data);
+            Helpers.AddObjectToByteList(X.Value, Data);
+            Helpers.AddObjectToByteList(Y.Value, Data);
+            Helpers.AddObjectToByteList(Z.Value, Data);
+            Helpers.AddObjectToByteList(ActorID.Value, Data);
+            Helpers.AddObjectToByteList(Speed.Value, Data);
 
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(XType, YType, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(ZType, 0, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(X.Vartype, Y.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Z.Vartype, 0, 4), Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 28);

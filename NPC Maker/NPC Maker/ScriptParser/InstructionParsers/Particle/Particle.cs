@@ -18,49 +18,34 @@ namespace NPC_Maker.Scripts
 
                 byte PosType = 0;
 
-                object PosX = (float)0;
-                object PosY = (float)0;
-                object PosZ = (float)0;
-                byte PosXT = 0;
-                byte PosYT = 0;
-                byte PosZT = 0;
+                ScriptVarVal PosX = new ScriptVarVal();
+                ScriptVarVal PosY = new ScriptVarVal();
+                ScriptVarVal PosZ = new ScriptVarVal();
 
-                object AccelX = (float)0;
-                object AccelY = (float)0;
-                object AccelZ = (float)0;
-                byte AccelXT = 0;
-                byte AccelYT = 0;
-                byte AccelZT = 0;
+                ScriptVarVal AccelX = new ScriptVarVal();
+                ScriptVarVal AccelY = new ScriptVarVal();
+                ScriptVarVal AccelZ = new ScriptVarVal();
 
-                object VelX = (float)0;
-                object VelY = (float)0;
-                object VelZ = (float)0;
-                byte VelXT = 0;
-                byte VelYT = 0;
-                byte VelZT = 0;
+                ScriptVarVal VelX = new ScriptVarVal();
+                ScriptVarVal VelY = new ScriptVarVal();
+                ScriptVarVal VelZ = new ScriptVarVal();
 
-                object[] PrimRGBA = new object[] { (float)0, (float)0, (float)0, (float)0 };
-                byte[] PrimRGBAVarT = new byte[] { 0, 0, 0, 0 };
-                object[] SecRGBA = new object[] { (float)0, (float)0, (float)0, (float)0 };
-                byte[] SecRGBAVarT = new byte[] { 0, 0, 0, 0 };
+                ScriptVarVal PrimR = new ScriptVarVal();
+                ScriptVarVal PrimG = new ScriptVarVal();
+                ScriptVarVal PrimB = new ScriptVarVal();
+                ScriptVarVal PrimA = new ScriptVarVal();
 
-                object Scale = (float)0;
-                byte ScaleT = 0;
+                ScriptVarVal SecR = new ScriptVarVal();
+                ScriptVarVal SecG = new ScriptVarVal();
+                ScriptVarVal SecB = new ScriptVarVal();
+                ScriptVarVal SecA = new ScriptVarVal();
 
-                object ScaleUpdate = (float)0;
-                byte ScaleUpdateT = 0;
-
-                object Life = (float)0;
-                byte LifeT = 0;
-
-                object Var = (float)0;
-                byte VarT = 0;
-
-                object Yaw = (float)0;
-                byte YawT = 0;
-
-                object DListIndex = (float)-1;
-                byte DListIndexT = 0;
+                ScriptVarVal Scale = new ScriptVarVal();
+                ScriptVarVal ScaleUpdate = new ScriptVarVal();
+                ScriptVarVal Life = new ScriptVarVal();
+                ScriptVarVal Var = new ScriptVarVal();
+                ScriptVarVal Yaw = new ScriptVarVal();
+                ScriptVarVal DListIndex = new ScriptVarVal(-1);
 
                 string LabelJumpIfFound = "__RETURN__";
 
@@ -92,115 +77,103 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
                                 PosType = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
-                                ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosXT, ref PosYT, ref PosZT, ref PosX, ref PosY, ref PosZ);
+                                ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosX, ref PosY, ref PosZ);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.ACCELERATION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
-                                ScriptHelpers.GetXYZPos(Split, 1, 2, 3, ref AccelXT, ref AccelYT, ref AccelZT, ref AccelX, ref AccelY, ref AccelZ);
+                                ScriptHelpers.GetXYZPos(Split, 1, 2, 3, ref AccelX, ref AccelY, ref AccelZ);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.VELOCITY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
-                                ScriptHelpers.GetXYZPos(Split, 1, 2, 3, ref VelXT, ref VelYT, ref VelZT, ref VelX, ref VelY, ref VelZ);
+                                ScriptHelpers.GetXYZPos(Split, 1, 2, 3, ref VelX, ref VelY, ref VelZ);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.COLOR1:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
-                                ScriptHelpers.GetRGBA(Split, 1, ref PrimRGBA, ref PrimRGBAVarT);
+                                ScriptHelpers.GetRGBorRGBA(Split, 1, ref PrimR, ref PrimG, ref PrimB, ref PrimA);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.COLOR2:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
-                                ScriptHelpers.GetRGBA(Split, 1, ref SecRGBA, ref SecRGBAVarT);
+                                ScriptHelpers.GetRGBorRGBA(Split, 1, ref SecR, ref SecG, ref SecB, ref SecA);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SCALE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                ScaleT = ScriptHelpers.GetVarType(Split, 1);
-                                Scale = ScriptHelpers.GetValueByType(Split, 1, ScaleT, Int16.MinValue, Int16.MaxValue);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, Int16.MinValue, Int16.MaxValue, ref Scale);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SCALE_UPDATE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                ScaleUpdateT = ScriptHelpers.GetVarType(Split, 1);
-                                ScaleUpdate = ScriptHelpers.GetValueByType(Split, 1, ScaleUpdateT, Int16.MinValue, Int16.MaxValue);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, Int16.MinValue, Int16.MaxValue, ref ScaleUpdate);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SCALE_UPDATE_DOWN:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                VarT = ScriptHelpers.GetVarType(Split, 1);
-                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, Int16.MinValue, Int16.MaxValue);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, Int16.MinValue, Int16.MaxValue, ref Var);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.OPACITY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                VarT = ScriptHelpers.GetVarType(Split, 1);
-                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, byte.MaxValue);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, 0, byte.MaxValue, ref Var);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.RANDOMIZE_XZ:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                VarT = ScriptHelpers.GetVarType(Split, 1);
-                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 1);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, 0, 1, ref Var);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SCORE_AMOUNT:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                VarT = ScriptHelpers.GetVarType(Split, 1);
-                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 3);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, 0, 3, ref Var);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.COUNT:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                VarT = ScriptHelpers.GetVarType(Split, 1);
-                                Var = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, UInt16.MaxValue);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, 0, UInt16.MaxValue, ref Var);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.LIGHTPOINT_COLOR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                VarT = ScriptHelpers.GetVarType(Split, 1);
-                                Var = ScriptHelpers.Helper_GetEnumByNameOrVarType(Split, 1, VarT, typeof(Lists.LightPointColors), ParseException.UnrecognizedParticle(Split));
+                                ScriptHelpers.GetScriptVarVal(Split, 1, typeof(Lists.LightPointColors), ParseException.UnrecognizedParameter(Split), ref Var);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.FADE_DELAY:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                PrimRGBAVarT[0] = ScriptHelpers.GetVarType(Split, 1);
-                                PrimRGBA[0] = ScriptHelpers.GetValueByType(Split, 1, VarT, 0, 255);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, 0, byte.MaxValue, ref PrimR);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.DURATION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                LifeT = ScriptHelpers.GetVarType(Split, 1);
-                                Life = ScriptHelpers.GetValueByType(Split, 1, LifeT, 0, Int16.MaxValue);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, 0, Int16.MaxValue, ref Life);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.YAW:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                YawT = ScriptHelpers.GetVarType(Split, 1);
-                                Yaw = ScriptHelpers.GetValueByType(Split, 1, YawT, 0, UInt16.MaxValue);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, 0, Int16.MaxValue, ref Yaw);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.DLIST:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-                                DListIndexT = ScriptHelpers.GetVarType(Split, 1);
-                                DListIndex = ScriptHelpers.Helper_GetDListID(Split, 1, DListIndexT, Entry.ExtraDisplayLists);
+                                DListIndex = ScriptHelpers.Helper_GetDListID(Split, 1, Entry.ExtraDisplayLists);
                                 continue;
                             }
                         case (int)Lists.ParticleSubOptions.SPOTTED:
@@ -222,37 +195,26 @@ namespace NPC_Maker.Scripts
                     PosX = PosX,
                     PosY = PosY,
                     PosZ = PosZ,
-                    PosXT = PosXT,
-                    PosYT = PosYT,
-                    PosZT = PosZT,
                     AccelX = AccelX,
                     AccelY = AccelY,
                     AccelZ = AccelZ,
-                    AccelXT = AccelXT,
-                    AccelYT = AccelYT,
-                    AccelZT = AccelZT,
                     VelX = VelX,
                     VelY = VelY,
                     VelZ = VelZ,
-                    VelXT = VelXT,
-                    VelYT = VelYT,
-                    VelZT = VelZT,
-                    PrimRGBA = PrimRGBA,
-                    PrimRGBAVarT = PrimRGBAVarT,
-                    SecRGBA = SecRGBA,
-                    SecRGBAVarT = SecRGBAVarT,
+                    PrimR = PrimR,
+                    PrimG = PrimG,
+                    PrimB = PrimB,
+                    PrimA = PrimA,
+                    SecR = SecR,
+                    SecG = SecG,
+                    SecB = SecB,
+                    SecA = SecA,
                     Scale = Scale,
-                    ScaleT = ScaleT,
                     ScaleUpdate = ScaleUpdate,
-                    ScaleUpdateT = ScaleUpdateT,
                     Life = Life,
-                    LifeT = LifeT,
                     Var = Var,
-                    VarT = VarT,
                     Yaw = Yaw,
-                    YawT = YawT,
                     DListIndex = DListIndex,
-                    DListIndexT = DListIndexT,
                     LabelJumpIfFound = new InstructionLabel(LabelJumpIfFound)
                 };
             }

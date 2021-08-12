@@ -2705,10 +2705,10 @@
             this.Combo_MovementType.FormattingEnabled = true;
             this.Combo_MovementType.Items.AddRange(new object[] {
             "None",
-            "Walk randomly",
-            "Follow Link",
-            "Run away from Link",
-            "Follow path",
+            "Roaming",
+            "Following",
+            "Running away",
+            "Following path",
             "Timed path"});
             this.Combo_MovementType.Location = new System.Drawing.Point(8, 27);
             this.Combo_MovementType.Name = "Combo_MovementType";
@@ -2859,7 +2859,6 @@
             this.MsgText.CharWidth = 8;
             this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgText.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.MsgText.IsReplaceMode = false;
             this.MsgText.Location = new System.Drawing.Point(260, 98);
             this.MsgText.Name = "MsgText";

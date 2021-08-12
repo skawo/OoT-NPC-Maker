@@ -10,19 +10,17 @@ namespace NPC_Maker.Scripts
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
-                object TextID_Adult = 0;
-                object TextID_Child = 0;
-                byte TextIDAdultT = 0;
-                byte TextIDChildT = 0;
+                ScriptVarVal TextID_Adult = new ScriptVarVal();
+                ScriptVarVal TextID_Child = new ScriptVarVal();
 
-                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT, Entry.Messages);
+                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, Entry.Messages);
 
-                return new InstructionTextbox((int)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child, TextIDAdultT, TextIDChildT);
+                return new InstructionTextbox((int)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionTextbox((int)Lists.Instructions.ENABLE_TALKING, 0, 0, 0, 0);
+                return new InstructionNop();
             }
             catch (Exception)
             {

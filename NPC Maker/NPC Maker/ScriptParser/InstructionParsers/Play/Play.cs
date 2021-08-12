@@ -19,34 +19,27 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-
-                                object SNDID = 0;
-
-                                SNDID = (SubID == (int)Lists.PlaySubTypes.SFX) ?
-                                                       ScriptHelpers.Helper_GetSFXId(SplitLine, 2, VarType)
+                                ScriptVarVal SND = (SubID == (int)Lists.PlaySubTypes.SFX) ?
+                                                       ScriptHelpers.Helper_GetSFXId(SplitLine, 2)
                                                                                :
-                                                       ScriptHelpers.Helper_GetMusicId(SplitLine, 2, VarType);
+                                                       ScriptHelpers.Helper_GetMusicId(SplitLine, 2);
 
-                                if (Convert.ToInt32(SNDID) < 0)
+                                if (Convert.ToInt32(SND.Value) < 0)
                                     throw ParseException.ParamOutOfRange(SplitLine);
 
-
-                                return new InstructionPlay((byte)SubID, SNDID, VarType);
+                                return new InstructionPlay((byte)SubID, SND);
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
-                                return new InstructionPlay((byte)SubID, 0, 0);
+                                return new InstructionPlay((byte)SubID, new ScriptVarVal());
                             }
                         case (int)Lists.PlaySubTypes.CUTSCENE_ID:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                var ID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, Int32.MaxValue);
 
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object ID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue);
-
-                                return new InstructionPlay((byte)SubID, ID, VarType);
+                                return new InstructionPlay((byte)SubID, ID);
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -55,7 +48,7 @@ namespace NPC_Maker.Scripts
                 catch (ParseException pEx)
                 {
                     outScript.ParseErrors.Add(pEx);
-                    return new InstructionPlay((int)Lists.Instructions.PLAY, 0, 0);
+                    return new InstructionNop();
                 }
             }
             catch (Exception)

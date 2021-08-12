@@ -37,10 +37,9 @@ namespace NPC_Maker.Scripts
         {
             TradeSetting Correct = null;
             List<TradeSetting> Failure = null;
-            object Talk_TextID_Adult = null;
-            object Talk_TextID_Child = null;
-            byte Talk_TextIDAdultT = 0;
-            byte Talk_TextIDChildT = 0;
+            ScriptVarVal Talk_TextID_Adult = null;
+            ScriptVarVal Talk_TextID_Child = null;
+
             int LineNoEnd = GetCorrespondingEndTrade(Lines, LineNo);
 
             try
@@ -50,8 +49,7 @@ namespace NPC_Maker.Scripts
                 if (LineNoEnd < 0)
                     throw ParseException.TradeNotClosed(SplitLine);
 
-                byte ItemT = ScriptHelpers.GetVarType(SplitLine, 1);
-                object Item = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 1, ItemT, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine));
+                var Item = ScriptHelpers.GetScriptVarVal(SplitLine, 1, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine));
 
                 LineNo++;
                 string[] SplitLTrade = Lines[LineNo].Split(' ');
@@ -65,14 +63,12 @@ namespace NPC_Maker.Scripts
                                 if (Correct != null)
                                     throw ParseException.DuplicateTradeInstruction(Lines[LineNo]);
 
-                                object TextID_Adult = 0;
-                                object TextID_Child = 0;
-                                byte TextIDAdultT = 0;
-                                byte TextIDChildT = 0;
+                                ScriptVarVal TextID_Adult = new ScriptVarVal();
+                                ScriptVarVal TextID_Child = new ScriptVarVal();
 
-                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT, Entry.Messages);
+                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref TextID_Adult, ref TextID_Child, Entry.Messages);
 
-                                Correct = new TradeSetting(Item, TextID_Adult, TextID_Child, ItemT, TextIDAdultT, TextIDChildT);
+                                Correct = new TradeSetting(Item, TextID_Adult, TextID_Child);
 
                                 LineNo++;
 
@@ -85,14 +81,12 @@ namespace NPC_Maker.Scripts
 
                                 if (SplitLTrade.Length != 1)
                                 {
-                                    object TextID_Adult = 0;
-                                    object TextID_Child = 0;
-                                    byte TextIDAdultT = 0;
-                                    byte TextIDChildT = 0;
+                                    ScriptVarVal TextID_Adult = new ScriptVarVal();
+                                    ScriptVarVal TextID_Child = new ScriptVarVal();
 
-                                    ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT, Entry.Messages);
+                                    ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref TextID_Adult, ref TextID_Child, Entry.Messages);
 
-                                    Failure = new List<TradeSetting>() { new TradeSetting(-1, TextID_Adult, TextID_Child, 0, TextIDAdultT, TextIDChildT) };
+                                    Failure = new List<TradeSetting>() { new TradeSetting(new ScriptVarVal(-1), TextID_Adult, TextID_Child) };
                                     LineNo++;
                                 }
                                 else
@@ -105,24 +99,17 @@ namespace NPC_Maker.Scripts
                                         if (Failure == null)
                                             Failure = new List<TradeSetting>();
 
-                                        object TextID_Adult_Fail = 0;
-                                        object TextID_Child_Fail = 0;
+                                        ScriptVarVal TextID_Adult_Fail = new ScriptVarVal();
+                                        ScriptVarVal TextID_Child_Fail = new ScriptVarVal();
 
-                                        byte TextID_Adult_FailT = 0;
-                                        byte TextID_Child_FailT = 0;
-
-                                        object FailItem = (float)-1;
-                                        byte FailItemT = (byte)Lists.VarTypes.NORMAL;
+                                        ScriptVarVal FailItem = new ScriptVarVal(-1);
 
                                         if (SplitTrFailItem[0].ToUpper().Trim() != Lists.Keyword_TradeDefault)
-                                        {
-                                            FailItemT = ScriptHelpers.GetVarType(SplitTrFailItem, 0);
-                                            FailItem = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitTrFailItem, 0, FailItemT, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitTrFailItem));
-                                        }
+                                            FailItem = ScriptHelpers.GetScriptVarVal(SplitTrFailItem, 0, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine));
 
-                                        ScriptHelpers.Helper_GetAdultChildTextIds(SplitTrFailItem, ref TextID_Adult_Fail, ref TextID_Child_Fail, ref TextID_Adult_FailT, ref TextID_Child_FailT, Entry.Messages);
+                                        ScriptHelpers.Helper_GetAdultChildTextIds(SplitTrFailItem, ref TextID_Adult_Fail, ref TextID_Child_Fail, Entry.Messages);
 
-                                        Failure.Add(new TradeSetting(FailItem, TextID_Adult_Fail, TextID_Child_Fail, FailItemT, TextID_Adult_FailT, TextID_Child_FailT));
+                                        Failure.Add(new TradeSetting(FailItem, TextID_Adult_Fail, TextID_Child_Fail));
 
                                         LineNo++;
                                         SplitTrFailItem = Lines[LineNo].Split(' ');
@@ -137,18 +124,7 @@ namespace NPC_Maker.Scripts
                                 if (Talk_TextID_Adult != null)
                                     throw ParseException.DuplicateTradeInstruction(Lines[LineNo]);
 
-                                object tTextID_Adult_Fail = 0;
-                                object tTextID_Child_Fail = 0;
-
-                                byte tTextID_Adult_FailT = 0;
-                                byte tTextID_Child_FailT = 0;
-
-                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref tTextID_Adult_Fail, ref tTextID_Child_Fail, ref tTextID_Adult_FailT, ref tTextID_Child_FailT, Entry.Messages);
-
-                                Talk_TextID_Adult = tTextID_Adult_Fail;
-                                Talk_TextID_Child = tTextID_Child_Fail;
-                                Talk_TextIDAdultT = tTextID_Adult_FailT;
-                                Talk_TextIDChildT = tTextID_Child_FailT;
+                                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLTrade, ref Talk_TextID_Adult, ref Talk_TextID_Child, Entry.Messages);
 
                                 LineNo++;
                                 break;
@@ -168,12 +144,12 @@ namespace NPC_Maker.Scripts
 
                 LineNo = LineNoEnd;
 
-                return new InstructionTrade((byte)Lists.Instructions.TRADE, Correct, Failure.OrderByDescending(x => x.Item).ToList(), Talk_TextID_Adult, Talk_TextID_Child, Talk_TextIDAdultT, Talk_TextIDChildT);
+                return new InstructionTrade((byte)Lists.Instructions.TRADE, Correct, Failure.OrderByDescending(x => x.Item).ToList(), Talk_TextID_Adult, Talk_TextID_Child);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionTrade((int)Lists.Instructions.TRADE, new TradeSetting(-1, 0, 0, 0, 0, 0), new List<TradeSetting>(), 0, 0, 0, 0);
+                return new InstructionNop();
             }
             catch (Exception)
             {

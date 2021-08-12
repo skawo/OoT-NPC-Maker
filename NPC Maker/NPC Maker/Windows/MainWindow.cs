@@ -12,7 +12,6 @@ namespace NPC_Maker
         string OpenedPath = "";
         NPCFile EditedFile = null;
         NPCEntry SelectedEntry = null;
-        NPCEntry CopiedEntry = null;
         int SelectedIndex = -1;
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
 

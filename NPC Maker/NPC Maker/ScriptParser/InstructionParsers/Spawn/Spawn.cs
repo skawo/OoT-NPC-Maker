@@ -14,28 +14,18 @@ namespace NPC_Maker.Scripts
 
                 int End = GetCorrespondingEndSpawn(Lines, LineNo);
 
-                object ActorID = 1;
-                object ActorVar = (float)0;
-                object PosX = (float)0;
-                object PosY = (float)0;
-                object PosZ = (float)0;
-                object RotX = (float)0;
-                object RotY = (float)0;
-                object RotZ = (float)0;
+                ScriptVarVal ActorVar = new ScriptVarVal();
+                ScriptVarVal PosX = new ScriptVarVal();
+                ScriptVarVal PosY = new ScriptVarVal();
+                ScriptVarVal PosZ = new ScriptVarVal();
+
+                ScriptVarVal RotX = new ScriptVarVal();
+                ScriptVarVal RotY = new ScriptVarVal();
+                ScriptVarVal RotZ = new ScriptVarVal();
+
                 byte PosType = 0;
 
-                byte ActorIDVarT = 0;
-                byte ActorVarT = 0;
-                byte PosXT = 0;
-                byte PosYT = 0;
-                byte PosZT = 0;
-                byte RotXT = 0;
-                byte RotYT = 0;
-                byte RotZT = 0;
-
-
-                ActorIDVarT = ScriptHelpers.GetVarType(SplitLine, 1);
-                ActorID = ScriptHelpers.Helper_GetActorId(SplitLine, 1, ActorIDVarT);
+                ScriptVarVal ActorID = ScriptHelpers.Helper_GetActorId(SplitLine, 1);
 
                 List<string> Params = Lines.Skip(LineNo + 1).Take(End - LineNo - 1).ToList();
 
@@ -61,9 +51,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SpawnParams.VARIABLE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
-
-                                ActorVarT = ScriptHelpers.GetVarType(Split, 1);
-                                ActorVar = ScriptHelpers.GetValueByType(Split, 1, ActorVarT, 0, UInt16.MaxValue);
+                                ScriptHelpers.GetScriptVarVal(Split, 1, 0, UInt16.MaxValue, ref ActorVar);
 
                                 continue;
                             }
@@ -72,14 +60,14 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
 
                                 PosType = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
-                                ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosXT, ref PosYT, ref PosZT, ref PosX, ref PosY, ref PosZ);
+                                ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosX, ref PosY, ref PosZ);
 
                                 continue;
                             }
                         case (int)Lists.SpawnParams.ROTATION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
-                                ScriptHelpers.GetXYZRot(Split, 1, 2, 3, ref RotXT, ref RotYT, ref RotZT, ref RotX, ref RotY, ref RotZ, Int16.MinValue, Int16.MaxValue);
+                                ScriptHelpers.GetXYZ(Split, 1, 2, 3, ref RotX, ref RotY, ref RotZ, Int16.MinValue, Int16.MaxValue);
 
                                 continue;
                             }
@@ -88,12 +76,12 @@ namespace NPC_Maker.Scripts
                     }
                 }
 
-                return new InstructionSpawn((byte)PosType, PosX, PosXT, PosY, PosYT, PosZ, PosZT, RotX, RotXT, RotY, RotYT, RotZ, RotZT, ActorID, ActorIDVarT, ActorVar, ActorVarT);
+                return new InstructionSpawn((byte)PosType, PosX, PosY, PosZ, RotX, RotY, RotZ, ActorID, ActorVar);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionSpawn(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                return new InstructionNop();
             }
             catch (Exception)
             {

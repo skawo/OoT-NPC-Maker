@@ -12,26 +12,21 @@ namespace NPC_Maker.Scripts
 
                 int SetSubType = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.TargetActorSubtypes));
 
-                object ActorNum = (float)0;
-                byte ANumVarT = 0;
+                ScriptVarVal ActorNum = new ScriptVarVal();
 
                 switch (SetSubType)
                 {
                     case (int)Lists.TargetActorSubtypes.NPCMAKER:
                         {
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                            ANumVarT = ScriptHelpers.GetVarType(SplitLine, 2);
-                            ActorNum = ScriptHelpers.GetValueByType(SplitLine, 3, ANumVarT, 0, UInt16.MaxValue);
+                            ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue, ref ActorNum);
 
                             break;
                         }
                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                         {
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
-
-                            ANumVarT = ScriptHelpers.GetVarType(SplitLine, 2);
-                            ActorNum = ScriptHelpers.Helper_GetActorId(SplitLine, 2, ANumVarT);
+                            ActorNum = ScriptHelpers.Helper_GetActorId(SplitLine, 2);
 
                             break;
                         }
@@ -41,12 +36,12 @@ namespace NPC_Maker.Scripts
                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                 }
 
-                return new InstructionKill((byte)SetSubType, ActorNum, ANumVarT);
+                return new InstructionKill((byte)SetSubType, ActorNum);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return new InstructionKill(0, 0, 0);
+                return new InstructionNop();
             }
             catch (Exception)
             {

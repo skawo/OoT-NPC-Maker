@@ -15,20 +15,18 @@ namespace NPC_Maker.Scripts
 
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
-                object TextID_Adult = (float)0;
-                object TextID_Child = (float)0;
-                byte TextIDAdultT = 0;
-                byte TextIDChildT = 0;
+                ScriptVarVal TextID_Adult = new ScriptVarVal();
+                ScriptVarVal TextID_Child = new ScriptVarVal();
 
-                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, ref TextIDAdultT, ref TextIDChildT, Entry.Messages);
+                ScriptHelpers.Helper_GetAdultChildTextIds(SplitLine, ref TextID_Adult, ref TextID_Child, Entry.Messages);
 
                 int End = GetCorrespondingEndTalking(Lines, LineNo);
 
                 if (End == -1)
                     throw ParseException.TalkNotClosed(SplitLine);
 
-                Instructions.Add(new InstructionTextbox((byte)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child, TextIDAdultT, TextIDChildT));
-                Instructions.Add(new InstructionIfWhile((byte)Lists.Instructions.IF, (byte)Lists.IfSubTypes.IS_TALKING, 0, 0, Lists.ConditionTypes.TRUE, -1, -1, LabelR));
+                Instructions.Add(new InstructionTextbox((byte)Lists.Instructions.ENABLE_TALKING, TextID_Adult, TextID_Child));
+                Instructions.Add(new InstructionIfWhile((byte)Lists.Instructions.IF, (byte)Lists.IfSubTypes.IS_TALKING, new ScriptVarVal(), Lists.ConditionTypes.TRUE, -1, -1, LabelR));
                 Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                 Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(End - LineNo - 1).ToList()));
                 Instructions.Add(new InstructionGoto("__ENDIF__" + LabelR));
