@@ -638,7 +638,7 @@ namespace NPC_Maker
                 }
             }
 
-            data.Add(0x02);
+            data.Add((byte)Lists.MsgControlCode.END);
 
             return data;
         }
@@ -649,7 +649,6 @@ namespace NPC_Maker
 
             for (int i = 0; i < code.Length; i++)
                 code[i] = code[i].Replace(" ", "_").ToUpper();
-
 
             switch (code[0])
             {
@@ -761,7 +760,7 @@ namespace NPC_Maker
         public DListEntry()
         {
             Name = "";
-            //Address = 0;
+            Address = 0;
             TransX = 0;
             TransY = 0;
             TransZ = 0;
