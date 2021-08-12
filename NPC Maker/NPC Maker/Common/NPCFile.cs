@@ -668,10 +668,7 @@ namespace NPC_Maker
                     case "BACKGROUND":
                         {
                             output.Add((byte)Lists.MsgControlCode.BACKGROUND);
-                            byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
-                            output.Add(backgroundIDBytes[2]);
-                            output.Add(backgroundIDBytes[1]);
-                            output.Add(backgroundIDBytes[0]);
+                            output.AddRangeBigEndian(Convert.ToInt32(code[1]));
                             break;
                         }
                     case "HIGH_SCORE":
@@ -687,24 +684,19 @@ namespace NPC_Maker
                             if (Dicts.SFXes.ContainsKey(code[1]))
                             {
                                 short soundValue = (short)Dicts.SFXes[code[1]];
-                                byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
-                                output.Add(soundIDBytes[1]);
-                                output.Add(soundIDBytes[0]);
+                                output.AddRangeBigEndian(soundValue);
                             }
                             else
                             {
                                 try
                                 {
                                     short soundValue = Convert.ToInt16(code[1]);
-                                    byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
-                                    output.Add(soundIDBytes[1]);
-                                    output.Add(soundIDBytes[0]);
+                                    output.AddRangeBigEndian(soundValue);
                                 }
                                 catch (Exception)
                                 {
                                     errors.Add($"{code[1]} is not a valid sound.");
-                                    output.Add(0);
-                                    output.Add(0);
+                                    output.AddRangeBigEndian((UInt16)0);
                                 }
                             }
 
