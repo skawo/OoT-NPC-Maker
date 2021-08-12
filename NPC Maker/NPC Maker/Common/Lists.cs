@@ -1355,7 +1355,7 @@ namespace NPC_Maker
         public enum MovementStyles
         {
             NONE = 0,
-            RANDOM = 1,
+            ROAM = 1,
             FOLLOW = 2,
             RUN_AWAY = 3,
             PATH = 4,
