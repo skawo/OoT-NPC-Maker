@@ -1399,7 +1399,6 @@ namespace NPC_Maker
             SFX,
             BGM,
             CUTSCENE,
-            CUTSCENE_ADDR,
             CUTSCENE_ID
         }
 

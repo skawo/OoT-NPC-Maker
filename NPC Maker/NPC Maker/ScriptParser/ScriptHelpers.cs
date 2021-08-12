@@ -157,6 +157,16 @@ namespace NPC_Maker.Scripts
             Output[3] = ScriptHelpers.GetValueByType(SplitLine, StartIndex + 3, TypeOutPut[3], 0, 255);
         }
 
+        public static ScriptVarVal GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max)
+        {
+            ScriptVarVal outv = new ScriptVarVal(0, 0);
+
+            outv.Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
+            outv.Value = ScriptHelpers.GetValueByType(SplitLine, Index, outv.Vartype, Min, Max);
+
+            return outv;
+        }
+
         public static float GetNormalVar(string[] SplitLine, int Index, float Min, float Max)
         {
             if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Degree))

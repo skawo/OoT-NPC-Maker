@@ -103,7 +103,7 @@ namespace NPC_Maker.Scripts
 
             ScriptText = Regex.Replace(ScriptText, @"([^=^\-^+^/^*^!])(=)([^=^\-^+^/^*^!])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
 
-            ScriptText = Regex.Replace(ScriptText, @"\\\s+\n", "");                                                            // Override line carriage return if preceded by \
+            ScriptText = Regex.Replace(ScriptText, @"\\\s+\n", "");                                                             // Override line carriage return if preceded by \
             ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
             ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty);                                        // Remove comment blocks

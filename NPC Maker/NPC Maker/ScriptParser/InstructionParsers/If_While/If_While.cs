@@ -103,11 +103,9 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue);
 
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object FlagID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue);
-
-                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, FlagID, Condition,
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Val.Vartype, Val.Value, Condition,
                                                                               EndIf, Else, LabelR));
                                 return Instructions;
                             }
@@ -149,10 +147,10 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt16.MaxValue);
+
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Val.Vartype, Val.Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.DISTANCE_FROM_PLAYER:
@@ -160,10 +158,10 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, float.MinValue, float.MaxValue);
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 3, float.MinValue, float.MaxValue);
+
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Val.Vartype, Val.Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.EXT_VAR:
@@ -171,15 +169,13 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 4);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 5);
-                                object Value = ScriptHelpers.GetValueByType(SplitLine, 5, VarType, float.MinValue, float.MaxValue);
 
-                                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object ActorID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue);
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 5, float.MinValue, float.MaxValue);
+                                var ActorID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, Int16.MaxValue);
 
                                 byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.NORMAL, 1, Lists.Num_User_Vars));
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhileExtVar((byte)ID, Convert.ToByte(SubID), ExtVarNum, VarType, Value, VarType2, ActorID, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhileExtVar((byte)ID, Convert.ToByte(SubID), ExtVarNum, Val.Vartype, Val.Value, ActorID.Vartype, ActorID.Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.STICK_X:
@@ -188,10 +184,9 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Value = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, sbyte.MinValue, sbyte.MaxValue);
+                                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 3, sbyte.MinValue, sbyte.MaxValue);
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), VarType, Value, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value.Vartype, Value.Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.ITEM_BEING_TRADED:
@@ -242,15 +237,14 @@ namespace NPC_Maker.Scripts
                                 byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object Value2 = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, 2, VarType2, typeof(Lists.DungeonItems), ParseException.UnrecognizedDungeonItem(SplitLine));
 
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Dungeon = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
+                                var Dungeon = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt16.MaxValue);
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
 
                                 if (SplitLine.Length == 5)
                                     Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 4);
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), VarType, Dungeon, VarType2, Value2, Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), Dungeon.Vartype, Dungeon.Value, VarType2, Value2, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM:
@@ -313,13 +307,10 @@ namespace NPC_Maker.Scripts
 
                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
 
-                byte VarType1 = ScriptHelpers.GetVarType(SplitLine, 1);
-                object Value1 = ScriptHelpers.GetValueByType(SplitLine, 1, VarType1, UInt32.MinValue, UInt32.MaxValue);
+                var Value1 = ScriptHelpers.GetScriptVarVal(SplitLine, 1, UInt32.MinValue, UInt32.MaxValue);
+                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, Int32.MinValue, Int32.MaxValue);
 
-                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                object Value2 = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, Int32.MinValue, Int32.MaxValue);
-
-                return new InstructionIfWhileWithSecondValue((byte)ID, (byte)SubID, VarType1, Value1, VarType2, Value2, Condition, EndIf, Else, LabelR);
+                return new InstructionIfWhileWithSecondValue((byte)ID, (byte)SubID, Value1.Vartype, Value1.Value, Value2.Vartype, Value2.Value, Condition, EndIf, Else, LabelR);
             }
             else
                 return null;

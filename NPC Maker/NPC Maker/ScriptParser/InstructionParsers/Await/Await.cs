@@ -45,22 +45,18 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.AwaitSubTypes.TEXTBOX_NUM:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue);
 
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object Data = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue);
-
-                                return new InstructionAwait((byte)SubID, Data, Lists.ConditionTypes.EQUALTO, VarType);
+                                return new InstructionAwait((byte)SubID, Val.Value, Lists.ConditionTypes.EQUALTO, Val.Vartype);
                             }
                         case (int)Lists.AwaitSubTypes.PATH_NODE:
                         case (int)Lists.AwaitSubTypes.ANIMATION_FRAME:
                         case (int)Lists.AwaitSubTypes.CUTSCENE_FRAME:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt16.MaxValue);
 
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, UInt16.MaxValue);
-
-                                return new InstructionAwait((byte)SubID, Data, Lists.ConditionTypes.EQUALTO, VarType);
+                                return new InstructionAwait((byte)SubID, Val.Value, Lists.ConditionTypes.EQUALTO, Val.Vartype);
                             }
                         case (int)Lists.AwaitSubTypes.STICK_X:
                         case (int)Lists.AwaitSubTypes.STICK_Y:
@@ -68,16 +64,14 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, sbyte.MinValue, sbyte.MaxValue);
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 3, sbyte.MinValue, sbyte.MaxValue);
 
-                                return new InstructionAwait((byte)SubID, Data, Condition, VarType);
+                                return new InstructionAwait((byte)SubID, Val.Value, Condition, Val.Vartype);
                             }
                         case (int)Lists.AwaitSubTypes.BUTTON_HELD:
                         case (int)Lists.AwaitSubTypes.BUTTON_PRESSED:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-
                                 object Value = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons), ParseException.UnrecognizedButton(SplitLine));
 
                                 return new InstructionAwait((byte)SubID, Value, Lists.ConditionTypes.EQUALTO, 0);
@@ -103,15 +97,13 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 4);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 5);
-                                object Data = ScriptHelpers.GetValueByType(SplitLine, 5, VarType, float.MinValue, float.MaxValue);
 
-                                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object NPCID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, UInt16.MaxValue);
+                                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 5, float.MinValue, float.MaxValue);
+                                var NPCID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue);
 
                                 byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.NORMAL, 0, 5));
 
-                                return new InstructionAwaitExtVar((byte)SubID, ExtVarNum, Data, NPCID, Condition, VarType, VarType2);
+                                return new InstructionAwaitExtVar((byte)SubID, ExtVarNum, Value.Value, NPCID.Value, Condition, Value.Vartype, NPCID.Vartype);
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -140,13 +132,10 @@ namespace NPC_Maker.Scripts
 
                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
 
-                byte VarType1 = ScriptHelpers.GetVarType(SplitLine, 1);
-                object Value1 = ScriptHelpers.GetValueByType(SplitLine, 1, VarType1, UInt32.MinValue, UInt32.MaxValue);
+                var Value1 = ScriptHelpers.GetScriptVarVal(SplitLine, 1, UInt32.MinValue, UInt32.MaxValue);
+                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, float.MinValue, float.MaxValue);
 
-                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                object Value2 = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, float.MinValue, float.MaxValue);
-
-                return new InstructionAwaitWithSecondValue((byte)SubID, Value1, Value2, Condition, VarType1, VarType2);
+                return new InstructionAwaitWithSecondValue((byte)SubID, Value1.Value, Value2.Value, Condition, Value1.Vartype, Value2.Vartype);
             }
             else
                 return null;

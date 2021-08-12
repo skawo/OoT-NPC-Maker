@@ -10,10 +10,9 @@ namespace NPC_Maker.Scripts
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
-                byte VarType = ScriptHelpers.GetVarType(SplitLine, 1);
-                object WarpID = ScriptHelpers.GetValueByType(SplitLine, 1, VarType, 0, UInt16.MaxValue);
+                var WarpID = ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt16.MaxValue);
 
-                return new InstructionWarp(WarpID, VarType);
+                return new InstructionWarp(WarpID.Value, WarpID.Vartype);
             }
             catch (ParseException pEx)
             {

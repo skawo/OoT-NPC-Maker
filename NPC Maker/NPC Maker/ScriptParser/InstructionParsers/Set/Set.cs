@@ -134,8 +134,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                byte VarType1 = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object FlagID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType1, 0, UInt16.MaxValue);
+                                var FlagID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue);
 
                                 object Val = (float)0;
 
@@ -146,7 +145,7 @@ namespace NPC_Maker.Scripts
                                 else
                                     Val = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, 1);
 
-                                return new InstructionSetWTwoValues((byte)SubID, FlagID, VarType1, Val, VarType2, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, FlagID.Value, FlagID.Vartype, Val, VarType2, 0);
                             }
                         case (int)Lists.SetSubTypes.ATTACKED_EFFECT:
                             return H_SetByEnum(SubID, SplitLine, typeof(Lists.EffectsIfAttacked), ParseException.UnrecognizedEffectIfAttacked(SplitLine));
@@ -191,10 +190,9 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
-                                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Value2 = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, UInt32.MaxValue);
+                                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt32.MaxValue);
 
-                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Value2, VarType2, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Value2.Value, Value2.Vartype, 0);
                             }
                         case (int)Lists.SetSubTypes.ANIMATION_SPEED:
                             {
@@ -203,10 +201,9 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
-                                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Speed = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, 0, float.MaxValue);
+                                var Speed = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, float.MaxValue);
 
-                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Speed, VarType2, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Speed.Value, Speed.Vartype, 0);
                             }
                         case (int)Lists.SetSubTypes.BLINK_PATTERN:
                         case (int)Lists.SetSubTypes.TALK_PATTERN:
@@ -280,10 +277,9 @@ namespace NPC_Maker.Scripts
                                 byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, VarType, Entry.Animations);
 
-                                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Frame = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, 0, 255);
+                                var Frame = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, byte.MaxValue);
 
-                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Frame, VarType2, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, AnimID, VarType, Frame.Value, Frame.Vartype, 0);
                             }
                         case (int)Lists.SetSubTypes.CAMERA_TRACKING_ON:
                         case (int)Lists.SetSubTypes.REF_ACTOR:
@@ -299,11 +295,9 @@ namespace NPC_Maker.Scripts
                                     case (int)Lists.TargetActorSubtypes.NPCMAKER:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                            var ActorNum = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt16.MaxValue);
 
-                                            byte ValueType = ScriptHelpers.GetVarType(SplitLine, 3);
-                                            object ActorNum = ScriptHelpers.GetValueByType(SplitLine, 3, ValueType, 0, UInt16.MaxValue);
-
-                                            return new InstructionSetActor((byte)SubID, (byte)Lists.TargetActorSubtypes.NPCMAKER, ActorNum, ValueType);
+                                            return new InstructionSetActor((byte)SubID, (byte)Lists.TargetActorSubtypes.NPCMAKER, ActorNum.Value, ActorNum.Vartype);
                                         }
                                     case (int)Lists.TargetActorSubtypes.ACTOR_ID:
                                         {
@@ -356,15 +350,13 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
 
                                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 4);
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 5);
-                                object Value = ScriptHelpers.GetValueByType(SplitLine, 5, VarType, float.MinValue, float.MaxValue);
 
-                                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object ActorID = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int16.MaxValue);
+                                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 5, float.MinValue, float.MaxValue);
+                                var ActorID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, Int16.MaxValue);
 
                                 byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.NORMAL, 1, Lists.Num_User_Vars));
 
-                                return new InstructionSetExtVar((byte)SubID, ExtVarNum, Value, VarType, ActorID, VarType2, Operator);
+                                return new InstructionSetExtVar((byte)SubID, ExtVarNum, Value.Value, Value.Vartype, ActorID.Value, ActorID.Vartype, Operator);
                             }
                         case (int)Lists.SetSubTypes.PLAYER_ANIMATION:
                             {
@@ -373,26 +365,15 @@ namespace NPC_Maker.Scripts
                                 byte OffsType = ScriptHelpers.GetVarType(SplitLine, 2);
                                 object Offset = ScriptHelpers.Helper_GetLinkAnimation(SplitLine, 2, OffsType);
 
-                                byte SpeedT = ScriptHelpers.GetVarType(SplitLine, 3);
-                                object Speed = ScriptHelpers.GetValueByType(SplitLine, 3, SpeedT, 0, float.MaxValue);
-
-                                byte StFrT = (byte)Lists.VarTypes.NORMAL;
-                                object StFr = (float)0;
-
-                                byte EFrT = (byte)Lists.VarTypes.NORMAL;
-                                object EFr = (float)255;
+                                var Speed = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, float.MaxValue);
+                                var StFr = new ScriptVarVal(0, (int)Lists.VarTypes.NORMAL);
+                                var EFr = new ScriptVarVal(255, (int)Lists.VarTypes.NORMAL);
 
                                 if (SplitLine.Length > 4)
-                                {
-                                    StFrT = ScriptHelpers.GetVarType(SplitLine, 4);
-                                    StFr = ScriptHelpers.GetValueByType(SplitLine, 4, SpeedT, (float)0, (float)255);
-                                }
+                                    StFr = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, 255);
 
                                 if (SplitLine.Length > 5)
-                                {
-                                    EFrT = ScriptHelpers.GetVarType(SplitLine, 5);
-                                    EFr = ScriptHelpers.GetValueByType(SplitLine, 5, SpeedT, (float)StFr, (float)255);
-                                }
+                                    EFr = ScriptHelpers.GetScriptVarVal(SplitLine, 5, (float)StFr.Value, 255);
 
                                 byte Once = 0;
 
@@ -404,7 +385,7 @@ namespace NPC_Maker.Scripts
                                         throw ParseException.UnrecognizedParameter(SplitLine);
                                 }
 
-                                return new InstructionSetPlayerAnim((byte)SubID, OffsType, Offset, SpeedT, Speed, StFrT, StFr, EFrT, EFr, Once);
+                                return new InstructionSetPlayerAnim((byte)SubID, OffsType, Offset, Speed.Vartype, Speed.Value, StFr.Vartype, StFr.Value, EFr.Vartype, EFr.Value, Once);
 
                             }
                         default: throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
@@ -434,13 +415,10 @@ namespace NPC_Maker.Scripts
 
                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 2);
 
-                byte VarType1 = ScriptHelpers.GetVarType(SplitLine, 1);
-                object Value1 = ScriptHelpers.GetValueByType(SplitLine, 1, VarType1, UInt32.MinValue, UInt32.MaxValue);
+                var Value1 = ScriptHelpers.GetScriptVarVal(SplitLine, 1, UInt32.MinValue, UInt32.MaxValue);
+                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, float.MinValue, float.MaxValue);
 
-                byte VarType2 = ScriptHelpers.GetVarType(SplitLine, 3);
-                object Value2 = ScriptHelpers.GetValueByType(SplitLine, 3, VarType2, float.MinValue, float.MaxValue);
-
-                return new InstructionSetWTwoValues((byte)SubID, Value1, VarType1, Value2, VarType2, Operator);
+                return new InstructionSetWTwoValues((byte)SubID, Value1.Value, Value1.Vartype, Value2.Value, Value2.Vartype, Operator);
             }
             else
                 return null;
@@ -461,15 +439,12 @@ namespace NPC_Maker.Scripts
             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
 
             byte Operator = ScriptHelpers.GetOperator(SplitLine, 2);
-
-            byte VarType = ScriptHelpers.GetVarType(SplitLine, 3);
-            object Data = ScriptHelpers.GetValueByType(SplitLine, 3, VarType, Min, Max);
+            var Data = ScriptHelpers.GetScriptVarVal(SplitLine, 3, Min, Max);
 
             if (Data == null)
                 throw ParseException.ParamConversionError(SplitLine);
 
-
-            return new InstructionSet((byte)SubID, Data, VarType, Operator);
+            return new InstructionSet((byte)SubID, Data.Value, Data.Vartype, Operator);
         }
     }
 }

@@ -16,4 +16,16 @@ namespace NPC_Maker.Scripts
         }
     }
 
+    public class ScriptVarVal
+    {
+        public byte Vartype { get; set; }
+        public object Value { get; set; }
+
+        public ScriptVarVal(int _Val, byte _Var)
+        {
+            Vartype = _Var;
+            Value = _Val;
+        }
+    }
+
 }

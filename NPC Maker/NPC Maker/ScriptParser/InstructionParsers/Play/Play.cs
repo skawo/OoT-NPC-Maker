@@ -39,15 +39,6 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
                                 return new InstructionPlay((byte)SubID, 0, 0);
                             }
-                        case (int)Lists.PlaySubTypes.CUTSCENE_ADDR:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-
-                                byte VarType = ScriptHelpers.GetVarType(SplitLine, 2);
-                                object Addr = ScriptHelpers.GetValueByType(SplitLine, 2, VarType, 0, Int32.MaxValue);
-
-                                return new InstructionPlay((byte)SubID, Addr, VarType);
-                            }
                         case (int)Lists.PlaySubTypes.CUTSCENE_ID:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
