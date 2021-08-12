@@ -26,6 +26,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem twochoices;
         private static ToolStripMenuItem threechoices;
         private static ToolStripMenuItem delay;
+        private static ToolStripMenuItem buttonPrompt;
 
         public static void MakeContextMenu()
         {
@@ -46,12 +47,14 @@ namespace NPC_Maker
             twochoices = new ToolStripMenuItem();
             threechoices = new ToolStripMenuItem();
             delay = new ToolStripMenuItem();
+            buttonPrompt = new ToolStripMenuItem();
 
             MenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     colors,
                                                                     highscore,
                                                                     sounds,
                                                                     newtextbox,
+                                                                    buttonPrompt,
                                                                     playername,
                                                                     noskip,
                                                                     icon,
@@ -118,6 +121,12 @@ namespace NPC_Maker
             newtextbox.Size = new System.Drawing.Size(156, 22);
             newtextbox.Text = "New textbox";
             newtextbox.Tag = $"<{Lists.MsgControlCode.NEW_BOX}>";
+            // 
+            // newtextbox
+            // 
+            buttonPrompt.Size = new System.Drawing.Size(156, 22);
+            buttonPrompt.Text = "Button prompt";
+            buttonPrompt.Tag = $"<{Lists.MsgControlCode.BUTTON_PROMPT}>";
             // 
             // playername
             // 
