@@ -627,94 +627,108 @@ namespace NPC_Maker
         {
             List<byte> output = new List<byte>();
 
-            for (int i = 0; i < code.Length; i++)
-                code[i] = code[i].Replace(" ", "_").ToUpper();
-
-            switch (code[0])
+            try
             {
-                case "PIXELS_RIGHT":
-                    {
-                        output.Add((byte)Lists.MsgControlCode.SPACES);
-                        output.Add(Convert.ToByte(code[1]));
-                        break;
-                    }
-                case "JUMP":
-                    {
-                        /* Jump will not work for messages like this.
-                        output.Add((byte)Lists.MsgControlCode.JUMP);
-                        byte[] jumpIDBytes = BitConverter.GetBytes(short.Parse(code[1], System.Globalization.NumberStyles.HexNumber));
-                        output.Add(jumpIDBytes[1]);
-                        output.Add(jumpIDBytes[0]);
-                        */
-                        break;
-                    }
-                case "DELAY":
-                case "FADE":
-                case "ICON":
-                    {
-                        output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
-                        output.Add(Convert.ToByte(code[1]));
-                        break;
-                    }
-                case "BACKGROUND":
-                    {
-                        output.Add((byte)Lists.MsgControlCode.BACKGROUND);
-                        byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
-                        output.Add(backgroundIDBytes[2]);
-                        output.Add(backgroundIDBytes[1]);
-                        output.Add(backgroundIDBytes[0]);
-                        break;
-                    }
-                case "HIGH_SCORE":
-                    {
-                        output.Add((byte)Lists.MsgControlCode.HIGH_SCORE);
-                        output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgHighScore), code[1]));
-                        break;
-                    }
-                case "SOUND":
-                    {
-                        output.Add((byte)Lists.MsgControlCode.SOUND);
+                for (int i = 0; i < code.Length; i++)
+                    code[i] = code[i].Replace(" ", "_").ToUpper();
 
-                        if (Dicts.SFXes.ContainsKey(code[1]))
+                switch (code[0])
+                {
+                    case "PIXELS_RIGHT":
                         {
-                            short soundValue = (short)Dicts.SFXes[code[1]];
-                            byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
-                            output.Add(soundIDBytes[1]);
-                            output.Add(soundIDBytes[0]);
+                            output.Add((byte)Lists.MsgControlCode.SHIFT);
+                            output.Add(Convert.ToByte(code[1]));
+                            break;
                         }
-                        else
+                    case "JUMP":
                         {
-                            try
+                            /* Jump will not work for messages like this.
+                            output.Add((byte)Lists.MsgControlCode.JUMP);
+                            byte[] jumpIDBytes = BitConverter.GetBytes(short.Parse(code[1], System.Globalization.NumberStyles.HexNumber));
+                            output.Add(jumpIDBytes[1]);
+                            output.Add(jumpIDBytes[0]);
+                            */
+                            break;
+                        }
+                    case "DELAY":
+                    case "FADE":
+                    case "FADE2":
+                    case "SHIFT":
+                        {
+                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
+                            output.Add(Convert.ToByte(code[1]));
+                            break;
+                        }
+                    case "ICON":
+                        {
+                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
+                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgIcon), code[1]));
+                            break;
+                        }
+                    case "BACKGROUND":
+                        {
+                            output.Add((byte)Lists.MsgControlCode.BACKGROUND);
+                            byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
+                            output.Add(backgroundIDBytes[2]);
+                            output.Add(backgroundIDBytes[1]);
+                            output.Add(backgroundIDBytes[0]);
+                            break;
+                        }
+                    case "HIGH_SCORE":
+                        {
+                            output.Add((byte)Lists.MsgControlCode.HIGH_SCORE);
+                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgHighScore), code[1]));
+                            break;
+                        }
+                    case "SOUND":
+                        {
+                            output.Add((byte)Lists.MsgControlCode.SOUND);
+
+                            if (Dicts.SFXes.ContainsKey(code[1]))
                             {
-                                short soundValue = Convert.ToInt16(code[1]);
+                                short soundValue = (short)Dicts.SFXes[code[1]];
                                 byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
                                 output.Add(soundIDBytes[1]);
                                 output.Add(soundIDBytes[0]);
                             }
-                            catch (Exception)
+                            else
                             {
-                                errors.Add($"{code[1]} is not a valid sound.");
-                                output.Add(0);
-                                output.Add(0);
+                                try
+                                {
+                                    short soundValue = Convert.ToInt16(code[1]);
+                                    byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
+                                    output.Add(soundIDBytes[1]);
+                                    output.Add(soundIDBytes[0]);
+                                }
+                                catch (Exception)
+                                {
+                                    errors.Add($"{code[1]} is not a valid sound.");
+                                    output.Add(0);
+                                    output.Add(0);
+                                }
                             }
-                        }
 
-                        break;
-                    }
-                default:
-                    {
-                        if (Enum.IsDefined(typeof(Lists.MsgColor), code[0]))
+                            break;
+                        }
+                    default:
                         {
-                            output.Add((byte)Lists.MsgControlCode.COLOR);
-                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgColor), code[0]));
-                        }
-                        else if (Enum.IsDefined(typeof(Lists.MsgControlCode), code[0]))
-                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
-                        else
-                            errors.Add($"{code[0]} is not a valid control code.");
+                            if (Enum.IsDefined(typeof(Lists.MsgColor), code[0]))
+                            {
+                                output.Add((byte)Lists.MsgControlCode.COLOR);
+                                output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgColor), code[0]));
+                            }
+                            else if (Enum.IsDefined(typeof(Lists.MsgControlCode), code[0]))
+                                output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
+                            else
+                                errors.Add($"{code[0]} is not a valid control code.");
 
-                        break;
-                    }
+                            break;
+                        }
+                }
+            }
+            catch (Exception)
+            {
+                errors.Add($"{String.Join(":", code)} could not be parsed.");
             }
 
             return output;

@@ -52,12 +52,12 @@ namespace NPC_Maker
             MenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     colors,
                                                                     highscore,
+                                                                    icon,
                                                                     sounds,
                                                                     newtextbox,
                                                                     buttonPrompt,
                                                                     playername,
                                                                     noskip,
-                                                                    icon,
                                                                     speed,
                                                                     fade,
                                                                     delay,
@@ -126,7 +126,7 @@ namespace NPC_Maker
             // 
             buttonPrompt.Size = new System.Drawing.Size(156, 22);
             buttonPrompt.Text = "Button prompt";
-            buttonPrompt.Tag = $"<{Lists.MsgControlCode.BUTTON_PROMPT}>";
+            buttonPrompt.Tag = $"<{Lists.MsgControlCode.AWAIT_BUTTON}>";
             // 
             // playername
             // 
@@ -150,7 +150,10 @@ namespace NPC_Maker
             // 
             icon.Size = new System.Drawing.Size(156, 22);
             icon.Text = "Icon";
-            icon.Tag = $"<{Lists.MsgControlCode.ICON}:0>";
+
+            foreach(string s in Enum.GetNames(typeof(Lists.MsgIcon)))
+                icon.DropDownItems.Add(new ToolStripMenuItem() { Text = s, Tag = $"<{Lists.MsgControlCode.ICON}:{s}>" });
+
             // 
             // speed
             // 
