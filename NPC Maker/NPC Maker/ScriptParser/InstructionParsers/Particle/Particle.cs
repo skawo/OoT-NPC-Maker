@@ -18,34 +18,34 @@ namespace NPC_Maker.Scripts
 
                 byte PosType = 0;
 
-                ScriptVarVal PosX = new ScriptVarVal();
-                ScriptVarVal PosY = new ScriptVarVal();
-                ScriptVarVal PosZ = new ScriptVarVal();
+                var PosX = new ScriptVarVal();
+                var PosY = new ScriptVarVal();
+                var PosZ = new ScriptVarVal();
 
-                ScriptVarVal AccelX = new ScriptVarVal();
-                ScriptVarVal AccelY = new ScriptVarVal();
-                ScriptVarVal AccelZ = new ScriptVarVal();
+                var AccelX = new ScriptVarVal();
+                var AccelY = new ScriptVarVal();
+                var AccelZ = new ScriptVarVal();
 
-                ScriptVarVal VelX = new ScriptVarVal();
-                ScriptVarVal VelY = new ScriptVarVal();
-                ScriptVarVal VelZ = new ScriptVarVal();
+                var VelX = new ScriptVarVal();
+                var VelY = new ScriptVarVal();
+                var VelZ = new ScriptVarVal();
 
-                ScriptVarVal PrimR = new ScriptVarVal();
-                ScriptVarVal PrimG = new ScriptVarVal();
-                ScriptVarVal PrimB = new ScriptVarVal();
-                ScriptVarVal PrimA = new ScriptVarVal();
+                var PrimR = new ScriptVarVal();
+                var PrimG = new ScriptVarVal();
+                var PrimB = new ScriptVarVal();
+                var PrimA = new ScriptVarVal();
 
-                ScriptVarVal SecR = new ScriptVarVal();
-                ScriptVarVal SecG = new ScriptVarVal();
-                ScriptVarVal SecB = new ScriptVarVal();
-                ScriptVarVal SecA = new ScriptVarVal();
+                var SecR = new ScriptVarVal();
+                var SecG = new ScriptVarVal();
+                var SecB = new ScriptVarVal();
+                var SecA = new ScriptVarVal();
 
-                ScriptVarVal Scale = new ScriptVarVal();
-                ScriptVarVal ScaleUpdate = new ScriptVarVal();
-                ScriptVarVal Life = new ScriptVarVal();
-                ScriptVarVal Var = new ScriptVarVal();
-                ScriptVarVal Yaw = new ScriptVarVal();
-                ScriptVarVal DListIndex = new ScriptVarVal(-1);
+                var Scale = new ScriptVarVal();
+                var ScaleUpdate = new ScriptVarVal();
+                var Life = new ScriptVarVal();
+                var Var = new ScriptVarVal();
+                var Yaw = new ScriptVarVal();
+                var DListIndex = new ScriptVarVal(-1);
 
                 string LabelJumpIfFound = "__RETURN__";
 

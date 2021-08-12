@@ -89,8 +89,7 @@ namespace NPC_Maker
                 ByteList.Add((byte)Value);
             else
             {
-                if (ByteList.Count() % 2 != 0)
-                    ByteList.Add(0);
+                Ensure2ByteAlign(ByteList);
 
                 if (Value.GetType() == typeof(UInt16))
                     ByteList.AddRange(Program.BEConverter.GetBytes((UInt16)Value));
@@ -98,8 +97,7 @@ namespace NPC_Maker
                     ByteList.AddRange(Program.BEConverter.GetBytes((Int16)Value));
                 else
                 {
-                    while (ByteList.Count() % 2 != 0)
-                        ByteList.Add(0);
+                    Ensure2ByteAlign(ByteList);
 
                     if (Value.GetType() == typeof(UInt32))
                         ByteList.AddRange(Program.BEConverter.GetBytes((UInt32)Value));

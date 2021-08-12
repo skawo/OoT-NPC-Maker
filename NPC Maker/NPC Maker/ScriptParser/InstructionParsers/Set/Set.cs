@@ -85,7 +85,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                ScriptVarVal Val = new ScriptVarVal();
+                                var Val = new ScriptVarVal();
                                 Val.Vartype = ScriptHelpers.GetVarType(SplitLine, 2);
 
                                 if (Val.Vartype == (int)Lists.VarTypes.NORMAL)
@@ -165,8 +165,8 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
 
-                                ScriptVarVal AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
-                                ScriptVarVal Once = new ScriptVarVal();
+                                var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
+                                var Once = new ScriptVarVal();
 
                                 if (SplitLine.Length == 4)
                                 {
@@ -183,7 +183,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                ScriptVarVal AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
+                                var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
                                 var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt32.MaxValue);
 
                                 return new InstructionSetWTwoValues((byte)SubID, AnimID, Value2, 0);
@@ -192,7 +192,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                ScriptVarVal AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
+                                var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
                                 var Speed = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, float.MaxValue);
 
                                 return new InstructionSetWTwoValues((byte)SubID, AnimID, Speed, 0);
@@ -218,10 +218,10 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                ScriptVarVal SegmentID = new ScriptVarVal();
+                                var SegmentID = new ScriptVarVal();
                                 SegmentID.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
 
-                                ScriptVarVal TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, 3, (int)SegmentID.Value, Entry.Segments);
+                                var TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, 3, (int)SegmentID.Value, Entry.Segments);
 
                                 return new InstructionSetWTwoValues((byte)SubID, SegmentID, TexID, 0);
                             }
@@ -243,9 +243,9 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                ScriptVarVal DListID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.ExtraDisplayLists);
+                                var DListID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.ExtraDisplayLists);
 
-                                ScriptVarVal DlistOption = new ScriptVarVal();
+                                var DlistOption = new ScriptVarVal();
                                 DListID.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
 
                                 return new InstructionSetWTwoValues((byte)SubID, DListID, DlistOption, 0);
@@ -255,7 +255,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                ScriptVarVal AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
+                                var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
                                 var Frame = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, byte.MaxValue);
 
                                 return new InstructionSetWTwoValues((byte)SubID, AnimID, Frame, 0);

@@ -9,23 +9,16 @@ namespace NPC_Maker.Scripts
         public byte FaceType;
         public byte Target;
 
-        public object SubjectActor;
-        public byte SubjectActorT;
+        public ScriptVarVal SubjectActor;
+        public ScriptVarVal TargetActor;
 
-        public object TargetActor;
-        public byte TargetActorT;
-
-        public InstructionFace(byte _Subject, byte _FaceType, byte _Target,
-                               object _SubjectActor, byte _SubjectActorT,
-                               object _TargetActor, byte _TargetActorT) : base((byte)Lists.Instructions.FACE)
+        public InstructionFace(byte _Subject, byte _FaceType, byte _Target, ScriptVarVal _SubjectActor, ScriptVarVal _TargetActor) : base((byte)Lists.Instructions.FACE)
         {
             Subject = _Subject;
             FaceType = _FaceType;
             Target = _Target;
             SubjectActor = _SubjectActor;
-            SubjectActorT = _SubjectActorT;
             TargetActor = _TargetActor;
-            TargetActorT = _TargetActorT;
         }
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
@@ -34,11 +27,11 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Target, Subject, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SubjectActorT, TargetActorT, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(SubjectActor.Vartype, TargetActor.Vartype, 4), Data);
             Helpers.AddObjectToByteList(FaceType, Data);
 
-            Helpers.AddObjectToByteList(SubjectActor, Data);
-            Helpers.AddObjectToByteList(TargetActor, Data);
+            Helpers.AddObjectToByteList(SubjectActor.Value, Data);
+            Helpers.AddObjectToByteList(TargetActor.Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);

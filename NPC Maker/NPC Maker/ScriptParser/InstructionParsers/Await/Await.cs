@@ -73,7 +73,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                ScriptVarVal Val = new ScriptVarVal();
+                                var Val = new ScriptVarVal();
                                 Val.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons), ParseException.UnrecognizedButton(SplitLine));
 
                                 return new InstructionAwait((byte)SubID, Val, Lists.ConditionTypes.EQUALTO);
@@ -85,7 +85,7 @@ namespace NPC_Maker.Scripts
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
 
-                                ScriptVarVal Val = new ScriptVarVal();
+                                var Val = new ScriptVarVal();
                                 Val.Vartype = ScriptHelpers.GetVarType(SplitLine, 3);
 
                                 if (Val.Vartype == (int)Lists.VarTypes.NORMAL)

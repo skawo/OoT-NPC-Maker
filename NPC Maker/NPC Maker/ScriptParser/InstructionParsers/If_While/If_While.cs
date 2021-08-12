@@ -209,7 +209,7 @@ namespace NPC_Maker.Scripts
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
 
-                                ScriptVarVal Time = new ScriptVarVal();
+                                var Time = new ScriptVarVal();
                                 Time.Vartype = ScriptHelpers.GetVarType(SplitLine, 3);
 
                                 if (Time.Vartype == (int)Lists.VarTypes.NORMAL)
@@ -223,7 +223,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.ANIMATION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                                ScriptVarVal AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
+                                var AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
 
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), AnimationID, Lists.ConditionTypes.EQUALTO, EndIf, Else, LabelR));
                                 return Instructions;
@@ -257,7 +257,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.BUTTON_PRESSED:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
-                                ScriptVarVal Value = new ScriptVarVal();
+                                var Value = new ScriptVarVal();
                                 Value.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons));
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;

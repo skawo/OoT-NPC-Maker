@@ -14,12 +14,6 @@ namespace NPC_Maker
             { "Instead of limb", 2 },
         };
 
-        public static Dictionary<string, int> LimbDrawTypes = new Dictionary<string, int>()
-        {
-            { "OPA", 0 },
-            { "XLU", 1 },
-        };
-
         public static Dictionary<Lists.DictType, string> DictFilenames = new Dictionary<Lists.DictType, string>()
         {
             { Lists.DictType.SFX, $"{Program.ExecPath}/Dicts/SFX.csv" },
@@ -234,6 +228,7 @@ namespace NPC_Maker
                 case Lists.DictType.SFX: SFXes = FileOps.GetDictionary(DictFilenames[Lists.DictType.SFX]); break;
                 case Lists.DictType.Music: Music = FileOps.GetDictionary(DictFilenames[Lists.DictType.Music]); break;
                 case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]); break;
+                case Lists.DictType.LinkAnims: LinkAnims = FileOps.GetDictionary(DictFilenames[Lists.DictType.LinkAnims]); break;
                 default: break;
             }
         }
@@ -264,9 +259,7 @@ namespace NPC_Maker
             Dictionary<Lists.MsgControlCode, string> output = new Dictionary<Lists.MsgControlCode, string>();
 
             foreach (Lists.MsgControlCode code in Enum.GetValues(typeof(Lists.MsgControlCode)))
-            {
                 output.Add(code, code.ToString().Replace("_", " "));
-            }
 
             return output;
         }

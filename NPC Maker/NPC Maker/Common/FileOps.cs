@@ -305,7 +305,6 @@ namespace NPC_Maker
 
                         #endregion
 
-
                         #region Animations
 
                         EntryBytes.AddRangeBigEndian((UInt32)Entry.Animations.Count());

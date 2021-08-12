@@ -49,8 +49,8 @@ namespace NPC_Maker
 
             MenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     colors,
-                                                                    sounds,
                                                                     highscore,
+                                                                    sounds,
                                                                     newtextbox,
                                                                     playername,
                                                                     noskip,
@@ -77,14 +77,14 @@ namespace NPC_Maker
 
             colors.DropDownItems.AddRange(new ToolStripMenuItem[]
                                             { 
-                                                new ToolStripMenuItem() { Text = "White", Tag = "<W>" },
-                                                new ToolStripMenuItem() { Text = "Red", Tag = "<R>" },
-                                                new ToolStripMenuItem() { Text = "Green", Tag = "<G>" },
-                                                new ToolStripMenuItem() { Text = "Blue", Tag = "<B>" },
-                                                new ToolStripMenuItem() { Text = "Cyan", Tag = "<C>" },
-                                                new ToolStripMenuItem() { Text = "Magenta", Tag = "<M>" },
-                                                new ToolStripMenuItem() { Text = "Yellow", Tag = "<Y>" },
-                                                new ToolStripMenuItem() { Text = "Black", Tag = "<Blk>" }
+                                                new ToolStripMenuItem() { Text = "White", Tag = $"<{Lists.MsgColor.W}>" },
+                                                new ToolStripMenuItem() { Text = "Red", Tag = $"<{Lists.MsgColor.R}>" },
+                                                new ToolStripMenuItem() { Text = "Green", Tag = $"<{Lists.MsgColor.G}>" },
+                                                new ToolStripMenuItem() { Text = "Blue", Tag = $"<{Lists.MsgColor.B}>" },
+                                                new ToolStripMenuItem() { Text = "Cyan", Tag = $"<{Lists.MsgColor.C}>" },
+                                                new ToolStripMenuItem() { Text = "Magenta", Tag = $"<{Lists.MsgColor.M}>" },
+                                                new ToolStripMenuItem() { Text = "Yellow", Tag = $"<{Lists.MsgColor.Y}>" },
+                                                new ToolStripMenuItem() { Text = "Black", Tag = $"<{Lists.MsgColor.BLK}>" }
                                             }
                                          );    
             // 
@@ -92,32 +92,8 @@ namespace NPC_Maker
             // 
             sounds.Size = new System.Drawing.Size(156, 22);
             sounds.Text = "Sound";
-
-            sounds.DropDownItems.AddRange(new ToolStripMenuItem[]
-                                            { 
-                                                new ToolStripMenuItem() { Text = "Item fanfare", Tag = "<Sound:Item Fanfare>" },
-                                                new ToolStripMenuItem() { Text = "Cow mooing", Tag = "<Sound:Moo>" },
-                                                new ToolStripMenuItem() { Text = "Frog ribbit 1", Tag = "<Sound:Frog Ribbit 1>" },
-                                                new ToolStripMenuItem() { Text = "Frog ribbit 2", Tag = "<Sound:Frog Ribbit 2>" },
-                                                new ToolStripMenuItem() { Text = "Deku squeak", Tag = "<Sound:Deku Squeak>" },
-                                                new ToolStripMenuItem() { Text = "Generic event", Tag = "<Sound:Generic Event>" },
-                                                new ToolStripMenuItem() { Text = "Poe vanishing", Tag = "<Sound:Poe Vanishing>" },
-                                                new ToolStripMenuItem() { Text = "Twinrova 1", Tag = "<Sound:Twinrova 1>" },
-                                                new ToolStripMenuItem() { Text = "Twinrova 2", Tag = "<Sound:Twinrova 2>" },
-                                                new ToolStripMenuItem() { Text = "Navi hello", Tag = "<Sound:Navi Hello>" },
-                                                new ToolStripMenuItem() { Text = "Talon Ehh", Tag = "<Sound:Talon Ehh>" },
-                                                new ToolStripMenuItem() { Text = "Carpenter Waaaa", Tag = "<Sound:Carpenter Waaaa>" },
-                                                new ToolStripMenuItem() { Text = "Navi HEY!", Tag = "<Sound:Navi Hey>" },
-                                                new ToolStripMenuItem() { Text = "Saria giggle", Tag = "<Sound:Saria Giggle>" },
-                                                new ToolStripMenuItem() { Text = "Yaaaa", Tag = "<Sound:Yaaaa>" },
-                                                new ToolStripMenuItem() { Text = "Zelda heh", Tag = "<Sound:Zelda Heh>" },
-                                                new ToolStripMenuItem() { Text = "Zelda awww", Tag = "<Sound:Zelda Awww>" },
-                                                new ToolStripMenuItem() { Text = "Zelda huh", Tag = "<Sound:Zelda Huh>" },
-                                                new ToolStripMenuItem() { Text = "Generic giggle", Tag = "<Sound:Generic Giggle>" },
-                                                new ToolStripMenuItem() { Text = "Unused", Tag = "<Sound:Unused 1>" }
-                                            }
-                                         );
-
+            sounds.Tag = Lists.MsgControlCode.SOUND.ToString();
+            sounds.Click += Sounds_Click;
 
             // 
             // highscore
@@ -127,12 +103,12 @@ namespace NPC_Maker
 
             highscore.DropDownItems.AddRange(new ToolStripMenuItem[]
                                             {
-                                                new ToolStripMenuItem() { Text = "Archery", Tag = "<High Score:Archery>" },
-                                                new ToolStripMenuItem() { Text = "Poe Salesman Points", Tag = "<High Score:Poe Points>" },
-                                                new ToolStripMenuItem() { Text = "Fishing", Tag = "<High Score:Fishing>" },
-                                                new ToolStripMenuItem() { Text = "Horse race", Tag = "<High Score:Horse Race>" },
-                                                new ToolStripMenuItem() { Text = "Running Man's Marathon", Tag = "<High Score:Marathon>" },
-                                                new ToolStripMenuItem() { Text = "Dampe Race", Tag = "<High Score:Dampe Race>" },
+                                                new ToolStripMenuItem() { Text = "Archery", Tag = $"<{Lists.MsgControlCode.HIGH_SCORE}:{Lists.MsgHighScore.ARCHERY}>" },
+                                                new ToolStripMenuItem() { Text = "Poe Salesman Points", Tag = $"<{Lists.MsgControlCode.HIGH_SCORE}:{Lists.MsgHighScore.POE_POINTS}>" },
+                                                new ToolStripMenuItem() { Text = "Fishing", Tag = $"<{Lists.MsgControlCode.HIGH_SCORE}:{Lists.MsgHighScore.FISHING}>" },
+                                                new ToolStripMenuItem() { Text = "Horse race", Tag = $"<{Lists.MsgControlCode.HIGH_SCORE}:{Lists.MsgHighScore.HORSE_RACE}>" },
+                                                new ToolStripMenuItem() { Text = "Running Man's Marathon", Tag = $"<{Lists.MsgControlCode.HIGH_SCORE}:{Lists.MsgHighScore.MARATHON}>" },
+                                                new ToolStripMenuItem() { Text = "Dampe Race", Tag = $"<{Lists.MsgControlCode.HIGH_SCORE}:{Lists.MsgHighScore.DAMPE_RACE}>" },
                                             }
                                          );
 
@@ -141,76 +117,79 @@ namespace NPC_Maker
             // 
             newtextbox.Size = new System.Drawing.Size(156, 22);
             newtextbox.Text = "New textbox";
-            newtextbox.Tag = "<New Box>";
+            newtextbox.Tag = $"<{Lists.MsgControlCode.NEW_BOX}>";
             // 
             // playername
             // 
             playername.Size = new System.Drawing.Size(156, 22);
             playername.Text = "Player name";
-            playername.Tag = "<Player>";
+            playername.Tag = $"<{Lists.MsgControlCode.PLAYER}>";
             // 
             // noskip
             // 
             noskip.Size = new System.Drawing.Size(156, 22);
             noskip.Text = "No skip";
-            noskip.Tag = "<NS>";
+            noskip.Tag = $"<{Lists.MsgControlCode.NS}>";
             // 
             // fade
             // 
             fade.Size = new System.Drawing.Size(156, 22);
             fade.Text = "Fade";
-            fade.Tag = "<Fade:0>";
+            fade.Tag = $"<{Lists.MsgControlCode.FADE}:0>";
             // 
             // icon
             // 
             icon.Size = new System.Drawing.Size(156, 22);
             icon.Text = "Icon";
-            icon.Tag = "<Icon:0>";
+            icon.Tag = $"<{Lists.MsgControlCode.ICON}:0>";
             // 
             // speed
             // 
             speed.Size = new System.Drawing.Size(156, 22);
             speed.Text = "Speed";
-            speed.Tag = "<Speed:0>";
+            speed.Tag = $"<{Lists.MsgControlCode.SPEED}:0>";
             // 
             // shopdescription
             // 
             shopdescription.Size = new System.Drawing.Size(156, 22);
             shopdescription.Text = "Shop description";
-            shopdescription.Tag = "<Shop Description>";
+            shopdescription.Tag = $"<{Lists.MsgControlCode.SHOP_DESCRIPTION}>";
             // 
             // drawinstant
             // 
             drawinstant.Size = new System.Drawing.Size(156, 22);
             drawinstant.Text = "Draw instantly";
-            drawinstant.Tag = "<DI>";
+            drawinstant.Tag = $"<{Lists.MsgControlCode.DI}>";
             // 
             // drawchar
             // 
             drawchar.Size = new System.Drawing.Size(156, 22);
             drawchar.Text = "Draw per-character";
-            drawchar.Tag = "<DC>";
+            drawchar.Tag = $"<{Lists.MsgControlCode.DC}>";
             // 
             // twochoices
             // 
             twochoices.Size = new System.Drawing.Size(156, 22);
             twochoices.Text = "Two choices";
-            twochoices.Tag = "<Two Choices>";
+            twochoices.Tag = $"<{Lists.MsgControlCode.TWO_CHOICES}>";
             // 
             // threechoices
             // 
             threechoices.Size = new System.Drawing.Size(156, 22);
             threechoices.Text = "Three choices";
-            threechoices.Tag = "<Three Choices>";
+            threechoices.Tag = $"<{Lists.MsgControlCode.THREE_CHOICES}>";
             // 
             // Delay
             // 
             delay.Size = new System.Drawing.Size(156, 22);
             delay.Text = "Delay";
-            delay.Tag = "<Delay:0>";
+            delay.Tag = $"<{Lists.MsgControlCode.DELAY}:0>";
 
             foreach (ToolStripMenuItem Item in MenuStrip.Items)
             {
+                if (Item == sounds)
+                    continue;
+
                 if (Item.Tag != null)
                 {
                     Item.DoubleClick += Tsmi_DoubleClick;
@@ -224,6 +203,17 @@ namespace NPC_Maker
                     SubItem.Click += SubItem_Click;
             }
 
+        }
+
+        private static void Sounds_Click(object sender, EventArgs e)
+        {
+            PickableList SFX = new PickableList(Lists.DictType.SFX, true);
+            DialogResult DR = SFX.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                InsertTxtToScript($"<{(sender as ToolStripItem).Tag as string}:{SFX.Chosen.Name}>");
+            }
         }
 
         public static void SetTextBox(FastColoredTextBox Box)

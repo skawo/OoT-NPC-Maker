@@ -2664,7 +2664,7 @@
             this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
             this.MsgText.ShowLineNumbers = false;
-            this.MsgText.Size = new System.Drawing.Size(432, 255);
+            this.MsgText.Size = new System.Drawing.Size(500, 478);
             this.MsgText.TabIndex = 68;
             this.MsgText.WordWrapAutoIndent = false;
             this.MsgText.Zoom = 100;

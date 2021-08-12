@@ -587,11 +587,11 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            data.Add((byte)Lists.MsgControlCode.Line_Break);
+                            data.Add((byte)Lists.MsgControlCode.LINE_BREAK);
                         }
                         catch (IndexOutOfRangeException)
                         {
-                            data.Add((byte)Lists.MsgControlCode.Line_Break);
+                            data.Add((byte)Lists.MsgControlCode.LINE_BREAK);
                         }
                     }
                     else if (MessageText[i] == '\r')
@@ -647,268 +647,95 @@ namespace NPC_Maker
         {
             List<byte> output = new List<byte>();
 
-            switch (code[0].ToLower())
+            for (int i = 0; i < code.Length; i++)
+                code[i] = code[i].Replace(" ", "_").ToUpper();
+
+
+            switch (code[0])
             {
-                case "line break":
-                    output.Add((byte)Lists.MsgControlCode.Line_Break);
-                    break;
-                case "box break":
-                    output.Add((byte)Lists.MsgControlCode.Box_Break);
-                    break;
-                case "w":
-                    output.Add(5);
-                    output.Add((byte)Lists.MsgColor.W);
-                    break;
-                case "r":
-                    output.Add(5);
-                    output.Add((byte)Lists.MsgColor.R);
-                    break;
-                case "g":
-                    output.Add(5);
-                    output.Add((byte)Lists.MsgColor.G);
-                    break;
-                case "b":
-                    output.Add(5);
-                    output.Add((byte)Lists.MsgColor.B);
-                    break;
-                case "c":
-                    output.Add(5);
-                    output.Add((byte)Lists.MsgColor.C);
-                    break;
-                case "m":
-                    output.Add(5);
-                    output.Add((byte)Lists.MsgColor.M);
-                    break;
-                case "y":
-                    output.Add(5);
-                    output.Add((byte)Lists.MsgColor.Y);
-                    break;
-                case "blk":
-                    output.Add(5);
-                    output.Add((byte)Lists.MsgColor.Blk);
-                    break;
-                case "pixels right":
-                    output.Add((byte)Lists.MsgControlCode.Spaces);
-                    output.Add(Convert.ToByte(code[1]));
-                    break;
-                    /* Jump will not work for messages like this.
-                case "jump":
-                    output.Add((byte)Lists.MsgControlCode.Jump);
-                    byte[] jumpIDBytes = BitConverter.GetBytes(short.Parse(code[1], System.Globalization.NumberStyles.HexNumber));
-                    output.Add(jumpIDBytes[1]);
-                    output.Add(jumpIDBytes[0]);
-                    break;
-                    */
-                case "di":
-                    output.Add((byte)Lists.MsgControlCode.Draw_Instant);
-                    break;
-                case "dc":
-                    output.Add((byte)Lists.MsgControlCode.Draw_Char);
-                    break;
-                case "shop description":
-                    output.Add((byte)Lists.MsgControlCode.Shop_Description);
-                    break;
-                case "event":
-                    output.Add((byte)Lists.MsgControlCode.Event);
-                    break;
-                case "delay":
-                    output.Add((byte)Lists.MsgControlCode.Delay);
-                    output.Add(Convert.ToByte(code[1]));
-                    break;
-                case "fade":
-                    output.Add((byte)Lists.MsgControlCode.Fade);
-                    output.Add(Convert.ToByte(code[1]));
-                    break;
-                case "player":
-                    output.Add((byte)Lists.MsgControlCode.Player);
-                    break;
-                case "ocarina":
-                    output.Add((byte)Lists.MsgControlCode.Ocarina);
-                    break;
-                case "sound":
-                    output.Add((byte)Lists.MsgControlCode.Sound);
-                    short soundValue = 0;
-                    switch (code[1].ToLower())
+                case "PIXELS_RIGHT":
                     {
-                        case "item fanfare":
-                            soundValue = (short)Lists.MsgSound.Item_Fanfare;
-                            break;
-                        case "frog ribbit 1":
-                            soundValue = (short)Lists.MsgSound.Frog_Ribbit_1;
-                            break;
-                        case "frog ribbit 2":
-                            soundValue = (short)Lists.MsgSound.Frog_Ribbit_2;
-                            break;
-                        case "deku squeak":
-                            soundValue = (short)Lists.MsgSound.Deku_Squeak;
-                            break;
-                        case "deku cry":
-                            soundValue = (short)Lists.MsgSound.Deku_Cry;
-                            break;
-                        case "generic event":
-                            soundValue = (short)Lists.MsgSound.Generic_Event;
-                            break;
-                        case "poe vanishing":
-                            soundValue = (short)Lists.MsgSound.Poe_Vanishing;
-                            break;
-                        case "twinrova 1":
-                            soundValue = (short)Lists.MsgSound.Twinrova_1;
-                            break;
-                        case "twinrova 2":
-                            soundValue = (short)Lists.MsgSound.Twinrova_2;
-                            break;
-                        case "navi hello":
-                            soundValue = (short)Lists.MsgSound.Navi_Hello;
-                            break;
-                        case "talon ehh":
-                            soundValue = (short)Lists.MsgSound.Talon_Ehh;
-                            break;
-                        case "carpenter waaaa":
-                            soundValue = (short)Lists.MsgSound.Carpenter_Waaaa;
-                            break;
-                        case "navi hey":
-                            soundValue = (short)Lists.MsgSound.Navi_HEY;
-                            break;
-                        case "saria giggle":
-                            soundValue = (short)Lists.MsgSound.Saria_Giggle;
-                            break;
-                        case "yaaaa":
-                            soundValue = (short)Lists.MsgSound.Yaaaa;
-                            break;
-                        case "zelda heh":
-                            soundValue = (short)Lists.MsgSound.Zelda_Heh;
-                            break;
-                        case "zelda awww":
-                            soundValue = (short)Lists.MsgSound.Zelda_Awww;
-                            break;
-                        case "zelda huh":
-                            soundValue = (short)Lists.MsgSound.Zelda_Huh;
-                            break;
-                        case "generic giggle":
-                            soundValue = (short)Lists.MsgSound.Generic_Giggle;
-                            break;
-                        case "unused 1":
-                            soundValue = (short)Lists.MsgSound.Unused_1;
-                            break;
-                        case "moo":
-                            soundValue = (short)Lists.MsgSound.Moo;
-                            break;
+                        output.Add((byte)Lists.MsgControlCode.SPACES);
+                        output.Add(Convert.ToByte(code[1]));
+                        break;
                     }
-                    byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
-                    output.Add(soundIDBytes[1]);
-                    output.Add(soundIDBytes[0]);
-                    break;
-                case "icon":
-                    output.Add((byte)Lists.MsgControlCode.Icon);
-                    output.Add(Convert.ToByte(code[1]));
-                    break;
-                case "speed":
-                    output.Add((byte)Lists.MsgControlCode.Speed);
-                    output.Add(Convert.ToByte(code[1]));
-                    break;
-                case "background":
-                    output.Add((byte)Lists.MsgControlCode.Background);
-                    byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
-                    output.Add(backgroundIDBytes[2]);
-                    output.Add(backgroundIDBytes[1]);
-                    output.Add(backgroundIDBytes[0]);
-                    break;
-                case "marathon time":
-                    output.Add((byte)Lists.MsgControlCode.Marathon_Time);
-                    break;
-                case "race time":
-                    output.Add((byte)Lists.MsgControlCode.Race_Time);
-                    break;
-                case "points":
-                    output.Add((byte)Lists.MsgControlCode.Points);
-                    break;
-                case "gold skulltulas":
-                    output.Add((byte)Lists.MsgControlCode.Gold_Skulltulas);
-                    break;
-                case "ns":
-                    output.Add((byte)Lists.MsgControlCode.No_Skip);
-                    break;
-                case "two choices":
-                    output.Add((byte)Lists.MsgControlCode.Two_Choices);
-                    break;
-                case "three choices":
-                    output.Add((byte)Lists.MsgControlCode.Three_Choices);
-                    break;
-                case "fish weight":
-                    output.Add((byte)Lists.MsgControlCode.Fish_Weight);
-                    break;
-                case "high score":
-                    output.Add((byte)Lists.MsgControlCode.High_Score);
-                    switch (code[1].ToLower())
+                case "JUMP":
                     {
-                        case "archery":
-                            output.Add((byte)Lists.MsgHighScore.Archery);
-                            break;
-                        case "poe points":
-                            output.Add((byte)Lists.MsgHighScore.Poe_Points);
-                            break;
-                        case "fishing":
-                            output.Add((byte)Lists.MsgHighScore.Fishing);
-                            break;
-                        case "horse race":
-                            output.Add((byte)Lists.MsgHighScore.Horse_Race);
-                            break;
-                        case "marathon":
-                            output.Add((byte)Lists.MsgHighScore.Marathon);
-                            break;
-                        case "dampe race":
-                            output.Add((byte)Lists.MsgHighScore.Dampe_Race);
-                            break;
+                        /* Jump will not work for messages like this.
+                        output.Add((byte)Lists.MsgControlCode.JUMP);
+                        byte[] jumpIDBytes = BitConverter.GetBytes(short.Parse(code[1], System.Globalization.NumberStyles.HexNumber));
+                        output.Add(jumpIDBytes[1]);
+                        output.Add(jumpIDBytes[0]);
+                        */
+                        break;
                     }
-                    break;
-                case "time":
-                    output.Add((byte)Lists.MsgControlCode.Time);
-                    break;
-                case "dash":
-                    output.Add((byte)Lists.MsgControlCode.Dash);
-                    break;
-                case "a button":
-                    output.Add((byte)Lists.MsgControlCode.A_Button);
-                    break;
-                case "b button":
-                    output.Add((byte)Lists.MsgControlCode.B_Button);
-                    break;
-                case "c button":
-                    output.Add((byte)Lists.MsgControlCode.C_Button);
-                    break;
-                case "l button":
-                    output.Add((byte)Lists.MsgControlCode.L_Button);
-                    break;
-                case "r button":
-                    output.Add((byte)Lists.MsgControlCode.R_Button);
-                    break;
-                case "z button":
-                    output.Add((byte)Lists.MsgControlCode.Z_Button);
-                    break;
-                case "c up":
-                    output.Add((byte)Lists.MsgControlCode.C_Up);
-                    break;
-                case "c down":
-                    output.Add((byte)Lists.MsgControlCode.C_Down);
-                    break;
-                case "c left":
-                    output.Add((byte)Lists.MsgControlCode.C_Left);
-                    break;
-                case "c right":
-                    output.Add((byte)Lists.MsgControlCode.C_Right);
-                    break;
-                case "triangle":
-                    output.Add((byte)Lists.MsgControlCode.Triangle);
-                    break;
-                case "control stick":
-                    output.Add((byte)Lists.MsgControlCode.Control_Stick);
-                    break;
-                case "d pad":
-                    output.Add((byte)Lists.MsgControlCode.D_Pad);
-                    break;
-                case "new box":
-                    output.Add((byte)Lists.MsgControlCode.Box_Break);
-                    break;
+                case "DELAY":
+                case "FADE":
+                case "ICON":
+                    {
+                        output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
+                        output.Add(Convert.ToByte(code[1]));
+                        break;
+                    }
+                case "BACKGROUND":
+                    {
+                        output.Add((byte)Lists.MsgControlCode.BACKGROUND);
+                        byte[] backgroundIDBytes = BitConverter.GetBytes(Convert.ToInt32(code[1]));
+                        output.Add(backgroundIDBytes[2]);
+                        output.Add(backgroundIDBytes[1]);
+                        output.Add(backgroundIDBytes[0]);
+                        break;
+                    }
+                case "HIGH_SCORE":
+                    {
+                        output.Add((byte)Lists.MsgControlCode.HIGH_SCORE);
+                        output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgHighScore), code[1]));
+                        break;
+                    }
+                case "SOUND":
+                    {
+                        output.Add((byte)Lists.MsgControlCode.SOUND);
+
+                        if (Dicts.SFXes.ContainsKey(code[1]))
+                        {
+                            short soundValue = (short)Dicts.SFXes[code[1]];
+                            byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
+                            output.Add(soundIDBytes[1]);
+                            output.Add(soundIDBytes[0]);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                short soundValue = Convert.ToInt16(code[1]);
+                                byte[] soundIDBytes = BitConverter.GetBytes(soundValue);
+                                output.Add(soundIDBytes[1]);
+                                output.Add(soundIDBytes[0]);
+                            }
+                            catch (Exception)
+                            {
+                                System.Windows.Forms.MessageBox.Show($"{code[1]} is not a valid sound.");
+                                output.Add(0);
+                                output.Add(0);
+                            }
+                        }
+
+                        break;
+                    }
+                default:
+                    {
+                        if (Enum.IsDefined(typeof(Lists.MsgColor), code[0]))
+                        {
+                            output.Add((byte)Lists.MsgControlCode.COLOR);
+                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgColor), code[0]));
+                        }
+                        else if (Enum.IsDefined(typeof(Lists.MsgControlCode), code[0]))
+                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
+                        else
+                            System.Windows.Forms.MessageBox.Show($"{code[0]} is not a valid control code.");
+
+                        break;
+                    }
             }
 
             return output;

@@ -151,7 +151,7 @@ namespace NPC_Maker.Scripts
 
         public static ScriptVarVal GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max)
         {
-            ScriptVarVal outv = new ScriptVarVal();
+            var outv = new ScriptVarVal();
 
             outv.Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
             outv.Value = ScriptHelpers.GetValueByType(SplitLine, Index, outv.Vartype, Min, Max);
@@ -173,7 +173,7 @@ namespace NPC_Maker.Scripts
 
         public static ScriptVarVal GetScriptVarVal(string[] SplitLine, int Index, Type EnumType, ParseException Throw)
         {
-            ScriptVarVal outv = new ScriptVarVal();
+            var outv = new ScriptVarVal();
 
             outv.Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
             outv.Value = ScriptHelpers.Helper_GetEnumByNameOrVarType(SplitLine, Index, outv.Vartype, EnumType, Throw);
@@ -398,7 +398,7 @@ namespace NPC_Maker.Scripts
         private static ScriptVarVal Helper_GetValFromDict(string[] SplitLine, int Index, int RangeMin, int RangeMax,
                                                    Dictionary<string, int> Dict, ParseException ToThrow)
         {
-            ScriptVarVal outV = new ScriptVarVal();
+            var outV = new ScriptVarVal();
             outV.Vartype = GetVarType(SplitLine, Index);
 
             try
@@ -442,7 +442,7 @@ namespace NPC_Maker.Scripts
 
         private static ScriptVarVal Helper_GetFromStringList(string[] SplitLine, int Index, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow, int? VarTypeOverride = null)
         {
-            ScriptVarVal outV = new ScriptVarVal();
+            var outV = new ScriptVarVal();
             bool found = false;
             outV.Vartype = VarTypeOverride == null ? GetVarType(SplitLine, Index) : (byte)VarTypeOverride;
 
