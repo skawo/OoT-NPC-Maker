@@ -299,7 +299,7 @@ namespace NPC_Maker
 
             foreach (DListEntry Dlist in SelectedEntry.ExtraDisplayLists)
             {
-                string SelCombo = Dicts.GetStringFromStringIntDict(Dicts.LimbShowSubTypes, Dlist.ShowType, Dicts.LimbShowSubTypes.First().Key);
+                string SelCombo = ExtraDlists_ShowType.Items[(int)Dlist.ShowType].ToString();
 
                 int Row = DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
                                                                            "",

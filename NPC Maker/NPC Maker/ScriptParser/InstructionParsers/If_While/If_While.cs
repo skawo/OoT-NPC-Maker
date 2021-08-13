@@ -63,7 +63,6 @@ namespace NPC_Maker.Scripts
                             Instructions.Add(new InstructionLabel("__WHILESTART__" + LabelR));
                             Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
                             Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
-                            Instructions.Add(new InstructionAwait((byte)Lists.AwaitSubTypes.FRAMES, new ScriptVarVal(1), Lists.ConditionTypes.EQUALTO));
                             Instructions.Add(new InstructionGoto("__WHILESTART__" + LabelR));
                             Instructions.Add(new InstructionLabel("__IFFALSE__" + LabelR));
                             InsertIdx = 1;
@@ -118,6 +117,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.ATTACKED:
                         case (int)Lists.IfSubTypes.TARGETTED:
                         case (int)Lists.IfSubTypes.LENS_OF_TRUTH_ON:
+                        case (int)Lists.IfSubTypes.TEXTBOX_DRAWING:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 

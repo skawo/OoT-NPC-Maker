@@ -607,8 +607,17 @@ namespace NPC_Maker
 
                     if (parsedCode.Replace(" ", "_").ToUpper() == Lists.MsgControlCode.NEW_BOX.ToString())
                     {
-                        data.RemoveAt(data.Count - 1); // Removes the last \n, which was added during import
-                        i++; // Skips next \n, added at import
+                        data.RemoveAt(data.Count - 1);
+
+                        if (MessageText.Length >= i + 1)
+                        {
+                            string s = String.Concat(MessageText[i + 1], MessageText[i + 2]);
+
+                            if (s == "\r\n")
+                            {
+                                i += 2; // Skips next \n
+                            }
+                        }
                     }
 
                     data.AddRange(GetControlCode(parsedCode.Split(':'), ref errors));
@@ -654,6 +663,7 @@ namespace NPC_Maker
                     case "FADE":
                     case "FADE2":
                     case "SHIFT":
+                    case "SPEED":
                         {
                             output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
                             output.Add(Convert.ToByte(code[1]));

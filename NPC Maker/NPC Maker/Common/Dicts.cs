@@ -9,9 +9,9 @@ namespace NPC_Maker
     {
         public static Dictionary<string, int> LimbShowSubTypes = new Dictionary<string, int>()
         {
-            { "Don't show", 0 },
-            { "Alongside limb", 1 },
-            { "Instead of limb", 2 },
+            { "Not visible", 0 },
+            { "With limb", 1 },
+            { "Replaces limb", 2 },
         };
 
         public static Dictionary<Lists.DictType, string> DictFilenames = new Dictionary<Lists.DictType, string>()

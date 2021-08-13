@@ -262,6 +262,11 @@
             this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
+            this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Color = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -271,11 +276,6 @@
             this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -3236,73 +3236,6 @@
             this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
             this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
             // 
-            // ExtraDlists_Purpose
-            // 
-            this.ExtraDlists_Purpose.FillWeight = 70F;
-            this.ExtraDlists_Purpose.HeaderText = "Purpose";
-            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
-            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Color
-            // 
-            this.ExtraDlists_Color.FillWeight = 30F;
-            this.ExtraDlists_Color.HeaderText = "Color";
-            this.ExtraDlists_Color.Name = "ExtraDlists_Color";
-            this.ExtraDlists_Color.ReadOnly = true;
-            // 
-            // ExtraDlists_Offset
-            // 
-            this.ExtraDlists_Offset.FillWeight = 50F;
-            this.ExtraDlists_Offset.HeaderText = "Offset";
-            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
-            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Translation
-            // 
-            this.ExtraDlists_Translation.FillWeight = 60F;
-            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
-            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
-            this.ExtraDlists_Translation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Rotation
-            // 
-            this.ExtraDlists_Rotation.FillWeight = 60F;
-            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
-            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
-            this.ExtraDlists_Rotation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDLists_Scale
-            // 
-            this.ExtraDLists_Scale.FillWeight = 40F;
-            this.ExtraDLists_Scale.HeaderText = "Scale";
-            this.ExtraDLists_Scale.Name = "ExtraDLists_Scale";
-            this.ExtraDLists_Scale.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Limb
-            // 
-            this.ExtraDlists_Limb.FillWeight = 35F;
-            this.ExtraDlists_Limb.HeaderText = "Limb";
-            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
-            this.ExtraDlists_Limb.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_ObjectID
-            // 
-            this.ExtraDlists_ObjectID.FillWeight = 60F;
-            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
-            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
-            this.ExtraDlists_ObjectID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_ShowType
-            // 
-            this.ExtraDlists_ShowType.FillWeight = 80F;
-            this.ExtraDlists_ShowType.HeaderText = "Show type";
-            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
-            "Don\'t show",
-            "Alongside limb",
-            "Instead of limb"});
-            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
-            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
             // MessagesGrid
             // 
             this.MessagesGrid.AllowUserToAddRows = false;
@@ -3371,6 +3304,73 @@
             this.Col_Name.Name = "Col_Name";
             this.Col_Name.ReadOnly = true;
             this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Purpose
+            // 
+            this.ExtraDlists_Purpose.FillWeight = 70F;
+            this.ExtraDlists_Purpose.HeaderText = "Purpose";
+            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
+            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Color
+            // 
+            this.ExtraDlists_Color.FillWeight = 30F;
+            this.ExtraDlists_Color.HeaderText = "Color";
+            this.ExtraDlists_Color.Name = "ExtraDlists_Color";
+            this.ExtraDlists_Color.ReadOnly = true;
+            // 
+            // ExtraDlists_Offset
+            // 
+            this.ExtraDlists_Offset.FillWeight = 50F;
+            this.ExtraDlists_Offset.HeaderText = "Offset";
+            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
+            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Translation
+            // 
+            this.ExtraDlists_Translation.FillWeight = 60F;
+            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
+            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
+            this.ExtraDlists_Translation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Rotation
+            // 
+            this.ExtraDlists_Rotation.FillWeight = 60F;
+            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
+            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
+            this.ExtraDlists_Rotation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDLists_Scale
+            // 
+            this.ExtraDLists_Scale.FillWeight = 40F;
+            this.ExtraDLists_Scale.HeaderText = "Scale";
+            this.ExtraDLists_Scale.Name = "ExtraDLists_Scale";
+            this.ExtraDLists_Scale.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Limb
+            // 
+            this.ExtraDlists_Limb.FillWeight = 35F;
+            this.ExtraDlists_Limb.HeaderText = "Limb";
+            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
+            this.ExtraDlists_Limb.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_ObjectID
+            // 
+            this.ExtraDlists_ObjectID.FillWeight = 60F;
+            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
+            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
+            this.ExtraDlists_ObjectID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_ShowType
+            // 
+            this.ExtraDlists_ShowType.FillWeight = 80F;
+            this.ExtraDlists_ShowType.HeaderText = "Show type";
+            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
+            "Not visible",
+            "With limb",
+            "Replaces limb"});
+            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
+            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // MainWindow
             // 
@@ -3707,6 +3707,8 @@
         private System.Windows.Forms.NumericUpDown NumUpDown_ScriptsVar;
         private System.Windows.Forms.Label Lbl_ScriptsFVars;
         private System.Windows.Forms.Label Lbl_ScriptsVars;
+        private System.Windows.Forms.ToolStripMenuItem linkAnimationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editGlobalHeaderToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Purpose;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Color;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Offset;
@@ -3716,8 +3718,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Limb;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
-        private System.Windows.Forms.ToolStripMenuItem linkAnimationsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editGlobalHeaderToolStripMenuItem;
     }
 }
 

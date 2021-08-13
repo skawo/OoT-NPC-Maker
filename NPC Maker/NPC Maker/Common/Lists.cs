@@ -212,6 +212,7 @@ namespace NPC_Maker
             TRADE,
             ENABLE_TALKING,
             SHOW_TEXTBOX,
+            SHOW_TEXTBOX_SP,
             ITEM,
             PLAY ,
             KILL,
@@ -1391,7 +1392,7 @@ namespace NPC_Maker
         {
             NOT_VISIBLE = 0,
             WITH_LIMB = 1,
-            INSTEAD_OF_LIMB = 2,
+            REPLACES_LIMB = 2,
         }
 
         public enum PlaySubTypes
