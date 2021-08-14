@@ -176,6 +176,7 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.CollisionYShift);
                         EntryBytes.AddRangeBigEndian(Entry.ShadowRadius);
                         EntryBytes.AddRangeBigEndian(Entry.MovementDistance);
+                        EntryBytes.AddRangeBigEndian(Entry.MaxDistRoam);
                         EntryBytes.AddRangeBigEndian(Entry.PathStartNodeID);
                         EntryBytes.AddRangeBigEndian(Entry.PathEndNodeID);
                         EntryBytes.AddRangeBigEndian(Entry.MovementDelayTime);
@@ -284,8 +285,8 @@ namespace NPC_Maker
                             Helpers.Ensure4ByteAlign(Message);
                             MsgData.AddRange(Message);
 
-                            if (MsgData.Count > 1024)
-                                throw new Exception("One of the messages has exceeded 1024 bytes, and could not be saved.");
+                            if (MsgData.Count > 640)
+                                throw new Exception("One of the messages has exceeded 640 bytes (the maximum allowed), and could not be saved.");
 
                             Header.AddRangeBigEndian(MsgOffset);
                             Header.Add(Msg.GetMessageTypePos());

@@ -34,6 +34,8 @@ namespace NPC_Maker.Scripts
 
                 LineNo = End;
 
+                bool[] Used = new bool[4] { false, false, false, false };
+
                 foreach (string Par in Params)
                 {
                     string[] Split = Par.Split(' ');
@@ -46,6 +48,9 @@ namespace NPC_Maker.Scripts
 
                     int SubID = (int)System.Enum.Parse(typeof(Lists.SpawnParams), Split[0].ToUpper());
 
+                    if (Used[SubID])
+                        throw ParseException.DuplicateSpawnInstruction(Split);
+
                     switch (SubID)
                     {
                         case (int)Lists.SpawnParams.VARIABLE:
@@ -53,14 +58,18 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 2);
                                 ScriptHelpers.GetScriptVarVal(Split, 1, 0, UInt16.MaxValue, ref ActorVar);
 
+                                Used[(int)Lists.SpawnParams.VARIABLE] = true;
+
                                 continue;
                             }
                         case (int)Lists.SpawnParams.POSITION:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 5);
 
-                                PosType = Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
+                                PosType += Convert.ToByte(ScriptHelpers.Helper_GetEnumByName(Split, 1, typeof(Lists.SpawnPosParams), ParseException.UnrecognizedParameter(Split)));
                                 ScriptHelpers.GetXYZPos(Split, 2, 3, 4, ref PosX, ref PosY, ref PosZ);
+
+                                Used[(int)Lists.SpawnParams.POSITION] = true;
 
                                 continue;
                             }
@@ -68,6 +77,17 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(Split, 4);
                                 ScriptHelpers.GetXYZ(Split, 1, 2, 3, ref RotX, ref RotY, ref RotZ, Int16.MinValue, Int16.MaxValue);
+
+                                Used[(int)Lists.SpawnParams.ROTATION] = true;
+
+                                continue;
+                            }
+                        case (int)Lists.SpawnParams.SET_AS_REF:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(Split, 1);
+                                PosType += 10;
+
+                                Used[(int)Lists.SpawnParams.SET_AS_REF] = true;
 
                                 continue;
                             }

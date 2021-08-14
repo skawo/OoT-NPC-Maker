@@ -391,6 +391,11 @@ namespace NPC_Maker.Scripts
             return DuplicateTradeInstruction(String.Join(" ", _Line));
         }
 
+        public static ParseException DuplicateSpawnInstruction(string[] _Line)
+        {
+            return new ParseException("Duplicate member in spawn instruction: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedInstruction(string[] _Line)
         {
             return new ParseException("Unrecognized instruction: ", String.Join(" ", _Line));

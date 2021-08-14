@@ -20,6 +20,7 @@ namespace NPC_Maker.Scripts
                     switch (SubID)
                     {
                         case (int)Lists.SetSubTypes.MOVEMENT_DISTANCE:
+                        case (int)Lists.SetSubTypes.MAXIMUM_ROAM:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_DELAY:
                         case (int)Lists.SetSubTypes.COLLISION_RADIUS:
                         case (int)Lists.SetSubTypes.COLLISION_HEIGHT:

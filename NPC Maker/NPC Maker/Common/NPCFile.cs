@@ -85,6 +85,7 @@ namespace NPC_Maker
         public float SmoothingConstant { get; set; }
         public UInt16 TimedPathStart { get; set; }
         public UInt16 TimedPathEnd { get; set; }
+        public UInt16 MaxDistRoam { get; set; }
 
         public bool GenLight { get; set; }
         public bool Glow { get; set; }
@@ -184,6 +185,7 @@ namespace NPC_Maker
             LoopPath = false;
             TimedPathStart = 0;
             TimedPathEnd = Helpers.GetOcarinaTime("23:59");
+            MaxDistRoam = 65535;
 
             Animations = new List<AnimationEntry>();
             AnimationType = 0;
@@ -311,6 +313,7 @@ namespace NPC_Maker
             INVISIBLE,
             SCRIPTVARS,
             SCRIPTFVARS,
+            ROAMMAX,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -431,6 +434,8 @@ namespace NPC_Maker
 
                 case Members.SCRIPTVARS: NumVars = Convert.ToByte(Value); break;
                 case Members.SCRIPTFVARS: NumFVars = Convert.ToByte(Value); break;
+
+                case Members.ROAMMAX: MaxDistRoam = Convert.ToUInt16(Value); break;
 
                 default: break;
             }

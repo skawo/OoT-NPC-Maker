@@ -163,6 +163,7 @@ namespace NPC_Maker
 
             SpawnParams.VARIABLE.ToString(),
             SpawnParams.ROTATION.ToString(),
+            SpawnParams.SET_AS_REF.ToString(),
 
             VarTypes.NORMAL.ToString(),
             VarTypes.RANDOM.ToString(),
@@ -358,6 +359,7 @@ namespace NPC_Maker
             ALPHA,
 
             MOVEMENT_DISTANCE,
+            MAXIMUM_ROAM,
             MOVEMENT_LOOP_DELAY,
             ATTACKED_SFX,
             LIGHT_RADIUS,
@@ -518,6 +520,7 @@ namespace NPC_Maker
             POSITION,
             ROTATION,
             VARIABLE,
+            SET_AS_REF,
         }
 
         public enum SpawnPosParams

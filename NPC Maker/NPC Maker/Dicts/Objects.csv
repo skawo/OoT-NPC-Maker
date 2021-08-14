@@ -1,4 +1,4 @@
--1,Current,Currently selected object
+-1,Main,NPC's main object
 -2,RAM,Load directly from RAM (Only for segments and extra limbs)
 -3,No object,Use as the NPC's object to not draw anything
 -4,XLU Display List,Use this to achieve transparency in models that require it

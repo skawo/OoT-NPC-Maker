@@ -181,6 +181,7 @@ namespace NPC_Maker
 
             Combo_MovementType.SelectedIndex = SelectedEntry.MovementType;
             NumUpDown_MovDistance.Value = SelectedEntry.MovementDistance;
+            NumUp_MaxRoam.Value = SelectedEntry.MaxDistRoam;
             NumUpDown_MovSpeed.Value = (decimal)SelectedEntry.MovementSpeed;
             NumUpDown_GravityForce.Value = (decimal)SelectedEntry.GravityForce;
             NumUpDown_LoopDelay.Value = SelectedEntry.MovementDelayTime;
