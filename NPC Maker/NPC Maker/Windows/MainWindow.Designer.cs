@@ -277,6 +277,7 @@
             this.sFXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.musicToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
@@ -2880,14 +2881,14 @@
         '\''};
             this.MsgText.AutoIndent = false;
             this.MsgText.AutoIndentChars = false;
-            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 14);
+            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 12);
             this.MsgText.BackBrush = null;
             this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MsgText.CharHeight = 14;
-            this.MsgText.CharWidth = 8;
+            this.MsgText.CharHeight = 12;
+            this.MsgText.CharWidth = 7;
             this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgText.Font = new System.Drawing.Font("Courier New", 9.75F);
+            this.MsgText.Font = new System.Drawing.Font("Courier New", 8.25F);
             this.MsgText.IsReplaceMode = false;
             this.MsgText.Location = new System.Drawing.Point(260, 98);
             this.MsgText.Name = "MsgText";
@@ -3356,7 +3357,8 @@
             this.actorsToolStripMenuItem1,
             this.sFXToolStripMenuItem,
             this.musicToolStripMenuItem1,
-            this.linkAnimationsToolStripMenuItem});
+            this.linkAnimationsToolStripMenuItem,
+            this.colorPickerToolStripMenuItem});
             this.listsToolStripMenuItem.Name = "listsToolStripMenuItem";
             this.listsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.listsToolStripMenuItem.Text = "Dictionaries";
@@ -3395,6 +3397,13 @@
             this.linkAnimationsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.linkAnimationsToolStripMenuItem.Text = "Link animations";
             this.linkAnimationsToolStripMenuItem.Click += new System.EventHandler(this.LinkAnimsToolStripMenuItem1_Click);
+            // 
+            // colorPickerToolStripMenuItem
+            // 
+            this.colorPickerToolStripMenuItem.Name = "colorPickerToolStripMenuItem";
+            this.colorPickerToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.colorPickerToolStripMenuItem.Text = "Color Picker";
+            this.colorPickerToolStripMenuItem.Click += new System.EventHandler(this.ColorPickerToolStripMenuItem_Click);
             // 
             // notifyIcon1
             // 
@@ -3750,6 +3759,7 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown NumUp_MaxRoam;
+        private System.Windows.Forms.ToolStripMenuItem colorPickerToolStripMenuItem;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FastColoredTextBoxNS;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -473,6 +474,14 @@ namespace NPC_Maker
                 FileMenu_Save_Click(null, null);
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void ColorPickerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                Clipboard.SetText($"{ColorDialog.Color.R}, {ColorDialog.Color.G}, {ColorDialog.Color.B}");
+            }
         }
 
         private void EditGlobalHeaderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1829,5 +1838,6 @@ namespace NPC_Maker
         }
 
         #endregion
+
     }
 }

@@ -62,7 +62,6 @@ namespace NPC_Maker
             this.Textbox_Script.CharWidth = 8;
             this.Textbox_Script.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Textbox_Script.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.Textbox_Script.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.Textbox_Script.IsReplaceMode = false;
             this.Textbox_Script.Location = new System.Drawing.Point(3, 3);
             this.Textbox_Script.Name = "Textbox_Script";

@@ -634,6 +634,10 @@ namespace NPC_Maker
             if (errors.Count != 0)
                 System.Windows.Forms.MessageBox.Show($"Errors parsing message {Name}: " + Environment.NewLine + String.Join(Environment.NewLine, errors.ToArray()));
 
+
+            System.IO.File.WriteAllBytes("test", data.ToArray());
+
+
             return data;
         }
 
