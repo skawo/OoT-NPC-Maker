@@ -617,7 +617,7 @@ namespace NPC_Maker
                     {
                         data.RemoveAt(data.Count - 1);
 
-                        if (MessageText.Length >= i + 1)
+                        if (MessageText.Length > i + 1)
                         {
                             string s = String.Concat(MessageText[i + 1], MessageText[i + 2]);
 
