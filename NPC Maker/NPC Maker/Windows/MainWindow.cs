@@ -1771,10 +1771,13 @@ namespace NPC_Maker
                 Combo_MsgPos.Enabled = true;
             }
 
+
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
             MsgText.Text = Entry.MessageText;
             Combo_MsgType.SelectedIndex = Entry.Type;
             Combo_MsgPos.SelectedIndex = Entry.Position;
+
+            MsgText_TextChanged(null, null);
         }
 
         private void NumUp_BoxNum_ValueChanged(object sender, EventArgs e)
@@ -1793,6 +1796,8 @@ namespace NPC_Maker
             List<byte> Data = Entry.ConvertTextData(false);
             ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray());
 
+            MsgText.TextChanged -= MsgText_TextChanged;
+
             int NumBoxes = mp.MessageCount;
 
             if (NumBoxes == 0)
@@ -1804,6 +1809,9 @@ namespace NPC_Maker
                 numUp_BoxNum.Value = NumBoxes;
 
             numUp_BoxNum.Maximum = NumBoxes;
+
+            MsgText.TextChanged += MsgText_TextChanged;
+
             pictureBox1.BackgroundImage = mp.GetPreview((int)numUp_BoxNum.Value - 1);
         }
 
