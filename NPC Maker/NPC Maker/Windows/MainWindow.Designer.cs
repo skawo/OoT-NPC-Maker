@@ -224,7 +224,7 @@
             this.MessagesTabPage = new System.Windows.Forms.TabPage();
             this.lblBoxNum = new System.Windows.Forms.Label();
             this.numUp_BoxNum = new System.Windows.Forms.NumericUpDown();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.MsgPreview = new System.Windows.Forms.PictureBox();
             this.MsgText = new FastColoredTextBoxNS.FastColoredTextBox();
             this.Btn_MsgRename = new System.Windows.Forms.Button();
             this.Lbl_Text = new System.Windows.Forms.Label();
@@ -346,7 +346,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
             this.MessagesTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUp_BoxNum)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.Panel_NPCList.SuspendLayout();
@@ -2852,7 +2852,7 @@
             // 
             this.MessagesTabPage.Controls.Add(this.lblBoxNum);
             this.MessagesTabPage.Controls.Add(this.numUp_BoxNum);
-            this.MessagesTabPage.Controls.Add(this.pictureBox1);
+            this.MessagesTabPage.Controls.Add(this.MsgPreview);
             this.MessagesTabPage.Controls.Add(this.MsgText);
             this.MessagesTabPage.Controls.Add(this.Btn_MsgRename);
             this.MessagesTabPage.Controls.Add(this.Lbl_Text);
@@ -2905,13 +2905,13 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(260, 444);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(500, 177);
-            this.pictureBox1.TabIndex = 69;
-            this.pictureBox1.TabStop = false;
+            this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.MsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgPreview.Location = new System.Drawing.Point(260, 444);
+            this.MsgPreview.Name = "pictureBox1";
+            this.MsgPreview.Size = new System.Drawing.Size(500, 177);
+            this.MsgPreview.TabIndex = 69;
+            this.MsgPreview.TabStop = false;
             // 
             // MsgText
             // 
@@ -3549,7 +3549,7 @@
             this.MessagesTabPage.ResumeLayout(false);
             this.MessagesTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUp_BoxNum)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.Panel_NPCList.ResumeLayout(false);
@@ -3812,7 +3812,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown NumUp_MaxRoam;
         private System.Windows.Forms.ToolStripMenuItem colorPickerToolStripMenuItem;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox MsgPreview;
         private System.Windows.Forms.NumericUpDown numUp_BoxNum;
         private System.Windows.Forms.Label lblBoxNum;
     }

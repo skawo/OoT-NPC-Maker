@@ -328,12 +328,10 @@ namespace NPC_Maker
             MessagesGrid.Rows.Clear();
 
             foreach (MessageEntry Entry in SelectedEntry.Messages)
-            {
                 MessagesGrid.Rows.Add(new object[] { Entry.Name });
-            }
 
-            MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
             MessagesGrid_SelectionChanged(MessagesGrid, null);
+            MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
 
             #endregion
 
@@ -1771,6 +1769,9 @@ namespace NPC_Maker
                 Combo_MsgPos.Enabled = true;
             }
 
+            MsgText.TextChanged -= MsgText_TextChanged;
+            numUp_BoxNum.ValueChanged -= NumUp_BoxNum_ValueChanged;
+            Combo_MsgType.SelectedIndexChanged -= Combo_MsgType_SelectedIndexChanged;
 
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
             MsgText.Text = Entry.MessageText;
@@ -1778,6 +1779,10 @@ namespace NPC_Maker
             Combo_MsgPos.SelectedIndex = Entry.Position;
 
             MsgText_TextChanged(null, null);
+
+            MsgText.TextChanged += MsgText_TextChanged;
+            numUp_BoxNum.ValueChanged += NumUp_BoxNum_ValueChanged;
+            Combo_MsgType.SelectedIndexChanged += Combo_MsgType_SelectedIndexChanged;
         }
 
         private void NumUp_BoxNum_ValueChanged(object sender, EventArgs e)
@@ -1796,8 +1801,6 @@ namespace NPC_Maker
             List<byte> Data = Entry.ConvertTextData(false);
             ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray());
 
-            MsgText.TextChanged -= MsgText_TextChanged;
-
             int NumBoxes = mp.MessageCount;
 
             if (NumBoxes == 0)
@@ -1810,9 +1813,7 @@ namespace NPC_Maker
 
             numUp_BoxNum.Maximum = NumBoxes;
 
-            MsgText.TextChanged += MsgText_TextChanged;
-
-            pictureBox1.BackgroundImage = mp.GetPreview((int)numUp_BoxNum.Value - 1);
+            MsgPreview.BackgroundImage = mp.GetPreview((int)numUp_BoxNum.Value - 1);
         }
 
         private void Combo_MsgPos_SelectedIndexChanged(object sender, EventArgs e)
@@ -1833,11 +1834,19 @@ namespace NPC_Maker
             Entry.Type = Combo_MsgType.SelectedIndex;
 
             if (Entry.Type == 5)
-                pictureBox1.BackColor = Color.Black;
+                MsgPreview.BackColor = Color.Black;
             else
-                pictureBox1.BackColor = Color.White;
+                MsgPreview.BackColor = Color.White;
+
+            MsgText.TextChanged -= MsgText_TextChanged;
+            numUp_BoxNum.ValueChanged -= NumUp_BoxNum_ValueChanged;
+            Combo_MsgType.SelectedIndexChanged -= Combo_MsgType_SelectedIndexChanged;
 
             MsgText_TextChanged(null, null);
+
+            MsgText.TextChanged += MsgText_TextChanged;
+            numUp_BoxNum.ValueChanged += NumUp_BoxNum_ValueChanged;
+            Combo_MsgType.SelectedIndexChanged += Combo_MsgType_SelectedIndexChanged;
         }
 
         private void Btn_AddMsg_Click(object sender, EventArgs e)
