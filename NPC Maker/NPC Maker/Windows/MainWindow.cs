@@ -1777,6 +1777,11 @@ namespace NPC_Maker
             Combo_MsgPos.SelectedIndex = Entry.Position;
         }
 
+        private void NumUp_BoxNum_ValueChanged(object sender, EventArgs e)
+        {
+            MsgText_TextChanged(null, null);
+        }
+
         private void MsgText_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             if (MessagesGrid.SelectedRows.Count == 0)
@@ -1784,6 +1789,22 @@ namespace NPC_Maker
 
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
             Entry.MessageText = MsgText.Text;
+
+            List<byte> Data = Entry.ConvertTextData(false);
+            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray());
+
+            int NumBoxes = mp.MessageCount;
+
+            if (NumBoxes == 0)
+                numUp_BoxNum.Minimum = 0;
+            else
+                numUp_BoxNum.Minimum = 1;
+
+            if (numUp_BoxNum.Value > NumBoxes)
+                numUp_BoxNum.Value = NumBoxes;
+
+            numUp_BoxNum.Maximum = NumBoxes;
+            pictureBox1.BackgroundImage = mp.GetPreview((int)numUp_BoxNum.Value - 1);
         }
 
         private void Combo_MsgPos_SelectedIndexChanged(object sender, EventArgs e)
@@ -1802,6 +1823,13 @@ namespace NPC_Maker
 
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
             Entry.Type = Combo_MsgType.SelectedIndex;
+
+            if (Entry.Type == 5)
+                pictureBox1.BackColor = Color.Black;
+            else
+                pictureBox1.BackColor = Color.White;
+
+            MsgText_TextChanged(null, null);
         }
 
         private void Btn_AddMsg_Click(object sender, EventArgs e)
@@ -1838,6 +1866,5 @@ namespace NPC_Maker
         }
 
         #endregion
-
     }
 }

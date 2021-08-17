@@ -222,6 +222,9 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.MessagesTabPage = new System.Windows.Forms.TabPage();
+            this.lblBoxNum = new System.Windows.Forms.Label();
+            this.numUp_BoxNum = new System.Windows.Forms.NumericUpDown();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.MsgText = new FastColoredTextBoxNS.FastColoredTextBox();
             this.Btn_MsgRename = new System.Windows.Forms.Button();
             this.Lbl_Text = new System.Windows.Forms.Label();
@@ -342,6 +345,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
             this.MessagesTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUp_BoxNum)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.Panel_NPCList.SuspendLayout();
@@ -2845,6 +2850,9 @@
             // 
             // MessagesTabPage
             // 
+            this.MessagesTabPage.Controls.Add(this.lblBoxNum);
+            this.MessagesTabPage.Controls.Add(this.numUp_BoxNum);
+            this.MessagesTabPage.Controls.Add(this.pictureBox1);
             this.MessagesTabPage.Controls.Add(this.MsgText);
             this.MessagesTabPage.Controls.Add(this.Btn_MsgRename);
             this.MessagesTabPage.Controls.Add(this.Lbl_Text);
@@ -2862,6 +2870,48 @@
             this.MessagesTabPage.TabIndex = 5;
             this.MessagesTabPage.Text = "Messages";
             this.MessagesTabPage.UseVisualStyleBackColor = true;
+            // 
+            // lblBoxNum
+            // 
+            this.lblBoxNum.AutoSize = true;
+            this.lblBoxNum.Location = new System.Drawing.Point(647, 417);
+            this.lblBoxNum.Name = "lblBoxNum";
+            this.lblBoxNum.Size = new System.Drawing.Size(66, 13);
+            this.lblBoxNum.TabIndex = 71;
+            this.lblBoxNum.Text = "Box number:";
+            // 
+            // numUp_BoxNum
+            // 
+            this.numUp_BoxNum.Location = new System.Drawing.Point(719, 415);
+            this.numUp_BoxNum.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numUp_BoxNum.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numUp_BoxNum.Name = "numUp_BoxNum";
+            this.numUp_BoxNum.Size = new System.Drawing.Size(41, 20);
+            this.numUp_BoxNum.TabIndex = 70;
+            this.numUp_BoxNum.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numUp_BoxNum.ValueChanged += new System.EventHandler(this.NumUp_BoxNum_ValueChanged);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(260, 444);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(500, 177);
+            this.pictureBox1.TabIndex = 69;
+            this.pictureBox1.TabStop = false;
             // 
             // MsgText
             // 
@@ -2896,7 +2946,7 @@
             this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
             this.MsgText.ShowLineNumbers = false;
-            this.MsgText.Size = new System.Drawing.Size(500, 490);
+            this.MsgText.Size = new System.Drawing.Size(500, 311);
             this.MsgText.TabIndex = 68;
             this.MsgText.WordWrapAutoIndent = false;
             this.MsgText.Zoom = 100;
@@ -3498,6 +3548,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
             this.MessagesTabPage.ResumeLayout(false);
             this.MessagesTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUp_BoxNum)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.Panel_NPCList.ResumeLayout(false);
@@ -3760,6 +3812,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown NumUp_MaxRoam;
         private System.Windows.Forms.ToolStripMenuItem colorPickerToolStripMenuItem;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.NumericUpDown numUp_BoxNum;
+        private System.Windows.Forms.Label lblBoxNum;
     }
 }
 

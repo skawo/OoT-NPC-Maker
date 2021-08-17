@@ -565,7 +565,7 @@ namespace NPC_Maker
             return (byte)(Out | Position);
         }
 
-        public List<byte> ConvertTextData()
+        public List<byte> ConvertTextData(bool ShowErrors = true)
         {
             List<byte> data = new List<byte>();
             List<string> errors = new List<string>();
@@ -597,7 +597,7 @@ namespace NPC_Maker
                     // Buffer for the control code
                     List<char> controlCode = new List<char>();
 
-                    while (MessageText[i] != '>')
+                    while (MessageText[i] != '>' && i < MessageText.Length - 1)
                     {
                         // Add code chars to the buffer
                         controlCode.Add(MessageText[i]);
@@ -605,6 +605,9 @@ namespace NPC_Maker
                         i++;
                     }
 
+                    if (controlCode.Count == 0)
+                        continue;
+                    
                     // Remove the < chevron from the beginning of the code
                     controlCode.RemoveAt(0);
 
@@ -631,14 +634,13 @@ namespace NPC_Maker
 
             data.Add((byte)Lists.MsgControlCode.END);
 
-            if (errors.Count != 0)
+            if (ShowErrors && errors.Count != 0)
                 System.Windows.Forms.MessageBox.Show($"Errors parsing message {Name}: " + Environment.NewLine + String.Join(Environment.NewLine, errors.ToArray()));
 
-
-            System.IO.File.WriteAllBytes("test", data.ToArray());
-
-
-            return data;
+            if (errors.Count == 0)
+                return data;
+            else
+                return new List<byte>();
         }
 
         private List<byte> GetControlCode(string[] code, ref List<string> errors)
@@ -687,7 +689,7 @@ namespace NPC_Maker
                     case "BACKGROUND":
                         {
                             output.Add((byte)Lists.MsgControlCode.BACKGROUND);
-                            output.AddRangeBigEndian(Convert.ToInt32(code[1]));
+                            output.AddRange(Program.BEConverter.GetBytes(Convert.ToUInt32(code[1])).Skip(1).Take(3).ToArray());
                             break;
                         }
                     case "HIGH_SCORE":
