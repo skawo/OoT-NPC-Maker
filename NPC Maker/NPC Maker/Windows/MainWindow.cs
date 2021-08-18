@@ -1753,6 +1753,14 @@ namespace NPC_Maker
 
         #region Messages
 
+        private void SetMsgBackground(int Type)
+        {
+            if (Entry.Type == 4)
+                MsgPreview.BackColor = Color.Black;
+            else
+                MsgPreview.BackColor = Color.White;
+        }
+
         private void MessagesGrid_SelectionChanged(object sender, EventArgs e)
         {
             if (MessagesGrid.SelectedRows.Count == 0)
@@ -1778,6 +1786,7 @@ namespace NPC_Maker
             Combo_MsgType.SelectedIndex = Entry.Type;
             Combo_MsgPos.SelectedIndex = Entry.Position;
 
+            SetMsgBackground(Entry.Type);
             MsgText_TextChanged(null, null);
 
             MsgText.TextChanged += MsgText_TextChanged;
@@ -1833,15 +1842,11 @@ namespace NPC_Maker
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
             Entry.Type = Combo_MsgType.SelectedIndex;
 
-            if (Entry.Type == 5)
-                MsgPreview.BackColor = Color.Black;
-            else
-                MsgPreview.BackColor = Color.White;
-
             MsgText.TextChanged -= MsgText_TextChanged;
             numUp_BoxNum.ValueChanged -= NumUp_BoxNum_ValueChanged;
             Combo_MsgType.SelectedIndexChanged -= Combo_MsgType_SelectedIndexChanged;
 
+            SetMsgBackground(Entry.Type);
             MsgText_TextChanged(null, null);
 
             MsgText.TextChanged += MsgText_TextChanged;

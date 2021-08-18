@@ -2903,12 +2903,12 @@
             0});
             this.numUp_BoxNum.ValueChanged += new System.EventHandler(this.NumUp_BoxNum_ValueChanged);
             // 
-            // pictureBox1
+            // MsgPreview
             // 
             this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.MsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.MsgPreview.Location = new System.Drawing.Point(260, 444);
-            this.MsgPreview.Name = "pictureBox1";
+            this.MsgPreview.Name = "MsgPreview";
             this.MsgPreview.Size = new System.Drawing.Size(500, 177);
             this.MsgPreview.TabIndex = 69;
             this.MsgPreview.TabStop = false;
