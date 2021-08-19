@@ -1755,7 +1755,7 @@ namespace NPC_Maker
 
         private void SetMsgBackground(int Type)
         {
-            if (Entry.Type == 4)
+            if (Type == 4)
                 MsgPreview.BackColor = Color.Black;
             else
                 MsgPreview.BackColor = Color.White;
