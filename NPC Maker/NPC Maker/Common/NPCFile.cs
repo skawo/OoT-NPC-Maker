@@ -612,12 +612,15 @@ namespace NPC_Maker
                     controlCode.RemoveAt(0);
 
                     string parsedCode = new string(controlCode.ToArray());
+                    string parsedFixed = parsedCode.Split(':')[0].Replace(" ", "_").ToUpper();
 
-                    if (parsedCode.Replace(" ", "_").ToUpper() == Lists.MsgControlCode.NEW_BOX.ToString())
+                    if (parsedFixed == Lists.MsgControlCode.NEW_BOX.ToString() || parsedFixed == Lists.MsgControlCode.DELAY.ToString())
                     {
-                        data.RemoveAt(data.Count - 1);
+                        if (data.Count != 0)
+                            if (data[data.Count - 1] == 0x01)
+                                data.RemoveAt(data.Count - 1);
 
-                        if (MessageText.Length > i + 1)
+                        if (MessageText.Length > i + 2)
                         {
                             string s = String.Concat(MessageText[i + 1], MessageText[i + 2]);
 
