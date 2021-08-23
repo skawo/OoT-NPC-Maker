@@ -991,6 +991,8 @@ namespace NPC_Maker
             {
                 case (int)AnimGridColumns.Name:
                     {
+                        e.Value = e.Value.ToString().Replace(" ", "_");
+
                         if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                             AddBlankAnim(e.ColumnIndex, e.RowIndex, e.Value.ToString());
                         else
@@ -1329,6 +1331,8 @@ namespace NPC_Maker
             {
                 case (int)EDlistsColumns.Purpose:
                     {
+                        e.Value = e.Value.ToString().Replace(" ", "_");
+
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, e.Value.ToString());
                         else
@@ -1570,6 +1574,8 @@ namespace NPC_Maker
             {
                 case (int)SegmentsColumns.Name:
                     {
+                        e.Value = e.Value.ToString().Replace(" ", "_");
+
                         if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
                             AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, e.Value.ToString());
                         else
@@ -1859,6 +1865,8 @@ namespace NPC_Maker
             string Title = "";
             InputBox.ShowInputDialog("Message title?", ref Title);
 
+            Title = Title.Replace(" ", "_");
+
             SelectedEntry.Messages.Add(new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
             int Index = MessagesGrid.Rows.Add(new object[] { Title });
             MessagesGrid.Rows[Index].Selected = true;
@@ -1881,6 +1889,8 @@ namespace NPC_Maker
 
             string Title = (MessagesGrid.SelectedRows[0].Cells[0].Value as string);
             InputBox.ShowInputDialog("New message title?", ref Title);
+
+            Title = Title.Replace(" ", "_");
 
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
             Entry.Name = Title;
