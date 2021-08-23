@@ -993,6 +993,16 @@ namespace NPC_Maker
                     {
                         e.Value = e.Value.ToString().Replace(" ", "_");
 
+                        while (true)
+                        {
+                            var entry = SelectedEntry.Animations.Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
+
+                            if (entry != null && entry != SelectedEntry.Animations[e.RowIndex])
+                                e.Value += "_";
+                            else
+                                break;
+                        }
+
                         if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                             AddBlankAnim(e.ColumnIndex, e.RowIndex, e.Value.ToString());
                         else
@@ -1333,6 +1343,16 @@ namespace NPC_Maker
                     {
                         e.Value = e.Value.ToString().Replace(" ", "_");
 
+                        while (true)
+                        {
+                            var entry = SelectedEntry.ExtraDisplayLists.Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
+
+                            if (entry != null && entry != SelectedEntry.ExtraDisplayLists[e.RowIndex])
+                                e.Value += "_";
+                            else
+                                break;
+                        }
+
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                             AddBlankDList(e.ColumnIndex, e.RowIndex, e.Value.ToString());
                         else
@@ -1575,6 +1595,16 @@ namespace NPC_Maker
                 case (int)SegmentsColumns.Name:
                     {
                         e.Value = e.Value.ToString().Replace(" ", "_");
+
+                        while (true)
+                        {
+                            var entry = SelectedEntry.Segments[DataGridIndex].Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
+
+                            if (entry != null && entry != SelectedEntry.Segments[DataGridIndex][e.RowIndex])
+                                e.Value += "_";
+                            else
+                                break;
+                        }
 
                         if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
                             AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, e.Value.ToString());
@@ -1867,6 +1897,12 @@ namespace NPC_Maker
 
             Title = Title.Replace(" ", "_");
 
+            if (SelectedEntry.Messages.Find(x => x.Name.ToUpper() == Title.ToUpper()) != null)
+            {
+                MessageBox.Show("Message with that name already exists.");
+                return;
+            }
+
             SelectedEntry.Messages.Add(new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
             int Index = MessagesGrid.Rows.Add(new object[] { Title });
             MessagesGrid.Rows[Index].Selected = true;
@@ -1891,8 +1927,14 @@ namespace NPC_Maker
             InputBox.ShowInputDialog("New message title?", ref Title);
 
             Title = Title.Replace(" ", "_");
-
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+
+            if (SelectedEntry.Messages.Find(x => x.Name.ToUpper() == Title.ToUpper()) != Entry)
+            {
+                MessageBox.Show("Message with that name already exists.");
+                return;
+            }
+
             Entry.Name = Title;
             MessagesGrid.SelectedRows[0].Cells[0].Value = Title;
         }
