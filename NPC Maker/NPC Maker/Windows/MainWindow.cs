@@ -482,6 +482,11 @@ namespace NPC_Maker
             }
         }
 
+        private void ImproveMessagePreviewReadabilityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MsgText_TextChanged(null, null);
+        }
+
         private void EditGlobalHeaderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EditedFile == null)
@@ -1858,7 +1863,7 @@ namespace NPC_Maker
 
             numUp_BoxNum.Maximum = NumBoxes;
 
-            MsgPreview.BackgroundImage = mp.GetPreview((int)numUp_BoxNum.Value - 1);
+            MsgPreview.BackgroundImage = mp.GetPreview((int)numUp_BoxNum.Value - 1, improveMessagePreviewReadabilityToolStripMenuItem.Checked);
         }
 
         private void Combo_MsgPos_SelectedIndexChanged(object sender, EventArgs e)
@@ -1940,5 +1945,6 @@ namespace NPC_Maker
         }
 
         #endregion
+
     }
 }

@@ -120,9 +120,8 @@
   <data name="Credits.Text" xml:space="preserve">
     <value>Programming: Skawo.
 Message encoding: SageOfMirrors
-Programming help: Fig, rankaisija, z64me, logyk, Nokaubure, RoadrunnerWMC
-Special thanks to: OoT decompilation team, z64ovl team
-Manual: Skawo, RoadrunnerWMC</value>
+Programming help: Fig, rankaisija, z64me, logyk, Dragorn421, Nokaubure, CDi-Fails
+Special thanks to: OoT decompilation team, z64ovl team, z64hdr team</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Logo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

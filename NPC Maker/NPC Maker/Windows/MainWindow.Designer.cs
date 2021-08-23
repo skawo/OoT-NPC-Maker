@@ -272,6 +272,7 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syntaxHighlightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkSyntaxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.improveMessagePreviewReadabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.listsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -3352,7 +3353,8 @@
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.syntaxHighlightingToolStripMenuItem,
-            this.checkSyntaxToolStripMenuItem});
+            this.checkSyntaxToolStripMenuItem,
+            this.improveMessagePreviewReadabilityToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -3363,7 +3365,7 @@
             this.syntaxHighlightingToolStripMenuItem.CheckOnClick = true;
             this.syntaxHighlightingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.syntaxHighlightingToolStripMenuItem.Name = "syntaxHighlightingToolStripMenuItem";
-            this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
             this.syntaxHighlightingToolStripMenuItem.Text = "Syntax highlighting";
             this.syntaxHighlightingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.SyntaxHighlightingToolStripMenuItem_CheckedChanged);
             // 
@@ -3373,9 +3375,19 @@
             this.checkSyntaxToolStripMenuItem.CheckOnClick = true;
             this.checkSyntaxToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkSyntaxToolStripMenuItem.Name = "checkSyntaxToolStripMenuItem";
-            this.checkSyntaxToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.checkSyntaxToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
             this.checkSyntaxToolStripMenuItem.Text = "Check syntax";
             this.checkSyntaxToolStripMenuItem.CheckedChanged += new System.EventHandler(this.CheckSyntaxToolStripMenuItem_CheckedChanged);
+            // 
+            // improveMessagePreviewReadabilityToolStripMenuItem
+            // 
+            this.improveMessagePreviewReadabilityToolStripMenuItem.Checked = true;
+            this.improveMessagePreviewReadabilityToolStripMenuItem.CheckOnClick = true;
+            this.improveMessagePreviewReadabilityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.improveMessagePreviewReadabilityToolStripMenuItem.Name = "improveMessagePreviewReadabilityToolStripMenuItem";
+            this.improveMessagePreviewReadabilityToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
+            this.improveMessagePreviewReadabilityToolStripMenuItem.Text = "Improve message preview readability";
+            this.improveMessagePreviewReadabilityToolStripMenuItem.Click += new System.EventHandler(this.ImproveMessagePreviewReadabilityToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -3815,6 +3827,7 @@
         private System.Windows.Forms.PictureBox MsgPreview;
         private System.Windows.Forms.NumericUpDown numUp_BoxNum;
         private System.Windows.Forms.Label lblBoxNum;
+        private System.Windows.Forms.ToolStripMenuItem improveMessagePreviewReadabilityToolStripMenuItem;
     }
 }
 
