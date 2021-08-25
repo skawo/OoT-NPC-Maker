@@ -69,18 +69,27 @@ namespace NPC_Maker.Scripts
         {
             UInt32? Value;
 
-            if (IsHex(Splitstring[Index]))
-                Value = (UInt32?)Convert.ToInt32(Splitstring[Index], 16);
-            else
-                Value = (UInt32?)Convert.ToInt32(Splitstring[Index]);
+            try
+            {
 
-            if (Value == null)
+                if (IsHex(Splitstring[Index]))
+                    Value = (UInt32?)Convert.ToInt32(Splitstring[Index], 16);
+                else
+                    Value = (UInt32?)Convert.ToInt32(Splitstring[Index]);
+
+                if (Value == null)
+                    throw ParseException.ParamConversionError(Splitstring);
+
+                if (Value < Min || Value > Max)
+                    throw ParseException.ParamOutOfRange(Splitstring);
+
+                return Value;
+            }
+            catch (Exception)
+            {
                 throw ParseException.ParamConversionError(Splitstring);
+            }
 
-            if (Value < Min || Value > Max)
-                throw ParseException.ParamOutOfRange(Splitstring);
-
-            return Value;
         }
 
         public static object GetValueAndCheckRange(string[] Splitstring, int Index, float Min, float Max)
@@ -306,7 +315,14 @@ namespace NPC_Maker.Scripts
 
         public static bool IsHex(string Number)
         {
-            return (Number.Length >= 3 && Number.StartsWith("0x"));
+            try
+            {
+                return (Number.Length >= 3 && Number.ToUpper().StartsWith("0X"));
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public static object Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
