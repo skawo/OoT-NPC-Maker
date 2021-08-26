@@ -503,6 +503,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.POSITION: Instructions.Add(ParsePositionInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SCALE: Instructions.Add(ParseScaleInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.ITEM: Instructions.Add(ParseItemInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.PICKUP: Instructions.Add(ParsePickupInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.RETURN: Instructions.Add(ParseReturnInstruction(SplitLine)); break;
                         default:
                             {

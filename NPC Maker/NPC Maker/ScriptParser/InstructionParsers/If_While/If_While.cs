@@ -119,6 +119,10 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.LENS_OF_TRUTH_ON:
                         case (int)Lists.IfSubTypes.TEXTBOX_DRAWING:
                         case (int)Lists.IfSubTypes.REF_ACTOR_EXISTS:
+                        case (int)Lists.IfSubTypes.PICKUP_IDLE:
+                        case (int)Lists.IfSubTypes.PICKUP_THROWN:
+                        case (int)Lists.IfSubTypes.PICKUP_LANDED:
+                        case (int)Lists.IfSubTypes.PICKUP_PICKED_UP:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 

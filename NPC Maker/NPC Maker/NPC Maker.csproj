@@ -110,6 +110,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\Pickup\Pickup.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Position\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Position\Position.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Scale\Classes.cs" />

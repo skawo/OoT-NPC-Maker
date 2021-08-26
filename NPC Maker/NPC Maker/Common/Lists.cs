@@ -225,6 +225,7 @@ namespace NPC_Maker
             FACE,
             PARTICLE,
             OCARINA,
+            PICKUP,
             RETURN,
             GOTO,
             LABEL,
@@ -300,6 +301,10 @@ namespace NPC_Maker
             PLAYER_HAS_MAGIC,
             ATTACKED,
             REF_ACTOR_EXISTS,
+            PICKUP_IDLE,
+            PICKUP_PICKED_UP,
+            PICKUP_THROWN,
+            PICKUP_LANDED,
 
             PLAYER_RUPEES,
             SCENE_ID,
