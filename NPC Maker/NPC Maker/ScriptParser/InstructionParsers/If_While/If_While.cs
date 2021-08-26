@@ -118,6 +118,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.TARGETTED:
                         case (int)Lists.IfSubTypes.LENS_OF_TRUTH_ON:
                         case (int)Lists.IfSubTypes.TEXTBOX_DRAWING:
+                        case (int)Lists.IfSubTypes.REF_ACTOR_EXISTS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 

@@ -67,6 +67,7 @@ namespace NPC_Maker.Scripts
 
                         case (int)Lists.TargetActorSubtypes.PLAYER:
                         case (int)Lists.TargetActorSubtypes.SELF:
+                        case (int)Lists.TargetActorSubtypes.REF_ACTOR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5 - NoSpeed);
                                 ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, float.MaxValue, ref Scale);

@@ -74,6 +74,7 @@ namespace NPC_Maker.Scripts
 
                         case (int)Lists.TargetActorSubtypes.PLAYER:
                         case (int)Lists.TargetActorSubtypes.SELF:
+                        case (int)Lists.TargetActorSubtypes.REF_ACTOR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 7 - NoSpeed, 8 - NoSpeed);
                                 ScriptHelpers.GetXYZPos(SplitLine, 3, 4, 5, ref XPos, ref YPos, ref ZPos);

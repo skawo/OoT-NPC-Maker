@@ -272,6 +272,7 @@ namespace NPC_Maker.Scripts
                                 {
                                     case (int)Lists.TargetActorSubtypes.SELF: return new InstructionSetActor((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.SELF, new ScriptVarVal());
                                     case (int)Lists.TargetActorSubtypes.PLAYER: return new InstructionSetActor((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.PLAYER, new ScriptVarVal());
+                                    case (int)Lists.TargetActorSubtypes.REF_ACTOR: return new InstructionSetActor((byte)SubID, (byte)(int)Lists.TargetActorSubtypes.REF_ACTOR, new ScriptVarVal());
                                     case (int)Lists.TargetActorSubtypes.NPCMAKER:
                                         {
                                             ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);

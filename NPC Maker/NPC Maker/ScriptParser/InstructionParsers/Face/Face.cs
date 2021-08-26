@@ -47,6 +47,7 @@ namespace NPC_Maker.Scripts
                         }
                     case (byte)Lists.TargetActorSubtypes.PLAYER:
                     case (byte)Lists.TargetActorSubtypes.SELF:
+                    case (int)Lists.TargetActorSubtypes.REF_ACTOR:
                         {
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
 
@@ -107,6 +108,7 @@ namespace NPC_Maker.Scripts
                     }
                 case (int)Lists.TargetActorSubtypes.PLAYER: break;
                 case (int)Lists.TargetActorSubtypes.SELF: break;
+                case (int)Lists.TargetActorSubtypes.REF_ACTOR:
                 default:
                     throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
             }

@@ -32,6 +32,7 @@ namespace NPC_Maker.Scripts
                         }
                     case (int)Lists.TargetActorSubtypes.PLAYER: break;
                     case (int)Lists.TargetActorSubtypes.SELF: break;
+                    case (int)Lists.TargetActorSubtypes.REF_ACTOR: break;
                     default:
                         throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                 }

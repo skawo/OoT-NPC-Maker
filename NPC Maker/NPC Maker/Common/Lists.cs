@@ -299,6 +299,7 @@ namespace NPC_Maker
             TEXTBOX_DRAWING,
             PLAYER_HAS_MAGIC,
             ATTACKED,
+            REF_ACTOR_EXISTS,
 
             PLAYER_RUPEES,
             SCENE_ID,
@@ -1473,6 +1474,7 @@ namespace NPC_Maker
             PLAYER = 1,
             NPCMAKER = 2,
             ACTOR_ID = 3,
+            REF_ACTOR = 4,
         }
 
         public enum ScriptChangeSubtypes

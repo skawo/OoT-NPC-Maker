@@ -71,7 +71,6 @@ namespace NPC_Maker.Scripts
 
             try
             {
-
                 if (IsHex(Splitstring[Index]))
                     Value = (UInt32?)Convert.ToInt32(Splitstring[Index], 16);
                 else
@@ -89,7 +88,6 @@ namespace NPC_Maker.Scripts
             {
                 throw ParseException.ParamConversionError(Splitstring);
             }
-
         }
 
         public static object GetValueAndCheckRange(string[] Splitstring, int Index, float Min, float Max)
@@ -319,7 +317,7 @@ namespace NPC_Maker.Scripts
             {
                 return (Number.Length >= 3 && Number.ToUpper().StartsWith("0X"));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
