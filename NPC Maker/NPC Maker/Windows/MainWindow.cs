@@ -1849,6 +1849,10 @@ namespace NPC_Maker
             Entry.MessageText = MsgText.Text;
 
             List<byte> Data = Entry.ConvertTextData(false);
+
+            if (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText))
+                return;
+
             ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray());
 
             int NumBoxes = mp.MessageCount;
