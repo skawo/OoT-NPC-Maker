@@ -1938,7 +1938,9 @@ namespace NPC_Maker
             Title = Title.Replace(" ", "_");
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
 
-            if (SelectedEntry.Messages.Find(x => x.Name.ToUpper() == Title.ToUpper()) != Entry)
+            MessageEntry same = SelectedEntry.Messages.Find(x => x.Name.ToUpper() == Title.ToUpper());
+
+            if (same != null && same != Entry)
             {
                 MessageBox.Show("Message with that name already exists.");
                 return;

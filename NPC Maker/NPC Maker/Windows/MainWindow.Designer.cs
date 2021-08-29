@@ -1329,10 +1329,10 @@
             this.ChkOnlyWhenLens.AutoSize = true;
             this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 212);
             this.ChkOnlyWhenLens.Name = "ChkOnlyWhenLens";
-            this.ChkOnlyWhenLens.Size = new System.Drawing.Size(144, 17);
+            this.ChkOnlyWhenLens.Size = new System.Drawing.Size(146, 17);
             this.ChkOnlyWhenLens.TabIndex = 81;
             this.ChkOnlyWhenLens.Tag = "VISIBLEONLYLENS";
-            this.ChkOnlyWhenLens.Text = "Visible with Lens of Truth";
+            this.ChkOnlyWhenLens.Text = "Affected by Lens of Truth";
             this.ChkOnlyWhenLens.UseVisualStyleBackColor = true;
             this.ChkOnlyWhenLens.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
@@ -2874,6 +2874,7 @@
             // 
             // lblBoxNum
             // 
+            this.lblBoxNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblBoxNum.AutoSize = true;
             this.lblBoxNum.Location = new System.Drawing.Point(647, 417);
             this.lblBoxNum.Name = "lblBoxNum";
@@ -2883,6 +2884,7 @@
             // 
             // numUp_BoxNum
             // 
+            this.numUp_BoxNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.numUp_BoxNum.Location = new System.Drawing.Point(719, 415);
             this.numUp_BoxNum.Maximum = new decimal(new int[] {
             1,
@@ -2906,6 +2908,7 @@
             // 
             // MsgPreview
             // 
+            this.MsgPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.MsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.MsgPreview.Location = new System.Drawing.Point(260, 444);

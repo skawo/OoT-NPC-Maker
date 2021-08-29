@@ -448,7 +448,7 @@ namespace NPC_Maker
 
             PRESS_SWITCHES,
             IS_TARGETTABLE,
-            VISIBLE_ONLY_UNDER_LENS,
+            AFFECTED_BY_LENS,
             IS_ALWAYS_ACTIVE,
             IS_ALWAYS_DRAWN,
             REACTS_IF_ATTACKED,

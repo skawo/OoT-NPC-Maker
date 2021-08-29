@@ -79,7 +79,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.GENERATES_LIGHT:
                         case (int)Lists.SetSubTypes.NO_AUTO_ANIM:
                         case (int)Lists.SetSubTypes.TALK_MODE:
-                        case (int)Lists.SetSubTypes.VISIBLE_ONLY_UNDER_LENS:
+                        case (int)Lists.SetSubTypes.AFFECTED_BY_LENS:
                         case (int)Lists.SetSubTypes.INVISIBLE:
                         case (int)Lists.SetSubTypes.CASTS_SHADOW:
                         case (int)Lists.SetSubTypes.PLAYER_ANIMATE_MODE:
