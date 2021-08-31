@@ -485,6 +485,8 @@ namespace NPC_Maker.Scripts
                             Instructions.AddRange(ParseOcarinaInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.TALK:
                             Instructions.AddRange(ParseTalkInstruction(Lines, SplitLine, ref i)); break;
+                        case (int)Lists.Instructions.TALK_PERSIST: Instructions.Add(ParseTalkPersistInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.FORCE_TALK: Instructions.Add(ParseForceTalkInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.TRADE: Instructions.Add(ParseTradeInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.NOP: Instructions.Add(ParseNopInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SET: Instructions.Add(ParseSetInstruction(SplitLine)); break;

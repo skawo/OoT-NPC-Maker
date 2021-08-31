@@ -210,6 +210,8 @@ namespace NPC_Maker
             AWAIT,
             SET,
             TALK,
+            TALK_PERSIST,
+            FORCE_TALK,
             TRADE,
             ENABLE_TALKING,
             SHOW_TEXTBOX,

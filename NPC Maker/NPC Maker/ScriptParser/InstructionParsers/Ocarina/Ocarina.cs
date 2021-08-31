@@ -28,6 +28,7 @@ namespace NPC_Maker.Scripts
                 Instructions.Add(new InstructionOcarina((int)Lists.Instructions.OCARINA, Value.Value, Value.Vartype, True, End));
                 Instructions.Add(new InstructionLabel(True));
                 Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(LineNoEnd - LineNo - 1).ToList()));
+                Instructions.Add(new InstructionSet((byte)Lists.SetSubTypes.PLAYER_CAN_MOVE, new ScriptVarVal(1, 0), 0));
                 Instructions.Add(new InstructionLabel(End));
 
                 LineNo = LineNoEnd;
