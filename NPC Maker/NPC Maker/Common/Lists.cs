@@ -210,7 +210,6 @@ namespace NPC_Maker
             AWAIT,
             SET,
             TALK,
-            TALK_PERSIST,
             FORCE_TALK,
             TRADE,
             ENABLE_TALKING,
@@ -412,6 +411,7 @@ namespace NPC_Maker
             LIGHT_GLOW,
             PAUSE_CUTSCENE,
             INVISIBLE,
+            TALK_PERSIST,
             CASTS_SHADOW,
             NO_AUTO_ANIM,
             TALK_MODE,
@@ -1459,7 +1459,7 @@ namespace NPC_Maker
         public enum FaceSubtypes
         {
             TOWARDS,
-            AND,
+            TOGETHER_WITH,
             AWAY_FROM,
         }
 

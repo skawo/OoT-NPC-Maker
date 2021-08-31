@@ -112,8 +112,6 @@
     <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Player_Talk\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Player_Talk\PlayerTalk.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Talk_Persist\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Talk_Persist\TalkPersist.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Pickup\Pickup.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Position\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Position\Position.cs" />
