@@ -7,6 +7,7 @@ namespace NPC_Maker
     {
         public static MiscUtil.Conversion.BigEndianBitConverter BEConverter = new MiscUtil.Conversion.BigEndianBitConverter();
         public static string ExecPath = "";
+        public static bool IsRunningUnderMono = false;
 
         /// <summary>
         /// The main entry point for the application.
@@ -18,6 +19,12 @@ namespace NPC_Maker
             Application.SetCompatibleTextRenderingDefault(false);
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+
+            Type t = Type.GetType("Mono.Runtime");
+
+            if (t != null)
+                IsRunningUnderMono = true;
+
 
             try
             {

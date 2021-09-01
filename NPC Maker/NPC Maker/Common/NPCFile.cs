@@ -1,5 +1,7 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace NPC_Maker
@@ -622,11 +624,16 @@ namespace NPC_Maker
 
                         if (MessageText.Length > i + 2)
                         {
-                            string s = String.Concat(MessageText[i + 1], MessageText[i + 2]);
+                            string s;
 
-                            if (s == "\r\n")
+                            if (Environment.NewLine.Length == 2)
+                               s = String.Concat(MessageText[i + 1], MessageText[i + 2]);
+                            else
+                               s = String.Concat(MessageText[i + 1]);
+
+                            if (s == Environment.NewLine)
                             {
-                                i += 2; // Skips next \n
+                                i += Environment.NewLine.Length; // Skips next linebreak
                             }
                         }
                     }
