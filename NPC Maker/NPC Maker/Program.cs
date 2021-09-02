@@ -25,7 +25,6 @@ namespace NPC_Maker
             if (t != null)
                 IsRunningUnderMono = true;
 
-
             try
             {
                 DropDownMenuScrollWheelHandler.Enable(true);

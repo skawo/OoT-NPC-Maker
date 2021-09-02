@@ -450,7 +450,6 @@ namespace NPC_Maker
                             ScrOffset += Scr.Script.Length;
 
                             CurLen += 4;
-
                         }
 
                         foreach (Scripts.BScript Scr in ParsedScripts)

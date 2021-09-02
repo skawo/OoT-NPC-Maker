@@ -622,7 +622,7 @@ namespace NPC_Maker
                             if (data[data.Count - 1] == 0x01)
                                 data.RemoveAt(data.Count - 1);
 
-                        if (MessageText.Length > i + 2)
+                        if (MessageText.Length > i + Environment.NewLine.Length)
                         {
                             string s;
 
