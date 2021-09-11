@@ -129,7 +129,7 @@ namespace NPC_Maker.Scripts
         {
             byte? SubID = ScriptHelpers.GetSubIDForRamType(SplitLine[1]);
 
-            if (SubID != null)
+            if (SubID != null && SubID != (byte)Lists.IfWhileAwaitSetRamSubTypes.RANDOM)
             {
                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 

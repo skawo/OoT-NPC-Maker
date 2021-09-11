@@ -265,6 +265,7 @@ namespace NPC_Maker
 
         public enum IfWhileAwaitSetRamSubTypes
         {
+            RANDOM = 241,
             GLOBAL8 = 242,
             GLOBAL16 = 243,
             GLOBAL32 = 244,
