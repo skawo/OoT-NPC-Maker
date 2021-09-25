@@ -2939,10 +2939,10 @@
             this.MsgText.BackBrush = null;
             this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.MsgText.CharHeight = 12;
-            this.MsgText.CharWidth = 7;
+            this.MsgText.CharWidth = 6;
             this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgText.Font = new System.Drawing.Font("Courier New", 8.25F);
+            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MsgText.IsReplaceMode = false;
             this.MsgText.Location = new System.Drawing.Point(260, 98);
             this.MsgText.Name = "MsgText";

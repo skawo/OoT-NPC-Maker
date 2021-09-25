@@ -1,5 +1,4 @@
-﻿using FastColoredTextBoxNS;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -400,7 +399,7 @@ namespace NPC_Maker
                 return;
 
             EditedFile = new NPCFile();
-            EditedFile.GlobalHeaders.AddRange(new List<ScriptEntry>(){ Defaults.DefaultDefines, Defaults.DefaultMacros});
+            EditedFile.GlobalHeaders.AddRange(new List<ScriptEntry>() { Defaults.DefaultDefines, Defaults.DefaultMacros });
 
             Panel_Editor.Enabled = true;
             InsertDataIntoActorListGrid();
@@ -964,7 +963,7 @@ namespace NPC_Maker
 
             if (SkipIndex != (int)AnimGridColumns.Address)
                 if (SelectedEntry.AnimationType == 1)
-                    DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Address; 
+                    DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Address;
                 else
                     DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Address);
 
@@ -1796,7 +1795,7 @@ namespace NPC_Maker
 
         private void SetMsgBackground(int Type)
         {
-            if (Type == 4)
+            if (Type == (int)ZeldaMessage.Data.BoxType.None_White)
                 MsgPreview.BackColor = Color.Black;
             else
                 MsgPreview.BackColor = Color.White;
