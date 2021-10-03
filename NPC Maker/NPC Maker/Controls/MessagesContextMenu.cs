@@ -27,6 +27,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem threechoices;
         private static ToolStripMenuItem delay;
         private static ToolStripMenuItem buttonPrompt;
+        private static ToolStripMenuItem pixelsright;
 
         public static void MakeContextMenu()
         {
@@ -41,6 +42,7 @@ namespace NPC_Maker
             icon = new ToolStripMenuItem();
             speed = new ToolStripMenuItem();
             fade = new ToolStripMenuItem();
+            pixelsright = new ToolStripMenuItem();
             shopdescription = new ToolStripMenuItem();
             drawinstant = new ToolStripMenuItem();
             drawchar = new ToolStripMenuItem();
@@ -57,6 +59,7 @@ namespace NPC_Maker
                                                                     newtextbox,
                                                                     buttonPrompt,
                                                                     playername,
+                                                                    pixelsright,
                                                                     noskip,
                                                                     speed,
                                                                     fade,
@@ -121,6 +124,12 @@ namespace NPC_Maker
             newtextbox.Size = new System.Drawing.Size(156, 22);
             newtextbox.Text = "New textbox";
             newtextbox.Tag = $"<{Lists.MsgControlCode.NEW_BOX}>";
+            // 
+            // pixelsright
+            // 
+            pixelsright.Size = new System.Drawing.Size(156, 22);
+            pixelsright.Text = "Pixel offset";
+            pixelsright.Tag = $"<PIXELS_RIGHT:0>";
             // 
             // newtextbox
             // 
