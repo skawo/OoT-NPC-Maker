@@ -19,7 +19,7 @@ namespace NPC_Maker
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            CultureInfo ci = new CultureInfo("en-US");
+            CultureInfo ci = CultureInfo.GetCultureInfo("en-US");
             Application.CurrentCulture = ci;
 
 
