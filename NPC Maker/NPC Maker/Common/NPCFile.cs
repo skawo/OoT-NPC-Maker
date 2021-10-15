@@ -185,7 +185,7 @@ namespace NPC_Maker
             PathEndNodeID = -1;
             MovementDelayTime = 0;
             LoopPath = false;
-            TimedPathStart = 0;
+            TimedPathStart = Helpers.GetOcarinaTime("00:00");
             TimedPathEnd = Helpers.GetOcarinaTime("23:59");
             MaxDistRoam = 65535;
 

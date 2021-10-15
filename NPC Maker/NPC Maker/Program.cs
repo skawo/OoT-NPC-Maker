@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace NPC_Maker
@@ -17,6 +18,10 @@ namespace NPC_Maker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            CultureInfo ci = new CultureInfo("en-US");
+            Application.CurrentCulture = ci;
+
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
 

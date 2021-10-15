@@ -898,7 +898,7 @@ namespace NPC_Maker
         private void DatePicker_ValueChanged(object sender, EventArgs e)
         {
             NPCEntry.Members Member = NPCEntry.GetMemberFromTag((sender as DateTimePicker).Tag, (sender as DateTimePicker).Name);
-            SelectedEntry.ChangeValueOfMember(Member, (sender as DateTimePicker).Value.ToString("HH:mm"));
+            SelectedEntry.ChangeValueOfMember(Member, (sender as DateTimePicker).Value.ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture));
         }
 
         private void ComboBox_ValueChanged(object sender, EventArgs e)
