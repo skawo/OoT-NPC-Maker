@@ -17,7 +17,7 @@ Then, in CAT:<br>
 - Check <i>use z64hdr</i> and then <i>Compile nOVL</i>. There should be a message stating that the compilation was successful in the terminal.<br>
 - Click <i>Find Empty Space</i> and then <i>Inject to ROM</i><br>
 
-Note: you can make the actor smaller by going into <i>Settings->Change C compile flags<i> and changing <i>-O1</i> into <i>-Os</i>
+Note: you can make the actor smaller by going into <i>Settings->Change C compile flags</i> and changing <i>-O1</i> into <i>-Os</i>
 
 <b>Creating an actor</b><br>
 For the sake of this tutorial, we're going to use the example actor found in the "Example" folder of the repository.
