@@ -85,4 +85,4 @@ Aftewards, setup the <a href="https://old.z64.me/guides/overlay-environment-setu
 Note: For ZZROMTOOL make sure <i>include/npc_maker.h</i> defines the "ZZROMTOOL" variable to 1.
   
 <h2>OoT decompilation</h2>
-Setting this up with the OoT decompilation can be done, but it's very hard and not recommended right now.  
+Setting this up with the OoT decompilation can be done, but it wouldn't be very convenient and is not recommended right now.  
