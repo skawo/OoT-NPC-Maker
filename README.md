@@ -29,7 +29,7 @@ Then, in CAT:
 - Select the <i>Objects</i> tab.<br>
 - Click <i>Import ZOBJ</i> and select the file you got from NPC Maker.<br>
 - Select the object number, for example 3A (which is blank in the original game).<br>
-- Click <i>Find empty space</i> and <i>Find original row</i><br>
+- Click <i>Find empty space</i>
 - Click <i>Inject to ROM</i><br>
 
 <b>Adding actor to scene</b><br>
