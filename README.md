@@ -4,7 +4,7 @@ An NPC creation tool for The Legend of Zelda: Ocarina of Time.
 --------------------------------------------------------------
 Instructions on how to add an actor to your game:
 
-<h2>Custom Actor Toolkit</h2><br>
+<h2>Custom Actor Toolkit</h2>
 <b>Compiling the actor overlay</b><br>
 - Download this repository.
 - Download <a href="https://hylianmodding.com/?p=217">CAT</a>.
@@ -48,7 +48,7 @@ You're done! <br>
 
 To edit the actor further, simply make the changes in NPC Maker, save the zobj and re-import it into the game.
 
-<h2>ZZROMTOOL and ZZRTL</h2><br>
+<h2>ZZROMTOOL and ZZRTL</h2>
 CAT is not the best tool to use this with - because you'll eventually run into file conflicts unless you're very diligent about your injection offsets. As such, it's recommended you use <a href="https://old.z64.me/tools/zzromtool.html">ZZROMTOOL</a> or <a href="https://old.z64.me/tools/zzrtl.html">ZZRTL</a> instead.
 Instructions on setting up that environment are specified on the linked pages. 
 
