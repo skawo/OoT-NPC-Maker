@@ -2,7 +2,7 @@ OoT NPC Maker
 
 Instructions on how to add an actor to your game using <a href="https://hylianmodding.com/?p=217">Custom Actor Toolkit</a>
 
-<b>Compiling the actor overlay</b>
+<b>Compiling the actor overlay</b><br>
 1. Download this repository. '
 2. Download CAT.
 
@@ -14,11 +14,11 @@ Then, in CAT:
 5. Check <i>use z64hdr</i> and then <i>Compile nOVL</i>. There should be a message stating that the compilation was successful in the terminal.
 6. Click <i>Find Empty Space</i> and then <i>Inject to ROM</i>
 
-<b>Creating an actor</>
+<b>Creating an actor</b><br>
 For the sake of this tutorial, we're going to use the example actor found in the "Example" folder of the repository.
 Load it up in NPC Maker by going <i>File -> Open</i>.
 You should see a Wallmaster NPC with ID 0.
-Now, select <i>File -> Save binary<i> and save the file somewhere.
+Now, select <i>File -> Save binary</i> and save the file somewhere.
 
 Then, in CAT:
 1. Select the <i>Objects</i> tab.
@@ -27,7 +27,7 @@ Then, in CAT:
 4. Click <i>Find empty space</i> and <i>Find original row</i>
 5. Click <i>Inject to ROM</i>
 
-<b>Adding actor to scene</b>
+<b>Adding actor to scene</b><br>
 Add the actor selected in CAT (for example, 3, as stated above), then fill out its data as follows:
 - "Variable" should be set to the Object number the NPC Maker zobj was imported as (e.g 3A as proposed above)
 - "X Rotation" should be 0 (if set to 1, this turns on screen logging if the actor was compiled with LOG_TO_SCREEN defined as 1).
