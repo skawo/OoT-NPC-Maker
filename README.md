@@ -14,7 +14,7 @@ Then, in CAT:<br>
 - Select <i>File->Load ROM</i> and select the Master Quest Debug ROM.<br>
 - Select <i>Import overlay</i> and select the <i>CustomActorToolkit.c</i> file from the <i>actor</i> folder in this repository.<br>
 - Select the actor ID to use, for example 3 (which is blank in the original game).<br>
-- Check <i>use z64hdr</i> and then <i>Compile nOVL</i>. There should be a message stating that the compilation was successful in the terminal.<br>
+- Check <i>Use z64hdr</i> and then click <i>Compile nOVL</i>. There should be a message stating that the compilation was successful in the terminal.<br>
 - Click <i>Find Empty Space</i> and then <i>Inject to ROM</i><br>
 
 Note: you can make the actor smaller by going into <i>Settings->Change C compile flags</i> and changing <i>-O1</i> into <i>-Os</i>
