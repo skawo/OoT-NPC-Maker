@@ -38,6 +38,8 @@ Using your scene editing tool, add the actor selected in CAT (for example, 3, as
 - "X Rotation" should be 0 (if set to 1, this turns on screen logging if the actor was compiled with LOG_TO_SCREEN defined as 1).<br>
 - "Z Rotation" should be the NPC ID from NPC Maker - if using the Wallmaster example, this should stay 0. Further NPCs added to the file would be 1, 2, etc.<br>
 
+You do not need to add the zobj from NPC Maker to the scene file list - it is loaded automatically.
+
 The scene included in the Example folder has this set up for the Wallmaster NPC already.
 After everything's set up, inject the scene into the game (make sure the "Auto Injection Offset" option is set in SharpOcarina when injecting)
 
