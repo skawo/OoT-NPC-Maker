@@ -46,3 +46,13 @@ After everything's set up, inject the scene into the game (make sure the "Auto I
 You're done! <br>
 ![image](https://user-images.githubusercontent.com/43761362/148632569-57d34376-b8ee-4828-919f-843ad562ea42.png)
 
+
+To edit the actor further, simply make the changes in NPC Maker, save the zobj and re-import it into the game.
+
+<b>ZZROMTOOL and ZZRTL</b><br>
+CAT is not the best tool to use this with - because you'll eventually run into file conflicts unless you're very diligent about your injection offsets. As such, it's recommended you use <a href="https://old.z64.me/tools/zzromtool.html">ZZROMTOOL</a> or <a href="https://old.z64.me/tools/zzrtl.html">ZZRTL</a> instead.
+Instructions on setting up that environment are specified on the linked pages. 
+
+Aftewards, setup the <a href="https://old.z64.me/guides/overlay-environment-setup-windows.html">overlay environment</a> and compile the actor using the Makefile and put the NPC Maker zobj into a file folder.
+
+Note: For ZZROMTOOL make sure <i>include/npc_maker.h<i> defines the "ZZROMTOOL" variable to 1.
