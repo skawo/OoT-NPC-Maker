@@ -16,7 +16,7 @@ Then, in CAT:<br>
 
 <b>Creating an actor</b><br>
 For the sake of this tutorial, we're going to use the example actor found in the "Example" folder of the repository.
-Load it up in NPC Maker by going <i>File -> Open</i>.
+Load it up in NPC Maker by going <i>File -> Open</i> and select ActorData.json.
 You should see a Wallmaster NPC with ID 0.
 Now, select <i>File -> Save binary</i> and save the file somewhere.
 
