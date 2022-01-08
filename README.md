@@ -1,6 +1,9 @@
-OoT NPC Maker
+<h1>OoT NPC Maker</h1>
+An NPC creation tool for The Legend of Zelda: Ocarina of Time.
 
-Instructions on how to add an actor to your game using <a href="https://hylianmodding.com/?p=217">Custom Actor Toolkit</a>
+--------------------------------------------------------------
+
+Instructions on how to add an actor to your game using <a href="https://hylianmodding.com/?p=217">Custom Actor Toolkit</a>:
 
 <b>Compiling the actor overlay</b><br>
 - Download this repository.
