@@ -33,7 +33,7 @@ Then, in CAT:
 - Click <i>Inject to ROM</i><br>
 
 <b>Adding actor to scene</b><br>
-Add the actor selected in CAT (for example, 3, as stated above), then fill out its data as follows:
+Using your scene editing tool, add the actor selected in CAT (for example, 3, as stated above), then fill out its data as follows:
 - "Variable" should be set to the Object number the NPC Maker zobj was imported as (e.g 3A as proposed above)<br>
 - "X Rotation" should be 0 (if set to 1, this turns on screen logging if the actor was compiled with LOG_TO_SCREEN defined as 1).<br>
 - "Z Rotation" should be the NPC ID from NPC Maker - if using the Wallmaster example, this should stay 0. Further NPCs added to the file would be 1, 2, etc.<br>
