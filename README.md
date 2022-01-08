@@ -56,3 +56,6 @@ Instructions on setting up that environment are specified on the linked pages.
 Aftewards, setup the <a href="https://old.z64.me/guides/overlay-environment-setup-windows.html">overlay environment</a> and compile the actor using the Makefile and put the NPC Maker zobj into a file folder.
 
 Note: For ZZROMTOOL make sure <i>include/npc_maker.h<i> defines the "ZZROMTOOL" variable to 1.
+  
+<b>OoT decompilation</b>
+Setting this up with the OoT decompilation can be done, but it's very hard and not recommended right now.  
