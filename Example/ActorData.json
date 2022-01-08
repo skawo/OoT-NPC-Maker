@@ -126,12 +126,12 @@
       ],
       "Scripts": [
         {
-          "Text": "if var.1 == 0\r\n    talk talking\r\n       talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       item take ITEM_GAUNTLETS_GOLD\r\n       item award GI_GAUNTLETS_GOLD\r\n       face player towards self\r\n       show_textbox talking_2\r\n       await talking_end\r\n       animation idle\r\n       talk_mode false\r\n       var.1 = 1\r\n    endtalk\r\nelse\r\n    talk talking_2\r\n       talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       talk_mode false\r\n    endtalk\r\nendif\r\n\r\n\r\n",
+          "Text": "if var.1 == 0\r\n    talk StartMessage\r\n       set talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       item take ITEM_GAUNTLETS_GOLD\r\n       item award GI_GAUNTLETS_GOLD\r\n       face player towards self\r\n       show_textbox MessageAfterGiven\r\n       await talking_end\r\n       set animation Idle\r\n       set talk_mode false\r\n       set var.1 = 1\r\n    endtalk\r\nelse\r\n    talk MessageAfterGiven\r\n       set talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       set talk_mode false\r\n    endtalk\r\nendif\r\n\r\n\r\n",
           "ParseErrors": [],
           "Name": "Talking"
         },
         {
-          "Text": "\r\nif is_talking and textbox_drawing and var.2 == 0\r\n    set animation talking once\r\n    await animation_end\r\nendif\r\n",
+          "Text": "\r\nif is_talking and textbox_drawing\r\n    set animation Talking once\r\n    await animation_end\r\nendif\r\n",
           "ParseErrors": [],
           "Name": "Talking animation"
         }
@@ -163,13 +163,13 @@
       "DisplayListColors": [],
       "Messages": [
         {
-          "Name": "talking",
+          "Name": "StartMessage",
           "MessageText": "You've gotta hand it to me.\r\nI'm a pretty handsome guy.\r\n<New box>\r\nThat's pretty handy in life, let \r\nme tell you.\r\n<New box>\r\nBut, enough about me. Let me \r\nextend a helping hand and give \r\nyou... this!",
           "Type": 0,
           "Position": 1
         },
         {
-          "Name": "talking_2",
+          "Name": "MessageAfterGiven",
           "MessageText": "I know certain things can be\r\na handful to deal with, so an extra \r\nbit of strength can't hurt.\r\n<New box>\r\nJust a wee bit of help for \r\nmy enslaved brethren.",
           "Type": 0,
           "Position": 0
