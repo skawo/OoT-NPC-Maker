@@ -32,7 +32,7 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
 
         #if LOG_TO_SCREEN == 1
 
-        if (en->npcId == 0)
+        if (en->dbgDrawToScreen)
         {
             Gfx* gfx = Graph_GfxPlusOne(globalCtx->state.gfxCtx->polyOpa.p);
             gSPDisplayList(globalCtx->state.gfxCtx->overlay.p++, gfx);

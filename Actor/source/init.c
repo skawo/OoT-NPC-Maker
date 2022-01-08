@@ -286,7 +286,7 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
         osSyncPrintf("_%2d: Setting up collision with radius %04d, height %04d, yoffs %04d", 
                      en->npcId, en->settings.collisionRadius, en->settings.collisionHeight, en->settings.collisionyShift);
     
-    if (en->actor.shape.rot.x == LOG_TO_SCREEN)
+    if (en->actor.shape.rot.x == 1)
         en->dbgDrawToScreen = true;
     #endif
 
