@@ -5,8 +5,9 @@ An NPC creation tool for The Legend of Zelda: Ocarina of Time.
 Instructions on how to add an actor to your game:
 
 <h2>Custom Actor Toolkit</h2>
-<b>Compiling the actor overlay</b><br>
-- Download this repository.
+<b>Compiling the actor overlay</b><br><br>
+
+- Download this repository.<br>
 - Download <a href="https://hylianmodding.com/?p=217">CAT</a>.
 
 Then, in CAT:<br>
