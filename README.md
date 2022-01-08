@@ -39,4 +39,8 @@ Add the actor selected in CAT (for example, 3, as stated above), then fill out i
 - "Z Rotation" should be the NPC ID from NPC Maker - if using the Wallmaster example, this should stay 0. Further NPCs added to the file would be 1, 2, etc.<br>
 
 The scene included in the Example folder has this set up for the Wallmaster NPC already.
-After everything's set up, inject the scene into the game.
+After everything's set up, inject the scene into the game (make sure the "Auto Injection Offset" option is set in SharpOcarina when injecting)
+
+You're done! <br>
+![image](https://user-images.githubusercontent.com/43761362/148632569-57d34376-b8ee-4828-919f-843ad562ea42.png)
+
