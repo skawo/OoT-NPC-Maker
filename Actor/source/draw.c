@@ -245,7 +245,7 @@ s32 Draw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbNumber, Gfx** dListP
 
     if (sLimbNumber == en->settings.waistLimb)
     {
-        if (en->settings.lookAtType > LOOK_WAIST || en->settings.lookAtType == LOOK_BOTH)
+        if (en->settings.lookAtType == LOOK_WAIST || en->settings.lookAtType == LOOK_BOTH)
         {
             Draw_SetAxis(en->settings.waistHorAxis, en->limbRotA * (en->settings.lookAtType == LOOK_BOTH ? LOOKAT_WAIST_HORIZ_MULTIPIER : 1), rotation);
             Draw_SetAxis(en->settings.waistVertAxis, en->limbRotB * (en->settings.lookAtType == LOOK_BOTH ? LOOKAT_WAIST_VERT_MULTIPIER : 1), rotation);
