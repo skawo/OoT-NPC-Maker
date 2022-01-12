@@ -250,11 +250,15 @@ namespace NPC_Maker
             Point Scroll = Owner.AutoScrollOffset;
             int start = Owner.SelectionStart;
             string newTxt = Owner.Text;
+
             newTxt = newTxt.Remove(Owner.SelectionStart, Owner.SelectionLength);
             newTxt = newTxt.Insert(Owner.SelectionStart, Text);
+
+            //Dumb workaround
+            Owner.Tag = 1;
+
             Owner.Text = newTxt;
             Owner.SelectionStart = start + Text.Length;
-
             Owner.AutoScrollOffset = Scroll;
         }
 

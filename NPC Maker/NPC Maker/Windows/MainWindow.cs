@@ -1841,6 +1841,13 @@ namespace NPC_Maker
 
         private void MsgText_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
+            //Dumb workaround
+            if (Convert.ToInt32(MsgText.Tag) > 0)
+            {
+                MsgText.Tag = (Convert.ToInt32(MsgText.Tag) - 1);
+                return;
+            }
+
             if (MessagesGrid.SelectedRows.Count == 0)
                 return;
 
@@ -1865,6 +1872,7 @@ namespace NPC_Maker
                 numUp_BoxNum.Value = NumBoxes;
 
             numUp_BoxNum.Maximum = NumBoxes;
+
 
             MsgPreview.BackgroundImage = mp.GetPreview((int)numUp_BoxNum.Value - 1, improveMessagePreviewReadabilityToolStripMenuItem.Checked);
         }

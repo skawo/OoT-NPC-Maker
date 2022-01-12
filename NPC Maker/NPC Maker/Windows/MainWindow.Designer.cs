@@ -2952,6 +2952,7 @@
             this.MsgText.ShowLineNumbers = false;
             this.MsgText.Size = new System.Drawing.Size(500, 311);
             this.MsgText.TabIndex = 68;
+            this.MsgText.Tag = "0";
             this.MsgText.WordWrapAutoIndent = false;
             this.MsgText.Zoom = 100;
             this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
