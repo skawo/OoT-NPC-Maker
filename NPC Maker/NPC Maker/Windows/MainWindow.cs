@@ -1031,7 +1031,7 @@ namespace NPC_Maker
                                 if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                                     AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (short)LinkAnim);
                                 else
-                                    SelectedEntry.Animations[e.RowIndex].ObjID = (short)LinkAnim;
+                                    SelectedEntry.Animations[e.RowIndex].Address = (UInt32)LinkAnim;
 
                                 e.ParsingApplied = true;
                             }
