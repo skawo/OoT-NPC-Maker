@@ -1029,7 +1029,7 @@ namespace NPC_Maker
                                 DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                                 if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (short)LinkAnim);
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, (UInt32)LinkAnim);
                                 else
                                     SelectedEntry.Animations[e.RowIndex].Address = (UInt32)LinkAnim;
 
