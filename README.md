@@ -34,13 +34,13 @@ Instructions on how to add an actor to your game:
 <h2>Custom Actor Toolkit</h2>
 <b>Compiling the actor overlay</b><br><br>
 
-- Download this repository.<br>
+- Download the tool.<br>
 - Download <a href="https://hylianmodding.com/?p=217">CAT</a>.
 
 Then, in CAT:<br>
 - Select <i>Help->Download z64hdr</i>.<br>
 - Select <i>File->Load ROM</i> and select the Master Quest Debug ROM.<br>
-- Select <i>Import overlay</i> and select the <i>CustomActorToolkit.c</i> file from the <i>actor</i> folder in this repository.<br>
+- Select <i>Import overlay</i> and select the <i>CustomActorToolkit.c</i> file from the <i>actor</i> folder.<br>
 - Select the actor ID to use, for example 3 (which is blank in the original game).<br>
 - Check <i>Use z64hdr</i> and then click <i>Compile nOVL</i>. There should be a message stating that the compilation was successful in the terminal.<br>
 - Click <i>Find Empty Space</i> and then <i>Inject to ROM</i><br>
