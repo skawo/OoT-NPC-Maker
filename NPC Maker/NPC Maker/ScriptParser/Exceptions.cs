@@ -266,6 +266,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Not a valid animation: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedDamage(string[] _Line)
+        {
+            return new ParseException("Not a valid damage type: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedQuestItem(string[] _Line)
         {
             return new ParseException("Not a valid quest item: ", String.Join(" ", _Line));

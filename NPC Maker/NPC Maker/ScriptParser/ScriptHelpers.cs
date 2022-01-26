@@ -260,7 +260,7 @@ namespace NPC_Maker.Scripts
                         return Convert.ToUInt32(ScriptHelpers.GetValueAndCheckRangeInt(Values, 1, 1, Lists.Num_User_Vars));
                     }
                 default:
-                        return (float)GetNormalVar(SplitLine, Index, Min, Max);
+                    return (float)GetNormalVar(SplitLine, Index, Min, Max);
             }
         }
 
@@ -325,24 +325,26 @@ namespace NPC_Maker.Scripts
 
         public static object Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
         {
-            try
+
+            if (!Enum.IsDefined(EnumType, SplitLine[Index].ToUpper()))
             {
-                if (!Enum.IsDefined(EnumType, SplitLine[Index].ToUpper()))
-                {
-                    if (ErrorToThrow == null)
-                        throw ParseException.GeneralError(SplitLine);
-                    else
-                        throw ErrorToThrow;
-                }
+                if (ErrorToThrow == null)
+                    throw ParseException.GeneralError(SplitLine);
                 else
+                    throw ErrorToThrow;
+            }
+            else
+            {
+                try
                 {
                     return (float)(int)System.Enum.Parse(EnumType, SplitLine[Index].ToUpper());
                 }
+                catch (Exception)
+                {
+                    throw ParseException.ParamConversionError(SplitLine);
+                }
             }
-            catch (Exception)
-            {
-                throw ErrorToThrow;
-            }
+
         }
 
         public static object Helper_GetEnumByNameOrVarType(string[] SplitLine, int Index, byte VarType, Type EnumType, ParseException Throw)

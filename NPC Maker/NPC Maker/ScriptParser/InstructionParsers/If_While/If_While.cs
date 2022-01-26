@@ -263,7 +263,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
                                 var Value = new ScriptVarVal();
-                                Value.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons));
+                                Value.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons), ParseException.UnrecognizedButton(SplitLine));
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
 
@@ -277,7 +277,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
                                 var Value = new ScriptVarVal();
-                                Value.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.DamageTypes));
+                                Value.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.DamageTypes), ParseException.UnrecognizedDamage(SplitLine));
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.EQUALTO;
 
