@@ -295,6 +295,7 @@ typedef enum IfWhileSubId
 
     IF_DISTANCE_FROM_PLAYER,
     IF_LENS_OF_TRUTH_ON,
+	IF_DAMAGED_BY,
 
 } IfWhileSubId;
 
