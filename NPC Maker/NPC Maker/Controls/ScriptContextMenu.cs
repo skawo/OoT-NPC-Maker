@@ -26,6 +26,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem objectstoolStripMenuItem;
         private static ToolStripMenuItem particlestoolStripMenuItem;
         private static ToolStripMenuItem linkAnimsStripMenuItem;
+        private static ToolStripMenuItem damageTypesStripMenuItem;
 
         public static void MakeContextMenu()
         {
@@ -46,6 +47,7 @@ namespace NPC_Maker
             ocarinaSongstoolStripMenuItem = new ToolStripMenuItem();
             particlestoolStripMenuItem = new ToolStripMenuItem();
             linkAnimsStripMenuItem = new ToolStripMenuItem();
+            damageTypesStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -55,6 +57,7 @@ namespace NPC_Maker
                                                                     questItemsToolStripMenuItem,
                                                                     itemsdungeonToolStripMenuItem,
                                                                     itemstradeToolStripMenuItem,
+                                                                    damageTypesStripMenuItem,
                                                                     playerMasksToolStripMenuItem,
                                                                     ocarinaSongstoolStripMenuItem,
                                                                     particlestoolStripMenuItem,
@@ -75,6 +78,7 @@ namespace NPC_Maker
             questItemsToolStripMenuItem.Text = "Quest items";
             itemsdungeonToolStripMenuItem.Text = "Dungeon items";
             itemstradeToolStripMenuItem.Text = "Trade items";
+            damageTypesStripMenuItem.Text = "Damage types";
             playerMasksToolStripMenuItem.Text = "Player Masks";
             ocarinaSongstoolStripMenuItem.Text = "Ocarina songs";
             particlestoolStripMenuItem.Text = "Particles";
@@ -116,6 +120,7 @@ namespace NPC_Maker
 
             AddItemCollectionToToolStripMenuItem(Lists.KeyValues.ToArray(), keywordsToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Lists.AllKeywords.ToArray(), keywordsToolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.DamageTypes)), damageTypesStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.AwardItems)), itemsgiveToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.DungeonItems)), itemsdungeonToolStripMenuItem);

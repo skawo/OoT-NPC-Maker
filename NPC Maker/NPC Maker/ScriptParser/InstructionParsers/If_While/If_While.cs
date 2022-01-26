@@ -273,6 +273,17 @@ namespace NPC_Maker.Scripts
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
+                        case (int)Lists.IfSubTypes.DAMAGED_BY:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                var Value = new ScriptVarVal();
+                                Value.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.DamageTypes));
+
+                                Lists.ConditionTypes Condition = Lists.ConditionTypes.EQUALTO;
+
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Condition, EndIf, Else, LabelR));
+                                return Instructions;
+                            }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }

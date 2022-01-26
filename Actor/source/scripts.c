@@ -373,6 +373,26 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             branch = Scripts_IfExtVar(en, globalCtx, ex_actor->scriptVars[instr->extVarNum], in, INT32);
             break;
         }
+
+        case IF_DAMAGED_BY:
+        {
+            int i = 0;
+
+            if (en->collider.info.acHitInfo != 0)
+            {
+                u32 flags = en->collider.info.acHitInfo->toucher.dmgFlags;
+
+                for (i = 0; i < 0x20; i++, flags >>= 1) 
+                {
+                    if (flags == 1) 
+                        break;
+                }
+            }    
+
+            branch = Scripts_IfValue(en, globalCtx, i, in, INT32); 
+            break;
+        }
+
         case SUBT_RANDOM:
         {
             ScrInstrDoubleIf* instr = (ScrInstrDoubleIf*)in;

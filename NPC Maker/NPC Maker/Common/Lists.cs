@@ -341,6 +341,7 @@ namespace NPC_Maker
 
             DISTANCE_FROM_PLAYER,
             LENS_OF_TRUTH_ON,
+            DAMAGED_BY,
         }
 
         public enum ItemSubTypes
@@ -1713,6 +1714,40 @@ namespace NPC_Maker
             TRIANGLE = 0xA9,
             CONTROL_STICK = 0xAA,
             D_PAD = 0xAB
+        }
+
+        public enum DamageTypes
+        {
+            DEKU_NUT,
+            DEKU_STICK,
+            SLINGSHOT,
+            EXPLOSION,
+            BOOMERANG,
+            ARROWS,
+            HAMMER,
+            HOOKSHOT,
+            KOKIRI_SWORD,
+            MASTER_SWORD,
+            GIANTS_KNIFE,
+            FIRE_ARROW,
+            UNK_ARROW1,
+            UNK_ARROW2,
+            UNK_ARROW3,
+            FIRE_MAGIC,
+            ICE_MAGIC,
+            LIGHT_MAGIC,
+            SHIELD,
+            MIRROR_RAY,
+            KOKIRI_SPINATK,
+            GIANTS_SPINATK,
+            MASTER_SPINATK,
+            KOKIRI_JUMPATK,
+            GIANT_JUMPATK,
+            MASTER_JUMPATK,
+            UNKNOWN1,
+            UNLOCKABLE,
+            HAMMER_JUMPATK,
+            UNKNOWN2,
         }
 
         public enum MsgColor
