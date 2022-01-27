@@ -136,6 +136,7 @@ namespace NPC_Maker.Scripts
                             }
                         case (int)Lists.IfSubTypes.PLAYER_RUPEES:
                         case (int)Lists.IfSubTypes.SCENE_ID:
+                        case (int)Lists.IfSubTypes.ROOM_ID:
                         case (int)Lists.IfSubTypes.PLAYER_SKULLTULAS:
                         case (int)Lists.IfSubTypes.PATH_NODE:
                         case (int)Lists.IfSubTypes.ANIMATION_FRAME:

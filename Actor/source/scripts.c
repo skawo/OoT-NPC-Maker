@@ -262,6 +262,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
 
         case IF_PLAYER_RUPEES:                  branch = Scripts_IfValue(en, globalCtx, gSaveContext.rupees, in, INT16); break;
         case IF_SCENE_ID:                       branch = Scripts_IfValue(en, globalCtx, globalCtx->sceneNum, in, INT16); break;
+        case IF_ROOM_ID:                        branch = Scripts_IfValue(en, globalCtx, globalCtx->roomCtx.curRoom.num, in, INT8); break;
         case IF_PLAYER_SKULLTULAS:              branch = Scripts_IfValue(en, globalCtx, gSaveContext.inventory.gsTokens, in, INT16); break;
         case IF_PATH_NODE:                      branch = Scripts_IfValue(en, globalCtx, en->curPathNode, in, INT16); break;
         case IF_ANIMATION_FRAME:                branch = Scripts_IfValue(en, globalCtx, (u16)en->skin.skelAnime.curFrame, in, INT16); break;

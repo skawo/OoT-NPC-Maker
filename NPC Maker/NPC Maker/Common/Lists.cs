@@ -342,6 +342,7 @@ namespace NPC_Maker
             DISTANCE_FROM_PLAYER,
             LENS_OF_TRUTH_ON,
             DAMAGED_BY,
+            ROOM_ID,
         }
 
         public enum ItemSubTypes
