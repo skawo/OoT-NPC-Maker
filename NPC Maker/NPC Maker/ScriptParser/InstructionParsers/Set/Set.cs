@@ -248,9 +248,9 @@ namespace NPC_Maker.Scripts
                                 var DListID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.ExtraDisplayLists);
 
                                 var DlistOption = new ScriptVarVal();
-                                DListID.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
+                                DlistOption.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
 
-                                return new InstructionSetWTwoValues((byte)SubID, DListID, DlistOption, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, DlistOption, DListID, 0);
                             }
                         case (int)Lists.SetSubTypes.ANIMATION_STARTFRAME:
                         case (int)Lists.SetSubTypes.ANIMATION_ENDFRAME:
