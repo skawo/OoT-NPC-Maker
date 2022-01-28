@@ -390,6 +390,45 @@ void Draw_Model(NpcMaker* en, GlobalContext* globalCtx)
     TwoHeadGfxArena* dest = (dT ? &POLY_XLU : &POLY_OPA);
     Draw_Setup(en, globalCtx, dT);
 
+    // Draw static exdlists (ones not attached to a limb)
+    if (en->hasStaticExDlists)
+    {
+        for (int i = 0; i < en->numExDLists; i++)
+        {
+            ExDListEntry dlist = en->extraDLists[i];
+
+            if (dlist.limb < 0)
+            {
+                u32 dListOffset = dlist.objectId == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
+                
+                if (dlist.showType != NOT_VISIBLE)
+                {
+                    Vec3f translation = (Vec3f){0,0,0};
+                    Vec3s rotation = (Vec3s){0,0,0};
+
+                    // -1 = relative to model. Else, absolute position.
+                    if (dlist.limb == -1)
+                    {
+                        translation = en->actor.world.pos;
+                        rotation = en->actor.world.rot;
+                    }
+
+                    Math_Vec3f_Sum(&translation, &dlist.translation, &translation);
+                    rotation.x += dlist.rotation.x;
+                    rotation.y += dlist.rotation.y;
+                    rotation.z += dlist.rotation.z;
+
+                    Matrix_Push();
+                    func_800D1694(translation.x, translation.y, translation.z, &rotation);
+                    Matrix_Scale(dlist.scale, dlist.scale, dlist.scale, 1);
+                    Draw_ExtDList(en, globalCtx, dlist.objectId, dlist.envColor, dListOffset);
+                    Matrix_Pop();                
+                }
+            }
+        }
+    }
+
+    // Draw skeleton
     if (en->settings.objectId >= 0)
     {
         switch (en->settings.drawType)

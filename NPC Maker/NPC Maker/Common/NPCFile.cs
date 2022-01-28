@@ -770,7 +770,7 @@ namespace NPC_Maker
         public Int16 RotZ { get; set; }
         public float Scale { get; set; }
         public int ShowType { get; set; }
-        public UInt16 Limb { get; set; }
+        public Int16 Limb { get; set; }
         public System.Drawing.Color Color { get; set; }
         public Int16 ObjectID { get; set; }
 
@@ -791,7 +791,7 @@ namespace NPC_Maker
             Color = System.Drawing.Color.FromArgb(255, 255, 255, 255);
         }
         public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, System.Drawing.Color _Color,
-                          Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, UInt16 _Limb, int _ShowType, Int16 _ObjectID)
+                          Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, Int16 _Limb, int _ShowType, Int16 _ObjectID)
         {
             Name = _Name;
             Address = _Address;

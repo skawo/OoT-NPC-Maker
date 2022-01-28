@@ -457,6 +457,17 @@ void Setup_Model(NpcMaker* en, GlobalContext* globalCtx)
         Setup_Animation(en, globalCtx, ANIM_IDLE, false, false, true, false);
         Update_Animations(en, globalCtx);
     }
+
+    for (int i = 0; i < en->numExDLists; i++)
+    {
+        ExDListEntry dlist = en->extraDLists[i];
+
+        if (dlist.limb < 0)
+        {
+            en->hasStaticExDlists = true;
+            break;
+        }
+    }
 }
 
 void Setup_Animation(NpcMaker* en, GlobalContext* globalCtx, int animId, bool interpolate, bool playOnce, bool forceSet, bool doNothing)

@@ -1242,7 +1242,7 @@ namespace NPC_Maker
         }
 
         private void AddBlankDList(int SkipIndex, int Index, string Name = null, uint? Address = null, float? TransX = null, float? TransY = null, float? TransZ = null,
-                                   short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, ushort? Limb = null, int? ShowType = null, short? ObjectID = null, Color? EnvColor = null)
+                                   short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, short? Limb = null, int? ShowType = null, short? ObjectID = null, Color? EnvColor = null)
         {
             if (Name == null)
                 Name = "DList_" + Index;
@@ -1255,7 +1255,7 @@ namespace NPC_Maker
             RotX = RotX ?? 0;
             RotY = RotY ?? 0;
             RotZ = RotZ ?? 0;
-            Scale = Scale ?? 0.01f;
+            Scale = Scale ?? 1f;
             Limb = Limb ?? 0;
             ShowType = ShowType ?? 0;
             ObjectID = ObjectID ?? -1;
@@ -1263,7 +1263,7 @@ namespace NPC_Maker
 
 
             SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ, (Color)EnvColor,
-                                                    (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (ushort)Limb, (int)ShowType, (short)ObjectID));
+                                                    (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (short)Limb, (int)ShowType, (short)ObjectID));
 
             if (SkipIndex != (int)EDlistsColumns.Purpose)
                 DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Purpose].Value = Name;
@@ -1458,9 +1458,9 @@ namespace NPC_Maker
                         try
                         {
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, Convert.ToUInt16(e.Value));
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, Convert.ToInt16(e.Value));
                             else
-                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Limb = Convert.ToUInt16(e.Value);
+                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Limb = Convert.ToInt16(e.Value);
                         }
                         catch (Exception)
                         {

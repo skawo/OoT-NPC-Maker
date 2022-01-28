@@ -133,7 +133,7 @@ typedef struct ExDListEntry
     float scale;
     s16 objectId;
     Vec3s rotation;
-    u16 limb;
+    s16 limb;
     u8 showType;
     Color_RGB8 envColor;
 
@@ -225,6 +225,7 @@ typedef struct NpcMaker
     u8 correctSongHeard;
     u8 pickedUpState;
     u8 hadCollision;
+    u8 hasStaticExDlists;
 
     Color_RGB8 curColor;
 
