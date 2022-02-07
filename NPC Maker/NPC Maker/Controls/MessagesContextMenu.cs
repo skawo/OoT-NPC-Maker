@@ -254,9 +254,6 @@ namespace NPC_Maker
             newTxt = newTxt.Remove(Owner.SelectionStart, Owner.SelectionLength);
             newTxt = newTxt.Insert(Owner.SelectionStart, Text);
 
-            //Dumb workaround
-            Owner.Tag = 1;
-
             Owner.Text = newTxt;
             Owner.SelectionStart = start + Text.Length;
             Owner.AutoScrollOffset = Scroll;

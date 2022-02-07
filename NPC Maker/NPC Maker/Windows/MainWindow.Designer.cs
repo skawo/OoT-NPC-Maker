@@ -222,8 +222,7 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.MessagesTabPage = new System.Windows.Forms.TabPage();
-            this.lblBoxNum = new System.Windows.Forms.Label();
-            this.numUp_BoxNum = new System.Windows.Forms.NumericUpDown();
+            this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
             this.MsgText = new FastColoredTextBoxNS.FastColoredTextBox();
             this.Btn_MsgRename = new System.Windows.Forms.Button();
@@ -346,7 +345,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
             this.MessagesTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numUp_BoxNum)).BeginInit();
+            this.PanelMsgPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
@@ -2851,9 +2850,7 @@
             // 
             // MessagesTabPage
             // 
-            this.MessagesTabPage.Controls.Add(this.lblBoxNum);
-            this.MessagesTabPage.Controls.Add(this.numUp_BoxNum);
-            this.MessagesTabPage.Controls.Add(this.MsgPreview);
+            this.MessagesTabPage.Controls.Add(this.PanelMsgPreview);
             this.MessagesTabPage.Controls.Add(this.MsgText);
             this.MessagesTabPage.Controls.Add(this.Btn_MsgRename);
             this.MessagesTabPage.Controls.Add(this.Lbl_Text);
@@ -2872,48 +2869,29 @@
             this.MessagesTabPage.Text = "Messages";
             this.MessagesTabPage.UseVisualStyleBackColor = true;
             // 
-            // lblBoxNum
+            // PanelMsgPreview
             // 
-            this.lblBoxNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblBoxNum.AutoSize = true;
-            this.lblBoxNum.Location = new System.Drawing.Point(647, 417);
-            this.lblBoxNum.Name = "lblBoxNum";
-            this.lblBoxNum.Size = new System.Drawing.Size(66, 13);
-            this.lblBoxNum.TabIndex = 71;
-            this.lblBoxNum.Text = "Box number:";
-            // 
-            // numUp_BoxNum
-            // 
-            this.numUp_BoxNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.numUp_BoxNum.Location = new System.Drawing.Point(719, 415);
-            this.numUp_BoxNum.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numUp_BoxNum.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numUp_BoxNum.Name = "numUp_BoxNum";
-            this.numUp_BoxNum.Size = new System.Drawing.Size(41, 20);
-            this.numUp_BoxNum.TabIndex = 70;
-            this.numUp_BoxNum.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numUp_BoxNum.ValueChanged += new System.EventHandler(this.NumUp_BoxNum_ValueChanged);
+            this.PanelMsgPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PanelMsgPreview.AutoScroll = true;
+            this.PanelMsgPreview.BackColor = System.Drawing.Color.White;
+            this.PanelMsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelMsgPreview.Controls.Add(this.MsgPreview);
+            this.PanelMsgPreview.Location = new System.Drawing.Point(163, 269);
+            this.PanelMsgPreview.Margin = new System.Windows.Forms.Padding(0);
+            this.PanelMsgPreview.Name = "PanelMsgPreview";
+            this.PanelMsgPreview.Size = new System.Drawing.Size(597, 352);
+            this.PanelMsgPreview.TabIndex = 72;
+            this.PanelMsgPreview.Resize += new System.EventHandler(this.PanelMsgPreview_Resize);
             // 
             // MsgPreview
             // 
-            this.MsgPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.MsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MsgPreview.Location = new System.Drawing.Point(260, 444);
+            this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MsgPreview.Location = new System.Drawing.Point(74, 39);
+            this.MsgPreview.Margin = new System.Windows.Forms.Padding(0);
             this.MsgPreview.Name = "MsgPreview";
-            this.MsgPreview.Size = new System.Drawing.Size(500, 177);
+            this.MsgPreview.Size = new System.Drawing.Size(474, 275);
+            this.MsgPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.MsgPreview.TabIndex = 69;
             this.MsgPreview.TabStop = false;
             // 
@@ -2944,13 +2922,13 @@
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
             this.MsgText.IsReplaceMode = false;
-            this.MsgText.Location = new System.Drawing.Point(260, 98);
+            this.MsgText.Location = new System.Drawing.Point(163, 50);
             this.MsgText.Name = "MsgText";
             this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
             this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
             this.MsgText.ShowLineNumbers = false;
-            this.MsgText.Size = new System.Drawing.Size(500, 311);
+            this.MsgText.Size = new System.Drawing.Size(597, 216);
             this.MsgText.TabIndex = 68;
             this.MsgText.Tag = "0";
             this.MsgText.WordWrapAutoIndent = false;
@@ -2960,7 +2938,7 @@
             // Btn_MsgRename
             // 
             this.Btn_MsgRename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_MsgRename.Location = new System.Drawing.Point(81, 590);
+            this.Btn_MsgRename.Location = new System.Drawing.Point(81, 553);
             this.Btn_MsgRename.Name = "Btn_MsgRename";
             this.Btn_MsgRename.Size = new System.Drawing.Size(73, 31);
             this.Btn_MsgRename.TabIndex = 67;
@@ -2971,7 +2949,7 @@
             // Lbl_Text
             // 
             this.Lbl_Text.AutoSize = true;
-            this.Lbl_Text.Location = new System.Drawing.Point(257, 82);
+            this.Lbl_Text.Location = new System.Drawing.Point(161, 34);
             this.Lbl_Text.Name = "Lbl_Text";
             this.Lbl_Text.Size = new System.Drawing.Size(31, 13);
             this.Lbl_Text.TabIndex = 66;
@@ -2986,7 +2964,7 @@
             "Top",
             "Center",
             "Bottom"});
-            this.Combo_MsgPos.Location = new System.Drawing.Point(260, 58);
+            this.Combo_MsgPos.Location = new System.Drawing.Point(457, 3);
             this.Combo_MsgPos.Name = "Combo_MsgPos";
             this.Combo_MsgPos.Size = new System.Drawing.Size(181, 21);
             this.Combo_MsgPos.TabIndex = 65;
@@ -2996,7 +2974,7 @@
             // Lbl_MsgPos
             // 
             this.Lbl_MsgPos.AutoSize = true;
-            this.Lbl_MsgPos.Location = new System.Drawing.Point(257, 42);
+            this.Lbl_MsgPos.Location = new System.Drawing.Point(404, 6);
             this.Lbl_MsgPos.Name = "Lbl_MsgPos";
             this.Lbl_MsgPos.Size = new System.Drawing.Size(47, 13);
             this.Lbl_MsgPos.TabIndex = 64;
@@ -3013,7 +2991,7 @@
             "Ocarina",
             "None (White text)",
             "None (Black text)"});
-            this.Combo_MsgType.Location = new System.Drawing.Point(260, 18);
+            this.Combo_MsgType.Location = new System.Drawing.Point(217, 3);
             this.Combo_MsgType.Name = "Combo_MsgType";
             this.Combo_MsgType.Size = new System.Drawing.Size(181, 21);
             this.Combo_MsgType.TabIndex = 63;
@@ -3023,7 +3001,7 @@
             // Lbl_MsgType
             // 
             this.Lbl_MsgType.AutoSize = true;
-            this.Lbl_MsgType.Location = new System.Drawing.Point(257, 2);
+            this.Lbl_MsgType.Location = new System.Drawing.Point(160, 6);
             this.Lbl_MsgType.Name = "Lbl_MsgType";
             this.Lbl_MsgType.Size = new System.Drawing.Size(51, 13);
             this.Lbl_MsgType.TabIndex = 62;
@@ -3032,7 +3010,7 @@
             // Btn_DeleteMsg
             // 
             this.Btn_DeleteMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_DeleteMsg.Location = new System.Drawing.Point(3, 590);
+            this.Btn_DeleteMsg.Location = new System.Drawing.Point(3, 553);
             this.Btn_DeleteMsg.Name = "Btn_DeleteMsg";
             this.Btn_DeleteMsg.Size = new System.Drawing.Size(73, 31);
             this.Btn_DeleteMsg.TabIndex = 8;
@@ -3043,9 +3021,9 @@
             // Btn_AddMsg
             // 
             this.Btn_AddMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_AddMsg.Location = new System.Drawing.Point(160, 590);
+            this.Btn_AddMsg.Location = new System.Drawing.Point(3, 590);
             this.Btn_AddMsg.Name = "Btn_AddMsg";
-            this.Btn_AddMsg.Size = new System.Drawing.Size(79, 31);
+            this.Btn_AddMsg.Size = new System.Drawing.Size(151, 31);
             this.Btn_AddMsg.TabIndex = 8;
             this.Btn_AddMsg.Text = "Add";
             this.Btn_AddMsg.UseVisualStyleBackColor = true;
@@ -3070,7 +3048,7 @@
             this.MessagesGrid.ReadOnly = true;
             this.MessagesGrid.RowHeadersVisible = false;
             this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MessagesGrid.Size = new System.Drawing.Size(236, 585);
+            this.MessagesGrid.Size = new System.Drawing.Size(151, 544);
             this.MessagesGrid.TabIndex = 3;
             // 
             // dataGridViewTextBoxColumn2
@@ -3564,7 +3542,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
             this.MessagesTabPage.ResumeLayout(false);
             this.MessagesTabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numUp_BoxNum)).EndInit();
+            this.PanelMsgPreview.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
@@ -3829,9 +3807,8 @@
         private System.Windows.Forms.NumericUpDown NumUp_MaxRoam;
         private System.Windows.Forms.ToolStripMenuItem colorPickerToolStripMenuItem;
         private System.Windows.Forms.PictureBox MsgPreview;
-        private System.Windows.Forms.NumericUpDown numUp_BoxNum;
-        private System.Windows.Forms.Label lblBoxNum;
         private System.Windows.Forms.ToolStripMenuItem improveMessagePreviewReadabilityToolStripMenuItem;
+        private System.Windows.Forms.Panel PanelMsgPreview;
     }
 }
 
