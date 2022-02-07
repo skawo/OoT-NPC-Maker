@@ -1362,7 +1362,7 @@
             this.Panel_Colors.Controls.Add(this.ChkBox_Glow);
             this.Panel_Colors.Controls.Add(this.NumUp_LightLimb);
             this.Panel_Colors.Controls.Add(this.ChkBox_GenLight);
-            this.Panel_Colors.Location = new System.Drawing.Point(419, 372);
+            this.Panel_Colors.Location = new System.Drawing.Point(419, 383);
             this.Panel_Colors.Name = "Panel_Colors";
             this.Panel_Colors.Size = new System.Drawing.Size(341, 134);
             this.Panel_Colors.TabIndex = 77;
@@ -1576,7 +1576,7 @@
             this.Btn_ReactIfAtt.Controls.Add(this.Txtbox_ReactIfAtt);
             this.Btn_ReactIfAtt.Controls.Add(this.Lbl_ReactIfAttSnd);
             this.Btn_ReactIfAtt.Controls.Add(this.Chkb_ReactIfAtt);
-            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 279);
+            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 290);
             this.Btn_ReactIfAtt.Name = "Btn_ReactIfAtt";
             this.Btn_ReactIfAtt.Size = new System.Drawing.Size(341, 87);
             this.Btn_ReactIfAtt.TabIndex = 76;
