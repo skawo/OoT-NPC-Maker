@@ -160,8 +160,8 @@ namespace NPC_Maker
 
             LastClickedTextbox.Text = newTxt;
             LastClickedTextbox.SelectionStart = start + Text.Length;
-
             LastClickedTextbox.VerticalScroll.Value = Scroll;
+            LastClickedTextbox.UpdateScrollbars();
         }
 
         private static void Tsmi_DoubleClick(object sender, EventArgs e)

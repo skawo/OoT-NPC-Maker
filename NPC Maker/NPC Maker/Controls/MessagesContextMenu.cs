@@ -257,6 +257,7 @@ namespace NPC_Maker
             Owner.Text = newTxt;
             Owner.SelectionStart = start + Text.Length;
             Owner.AutoScrollOffset = Scroll;
+            Owner.UpdateScrollbars();
         }
 
         private static void Tsmi_DoubleClick(object sender, EventArgs e)

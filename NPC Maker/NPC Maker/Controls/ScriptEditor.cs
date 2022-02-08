@@ -22,7 +22,7 @@ namespace NPC_Maker
 
             AutoParseTimer = new System.Windows.Forms.Timer
             {
-                Interval = 1000
+                Interval =  1000
             };
             AutoParseTimer.Tick += AutoParseTimer_Tick;
 

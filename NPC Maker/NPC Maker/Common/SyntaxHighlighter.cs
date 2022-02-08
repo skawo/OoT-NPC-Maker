@@ -28,6 +28,7 @@ namespace NPC_Maker
             {Enum.GetNames(typeof(Lists.DungeonItems)).ToList(),  SyntaxHighlighter.CyanStyle},
             {Enum.GetNames(typeof(Lists.Items)).ToList(),  SyntaxHighlighter.CyanStyle},
             {Enum.GetNames(typeof(Lists.AwardItems)).ToList(),  SyntaxHighlighter.CyanStyle},
+            {Enum.GetNames(typeof(Lists.QuestItems)).ToList(),  SyntaxHighlighter.CyanStyle},
             {Enum.GetNames(typeof(Lists.Instructions)).ToList(),  SyntaxHighlighter.PurpleStyle},
             {Lists.KeywordsBlue,  SyntaxHighlighter.BlueStyle},
             {Lists.KeywordsRed,  SyntaxHighlighter.RedStyle},
