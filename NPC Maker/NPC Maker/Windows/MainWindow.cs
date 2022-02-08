@@ -1960,5 +1960,62 @@ namespace NPC_Maker
         }
 
         #endregion
+
+        private void TabControl_MouseUp(object sender, MouseEventArgs e)
+        {
+            int PageClicked = -1;
+
+            for (int i = 0; i < TabControl.TabCount; i++)
+            {
+                if (TabControl.GetTabRect(i).Contains(e.Location))
+                    PageClicked = i;
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                TabControl.SelectedTab = TabControl.TabPages[PageClicked];
+
+                ContextMenuStrip mn = new ContextMenuStrip();
+
+                ToolStripMenuItem renameScript = new ToolStripMenuItem();
+                ToolStripMenuItem deleteScript = new ToolStripMenuItem();
+                ToolStripMenuItem newScript = new ToolStripMenuItem();
+
+                if ((string)TabControl.TabPages[PageClicked].Tag == "SCRIPT")
+                    mn.Items.AddRange(new ToolStripItem[] { newScript, renameScript, deleteScript });
+                else
+                    mn.Items.AddRange(new ToolStripItem[] { newScript });
+
+                renameScript.Size = new System.Drawing.Size(156, 22);
+                renameScript.Text = "Rename script";
+                renameScript.Click += RenameScript_Click;
+
+                deleteScript.Size = new System.Drawing.Size(156, 22);
+                deleteScript.Text = "Delete script";
+                deleteScript.Click += DeleteScript_Click;
+
+                newScript.Size = new System.Drawing.Size(156, 22);
+                newScript.Text = "New script";
+                newScript.Click += NewScript_Click;
+
+                mn.Show(TabControl.PointToScreen(new Point(e.X, e.Y)));
+            }
+
+        }
+
+        private void NewScript_Click(object sender, EventArgs e)
+        {
+            AddNewScriptToolStripMenuItem_Click(null, null);
+        }
+
+        private void DeleteScript_Click(object sender, EventArgs e)
+        {
+            DeleteCurrentScriptToolStripMenuItem_Click(null, null);
+        }
+
+        private void RenameScript_Click(object sender, EventArgs e)
+        {
+            RenameCurrentScriptToolStripMenuItem_Click(null, null);
+        }
     }
 }

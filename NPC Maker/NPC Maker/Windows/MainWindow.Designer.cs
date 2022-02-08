@@ -221,7 +221,7 @@
             this.NumUpDown_CutsceneSlot = new System.Windows.Forms.NumericUpDown();
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
-            this.MessagesTabPage = new System.Windows.Forms.TabPage();
+            this.Tab4_Messages = new System.Windows.Forms.TabPage();
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
             this.MsgText = new FastColoredTextBoxNS.FastColoredTextBox();
@@ -344,7 +344,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
-            this.MessagesTabPage.SuspendLayout();
+            this.Tab4_Messages.SuspendLayout();
             this.PanelMsgPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
@@ -385,13 +385,14 @@
             this.TabControl.Controls.Add(this.Tab1_Data);
             this.TabControl.Controls.Add(this.Tab2_ExtraData);
             this.TabControl.Controls.Add(this.Tab3_BehaviorData);
-            this.TabControl.Controls.Add(this.MessagesTabPage);
+            this.TabControl.Controls.Add(this.Tab4_Messages);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
             this.TabControl.Size = new System.Drawing.Size(776, 653);
             this.TabControl.TabIndex = 41;
+            this.TabControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TabControl_MouseUp);
             // 
             // Tab1_Data
             // 
@@ -2848,26 +2849,26 @@
             this.Checkbox_CanPressSwitches.UseVisualStyleBackColor = true;
             this.Checkbox_CanPressSwitches.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
-            // MessagesTabPage
+            // Tab4_Messages
             // 
-            this.MessagesTabPage.Controls.Add(this.PanelMsgPreview);
-            this.MessagesTabPage.Controls.Add(this.MsgText);
-            this.MessagesTabPage.Controls.Add(this.Btn_MsgRename);
-            this.MessagesTabPage.Controls.Add(this.Lbl_Text);
-            this.MessagesTabPage.Controls.Add(this.Combo_MsgPos);
-            this.MessagesTabPage.Controls.Add(this.Lbl_MsgPos);
-            this.MessagesTabPage.Controls.Add(this.Combo_MsgType);
-            this.MessagesTabPage.Controls.Add(this.Lbl_MsgType);
-            this.MessagesTabPage.Controls.Add(this.Btn_DeleteMsg);
-            this.MessagesTabPage.Controls.Add(this.Btn_AddMsg);
-            this.MessagesTabPage.Controls.Add(this.MessagesGrid);
-            this.MessagesTabPage.Location = new System.Drawing.Point(4, 22);
-            this.MessagesTabPage.Name = "MessagesTabPage";
-            this.MessagesTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.MessagesTabPage.Size = new System.Drawing.Size(768, 627);
-            this.MessagesTabPage.TabIndex = 5;
-            this.MessagesTabPage.Text = "Messages";
-            this.MessagesTabPage.UseVisualStyleBackColor = true;
+            this.Tab4_Messages.Controls.Add(this.PanelMsgPreview);
+            this.Tab4_Messages.Controls.Add(this.MsgText);
+            this.Tab4_Messages.Controls.Add(this.Btn_MsgRename);
+            this.Tab4_Messages.Controls.Add(this.Lbl_Text);
+            this.Tab4_Messages.Controls.Add(this.Combo_MsgPos);
+            this.Tab4_Messages.Controls.Add(this.Lbl_MsgPos);
+            this.Tab4_Messages.Controls.Add(this.Combo_MsgType);
+            this.Tab4_Messages.Controls.Add(this.Lbl_MsgType);
+            this.Tab4_Messages.Controls.Add(this.Btn_DeleteMsg);
+            this.Tab4_Messages.Controls.Add(this.Btn_AddMsg);
+            this.Tab4_Messages.Controls.Add(this.MessagesGrid);
+            this.Tab4_Messages.Location = new System.Drawing.Point(4, 22);
+            this.Tab4_Messages.Name = "Tab4_Messages";
+            this.Tab4_Messages.Padding = new System.Windows.Forms.Padding(3);
+            this.Tab4_Messages.Size = new System.Drawing.Size(768, 627);
+            this.Tab4_Messages.TabIndex = 5;
+            this.Tab4_Messages.Text = "Messages";
+            this.Tab4_Messages.UseVisualStyleBackColor = true;
             // 
             // PanelMsgPreview
             // 
@@ -3540,8 +3541,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
-            this.MessagesTabPage.ResumeLayout(false);
-            this.MessagesTabPage.PerformLayout();
+            this.Tab4_Messages.ResumeLayout(false);
+            this.Tab4_Messages.PerformLayout();
             this.PanelMsgPreview.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
@@ -3775,7 +3776,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_EndFrame;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Speed;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_OBJ;
-        private System.Windows.Forms.TabPage MessagesTabPage;
+        private System.Windows.Forms.TabPage Tab4_Messages;
         private System.Windows.Forms.ComboBox Combo_MsgType;
         private System.Windows.Forms.Label Lbl_MsgType;
         private System.Windows.Forms.Button Btn_DeleteMsg;

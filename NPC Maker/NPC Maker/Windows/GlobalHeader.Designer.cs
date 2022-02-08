@@ -90,6 +90,7 @@ namespace NPC_Maker.Windows
             this.Tab.SelectedIndex = 0;
             this.Tab.Size = new System.Drawing.Size(834, 478);
             this.Tab.TabIndex = 3;
+            this.Tab.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Tab_MouseUp);
             // 
             // GlobalHeader
             // 
