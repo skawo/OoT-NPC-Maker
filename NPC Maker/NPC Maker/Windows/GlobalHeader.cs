@@ -108,30 +108,31 @@ namespace NPC_Maker.Windows
             }
 
             if (e.Button == MouseButtons.Right)
-
+            {
                 Tab.SelectedTab = Tab.TabPages[PageClicked];
 
-            ContextMenuStrip mn = new ContextMenuStrip();
+                ContextMenuStrip mn = new ContextMenuStrip();
 
-            ToolStripMenuItem renameHeader = new ToolStripMenuItem();
-            ToolStripMenuItem deleteHeader = new ToolStripMenuItem();
-            ToolStripMenuItem newHeader = new ToolStripMenuItem();
+                ToolStripMenuItem renameHeader = new ToolStripMenuItem();
+                ToolStripMenuItem deleteHeader = new ToolStripMenuItem();
+                ToolStripMenuItem newHeader = new ToolStripMenuItem();
 
-            mn.Items.AddRange(new ToolStripItem[] { newHeader, renameHeader, deleteHeader });
+                mn.Items.AddRange(new ToolStripItem[] { newHeader, renameHeader, deleteHeader });
 
-            renameHeader.Size = new System.Drawing.Size(156, 22);
-            renameHeader.Text = "Rename";
-            renameHeader.Click += Rename_Click;
+                renameHeader.Size = new System.Drawing.Size(156, 22);
+                renameHeader.Text = "Rename";
+                renameHeader.Click += Rename_Click;
 
-            deleteHeader.Size = new System.Drawing.Size(156, 22);
-            deleteHeader.Text = "Delete";
-            deleteHeader.Click += Delete_Click;
+                deleteHeader.Size = new System.Drawing.Size(156, 22);
+                deleteHeader.Text = "Delete";
+                deleteHeader.Click += Delete_Click;
 
-            newHeader.Size = new System.Drawing.Size(156, 22);
-            newHeader.Text = "Add new";
-            newHeader.Click += AddNew_Click;
+                newHeader.Size = new System.Drawing.Size(156, 22);
+                newHeader.Text = "Add new";
+                newHeader.Click += AddNew_Click;
 
-            mn.Show(Tab.PointToScreen(new Point(e.X, e.Y)));
+                mn.Show(Tab.PointToScreen(new Point(e.X, e.Y)));
+            }
         }
 
     }
