@@ -22,7 +22,6 @@ namespace NPC_Maker
             CultureInfo ci = CultureInfo.GetCultureInfo("en-US");
             Application.CurrentCulture = ci;
 
-
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
 
             Type t = Type.GetType("Mono.Runtime");
