@@ -1971,6 +1971,9 @@ namespace NPC_Maker
                     PageClicked = i;
             }
 
+            if (PageClicked < 0)
+                return;
+
             if (e.Button == MouseButtons.Right)
             {
                 TabControl.SelectedTab = TabControl.TabPages[PageClicked];
