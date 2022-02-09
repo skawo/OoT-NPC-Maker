@@ -1976,6 +1976,7 @@ namespace NPC_Maker
 
             if (e.Button == MouseButtons.Right)
             {
+                // Gotta select the menu so we can reuse the main menu strip code.
                 TabControl.SelectedTab = TabControl.TabPages[PageClicked];
 
                 ContextMenuStrip mn = new ContextMenuStrip();

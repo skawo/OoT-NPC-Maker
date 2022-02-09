@@ -1,5 +1,6 @@
 ﻿using FastColoredTextBoxNS;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -101,10 +102,7 @@ namespace NPC_Maker
 
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
-                ToolStripMenuItem Tsmi = new ToolStripMenuItem
-                {
-                    Text = Item
-                };
+                ToolStripMenuItem Tsmi = new ToolStripMenuItem(Item);
 
                 if (Dicts.FunctionSubtypes.ContainsKey(Item))
                 {
@@ -135,11 +133,16 @@ namespace NPC_Maker
         {
             MenuItem.DropDown.MaximumSize = new Size(300, 700);
 
-            foreach (string Item in Collection)
+            ToolStripMenuItem[] Items = new ToolStripMenuItem[Collection.Length];
+
+            for (int i = 0; i < Items.Length; i++)
             {
-                ToolStripItem SubItem = MenuItem.DropDownItems.Add(Item);
+                ToolStripMenuItem SubItem = new ToolStripMenuItem(Collection[i]);
                 SubItem.Click += SubItem_Click;
+                Items[i] = SubItem;
             }
+
+            MenuItem.DropDownItems.AddRange(Items);
         }
 
         public static void SetTextBox(FastColoredTextBox Box)
