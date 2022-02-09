@@ -30,6 +30,7 @@ An NPC creation tool for The Legend of Zelda: Ocarina of Time.
 
 --------------------------------------------------------------
 Instructions on how to add an actor to your game:
+(Video version can be found here: https://www.youtube.com/watch?v=bwDyzOeDjG4)
 
 <h2>Custom Actor Toolkit</h2>
 <b>Compiling the actor overlay</b><br><br>
