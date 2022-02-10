@@ -114,6 +114,14 @@
 #define MIN_THROW_VELOCITY 3
 #define MAX_THROW_VELOCITY 12
 
+#ifndef MAX
+    #define MAX(a, b)               ((a) > (b) ? (a) : (b))
+#endif
+
+#ifndef MIN
+    #define MIN(a, b)               ((a) < (b) ? (a) : (b))
+#endif
+
 typedef enum dlist_visibility
 {
 	NOT_VISIBLE = 0,

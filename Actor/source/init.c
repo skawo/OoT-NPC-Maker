@@ -168,12 +168,16 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
         osSyncPrintf("_Loading NPC Entry %2d from object %4d.", en->npcId, settingsObjectId);
     #endif
 
-    en->settingsCompressed = Rom_IsObjectCompressed(settingsObjectId);
+    #if DIRECT_ROM_LOAD == 1
+        en->settingsCompressed = Rom_IsObjectCompressed(settingsObjectId);
+    #else
+        en->settingsCompressed = true;
+    #endif
 
     if (en->settingsCompressed)
     {
         #if LOGGING == 1
-            osSyncPrintf("_Settings object file is compressed! Loading it into RAM...");
+            osSyncPrintf("_Loading settings file into RAM...");
         #endif  
 
         Rom_LoadObjectIfUnloaded(globalCtx, settingsObjectId);

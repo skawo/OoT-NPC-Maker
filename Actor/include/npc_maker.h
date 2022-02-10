@@ -25,6 +25,10 @@
     #define COLLISION_VIEWER 1
 #endif
 
+#ifndef DIRECT_ROM_LOAD
+    #define DIRECT_ROM_LOAD 0
+#endif
+
 #ifndef LOG_TO_SCREEN
     #define LOG_TO_SCREEN 1
 #endif

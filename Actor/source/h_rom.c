@@ -21,7 +21,7 @@ RomSection Rom_GetPhysicalROMAddrFromVirtual(u32 virtual)
         u32 Pend;
     } *dma;
 
-    RomSection out = { .Start = 0, .End = 0};
+    RomSection out = { .Start = 0xFFFFFFFF, .End = 0xFFFFFFFF};
     
     for (dma = (void*)dmaData; ; ++dma)
     {
