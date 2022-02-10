@@ -371,7 +371,11 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             u32 actor_id = Scripts_GetVarval(en, globalCtx, instr->actorNumVarType, instr->actorNum, false);
             NpcMaker* ex_actor = Scene_GetNpcMakerByID(en, globalCtx, actor_id);
 
-            branch = Scripts_IfExtVar(en, globalCtx, ex_actor->scriptVars[instr->extVarNum], in, INT32);
+            if (ex_actor == NULL)
+                branch = in->falseInstrNum;
+            else
+                branch = Scripts_IfExtVar(en, globalCtx, ex_actor->scriptVars[instr->extVarNum], in, INT32);
+                
             break;
         }
 
@@ -938,10 +942,13 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             u32 actorId = Scripts_GetVarval(en, globalCtx, instr->actorNumVarType, instr->actorNum, false);
             NpcMaker* exActor = Scene_GetNpcMakerByID(en, globalCtx, actorId);
 
-            Scripts_MathOperation(&exActor->scriptVars[instr->extVarNum - 1], 
-                                  Scripts_GetVarval(en, globalCtx, instr->varType, instr->value, true), 
-                                  instr->operator, 
-                                  INT32);
+            if (exActor != NULL)
+            {
+                Scripts_MathOperation(&exActor->scriptVars[instr->extVarNum - 1], 
+                                    Scripts_GetVarval(en, globalCtx, instr->varType, instr->value, true), 
+                                    instr->operator, 
+                                    INT32);
+            }
             
             break;
         }

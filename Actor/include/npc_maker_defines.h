@@ -1,6 +1,10 @@
 #ifndef NPC_MAKER_DEFINES_H
 #define NPC_MAKER_DEFINES_H
 
+#define DUMMY_MSG_DATA 0x30313161
+#define DUMMY_MESSAGE 0x011A
+#define NO_CUSTOM_MESSAGE -1 
+
 #define ROT16(R16A0) (182.044444 * (R16A0))
 #define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
 #define AADDR(a,o)  ((void*)((u8*)(a)+(o)))
@@ -107,9 +111,6 @@
 #define NIGHT_TIME 0xC001
 
 #define ONE_HEART 0x10
-
-#define DUMMY_MESSAGE 0x011A
-#define NO_CUSTOM_MESSAGE -1 
 
 #define MIN_THROW_VELOCITY 3
 #define MAX_THROW_VELOCITY 12

@@ -78,7 +78,6 @@ void Setup_Defaults(NpcMaker* en, GlobalContext* globalCtx)
     en->messagesDataOffset = 0;
     en->textboxNum = -1;
     en->refActor = &en->actor;
-    en->dummyMsgStart = 0xFFFFFFFF;
     en->hasStaticExDlists = false;
     Movement_SetNextDelay(en);
 
@@ -95,8 +94,8 @@ void Setup_Defaults(NpcMaker* en, GlobalContext* globalCtx)
     }
 }
 
-u32 Setup_LoadSection(u32* allocDest, u16* entriesNumberOut, u8* buffer, u32 offset, u32 entrySize, 
-                       u32 nullSize, s32 blockSize)
+u32 Setup_LoadSection(NpcMaker* en, GlobalContext* globalCtx, u8* buffer, u32 offset, u32 entryAddress,
+                      u32* allocDest, u16* entriesNumberOut,  u32 entrySize, u32 nullSize, bool noCopy, s32 blockSize)
 {
     #if LOGGING == 1
         osSyncPrintf("_Loading a section.");
@@ -114,18 +113,27 @@ u32 Setup_LoadSection(u32* allocDest, u16* entriesNumberOut, u8* buffer, u32 off
 
     if (blockSize > nullSize)
     {
-        *allocDest = (u32)ZeldaArena_Malloc(blockSize);
-
-        if (*allocDest == 0)
+        // If we're loading from a RAM object, and the data is static, we might as well just use the RAM object data as is, without making a copy.
+        if (en->settingsCompressed & noCopy)
         {
-            *entriesNumberOut = 0;
-
-            #if LOGGING == 1
-                osSyncPrintf("_Failed to allocate section!");
-            #endif
+            void* ptr = Rom_GetObjectDataPtr(en->actor.params, globalCtx);
+            *allocDest = (u32)AADDR(ptr, entryAddress + 4 + offset);
         }
         else
-            bcopy(buffer + offset, (u32*)*allocDest, blockSize); 
+        {
+            *allocDest = (u32)ZeldaArena_Malloc(blockSize);
+
+            if (*allocDest == 0)
+            {
+                *entriesNumberOut = 0;
+
+                #if LOGGING == 1
+                    osSyncPrintf("_Failed to allocate section!");
+                #endif
+            }
+            else
+                bcopy(buffer + offset, (u32*)*allocDest, blockSize);
+        } 
     }
     else
     {
@@ -235,11 +243,11 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
 
     SectionLoad sLoadList[] = 
     {
-        {.allocDest = (u32*)&en->animations,  .entriesNumberOut = &en->numAnims,        .entrySize = sizeof(NpcAnimationEntry),  .nullBlockSize = NULL_ANIM_BLOCK_SIZE},
-        {.allocDest = (u32*)&en->extraDLists, .entriesNumberOut = &en->numExDLists,     .entrySize = sizeof(ExDListEntry),       .nullBlockSize = NULL_EXDLIST_BLOCK_SIZE},
-        {.allocDest = (u32*)&en->dListColors, .entriesNumberOut = &en->numExColors,     .entrySize = sizeof(ColorEntry),         .nullBlockSize = NULL_EX_COLORS_BLOCK_SIZE},
-        {.allocDest = (u32*)&en->exSegData,   .entriesNumberOut = &en->exSegDataBlSize, .entrySize = 1,                          .nullBlockSize = NULL_SEG_BLOCK_SIZE},
-        {.allocDest = (u32*)&en->scripts,     .entriesNumberOut = NULL,                 .entrySize = 0,                          .nullBlockSize = NULL_SCRIPTS_BLOCK_SIZE},
+        {.allocDest = (u32*)&en->animations,  .entriesNumberOut = &en->numAnims,        .entrySize = sizeof(NpcAnimationEntry),  .nullBlockSize = NULL_ANIM_BLOCK_SIZE,      .noCopy = false},
+        {.allocDest = (u32*)&en->extraDLists, .entriesNumberOut = &en->numExDLists,     .entrySize = sizeof(ExDListEntry),       .nullBlockSize = NULL_EXDLIST_BLOCK_SIZE,   .noCopy = false},
+        {.allocDest = (u32*)&en->dListColors, .entriesNumberOut = &en->numExColors,     .entrySize = sizeof(ColorEntry),         .nullBlockSize = NULL_EX_COLORS_BLOCK_SIZE, .noCopy = true},
+        {.allocDest = (u32*)&en->exSegData,   .entriesNumberOut = &en->exSegDataBlSize, .entrySize = 1,                          .nullBlockSize = NULL_SEG_BLOCK_SIZE,       .noCopy = true},
+        {.allocDest = (u32*)&en->scripts,     .entriesNumberOut = NULL,                 .entrySize = 0,                          .nullBlockSize = NULL_SCRIPTS_BLOCK_SIZE,   .noCopy = true},
     };
 
     #if LOGGING == 1
@@ -249,7 +257,17 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     for (int i = 0; i < ARRAY_COUNT(sLoadList); i++)
     {
         int size = (i == ARRAY_COUNT(sLoadList) - 1) ? entrySize - offset : -1;
-        offset = Setup_LoadSection(sLoadList[i].allocDest, sLoadList[i].entriesNumberOut, buffer, offset, sLoadList[i].entrySize, sLoadList[i].nullBlockSize, size);
+        offset = Setup_LoadSection(en, 
+                                   globalCtx, 
+                                   buffer, 
+                                   offset, 
+                                   entryAddress, 
+                                   sLoadList[i].allocDest, 
+                                   sLoadList[i].entriesNumberOut, 
+                                   sLoadList[i].entrySize, 
+                                   sLoadList[i].nullBlockSize, 
+                                   sLoadList[i].noCopy, 
+                                   size);
     }
 
     #if LOGGING == 1

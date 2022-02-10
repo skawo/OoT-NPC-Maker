@@ -191,16 +191,12 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
     if (en->isTalking && globalCtx->msgCtx.msgMode == MSGMODE_NEWMSG)
         en->textboxNum++;
 
-    // Get dummy message data.
-    if (AVAL(&globalCtx->msgCtx, u16, 0xE2F8) == DUMMY_MESSAGE && en->dummyMsgStart == 0xFFFFFFFF)
-        en->dummyMsgStart = *(u32*)globalCtx->msgCtx.font.msgBuf;
-
     // Overwrite message if custom ID is set.
     if (en->isTalking && en->customMsgId >= 0)
     {
         // See if the game has copied the dummy message to RAM.
         // "011a" is the first 4 bytes of contents of message 0x011a
-        if (en->dummyMsgStart == *(u32*)globalCtx->msgCtx.font.msgBuf)
+        if (DUMMY_MSG_DATA == *(u32*)globalCtx->msgCtx.font.msgBuf)
         {
             #if LOGGING == 1
                 osSyncPrintf("_%2d: Setting a custom message.", en->npcId);

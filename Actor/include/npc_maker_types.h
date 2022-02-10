@@ -165,6 +165,7 @@ typedef struct SectionLoad
     u16* entriesNumberOut;
     u32 entrySize;
     u32 nullBlockSize;
+    u8 noCopy;
 } SectionLoad;
 
 typedef struct NpcMaker
@@ -187,7 +188,6 @@ typedef struct NpcMaker
     s16 limbRotA;
     s16 limbRotB;
 
-    u16 settingsCompressed;
     u8 segmentDataIds[0x7];
     u16 blinkTimer;
     
@@ -226,6 +226,7 @@ typedef struct NpcMaker
     u8 pickedUpState;
     u8 hadCollision;
     u8 hasStaticExDlists;
+    u8 settingsCompressed;
 
     Color_RGB8 curColor;
 
@@ -253,7 +254,6 @@ typedef struct NpcMaker
     ScriptInstance* scriptInstances;
     u32 messagesDataOffset;
     s32 customMsgId;
-    u32 dummyMsgStart;
 
     NpcMaker* riddenNpc;
     Actor* refActor;
