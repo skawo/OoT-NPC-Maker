@@ -1702,6 +1702,7 @@ namespace NPC_Maker
             NOTHING_10,
             NOTHING_11,
             NOTHING_12,
+            NOTHING_13,
             FOREST_MEDALLION,
             FIRE_MEDALLION,
             WATER_MEDALLION,
