@@ -490,9 +490,11 @@ typedef struct ScrInstrItem
 typedef struct ScrInstrWarp
 {
     u8 id;
-    u8 varType;
-    u8 pad[2];
+    u8 warpIdvarType;
+    u8 cutsceneIdvarType;
+    u8 pad;
     ScriptVarval warpId;
+    ScriptVarval cutsceneId;
 } ScrInstrWarp;
 
 
