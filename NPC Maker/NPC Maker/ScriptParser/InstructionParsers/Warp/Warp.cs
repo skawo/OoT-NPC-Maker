@@ -8,10 +8,14 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
+                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
                 var WarpID = ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt16.MaxValue);
+                var NextCutsceneIndex = new ScriptVarVal(0, 0);
 
-                return new InstructionWarp(WarpID);
+                if (SplitLine.Length == 3)
+                    NextCutsceneIndex = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 4, 16);
+
+                return new InstructionWarp(WarpID, NextCutsceneIndex);
             }
             catch (ParseException pEx)
             {
