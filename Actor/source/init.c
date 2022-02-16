@@ -114,10 +114,10 @@ u32 Setup_LoadSection(NpcMaker* en, GlobalContext* globalCtx, u8* buffer, u32 of
     if (blockSize > nullSize)
     {
         // If we're loading from a RAM object, and the data is static, we might as well just use the RAM object data as is, without making a copy.
-        if (en->settingsCompressed & noCopy)
+        if (en->getSettingsFromRAMObject & noCopy)
         {
             void* ptr = Rom_GetObjectDataPtr(en->actor.params, globalCtx);
-            *allocDest = (u32)AADDR(ptr, entryAddress + 4 + offset);
+            *allocDest = (u32)AADDR(ptr, 4 + entryAddress + offset);
         }
         else
         {
@@ -165,7 +165,6 @@ void Setup_ScriptVars(NpcMaker* en, void** ptr, u32 count)
     else if (*ptr != NULL)
         Lib_MemSet((void*)*ptr, 4 * count, 0);
 }
- 
 
 bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
 {
@@ -177,12 +176,12 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     #endif
 
     #if DIRECT_ROM_LOAD == 1
-        en->settingsCompressed = Rom_IsObjectCompressed(settingsObjectId);
+        en->getSettingsFromRAMObject = Rom_IsObjectCompressed(settingsObjectId);
     #else
-        en->settingsCompressed = true;
+        en->getSettingsFromRAMObject = true;
     #endif
 
-    if (en->settingsCompressed)
+    if (en->getSettingsFromRAMObject)
     {
         #if LOGGING == 1
             osSyncPrintf("_Loading settings file into RAM...");
@@ -194,7 +193,7 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     u32 buf;
 
     // Load number of entries from ROM...
-    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, 0, 4, en->settingsCompressed);
+    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, 0, 4, en->getSettingsFromRAMObject);
     u32 numEntries = buf;
 
     // If the selected entry id is bigger than the number of entries, exit.
@@ -208,7 +207,7 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     }
 
     // Load the entry offset...
-    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, 4 + (4 * en->npcId), 4, en->settingsCompressed);
+    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, 4 + (4 * en->npcId), 4, en->getSettingsFromRAMObject);
     u32 entryAddress = buf;
 
     // If the entry offset is 0, the actor was nulled.
@@ -222,7 +221,7 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     }
 
     // Get entry size...
-    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, entryAddress, 4, en->settingsCompressed);
+    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, entryAddress, 4, en->getSettingsFromRAMObject);
     u32 entrySize = buf;
 
     // We load the whole entry here to avoid multiple tiny reads from ROM.
@@ -232,7 +231,7 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
         osSyncPrintf("_%2d: Loading entry size bytes: %08x", en->npcId, entrySize);
     #endif
 
-    Rom_LoadDataFromObject(globalCtx, settingsObjectId, buffer, entryAddress + 4, entrySize, en->settingsCompressed);
+    Rom_LoadDataFromObject(globalCtx, settingsObjectId, buffer, entryAddress + 4, entrySize, en->getSettingsFromRAMObject);
 
     // Copy data from the entry...
     bcopy(buffer, &en->settings, sizeof(NpcSettings));
@@ -309,12 +308,10 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
         osSyncPrintf("_%2d: Setting up collision with radius %04d, height %04d, yoffs %04d", 
                      en->npcId, en->settings.collisionRadius, en->settings.collisionHeight, en->settings.collisionyShift);
     
-    if (en->actor.shape.rot.x == 1)
-        en->dbgDrawToScreen = true;
+        if (en->actor.shape.rot.x == 1)
+            en->dbgDrawToScreen = true;
     #endif
-
-    en->actor.shape.rot.x = 0;
-
+    
     Collider_InitCylinder(globalCtx, &en->collider);
     Collider_SetCylinder(globalCtx, &en->collider, &en->actor, &npcMakerCollision);
     en->collider.dim.radius = en->settings.collisionRadius;
@@ -522,8 +519,7 @@ void Setup_Animation(NpcMaker* en, GlobalContext* globalCtx, int animId, bool in
             osSyncPrintf("_%2d: Setting animation ID: %02d", en->npcId, animId);
         #endif
 
-        en->currentAnimId = animId;
-        NpcAnimationEntry anim = en->animations[en->currentAnimId];
+        NpcAnimationEntry anim = en->animations[animId];
         
         bool was_set = Setup_AnimationImpl(&en->actor, 
                                              globalCtx, 
@@ -539,7 +535,10 @@ void Setup_Animation(NpcMaker* en, GlobalContext* globalCtx, int animId, bool in
                                              playOnce);
 
         if (was_set)
+        {
+            en->currentAnimId = animId;
             en->animationFinished = false;
+        }
     }
 }
 

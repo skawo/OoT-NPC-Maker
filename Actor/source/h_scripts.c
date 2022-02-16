@@ -122,7 +122,6 @@ Color_RGBA8 Scripts_GetVarvalRGBA(NpcMaker* en, GlobalContext* globalCtx, Vartyp
     return out;
 }
 
-
 void* Scripts_RamSubIdSetup(NpcMaker* en, GlobalContext* globalCtx, u32 value, u32 subId, u32* outValtype)
 {
     if (subId == SUBT_VARF)
@@ -553,7 +552,6 @@ void Scripts_ShowMessage(NpcMaker* en, GlobalContext* globalCtx, u16 msgId, bool
     // Else, we show a new textbox.
     else
     {
-        //globalCtx->talkWithPlayer(globalCtx, &en->actor);
         func_8010B680(globalCtx, msgId, setActor ? &en->actor : NULL);
         en->textboxNum = -1;
         en->persistTalk = false;

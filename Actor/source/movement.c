@@ -30,12 +30,12 @@ void Movement_OpenDoors(NpcMaker* en, GlobalContext* globalCtx)
 
 void Movement_MoveTowardsNextPos(NpcMaker* en, GlobalContext* globalCtx, float speed, movement_type movementType, bool ignoreY, bool setAnims)
 {
-    // We don't move in these instances. Can't move if movement type is timed path since that moves the npc on its own.
-    if (!en->canMove || 
+    // We don't move in these instances. Can't move if movement type is timed path since that snaps the NPC into place.
+    if (!en->canMove ||
+        !speed ||  
          en->stopped || 
          en->listeningToSong || 
          en->wasHit || 
-         !speed || 
          movementType == MOVEMENT_TIMED_PATH)
     {
         en->actor.speedXZ = 0;
@@ -44,7 +44,7 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, GlobalContext* globalCtx, float s
     }
 
     // The option to not consider Y axis exists, because placing pathnodes on the ground is difficult.
-    en->currentDistToNextPos = get_dist_to_next_pos(en, ignoreY);
+    en->currentDistToNextPos = DIST_TO_NEXT_POS(en, ignoreY);
 
     // If we're moving and we're close enough to the end, or the distance travelled has exceeded the initial distance calculated, we don't move.
     if (Movement_HasReachedDestination(en, MOVEMENT_DISTANCE_EQUAL_MARGIN))
@@ -410,7 +410,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                     else
                     {
                         // We need to calculate if we've actually moved, or we'll rotate in place due to the smoothing.
-                        float dist = get_dist_to_next_pos(en, ignoreY);
+                        float dist = DIST_TO_NEXT_POS(en, ignoreY);
 
                         if (dist > 0)
                         {
@@ -508,26 +508,26 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
         // to that.
         case MOVEMENT_CUTSCENE:
         {
-            CsCmdActorAction* current_ptr = globalCtx->csCtx.npcActions[CUTSCENE_ID(en)];
+            CsCmdActorAction* curActionPtr = globalCtx->csCtx.npcActions[CUTSCENE_ID(en)];
             speed = en->cutsceneMovementSpeed;
 
-            if (current_ptr != NULL)
+            if (curActionPtr != NULL)
             {
                 int curFrame = globalCtx->csCtx.frames;
-                int framesRemain = current_ptr->endFrame + 2 - curFrame;
+                int framesRemain = curActionPtr->endFrame + 2 - curFrame;
 
-                if (current_ptr->startFrame + 1 == curFrame)
+                if (curActionPtr->startFrame + 1 == curFrame)
                 {
                     // Set the animation based on the current action.
-                    Setup_Animation(en, globalCtx, current_ptr->action - 1, true, false, false, false);
+                    Setup_Animation(en, globalCtx, curActionPtr->action - 1, true, false, false, false);
 
                     // Set start position...
                     en->movementStartPos = en->actor.world.pos;
 
                     // Set the next position...
-                    Vec3f nextPos = {current_ptr->endPos.x, 
-                                     en->settings.ignorePathYAxis ? en->actor.world.pos.y : current_ptr->endPos.y, 
-                                     current_ptr->endPos.z};
+                    Vec3f nextPos = {curActionPtr->endPos.x, 
+                                     en->settings.ignorePathYAxis ? en->actor.world.pos.y : curActionPtr->endPos.y, 
+                                     curActionPtr->endPos.z};
                                         
                     Movement_SetNextPos(en, &nextPos);
 
@@ -539,7 +539,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                     en->stopped = false;
                     en->isMoving = true;
                 }
-                else if (current_ptr->endFrame + 1 == curFrame)
+                else if (curActionPtr->endFrame + 1 == curFrame)
                     Movement_StopMoving(en, globalCtx, true);
             }
             else
@@ -561,7 +561,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
         }
     }
 
-    // We actually move here.
+    // We actually move there.
     Movement_MoveTowardsNextPos(en, globalCtx, speed, movementType, ignoreY, setAnims);
 
     // Next, we check how much we've moved and add it to the travelled distance.
@@ -572,7 +572,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
 inline void Movement_SetNextDelay(NpcMaker* en)
 {
     if (en->settings.movementDelay == 0)
-        en->roamMovementDelay = en->settings.movementDelay;
+        en->roamMovementDelay = 0;
     else
         en->roamMovementDelay = Math_RandGetBetween(MINIMUM_RANDOM_DELAY, MINIMUM_RANDOM_DELAY + en->settings.movementDelay);
 }

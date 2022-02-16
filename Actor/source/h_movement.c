@@ -29,7 +29,7 @@ Vec3f Movement_CalcVector(Vec3f* start, Vec3f* end, float speed)
 {
     Vec3f vector;
     float dist = Math_Vec3f_DistXYZAndStoreDiff(start, end, &vector);
-
+    
     if (dist == 0)
         vector = (Vec3f){0,0,0};
     else

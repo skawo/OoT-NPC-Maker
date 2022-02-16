@@ -174,7 +174,7 @@ typedef struct NpcMaker
     NpcSettings settings;
 
     u16 npcId;
-    u16 currentAnimId;
+    s16 currentAnimId;
     s16 cameraId;
 
     u16 numAnims;
@@ -226,7 +226,7 @@ typedef struct NpcMaker
     u8 pickedUpState;
     u8 hadCollision;
     u8 hasStaticExDlists;
-    u8 settingsCompressed;
+    u8 getSettingsFromRAMObject;
 
     Color_RGB8 curColor;
 

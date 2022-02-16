@@ -80,6 +80,11 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
     #endif    
 }
 
+inline u32 Draw_GetDrawDestType(NpcMaker* en, GlobalContext* globalCtx)
+{
+    return (en->curAlpha == 255 && globalCtx->actorCtx.unk_03 == 0) ? OPA : DRAW_TYPE(en->settings.drawType);
+}
+
 void Draw_Setup(NpcMaker* en, GlobalContext* globalCtx, int drawType)
 {
     if (drawType == XLU)
@@ -144,8 +149,9 @@ inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
 void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, s32 object, Color_RGB8 envColor, u32 dList)
 {
     object = R_OBJECT(en, object);
+
     // Always drawing to the other buffer than the main model is.
-    int dT = (en->curAlpha == 255 && globalCtx->actorCtx.unk_03 == 0) ? OPA : DRAW_TYPE(en->settings.drawType);
+    int dT = Draw_GetDrawDestType(en, globalCtx);
     TwoHeadGfxArena *dest = dT ? &POLY_OPA : &POLY_XLU;
 
     switch (object)
@@ -276,7 +282,9 @@ s32 Draw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbNumber, Gfx** dListP
         Draw_Lights(en, globalCtx, &worldPos);
     }
 
-#pragma endregionExternal Dlists
+#pragma endregion 
+
+#pragma region External Dlists
 
     for (int i = 0; i < en->numExDLists; i++)
     {
@@ -380,56 +388,71 @@ void Draw_SetGlobalEnvColor(NpcMaker* en, GlobalContext* globalCtx)
     }
 }
 
+void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
+{
+    for (int i = 0; i < en->numExDLists; i++)
+    {
+        ExDListEntry dlist = en->extraDLists[i];
+
+        if (dlist.limb < 0)
+        {
+            u32 dListOffset = dlist.objectId == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
+            
+            if (dlist.showType != NOT_VISIBLE)
+            {
+                Vec3f translation = (Vec3f){0,0,0};
+                Vec3s rotation = (Vec3s){0,0,0};
+
+                switch (dlist.limb)
+                {
+                    case STATIC_EXDLIST_RELATIVE:
+                    {
+                        translation = en->actor.world.pos;
+                        rotation = en->actor.world.rot;         
+                        break;               
+                    }
+                    case STATIC_EXDLIST_AT_CAM:
+                    {
+                        OLib_Vec3fDistNormalize(&translation, &globalCtx->mainCamera.eye, &globalCtx->mainCamera.at);
+                        Math_Vec3f_Scale(&translation, 20);
+                        Math_Vec3f_Sum(&translation, &globalCtx->mainCamera.eye, &translation);
+
+                        rotation = globalCtx->mainCamera.camDir;
+                        rotation.y += 0x8000;  
+                        break;               
+                    }
+                    default: break;
+                }
+
+                Math_Vec3f_Sum(&translation, &dlist.translation, &translation);
+                Math_Vec3s_Sum(&rotation, &dlist.rotation, &rotation);
+
+                Matrix_Push();
+                func_800D1694(translation.x, translation.y, translation.z, &rotation);
+
+                float scale = dlist.scale *= en->actor.scale.x;
+
+                Matrix_Scale(scale, scale, scale, 1);
+                Draw_ExtDList(en, globalCtx, dlist.objectId, dlist.envColor, dListOffset);
+                Matrix_Pop();                
+            }
+        }
+    }   
+}
+
 void Draw_Model(NpcMaker* en, GlobalContext* globalCtx)
 {
-    if (en->curAlpha == 0)
-        return;
-
-    int dT = (en->curAlpha == 255 && globalCtx->actorCtx.unk_03 == 0) ? OPA : DRAW_TYPE(en->settings.drawType);
+    int dT = Draw_GetDrawDestType(en, globalCtx);
 
     TwoHeadGfxArena* dest = (dT ? &POLY_XLU : &POLY_OPA);
     Draw_Setup(en, globalCtx, dT);
 
     // Draw static exdlists (ones not attached to a limb)
     if (en->hasStaticExDlists)
-    {
-        for (int i = 0; i < en->numExDLists; i++)
-        {
-            ExDListEntry dlist = en->extraDLists[i];
-
-            if (dlist.limb < 0)
-            {
-                u32 dListOffset = dlist.objectId == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
-                
-                if (dlist.showType != NOT_VISIBLE)
-                {
-                    Vec3f translation = (Vec3f){0,0,0};
-                    Vec3s rotation = (Vec3s){0,0,0};
-
-                    // -1 = relative to model. Else, absolute position.
-                    if (dlist.limb == -1)
-                    {
-                        translation = en->actor.world.pos;
-                        rotation = en->actor.world.rot;
-                    }
-
-                    Math_Vec3f_Sum(&translation, &dlist.translation, &translation);
-                    rotation.x += dlist.rotation.x;
-                    rotation.y += dlist.rotation.y;
-                    rotation.z += dlist.rotation.z;
-
-                    Matrix_Push();
-                    func_800D1694(translation.x, translation.y, translation.z, &rotation);
-                    Matrix_Scale(dlist.scale, dlist.scale, dlist.scale, 1);
-                    Draw_ExtDList(en, globalCtx, dlist.objectId, dlist.envColor, dListOffset);
-                    Matrix_Pop();                
-                }
-            }
-        }
-    }
+        Draw_StaticExtDLists(en, globalCtx);
 
     // Draw skeleton
-    if (en->settings.objectId >= 0)
+    if (en->settings.objectId > 0)
     {
         switch (en->settings.drawType)
         {

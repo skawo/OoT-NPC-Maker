@@ -159,5 +159,5 @@ MessageEntry* Rom_GetMessageEntry(s16 msgId)
 void Message_Overwrite(NpcMaker* en, GlobalContext* globalCtx, s16 msgId)
 {
     InternalMsgEntry msgdata = Data_GetCustomMessage(en, globalCtx, msgId);
-    Rom_LoadDataFromObject(globalCtx, en->actor.params, &globalCtx->msgCtx.font.msgBuf, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->settingsCompressed);
+    Rom_LoadDataFromObject(globalCtx, en->actor.params, &globalCtx->msgCtx.font.msgBuf, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->getSettingsFromRAMObject);
 }

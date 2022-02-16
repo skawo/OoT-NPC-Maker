@@ -78,7 +78,7 @@ static void NpcMaker_Draw(NpcMaker* en, GlobalContext* globalCtx)
     Draw_SetGlobalEnvColor(en, globalCtx);
     Draw_SetupSegments(en, globalCtx);
 
-    if (!en->settings.invisible)
+    if (!en->settings.invisible && en->curAlpha != 0)
         Draw_Model(en, globalCtx);
         
     if (en->settings.castsShadow && !en->settings.hasCollision)

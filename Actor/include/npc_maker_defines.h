@@ -31,6 +31,7 @@
 #define _ZQDL(ZQDL_A0, ZQDL_A1) ZQDL_A0->state.gfxCtx->ZQDL_A1
 #define POLY_OPA _ZQDL(globalCtx, polyOpa)
 #define POLY_XLU _ZQDL(globalCtx, polyXlu)
+#define POLY_OVERLAY _ZQDL(globalCtx, overlay)
 
 #define DRAW_TYPE(h_type) ((h_type % 2 && h_type != SKIN) ? XLU : OPA)
 #define DRAW_DEST(h_type) (DRAW_TYPE(h_type) == XLU ? &POLY_XLU : &POLY_OPA)
@@ -48,6 +49,10 @@
 #define OBJECT_NONE -3
 #define OBJECT_XLUDLIST -4
 #define OBJECT_ENDDLIST -5
+
+#define STATIC_EXDLIST_RELATIVE -1
+#define STATIC_EXDLIST_ABSOLUTE -2 
+#define STATIC_EXDLIST_AT_CAM -3 
 
 #define SEG_OFFSET(seg) (0x01000000 * seg)
 #define OFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset : offset + SEG_OFFSET(segment)

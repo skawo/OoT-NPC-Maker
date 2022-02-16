@@ -5,8 +5,6 @@
 #include "../include/h_movement.h"
 #include "../include/h_scene.h"
 
-extern char DummyMessageData;
-
 void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
 {
     en->lastDayTime = gSaveContext.dayTime;
