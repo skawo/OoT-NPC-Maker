@@ -414,7 +414,7 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
                     case STATIC_EXDLIST_AT_CAM:
                     {
                         OLib_Vec3fDistNormalize(&translation, &globalCtx->mainCamera.eye, &globalCtx->mainCamera.at);
-                        Math_Vec3f_Scale(&translation, 20);
+                        Math_Vec3f_Scale(&translation, dlist.translation.z);
                         Math_Vec3f_Sum(&translation, &globalCtx->mainCamera.eye, &translation);
 
                         rotation = globalCtx->mainCamera.camDir;
@@ -426,6 +426,9 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
 
                 Math_Vec3f_Sum(&translation, &dlist.translation, &translation);
                 Math_Vec3s_Sum(&rotation, &dlist.rotation, &rotation);
+
+                if (dlist.limb == -3)
+                    translation.z -= dlist.translation.z;
 
                 Matrix_Push();
                 func_800D1694(translation.x, translation.y, translation.z, &rotation);
