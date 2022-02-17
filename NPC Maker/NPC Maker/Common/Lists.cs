@@ -215,6 +215,7 @@ namespace NPC_Maker
             ENABLE_TALKING,
             SHOW_TEXTBOX,
             SHOW_TEXTBOX_SP,
+            CLOSE_TEXTBOX,
             ITEM,
             PLAY ,
             KILL,
@@ -525,9 +526,9 @@ namespace NPC_Maker
 
             ANIMATION_OBJECT,
             ANIMATION_OFFSET,
-            ANIMATION_SPEED,
             ANIMATION_STARTFRAME,
             ANIMATION_ENDFRAME,
+            ANIMATION_SPEED,
             FLAG_INF,
             FLAG_EVENT,
             FLAG_SWITCH,
@@ -566,6 +567,21 @@ namespace NPC_Maker
             REF_ACTOR,
             PLAYER_ANIMATION,
             PLAYER_ANIMATE_MODE,
+
+            DLIST_COLOR,
+            DLIST_OFFSET,
+
+            DLIST_TRANS_X,
+            DLIST_TRANS_Y,
+            DLIST_TRANS_Z,
+            DLIST_SCALE,
+
+            DLIST_ROT_X,
+            DLIST_ROT_Y,
+            DLIST_ROT_Z,
+
+            DLIST_LIMB,
+            DLIST_OBJECT,
         }
 
         public enum AwaitSubTypes

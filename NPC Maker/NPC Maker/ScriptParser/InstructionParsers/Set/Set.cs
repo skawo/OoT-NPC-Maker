@@ -183,21 +183,85 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.ANIMATION_OBJECT:
                         case (int)Lists.SetSubTypes.ANIMATION_OFFSET:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
                                 var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
                                 var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt32.MaxValue);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 4);
 
-                                return new InstructionSetWTwoValues((byte)SubID, AnimID, Value2, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, AnimID, Value2, Operator);
                             }
                         case (int)Lists.SetSubTypes.ANIMATION_SPEED:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
                                 var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
-                                var Speed = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, float.MaxValue);
+                                var Speed = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, float.MaxValue);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
 
-                                return new InstructionSetWTwoValues((byte)SubID, AnimID, Speed, 0);
+                                return new InstructionSetWTwoValues((byte)SubID, AnimID, Speed, Operator);
+                            }
+                        case (int)Lists.SetSubTypes.ANIMATION_STARTFRAME:
+                        case (int)Lists.SetSubTypes.ANIMATION_ENDFRAME:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+
+                                var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
+                                var Frame = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, byte.MaxValue);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 4);
+
+                                return new InstructionSetWTwoValues((byte)SubID, AnimID, Frame, Operator);
+                            }
+                        case (int)Lists.SetSubTypes.DLIST_OFFSET:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+
+                                var DlistID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.ExtraDisplayLists);
+                                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, UInt32.MaxValue);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
+
+                                return new InstructionSetWTwoValues((byte)SubID, DlistID, Value2, Operator);
+                            }
+                        case (int)Lists.SetSubTypes.DLIST_TRANS_X:
+                        case (int)Lists.SetSubTypes.DLIST_TRANS_Y:
+                        case (int)Lists.SetSubTypes.DLIST_TRANS_Z:
+                        case (int)Lists.SetSubTypes.DLIST_SCALE:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+
+                                var DlistID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.ExtraDisplayLists);
+                                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, float.MaxValue);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
+
+                                return new InstructionSetWTwoValues((byte)SubID, DlistID, Value, Operator);
+                            }
+                        case (int)Lists.SetSubTypes.DLIST_ROT_X:
+                        case (int)Lists.SetSubTypes.DLIST_ROT_Y:
+                        case (int)Lists.SetSubTypes.DLIST_ROT_Z:
+                        case (int)Lists.SetSubTypes.DLIST_OBJECT:
+                        case (int)Lists.SetSubTypes.DLIST_LIMB:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+
+                                var DlistID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.ExtraDisplayLists);
+                                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 4, Int16.MinValue, Int16.MaxValue);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
+
+                                return new InstructionSetWTwoValues((byte)SubID, DlistID, Value2, Operator);
+                            }
+                        case (int)Lists.SetSubTypes.DLIST_COLOR:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6);
+
+                                ScriptVarVal R = new ScriptVarVal();
+                                ScriptVarVal G = new ScriptVarVal();
+                                ScriptVarVal B = new ScriptVarVal();
+                                ScriptVarVal A = null;
+
+                                var DlistID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.ExtraDisplayLists);
+                                ScriptHelpers.GetRGBorRGBA(SplitLine, 3, ref R, ref G, ref B, ref A);
+
+                                return new InstructionSetDlistColor((byte)SubID, R, G, B, DlistID);
                             }
                         case (int)Lists.SetSubTypes.BLINK_PATTERN:
                         case (int)Lists.SetSubTypes.TALK_PATTERN:
@@ -251,16 +315,6 @@ namespace NPC_Maker.Scripts
                                 DlistOption.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.DListVisibilityOptions), ParseException.UnregonizedDlistVisibility(SplitLine));
 
                                 return new InstructionSetWTwoValues((byte)SubID, DlistOption, DListID, 0);
-                            }
-                        case (int)Lists.SetSubTypes.ANIMATION_STARTFRAME:
-                        case (int)Lists.SetSubTypes.ANIMATION_ENDFRAME:
-                            {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
-
-                                var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
-                                var Frame = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, byte.MaxValue);
-
-                                return new InstructionSetWTwoValues((byte)SubID, AnimID, Frame, 0);
                             }
                         case (int)Lists.SetSubTypes.CAMERA_TRACKING_ON:
                         case (int)Lists.SetSubTypes.REF_ACTOR:

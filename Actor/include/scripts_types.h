@@ -112,6 +112,20 @@ typedef struct ScrInstrColorSet
     ScriptVarval B;
 } ScrInstrColorSet;
 
+typedef struct ScrInstrDlistColorSet
+{
+    u8 id;
+    u8 subId;
+    u8 varTypeR : 4;
+    u8 varTypeG : 4;
+    u8 varTypeB : 4;
+    u8 varTypeDListID : 4;
+    ScriptVarval R;
+    ScriptVarval G;
+    ScriptVarval B;
+    ScriptVarval DListId;
+} ScrInstrDlistColorSet;
+
 typedef struct ScrInstrResponsesSet
 {
     u8 id;

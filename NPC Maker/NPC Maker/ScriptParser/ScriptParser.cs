@@ -494,6 +494,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.SHOW_TEXTBOX: Instructions.Add(ParseShowTextboxInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SHOW_TEXTBOX_SP: Instructions.Add(ParseShowTextboxSPInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.ENABLE_TALKING: Instructions.Add(ParseEnableTalkingInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.CLOSE_TEXTBOX: Instructions.Add(ParseCloseTextboxInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.PLAY: Instructions.Add(ParsePlayInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.GOTO: Instructions.Add(ParseGotoInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.WARP: Instructions.Add(ParseWarpInstruction(SplitLine)); break;

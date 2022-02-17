@@ -116,6 +116,7 @@ bool Scripts_Execute(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* scr
         case WARP:               return Scripts_InstructionWarp(en, globalCtx, script, (ScrInstrWarp*)instruction); break;
         case PARTICLE:           return Scripts_InstructionParticle(en, globalCtx, script, (ScrInstrParticle*)instruction); break;
         case FORCE_TALK:         en->isTalking = true; globalCtx->talkWithPlayer(globalCtx, &en->actor); script->curInstrNum++; return SCRIPT_CONTINUE;
+        case CLOSE_TEXTBOX:      globalCtx->msgCtx.msgMode = MSGMODE_CLOSING; script->curInstrNum++; return SCRIPT_CONTINUE;
         case NOP:                script->curInstrNum++; return SCRIPT_STOP;
         default:                                
         {
@@ -794,7 +795,27 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
         case SET_ANIMATION_SPEED:
         case SET_ANIMATION_STARTFRAME:
         case SET_ANIMATION_ENDFRAME:                Scripts_SetAnimation(en, globalCtx, in); break;
-        
+
+        case SET_DLIST_OFFSET:
+        case SET_DLIST_TRANS_X:
+        case SET_DLIST_TRANS_Y:
+        case SET_DLIST_TRANS_Z:
+        case SET_DLIST_ROT_X:
+        case SET_DLIST_ROT_Y:
+        case SET_DLIST_ROT_Z:
+        case SET_DLIST_SCALE:
+        case SET_DLIST_OBJECT:
+        case SET_DLIST_LIMB:                        Scripts_SetDList(en, globalCtx, in); break;
+        case SET_DLIST_COLOR:
+        {
+            ScrInstrDlistColorSet* instr = (ScrInstrDlistColorSet*)in;
+
+            int dlistId = Scripts_GetVarval(en, globalCtx, instr->varTypeDListID, instr->DListId, false);
+            en->extraDLists[dlistId].envColor.r = Scripts_GetVarval(en, globalCtx, instr->varTypeR, instr->R, false);
+            en->extraDLists[dlistId].envColor.g = Scripts_GetVarval(en, globalCtx, instr->varTypeG, instr->G, false);
+            en->extraDLists[dlistId].envColor.b = Scripts_GetVarval(en, globalCtx, instr->varTypeB, instr->B, false);
+            break;
+        }
         case SET_FLAG_INF:
         case SET_FLAG_EVENT:
         case SET_FLAG_SWITCH:

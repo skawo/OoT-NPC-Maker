@@ -201,6 +201,47 @@ namespace NPC_Maker.Scripts
         }
     }
 
+    public class InstructionSetDlistColor : InstructionSub
+    {
+        ScriptVarVal R { get; set; }
+        ScriptVarVal G { get; set; }
+        ScriptVarVal B { get; set; }
+        ScriptVarVal DlistID { get; set; }
+
+        public InstructionSetDlistColor(byte _SubID, ScriptVarVal _R, ScriptVarVal _G, ScriptVarVal _B, ScriptVarVal _DlistId) : base((int)Lists.Instructions.SET, _SubID)
+        {
+            R = _R;
+            G = _G;
+            B = _B;
+            DlistID = _DlistId;
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+            List<byte> Data = new List<byte>();
+
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(R.Vartype, G.Vartype, 4), Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(B.Vartype, DlistID.Vartype, 4), Data);
+
+            Helpers.AddObjectToByteList(R.Value, Data);
+            Helpers.AddObjectToByteList(G.Value, Data);
+            Helpers.AddObjectToByteList(B.Value, Data);
+            Helpers.AddObjectToByteList(DlistID.Value, Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 20);
+
+            return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
+        }
+    }
+
     public class InstructionSetResponses : InstructionSub
     {
         InstructionLabel Resp1 { get; set; }

@@ -427,7 +427,7 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
                 Math_Vec3f_Sum(&translation, &dlist.translation, &translation);
                 Math_Vec3s_Sum(&rotation, &dlist.rotation, &rotation);
 
-                if (dlist.limb == -3)
+                if (dlist.limb == STATIC_EXDLIST_AT_CAM)
                     translation.z -= dlist.translation.z;
 
                 Matrix_Push();

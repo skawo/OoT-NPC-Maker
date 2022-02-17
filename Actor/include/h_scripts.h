@@ -38,7 +38,7 @@ u16 Scripts_IfValueCommon(NpcMaker* en, GlobalContext* global, float value, Data
                          ScriptVarval compared_value, u16 goto_true, u16 goto_false);
 
 void* Scripts_GetActorByType(NpcMaker* en, GlobalContext* globalCtx, u32 targetActor, u8 actorNumType, ScriptVarval actorNumValue);
-
+void Scripts_SetDList(NpcMaker* en, GlobalContext* globalCtx, void* instruction);
 
 
 #endif
