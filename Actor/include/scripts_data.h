@@ -1,4 +1,5 @@
 #ifndef SCRIPTS_DATA_H
+
 #define SCRIPTS_DATA_H
 
 #include "npc_maker_types.h"
@@ -66,6 +67,29 @@ u16 basic_set_offsets[] =
     OFFSETOF(NpcMaker, pauseCutscene),
     OFFSETOF(NpcMaker, settings.invisible),
     OFFSETOF(NpcMaker, persistTalk),
+};
+
+u8 setAnimsOffsets[] = 
+{
+    OFFSETOF(NpcAnimationEntry, objectId),
+    OFFSETOF(NpcAnimationEntry, offset),
+    OFFSETOF(NpcAnimationEntry, startFrame),
+    OFFSETOF(NpcAnimationEntry, endFrame),
+    OFFSETOF(NpcAnimationEntry, speed),
+};
+
+u8 setDlistOffsets[] = 
+{
+    OFFSETOF(ExDListEntry, offset),
+    OFFSETOF(ExDListEntry, translation.x),
+    OFFSETOF(ExDListEntry, translation.y),
+    OFFSETOF(ExDListEntry, translation.z),
+    OFFSETOF(ExDListEntry, scale),
+    OFFSETOF(ExDListEntry, rotation.z),
+    OFFSETOF(ExDListEntry, rotation.z),
+    OFFSETOF(ExDListEntry, rotation.z),
+    OFFSETOF(ExDListEntry, limb),
+    OFFSETOF(ExDListEntry, objectId),
 };
 
 u32 toggle_offsets[][2] =

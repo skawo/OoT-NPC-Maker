@@ -318,36 +318,34 @@ void Scripts_SetInventory(NpcMaker* en, GlobalContext* globalCtx, u8 slotSetting
     }
 }
 
+extern u8 setDlistOffsets[];
+extern u8 setAnimsOffsets[];
+
 void Scripts_SetAnimation(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
 {
     ScrInstrDoubleSet* instr = (ScrInstrDoubleSet*)instruction;
 
     int animId = Scripts_GetVarval(en, globalCtx, instr->varType1, instr->value1, false);
-    CommonType property;
-
-    if (instr->subId != SET_ANIMATION_SPEED)
-        property.ui32 = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false);  
-    else
-        property.flo = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, true);
-
-    void* destAddrs[] =  
-    {
-        &en->animations[animId].objectId,
-        &en->animations[animId].offset,
-        &en->animations[animId].startFrame,
-        &en->animations[animId].endFrame,
-        &en->animations[animId].speed,
-    };
-
     int destAddrsOffset = instr->subId - SET_ANIMATION_OBJECT;
+    void* destAddr = AADDR(&en->animations[animId], setAnimsOffsets[destAddrsOffset]);
 
     switch (instr->subId)
     {
         case SET_ANIMATION_OBJECT:          
         case SET_ANIMATION_OFFSET:          
         case SET_ANIMATION_STARTFRAME:      
-        case SET_ANIMATION_ENDFRAME:        Scripts_MathOperation(destAddrs[destAddrsOffset], property.ui32, instr->operator, UINT32); break; 
-        case SET_ANIMATION_SPEED:           Scripts_MathOperation(destAddrs[destAddrsOffset], property.flo, instr->operator, FLOAT); break; 
+        case SET_ANIMATION_ENDFRAME:        
+        {
+            u32 property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false); 
+            Scripts_MathOperation(destAddr, property, instr->operator, UINT32); 
+            break; 
+        }
+        case SET_ANIMATION_SPEED:           
+        {
+            float property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, true);
+            Scripts_MathOperation(destAddr, property, instr->operator, FLOAT); 
+            break; 
+        }
     }
 }
 
@@ -356,29 +354,15 @@ void Scripts_SetDList(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
     ScrInstrDoubleSet* instr = (ScrInstrDoubleSet*)instruction;
 
     int dlistId = Scripts_GetVarval(en, globalCtx, instr->varType1, instr->value1, false);
-
-    void* destAddrs[] =  
-    {
-        &en->extraDLists[dlistId].offset,
-        &en->extraDLists[dlistId].translation.x,
-        &en->extraDLists[dlistId].translation.y,
-        &en->extraDLists[dlistId].translation.z,
-        &en->extraDLists[dlistId].scale,
-        &en->extraDLists[dlistId].rotation.x,
-        &en->extraDLists[dlistId].rotation.y,
-        &en->extraDLists[dlistId].rotation.z,
-        &en->extraDLists[dlistId].limb,
-        &en->extraDLists[dlistId].objectId,
-    };
-
     int destAddrsOffset = instr->subId - SET_DLIST_OFFSET;
+    void* destAddr = AADDR(&en->extraDLists[dlistId], setDlistOffsets[destAddrsOffset]);
 
     switch (instr->subId)
     {
         case SET_DLIST_OFFSET:              
         {
             u32 property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false);
-            Scripts_MathOperation(destAddrs[destAddrsOffset], property, instr->operator, UINT32); 
+            Scripts_MathOperation(destAddr, property, instr->operator, UINT32); 
             break; 
         }
         case SET_DLIST_TRANS_X:             
@@ -387,7 +371,7 @@ void Scripts_SetDList(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
         case SET_DLIST_SCALE:              
         {
             float property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false);
-            Scripts_MathOperation(destAddrs[destAddrsOffset], property, instr->operator, FLOAT); 
+            Scripts_MathOperation(destAddr, property, instr->operator, FLOAT); 
             break; 
         }
         case SET_DLIST_ROT_X:               
@@ -397,7 +381,7 @@ void Scripts_SetDList(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
         case SET_DLIST_OBJECT:
         {
             s16 property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false);
-            Scripts_MathOperation(destAddrs[destAddrsOffset], property, instr->operator, INT16); 
+            Scripts_MathOperation(destAddr, property, instr->operator, INT16); 
 
             if (instr->subId == SET_DLIST_OBJECT)
                 Rom_LoadObjectIfUnloaded(globalCtx, en->extraDLists[dlistId].objectId);

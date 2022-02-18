@@ -811,6 +811,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             ScrInstrDlistColorSet* instr = (ScrInstrDlistColorSet*)in;
 
             int dlistId = Scripts_GetVarval(en, globalCtx, instr->varTypeDListID, instr->DListId, false);
+
             en->extraDLists[dlistId].envColor.r = Scripts_GetVarval(en, globalCtx, instr->varTypeR, instr->R, false);
             en->extraDLists[dlistId].envColor.g = Scripts_GetVarval(en, globalCtx, instr->varTypeG, instr->G, false);
             en->extraDLists[dlistId].envColor.b = Scripts_GetVarval(en, globalCtx, instr->varTypeB, instr->B, false);
