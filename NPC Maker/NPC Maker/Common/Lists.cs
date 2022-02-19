@@ -1754,7 +1754,7 @@ namespace NPC_Maker
             JUMP = 0x07,
             DI = 0x08,
             DC = 0x09,
-            SHOP_DESCRIPTION = 0x0A,
+            PERSISTENT = 0x0A,
             EVENT = 0x0B,
             DELAY = 0x0C,
             AWAIT_BUTTON = 0x0D,

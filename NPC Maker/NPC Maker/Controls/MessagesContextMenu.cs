@@ -173,8 +173,8 @@ namespace NPC_Maker
             // shopdescription
             // 
             shopdescription.Size = new System.Drawing.Size(156, 22);
-            shopdescription.Text = "Shop description";
-            shopdescription.Tag = $"<{Lists.MsgControlCode.SHOP_DESCRIPTION}>";
+            shopdescription.Text = "Persistent";
+            shopdescription.Tag = $"<{Lists.MsgControlCode.PERSISTENT}>";
             // 
             // drawinstant
             // 
