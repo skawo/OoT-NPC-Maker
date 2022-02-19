@@ -249,6 +249,8 @@ typedef enum SetSubId
     
     SET_DLIST_LIMB,
     SET_DLIST_OBJECT,
+
+    SET_RAM,
 } SetSubId;
 
 typedef enum IfWhileSubId
@@ -407,7 +409,8 @@ typedef enum Play_SubId
     PLAY_SFX,
     PLAY_BGM,
     PLAY_CUTSCENE,
-    PLAY_CUTSCENE_ID
+    PLAY_CUTSCENE_ID,
+    PLAY_SFX_GLOBAL,
 } Play_SubId;
 
 typedef enum Item_SubId

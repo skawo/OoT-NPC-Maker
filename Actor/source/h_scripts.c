@@ -159,6 +159,8 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, GlobalContext* globalCtx, u32 value, u
         int id = subId - SUBT_GLOBAL8;
         *outValtype = 2 * (id % 4);
 
+        osSyncPrintf("_%8x", value);
+
         switch (id / 4)
         {
             case 0:    return AADDR(globalCtx, value); break;

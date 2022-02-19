@@ -980,6 +980,21 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             en->collider.base.colType = en->settings.effectIfAttacked;
             break;
         }
+
+        case SET_RAM:
+        {
+            ScrInstrSetRAM* instr = (ScrInstrSetRAM*)in;
+    
+            switch (instr->lenght)
+            {
+                case 0: AVAL(instr->address, u8, 0) = instr->value; break;
+                case 1: AVAL(instr->address, u16, 0) = instr->value; break;
+                case 2: AVAL(instr->address, u32, 0) = instr->value; break;
+            }
+
+            break;   
+        }
+
         case SUBT_GLOBAL8:
         case SUBT_GLOBAL16:
         case SUBT_GLOBAL32:
@@ -1457,6 +1472,7 @@ bool Scripts_InstructionPlay(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
         case PLAY_BGM: Audio_SetBGM(value); break;
         case PLAY_CUTSCENE: Cutscene_SetSegment(globalCtx, (u32)Scene_GetCurrentCutscenePtr(globalCtx)); break;
         case PLAY_CUTSCENE_ID: Cutscene_SetSegment(globalCtx, (u32)Scene_GetCutscenePtr(globalCtx, value)); break;
+        case PLAY_SFX_GLOBAL: Audio_PlaySoundGeneral(value, &Audio_Play_VecZero, 4, &Audio_Play_One, &Audio_Play_One, &Audio_Play_Zero); break;
     }
 
     script->curInstrNum++;

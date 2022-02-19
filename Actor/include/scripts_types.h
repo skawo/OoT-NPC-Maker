@@ -112,6 +112,16 @@ typedef struct ScrInstrColorSet
     ScriptVarval B;
 } ScrInstrColorSet;
 
+typedef struct ScrInstrSetRAM
+{
+    u8 id;
+    u8 subId;
+    u8 lenght;
+    u8 pad;
+    u32 address;
+    u32 value;
+} ScrInstrSetRAM;
+
 typedef struct ScrInstrDlistColorSet
 {
     u8 id;
