@@ -15,6 +15,7 @@ namespace NPC_Maker.Scripts
                     switch (SubID)
                     {
                         case (int)Lists.PlaySubTypes.SFX:
+                        case (int)Lists.PlaySubTypes.SFX_GLOBAL:
                         case (int)Lists.PlaySubTypes.BGM:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);

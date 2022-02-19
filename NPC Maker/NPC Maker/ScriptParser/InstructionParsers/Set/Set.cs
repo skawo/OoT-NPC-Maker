@@ -419,6 +419,33 @@ namespace NPC_Maker.Scripts
                                 return new InstructionSetPlayerAnim((byte)SubID, Offset, Speed, StFr, EFr, Once);
 
                             }
+                        case (int)Lists.SetSubTypes.RAM:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 5);
+
+                                byte Len = 0;
+
+                                switch (SplitLine[2])
+                                {
+                                    case "8": Len = 0; break;
+                                    case "16": Len = 1; break;
+                                    case "32": Len = 2; break;
+                                    default: throw ParseException.UnrecognizedParameter(SplitLine);
+                                }
+
+                                UInt32 Offset = (UInt32)ScriptHelpers.GetValueAndCheckRangeInt(SplitLine, 3, 0, UInt32.MaxValue);
+                                UInt32 Value = 0; 
+
+                                switch (Len)
+                                {
+                                    case 0: Value = (UInt32)ScriptHelpers.GetValueAndCheckRangeInt(SplitLine, 4, 0, byte.MaxValue); break;
+                                    case 1: Value = (UInt32)ScriptHelpers.GetValueAndCheckRangeInt(SplitLine, 4, 0, UInt16.MaxValue); break;
+                                    case 2: Value = (UInt32)ScriptHelpers.GetValueAndCheckRangeInt(SplitLine, 4, 0, UInt32.MaxValue); break;
+                                }
+
+                                return new InstructionSetRAM((byte)SubID, Offset, Value, Len);
+
+                            }
                         default: throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
                 }

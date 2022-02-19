@@ -582,6 +582,8 @@ namespace NPC_Maker
 
             DLIST_LIMB,
             DLIST_OBJECT,
+
+            RAM,
         }
 
         public enum AwaitSubTypes
@@ -1518,7 +1520,8 @@ namespace NPC_Maker
             SFX,
             BGM,
             CUTSCENE,
-            CUTSCENE_ID
+            CUTSCENE_ID,
+            SFX_GLOBAL,
         }
 
         public enum RotationSubTypes
