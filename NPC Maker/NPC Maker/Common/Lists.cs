@@ -381,6 +381,7 @@ namespace NPC_Maker
             FLAG_ROOM_CLEAR,
             FLAG_SCENE_COLLECT,
             FLAG_TEMPORARY,
+            FLAG_INTERNAL,
 
             LINK_IS_ADULT,
             IS_DAY,
@@ -432,7 +433,6 @@ namespace NPC_Maker
             LENS_OF_TRUTH_ON,
             DAMAGED_BY,
             ROOM_ID,
-            FLAG_INTERNAL,
         }
 
         public enum ItemSubTypes
@@ -538,6 +538,7 @@ namespace NPC_Maker
             FLAG_ROOM_CLEAR,
             FLAG_SCENE_COLLECT,
             FLAG_TEMPORARY,
+            FLAG_INTERNAL,
 
             MASS,
 
@@ -585,11 +586,21 @@ namespace NPC_Maker
             DLIST_OBJECT,
 
             RAM,
-            FLAG_INTERNAL,
         }
 
         public enum AwaitSubTypes
         {
+
+            FLAG_INF,
+            FLAG_EVENT,
+            FLAG_SWITCH,
+            FLAG_SCENE,
+            FLAG_TREASURE,
+            FLAG_ROOM_CLEAR,
+            FLAG_SCENE_COLLECT,
+            FLAG_TEMPORARY,
+            FLAG_INTERNAL,
+
             MOVEMENT_PATH_END,
             RESPONSE,
             TALKING_END,

@@ -523,6 +523,8 @@ u16 Scripts_IfFlag(NpcMaker* en, GlobalContext* global, void* instruction)
 
     u32 flag = Scripts_GetVarval(en, global, instr->vartype, instr->value, false);
 
+    en->fDbgVar2 = flag;
+
     switch (instr->subId)
     {
         case IF_FLAG_SWITCH:               ret = Flags_GetSwitch(global, flag); break;

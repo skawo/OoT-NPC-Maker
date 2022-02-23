@@ -489,6 +489,25 @@ bool Scripts_InstructionAwait(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
             en->isWaitingForResponse = true;
             return SCRIPT_STOP;
         }
+        case AWAIT_FLAG_INF:
+        case AWAIT_FLAG_EVENT:
+        case AWAIT_FLAG_SWITCH:
+        case AWAIT_FLAG_SCENE:
+        case AWAIT_FLAG_TREASURE:
+        case AWAIT_FLAG_ROOM_CLEAR:
+        case AWAIT_FLAG_SCENE_COLLECT:
+        case AWAIT_FLAG_TEMPORARY:
+        case AWAIT_FLAG_INTERNAL:
+        {
+            ScrInstrIf instr = (ScrInstrIf){.condition = in->condition, 
+                                            .subId = in->subId,
+                                            .value = in->value,
+                                            .falseInstrNum = 0,
+                                            .trueInstrNum = 1};
+ 
+            conditionMet = Scripts_IfFlag(en, globalCtx, &instr);
+            break;
+        }
         case AWAIT_FOREVER:                         conditionMet = false; break;
         case AWAIT_MOVEMENT_PATH_END:               conditionMet = Scripts_AwaitBool(en, globalCtx, (en->stopped && (en->curPathNode == en->curPathNumNodes)), C_TRUE); break;
         case AWAIT_TALKING_END:                     conditionMet = Scripts_AwaitBool(en, globalCtx, en->talkingFinished, C_TRUE); break;

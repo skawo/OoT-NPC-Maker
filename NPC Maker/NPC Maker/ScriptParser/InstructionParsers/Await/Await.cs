@@ -19,6 +19,24 @@ namespace NPC_Maker.Scripts
 
                     switch (SubID)
                     {
+                        case (int)Lists.AwaitSubTypes.FLAG_INF:
+                        case (int)Lists.AwaitSubTypes.FLAG_EVENT:
+                        case (int)Lists.AwaitSubTypes.FLAG_SWITCH:
+                        case (int)Lists.AwaitSubTypes.FLAG_SCENE:
+                        case (int)Lists.AwaitSubTypes.FLAG_TREASURE:
+                        case (int)Lists.AwaitSubTypes.FLAG_ROOM_CLEAR:
+                        case (int)Lists.AwaitSubTypes.FLAG_SCENE_COLLECT:
+                        case (int)Lists.AwaitSubTypes.FLAG_TEMPORARY:
+                        case (int)Lists.AwaitSubTypes.FLAG_INTERNAL:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
+                                int MaxFlagId = (SubID == (int)Lists.AwaitSubTypes.FLAG_INTERNAL ? 31 : UInt16.MaxValue);
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, MaxFlagId);
+
+                                return new InstructionAwait((byte)SubID, Val, Condition);
+                            }
                         case (int)Lists.AwaitSubTypes.MOVEMENT_PATH_END:
                         case (int)Lists.AwaitSubTypes.RESPONSE:
                         case (int)Lists.AwaitSubTypes.TALKING_END:
