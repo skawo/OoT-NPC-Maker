@@ -1513,6 +1513,7 @@ namespace NPC_Maker
             NOT_VISIBLE = 0,
             WITH_LIMB = 1,
             REPLACES_LIMB = 2,
+            IN_SKELETON = 3
         }
 
         public enum PlaySubTypes

@@ -133,6 +133,7 @@ typedef enum dlist_visibility
 	NOT_VISIBLE = 0,
 	WITH_LIMB = 1,
 	INSTEAD_OF_LIMB = 2,
+    CONTROL = 3,
 } dlist_visibility;
 
 typedef enum axes

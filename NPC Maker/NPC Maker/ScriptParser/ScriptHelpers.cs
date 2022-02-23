@@ -72,7 +72,18 @@ namespace NPC_Maker.Scripts
             try
             {
                 if (IsHex(Splitstring[Index]))
-                    Value = (UInt32?)Convert.ToInt32(Splitstring[Index], 16);
+                {
+                    string str = Splitstring[Index];
+                    bool neg = false;
+
+                    if (str.StartsWith("-"))
+                    {
+                        str = str.Substring(1);
+                        throw ParseException.ParamOutOfRange(Splitstring);
+                    }
+
+                    Value = (UInt32?)Convert.ToInt32(str, 16);
+                }
                 else
                     Value = (UInt32?)Convert.ToInt32(Splitstring[Index]);
 
@@ -97,7 +108,22 @@ namespace NPC_Maker.Scripts
             try
             {
                 if (IsHex(Splitstring[Index]))
-                    Value = (float?)Convert.ToDecimal(Convert.ToInt32(Splitstring[Index], 16));
+                {
+                    string str = Splitstring[Index];
+                    bool neg = false;
+
+                    if (str.StartsWith("-"))
+                    {
+                        str = str.Substring(1);
+                        neg = true;
+                    }
+
+                    Value = (float?)Convert.ToDecimal(Convert.ToInt32(str, 16));
+
+                    if (neg)
+                        Value = -Value;
+
+                }
                 else
                     Value = (float?)Convert.ToDecimal(Splitstring[Index]);
             }
@@ -315,7 +341,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                return (Number.Length >= 3 && Number.ToUpper().StartsWith("0X"));
+                return (Number.Length >= 3 && Number.ToUpper().StartsWith("0X") || Number.Length >= 4 && Number.ToUpper().StartsWith("-0X"));
             }
             catch (Exception)
             {

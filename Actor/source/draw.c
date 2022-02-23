@@ -146,9 +146,10 @@ inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
 }
 
 // Matrix should be set before this is called.
-void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, s32 object, Color_RGB8 envColor, u32 dList)
+void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, ExDListEntry* dList)
 {
-    object = R_OBJECT(en, object);
+    s32 object = R_OBJECT(en, dList->objectId);
+    u32 dListOffset = object == OBJECT_RAM ? dList->offset : OFFSET_ADDRESS(6, dList->offset);
 
     // Always drawing to the other buffer than the main model is.
     int dT = Draw_GetDrawDestType(en, globalCtx);
@@ -181,9 +182,10 @@ void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, s32 object, Color_RGB
         }
     }
 
-    Draw_SetEnvColor(&dest->p, envColor, en->curAlpha);
+    Draw_SetEnvColor(&dest->p, dList->envColor, en->curAlpha);
     gSPMatrix(dest->p++, Matrix_NewMtx(globalCtx->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
-    gSPDisplayList(dest->p++, dList);
+    gSPDisplayList(dest->p++, dListOffset);
+    
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
     if (en->settings.objectId > 0 && object != en->settings.objectId)
@@ -289,21 +291,31 @@ s32 Draw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbNumber, Gfx** dListP
     for (int i = 0; i < en->numExDLists; i++)
     {
         ExDListEntry dlist = en->extraDLists[i];
-
+        
         if (sLimbNumber == dlist.limb)
         {
-            u32 dListOffset = dlist.objectId == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
-            
-            if (dlist.showType != NOT_VISIBLE)
+            s32 object = R_OBJECT(en, dlist.objectId);  
+
+            if (dlist.showType >= INSTEAD_OF_LIMB)
+                *dListPtr = 0;
+
+            if (dlist.showType == CONTROL && object == en->settings.objectId)
+            {
+                Math_Vec3s_Sum(rotation, &dlist.rotation, rotation);
+                Math_Vec3f_Sum(translation, &dlist.translation, translation);
+                Matrix_Scale(dlist.scale, dlist.scale, dlist.scale, 1);
+
+                u32 dListOffset = object == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
+                *dListPtr = (Gfx*)dListOffset;
+
+            }
+            else if (dlist.showType != NOT_VISIBLE)
             {
                 Matrix_Push();
                 Draw_AffectMatrix(dlist, translation, rotation);
-                Draw_ExtDList(en, globalCtx, dlist.objectId, dlist.envColor, dListOffset);
+                Draw_ExtDList(en, globalCtx, &dlist);
                 Matrix_Pop();                
             }
-
-            if (dlist.showType == INSTEAD_OF_LIMB)
-                *dListPtr = 0;
         }
     }
 
@@ -396,8 +408,6 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
 
         if (dlist.limb < 0)
         {
-            u32 dListOffset = dlist.objectId == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
-            
             if (dlist.showType != NOT_VISIBLE)
             {
                 Vec3f translation = (Vec3f){0,0,0};
@@ -436,7 +446,7 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
                 float scale = dlist.scale *= en->actor.scale.x;
 
                 Matrix_Scale(scale, scale, scale, 1);
-                Draw_ExtDList(en, globalCtx, dlist.objectId, dlist.envColor, dListOffset);
+                Draw_ExtDList(en, globalCtx, &dlist);
                 Matrix_Pop();                
             }
         }

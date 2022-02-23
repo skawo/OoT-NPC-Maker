@@ -12,6 +12,7 @@ namespace NPC_Maker
             { "Not visible", 0 },
             { "With limb", 1 },
             { "Replaces limb", 2 },
+            { "In Skeleton", 3 },
         };
 
         public static Dictionary<Lists.DictType, string> DictFilenames = new Dictionary<Lists.DictType, string>()

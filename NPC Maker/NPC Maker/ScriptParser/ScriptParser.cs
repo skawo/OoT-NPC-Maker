@@ -95,13 +95,15 @@ namespace NPC_Maker.Scripts
 
         private static void RegexText(ref string ScriptText)
         {
-            string[] Operators = { "+=", "-=", "/=", "*=", "!=", "==", "=+", "=-", "=/", "=!" };
+            string[] Operators = { "+=", "-=", "/=", "*=", "!=", "==", "=+", "=-", "=/", "=!", ">=", "<=" };
 
             // Separate oparators
             foreach (string op in Operators)
                 ScriptText = ScriptText.Replace(op, " " + op + " ");
 
-            ScriptText = Regex.Replace(ScriptText, @"([^=^\-^+^/^*^!])(=)([^=^\-^+^/^*^!])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
+            ScriptText = Regex.Replace(ScriptText, @"([^>^<^=^\-^+^/^*^!])(=)([^=^\-^+^/^*^!^>^<])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
+            ScriptText = Regex.Replace(ScriptText, @"([^=])(<)([^=])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
+            ScriptText = Regex.Replace(ScriptText, @"([^=])(>)([^=])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
 
             ScriptText = Regex.Replace(ScriptText, @"\\\s+\n", "");                                                             // Override line carriage return if preceded by \
             ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
