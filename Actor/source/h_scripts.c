@@ -462,6 +462,15 @@ void Scripts_SetFlag(NpcMaker* en, GlobalContext* global, void* instruction)
 
             break;
         }
+        case SET_FLAG_INTERNAL: 
+        {
+            if (set)
+                en->flags_internal |= 1UL << flag;
+            else
+                en->flags_internal &= ~(1UL << flag); 
+            
+            break;
+        }
     }
 }
 
@@ -524,6 +533,7 @@ u16 Scripts_IfFlag(NpcMaker* en, GlobalContext* global, void* instruction)
         case IF_FLAG_EVENT:                ret = Flags_GetEventChkInf(flag); break;
         case IF_FLAG_TREASURE:             ret = Flags_GetTreasure(global, flag); break;
         case IF_FLAG_SCENE_COLLECT:        ret = Flags_GetCollectible(global, flag); break;
+        case IF_FLAG_INTERNAL:             ret = en->flags_internal & (1 << flag); break;
         default:                           ret = false; break;
     }
 

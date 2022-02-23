@@ -98,11 +98,13 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.FLAG_ROOM_CLEAR:
                         case (int)Lists.IfSubTypes.FLAG_SCENE_COLLECT:
                         case (int)Lists.IfSubTypes.FLAG_TEMPORARY:
+                        case (int)Lists.IfSubTypes.FLAG_INTERNAL:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
-                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue);
+                                int MaxFlagId = (SubID == (int)Lists.IfSubTypes.FLAG_INTERNAL ? 31 : UInt16.MaxValue);
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, MaxFlagId);
 
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Val, Condition, EndIf, Else, LabelR));
                                 return Instructions;

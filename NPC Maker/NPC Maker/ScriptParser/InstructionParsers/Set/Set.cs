@@ -133,10 +133,13 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.FLAG_ROOM_CLEAR:
                         case (int)Lists.SetSubTypes.FLAG_SCENE_COLLECT:
                         case (int)Lists.SetSubTypes.FLAG_TEMPORARY:
+                        case (int)Lists.SetSubTypes.FLAG_INTERNAL:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                var FlagID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue);
+                                int MaxFlagId = (SubID == (int)Lists.SetSubTypes.FLAG_INTERNAL ? 31 : UInt16.MaxValue);
+
+                                var FlagID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, MaxFlagId);
                                 var Val = new ScriptVarVal();
 
                                 Val.Vartype = ScriptHelpers.GetVarType(SplitLine, 3);

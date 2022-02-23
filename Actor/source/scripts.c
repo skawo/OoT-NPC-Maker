@@ -243,7 +243,8 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
         case IF_FLAG_TREASURE:
         case IF_FLAG_ROOM_CLEAR:
         case IF_FLAG_SCENE_COLLECT:
-        case IF_FLAG_TEMPORARY:                 branch = Scripts_IfFlag(en, globalCtx, in); break;
+        case IF_FLAG_TEMPORARY:                 
+        case IF_FLAG_INTERNAL:                  branch = Scripts_IfFlag(en, globalCtx, in); break;
                                             
         case IF_LINK_IS_ADULT:                  branch = Scripts_IfBool(en, globalCtx, !globalCtx->linkAgeOnLoad, in); break;
         case IF_IS_DAY:                         branch = Scripts_IfBool(en, globalCtx, MORNING_TIME < gSaveContext.dayTime && NIGHT_TIME > gSaveContext.dayTime, in); break;
@@ -824,7 +825,8 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
         case SET_FLAG_TREASURE:
         case SET_FLAG_ROOM_CLEAR:
         case SET_FLAG_SCENE_COLLECT:
-        case SET_FLAG_TEMPORARY:                    Scripts_SetFlag(en, globalCtx, in); break;
+        case SET_FLAG_TEMPORARY:                    
+        case SET_FLAG_INTERNAL:                   Scripts_SetFlag(en, globalCtx, in); break;
         case SET_MASS: 
         {
             Scripts_Set(en, globalCtx, &en->settings.mass, in, UINT8);

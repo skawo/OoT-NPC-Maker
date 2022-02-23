@@ -254,6 +254,7 @@ typedef struct NpcMaker
     ScriptInstance* scriptInstances;
     u32 messagesDataOffset;
     s32 customMsgId;
+    u32 flags_internal;
 
     NpcMaker* riddenNpc;
     Actor* refActor;

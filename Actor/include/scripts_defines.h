@@ -251,6 +251,7 @@ typedef enum SetSubId
     SET_DLIST_OBJECT,
 
     SET_RAM,
+    SET_FLAG_INTERNAL,
 } SetSubId;
 
 typedef enum IfWhileSubId
@@ -314,6 +315,7 @@ typedef enum IfWhileSubId
     IF_LENS_OF_TRUTH_ON,
 	IF_DAMAGED_BY,
     IF_ROOM_ID,
+    IF_FLAG_INTERNAL,
 
 } IfWhileSubId;
 

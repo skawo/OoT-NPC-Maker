@@ -432,6 +432,7 @@ namespace NPC_Maker
             LENS_OF_TRUTH_ON,
             DAMAGED_BY,
             ROOM_ID,
+            FLAG_INTERNAL,
         }
 
         public enum ItemSubTypes
@@ -584,6 +585,7 @@ namespace NPC_Maker
             DLIST_OBJECT,
 
             RAM,
+            FLAG_INTERNAL,
         }
 
         public enum AwaitSubTypes
