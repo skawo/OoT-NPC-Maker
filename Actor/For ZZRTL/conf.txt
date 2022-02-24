@@ -1,0 +1,2 @@
+allocation   0x0000
+vram         0x80800000
