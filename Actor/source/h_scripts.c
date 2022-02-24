@@ -159,8 +159,6 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, GlobalContext* globalCtx, u32 value, u
         int id = subId - SUBT_GLOBAL8;
         *outValtype = 2 * (id % 4);
 
-        osSyncPrintf("_%8x", value);
-
         switch (id / 4)
         {
             case 0:    return AADDR(globalCtx, value); break;
@@ -522,9 +520,6 @@ u16 Scripts_IfFlag(NpcMaker* en, GlobalContext* global, void* instruction)
     bool ret;
 
     u32 flag = Scripts_GetVarval(en, global, instr->vartype, instr->value, false);
-
-    en->fDbgVar2 = flag;
-
     switch (instr->subId)
     {
         case IF_FLAG_SWITCH:               ret = Flags_GetSwitch(global, flag); break;
