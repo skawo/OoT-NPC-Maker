@@ -1763,8 +1763,9 @@ bool Scripts_InstructionWarp(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
 
     u32 warpId = Scripts_GetVarval(en, globalCtx, in->warpIdvarType, in->warpId, false);
     u32 cutsceneId = Scripts_GetVarval(en, globalCtx, in->cutsceneIdvarType, in->cutsceneId, false);
+    u32 sceneLoadFlag = Scripts_GetVarval(en, globalCtx, in->sceneLoadFlagType, in->sceneLoadFlag, false);
     globalCtx->nextEntranceIndex = warpId;
-    globalCtx->sceneLoadFlag = 1;
+    globalCtx->sceneLoadFlag = sceneLoadFlag;
 
     if (cutsceneId > 0)
         cutsceneId = 0xFFF0 + (cutsceneId - 4);

@@ -217,7 +217,8 @@ namespace NPC_Maker
             SHOW_TEXTBOX_SP,
             CLOSE_TEXTBOX,
             ITEM,
-            PLAY ,
+            PLAY,
+            SCRIPT,
             KILL,
             SPAWN,
             WARP,
@@ -1611,6 +1612,12 @@ namespace NPC_Maker
         {
             OVERWRITE = 0,
             RESTORE = 1,
+        }
+
+        public enum ScriptSubtypes
+        {
+            STOP = 0,
+            START = 1,
         }
 
         public enum Buttons
