@@ -463,7 +463,6 @@ namespace NPC_Maker
             MOVEMENT_LOOP_DELAY,
             ATTACKED_SFX,
             LIGHT_RADIUS,
-            CUTSCENE_FRAME,
 
             COLLISION_RADIUS,
             COLLISION_HEIGHT,

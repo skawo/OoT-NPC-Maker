@@ -29,7 +29,6 @@ u16 basic_set_offsets[] =
     OFFSETOF(NpcMaker, settings.movementDelay),
     OFFSETOF(NpcMaker, settings.sfxIfAttacked),
     OFFSETOF(NpcMaker, settings.lightRadius),
-    OFFSETOF(GlobalContext, csCtx.frames),
 
     OFFSETOF(NpcMaker, collider.dim.radius),
     OFFSETOF(NpcMaker, collider.dim.height),

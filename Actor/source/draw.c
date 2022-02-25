@@ -44,7 +44,7 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
 
             GfxPrint_SetPos(&printer, 3, 1);
 
-            GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08x]", MAJOR_VERSION, MINOR_VERSION, en->dbgVar, en->dbgVar2);
+            GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08x]", MAJOR_VERSION, MINOR_VERSION, globalCtx->csCtx.frames, en->dbgVar2);
 
             if (en->settings.movementType == MOVEMENT_TIMED_PATH)
             {
@@ -423,11 +423,16 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
                     }
                     case STATIC_EXDLIST_AT_CAM:
                     {
-                        OLib_Vec3fDistNormalize(&translation, &globalCtx->mainCamera.eye, &globalCtx->mainCamera.at);
-                        Math_Vec3f_Scale(&translation, dlist.translation.z);
-                        Math_Vec3f_Sum(&translation, &globalCtx->mainCamera.eye, &translation);
+                        Camera* cam = globalCtx->cameraPtrs[globalCtx->activeCamera];
 
-                        rotation = globalCtx->mainCamera.camDir;
+                        if (globalCtx->csCtx.state != 0)
+                            cam = Gameplay_GetCamera(globalCtx, globalCtx->csCtx.unk_14);
+
+                        OLib_Vec3fDistNormalize(&translation, &cam->eye, &cam->at);
+                        Math_Vec3f_Scale(&translation, dlist.translation.z);
+                        Math_Vec3f_Sum(&translation, &cam->eye, &translation);
+
+                        rotation = cam->camDir;
                         rotation.y += 0x8000;  
                         break;               
                     }

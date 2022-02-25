@@ -634,8 +634,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
         case SET_MOVEMENT_LOOP_DELAY:               
         case SET_ATTACKED_SFX:                   
         case SET_LIGHT_RADIUS:                      Scripts_Set(en, globalCtx, AADDR(en, basic_set_offsets[in->subId]), in, UINT16); break;
-        case SET_CUTSCENE_FRAME:                    Scripts_Set(en, globalCtx, AADDR(globalCtx, basic_set_offsets[in->subId]), in, UINT16); break;
-        
+
         case SET_COLLISION_RADIUS:                 
         case SET_COLLISION_HEIGHT:                  
         case SET_MOVEMENT_LOOP_START:               
@@ -1495,6 +1494,9 @@ bool Scripts_InstructionPlay(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
         case PLAY_CUTSCENE_ID: Cutscene_SetSegment(globalCtx, (u32)Scene_GetCutscenePtr(globalCtx, value)); break;
         case PLAY_SFX_GLOBAL: Audio_PlaySoundGeneral(value, &Audio_Play_VecZero, 4, &Audio_Play_One, &Audio_Play_One, &Audio_Play_Zero); break;
     }
+
+    if (globalCtx->csCtx.segment != NULL)
+        gSaveContext.cutsceneTrigger = 1;
 
     script->curInstrNum++;
     return SCRIPT_CONTINUE;
