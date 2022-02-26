@@ -24,6 +24,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_DELAY:
                         case (int)Lists.SetSubTypes.COLLISION_RADIUS:
                         case (int)Lists.SetSubTypes.COLLISION_HEIGHT:
+                        case (int)Lists.SetSubTypes.CUTSCENE_FRAME:
                             return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue);
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_START:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_END:
