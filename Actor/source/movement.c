@@ -423,7 +423,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                             en->skin.skelAnime.playSpeed = en->animations[en->currentAnimId].speed * anim_speed_mult;
 
                             if (en->settings.smoothingConstant >= 0)
-                                Movement_RotTowards(&en->actor.shape.rot.y, Math_Vec3f_Yaw(&en->actor.world.pos, &en->movementNextPos));
+                                Movement_RotTowards(&en->actor.shape.rot.y, Math_Vec3f_Yaw(&en->actor.world.pos, &en->movementNextPos), 0);
                             else
                                 en->actor.shape.rot.y = Math_Vec3f_Yaw(&en->actor.world.pos, &en->movementNextPos);
                         }
@@ -434,6 +434,8 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                     // Actually move the character.
                     en->actor.world.pos = en->movementNextPos;
                 }
+
+                
                 break;
             }
         }

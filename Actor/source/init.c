@@ -387,6 +387,7 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
             en->scriptInstances[i].jumpToWhenReponded = -1;
             en->scriptInstances[i].spotted = 0;
             en->scriptInstances[i].jumpToWhenSpottedInstrNum = -1;
+            en->scriptInstances[i].active = 1;
             
             Scripts_FreeTemp(&en->scriptInstances[i]);
         }

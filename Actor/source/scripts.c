@@ -34,22 +34,25 @@ void Scripts_Main(NpcMaker* en, GlobalContext* globalCtx)
 
         if (script->scriptPtr != NULL)
         {
-            // Player responding to a textbox may desync from the script (especially if the player mashes the button), 
-            // so we need to check for this before executing anything.
-            Scripts_ResponseInstruction(en, globalCtx, script);
-
-            // Player getting spotted due to a search particle.
-            if (script->spotted && script->jumpToWhenSpottedInstrNum >= 0)
+            if (script->active)
             {
-                script->curInstrNum = script->jumpToWhenSpottedInstrNum;
-                script->spotted = 0;
-                script->jumpToWhenSpottedInstrNum = -1;
-            }
+                // Player responding to a textbox may desync from the script (especially if the player mashes the button), 
+                // so we need to check for this before executing anything.
+                Scripts_ResponseInstruction(en, globalCtx, script);
 
-            if (script->waitTimer != 0)
-                script->waitTimer--;
-            else
-                while(Scripts_Execute(en, globalCtx, script));
+                // Player getting spotted due to a search particle.
+                if (script->spotted && script->jumpToWhenSpottedInstrNum >= 0)
+                {
+                    script->curInstrNum = script->jumpToWhenSpottedInstrNum;
+                    script->spotted = 0;
+                    script->jumpToWhenSpottedInstrNum = -1;
+                }
+
+                if (script->waitTimer != 0)
+                    script->waitTimer--;
+                else
+                    while(Scripts_Execute(en, globalCtx, script));
+            }
         }   
     }
 }
@@ -114,6 +117,7 @@ bool Scripts_Execute(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* scr
         case SPAWN:              return Scripts_InstructionSpawn(en, globalCtx, script, (ScrInstrSpawn*)instruction); break;
         case ITEM:               return Scripts_InstructionItem(en, globalCtx, script, (ScrInstrItem*)instruction); break;
         case WARP:               return Scripts_InstructionWarp(en, globalCtx, script, (ScrInstrWarp*)instruction); break;
+        case SCRIPT:             return Scripts_InstructionScript(en, globalCtx, script, (ScrInstrScript*)instruction); break;
         case PARTICLE:           return Scripts_InstructionParticle(en, globalCtx, script, (ScrInstrParticle*)instruction); break;
         case FORCE_TALK:         en->isTalking = true; globalCtx->talkWithPlayer(globalCtx, &en->actor); script->curInstrNum++; return SCRIPT_CONTINUE;
         case CLOSE_TEXTBOX:      globalCtx->msgCtx.msgMode = MSGMODE_CLOSING; script->curInstrNum++; return SCRIPT_CONTINUE;
@@ -634,6 +638,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
         case SET_MOVEMENT_LOOP_DELAY:               
         case SET_ATTACKED_SFX:                   
         case SET_LIGHT_RADIUS:                      Scripts_Set(en, globalCtx, AADDR(en, basic_set_offsets[in->subId]), in, UINT16); break;
+        case SET_CUTSCENE_FRAME:                    Scripts_Set(en, globalCtx, AADDR(globalCtx, basic_set_offsets[in->subId]), in, UINT16); break;
 
         case SET_COLLISION_RADIUS:                 
         case SET_COLLISION_HEIGHT:                  
@@ -1220,15 +1225,15 @@ bool Scripts_InstructionFace(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
             case FACE_TOWARDS:
             case FACE_AWAY_FROM:
             {
-                if (!Movement_RotTowards(&subject->shape.rot.y, target_rot_sub))
+                if (!Movement_RotTowards(&subject->shape.rot.y, target_rot_sub, 0))
                     done = true;
 
                 break;
             }
             case FACE_AND:
             {
-                s16 diff_sub = Movement_RotTowards(&subject->shape.rot.y, target_rot_sub);
-                s16 diff_tar = Movement_RotTowards(&target->shape.rot.y, target_rot_tar);
+                s16 diff_sub = Movement_RotTowards(&subject->shape.rot.y, target_rot_sub, 0);
+                s16 diff_tar = Movement_RotTowards(&target->shape.rot.y, target_rot_tar, 0);
 
                 if (diff_sub == 0 && diff_tar == 0)
                     done = true;
@@ -1283,9 +1288,9 @@ bool Scripts_InstructionRotation(NpcMaker* en, GlobalContext* globalCtx, ScriptI
         // In this case, we smoothly change the rotation to the one specified.
         case ROT_ROTATE_TO:
         {
-            incomplete = Movement_RotTowards(&ACTOR->shape.rot.x, ROT->x) + 
-                         Movement_RotTowards(&ACTOR->shape.rot.y, ROT->y) + 
-                         Movement_RotTowards(&ACTOR->shape.rot.z, ROT->z);
+            incomplete = Movement_RotTowards(&ACTOR->shape.rot.x, ROT->x, SPEED) + 
+                         Movement_RotTowards(&ACTOR->shape.rot.y, ROT->y, SPEED) + 
+                         Movement_RotTowards(&ACTOR->shape.rot.z, ROT->z, SPEED);
             break;
         }
         // In this case, we change by the amount specified.
@@ -1386,7 +1391,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     {
         // Only rotate if there's actual XZ distance to go, though.
         if (distFromEndXZ != 0)
-            Movement_RotTowards(&ACTOR->shape.rot.y, Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS));
+            Movement_RotTowards(&ACTOR->shape.rot.y, Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS), 0);
 
         return SCRIPT_STOP;
     }
@@ -1771,6 +1776,18 @@ bool Scripts_InstructionWarp(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
         cutsceneId = 0xFFF0 + (cutsceneId - 4);
 
     gSaveContext.nextCutsceneIndex = cutsceneId;
+    script->curInstrNum++;
+    return SCRIPT_CONTINUE; 
+}
+
+bool Scripts_InstructionScript(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrScript* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: SCRIPT", en->npcId);
+    #endif  
+
+    u32 scriptID = Scripts_GetVarval(en, globalCtx, in->scriptIdVarType, in->scriptId, false);
+    en->scriptInstances[scriptID].active = in->subID;
     script->curInstrNum++;
     return SCRIPT_CONTINUE; 
 }

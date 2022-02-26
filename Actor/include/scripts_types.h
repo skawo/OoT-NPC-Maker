@@ -26,7 +26,8 @@ typedef struct ScriptInstance
     u16 waitTimer;
     u16 curInstrNum;
     u16 startInstrNum;
-    u16 padding;
+    u8 active;
+    u8 pad;
     
 } ScriptInstance;
 
@@ -521,6 +522,20 @@ typedef struct ScrInstrWarp
     ScriptVarval cutsceneId;
     ScriptVarval sceneLoadFlag;
 } ScrInstrWarp;
+
+
+#pragma endregion
+
+#pragma region scripts
+
+typedef struct ScrInstrScript
+{
+    u8 id;
+    u8 subID;
+    u8 scriptIdVarType;
+    u8 pad;
+    ScriptVarval scriptId;
+} ScrInstrScript;
 
 
 #pragma endregion

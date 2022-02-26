@@ -50,12 +50,15 @@ float Movement_CalcDist(Vec3f* posA, Vec3f* posB, bool ignoreY)
         return Math_Vec3f_DistXYZ(posA, posB);    
 }
 
-s16 Movement_RotTowards(s16* src, s16 target)
+s16 Movement_RotTowards(s16* src, s16 target, u32 speed)
 {
+    u32 speed_max = speed == 0 ? MOVEMENT_ROTATION_MAX : speed;
+    u32 speed_min = speed == 0 ? MOVEMENT_ROTATION_MIN : speed / 10;
+
     return Math_SmoothStepToS(src, target, 
                               MOVEMENT_ROTATION_SCALE,
-                              MOVEMENT_ROTATION_MAX,
-                              MOVEMENT_ROTATION_MIN);
+                              speed_max,
+                              speed_min);
 }
 
 s16 Movement_StepToZero(float* steppedToZero, s16* stepped, float step)

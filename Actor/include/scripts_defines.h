@@ -24,6 +24,7 @@ typedef enum InstructionId
     CLOSE_TEXTBOX,
     ITEM,  
     PLAY,
+    SCRIPT,
     KILL,
     SPAWN,  
     WARP,
@@ -130,6 +131,7 @@ typedef enum SetSubId
     SET_MOVEMENT_LOOP_DELAY,
     SET_ATTACKED_SFX,
     SET_LIGHT_RADIUS,
+    SET_CUTSCENE_FRAME,
 
     SET_COLLISION_RADIUS,
     SET_COLLISION_HEIGHT,

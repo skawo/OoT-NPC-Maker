@@ -26,5 +26,6 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* global, ScriptInstanc
 bool Scripts_InstructionItem(NpcMaker* en, GlobalContext* global, ScriptInstance* script, ScrInstrItem* in);
 bool Scripts_InstructionWarp(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrWarp* in);
 bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrParticle* in);
+bool Scripts_InstructionScript(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrScript* in);
 
 #endif

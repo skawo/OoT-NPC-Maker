@@ -3,7 +3,7 @@
 
 #include "npc_maker_types.h"
 
-s16 Movement_RotTowards(s16* src, s16 target);
+s16 Movement_RotTowards(s16* src, s16 target, u32 speed);
 u32 Movement_GetTotalPathTime(NpcMaker* en, GlobalContext* global);
 u32 Movement_GetRemainingPathTime(NpcMaker* en, GlobalContext* global);
 void Movement_Apply(Actor* act, Vec3f* movement_vector);
