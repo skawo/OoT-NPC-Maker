@@ -5,6 +5,18 @@
 #define DUMMY_MESSAGE 0x011A
 #define NO_CUSTOM_MESSAGE -1 
 
+
+#if GAME_VERSION == 0
+	#define VEC_ZERO  (Vec3f*)0x801333D4
+	#define FLOAT_ONE (f32*)0x801333E0
+	#define FLOAT_ZERO (f32*)0x801333E8
+#endif
+#if GAME_VERSION == 1
+	#define VEC_ZERO  (Vec3f*)0x80104394
+	#define FLOAT_ONE (f32*)0x801043A0
+	#define FLOAT_ZERO (f32*)0x801043A8	
+#endif
+
 #define ROT16(R16A0) (182.044444 * (R16A0))
 #define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
 #define AADDR(a,o)  ((void*)((u8*)(a)+(o)))

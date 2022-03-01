@@ -1016,7 +1016,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
                 case 1: AVAL(instr->address, u16, 0) = instr->value; break;
                 case 2: AVAL(instr->address, u32, 0) = instr->value; break;
             }
-
+			
             break;   
         }
 
@@ -1047,6 +1047,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
                                   Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, true), 
                                   instr->operator, 
                                   valt);
+								 	  
             break;
         }
         default: break;
@@ -1495,13 +1496,26 @@ bool Scripts_InstructionPlay(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
     {
         case PLAY_SFX: Audio_PlayActorSound2(&en->actor,value); break;
         case PLAY_BGM: Audio_SetBGM(value); break;
-        case PLAY_CUTSCENE: Cutscene_SetSegment(globalCtx, (u32)Scene_GetCurrentCutscenePtr(globalCtx)); break;
-        case PLAY_CUTSCENE_ID: Cutscene_SetSegment(globalCtx, (u32)Scene_GetCutscenePtr(globalCtx, value)); break;
-        case PLAY_SFX_GLOBAL: Audio_PlaySoundGeneral(value, &Audio_Play_VecZero, 4, &Audio_Play_One, &Audio_Play_One, &Audio_Play_Zero); break;
+        case PLAY_CUTSCENE: 
+		{
+			Cutscene_SetSegment(globalCtx, (u32)Scene_GetCurrentCutscenePtr(globalCtx)); 
+			
+			if (globalCtx->csCtx.segment != NULL)
+				gSaveContext.cutsceneTrigger = 1;
+	
+			break;
+		}
+        case PLAY_CUTSCENE_ID: 
+		{
+			Cutscene_SetSegment(globalCtx, (u32)Scene_GetCutscenePtr(globalCtx, value)); 
+			
+			if (globalCtx->csCtx.segment != NULL)
+				gSaveContext.cutsceneTrigger = 1;
+			
+			break;
+		}
+        case PLAY_SFX_GLOBAL: Audio_PlaySoundGeneral(value, VEC_ZERO, 4, FLOAT_ONE, FLOAT_ONE, FLOAT_ZERO); break;
     }
-
-    if (globalCtx->csCtx.segment != NULL)
-        gSaveContext.cutsceneTrigger = 1;
 
     script->curInstrNum++;
     return SCRIPT_CONTINUE;

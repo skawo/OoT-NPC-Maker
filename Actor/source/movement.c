@@ -434,8 +434,6 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                     // Actually move the character.
                     en->actor.world.pos = en->movementNextPos;
                 }
-
-                
                 break;
             }
         }

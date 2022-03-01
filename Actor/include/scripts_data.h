@@ -4,10 +4,6 @@
 
 #include "npc_maker_types.h"
 
-Vec3f Audio_Play_VecZero = (Vec3f){0,0,0};
-float Audio_Play_One = 1.0f;
-float Audio_Play_Zero = 0.0f;
-
 u16 basic_set_offsets[] =
 {
     OFFSETOF(NpcMaker, settings.targetLimb),            
