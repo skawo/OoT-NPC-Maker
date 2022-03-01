@@ -20,10 +20,10 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                ScriptVarVal SND = (SubID == (int)Lists.PlaySubTypes.SFX) ?
-                                                       ScriptHelpers.Helper_GetSFXId(SplitLine, 2)
+                                ScriptVarVal SND = (SubID == (int)Lists.PlaySubTypes.BGM) ?
+                                                       ScriptHelpers.Helper_GetMusicId(SplitLine, 2)
                                                                                :
-                                                       ScriptHelpers.Helper_GetMusicId(SplitLine, 2);
+                                                       ScriptHelpers.Helper_GetSFXId(SplitLine, 2);
 
                                 if (Convert.ToInt32(SND.Value) < 0)
                                     throw ParseException.ParamOutOfRange(SplitLine);
