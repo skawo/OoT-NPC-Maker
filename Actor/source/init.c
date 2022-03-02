@@ -307,14 +307,17 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
     #if LOGGING == 1
         osSyncPrintf("_%2d: Setting up collision with radius %04d, height %04d, yoffs %04d", 
                      en->npcId, en->settings.collisionRadius, en->settings.collisionHeight, en->settings.collisionyShift);
-    
-        if (en->actor.shape.rot.x == 1)
-            en->dgbDrawVersion = true;
-
-        if (en->actor.shape.rot.x == 2)
-            en->dbgEnabledPosEditor = true;
     #endif
-    
+	
+	#if DEBUG_STRUCT == 1
+		if (en->actor.shape.rot.x == 1)
+			en->dgbDrawVersion = true;
+
+		if (en->actor.shape.rot.x == 2)
+			en->dbgEnabledPosEditor = true;
+    #endif
+	
+	
     Collider_InitCylinder(globalCtx, &en->collider);
     Collider_SetCylinder(globalCtx, &en->collider, &en->actor, &npcMakerCollision);
     en->collider.dim.radius = en->settings.collisionRadius;
