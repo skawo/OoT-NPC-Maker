@@ -1825,13 +1825,17 @@ namespace NPC_Maker
             MsgText.TextChanged -= MsgText_TextChanged;
             Combo_MsgType.SelectedIndexChanged -= Combo_MsgType_SelectedIndexChanged;
 
-            MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
-            MsgText.Text = Entry.MessageText;
-            Combo_MsgType.SelectedIndex = Entry.Type;
-            Combo_MsgPos.SelectedIndex = Entry.Position;
+            if (SelectedEntry.Messages.Count != 0)
+            {
 
-            SetMsgBackground(Entry.Type);
-            MsgPreviewTimer_Tick(null, null);
+                MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+                MsgText.Text = Entry.MessageText;
+                Combo_MsgType.SelectedIndex = Entry.Type;
+                Combo_MsgPos.SelectedIndex = Entry.Position;
+
+                SetMsgBackground(Entry.Type);
+                MsgPreviewTimer_Tick(null, null);
+            }
 
             MsgText.TextChanged += MsgText_TextChanged;
             Combo_MsgType.SelectedIndexChanged += Combo_MsgType_SelectedIndexChanged;
