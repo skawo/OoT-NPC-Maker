@@ -309,7 +309,10 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
                      en->npcId, en->settings.collisionRadius, en->settings.collisionHeight, en->settings.collisionyShift);
     
         if (en->actor.shape.rot.x == 1)
-            en->dbgDrawToScreen = true;
+            en->dgbDrawVersion = true;
+
+        if (en->actor.shape.rot.x == 2)
+            en->dbgEnabledPosEditor = true;
     #endif
     
     Collider_InitCylinder(globalCtx, &en->collider);

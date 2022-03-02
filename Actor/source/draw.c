@@ -1,5 +1,4 @@
 #include "../include/draw.h"
-#include "../include/h_debug.h"
 #include "../include/h_rom.h"
 #include "../include/h_data.h"
 #include "../include/h_movement.h"
@@ -28,11 +27,61 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
 
     #endif
 
-    #if LOGGING == 1
+    #if DEBUG_STRUCT == 1
 
-        #if LOG_TO_SCREEN == 1
+        #if EXDLIST_EDITOR == 1
 
-        if (en->dbgDrawToScreen)
+        if (en->dbgEnabledPosEditor && en->numExDLists != 0)
+        {
+            Gfx* gfx = Graph_GfxPlusOne(globalCtx->state.gfxCtx->polyOpa.p);
+            gSPDisplayList(globalCtx->state.gfxCtx->overlay.p++, gfx);
+            GfxPrint printer;
+
+            GfxPrint_Init(&printer);
+            GfxPrint_Open(&printer, gfx);
+            GfxPrint_SetColor(&printer, 255, 255, 255, 255);
+
+            GfxPrint_SetPos(&printer, 24, 10);
+            GfxPrint_Printf(&printer, "E %02d", en->dbgPosEditorCurEditing);
+
+            if (en->dbgPosEditorCurEditing <= en->numExDLists)
+            {
+                ExDListEntry dlist = en->extraDLists[en->dbgPosEditorCurEditing];
+                GfxPrint_SetPos(&printer, 24, 11);
+                GfxPrint_Printf(&printer, "TX %04f", dlist.translation.x);
+                GfxPrint_SetPos(&printer, 24, 12);
+                GfxPrint_Printf(&printer, "TY %04f", dlist.translation.y);
+                GfxPrint_SetPos(&printer, 24, 13);
+                GfxPrint_Printf(&printer, "TZ %04f", dlist.translation.z);
+                GfxPrint_SetPos(&printer, 24, 14);
+                GfxPrint_Printf(&printer, "RX %04d", dlist.rotation.x);
+                GfxPrint_SetPos(&printer, 24, 15);
+                GfxPrint_Printf(&printer, "RY %04d", dlist.rotation.y);
+                GfxPrint_SetPos(&printer, 24, 16);
+                GfxPrint_Printf(&printer, "RZ %04d", dlist.rotation.z);
+                GfxPrint_SetPos(&printer, 24, 17);
+                GfxPrint_Printf(&printer, "Sc %04f", dlist.scale);
+                GfxPrint_SetPos(&printer, 24, 18);
+                GfxPrint_Printf(&printer, "L %04d", dlist.limb);
+            }
+            else
+                en->dbgPosEditorCursorPos = 0;
+
+            GfxPrint_SetPos(&printer, 22, 10 + en->dbgPosEditorCursorPos);
+            GfxPrint_Printf(&printer, ">");
+
+            gfx = GfxPrint_Close(&printer);
+            GfxPrint_Destroy(&printer);
+            gSPEndDisplayList(gfx++);
+            Graph_BranchDlist(globalCtx->state.gfxCtx->polyOpa.p, gfx);
+            globalCtx->state.gfxCtx->polyOpa.p = gfx;
+        }
+
+        #endif
+
+        #if LOG_VERSION == 1
+
+        if (en->dgbDrawVersion)
         {
             Gfx* gfx = Graph_GfxPlusOne(globalCtx->state.gfxCtx->polyOpa.p);
             gSPDisplayList(globalCtx->state.gfxCtx->overlay.p++, gfx);
@@ -45,28 +94,6 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
             GfxPrint_SetPos(&printer, 3, 1);
 
             GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08x]", MAJOR_VERSION, MINOR_VERSION, globalCtx->csCtx.frames, en->dbgVar2);
-
-            if (en->settings.movementType == MOVEMENT_TIMED_PATH)
-            {
-                ReadableTime cur = Time_Convert(gSaveContext.dayTime);
-                ReadableTime st = Time_Convert(en->settings.timedPathStart);
-                ReadableTime end = Time_Convert(en->settings.timedPathEnd);
-
-                ReadableTime pt = Time_Convert(Movement_GetTotalPathTime(en, globalCtx));
-                ReadableTime ut = Time_Convert(Movement_GetRemainingPathTime(en, globalCtx));
-
-                GfxPrint_SetPos(&printer, 25, 23);
-                GfxPrint_Printf(&printer, "Tot %02d:%02d", pt.hour, pt.minutes);
-                GfxPrint_SetPos(&printer, 25, 24);
-                GfxPrint_Printf(&printer, "Unt %02d:%02d", ut.hour, ut.minutes);
-
-                GfxPrint_SetPos(&printer, 25, 25);
-                GfxPrint_Printf(&printer, "Cur %02d:%02d", cur.hour, cur.minutes);
-                GfxPrint_SetPos(&printer, 25, 26);
-                GfxPrint_Printf(&printer, "St %02d:%02d", st.hour, st.minutes);
-                GfxPrint_SetPos(&printer, 25, 27);
-                GfxPrint_Printf(&printer, "En %02d:%02d", end.hour, end.minutes);
-            }
 
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);

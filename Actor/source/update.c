@@ -14,6 +14,98 @@ void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
         
     if (en->cameraId - 1 > 0)
         Camera_ChangeDataIdx(&globalCtx->mainCamera, en->cameraId - 1);
+
+    #if EXDLIST_EDITOR == 1
+
+    if (en->dbgEnabledPosEditor && en->numExDLists != 0)
+    {
+        if (en->dbgPosEditorCooldown)
+        {
+            en->dbgPosEditorCooldown--;
+            return;
+        }
+
+        if (CHECK_BTN_ALL(globalCtx->state.input->press.button, BTN_DDOWN))
+        {
+            en->dbgPosEditorCursorPos++;
+
+            if (en->dbgPosEditorCursorPos > 8)
+                en->dbgPosEditorCursorPos = 0;
+        }
+
+        if (CHECK_BTN_ALL(globalCtx->state.input->press.button, BTN_DUP))
+        {
+            if (en->dbgPosEditorCursorPos == 0)
+                en->dbgPosEditorCursorPos = 8;
+            else
+                en->dbgPosEditorCursorPos--;
+        }
+
+        if (CHECK_BTN_ALL(globalCtx->state.input->cur.button, BTN_DRIGHT))
+        {
+            en->dbgPosEditorCooldown = 1;
+
+            float mul = 1;
+
+            if (CHECK_BTN_ALL(globalCtx->state.input->cur.button, BTN_L))
+                mul = 100;
+
+            switch (en->dbgPosEditorCursorPos)
+            {
+                case 0: 
+                {
+                    if (en->dbgPosEditorCurEditing + 1 < en->numExDLists)
+                        en->dbgPosEditorCurEditing++; 
+                    else
+                        en->dbgPosEditorCurEditing = 0;
+                        
+                    break;
+                }
+                case 1: en->extraDLists[en->dbgPosEditorCurEditing].translation.x += (1 * mul); break;
+                case 2: en->extraDLists[en->dbgPosEditorCurEditing].translation.y += (1 * mul); break;
+                case 3: en->extraDLists[en->dbgPosEditorCurEditing].translation.z += (1 * mul); break;
+                case 4: en->extraDLists[en->dbgPosEditorCurEditing].rotation.x += (10 * mul); break;
+                case 5: en->extraDLists[en->dbgPosEditorCurEditing].rotation.y += (10 * mul); break;
+                case 6: en->extraDLists[en->dbgPosEditorCurEditing].rotation.z += (10 * mul); break;
+                case 7: en->extraDLists[en->dbgPosEditorCurEditing].scale += (0.01f * mul); break;
+                case 8: en->extraDLists[en->dbgPosEditorCurEditing].limb += 1; break;
+            }
+        }
+        if (CHECK_BTN_ALL(globalCtx->state.input->cur.button, BTN_DLEFT))
+        {
+            en->dbgPosEditorCooldown = 1;
+
+            float mul = 1;
+
+            if (CHECK_BTN_ALL(globalCtx->state.input->cur.button, BTN_L))
+                mul = 100;
+
+
+            switch (en->dbgPosEditorCursorPos)
+            {
+                case 0: 
+                {
+                    if (en->dbgPosEditorCurEditing - 1 >= 0)
+                        en->dbgPosEditorCurEditing--;
+                    else
+                        en->dbgPosEditorCurEditing = en->numExDLists - 1;
+                        
+                    break;
+                }
+                case 1: en->extraDLists[en->dbgPosEditorCurEditing].translation.x -= (1 * mul); break;
+                case 2: en->extraDLists[en->dbgPosEditorCurEditing].translation.y -= (1 * mul); break;
+                case 3: en->extraDLists[en->dbgPosEditorCurEditing].translation.z -= (1 * mul); break;
+                case 4: en->extraDLists[en->dbgPosEditorCurEditing].rotation.x -= (10 * mul); break;
+                case 5: en->extraDLists[en->dbgPosEditorCurEditing].rotation.y -= (10 * mul); break;
+                case 6: en->extraDLists[en->dbgPosEditorCurEditing].rotation.z -= (10 * mul); break;
+                case 7: en->extraDLists[en->dbgPosEditorCurEditing].scale -= (0.01f * mul); break;
+                case 8: en->extraDLists[en->dbgPosEditorCurEditing].limb -= 1; break;
+            }
+        }
+    }
+
+
+    #endif
 }
 
 void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)

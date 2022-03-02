@@ -260,12 +260,16 @@ typedef struct NpcMaker
     Actor* refActor;
     MessageEntry* dummyMesEntry;
     
-    #if LOGGING == 1
+    #if DEBUG_STRUCT == 1
         s32 dbgVar;
         s32 dbgVar2;
         float fDbgVar;
         float fDbgVar2;
-        u8 dbgDrawToScreen;
+        u8 dgbDrawVersion;
+        u8 dbgEnabledPosEditor;
+        u8 dbgPosEditorCooldown;
+        u8 dbgPosEditorCursorPos;
+        u8 dbgPosEditorCurEditing;
     #endif
 
 } NpcMaker;
