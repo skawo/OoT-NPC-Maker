@@ -287,10 +287,10 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
-                                var SegmentID = new ScriptVarVal();
+                                ScriptVarVal SegmentID = new ScriptVarVal();
                                 SegmentID.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Segments), ParseException.UnrecognizedSegment(SplitLine));
 
-                                var TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, 3, (int)SegmentID.Value, Entry.Segments);
+                                ScriptVarVal TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, 3, Convert.ToInt32(SegmentID.Value), Entry.Segments);
 
                                 return new InstructionSetWTwoValues((byte)SubID, SegmentID, TexID, 0);
                             }
@@ -459,8 +459,9 @@ namespace NPC_Maker.Scripts
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                string t = ex.Message;
                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
                 return new InstructionNop();
             }
