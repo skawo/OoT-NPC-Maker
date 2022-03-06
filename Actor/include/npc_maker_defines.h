@@ -79,8 +79,8 @@
 #define R_OBJECT(en, obj) obj == OBJECT_CURRENT ? en->settings.objectId : obj
 #define R_CUSTOM_MSG_ID(id) (id - 32768)
 
-#define MAX_BLINK_FRAME 3
-#define MAX_TALK_FRAME 3
+#define MAX_BLINK_FRAME 4
+#define MAX_TALK_FRAME 4
 #define RANDOM_BLINK_MIN_FRAMES 30
 #define RANDOM_BLINK_MAX_FRAMES 30
 #define BLINK_FRAME_BLANK 0xFF

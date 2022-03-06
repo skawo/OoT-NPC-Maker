@@ -380,7 +380,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             if (ex_actor == NULL)
                 branch = in->falseInstrNum;
             else
-                branch = Scripts_IfExtVar(en, globalCtx, ex_actor->scriptVars[instr->extVarNum], in, INT32);
+                branch = Scripts_IfExtVar(en, globalCtx, ex_actor->scriptVars[instr->extVarNum - 1], in, INT32);
                 
             break;
         }
@@ -550,7 +550,7 @@ bool Scripts_InstructionAwait(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
             u32 actor_id = Scripts_GetVarval(en, globalCtx, instr->actorNumVarType, instr->actorNum, false);
             NpcMaker* exActor = Scene_GetNpcMakerByID(en, globalCtx, actor_id);
 
-            conditionMet = Scripts_AwaitValue(en, globalCtx, exActor->scriptVars[instr->extVarNum], INT32, instr->condition, instr->varType, instr->value); break;
+            conditionMet = Scripts_AwaitValue(en, globalCtx, exActor->scriptVars[instr->extVarNum - 1], INT32, instr->condition, instr->varType, instr->value); break;
             break;
         }
         case SUBT_GLOBAL8:
@@ -638,7 +638,17 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
         case SET_MOVEMENT_LOOP_DELAY:               
         case SET_ATTACKED_SFX:                   
         case SET_LIGHT_RADIUS:                      Scripts_Set(en, globalCtx, AADDR(en, basic_set_offsets[in->subId]), in, UINT16); break;
-        case SET_CUTSCENE_FRAME:                    Scripts_Set(en, globalCtx, AADDR(globalCtx, basic_set_offsets[in->subId]), in, UINT16); break;
+        case SET_CUTSCENE_FRAME:                    
+        {
+            Scripts_Set(en, globalCtx, AADDR(globalCtx, basic_set_offsets[in->subId]), in, UINT16); 
+
+            if (globalCtx->csCtx.unk_18 > globalCtx->csCtx.frames)
+            {
+                globalCtx->csCtx.state = 0;
+                Cutscene_SetSegment(globalCtx,  (u32)globalCtx->csCtx.segment); 
+            }
+            break;
+        }
 
         case SET_COLLISION_RADIUS:                 
         case SET_COLLISION_HEIGHT:                  
@@ -996,7 +1006,6 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
                                     instr->operator, 
                                     INT32);
             }
-            
             break;
         }
         case SET_ATTACKED_EFFECT: 

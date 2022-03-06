@@ -79,6 +79,7 @@ void Setup_Defaults(NpcMaker* en, GlobalContext* globalCtx)
     en->textboxNum = -1;
     en->refActor = &en->actor;
     en->hasStaticExDlists = false;
+
     Movement_SetNextDelay(en);
 
     // Get the dummy message.

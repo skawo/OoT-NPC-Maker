@@ -278,7 +278,7 @@ namespace NPC_Maker.Scripts
                                     int Segment = (SubID == (int)Lists.SetSubTypes.BLINK_PATTERN ? Entry.BlinkSegment : Entry.TalkSegment) - 8;
                                     var TexID = ScriptHelpers.Helper_GetSegmentDataEntryID(SplitLine, i, Segment, Entry.Segments);
 
-                                    Data[i - 2] = (byte)TexID.Value;
+                                    Data[i - 2] = Convert.ToByte(TexID.Value);
                                 }
 
                                 return new InstructionSetPattern((byte)SubID, Data);

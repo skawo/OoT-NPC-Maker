@@ -133,16 +133,19 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
                 // If the current texture is the last one, or undefined, then we set the current texture to 0.
                 if (en->currentBlinkFrame == MAX_BLINK_FRAME || segTexture == BLINK_FRAME_BLANK)
                 {
-                    segTexture = 0;
                     en->currentBlinkFrame = 0;
+                    segTexture = en->settings.blinkPattern[en->currentBlinkFrame];
                     en->blinkTimer = Rand_S16Offset(RANDOM_BLINK_MIN_FRAMES, RANDOM_BLINK_MAX_FRAMES);
                 }
-                
+
                 // We iterate the current texture for next time.
                 en->currentBlinkFrame++;
+
                 // We set the current segment data for this segment to the selected number of the texture in pattern.
-                if (en->settings.blinkPattern[segTexture] != BLINK_FRAME_BLANK)
-                    en->segmentDataIds[en->settings.blinkTexSegment - 8] = en->settings.blinkPattern[segTexture];
+                if (segTexture != 0xFF)
+                    en->segmentDataIds[en->settings.blinkTexSegment - 8] = segTexture;
+                else
+                    en->segmentDataIds[en->settings.blinkTexSegment - 8] = 0;
             }
             else
                 en->blinkingFramesBetween++;
@@ -168,18 +171,22 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
                 {
                     segTexture = 0;
                     en->currentTalkFrame = 0;
+                    segTexture = en->settings.talkPattern[en->currentTalkFrame];
                 }
-                    
-                en->currentTalkFrame++;
 
-                if (en->settings.talkPattern[segTexture] != TALK_FRAME_BLANK)
-                    en->segmentDataIds[en->settings.talkTexSegment - 8] = en->settings.talkPattern[segTexture];
+                en->currentTalkFrame++;
+                en->segmentDataIds[en->settings.talkTexSegment - 8] = segTexture;
             }
             else
                 en->talkingFramesBetween++;
         }
         else
-            en->segmentDataIds[en->settings.talkTexSegment - 8] = 0;
+        {
+            if (en->settings.talkPattern[0] != 0xFF)
+                en->segmentDataIds[en->settings.talkTexSegment - 8] = en->settings.talkPattern[0];
+            else
+                en->segmentDataIds[en->settings.talkTexSegment - 8] = 0;
+        }
     }
 
     #pragma endregion

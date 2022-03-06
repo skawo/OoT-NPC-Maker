@@ -33,16 +33,19 @@ static void NpcMaker_Update(NpcMaker* en, GlobalContext* globalCtx)
 
     // Update current conversation status and copy messages into message context if need be...
     Update_Conversation(en, globalCtx);
+	
+    if (en->pauseCutscene)
+    {
+        globalCtx->csCtx.frames--;
+        globalCtx->csCtx.unk_18 = 0xF000;
+    }
 
     // Don't run some stuff if "just script" option is set.
     if (!en->settings.execJustScript)
     {
         // If we're in cutscene mode, we're always moving in the cutscene movement mode
         if (globalCtx->csCtx.state && en->settings.cutsceneId)
-        {
-            if (en->pauseCutscene)
-                globalCtx->csCtx.frames--;
-                
+        {                
             Movement_Main(en, globalCtx, MOVEMENT_CUTSCENE, false, false);
         }
         else
