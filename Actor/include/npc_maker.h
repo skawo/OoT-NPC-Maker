@@ -2,10 +2,14 @@
 #define NPC_MAKER_H
 
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 160
+#define MINOR_VERSION 170
 
 #ifndef GAME_VERSION
     #define GAME_VERSION 0
+#endif
+
+#ifndef WIIVC_COMPAT
+    #define WIIVC_COMPAT 0
 #endif
 
 #if GAME_VERSION == 0

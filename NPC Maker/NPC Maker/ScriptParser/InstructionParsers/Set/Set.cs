@@ -459,9 +459,8 @@ namespace NPC_Maker.Scripts
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                string t = ex.Message;
                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
                 return new InstructionNop();
             }
