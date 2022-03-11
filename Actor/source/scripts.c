@@ -11,10 +11,6 @@
 #include "../include/draw.h"
 #include "../include/scripts_data.h"
 
-#if WIIVC_COMPAT == 1
-    #pragma GCC optimize 0
-#endif
-
 inline ScrInstr* Scripts_GetInstrPtr(ScriptInstance* script, u32 instruction_num)
 {
     u32 curOffs = AVAL(script->scriptPtr, u16, SCRIPT_INSTR_SIZE * instruction_num);
@@ -1817,7 +1813,3 @@ bool Scripts_InstructionScript(NpcMaker* en, GlobalContext* globalCtx, ScriptIns
     script->curInstrNum++;
     return SCRIPT_CONTINUE; 
 }
-
-#if WIIVC_COMPAT == 1
-    #pragma GCC reset_options
-#endif

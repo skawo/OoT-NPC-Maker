@@ -8,10 +8,6 @@
     #define GAME_VERSION 0
 #endif
 
-#ifndef WIIVC_COMPAT
-    #define WIIVC_COMPAT 0
-#endif
-
 #if GAME_VERSION == 0
     #ifndef LOGGING
         #define LOGGING 1
