@@ -285,7 +285,7 @@ namespace NPC_Maker
                             Helpers.Ensure4ByteAlign(Message);
                             MsgData.AddRange(Message);
 
-                            if (MsgData.Count > 640)
+                            if (Message.Count > 640)
                                 throw new Exception("One of the messages has exceeded 640 bytes (the maximum allowed), and could not be saved.");
 
                             Header.AddRangeBigEndian(MsgOffset);
