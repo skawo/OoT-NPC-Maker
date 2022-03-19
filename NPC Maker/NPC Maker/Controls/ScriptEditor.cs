@@ -46,6 +46,7 @@ namespace NPC_Maker
             Textbox_Script.Text = Script.Text;
 
             Textbox_ParseErrors.Clear();
+            Textbox_Script.ClearUndo();
 
             if (Script.ParseErrors.Count == 0)
                 Textbox_ParseErrors.Text = "Parsed successfully!";

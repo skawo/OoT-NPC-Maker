@@ -64,6 +64,8 @@ namespace NPC_Maker.Windows
                 Dock = DockStyle.Fill
             };
 
+            
+
             Page.Controls.Add(Se);
             Tab.TabPages.Add(Page);
         }
