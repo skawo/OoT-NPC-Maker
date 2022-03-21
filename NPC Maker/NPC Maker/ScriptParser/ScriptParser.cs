@@ -611,9 +611,9 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Clear();
                 outScript.ParseErrors.Add(pEx);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                outScript.ParseErrors.Add(ParseException.GeneralError("Unknown error converting to bytes."));
+                outScript.ParseErrors.Add(ParseException.GeneralError("Unknown error converting to bytes" + ex.Message));
             }
 
             return new byte[0];
