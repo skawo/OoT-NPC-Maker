@@ -588,9 +588,11 @@ namespace NPC_Maker.Scripts
                     HeaderOffs += (UInt16)Data.Length;
                 }
 
+                // Add the size of the header to the offsets
                 for (int i = 0; i < Offsets.Count; i++)
                     Offsets[i] += (UInt16)(Offsets.Count * 2 + ((Offsets.Count % 2 != 0) ? 2 : 0));
 
+                // Ensure there's an even amount of offsets so everything is 4-aligned
                 if (Offsets.Count % 2 != 0)
                     Offsets.Add(0);
 
