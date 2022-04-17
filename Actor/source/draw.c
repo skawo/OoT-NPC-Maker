@@ -14,7 +14,7 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
             Matrix_Push();
 
             //z_matrix_translate_3f_800D1694
-            func_800D1694(en->actor.world.pos.x, en->actor.world.pos.y + en->collider.dim.yShift, en->actor.world.pos.z, &en->actor.shape.rot);
+            Matrix_SetTranslateRotateYXZ(en->actor.world.pos.x, en->actor.world.pos.y + en->collider.dim.yShift, en->actor.world.pos.z, &en->actor.shape.rot);
             Matrix_Scale(MAX(1, en->collider.dim.radius) / 128.0f, en->collider.dim.height / 204.0f, MAX(1, en->collider.dim.radius) / 128.0f, 1);
 
             gSPMatrix(POLY_XLU.p++, Matrix_NewMtx(globalCtx->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
@@ -109,7 +109,7 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
 
 inline u32 Draw_GetDrawDestType(NpcMaker* en, GlobalContext* globalCtx)
 {
-    return (en->curAlpha == 255 && globalCtx->actorCtx.unk_03 == 0) ? OPA : DRAW_TYPE(en->settings.drawType);
+    return (en->curAlpha == 255 && globalCtx->actorCtx.lensActive == 0) ? OPA : DRAW_TYPE(en->settings.drawType);
 }
 
 void Draw_Setup(NpcMaker* en, GlobalContext* globalCtx, int drawType)
@@ -224,10 +224,10 @@ void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, ExDListEntry* dList)
 void Draw_AffectMatrix(ExDListEntry dlist, Vec3f* translation, Vec3s* rotation)
 {
     if (translation != NULL && rotation != NULL)
-        Matrix_JointPosition(translation, rotation);
+        Matrix_TranslateRotateZYX(translation, rotation);
 
     Matrix_Translate(dlist.translation.x, dlist.translation.y, dlist.translation.z, 1);
-    Matrix_RotateRPY(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, 1);
+    Matrix_RotateZYX(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, 1);
     Matrix_Scale(dlist.scale, dlist.scale, dlist.scale, 1);
 }
 
@@ -252,7 +252,7 @@ void Draw_PostLimbDraw(GlobalContext* globalCtx, s32 limb, Gfx** dListPtr, Vec3s
     Draw_CalcFocusPos(globalCtx, limb, en);
 }
 
-s32 Draw_PostLimbDrawSkin(Actor* instance, GlobalContext* globalCtx, s32 limb, PSkinAwb* skelanime)
+s32 Draw_PostLimbDrawSkin(Actor* instance, GlobalContext* globalCtx, s32 limb, Skin* skelanime)
 {
     // Should be only doing this for limbs that have textures to change, but whatever.
     NpcMaker* en = (NpcMaker*)instance;
@@ -473,7 +473,7 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
                     translation.z -= dlist.translation.z;
 
                 Matrix_Push();
-                func_800D1694(translation.x, translation.y, translation.z, &rotation);
+                Matrix_SetTranslateRotateYXZ(translation.x, translation.y, translation.z, &rotation);
 
                 float scale = dlist.scale *= en->actor.scale.x;
 

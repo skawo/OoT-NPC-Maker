@@ -66,7 +66,7 @@ void Scripts_ResponseInstruction(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     // Wait until the selection pops up and player has responded to it...
 
     // Player talk state, player responded to textbox
-    if (func_8010BDBC(&globalCtx->msgCtx) == MSGSTATUS_SELECTING && func_80106BC8(globalCtx))
+    if (Message_GetState(&globalCtx->msgCtx) == TEXT_STATE_CHOICE && Message_ShouldAdvance(globalCtx))
     {
         switch (globalCtx->msgCtx.choiceIndex)
         {
@@ -119,7 +119,7 @@ bool Scripts_Execute(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* scr
         case SCRIPT:             return Scripts_InstructionScript(en, globalCtx, script, (ScrInstrScript*)instruction); break;
         case PARTICLE:           return Scripts_InstructionParticle(en, globalCtx, script, (ScrInstrParticle*)instruction); break;
         case FORCE_TALK:         en->isTalking = true; globalCtx->talkWithPlayer(globalCtx, &en->actor); script->curInstrNum++; return SCRIPT_CONTINUE;
-        case CLOSE_TEXTBOX:      globalCtx->msgCtx.msgMode = MSGMODE_CLOSING; script->curInstrNum++; return SCRIPT_CONTINUE;
+        case CLOSE_TEXTBOX:      globalCtx->msgCtx.msgMode = MSGMODE_TEXT_CLOSING; script->curInstrNum++; return SCRIPT_CONTINUE;
         case NOP:                script->curInstrNum++; return SCRIPT_STOP;
         default:                                
         {
@@ -254,8 +254,8 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
         case IF_IS_TALKING:                     branch = Scripts_IfBool(en, globalCtx, en->isTalking, in); break;
         case IF_PLAYER_HAS_EMPTY_BOTTLE:        branch = Scripts_IfBool(en, globalCtx, Inventory_HasEmptyBottle(), in); break;
         case IF_IN_CUTSCENE:                    branch = Scripts_IfBool(en, globalCtx, globalCtx->csCtx.segment != NULL, in); break;
-        case IF_TEXTBOX_ON_SCREEN:              branch = Scripts_IfBool(en, globalCtx, func_8010BDBC(&globalCtx->msgCtx), in); break;    
-        case IF_TEXTBOX_DRAWING:                branch = Scripts_IfBool(en, globalCtx, globalCtx->msgCtx.msgMode == MSGMODE_DRAWING, in); break; 
+        case IF_TEXTBOX_ON_SCREEN:              branch = Scripts_IfBool(en, globalCtx, Message_GetState(&globalCtx->msgCtx), in); break;    
+        case IF_TEXTBOX_DRAWING:                branch = Scripts_IfBool(en, globalCtx, globalCtx->msgCtx.msgMode == MSGMODE_TEXT_DISPLAYING, in); break; 
         case IF_PLAYER_HAS_MAGIC:               branch = Scripts_IfBool(en, globalCtx, gSaveContext.magicAcquired, in); break; 
         case IF_ATTACKED:                       branch = Scripts_IfBool(en, globalCtx, en->wasHitThisFrame, in); break; 
         case IF_REF_ACTOR_EXISTS:               branch = Scripts_IfBool(en, globalCtx, en->refActor != NULL, in); break; 
@@ -263,7 +263,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
         case IF_PICKUP_PICKED_UP:
         case IF_PICKUP_THROWN:
         case IF_PICKUP_LANDED:                  branch = Scripts_IfBool(en, globalCtx, en->pickedUpState == (in->subId - IF_PICKUP_IDLE), in); break; 
-        case IF_LENS_OF_TRUTH_ON:               branch = Scripts_IfBool(en, globalCtx, globalCtx->actorCtx.unk_03 != 0, in); break; 
+        case IF_LENS_OF_TRUTH_ON:               branch = Scripts_IfBool(en, globalCtx, globalCtx->actorCtx.lensActive != 0, in); break; 
 
         case IF_PLAYER_RUPEES:                  branch = Scripts_IfValue(en, globalCtx, gSaveContext.rupees, in, INT16); break;
         case IF_SCENE_ID:                       branch = Scripts_IfValue(en, globalCtx, globalCtx->sceneNum, in, INT16); break;
@@ -292,7 +292,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
                 branch = in->falseInstrNum;
             // Otherwise, check if the item being traded matches
             else
-                branch = Scripts_IfValue(en, globalCtx, PLAYER->exchangeItemId, in, INT32); 
+                branch = Scripts_IfValue(en, globalCtx, GET_PLAYER(globalCtx)->exchangeItemId, in, INT32); 
 
             // If this has happened, then a textbox is gonna be shown, but without the NPC being marked as talked to.
             // This is why we need to artificially set this.
@@ -308,7 +308,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
         case IF_TRADE_STATUS:                   
         {
             u32 tradeStatusToCheck = Scripts_GetVarval(en, globalCtx, in->vartype, in->value, false);
-            s8 curTraded = PLAYER->exchangeItemId;
+            s8 curTraded = GET_PLAYER(globalCtx)->exchangeItemId;
 
             branch = in->falseInstrNum;
 
@@ -325,7 +325,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             
             break;
         }
-        case IF_PLAYER_MASK: branch = Scripts_IfValue(en, globalCtx, PLAYER->currentMask, in, UINT8); break;
+        case IF_PLAYER_MASK: branch = Scripts_IfValue(en, globalCtx, GET_PLAYER(globalCtx)->currentMask, in, UINT8); break;
         case IF_TIME_OF_DAY: branch = Scripts_IfValue(en, globalCtx, gSaveContext.dayTime, in, UINT16); break;
         case IF_ANIMATION: branch = Scripts_IfValue(en, globalCtx, en->currentAnimId, in, UINT16); break;
         case IF_PLAYER_HAS_INVENTORY_ITEM: 
@@ -366,7 +366,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
         case IF_TARGETTED: branch = Scripts_IfBool(en, globalCtx, globalCtx->actorCtx.targetCtx.targetedActor == &en->actor, in); break;
         case IF_DISTANCE_FROM_PLAYER: 
         {
-            branch = Scripts_IfValue(en, globalCtx, en->actor.xzDistToPlayer - PLAYER->cylinder.dim.radius - en->settings.collisionRadius, in, FLOAT); 
+            branch = Scripts_IfValue(en, globalCtx, en->actor.xzDistToPlayer - GET_PLAYER(globalCtx)->cylinder.dim.radius - en->settings.collisionRadius, in, FLOAT); 
             break;
         }
 
@@ -514,9 +514,9 @@ bool Scripts_InstructionAwait(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
         case AWAIT_FOREVER:                         conditionMet = false; break;
         case AWAIT_MOVEMENT_PATH_END:               conditionMet = Scripts_AwaitBool(en, globalCtx, (en->stopped && (en->curPathNode == en->curPathNumNodes)), C_TRUE); break;
         case AWAIT_TALKING_END:                     conditionMet = Scripts_AwaitBool(en, globalCtx, en->talkingFinished, C_TRUE); break;
-        case AWAIT_TEXTBOX_ON_SCREEN:               conditionMet = Scripts_AwaitBool(en, globalCtx, func_8010BDBC(&globalCtx->msgCtx) != MSGSTATUS_NONE, in->condition); break;
-        case AWAIT_TEXTBOX_DRAWING:                 conditionMet = Scripts_AwaitBool(en, globalCtx, func_8010BDBC(&globalCtx->msgCtx) != MSGSTATUS_DRAWING, in->condition); break;
-        case AWAIT_TEXTBOX_DISMISSED:               conditionMet = Scripts_AwaitBool(en, globalCtx, globalCtx->msgCtx.msgMode == MSGMODE_CLOSING, C_TRUE); break;
+        case AWAIT_TEXTBOX_ON_SCREEN:               conditionMet = Scripts_AwaitBool(en, globalCtx, Message_GetState(&globalCtx->msgCtx) != TEXT_STATE_NONE, in->condition); break;
+        case AWAIT_TEXTBOX_DRAWING:                 conditionMet = Scripts_AwaitBool(en, globalCtx, Message_GetState(&globalCtx->msgCtx) != TEXT_STATE_DONE_FADING, in->condition); break;
+        case AWAIT_TEXTBOX_DISMISSED:               conditionMet = Scripts_AwaitBool(en, globalCtx, globalCtx->msgCtx.msgMode == MSGMODE_TEXT_CLOSING, C_TRUE); break;
         case AWAIT_PATH_NODE:                       conditionMet = Scripts_AwaitValue(en, globalCtx, en->curPathNode, INT16, in->condition, in->varType, in->value); break;
         case AWAIT_ANIMATION_FRAME:                 conditionMet = Scripts_AwaitValue(en, globalCtx, en->skin.skelAnime.curFrame, UINT32, in->condition, in->varType, in->value); break;
         case AWAIT_CUTSCENE_FRAME:                  conditionMet = Scripts_AwaitValue(en, globalCtx, globalCtx->csCtx.frames, UINT16, in->condition, in->varType, in->value); break;
@@ -537,9 +537,9 @@ bool Scripts_InstructionAwait(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
         case AWAIT_PLAYER_ANIMATION_END:                   
         {
             if (firstRun)
-                script->tempValues[2] = (s32)PLAYER->skelAnime.animation;
+                script->tempValues[2] = (s32)GET_PLAYER(globalCtx)->skelAnime.animation;
 
-            conditionMet = (PLAYER->skelAnime.curFrame >= PLAYER->skelAnime.endFrame - 1 - PLAYER->skelAnime.playSpeed) || ((s32)PLAYER->skelAnime.animation != script->tempValues[2]);
+            conditionMet = (GET_PLAYER(globalCtx)->skelAnime.curFrame >= GET_PLAYER(globalCtx)->skelAnime.endFrame - 1 - GET_PLAYER(globalCtx)->skelAnime.playSpeed) || ((s32)GET_PLAYER(globalCtx)->skelAnime.animation != script->tempValues[2]);
             break;               
         }
         case AWAIT_EXT_VAR: 
@@ -644,7 +644,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             if (globalCtx->csCtx.unk_18 > globalCtx->csCtx.frames)
             {
                 globalCtx->csCtx.state = 0;
-                Cutscene_SetSegment(globalCtx,  (u32)globalCtx->csCtx.segment); 
+                Cutscene_SetSegment(globalCtx,  globalCtx->csCtx.segment); 
             }
             break;
         }
@@ -802,9 +802,9 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             en->stopPlayer = value;
 
             if (value)
-                PLAYER->stateFlags1 |= PLAYER_STOPPED_MASK;
+                GET_PLAYER(globalCtx)->stateFlags1 |= PLAYER_STOPPED_MASK;
             else
-                PLAYER->stateFlags1 &= ~PLAYER_STOPPED_MASK;
+                GET_PLAYER(globalCtx)->stateFlags1 &= ~PLAYER_STOPPED_MASK;
 
             break;
         }
@@ -882,9 +882,9 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             en->stopPlayer = !Scripts_GetBool(en, globalCtx, in);
 
             if (en->stopPlayer)
-                PLAYER->stateFlags1 |= PLAYER_STOPPED_MASK;
+                GET_PLAYER(globalCtx)->stateFlags1 |= PLAYER_STOPPED_MASK;
             else
-                PLAYER->stateFlags1 &= ~PLAYER_STOPPED_MASK;
+                GET_PLAYER(globalCtx)->stateFlags1 &= ~PLAYER_STOPPED_MASK;
 
             break;
         }
@@ -900,17 +900,17 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
 
             if (val)
             {
-                if ((void*)PLAYER->actor.update != &Scripts_PlayerAnimateMode)
+                if ((void*)GET_PLAYER(globalCtx)->actor.update != &Scripts_PlayerAnimateMode)
                 {
-                    script->PlayerUpdate = PLAYER->actor.update;
-                    PLAYER->actor.update = (void*)&Scripts_PlayerAnimateMode;
+                    script->PlayerUpdate = GET_PLAYER(globalCtx)->actor.update;
+                    GET_PLAYER(globalCtx)->actor.update = (void*)&Scripts_PlayerAnimateMode;
                 }
             }
             else
             {
-                if ((void*)PLAYER->actor.update == &Scripts_PlayerAnimateMode)
+                if ((void*)GET_PLAYER(globalCtx)->actor.update == &Scripts_PlayerAnimateMode)
                 {
-                    PLAYER->actor.update = script->PlayerUpdate;
+                    GET_PLAYER(globalCtx)->actor.update = script->PlayerUpdate;
                     script->PlayerUpdate = NULL;
                 }
             }
@@ -936,7 +936,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             u32 endFrame = Scripts_GetVarval(en, globalCtx, instr->endFrameType, instr->endFrame, false);
             float speed = Scripts_GetVarval(en, globalCtx, instr->speedType, instr->speed, false);   
 
-            Setup_AnimationImpl(&PLAYER->actor, globalCtx, &PLAYER->skelAnime, offset, ANIMTYPE_LINK, -1, -1, startFrame, endFrame, speed, true, instr->once);
+            Setup_AnimationImpl(&GET_PLAYER(globalCtx)->actor, globalCtx, &GET_PLAYER(globalCtx)->skelAnime, offset, ANIMTYPE_LINK, -1, -1, startFrame, endFrame, speed, true, instr->once);
             break;       
         }
         case SET_SCRIPT_START:
@@ -1130,7 +1130,7 @@ bool Scripts_InstructionEnableTrade(NpcMaker* en, GlobalContext* globalCtx, Scri
 
     // Find which item we're meant to check for, and which item Link is actually trading.
     en->tradeItem = Scripts_GetVarval(en, globalCtx, in->correct.varTypeItem, in->correct.item, false);
-    s8 curTradedItem = PLAYER->exchangeItemId;
+    s8 curTradedItem = GET_PLAYER(globalCtx)->exchangeItemId;
 
     if (!en->isTalking)
     {
@@ -1503,10 +1503,10 @@ bool Scripts_InstructionPlay(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
     switch (in->subId)
     {
         case PLAY_SFX: Audio_PlayActorSound2(&en->actor,value); break;
-        case PLAY_BGM: Audio_SetBGM(value); break;
+        case PLAY_BGM: Audio_QueueSeqCmd(value); break;
         case PLAY_CUTSCENE: 
 		{
-			Cutscene_SetSegment(globalCtx, (u32)Scene_GetCurrentCutscenePtr(globalCtx)); 
+			Cutscene_SetSegment(globalCtx, Scene_GetCurrentCutscenePtr(globalCtx)); 
 			
 			if (globalCtx->csCtx.segment != NULL)
 				gSaveContext.cutsceneTrigger = 1;
@@ -1515,7 +1515,7 @@ bool Scripts_InstructionPlay(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
 		}
         case PLAY_CUTSCENE_ID: 
 		{
-			Cutscene_SetSegment(globalCtx, (u32)Scene_GetCutscenePtr(globalCtx, value)); 
+			Cutscene_SetSegment(globalCtx, Scene_GetCutscenePtr(globalCtx, value)); 
 			
 			if (globalCtx->csCtx.segment != NULL)
 				gSaveContext.cutsceneTrigger = 1;
@@ -1562,15 +1562,15 @@ bool Scripts_InstructionOcarina(NpcMaker* en, GlobalContext* globalCtx, ScriptIn
         if ((en->settings.talkRadius + en->collider.dim.radius) >= en->actor.xzDistToPlayer || 
             globalCtx->actorCtx.targetCtx.targetedActor == &en->actor)
         {
-            PLAYER->stateFlags2 |= 0x800000;
+            GET_PLAYER(globalCtx)->stateFlags2 |= 0x800000;
             en->actor.flags |= 0x02000000;
 
             // Check if player has entered the ocarina state.
-            if (PLAYER->stateFlags2 & 0x1000000)
+            if (GET_PLAYER(globalCtx)->stateFlags2 & 0x1000000)
             {
                 func_8010BD88(globalCtx, 0x22);
-                PLAYER->stateFlags2 |= 0x2000000;
-                PLAYER->unk_6A8 = &en->actor;
+                GET_PLAYER(globalCtx)->stateFlags2 |= 0x2000000;
+                GET_PLAYER(globalCtx)->unk_6A8 = &en->actor;
 
                 #if LOGGING == 1
                     osSyncPrintf("_%2d: Player whipped out an ocarina!", en->npcId);
@@ -1590,13 +1590,13 @@ bool Scripts_InstructionOcarina(NpcMaker* en, GlobalContext* globalCtx, ScriptIn
     }
     else
     {
-        u16* playedSong = &globalCtx->msgCtx.unk_E3EC;
-        u16* songState = &globalCtx->msgCtx.unk_E3EE;
+        u16* playedSong = &globalCtx->msgCtx.lastPlayedSong;
+        u16* songState = &globalCtx->msgCtx.ocarinaMode;
 
         if (en->correctSongHeard)
         {
             // Dumb workaround to make SURE Saria's Song text doesn't appear.
-            PLAYER->stateFlags1 |= PLAYER_STOPPED_MASK;
+            GET_PLAYER(globalCtx)->stateFlags1 |= PLAYER_STOPPED_MASK;
             script->curInstrNum = in->trueInstrNum;
             en->correctSongHeard = false;
             en->listeningToSong = false;
@@ -1698,9 +1698,9 @@ bool Scripts_InstructionItem(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
                 {
                     script->waitTimer = 2;
 
-                    if (PLAYER->csMode != 0)
+                    if (GET_PLAYER(globalCtx)->csMode != 0)
                     {
-                        script->tempValues[0] = PLAYER->csMode;
+                        script->tempValues[0] = GET_PLAYER(globalCtx)->csMode;
                         //z_cutscene_link_action
                         func_8002DF54(globalCtx, &en->actor, 0x7);
                     }
@@ -1709,7 +1709,7 @@ bool Scripts_InstructionItem(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
                     {
                         script->tempValues[1] = en->stopPlayer;
                         en->stopPlayer = false;
-                        PLAYER->stateFlags1 &= ~PLAYER_STOPPED_MASK;
+                        GET_PLAYER(globalCtx)->stateFlags1 &= ~PLAYER_STOPPED_MASK;
                     }
 
                     return SCRIPT_STOP;
@@ -1729,7 +1729,7 @@ bool Scripts_InstructionItem(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
                     {
                         // Wait for textbox end...
                         // Player talk state
-                        if (func_8010BDBC(&globalCtx->msgCtx) != MSGSTATUS_END)
+                        if (Message_GetState(&globalCtx->msgCtx) != TEXT_STATE_CLOSING)
                             return SCRIPT_STOP;
 
                         //...after which, if Link WAS in a cutscene, we restore the cutscene state.
@@ -1765,9 +1765,9 @@ bool Scripts_InstructionItem(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
                 else if (IS_BOTTLE_ITEM(item))
                 {
                     // If item is holding the item in question, we take that one specifically.
-                    if ((PLAYER->heldItemButton != 0) && 
-                    (gSaveContext.inventory.items[gSaveContext.equips.cButtonSlots[PLAYER->heldItemButton - 1]] == item))
-                        Player_UpdateBottleHeld(globalCtx, PLAYER, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                    if ((GET_PLAYER(globalCtx)->heldItemButton != 0) && 
+                    (gSaveContext.inventory.items[gSaveContext.equips.cButtonSlots[GET_PLAYER(globalCtx)->heldItemButton - 1]] == item))
+                        Player_UpdateBottleHeld(globalCtx, GET_PLAYER(globalCtx), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
                     else
                         Inventory_ReplaceItem(globalCtx, item, ITEM_BOTTLE);
                 }

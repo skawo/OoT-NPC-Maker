@@ -174,7 +174,7 @@ bool Movement_PickUp(NpcMaker* en, GlobalContext* globalCtx)
         case STATE_IDLE:
         {
             // If player is holding us, change state to picked-up, disable collision and targetting.
-            if (PLAYER->heldActor == &en->actor)
+            if (GET_PLAYER(globalCtx)->heldActor == &en->actor)
             {
                 en->pickedUpState = STATE_PICKED_UP;
                 en->hadCollision = en->settings.hasCollision;
@@ -187,7 +187,7 @@ bool Movement_PickUp(NpcMaker* en, GlobalContext* globalCtx)
         // If player stopped holding us, we've been thrown. Restore collision and targetting.
         case STATE_PICKED_UP:
         {
-            if (PLAYER->heldActor != &en->actor)
+            if (GET_PLAYER(globalCtx)->heldActor != &en->actor)
             {
                 en->pickedUpState = STATE_THROWN;
                 en->settings.hasCollision = en->hadCollision;
@@ -294,10 +294,10 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
         // If the actor is close enough, we stop.
         case MOVEMENT_FOLLOW:
         {
-            float minDist = PLAYER->cylinder.dim.radius + en->settings.collisionRadius + en->settings.movementDistance;
+            float minDist = GET_PLAYER(globalCtx)->cylinder.dim.radius + en->settings.collisionRadius + en->settings.movementDistance;
 
             if (en->actor.xzDistToPlayer > minDist || en->actor.yDistToPlayer > minDist)
-                Movement_SetNextPos(en, &PLAYER->actor.world.pos);
+                Movement_SetNextPos(en, &GET_PLAYER(globalCtx)->actor.world.pos);
             else
                 Movement_StopMoving(en, globalCtx, setAnims);
             
@@ -310,9 +310,9 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
 
             if (en->actor.xzDistToPlayer < minDist && !en->isMoving)
             {
-                Vec3f vector = {en->settings.movementDistance * Math_SinS(PLAYER->actor.world.rot.y), 
+                Vec3f vector = {en->settings.movementDistance * Math_SinS(GET_PLAYER(globalCtx)->actor.world.rot.y), 
                                 0, 
-                                en->settings.movementDistance * Math_CosS(PLAYER->actor.world.rot.y)};
+                                en->settings.movementDistance * Math_CosS(GET_PLAYER(globalCtx)->actor.world.rot.y)};
                                   
                 Math_Vec3f_Sum(&en->actor.world.pos, &vector, &en->movementNextPos);
                 Movement_SetNextPos(en, &en->movementNextPos);

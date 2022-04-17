@@ -241,7 +241,7 @@ typedef struct NpcMaker
     s32* scriptVars;
     float* scriptFVars;
 
-    PSkinAwb skin;
+    Skin skin;
     ColliderCylinder collider;
     LightInfo light;
     LightNode* lightNode;

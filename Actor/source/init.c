@@ -469,7 +469,7 @@ void Setup_Model(NpcMaker* en, GlobalContext* globalCtx)
             case SKIN:
             {
                 //z_skelanime_init_weighted
-                func_800A663C(globalCtx,
+                Skin_Init(globalCtx,
                               &en->skin,
                               (void*)en->settings.skeleton,
                               0); 

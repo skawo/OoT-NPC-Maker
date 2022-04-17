@@ -233,7 +233,7 @@ void* Scripts_GetActorByType(NpcMaker* en, GlobalContext* globalCtx, u32 targetA
     switch (targetActor)
     {
         case TARGET_SELF:              return en;
-        case TARGET_PLAYER:            return PLAYER;
+        case TARGET_PLAYER:            return GET_PLAYER(globalCtx);
         case TARGET_NPCMAKER:          return Scene_GetNpcMakerByID(en, globalCtx, actorNum);
         case TARGET_ACTOR_ID:          return Scene_GetActorByID(actorNum, globalCtx, &en->actor, NULL);
         case TARGET_REF_ACTOR:         return en->refActor;
@@ -599,20 +599,20 @@ u32 Scripts_GetTextId(NpcMaker* en, GlobalContext* globalCtx, u8 varTypeChild, S
 
 void Scripts_ShowMessage(NpcMaker* en, GlobalContext* globalCtx, u16 msgId, bool setActor)
 {
-    int talkState = func_8010BDBC(&globalCtx->msgCtx);
+    int talkState = Message_GetState(&globalCtx->msgCtx);
 
     // If we've talked to the NPC, and the message status isn't blank, then we continue the message with this new one.
     // Textbox number is set to 0, because the first message isn't counted as new message?
-    if (en->isTalking && talkState != MSGSTATUS_NONE)
+    if (en->isTalking && talkState != TEXT_STATE_NONE)
     {
-        func_8010B720(globalCtx, msgId);
+        Message_ContinueTextbox(globalCtx, msgId);
         en->textboxNum = 0;
         en->persistTalk = false;
     }
     // Else, we show a new textbox.
     else
     {
-        func_8010B680(globalCtx, msgId, setActor ? &en->actor : NULL);
+        Message_StartTextbox(globalCtx, msgId, setActor ? &en->actor : NULL);
         en->textboxNum = -1;
         en->persistTalk = false;
     }

@@ -44,7 +44,7 @@ void Doors_Close(Actor* npc, Actor* door, GlobalContext* globalCtx)
                 if (door->world.pos.y < door->home.pos.y + 20)
                 {
                     door->floorHeight = door->world.pos.y;
-                    Actor_SpawnFloorDust(globalCtx, door, &door->world.pos, 45.0f, 0xA, 8.0f, 0x1F4, 0xA, 0);
+                    Actor_SpawnFloorDustRing(globalCtx, door, &door->world.pos, 45.0f, 0xA, 8.0f, 0x1F4, 0xA, 0);
                 }
 
                 Math_ApproachF(&door->world.pos.y, door->home.pos.y, 1, SLIDE_DOOR_OPEN_SHUT_SPEED);

@@ -10,7 +10,7 @@ void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
     en->lastDayTime = gSaveContext.dayTime;
 
     if (en->stopPlayer)
-        PLAYER->stateFlags1 |= PLAYER_STOPPED_MASK;
+        GET_PLAYER(globalCtx)->stateFlags1 |= PLAYER_STOPPED_MASK;
         
     if (en->cameraId - 1 > 0)
         Camera_ChangeDataIdx(&globalCtx->mainCamera, en->cameraId - 1);
@@ -160,7 +160,7 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
     // but whenever the actor is talking.
     if (en->settings.talkTexSegment >= 8 && en->exSegData[en->settings.talkTexSegment - 8] != 0 && en->doTalkingAnm)
     {
-        if (en->isTalking && func_8010BDBC(&global->msgCtx) == MSGSTATUS_DRAWING)
+        if (en->isTalking && Message_GetState(&global->msgCtx) == TEXT_STATE_DONE_FADING)
         {
             if (en->talkingFramesBetween >= en->settings.talkAnimSpeed)
             {
@@ -244,7 +244,7 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
 void Update_HeadWaistRot(NpcMaker *en, GlobalContext* globalCtx)
 {
     s16 targetHor = -(en->actor.yawTowardsPlayer - en->actor.shape.rot.y);
-    s16 targetVert = Math_Vec3f_Pitch(&en->settings.lookAtPosOffset, &PLAYER->actor.focus.pos);
+    s16 targetVert = Math_Vec3f_Pitch(&en->settings.lookAtPosOffset, &GET_PLAYER(globalCtx)->actor.focus.pos);
 
     // Checking if player is in range.
     if (ABS(targetHor) > ROT16(en->settings.lookAtDegreesHor) ||
@@ -262,10 +262,10 @@ void Update_HeadWaistRot(NpcMaker *en, GlobalContext* globalCtx)
 
 void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
 {
-    int talkState = func_8010BDBC(&globalCtx->msgCtx);
+    int talkState = Message_GetState(&globalCtx->msgCtx);
 
     // Checking if the player has talked to the NPC.
-    if (func_8002F194(&en->actor, globalCtx))
+    if (Actor_ProcessTalkRequest(&en->actor, globalCtx))
     {
         #if LOGGING == 1
             osSyncPrintf("_%2d: Started talking!", en->npcId);
@@ -278,14 +278,14 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
 
     // The hackiest workaround to make talk mode persist even if message is closed.
     if (en->persistTalk)
-        globalCtx->msgCtx.unk_E3EE = SONGSTATUS_CORRECT;
+        globalCtx->msgCtx.ocarinaMode = SONGSTATUS_CORRECT;
 
     // Trading bug workaround.
     if (en->isTalking)
-        PLAYER->actor.textId = en->actor.textId;
+        GET_PLAYER(globalCtx)->actor.textId = en->actor.textId;
 
     // If message status is "new message", increase textbox count.
-    if (en->isTalking && globalCtx->msgCtx.msgMode == MSGMODE_NEWMSG)
+    if (en->isTalking && globalCtx->msgCtx.msgMode == MSGMODE_TEXT_NEXT_MSG)
         en->textboxNum++;
 
     // Overwrite message if custom ID is set.
@@ -304,7 +304,7 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
     }
 
     // If we talked to the NPC, and msgstatus is 3, then textbox is visible.
-    if (en->isTalking && globalCtx->msgCtx.msgMode == MSGMODE_UNK_03)
+    if (en->isTalking && globalCtx->msgCtx.msgMode == MSGMODE_TEXT_STARTING)
     {
         #if LOGGING == 1
             osSyncPrintf("_%2d: Textbox shown!", en->npcId);
@@ -314,7 +314,7 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
     }
 
     // If textbox was displayed, and now the message status is blank, then talking has finished.
-    if (en->textboxDisplayed && (globalCtx->msgCtx.msgMode == MSGMODE_NONE || talkState == MSGSTATUS_EVENT))
+    if (en->textboxDisplayed && (globalCtx->msgCtx.msgMode == MSGMODE_NONE || talkState == TEXT_STATE_EVENT))
     {
         #if LOGGING == 1
             osSyncPrintf("_%2d: _Talking has finished!", en->npcId);
