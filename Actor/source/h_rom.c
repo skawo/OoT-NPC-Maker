@@ -41,7 +41,11 @@ void Rom_LoadObject(int objId, void *dest)
 {
     RomSection obj = Rom_GetObjectROMAddr(objId);
 
-    DmaMgr_SendRequest1(dest, obj.Start, obj.End - obj.Start, "", __LINE__);
+    #ifdef _Z64HDR_MQ_DEBUG_
+        DmaMgr_SendRequest1(dest, obj.Start, obj.End - obj.Start, "", __LINE__);
+    #else
+        DmaMgr_SendRequest1(dest, obj.Start, obj.End - obj.Start);
+    #endif
 }
 
 // Loads data from given object directly from the cartridge (if it's not compressed!)
@@ -67,7 +71,11 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* dest, u32 fileOffs, size_t s
         osSyncPrintf("_Loading 0x%08x bytes from ROM at 0x%08x", size, start);
     #endif    
 
-    DmaMgr_SendRequest1(dest, start, size, "", __LINE__);
+    #ifdef _Z64HDR_MQ_DEBUG_
+        DmaMgr_SendRequest1(dest, start, size, "", __LINE__);
+    #else
+        DmaMgr_SendRequest1(dest, start, size);
+    #endif
 
 }
 
