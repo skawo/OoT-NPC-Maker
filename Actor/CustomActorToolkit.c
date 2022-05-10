@@ -14,7 +14,6 @@
 #include "source/init.c"
 #include "source/draw.c"
 #include "source/h_data.c"
-#include "source/h_debug.c"
 #include "source/h_doors.c"
 #include "source/h_movement.c"
 #include "source/h_rom.c"
