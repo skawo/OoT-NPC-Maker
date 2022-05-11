@@ -83,6 +83,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.AFFECTED_BY_LENS:
                         case (int)Lists.SetSubTypes.INVISIBLE:
                         case (int)Lists.SetSubTypes.CASTS_SHADOW:
+                        case (int)Lists.SetSubTypes.EXISTS_IN_ALL_ROOMS:
                         case (int)Lists.SetSubTypes.PLAYER_ANIMATE_MODE:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
