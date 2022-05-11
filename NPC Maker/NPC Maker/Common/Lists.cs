@@ -549,6 +549,7 @@ namespace NPC_Maker
             IS_ALWAYS_ACTIVE,
             IS_ALWAYS_DRAWN,
             REACTS_IF_ATTACKED,
+            EXISTS_IN_ALL_ROOMS,
 
             GRAVITY_FORCE,
             MOVEMENT_PATH_ID,

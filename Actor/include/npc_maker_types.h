@@ -55,8 +55,11 @@ typedef struct NpcSettings
 
     u8 visibleWithLens;
     u8 invisible;
+    u8 existsInAllRooms;
     u8 numVars;
+
     u8 numFVars;
+    u8 pad[3];
 
     u16 objectId;
     u16 lookAtDegreesVert;

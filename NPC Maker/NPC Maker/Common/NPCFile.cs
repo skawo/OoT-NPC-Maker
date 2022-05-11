@@ -120,6 +120,8 @@ namespace NPC_Maker
         public byte NumVars { get; set; }
         public byte NumFVars { get; set; }
 
+        public bool ExistInAllRooms { get; set; } 
+
         public NPCEntry()
         {
             NPCName = "";
@@ -142,6 +144,7 @@ namespace NPC_Maker
             LookAtDegreesHorizontal = 0;
             LookAtPositionOffsets = new float[] { 0, 0, 0 };
 
+            ExistInAllRooms = false;
             HasCollision = false;
             FadeOut = false;
             Alpha = 255;
@@ -316,6 +319,7 @@ namespace NPC_Maker
             SCRIPTVARS,
             SCRIPTFVARS,
             ROAMMAX,
+            EXISTALLROOMS,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -438,6 +442,7 @@ namespace NPC_Maker
                 case Members.SCRIPTFVARS: NumFVars = Convert.ToByte(Value); break;
 
                 case Members.ROAMMAX: MaxDistRoam = Convert.ToUInt16(Value); break;
+                case Members.EXISTALLROOMS: ExistInAllRooms = Convert.ToBoolean(Value); break;
 
                 default: break;
             }
