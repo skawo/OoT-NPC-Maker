@@ -361,6 +361,9 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
         if (en->settings.visibleWithLens)
             en->actor.flags |= DRAWN_WITH_LENS_MASK;
 
+        if (en->settings.existsInAllRooms)
+            en->actor.room = -1;
+
         en->actor.flags |= NO_LIGHT_BIND;
 
         en->actor.targetMode = en->settings.targetDistance;

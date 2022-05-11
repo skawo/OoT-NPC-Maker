@@ -754,6 +754,18 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             
             break;
         }
+        case SET_EXISTS_IN_ALL_ROOMS:
+        {
+            bool val = Scripts_GetBool(en, globalCtx, in);
+            en->settings.existsInAllRooms = val;
+            
+            if (en->settings.existsInAllRooms)
+                en->actor.room = -1;
+            else
+                en->actor.room = globalCtx->roomCtx.curRoom.num;
+
+            break;
+        }
         case SET_CASTS_SHADOW:
         {
             bool val = Scripts_GetBool(en, globalCtx, in);

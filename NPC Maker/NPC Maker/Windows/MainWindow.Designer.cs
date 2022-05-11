@@ -282,6 +282,7 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -1235,6 +1236,7 @@
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
+            this.Tab3_BehaviorData.Controls.Add(this.checkBox1);
             this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_ScriptsFVar);
             this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_ScriptsVar);
             this.Tab3_BehaviorData.Controls.Add(this.Lbl_ScriptsFVars);
@@ -3456,6 +3458,18 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(584, 237);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(103, 17);
+            this.checkBox1.TabIndex = 87;
+            this.checkBox1.Tag = "EXISTALLROOMS";
+            this.checkBox1.Text = "Exist in all rooms";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3811,6 +3825,7 @@
         private System.Windows.Forms.PictureBox MsgPreview;
         private System.Windows.Forms.ToolStripMenuItem improveMessagePreviewReadabilityToolStripMenuItem;
         private System.Windows.Forms.Panel PanelMsgPreview;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
