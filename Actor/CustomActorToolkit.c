@@ -1,10 +1,10 @@
 #define ZZROMTOOL 0
-#define LOG_TO_SCREEN 0
 #define LOGGING 0
 #define EXDLIST_EDITOR 0
 #define DEBUG_STRUCT 0
 #define LOG_VERSION 0
 #define COLLISION_VIEWER 1
+#define DIRECT_ROM_LOAD 0
 
 #include "source/npc_maker.c"
 #include "source/scripts.c"
