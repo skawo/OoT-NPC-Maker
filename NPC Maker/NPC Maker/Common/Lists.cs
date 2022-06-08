@@ -414,6 +414,7 @@ namespace NPC_Maker
             PLAYER_BEANS,
             PLAYER_SEEDS,
             EXT_VAR,
+            EXT_VARF,
 
             STICK_X,
             STICK_Y,
@@ -564,6 +565,7 @@ namespace NPC_Maker
             DLIST_VISIBILITY,
             CAMERA_TRACKING_ON,
             EXT_VAR,
+            EXT_VARF,
             TIME_OF_DAY,
             ATTACKED_EFFECT,
             MOVEMENT_TYPE,
@@ -627,6 +629,7 @@ namespace NPC_Maker
             ANIMATION_END,
             PLAYER_ANIMATION_END,
             EXT_VAR,
+            EXT_VARF,
         }
 
         public enum EffectsIfAttacked

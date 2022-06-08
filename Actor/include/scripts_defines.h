@@ -230,6 +230,7 @@ typedef enum SetSubId
     SET_DLIST_VISIBILITY,
     SET_CAMERA_TRACKING_ON,
     SET_EXT_VAR,
+    SET_EXT_VARF,
     SET_TIME_OF_DAY,
     SET_ATTACKED_EFFECT,
     SET_MOVEMENT_TYPE,
@@ -298,6 +299,7 @@ typedef enum IfWhileSubId
     IF_PLAYER_BEANS,
     IF_PLAYER_SEEDS,
     IF_EXT_VAR,
+    IF_EXT_VARF,
 
     IF_STICK_X,
     IF_STICK_Y,
@@ -357,6 +359,7 @@ typedef enum AwaitSubId
     AWAIT_ANIMATION_END,
     AWAIT_PLAYER_ANIMATION_END,
     AWAIT_EXT_VAR,
+    AWAIT_EXT_VARF,
 
 } AwaitSubId;
 
