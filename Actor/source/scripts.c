@@ -383,6 +383,19 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
                 
             break;
         }
+        case IF_EXT_VARF:
+        {
+            ScrInstrExtVarIf* instr = (ScrInstrExtVarIf*)in;
+            u32 actor_id = Scripts_GetVarval(en, globalCtx, instr->actorNumVarType, instr->actorNum, false);
+            NpcMaker* ex_actor = Scene_GetNpcMakerByID(en, globalCtx, actor_id);
+
+            if (ex_actor == NULL)
+                branch = in->falseInstrNum;
+            else
+                branch = Scripts_IfExtVar(en, globalCtx, ex_actor->scriptFVars[instr->extVarNum - 1], in, FLOAT);
+                
+            break;
+        }
 
         case IF_DAMAGED_BY:
         {
@@ -550,6 +563,16 @@ bool Scripts_InstructionAwait(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
             NpcMaker* exActor = Scene_GetNpcMakerByID(en, globalCtx, actor_id);
 
             conditionMet = Scripts_AwaitValue(en, globalCtx, exActor->scriptVars[instr->extVarNum - 1], INT32, instr->condition, instr->varType, instr->value); break;
+            break;
+        }
+        case AWAIT_EXT_VARF: 
+        {
+            ScrInstrExtVarAwait* instr = (ScrInstrExtVarAwait*)in;
+
+            u32 actor_id = Scripts_GetVarval(en, globalCtx, instr->actorNumVarType, instr->actorNum, false);
+            NpcMaker* exActor = Scene_GetNpcMakerByID(en, globalCtx, actor_id);
+
+            conditionMet = Scripts_AwaitValue(en, globalCtx, exActor->scriptFVars[instr->extVarNum - 1], FLOAT, instr->condition, instr->varType, instr->value); break;
             break;
         }
         case SUBT_GLOBAL8:
@@ -1016,6 +1039,21 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
                                     Scripts_GetVarval(en, globalCtx, instr->varType, instr->value, true), 
                                     instr->operator, 
                                     INT32);
+            }
+            break;
+        }
+        case SET_EXT_VARF:
+        {
+            ScrInstrExtVarSet* instr = (ScrInstrExtVarSet*)in;
+            u32 actorId = Scripts_GetVarval(en, globalCtx, instr->actorNumVarType, instr->actorNum, false);
+            NpcMaker* exActor = Scene_GetNpcMakerByID(en, globalCtx, actorId);
+
+            if (exActor != NULL)
+            {
+                Scripts_MathOperation(&exActor->scriptFVars[instr->extVarNum - 1], 
+                                    Scripts_GetVarval(en, globalCtx, instr->varType, instr->value, true), 
+                                    instr->operator, 
+                                    FLOAT);
             }
             break;
         }

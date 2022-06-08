@@ -49,6 +49,7 @@ namespace NPC_Maker.Scripts
                                 return new InstructionAwait((byte)SubID, new ScriptVarVal(), Lists.ConditionTypes.EQUALTO);
                             }
                         case (int)Lists.AwaitSubTypes.TEXTBOX_ON_SCREEN:
+                        case (int)Lists.AwaitSubTypes.TEXTBOX_DRAWING:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
 
@@ -114,6 +115,7 @@ namespace NPC_Maker.Scripts
                                 return new InstructionAwait((byte)SubID, Val, Condition);
                             }
                         case (int)Lists.AwaitSubTypes.EXT_VAR:
+                        case (int)Lists.AwaitSubTypes.EXT_VARF:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
 
