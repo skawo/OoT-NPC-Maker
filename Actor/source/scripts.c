@@ -1443,13 +1443,23 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     }
 
     // Caculate movement vector, add it to the position and rotate towards the goal.
-    Vec3f movVec = Movement_CalcVector(&ACTOR->world.pos, ENDPOS, SPEED);
-    Math_Vec3f_Sum(&ACTOR->world.pos, &movVec, &ACTOR->world.pos);
+
+    if (!in->ignoreY)
+    {
+        Vec3f movVec = Movement_CalcVector(&ACTOR->world.pos, ENDPOS, SPEED);
+        Math_Vec3f_Sum(&ACTOR->world.pos, &movVec, &ACTOR->world.pos);
+    }
+    else
+    {
+        en->actor.speedXZ = SPEED;
+		ACTOR->world.rot.y = Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS);
+        Movement_Apply(ACTOR, NULL);
+    }
 
     // Calculate if we're there yet.
     float distFromEnd = Movement_CalcDist(&ACTOR->world.pos, ENDPOS, in->ignoreY);
     float distFromEndXZ = in->ignoreY ? distFromEnd : Movement_CalcDist(&ACTOR->world.pos, ENDPOS, true);
-
+	
     // If we aren't there yet, rotate towards the destination and stop executing script for this frame.
     if (distFromEnd > MOVEMENT_DISTANCE_EQUAL_MARGIN)
     {
@@ -1461,6 +1471,8 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     }
     else
     {
+		en->actor.speedXZ = 0;
+		
         // Handle switching the animation back to idle if this is the NPC Maker actor.
         if (isNpcMaker)
         {
