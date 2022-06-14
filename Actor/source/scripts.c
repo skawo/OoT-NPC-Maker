@@ -369,6 +369,11 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             branch = Scripts_IfValue(en, globalCtx, en->actor.xzDistToPlayer - PLAYER->cylinder.dim.radius - en->settings.collisionRadius, in, FLOAT); 
             break;
         }
+        case IF_DISTANCE_FROM_REF_ACTOR:
+        {
+            branch = Scripts_IfValue(en, globalCtx, Math_Vec3f_DistXZ(&en->actor.world.pos, &en->refActor->world.pos), in, FLOAT);
+            break;     
+        }
 
         case IF_EXT_VAR:
         {
