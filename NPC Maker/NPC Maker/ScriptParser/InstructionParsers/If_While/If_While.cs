@@ -161,6 +161,7 @@ namespace NPC_Maker.Scripts
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.DISTANCE_FROM_PLAYER:
+                        case (int)Lists.IfSubTypes.DISTANCE_FROM_REF_ACTOR:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 

@@ -432,6 +432,7 @@ namespace NPC_Maker
             TARGETTED,
 
             DISTANCE_FROM_PLAYER,
+            DISTANCE_FROM_REF_ACTOR,
             LENS_OF_TRUTH_ON,
             DAMAGED_BY,
             ROOM_ID,

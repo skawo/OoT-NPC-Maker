@@ -104,12 +104,16 @@ namespace NPC_Maker.Scripts
 
                                         ScriptVarVal FailItem = new ScriptVarVal(-1);
 
+                                        bool PutAtEnd = false;
+
                                         if (SplitTrFailItem[0].ToUpper().Trim() != Lists.Keyword_TradeDefault)
-                                            FailItem = ScriptHelpers.GetScriptVarVal(SplitTrFailItem, 0, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitLine));
+                                            FailItem = ScriptHelpers.GetScriptVarVal(SplitTrFailItem, 0, typeof(Lists.TradeItems), ParseException.UnrecognizedTradeItem(SplitTrFailItem));
+                                        else
+                                            PutAtEnd = true;
 
                                         ScriptHelpers.Helper_GetAdultChildTextIds(SplitTrFailItem, ref TextID_Adult_Fail, ref TextID_Child_Fail, Entry.Messages);
 
-                                        Failure.Add(new TradeSetting(FailItem, TextID_Adult_Fail, TextID_Child_Fail));
+                                        Failure.Insert(PutAtEnd ? Failure.Count : 0, new TradeSetting(FailItem, TextID_Adult_Fail, TextID_Child_Fail));
 
                                         LineNo++;
                                         SplitTrFailItem = Lines[LineNo].Split(' ');
@@ -144,14 +148,14 @@ namespace NPC_Maker.Scripts
 
                 LineNo = LineNoEnd;
 
-                return new InstructionTrade((byte)Lists.Instructions.TRADE, Correct, Failure.OrderByDescending(x => x.Item).ToList(), Talk_TextID_Adult, Talk_TextID_Child);
+                return new InstructionTrade((byte)Lists.Instructions.TRADE, Correct, Failure, Talk_TextID_Adult, Talk_TextID_Child);
             }
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
                 return new InstructionNop();
             }
-            catch (Exception)
+            catch (Exception exx)
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
                 return new InstructionNop();
