@@ -367,8 +367,8 @@ namespace NPC_Maker.Scripts
 
                     if (End < 0)
                     {
-                        Lines.RemoveAt(AndLineIndex);
                         outScript.ParseErrors.Add(If ? ParseException.IfNotClosed(Lines[AndLineIndex]) : ParseException.WhileNotClosed(Lines[AndLineIndex]));
+                        Lines.RemoveAt(AndLineIndex);
                     }
                     else
                     {

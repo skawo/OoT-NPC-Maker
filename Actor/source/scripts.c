@@ -1384,6 +1384,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     #define NPCACTOR ((NpcMaker*)script->tempValues[0])
     #define ENDPOS ((Vec3f*)&script->fTempValues[1])
     #define SPEED (script->fTempValues[4])
+    #define LASTDIST (script->fTempValues[5])
 
     #if LOGGING == 1
         osSyncPrintf("_%2d: POSITION", en->npcId);
@@ -1413,6 +1414,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
             Math_Vec3f_Copy(ENDPOS, &pos);
 
             SPEED = Scripts_GetVarval(en, globalCtx, in->speedType, in->speed, true);
+			LASTDIST = Movement_CalcDist(&ACTOR->world.pos, ENDPOS, in->ignoreY);
         }
     }
 
@@ -1459,10 +1461,14 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     // Calculate if we're there yet.
     float distFromEnd = Movement_CalcDist(&ACTOR->world.pos, ENDPOS, in->ignoreY);
     float distFromEndXZ = in->ignoreY ? distFromEnd : Movement_CalcDist(&ACTOR->world.pos, ENDPOS, true);
-	
+    float distDiff = ABS(LASTDIST - distFromEnd);
+    
     // If we aren't there yet, rotate towards the destination and stop executing script for this frame.
-    if (distFromEnd > MOVEMENT_DISTANCE_EQUAL_MARGIN)
+    // If too little progress was made, we got stuck somewhere and should stop moving.
+    if (distFromEnd > MOVEMENT_DISTANCE_EQUAL_MARGIN && distDiff >= (SPEED / 10))
     {
+        LASTDIST = distFromEnd;
+
         // Only rotate if there's actual XZ distance to go, though.
         if (distFromEndXZ != 0)
             Movement_RotTowards(&ACTOR->shape.rot.y, Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS), 0);
@@ -1490,6 +1496,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     #undef NPCACTOR
     #undef ENDPOS
     #undef SPEED
+    #undef LASTDIST
 }
 
 bool Scripts_InstructionScale(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrScale* in)
