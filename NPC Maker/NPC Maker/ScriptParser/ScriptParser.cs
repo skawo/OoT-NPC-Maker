@@ -374,10 +374,21 @@ namespace NPC_Maker.Scripts
                     {
                         Second = Second.ReplaceFirstExpr($"{Lists.Keyword_And} ", Repl, RegexOptions.IgnoreCase);
 
+                        int Else = GetCorrespondingElse(Lines, AndLineIndex, End);
+
                         Lines.RemoveAt(AndLineIndex);
                         Lines.Insert(AndLineIndex, First);
                         Lines.Insert(End, If ? Lists.Keyword_EndIf : Lists.Keyword_EndWhile);
                         Lines.Insert(AndLineIndex + 1, Second);
+
+                        if (Else != -1)
+                        {
+                            string JumpElseLabel = ScriptDataHelpers.RandomString(this, 5);
+
+                            Lines.Insert(Else + 2, $"ANDELSE_{JumpElseLabel}:");
+                            Lines.Insert(End + 3, Lists.Keyword_Else);
+                            Lines.Insert(End + 4, $"{Lists.Instructions.GOTO} ANDELSE_{JumpElseLabel}");
+                        }
                     }
                 }
 
