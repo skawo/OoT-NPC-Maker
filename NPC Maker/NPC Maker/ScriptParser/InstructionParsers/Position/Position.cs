@@ -34,8 +34,8 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.PositionSubTypes.MOVE_TO:
                         case (int)Lists.PositionSubTypes.MOVE_BY:
                         case (int)Lists.PositionSubTypes.DIRECTION_MOVE_BY:
-                        case (int)Lists.PositionSubTypes.MOVE_BY_REFACTOR:
-                        case (int)Lists.PositionSubTypes.DIRECTION_MOVE_BY_REFACTOR:
+                        case (int)Lists.PositionSubTypes.MOVE_BY_REF_ACTOR:
+                        case (int)Lists.PositionSubTypes.DIRECTION_MOVE_BY_REF_ACTOR:
                             break;
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
