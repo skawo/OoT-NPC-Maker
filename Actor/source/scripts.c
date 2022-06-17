@@ -1472,12 +1472,14 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     if (ACTOR == NULL)
         return Scripts_FreeAndContinue(script);  
 
+    // If the actor's ID is the same as the actor's executing the script, then conclude they're an NPC Maker NPC.
     bool isNpcMaker = (ACTOR->id == en->actor.id);
 
-    // If actor is an NPC Maker actor, but can't move, we do nothing until he can (this is useful for stuff like getting hit)
+    // If actor is an NPC Maker actor, but can't move, we do nothing until it can (this is useful for stuff like getting hit)
     if (isNpcMaker && !NPCACTOR->canMove)
         return SCRIPT_STOP;
 
+    // If type is set, just directly set the position.
     if (in->subId == POS_SET)
         ACTOR->world.pos = *ENDPOS;
 
