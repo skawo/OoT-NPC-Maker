@@ -124,7 +124,7 @@ void Draw_Lights(NpcMaker* en, GlobalContext* globalCtx, Vec3f* translation)
 {
     Vec3f transl_in_dir;
     Math_Vec3s_ToVec3f(&transl_in_dir, &en->settings.lightPosOffset);
-    Math_AffectMatrixByRot(en->actor.shape.rot.y, &transl_in_dir);
+    Math_AffectMatrixByRot(en->actor.shape.rot.y, &transl_in_dir, NULL);
 
     if (en->settings.generatesLight)
     {

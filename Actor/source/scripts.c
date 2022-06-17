@@ -140,11 +140,36 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
 
     Vec3f pos = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
 
-    if (in->posType == POSTYPE_DIRECTION)
-        Math_AffectMatrixByRot(en->actor.shape.rot.y, &pos);
+    switch (in->posType)
+    {
+        case POSTYPE_DIRECTION:
+        {
+            Math_AffectMatrixByRot(en->actor.shape.rot.y, &pos, NULL);
+            Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
+            break;
+        }
+        case POSTYPE_REFACTOR_RELATIVE_DIRECTION:
+        {
+            Math_AffectMatrixByRot(en->refActor->shape.rot.y, &pos, NULL);
+            Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
+            break;          
+        }
+        case POSTYPE_RELATIVE:
+        {
+            if (in->type != PARTICLE_FIRE_TAIL)
+                Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
 
-    if (in->posType && in->type != PARTICLE_FIRE_TAIL)
-        Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
+            break;
+        }
+        case POSTYPE_REFACTOR_RELATIVE:
+        {
+            if (in->type != PARTICLE_FIRE_TAIL)
+                Math_Vec3f_Sum(&pos, &en->refActor->world.pos, &pos); 
+                
+            break;
+        }
+        default: break;
+    }
 
     Vec3f accel = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->accelXType, in->accelYType, in->accelZType}, (ScriptVarval[]){in->accelX, in->accelY, in->accelZ}, 100);
     Vec3f vel = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->velXType, in->velYType, in->velZType}, (ScriptVarval[]){in->velX, in->velY, in->velZ}, 100);
@@ -173,7 +198,18 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
         case PARTICLE_BURN_MARK:        EffectSsDeadDs_Spawn(globalCtx, &pos, &vel, &accel, scale, scaleUpd, var, life); break;
         case PARTICLE_RING:             EffectSsBlast_Spawn(globalCtx, &pos, &vel, &accel, &prim, &env, scale, scaleUpd, var, life); break;
         case PARTICLE_FLAME:            EffectSsDeadDb_Spawn(globalCtx, &pos, &vel, &accel, scale, scaleUpd, prim.r, prim.g, prim.b, prim.a, env.r, env.g, env.b, env.a, life, 0); break;
-        case PARTICLE_FIRE_TAIL:        EffectSsFireTail_Spawn(globalCtx, in->posType ? &en->actor : NULL, &pos, scale, &vel, 0, &prim, &env, var, -1, life); break;
+        case PARTICLE_FIRE_TAIL:        
+        {
+            Actor* a = NULL;
+
+            if (in->posType && in->posType < 3)
+                a = &en->actor;
+            else if (in->posType >= 3)
+                a = en->refActor;
+
+            EffectSsFireTail_Spawn(globalCtx, a, &pos, scale, &vel, 0, &prim, &env, var, -1, life); 
+            break;
+        }
         case PARTICLE_HIT_MARK_FLASH:     
         case PARTICLE_HIT_MARK_DUST:  
         case PARTICLE_HIT_MARK_BURST:  
@@ -220,7 +256,7 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
         {
             script->jumpToWhenSpottedInstrNum = in->foundInstrNum;  
 
-            Math_AffectMatrixByRot(en->actor.shape.rot.y + en->limbRotA, &vel);         
+            Math_AffectMatrixByRot(en->actor.shape.rot.y + en->limbRotA, &vel, NULL);         
             EffectSsSolderSrchBall_Spawn(globalCtx, &pos, &vel, &accel, 0, &script->spotted);
             break;
         }
@@ -1405,11 +1441,26 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
             // Position
             Vec3f pos = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->xType, in->yType, in->zType}, (ScriptVarval[]){in->x, in->y, in->z}, 1);
 
-            if (in->subId == POS_MOVE_BY_DIRECTION)
-                Math_AffectMatrixByRot(en->actor.shape.rot.y, &pos);
-
-            if (in->subId >= POS_MOVE_BY)
-                Math_Vec3f_Sum(&pos, &ACTOR->world.pos, &pos);
+            switch (in->subId)
+            {
+                case POS_MOVE_BY:
+                    Math_Vec3f_Sum(&pos, &ACTOR->world.pos, &pos); break;
+                case POS_MOVE_BY_DIRECTION:
+                {
+                    Math_AffectMatrixByRot(en->actor.shape.rot.y, &pos, NULL);
+                    Math_Vec3f_Sum(&pos, &ACTOR->world.pos, &pos); 
+                    break;
+                }
+                case POS_MOVE_BY_RELATIVE:
+                    Math_Vec3f_Sum(&pos, &en->refActor->world.pos, &pos); break;
+                case POS_MOVE_BY_RELATIVE_DIRECTION:
+                {
+                    Math_AffectMatrixByRot(en->refActor->shape.rot.y, &pos, en->refActor);
+                    Math_Vec3f_Sum(&pos, &en->refActor->world.pos, &pos); 
+                    break;           
+                }
+                default: break;
+            }
 
             Math_Vec3f_Copy(ENDPOS, &pos);
 
@@ -1723,9 +1774,21 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
     switch (posType)
     {
         case POSTYPE_DIRECTION:
-            Math_AffectMatrixByRot(en->actor.shape.rot.y, &position);
+        {
+            Math_AffectMatrixByRot(en->actor.shape.rot.y, &position, NULL);
+            Math_Vec3f_Sum(&position, &en->actor.world.pos, &position);
+            break;
+        }
+        case POSTYPE_REFACTOR_RELATIVE_DIRECTION:
+        {
+            Math_AffectMatrixByRot(en->refActor->shape.rot.y, &position, NULL);
+            Math_Vec3f_Sum(&position, &en->actor.world.pos, &position);
+            break;          
+        }
         case POSTYPE_RELATIVE:
             Math_Vec3f_Sum(&position, &en->actor.world.pos, &position); break;
+        case POSTYPE_REFACTOR_RELATIVE:
+            Math_Vec3f_Sum(&position, &en->refActor->world.pos, &position); break;
         default: break;
     }
 
