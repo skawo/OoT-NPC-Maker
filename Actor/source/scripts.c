@@ -1498,7 +1498,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     }
 
     // Caculate movement vector, add it to the position and rotate towards the goal.
-
+    // In both cases, if the speed exceeds the movement distance, we automatically set the goal as the current position.
     if (!in->ignoreY)
     {
         Vec3f movVec = Movement_CalcVector(&ACTOR->world.pos, ENDPOS, SPEED);
@@ -1506,9 +1506,15 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     }
     else
     {
-        en->actor.speedXZ = SPEED;
-		ACTOR->world.rot.y = Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS);
-        Movement_Apply(ACTOR, NULL);
+        ACTOR->world.rot.y = Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS);
+
+        if (LASTDIST < SPEED)
+            ACTOR->world.pos = *ENDPOS;
+        else
+        {
+            en->actor.speedXZ = SPEED;
+            Movement_Apply(ACTOR, NULL);
+        }
     }
 
     // Calculate if we're there yet.
