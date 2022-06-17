@@ -1506,9 +1506,15 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     }
     else
     {
-        en->actor.speedXZ = SPEED;
-		ACTOR->world.rot.y = Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS);
-        Movement_Apply(ACTOR, NULL);
+        ACTOR->world.rot.y = Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS);
+
+        if (LASTDIST < SPEED)
+            ACTOR->world.pos = ENDPOS;
+        else
+        {
+            en->actor.speedXZ = SPEED;
+            Movement_Apply(ACTOR, NULL);
+        }
     }
 
     // Calculate if we're there yet.
