@@ -1,0 +1,233 @@
+{
+  "Version": 2,
+  "Entries": [
+    {
+      "NPCName": "FollowGoron",
+      "IsNull": false,
+      "ObjectID": 201,
+      "Hierarchy": 65264,
+      "HierarchyType": 0,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 1,
+      "LookAtType": 0,
+      "HeadLimb": 10,
+      "HeadHorizAxis": 2,
+      "HeadVertAxis": 4,
+      "WaistLimb": 9,
+      "WaistHorizAxis": 1,
+      "WaistVertAxis": 3,
+      "LookAtDegreesVertical": 60,
+      "LookAtDegreesHorizontal": 80,
+      "LookAtPositionOffsets": [
+        0.0,
+        490.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": true,
+      "IsAlwaysDrawn": true,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": false,
+      "SfxIfAttacked": -1,
+      "EffectIfAttacked": 7,
+      "OpensDoors": true,
+      "CollisionRadius": 20,
+      "CollisionHeight": 20,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 40,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": true,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 0,
+      "TargetLimb": 10,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 50.0,
+      "MovementType": 2,
+      "MovementDistance": 30,
+      "MovementSpeed": 5.0,
+      "GravityForce": 1.0,
+      "PathID": 0,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": false,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 8.4,
+      "TimedPathStart": 8738,
+      "TimedPathEnd": 58345,
+      "MaxDistRoam": 0,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "0, 0, 0, 0",
+      "LightRadius": 0,
+      "AnimationType": 0,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 8656,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255
+        },
+        {
+          "Name": "Walking",
+          "Address": 10664,
+          "ObjID": -1,
+          "Speed": 2.0,
+          "StartFrame": 0,
+          "EndFrame": 255
+        },
+        {
+          "Name": "Attacked",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255
+        },
+        {
+          "Name": "Attack",
+          "Address": 11648,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "#define SHOWING_MESSAGE var.1 \r\n#define CURRENTLY_BREAKING var.2  \r\n\r\nif SHOWING_MESSAGE == 0 and CURRENTLY_BREAKING == 0\r\n    talk TalkMsg\r\n       set talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       set talk_mode false\r\n    endtalk\r\nendif\r\n\r\n\r\n",
+          "ParseErrors": [],
+          "Name": "Talking"
+        },
+        {
+          "Text": "#define SHOWING_MESSAGE var.1\r\n#define CURRENTLY_BREAKING var.2  \r\n\r\nif CURRENTLY_BREAKING == 0\r\n\r\n    // Warp to player if he gets too far away\r\n    if DISTANCE_FROM_PLAYER > 250\r\n\r\n        set has_collision false\r\n        set GRAVITY_FORCE = 0\r\n\r\n        set ref_actor player\r\n        position set self actor.posX actor.posY actor.posZ\r\n\r\n       particle DUST\r\n            duration 100\r\n            scale 1500\r\n            position direction 0 0 0\r\n            color1 255 255 255 255\r\n            color2 255 128 255 255\r\n            acceleration random.-30->30 random.-100->0 random.-30->30\r\n            velocity random.-30->30 random.-100->0 random.-30->30\r\n       endparticle \r\n\r\n        await frames 4\r\n        set has_collision true\r\n        set GRAVITY_FORCE = -1\r\n\r\n    endif\r\n\r\nendif\r\n\r\nif SHOWING_MESSAGE == 0\r\n\r\n    // Break a boulder if D-Pad Down is pressed\r\n    if BUTTON_PRESSED BTN_DDOWN\r\n\r\n        // Set ref_actor to closest Bombable Boulder...\r\n        set REF_ACTOR actor_id OBJ_BOMBIWA\r\n\r\n        // If one is found, and it's less than 300 units away from the player...\r\n        if ref_actor_exists and distance_from_ref_actor < 300\r\n\r\n                set CURRENTLY_BREAKING = 1\r\n\r\n                // Stop following the player\r\n                set MOVEMENT_TYPE none\r\n\r\n                // Move to -110 units in front of the bombable boulder in the direction it's facing\r\n                play sfx NA_SE_EN_GOLON_WAKE_UP\r\n                set REF_ACTOR actor_id OBJ_BOMBIWA\r\n                position move_by_refactor self 0 0 -110 2 ignore_y\r\n                face self towards actor_id OBJ_BOMBIWA\r\n        \r\n                // Play the punch animation, wait for it to end, reset animation\r\n                set no_auto_anim true\r\n                play sfx NA_SE_EN_GOLON_CRY\r\n                set animation Attack once\r\n                await animation_end\r\n                set no_auto_anim false\r\n                set animation Idle\r\n\r\n                // Destroy the bombable boulder while playing animations\r\n                play sfx NA_SE_IT_BOMB_EXPLOSION\r\n                set REF_ACTOR actor_id OBJ_BOMBIWA\r\n\r\n                particle DISPLAY_LIST\r\n                    scale 12\r\n                    SCALE_UPDATE 2\r\n                    DURATION 100\r\n                    COUNT 12\r\n                    DLIST BombableBoulder\r\n                    position absolute actor.posX actor.posY actor.posZ \r\n                endparticle \r\n\r\n                particle EXPLOSION\r\n                    scale 500\r\n                    SCALE_UPDATE 21\r\n                    ACCELERATION 0 10 0\r\n                    VELOCITY 0 10 0\r\n                    position absolute actor.posX actor.posY actor.posZ \r\n                endparticle \r\n\r\n                kill actor_id OBJ_BOMBIWA\r\n                set MOVEMENT_TYPE follow\r\n\r\n                set CURRENTLY_BREAKING = 0\r\n       else\r\n\r\n            set SHOWING_MESSAGE = 1\r\n            play sfx NA_SE_EN_GOLON_WAKE_UP\r\n            show_textbox_sp NothingHere\r\n            await textbox_on_screen false\r\n            set SHOWING_MESSAGE = 0\r\n       endif\r\n    endif\r\nendif\r\n",
+          "ParseErrors": [],
+          "Name": "Follower"
+        }
+      ],
+      "EnvironmentColor": "Transparent",
+      "Segments": [
+        [
+          {
+            "Name": "1",
+            "Address": 52864,
+            "ObjectID": -1
+          },
+          {
+            "Name": "2",
+            "Address": 53888,
+            "ObjectID": -1
+          },
+          {
+            "Name": "3",
+            "Address": 54912,
+            "ObjectID": -1
+          }
+        ],
+        [
+          {
+            "Name": "1",
+            "Address": 56960,
+            "ObjectID": -1
+          }
+        ],
+        [
+          {
+            "Name": "Texture_0",
+            "Address": 0,
+            "ObjectID": -5
+          }
+        ],
+        [
+          {
+            "Name": "Texture_0",
+            "Address": 0,
+            "ObjectID": -5
+          }
+        ],
+        [],
+        [
+          {
+            "Name": "Texture_0",
+            "Address": 0,
+            "ObjectID": -5
+          }
+        ],
+        [],
+        []
+      ],
+      "BlinkPattern": "1,2,3",
+      "TalkPattern": "1",
+      "BlinkSegment": 8,
+      "TalkSegment": 9,
+      "BlinkSpeed": 0,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [
+        {
+          "Name": "BombableBoulder",
+          "Address": 2528,
+          "TransX": 0.0,
+          "TransY": 0.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 20.0,
+          "ShowType": 0,
+          "Limb": 0,
+          "Color": "White",
+          "ObjectID": 355
+        }
+      ],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "TalkMsg",
+          "MessageText": "Let's go!",
+          "Type": 0,
+          "Position": 1
+        },
+        {
+          "Name": "NothingHere",
+          "MessageText": "Nothing to break here, goro!<fade:40>",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "NumVars": 10,
+      "NumFVars": 10,
+      "ExistInAllRooms": false
+    }
+  ],
+  "GlobalHeaders": [
+    {
+      "Text": "#define actor.posX actorf.0x24\r\n#define actor.posY actorf.0x28 \r\n#define actor.posZ actorf.0x2C \r\n#define actor.dirX actor16.0x30 \r\n#define actor.dirY actor16.0x32 \r\n#define actor.dirZ actor16.0x34 \r\n\r\n#define actor.homePosX actorf.0x8 \r\n#define actor.homePosY actorf.0xC \r\n#define actor.homePosZ actorf.0x10 \r\n#define actor.homeDirX actor16.0x12 \r\n#define actor.homeDirY actor16.0x14 \r\n#define actor.homeDirZ actor16.0x16 \r\n                \r\n#define actor.scaleX actorf.0x50 \r\n#define actor.scaleY actorf.0x54 \r\n#define actor.scaleZ actorf.0x58 \r\n\r\n#define actor.velocityX actorf.0x5C \r\n#define actor.velocityY actorf.0x60 \r\n#define actor.velocityZ actorf.0x64 \r\n\r\n#define actor.rotX actor16.0xB4 \r\n#define actor.rotY actor16.0xB6 \r\n#define actor.rotZ actor16.0xB8\r\n",
+      "ParseErrors": [],
+      "Name": ""
+    }
+  ]
+}
