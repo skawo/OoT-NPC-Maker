@@ -413,6 +413,8 @@ typedef enum PositionSubId
     POS_MOVE_TO,
     POS_MOVE_BY,
     POS_MOVE_BY_DIRECTION,
+    POS_MOVE_BY_RELATIVE,
+    POS_MOVE_BY_RELATIVE_DIRECTION,
 } PositionSubId;
 
 typedef enum Scale_SubId
@@ -443,6 +445,8 @@ typedef enum PositionSubType
     POSTYPE_ABSOLUTE,
     POSTYPE_RELATIVE,
     POSTYPE_DIRECTION,
+    POSTYPE_REFACTOR_RELATIVE,
+    POSTYPE_REFACTOR_RELATIVE_DIRECTION,
 } PositionSubType;
 
 typedef enum Particle_TypeId

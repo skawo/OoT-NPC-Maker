@@ -353,7 +353,7 @@ namespace NPC_Maker.Scripts
             return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Lists.ConditionTypes.EQUALTO, EndIf, Else, LabelR);
         }
 
-        private int GetCorrespondingElse(List<string> Lines, int LineSt, int LineEnd)
+        public int GetCorrespondingElse(List<string> Lines, int LineSt, int LineEnd)
         {
             for (int i = LineSt + 1; i < LineEnd; i++)
             {
