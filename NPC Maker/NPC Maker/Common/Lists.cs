@@ -664,8 +664,8 @@ namespace NPC_Maker
             ABSOLUTE = 0,
             RELATIVE = 1,
             DIRECTION = 2,
-            RELATIVE_REFACTOR = 3,
-            DIRECTION_REFACTOR = 4,
+            RELATIVE_REF_ACTOR = 3,
+            DIRECTION_REF_ACTOR = 4,
         }
 
         public enum ConditionTypes
@@ -1559,8 +1559,8 @@ namespace NPC_Maker
             MOVE_TO,
             MOVE_BY,
             DIRECTION_MOVE_BY,
-            MOVE_BY_REFACTOR,
-            DIRECTION_MOVE_BY_REFACTOR,
+            MOVE_BY_REF_ACTOR,
+            DIRECTION_MOVE_BY_REF_ACTOR,
         }
 
         public enum ScaleSubTypes
