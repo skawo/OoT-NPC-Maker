@@ -1509,7 +1509,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
         ACTOR->world.rot.y = Math_Vec3f_Yaw(&ACTOR->world.pos, ENDPOS);
 
         if (LASTDIST < SPEED)
-            ACTOR->world.pos = ENDPOS;
+            ACTOR->world.pos = *ENDPOS;
         else
         {
             en->actor.speedXZ = SPEED;
