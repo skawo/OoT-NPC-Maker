@@ -436,6 +436,21 @@ namespace NPC_Maker
             LENS_OF_TRUTH_ON,
             DAMAGED_BY,
             ROOM_ID,
+
+            CURRENT_STATE,
+        }
+
+        public enum StateTypes
+        {
+            ON_GROUND,
+            TOUCHED_GROUND,
+            LEFT_GROUND,
+            TOUCHING_WALL,
+            TOUCHING_CEILING,
+            IN_WATER,
+            TOUCHED_WATER,
+            ON_GROUND_STRICT,
+            CRUSHED,
         }
 
         public enum ItemSubTypes
@@ -631,6 +646,8 @@ namespace NPC_Maker
             PLAYER_ANIMATION_END,
             EXT_VAR,
             EXT_VARF,
+
+            CURRENT_STATE,
         }
 
         public enum EffectsIfAttacked

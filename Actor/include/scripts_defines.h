@@ -322,6 +322,8 @@ typedef enum IfWhileSubId
 	IF_DAMAGED_BY,
     IF_ROOM_ID,
 
+    IF_CURRENT_STATE,
+
 } IfWhileSubId;
 
 typedef enum AwaitSubId
@@ -361,6 +363,8 @@ typedef enum AwaitSubId
     AWAIT_PLAYER_ANIMATION_END,
     AWAIT_EXT_VAR,
     AWAIT_EXT_VARF,
+
+    AWAIT_CURRENT_STATE,
 
 } AwaitSubId;
 
