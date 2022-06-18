@@ -251,6 +251,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Not a valid mask: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedState(string[] _Line)
+        {
+            return new ParseException("Not a valid state: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedSegmentDataEntry(string[] _Line)
         {
             return new ParseException("Not a valid segment data entry, or segment data entry defined for the wrong segment: ", String.Join(" ", _Line));

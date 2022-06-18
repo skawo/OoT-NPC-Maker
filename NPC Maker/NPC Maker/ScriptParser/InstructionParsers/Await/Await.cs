@@ -128,6 +128,13 @@ namespace NPC_Maker.Scripts
 
                                 return new InstructionAwaitExtVar((byte)SubID, ExtVarNum, Value, NPCID, Condition);
                             }
+                        case (int)Lists.AwaitSubTypes.CURRENT_STATE:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                                var State = ScriptHelpers.GetScriptVarVal(SplitLine, 2, typeof(Lists.StateTypes), ParseException.UnrecognizedState(SplitLine));
+
+                                return new InstructionAwait((byte)SubID, State, Lists.ConditionTypes.EQUALTO);
+                            }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
