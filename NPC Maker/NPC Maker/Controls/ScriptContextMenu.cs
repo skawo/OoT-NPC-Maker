@@ -28,6 +28,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem particlestoolStripMenuItem;
         private static ToolStripMenuItem linkAnimsStripMenuItem;
         private static ToolStripMenuItem damageTypesStripMenuItem;
+        private static ToolStripMenuItem stateTypesStripMenuItem;
 
         public static void MakeContextMenu()
         {
@@ -49,6 +50,7 @@ namespace NPC_Maker
             particlestoolStripMenuItem = new ToolStripMenuItem();
             linkAnimsStripMenuItem = new ToolStripMenuItem();
             damageTypesStripMenuItem = new ToolStripMenuItem();
+            stateTypesStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -59,6 +61,7 @@ namespace NPC_Maker
                                                                     itemsdungeonToolStripMenuItem,
                                                                     itemstradeToolStripMenuItem,
                                                                     damageTypesStripMenuItem,
+                                                                    stateTypesStripMenuItem,
                                                                     playerMasksToolStripMenuItem,
                                                                     ocarinaSongstoolStripMenuItem,
                                                                     particlestoolStripMenuItem,
@@ -72,6 +75,7 @@ namespace NPC_Maker
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
             ContextMenuStrip.Text = "Items";
 
+            stateTypesStripMenuItem.Text = "States";
             functionsToolStripMenuItem.Text = "Functions";
             keywordsToolStripMenuItem.Text = "Keywords";
             itemsToolStripMenuItem.Text = "Inventory items";
@@ -127,6 +131,7 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.PlayerMasks)), playerMasksToolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.OcarinaSongs)), ocarinaSongstoolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), particlestoolStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.StateTypes)), stateTypesStripMenuItem);
         }
 
         private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)

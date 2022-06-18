@@ -197,6 +197,11 @@ namespace NPC_Maker.Scripts
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
+                        case (int)Lists.IfSubTypes.CURRENT_STATE:
+                            {
+                                Instructions.Insert(InsertIdx, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.StateTypes), EndIf, Else, LabelR, ParseException.UnrecognizedState(SplitLine)));
+                                return Instructions;
+                            }
                         case (int)Lists.IfSubTypes.ITEM_BEING_TRADED:
                             {
                                 Instructions.Insert(InsertIdx, H_IfWhileEnum(ID, SubID, SplitLine, typeof(Lists.TradeItems), EndIf, Else, LabelR, ParseException.UnrecognizedTradeItem(SplitLine)));

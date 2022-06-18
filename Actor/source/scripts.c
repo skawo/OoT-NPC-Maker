@@ -321,6 +321,13 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
         case IF_STICK_X:                        branch = Scripts_IfValue(en, globalCtx, globalCtx->state.input->cur.stick_x, in, INT8); break;
         case IF_STICK_Y:                        branch = Scripts_IfValue(en, globalCtx, globalCtx->state.input->cur.stick_y, in, INT8); break;
 
+        case IF_CURRENT_STATE:                  
+        {
+            bool t = en->actor.bgCheckFlags & (1 << (int)Scripts_GetVarval(en, globalCtx, in->vartype, in->value, false));
+            branch = (t ? in->trueInstrNum : in->falseInstrNum);
+            break;
+        }
+
         case IF_ITEM_BEING_TRADED:              
         {
             // If we're not in the trading radius, and not talking, then we're definitely not trading anything.
@@ -614,6 +621,11 @@ bool Scripts_InstructionAwait(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
             NpcMaker* exActor = Scene_GetNpcMakerByID(en, globalCtx, actor_id);
 
             conditionMet = Scripts_AwaitValue(en, globalCtx, exActor->scriptFVars[instr->extVarNum - 1], FLOAT, instr->condition, instr->varType, instr->value); break;
+            break;
+        }
+        case AWAIT_CURRENT_STATE:
+        {
+            conditionMet = en->actor.bgCheckFlags & (1 << (int)Scripts_GetVarval(en, globalCtx, in->varType, in->value, false));
             break;
         }
         case SUBT_GLOBAL8:
