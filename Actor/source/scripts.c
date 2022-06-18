@@ -120,7 +120,7 @@ bool Scripts_Execute(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* scr
         case PARTICLE:           return Scripts_InstructionParticle(en, globalCtx, script, (ScrInstrParticle*)instruction); break;
         case FORCE_TALK:         en->isTalking = true; globalCtx->talkWithPlayer(globalCtx, &en->actor); script->curInstrNum++; return SCRIPT_CONTINUE;
         case CLOSE_TEXTBOX:      globalCtx->msgCtx.msgMode = MSGMODE_CLOSING; script->curInstrNum++; return SCRIPT_CONTINUE;
-        case NOP:                script->curInstrNum++; return SCRIPT_STOP;
+        case NOP:                script->curInstrNum++; return SCRIPT_CONTINUE;
         default:                                
         {
             #if LOGGING == 1
