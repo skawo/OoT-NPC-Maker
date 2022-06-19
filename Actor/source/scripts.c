@@ -91,45 +91,76 @@ void Scripts_ResponseInstruction(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     }
 }
 
+void* ScriptFuncs[] = 
+{   &Scripts_InstructionIf,                 // IF
+    &Scripts_InstructionIf,                 // WHILE
+    &Scripts_InstructionAwait,              // AWAIT
+    &Scripts_InstructionSet,                // SET
+    &Scripts_InstructionNop,                // TALK
+    &Scripts_InstructionForceTalk,          // FORCE_TALK
+    &Scripts_InstructionEnableTrade,        // TRADE
+    &Scripts_InstructionEnableTalking,      // ENABLE_TALKING
+    &Scripts_InstructionShowTextbox,        // SHOW_TEXTBOX
+    &Scripts_InstructionShowTextbox,        // SHOW_TEXTBOX_SP
+    &Scripts_InstructionCloseTextbox,       // CLOSE_TEXTBOX
+    &Scripts_InstructionItem,               // ITEM
+    &Scripts_InstructionPlay,               // PLAY
+    &Scripts_InstructionScript,             // SCRIPT
+    &Scripts_InstructionKill,               // KILL
+    &Scripts_InstructionSpawn,              // SPAWN
+    &Scripts_InstructionWarp,               // WARP
+    &Scripts_InstructionRotation,           // ROTATION
+    &Scripts_InstructionPosition,           // POSITION
+    &Scripts_InstructionScale,              // SCALE
+    &Scripts_InstructionFace,               // FACE
+    &Scripts_InstructionParticle,           // PARTICLE
+    &Scripts_InstructionOcarina,            // OCARINA
+    &Scripts_InstructionNop,                // PICKUP
+    &Scripts_InstructionNop,                // RETURN
+    &Scripts_InstructionGoto,               // GOTO
+    &Scripts_InstructionNop,                // NOP
+};
+
 bool Scripts_Execute(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script)
 {
     ScrInstr* instruction = Scripts_GetInstrPtr(script, script->curInstrNum);
 
-    switch (instruction->id)
-    {
-        case IF:
-        case WHILE:              return Scripts_InstructionIf(en, globalCtx, script, (ScrInstrIf*)instruction); break;
-        case AWAIT:              return Scripts_InstructionAwait(en, globalCtx, script, (ScrInstrAwait*)instruction); break;
-        case GOTO:               return Scripts_InstructionGoto(en, globalCtx, script, (ScrInstrGoto*)instruction); break;
-        case SET:                return Scripts_InstructionSet(en, globalCtx, script, (ScrInstrSet*)instruction); break;
-        case ENABLE_TALKING:     return Scripts_InstructionEnableTalking(en, globalCtx, script, (ScrInstrTextbox*)instruction); break;
-        case SHOW_TEXTBOX:       return Scripts_InstructionShowTextbox(en, globalCtx, script, (ScrInstrTextbox*)instruction); break;
-        case SHOW_TEXTBOX_SP:    return Scripts_InstructionShowTextbox(en, globalCtx, script, (ScrInstrTextbox*)instruction); break;
-        case TRADE:              return Scripts_InstructionEnableTrade(en, globalCtx, script, (ScrInstrTrade*)instruction); break;
-        case FACE:               return Scripts_InstructionFace(en, globalCtx, script, (ScrInstrFace*)instruction); break;
-        case ROTATION:           return Scripts_InstructionRotation(en, globalCtx, script, (ScrInstrRotation*)instruction); break;
-        case POSITION:           return Scripts_InstructionPosition(en, globalCtx, script, (ScrInstrPosition*)instruction); break;
-        case SCALE:              return Scripts_InstructionScale(en, globalCtx, script, (ScrInstrScale*)instruction); break;
-        case PLAY:               return Scripts_InstructionPlay(en, globalCtx, script, (ScrInstrPlay*)instruction); break;
-        case KILL:               return Scripts_InstructionKill(en, globalCtx, script, (ScrInstrKill*)instruction); break;
-        case OCARINA:            return Scripts_InstructionOcarina(en, globalCtx, script, (ScrInstrOcarina*)instruction); break;
-        case SPAWN:              return Scripts_InstructionSpawn(en, globalCtx, script, (ScrInstrSpawn*)instruction); break;
-        case ITEM:               return Scripts_InstructionItem(en, globalCtx, script, (ScrInstrItem*)instruction); break;
-        case WARP:               return Scripts_InstructionWarp(en, globalCtx, script, (ScrInstrWarp*)instruction); break;
-        case SCRIPT:             return Scripts_InstructionScript(en, globalCtx, script, (ScrInstrScript*)instruction); break;
-        case PARTICLE:           return Scripts_InstructionParticle(en, globalCtx, script, (ScrInstrParticle*)instruction); break;
-        case FORCE_TALK:         en->isTalking = true; globalCtx->talkWithPlayer(globalCtx, &en->actor); script->curInstrNum++; return SCRIPT_CONTINUE;
-        case CLOSE_TEXTBOX:      globalCtx->msgCtx.msgMode = MSGMODE_CLOSING; script->curInstrNum++; return SCRIPT_CONTINUE;
-        case NOP:                script->curInstrNum++; return SCRIPT_CONTINUE;
-        default:                                
-        {
-            #if LOGGING == 1
-                osSyncPrintf("_%2d: Encountered invalid instruction %2d. Stopping script.", en->npcId, instruction->id);
-            #endif     
+    typedef bool ScriptFunc(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in);
+    ScriptFunc* f = (ScriptFunc*)ScriptFuncs[instruction->id];
+    return f(en, globalCtx, script, instruction);
+}
 
-            return SCRIPT_STOP;
-        } 
-    }
+bool Scripts_InstructionNop(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: NOP", en->npcId);
+    #endif		
+	
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionCloseTextbox(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: CLOSE TEXTBOX", en->npcId);
+    #endif		
+	
+    globalCtx->msgCtx.msgMode = MSGMODE_CLOSING; 
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionForceTalk(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: FORCE TALK", en->npcId);
+    #endif	
+	
+    en->isTalking = true; 
+    globalCtx->talkWithPlayer(globalCtx, &en->actor); 
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
 }
 
 bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrParticle* in)
@@ -1771,12 +1802,12 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
     
     Actor* subject = &en->actor;
 
-    if (in->posType >= 3)
+    if (posType >= 3)
         subject = en->refActor;
 
-    if (in->posType)
+    if (posType)
     {
-        if (in->posType % 2)
+        if (posType % 2)
             Math_Vec3f_Sum(&position, &subject->world.pos, &position);
         else 
         {
