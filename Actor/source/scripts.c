@@ -140,35 +140,21 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
 
     Vec3f pos = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
 
-    switch (in->posType)
-    {
-        case POSTYPE_DIRECTION:
-        {
-            Math_AffectMatrixByRot(en->actor.shape.rot.y, &pos, NULL);
-            Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
-            break;
-        }
-        case POSTYPE_REFACTOR_RELATIVE_DIRECTION:
-        {
-            Math_AffectMatrixByRot(en->refActor->shape.rot.y, &pos, NULL);
-            Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
-            break;          
-        }
-        case POSTYPE_RELATIVE:
-        {
-            if (in->type != PARTICLE_FIRE_TAIL)
-                Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
 
-            break;
-        }
-        case POSTYPE_REFACTOR_RELATIVE:
+    Actor* subject = &en->actor;
+
+    if (in->posType >= 3)
+        subject = en->refActor;
+
+    if (in->posType)
+    {
+        if (!(in->posType % 2))
         {
-            if (in->type != PARTICLE_FIRE_TAIL)
-                Math_Vec3f_Sum(&pos, &en->refActor->world.pos, &pos); 
-                
-            break;
+            Math_AffectMatrixByRot(subject->shape.rot.y, &pos, NULL);
+            Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
         }
-        default: break;
+        else if (in->type != PARTICLE_FIRE_TAIL)
+            Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);    
     }
 
     Vec3f accel = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->accelXType, in->accelYType, in->accelZType}, (ScriptVarval[]){in->accelX, in->accelY, in->accelZ}, 100);
@@ -198,18 +184,7 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
         case PARTICLE_BURN_MARK:        EffectSsDeadDs_Spawn(globalCtx, &pos, &vel, &accel, scale, scaleUpd, var, life); break;
         case PARTICLE_RING:             EffectSsBlast_Spawn(globalCtx, &pos, &vel, &accel, &prim, &env, scale, scaleUpd, var, life); break;
         case PARTICLE_FLAME:            EffectSsDeadDb_Spawn(globalCtx, &pos, &vel, &accel, scale, scaleUpd, prim.r, prim.g, prim.b, prim.a, env.r, env.g, env.b, env.a, life, 0); break;
-        case PARTICLE_FIRE_TAIL:        
-        {
-            Actor* a = NULL;
-
-            if (in->posType && in->posType < 3)
-                a = &en->actor;
-            else if (in->posType >= 3)
-                a = en->refActor;
-
-            EffectSsFireTail_Spawn(globalCtx, a, &pos, scale, &vel, 0, &prim, &env, var, -1, life); 
-            break;
-        }
+        case PARTICLE_FIRE_TAIL:        EffectSsFireTail_Spawn(globalCtx, subject, &pos, scale, &vel, 0, &prim, &env, var, -1, life); break;
         case PARTICLE_HIT_MARK_FLASH:     
         case PARTICLE_HIT_MARK_DUST:  
         case PARTICLE_HIT_MARK_BURST:  
@@ -1791,26 +1766,22 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
     bool setAsRef = in->posType >= 10;
     int posType = in->posType >= 10 ? in->posType - 10 : in->posType;
 
-    switch (posType)
+    Actor* subject = &en->actor;
+
+    if (posType >= 3)
+        subject = en->refActor;
+
+    if (posType)
     {
-        case POSTYPE_DIRECTION:
+        if (!(posType % 2))
         {
-            Math_AffectMatrixByRot(en->actor.shape.rot.y, &position, NULL);
-            Math_Vec3f_Sum(&position, &en->actor.world.pos, &position);
-            break;
+            Math_AffectMatrixByRot(subject->shape.rot.y, &position, NULL);
+            Math_Vec3f_Sum(&position, &subject->world.pos, &position);
         }
-        case POSTYPE_REFACTOR_RELATIVE_DIRECTION:
-        {
-            Math_AffectMatrixByRot(en->refActor->shape.rot.y, &position, NULL);
-            Math_Vec3f_Sum(&position, &en->actor.world.pos, &position);
-            break;          
-        }
-        case POSTYPE_RELATIVE:
-            Math_Vec3f_Sum(&position, &en->actor.world.pos, &position); break;
-        case POSTYPE_REFACTOR_RELATIVE:
-            Math_Vec3f_Sum(&position, &en->refActor->world.pos, &position); break;
-        default: break;
+        else 
+            Math_Vec3f_Sum(&position, &subject->world.pos, &position);    
     }
+
 
     Vec3s rotation = (Vec3s){
                                 Scripts_GetVarval(en, globalCtx, in->rotXType, in->rotX, true),
