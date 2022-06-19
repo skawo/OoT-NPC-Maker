@@ -91,45 +91,76 @@ void Scripts_ResponseInstruction(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     }
 }
 
+void* ScriptFuncs[] = 
+{   &Scripts_InstructionIf,                 // IF
+    &Scripts_InstructionIf,                 // WHILE
+    &Scripts_InstructionAwait,              // AWAIT
+    &Scripts_InstructionSet,                // SET
+    &Scripts_InstructionNop,                // TALK
+    &Scripts_InstructionForceTalk,          // FORCE_TALK
+    &Scripts_InstructionEnableTrade,        // TRADE
+    &Scripts_InstructionEnableTalking,      // ENABLE_TALKING
+    &Scripts_InstructionShowTextbox,        // SHOW_TEXTBOX
+    &Scripts_InstructionShowTextbox,        // SHOW_TEXTBOX_SP
+    &Scripts_InstructionCloseTextbox,       // CLOSE_TEXTBOX
+    &Scripts_InstructionItem,               // ITEM
+    &Scripts_InstructionPlay,               // PLAY
+    &Scripts_InstructionScript,             // SCRIPT
+    &Scripts_InstructionKill,               // KILL
+    &Scripts_InstructionSpawn,              // SPAWN
+    &Scripts_InstructionWarp,               // WARP
+    &Scripts_InstructionRotation,           // ROTATION
+    &Scripts_InstructionPosition,           // POSITION
+    &Scripts_InstructionScale,              // SCALE
+    &Scripts_InstructionFace,               // FACE
+    &Scripts_InstructionParticle,           // PARTICLE
+    &Scripts_InstructionOcarina,            // OCARINA
+    &Scripts_InstructionNop,                // PICKUP
+    &Scripts_InstructionNop,                // RETURN
+    &Scripts_InstructionGoto,               // GOTO
+    &Scripts_InstructionNop,                // NOP
+};
+
 bool Scripts_Execute(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script)
 {
     ScrInstr* instruction = Scripts_GetInstrPtr(script, script->curInstrNum);
 
-    switch (instruction->id)
-    {
-        case IF:
-        case WHILE:              return Scripts_InstructionIf(en, globalCtx, script, (ScrInstrIf*)instruction); break;
-        case AWAIT:              return Scripts_InstructionAwait(en, globalCtx, script, (ScrInstrAwait*)instruction); break;
-        case GOTO:               return Scripts_InstructionGoto(en, globalCtx, script, (ScrInstrGoto*)instruction); break;
-        case SET:                return Scripts_InstructionSet(en, globalCtx, script, (ScrInstrSet*)instruction); break;
-        case ENABLE_TALKING:     return Scripts_InstructionEnableTalking(en, globalCtx, script, (ScrInstrTextbox*)instruction); break;
-        case SHOW_TEXTBOX:       return Scripts_InstructionShowTextbox(en, globalCtx, script, (ScrInstrTextbox*)instruction); break;
-        case SHOW_TEXTBOX_SP:    return Scripts_InstructionShowTextbox(en, globalCtx, script, (ScrInstrTextbox*)instruction); break;
-        case TRADE:              return Scripts_InstructionEnableTrade(en, globalCtx, script, (ScrInstrTrade*)instruction); break;
-        case FACE:               return Scripts_InstructionFace(en, globalCtx, script, (ScrInstrFace*)instruction); break;
-        case ROTATION:           return Scripts_InstructionRotation(en, globalCtx, script, (ScrInstrRotation*)instruction); break;
-        case POSITION:           return Scripts_InstructionPosition(en, globalCtx, script, (ScrInstrPosition*)instruction); break;
-        case SCALE:              return Scripts_InstructionScale(en, globalCtx, script, (ScrInstrScale*)instruction); break;
-        case PLAY:               return Scripts_InstructionPlay(en, globalCtx, script, (ScrInstrPlay*)instruction); break;
-        case KILL:               return Scripts_InstructionKill(en, globalCtx, script, (ScrInstrKill*)instruction); break;
-        case OCARINA:            return Scripts_InstructionOcarina(en, globalCtx, script, (ScrInstrOcarina*)instruction); break;
-        case SPAWN:              return Scripts_InstructionSpawn(en, globalCtx, script, (ScrInstrSpawn*)instruction); break;
-        case ITEM:               return Scripts_InstructionItem(en, globalCtx, script, (ScrInstrItem*)instruction); break;
-        case WARP:               return Scripts_InstructionWarp(en, globalCtx, script, (ScrInstrWarp*)instruction); break;
-        case SCRIPT:             return Scripts_InstructionScript(en, globalCtx, script, (ScrInstrScript*)instruction); break;
-        case PARTICLE:           return Scripts_InstructionParticle(en, globalCtx, script, (ScrInstrParticle*)instruction); break;
-        case FORCE_TALK:         en->isTalking = true; globalCtx->talkWithPlayer(globalCtx, &en->actor); script->curInstrNum++; return SCRIPT_CONTINUE;
-        case CLOSE_TEXTBOX:      globalCtx->msgCtx.msgMode = MSGMODE_TEXT_CLOSING; script->curInstrNum++; return SCRIPT_CONTINUE;
-        case NOP:                script->curInstrNum++; return SCRIPT_STOP;
-        default:                                
-        {
-            #if LOGGING == 1
-                osSyncPrintf("_%2d: Encountered invalid instruction %2d. Stopping script.", en->npcId, instruction->id);
-            #endif     
+    typedef bool ScriptFunc(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in);
+    ScriptFunc* f = (ScriptFunc*)ScriptFuncs[instruction->id];
+    return f(en, globalCtx, script, instruction);
+}
 
-            return SCRIPT_STOP;
-        } 
-    }
+bool Scripts_InstructionNop(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: NOP", en->npcId);
+    #endif		
+	
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionCloseTextbox(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: CLOSE TEXTBOX", en->npcId);
+    #endif		
+	
+    globalCtx->msgCtx.msgMode = MSGMODE_CLOSING; 
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionForceTalk(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: FORCE TALK", en->npcId);
+    #endif	
+	
+    en->isTalking = true; 
+    globalCtx->talkWithPlayer(globalCtx, &en->actor); 
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
 }
 
 bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrParticle* in)
@@ -140,35 +171,24 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
 
     Vec3f pos = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
 
-    switch (in->posType)
-    {
-        case POSTYPE_DIRECTION:
-        {
-            Math_AffectMatrixByRot(en->actor.shape.rot.y, &pos, NULL);
-            Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
-            break;
-        }
-        case POSTYPE_REFACTOR_RELATIVE_DIRECTION:
-        {
-            Math_AffectMatrixByRot(en->refActor->shape.rot.y, &pos, NULL);
-            Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
-            break;          
-        }
-        case POSTYPE_RELATIVE:
-        {
-            if (in->type != PARTICLE_FIRE_TAIL)
-                Math_Vec3f_Sum(&pos, &en->actor.world.pos, &pos);
 
-            break;
-        }
-        case POSTYPE_REFACTOR_RELATIVE:
+    Actor* subject = &en->actor;
+
+    if (in->posType >= 3)
+        subject = en->refActor;
+
+    if (in->posType)
+    {
+        if (in->posType % 2)
         {
             if (in->type != PARTICLE_FIRE_TAIL)
-                Math_Vec3f_Sum(&pos, &en->refActor->world.pos, &pos); 
-                
-            break;
+                Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
+        } 
+        else 
+        {
+            Math_AffectMatrixByRot(subject->shape.rot.y, &pos, NULL);
+            Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
         }
-        default: break;
     }
 
     Vec3f accel = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->accelXType, in->accelYType, in->accelZType}, (ScriptVarval[]){in->accelX, in->accelY, in->accelZ}, 100);
@@ -198,18 +218,7 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
         case PARTICLE_BURN_MARK:        EffectSsDeadDs_Spawn(globalCtx, &pos, &vel, &accel, scale, scaleUpd, var, life); break;
         case PARTICLE_RING:             EffectSsBlast_Spawn(globalCtx, &pos, &vel, &accel, &prim, &env, scale, scaleUpd, var, life); break;
         case PARTICLE_FLAME:            EffectSsDeadDb_Spawn(globalCtx, &pos, &vel, &accel, scale, scaleUpd, prim.r, prim.g, prim.b, prim.a, env.r, env.g, env.b, env.a, life, 0); break;
-        case PARTICLE_FIRE_TAIL:        
-        {
-            Actor* a = NULL;
-
-            if (in->posType && in->posType < 3)
-                a = &en->actor;
-            else if (in->posType >= 3)
-                a = en->refActor;
-
-            EffectSsFireTail_Spawn(globalCtx, a, &pos, scale, &vel, 0, &prim, &env, var, -1, life); 
-            break;
-        }
+        case PARTICLE_FIRE_TAIL:        EffectSsFireTail_Spawn(globalCtx, subject, &pos, scale, &vel, 0, &prim, &env, var, -1, life); break;
         case PARTICLE_HIT_MARK_FLASH:     
         case PARTICLE_HIT_MARK_DUST:  
         case PARTICLE_HIT_MARK_BURST:  
@@ -327,7 +336,6 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             branch = (t ? in->trueInstrNum : in->falseInstrNum);
             break;
         }
-
         case IF_ITEM_BEING_TRADED:              
         {
             // If we're not in the trading radius, and not talking, then we're definitely not trading anything.
@@ -406,18 +414,9 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             branch = Scripts_IfBool(en, globalCtx, held, in); 
             break;
         }
-        case IF_TARGETTED: branch = Scripts_IfBool(en, globalCtx, globalCtx->actorCtx.targetCtx.targetedActor == &en->actor, in); break;
-        case IF_DISTANCE_FROM_PLAYER: 
-        {
-            branch = Scripts_IfValue(en, globalCtx, en->actor.xzDistToPlayer - GET_PLAYER(globalCtx)->cylinder.dim.radius - en->settings.collisionRadius, in, FLOAT); 
-            break;
-        }
-        case IF_DISTANCE_FROM_REF_ACTOR:
-        {
-            branch = Scripts_IfValue(en, globalCtx, Math_Vec3f_DistXZ(&en->actor.world.pos, &en->refActor->world.pos), in, FLOAT);
-            break;     
-        }
-
+        case IF_TARGETTED:                  branch = Scripts_IfBool(en, globalCtx, globalCtx->actorCtx.targetCtx.targetedActor == &en->actor, in); break;
+        case IF_DISTANCE_FROM_PLAYER:       branch = Scripts_IfValue(en, globalCtx, en->actor.xzDistToPlayer - GET_PLAYER(globalCtx)->cylinder.dim.radius - en->settings.collisionRadius, in, FLOAT); break;
+        case IF_DISTANCE_FROM_REF_ACTOR:    branch = Scripts_IfValue(en, globalCtx, Math_Vec3f_DistXZ(&en->actor.world.pos, &en->refActor->world.pos), in, FLOAT); break;     
         case IF_EXT_VAR:
         {
             ScrInstrExtVarIf* instr = (ScrInstrExtVarIf*)in;
@@ -576,7 +575,7 @@ bool Scripts_InstructionAwait(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
         case AWAIT_MOVEMENT_PATH_END:               conditionMet = Scripts_AwaitBool(en, globalCtx, (en->stopped && (en->curPathNode == en->curPathNumNodes)), C_TRUE); break;
         case AWAIT_TALKING_END:                     conditionMet = Scripts_AwaitBool(en, globalCtx, en->talkingFinished, C_TRUE); break;
         case AWAIT_TEXTBOX_ON_SCREEN:               conditionMet = Scripts_AwaitBool(en, globalCtx, Message_GetState(&globalCtx->msgCtx) != TEXT_STATE_NONE, in->condition); break;
-        case AWAIT_TEXTBOX_DRAWING:                 conditionMet = Scripts_AwaitBool(en, globalCtx, Message_GetState(&globalCtx->msgCtx) != TEXT_STATE_DONE_FADING, in->condition); break;
+        case AWAIT_TEXTBOX_DRAWING:                 conditionMet = Scripts_AwaitBool(en, globalCtx, Message_GetState(&globalCtx->msgCtx) == TEXT_STATE_DONE_FADING, in->condition); break;
         case AWAIT_TEXTBOX_DISMISSED:               conditionMet = Scripts_AwaitBool(en, globalCtx, globalCtx->msgCtx.msgMode == MSGMODE_TEXT_CLOSING, C_TRUE); break;
         case AWAIT_PATH_NODE:                       conditionMet = Scripts_AwaitValue(en, globalCtx, en->curPathNode, INT16, in->condition, in->varType, in->value); break;
         case AWAIT_ANIMATION_FRAME:                 conditionMet = Scripts_AwaitValue(en, globalCtx, en->skin.skelAnime.curFrame, UINT32, in->condition, in->varType, in->value); break;
@@ -1787,30 +1786,9 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
         osSyncPrintf("_%2d: SPAWN", en->npcId);
     #endif
     
-    Vec3f position = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
     bool setAsRef = in->posType >= 10;
     int posType = in->posType >= 10 ? in->posType - 10 : in->posType;
 
-    switch (posType)
-    {
-        case POSTYPE_DIRECTION:
-        {
-            Math_AffectMatrixByRot(en->actor.shape.rot.y, &position, NULL);
-            Math_Vec3f_Sum(&position, &en->actor.world.pos, &position);
-            break;
-        }
-        case POSTYPE_REFACTOR_RELATIVE_DIRECTION:
-        {
-            Math_AffectMatrixByRot(en->refActor->shape.rot.y, &position, NULL);
-            Math_Vec3f_Sum(&position, &en->actor.world.pos, &position);
-            break;          
-        }
-        case POSTYPE_RELATIVE:
-            Math_Vec3f_Sum(&position, &en->actor.world.pos, &position); break;
-        case POSTYPE_REFACTOR_RELATIVE:
-            Math_Vec3f_Sum(&position, &en->refActor->world.pos, &position); break;
-        default: break;
-    }
 
     Vec3s rotation = (Vec3s){
                                 Scripts_GetVarval(en, globalCtx, in->rotXType, in->rotX, true),
@@ -1820,6 +1798,23 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
 
     int actorNum = Scripts_GetVarval(en, globalCtx, in->actorNumType, in->actorNum, false);
     int actorParam = Scripts_GetVarval(en, globalCtx, in->actorParamType, in->actorParam, false);
+    Vec3f position = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
+    
+    Actor* subject = &en->actor;
+
+    if (posType >= 3)
+        subject = en->refActor;
+
+    if (posType)
+    {
+        if (posType % 2)
+            Math_Vec3f_Sum(&position, &subject->world.pos, &position);
+        else 
+        {
+            Math_AffectMatrixByRot(subject->shape.rot.y, &position, NULL);
+            Math_Vec3f_Sum(&position, &subject->world.pos, &position);
+        }
+    }
 
     Actor* spawned = Actor_Spawn(&globalCtx->actorCtx, globalCtx, actorNum, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, actorParam);
 
@@ -1873,7 +1868,7 @@ bool Scripts_InstructionItem(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
                 }
                 else
                 {
-                    // Once we have waited five frames, we give the actor an item, and wait a bit of time again (to not restore the cutscene state prematurely)...
+                    // Once we have waited two frames, we give the actor an item, and wait a bit of time again (to not restore the cutscene state prematurely)...
                     if (script->tempValues[2] == -1)
                     {
                         //z_actor_give_item
