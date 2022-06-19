@@ -148,13 +148,16 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
 
     if (in->posType)
     {
-        if (!(in->posType % 2))
+        if (in->posType % 2)
+        {
+            if (in->type != PARTICLE_FIRE_TAIL)
+                Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
+        } 
+        else 
         {
             Math_AffectMatrixByRot(subject->shape.rot.y, &pos, NULL);
             Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
         }
-        else if (in->type != PARTICLE_FIRE_TAIL)
-            Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);    
     }
 
     Vec3f accel = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->accelXType, in->accelYType, in->accelZType}, (ScriptVarval[]){in->accelX, in->accelY, in->accelZ}, 100);
@@ -1768,18 +1771,18 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
 
     Actor* subject = &en->actor;
 
-    if (posType >= 3)
+    if (in->posType >= 3)
         subject = en->refActor;
 
-    if (posType)
+    if (in->posType)
     {
-        if (!(posType % 2))
+        if (in->posType % 2)
+                Math_Vec3f_Sum(&position, &subject->world.pos, &position);
+        else 
         {
             Math_AffectMatrixByRot(subject->shape.rot.y, &position, NULL);
             Math_Vec3f_Sum(&position, &subject->world.pos, &position);
         }
-        else 
-            Math_Vec3f_Sum(&position, &subject->world.pos, &position);    
     }
 
 
