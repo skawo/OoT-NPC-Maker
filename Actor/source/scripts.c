@@ -544,7 +544,7 @@ bool Scripts_InstructionAwait(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
         case AWAIT_MOVEMENT_PATH_END:               conditionMet = Scripts_AwaitBool(en, globalCtx, (en->stopped && (en->curPathNode == en->curPathNumNodes)), C_TRUE); break;
         case AWAIT_TALKING_END:                     conditionMet = Scripts_AwaitBool(en, globalCtx, en->talkingFinished, C_TRUE); break;
         case AWAIT_TEXTBOX_ON_SCREEN:               conditionMet = Scripts_AwaitBool(en, globalCtx, func_8010BDBC(&globalCtx->msgCtx) != MSGSTATUS_NONE, in->condition); break;
-        case AWAIT_TEXTBOX_DRAWING:                 conditionMet = Scripts_AwaitBool(en, globalCtx, func_8010BDBC(&globalCtx->msgCtx) != MSGSTATUS_DRAWING, in->condition); break;
+        case AWAIT_TEXTBOX_DRAWING:                 conditionMet = Scripts_AwaitBool(en, globalCtx, func_8010BDBC(&globalCtx->msgCtx) == MSGSTATUS_DRAWING, in->condition); break;
         case AWAIT_TEXTBOX_DISMISSED:               conditionMet = Scripts_AwaitBool(en, globalCtx, globalCtx->msgCtx.msgMode == MSGMODE_CLOSING, C_TRUE); break;
         case AWAIT_PATH_NODE:                       conditionMet = Scripts_AwaitValue(en, globalCtx, en->curPathNode, INT16, in->condition, in->varType, in->value); break;
         case AWAIT_ANIMATION_FRAME:                 conditionMet = Scripts_AwaitValue(en, globalCtx, en->skin.skelAnime.curFrame, UINT32, in->condition, in->varType, in->value); break;
