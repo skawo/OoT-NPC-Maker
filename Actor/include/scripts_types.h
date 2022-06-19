@@ -141,9 +141,7 @@ typedef struct ScrInstrResponsesSet
 {
     u8 id;
     u8 subId;
-    u16 resp1InstrNum;
-    u16 resp2InstrNum;
-    u16 resp3InstrNum;
+    u16 respInstrNum[3];
 } ScrInstrResponsesSet;
 
 typedef struct ScrInstrStartSet

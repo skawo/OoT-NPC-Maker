@@ -64,18 +64,9 @@ void Scripts_ResponseInstruction(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     ScrInstrResponsesSet* instruction = (ScrInstrResponsesSet*)Scripts_GetInstrPtr(script, script->responsesInstrNum);
 
     // Wait until the selection pops up and player has responded to it...
-
     // Player talk state, player responded to textbox
     if (func_8010BDBC(&globalCtx->msgCtx) == MSGSTATUS_SELECTING && func_80106BC8(globalCtx))
-    {
-        switch (globalCtx->msgCtx.choiceIndex)
-        {
-            case 0:     script->jumpToWhenReponded = instruction->resp1InstrNum; break;
-            case 1:     script->jumpToWhenReponded = instruction->resp2InstrNum; break;
-            case 2:     script->jumpToWhenReponded = instruction->resp3InstrNum; break;
-            default:    break;
-        }
-    }
+        script->jumpToWhenReponded = instruction->respInstrNum[globalCtx->msgCtx.choiceIndex];
 
     // If waiting for response, and a selection has been picked, jump to the designated instruction.
     if (en->isWaitingForResponse && script->jumpToWhenReponded >= 0)
@@ -443,7 +434,6 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
                 
             break;
         }
-
         case IF_DAMAGED_BY:
         {
             int i = 0;
@@ -462,7 +452,6 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             branch = Scripts_IfValue(en, globalCtx, i, in, INT32); 
             break;
         }
-
         case SUBT_RANDOM:
         {
             ScrInstrDoubleIf* instr = (ScrInstrDoubleIf*)in;
@@ -1427,15 +1416,15 @@ bool Scripts_InstructionRotation(NpcMaker* en, GlobalContext* globalCtx, ScriptI
 
 bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrPosition* in)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: POSITION", en->npcId);
+    #endif 
+
     #define ACTOR ((Actor*)script->tempValues[0])
     #define NPCACTOR ((NpcMaker*)script->tempValues[0])
     #define ENDPOS ((Vec3f*)&script->fTempValues[1])
     #define SPEED (script->fTempValues[4])
     #define LASTDIST (script->fTempValues[5])
-
-    #if LOGGING == 1
-        osSyncPrintf("_%2d: POSITION", en->npcId);
-    #endif  
 
     bool first_run = Scripts_SetupTemp(script, in);
 
@@ -1452,29 +1441,23 @@ bool Scripts_InstructionPosition(NpcMaker* en, GlobalContext* globalCtx, ScriptI
             // Position
             Vec3f pos = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->xType, in->yType, in->zType}, (ScriptVarval[]){in->x, in->y, in->z}, 1);
 
-            switch (in->subId)
+            if (in->subId > 1)
             {
-                case POS_MOVE_BY:
-                    Math_Vec3f_Sum(&pos, &ACTOR->world.pos, &pos); break;
-                case POS_MOVE_BY_DIRECTION:
+                Actor* subject = ACTOR;
+
+                if (in->subId >= 4)
+                    subject = en->refActor;
+
+                if (in->subId % 2)
                 {
-                    Math_AffectMatrixByRot(en->actor.shape.rot.y, &pos, NULL);
-                    Math_Vec3f_Sum(&pos, &ACTOR->world.pos, &pos); 
-                    break;
+                    Math_AffectMatrixByRot(subject->shape.rot.y, &pos, subject);
+                    Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);        
                 }
-                case POS_MOVE_BY_RELATIVE:
-                    Math_Vec3f_Sum(&pos, &en->refActor->world.pos, &pos); break;
-                case POS_MOVE_BY_RELATIVE_DIRECTION:
-                {
-                    Math_AffectMatrixByRot(en->refActor->shape.rot.y, &pos, en->refActor);
-                    Math_Vec3f_Sum(&pos, &en->refActor->world.pos, &pos); 
-                    break;           
-                }
-                default: break;
+                else
+                    Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
             }
 
-            Math_Vec3f_Copy(ENDPOS, &pos);
-
+            *ENDPOS = pos;
             SPEED = Scripts_GetVarval(en, globalCtx, in->speedType, in->speed, true);
 			LASTDIST = Movement_CalcDist(&ACTOR->world.pos, ENDPOS, in->ignoreY);
         }
