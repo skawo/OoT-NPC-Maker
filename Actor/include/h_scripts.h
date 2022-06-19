@@ -33,6 +33,10 @@ bool Scripts_SetupTemp(ScriptInstance* script, void* instruction);
 void Scripts_FreeTemp(ScriptInstance* script);
 bool Scripts_FreeAndContinue(ScriptInstance* script);
 void Scripts_SetMessage(NpcMaker* en, GlobalContext* global, int msg_id, u16* non_custom_field, bool show_set, bool setActor);
+bool Scripts_InstructionNop(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in);
+bool Scripts_InstructionForceTalk(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in);
+bool Scripts_InstructionCloseTextbox(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in);
+
 
 u16 Scripts_IfValueCommon(NpcMaker* en, GlobalContext* global, float value, DataType read_type, u32 condition, u8 val_type, 
                          ScriptVarval compared_value, u16 goto_true, u16 goto_false);
