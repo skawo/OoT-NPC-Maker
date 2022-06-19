@@ -305,7 +305,6 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             branch = (t ? in->trueInstrNum : in->falseInstrNum);
             break;
         }
-
         case IF_ITEM_BEING_TRADED:              
         {
             // If we're not in the trading radius, and not talking, then we're definitely not trading anything.
@@ -384,18 +383,9 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             branch = Scripts_IfBool(en, globalCtx, held, in); 
             break;
         }
-        case IF_TARGETTED: branch = Scripts_IfBool(en, globalCtx, globalCtx->actorCtx.targetCtx.targetedActor == &en->actor, in); break;
-        case IF_DISTANCE_FROM_PLAYER: 
-        {
-            branch = Scripts_IfValue(en, globalCtx, en->actor.xzDistToPlayer - PLAYER->cylinder.dim.radius - en->settings.collisionRadius, in, FLOAT); 
-            break;
-        }
-        case IF_DISTANCE_FROM_REF_ACTOR:
-        {
-            branch = Scripts_IfValue(en, globalCtx, Math_Vec3f_DistXZ(&en->actor.world.pos, &en->refActor->world.pos), in, FLOAT);
-            break;     
-        }
-
+        case IF_TARGETTED:                  branch = Scripts_IfBool(en, globalCtx, globalCtx->actorCtx.targetCtx.targetedActor == &en->actor, in); break;
+        case IF_DISTANCE_FROM_PLAYER:       branch = Scripts_IfValue(en, globalCtx, en->actor.xzDistToPlayer - PLAYER->cylinder.dim.radius - en->settings.collisionRadius, in, FLOAT); break;
+        case IF_DISTANCE_FROM_REF_ACTOR:    branch = Scripts_IfValue(en, globalCtx, Math_Vec3f_DistXZ(&en->actor.world.pos, &en->refActor->world.pos), in, FLOAT); break;     
         case IF_EXT_VAR:
         {
             ScrInstrExtVarIf* instr = (ScrInstrExtVarIf*)in;
@@ -1765,25 +1755,8 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
         osSyncPrintf("_%2d: SPAWN", en->npcId);
     #endif
     
-    Vec3f position = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
     bool setAsRef = in->posType >= 10;
     int posType = in->posType >= 10 ? in->posType - 10 : in->posType;
-
-    Actor* subject = &en->actor;
-
-    if (in->posType >= 3)
-        subject = en->refActor;
-
-    if (in->posType)
-    {
-        if (in->posType % 2)
-                Math_Vec3f_Sum(&position, &subject->world.pos, &position);
-        else 
-        {
-            Math_AffectMatrixByRot(subject->shape.rot.y, &position, NULL);
-            Math_Vec3f_Sum(&position, &subject->world.pos, &position);
-        }
-    }
 
 
     Vec3s rotation = (Vec3s){
@@ -1794,6 +1767,23 @@ bool Scripts_InstructionSpawn(NpcMaker* en, GlobalContext* globalCtx, ScriptInst
 
     int actorNum = Scripts_GetVarval(en, globalCtx, in->actorNumType, in->actorNum, false);
     int actorParam = Scripts_GetVarval(en, globalCtx, in->actorParamType, in->actorParam, false);
+    Vec3f position = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
+    
+    Actor* subject = &en->actor;
+
+    if (in->posType >= 3)
+        subject = en->refActor;
+
+    if (in->posType)
+    {
+        if (in->posType % 2)
+            Math_Vec3f_Sum(&position, &subject->world.pos, &position);
+        else 
+        {
+            Math_AffectMatrixByRot(subject->shape.rot.y, &position, NULL);
+            Math_Vec3f_Sum(&position, &subject->world.pos, &position);
+        }
+    }
 
     Actor* spawned = Actor_Spawn(&globalCtx->actorCtx, globalCtx, actorNum, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, actorParam);
 
@@ -1847,7 +1837,7 @@ bool Scripts_InstructionItem(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
                 }
                 else
                 {
-                    // Once we have waited five frames, we give the actor an item, and wait a bit of time again (to not restore the cutscene state prematurely)...
+                    // Once we have waited two frames, we give the actor an item, and wait a bit of time again (to not restore the cutscene state prematurely)...
                     if (script->tempValues[2] == -1)
                     {
                         //z_actor_give_item
@@ -1895,7 +1885,7 @@ bool Scripts_InstructionItem(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
                 // Code for bottle items
                 else if (IS_BOTTLE_ITEM(item))
                 {
-                    // If item is holding the item in question, we take that one specifically.
+                    // If player is holding the item in question, we take that one specifically.
                     if ((PLAYER->heldItemButton != 0) && 
                     (gSaveContext.inventory.items[gSaveContext.equips.cButtonSlots[PLAYER->heldItemButton - 1]] == item))
                         Player_UpdateBottleHeld(globalCtx, PLAYER, ITEM_BOTTLE, PLAYER_AP_BOTTLE);
