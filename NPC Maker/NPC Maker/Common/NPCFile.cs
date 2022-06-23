@@ -687,12 +687,18 @@ namespace NPC_Maker
                         }
                     case "DELAY":
                     case "FADE":
-                    case "FADE2":
                     case "SHIFT":
                     case "SPEED":
                         {
                             output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
                             output.Add(Convert.ToByte(code[1]));
+                            break;
+                        }
+                    case "FADE2":
+                        {
+                            output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgControlCode), code[0]));
+                            short soundValue = Convert.ToInt16(code[1]);
+                            output.AddRangeBigEndian(soundValue);
                             break;
                         }
                     case "ICON":
