@@ -7,6 +7,13 @@
 #include "../include/h_scripts.h"
 #include "../include/h_rom.h"
 
+static void NpcMaker_Init(NpcMaker* en, GlobalContext* globalCtx);
+static void NpcMaker_PostInit(NpcMaker* en, GlobalContext* globalCtx);
+static void NpcMaker_Update(NpcMaker* en, GlobalContext* globalCtx);
+static void NpcMaker_Update(NpcMaker* en, GlobalContext* globalCtx);
+static void NpcMaker_Draw(NpcMaker* en, GlobalContext* globalCtx);
+
+
 static void NpcMaker_Init(NpcMaker* en, GlobalContext* globalCtx)
 {
     #if LOGGING == 1
@@ -20,10 +27,18 @@ static void NpcMaker_Init(NpcMaker* en, GlobalContext* globalCtx)
         Actor_Kill(&en->actor);
         return;
     }
+}
 
+// Setting up the object needs to happen in update for some unknown reason,
+// because otherwise it fails if the object is already loaded in by the scene.
+static void NpcMaker_PostInit(NpcMaker* en, GlobalContext* globalCtx)
+{
     Setup_Objects(en, globalCtx);
     Setup_Misc(en, globalCtx);
     Setup_Model(en, globalCtx);
+
+    en->actor.update = (ActorFunc)&NpcMaker_Update;
+    NpcMaker_Update(en, globalCtx);
 }
 
 static void NpcMaker_Update(NpcMaker* en, GlobalContext* globalCtx)
@@ -132,6 +147,6 @@ const ActorInit init_vars =
     .instanceSize = sizeof(NpcMaker),
     .init = (ActorFunc)NpcMaker_Init,
     .destroy = (ActorFunc)NpcMaker_Destroy,
-    .update = (ActorFunc)NpcMaker_Update,
+    .update = (ActorFunc)NpcMaker_PostInit,
     .draw = (ActorFunc)NpcMaker_Draw
 };
