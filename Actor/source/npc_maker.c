@@ -29,6 +29,8 @@ static void NpcMaker_Init(NpcMaker* en, GlobalContext* globalCtx)
     }
 }
 
+// Setting up the object needs to happen in update for some unknown reason,
+// because otherwise it fails if the object is already loaded in by the scene.
 static void NpcMaker_PostInit(NpcMaker* en, GlobalContext* globalCtx)
 {
     Setup_Objects(en, globalCtx);
