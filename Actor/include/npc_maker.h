@@ -2,7 +2,7 @@
 #define NPC_MAKER_H
 
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 191
+#define MINOR_VERSION 192
 
 #ifndef GAME_VERSION
     #define GAME_VERSION 0
