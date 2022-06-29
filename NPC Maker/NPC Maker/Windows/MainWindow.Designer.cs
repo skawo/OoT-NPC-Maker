@@ -102,6 +102,7 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.NumUpDown_ScriptsFVar = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ScriptsVar = new System.Windows.Forms.NumericUpDown();
             this.Lbl_ScriptsFVars = new System.Windows.Forms.Label();
@@ -282,7 +283,6 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -1044,7 +1044,7 @@
             0,
             0});
             this.NumUpDown_TalkSegment.Minimum = new decimal(new int[] {
-            8,
+            7,
             0,
             0,
             0});
@@ -1070,7 +1070,7 @@
             0,
             0});
             this.NumUpDown_BlinkSegment.Minimum = new decimal(new int[] {
-            8,
+            7,
             0,
             0,
             0});
@@ -1268,6 +1268,18 @@
             this.Tab3_BehaviorData.Size = new System.Drawing.Size(768, 627);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(584, 237);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(103, 17);
+            this.checkBox1.TabIndex = 87;
+            this.checkBox1.Tag = "EXISTALLROOMS";
+            this.checkBox1.Text = "Exist in all rooms";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUpDown_ScriptsFVar
             // 
@@ -3457,18 +3469,6 @@
             // 
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(584, 237);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(103, 17);
-            this.checkBox1.TabIndex = 87;
-            this.checkBox1.Tag = "EXISTALLROOMS";
-            this.checkBox1.Text = "Exist in all rooms";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // MainWindow
             // 

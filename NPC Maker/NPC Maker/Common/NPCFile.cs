@@ -204,8 +204,8 @@ namespace NPC_Maker
             EnvironmentColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             BlinkPattern = "";
             TalkPattern = "";
-            BlinkSegment = 8;
-            TalkSegment = 8;
+            BlinkSegment = 7;
+            TalkSegment = 7;
             BlinkSpeed = 1;
             TalkSpeed = 1;
 
