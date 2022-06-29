@@ -116,7 +116,7 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
     #pragma region Blinking
 
     // We check if anything is defined for the segment set as the one used for blinking, and if blinking is enabled.
-    if (en->settings.blinkTexSegment >= 8 && en->exSegData[en->settings.blinkTexSegment - 8] != 0 && en->doBlinkingAnm)
+    if (en->settings.blinkTexSegment >= 8 && en->exSegData[en->settings.blinkTexSegment - 8] != 0 && en->doBlinkingAnm && en->settings.blinkPattern[0] != 0xFF)
     {
         // We wait until the timer between blinks is exhausted before starting to blink.
         if (en->blinkTimer)
@@ -158,7 +158,7 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
 
     // Pretty much the same as above, really, except we don't do this based on a timer,
     // but whenever the actor is talking.
-    if (en->settings.talkTexSegment >= 8 && en->exSegData[en->settings.talkTexSegment - 8] != 0 && en->doTalkingAnm)
+    if (en->settings.talkTexSegment >= 8 && en->exSegData[en->settings.talkTexSegment - 8] != 0 && en->doTalkingAnm && en->settings.talkPattern[0] != 0xFF)
     {
         if (en->isTalking && func_8010BDBC(&global->msgCtx) == MSGSTATUS_DRAWING)
         {
