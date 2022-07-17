@@ -43,6 +43,11 @@ static void NpcMaker_PostInit(NpcMaker* en, GlobalContext* globalCtx)
 
 static void NpcMaker_Update(NpcMaker* en, GlobalContext* globalCtx)
 {
+    // Set the object location again to account for the fileStart
+
+    if (en->settings.fileStart)
+        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
+
     // Executing scripts...
     Scripts_Main(en, globalCtx);
 

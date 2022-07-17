@@ -205,7 +205,7 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
 
     if (realObjId != en->settings.objectId)
     {
-        if (!Rom_SetObjectToActor(&en->actor, globalCtx, realObjId))
+        if (!Rom_SetObjectToActor(&en->actor, globalCtx, realObjId, (R_FILESTART(en, anim.fileStart))))
         {
             #if LOGGING == 1
                 osSyncPrintf("_%2d: Animation had object %04x set, but it wasn't loaded, so the animation will not play.", en->npcId, realObjId);
@@ -238,7 +238,7 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
 
     
     if (realObjId != en->settings.objectId)
-        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId);
+        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
 }
 
 void Update_HeadWaistRot(NpcMaker *en, GlobalContext* globalCtx)

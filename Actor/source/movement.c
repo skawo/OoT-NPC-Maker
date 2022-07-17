@@ -155,9 +155,9 @@ bool Movement_RideActor(NpcMaker* en, GlobalContext* globalCtx)
             if (en->riddenNpc->isMoving)
             {
                 // Object needs to be set to the ridden NPC's, otherwise the animations will not work properly.
-                Rom_SetObjectToActor(&en->riddenNpc->actor, globalCtx, en->riddenNpc->settings.objectId);
+                Rom_SetObjectToActor(&en->riddenNpc->actor, globalCtx, en->riddenNpc->settings.objectId, en->riddenNpc->settings.fileStart);
                 Movement_StopMoving(en->riddenNpc, globalCtx, true);
-                Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId);
+                Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
             }
         }
 

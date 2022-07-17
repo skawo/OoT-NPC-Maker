@@ -88,6 +88,7 @@ typedef struct NpcSettings
     float gravity;
     float smoothingConstant;
     u32 skeleton;
+    s32 fileStart;
     Vec3f lookAtPosOffset;
 
     u8 blinkPattern[4];
@@ -122,6 +123,7 @@ typedef struct InternalMsgEntry
 typedef struct NpcAnimationEntry
 {
     u32 offset;
+    s32 fileStart;
     float speed;
     s16 objectId;
     u8 startFrame;
@@ -132,6 +134,7 @@ typedef struct NpcAnimationEntry
 typedef struct ExDListEntry
 {
     u32 offset;
+    s32 fileStart;
     Vec3f translation;
     float scale;
     s16 objectId;
@@ -152,6 +155,7 @@ typedef struct ColorEntry
 typedef struct ExSegDataEntry
 {
     u32 offset;
+    s32 fileStart;
     s16 objectId;
     s16 __pad__;
 } ExSegDataEntry;

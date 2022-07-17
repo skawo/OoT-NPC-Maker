@@ -77,6 +77,7 @@
 #define PATH_ID(en) (en->settings.pathId - 1) 
 #define CUTSCENE_ID(en) (en->settings.cutsceneId - 1)
 #define R_OBJECT(en, obj) obj == OBJECT_CURRENT ? en->settings.objectId : obj
+#define R_FILESTART(en, fS) fS == OBJECT_CURRENT ? en->settings.fileStart : fS
 #define R_CUSTOM_MSG_ID(id) (id - 32768)
 
 #define MAX_BLINK_FRAME 4

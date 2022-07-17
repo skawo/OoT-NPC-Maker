@@ -14,7 +14,7 @@ namespace NPC_Maker
 
         public NPCFile()
         {
-            Version = 2;
+            Version = 3;
             Entries = new List<NPCEntry>();
             GlobalHeaders = new List<ScriptEntry>();
         }
@@ -27,6 +27,8 @@ namespace NPC_Maker
 
         public UInt16 ObjectID { get; set; }
         public UInt32 Hierarchy { get; set; }
+
+        public Int32 FileStart { get; set; }
         public byte HierarchyType { get; set; }
         public Int16[] ModelPositionOffsets { get; set; }
         public float ModelScale { get; set; }
@@ -216,6 +218,8 @@ namespace NPC_Maker
             Invisible = false;
             DEBUGShowCols = false;
 
+            FileStart = 0;
+
             NumVars = 2;
             NumFVars = 2;
         }
@@ -320,6 +324,7 @@ namespace NPC_Maker
             SCRIPTFVARS,
             ROAMMAX,
             EXISTALLROOMS,
+            FILESTART,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -443,6 +448,7 @@ namespace NPC_Maker
 
                 case Members.ROAMMAX: MaxDistRoam = Convert.ToUInt16(Value); break;
                 case Members.EXISTALLROOMS: ExistInAllRooms = Convert.ToBoolean(Value); break;
+                case Members.FILESTART: FileStart = Convert.ToInt32(Value); break;
 
                 default: break;
             }
@@ -472,6 +478,8 @@ namespace NPC_Maker
         public byte StartFrame { get; set; }
         public byte EndFrame { get; set; }
 
+        public Int32 FileStart { get; set; }
+
         public AnimationEntry()
         {
             Name = "";
@@ -480,8 +488,9 @@ namespace NPC_Maker
             ObjID = -1;
             StartFrame = 0;
             EndFrame = 0xFF;
+            FileStart = -1;
         }
-        public AnimationEntry(string _Name, UInt32 _Address, float _Speed, Int16 _ObjectID, byte _StartFrame, byte _EndFrame)
+        public AnimationEntry(string _Name, UInt32 _Address, float _Speed, Int16 _ObjectID, byte _StartFrame, byte _EndFrame, Int32 _FileStart)
         {
             Name = _Name;
             Address = _Address;
@@ -489,6 +498,7 @@ namespace NPC_Maker
             ObjID = _ObjectID;
             StartFrame = _StartFrame;
             EndFrame = _EndFrame;
+            FileStart = _FileStart;
         }
     }
 
@@ -498,17 +508,21 @@ namespace NPC_Maker
         public UInt32 Address { get; set; }
         public Int16 ObjectID { get; set; }
 
+        public Int32 FileStart { get; set; }
+
         public SegmentEntry()
         {
             Name = "";
             Address = 0;
             ObjectID = -1;
+            FileStart = -1;
         }
-        public SegmentEntry(string _Name, UInt32 _Address, Int16 _ObjectID)
+        public SegmentEntry(string _Name, UInt32 _Address, Int16 _ObjectID, Int32 _FileStart)
         {
             Name = _Name;
             Address = _Address;
             ObjectID = _ObjectID;
+            FileStart = _FileStart;
         }
     }
 
@@ -785,6 +799,8 @@ namespace NPC_Maker
         public System.Drawing.Color Color { get; set; }
         public Int16 ObjectID { get; set; }
 
+        public Int32 FileStart { get; set; }
+
         public DListEntry()
         {
             Name = "";
@@ -800,9 +816,10 @@ namespace NPC_Maker
             Limb = 0;
             ObjectID = -1;
             Color = System.Drawing.Color.FromArgb(255, 255, 255, 255);
+            FileStart = -1;
         }
         public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, System.Drawing.Color _Color,
-                          Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, Int16 _Limb, int _ShowType, Int16 _ObjectID)
+                          Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, Int16 _Limb, int _ShowType, Int16 _ObjectID, Int32 _FileStart)
         {
             Name = _Name;
             Address = _Address;
@@ -817,6 +834,7 @@ namespace NPC_Maker
             ShowType = _ShowType;
             Color = _Color;
             ObjectID = _ObjectID;
+            FileStart = _FileStart;
         }
     }
 }

@@ -1012,7 +1012,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             u32 endFrame = Scripts_GetVarval(en, globalCtx, instr->endFrameType, instr->endFrame, false);
             float speed = Scripts_GetVarval(en, globalCtx, instr->speedType, instr->speed, false);   
 
-            Setup_AnimationImpl(&PLAYER->actor, globalCtx, &PLAYER->skelAnime, offset, ANIMTYPE_LINK, -1, -1, startFrame, endFrame, speed, true, instr->once);
+            Setup_AnimationImpl(&PLAYER->actor, globalCtx, &PLAYER->skelAnime, offset, ANIMTYPE_LINK, -1, 0, -1, 0, startFrame, endFrame, speed, true, instr->once);
             break;       
         }
         case SET_SCRIPT_START:
