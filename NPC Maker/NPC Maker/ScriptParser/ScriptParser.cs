@@ -522,6 +522,9 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.ITEM: Instructions.Add(ParseItemInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.PICKUP: Instructions.Add(ParsePickupInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.RETURN: Instructions.Add(ParseReturnInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.SAVE: Instructions.Add(ParseSaveInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.FADEIN: 
+                        case (int)Lists.Instructions.FADEOUT: Instructions.Add(ParseFadeInstruction(SplitLine)); break;
                         default:
                             {
                                 byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);

@@ -202,7 +202,7 @@ void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, ExDListEntry* dList)
                     return;
                 }
                 else  
-                    gSPSegment(dest->p++, 6, pointer);
+                    gSPSegment(dest->p++, 6, AADDR(pointer, (R_FILESTART(en, dList->fileStart))));
             }
                 
             break;
@@ -216,7 +216,7 @@ void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, ExDListEntry* dList)
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
     if (en->settings.objectId > 0 && object != en->settings.objectId)
-        gSPSegment(dest->p++, 6, Rom_GetObjectDataPtr(en->settings.objectId, globalCtx));
+        gSPSegment(dest->p++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, globalCtx), en->settings.fileStart));
 
     Draw_SetEnvColor(&dest->p, en->curColor, en->curAlpha);
 }
@@ -403,8 +403,8 @@ void Draw_SetupSegments(NpcMaker* en, GlobalContext* globalCtx)
                 }
             }
 
-            gSPSegment(POLY_XLU.p++, i + 8, pointer + data->offset);
-            gSPSegment(POLY_OPA.p++, i + 8, pointer + data->offset);
+            gSPSegment(POLY_XLU.p++, i + 8, pointer + data->offset + (R_FILESTART(en, data->fileStart)));
+            gSPSegment(POLY_OPA.p++, i + 8, pointer + data->offset + (R_FILESTART(en, data->fileStart)));
         }
     }
 }
@@ -491,6 +491,14 @@ void Draw_Model(NpcMaker* en, GlobalContext* globalCtx)
 
     TwoHeadGfxArena* dest = (dT ? &POLY_XLU : &POLY_OPA);
     Draw_Setup(en, globalCtx, dT);
+
+    // Reset the file location to account for the file start offset.
+    if (en->settings.fileStart)
+    {
+        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
+        gSPSegment(POLY_XLU.p++, 0x06, globalCtx->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
+        gSPSegment(POLY_OPA.p++, 0x06, globalCtx->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
+    }    
 
     // Draw static exdlists (ones not attached to a limb)
     if (en->hasStaticExDlists)

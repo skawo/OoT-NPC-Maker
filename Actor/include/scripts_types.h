@@ -605,5 +605,22 @@ typedef struct ScrInstrParticle
 
 #pragma endregion
 
+#pragma region fade
+
+typedef struct ScrInstrFade
+{
+    u8 id;
+    u8 varTypeR : 4;
+    u8 varTypeG : 4;
+    u8 varTypeB;
+    u8 varTypeRate;
+    ScriptVarval R;
+    ScriptVarval G;
+    ScriptVarval B;
+    ScriptVarval rate;
+} ScrInstrFade;
+
+
+#pragma endregion
 
 #endif

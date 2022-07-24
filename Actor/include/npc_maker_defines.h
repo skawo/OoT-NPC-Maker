@@ -1,6 +1,16 @@
 #ifndef NPC_MAKER_DEFINES_H
 #define NPC_MAKER_DEFINES_H
 
+#if GAME_VERSION == 1
+    extern void Sram_WriteSave_Temp(SramContext* sramCtx);
+        asm("Sram_WriteSave_Temp = 0x800905D4");
+#endif
+
+#if GAME_VERSION == 1
+    extern void Gameplay_SaveSceneFlags_Temp(GlobalContext* globalCtx);
+        asm("Gameplay_SaveSceneFlags_Temp = 0x8009D894");
+#endif
+
 #define DUMMY_MSG_DATA 0x30313161
 #define DUMMY_MESSAGE 0x011A
 #define NO_CUSTOM_MESSAGE -1 
@@ -77,6 +87,7 @@
 #define PATH_ID(en) (en->settings.pathId - 1) 
 #define CUTSCENE_ID(en) (en->settings.cutsceneId - 1)
 #define R_OBJECT(en, obj) obj == OBJECT_CURRENT ? en->settings.objectId : obj
+#define R_FILESTART(en, fS) fS == OBJECT_CURRENT ? en->settings.fileStart : fS
 #define R_CUSTOM_MSG_ID(id) (id - 32768)
 
 #define MAX_BLINK_FRAME 4

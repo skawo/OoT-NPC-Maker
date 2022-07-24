@@ -287,7 +287,7 @@ void Setup_Objects(NpcMaker* en, GlobalContext* globalCtx)
     if (en->settings.objectId > 0)
     {
         Rom_LoadObjectIfUnloaded(globalCtx, en->settings.objectId);
-        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId);
+        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
     }
 
     for (int i = 0; i < en->numAnims; i++)
@@ -296,7 +296,7 @@ void Setup_Objects(NpcMaker* en, GlobalContext* globalCtx)
     for (int i = 0; i < en->numExDLists; i++)
         Rom_LoadObjectIfUnloaded(globalCtx, en->extraDLists[i].objectId);
 
-    for (int i = NULL_SEG_BLOCK_SIZE; i < en->exSegDataBlSize; i+=8)
+    for (int i = NULL_SEG_BLOCK_SIZE; i < en->exSegDataBlSize; i += 12)
     {
         ExSegDataEntry* ex = (ExSegDataEntry*)AADDR(en->exSegData, i);
         Rom_LoadObjectIfUnloaded(globalCtx, ex->objectId);
@@ -538,7 +538,9 @@ void Setup_Animation(NpcMaker* en, GlobalContext* globalCtx, int animId, bool in
                                              anim.offset, 
                                              en->settings.animationType, 
                                              R_OBJECT(en, anim.objectId),
+                                             (R_FILESTART(en, anim.fileStart)),
                                              en->settings.objectId, 
+                                             en->settings.fileStart,
                                              anim.startFrame, 
                                              anim.endFrame, 
                                              anim.speed, 
@@ -553,7 +555,7 @@ void Setup_Animation(NpcMaker* en, GlobalContext* globalCtx, int animId, bool in
     }
 }
 
-bool Setup_AnimationImpl(Actor* actor, GlobalContext* globalCtx, SkelAnime* skelanime, int animAddr, int animType, int object, int actorObject,
+bool Setup_AnimationImpl(Actor* actor, GlobalContext* globalCtx, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int actorObject, int actorObjectFileStart,
                            int animStart, int animEnd, float speed, bool interpolate, bool playOnce)
 {
 #pragma region AnimMode
@@ -620,7 +622,7 @@ bool Setup_AnimationImpl(Actor* actor, GlobalContext* globalCtx, SkelAnime* skel
 
                 if (actorObject != object && object > 0)
                 {
-                    if (!Rom_SetObjectToActor(actor, globalCtx, object))
+                    if (!Rom_SetObjectToActor(actor, globalCtx, object, fileStart))
                     {
                         #if LOGGING == 1
                             osSyncPrintf("_Animation needs object %08x, but it's not loaded, so the animation won't play", object);
@@ -646,7 +648,7 @@ bool Setup_AnimationImpl(Actor* actor, GlobalContext* globalCtx, SkelAnime* skel
                 skelanime->endFrame = endFrame;
 
                 if (actorObject != object && actorObject > 0)
-                    Rom_SetObjectToActor(actor, globalCtx, actorObject);
+                    Rom_SetObjectToActor(actor, globalCtx, actorObject, actorObjectFileStart);
 
                 break;
             }

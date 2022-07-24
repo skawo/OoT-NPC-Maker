@@ -232,6 +232,9 @@ namespace NPC_Maker
             RETURN,
             GOTO,
             LABEL,
+            SAVE,
+            FADEIN,
+            FADEOUT,
             NOP,
         }
 
