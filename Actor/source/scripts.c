@@ -181,7 +181,7 @@ bool Scripts_InstructionFadeOut(NpcMaker* en, GlobalContext* globalCtx, ScriptIn
     {
         globalCtx->envCtx.unk_E2[0] = Scripts_GetVarval(en, globalCtx, in->varTypeR, in->R, true);
         globalCtx->envCtx.unk_E2[1] = Scripts_GetVarval(en, globalCtx, in->varTypeG, in->G, true);
-        globalCtx->envCtx.unk_E2[2] = Scripts_GetVarval(en, globalCtx, in->varTypeB, in->G, true);
+        globalCtx->envCtx.unk_E2[2] = Scripts_GetVarval(en, globalCtx, in->varTypeB, in->B, true);
         globalCtx->envCtx.unk_E1 = 1;
     }
 
