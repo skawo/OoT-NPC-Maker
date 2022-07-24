@@ -119,14 +119,14 @@ void Rom_LoadObjectIfUnloaded(GlobalContext* globalCtx, s16 objId)
     }
 }
 
-bool Rom_SetObjectToActor(Actor* en, GlobalContext* globalCtx, u16 object)
+bool Rom_SetObjectToActor(Actor* en, GlobalContext* globalCtx, u16 object, s32 fileStart)
 {
     int bankIndex = Object_GetIndex(&globalCtx->objectCtx, object);
 
     if (Object_IsLoaded(&globalCtx->objectCtx, bankIndex))
     {
         en->objBankIndex = bankIndex;
-        Actor_SetObjectDependency(globalCtx, en);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(globalCtx->objectCtx.status[en->objBankIndex].segment) + fileStart;
         return true;
     }
     else

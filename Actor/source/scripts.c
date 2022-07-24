@@ -109,6 +109,10 @@ void* ScriptFuncs[] =
     &Scripts_InstructionNop,                // PICKUP
     &Scripts_InstructionNop,                // RETURN
     &Scripts_InstructionGoto,               // GOTO
+    &Scripts_InstructionNop,                // LABEL
+    &Scripts_InstructionSave,               // SAVE
+    &Scripts_InstructionFadeIn,             // FADEIN
+    &Scripts_InstructionFadeOut,            // FADEOUT
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -120,6 +124,84 @@ bool Scripts_Execute(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* scr
     ScriptFunc* f = (ScriptFunc*)ScriptFuncs[instruction->id];
     return f(en, globalCtx, script, instruction);
 }
+
+bool Scripts_InstructionSave(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: SAVE", en->npcId);
+    #endif		
+
+    #if GAME_VERSION == 1
+        Gameplay_SaveSceneFlags_Temp(globalCtx);
+        Sram_WriteSave_Temp(&globalCtx->sramCtx);
+    #else
+        Gameplay_SaveSceneFlags(globalCtx);
+        Sram_WriteSave(&globalCtx->sramCtx);
+    #endif 
+
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionFadeIn(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrFade* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: FADEIN", en->npcId);
+    #endif		
+
+    if (globalCtx->envCtx.unk_E2[3] != 0)
+    {
+        float rate = Scripts_GetVarval(en, globalCtx, in->varTypeRate, in->rate, true);
+
+        if (rate >= globalCtx->envCtx.unk_E2[3])
+        {
+            globalCtx->envCtx.unk_E2[3] = 0;
+            globalCtx->envCtx.unk_E1 = 0;
+        }
+        else
+        {
+            globalCtx->envCtx.unk_E2[3] -= rate;
+            return SCRIPT_STOP;
+        }
+    }
+
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionFadeOut(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrFade* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: FADEOUT", en->npcId);
+    #endif		
+
+    bool firstRun = Scripts_SetupTemp(script, in);
+
+    if (firstRun)
+    {
+        globalCtx->envCtx.unk_E2[0] = Scripts_GetVarval(en, globalCtx, in->varTypeR, in->R, true);
+        globalCtx->envCtx.unk_E2[1] = Scripts_GetVarval(en, globalCtx, in->varTypeG, in->G, true);
+        globalCtx->envCtx.unk_E2[2] = Scripts_GetVarval(en, globalCtx, in->varTypeB, in->B, true);
+        globalCtx->envCtx.unk_E1 = 1;
+    }
+
+    if (globalCtx->envCtx.unk_E2[3] != 255)
+    {
+        float rate = Scripts_GetVarval(en, globalCtx, in->varTypeRate, in->rate, true);
+
+        if (rate + globalCtx->envCtx.unk_E2[3] >= 255)
+            globalCtx->envCtx.unk_E2[3] = 255;
+        else
+        {
+            globalCtx->envCtx.unk_E2[3] += rate;
+            return SCRIPT_STOP;
+        }
+    }
+
+    script->curInstrNum++; 
+    return Scripts_FreeAndContinue(script);
+}
+
 
 bool Scripts_InstructionNop(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstr* in)
 {
@@ -161,7 +243,6 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
     #endif
 
     Vec3f pos = Scripts_GetVarvalVec3f(en, globalCtx, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
-
 
     Actor* subject = &en->actor;
 
@@ -1012,7 +1093,7 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             u32 endFrame = Scripts_GetVarval(en, globalCtx, instr->endFrameType, instr->endFrame, false);
             float speed = Scripts_GetVarval(en, globalCtx, instr->speedType, instr->speed, false);   
 
-            Setup_AnimationImpl(&GET_PLAYER(globalCtx)->actor, globalCtx, &GET_PLAYER(globalCtx)->skelAnime, offset, ANIMTYPE_LINK, -1, -1, startFrame, endFrame, speed, true, instr->once);
+            Setup_AnimationImpl(&GET_PLAYER(globalCtx)->actor, globalCtx, &GET_PLAYER(globalCtx)->skelAnime, offset, ANIMTYPE_LINK, -1, 0, -1, 0, startFrame, endFrame, speed, true, instr->once);
             break;       
         }
         case SET_SCRIPT_START:

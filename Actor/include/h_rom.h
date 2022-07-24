@@ -29,7 +29,7 @@ extern RomFile* objectTable;
 void Rom_LoadObject(int objId, void *dram_addr);
 void Rom_LoadDataFromObjectFromROM(int objId, void* dram_addr, u32 offset_into_file, size_t size);
 void Rom_LoadObjectIfUnloaded(GlobalContext* global, s16 object_id);
-bool Rom_SetObjectToActor(Actor* en, GlobalContext*global, u16 object);
+bool Rom_SetObjectToActor(Actor* en, GlobalContext*global, u16 object, s32 fileStart);
 void* Rom_GetObjectDataPtr(u16 object_id, GlobalContext*global);
 MessageEntry* Rom_GetMessageEntry(s16 msg_id);
 InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, GlobalContext* global, int id);

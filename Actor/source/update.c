@@ -116,7 +116,7 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
     #pragma region Blinking
 
     // We check if anything is defined for the segment set as the one used for blinking, and if blinking is enabled.
-    if (en->settings.blinkTexSegment >= 8 && en->exSegData[en->settings.blinkTexSegment - 8] != 0 && en->doBlinkingAnm)
+    if (en->settings.blinkTexSegment >= 8 && en->exSegData[en->settings.blinkTexSegment - 8] != 0 && en->doBlinkingAnm && en->settings.blinkPattern[0] != 0xFF)
     {
         // We wait until the timer between blinks is exhausted before starting to blink.
         if (en->blinkTimer)
@@ -158,7 +158,7 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
 
     // Pretty much the same as above, really, except we don't do this based on a timer,
     // but whenever the actor is talking.
-    if (en->settings.talkTexSegment >= 8 && en->exSegData[en->settings.talkTexSegment - 8] != 0 && en->doTalkingAnm)
+    if (en->settings.talkTexSegment >= 8 && en->exSegData[en->settings.talkTexSegment - 8] != 0 && en->doTalkingAnm && en->settings.talkPattern[0] != 0xFF)
     {
         if (en->isTalking && Message_GetState(&global->msgCtx) == TEXT_STATE_DONE_FADING)
         {
@@ -205,7 +205,7 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
 
     if (realObjId != en->settings.objectId)
     {
-        if (!Rom_SetObjectToActor(&en->actor, globalCtx, realObjId))
+        if (!Rom_SetObjectToActor(&en->actor, globalCtx, realObjId, (R_FILESTART(en, anim.fileStart))))
         {
             #if LOGGING == 1
                 osSyncPrintf("_%2d: Animation had object %04x set, but it wasn't loaded, so the animation will not play.", en->npcId, realObjId);
@@ -238,7 +238,7 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
 
     
     if (realObjId != en->settings.objectId)
-        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId);
+        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
 }
 
 void Update_HeadWaistRot(NpcMaker *en, GlobalContext* globalCtx)
