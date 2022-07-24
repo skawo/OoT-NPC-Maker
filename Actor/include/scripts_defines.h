@@ -38,6 +38,9 @@ typedef enum InstructionId
     RETURN,
     GOTO,
     LABEL,
+    SAVE,
+    FADEIN,
+    FADEOUT,
     NOP,
 } InstructionId;
 

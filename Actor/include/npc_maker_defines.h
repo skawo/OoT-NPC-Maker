@@ -2,8 +2,13 @@
 #define NPC_MAKER_DEFINES_H
 
 #if GAME_VERSION == 1
-    void Sram_WriteSave_Temp(SramContext* sramCtx);
+    extern void Sram_WriteSave_Temp(SramContext* sramCtx);
         asm("Sram_WriteSave_Temp = 0x800905D4");
+#endif
+
+#if GAME_VERSION == 1
+    extern void Gameplay_SaveSceneFlags_Temp(GlobalContext* globalCtx);
+        asm("Gameplay_SaveSceneFlags_Temp = 0x8009D894");
 #endif
 
 #define DUMMY_MSG_DATA 0x30313161

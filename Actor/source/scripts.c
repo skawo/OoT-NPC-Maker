@@ -132,8 +132,10 @@ bool Scripts_InstructionSave(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
     #endif		
 
     #if GAME_VERSION == 1
+        Gameplay_SaveSceneFlags_Temp(globalCtx);
         Sram_WriteSave_Temp(&globalCtx->sramCtx);
     #else
+        Gameplay_SaveSceneFlags(globalCtx);
         Sram_WriteSave(&globalCtx->sramCtx);
     #endif 
 
