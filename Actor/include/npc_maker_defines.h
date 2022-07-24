@@ -1,6 +1,11 @@
 #ifndef NPC_MAKER_DEFINES_H
 #define NPC_MAKER_DEFINES_H
 
+#if GAME_VERSION == 1
+    void Sram_WriteSave_Temp(SramContext* sramCtx);
+        asm("Sram_WriteSave_Temp = 0x800905D4");
+#endif
+
 #define DUMMY_MSG_DATA 0x30313161
 #define DUMMY_MESSAGE 0x011A
 #define NO_CUSTOM_MESSAGE -1 
