@@ -44,7 +44,6 @@ static void NpcMaker_PostInit(NpcMaker* en, GlobalContext* globalCtx)
 static void NpcMaker_Update(NpcMaker* en, GlobalContext* globalCtx)
 {
     // Set the object location again to account for the fileStart
-
     if (en->settings.fileStart)
         Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
 
@@ -64,10 +63,8 @@ static void NpcMaker_Update(NpcMaker* en, GlobalContext* globalCtx)
     if (!en->settings.execJustScript)
     {
         // If we're in cutscene mode, we're always moving in the cutscene movement mode
-        if (globalCtx->csCtx.state && en->settings.cutsceneId)
-        {                
+        if (globalCtx->csCtx.state && en->settings.cutsceneId)        
             Movement_Main(en, globalCtx, MOVEMENT_CUTSCENE, false, false);
-        }
         else
         {
             Movement_Main(en, globalCtx, en->settings.movementType, en->settings.ignorePathYAxis, true);
@@ -78,7 +75,7 @@ static void NpcMaker_Update(NpcMaker* en, GlobalContext* globalCtx)
                 Update_HeadWaistRot(en, globalCtx);
         }
 
-        // Animations, collision, etc. is set AFTER movement, since movement sets up the next animation.
+        // Animations, collision, etc. are updated AFTER movement, since movement sets up the next animation and this new movement position is what we want to check.
         if (en->currentAnimId >= 0)
             Update_Animations(en, globalCtx);
 

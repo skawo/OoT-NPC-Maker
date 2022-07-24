@@ -11,18 +11,18 @@
 #include "../include/draw.h"
 #include "../include/scripts_data.h"
 
-inline ScrInstr* Scripts_GetInstrPtr(ScriptInstance* script, u32 instruction_num)
-{
-    u32 curOffs = AVAL(script->scriptPtr, u16, SCRIPT_INSTR_SIZE * instruction_num);
-    return (ScrInstr*)AADDR(script->scriptPtr, curOffs);
-}
-
 // Used as the update function for the player whenever animate mode is set.
 // The actor which turns on the animate mode MUST unset it in the same state as when the animate mode was set!
 // (e.g if animate mode is set while textbox is on screen, it must be unset while textbox is on screen)
 void Scripts_PlayerAnimateMode(Player* pl, GlobalContext* globalCtx)
 {
     LinkAnimation_Update(globalCtx, &pl->skelAnime);
+}
+
+inline ScrInstr* Scripts_GetInstrPtr(ScriptInstance* script, u32 instruction_num)
+{
+    u32 curOffs = AVAL(script->scriptPtr, u16, SCRIPT_INSTR_SIZE * instruction_num);
+    return (ScrInstr*)AADDR(script->scriptPtr, curOffs);
 }
 
 void Scripts_Main(NpcMaker* en, GlobalContext* globalCtx)
@@ -151,7 +151,7 @@ bool Scripts_InstructionFadeIn(NpcMaker* en, GlobalContext* globalCtx, ScriptIns
 
     if (globalCtx->envCtx.unk_E2[3] != 0)
     {
-        float rate = Scripts_GetVarval(en, globalCtx, in->varTypeRate, in->rate, true);
+        float rate = Scripts_GetVarval(en, globalCtx, in->varTypeRate, in->rate, false);
 
         if (rate >= globalCtx->envCtx.unk_E2[3])
         {
@@ -179,15 +179,15 @@ bool Scripts_InstructionFadeOut(NpcMaker* en, GlobalContext* globalCtx, ScriptIn
 
     if (firstRun)
     {
-        globalCtx->envCtx.unk_E2[0] = Scripts_GetVarval(en, globalCtx, in->varTypeR, in->R, true);
-        globalCtx->envCtx.unk_E2[1] = Scripts_GetVarval(en, globalCtx, in->varTypeG, in->G, true);
-        globalCtx->envCtx.unk_E2[2] = Scripts_GetVarval(en, globalCtx, in->varTypeB, in->B, true);
+        globalCtx->envCtx.unk_E2[0] = Scripts_GetVarval(en, globalCtx, in->varTypeR, in->R, false);
+        globalCtx->envCtx.unk_E2[1] = Scripts_GetVarval(en, globalCtx, in->varTypeG, in->G, false);
+        globalCtx->envCtx.unk_E2[2] = Scripts_GetVarval(en, globalCtx, in->varTypeB, in->B, false);
         globalCtx->envCtx.unk_E1 = 1;
     }
 
     if (globalCtx->envCtx.unk_E2[3] != 255)
     {
-        float rate = Scripts_GetVarval(en, globalCtx, in->varTypeRate, in->rate, true);
+        float rate = Scripts_GetVarval(en, globalCtx, in->varTypeRate, in->rate, false);
 
         if (rate + globalCtx->envCtx.unk_E2[3] >= 255)
             globalCtx->envCtx.unk_E2[3] = 255;
@@ -198,7 +198,6 @@ bool Scripts_InstructionFadeOut(NpcMaker* en, GlobalContext* globalCtx, ScriptIn
         }
     }
 
-    script->curInstrNum++; 
     return Scripts_FreeAndContinue(script);
 }
 
@@ -320,6 +319,7 @@ bool Scripts_InstructionParticle(NpcMaker* en, GlobalContext* globalCtx, ScriptI
 
             if (exDlistIndex < 0)
             {
+                // Hahen has a default object.
                 exDList.objectId = -1;
                 exDList.scale = 35.0f;
             }
