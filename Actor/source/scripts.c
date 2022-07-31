@@ -404,6 +404,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
 
         case IF_CURRENT_STATE:                  
         {
+            // Checks current state derived from collision.
             bool t = en->actor.bgCheckFlags & (1 << (int)Scripts_GetVarval(en, globalCtx, in->vartype, in->value, false));
             branch = (t ? in->trueInstrNum : in->falseInstrNum);
             break;
@@ -516,7 +517,7 @@ bool Scripts_InstructionIf(NpcMaker* en, GlobalContext* globalCtx, ScriptInstanc
             break;
         }
         case IF_DAMAGED_BY:
-        {
+        {            
             int i = 0;
 
             if (en->collider.info.acHitInfo != 0)
@@ -855,6 +856,9 @@ bool Scripts_InstructionSet(NpcMaker* en, GlobalContext* globalCtx, ScriptInstan
             }
             else
             {
+                // If time difference is larger than current time speed, get the time difference and increase time by <= 0x500 per frame
+                // to make the time smoothly advance to that time (can't just set this directly, because if the current time is higher than
+                // the destination time, then setting it directly won't work)
                 u16 timediff = MIN(ABS(gSaveContext.dayTime - script->tempValues[0]), 0x500);
 
                 if (gSaveContext.dayTime + timediff == script->tempValues[0])

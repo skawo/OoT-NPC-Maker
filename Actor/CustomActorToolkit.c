@@ -5,6 +5,7 @@
 #define LOG_VERSION 0
 #define COLLISION_VIEWER 1
 #define DIRECT_ROM_LOAD 0
+#define GAME_VERSION 0
 
 #include "source/npc_maker.c"
 #include "source/scripts.c"
