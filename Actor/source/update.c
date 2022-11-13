@@ -284,9 +284,13 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
     if (en->isTalking)
         PLAYER->actor.textId = en->actor.textId;
 
-    // If message status is "new message", increase textbox count.
+    // If message status is "new message", increase textbox count. Also,
+    // save current textbox buffer position.
     if (en->isTalking && globalCtx->msgCtx.msgMode == MSGMODE_NEWMSG)
+    {
+        en->curTextBuffPos = AVAL(&globalCtx->msgCtx, u16, 0xE3CE);
         en->textboxNum++;
+    }
 
     // Overwrite message if custom ID is set.
     if (en->isTalking && en->customMsgId >= 0)

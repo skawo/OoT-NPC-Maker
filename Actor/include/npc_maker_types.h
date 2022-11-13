@@ -266,6 +266,7 @@ typedef struct NpcMaker
     NpcMaker* riddenNpc;
     Actor* refActor;
     MessageEntry* dummyMesEntry;
+    u16 curTextBuffPos;
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;
