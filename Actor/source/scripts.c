@@ -113,6 +113,7 @@ void* ScriptFuncs[] =
     &Scripts_InstructionSave,               // SAVE
     &Scripts_InstructionFadeIn,             // FADEIN
     &Scripts_InstructionFadeOut,            // FADEOUT
+    &Scripts_InstructionQuake,              // QUAKE
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -139,6 +140,21 @@ bool Scripts_InstructionSave(NpcMaker* en, GlobalContext* globalCtx, ScriptInsta
         Sram_WriteSave(&globalCtx->sramCtx);
     #endif 
 
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionQuake(NpcMaker* en, GlobalContext* globalCtx, ScriptInstance* script, ScrInstrQuake* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: QUAKE", en->npcId);
+    #endif		
+
+    s16 quakeId = Quake_Add(GET_ACTIVE_CAM(globalCtx), Scripts_GetVarval(en, globalCtx, in->varTypeType, in->type, false));
+    Quake_SetSpeed(quakeId, Scripts_GetVarval(en, globalCtx, in->varTypeSpeed, in->speed, false));
+    Quake_SetQuakeValues(quakeId, 0, 1, 0xFA, 1);
+    Quake_SetCountdown(quakeId, 0xA);
+    
     script->curInstrNum++; 
     return SCRIPT_CONTINUE;
 }

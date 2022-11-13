@@ -10,12 +10,13 @@ namespace NPC_Maker.Scripts
             {
                 try
                 {
-                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                     var Type = ScriptHelpers.GetScriptVarVal(SplitLine, 1, typeof(Lists.QuakeTypes), ParseException.UnrecognizedQuake(SplitLine));
                     var Speed = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, Int16.MaxValue);
+                    var Duration = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, Int16.MaxValue);
 
-                    return new InstructionQuake(Speed, Type);
+                    return new InstructionQuake(Speed, Type, Duration);
 
                 }
                 catch (ParseException pEx)

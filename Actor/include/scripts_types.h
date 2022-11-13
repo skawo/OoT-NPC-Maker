@@ -623,4 +623,19 @@ typedef struct ScrInstrFade
 
 #pragma endregion
 
+#pragma region quake
+
+typedef struct ScrInstrQuake
+{
+    u8 id;
+    u8 varTypeSpeed;
+    u8 varTypeType;
+    u8 pad;
+    ScriptVarval speed;
+    ScriptVarval type;
+} ScrInstrQuake;
+
+
+#pragma endregion
+
 #endif
