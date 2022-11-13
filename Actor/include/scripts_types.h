@@ -630,9 +630,10 @@ typedef struct ScrInstrQuake
     u8 id;
     u8 varTypeSpeed;
     u8 varTypeType;
-    u8 pad;
+    u8 varTypeDuration;
     ScriptVarval speed;
     ScriptVarval type;
+    ScriptVarval duration;
 } ScrInstrQuake;
 
 

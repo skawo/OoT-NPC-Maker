@@ -79,6 +79,8 @@
 #define SEG_OFFSET(seg) (0x01000000 * seg)
 #define OFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset : offset + SEG_OFFSET(segment)
 
+#define GET_ACTIVE_CAM(GlobalContext) ((GlobalContext)->cameraPtrs[(GlobalContext)->activeCamera])
+
 #define INVALID_NODE -1
 #define INVALID_PATH 0
 #define START_NODE(en) (en->settings.pathLoopStartNode >= 0 ? en->settings.pathLoopStartNode : 0)
