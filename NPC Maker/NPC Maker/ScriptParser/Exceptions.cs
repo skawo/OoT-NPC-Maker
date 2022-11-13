@@ -316,6 +316,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Not a valid effect if attacked: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedQuake(string[] _Line)
+        {
+            return new ParseException("Not a valid quake type: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedLookAtStyle(string[] _Line)
         {
             return new ParseException("Not a valid look-at style: ", String.Join(" ", _Line));

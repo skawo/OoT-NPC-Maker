@@ -235,6 +235,7 @@ namespace NPC_Maker
             SAVE,
             FADEIN,
             FADEOUT,
+            QUAKE,
             NOP,
         }
 
@@ -1929,6 +1930,16 @@ namespace NPC_Maker
             HORSE_RACE = 0x03,
             MARATHON = 0x04,
             DAMPE_RACE = 0x06
+        }
+
+        public enum QuakeTypes
+        {
+            QUAKE_NONE,
+            QUAKE_TYPE1,
+            QUAKE_TYPE2,
+            QUAKE_TYPE3,
+            QUAKE_TYPE4,
+            QUAKE_TYPE5,
         }
     }
 }
