@@ -5,7 +5,7 @@
 #include "../include/h_math.h"
 #include "../include/h_graphics.h"
 
-void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
+void Draw_Debug(NpcMaker* en, PlayState* playState)
 {
     #if COLLISION_VIEWER == 1
 
@@ -14,10 +14,10 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
             Matrix_Push();
 
             //z_matrix_translate_3f_800D1694
-            func_800D1694(en->actor.world.pos.x, en->actor.world.pos.y + en->collider.dim.yShift, en->actor.world.pos.z, &en->actor.shape.rot);
+            Matrix_SetTranslateRotateYXZ(en->actor.world.pos.x, en->actor.world.pos.y + en->collider.dim.yShift, en->actor.world.pos.z, &en->actor.shape.rot);
             Matrix_Scale(MAX(1, en->collider.dim.radius) / 128.0f, en->collider.dim.height / 204.0f, MAX(1, en->collider.dim.radius) / 128.0f, 1);
 
-            gSPMatrix(POLY_XLU.p++, Matrix_NewMtx(globalCtx->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPMatrix(POLY_XLU.p++, Matrix_NewMtx(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_XLU.p++, xluMaterial);
             gDPSetEnvColor(POLY_XLU.p++, 0xFF, 0x00, 0x00, 0x7F);
             gSPDisplayList(POLY_XLU.p++, dlCylinder);
@@ -33,8 +33,8 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
 
         if (en->dbgEnabledPosEditor && en->numExDLists != 0)
         {
-            Gfx* gfx = Graph_GfxPlusOne(globalCtx->state.gfxCtx->polyOpa.p);
-            gSPDisplayList(globalCtx->state.gfxCtx->overlay.p++, gfx);
+            Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
+            gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
             GfxPrint printer;
 
             GfxPrint_Init(&printer);
@@ -73,8 +73,8 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);
             gSPEndDisplayList(gfx++);
-            Graph_BranchDlist(globalCtx->state.gfxCtx->polyOpa.p, gfx);
-            globalCtx->state.gfxCtx->polyOpa.p = gfx;
+            Graph_BranchDlist(playState->state.gfxCtx->polyOpa.p, gfx);
+            playState->state.gfxCtx->polyOpa.p = gfx;
         }
 
         #endif
@@ -83,8 +83,8 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
 
         if (en->dgbDrawVersion)
         {
-            Gfx* gfx = Graph_GfxPlusOne(globalCtx->state.gfxCtx->polyOpa.p);
-            gSPDisplayList(globalCtx->state.gfxCtx->overlay.p++, gfx);
+            Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
+            gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
             GfxPrint printer;
 
             GfxPrint_Init(&printer);
@@ -93,13 +93,13 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
 
             GfxPrint_SetPos(&printer, 3, 1);
 
-            GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08x]", MAJOR_VERSION, MINOR_VERSION, globalCtx->csCtx.frames, en->dbgVar2);
+            GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08x]", MAJOR_VERSION, MINOR_VERSION, playState->csCtx.frames, en->dbgVar2);
 
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);
             gSPEndDisplayList(gfx++);
-            Graph_BranchDlist(globalCtx->state.gfxCtx->polyOpa.p, gfx);
-            globalCtx->state.gfxCtx->polyOpa.p = gfx;
+            Graph_BranchDlist(playState->state.gfxCtx->polyOpa.p, gfx);
+            playState->state.gfxCtx->polyOpa.p = gfx;
         }
 
         #endif
@@ -107,20 +107,20 @@ void Draw_Debug(NpcMaker* en, GlobalContext* globalCtx)
     #endif    
 }
 
-inline u32 Draw_GetDrawDestType(NpcMaker* en, GlobalContext* globalCtx)
+inline u32 Draw_GetDrawDestType(NpcMaker* en, PlayState* playState)
 {
-    return (en->curAlpha == 255 && globalCtx->actorCtx.unk_03 == 0) ? OPA : DRAW_TYPE(en->settings.drawType);
+    return (en->curAlpha == 255 && !playState->actorCtx.lensActive) ? OPA : DRAW_TYPE(en->settings.drawType);
 }
 
-void Draw_Setup(NpcMaker* en, GlobalContext* globalCtx, int drawType)
+void Draw_Setup(NpcMaker* en, PlayState* playState, int drawType)
 {
     if (drawType == XLU)
-        func_80093D84(globalCtx->state.gfxCtx);
+        Gfx_SetupDL_25Xlu(playState->state.gfxCtx);
     else
-        func_80093D18(globalCtx->state.gfxCtx);
+        Gfx_SetupDL_25Opa(playState->state.gfxCtx);
 }
 
-void Draw_Lights(NpcMaker* en, GlobalContext* globalCtx, Vec3f* translation)
+void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
 {
     Vec3f transl_in_dir;
     Math_Vec3s_ToVec3f(&transl_in_dir, &en->settings.lightPosOffset);
@@ -143,15 +143,15 @@ void Draw_Lights(NpcMaker* en, GlobalContext* globalCtx, Vec3f* translation)
     }    
 }
 
-void Draw_LightsRebind(NpcMaker* en, GlobalContext* globalCtx) 
+void Draw_LightsRebind(NpcMaker* en, PlayState* playState) 
 {
     Vec3f bindPos = en->actor.world.pos;
     bindPos.y += ((en->actor.focus.pos.y - en->actor.world.pos.y) / 2);
 
     Lights* lights;
-    lights = LightContext_NewLights(&globalCtx->lightCtx, globalCtx->state.gfxCtx);
-    Lights_BindAll(lights, globalCtx->lightCtx.listHead, &bindPos);
-    Lights_Draw(lights, globalCtx->state.gfxCtx);
+    lights = LightContext_NewLights(&playState->lightCtx, playState->state.gfxCtx);
+    Lights_BindAll(lights, playState->lightCtx.listHead, &bindPos);
+    Lights_Draw(lights, playState->state.gfxCtx);
 }
 
 inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
@@ -173,13 +173,13 @@ inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
 }
 
 // Matrix should be set before this is called.
-void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, ExDListEntry* dList)
+void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
 {
     s32 object = R_OBJECT(en, dList->objectId);
     u32 dListOffset = object == OBJECT_RAM ? dList->offset : OFFSET_ADDRESS(6, dList->offset);
 
     // Always drawing to the other buffer than the main model is.
-    int dT = Draw_GetDrawDestType(en, globalCtx);
+    int dT = Draw_GetDrawDestType(en, playState);
     TwoHeadGfxArena *dest = dT ? &POLY_OPA : &POLY_XLU;
 
     switch (object)
@@ -191,7 +191,7 @@ void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, ExDListEntry* dList)
             // Setting segment 6 if object is different to the currently loaded object...
             if (object != en->settings.objectId)
             {
-                void* pointer = Rom_GetObjectDataPtr(object, globalCtx);
+                void* pointer = Rom_GetObjectDataPtr(object, playState);
 
                 if (pointer == NULL)
                 {
@@ -210,13 +210,13 @@ void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, ExDListEntry* dList)
     }
 
     Draw_SetEnvColor(&dest->p, dList->envColor, en->curAlpha);
-    gSPMatrix(dest->p++, Matrix_NewMtx(globalCtx->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
+    gSPMatrix(dest->p++, Matrix_NewMtx(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
     gSPDisplayList(dest->p++, dListOffset);
     
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
     if (en->settings.objectId > 0 && object != en->settings.objectId)
-        gSPSegment(dest->p++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, globalCtx), en->settings.fileStart));
+        gSPSegment(dest->p++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, playState), en->settings.fileStart));
 
     Draw_SetEnvColor(&dest->p, en->curColor, en->curAlpha);
 }
@@ -224,14 +224,14 @@ void Draw_ExtDList(NpcMaker *en, GlobalContext* globalCtx, ExDListEntry* dList)
 void Draw_AffectMatrix(ExDListEntry dlist, Vec3f* translation, Vec3s* rotation)
 {
     if (translation != NULL && rotation != NULL)
-        Matrix_JointPosition(translation, rotation);
+        Matrix_TranslateRotateZYX(translation, rotation);
 
     Matrix_Translate(dlist.translation.x, dlist.translation.y, dlist.translation.z, 1);
-    Matrix_RotateRPY(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, 1);
+    Matrix_RotateZYX(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, 1);
     Matrix_Scale(dlist.scale, dlist.scale, dlist.scale, 1);
 }
 
-void Draw_CalcFocusPos(GlobalContext* globalCtx, s32 limb, NpcMaker* en)
+void Draw_CalcFocusPos(PlayState* playState, s32 limb, NpcMaker* en)
 {
     if (limb == en->settings.targetLimb + 1)
     {
@@ -246,23 +246,23 @@ void Draw_SetEnvColor(Gfx** destP, Color_RGB8 color, u8 alpha)
     gDPSetEnvColor((*destP)++, color.r, color.g, color.b, alpha);
 }
 
-void Draw_PostLimbDraw(GlobalContext* globalCtx, s32 limb, Gfx** dListPtr, Vec3s* rot, void* instance, Gfx** gfxP)
+void Draw_PostLimbDraw(PlayState* playState, s32 limb, Gfx** dListPtr, Vec3s* rot, void* instance, Gfx** gfxP)
 {
     NpcMaker* en = (NpcMaker*)instance;
-    Draw_CalcFocusPos(globalCtx, limb, en);
+    Draw_CalcFocusPos(playState, limb, en);
 }
 
-s32 Draw_PostLimbDrawSkin(Actor* instance, GlobalContext* globalCtx, s32 limb, PSkinAwb* skelanime)
+s32 Draw_PostLimbDrawSkin(Actor* instance, PlayState* playState, s32 limb, Skin* skelanime)
 {
     // Should be only doing this for limbs that have textures to change, but whatever.
     NpcMaker* en = (NpcMaker*)instance;
-    Draw_SetupSegments(en, globalCtx);
-    Draw_CalcFocusPos(globalCtx, limb, en);
+    Draw_SetupSegments(en, playState);
+    Draw_CalcFocusPos(playState, limb, en);
     
     return 1;
 }
 
-s32 Draw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP)
+s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP)
 {
     NpcMaker* en = (NpcMaker*)instance;
     int sLimbNumber = limbNumber - 1;
@@ -308,7 +308,7 @@ s32 Draw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbNumber, Gfx** dListP
         Vec3f in = { translation->x, translation->y, translation->z};
 		Matrix_MultVec3f(&in, &worldPos);
         
-        Draw_Lights(en, globalCtx, &worldPos);
+        Draw_Lights(en, playState, &worldPos);
     }
 
 #pragma endregion 
@@ -340,7 +340,7 @@ s32 Draw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbNumber, Gfx** dListP
             {
                 Matrix_Push();
                 Draw_AffectMatrix(dlist, translation, rotation);
-                Draw_ExtDList(en, globalCtx, &dlist);
+                Draw_ExtDList(en, playState, &dlist);
                 Matrix_Pop();                
             }
         }
@@ -365,7 +365,7 @@ s32 Draw_OverrideLimbDraw(GlobalContext* globalCtx, s32 limbNumber, Gfx** dListP
     return 0;
 }
 
-void Draw_SetupSegments(NpcMaker* en, GlobalContext* globalCtx)
+void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
 {
     if (en->exSegData == NULL)
         return;
@@ -390,7 +390,7 @@ void Draw_SetupSegments(NpcMaker* en, GlobalContext* globalCtx)
                 case OBJECT_ENDDLIST:       pointer = 0; data->offset = (u32)&endDList; break;
                 default:
                 {
-                    pointer = (u32)Rom_GetObjectDataPtr(r_obj, globalCtx);
+                    pointer = (u32)Rom_GetObjectDataPtr(r_obj, playState);
 
                     if (pointer == 0)
                     {
@@ -409,7 +409,7 @@ void Draw_SetupSegments(NpcMaker* en, GlobalContext* globalCtx)
     }
 }
 
-void Draw_SetGlobalEnvColor(NpcMaker* en, GlobalContext* globalCtx)
+void Draw_SetGlobalEnvColor(NpcMaker* en, PlayState* playState)
 {
     if (en->settings.usesEnvColor)
     {
@@ -417,7 +417,7 @@ void Draw_SetGlobalEnvColor(NpcMaker* en, GlobalContext* globalCtx)
         Draw_SetEnvColor(&POLY_OPA.p, en->settings.envColor, en->curAlpha);
         en->curColor = en->settings.envColor;
     }
-    // If global color is not set, then we set env color to white.
+    // If playState color is not set, then we set env color to white.
     else
     {
         Color_RGB8 defEnvColor = (Color_RGB8){255, 255, 255};
@@ -427,7 +427,7 @@ void Draw_SetGlobalEnvColor(NpcMaker* en, GlobalContext* globalCtx)
     }
 }
 
-void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
+void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 {
     for (int i = 0; i < en->numExDLists; i++)
     {
@@ -450,10 +450,10 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
                     }
                     case STATIC_EXDLIST_AT_CAM:
                     {
-                        Camera* cam = globalCtx->cameraPtrs[globalCtx->activeCamera];
+                        Camera* cam = playState->cameraPtrs[playState->activeCamId];
 
-                        if (globalCtx->csCtx.state != 0)
-                            cam = Gameplay_GetCamera(globalCtx, globalCtx->csCtx.unk_14);
+                        if (playState->csCtx.state != 0)
+                            cam = Play_GetCamera(playState, playState->csCtx.subCamId);
 
                         OLib_Vec3fDistNormalize(&translation, &cam->eye, &cam->at);
                         Math_Vec3f_Scale(&translation, dlist.translation.z);
@@ -473,36 +473,36 @@ void Draw_StaticExtDLists(NpcMaker* en, GlobalContext* globalCtx)
                     translation.z -= dlist.translation.z;
 
                 Matrix_Push();
-                func_800D1694(translation.x, translation.y, translation.z, &rotation);
+                Matrix_SetTranslateRotateYXZ(translation.x, translation.y, translation.z, &rotation);
 
                 float scale = dlist.scale *= en->actor.scale.x;
 
                 Matrix_Scale(scale, scale, scale, 1);
-                Draw_ExtDList(en, globalCtx, &dlist);
+                Draw_ExtDList(en, playState, &dlist);
                 Matrix_Pop();                
             }
         }
     }   
 }
 
-void Draw_Model(NpcMaker* en, GlobalContext* globalCtx)
+void Draw_Model(NpcMaker* en, PlayState* playState)
 {
-    int dT = Draw_GetDrawDestType(en, globalCtx);
+    int dT = Draw_GetDrawDestType(en, playState);
 
     TwoHeadGfxArena* dest = (dT ? &POLY_XLU : &POLY_OPA);
-    Draw_Setup(en, globalCtx, dT);
+    Draw_Setup(en, playState, dT);
 
     // Reset the file location to account for the file start offset.
     if (en->settings.fileStart)
     {
-        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
-        gSPSegment(POLY_XLU.p++, 0x06, globalCtx->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
-        gSPSegment(POLY_OPA.p++, 0x06, globalCtx->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
+        Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
+        gSPSegment(POLY_XLU.p++, 0x06, playState->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
+        gSPSegment(POLY_OPA.p++, 0x06, playState->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
     }    
 
     // Draw static exdlists (ones not attached to a limb)
     if (en->hasStaticExDlists)
-        Draw_StaticExtDLists(en, globalCtx);
+        Draw_StaticExtDLists(en, playState);
 
     // Draw skeleton
     if (en->settings.objectId > 0)
@@ -513,7 +513,7 @@ void Draw_Model(NpcMaker* en, GlobalContext* globalCtx)
             case XLU_MATRIX:
             {
                 dest->p = (Gfx*) SkelAnime_DrawFlex(
-                                                    globalCtx,
+                                                    playState,
                                                     (void*)en->skin.skelAnime.skeleton,
                                                     en->skin.skelAnime.jointTable,
                                                     en->skin.skelAnime.limbCount,
@@ -528,7 +528,7 @@ void Draw_Model(NpcMaker* en, GlobalContext* globalCtx)
             case XLU_NONMATRIX:
             {
                 dest->p = (Gfx*) SkelAnime_Draw( 
-                                                globalCtx,
+                                                playState,
                                                 (void*)en->skin.skelAnime.skeleton,
                                                 en->skin.skelAnime.jointTable,
                                                 &Draw_OverrideLimbDraw,
@@ -543,7 +543,7 @@ void Draw_Model(NpcMaker* en, GlobalContext* globalCtx)
                 //z_skelanime_draw_weighted_unk
                 func_800A6360(
                                 &en->actor,
-                                globalCtx,
+                                playState,
                                 &en->skin,
                                 NULL,
                                 &Draw_PostLimbDrawSkin,

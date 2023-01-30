@@ -7,7 +7,7 @@ void Math_AffectMatrixByRot(s16 rot, Vec3f* vector, Actor* rel)
     Matrix_Push();
 
     if (rel != NULL)
-        func_800D1694(rel->world.pos.x, rel->world.pos.y, rel->world.pos.z, &rel->shape.rot);
+        Matrix_SetTranslateRotateYXZ(rel->world.pos.x, rel->world.pos.y, rel->world.pos.z, &rel->shape.rot);
 
     Matrix_RotateY((rot / 32768.0f) * M_PI, 0);
     Matrix_MultVec3f(vector, &temp);

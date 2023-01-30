@@ -7,9 +7,9 @@ ExSegDataEntry* Data_GetExtraSegmentData(NpcMaker* en, int segmentId, int entry)
     return AADDR(segmentAddr, entry * sizeof(ExSegDataEntry));
 }
 
-InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, GlobalContext* globalCtx, int ID)
+InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int ID)
 {
     InternalMsgEntry msgData;
-    Rom_LoadDataFromObject(globalCtx, en->actor.params, &msgData, en->messagesDataOffset + (ID * sizeof(InternalMsgEntry)), sizeof(InternalMsgEntry), en->getSettingsFromRAMObject);
+    Rom_LoadDataFromObject(playState, en->actor.params, &msgData, en->messagesDataOffset + (ID * sizeof(InternalMsgEntry)), sizeof(InternalMsgEntry), en->getSettingsFromRAMObject);
     return msgData;
 }

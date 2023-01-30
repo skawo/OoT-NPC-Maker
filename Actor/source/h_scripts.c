@@ -13,13 +13,13 @@ void Scripts_ToggleActorFlag(NpcMaker* en, u8* field, bool setting, u32 mask)
         en->actor.flags  &= ~(mask);
 }
 
-bool Scripts_GetBool(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
+bool Scripts_GetBool(NpcMaker* en, PlayState* playState, void* instruction)
 {
     ScrInstrSet* instr = (ScrInstrSet*)instruction;
-    return Scripts_GetVarval(en, globalCtx, instr->varType, instr->value, false) ? true : false;
+    return Scripts_GetVarval(en, playState, instr->varType, instr->value, false) ? true : false;
 }
 
-float Scripts_GetVarval(NpcMaker* en, GlobalContext* globalCtx, Vartype type, ScriptVarval value, bool signedVal)
+float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, ScriptVarval value, bool signedVal)
 {
     float out = 0;
 
@@ -46,7 +46,7 @@ float Scripts_GetVarval(NpcMaker* en, GlobalContext* globalCtx, Vartype type, Sc
         case SAVEF:             
         {
             u32* addrs[] = {
-                                (void*)globalCtx, 
+                                (void*)playState, 
                                 (void*)en->refActor, 
                                 (void*)&gSaveContext
                            };
@@ -99,7 +99,7 @@ float Scripts_GetVarval(NpcMaker* en, GlobalContext* globalCtx, Vartype type, Sc
     return out;
 }
 
-Vec3f Scripts_GetVarvalVec3f(NpcMaker* en, GlobalContext* globalCtx, Vartype xyzType[], ScriptVarval values[], float divider)
+Vec3f Scripts_GetVarvalVec3f(NpcMaker* en, PlayState* playState, Vartype xyzType[], ScriptVarval values[], float divider)
 {
     if (divider == 0)
         divider = 1;
@@ -107,22 +107,22 @@ Vec3f Scripts_GetVarvalVec3f(NpcMaker* en, GlobalContext* globalCtx, Vartype xyz
     Vec3f out;
 
     for (int i = 0; i < 3; i++)
-        AVAL(&out, float, i * sizeof(float)) = (Scripts_GetVarval(en, globalCtx, xyzType[i], values[i], true) / divider);
+        AVAL(&out, float, i * sizeof(float)) = (Scripts_GetVarval(en, playState, xyzType[i], values[i], true) / divider);
 
     return out;
 }
 
-Color_RGBA8 Scripts_GetVarvalRGBA(NpcMaker* en, GlobalContext* globalCtx, Vartype colorTypes[], ScriptVarval values[])
+Color_RGBA8 Scripts_GetVarvalRGBA(NpcMaker* en, PlayState* playState, Vartype colorTypes[], ScriptVarval values[])
 {
     Color_RGBA8 out;
 
     for (int i = 0; i < 4; i++)
-        AVAL(&out, u8, i * sizeof(u8)) = Scripts_GetVarval(en, globalCtx, colorTypes[i], values[i], false);
+        AVAL(&out, u8, i * sizeof(u8)) = Scripts_GetVarval(en, playState, colorTypes[i], values[i], false);
 
     return out;
 }
 
-void* Scripts_RamSubIdSetup(NpcMaker* en, GlobalContext* globalCtx, u32 value, u32 subId, u32* outValtype)
+void* Scripts_RamSubIdSetup(NpcMaker* en, PlayState* playState, u32 value, u32 subId, u32* outValtype)
 {
     if (subId == SUBT_VARF)
     {
@@ -161,7 +161,7 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, GlobalContext* globalCtx, u32 value, u
 
         switch (id / 4)
         {
-            case 0:    return AADDR(globalCtx, value); break;
+            case 0:    return AADDR(playState, value); break;
             case 1:    return AADDR(en->refActor, value); break;
             case 2:    return AADDR(&gSaveContext, value); break;
             default:   return NULL; break;
@@ -225,17 +225,17 @@ void Scripts_MathOperation(void* dest, float value, Operator op, DataType dataTy
     bcopy(&var, dest, size);
 }
 
-void* Scripts_GetActorByType(NpcMaker* en, GlobalContext* globalCtx, u32 targetActor, u8 actorNumType, 
+void* Scripts_GetActorByType(NpcMaker* en, PlayState* playState, u32 targetActor, u8 actorNumType, 
                              ScriptVarval actorNumValue)
 {
-    int actorNum = Scripts_GetVarval(en, globalCtx, actorNumType, actorNumValue, false);
+    int actorNum = Scripts_GetVarval(en, playState, actorNumType, actorNumValue, false);
 
     switch (targetActor)
     {
         case TARGET_SELF:              return en;
-        case TARGET_PLAYER:            return PLAYER;
-        case TARGET_NPCMAKER:          return Scene_GetNpcMakerByID(en, globalCtx, actorNum);
-        case TARGET_ACTOR_ID:          return Scene_GetActorByID(actorNum, globalCtx, &en->actor, NULL);
+        case TARGET_PLAYER:            return GET_PLAYER(playState);
+        case TARGET_NPCMAKER:          return Scene_GetNpcMakerByID(en, playState, actorNum);
+        case TARGET_ACTOR_ID:          return Scene_GetActorByID(actorNum, playState, &en->actor, NULL);
         case TARGET_REF_ACTOR:         return en->refActor;
         default:                       return NULL;
     }
@@ -277,17 +277,17 @@ bool Scripts_FreeAndContinue(ScriptInstance* script)
 
 #pragma region SET
 
-void Scripts_Set(NpcMaker* en, GlobalContext* globalCtx, void* dest, void* instruction, DataType dataType)
+void Scripts_Set(NpcMaker* en, PlayState* playState, void* dest, void* instruction, DataType dataType)
 {
     ScrInstrSet* instr = (ScrInstrSet*)instruction;
 
     if (dataType == BOOL)
-        AVAL(dest, u8, 0) = Scripts_GetBool(en, globalCtx, instr);
+        AVAL(dest, u8, 0) = Scripts_GetBool(en, playState, instr);
     else 
-        Scripts_MathOperation(dest, Scripts_GetVarval(en, globalCtx, instr->varType, instr->value, !(dataType % 2) || dataType == FLOAT), instr->operator, dataType);
+        Scripts_MathOperation(dest, Scripts_GetVarval(en, playState, instr->varType, instr->value, !(dataType % 2) || dataType == FLOAT), instr->operator, dataType);
 }
 
-void Scripts_SetInventory(NpcMaker* en, GlobalContext* globalCtx, u8 slotSettings[], void* instruction)
+void Scripts_SetInventory(NpcMaker* en, PlayState* playState, u8 slotSettings[], void* instruction)
 {
     ScrInstrSet* instr = (ScrInstrSet*)instruction;
 
@@ -296,15 +296,15 @@ void Scripts_SetInventory(NpcMaker* en, GlobalContext* globalCtx, u8 slotSetting
     switch (slotSettings[0])
     {
         case ITEM_RUPEE_BLUE:               curVal = gSaveContext.rupees + gSaveContext.rupeeAccumulator; break;
-        case ITEM_HEART:                    curVal = gSaveContext.health + gSaveContext.healthAccumulator; break;
+        case ITEM_RECOVERY_HEART:                    curVal = gSaveContext.health + gSaveContext.healthAccumulator; break;
         default:                            curVal = gSaveContext.inventory.ammo[slotSettings[1]]; break;
     }
     
     s32 chgVal = curVal;
-    float var = Scripts_GetVarval(en, globalCtx, instr->varType, instr->value, true);
+    float var = Scripts_GetVarval(en, playState, instr->varType, instr->value, true);
 
     // For ease of use (one heart = 0x10, and we're calculating that automatically here)
-    if (slotSettings[0] == ITEM_HEART)
+    if (slotSettings[0] == ITEM_RECOVERY_HEART)
         var *= ONE_HEART;
 
     Scripts_MathOperation(&chgVal, var, instr->operator, INT32);
@@ -313,7 +313,7 @@ void Scripts_SetInventory(NpcMaker* en, GlobalContext* globalCtx, u8 slotSetting
     switch (slotSettings[0])
     {
         case ITEM_RUPEE_BLUE:               Rupees_ChangeBy(difference); break;
-        case ITEM_HEART:                    Health_ChangeBy(globalCtx, difference); break;
+        case ITEM_RECOVERY_HEART:                    Health_ChangeBy(playState, difference); break;
         default:                            Inventory_ChangeAmmo(slotSettings[0], difference); break;
     }
 }
@@ -321,11 +321,11 @@ void Scripts_SetInventory(NpcMaker* en, GlobalContext* globalCtx, u8 slotSetting
 extern u8 setDlistOffsets[];
 extern u8 setAnimsOffsets[];
 
-void Scripts_SetAnimation(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
+void Scripts_SetAnimation(NpcMaker* en, PlayState* playState, void* instruction)
 {
     ScrInstrDoubleSet* instr = (ScrInstrDoubleSet*)instruction;
 
-    int animId = Scripts_GetVarval(en, globalCtx, instr->varType1, instr->value1, false);
+    int animId = Scripts_GetVarval(en, playState, instr->varType1, instr->value1, false);
     int destAddrsOffset = instr->subId - SET_ANIMATION_OBJECT;
     void* destAddr = AADDR(&en->animations[animId], setAnimsOffsets[destAddrsOffset]);
 
@@ -336,24 +336,24 @@ void Scripts_SetAnimation(NpcMaker* en, GlobalContext* globalCtx, void* instruct
         case SET_ANIMATION_STARTFRAME:      
         case SET_ANIMATION_ENDFRAME:        
         {
-            u32 property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false); 
+            u32 property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, false); 
             Scripts_MathOperation(destAddr, property, instr->operator, UINT32); 
             break; 
         }
         case SET_ANIMATION_SPEED:           
         {
-            float property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, true);
+            float property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, true);
             Scripts_MathOperation(destAddr, property, instr->operator, FLOAT); 
             break; 
         }
     }
 }
 
-void Scripts_SetDList(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
+void Scripts_SetDList(NpcMaker* en, PlayState* playState, void* instruction)
 {
     ScrInstrDoubleSet* instr = (ScrInstrDoubleSet*)instruction;
 
-    int dlistId = Scripts_GetVarval(en, globalCtx, instr->varType1, instr->value1, false);
+    int dlistId = Scripts_GetVarval(en, playState, instr->varType1, instr->value1, false);
     int destAddrsOffset = instr->subId - SET_DLIST_OFFSET;
     void* destAddr = AADDR(&en->extraDLists[dlistId], setDlistOffsets[destAddrsOffset]);
 
@@ -361,7 +361,7 @@ void Scripts_SetDList(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
     {
         case SET_DLIST_OFFSET:              
         {
-            u32 property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false);
+            u32 property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, false);
             Scripts_MathOperation(destAddr, property, instr->operator, UINT32); 
             break; 
         }
@@ -370,7 +370,7 @@ void Scripts_SetDList(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
         case SET_DLIST_TRANS_Z:             
         case SET_DLIST_SCALE:              
         {
-            float property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false);
+            float property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, false);
             Scripts_MathOperation(destAddr, property, instr->operator, FLOAT); 
             break; 
         }
@@ -380,42 +380,42 @@ void Scripts_SetDList(NpcMaker* en, GlobalContext* globalCtx, void* instruction)
         case SET_DLIST_LIMB:
         case SET_DLIST_OBJECT:
         {
-            s16 property = Scripts_GetVarval(en, globalCtx, instr->varType2, instr->value2, false);
+            s16 property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, false);
             Scripts_MathOperation(destAddr, property, instr->operator, INT16); 
 
             if (instr->subId == SET_DLIST_OBJECT)
-                Rom_LoadObjectIfUnloaded(globalCtx, en->extraDLists[dlistId].objectId);
+                Rom_LoadObjectIfUnloaded(playState, en->extraDLists[dlistId].objectId);
 
             break; 
         }
     }
 }
 
-void Scripts_SetColor(NpcMaker* en, GlobalContext* globalCtx, Color_RGB8* dest, void* instruction)
+void Scripts_SetColor(NpcMaker* en, PlayState* playState, Color_RGB8* dest, void* instruction)
 {
     ScrInstrColorSet* instr = (ScrInstrColorSet*)instruction;
-    dest->r = Scripts_GetVarval(en, globalCtx, instr->varTypeR, instr->R, false);
-    dest->g = Scripts_GetVarval(en, globalCtx, instr->varTypeG, instr->G, false);
-    dest->b = Scripts_GetVarval(en, globalCtx, instr->varTypeB, instr->B, false);
+    dest->r = Scripts_GetVarval(en, playState, instr->varTypeR, instr->R, false);
+    dest->g = Scripts_GetVarval(en, playState, instr->varTypeG, instr->G, false);
+    dest->b = Scripts_GetVarval(en, playState, instr->varTypeB, instr->B, false);
 }
 
-void Scripts_SetFlag(NpcMaker* en, GlobalContext* global, void* instruction)
+void Scripts_SetFlag(NpcMaker* en, PlayState* playState, void* instruction)
 {
     ScrInstrDoubleSet* instr = (ScrInstrDoubleSet*)instruction;
-    s32 flag = Scripts_GetVarval(en, global, instr->varType1, instr->value1, true);
+    s32 flag = Scripts_GetVarval(en, playState, instr->varType1, instr->value1, true);
     bool set = false;
 
     if (instr->varType2 == NORMAL)
         set = (bool)instr->value2.ui32;
     else
-        set = (bool)Scripts_GetVarval(en, global, instr->varType2, instr->value2, false);
+        set = (bool)Scripts_GetVarval(en, playState, instr->varType2, instr->value2, false);
 
     switch (instr->subId)
     {
-        case SET_FLAG_SWITCH: set ?         Flags_SetSwitch(global, flag) : Flags_UnsetSwitch(global, flag); break;
-        case SET_FLAG_SCENE: set ?          Flags_SetUnknown(global, flag) : Flags_UnsetUnknown(global, flag); break;
-        case SET_FLAG_ROOM_CLEAR: set ?     Flags_SetClear(global, flag) : Flags_UnsetClear(global, flag); break;
-        case SET_FLAG_TEMPORARY: set ?      Flags_SetTempClear(global, flag) : Flags_UnsetTempClear(global, flag); break;
+        case SET_FLAG_SWITCH: set ?         Flags_SetSwitch(playState, flag) : Flags_UnsetSwitch(playState, flag); break;
+        case SET_FLAG_SCENE: set ?          Flags_SetUnknown(playState, flag) : Flags_UnsetUnknown(playState, flag); break;
+        case SET_FLAG_ROOM_CLEAR: set ?     Flags_SetClear(playState, flag) : Flags_UnsetClear(playState, flag); break;
+        case SET_FLAG_TEMPORARY: set ?      Flags_SetTempClear(playState, flag) : Flags_UnsetTempClear(playState, flag); break;
         case SET_FLAG_INF: 
         {
             if (set)
@@ -437,24 +437,24 @@ void Scripts_SetFlag(NpcMaker* en, GlobalContext* global, void* instruction)
         case SET_FLAG_TREASURE:
         {
             if (set)
-                 Flags_SetTreasure(global, flag);
+                 Flags_SetTreasure(playState, flag);
             else
-                global->actorCtx.flags.chest &= ~(1 << flag); 
+                playState->actorCtx.flags.chest &= ~(1 << flag); 
                 
             break;
         }
         case SET_FLAG_SCENE_COLLECT:
         {
             if (set)
-                Flags_SetCollectible(global, flag);
+                Flags_SetCollectible(playState, flag);
             else
             {
                 if (flag) 
                 {
                     if (flag < 0x20)
-                        global->actorCtx.flags.collect &= ~(1 << flag);
+                        playState->actorCtx.flags.collect &= ~(1 << flag);
                     else 
-                        global->actorCtx.flags.tempCollect &= ~(1 << (flag - 0x20));
+                        playState->actorCtx.flags.tempCollect &= ~(1 << (flag - 0x20));
                 }                
             }
 
@@ -476,14 +476,14 @@ void Scripts_SetFlag(NpcMaker* en, GlobalContext* global, void* instruction)
 
 #pragma region AWAIT
 
-inline bool Scripts_AwaitBool(NpcMaker* en, GlobalContext* global, bool checked, u32 condition)
+inline bool Scripts_AwaitBool(NpcMaker* en, PlayState* playState, bool checked, u32 condition)
 {
-    return Scripts_IfCommon(en, global, checked, condition, 1, 0);
+    return Scripts_IfCommon(en, playState, checked, condition, 1, 0);
 }
 
-inline bool Scripts_AwaitValue(NpcMaker* en, GlobalContext* global, float value, DataType dataType, u32 condition, u8 valType, ScriptVarval comparedValue)
+inline bool Scripts_AwaitValue(NpcMaker* en, PlayState* playState, float value, DataType dataType, u32 condition, u8 valType, ScriptVarval comparedValue)
 {
-    return Scripts_IfValueCommon(en, global, value, dataType, condition, valType, comparedValue, 1, 0);
+    return Scripts_IfValueCommon(en, playState, value, dataType, condition, valType, comparedValue, 1, 0);
 }
 
 #pragma endregion
@@ -514,22 +514,22 @@ inline u16 Scripts_GetBranch(bool result, u16 trueInstruction, u16 falseInstruct
     return result ? trueInstruction : falseInstruction;
 }
 
-u16 Scripts_IfFlag(NpcMaker* en, GlobalContext* global, void* instruction)
+u16 Scripts_IfFlag(NpcMaker* en, PlayState* playState, void* instruction)
 {
     ScrInstrIf* instr = (ScrInstrIf*)instruction;
     bool ret;
 
-    u32 flag = Scripts_GetVarval(en, global, instr->vartype, instr->value, false);
+    u32 flag = Scripts_GetVarval(en, playState, instr->vartype, instr->value, false);
     switch (instr->subId)
     {
-        case IF_FLAG_SWITCH:               ret = Flags_GetSwitch(global, flag); break;
-        case IF_FLAG_SCENE:                ret = Flags_GetUnknown(global, flag); break;
-        case IF_FLAG_ROOM_CLEAR:           ret = Flags_GetClear(global, flag); break;
-        case IF_FLAG_TEMPORARY:            ret = Flags_GetTempClear(global, flag); break;
+        case IF_FLAG_SWITCH:               ret = Flags_GetSwitch(playState, flag); break;
+        case IF_FLAG_SCENE:                ret = Flags_GetUnknown(playState, flag); break;
+        case IF_FLAG_ROOM_CLEAR:           ret = Flags_GetClear(playState, flag); break;
+        case IF_FLAG_TEMPORARY:            ret = Flags_GetTempClear(playState, flag); break;
         case IF_FLAG_INF:                  ret = Flags_GetInfTable(flag); break;
         case IF_FLAG_EVENT:                ret = Flags_GetEventChkInf(flag); break;
-        case IF_FLAG_TREASURE:             ret = Flags_GetTreasure(global, flag); break;
-        case IF_FLAG_SCENE_COLLECT:        ret = Flags_GetCollectible(global, flag); break;
+        case IF_FLAG_TREASURE:             ret = Flags_GetTreasure(playState, flag); break;
+        case IF_FLAG_SCENE_COLLECT:        ret = Flags_GetCollectible(playState, flag); break;
         case IF_FLAG_INTERNAL:             ret = en->flags_internal & (1 << flag); break;
         default:                           ret = false; break;
     }
@@ -537,88 +537,88 @@ u16 Scripts_IfFlag(NpcMaker* en, GlobalContext* global, void* instruction)
     return Scripts_GetBranch(Scripts_Compare(ret, 0, instr->condition, BOOL_COMPARE), instr->trueInstrNum, instr->falseInstrNum);
 }
 
-inline u16 Scripts_IfCommon(NpcMaker* en, GlobalContext* global, bool checked, u32 condition, u16 gotoTrue, u16 gotoFalse)
+inline u16 Scripts_IfCommon(NpcMaker* en, PlayState* playState, bool checked, u32 condition, u16 gotoTrue, u16 gotoFalse)
 {
     return Scripts_GetBranch(Scripts_Compare(checked, 0, condition, BOOL_COMPARE), gotoTrue, gotoFalse);
 }
 
-u16 Scripts_IfBool(NpcMaker* en, GlobalContext* global, bool checked, void* instruction)
+u16 Scripts_IfBool(NpcMaker* en, PlayState* playState, bool checked, void* instruction)
 {
     ScrInstrIf* instr = (ScrInstrIf*)instruction;
-    return Scripts_IfCommon(en, global, checked, instr->condition, instr->trueInstrNum, instr->falseInstrNum);
+    return Scripts_IfCommon(en, playState, checked, instr->condition, instr->trueInstrNum, instr->falseInstrNum);
 }
 
-u16 Scripts_IfBoolTwoValues(NpcMaker* en, GlobalContext* global, bool checked, void* instruction)
+u16 Scripts_IfBoolTwoValues(NpcMaker* en, PlayState* playState, bool checked, void* instruction)
 {
     ScrInstrDoubleIf* instr = (ScrInstrDoubleIf*)instruction;
-    return Scripts_IfCommon(en, global, checked, instr->condition, instr->trueInstrNum, instr->falseInstrNum);
+    return Scripts_IfCommon(en, playState, checked, instr->condition, instr->trueInstrNum, instr->falseInstrNum);
 }
 
-u16 Scripts_IfValueCommon(NpcMaker* en, GlobalContext* global, float value, DataType dataType, u32 condition, 
+u16 Scripts_IfValueCommon(NpcMaker* en, PlayState* playState, float value, DataType dataType, u32 condition, 
                            u8 valType, ScriptVarval compared_value, u16 gotoTrue, u16 gotoFalse)
 {
     bool ret = false;
 
     if (dataType == BOOL)
-        ret = Scripts_Compare(value, Scripts_GetVarval(en, global, valType, compared_value, !(dataType % 2) || dataType == FLOAT), condition, BOOL_COMPARE);
+        ret = Scripts_Compare(value, Scripts_GetVarval(en, playState, valType, compared_value, !(dataType % 2) || dataType == FLOAT), condition, BOOL_COMPARE);
     else
-        ret = Scripts_Compare(value, Scripts_GetVarval(en, global, valType, compared_value, !(dataType % 2) || dataType == FLOAT), condition, VALUE_COMPARE);
+        ret = Scripts_Compare(value, Scripts_GetVarval(en, playState, valType, compared_value, !(dataType % 2) || dataType == FLOAT), condition, VALUE_COMPARE);
     
     return Scripts_GetBranch(ret, gotoTrue, gotoFalse);
 }
 
-u16 Scripts_IfExtVar(NpcMaker* en, GlobalContext* global, float value, void* instruction, DataType dataType)
+u16 Scripts_IfExtVar(NpcMaker* en, PlayState* playState, float value, void* instruction, DataType dataType)
 {
     ScrInstrExtVarIf* instr = (ScrInstrExtVarIf*)instruction;
-    return Scripts_IfValueCommon(en, global, value, dataType, instr->condition, instr->varType, instr->value, instr->trueInstrNum, instr->falseInstrNum);
+    return Scripts_IfValueCommon(en, playState, value, dataType, instr->condition, instr->varType, instr->value, instr->trueInstrNum, instr->falseInstrNum);
 }
 
-u16 Scripts_IfTwoValues(NpcMaker* en, GlobalContext* global, float value, void* instruction, DataType dataType)
+u16 Scripts_IfTwoValues(NpcMaker* en, PlayState* playState, float value, void* instruction, DataType dataType)
 {
     ScrInstrDoubleIf* instr = (ScrInstrDoubleIf*)instruction;
-    return Scripts_IfValueCommon(en, global, value, dataType, instr->condition, instr->varType2, instr->value2, instr->trueInstrNum, instr->falseInstrNum);
+    return Scripts_IfValueCommon(en, playState, value, dataType, instr->condition, instr->varType2, instr->value2, instr->trueInstrNum, instr->falseInstrNum);
 }
 
-u16 Scripts_IfValue(NpcMaker* en, GlobalContext* global, float value, void* instruction, DataType dataType)
+u16 Scripts_IfValue(NpcMaker* en, PlayState* playState, float value, void* instruction, DataType dataType)
 {
     ScrInstrIf* instr = (ScrInstrIf*)instruction;
-    return Scripts_IfValueCommon(en, global, value, dataType, instr->condition, instr->vartype, instr->value, instr->trueInstrNum, instr->falseInstrNum);
+    return Scripts_IfValueCommon(en, playState, value, dataType, instr->condition, instr->vartype, instr->value, instr->trueInstrNum, instr->falseInstrNum);
 }
 
 #pragma endregion
 
 #pragma region TEXT
 
-u32 Scripts_GetTextId(NpcMaker* en, GlobalContext* globalCtx, u8 varTypeChild, ScriptVarval child, u8 varTypeAdult, ScriptVarval adult)
+u32 Scripts_GetTextId(NpcMaker* en, PlayState* playState, u8 varTypeChild, ScriptVarval child, u8 varTypeAdult, ScriptVarval adult)
 {
-    if (globalCtx->linkAgeOnLoad)
-        return Scripts_GetVarval(en, globalCtx, varTypeChild, child, true);
+    if (playState->linkAgeOnLoad)
+        return Scripts_GetVarval(en, playState, varTypeChild, child, true);
     else
-        return Scripts_GetVarval(en, globalCtx, varTypeAdult, adult, true);
+        return Scripts_GetVarval(en, playState, varTypeAdult, adult, true);
 }
 
-void Scripts_ShowMessage(NpcMaker* en, GlobalContext* globalCtx, u16 msgId, bool setActor)
+void Scripts_ShowMessage(NpcMaker* en, PlayState* playState, u16 msgId, bool setActor)
 {
-    int talkState = func_8010BDBC(&globalCtx->msgCtx);
+    int talkState = Message_GetState(&playState->msgCtx);
 
     // If we've talked to the NPC, and the message status isn't blank, then we continue the message with this new one.
     // Textbox number is set to 0, because the first message isn't counted as new message?
-    if (en->isTalking && talkState != MSGSTATUS_NONE)
+    if (en->isTalking && talkState != TEXT_STATE_NONE)
     {
-        func_8010B720(globalCtx, msgId);
+        Message_ContinueTextbox(playState, msgId);
         en->textboxNum = 0;
         en->persistTalk = false;
     }
     // Else, we show a new textbox.
     else
     {
-        func_8010B680(globalCtx, msgId, setActor ? &en->actor : NULL);
+        Message_StartTextbox(playState, msgId, setActor ? &en->actor : NULL);
         en->textboxNum = -1;
         en->persistTalk = false;
     }
 }
 
-void Scripts_SetMessage(NpcMaker* en, GlobalContext* globalCtx, int msgId, u16* field, bool showSet, bool setActor)
+void Scripts_SetMessage(NpcMaker* en, PlayState* playState, int msgId, u16* field, bool showSet, bool setActor)
 {
     if (msgId > __INT16_MAX__)
     {
@@ -628,7 +628,7 @@ void Scripts_SetMessage(NpcMaker* en, GlobalContext* globalCtx, int msgId, u16* 
 
             if (en->dummyMesEntry != NULL)
             {
-                InternalMsgEntry data = Data_GetCustomMessage(en, globalCtx, en->customMsgId);
+                InternalMsgEntry data = Data_GetCustomMessage(en, playState, en->customMsgId);
                 en->dummyMesEntry->settings = data.posType;
             }
         }
@@ -642,7 +642,7 @@ void Scripts_SetMessage(NpcMaker* en, GlobalContext* globalCtx, int msgId, u16* 
         *field = msgId;
 
     if (showSet)
-        Scripts_ShowMessage(en, globalCtx, msgId, setActor);
+        Scripts_ShowMessage(en, playState, msgId, setActor);
 }
 
 #pragma endregion

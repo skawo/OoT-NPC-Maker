@@ -45,7 +45,7 @@ static ColliderCylinderInit npcMakerCollision =
             }
 };
 
-void Setup_Defaults(NpcMaker* en, GlobalContext* globalCtx)
+void Setup_Defaults(NpcMaker* en, PlayState* playState)
 {
     en->exSegData = NULL;
     en->animations = NULL;
@@ -95,7 +95,7 @@ void Setup_Defaults(NpcMaker* en, GlobalContext* globalCtx)
     }
 }
 
-u32 Setup_LoadSection(NpcMaker* en, GlobalContext* globalCtx, u8* buffer, u32 offset, u32 entryAddress,
+u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 entryAddress,
                       u32* allocDest, u16* entriesNumberOut,  u32 entrySize, u32 nullSize, bool noCopy, s32 blockSize)
 {
     #if LOGGING == 1
@@ -117,7 +117,7 @@ u32 Setup_LoadSection(NpcMaker* en, GlobalContext* globalCtx, u8* buffer, u32 of
         // If we're loading from a RAM object, and the data is static, we might as well just use the RAM object data as is, without making a copy.
         if (en->getSettingsFromRAMObject & noCopy)
         {
-            void* ptr = Rom_GetObjectDataPtr(en->actor.params, globalCtx);
+            void* ptr = Rom_GetObjectDataPtr(en->actor.params, playState);
             *allocDest = (u32)AADDR(ptr, 4 + entryAddress + offset);
         }
         else
@@ -167,7 +167,7 @@ void Setup_ScriptVars(NpcMaker* en, void** ptr, u32 count)
         Lib_MemSet((void*)*ptr, 4 * count, 0);
 }
 
-bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
+bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 {
     u16 settingsObjectId = en->actor.params;
     en->npcId = en->actor.shape.rot.z;
@@ -188,13 +188,13 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
             osSyncPrintf("_Loading settings file into RAM...");
         #endif  
 
-        Rom_LoadObjectIfUnloaded(globalCtx, settingsObjectId);
+        Rom_LoadObjectIfUnloaded(playState, settingsObjectId);
     }
 
     u32 buf;
 
     // Load number of entries from ROM...
-    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, 0, 4, en->getSettingsFromRAMObject);
+    Rom_LoadDataFromObject(playState, settingsObjectId, &buf, 0, 4, en->getSettingsFromRAMObject);
     u32 numEntries = buf;
 
     // If the selected entry id is bigger than the number of entries, exit.
@@ -208,7 +208,7 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     }
 
     // Load the entry offset...
-    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, 4 + (4 * en->npcId), 4, en->getSettingsFromRAMObject);
+    Rom_LoadDataFromObject(playState, settingsObjectId, &buf, 4 + (4 * en->npcId), 4, en->getSettingsFromRAMObject);
     u32 entryAddress = buf;
 
     // If the entry offset is 0, the actor was nulled.
@@ -222,7 +222,7 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     }
 
     // Get entry size...
-    Rom_LoadDataFromObject(globalCtx, settingsObjectId, &buf, entryAddress, 4, en->getSettingsFromRAMObject);
+    Rom_LoadDataFromObject(playState, settingsObjectId, &buf, entryAddress, 4, en->getSettingsFromRAMObject);
     u32 entrySize = buf;
 
     // We load the whole entry here to avoid multiple tiny reads from ROM.
@@ -232,7 +232,7 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
         osSyncPrintf("_%2d: Loading entry size bytes: %08x", en->npcId, entrySize);
     #endif
 
-    Rom_LoadDataFromObject(globalCtx, settingsObjectId, buffer, entryAddress + 4, entrySize, en->getSettingsFromRAMObject);
+    Rom_LoadDataFromObject(playState, settingsObjectId, buffer, entryAddress + 4, entrySize, en->getSettingsFromRAMObject);
 
     // Copy data from the entry...
     bcopy(buffer, &en->settings, sizeof(NpcSettings));
@@ -258,7 +258,7 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     {
         int size = (i == ARRAY_COUNT(sLoadList) - 1) ? entrySize - offset : -1;
         offset = Setup_LoadSection(en, 
-                                   globalCtx, 
+                                   playState, 
                                    buffer, 
                                    offset, 
                                    entryAddress, 
@@ -281,29 +281,29 @@ bool Setup_LoadSetup(NpcMaker* en, GlobalContext* globalCtx)
     return true;
 }
 
-void Setup_Objects(NpcMaker* en, GlobalContext* globalCtx)
+void Setup_Objects(NpcMaker* en, PlayState* playState)
 {
     // Loading and setting the main object ID.
     if (en->settings.objectId > 0)
     {
-        Rom_LoadObjectIfUnloaded(globalCtx, en->settings.objectId);
-        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
+        Rom_LoadObjectIfUnloaded(playState, en->settings.objectId);
+        Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
     }
 
     for (int i = 0; i < en->numAnims; i++)
-        Rom_LoadObjectIfUnloaded(globalCtx, en->animations[i].objectId);
+        Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
 
     for (int i = 0; i < en->numExDLists; i++)
-        Rom_LoadObjectIfUnloaded(globalCtx, en->extraDLists[i].objectId);
+        Rom_LoadObjectIfUnloaded(playState, en->extraDLists[i].objectId);
 
     for (int i = NULL_SEG_BLOCK_SIZE; i < en->exSegDataBlSize; i += 12)
     {
         ExSegDataEntry* ex = (ExSegDataEntry*)AADDR(en->exSegData, i);
-        Rom_LoadObjectIfUnloaded(globalCtx, ex->objectId);
+        Rom_LoadObjectIfUnloaded(playState, ex->objectId);
     }
 }
 
-void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
+void Setup_Misc(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING == 1
         osSyncPrintf("_%2d: Setting up collision with radius %04d, height %04d, yoffs %04d", 
@@ -319,8 +319,8 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
     #endif
 	
 	
-    Collider_InitCylinder(globalCtx, &en->collider);
-    Collider_SetCylinder(globalCtx, &en->collider, &en->actor, &npcMakerCollision);
+    Collider_InitCylinder(playState, &en->collider);
+    Collider_SetCylinder(playState, &en->collider, &en->actor, &npcMakerCollision);
     en->collider.dim.radius = en->settings.collisionRadius;
     en->collider.dim.height = en->settings.collisionHeight;
     en->collider.dim.yShift = en->settings.collisionyShift;
@@ -339,10 +339,10 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
     Actor_SetScale(&en->actor, en->settings.modelScale);
 
     //Setting the starting path, if any.
-    Setup_Path(en, globalCtx, en->settings.pathId);
+    Setup_Path(en, playState, en->settings.pathId);
 
     if (en->settings.generatesLight)
-        en->lightNode = LightContext_InsertLight(globalCtx, &globalCtx->lightCtx, &en->light);
+        en->lightNode = LightContext_InsertLight(playState, &playState->lightCtx, &en->light);
 
     #pragma region Actor flags
 
@@ -406,13 +406,13 @@ void Setup_Misc(NpcMaker* en, GlobalContext* globalCtx)
     #pragma endregion
 }
 
-void Setup_Path(NpcMaker* en, GlobalContext* globalCtx, int pathId)
+void Setup_Path(NpcMaker* en, PlayState* playState, int pathId)
 {
     en->settings.pathId = pathId;
     en->curPathNumNodes = 0;
 
     if (pathId != INVALID_PATH)
-        en->curPathNumNodes = Scene_GetPathNodeCount(globalCtx, PATH_ID(en));
+        en->curPathNumNodes = Scene_GetPathNodeCount(playState, PATH_ID(en));
     else
     {
         en->curPathNode = INVALID_NODE;
@@ -440,7 +440,7 @@ void Setup_Path(NpcMaker* en, GlobalContext* globalCtx, int pathId)
     }
 }
 
-void Setup_Model(NpcMaker* en, GlobalContext* globalCtx)
+void Setup_Model(NpcMaker* en, PlayState* playState)
 {
     if (en->settings.objectId > 0)
     {
@@ -452,7 +452,7 @@ void Setup_Model(NpcMaker* en, GlobalContext* globalCtx)
             case OPA_MATRIX:
             case XLU_MATRIX:
             {
-                SkelAnime_InitFlex(globalCtx,
+                SkelAnime_InitFlex(playState,
                                    &en->skin.skelAnime,
                                    (void*)en->settings.skeleton,
                                    0, 0, 0, 0); 
@@ -462,7 +462,7 @@ void Setup_Model(NpcMaker* en, GlobalContext* globalCtx)
             case OPA_NONMATRIX:
             case XLU_NONMATRIX:
             {
-                SkelAnime_Init(globalCtx,
+                SkelAnime_Init(playState,
                                &en->skin.skelAnime,
                                (void*)en->settings.skeleton,
                                0, 0, 0, 0); 
@@ -472,7 +472,7 @@ void Setup_Model(NpcMaker* en, GlobalContext* globalCtx)
             case SKIN:
             {
                 //z_skelanime_init_weighted
-                func_800A663C(globalCtx,
+                Skin_Init(playState,
                               &en->skin,
                               (void*)en->settings.skeleton,
                               0); 
@@ -485,8 +485,8 @@ void Setup_Model(NpcMaker* en, GlobalContext* globalCtx)
 
     if (en->animations[ANIM_IDLE].offset != 0)
     {
-        Setup_Animation(en, globalCtx, ANIM_IDLE, false, false, true, false);
-        Update_Animations(en, globalCtx);
+        Setup_Animation(en, playState, ANIM_IDLE, false, false, true, false);
+        Update_Animations(en, playState);
     }
 
     for (int i = 0; i < en->numExDLists; i++)
@@ -501,7 +501,7 @@ void Setup_Model(NpcMaker* en, GlobalContext* globalCtx)
     }
 }
 
-void Setup_Animation(NpcMaker* en, GlobalContext* globalCtx, int animId, bool interpolate, bool playOnce, bool forceSet, bool doNothing)
+void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interpolate, bool playOnce, bool forceSet, bool doNothing)
 {
     if (doNothing)
         return;
@@ -533,7 +533,7 @@ void Setup_Animation(NpcMaker* en, GlobalContext* globalCtx, int animId, bool in
         NpcAnimationEntry anim = en->animations[animId];
         
         bool was_set = Setup_AnimationImpl(&en->actor, 
-                                             globalCtx, 
+                                             playState, 
                                              &en->skin.skelAnime, 
                                              anim.offset, 
                                              en->settings.animationType, 
@@ -555,7 +555,7 @@ void Setup_Animation(NpcMaker* en, GlobalContext* globalCtx, int animId, bool in
     }
 }
 
-bool Setup_AnimationImpl(Actor* actor, GlobalContext* globalCtx, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int actorObject, int actorObjectFileStart,
+bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int actorObject, int actorObjectFileStart,
                            int animStart, int animEnd, float speed, bool interpolate, bool playOnce)
 {
 #pragma region AnimMode
@@ -598,7 +598,7 @@ bool Setup_AnimationImpl(Actor* actor, GlobalContext* globalCtx, SkelAnime* skel
                 int endFrame = MIN(Animation_GetLastFrame((void*)animAddr), animEnd);
                 int startFrame = MIN(endFrame, animStart);
 
-                LinkAnimation_Change(globalCtx,
+                LinkAnimation_Change(playState,
                                      skelanime,
                                      (void*)animAddr,
                                      speed,
@@ -622,7 +622,7 @@ bool Setup_AnimationImpl(Actor* actor, GlobalContext* globalCtx, SkelAnime* skel
 
                 if (actorObject != object && object > 0)
                 {
-                    if (!Rom_SetObjectToActor(actor, globalCtx, object, fileStart))
+                    if (!Rom_SetObjectToActor(actor, playState, object, fileStart))
                     {
                         #if LOGGING == 1
                             osSyncPrintf("_Animation needs object %08x, but it's not loaded, so the animation won't play", object);
@@ -648,7 +648,7 @@ bool Setup_AnimationImpl(Actor* actor, GlobalContext* globalCtx, SkelAnime* skel
                 skelanime->endFrame = endFrame;
 
                 if (actorObject != object && actorObject > 0)
-                    Rom_SetObjectToActor(actor, globalCtx, actorObject, actorObjectFileStart);
+                    Rom_SetObjectToActor(actor, playState, actorObject, actorObjectFileStart);
 
                 break;
             }

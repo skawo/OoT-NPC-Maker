@@ -41,7 +41,7 @@ void Rom_LoadObject(int objId, void *dest)
 {
     RomSection obj = Rom_GetObjectROMAddr(objId);
 
-    #ifdef _Z64HDR_MQ_DEBUG_
+    #ifdef OOT_MQ_DEBUG_PAL
         DmaMgr_SendRequest1(dest, obj.Start, obj.End - obj.Start, "", __LINE__);
     #else
         DmaMgr_SendRequest1(dest, obj.Start, obj.End - obj.Start);
@@ -71,7 +71,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* dest, u32 fileOffs, size_t s
         osSyncPrintf("_Loading 0x%08x bytes from ROM at 0x%08x", size, start);
     #endif    
 
-    #ifdef _Z64HDR_MQ_DEBUG_
+    #ifdef OOT_MQ_DEBUG_PAL
         DmaMgr_SendRequest1(dest, start, size, "", __LINE__);
     #else
         DmaMgr_SendRequest1(dest, start, size);
@@ -79,11 +79,11 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* dest, u32 fileOffs, size_t s
 
 }
 
-void Rom_LoadDataFromObject(GlobalContext* globalCtx, int objId, void* dest, u32 fileOffs, size_t size, bool fromRam)
+void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dest, u32 fileOffs, size_t size, bool fromRam)
 {
     if (fromRam)
     {
-        void* ptr = Rom_GetObjectDataPtr(objId, globalCtx);
+        void* ptr = Rom_GetObjectDataPtr(objId, playState);
 
         if (ptr == NULL)
         {
@@ -100,7 +100,7 @@ void Rom_LoadDataFromObject(GlobalContext* globalCtx, int objId, void* dest, u32
         Rom_LoadDataFromObjectFromROM(objId, dest, fileOffs, size);
 }
 
-void Rom_LoadObjectIfUnloaded(GlobalContext* globalCtx, s16 objId)
+void Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
 {
     if (objId < 0)
         return;
@@ -109,8 +109,8 @@ void Rom_LoadObjectIfUnloaded(GlobalContext* globalCtx, s16 objId)
         osSyncPrintf("_Loading object %4d...", objId);
     #endif   
 
-    if (!Object_IsLoaded(&globalCtx->objectCtx, Object_GetIndex(&globalCtx->objectCtx, objId)))
-        Object_Spawn(&globalCtx->objectCtx, objId);
+    if (!Object_IsLoaded(&playState->objectCtx, Object_GetIndex(&playState->objectCtx, objId)))
+        Object_Spawn(&playState->objectCtx, objId);
     else
     {
         #if LOGGING == 1
@@ -119,28 +119,28 @@ void Rom_LoadObjectIfUnloaded(GlobalContext* globalCtx, s16 objId)
     }
 }
 
-bool Rom_SetObjectToActor(Actor* en, GlobalContext* globalCtx, u16 object, s32 fileStart)
+bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileStart)
 {
-    int bankIndex = Object_GetIndex(&globalCtx->objectCtx, object);
+    int bankIndex = Object_GetIndex(&playState->objectCtx, object);
 
-    if (Object_IsLoaded(&globalCtx->objectCtx, bankIndex))
+    if (Object_IsLoaded(&playState->objectCtx, bankIndex))
     {
         en->objBankIndex = bankIndex;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(globalCtx->objectCtx.status[en->objBankIndex].segment) + fileStart;
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(playState->objectCtx.status[en->objBankIndex].segment) + fileStart;
         return true;
     }
     else
         return false;
 }
 
-void* Rom_GetObjectDataPtr(u16 objId, GlobalContext* globalCtx)
+void* Rom_GetObjectDataPtr(u16 objId, PlayState* playState)
 {
-	int index = Object_GetIndex(&globalCtx->objectCtx, objId);
+	int index = Object_GetIndex(&playState->objectCtx, objId);
 
 	if (index < 0)
 		return NULL;
 
-    return globalCtx->objectCtx.status[index].segment;
+    return playState->objectCtx.status[index].segment;
 }
 
 MessageEntry* Rom_GetMessageEntry(s16 msgId)
@@ -156,8 +156,8 @@ MessageEntry* Rom_GetMessageEntry(s16 msgId)
     return NULL;
 }
 
-void Message_Overwrite(NpcMaker* en, GlobalContext* globalCtx, s16 msgId)
+void Message_Overwrite(NpcMaker* en, PlayState* playState, s16 msgId)
 {
-    InternalMsgEntry msgdata = Data_GetCustomMessage(en, globalCtx, msgId);
-    Rom_LoadDataFromObject(globalCtx, en->actor.params, &globalCtx->msgCtx.font.msgBuf, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->getSettingsFromRAMObject);
+    InternalMsgEntry msgdata = Data_GetCustomMessage(en, playState, msgId);
+    Rom_LoadDataFromObject(playState, en->actor.params, &playState->msgCtx.font.msgBuf, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->getSettingsFromRAMObject);
 }

@@ -1,6 +1,6 @@
 #include "../include/h_movement.h"
 
-u32 Movement_GetTotalPathTime(NpcMaker* en, GlobalContext* globalCtx)
+u32 Movement_GetTotalPathTime(NpcMaker* en, PlayState* playState)
 {
     if (en->settings.timedPathEnd > en->settings.timedPathStart)
         return en->settings.timedPathEnd - en->settings.timedPathStart;
@@ -8,7 +8,7 @@ u32 Movement_GetTotalPathTime(NpcMaker* en, GlobalContext* globalCtx)
         return (0xFFFF - en->settings.timedPathStart) + en->settings.timedPathEnd;    
 }
 
-u32 Movement_GetRemainingPathTime(NpcMaker* en, GlobalContext* globalCtx)
+u32 Movement_GetRemainingPathTime(NpcMaker* en, PlayState* playState)
 {
     if (en->settings.timedPathEnd > en->settings.timedPathStart || en->settings.timedPathEnd >= gSaveContext.dayTime)
         return MAX(0, en->settings.timedPathEnd - gSaveContext.dayTime);

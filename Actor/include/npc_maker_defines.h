@@ -1,31 +1,12 @@
 #ifndef NPC_MAKER_DEFINES_H
 #define NPC_MAKER_DEFINES_H
 
-#if GAME_VERSION == 1
-    extern void Sram_WriteSave_Temp(SramContext* sramCtx);
-        asm("Sram_WriteSave_Temp = 0x800905D4");
-#endif
-
-#if GAME_VERSION == 1
-    extern void Gameplay_SaveSceneFlags_Temp(GlobalContext* globalCtx);
-        asm("Gameplay_SaveSceneFlags_Temp = 0x8009D894");
-#endif
-
 #define DUMMY_MSG_DATA 0x30313161
 #define DUMMY_MESSAGE 0x011A
 #define NO_CUSTOM_MESSAGE -1 
 
-
-#if GAME_VERSION == 0
-	#define VEC_ZERO  (Vec3f*)0x801333D4
-	#define FLOAT_ONE (f32*)0x801333E0
-	#define FLOAT_ZERO (f32*)0x801333E8
-#endif
-#if GAME_VERSION == 1
-	#define VEC_ZERO  (Vec3f*)0x80104394
-	#define FLOAT_ONE (f32*)0x801043A0
-	#define FLOAT_ZERO (f32*)0x801043A8	
-#endif
+#define GlobalContext PlayState
+#define PSkinAwb Skin
 
 #define ROT16(R16A0) (182.044444 * (R16A0))
 #define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
@@ -51,9 +32,9 @@
 #define NULL_SEG_BLOCK_SIZE 32
 
 #define _ZQDL(ZQDL_A0, ZQDL_A1) ZQDL_A0->state.gfxCtx->ZQDL_A1
-#define POLY_OPA _ZQDL(globalCtx, polyOpa)
-#define POLY_XLU _ZQDL(globalCtx, polyXlu)
-#define POLY_OVERLAY _ZQDL(globalCtx, overlay)
+#define POLY_OPA _ZQDL(playState, polyOpa)
+#define POLY_XLU _ZQDL(playState, polyXlu)
+#define POLY_OVERLAY _ZQDL(playState, overlay)
 
 #define DRAW_TYPE(h_type) ((h_type % 2 && h_type != SKIN) ? XLU : OPA)
 #define DRAW_DEST(h_type) (DRAW_TYPE(h_type) == XLU ? &POLY_XLU : &POLY_OPA)
@@ -78,8 +59,6 @@
 
 #define SEG_OFFSET(seg) (0x01000000 * seg)
 #define OFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset : offset + SEG_OFFSET(segment)
-
-#define GET_ACTIVE_CAM(GlobalContext) ((GlobalContext)->cameraPtrs[(GlobalContext)->activeCamera])
 
 #define INVALID_NODE -1
 #define INVALID_PATH 0
@@ -187,81 +166,6 @@ typedef enum picked_up_state
     STATE_THROWN = 2,
     STATE_LANDED = 3,
 } picked_up_state;
-
-typedef enum message_status
-{
-	MSGSTATUS_NONE = 0, 
-	MSGSTATUS_NEXT = 1,
-	MSGSTATUS_END = 2,
-	MSGSTATUS_DRAWING = 3,
-	MSGSTATUS_SELECTING = 4,
-	MSGSTATUS_EVENT = 5,
-	MSGSTATUS_CLOSING = 6,
-	MSGSTATUS_OCARINA1 = 7,
-	MSGSTATUS_OCARINA2 = 8,
-	MSGSTATUS_OCARINA3 = 9,
-	MSGSTATUS_WAIT = 10,
-	MSGSTATUS_UNK11 = 11,
-} message_status;
-
-typedef enum {
-    /* 0x00 */ MSGMODE_NONE, // idle / do nothing
-    /* 0x01 */ MSGMODE_OPENING,
-    /* 0x02 */ MSGMODE_START,
-    /* 0x03 */ MSGMODE_UNK_03,
-    /* 0x04 */ MSGMODE_NEWMSG,
-    /* 0x05 */ MSGMODE_UNK_05,
-    /* 0x06 */ MSGMODE_DRAWING, // textbox in progress
-    /* 0x07 */ MSGMODE_UNK_07,
-    /* 0x08 */ MSGMODE_UNK_08,
-    /* 0x09 */ MSGMODE_UNK_09,
-    /* 0x0A */ MSGMODE_UNK_0A,
-    /* 0x0B */ MSGMODE_UNK_0B,
-    /* 0x0C */ MSGMODE_UNK_0C,
-    /* 0x0D */ MSGMODE_UNK_0D,
-    /* 0x0E */ MSGMODE_UNK_0E,
-    /* 0x0F */ MSGMODE_UNK_0F,
-    /* 0x10 */ MSGMODE_UNK_10,
-    /* 0x11 */ MSGMODE_UNK_11,
-    /* 0x12 */ MSGMODE_UNK_12,
-    /* 0x13 */ MSGMODE_UNK_13,
-    /* 0x14 */ MSGMODE_UNK_14,
-    /* 0x15 */ MSGMODE_UNK_15,
-    /* 0x16 */ MSGMODE_UNK_16,
-    /* 0x17 */ MSGMODE_UNK_17,
-    /* 0x18 */ MSGMODE_UNK_18,
-    /* 0x19 */ MSGMODE_UNK_19,
-    /* 0x1A */ MSGMODE_UNK_1A,
-    /* 0x1B */ MSGMODE_UNK_1B,
-    /* 0x1C */ MSGMODE_UNK_1C,
-    /* 0x1D */ MSGMODE_UNK_1D,
-    /* 0x1E */ MSGMODE_UNK_1E,
-    /* 0x1F */ MSGMODE_UNK_1F,
-    /* 0x20 */ MSGMODE_UNK_20,
-    /* 0x21 */ MSGMODE_UNK_21,
-    /* 0x22 */ MSGMODE_UNK_22,
-    /* 0x23 */ MSGMODE_UNK_23,
-    /* 0x24 */ MSGMODE_UNK_24,
-    /* 0x25 */ MSGMODE_UNK_25,
-    /* 0x26 */ MSGMODE_UNK_26,
-    /* 0x27 */ MSGMODE_UNK_27,
-    /* 0x28 */ MSGMODE_UNK_28,
-    /* 0x29 */ MSGMODE_UNK_29,
-    /* 0x2A */ MSGMODE_UNK_2A,
-    /* 0x2B */ MSGMODE_UNK_2B,
-    /* 0x2C */ MSGMODE_UNK_2C,
-    /* 0x2D */ MSGMODE_UNK_2D,
-    /* 0x2E */ MSGMODE_UNK_2E,
-    /* 0x2F */ MSGMODE_UNK_2F,
-    /* 0x30 */ MSGMODE_UNK_30,
-    /* 0x31 */ MSGMODE_UNK_31,  // frogs
-    /* 0x32 */ MSGMODE_UNK_32,  // frogs
-    /* 0x33 */ MSGMODE_UNK_33,  // frog jumping game?
-    /* 0x34 */ MSGMODE_NEXT,    // next textbox
-    /* 0x35 */ MSGMODE_END,     // textbox done
-    /* 0x36 */ MSGMODE_CLOSING, // textbox closing
-    /* 0x37 */ MSGMODE_UNK_37
-} MessageMode;
 
 // There are more, but their exact purpose is not known.
 typedef enum song_status

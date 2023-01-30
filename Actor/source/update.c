@@ -5,15 +5,15 @@
 #include "../include/h_movement.h"
 #include "../include/h_scene.h"
 
-void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
+void Update_Misc(NpcMaker* en, PlayState* playState)
 {
     en->lastDayTime = gSaveContext.dayTime;
 
     if (en->stopPlayer)
-        PLAYER->stateFlags1 |= PLAYER_STOPPED_MASK;
+        GET_PLAYER(playState)->stateFlags1 |= PLAYER_STOPPED_MASK;
         
     if (en->cameraId - 1 > 0)
-        Camera_ChangeDataIdx(&globalCtx->mainCamera, en->cameraId - 1);
+        Camera_ChangeBgCamIndex(&playState->mainCamera, en->cameraId - 1);
 
     #if EXDLIST_EDITOR == 1
 
@@ -25,7 +25,7 @@ void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
             return;
         }
 
-        if (CHECK_BTN_ALL(globalCtx->state.input->press.button, BTN_DDOWN))
+        if (CHECK_BTN_ALL(playState->state.input->press.button, BTN_DDOWN))
         {
             en->dbgPosEditorCursorPos++;
 
@@ -33,7 +33,7 @@ void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
                 en->dbgPosEditorCursorPos = 0;
         }
 
-        if (CHECK_BTN_ALL(globalCtx->state.input->press.button, BTN_DUP))
+        if (CHECK_BTN_ALL(playState->state.input->press.button, BTN_DUP))
         {
             if (en->dbgPosEditorCursorPos == 0)
                 en->dbgPosEditorCursorPos = 8;
@@ -41,13 +41,13 @@ void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
                 en->dbgPosEditorCursorPos--;
         }
 
-        if (CHECK_BTN_ALL(globalCtx->state.input->cur.button, BTN_DRIGHT))
+        if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_DRIGHT))
         {
             en->dbgPosEditorCooldown = 1;
 
             float mul = 1;
 
-            if (CHECK_BTN_ALL(globalCtx->state.input->cur.button, BTN_L))
+            if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_L))
                 mul = 100;
 
             switch (en->dbgPosEditorCursorPos)
@@ -71,13 +71,13 @@ void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
                 case 8: en->extraDLists[en->dbgPosEditorCurEditing].limb += 1; break;
             }
         }
-        if (CHECK_BTN_ALL(globalCtx->state.input->cur.button, BTN_DLEFT))
+        if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_DLEFT))
         {
             en->dbgPosEditorCooldown = 1;
 
             float mul = 1;
 
-            if (CHECK_BTN_ALL(globalCtx->state.input->cur.button, BTN_L))
+            if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_L))
                 mul = 100;
 
 
@@ -108,7 +108,7 @@ void Update_Misc(NpcMaker* en, GlobalContext* globalCtx)
     #endif
 }
 
-void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
+void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
 {
     if (en->exSegData == NULL)
         return;
@@ -160,7 +160,7 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
     // but whenever the actor is talking.
     if (en->settings.talkTexSegment >= 8 && en->exSegData[en->settings.talkTexSegment - 8] != 0 && en->doTalkingAnm && en->settings.talkPattern[0] != 0xFF)
     {
-        if (en->isTalking && func_8010BDBC(&global->msgCtx) == MSGSTATUS_DRAWING)
+        if (en->isTalking && Message_GetState(&playState->msgCtx) == MSGMODE_TEXT_DISPLAYING)
         {
             if (en->talkingFramesBetween >= en->settings.talkAnimSpeed)
             {
@@ -192,7 +192,7 @@ void Update_TextureAnimations(NpcMaker *en, GlobalContext* global)
     #pragma endregion
 }
 
-void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
+void Update_Animations(NpcMaker* en, PlayState* playState)
 {
     if (en->animations == NULL || en->currentAnimId < 0)
     {
@@ -205,7 +205,7 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
 
     if (realObjId != en->settings.objectId)
     {
-        if (!Rom_SetObjectToActor(&en->actor, globalCtx, realObjId, (R_FILESTART(en, anim.fileStart))))
+        if (!Rom_SetObjectToActor(&en->actor, playState, realObjId, (R_FILESTART(en, anim.fileStart))))
         {
             #if LOGGING == 1
                 osSyncPrintf("_%2d: Animation had object %04x set, but it wasn't loaded, so the animation will not play.", en->npcId, realObjId);
@@ -218,7 +218,7 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
 
     switch (en->settings.animationType)
     {
-        case ANIMTYPE_LINK: en->animationFinished = LinkAnimation_Update(globalCtx, &en->skin.skelAnime); break;
+        case ANIMTYPE_LINK: en->animationFinished = LinkAnimation_Update(playState, &en->skin.skelAnime); break;
         case ANIMTYPE_NORMAL: en->animationFinished = SkelAnime_Update(&en->skin.skelAnime); break;
         default: break;
     }
@@ -229,7 +229,7 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
         switch (en->skin.skelAnime.mode)
         {
             // For interpolation, we just reset the animation.
-            case ANIMMODE_LOOP_PARTIAL_INTERP: Setup_Animation(en, globalCtx, en->currentAnimId, true, false, true, false); break;
+            case ANIMMODE_LOOP_PARTIAL_INTERP: Setup_Animation(en, playState, en->currentAnimId, true, false, true, false); break;
             // If we don't need to interpolate, we set the current frame to the start frame.
             case ANIMMODE_LOOP_PARTIAL: en->skin.skelAnime.curFrame = anim.startFrame; break;
             default: break;
@@ -238,13 +238,13 @@ void Update_Animations(NpcMaker* en, GlobalContext* globalCtx)
 
     
     if (realObjId != en->settings.objectId)
-        Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
+        Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
 }
 
-void Update_HeadWaistRot(NpcMaker *en, GlobalContext* globalCtx)
+void Update_HeadWaistRot(NpcMaker *en, PlayState* playState)
 {
     s16 targetHor = -(en->actor.yawTowardsPlayer - en->actor.shape.rot.y);
-    s16 targetVert = Math_Vec3f_Pitch(&en->settings.lookAtPosOffset, &PLAYER->actor.focus.pos);
+    s16 targetVert = Math_Vec3f_Pitch(&en->settings.lookAtPosOffset, &GET_PLAYER(playState)->actor.focus.pos);
 
     // Checking if player is in range.
     if (ABS(targetHor) > ROT16(en->settings.lookAtDegreesHor) ||
@@ -260,12 +260,12 @@ void Update_HeadWaistRot(NpcMaker *en, GlobalContext* globalCtx)
     Math_SmoothStepToS(&en->limbRotB, targetVert, LOOKAT_ROTATION_SCALE, LOOKAT_ROTATION_MAX, LOOKAT_ROTATION_MIN);
 }
 
-void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
+void Update_Conversation(NpcMaker* en, PlayState* playState)
 {
-    int talkState = func_8010BDBC(&globalCtx->msgCtx);
+    int talkState = Message_GetState(&playState->msgCtx);
 
     // Checking if the player has talked to the NPC.
-    if (func_8002F194(&en->actor, globalCtx))
+    if (Actor_ProcessTalkRequest(&en->actor, playState))
     {
         #if LOGGING == 1
             osSyncPrintf("_%2d: Started talking!", en->npcId);
@@ -278,17 +278,17 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
 
     // The hackiest workaround to make talk mode persist even if message is closed.
     if (en->persistTalk)
-        globalCtx->msgCtx.unk_E3EE = SONGSTATUS_CORRECT;
+        playState->msgCtx.ocarinaMode = SONGSTATUS_CORRECT;
 
     // Trading bug workaround.
     if (en->isTalking)
-        PLAYER->actor.textId = en->actor.textId;
+        GET_PLAYER(playState)->actor.textId = en->actor.textId;
 
     // If message status is "new message", increase textbox count. Also,
     // save current textbox buffer position.
-    if (en->isTalking && globalCtx->msgCtx.msgMode == MSGMODE_NEWMSG)
+    if (en->isTalking && playState->msgCtx.msgMode == MSGMODE_TEXT_NEXT_MSG)
     {
-        en->curTextBuffPos = AVAL(&globalCtx->msgCtx, u16, 0xE3CE);
+        en->curTextBuffPos = AVAL(&playState->msgCtx, u16, 0xE3CE);
         en->textboxNum++;
     }
 
@@ -297,18 +297,18 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
     {
         // See if the game has copied the dummy message to RAM.
         // "011a" is the first 4 bytes of contents of message 0x011a
-        if (DUMMY_MSG_DATA == *(u32*)globalCtx->msgCtx.font.msgBuf)
+        if (DUMMY_MSG_DATA == *(u32*)playState->msgCtx.font.msgBuf)
         {
             #if LOGGING == 1
                 osSyncPrintf("_%2d: Setting a custom message.", en->npcId);
             #endif  
 
-            Message_Overwrite(en, globalCtx, en->customMsgId);
+            Message_Overwrite(en, playState, en->customMsgId);
         }
     }
 
     // If we talked to the NPC, and msgstatus is 3, then textbox is visible.
-    if (en->isTalking && globalCtx->msgCtx.msgMode == MSGMODE_UNK_03)
+    if (en->isTalking && playState->msgCtx.msgMode == MSGMODE_TEXT_STARTING)
     {
         #if LOGGING == 1
             osSyncPrintf("_%2d: Textbox shown!", en->npcId);
@@ -318,7 +318,7 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
     }
 
     // If textbox was displayed, and now the message status is blank, then talking has finished.
-    if (en->textboxDisplayed && (globalCtx->msgCtx.msgMode == MSGMODE_NONE || talkState == MSGSTATUS_EVENT))
+    if (en->textboxDisplayed && (playState->msgCtx.msgMode == MSGMODE_NONE || talkState == MSGMODE_TEXT_CONTINUING))
     {
         #if LOGGING == 1
             osSyncPrintf("_%2d: _Talking has finished!", en->npcId);
@@ -333,7 +333,7 @@ void Update_Conversation(NpcMaker* en, GlobalContext* globalCtx)
     }
 }
 
-void Update_HitsReaction(NpcMaker* en, GlobalContext* globalCtx)
+void Update_HitsReaction(NpcMaker* en, PlayState* playState)
 {
     en->wasHitThisFrame = en->collider.base.acFlags & AC_HIT;
 
@@ -353,7 +353,7 @@ void Update_HitsReaction(NpcMaker* en, GlobalContext* globalCtx)
             en->collider.base.acFlags &= ~AC_HIT;
 
             // Stop moving.
-            Movement_StopMoving(en, globalCtx, true);
+            Movement_StopMoving(en, playState, true);
 
             // If sfx is set, play it.
             // z_actor_play_sfx
@@ -361,7 +361,7 @@ void Update_HitsReaction(NpcMaker* en, GlobalContext* globalCtx)
                 func_8002F7DC(&en->actor, en->settings.sfxIfAttacked);
 
             // Play the attacked animation and setup info that we've been hit.
-            Setup_Animation(en, globalCtx, ANIM_ATTACKED, true, true, false, !en->autoAnims);
+            Setup_Animation(en, playState, ANIM_ATTACKED, true, true, false, !en->autoAnims);
             en->wasHitTimer = en->skin.skelAnime.endFrame + WAS_HIT_DELAY_BEFORE_RETURNING_TO_NORMAL;
             en->wasHit = true;
         }
@@ -387,31 +387,31 @@ void Update_HitsReaction(NpcMaker* en, GlobalContext* globalCtx)
                 en->collider.base.acFlags |= AC_ON;
 
             // We can go back to moving.
-            Setup_Animation(en, globalCtx, ANIM_IDLE, true, false, false, false);
+            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, false);
         }
     }
 }
 
-void Update_Collision(NpcMaker* en, GlobalContext* globalCtx)
+void Update_Collision(NpcMaker* en, PlayState* playState)
 {
     // Update the collider
     Collider_UpdateCylinder(&en->actor, &en->collider);
 
     // We need to react to hits before we update the bumpbox and hurtbox (as that resets indication there's been any collisions).
-    Update_HitsReaction(en, globalCtx);
+    Update_HitsReaction(en, playState);
 
     // We update the bump collision (i.e against platforms and such)
     if (en->settings.hasCollision)
     {
-        Actor_UpdateBgCheckInfo(globalCtx, &en->actor, 20.0f, en->collider.dim.radius, en->collider.dim.height, 5);
-        CollisionCheck_SetOC(globalCtx, &globalCtx->colChkCtx, &en->collider.base);
+        Actor_UpdateBgCheckInfo(playState, &en->actor, 20.0f, en->collider.dim.radius, en->collider.dim.height, 5);
+        CollisionCheck_SetOC(playState, &playState->colChkCtx, &en->collider.base);
     }
 
     if (en->collider.base.acFlags & AC_ON)
-        CollisionCheck_SetAC(globalCtx, &globalCtx->colChkCtx, &en->collider.base);
+        CollisionCheck_SetAC(playState, &playState->colChkCtx, &en->collider.base);
 }
 
-void Update_ModelAlpha(NpcMaker* en, GlobalContext* globalCtx)
+void Update_ModelAlpha(NpcMaker* en, PlayState* playState)
 {
     if (en->settings.fadeOut)
     {

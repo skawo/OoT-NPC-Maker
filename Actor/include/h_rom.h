@@ -17,26 +17,24 @@ extern RomFile* objectTable;
     #define objectTable (*(RomSection(*)[]) gObjectTable) 
 #endif 
 
-#ifdef _Z64HDR_MQ_DEBUG_
+#ifdef OOT_MQ_DEBUG_PAL
     #define messageTable (*(MessageEntry(*)[]) 0x8014B320)
-#endif
-
-#ifdef _Z64HDR_U10_
+#else
     #define messageTable (*(MessageEntry(*)[]) 0x8010EA8C)
 #endif
 
 
 void Rom_LoadObject(int objId, void *dram_addr);
 void Rom_LoadDataFromObjectFromROM(int objId, void* dram_addr, u32 offset_into_file, size_t size);
-void Rom_LoadObjectIfUnloaded(GlobalContext* global, s16 object_id);
-bool Rom_SetObjectToActor(Actor* en, GlobalContext*global, u16 object, s32 fileStart);
-void* Rom_GetObjectDataPtr(u16 object_id, GlobalContext*global);
+void Rom_LoadObjectIfUnloaded(PlayState* playState, s16 object_id);
+bool Rom_SetObjectToActor(Actor* en, PlayState*playState, u16 object, s32 fileStart);
+void* Rom_GetObjectDataPtr(u16 object_id, PlayState*playState);
 MessageEntry* Rom_GetMessageEntry(s16 msg_id);
-InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, GlobalContext* global, int id);
+InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int id);
 bool Rom_IsObjectCompressed(int objId);
 RomSection Rom_GetObjectROMAddr(int objId);
 RomSection Rom_GetPhysicalROMAddrFromVirtual(u32 virtual);
-void Rom_LoadDataFromObject(GlobalContext* global, int objId, void* dram_addr, u32 offset_into_file, size_t size, bool from_ram);
-void Message_Overwrite(NpcMaker* en, GlobalContext* globalCtx, s16 msgId);
+void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dram_addr, u32 offset_into_file, size_t size, bool from_ram);
+void Message_Overwrite(NpcMaker* en, PlayState* playState, s16 msgId);
 
 #endif

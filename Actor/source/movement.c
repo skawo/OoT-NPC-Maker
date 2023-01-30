@@ -7,9 +7,9 @@
 #include "../include/h_math.h"
 #include "../include/h_scripts.h"
 
-void Movement_OpenDoors(NpcMaker* en, GlobalContext* globalCtx)
+void Movement_OpenDoors(NpcMaker* en, PlayState* playState)
 {
-    Actor* door = globalCtx->actorCtx.actorLists[ACTORCAT_DOOR].head;
+    Actor* door = playState->actorCtx.actorLists[ACTORCAT_DOOR].head;
 
     while (door != NULL)
     {
@@ -20,15 +20,15 @@ void Movement_OpenDoors(NpcMaker* en, GlobalContext* globalCtx)
         float dist2 = Math_Vec3f_DistXYZ(&en->actor.world.pos, &door->home.pos);
 
         if (dist <= DOOR_OPEN_DIST_MARGIN || dist2 <= DOOR_OPEN_DIST_MARGIN)
-            Doors_Open(&en->actor, door, globalCtx);
+            Doors_Open(&en->actor, door, playState);
         else
-            Doors_Close(&en->actor, door, globalCtx);
+            Doors_Close(&en->actor, door, playState);
 
         door = door->next;
     }
 }
 
-void Movement_MoveTowardsNextPos(NpcMaker* en, GlobalContext* globalCtx, float speed, movement_type movementType, bool ignoreY, bool setAnims)
+void Movement_MoveTowardsNextPos(NpcMaker* en, PlayState* playState, float speed, movement_type movementType, bool ignoreY, bool setAnims)
 {
     // We don't move in these instances. Can't move if movement type is timed path since that snaps the NPC into place.
     if (!en->canMove ||
@@ -49,7 +49,7 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, GlobalContext* globalCtx, float s
     // If we're moving and we're close enough to the end, or the distance travelled has exceeded the initial distance calculated, we don't move.
     if (Movement_HasReachedDestination(en, MOVEMENT_DISTANCE_EQUAL_MARGIN))
     {
-        Movement_StopMoving(en, globalCtx, setAnims);
+        Movement_StopMoving(en, playState, setAnims);
         Movement_Apply(&en->actor, NULL);
         return;
     }
@@ -70,7 +70,7 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, GlobalContext* globalCtx, float s
         }
 
         if (setAnims && en->currentAnimId != ANIM_WALK)
-            Setup_Animation(en, globalCtx, ANIM_WALK, true, false, false, !en->autoAnims);
+            Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims);
 
         // Calculate the direction. Set the rotation faced immediately to the smoothed direction.
         Math_SmoothStepToS(&en->actor.world.rot.y, 
@@ -97,11 +97,11 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, GlobalContext* globalCtx, float s
     }
 }
 
-bool Movement_RideActor(NpcMaker* en, GlobalContext* globalCtx)
+bool Movement_RideActor(NpcMaker* en, PlayState* playState)
 {
     if (en->settings.riddenNPCId >= 0)
     {
-        en->riddenNpc = Scene_GetNpcMakerByID(en, globalCtx, en->settings.riddenNPCId);
+        en->riddenNpc = Scene_GetNpcMakerByID(en, playState, en->settings.riddenNPCId);
 
         if (en->riddenNpc == NULL)
             return false;
@@ -115,10 +115,10 @@ bool Movement_RideActor(NpcMaker* en, GlobalContext* globalCtx)
                 if (!en->wasHit)
                 {
                     if (en->settings.sfxIfAttacked >= 0)
-                        Audio_PlayActorSound2(&en->actor, en->settings.sfxIfAttacked);
+                        Audio_PlayActorSfx2(&en->actor, en->settings.sfxIfAttacked);
 
                     // Play the attacked animation and setup info that we've been hit.
-                    Setup_Animation(en, globalCtx, ANIM_ATTACKED, true, true, false, !en->autoAnims);
+                    Setup_Animation(en, playState, ANIM_ATTACKED, true, true, false, !en->autoAnims);
                     en->wasHit = true;
                     en->canMove = false;
                 }
@@ -134,9 +134,9 @@ bool Movement_RideActor(NpcMaker* en, GlobalContext* globalCtx)
 
                 // Set the appropriate animation...
                 if (en->riddenNpc->isMoving)
-                    Setup_Animation(en, globalCtx, ANIM_WALK, true, false, false, !en->autoAnims);
+                    Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims);
                 else
-                    Setup_Animation(en, globalCtx, ANIM_IDLE, true, false, false, !en->autoAnims);
+                    Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims);
             }
         }
 
@@ -150,14 +150,14 @@ bool Movement_RideActor(NpcMaker* en, GlobalContext* globalCtx)
         if (!en->canMove || !en->riddenNpc->canMove)
         {
             if (en->isMoving)
-                Movement_StopMoving(en, globalCtx, true);
+                Movement_StopMoving(en, playState, true);
 
             if (en->riddenNpc->isMoving)
             {
                 // Object needs to be set to the ridden NPC's, otherwise the animations will not work properly.
-                Rom_SetObjectToActor(&en->riddenNpc->actor, globalCtx, en->riddenNpc->settings.objectId, en->riddenNpc->settings.fileStart);
-                Movement_StopMoving(en->riddenNpc, globalCtx, true);
-                Rom_SetObjectToActor(&en->actor, globalCtx, en->settings.objectId, en->settings.fileStart);
+                Rom_SetObjectToActor(&en->riddenNpc->actor, playState, en->riddenNpc->settings.objectId, en->riddenNpc->settings.fileStart);
+                Movement_StopMoving(en->riddenNpc, playState, true);
+                Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
             }
         }
 
@@ -167,14 +167,14 @@ bool Movement_RideActor(NpcMaker* en, GlobalContext* globalCtx)
         return false;    
 }
 
-bool Movement_PickUp(NpcMaker* en, GlobalContext* globalCtx)
+bool Movement_PickUp(NpcMaker* en, PlayState* playState)
 {
     switch (en->pickedUpState)
     {
         case STATE_IDLE:
         {
             // If player is holding us, change state to picked-up, disable collision and targetting.
-            if (PLAYER->heldActor == &en->actor)
+            if (GET_PLAYER(playState)->heldActor == &en->actor)
             {
                 en->pickedUpState = STATE_PICKED_UP;
                 en->hadCollision = en->settings.hasCollision;
@@ -187,7 +187,7 @@ bool Movement_PickUp(NpcMaker* en, GlobalContext* globalCtx)
         // If player stopped holding us, we've been thrown. Restore collision and targetting.
         case STATE_PICKED_UP:
         {
-            if (PLAYER->heldActor != &en->actor)
+            if (GET_PLAYER(playState)->heldActor != &en->actor)
             {
                 en->pickedUpState = STATE_THROWN;
                 en->settings.hasCollision = en->hadCollision;
@@ -223,9 +223,9 @@ bool Movement_PickUp(NpcMaker* en, GlobalContext* globalCtx)
     return en->pickedUpState != STATE_IDLE;
 }
 
-void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movementType, bool ignoreY, bool setAnims)
+void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementType, bool ignoreY, bool setAnims)
 {
-    if (Movement_RideActor(en, globalCtx) || Movement_PickUp(en, globalCtx) || !en->canMove)
+    if (Movement_RideActor(en, playState) || Movement_PickUp(en, playState) || !en->canMove)
         return;
 
     // Before we start moving, we grab the current position for use later.
@@ -234,7 +234,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
     // If we've moved, and actor is set to do so, open doors.
     // This has to happen after the first frame of a scene, or the game crashes, which is why it's placed up here.
     if (en->traversedDistance - en->lastTraversedDistance > 0 && en->settings.opensDoors)
-        Movement_OpenDoors(en, globalCtx);
+        Movement_OpenDoors(en, playState);
 
     float speed = en->settings.movementSpeed;
 
@@ -286,7 +286,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
             }
             // Checking if we've bumbled into something or if we've reached the destination or travelled far enough. If we have, stop moving.
             else if (en->traversedDistance - en->lastTraversedDistance < speed || tooFarFromBase || reachedDest)
-                Movement_StopMoving(en, globalCtx, setAnims);
+                Movement_StopMoving(en, playState, setAnims);
 
             break;
         }
@@ -294,12 +294,12 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
         // If the actor is close enough, we stop.
         case MOVEMENT_FOLLOW:
         {
-            float minDist = PLAYER->cylinder.dim.radius + en->settings.collisionRadius + en->settings.movementDistance;
+            float minDist = GET_PLAYER(playState)->cylinder.dim.radius + en->settings.collisionRadius + en->settings.movementDistance;
 
             if (en->actor.xzDistToPlayer > minDist || en->actor.yDistToPlayer > minDist)
-                Movement_SetNextPos(en, &PLAYER->actor.world.pos);
+                Movement_SetNextPos(en, &GET_PLAYER(playState)->actor.world.pos);
             else
-                Movement_StopMoving(en, globalCtx, setAnims);
+                Movement_StopMoving(en, playState, setAnims);
             
             break;
         }
@@ -310,15 +310,15 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
 
             if (en->actor.xzDistToPlayer < minDist && !en->isMoving)
             {
-                Vec3f vector = {en->settings.movementDistance * Math_SinS(PLAYER->actor.world.rot.y), 
+                Vec3f vector = {en->settings.movementDistance * Math_SinS(GET_PLAYER(playState)->actor.world.rot.y), 
                                 0, 
-                                en->settings.movementDistance * Math_CosS(PLAYER->actor.world.rot.y)};
+                                en->settings.movementDistance * Math_CosS(GET_PLAYER(playState)->actor.world.rot.y)};
                                   
                 Math_Vec3f_Sum(&en->actor.world.pos, &vector, &en->movementNextPos);
                 Movement_SetNextPos(en, &en->movementNextPos);
             }
             else if (Movement_HasReachedDestination(en, MOVEMENT_DISTANCE_EQUAL_MARGIN))
-                Movement_StopMoving(en, globalCtx, setAnims);
+                Movement_StopMoving(en, playState, setAnims);
         
             break;
         }
@@ -327,12 +327,12 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
         case MOVEMENT_TIMED_PATH:
         {
             // We don't do anything if the Path ID is 0 (we're using SharpOcarina's path IDs here, and path 0 doesn't exist) or if the path list address wasn't found.
-            if (en->settings.pathId == INVALID_PATH || globalCtx->setupPathList == NULL || en->curPathNode < 0)
+            if (en->settings.pathId == INVALID_PATH || playState->setupPathList == NULL || en->curPathNode < 0)
                 break;
 
             // First, we get the total time the path takes, and how much time is left until the end time.
-            u32 timeTotal = Movement_GetTotalPathTime(en, globalCtx);
-            u32 timeLeft = Movement_GetRemainingPathTime(en, globalCtx);
+            u32 timeTotal = Movement_GetTotalPathTime(en, playState);
+            u32 timeLeft = Movement_GetRemainingPathTime(en, playState);
 
             if (timeTotal == 0)
                 break;
@@ -353,7 +353,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                 }
                 else
                 {
-                    float totalPathLen = Scene_GetPathLen(globalCtx, 
+                    float totalPathLen = Scene_GetPathLen(playState, 
                                                           PATH_ID(en), 
                                                           START_NODE(en),
                                                           END_NODE(en),
@@ -369,7 +369,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                     // distance we're supposed to have traversed.
                     for (i = 0; i < en->curPathNumNodes - 1; i++)
                     {
-                        sectionLen = Scene_GetPathSectionLen(globalCtx, PATH_ID(en), i, ignoreY);
+                        sectionLen = Scene_GetPathSectionLen(playState, PATH_ID(en), i, ignoreY);
                         pathLen += sectionLen;
 
                         if (pathLen >= curProgress)
@@ -381,13 +381,13 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                 }
 
                 // We know the node we're on now, so we get the start and end points for it...
-                Vec3s* sectionStart = Scene_GetPathNodePos(globalCtx, PATH_ID(en), en->curPathNode);
+                Vec3s* sectionStart = Scene_GetPathNodePos(playState, PATH_ID(en), en->curPathNode);
                 Vec3s* sectionEnd;
 
                 if (en->curPathNode + 1 >= en->curPathNumNodes)
                     sectionEnd = sectionStart;
                 else
-                    sectionEnd = Scene_GetPathNodePos(globalCtx, PATH_ID(en), en->curPathNode + 1);
+                    sectionEnd = Scene_GetPathNodePos(playState, PATH_ID(en), en->curPathNode + 1);
 
                 if (sectionStart != NULL)
                 {
@@ -414,7 +414,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
 
                         if (dist > 0)
                         {
-                            Setup_Animation(en, globalCtx, ANIM_WALK, true, false, false, !en->autoAnims); 
+                            Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims); 
 
                             // Multiply animation speed according to how quickly time is passing. 
                             u32 time_diff = gSaveContext.dayTime < en->lastDayTime ? 0xFFFF - en->lastDayTime : gSaveContext.dayTime - en->lastDayTime;
@@ -428,7 +428,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                                 en->actor.shape.rot.y = Math_Vec3f_Yaw(&en->actor.world.pos, &en->movementNextPos);
                         }
                         else
-                            Setup_Animation(en, globalCtx, ANIM_IDLE, true, false, false, !en->autoAnims);
+                            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims);
                     }
 
                     // Actually move the character.
@@ -441,14 +441,14 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
         case MOVEMENT_PATH:
         {
             // We don't do anything if the Path ID is 0 (we're using SharpOcarina's path IDs here, and path 0 doesn't exist) or if the path list address wasn't found.
-            if (en->settings.pathId == INVALID_PATH || globalCtx->setupPathList == NULL || en->curPathNode < 0)
+            if (en->settings.pathId == INVALID_PATH || playState->setupPathList == NULL || en->curPathNode < 0)
                 break;
 
             // If we're moving, we check if we've reached the destination or travelled far enough. If so, we stop moving, but we do not change
             // the animation back to idle yet, in case we're not actually fully stopping (there are further nodes, or the path is set to loop)
             if (Movement_HasReachedDestination(en, MOVEMENT_DISTANCE_EQUAL_MARGIN + en->settings.smoothingConstant))
             {
-                Movement_StopMoving(en, globalCtx, false);
+                Movement_StopMoving(en, playState, false);
 
                 // If the current path node is the last, or the last in the loop, we check if looping is enabled.
                 // If looping is enabled, we set the next path node to loop start, or 0 if undefined. We also set the delay before the path loop restarts.
@@ -462,12 +462,12 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                         en->movementDelayCounter = en->settings.movementDelay;
 
                         if (en->movementDelayCounter != 0)
-                            Setup_Animation(en, globalCtx, ANIM_IDLE, true, false, false, !en->autoAnims); 
+                            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims); 
                     }
                     else
                     {
                         en->curPathNode = INVALID_NODE;
-                        Setup_Animation(en, globalCtx, ANIM_IDLE, true, false, false, !en->autoAnims); 
+                        Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims); 
                         break;
                     }
                 }
@@ -486,7 +486,7 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                 // And set the next node position.
                 else
                 {   
-                    Vec3s* next_node = Scene_GetPathNodePos(globalCtx, PATH_ID(en), en->curPathNode);
+                    Vec3s* next_node = Scene_GetPathNodePos(playState, PATH_ID(en), en->curPathNode);
 
                     if (next_node == NULL)
                     {
@@ -508,18 +508,18 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
         // to that.
         case MOVEMENT_CUTSCENE:
         {
-            CsCmdActorAction* curActionPtr = globalCtx->csCtx.npcActions[CUTSCENE_ID(en)];
+            CsCmdActorAction* curActionPtr = playState->csCtx.npcActions[CUTSCENE_ID(en)];
             speed = en->cutsceneMovementSpeed;
 
             if (curActionPtr != NULL)
             {
-                int curFrame = globalCtx->csCtx.frames;
+                int curFrame = playState->csCtx.frames;
                 int framesRemain = curActionPtr->endFrame + 2 - curFrame;
 
                 if (curActionPtr->startFrame + 1 == curFrame)
                 {
                     // Set the animation based on the current action.
-                    Setup_Animation(en, globalCtx, curActionPtr->action - 1, true, false, false, false);
+                    Setup_Animation(en, playState, curActionPtr->action - 1, true, false, false, false);
 
                     // Set start position...
                     en->movementStartPos = en->actor.world.pos;
@@ -540,11 +540,11 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
                     en->isMoving = true;
                 }
                 else if (curActionPtr->endFrame + 1 == curFrame)
-                    Movement_StopMoving(en, globalCtx, true);
+                    Movement_StopMoving(en, playState, true);
             }
             else
             {
-                Movement_StopMoving(en, globalCtx, true);
+                Movement_StopMoving(en, playState, true);
                 speed = 0;
             }            
 
@@ -555,14 +555,14 @@ void Movement_Main(NpcMaker* en, GlobalContext* globalCtx, movement_type movemen
         default:
         {
             if (!en->stopped || en->isMoving)
-                Movement_StopMoving(en, globalCtx, setAnims);
+                Movement_StopMoving(en, playState, setAnims);
 
             break;
         }
     }
 
     // We actually move there.
-    Movement_MoveTowardsNextPos(en, globalCtx, speed, movementType, ignoreY, setAnims);
+    Movement_MoveTowardsNextPos(en, playState, speed, movementType, ignoreY, setAnims);
 
     // Next, we check how much we've moved and add it to the travelled distance.
     en->lastTraversedDistance = en->traversedDistance;
@@ -588,10 +588,10 @@ void Movement_SetNextPos(NpcMaker* en, Vec3f* next_pos)
     #endif  
 }
 
-void Movement_StopMoving(NpcMaker* en, GlobalContext* globalCtx, bool stopAnim)
+void Movement_StopMoving(NpcMaker* en, PlayState* playState, bool stopAnim)
 {
     if (stopAnim)
-        Setup_Animation(en, globalCtx, ANIM_IDLE, true, false, false, !en->autoAnims);
+        Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims);
 
     en->stopped = true;
     en->isMoving = false;

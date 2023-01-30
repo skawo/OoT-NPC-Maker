@@ -1,13 +1,13 @@
 #include "../include/h_doors.h"
 
-void Doors_UpdateDummy(Actor* door, GlobalContext* globalCtx)
+void Doors_UpdateDummy(Actor* door, PlayState* playState)
 {
     //Failsafe.
-    if (Actor_FindNearby(globalCtx, door, door->colChkInfo.health, ACTORCAT_NPC, DOOR_OPEN_DIST_MARGIN * 3) == NULL)
-        Doors_Close(door, door, globalCtx);
+    if (Actor_FindNearby(playState, door, door->colChkInfo.health, ACTORCAT_NPC, DOOR_OPEN_DIST_MARGIN * 3) == NULL)
+        Doors_Close(door, door, playState);
 }
 
-void Doors_Close(Actor* npc, Actor* door, GlobalContext* globalCtx)
+void Doors_Close(Actor* npc, Actor* door, PlayState* playState)
 {
     u32* savedUpdate = (u32*)&door->speedXZ;
 
@@ -32,19 +32,19 @@ void Doors_Close(Actor* npc, Actor* door, GlobalContext* globalCtx)
                 {
                     door->update = (void*)*savedUpdate;
                     NPCID(door) = 0xFFFF;
-                    Audio_PlayActorSound2(door, NA_SE_EV_DOOR_CLOSE);
+                    Audio_PlayActorSfx2(door, NA_SE_EV_DOOR_CLOSE);
                 }
                 break;
             }
             case ACTOR_DOOR_SHUTTER:
             {
                 if (door->world.pos.y == (door->home.pos.y + SLIDE_DOOR_OPEN_DIST))
-                    Audio_PlayActorSound2(door, NA_SE_EV_SLIDE_DOOR_CLOSE);
+                    Audio_PlayActorSfx2(door, NA_SE_EV_SLIDE_DOOR_CLOSE);
 
                 if (door->world.pos.y < door->home.pos.y + 20)
                 {
                     door->floorHeight = door->world.pos.y;
-                    Actor_SpawnFloorDust(globalCtx, door, &door->world.pos, 45.0f, 0xA, 8.0f, 0x1F4, 0xA, 0);
+                    Actor_SpawnFloorDustRing(playState, door, &door->world.pos, 45.0f, 0xA, 8.0f, 0x1F4, 0xA, 0);
                 }
 
                 Math_ApproachF(&door->world.pos.y, door->home.pos.y, 1, SLIDE_DOOR_OPEN_SHUT_SPEED);
@@ -53,7 +53,7 @@ void Doors_Close(Actor* npc, Actor* door, GlobalContext* globalCtx)
                 {
                     door->update = (void*)*savedUpdate;
                     NPCID(door) = 0xFFFF;
-                    Audio_PlayActorSound2(door, NA_SE_EV_STONE_BOUND);
+                    Audio_PlayActorSfx2(door, NA_SE_EV_STONE_BOUND);
                 }
 
                 break;
@@ -64,7 +64,7 @@ void Doors_Close(Actor* npc, Actor* door, GlobalContext* globalCtx)
 
 }
 
-void Doors_Open(Actor* npc, Actor* door, GlobalContext* globalCtx)
+void Doors_Open(Actor* npc, Actor* door, PlayState* playState)
 {
     u32* savedUpdate = (u32*)&door->speedXZ;
 
@@ -82,7 +82,7 @@ void Doors_Open(Actor* npc, Actor* door, GlobalContext* globalCtx)
                 NPCID(door) = ((NpcMaker*)npc)->npcId;
                 ACTORID(door) = npc->id;
 
-                Audio_PlayActorSound2(door, NA_SE_OC_DOOR_OPEN);
+                Audio_PlayActorSfx2(door, NA_SE_OC_DOOR_OPEN);
             }
 
             Math_ApproachS(&door_skelanime->jointTable[4].z, door->shape.rot.y < 0 ? DOOR_OPEN_DEST_ROT : -DOOR_OPEN_DEST_ROT, 1, DOOR_OPEN_SHUT_SPEED);
@@ -99,7 +99,7 @@ void Doors_Open(Actor* npc, Actor* door, GlobalContext* globalCtx)
                 NPCID(door) = ((NpcMaker*)npc)->npcId;
                 ACTORID(door) = npc->id;
 
-                Audio_PlayActorSound2(door, NA_SE_EV_SLIDE_DOOR_OPEN);
+                Audio_PlayActorSfx2(door, NA_SE_EV_SLIDE_DOOR_OPEN);
             }
 
             Math_ApproachF(&door->world.pos.y, door->home.pos.y + SLIDE_DOOR_OPEN_DIST, 1, SLIDE_DOOR_OPEN_SHUT_SPEED);
