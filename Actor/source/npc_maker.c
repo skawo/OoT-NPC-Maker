@@ -140,7 +140,7 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
 }
 
 /* .data */
-const ActorInitExplPad init_vars = 
+const ActorInitExplPad ActorInit = 
 {
     .id = 0xDEAD, .padding = 0xBEEF, // <-- magic values, do not change
     .category = ACTORCAT_NPC,
