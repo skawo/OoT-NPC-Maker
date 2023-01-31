@@ -1,7 +1,7 @@
 <h1>OoT NPC Maker</h1>
 An NPC creation tool for The Legend of Zelda: Ocarina of Time.
 
-Check out the <a href="https://github.com/skawo/OoT-NPC-Maker/wiki">documentation (still being worked on)</a>. You can also check out <a href="https://www.youtube.com/watch?v=bwDyzOeDjG4"> this instructional video </a>. If you have any questions, feel free to join the <a href="https://discord.com/invite/d9gNnBHvBb">Discord</a>
+Check out the <a href="https://github.com/skawo/OoT-NPC-Maker/wiki">documentation (still being worked on)</a>. You can also check out <a href="https://www.youtube.com/watch?v=bwDyzOeDjG4">this instructional video</a>. If you have any questions, feel free to join the <a href="https://discord.com/invite/d9gNnBHvBb">Discord</a>
 
 <table>
   <tr>
