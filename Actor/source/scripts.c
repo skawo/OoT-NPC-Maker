@@ -1935,10 +1935,12 @@ bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance*
                         //z_cutscene_link_action
                         func_8002DF54(playState, &en->actor, 0x7);
                     }
+					
+					// Save current state to restore later.
+					script->tempValues[1] = en->stopPlayer;
 
                     if (en->stopPlayer)
                     {
-                        script->tempValues[1] = en->stopPlayer;
                         en->stopPlayer = false;
                         GET_PLAYER(playState)->stateFlags1 &= ~PLAYER_STOPPED_MASK;
                     }
