@@ -1937,7 +1937,7 @@ bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance*
                     }
 					
 					// Save current state to restore later.
-					script->tempValues[1] = en->stopPlayer;
+                    script->tempValues[1] = en->stopPlayer;
 
                     if (en->stopPlayer)
                     {
