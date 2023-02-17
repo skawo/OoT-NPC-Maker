@@ -1,18 +1,19 @@
 {
-  "Version": 2,
+  "Version": 3,
   "Entries": [
     {
-      "NPCName": "DeadHand",
+      "NPCName": "Test 1",
       "IsNull": false,
-      "ObjectID": 166,
-      "Hierarchy": 32392,
+      "ObjectID": 12,
+      "Hierarchy": 33560,
+      "FileStart": 0,
       "HierarchyType": 0,
       "ModelPositionOffsets": [
         0,
         0,
         0
       ],
-      "ModelScale": 0.01,
+      "ModelScale": 0.03,
       "CutsceneID": 1,
       "LookAtType": 0,
       "HeadLimb": 10,
@@ -35,11 +36,11 @@
       "IsAlwaysDrawn": true,
       "ExecuteJustScript": false,
       "ReactsIfAttacked": true,
-      "SfxIfAttacked": 14761,
-      "EffectIfAttacked": 7,
+      "SfxIfAttacked": 14337,
+      "EffectIfAttacked": 10,
       "OpensDoors": true,
-      "CollisionRadius": 33,
-      "CollisionHeight": 30,
+      "CollisionRadius": 76,
+      "CollisionHeight": 88,
       "CollisionYShift": 0,
       "NPCToRide": -1,
       "CastsShadow": true,
@@ -49,25 +50,25 @@
       "IsTargettable": true,
       "FadeOut": false,
       "Alpha": 255,
-      "TargetDistance": 9,
-      "TargetLimb": 10,
+      "TargetDistance": 2,
+      "TargetLimb": 0,
       "TargetPositionOffsets": [
         0,
         0,
         0
       ],
-      "TalkRadius": 50.0,
+      "TalkRadius": 150.0,
       "MovementType": 0,
-      "MovementDistance": 100,
+      "MovementDistance": 300,
       "MovementSpeed": 4.0,
       "GravityForce": 1.0,
       "PathID": 1,
       "PathStartNodeID": -1,
       "PathEndNodeID": -1,
-      "MovementDelayTime": 0,
+      "MovementDelayTime": 25,
       "LoopPath": true,
       "IgnoreYAxis": true,
-      "SmoothingConstant": 6.3,
+      "SmoothingConstant": -2.0,
       "TimedPathStart": 8738,
       "TimedPathEnd": 58345,
       "MaxDistRoam": 65535,
@@ -85,90 +86,65 @@
       "Animations": [
         {
           "Name": "Idle",
-          "Address": 22656,
+          "Address": 19488,
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Walking",
-          "Address": 22656,
+          "Address": 35612,
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Attacked",
-          "Address": 18008,
+          "Address": 6724,
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
-          "Name": "Talking",
-          "Address": 15724,
-          "ObjID": -1,
-          "Speed": 0.6,
-          "StartFrame": 5,
-          "EndFrame": 10
-        },
-        {
-          "Name": "Surprise",
-          "Address": 6716,
-          "ObjID": -1,
-          "Speed": 0.1,
-          "StartFrame": 4,
-          "EndFrame": 5
-        },
-        {
-          "Name": "Eat",
-          "Address": 6716,
+          "Name": "charge",
+          "Address": 13160,
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
-          "Name": "Twitching",
-          "Address": 14172,
+          "Name": "attack",
+          "Address": 10480,
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
-        },
-        {
-          "Name": "Dead",
-          "Address": 12988,
-          "ObjID": -1,
-          "Speed": 1.0,
-          "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         }
       ],
       "Scripts": [
         {
-          "Text": "#define trade_complete var.1\r\n#define talk_animation_cancel var.2\r\n#define particle_counter var.3\r\n#define hp var.4\r\n#define death_particle_counter var.5\r\n#define was_attacked var.6\r\n\r\nproc basic_talk\r\n   set talk_mode true\r\n   face self towards player\r\n   await talking_end\r\n   set animation idle\r\n   set talk_mode false\r\nendproc\r\n\r\n\r\n// If actor hasn't been attacked...\r\nif was_attacked = 0\r\n    // ...and chicken hasn't yet been traded...\r\n    if trade_complete == 0\r\n   \r\n\r\n\r\n        // Setup a trade with chicken.\r\n        trade EXCH_ITEM_CHICKEN\r\n            // If chicken presented, show the correct item message\r\n            success MsgCorrectItem\r\n\r\n            // If any other (default) item presented, show incorrect item message.\r\n            // Can list other items if a specific message should be displayed for\r\n            // specific item.\r\n            failure\r\n                default MsgBadItem\r\n            endfailure\r\n\r\n            // Otherwise, show a regular talking message\r\n            talked_to MsgTalking\r\n        endtrade\r\n\r\n\r\n\r\n        // If resulting trade was a success...\r\n        if trade_status success\r\n\r\n           // Standard talking stuff, take away control from player, etc.\r\n           set talk_mode true\r\n           face self towards player\r\n           await talking_end\r\n\r\n           // Remove chicken from inventory\r\n           item take ITEM_CHICKEN\r\n\r\n           // Show the external dlist of the chicken in Dead Hand's mouth and chomp\r\n           set dlist_visibility ChickenDlist with_limb\r\n           set animation eat once\r\n           await animation_frame = 5\r\n\r\n           // Spray blood particles\r\n           while particle_counter < 50\r\n\r\n               particle BUBBLE\r\n                    duration 100\r\n                    scale 100\r\n                    position direction 0 35 20\r\n                    color1 178 38 41 255\r\n                    color2 94 8 17 255\r\n                    acceleration random.-30->30 random.-100->0 random.-30->30\r\n                    velocity random.-30->30 random.-100->0 random.-30->30\r\n               endparticle \r\n               particle_counter += 1\r\n\r\n           endwhile\r\n\r\n           // Sound effects for added effect!\r\n           play sfx NA_SE_EV_CHICKEN_CRY_A\r\n           play sfx NA_SE_EN_DODO_J_EAT\r\n\r\n           // Hide the chicken.\r\n           set dlist_visibility ChickenDlist not_visible\r\n           set trade_complete = 1\r\n\r\n           // Give player control back\r\n           set animation idle\r\n           set talk_mode false\r\n\r\n        // For failure or just regular talking, just run basic talking stuff\r\n        elif trade_status failure\r\n            ::basic_talk\r\n\r\n        elif trade_status talked_to\r\n            ::basic_talk\r\n            \r\n        endif\r\n    // If chicken HAS been traded...\r\n    else\r\n        // Once the trade is complete, and player talks to actor again,show a question...\r\n        talk MsgConsumed\r\n            set talk_mode true\r\n\r\n            // The question has two responses, so we indicate what they do here.\r\n            set response_actions resp_1 resp_2\r\n            face self towards player\r\n            await response\r\n        endtalk\r\n\r\n        // If nothing was picked, we're done.\r\n        return\r\n\r\n        // This runs if option 1 is picked\r\n        resp_1:\r\n            show_textbox MsgMaybe\r\n\r\n            // We're switching to another animation, so we don't want the talking one\r\n            // to play in the meantime\r\n            set talk_animation_cancel = 1\r\n            set animation surprise\r\n\r\n            play sfx NA_SE_EN_DEADHAND_DEAD\r\n            await talking_end\r\n            set talk_mode false\r\n            set animation idle\r\n            set talk_animation_cancel = 0\r\n            return\r\n\r\n        // This runs if option 2 is picked\r\n        resp_2:\r\n            show_textbox MsgNoWay\r\n            await talking_end\r\n            set talk_mode false\r\n            set animation idle\r\n            return\r\n   endif\r\n\r\nendif\r\n",
+          "Text": "#define health var.1\r\n#define state var.2\r\n#define introscene var.3\r\n#define timer_between var.4\r\n#define chargetimer2 var.5\r\n#define invicibility var.6\r\n#define hurt_player var.7\r\n#define hurtbox_size var.8\r\n\r\n#define state_normal 0\r\n#define state_damaged 1\r\n#define state_charge 2\r\n#define state_spin 4\r\n\r\n// Intro\r\nif introscene == 0\r\n    set talk_mode true\r\n    set health = 50\r\n    set timer_between = 5\r\n    set hurtbox_size = 1\r\n    set state = state_normal\r\n    await frames 20\r\n    play bgm NA_BGM_BOSS00\r\n    face player towards self\r\n    play sfx NA_SE_VO_LI_SURPRISE_KID\r\n    await frames 10\r\n    face self towards player\r\n    play sfx NA_SE_EN_DODO_J_CRY\r\n    set animation attack once\r\n    await animation_end\r\n    set talk_mode false\r\n    set introscene = 1\r\nelse\r\n// Do SFX\r\n    if animation walking\r\n       if animation_frame == 20 \\             \r\n       or animation_frame == 39\r\n            play sfx NA_SE_EN_DODO_J_WALK\r\n        endif\r\n    endif\r\n\r\n// Normal state\r\n    if state == state_normal\r\n        // If timer between charges has elapsed, start charging\r\n        if timer_between == 0\r\n            set movement_type none\r\n            set animation charge once\r\n            set movement_distance = 0\r\n            set movement_type follow\r\n            set movement_speed = 8.0\r\n            set animation_speed walking = 5.0\r\n            set chargetimer2 = 35\r\n            set state = state_charge   \r\n            set hurtbox_size += 5\r\n            play sfx NA_SE_EN_DODO_J_CRY\r\n        // Else, decrement timer and reset speed\r\n        else\r\n            if timer_between > 0\r\n                set timer_between -= 1   \r\n            endif\r\n            set animation_speed walking = 1\r\n            set movement_speed = 4\r\n        endif\r\n    endif\r\n\r\n    // Attacked state\r\n    if attacked\r\n        // Decrease health\r\n        if state != state_damaged\r\n            set REACTS_IF_ATTACKED false\r\n            set movement_type none\r\n            play sfx NA_SE_EN_DODO_J_DAMAGE\r\n            set health -= 10\r\n            set state = state_damaged\r\n            set chargetimer2 = 0\r\n            set timer_between = random.40->60\r\n        endif\r\n    // Once the attacked state expires, counterattack and then return to normal\r\n    else\r\n        if state = state_damaged\r\n            await animation_end\r\n            set animation idle\r\n            set state = state_spin\r\n            await frames 10\r\n        endif\r\n    endif\r\n\r\n    // Spin state\r\n    if state = state_spin   \r\n            set hurtbox_size += 50\r\n            play sfx NA_SE_EN_PO_ROLL\r\n            rotation rotate_by self 0 DEG_-720 0 DEG_40\r\n            set hurtbox_size -= 50\r\n            set movement_distance = 100\r\n            set movement_speed = 4\r\n            set animation_speed walking = 1\r\n            set timer_between = random.40->60\r\n            play sfx NA_SE_EV_FROG_GROW_UP\r\n            scale scale_by self 0.0050 0.001\r\n            set hurtbox_size += 10\r\n            set collision_radius += 10\r\n            set REACTS_IF_ATTACKED true\r\n            await frames 10 \r\n            set movement_type roam\r\n            set state = state_normal\r\n    endif\r\n\r\n    // Charge until the timer expires or the player was hurt.\r\n    if state = state_charge\r\n        if chargetimer2 == 0 or hurt_player = 1\r\n            set animation idle\r\n            set movement_distance = 100\r\n            set movement_speed = 4\r\n            set animation_speed walking = 1\r\n            set movement_type roam\r\n            set chargetimer2 = 0\r\n            set hurtbox_size -= 5\r\n            set state = state_normal\r\n            set timer_between = random.20->60\r\n        else\r\n            set chargetimer2 -= 1\r\n        endif\r\n    endif\r\n\r\n\r\n    // On death\r\n    if health == 0\r\n        play bgm NA_BGM_BOSS_CLEAR\r\n        set NO_AUTO_ANIM true\r\n        set talk_mode true\r\n        await frames 20\r\n        scale scale_to self 0 0.0005\r\n        await frames 40\r\n        item award GI_HEART_CONTAINER\r\n        set talk_mode false\r\n        kill self\r\n    endif\r\n\r\nendif",
           "ParseErrors": [],
-          "Name": "MainBehavior"
+          "Name": "main"
         },
         {
-          "Text": "#define trade_complete var.1\r\n#define talk_animation_cancel var.2\r\n#define particle_counter var.3\r\n#define hp var.4\r\n#define death_particle_counter var.5\r\n#define was_attacked var.6\r\n\r\n// The actor can take three hits, so we set the HP to 3.\r\nhp = 3\r\n// Then we set where the script starts - so that we don't set the HP to 3 again.\r\nset script_start hp_set\r\n\r\nhp_set:\r\n\r\n// This makes the talking animation work\r\nif is_talking and textbox_drawing and talk_animation_cancel == 0\r\n    set animation talking once\r\n    await animation_end\r\nendif\r\n\r\n\r\nif attacked\r\n    set was_attacked = 1\r\n    set reacts_if_attacked false\r\n\r\n    // If HP has been depleted...\r\n    if hp = 1\r\n        // Turn on the manual animation mode and show a textbox...\r\n        set no_auto_anim true\r\n        show_textbox_sp MsgDying\r\n\r\n        // Play the dying animation\r\n        set animation dead once\r\n        await animation_end\r\n        set animation twitching once\r\n        await animation_end\r\n\r\n        // Sound effects for emphasis. Also, scale itself down to 0.\r\n        play sfx NA_SE_EN_DEADHAND_DEAD\r\n        scale scale_to self 0 0.0005\r\n        play sfx NA_SE_EN_AWA_BREAK\r\n\r\n        // Blood spray\r\n        while death_particle_counter < 100\r\n\r\n            particle BUBBLE\r\n                duration 100\r\n                scale 100\r\n                position direction random.-10->30 0 random.-10->30\r\n                color1 random.120->180 38 41 255\r\n                color2 94 8 17 255\r\n                acceleration random.-30->30 random.0->100 random.-30->30\r\n                velocity random.-30->30 random.0->100 random.-30->30\r\n            endparticle \r\n\r\n            set death_particle_counter += 1\r\n\r\n        endwhile\r\n\r\n        // Delete actor\r\n        kill self\r\n    else\r\n        // If HP hasn't been depleted, subtract 1 from it and show a textbox\r\n        set no_auto_anim true\r\n        set hp -= 1\r\n        show_textbox_sp MsgAttacked\r\n        await textbox_on_screen false\r\n        set animation idle\r\n        set no_auto_anim false\r\n        set was_attacked = 0\r\n        set reacts_if_attacked true\r\n    endif\r\nendif",
+          "Text": "#define health var.1\r\n#define state var.2\r\n#define introscene var.3\r\n#define timer_between var.4\r\n#define chargetimer2 var.5\r\n#define invicibility var.6\r\n#define hurt_player var.7\r\n#define hurtbox_size var.8\r\n\r\n#define state_normal 0\r\n#define state_damaged 1\r\n#define state_charge 2\r\n#define state_spin 4\r\n\r\n// If the player is close enough, hurt them, but not too often\r\nif DISTANCE_FROM_PLAYER < hurtbox_size and state != state_damaged\r\n    if invicibility = 0\r\n        set player_health -= 0.5\r\n        set chargetimer2 = 0\r\n        set invicibility = 12\r\n        set hurt_player = 1\r\n        play sfx NA_SE_PL_DAMAGE\r\n        play sfx NA_SE_VO_LI_DAMAGE_S_KID\r\n    endif\r\nendif\r\n\r\n// Decrease player invincibility timer\r\nif invicibility > 0\r\n    set invicibility -= 1\r\nelse\r\n    set hurt_player = 0\r\nendif",
           "ParseErrors": [],
-          "Name": "AttackedBehavior"
+          "Name": "hurtbox"
         }
       ],
-      "EnvironmentColor": "Transparent",
+      "EnvironmentColor": "44, 44, 255",
       "Segments": [
-        [
-          {
-            "Name": "Texture_0",
-            "Address": 0,
-            "ObjectID": -4
-          }
-        ],
+        [],
         [],
         [],
         [],
@@ -180,97 +156,25 @@
       "BlinkPattern": "",
       "TalkPattern": "",
       "BlinkSegment": 8,
-      "TalkSegment": 8,
-      "BlinkSpeed": 0,
+      "TalkSegment": 9,
+      "BlinkSpeed": 1,
       "TalkSpeed": 1,
-      "ExtraDisplayLists": [
-        {
-          "Name": "ChickenDlist",
-          "Address": 5680,
-          "TransX": 3222.0,
-          "TransY": 1500.0,
-          "TransZ": 0.0,
-          "RotX": 15000,
-          "RotY": 0,
-          "RotZ": 0,
-          "Scale": 35.0,
-          "ShowType": 0,
-          "Limb": 12,
-          "Color": "White",
-          "ObjectID": 265
-        }
-      ],
+      "ExtraDisplayLists": [],
       "DisplayListColors": [
         {
-          "Color": "White",
-          "Limbs": "2"
+          "Color": "255, 23, 29",
+          "Limbs": "10"
         },
         {
-          "Color": "White",
-          "Limbs": "18"
-        },
-        {
-          "Color": "White",
-          "Limbs": "19"
-        },
-        {
-          "Color": "Red",
-          "Limbs": "20"
+          "Color": "44, 44, 255",
+          "Limbs": "12"
         }
       ],
-      "Messages": [
-        {
-          "Name": "MsgCorrectItem",
-          "MessageText": "Yessssss... Down the hatch.",
-          "Type": 0,
-          "Position": 0
-        },
-        {
-          "Name": "MsgTalking",
-          "MessageText": "Give me... give me <Speed:1><G>sustenance<W>.\r\n<New box>\r\n<Speed:2>A... delicious feathery dish.\r\n<New box>\r\n<SOUND:NA_SE_EN_DEADHAND_LAUGH> Mweeeeeeee heeeeeee heeeeeeeeeee",
-          "Type": 0,
-          "Position": 0
-        },
-        {
-          "Name": "MsgBadItem",
-          "MessageText": "Nooooo...",
-          "Type": 0,
-          "Position": 2
-        },
-        {
-          "Name": "MsgConsumed",
-          "MessageText": "<Speed:5><SOUND:NA_SE_EN_REDEAD_CRY>Delicious.\r\n<New Box>\r\nIs... is there more?\r\n<Two Choices>\r\n<G>Maybe\r\nNo way<W>",
-          "Type": 0,
-          "Position": 0
-        },
-        {
-          "Name": "MsgMaybe",
-          "MessageText": "That would be<Delay:30>\r\n<SPEED:1><SOUND:NA_SE_EN_DEADHAND_LAUGH>...divine.",
-          "Type": 0,
-          "Position": 0
-        },
-        {
-          "Name": "MsgNoWay",
-          "MessageText": "Not... acceptable.\r\n<New box>\r\nBring me more.",
-          "Type": 0,
-          "Position": 0
-        },
-        {
-          "Name": "MsgAttacked",
-          "MessageText": "Hey, STOP!<Fade:20>",
-          "Type": 0,
-          "Position": 3
-        },
-        {
-          "Name": "MsgDying",
-          "MessageText": "ARGHHHHH!<Fade:20>",
-          "Type": 0,
-          "Position": 3
-        }
-      ],
+      "Messages": [],
       "DEBUGShowCols": false,
-      "NumVars": 8,
-      "NumFVars": 0
+      "NumVars": 10,
+      "NumFVars": 10,
+      "ExistInAllRooms": false
     }
   ],
   "GlobalHeaders": []
