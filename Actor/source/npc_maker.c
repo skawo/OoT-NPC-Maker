@@ -140,9 +140,10 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
 }
 
 /* .data */
-const ActorInitExplPad actor_vars = 
+
+ActorInit __attribute__((section(".data"))) sNpcMakerInit = 
 {
-    .id = 0xDEAD, .padding = 0xBEEF, // <-- magic values, do not change
+    .id = 0x0003, // <-- Set this to whichever actor ID you're using.
     .category = ACTORCAT_NPC,
     .flags = 0x00000000,
     .objectId = 0x1,
@@ -153,10 +154,9 @@ const ActorInitExplPad actor_vars =
     .draw = (ActorFunc)NpcMaker_Draw
 };
 
-/* .data */
-const ActorInit sNpcMakerInit = 
+ActorInitExplPad __attribute__((section(".data"))) sActorVars = 
 {
-    .id = 0x0003, // <-- Set this to whichever actor ID you're using.
+    .id = 0xDEAD, .padding = 0xBEEF, // <-- magic values, do not change
     .category = ACTORCAT_NPC,
     .flags = 0x00000000,
     .objectId = 0x1,
