@@ -1,31 +1,12 @@
 #ifndef NPC_MAKER_DEFINES_H
 #define NPC_MAKER_DEFINES_H
 
-#if GAME_VERSION == 1
-    extern void Sram_WriteSave_Temp(SramContext* sramCtx);
-        asm("Sram_WriteSave_Temp = 0x800905D4");
-#endif
-
-#if GAME_VERSION == 1
-    extern void Gameplay_SaveSceneFlags_Temp(GlobalContext* globalCtx);
-        asm("Gameplay_SaveSceneFlags_Temp = 0x8009D894");
-#endif
-
 #define DUMMY_MSG_DATA 0x30313161
 #define DUMMY_MESSAGE 0x011A
 #define NO_CUSTOM_MESSAGE -1 
 
-
-#if GAME_VERSION == 0
-	#define VEC_ZERO  (Vec3f*)0x801333D4
-	#define FLOAT_ONE (f32*)0x801333E0
-	#define FLOAT_ZERO (s8*)0x801333E8
-#endif
-#if GAME_VERSION == 1
-	#define VEC_ZERO  (Vec3f*)0x80104394
-	#define FLOAT_ONE (f32*)0x801043A0
-	#define FLOAT_ZERO (s8*)0x801043A8	
-#endif
+#define GlobalContext PlayState
+#define PSkinAwb Skin
 
 #define ROT16(R16A0) (182.044444 * (R16A0))
 #define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
@@ -51,9 +32,9 @@
 #define NULL_SEG_BLOCK_SIZE 32
 
 #define _ZQDL(ZQDL_A0, ZQDL_A1) ZQDL_A0->state.gfxCtx->ZQDL_A1
-#define POLY_OPA _ZQDL(globalCtx, polyOpa)
-#define POLY_XLU _ZQDL(globalCtx, polyXlu)
-#define POLY_OVERLAY _ZQDL(globalCtx, overlay)
+#define POLY_OPA _ZQDL(playState, polyOpa)
+#define POLY_XLU _ZQDL(playState, polyXlu)
+#define POLY_OVERLAY _ZQDL(playState, overlay)
 
 #define DRAW_TYPE(h_type) ((h_type % 2 && h_type != SKIN) ? XLU : OPA)
 #define DRAW_DEST(h_type) (DRAW_TYPE(h_type) == XLU ? &POLY_XLU : &POLY_OPA)
@@ -185,24 +166,6 @@ typedef enum picked_up_state
     STATE_THROWN = 2,
     STATE_LANDED = 3,
 } picked_up_state;
-
-/*
-typedef enum message_status
-{
-	MSGSTATUS_NONE = 0, 
-	MSGSTATUS_NEXT = 1,
-	MSGSTATUS_END = 2,
-	MSGSTATUS_DRAWING = 3,
-	MSGSTATUS_SELECTING = 4,
-	MSGSTATUS_EVENT = 5,
-	MSGSTATUS_CLOSING = 6,
-	MSGSTATUS_OCARINA1 = 7,
-	MSGSTATUS_OCARINA2 = 8,
-	MSGSTATUS_OCARINA3 = 9,
-	MSGSTATUS_WAIT = 10,
-	MSGSTATUS_UNK11 = 11,
-} message_status;
-*/
 
 // There are more, but their exact purpose is not known.
 typedef enum song_status

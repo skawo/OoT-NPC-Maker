@@ -1,9 +1,9 @@
 #include "../include/h_scene.h"
 #include "../include/h_movement.h"
 
-u32* Scene_GetHeaderPtr(GlobalContext* globalCtx, int setupId)
+u32* Scene_GetHeaderPtr(PlayState* playState, int setupId)
 {
-    u32* sceneHeader = (u32*)globalCtx->sceneSegment;
+    u32* sceneHeader = (u32*)playState->sceneSegment;
 
     if (*sceneHeader == 0x18000000 && setupId != 0)
     {
@@ -24,14 +24,14 @@ u32* Scene_GetHeaderPtr(GlobalContext* globalCtx, int setupId)
     return sceneHeader;
 }
 
-inline u32* Scene_GetCurrentHeaderPtr(GlobalContext* globalCtx)
+inline u32* Scene_GetCurrentHeaderPtr(PlayState* playState)
 {
-    return Scene_GetHeaderPtr(globalCtx, gSaveContext.sceneSetupIndex);
+    return Scene_GetHeaderPtr(playState, gSaveContext.sceneLayer);
 }
 
-u32* Scene_GetCutscenePtr(GlobalContext* globalCtx, int setupId)
+u32* Scene_GetCutscenePtr(PlayState* playState, int setupId)
 {
-    u32* cutscenePtr = Scene_GetHeaderPtr(globalCtx, setupId);
+    u32* cutscenePtr = Scene_GetHeaderPtr(playState, setupId);
 
     for (int i = 0; i < 25; i++)
     {
@@ -45,25 +45,25 @@ u32* Scene_GetCutscenePtr(GlobalContext* globalCtx, int setupId)
     return NULL;
 }
 
-inline u32* Scene_GetCurrentCutscenePtr(GlobalContext* globalCtx)
+inline u32* Scene_GetCurrentCutscenePtr(PlayState* playState)
 {
-    return Scene_GetCutscenePtr(globalCtx, gSaveContext.sceneSetupIndex);
+    return Scene_GetCutscenePtr(playState, gSaveContext.sceneLayer);
 }
 
-Path* Scene_GetPathPtr(GlobalContext* globalCtx, s16 pathId)
+Path* Scene_GetPathPtr(PlayState* playState, s16 pathId)
 {
-    if (globalCtx->setupPathList == NULL)
+    if (playState->setupPathList == NULL)
         return NULL;
 
-    return &globalCtx->setupPathList[pathId];
+    return &playState->setupPathList[pathId];
 }
 
-u8 Scene_GetPathNodeCount(GlobalContext* globalCtx, s16 pathId)
+u8 Scene_GetPathNodeCount(PlayState* playState, s16 pathId)
 {
-    if (globalCtx->setupPathList == NULL)
+    if (playState->setupPathList == NULL)
         return 0;
 
-    Path* pathPtr = Scene_GetPathPtr(globalCtx, pathId);
+    Path* pathPtr = Scene_GetPathPtr(playState, pathId);
 
     if (pathPtr == NULL)
         return 0;
@@ -71,9 +71,9 @@ u8 Scene_GetPathNodeCount(GlobalContext* globalCtx, s16 pathId)
     return pathPtr->count;
 }
 
-Vec3s* Scene_GetPathNodePos(GlobalContext* globalCtx, s16 pathId, s16 nodeId)
+Vec3s* Scene_GetPathNodePos(PlayState* playState, s16 pathId, s16 nodeId)
 {
-    Path* pathPtr = Scene_GetPathPtr(globalCtx, pathId);
+    Path* pathPtr = Scene_GetPathPtr(playState, pathId);
 
     if (pathPtr == NULL)
         return NULL;
@@ -87,10 +87,10 @@ Vec3s* Scene_GetPathNodePos(GlobalContext* globalCtx, s16 pathId, s16 nodeId)
     }
 }
 
-float Scene_GetPathSectionLen(GlobalContext* globalCtx, s16 pathId, s16 startNodeId, bool ignoreY)
+float Scene_GetPathSectionLen(PlayState* playState, s16 pathId, s16 startNodeId, bool ignoreY)
 {
-    Vec3s* start = Scene_GetPathNodePos(globalCtx, pathId, startNodeId);
-    Vec3s* end = Scene_GetPathNodePos(globalCtx, pathId, startNodeId + 1);
+    Vec3s* start = Scene_GetPathNodePos(playState, pathId, startNodeId);
+    Vec3s* end = Scene_GetPathNodePos(playState, pathId, startNodeId + 1);
 
     if (start == NULL || end == NULL)
         return 0;
@@ -103,19 +103,19 @@ float Scene_GetPathSectionLen(GlobalContext* globalCtx, s16 pathId, s16 startNod
     return Movement_CalcDist(&start_f, &end_f, ignoreY);
 }
 
-float Scene_GetPathLen(GlobalContext* globalCtx, s16 pathId, s16 startNodeId, s16 endNodeId, bool ignoreY)
+float Scene_GetPathLen(PlayState* playState, s16 pathId, s16 startNodeId, s16 endNodeId, bool ignoreY)
 {
     float out = 0;
 
     for (u32 i = startNodeId; i < endNodeId; i++)
-        out += Scene_GetPathSectionLen(globalCtx, pathId, i, ignoreY);
+        out += Scene_GetPathSectionLen(playState, pathId, i, ignoreY);
 
     return out;
 }
 
-NpcMaker* Scene_GetNpcMakerByID(NpcMaker* en, GlobalContext* globalCtx, u16 ID)
+NpcMaker* Scene_GetNpcMakerByID(NpcMaker* en, PlayState* playState, u16 ID)
 {
-    NpcMaker* npc = (NpcMaker*)globalCtx->actorCtx.actorLists[ACTORCAT_NPC].head;
+    NpcMaker* npc = (NpcMaker*)playState->actorCtx.actorLists[ACTORCAT_NPC].head;
 
     while (npc)
     {
@@ -131,14 +131,14 @@ NpcMaker* Scene_GetNpcMakerByID(NpcMaker* en, GlobalContext* globalCtx, u16 ID)
     return npc;
 }
 
-Actor* Scene_GetActorByID(int ID, GlobalContext* globalCtx, Actor* closestTo, Actor* skip)
+Actor* Scene_GetActorByID(int ID, PlayState* playState, Actor* closestTo, Actor* skip)
 {
     Actor* out = skip;
     float dist = __UINT32_MAX__;
 
     for (int i = ACTORCAT_SWITCH; i <= ACTORCAT_CHEST; i++)
     {
-        Actor* act = globalCtx->actorCtx.actorLists[i].head;
+        Actor* act = playState->actorCtx.actorLists[i].head;
 
         while (act)
         {
