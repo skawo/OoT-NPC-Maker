@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace NPC_Maker
 {
@@ -30,6 +34,12 @@ namespace NPC_Maker
 
                 Page.Controls.Add(sg);
             }
+
+
+            // SETTINGS!!
+            Combo_CodeEditor.Items.Clear();
+            Combo_CodeEditor.Items.AddRange(CodeEditors);
+            Combo_CodeEditor.SelectedIndex = 0;
 
             MsgPreviewTimer.Interval = 100;
             MsgPreviewTimer.Tick += MsgPreviewTimer_Tick;
@@ -280,7 +290,7 @@ namespace NPC_Maker
             foreach (AnimationEntry Animation in SelectedEntry.Animations)
             {
                 if (SelectedEntry.AnimationType == 1)
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID)});
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
                 else
                     DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
             }
@@ -507,6 +517,21 @@ namespace NPC_Maker
         {
             About Window = new About();
             Window.ShowDialog();
+        }
+
+        private void NewScript_Click(object sender, EventArgs e)
+        {
+            AddNewScriptToolStripMenuItem_Click(null, null);
+        }
+
+        private void DeleteScript_Click(object sender, EventArgs e)
+        {
+            DeleteCurrentScriptToolStripMenuItem_Click(null, null);
+        }
+
+        private void RenameScript_Click(object sender, EventArgs e)
+        {
+            RenameCurrentScriptToolStripMenuItem_Click(null, null);
         }
 
         private void SyntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
@@ -754,7 +779,6 @@ namespace NPC_Maker
         #endregion
 
         #region Field changes
-
 
         private void Txb_ReactIfAtt_KeyUp(object sender, KeyEventArgs e)
         {
@@ -2117,19 +2141,169 @@ namespace NPC_Maker
 
         }
 
-        private void NewScript_Click(object sender, EventArgs e)
+
+
+        private void Tab5_EmbeddedOverlay_Click(object sender, EventArgs e)
         {
-            AddNewScriptToolStripMenuItem_Click(null, null);
+
         }
 
-        private void DeleteScript_Click(object sender, EventArgs e)
+        #region CCompile
+
+        private bool CreateCTempDirectory(eCodeEditors Editor)
         {
-            DeleteCurrentScriptToolStripMenuItem_Click(null, null);
+            try
+            {
+                if (Directory.Exists(Path.Combine(Program.ExecPath, ".temp")))
+                    Directory.Delete(Path.Combine(Program.ExecPath, ".temp"), true);
+
+                Directory.CreateDirectory(Path.Combine(Program.ExecPath, ".temp"));
+
+                if (Editor == eCodeEditors.VSCode)
+                {
+                    Directory.CreateDirectory(Path.Combine(Program.ExecPath, ".temp", ".vscode"));
+                    File.WriteAllText(Path.Combine(Program.ExecPath, ".temp", ".vscode", "c_cpp_properties.json"), Properties.Resources.c_cpp_properties);
+                    File.WriteAllText(Path.Combine(Program.ExecPath, ".temp", ".vscode", "settings.json"), Properties.Resources.settings);
+                }
+
+                File.WriteAllText(Path.Combine(Program.ExecPath, ".temp", "EmbeddedOverlay.c"), SelectedEntry.EmbeddedOverlayCode);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error creating temporary directory: " + ex.Message);
+                return false;
+            }
         }
 
-        private void RenameScript_Click(object sender, EventArgs e)
+        public enum eCodeEditors
         {
-            RenameCurrentScriptToolStripMenuItem_Click(null, null);
+            VSCode,
+            Notepad,
+            NotepadPlusPlus,
+            Other
+        };
+
+        public string[] CodeEditors = new string[]
+        {
+            eCodeEditors.VSCode.ToString(),
+            eCodeEditors.Notepad.ToString(),
+            eCodeEditors.NotepadPlusPlus.ToString(),
+            eCodeEditors.Other.ToString()
+        };
+
+        public string EmbeddedCodeFile = "\"" + Path.Combine(Program.ExecPath, ".temp", "EmbeddedOverlay.c") + "\"";
+
+        private Process OpenCodeEditor()
+        {
+            try
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
+
+                eCodeEditors SelectedCodeEditor = (eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString());
+
+                switch (SelectedCodeEditor)
+                {
+                    case eCodeEditors.VSCode:
+                        {
+                            startInfo.FileName = "code-tunnel.exe";
+                            startInfo.Arguments = "-a \".temp\"";
+                            break;
+                        }
+                    case eCodeEditors.Notepad:
+                        {
+                            startInfo.FileName = "C:\\Windows\\notepad.exe";
+                            startInfo.Arguments = EmbeddedCodeFile;
+                            break;
+                        }
+                    case eCodeEditors.NotepadPlusPlus:
+                        {
+                            startInfo.FileName = "C:\\Program Files\\Notepad++\\notepad++.exe";
+                            startInfo.Arguments = EmbeddedCodeFile;
+                            break;
+                        }
+                    default:
+                        {
+                            string[] s = TextBox_CodeEditorPath.Text.Split(' ');
+                            startInfo.FileName = s[0];
+
+                            foreach (string ss in s.Skip(1))
+                            {
+                                startInfo.Arguments += " " + ss.Replace("$CODEFILE", EmbeddedCodeFile);
+                            }
+                            break;
+                        }
+
+                }
+
+                return Process.Start(startInfo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error running editor: " + ex.Message);
+                return null;
+            }
         }
+
+        private void WatchFile()
+        {
+            var watcher = new FileSystemWatcher(Path.Combine(Program.ExecPath, ".temp"));
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Changed += Watcher_Changed;
+            watcher.IncludeSubdirectories = true;
+            watcher.EnableRaisingEvents = true;
+            watcher.Filter = "EmbeddedOverlay.c";
+
+        }
+
+        private void Watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Changed)
+            {
+                var fs = File.Open(Path.Combine(Program.ExecPath, ".temp", "EmbeddedOverlay.c"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                var sr = new StreamReader(fs, Encoding.Default);
+
+                SelectedEntry.EmbeddedOverlayCode = sr.ReadToEnd();
+
+                sr.Close();
+                sr.Dispose();
+                fs.Close();
+                fs.Dispose();
+            }
+        }
+
+        private void Button_OpenCCode_Click(object sender, EventArgs e)
+        {
+            if (!CreateCTempDirectory((eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString()))) return;
+
+            object o = OpenCodeEditor();
+
+            if (o == null)
+                return;
+            else
+            {
+                Process p = o as Process;
+                WatchFile();
+                p.WaitForExit();
+            }
+        }
+
+        private void Button_FindCodeEditor_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog oF = new OpenFileDialog();
+            var Res = oF.ShowDialog();
+
+            if (Res == DialogResult.OK)
+            {
+                TextBox_CodeEditorPath.Text = oF.FileName + " " + "$CODEFILE";
+                Combo_CodeEditor.SelectedItem = CodeEditors.Last();
+                Combo_CodeEditor.Refresh();
+            }
+
+        }
+
+        #endregion
     }
 }

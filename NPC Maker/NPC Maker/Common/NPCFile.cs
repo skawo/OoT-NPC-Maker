@@ -124,6 +124,8 @@ namespace NPC_Maker
 
         public bool ExistInAllRooms { get; set; } 
 
+        public string EmbeddedOverlayCode { get; set; }
+
         public NPCEntry()
         {
             NPCName = "";
@@ -222,6 +224,8 @@ namespace NPC_Maker
 
             NumVars = 2;
             NumFVars = 2;
+
+            EmbeddedOverlayCode = Properties.Resources.EmbeddedOverlay;
         }
 
         public List<OutputColorEntry> ParseColorEntries()

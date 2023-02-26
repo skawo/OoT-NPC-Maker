@@ -1,0 +1,20 @@
+{
+  "configurations": [
+    {
+      "name": "MIPS",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "../gcc/mips64/include/z64hdr/**",
+        "../gcc/mips64/include"
+      ],
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE",
+        "_LANGUAGE_C "
+      ],
+      "compilerPath": "C:/msys64/mingw32/bin/gcc.exe"
+    }
+  ],
+  "version": 4
+}

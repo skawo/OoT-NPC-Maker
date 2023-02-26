@@ -285,13 +285,17 @@
     <None Include="Dicts\SFX.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\settings.json" />
+    <None Include="Resources\tasks.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="nUhhuh.ico" />
+    <None Include="Resources\EmbeddedOverlay.c" />
     <Content Include="uhhuh.ico" />
+    <None Include="Resources\c_cpp_properties.json" />
     <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>

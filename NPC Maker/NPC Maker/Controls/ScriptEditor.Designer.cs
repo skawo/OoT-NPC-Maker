@@ -34,6 +34,7 @@ namespace NPC_Maker
             this.Textbox_Script = new FastColoredTextBoxNS.FastColoredTextBox();
             this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
             this.Button_TryParse = new System.Windows.Forms.Button();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Textbox_Script)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,9 +72,9 @@ namespace NPC_Maker
             this.Textbox_Script.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("Textbox_Script.ServiceColors")));
             this.Textbox_Script.Size = new System.Drawing.Size(796, 504);
             this.Textbox_Script.TabIndex = 4;
+            this.Textbox_Script.Tag = "";
             this.Textbox_Script.WordWrapAutoIndent = false;
             this.Textbox_Script.Zoom = 100;
-            this.Textbox_Script.Tag = "";
             this.Textbox_Script.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.Textbox_Script_TextChanged);
             this.Textbox_Script.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Textbox_Script_MouseClick);
             // 
@@ -102,6 +103,11 @@ namespace NPC_Maker
             this.Button_TryParse.UseVisualStyleBackColor = true;
             this.Button_TryParse.Click += new System.EventHandler(this.Button_TryParse_Click);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            // 
             // ScriptEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -122,5 +128,6 @@ namespace NPC_Maker
         private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script;
         private System.Windows.Forms.TextBox Textbox_ParseErrors;
         private System.Windows.Forms.Button Button_TryParse;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
