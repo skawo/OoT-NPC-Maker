@@ -11,9 +11,8 @@
         "_DEBUG",
         "UNICODE",
         "_UNICODE",
-        "_LANGUAGE_C "
-      ],
-      "compilerPath": "C:/msys64/mingw32/bin/gcc.exe"
+        "_LANGUAGE_C"
+      ]
     }
   ],
   "version": 4

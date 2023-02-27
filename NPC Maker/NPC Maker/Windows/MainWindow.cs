@@ -2150,23 +2150,45 @@ namespace NPC_Maker
 
         #region CCompile
 
+        public enum eCodeEditors
+        {
+            VSCode,
+            Notepad,
+            NotepadPlusPlus,
+            Other
+        };
+
+        public static string[] CodeEditors = new string[]
+        {
+            eCodeEditors.VSCode.ToString(),
+            eCodeEditors.Notepad.ToString(),
+            eCodeEditors.NotepadPlusPlus.ToString(),
+            eCodeEditors.Other.ToString()
+        };
+
+        public static string tempFolder = Path.Combine(Program.ExecPath, ".temp");
+        public static string EmbeddedCodeFile = $"\"{Path.Combine(tempFolder, "EmbeddedOverlay.c")}\"";
+        public static string codeFileName = "EmbeddedOverlay.c";
+
         private bool CreateCTempDirectory(eCodeEditors Editor)
         {
             try
             {
-                if (Directory.Exists(Path.Combine(Program.ExecPath, ".temp")))
-                    Directory.Delete(Path.Combine(Program.ExecPath, ".temp"), true);
+                if (Directory.Exists(tempFolder))
+                    Directory.Delete(tempFolder, true);
 
-                Directory.CreateDirectory(Path.Combine(Program.ExecPath, ".temp"));
+                Directory.CreateDirectory(tempFolder);
 
                 if (Editor == eCodeEditors.VSCode)
                 {
-                    Directory.CreateDirectory(Path.Combine(Program.ExecPath, ".temp", ".vscode"));
-                    File.WriteAllText(Path.Combine(Program.ExecPath, ".temp", ".vscode", "c_cpp_properties.json"), Properties.Resources.c_cpp_properties);
-                    File.WriteAllText(Path.Combine(Program.ExecPath, ".temp", ".vscode", "settings.json"), Properties.Resources.settings);
+                    string vscodeFolder = Path.Combine(tempFolder, ".vscode");
+
+                    Directory.CreateDirectory(vscodeFolder);
+                    File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), Properties.Resources.c_cpp_properties);
+                    File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
                 }
 
-                File.WriteAllText(Path.Combine(Program.ExecPath, ".temp", "EmbeddedOverlay.c"), SelectedEntry.EmbeddedOverlayCode);
+                File.WriteAllText(Path.Combine(tempFolder, codeFileName), SelectedEntry.EmbeddedOverlayCode);
                 return true;
             }
             catch (Exception ex)
@@ -2176,31 +2198,15 @@ namespace NPC_Maker
             }
         }
 
-        public enum eCodeEditors
-        {
-            VSCode,
-            Notepad,
-            NotepadPlusPlus,
-            Other
-        };
-
-        public string[] CodeEditors = new string[]
-        {
-            eCodeEditors.VSCode.ToString(),
-            eCodeEditors.Notepad.ToString(),
-            eCodeEditors.NotepadPlusPlus.ToString(),
-            eCodeEditors.Other.ToString()
-        };
-
-        public string EmbeddedCodeFile = "\"" + Path.Combine(Program.ExecPath, ".temp", "EmbeddedOverlay.c") + "\"";
-
         private Process OpenCodeEditor()
         {
             try
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = true;
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
 
                 eCodeEditors SelectedCodeEditor = (eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString());
 
@@ -2214,13 +2220,13 @@ namespace NPC_Maker
                         }
                     case eCodeEditors.Notepad:
                         {
-                            startInfo.FileName = "C:\\Windows\\notepad.exe";
+                            startInfo.FileName = @"C:\Windows\notepad.exe";
                             startInfo.Arguments = EmbeddedCodeFile;
                             break;
                         }
                     case eCodeEditors.NotepadPlusPlus:
                         {
-                            startInfo.FileName = "C:\\Program Files\\Notepad++\\notepad++.exe";
+                            startInfo.FileName = @"C:\Program Files\Notepad++\notepad++.exe";
                             startInfo.Arguments = EmbeddedCodeFile;
                             break;
                         }
@@ -2230,12 +2236,10 @@ namespace NPC_Maker
                             startInfo.FileName = s[0];
 
                             foreach (string ss in s.Skip(1))
-                            {
                                 startInfo.Arguments += " " + ss.Replace("$CODEFILE", EmbeddedCodeFile);
-                            }
+
                             break;
                         }
-
                 }
 
                 return Process.Start(startInfo);
@@ -2249,28 +2253,25 @@ namespace NPC_Maker
 
         private void WatchFile()
         {
-            var watcher = new FileSystemWatcher(Path.Combine(Program.ExecPath, ".temp"));
+            var watcher = new FileSystemWatcher(tempFolder);
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += Watcher_Changed;
             watcher.IncludeSubdirectories = true;
             watcher.EnableRaisingEvents = true;
-            watcher.Filter = "EmbeddedOverlay.c";
-
+            watcher.Filter = codeFileName;
         }
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
             if (e.ChangeType == WatcherChangeTypes.Changed)
             {
-                var fs = File.Open(Path.Combine(Program.ExecPath, ".temp", "EmbeddedOverlay.c"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                var sr = new StreamReader(fs, Encoding.Default);
-
-                SelectedEntry.EmbeddedOverlayCode = sr.ReadToEnd();
-
-                sr.Close();
-                sr.Dispose();
-                fs.Close();
-                fs.Dispose();
+                using (var fs = File.Open(Path.Combine(tempFolder, codeFileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (var sr = new StreamReader(fs, Encoding.Default))
+                    {
+                        SelectedEntry.EmbeddedOverlayCode = sr.ReadToEnd();
+                    }
+                }
             }
         }
 
@@ -2278,13 +2279,12 @@ namespace NPC_Maker
         {
             if (!CreateCTempDirectory((eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString()))) return;
 
-            object o = OpenCodeEditor();
+            Process p = OpenCodeEditor();
 
-            if (o == null)
+            if (p == null)
                 return;
             else
             {
-                Process p = o as Process;
                 WatchFile();
                 p.WaitForExit();
             }
@@ -2297,7 +2297,7 @@ namespace NPC_Maker
 
             if (Res == DialogResult.OK)
             {
-                TextBox_CodeEditorPath.Text = oF.FileName + " " + "$CODEFILE";
+                TextBox_CodeEditorPath.Text = $"{oF.FileName} $CODEFILE";
                 Combo_CodeEditor.SelectedItem = CodeEditors.Last();
                 Combo_CodeEditor.Refresh();
             }
