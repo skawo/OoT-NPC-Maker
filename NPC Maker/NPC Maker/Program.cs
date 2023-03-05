@@ -51,12 +51,18 @@ namespace NPC_Maker
                 Application.Run(new MainWindow());
             else
             {
+                StreamWriter _stdOutWriter;
+                var stdout = Console.OpenStandardOutput();
+                _stdOutWriter = new StreamWriter(stdout);
+                _stdOutWriter.AutoFlush = true;
                 AttachConsole(-1);
                 Console.WriteLine();
 
                 if (args[0].ToUpper() == "/?" || args[0].ToUpper() == "-HELP" || args.Length != 2)
                 {
+                    Console.WriteLine("Zelda Ocarina of Time NPC Creation Tool");
                     Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj]");
+                    Console.WriteLine("Press ENTER to exit...");
                 }
                 else if (args.Length == 2)
                 {
