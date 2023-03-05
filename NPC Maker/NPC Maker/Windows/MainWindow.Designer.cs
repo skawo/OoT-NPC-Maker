@@ -3271,6 +3271,8 @@
             this.Combo_FuncOnDelete.Name = "Combo_FuncOnDelete";
             this.Combo_FuncOnDelete.Size = new System.Drawing.Size(184, 21);
             this.Combo_FuncOnDelete.TabIndex = 16;
+            this.Combo_FuncOnDelete.Tag = "4";
+            this.Combo_FuncOnDelete.SelectedIndexChanged += new System.EventHandler(this.Combo_Func_SelectedIndexChanged);
             // 
             // Combo_FuncOnLimb
             // 
@@ -3280,6 +3282,8 @@
             this.Combo_FuncOnLimb.Name = "Combo_FuncOnLimb";
             this.Combo_FuncOnLimb.Size = new System.Drawing.Size(184, 21);
             this.Combo_FuncOnLimb.TabIndex = 15;
+            this.Combo_FuncOnLimb.Tag = "3";
+            this.Combo_FuncOnLimb.SelectedIndexChanged += new System.EventHandler(this.Combo_Func_SelectedIndexChanged);
             // 
             // LblOnDelete
             // 
@@ -3298,6 +3302,8 @@
             this.Combo_FuncOnDraw.Name = "Combo_FuncOnDraw";
             this.Combo_FuncOnDraw.Size = new System.Drawing.Size(184, 21);
             this.Combo_FuncOnDraw.TabIndex = 12;
+            this.Combo_FuncOnDraw.Tag = "2";
+            this.Combo_FuncOnDraw.SelectedIndexChanged += new System.EventHandler(this.Combo_Func_SelectedIndexChanged);
             // 
             // LblOnLimb
             // 
@@ -3320,6 +3326,8 @@
             this.Combo_WhenOnDraw.Name = "Combo_WhenOnDraw";
             this.Combo_WhenOnDraw.Size = new System.Drawing.Size(184, 21);
             this.Combo_WhenOnDraw.TabIndex = 9;
+            this.Combo_WhenOnDraw.Tag = "7";
+            this.Combo_WhenOnDraw.SelectedIndexChanged += new System.EventHandler(this.Combo_Func_SelectedIndexChanged);
             // 
             // LblOnDraw
             // 
@@ -3338,6 +3346,8 @@
             this.Combo_FuncOnUpdate.Name = "Combo_FuncOnUpdate";
             this.Combo_FuncOnUpdate.Size = new System.Drawing.Size(184, 21);
             this.Combo_FuncOnUpdate.TabIndex = 7;
+            this.Combo_FuncOnUpdate.Tag = "1";
+            this.Combo_FuncOnUpdate.SelectedIndexChanged += new System.EventHandler(this.Combo_Func_SelectedIndexChanged);
             // 
             // Combo_WhenOnUpdate
             // 
@@ -3352,6 +3362,8 @@
             this.Combo_WhenOnUpdate.Name = "Combo_WhenOnUpdate";
             this.Combo_WhenOnUpdate.Size = new System.Drawing.Size(184, 21);
             this.Combo_WhenOnUpdate.TabIndex = 6;
+            this.Combo_WhenOnUpdate.Tag = "6";
+            this.Combo_WhenOnUpdate.SelectedIndexChanged += new System.EventHandler(this.Combo_Func_SelectedIndexChanged);
             // 
             // LblUpdate
             // 
@@ -3370,6 +3382,8 @@
             this.Combo_FuncOnInit.Name = "Combo_FuncOnInit";
             this.Combo_FuncOnInit.Size = new System.Drawing.Size(184, 21);
             this.Combo_FuncOnInit.TabIndex = 4;
+            this.Combo_FuncOnInit.Tag = "0";
+            this.Combo_FuncOnInit.SelectedIndexChanged += new System.EventHandler(this.Combo_Func_SelectedIndexChanged);
             // 
             // LblOnInit
             // 

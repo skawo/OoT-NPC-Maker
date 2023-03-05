@@ -847,10 +847,27 @@ namespace NPC_Maker
         public string Code { get; set; }
         public Dictionary<string, int> Functions { get; set; }
 
-        public CCodeEntry(string _Code = "", Dictionary<string, int> _Funcs = null)
+        public int[,] FuncsRunWhen { get; set; }
+
+        public CCodeEntry(string _Code = "", Dictionary<string, int> _Funcs = null, int[,] _FuncsRunWhen = null)
         {
             Code = _Code;
             Functions = _Funcs;
+
+            if (Functions == null)
+                Functions = new Dictionary<string, int>() { };
+
+            FuncsRunWhen = _FuncsRunWhen;
+
+            if (FuncsRunWhen == null)
+                FuncsRunWhen = new int[5, 2]
+                {
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                }; 
         }
     }
 }

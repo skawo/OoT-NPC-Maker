@@ -51,6 +51,15 @@ namespace NPC_Maker
             MsgText.ContextMenuStrip = MessagesContextMenu.MenuStrip;
             MessagesContextMenu.SetTextBox(MsgText);
 
+            FunctionComboBoxes = new List<KeyValuePair<ComboBox, ComboBox>>()
+                        {
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnInit, null),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnUpdate, Combo_WhenOnUpdate ),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnDraw, Combo_WhenOnDraw ),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnLimb, null ),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnDelete, null ),
+                        };
+
             this.DoubleBuffered = true;
 
             this.ResizeBegin += Form1_ResizeBegin;
@@ -363,6 +372,55 @@ namespace NPC_Maker
 
             MessagesGrid_SelectionChanged(MessagesGrid, null);
             MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
+
+            #endregion
+
+            #region CCode
+
+            string CompileErrors = "";
+
+            Compile(false, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+            TextBox_CompileMsg.Text = CompileErrors;
+
+            int Index = 0;
+
+            foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
+            {
+                ComboBox c = kvp.Key;
+                ComboBox w = kvp.Value;
+
+                c.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
+
+                if (w != null)
+                    w.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
+
+
+                if (SelectedEntry.EmbeddedOverlayCode.Functions == null || SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
+                    c.DataSource = null;
+                else
+                {
+                    c.DisplayMember = "Key";
+                    c.ValueMember = "Value";
+                    c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
+                    c.SelectedIndex = -1;
+
+                    if (SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 0] < c.Items.Count)
+                        c.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 0];
+                    else
+                        c.SelectedIndex = -1;
+
+                    if (w != null)
+                        w.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 1];
+                }
+
+                Index++;
+
+                c.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
+
+                if (w != null)
+                    w.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
+            }
+
 
             #endregion
 
@@ -2185,6 +2243,7 @@ namespace NPC_Maker
         public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay.ovl");
         public static FileSystemWatcher Watcher;
         public static Process CodeEditorProcess;
+        public static List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
 
         private void GetOutput(Process p, string Section, ref string CompileErrors)
         {
@@ -2192,10 +2251,11 @@ namespace NPC_Maker
 
             string Out = Environment.NewLine + p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine) + Environment.NewLine + p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine);
 
-            if (String.IsNullOrWhiteSpace(Out))
-                CompileErrors += Environment.NewLine + "OK!" + Environment.NewLine;
-            else
+            if (!String.IsNullOrWhiteSpace(Out))
                 CompileErrors += Out;
+
+            if (p.ExitCode == 0)
+                CompileErrors += Environment.NewLine + "OK!" + Environment.NewLine;
         }
 
         private void Clean()
@@ -2276,9 +2336,9 @@ namespace NPC_Maker
             };
 
             Process p = Process.Start(gccInfo);
-            GetOutput(p, "GCC", ref CompileErrors);
             p.WaitForExit();
 
+            GetOutput(p, "GCC", ref CompileErrors);
 
             #endregion
 
@@ -2306,9 +2366,9 @@ namespace NPC_Maker
             };
 
             p = Process.Start(ldInfo);
-
-            GetOutput(p, "LINKER", ref CompileErrors);
             p.WaitForExit();
+            GetOutput(p, "LINKER", ref CompileErrors);
+
 
             if (!File.Exists(elfFile))
             {
@@ -2332,8 +2392,8 @@ namespace NPC_Maker
             };
 
             p = Process.Start(nOVLInfo);
-            GetOutput(p, "NOVL", ref CompileErrors);
             p.WaitForExit();
+            GetOutput(p, "NOVL", ref CompileErrors);
 
             if (!File.Exists(ovlFile))
                 CompileErrors += "Compilation failed.";
@@ -2381,7 +2441,7 @@ namespace NPC_Maker
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     Arguments = EmbeddedCodeFile.AppendQuotation()
-            };
+                };
 
                 eCodeEditors SelectedCodeEditor = (eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString());
 
@@ -2443,6 +2503,7 @@ namespace NPC_Maker
             Watcher.Filter = codeFileName;
         }
 
+
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
             try
@@ -2473,17 +2534,10 @@ namespace NPC_Maker
                             TextBox_CompileMsg.Text = CompileErrs;
                         });
 
-                        List<ComboBox> ComboBoxes = new List<ComboBox>()
+                        foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
                         {
-                            Combo_FuncOnInit,
-                            Combo_FuncOnUpdate,
-                            Combo_FuncOnDraw,
-                            Combo_FuncOnLimb,
-                            Combo_FuncOnDelete,
-                        };
+                            ComboBox c = kvp.Key;
 
-                        foreach (ComboBox c in ComboBoxes)
-                        {
                             c.Invoke((MethodInvoker)delegate
                             {
                                 string CurrentSelection = c.Text;
@@ -2492,9 +2546,10 @@ namespace NPC_Maker
                                     c.DataSource = null;
                                 else
                                 {
-                                    c.DataSource = new BindingSource(SelectedEntry.EmbeddedOverlayCode.Functions, null);
                                     c.DisplayMember = "Key";
                                     c.ValueMember = "Value";
+                                    c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
+                                    c.SelectedIndex = -1;
 
                                     KeyValuePair<string, int>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
 
@@ -2522,7 +2577,7 @@ namespace NPC_Maker
         {
             if (!CreateCTempDirectory((eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString()))) return;
 
-            if (CodeEditorProcess != null)
+            if (CodeEditorProcess != null && !CodeEditorProcess.HasExited)
                 CodeEditorProcess.Kill();
 
             CodeEditorProcess = OpenCodeEditor();
@@ -2551,5 +2606,19 @@ namespace NPC_Maker
         }
 
         #endregion
+
+        private void Combo_Func_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox c = (sender as ComboBox);
+
+            int ComboId = Convert.ToInt32(c.Tag);
+
+            if (ComboId < 5)
+                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId, 0] = c.SelectedIndex;
+            else
+                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId - 5, 1] = c.SelectedIndex;
+
+
+        }
     }
 }
