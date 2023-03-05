@@ -652,27 +652,19 @@ namespace NPC_Maker
 
         private void SyntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-            foreach (TabPage Page in TabControl.TabPages)
+            foreach (TabPage Page in TabControl_Scripts.TabPages)
             {
-                if ((string)Page.Tag == "SCRIPT")
-                {
-                    if (Page.Controls.Count != 0)
-                        (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting((sender as ToolStripMenuItem).Checked);
-
-                }
+                if (Page.Controls.Count != 0)
+                    (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting((sender as ToolStripMenuItem).Checked);
             }
         }
 
         private void CheckSyntaxToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-            foreach (TabPage Page in TabControl.TabPages)
+            foreach (TabPage Page in TabControl_Scripts.TabPages)
             {
-                if ((string)Page.Tag == "SCRIPT")
-                {
-                    if (Page.Controls.Count != 0)
-                        (Page.Controls[0] as ScriptEditor).SetAutoParsing((sender as ToolStripMenuItem).Checked);
-
-                }
+                if (Page.Controls.Count != 0)
+                    (Page.Controls[0] as ScriptEditor).SetAutoParsing((sender as ToolStripMenuItem).Checked);
             }
         }
 
