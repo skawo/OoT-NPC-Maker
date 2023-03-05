@@ -62,7 +62,7 @@ namespace NPC_Maker
                 File.Delete(ovlFile);
         }
 
-        public static Dictionary<string, int> GetNpcMakerFunctionsFromO(string oFilePath)
+        public static List<KeyValuePair<string, int>> GetNpcMakerFunctionsFromO(string oFilePath)
         {
             ProcessStartInfo objDump = new ProcessStartInfo
             {
@@ -84,7 +84,7 @@ namespace NPC_Maker
             List<string> Lines = Out.Split(new[] { '\n' }).ToList();
 
 
-            Dictionary<string, int> Functions = new Dictionary<string, int>();
+            List<KeyValuePair<string, int>> Functions = new List<KeyValuePair<string, int>>();
 
             foreach (string Line in Lines)
             {
@@ -99,10 +99,10 @@ namespace NPC_Maker
                 if (!Words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
                     continue;
                 else
-                    Functions.Add(Words[5], int.Parse(Words[4].TrimStart('0'), System.Globalization.NumberStyles.HexNumber));
+                    Functions.Add(new KeyValuePair<string, int>(Words[5], int.Parse(Words[4].TrimStart('0'), System.Globalization.NumberStyles.HexNumber)));
             }
 
-            return Functions;
+            return Functions.OrderBy(x => x.Key).ToList();
 
         }
 

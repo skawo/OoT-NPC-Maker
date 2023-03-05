@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace NPC_Maker
 {
@@ -14,6 +15,9 @@ namespace NPC_Maker
 
         public static FileSystemWatcher Watcher;
         public static Process CodeEditorProcess;
+
+        [DllImport("kernel32.dll")]
+        private static extern bool AttachConsole(int dwProcessId);
 
         /// <summary>
         /// The main entry point for the application.
@@ -47,13 +51,14 @@ namespace NPC_Maker
                 Application.Run(new MainWindow());
             else
             {
+                AttachConsole(-1);
+                Console.WriteLine();
+
                 if (args[0].ToUpper() == "/?" || args[0].ToUpper() == "-HELP" || args.Length != 2)
                 {
-                    Console.WriteLine("Usage: npcmaker.exe [InputJson] [OutputZobj]");
-                    return;
+                    Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj]");
                 }
-
-                if (args.Length == 2)
+                else if (args.Length == 2)
                 {
                     NPCFile InFile = null;
 
@@ -68,12 +73,15 @@ namespace NPC_Maker
 
                     try
                     {
+                        Console.WriteLine("Writing output ZOBJ...");
                         FileOps.SaveBinaryFile(args[1], InFile, true);
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine("Error writing output:" + ex.Message);
                     }
+
+                    Console.WriteLine("Done! Press ENTER to exit...");
                 }
             }
 

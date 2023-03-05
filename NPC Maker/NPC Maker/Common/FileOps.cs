@@ -488,7 +488,13 @@ namespace NPC_Maker
 
                                     for (int i = 0; i < Entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0); i++)
                                     {
-                                        FuncsList.AddRangeBigEndian((UInt32)Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0]);
+                                        int FuncIdx = Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0];
+                                        int FuncAddr = -1;
+
+                                        if (FuncIdx >= 0)
+                                            FuncAddr = Entry.EmbeddedOverlayCode.Functions.ToList()[Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0]].Value;
+
+                                        FuncsList.AddRangeBigEndian((UInt32)FuncAddr);
                                         FuncsWhenList.Add((byte)Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 1]);
                                     }
 

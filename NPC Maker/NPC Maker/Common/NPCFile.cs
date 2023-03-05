@@ -845,17 +845,17 @@ namespace NPC_Maker
     public class CCodeEntry
     {
         public string Code { get; set; }
-        public Dictionary<string, int> Functions { get; set; }
+        public List<KeyValuePair<string, int>> Functions { get; set; }
 
         public int[,] FuncsRunWhen { get; set; }
 
-        public CCodeEntry(string _Code = "", Dictionary<string, int> _Funcs = null, int[,] _FuncsRunWhen = null)
+        public CCodeEntry(string _Code = "", List<KeyValuePair<string, int>> _Funcs = null, int[,] _FuncsRunWhen = null)
         {
             Code = _Code;
             Functions = _Funcs;
 
             if (Functions == null)
-                Functions = new Dictionary<string, int>() { };
+                Functions = new List<KeyValuePair<string, int>>();
 
             FuncsRunWhen = _FuncsRunWhen;
 
