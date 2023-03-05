@@ -241,6 +241,8 @@
             this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tab5_EmbeddedOverlay = new System.Windows.Forms.TabPage();
+            this.Label_OtherArguments = new System.Windows.Forms.Label();
+            this.Textbox_CodeEditorArgs = new System.Windows.Forms.TextBox();
             this.TextBox_CodeEditorPath = new System.Windows.Forms.TextBox();
             this.Button_FindCodeEditor = new System.Windows.Forms.Button();
             this.Combo_CodeEditor = new System.Windows.Forms.ComboBox();
@@ -3145,6 +3147,8 @@
             // 
             // Tab5_EmbeddedOverlay
             // 
+            this.Tab5_EmbeddedOverlay.Controls.Add(this.Label_OtherArguments);
+            this.Tab5_EmbeddedOverlay.Controls.Add(this.Textbox_CodeEditorArgs);
             this.Tab5_EmbeddedOverlay.Controls.Add(this.TextBox_CodeEditorPath);
             this.Tab5_EmbeddedOverlay.Controls.Add(this.Button_FindCodeEditor);
             this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_CodeEditor);
@@ -3174,6 +3178,22 @@
             this.Tab5_EmbeddedOverlay.Text = "C Code";
             this.Tab5_EmbeddedOverlay.UseVisualStyleBackColor = true;
             this.Tab5_EmbeddedOverlay.Click += new System.EventHandler(this.Tab5_EmbeddedOverlay_Click);
+            // 
+            // Label_OtherArguments
+            // 
+            this.Label_OtherArguments.AutoSize = true;
+            this.Label_OtherArguments.Location = new System.Drawing.Point(370, 76);
+            this.Label_OtherArguments.Name = "Label_OtherArguments";
+            this.Label_OtherArguments.Size = new System.Drawing.Size(60, 13);
+            this.Label_OtherArguments.TabIndex = 25;
+            this.Label_OtherArguments.Text = "Arguments:";
+            // 
+            // Textbox_CodeEditorArgs
+            // 
+            this.Textbox_CodeEditorArgs.Location = new System.Drawing.Point(436, 73);
+            this.Textbox_CodeEditorArgs.Name = "Textbox_CodeEditorArgs";
+            this.Textbox_CodeEditorArgs.Size = new System.Drawing.Size(324, 20);
+            this.Textbox_CodeEditorArgs.TabIndex = 24;
             // 
             // TextBox_CodeEditorPath
             // 
@@ -3310,12 +3330,12 @@
             this.LblOnDraw.TabIndex = 8;
             this.LblOnDraw.Text = "On Draw:";
             // 
-            // Combo_OnUpdate
+            // Combo_FuncOnUpdate
             // 
             this.Combo_FuncOnUpdate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_FuncOnUpdate.FormattingEnabled = true;
             this.Combo_FuncOnUpdate.Location = new System.Drawing.Point(73, 365);
-            this.Combo_FuncOnUpdate.Name = "Combo_OnUpdate";
+            this.Combo_FuncOnUpdate.Name = "Combo_FuncOnUpdate";
             this.Combo_FuncOnUpdate.Size = new System.Drawing.Size(184, 21);
             this.Combo_FuncOnUpdate.TabIndex = 7;
             // 
@@ -4160,6 +4180,8 @@
         private System.Windows.Forms.ComboBox Combo_CodeEditor;
         private System.Windows.Forms.Label LblCodeEditor;
         private System.Windows.Forms.TextBox TextBox_CodeEditorPath;
+        private System.Windows.Forms.Label Label_OtherArguments;
+        private System.Windows.Forms.TextBox Textbox_CodeEditorArgs;
     }
 }
 

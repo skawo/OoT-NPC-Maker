@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Text.RegularExpressions;
 
+
 namespace NPC_Maker
 {
     public partial class MainWindow : Form
@@ -2157,6 +2158,7 @@ namespace NPC_Maker
             Notepad,
             NotepadPlusPlus,
             Sublime,
+            WordPad,
             Other
         };
 
@@ -2166,15 +2168,17 @@ namespace NPC_Maker
             eCodeEditors.Notepad.ToString(),
             eCodeEditors.NotepadPlusPlus.ToString(),
             eCodeEditors.Sublime.ToString(),
+            eCodeEditors.WordPad.ToString(),
             eCodeEditors.Other.ToString()
         };
 
-        public static string tempFolder = Path.Combine(Program.ExecPath, ".temp");
-        public static string EmbeddedCodeFile = $"\"{Path.Combine(tempFolder, "EmbeddedOverlay.c")}\"";
+        public static string tempFolder = Path.Combine(Program.ExecPath, "temp");
         public static string codeFileName = "EmbeddedOverlay.c";
+        public static string EmbeddedCodeFile = $"{Path.Combine(tempFolder, codeFileName)}";
         public static string oFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.o");
         public static string elfFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.elf");
         public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay.ovl");
+        public static FileSystemWatcher Watcher;
 
         private void GetOutput(Process p, string Section, ref string CompileErrors)
         {
@@ -2219,7 +2223,7 @@ namespace NPC_Maker
             Out = Out.Replace("\t", " ");
             Out = Regex.Replace(Out, "[ ]{2,}", " ");
 
-            List<string> Lines = Out.Split(new[] {'\n'}).ToList();
+            List<string> Lines = Out.Split(new[] { '\n' }).ToList();
 
 
             Dictionary<string, int> Functions = new Dictionary<string, int>();
@@ -2258,8 +2262,8 @@ namespace NPC_Maker
                 CreateNoWindow = true,
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
-                Arguments = 
-                $"-I \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10"})}\" " +
+                Arguments =
+                $"-I \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" })}\" " +
                 $"-I \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" })}\" " +
                 $"-G 0 -Os -fno-reorder-blocks -std=gnu99 -mtune=vr4300 -march=vr4300 -mabi=32 -c -mips3 -mno-explicit-relocs -mno-memcpy -mno-check-zero-division " +
                 $"\"{Path.Combine(tempFolder, codeFileName)}\"",
@@ -2350,14 +2354,11 @@ namespace NPC_Maker
 
                 Directory.CreateDirectory(tempFolder);
 
-                if (Editor == eCodeEditors.VSCode)
-                {
-                    string vscodeFolder = Path.Combine(tempFolder, ".vscode");
+                string vscodeFolder = Path.Combine(tempFolder, ".vscode");
 
-                    Directory.CreateDirectory(vscodeFolder);
-                    File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), Properties.Resources.c_cpp_properties);
-                    File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
-                }
+                Directory.CreateDirectory(vscodeFolder);
+                File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), Properties.Resources.c_cpp_properties);
+                File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
 
                 File.WriteAllText(Path.Combine(tempFolder, codeFileName), SelectedEntry.EmbeddedOverlayCode.Code);
                 return true;
@@ -2376,8 +2377,9 @@ namespace NPC_Maker
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     UseShellExecute = false,
-                    CreateNoWindow = true
-                };
+                    CreateNoWindow = true,
+                    Arguments = "\"" + EmbeddedCodeFile + "\""
+            };
 
                 eCodeEditors SelectedCodeEditor = (eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString());
 
@@ -2386,35 +2388,33 @@ namespace NPC_Maker
                     case eCodeEditors.VSCode:
                         {
                             startInfo.FileName = "code-tunnel.exe";
-                            startInfo.Arguments = "-a \".temp\"";
+                            startInfo.Arguments = "-a \" " + tempFolder + "\"";
                             break;
                         }
                     case eCodeEditors.Notepad:
                         {
                             startInfo.FileName = @"C:\Windows\notepad.exe";
-                            startInfo.Arguments = EmbeddedCodeFile;
                             break;
                         }
                     case eCodeEditors.NotepadPlusPlus:
                         {
                             startInfo.FileName = @"C:\Program Files\Notepad++\notepad++.exe";
-                            startInfo.Arguments = EmbeddedCodeFile;
                             break;
                         }
                     case eCodeEditors.Sublime:
                         {
                             startInfo.FileName = @"C:\Program Files\Sublime Text\subl.exe";
-                            startInfo.Arguments = EmbeddedCodeFile;
+                            break;
+                        }
+                    case eCodeEditors.WordPad:
+                        {
+                            startInfo.FileName = @"C:\Windows\write.exe";
                             break;
                         }
                     default:
                         {
-                            string[] s = TextBox_CodeEditorPath.Text.Split(' ');
-                            startInfo.FileName = s[0];
-
-                            foreach (string ss in s.Skip(1))
-                                startInfo.Arguments += " " + ss.Replace("$CODEFILE", EmbeddedCodeFile);
-
+                            startInfo.FileName = TextBox_CodeEditorPath.Text;
+                            startInfo.Arguments = Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", "\"" + EmbeddedCodeFile + "\"").Replace("$CODEFOLDER", "\"" + tempFolder + "\"");
                             break;
                         }
                 }
@@ -2430,27 +2430,42 @@ namespace NPC_Maker
 
         private void WatchFile()
         {
-            var watcher = new FileSystemWatcher(tempFolder);
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Changed += Watcher_Changed;
-            watcher.IncludeSubdirectories = true;
-            watcher.EnableRaisingEvents = true;
-            watcher.Filter = codeFileName;
+            if (Watcher != null)
+                Watcher.Dispose();
+
+            Watcher = new FileSystemWatcher(tempFolder);
+            Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            Watcher.Changed += Watcher_Changed;
+            Watcher.IncludeSubdirectories = true;
+            Watcher.EnableRaisingEvents = true;
+            Watcher.Filter = codeFileName;
         }
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
-            if (e.ChangeType == WatcherChangeTypes.Changed)
+            try
             {
-                using (var fs = File.Open(Path.Combine(tempFolder, codeFileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                if (e.ChangeType == WatcherChangeTypes.Changed)
                 {
+                    FileStream fs;
+
+                    // Hacky workaround
+                    try
+                    {
+                        fs = File.Open(Path.Combine(tempFolder, codeFileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    }
+                    catch (Exception)
+                    {
+                        fs = File.Open(Path.Combine(tempFolder, codeFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    }
+
                     using (var sr = new StreamReader(fs, Encoding.Default))
                     {
                         SelectedEntry.EmbeddedOverlayCode.Code = sr.ReadToEnd();
 
                         string Msg = Compile(false, SelectedEntry.EmbeddedOverlayCode);
 
-                        this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate 
+                        this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
                         {
                             TextBox_CompileMsg.Text = Msg;
                         });
@@ -2470,25 +2485,33 @@ namespace NPC_Maker
                             {
                                 string CurrentSelection = c.Text;
 
-                                if (SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
+                                if (SelectedEntry.EmbeddedOverlayCode.Functions == null || SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
                                     c.DataSource = null;
                                 else
                                 {
                                     c.DataSource = new BindingSource(SelectedEntry.EmbeddedOverlayCode.Functions, null);
                                     c.DisplayMember = "Key";
                                     c.ValueMember = "Value";
+
+                                    KeyValuePair<string, int>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
+
+                                    if (Function != null)
+                                        c.SelectedIndex = c.Items.IndexOf(Function);
+                                    else
+                                        c.SelectedIndex = -1;
                                 }
-
-                                KeyValuePair<string, int>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
-
-                                if (Function != null)
-                                    c.SelectedIndex = c.Items.IndexOf(Function);
-                                else
-                                    c.SelectedIndex = -1;
                             });
                         }
                     }
+
+                    fs.Close();
+                    fs.Dispose();
                 }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error has occurred while attempting to update the embedded overlay: " + ex.Message);
             }
         }
 
@@ -2503,7 +2526,6 @@ namespace NPC_Maker
             else
             {
                 WatchFile();
-                p.WaitForExit();
             }
         }
 
@@ -2514,7 +2536,8 @@ namespace NPC_Maker
 
             if (Res == DialogResult.OK)
             {
-                TextBox_CodeEditorPath.Text = $"{oF.FileName} $CODEFILE";
+                TextBox_CodeEditorPath.Text = oF.FileName;
+                Textbox_CodeEditorArgs.Text = "$CODEFILE";
                 Combo_CodeEditor.SelectedItem = CodeEditors.Last();
                 Combo_CodeEditor.Refresh();
             }
