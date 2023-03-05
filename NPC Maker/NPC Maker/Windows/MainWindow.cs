@@ -2230,6 +2230,8 @@ namespace NPC_Maker
             Out = Regex.Replace(Out, "[ ]{2,}", " ");
 
             List<string> Lines = Out.Split(new[] { '\n' }).ToList();
+
+
             Dictionary<string, int> Functions = new Dictionary<string, int>();
 
             foreach (string Line in Lines)
