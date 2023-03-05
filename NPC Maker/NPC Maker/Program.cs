@@ -19,7 +19,7 @@ namespace NPC_Maker
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -43,7 +43,40 @@ namespace NPC_Maker
 
             }
 
-            Application.Run(new MainWindow());
+            if (args.Length == 0)
+                Application.Run(new MainWindow());
+            else
+            {
+                if (args[0].ToUpper() == "/?" || args[0].ToUpper() == "-HELP" || args.Length != 2)
+                {
+                    Console.WriteLine("Usage: npcmaker.exe [InputJson] [OutputZobj]");
+                    return;
+                }
+
+                if (args.Length == 2)
+                {
+                    NPCFile InFile = null;
+
+                    try
+                    {
+                        InFile = FileOps.ParseJSONFile(args[0]);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error reading input JSON:" + ex.Message);
+                    }
+
+                    try
+                    {
+                        FileOps.SaveBinaryFile(args[1], InFile, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error writing output:" + ex.Message);
+                    }
+                }
+            }
+
         }
     }
 }

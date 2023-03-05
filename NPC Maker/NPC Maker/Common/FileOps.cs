@@ -113,11 +113,21 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveBinaryFile(string Path, NPCFile Data)
+        private static void ShowMsg(bool CLIMode, string Msg)
+        {
+            if (CLIMode)
+                Console.WriteLine(Msg);
+            else
+                System.Windows.Forms.MessageBox.Show(Msg);
+
+            return;
+        }
+
+        public static void SaveBinaryFile(string Path, NPCFile Data, bool CLIMode = false)
         {
             if (Data.Entries.Count() == 0)
             {
-                System.Windows.Forms.MessageBox.Show("Nothing to save.");
+                ShowMsg(CLIMode, "Nothing to save.");
                 return;
             }
 
@@ -252,7 +262,7 @@ namespace NPC_Maker
 
                         if (BlinkPat.Length > 4 || TalkPat.Length > 4)
                         {
-                            System.Windows.Forms.MessageBox.Show("Talking and blinking patterns may only be 4 entries long!");
+                            ShowMsg(CLIMode, $"{Entry.NPCName}: Talking and blinking patterns may only be 4 entries long!");
                             return;
                         }
 
@@ -264,7 +274,7 @@ namespace NPC_Maker
 
                                 if (Index == -1)
                                 {
-                                    System.Windows.Forms.MessageBox.Show("Couldn't find one of the blink pattern textures: " + BlinkPat[i]);
+                                    ShowMsg(CLIMode, $"{Entry.NPCName}: Couldn't find one of the blink pattern textures: " + BlinkPat[i]);
                                     return;
                                 }
                                 else
@@ -282,7 +292,7 @@ namespace NPC_Maker
 
                                 if (Index == -1)
                                 {
-                                    System.Windows.Forms.MessageBox.Show("Couldn't find one of the talking pattern textures: " + TalkPat[i]);
+                                    ShowMsg(CLIMode, $"{Entry.NPCName}: Couldn't find one of the talk pattern textures: " + TalkPat[i]);
                                     return;
                                 }
                                 else
@@ -312,7 +322,10 @@ namespace NPC_Maker
                             MsgData.AddRange(Message);
 
                             if (Message.Count > 640)
-                                throw new Exception("One of the messages has exceeded 640 bytes (the maximum allowed), and could not be saved.");
+                            {
+                                ShowMsg(CLIMode, $"{Entry.NPCName}: One of the messages ({Msg.Name}) has exceeded 640 bytes (the maximum allowed), and could not be saved.");
+                                return;
+                            }
 
                             Header.AddRangeBigEndian(MsgOffset);
                             Header.Add(Msg.GetMessageTypePos());
@@ -570,13 +583,13 @@ namespace NPC_Maker
                     Output.AddRange(Entry);
 
                 if (ParseErrors.Count != 0)
-                    System.Windows.Forms.MessageBox.Show($"File could not be saved.{Environment.NewLine}{Environment.NewLine}There were errors parsing scripts or compiling code for NPC(s): {String.Join(",", ParseErrors)}.");
+                    ShowMsg(CLIMode, $"File could not be saved.{Environment.NewLine}{Environment.NewLine}There were errors parsing scripts or compiling code for NPC(s): {String.Join(",", ParseErrors)}.");
                 else
                     File.WriteAllBytes(Path, Output.ToArray());
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"Error writing file: {ex.Message}");
+                ShowMsg(CLIMode, $"Error writing file: {ex.Message}");
             }
         }
 
