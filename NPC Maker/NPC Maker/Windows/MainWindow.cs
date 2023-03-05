@@ -2156,6 +2156,7 @@ namespace NPC_Maker
             VSCode,
             Notepad,
             NotepadPlusPlus,
+            Sublime,
             Other
         };
 
@@ -2164,6 +2165,7 @@ namespace NPC_Maker
             eCodeEditors.VSCode.ToString(),
             eCodeEditors.Notepad.ToString(),
             eCodeEditors.NotepadPlusPlus.ToString(),
+            eCodeEditors.Sublime.ToString(),
             eCodeEditors.Other.ToString()
         };
 
@@ -2396,6 +2398,12 @@ namespace NPC_Maker
                     case eCodeEditors.NotepadPlusPlus:
                         {
                             startInfo.FileName = @"C:\Program Files\Notepad++\notepad++.exe";
+                            startInfo.Arguments = EmbeddedCodeFile;
+                            break;
+                        }
+                    case eCodeEditors.Sublime:
+                        {
+                            startInfo.FileName = @"C:\Program Files\Sublime Text\subl.exe";
                             startInfo.Arguments = EmbeddedCodeFile;
                             break;
                         }
