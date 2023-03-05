@@ -845,14 +845,11 @@ namespace NPC_Maker
     public class CCodeEntry
     {
         public string Code { get; set; }
-        public byte[] Ovl { get; set; }
-
         public Dictionary<string, int> Functions { get; set; }
 
-        public CCodeEntry(string _Code = "", byte[] _Ovl = null, Dictionary<string, int> _Funcs = null)
+        public CCodeEntry(string _Code = "", Dictionary<string, int> _Funcs = null)
         {
             Code = _Code;
-            Ovl = _Ovl;
             Functions = _Funcs;
         }
     }

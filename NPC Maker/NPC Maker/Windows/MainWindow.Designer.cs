@@ -3242,6 +3242,7 @@
             this.TextBox_CompileMsg.Multiline = true;
             this.TextBox_CompileMsg.Name = "TextBox_CompileMsg";
             this.TextBox_CompileMsg.ReadOnly = true;
+            this.TextBox_CompileMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.TextBox_CompileMsg.Size = new System.Drawing.Size(751, 201);
             this.TextBox_CompileMsg.TabIndex = 19;
             // 

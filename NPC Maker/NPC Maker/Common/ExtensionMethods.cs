@@ -24,5 +24,10 @@ namespace NPC_Maker
 
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
+
+        public static string AppendQuotation(this string text)
+        {
+            return "\"" + text + "\"";
+        }
     }
 }

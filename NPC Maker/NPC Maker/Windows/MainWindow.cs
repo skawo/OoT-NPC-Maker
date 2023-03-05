@@ -87,6 +87,18 @@ namespace NPC_Maker
                     }
                 }
             }
+
+            try
+            {
+                if (CodeEditorProcess != null)
+                {
+                    CodeEditorProcess.Kill();
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void InsertDataIntoActorListGrid()
@@ -2179,10 +2191,11 @@ namespace NPC_Maker
         public static string elfFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.elf");
         public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay.ovl");
         public static FileSystemWatcher Watcher;
+        public static Process CodeEditorProcess;
 
         private void GetOutput(Process p, string Section, ref string CompileErrors)
         {
-            CompileErrors += $"=============={Section}==============";
+            CompileErrors += $"+==============+ {Section} +==============+";
 
             string Out = Environment.NewLine + p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine) + Environment.NewLine + p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine);
 
@@ -2248,7 +2261,7 @@ namespace NPC_Maker
 
         }
 
-        private string Compile(bool OotVer, CCodeEntry CodeEntry)
+        private byte[] Compile(bool OotVer, CCodeEntry CodeEntry, ref string CompileErrors)
         {
             Clean();
 
@@ -2263,14 +2276,13 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
                 Arguments =
-                $"-I \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" })}\" " +
-                $"-I \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" })}\" " +
+                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" }).AppendQuotation()} " +
+                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
                 $"-G 0 -Os -fno-reorder-blocks -std=gnu99 -mtune=vr4300 -march=vr4300 -mabi=32 -c -mips3 -mno-explicit-relocs -mno-memcpy -mno-check-zero-division " +
-                $"\"{Path.Combine(tempFolder, codeFileName)}\"",
+                $"{Path.Combine(tempFolder, codeFileName).AppendQuotation()}",
             };
 
             Process p = Process.Start(gccInfo);
-            string CompileErrors = "";
             GetOutput(p, "GCC", ref CompileErrors);
             p.WaitForExit();
 
@@ -2282,7 +2294,7 @@ namespace NPC_Maker
             if (!File.Exists(oFile))
             {
                 CompileErrors += "Compilation failed.";
-                return CompileErrors;
+                return null;
             }
 
             ProcessStartInfo ldInfo = new ProcessStartInfo
@@ -2294,10 +2306,10 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
                 Arguments =
-                $"-L \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" })}\" " +
-                $"-L \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common" })}\" " +
+                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" }).AppendQuotation()} " +
+                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
                 $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
-                $"-o \"{elfFile}\" \"{oFile}\""
+                $"-o {elfFile.AppendQuotation()} {oFile.AppendQuotation()}"
             };
 
             p = Process.Start(ldInfo);
@@ -2308,7 +2320,7 @@ namespace NPC_Maker
             if (!File.Exists(elfFile))
             {
                 CompileErrors += "Compilation failed.";
-                return CompileErrors;
+                return null;
             }
 
             #endregion
@@ -2323,7 +2335,7 @@ namespace NPC_Maker
                 CreateNoWindow = true,
                 FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
                 Arguments =
-                $"-c -A 0x80800000 -o \"{ovlFile}\" \"{elfFile}\"",
+                $"-c -A 0x80800000 -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
             };
 
             p = Process.Start(nOVLInfo);
@@ -2335,12 +2347,9 @@ namespace NPC_Maker
             else
                 CompileErrors += "Compilation successful!";
 
-            CodeEntry.Ovl = File.ReadAllBytes(ovlFile);
             CodeEntry.Functions = GetNpcMakerFunctionsFromO(oFile);
 
-
-
-            return CompileErrors;
+            return File.ReadAllBytes(ovlFile);
             #endregion
 
         }
@@ -2378,7 +2387,7 @@ namespace NPC_Maker
                 {
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = "\"" + EmbeddedCodeFile + "\""
+                    Arguments = EmbeddedCodeFile.AppendQuotation()
             };
 
                 eCodeEditors SelectedCodeEditor = (eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString());
@@ -2387,34 +2396,34 @@ namespace NPC_Maker
                 {
                     case eCodeEditors.VSCode:
                         {
-                            startInfo.FileName = "code-tunnel.exe";
-                            startInfo.Arguments = "-a \" " + tempFolder + "\"";
+                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
+                            startInfo.Arguments = $"-a {tempFolder.AppendQuotation()}";
                             break;
                         }
                     case eCodeEditors.Notepad:
                         {
-                            startInfo.FileName = @"C:\Windows\notepad.exe";
+                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\notepad.exe";
                             break;
                         }
                     case eCodeEditors.NotepadPlusPlus:
                         {
-                            startInfo.FileName = @"C:\Program Files\Notepad++\notepad++.exe";
+                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Notepad++\notepad++.exe";
                             break;
                         }
                     case eCodeEditors.Sublime:
                         {
-                            startInfo.FileName = @"C:\Program Files\Sublime Text\subl.exe";
+                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Sublime Text\subl.exe";
                             break;
                         }
                     case eCodeEditors.WordPad:
                         {
-                            startInfo.FileName = @"C:\Windows\write.exe";
+                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\write.exe";
                             break;
                         }
                     default:
                         {
                             startInfo.FileName = TextBox_CodeEditorPath.Text;
-                            startInfo.Arguments = Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", "\"" + EmbeddedCodeFile + "\"").Replace("$CODEFOLDER", "\"" + tempFolder + "\"");
+                            startInfo.Arguments = Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", EmbeddedCodeFile.AppendQuotation()).Replace("$CODEFOLDER", tempFolder.AppendQuotation());
                             break;
                         }
                 }
@@ -2463,11 +2472,12 @@ namespace NPC_Maker
                     {
                         SelectedEntry.EmbeddedOverlayCode.Code = sr.ReadToEnd();
 
-                        string Msg = Compile(false, SelectedEntry.EmbeddedOverlayCode);
+                        string CompileErrs = "";
+                        Compile(false, SelectedEntry.EmbeddedOverlayCode, ref CompileErrs);
 
                         this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
                         {
-                            TextBox_CompileMsg.Text = Msg;
+                            TextBox_CompileMsg.Text = CompileErrs;
                         });
 
                         List<ComboBox> ComboBoxes = new List<ComboBox>()
@@ -2519,9 +2529,12 @@ namespace NPC_Maker
         {
             if (!CreateCTempDirectory((eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString()))) return;
 
-            Process p = OpenCodeEditor();
+            if (CodeEditorProcess != null)
+                CodeEditorProcess.Kill();
 
-            if (p == null)
+            CodeEditorProcess = OpenCodeEditor();
+
+            if (CodeEditorProcess == null)
                 return;
             else
             {
