@@ -3177,7 +3177,6 @@
             this.Tab5_EmbeddedOverlay.TabIndex = 6;
             this.Tab5_EmbeddedOverlay.Text = "C Code";
             this.Tab5_EmbeddedOverlay.UseVisualStyleBackColor = true;
-            this.Tab5_EmbeddedOverlay.Click += new System.EventHandler(this.Tab5_EmbeddedOverlay_Click);
             // 
             // Label_OtherArguments
             // 
