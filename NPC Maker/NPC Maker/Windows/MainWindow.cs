@@ -375,7 +375,7 @@ namespace NPC_Maker
 
             #region CCode
 
-   
+
             string CompileErrors = "";
 
             if (SelectedEntry.EmbeddedOverlayCode.Code != "")
@@ -2288,10 +2288,10 @@ namespace NPC_Maker
         private void Button_OpenCCode_Click(object sender, EventArgs e)
         {
             if (!CCode.CreateCTempDirectory(
-                                                (CCode.eCodeEditors)Enum.Parse(typeof(CCode.eCodeEditors), 
-                                                Combo_CodeEditor.SelectedItem.ToString()), 
+                                                (CCode.eCodeEditors)Enum.Parse(typeof(CCode.eCodeEditors),
+                                                Combo_CodeEditor.SelectedItem.ToString()),
                                                 SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code)
-                                           ) 
+                                           )
                 return;
 
             if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
@@ -2336,6 +2336,15 @@ namespace NPC_Maker
                 SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId - 5, 1] = c.SelectedIndex;
         }
 
+        private void Combo_Func_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+                (sender as ComboBox).SelectedIndex = -1;
+        }
+
         #endregion
+
+
+
     }
 }
