@@ -453,6 +453,60 @@ namespace NPC_Maker
 
                         #endregion
 
+                        #region CCode
+
+                        if (Entry.EmbeddedOverlayCode.Code != "")
+                        {
+                            string CompErrors = "";
+                            byte[] Overlay = CCode.Compile(false, Entry.EmbeddedOverlayCode, ref CompErrors);
+
+                            if (Overlay == null)
+                                ParseErrors.Add("C Code compilation was not successful");
+                            else
+                            {
+                                CurLen += 4;
+
+                                if (Entry.EmbeddedOverlayCode.Functions.Count != 0)
+                                {
+                                    EntryBytes.AddRangeBigEndian(Overlay.Length);
+
+                                    List<byte> FuncsList = new List<byte>();
+                                    List<byte> FuncsWhenList = new List<byte>();
+
+                                    for (int i = 0; i < Entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0); i++)
+                                    {
+                                        FuncsList.AddRangeBigEndian((UInt32)Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0]);
+                                        FuncsWhenList.Add((byte)Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 1]);
+                                    }
+
+                                    EntryBytes.AddRange(FuncsList.ToArray());
+                                    EntryBytes.AddRange(FuncsWhenList.ToArray());
+                                    Helpers.Ensure4ByteAlign(EntryBytes);
+
+                                    CurLen += 20 + 8;
+                                    Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                                    EntryBytes.AddRange(Overlay);
+                                    CurLen += Overlay.Length;
+                                    Helpers.Ensure4ByteAlign(EntryBytes);
+
+                                    if (Overlay.Length % 4 != 0)
+                                        CurLen += Overlay.Length % 4;
+
+                                    Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+                                }
+                                else
+                                    EntryBytes.AddRangeBigEndian(-1);
+                            }
+                        }
+                        else
+                        {
+                            EntryBytes.AddRangeBigEndian(-1);
+                            CurLen += 4;
+                        }
+
+                        #endregion
+
                         #region Scripts
 
                         List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
@@ -516,7 +570,7 @@ namespace NPC_Maker
                     Output.AddRange(Entry);
 
                 if (ParseErrors.Count != 0)
-                    System.Windows.Forms.MessageBox.Show($"File could not be saved.{Environment.NewLine}{Environment.NewLine}There were errors parsing scripts for NPC(s): {String.Join(",", ParseErrors)}.");
+                    System.Windows.Forms.MessageBox.Show($"File could not be saved.{Environment.NewLine}{Environment.NewLine}There were errors parsing scripts or compiling code for NPC(s): {String.Join(",", ParseErrors)}.");
                 else
                     File.WriteAllBytes(Path, Output.ToArray());
             }

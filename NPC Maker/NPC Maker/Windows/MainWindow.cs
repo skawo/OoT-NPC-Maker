@@ -21,6 +21,7 @@ namespace NPC_Maker
         int SelectedIndex = -1;
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
         private readonly System.Windows.Forms.Timer MsgPreviewTimer = new Timer();
+        public static List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
 
         public MainWindow()
         {
@@ -40,7 +41,7 @@ namespace NPC_Maker
 
             // SETTINGS!!
             Combo_CodeEditor.Items.Clear();
-            Combo_CodeEditor.Items.AddRange(CodeEditors);
+            Combo_CodeEditor.Items.AddRange(CCode.CodeEditors);
             Combo_CodeEditor.SelectedIndex = 0;
 
             MsgPreviewTimer.Interval = 100;
@@ -99,10 +100,8 @@ namespace NPC_Maker
 
             try
             {
-                if (CodeEditorProcess != null)
-                {
-                    CodeEditorProcess.Kill();
-                }
+                if (Program.CodeEditorProcess != null)
+                    Program.CodeEditorProcess.Kill();
             }
             catch (Exception)
             {
@@ -258,27 +257,26 @@ namespace NPC_Maker
             #region Script Tab Pages
             List<TabPage> ReusableTabPages = new List<TabPage>();
 
-            foreach (TabPage Page in TabControl.TabPages)
-            {
-                if ((string)Page.Tag == "SCRIPT")
-                    ReusableTabPages.Add(Page);
-            }
+            foreach (TabPage Page in TabControl_Scripts.TabPages)
+                ReusableTabPages.Add(Page);
 
             foreach (ScriptEntry ScriptT in SelectedEntry.Scripts)
             {
                 TabPage Page;
 
+                string PageName = ScriptT.Name == "" ? "Script" : ScriptT.Name;
+
                 if (ReusableTabPages.Count != 0)
                 {
                     Page = ReusableTabPages.First();
                     (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
-                    Page.Text = ScriptT.Name;
+                    Page.Text = PageName;
                     ReusableTabPages.Remove(Page);
                 }
                 else
                 {
-                    Page = new TabPage(ScriptT.Name) { Tag = "SCRIPT" };
-                    TabControl.TabPages.Add(Page);
+                    Page = new TabPage(PageName);
+                    TabControl_Scripts.TabPages.Add(Page);
 
                     ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked) { Dock = DockStyle.Fill };
                     Page.Controls.Add(Se);
@@ -286,7 +284,7 @@ namespace NPC_Maker
             }
 
             foreach (TabPage Page in ReusableTabPages)
-                TabControl.TabPages.Remove(Page);
+                TabControl_Scripts.TabPages.Remove(Page);
 
             #endregion
 
@@ -377,9 +375,12 @@ namespace NPC_Maker
 
             #region CCode
 
+   
             string CompileErrors = "";
 
-            Compile(false, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+            if (SelectedEntry.EmbeddedOverlayCode.Code != "")
+                CCode.Compile(false, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+
             TextBox_CompileMsg.Text = CompileErrors;
 
             int Index = 0;
@@ -425,6 +426,49 @@ namespace NPC_Maker
             #endregion
 
             TabControl.ResumeLayout();
+        }
+
+        private void TabControlScripts_MouseUp(object sender, MouseEventArgs e)
+        {
+            int PageClicked = -1;
+
+            for (int i = 0; i < TabControl_Scripts.TabCount; i++)
+            {
+                if (TabControl_Scripts.GetTabRect(i).Contains(e.Location))
+                    PageClicked = i;
+            }
+
+            if (PageClicked < 0)
+                return;
+
+            if (e.Button == MouseButtons.Right)
+            {
+                // Gotta select the menu so we can reuse the main menu strip code.
+                TabControl_Scripts.SelectedTab = TabControl_Scripts.TabPages[PageClicked];
+
+                ContextMenuStrip mn = new ContextMenuStrip();
+
+                ToolStripMenuItem renameScript = new ToolStripMenuItem();
+                ToolStripMenuItem deleteScript = new ToolStripMenuItem();
+                ToolStripMenuItem newScript = new ToolStripMenuItem();
+
+                mn.Items.AddRange(new ToolStripItem[] { newScript, renameScript, deleteScript });
+
+                renameScript.Size = new System.Drawing.Size(156, 22);
+                renameScript.Text = "Rename script";
+                renameScript.Click += RenameScript_Click;
+
+                deleteScript.Size = new System.Drawing.Size(156, 22);
+                deleteScript.Text = "Delete script";
+                deleteScript.Click += DeleteScript_Click;
+
+                newScript.Size = new System.Drawing.Size(156, 22);
+                newScript.Text = "New script";
+                newScript.Click += NewScript_Click;
+
+                mn.Show(TabControl_Scripts.PointToScreen(new Point(e.X, e.Y)));
+            }
+
         }
 
         #region MenuStrip
@@ -661,9 +705,9 @@ namespace NPC_Maker
 
             if (OnTab)
             {
-                if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
+                if (TabControl.SelectedTab != Tab5_Scripts)
                 {
-                    MessageBox.Show("Select a script tab first.");
+                    MessageBox.Show("Select the script tab first.");
                     return false;
                 }
             }
@@ -678,27 +722,26 @@ namespace NPC_Maker
 
             string ScriptName = GetScriptName();
 
-            if (SelectedEntry.Scripts.Count >= 255)
+            if (Name != "")
             {
-                MessageBox.Show("Cannot define more than 255 scripts.");
-                return;
+                if (SelectedEntry.Scripts.Count >= 255)
+                {
+                    MessageBox.Show("Cannot define more than 255 scripts.");
+                    return;
+                }
+
+                TabPage Page = new TabPage(ScriptName);
+                ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
+                SelectedEntry.Scripts.Add(Sc);
+
+                ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, Sc, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
+                {
+                    Dock = DockStyle.Fill
+                };
+
+                Page.Controls.Add(Se);
+                TabControl_Scripts.TabPages.Add(Page);
             }
-
-            TabPage Page = new TabPage(ScriptName)
-            {
-                Tag = "SCRIPT"
-            };
-
-            ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
-            SelectedEntry.Scripts.Add(Sc);
-
-            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, Sc, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
-            {
-                Dock = DockStyle.Fill
-            };
-
-            Page.Controls.Add(Se);
-            TabControl.TabPages.Add(Page);
         }
 
         private void RenameCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
@@ -706,13 +749,12 @@ namespace NPC_Maker
             if (!CheckScriptOpForValidity(true))
                 return;
 
-            string Name = GetScriptName(TabControl.SelectedTab.Text);
+            string Name = GetScriptName(TabControl_Scripts.SelectedTab.Text);
 
             if (Name != "")
             {
-
-                (TabControl.SelectedTab.Controls[0] as ScriptEditor).Script.Name = Name;
-                TabControl.SelectedTab.Text = Name;
+                (TabControl_Scripts.SelectedTab.Controls[0] as ScriptEditor).Script.Name = Name;
+                TabControl_Scripts.SelectedTab.Text = Name;
             }
         }
 
@@ -725,8 +767,8 @@ namespace NPC_Maker
 
             if (Res == DialogResult.Yes)
             {
-                SelectedEntry.Scripts.Remove((TabControl.SelectedTab.Controls[0] as ScriptEditor).Script);
-                TabControl.TabPages.Remove(TabControl.SelectedTab);
+                SelectedEntry.Scripts.Remove((TabControl_Scripts.SelectedTab.Controls[0] as ScriptEditor).Script);
+                TabControl_Scripts.TabPages.Remove(TabControl_Scripts.SelectedTab);
             }
         }
 
@@ -2167,342 +2209,20 @@ namespace NPC_Maker
 
         #endregion
 
-        private void TabControl_MouseUp(object sender, MouseEventArgs e)
-        {
-            int PageClicked = -1;
-
-            for (int i = 0; i < TabControl.TabCount; i++)
-            {
-                if (TabControl.GetTabRect(i).Contains(e.Location))
-                    PageClicked = i;
-            }
-
-            if (PageClicked < 0)
-                return;
-
-            if (e.Button == MouseButtons.Right)
-            {
-                // Gotta select the menu so we can reuse the main menu strip code.
-                TabControl.SelectedTab = TabControl.TabPages[PageClicked];
-
-                ContextMenuStrip mn = new ContextMenuStrip();
-
-                ToolStripMenuItem renameScript = new ToolStripMenuItem();
-                ToolStripMenuItem deleteScript = new ToolStripMenuItem();
-                ToolStripMenuItem newScript = new ToolStripMenuItem();
-
-                if ((string)TabControl.TabPages[PageClicked].Tag == "SCRIPT")
-                    mn.Items.AddRange(new ToolStripItem[] { newScript, renameScript, deleteScript });
-                else
-                    mn.Items.AddRange(new ToolStripItem[] { newScript });
-
-                renameScript.Size = new System.Drawing.Size(156, 22);
-                renameScript.Text = "Rename script";
-                renameScript.Click += RenameScript_Click;
-
-                deleteScript.Size = new System.Drawing.Size(156, 22);
-                deleteScript.Text = "Delete script";
-                deleteScript.Click += DeleteScript_Click;
-
-                newScript.Size = new System.Drawing.Size(156, 22);
-                newScript.Text = "New script";
-                newScript.Click += NewScript_Click;
-
-                mn.Show(TabControl.PointToScreen(new Point(e.X, e.Y)));
-            }
-
-        }
-
         #region CCompile
-
-        public enum eCodeEditors
-        {
-            VSCode,
-            Notepad,
-            NotepadPlusPlus,
-            Sublime,
-            WordPad,
-            Other
-        };
-
-        public static string[] CodeEditors = new string[]
-        {
-            eCodeEditors.VSCode.ToString(),
-            eCodeEditors.Notepad.ToString(),
-            eCodeEditors.NotepadPlusPlus.ToString(),
-            eCodeEditors.Sublime.ToString(),
-            eCodeEditors.WordPad.ToString(),
-            eCodeEditors.Other.ToString()
-        };
-
-        public static string tempFolder = Path.Combine(Program.ExecPath, "temp");
-        public static string codeFileName = "EmbeddedOverlay.c";
-        public static string EmbeddedCodeFile = $"{Path.Combine(tempFolder, codeFileName)}";
-        public static string oFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.o");
-        public static string elfFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.elf");
-        public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay.ovl");
-        public static FileSystemWatcher Watcher;
-        public static Process CodeEditorProcess;
-        public static List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
-
-        private void GetOutput(Process p, string Section, ref string CompileErrors)
-        {
-            CompileErrors += $"+==============+ {Section} +==============+";
-
-            string Out = Environment.NewLine + p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine) + Environment.NewLine + p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine);
-
-            if (!String.IsNullOrWhiteSpace(Out))
-                CompileErrors += Out;
-
-            if (p.ExitCode == 0)
-                CompileErrors += Environment.NewLine + "OK!" + Environment.NewLine;
-        }
-
-        private void Clean()
-        {
-            if (File.Exists(oFile))
-                File.Delete(oFile);
-
-            if (File.Exists(elfFile))
-                File.Delete(elfFile);
-
-            if (File.Exists(ovlFile))
-                File.Delete(ovlFile);
-        }
-
-        private Dictionary<string, int> GetNpcMakerFunctionsFromO(string oFilePath)
-        {
-            ProcessStartInfo objDump = new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-objdump.exe"),
-                Arguments =
-                $"-t \"{oFilePath}\""
-            };
-
-            Process p = Process.Start(objDump);
-            string Out = p.StandardOutput.ReadToEnd();
-            Out = Out.Replace("\t", " ");
-            Out = Regex.Replace(Out, "[ ]{2,}", " ");
-
-            List<string> Lines = Out.Split(new[] { '\n' }).ToList();
-
-
-            Dictionary<string, int> Functions = new Dictionary<string, int>();
-
-            foreach (string Line in Lines)
-            {
-                List<string> Words = Line.Split(' ').ToList();
-
-                if (Words.Count != 6)
-                    continue;
-
-                if (Words[2] != "F")
-                    continue;
-
-                if (!Words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
-                    continue;
-                else
-                    Functions.Add(Words[5], int.Parse(Words[4].TrimStart('0'), System.Globalization.NumberStyles.HexNumber));
-            }
-
-            return Functions;
-
-        }
-
-        private byte[] Compile(bool OotVer, CCodeEntry CodeEntry, ref string CompileErrors)
-        {
-            Clean();
-
-            #region GCC
-
-            ProcessStartInfo gccInfo = new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
-                Arguments =
-                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" }).AppendQuotation()} " +
-                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
-                $"-G 0 -Os -fno-reorder-blocks -std=gnu99 -mtune=vr4300 -march=vr4300 -mabi=32 -c -mips3 -mno-explicit-relocs -mno-memcpy -mno-check-zero-division " +
-                $"{Path.Combine(tempFolder, codeFileName).AppendQuotation()}",
-            };
-
-            Process p = Process.Start(gccInfo);
-            p.WaitForExit();
-
-            GetOutput(p, "GCC", ref CompileErrors);
-
-            #endregion
-
-            #region LD
-
-            if (!File.Exists(oFile))
-            {
-                CompileErrors += "Compilation failed.";
-                return null;
-            }
-
-            ProcessStartInfo ldInfo = new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
-                Arguments =
-                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" }).AppendQuotation()} " +
-                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
-                $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
-                $"-o {elfFile.AppendQuotation()} {oFile.AppendQuotation()}"
-            };
-
-            p = Process.Start(ldInfo);
-            p.WaitForExit();
-            GetOutput(p, "LINKER", ref CompileErrors);
-
-
-            if (!File.Exists(elfFile))
-            {
-                CompileErrors += "Compilation failed.";
-                return null;
-            }
-
-            #endregion
-
-            #region NOVL
-
-            ProcessStartInfo nOVLInfo = new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
-                Arguments =
-                $"-c -A 0x80800000 -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
-            };
-
-            p = Process.Start(nOVLInfo);
-            p.WaitForExit();
-            GetOutput(p, "NOVL", ref CompileErrors);
-
-            if (!File.Exists(ovlFile))
-                CompileErrors += "Compilation failed.";
-            else
-                CompileErrors += "Compilation successful!";
-
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(oFile);
-
-            return File.ReadAllBytes(ovlFile);
-            #endregion
-
-        }
-
-        private bool CreateCTempDirectory(eCodeEditors Editor)
-        {
-            try
-            {
-                if (Directory.Exists(tempFolder))
-                    Directory.Delete(tempFolder, true);
-
-                Directory.CreateDirectory(tempFolder);
-
-                string vscodeFolder = Path.Combine(tempFolder, ".vscode");
-
-                Directory.CreateDirectory(vscodeFolder);
-                File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), Properties.Resources.c_cpp_properties);
-                File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
-
-                File.WriteAllText(Path.Combine(tempFolder, codeFileName), SelectedEntry.EmbeddedOverlayCode.Code);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error creating temporary directory: " + ex.Message);
-                return false;
-            }
-        }
-
-        private Process OpenCodeEditor()
-        {
-            try
-            {
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    Arguments = EmbeddedCodeFile.AppendQuotation()
-                };
-
-                eCodeEditors SelectedCodeEditor = (eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString());
-
-                switch (SelectedCodeEditor)
-                {
-                    case eCodeEditors.VSCode:
-                        {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
-                            startInfo.Arguments = $"-a {tempFolder.AppendQuotation()}";
-                            break;
-                        }
-                    case eCodeEditors.Notepad:
-                        {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\notepad.exe";
-                            break;
-                        }
-                    case eCodeEditors.NotepadPlusPlus:
-                        {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Notepad++\notepad++.exe";
-                            break;
-                        }
-                    case eCodeEditors.Sublime:
-                        {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Sublime Text\subl.exe";
-                            break;
-                        }
-                    case eCodeEditors.WordPad:
-                        {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\write.exe";
-                            break;
-                        }
-                    default:
-                        {
-                            startInfo.FileName = TextBox_CodeEditorPath.Text;
-                            startInfo.Arguments = Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", EmbeddedCodeFile.AppendQuotation()).Replace("$CODEFOLDER", tempFolder.AppendQuotation());
-                            break;
-                        }
-                }
-
-                return Process.Start(startInfo);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error running editor: " + ex.Message);
-                return null;
-            }
-        }
 
         private void WatchFile()
         {
-            if (Watcher != null)
-                Watcher.Dispose();
+            if (Program.Watcher != null)
+                Program.Watcher.Dispose();
 
-            Watcher = new FileSystemWatcher(tempFolder);
-            Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-            Watcher.Changed += Watcher_Changed;
-            Watcher.IncludeSubdirectories = true;
-            Watcher.EnableRaisingEvents = true;
-            Watcher.Filter = codeFileName;
+            Program.Watcher = new FileSystemWatcher(CCode.tempFolder);
+            Program.Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            Program.Watcher.Changed += Watcher_Changed;
+            Program.Watcher.IncludeSubdirectories = true;
+            Program.Watcher.EnableRaisingEvents = true;
+            Program.Watcher.Filter = CCode.codeFileName;
         }
-
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
@@ -2515,11 +2235,11 @@ namespace NPC_Maker
                     // Hacky workaround
                     try
                     {
-                        fs = File.Open(Path.Combine(tempFolder, codeFileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        fs = File.Open(Path.Combine(CCode.tempFolder, CCode.codeFileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     }
                     catch (Exception)
                     {
-                        fs = File.Open(Path.Combine(tempFolder, codeFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
+                        fs = File.Open(Path.Combine(CCode.tempFolder, CCode.codeFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
                     }
 
                     using (var sr = new StreamReader(fs, Encoding.Default))
@@ -2527,7 +2247,7 @@ namespace NPC_Maker
                         SelectedEntry.EmbeddedOverlayCode.Code = sr.ReadToEnd();
 
                         string CompileErrs = "";
-                        Compile(false, SelectedEntry.EmbeddedOverlayCode, ref CompileErrs);
+                        CCode.Compile(false, SelectedEntry.EmbeddedOverlayCode, ref CompileErrs);
 
                         this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
                         {
@@ -2575,19 +2295,26 @@ namespace NPC_Maker
 
         private void Button_OpenCCode_Click(object sender, EventArgs e)
         {
-            if (!CreateCTempDirectory((eCodeEditors)Enum.Parse(typeof(eCodeEditors), Combo_CodeEditor.SelectedItem.ToString()))) return;
+            if (!CCode.CreateCTempDirectory(
+                                                (CCode.eCodeEditors)Enum.Parse(typeof(CCode.eCodeEditors), 
+                                                Combo_CodeEditor.SelectedItem.ToString()), 
+                                                SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code)
+                                           ) 
+                return;
 
-            if (CodeEditorProcess != null && !CodeEditorProcess.HasExited)
-                CodeEditorProcess.Kill();
+            if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
+                Program.CodeEditorProcess.Kill();
 
-            CodeEditorProcess = OpenCodeEditor();
+            Program.CodeEditorProcess = CCode.OpenCodeEditor(
+                                                                (CCode.eCodeEditors)Enum.Parse(typeof(CCode.eCodeEditors), Combo_CodeEditor.SelectedItem.ToString()),
+                                                                TextBox_CodeEditorPath.Text,
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.EmbeddedCodeFile.AppendQuotation()).Replace("$CODEFOLDER", CCode.tempFolder.AppendQuotation())
+                                                            );
 
-            if (CodeEditorProcess == null)
+            if (Program.CodeEditorProcess == null)
                 return;
             else
-            {
                 WatchFile();
-            }
         }
 
         private void Button_FindCodeEditor_Click(object sender, EventArgs e)
@@ -2599,13 +2326,11 @@ namespace NPC_Maker
             {
                 TextBox_CodeEditorPath.Text = oF.FileName;
                 Textbox_CodeEditorArgs.Text = "$CODEFILE";
-                Combo_CodeEditor.SelectedItem = CodeEditors.Last();
+                Combo_CodeEditor.SelectedItem = CCode.CodeEditors.Last();
                 Combo_CodeEditor.Refresh();
             }
 
         }
-
-        #endregion
 
         private void Combo_Func_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -2617,8 +2342,8 @@ namespace NPC_Maker
                 SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId, 0] = c.SelectedIndex;
             else
                 SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId - 5, 1] = c.SelectedIndex;
-
-
         }
+
+        #endregion
     }
 }

@@ -240,7 +240,9 @@
             this.Btn_AddMsg = new System.Windows.Forms.Button();
             this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Tab5_EmbeddedOverlay = new System.Windows.Forms.TabPage();
+            this.Tab5_Scripts = new System.Windows.Forms.TabPage();
+            this.TabControl_Scripts = new System.Windows.Forms.TabControl();
+            this.Tab6_EmbeddedOverlay = new System.Windows.Forms.TabPage();
             this.Label_OtherArguments = new System.Windows.Forms.Label();
             this.Textbox_CodeEditorArgs = new System.Windows.Forms.TextBox();
             this.TextBox_CodeEditorPath = new System.Windows.Forms.TextBox();
@@ -379,7 +381,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
-            this.Tab5_EmbeddedOverlay.SuspendLayout();
+            this.Tab5_Scripts.SuspendLayout();
+            this.Tab6_EmbeddedOverlay.SuspendLayout();
             this.Panel_NPCList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.ContextMenuStrip.SuspendLayout();
@@ -417,14 +420,14 @@
             this.TabControl.Controls.Add(this.Tab2_ExtraData);
             this.TabControl.Controls.Add(this.Tab3_BehaviorData);
             this.TabControl.Controls.Add(this.Tab4_Messages);
-            this.TabControl.Controls.Add(this.Tab5_EmbeddedOverlay);
+            this.TabControl.Controls.Add(this.Tab5_Scripts);
+            this.TabControl.Controls.Add(this.Tab6_EmbeddedOverlay);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
             this.TabControl.Size = new System.Drawing.Size(776, 653);
             this.TabControl.TabIndex = 41;
-            this.TabControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TabControl_MouseUp);
             // 
             // Tab1_Data
             // 
@@ -3145,38 +3148,59 @@
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
             this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // Tab5_EmbeddedOverlay
+            // Tab5_Scripts
             // 
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Label_OtherArguments);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Textbox_CodeEditorArgs);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.TextBox_CodeEditorPath);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Button_FindCodeEditor);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_CodeEditor);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblCodeEditor);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.TextBox_CompileMsg);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblCompilerMsg);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblWhen);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnDelete);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnLimb);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblOnDelete);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnDraw);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblOnLimb);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_WhenOnDraw);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblOnDraw);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnUpdate);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_WhenOnUpdate);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblUpdate);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnInit);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblOnInit);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.LblFuncToRun);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Button_OpenCCode);
-            this.Tab5_EmbeddedOverlay.Location = new System.Drawing.Point(4, 22);
-            this.Tab5_EmbeddedOverlay.Name = "Tab5_EmbeddedOverlay";
-            this.Tab5_EmbeddedOverlay.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab5_EmbeddedOverlay.Size = new System.Drawing.Size(768, 627);
-            this.Tab5_EmbeddedOverlay.TabIndex = 6;
-            this.Tab5_EmbeddedOverlay.Text = "C Code";
-            this.Tab5_EmbeddedOverlay.UseVisualStyleBackColor = true;
+            this.Tab5_Scripts.Controls.Add(this.TabControl_Scripts);
+            this.Tab5_Scripts.Location = new System.Drawing.Point(4, 22);
+            this.Tab5_Scripts.Name = "Tab5_Scripts";
+            this.Tab5_Scripts.Padding = new System.Windows.Forms.Padding(3);
+            this.Tab5_Scripts.Size = new System.Drawing.Size(768, 627);
+            this.Tab5_Scripts.TabIndex = 7;
+            this.Tab5_Scripts.Text = "Scripts";
+            this.Tab5_Scripts.UseVisualStyleBackColor = true;
+            // 
+            // TabControl_Scripts
+            // 
+            this.TabControl_Scripts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TabControl_Scripts.Location = new System.Drawing.Point(3, 3);
+            this.TabControl_Scripts.Name = "TabControl_Scripts";
+            this.TabControl_Scripts.SelectedIndex = 0;
+            this.TabControl_Scripts.Size = new System.Drawing.Size(762, 621);
+            this.TabControl_Scripts.TabIndex = 0;
+            this.TabControl_Scripts.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TabControlScripts_MouseUp);
+            // 
+            // Tab6_EmbeddedOverlay
+            // 
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Label_OtherArguments);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Textbox_CodeEditorArgs);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.TextBox_CodeEditorPath);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Button_FindCodeEditor);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_CodeEditor);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblCodeEditor);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.TextBox_CompileMsg);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblCompilerMsg);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblWhen);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnDelete);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnLimb);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblOnDelete);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnDraw);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblOnLimb);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_WhenOnDraw);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblOnDraw);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnUpdate);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_WhenOnUpdate);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblUpdate);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnInit);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblOnInit);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.LblFuncToRun);
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Button_OpenCCode);
+            this.Tab6_EmbeddedOverlay.Location = new System.Drawing.Point(4, 22);
+            this.Tab6_EmbeddedOverlay.Name = "Tab6_EmbeddedOverlay";
+            this.Tab6_EmbeddedOverlay.Padding = new System.Windows.Forms.Padding(3);
+            this.Tab6_EmbeddedOverlay.Size = new System.Drawing.Size(768, 627);
+            this.Tab6_EmbeddedOverlay.TabIndex = 6;
+            this.Tab6_EmbeddedOverlay.Text = "C Code";
+            this.Tab6_EmbeddedOverlay.UseVisualStyleBackColor = true;
             // 
             // Label_OtherArguments
             // 
@@ -3902,8 +3926,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
-            this.Tab5_EmbeddedOverlay.ResumeLayout(false);
-            this.Tab5_EmbeddedOverlay.PerformLayout();
+            this.Tab5_Scripts.ResumeLayout(false);
+            this.Tab6_EmbeddedOverlay.ResumeLayout(false);
+            this.Tab6_EmbeddedOverlay.PerformLayout();
             this.Panel_NPCList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.ContextMenuStrip.ResumeLayout(false);
@@ -4172,7 +4197,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Limb;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
-        private System.Windows.Forms.TabPage Tab5_EmbeddedOverlay;
+        private System.Windows.Forms.TabPage Tab6_EmbeddedOverlay;
         private System.Windows.Forms.TextBox TextBox_CompileMsg;
         private System.Windows.Forms.Label LblCompilerMsg;
         private System.Windows.Forms.Label LblWhen;
@@ -4196,6 +4221,8 @@
         private System.Windows.Forms.TextBox TextBox_CodeEditorPath;
         private System.Windows.Forms.Label Label_OtherArguments;
         private System.Windows.Forms.TextBox Textbox_CodeEditorArgs;
+        private System.Windows.Forms.TabPage Tab5_Scripts;
+        private System.Windows.Forms.TabControl TabControl_Scripts;
     }
 }
 

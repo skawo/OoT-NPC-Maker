@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
 
 namespace NPC_Maker
@@ -9,6 +11,9 @@ namespace NPC_Maker
         public static MiscUtil.Conversion.BigEndianBitConverter BEConverter = new MiscUtil.Conversion.BigEndianBitConverter();
         public static string ExecPath = "";
         public static bool IsRunningUnderMono = false;
+
+        public static FileSystemWatcher Watcher;
+        public static Process CodeEditorProcess;
 
         /// <summary>
         /// The main entry point for the application.

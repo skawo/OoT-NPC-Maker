@@ -225,7 +225,7 @@ namespace NPC_Maker
             NumVars = 2;
             NumFVars = 2;
 
-            EmbeddedOverlayCode = new CCodeEntry(Properties.Resources.EmbeddedOverlay);
+            EmbeddedOverlayCode = new CCodeEntry();
         }
 
         public List<OutputColorEntry> ParseColorEntries()
