@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace NPC_Maker
 {
@@ -2169,6 +2170,174 @@ namespace NPC_Maker
         public static string tempFolder = Path.Combine(Program.ExecPath, ".temp");
         public static string EmbeddedCodeFile = $"\"{Path.Combine(tempFolder, "EmbeddedOverlay.c")}\"";
         public static string codeFileName = "EmbeddedOverlay.c";
+        public static string oFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.o");
+        public static string elfFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.elf");
+        public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay.ovl");
+
+        private void GetOutput(Process p, string Section, ref string CompileErrors)
+        {
+            CompileErrors += $"=============={Section}==============";
+
+            string Out = Environment.NewLine + p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine) + Environment.NewLine + p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine);
+
+            if (String.IsNullOrWhiteSpace(Out))
+                CompileErrors += Environment.NewLine + "OK!" + Environment.NewLine;
+            else
+                CompileErrors += Out;
+        }
+
+        private void Clean()
+        {
+            if (File.Exists(oFile))
+                File.Delete(oFile);
+
+            if (File.Exists(elfFile))
+                File.Delete(elfFile);
+
+            if (File.Exists(ovlFile))
+                File.Delete(ovlFile);
+        }
+
+        private Dictionary<string, int> GetNpcMakerFunctionsFromO(string oFilePath)
+        {
+            ProcessStartInfo objDump = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-objdump.exe"),
+                Arguments =
+                $"-t \"{oFilePath}\""
+            };
+
+            Process p = Process.Start(objDump);
+            string Out = p.StandardOutput.ReadToEnd();
+            Out = Out.Replace("\t", " ");
+            Out = Regex.Replace(Out, "[ ]{2,}", " ");
+
+            List<string> Lines = Out.Split(new[] {'\n'}).ToList();
+
+
+            Dictionary<string, int> Functions = new Dictionary<string, int>();
+
+            foreach (string Line in Lines)
+            {
+                List<string> Words = Line.Split(' ').ToList();
+
+                if (Words.Count != 6)
+                    continue;
+
+                if (Words[2] != "F")
+                    continue;
+
+                if (!Words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
+                    continue;
+                else
+                    Functions.Add(Words[5], int.Parse(Words[4].TrimStart('0'), System.Globalization.NumberStyles.HexNumber));
+            }
+
+            return Functions;
+
+        }
+
+        private string Compile(bool OotVer, CCodeEntry CodeEntry)
+        {
+            Clean();
+
+            #region GCC
+
+            ProcessStartInfo gccInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
+                Arguments = 
+                $"-I \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10"})}\" " +
+                $"-I \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" })}\" " +
+                $"-G 0 -Os -fno-reorder-blocks -std=gnu99 -mtune=vr4300 -march=vr4300 -mabi=32 -c -mips3 -mno-explicit-relocs -mno-memcpy -mno-check-zero-division " +
+                $"\"{Path.Combine(tempFolder, codeFileName)}\"",
+            };
+
+            Process p = Process.Start(gccInfo);
+            string CompileErrors = "";
+            GetOutput(p, "GCC", ref CompileErrors);
+            p.WaitForExit();
+
+
+            #endregion
+
+            #region LD
+
+            if (!File.Exists(oFile))
+            {
+                CompileErrors += "Compilation failed.";
+                return CompileErrors;
+            }
+
+            ProcessStartInfo ldInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
+                Arguments =
+                $"-L \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" })}\" " +
+                $"-L \"{Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common" })}\" " +
+                $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
+                $"-o \"{elfFile}\" \"{oFile}\""
+            };
+
+            p = Process.Start(ldInfo);
+
+            GetOutput(p, "LINKER", ref CompileErrors);
+            p.WaitForExit();
+
+            if (!File.Exists(elfFile))
+            {
+                CompileErrors += "Compilation failed.";
+                return CompileErrors;
+            }
+
+            #endregion
+
+            #region NOVL
+
+            ProcessStartInfo nOVLInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
+                Arguments =
+                $"-c -A 0x80800000 -o \"{ovlFile}\" \"{elfFile}\"",
+            };
+
+            p = Process.Start(nOVLInfo);
+            GetOutput(p, "NOVL", ref CompileErrors);
+            p.WaitForExit();
+
+            if (!File.Exists(ovlFile))
+                CompileErrors += "Compilation failed.";
+            else
+                CompileErrors += "Compilation successful!";
+
+            CodeEntry.Ovl = File.ReadAllBytes(ovlFile);
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(oFile);
+
+
+
+            return CompileErrors;
+            #endregion
+
+        }
 
         private bool CreateCTempDirectory(eCodeEditors Editor)
         {
@@ -2188,7 +2357,7 @@ namespace NPC_Maker
                     File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
                 }
 
-                File.WriteAllText(Path.Combine(tempFolder, codeFileName), SelectedEntry.EmbeddedOverlayCode);
+                File.WriteAllText(Path.Combine(tempFolder, codeFileName), SelectedEntry.EmbeddedOverlayCode.Code);
                 return true;
             }
             catch (Exception ex)
@@ -2269,7 +2438,47 @@ namespace NPC_Maker
                 {
                     using (var sr = new StreamReader(fs, Encoding.Default))
                     {
-                        SelectedEntry.EmbeddedOverlayCode = sr.ReadToEnd();
+                        SelectedEntry.EmbeddedOverlayCode.Code = sr.ReadToEnd();
+
+                        string Msg = Compile(false, SelectedEntry.EmbeddedOverlayCode);
+
+                        this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate 
+                        {
+                            TextBox_CompileMsg.Text = Msg;
+                        });
+
+                        List<ComboBox> ComboBoxes = new List<ComboBox>()
+                        {
+                            Combo_FuncOnInit,
+                            Combo_FuncOnUpdate,
+                            Combo_FuncOnDraw,
+                            Combo_FuncOnLimb,
+                            Combo_FuncOnDelete,
+                        };
+
+                        foreach (ComboBox c in ComboBoxes)
+                        {
+                            c.Invoke((MethodInvoker)delegate
+                            {
+                                string CurrentSelection = c.Text;
+
+                                if (SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
+                                    c.DataSource = null;
+                                else
+                                {
+                                    c.DataSource = new BindingSource(SelectedEntry.EmbeddedOverlayCode.Functions, null);
+                                    c.DisplayMember = "Key";
+                                    c.ValueMember = "Value";
+                                }
+
+                                KeyValuePair<string, int>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
+
+                                if (Function != null)
+                                    c.SelectedIndex = c.Items.IndexOf(Function);
+                                else
+                                    c.SelectedIndex = -1;
+                            });
+                        }
                     }
                 }
             }

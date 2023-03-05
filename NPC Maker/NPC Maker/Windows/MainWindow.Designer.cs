@@ -255,7 +255,7 @@
             this.LblOnLimb = new System.Windows.Forms.Label();
             this.Combo_WhenOnDraw = new System.Windows.Forms.ComboBox();
             this.LblOnDraw = new System.Windows.Forms.Label();
-            this.Combo_OnUpdate = new System.Windows.Forms.ComboBox();
+            this.Combo_FuncOnUpdate = new System.Windows.Forms.ComboBox();
             this.Combo_WhenOnUpdate = new System.Windows.Forms.ComboBox();
             this.LblUpdate = new System.Windows.Forms.Label();
             this.Combo_FuncOnInit = new System.Windows.Forms.ComboBox();
@@ -3159,7 +3159,7 @@
             this.Tab5_EmbeddedOverlay.Controls.Add(this.LblOnLimb);
             this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_WhenOnDraw);
             this.Tab5_EmbeddedOverlay.Controls.Add(this.LblOnDraw);
-            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_OnUpdate);
+            this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnUpdate);
             this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_WhenOnUpdate);
             this.Tab5_EmbeddedOverlay.Controls.Add(this.LblUpdate);
             this.Tab5_EmbeddedOverlay.Controls.Add(this.Combo_FuncOnInit);
@@ -3217,6 +3217,7 @@
             // 
             // TextBox_CompileMsg
             // 
+            this.TextBox_CompileMsg.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TextBox_CompileMsg.Location = new System.Drawing.Point(9, 99);
             this.TextBox_CompileMsg.Multiline = true;
             this.TextBox_CompileMsg.Name = "TextBox_CompileMsg";
@@ -3311,12 +3312,12 @@
             // 
             // Combo_OnUpdate
             // 
-            this.Combo_OnUpdate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Combo_OnUpdate.FormattingEnabled = true;
-            this.Combo_OnUpdate.Location = new System.Drawing.Point(73, 365);
-            this.Combo_OnUpdate.Name = "Combo_OnUpdate";
-            this.Combo_OnUpdate.Size = new System.Drawing.Size(184, 21);
-            this.Combo_OnUpdate.TabIndex = 7;
+            this.Combo_FuncOnUpdate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_FuncOnUpdate.FormattingEnabled = true;
+            this.Combo_FuncOnUpdate.Location = new System.Drawing.Point(73, 365);
+            this.Combo_FuncOnUpdate.Name = "Combo_OnUpdate";
+            this.Combo_FuncOnUpdate.Size = new System.Drawing.Size(184, 21);
+            this.Combo_FuncOnUpdate.TabIndex = 7;
             // 
             // Combo_WhenOnUpdate
             // 
@@ -4148,7 +4149,7 @@
         private System.Windows.Forms.Label LblOnLimb;
         private System.Windows.Forms.ComboBox Combo_WhenOnDraw;
         private System.Windows.Forms.Label LblOnDraw;
-        private System.Windows.Forms.ComboBox Combo_OnUpdate;
+        private System.Windows.Forms.ComboBox Combo_FuncOnUpdate;
         private System.Windows.Forms.ComboBox Combo_WhenOnUpdate;
         private System.Windows.Forms.Label LblUpdate;
         private System.Windows.Forms.ComboBox Combo_FuncOnInit;
