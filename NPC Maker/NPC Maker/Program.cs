@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace NPC_Maker
 {
@@ -60,7 +61,7 @@ namespace NPC_Maker
 
                 if (args[0].ToUpper() == "/?" || args[0].ToUpper() == "-HELP" || args.Length != 2)
                 {
-                    Console.WriteLine("Zelda Ocarina of Time NPC Creation Tool");
+                    Console.WriteLine($"Zelda Ocarina of Time NPC Creation Tool v.{FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}");
                     Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj]");
                     Console.WriteLine("Press ENTER to exit...");
                 }
@@ -87,7 +88,7 @@ namespace NPC_Maker
                         Console.WriteLine("Error writing output:" + ex.Message);
                     }
 
-                    Console.WriteLine("Done! Press ENTER to exit...");
+                    Console.WriteLine("Press ENTER to exit...");
                 }
             }
 

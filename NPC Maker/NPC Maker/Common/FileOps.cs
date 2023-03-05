@@ -139,6 +139,8 @@ namespace NPC_Maker
                 List<List<byte>> EntryData = new List<List<byte>>();
                 List<string> ParseErrors = new List<string>();
 
+                string CompErrors = "";
+
                 foreach (NPCEntry Entry in Data.Entries)
                 {
                     if (Entry.IsNull == false)
@@ -470,11 +472,11 @@ namespace NPC_Maker
 
                         if (Entry.EmbeddedOverlayCode.Code != "")
                         {
-                            string CompErrors = "";
+                            CompErrors += "+==========================+" + Entry.NPCName + "+==========================+";
                             byte[] Overlay = CCode.Compile(false, Entry.EmbeddedOverlayCode, ref CompErrors);
 
                             if (Overlay == null)
-                                ParseErrors.Add("C Code compilation was not successful");
+                                ParseErrors.Add(Entry.NPCName);
                             else
                             {
                                 CurLen += 4;
@@ -589,7 +591,10 @@ namespace NPC_Maker
                     Output.AddRange(Entry);
 
                 if (ParseErrors.Count != 0)
-                    ShowMsg(CLIMode, $"File could not be saved.{Environment.NewLine}{Environment.NewLine}There were errors parsing scripts or compiling code for NPC(s): {String.Join(",", ParseErrors)}.");
+                    ShowMsg(CLIMode,
+                            $"File could not be saved." +
+                            $"" + Environment.NewLine + Environment.NewLine +
+                            $"There were errors parsing scripts or compiling code for NPC(s): {String.Join(",", ParseErrors)}");
                 else
                     File.WriteAllBytes(Path, Output.ToArray());
             }
