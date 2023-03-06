@@ -36,6 +36,7 @@ namespace NPC_Maker
         public static string oFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.o");
         public static string elfFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.elf");
         public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay.ovl");
+        public static UInt32 BaseAddr = 0x80800000;
 
         public static void GetOutput(Process p, string Section, ref string CompileErrors)
         {
@@ -62,7 +63,8 @@ namespace NPC_Maker
                 File.Delete(ovlFile);
         }
 
-        public static List<KeyValuePair<string, int>> GetNpcMakerFunctionsFromO(string oFilePath)
+        
+        public static List<KeyValuePair<string, UInt32>> GetNpcMakerFunctionsFromO(string elfPath)
         {
             ProcessStartInfo objDump = new ProcessStartInfo
             {
@@ -73,7 +75,7 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-objdump.exe"),
                 Arguments =
-                $"-t {oFilePath.AppendQuotation()}"
+                $"-t {elfPath.AppendQuotation()}"
             };
 
             Process p = Process.Start(objDump);
@@ -84,7 +86,22 @@ namespace NPC_Maker
             List<string> Lines = Out.Split(new[] { '\n' }).ToList();
 
 
-            List<KeyValuePair<string, int>> Functions = new List<KeyValuePair<string, int>>();
+            List<KeyValuePair<string, UInt32>> Functions = new List<KeyValuePair<string, UInt32>>();
+            Dictionary<string, UInt32> SectionOffsets = new Dictionary<string, UInt32>();
+
+            foreach (string Line in Lines)
+            {
+                List<string> Words = Line.Split(' ').ToList();
+
+                if (Words.Count != 6)
+                    continue;
+
+                if (Words[2] != "d")
+                    continue;
+
+                if (Words[5] == ".text" || Words[5] == ".data" || Words[5] == ".bss")
+                    SectionOffsets.Add(Words[5], Words[0].Int2HexLeading() - BaseAddr);
+            }
 
             foreach (string Line in Lines)
             {
@@ -99,7 +116,7 @@ namespace NPC_Maker
                 if (!Words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
                     continue;
                 else
-                    Functions.Add(new KeyValuePair<string, int>(Words[5], int.Parse(Words[4].TrimStart('0'), System.Globalization.NumberStyles.HexNumber)));
+                    Functions.Add(new KeyValuePair<string, UInt32>(Words[5], (UInt32)(Words[0].Int2HexLeading() - BaseAddr + SectionOffsets[Words[3]])));
             }
 
             return Functions.OrderBy(x => x.Key).ToList();
@@ -180,7 +197,7 @@ namespace NPC_Maker
                 CreateNoWindow = true,
                 FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
                 Arguments =
-                $"-c -A 0x80800000 -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
+                $"-c -A 0x{BaseAddr.ToString("X")} -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
             };
 
             p = Process.Start(nOVLInfo);
@@ -192,7 +209,7 @@ namespace NPC_Maker
             else
                 CompileErrors += "Compilation successful!";
 
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(oFile);
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFile);
 
             return File.ReadAllBytes(ovlFile);
             #endregion

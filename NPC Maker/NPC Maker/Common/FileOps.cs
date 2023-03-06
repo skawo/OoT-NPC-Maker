@@ -491,7 +491,7 @@ namespace NPC_Maker
                                     for (int i = 0; i < Entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0); i++)
                                     {
                                         int FuncIdx = Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0];
-                                        int FuncAddr = -1;
+                                        UInt32 FuncAddr = 0xFFFFFFFF;
 
                                         if (FuncIdx >= 0)
                                             FuncAddr = Entry.EmbeddedOverlayCode.Functions.ToList()[Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0]].Value;

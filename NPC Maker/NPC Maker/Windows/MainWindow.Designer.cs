@@ -3447,7 +3447,7 @@
             // 
             this.LblFuncToRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LblFuncToRun.AutoSize = true;
-            this.LblFuncToRun.Location = new System.Drawing.Point(77, 310);
+            this.LblFuncToRun.Location = new System.Drawing.Point(70, 310);
             this.LblFuncToRun.Name = "LblFuncToRun";
             this.LblFuncToRun.Size = new System.Drawing.Size(178, 13);
             this.LblFuncToRun.TabIndex = 1;

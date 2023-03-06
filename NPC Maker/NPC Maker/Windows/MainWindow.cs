@@ -2263,7 +2263,7 @@ namespace NPC_Maker
                                     c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
                                     c.SelectedIndex = -1;
 
-                                    KeyValuePair<string, int>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
+                                    KeyValuePair<string, UInt32>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
 
                                     if (Function != null)
                                         c.SelectedIndex = c.Items.IndexOf(Function);
