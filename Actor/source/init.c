@@ -182,7 +182,7 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
     u8* addr = ZeldaArena_Malloc(len);
     
     #if LOGGING == 1
-        osSyncPrintf("_Copying overlay to %8x", addr);
+        osSyncPrintf("_Copying overlay to 0x%8x", addr);
     #endif
     
     bcopy(buffer + offset, addr, len);
@@ -190,14 +190,14 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
     u32 ovlOffset = AVAL(addr + len, u32, -4);
 
     #if LOGGING == 1
-        osSyncPrintf("_Ovl Offset is at %8x", ovlOffset);
+        osSyncPrintf("_Ovl Offset is at 0x%8x", ovlOffset);
     #endif
 
     OverlayRelocationSection* ovl = (OverlayRelocationSection*)(addr + len - ovlOffset);
 
     #if LOGGING == 1
-        osSyncPrintf("_Relocating section is at %8x", ovl);
-        osSyncPrintf("_Relocations num is %8x", ovl->nRelocations);
+        osSyncPrintf("_Relocating section is at 0x%8x", ovl);
+        osSyncPrintf("_Relocations num is %2d", ovl->nRelocations);
     #endif
 
     Overlay_Relocate(addr, ovl, (u32*)0x80800000);
@@ -284,7 +284,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     u8* buffer = ZeldaArena_Malloc(entrySize);
 
     #if LOGGING == 1
-        osSyncPrintf("_%2d: Loading entry size bytes: %08x", en->npcId, entrySize);
+        osSyncPrintf("_%2d: Loading entry size bytes: 0x%08x", en->npcId, entrySize);
     #endif
 
     Rom_LoadDataFromObject(playState, settingsObjectId, buffer, entryAddress + 4, entrySize, en->getSettingsFromRAMObject);
@@ -321,7 +321,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             int overlayLen = AVAL(buffer, u32, offset);
 
             #if LOGGING == 1
-                osSyncPrintf("_Size: %8d", overlayLen);
+                osSyncPrintf("_Size: 0x%8x", overlayLen);
             #endif
 
             if (overlayLen != 0xFFFFFFFF)
@@ -685,7 +685,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                 animAddr = OFFSET_ADDRESS(4, animAddr);
                 
                 #if LOGGING == 1
-                    osSyncPrintf("_Link animation type at %08x, animation mode %01d", animAddr, animMode);
+                    osSyncPrintf("_Link animation type at 0x%08x, animation mode %01d", animAddr, animMode);
                 #endif
 
                 int endFrame = MIN(Animation_GetLastFrame((void*)animAddr), animEnd);
@@ -710,7 +710,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                 animAddr = OFFSET_ADDRESS(6, animAddr);
 
                 #if LOGGING == 1
-                    osSyncPrintf("_Normal animation type at %08x, animation mode %01d", animAddr, animMode);
+                    osSyncPrintf("_Normal animation type at 0x%08x, animation mode %01d", animAddr, animMode);
                 #endif
 
                 if (actorObject != object && object > 0)
@@ -718,7 +718,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                     if (!Rom_SetObjectToActor(actor, playState, object, fileStart))
                     {
                         #if LOGGING == 1
-                            osSyncPrintf("_Animation needs object %08x, but it's not loaded, so the animation won't play", object);
+                            osSyncPrintf("_Animation needs object 0x%08x, but it's not loaded, so the animation won't play", object);
                         #endif
 
                         return false;
