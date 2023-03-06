@@ -19,4 +19,6 @@ void Draw_Model(NpcMaker* en, PlayState* playState);
 void Draw_CalcFocusPos(PlayState* playState, s32 limb, NpcMaker* en);
 void Draw_SetEnvColor(Gfx** destP, Color_RGB8 color, u8 alpha);
 
+float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset);
+
 #endif

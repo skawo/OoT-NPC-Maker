@@ -80,6 +80,12 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->refActor = &en->actor;
     en->hasStaticExDlists = false;
 
+    for (int i = 0; i < 5; i++)
+        en->CFuncs[i] = 0xFFFFFFFF;
+    
+    for (int i = 0; i < 8; i++)
+        en->CFuncsWhen[i] = 0xFF;
+
     Movement_SetNextDelay(en);
 
     // Get the dummy message.
@@ -167,20 +173,48 @@ void Setup_ScriptVars(NpcMaker* en, void** ptr, u32 count)
         Lib_MemSet((void*)*ptr, 4 * count, 0);
 }
 
-static u32* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 len)
+static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 len)
 {
-    u32* addr = ZeldaArena_Malloc(len);
+    #if LOGGING == 1
+        osSyncPrintf("_Allocating %2d bytes", len);
+    #endif
+
+    u8* addr = ZeldaArena_Malloc(len);
+    
+    #if LOGGING == 1
+        osSyncPrintf("_Copying overlay to %8x", addr);
+    #endif
+    
     bcopy(buffer + offset, addr, len);
 
-    u32 ovlOffset = AVAL(buffer + offset, u32, -4);
-    OverlayRelocationSection* ovl = (OverlayRelocationSection*)(AADDR(buffer + len, -ovlOffset));
+    u32 ovlOffset = AVAL(addr + len, u32, -4);
+
+    #if LOGGING == 1
+        osSyncPrintf("_Ovl Offset is at %8x", ovlOffset);
+    #endif
+
+    OverlayRelocationSection* ovl = (OverlayRelocationSection*)(addr + len - ovlOffset);
+
+    #if LOGGING == 1
+        osSyncPrintf("_Relocating section is at %8x", ovl);
+        osSyncPrintf("_Relocations num is %8x", ovl->nRelocations);
+    #endif
+
     Overlay_Relocate(addr, ovl, (u32*)0x80800000);
 
+    #if LOGGING == 1
+        osSyncPrintf("_Clearing bss...");
+    #endif
+
     if (ovl->bssSize != 0)
-        bzero((void*)buffer + len, ovl->bssSize);
+        bzero((void*)addr + len, ovl->bssSize);
 
     int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
     bzero(ovl, size);
+
+    #if LOGGING == 1
+        osSyncPrintf("_Invalidating cache...");
+    #endif
 
     osWritebackDCache(addr, len);
     osInvalICache(addr, len);
@@ -272,7 +306,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     };
 
     #if LOGGING == 1
-        osSyncPrintf("_Loading sections: animations, extra display lists, colors, segment data, scripts.");
+        osSyncPrintf("_Loading sections: animations, extra display lists, colors, segment data, overlay, scripts.");
     #endif
 
     for (int i = 0; i < ARRAY_COUNT(sLoadList); i++)
@@ -280,19 +314,39 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         // Load Overlay
         if (i == 4)
         {
+            #if LOGGING == 1
+                osSyncPrintf("_Loading embedded overlay...");
+            #endif
+
             int overlayLen = AVAL(buffer, u32, offset);
+
+            #if LOGGING == 1
+                osSyncPrintf("_Size: %8d", overlayLen);
+            #endif
 
             if (overlayLen != 0xFFFFFFFF)
             {
                 offset += 4;
-                bcopy(buffer + offset, &en->settings.CFuncs, 20);
-                bcopy(buffer + offset + 20, &en->settings.CFuncsWhen, 8);
+                bcopy(buffer + offset, &en->CFuncs, 20);
+                bcopy(buffer + offset + 20, &en->CFuncsWhen, 8);
                 offset += 28;
 
                 en->embeddedOverlay = Setup_LoadEmbeddedOverlay(en, playState, buffer, offset, overlayLen);
+
+                #if LOGGING == 1
+                    osSyncPrintf("_Embedded overlay loaded!");
+                #endif
+
+                offset += overlayLen;
             }
             else
+            {
+                #if LOGGING == 1
+                    osSyncPrintf("_There is no embedded overlay.");
+                #endif
+
                 offset += 4;
+            }
         }
 
         int size = (i == ARRAY_COUNT(sLoadList) - 1) ? entrySize - offset : -1;

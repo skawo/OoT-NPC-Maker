@@ -304,14 +304,16 @@ namespace NPC_Maker.Scripts
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
                                 var Value = new ScriptVarVal();
+                                byte IsBool = 1;
 
                                 if (SplitLine.Length == 5)
                                 {
                                     Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
                                     Value = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, Int32.MaxValue);
+                                    IsBool = 0;
                                 }
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhileCCall((byte)ID, Convert.ToByte(SubID), Value, Func.Value,  Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhileCCall((byte)ID, Convert.ToByte(SubID), Value, Func.Value, IsBool, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         default:

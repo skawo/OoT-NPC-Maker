@@ -473,7 +473,7 @@ namespace NPC_Maker
                         if (Entry.EmbeddedOverlayCode.Code != "")
                         {
                             CompErrors += "+==========================+" + Entry.NPCName + "+==========================+";
-                            byte[] Overlay = CCode.Compile(false, Entry.EmbeddedOverlayCode, ref CompErrors);
+                            byte[] Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
 
                             if (Overlay == null)
                                 ParseErrors.Add(Entry.NPCName);

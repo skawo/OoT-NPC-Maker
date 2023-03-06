@@ -13,41 +13,19 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState);
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState);
 static void NpcMaker_Draw(NpcMaker* en, PlayState* playState);
 
-static u32* Load_OverlayFromObject(NpcMaker* en, PlayState* playState, int objNum)
+float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset)
 {
-    int bank = Rom_LoadObjectIfUnloaded(playState, objNum);
-    u32* addr = playState->objectCtx.status[bank].segment;
+    if (offset == 0xFFFFFFFF)
+        return 0;
 
-    RomSection* obj = &objectTable[objNum];
-    u32 size = obj->End - obj->Start;
-    u32* end = AADDR(addr, size);
+    #if LOGGING == 1
+        osSyncPrintf("_Running embedded function %8x", en->embeddedOverlay + offset);
+    #endif
 
-    u32 ovlOffset = ((s32*)end)[-1];
-    OverlayRelocationSection* ovl = (OverlayRelocationSection*)(AADDR(end, -ovlOffset));
-
-    Overlay_Relocate(addr, ovl, (u32*)0x80800000);
-
-    if (ovl->bssSize != 0)
-        bzero((void*)end, ovl->bssSize);
-
-    size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
-    bzero(ovl, size);
-
-    size = obj->End - obj->Start;
-    osWritebackDCache(addr, size);
-    osInvalICache(addr, size);
-    
-    for (u32 i = (u32)addr; i <= (u32)end; i++)
-    {
-        if (*(u32*)i == 0xDEADBEEF)
-            return (u32*)i + 1;
-    }
-
-    return (u32*)-1;
+    typedef int EmbeddedFunction(NpcMaker* en, PlayState* playState);
+    EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + offset;
+    return f(en, playState);
 }
-
-u32* CustOvFuncsList;
-
 
 static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
 {
@@ -62,6 +40,8 @@ static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
         Actor_Kill(&en->actor);
         return;
     }
+
+    NpcMaker_RunCFunc(en, playState, en->CFuncs[0]);
 }
 
 // Setting up the object needs to happen in update for some unknown reason,
@@ -78,18 +58,26 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 {
-       typedef void Func(NpcMaker* en, PlayState* playState);
-    Func* f = (Func*)*CustOvFuncsList;
-
-    f(en, playState); 
-
+    if (en->CFuncsWhen[1] == REPLACE_UPDATE)
+    {
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
+        return;
+    }
 
     // Set the object location again to account for the fileStart
     if (en->settings.fileStart)
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
 
-    // Executing scripts...
-    Scripts_Main(en, playState);
+    if (en->CFuncsWhen[1] == BEFORE_SCRIPTS)
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
+    
+    if (en->CFuncsWhen[1] == INSTEAD_OF_SCRIPTS)
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
+    else
+        Scripts_Main(en, playState);
+
+    if (en->CFuncsWhen[1] == AFTER_SCRIPTS)
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
 
     // Update current conversation status and copy messages into message context if need be...
     Update_Conversation(en, playState);
@@ -130,24 +118,35 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 
 static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
 {
-    Draw_Debug(en, playState);
-
-    if (en->settings.execJustScript)
-        return;
-    
-    Draw_LightsRebind(en, playState);
-    Draw_SetGlobalEnvColor(en, playState);
-    Draw_SetupSegments(en, playState);
-
-    if (!en->settings.invisible && en->curAlpha != 0)
-        Draw_Model(en, playState);
-        
-    if (en->settings.castsShadow && !en->settings.hasCollision)
+    if (en->CFuncsWhen[2] == REPLACE_UPDATE)
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
+    else
     {
-        Vec3f shadow;
-        shadow.z = shadow.y = shadow.x = en->settings.shadowRadius / 90.0f;
-        //z_actor_shadow_draw_vec3f
-        func_80033C30(&en->actor.world.pos, &shadow, 127, playState);
+        if (en->CFuncsWhen[2] == BEFORE_MODEL)
+            NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
+
+        Draw_Debug(en, playState);
+
+        if (en->settings.execJustScript)
+            return;
+        
+        Draw_LightsRebind(en, playState);
+        Draw_SetGlobalEnvColor(en, playState);
+        Draw_SetupSegments(en, playState);
+
+        if (!en->settings.invisible && en->curAlpha != 0)
+            Draw_Model(en, playState);
+            
+        if (en->settings.castsShadow && !en->settings.hasCollision)
+        {
+            Vec3f shadow;
+            shadow.z = shadow.y = shadow.x = en->settings.shadowRadius / 90.0f;
+            //z_actor_shadow_draw_vec3f
+            func_80033C30(&en->actor.world.pos, &shadow, 127, playState);
+        }
+
+        if (en->CFuncsWhen[2] == AFTER_MODEL)
+            NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
     }
 }
 
@@ -178,6 +177,8 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
         if (frees[i] != NULL)
             ZeldaArena_Free(frees[i]);
     }
+
+    NpcMaker_RunCFunc(en, playState, en->CFuncs[4]);
 }
 
 /* .data */

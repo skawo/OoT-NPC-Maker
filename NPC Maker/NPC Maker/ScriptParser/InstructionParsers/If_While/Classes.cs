@@ -52,8 +52,9 @@ namespace NPC_Maker.Scripts
     public class InstructionIfWhileCCall : InstructionIfWhile
     {
         public UInt32 Func;
+        public byte IsBool;
 
-        public InstructionIfWhileCCall(byte _ID, byte _SubID, ScriptVarVal _Value, UInt32 _FuncAddr, Lists.ConditionTypes _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr)
+        public InstructionIfWhileCCall(byte _ID, byte _SubID, ScriptVarVal _Value, UInt32 _FuncAddr, byte _IsBool, Lists.ConditionTypes _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr)
                              : base(_ID, _SubID, _Value, _Condition, _EndIfLineNo, _ElseLineNo, LabelStr )
         {
             Condition = (byte)_Condition;
@@ -61,6 +62,7 @@ namespace NPC_Maker.Scripts
             Func = _FuncAddr;
             ElseLineNo = _ElseLineNo;
             EndIfLineNo = _EndIfLineNo;
+            IsBool = _IsBool;
             GotoTrue = new InstructionLabel("__IFTRUE__" + LabelStr);
             GotoFalse = new InstructionLabel("__IFFALSE__" + LabelStr);
         }
@@ -72,7 +74,7 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(Value.Vartype, Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Value.Vartype, IsBool, 4), Data);
             Helpers.AddObjectToByteList(Condition, Data);
             Helpers.AddObjectToByteList(Value.Value, Data);
             Helpers.AddObjectToByteList(Func, Data);

@@ -379,7 +379,7 @@ namespace NPC_Maker
             string CompileErrors = "";
 
             if (SelectedEntry.EmbeddedOverlayCode.Code != "")
-                CCode.Compile(false, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+                CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
 
             TextBox_CompileMsg.Text = CompileErrors;
 
@@ -2239,7 +2239,7 @@ namespace NPC_Maker
                         SelectedEntry.EmbeddedOverlayCode.Code = sr.ReadToEnd();
 
                         string CompileErrs = "";
-                        CCode.Compile(false, SelectedEntry.EmbeddedOverlayCode, ref CompileErrs);
+                        CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileErrs);
 
                         this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
                         {

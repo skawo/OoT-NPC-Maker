@@ -94,9 +94,6 @@ typedef struct NpcSettings
     u8 blinkPattern[4];
     u8 talkPattern[4];
 
-    u32 CFuncs[5];
-    u8 CFuncsWhen[8];
-
 } NpcSettings;    
 
 typedef struct RomSection
@@ -270,7 +267,10 @@ typedef struct NpcMaker
     Actor* refActor;
     MessageEntry* dummyMesEntry;
     u16 curTextBuffPos;
-    u32* embeddedOverlay;
+
+    u32 CFuncs[5];
+    u8 CFuncsWhen[8];    
+    u8* embeddedOverlay;
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

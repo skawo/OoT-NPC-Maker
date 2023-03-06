@@ -40,13 +40,15 @@ namespace NPC_Maker.Scripts
     public class InstructionAwaitCCall : InstructionAwait
     {
         UInt32 Func;
+        byte IsBool;
 
-        public InstructionAwaitCCall(byte _SubID, ScriptVarVal _Value, UInt32 _FuncAddr, Lists.ConditionTypes _Condition)
-                                : base(_SubID, _Value, _Condition )
+        public InstructionAwaitCCall(byte _SubID, ScriptVarVal _Value, UInt32 _FuncAddr, Lists.ConditionTypes _Condition, byte _IsBool)
+                                : base(_SubID, _Value, _Condition)
         {
             Value = _Value;
             Condition = (byte)_Condition;
             Func = _FuncAddr;
+            IsBool = _IsBool;
         }
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
@@ -55,7 +57,7 @@ namespace NPC_Maker.Scripts
 
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
-            Helpers.AddObjectToByteList(Value.Vartype, Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Value.Vartype, IsBool, 4), Data);
             Helpers.AddObjectToByteList(Condition, Data);
             Helpers.AddObjectToByteList(Value.Value, Data);
             Helpers.AddObjectToByteList(Func, Data);

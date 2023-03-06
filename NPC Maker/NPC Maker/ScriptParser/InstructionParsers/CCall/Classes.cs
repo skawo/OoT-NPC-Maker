@@ -23,9 +23,10 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(Destination.Vartype, Data);
             Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(FuncAddr, Data);
+            Helpers.AddObjectToByteList(Destination.Value, Data);
             Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
             return Data.ToArray();
         }
     }

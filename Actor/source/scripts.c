@@ -114,6 +114,7 @@ void* ScriptFuncs[] =
     &Scripts_InstructionFadeIn,             // FADEIN
     &Scripts_InstructionFadeOut,            // FADEOUT
     &Scripts_InstructionQuake,              // QUAKE
+    &Scripts_InstructionCCall,              // CCALL
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -134,6 +135,35 @@ bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance*
 
     Play_SaveSceneFlags(playState);
     Sram_WriteSave(&playState->sramCtx);
+
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrCCall* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: CCALL", en->npcId);
+    #endif		
+
+    float out = NpcMaker_RunCFunc(en, playState, in->funcOffs); 
+
+    en->fDbgVar = out;
+
+    if (in->varType > 1)
+    {
+        u32 valt;
+        void* addr = Scripts_RamSubIdSetup(en, playState, in->DestVar.ui32, SUBT_GLOBAL8 - 2 + in->varType, &valt);
+
+        switch (valt)
+        {
+            case INT8:      AVAL(addr, s8, 0) = out; break;
+            case INT16:     AVAL(addr, s16, 0) = out; break;
+            case INT32:     AVAL(addr, s32, 0) = out; break;
+            case FLOAT:     AVAL(addr, float, 0) = out; break;
+            default: break;
+        }
+    }
 
     script->curInstrNum++; 
     return SCRIPT_CONTINUE;
@@ -546,6 +576,18 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
             branch = Scripts_IfValue(en, playState, i, in, INT32); 
             break;
         }
+        case IF_CCALL:
+        {
+            ScrInstrIfCCall* instr = (ScrInstrIfCCall*)in;
+            float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs);
+            
+            if (!instr->isBool)
+                branch = Scripts_IfValueCommon(en, playState, out, FLOAT, instr->condition, instr->varType, instr->value, instr->trueInstrNum, instr->falseInstrNum);
+            else
+                branch = Scripts_IfCommon(en, playState, out, instr->condition, instr->trueInstrNum, instr->falseInstrNum);
+
+            break;   
+        }
         case SUBT_RANDOM:
         {
             ScrInstrDoubleIf* instr = (ScrInstrDoubleIf*)in;
@@ -708,6 +750,13 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
         case AWAIT_CURRENT_STATE:
         {
             conditionMet = en->actor.bgCheckFlags & (1 << (int)Scripts_GetVarval(en, playState, in->varType, in->value, false));
+            break;
+        }
+        case AWAIT_CCALL:
+        {
+            ScrInstrAwaitCCall* instr = (ScrInstrAwaitCCall*)in;
+            float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs); 
+            conditionMet = Scripts_AwaitValue(en, playState, out, instr->isBool ? BOOL : FLOAT, instr->condition, instr->varType, instr->value);
             break;
         }
         case SUBT_GLOBAL8:

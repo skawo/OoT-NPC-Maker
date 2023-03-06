@@ -110,6 +110,8 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 
 void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
 {
+    
+
     if (en->exSegData == NULL)
         return;
 

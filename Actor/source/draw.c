@@ -93,7 +93,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 
             GfxPrint_SetPos(&printer, 3, 1);
 
-            GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08x]", MAJOR_VERSION, MINOR_VERSION, en->dbgVar, en->dbgVar2);
+            GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08f]", MAJOR_VERSION, MINOR_VERSION, en->dbgVar, en->fDbgVar);
 
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);
@@ -361,6 +361,8 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
     Draw_SetEnvColor(gfxP, en->curColor, en->curAlpha);
 
 #pragma endregion
+
+    NpcMaker_RunCFunc(en, playState, en->CFuncs[3]);
 
     return 0;
 }
