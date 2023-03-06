@@ -22,9 +22,15 @@ float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset)
         osSyncPrintf("_Running embedded function %8x", en->embeddedOverlay + offset);
     #endif
 
-    typedef int EmbeddedFunction(NpcMaker* en, PlayState* playState);
+    typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState);
     EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + offset;
-    return f(en, playState);
+    float out = f(en, playState);
+
+    #if LOGGING == 1
+        osSyncPrintf("_Embedded function finished.");
+    #endif
+
+    return out;
 }
 
 static void NpcMaker_Init(NpcMaker* en, PlayState* playState)

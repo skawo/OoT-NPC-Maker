@@ -282,6 +282,7 @@ typedef struct NpcMaker
         u8 dbgPosEditorCooldown;
         u8 dbgPosEditorCursorPos;
         u8 dbgPosEditorCurEditing;
+        u8 curScriptNum;
     #endif
 
 } NpcMaker;
