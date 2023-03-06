@@ -32,6 +32,18 @@ debug: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/inclu
 debug: LDFLAGS = -L/opt/n64/mips64/include/z64hdr/common -L/opt/n64/mips64/include/z64hdr/oot_mq_debug/ -T /opt/n64/mips64/include/z64hdr/common/z64hdr.ld --emit-relocs
 debug: create_dir $(PROGRAM).ovl
 
+debugr: LOGGING = 0
+debugr: LOG_VERSION = 0
+debugr: DEBUG_STRUCT = 0
+debugr: EXDLIST_EDITOR = 0
+debugr: ZZROMTOOL = 0
+debugr: COLLISION_VIEWER = 0
+debugr: GAME_VERSION = 0 
+debugr: OPTIMIZATION = -Os
+debugr: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_mq_debug
+debugr: LDFLAGS = -L/opt/n64/mips64/include/z64hdr/common -L/opt/n64/mips64/include/z64hdr/oot_mq_debug/ -T /opt/n64/mips64/include/z64hdr/common/z64hdr.ld --emit-relocs
+debugr: create_dir $(PROGRAM).ovl
+
 10: LOGGING = 0
 10: LOG_VERSION = 0
 10: DEBUG_STRUCT = 0
