@@ -64,7 +64,7 @@ namespace NPC_Maker
                 if (File.Exists(ovlFile))
                     File.Delete(ovlFile);
             }
-            catch ()
+            catch (Exception)
             { }
         }
 
