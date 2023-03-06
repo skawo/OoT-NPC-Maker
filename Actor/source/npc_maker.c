@@ -58,12 +58,20 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
     Setup_Misc(en, playState);
     Setup_Model(en, playState);
 
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Initialization complete.", en->npcId);
+    #endif    
+
     en->actor.update = (ActorFunc)&NpcMaker_Update;
     NpcMaker_Update(en, playState);
 }
 
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: ======== Actor update, frame %2d ======== ", en->npcId, playState->gameplayFrames);
+    #endif
+
     if (en->CFuncsWhen[1] == REPLACE_UPDATE)
     {
         NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
@@ -120,10 +128,18 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
     }
 
     Update_Misc(en, playState);
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Actor update complete.", en->npcId);
+    #endif
 }
 
 static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing actor.", en->npcId);
+    #endif
+
     if (en->CFuncsWhen[2] == REPLACE_UPDATE)
         NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
     else
@@ -154,6 +170,10 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
         if (en->CFuncsWhen[2] == AFTER_MODEL)
             NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing actor complete.", en->npcId);
+    #endif
 }
 
 static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
@@ -185,6 +205,10 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
     }
 
     NpcMaker_RunCFunc(en, playState, en->CFuncs[4]);
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Destroying actor complete.", en->npcId);
+    #endif
 }
 
 /* .data */

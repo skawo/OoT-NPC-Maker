@@ -27,6 +27,10 @@ inline ScrInstr* Scripts_GetInstrPtr(ScriptInstance* script, u32 instruction_num
 
 void Scripts_Main(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: ******* Scripts ******* ", en->npcId, playState->gameplayFrames);
+    #endif
+    
     for (int i = 0; i < en->scripts->numScripts; i++)
     {
         #if LOGGING == 1
@@ -64,6 +68,10 @@ void Scripts_Main(NpcMaker* en, PlayState* playState)
             }
         }   
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: ******* Scripts End *******", en->npcId, playState->gameplayFrames);
+    #endif
 }
 
 void Scripts_ResponseInstruction(NpcMaker* en, PlayState* playState, ScriptInstance* script)

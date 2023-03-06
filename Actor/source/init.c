@@ -477,6 +477,10 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
 
     if (en->scripts != NULL)
     {
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: Allocating space for scripts: 0x%8x", en->npcId, en->scripts->numScripts * sizeof(ScriptInstance));
+        #endif
+
         en->scriptInstances = ZeldaArena_Malloc(en->scripts->numScripts * sizeof(ScriptInstance));
         u32* offset = AADDR(en->scripts, 4 + (4 * en->scripts->numScripts));
 
@@ -494,6 +498,10 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
             
             Scripts_FreeTemp(&en->scriptInstances[i]);
         }
+
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: Script init complete.", en->npcId);
+        #endif            
     }
 
     #pragma endregion
@@ -535,10 +543,18 @@ void Setup_Path(NpcMaker* en, PlayState* playState, int pathId)
 
 void Setup_Model(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Setting up model.", en->npcId);
+    #endif
+    
     if (en->settings.objectId > 0)
     {
         // We assume the model is in Segment 6.
         en->settings.skeleton = OFFSET_ADDRESS(6, en->settings.skeleton);
+
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: Setting up skeleton at 0x%08x.", en->npcId, en->settings.skeleton);
+        #endif        
 
         switch (en->settings.drawType)
         {
@@ -576,11 +592,19 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         }
     }
 
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Setting default animation.", en->npcId);
+    #endif
+
     if (en->animations[ANIM_IDLE].offset != 0)
     {
         Setup_Animation(en, playState, ANIM_IDLE, false, false, true, false);
         Update_Animations(en, playState);
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Detecting static ExDlists.", en->npcId);
+    #endif
 
     for (int i = 0; i < en->numExDLists; i++)
     {
@@ -592,6 +616,10 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
             break;
         }
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Model initialized.", en->npcId);
+    #endif
 }
 
 void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interpolate, bool playOnce, bool forceSet, bool doNothing)
