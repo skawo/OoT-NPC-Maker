@@ -30,6 +30,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem damageTypesStripMenuItem;
         private static ToolStripMenuItem stateTypesStripMenuItem;
         private static ToolStripMenuItem cFunctionsStripMenuItem;
+        private static ToolStripMenuItem quakeTypesStripMenuItem;
         public static void MakeContextMenu(CCodeEntry CodeEntry)
         {
             ContextMenuStrip = new ContextMenuStrip();
@@ -52,6 +53,7 @@ namespace NPC_Maker
             damageTypesStripMenuItem = new ToolStripMenuItem();
             stateTypesStripMenuItem = new ToolStripMenuItem();
             cFunctionsStripMenuItem = new ToolStripMenuItem();
+            quakeTypesStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -63,6 +65,7 @@ namespace NPC_Maker
                                                                     itemstradeToolStripMenuItem,
                                                                     damageTypesStripMenuItem,
                                                                     stateTypesStripMenuItem,
+                                                                    quakeTypesStripMenuItem,
                                                                     playerMasksToolStripMenuItem,
                                                                     ocarinaSongstoolStripMenuItem,
                                                                     particlestoolStripMenuItem,
@@ -89,6 +92,7 @@ namespace NPC_Maker
             playerMasksToolStripMenuItem.Text = "Player Masks";
             ocarinaSongstoolStripMenuItem.Text = "Ocarina songs";
             particlestoolStripMenuItem.Text = "Particles";
+            quakeTypesStripMenuItem.Text = "Quake types";
             cFunctionsStripMenuItem.Text = "C Functions";
 
             soundEffectsToolStripMenuItem.Text = "Sound effects";
@@ -135,6 +139,7 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.OcarinaSongs)), ocarinaSongstoolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), particlestoolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.StateTypes)), stateTypesStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuakeTypes)), quakeTypesStripMenuItem);
 
             List<string> FunctionNames = new List<string>();
 
