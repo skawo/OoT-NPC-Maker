@@ -55,16 +55,7 @@ static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
         osSyncPrintf("___NPC MAKER DEBUG___");
     #endif
 
-    CustOvFuncsList = Load_CustomOverlay(en, playState, 4);
-
-
-
-
-
-
     Setup_Defaults(en, playState);
-
-
 
     if (!Setup_LoadSetup(en, playState))
     {

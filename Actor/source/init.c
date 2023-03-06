@@ -167,6 +167,27 @@ void Setup_ScriptVars(NpcMaker* en, void** ptr, u32 count)
         Lib_MemSet((void*)*ptr, 4 * count, 0);
 }
 
+static u32* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 len)
+{
+    u32* addr = ZeldaArena_Malloc(len);
+    bcopy(buffer + offset, addr, len);
+
+    u32 ovlOffset = AVAL(buffer + offset, u32, -4);
+    OverlayRelocationSection* ovl = (OverlayRelocationSection*)(AADDR(buffer + len, -ovlOffset));
+    Overlay_Relocate(addr, ovl, (u32*)0x80800000);
+
+    if (ovl->bssSize != 0)
+        bzero((void*)buffer + len, ovl->bssSize);
+
+    int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
+    bzero(ovl, size);
+
+    osWritebackDCache(addr, len);
+    osInvalICache(addr, len);
+
+    return addr;
+}
+
 bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 {
     u16 settingsObjectId = en->actor.params;
@@ -256,6 +277,24 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 
     for (int i = 0; i < ARRAY_COUNT(sLoadList); i++)
     {
+        // Load Overlay
+        if (i == 4)
+        {
+            int overlayLen = AVAL(buffer, u32, offset);
+
+            if (overlayLen != 0xFFFFFFFF)
+            {
+                offset += 4;
+                bcopy(buffer + offset, &en->settings.CFuncs, 20);
+                bcopy(buffer + offset + 20, &en->settings.CFuncsWhen, 8);
+                offset += 28;
+
+                en->embeddedOverlay = Setup_LoadEmbeddedOverlay(en, playState, buffer, offset, overlayLen);
+            }
+            else
+                offset += 4;
+        }
+
         int size = (i == ARRAY_COUNT(sLoadList) - 1) ? entrySize - offset : -1;
         offset = Setup_LoadSection(en, 
                                    playState, 
