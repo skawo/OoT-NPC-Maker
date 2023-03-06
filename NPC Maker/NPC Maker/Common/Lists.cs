@@ -235,6 +235,7 @@ namespace NPC_Maker
             SAVE,
             FADEIN,
             FADEOUT,
+            CCALL,
             NOP,
         }
 
@@ -441,6 +442,7 @@ namespace NPC_Maker
             ROOM_ID,
 
             CURRENT_STATE,
+            CCALL,
         }
 
         public enum StateTypes
@@ -651,6 +653,7 @@ namespace NPC_Maker
             EXT_VARF,
 
             CURRENT_STATE,
+            CCALL,
         }
 
         public enum EffectsIfAttacked

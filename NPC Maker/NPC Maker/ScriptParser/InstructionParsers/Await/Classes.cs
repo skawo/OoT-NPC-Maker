@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NPC_Maker.Scripts
 {
     public class InstructionAwait : InstructionSub
     {
-        ScriptVarVal Value { get; set; }
+        public ScriptVarVal Value { get; set; }
         public byte Condition;
 
         public InstructionAwait(byte _SubID, ScriptVarVal _Value, Lists.ConditionTypes _Condition)
@@ -26,6 +27,41 @@ namespace NPC_Maker.Scripts
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
+
+            return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.AwaitSubTypes)SubID).ToString();
+        }
+    }
+
+    public class InstructionAwaitCCall : InstructionAwait
+    {
+        UInt32 Func;
+
+        public InstructionAwaitCCall(byte _SubID, ScriptVarVal _Value, UInt32 _FuncAddr, Lists.ConditionTypes _Condition)
+                                : base(_SubID, _Value, _Condition )
+        {
+            Value = _Value;
+            Condition = (byte)_Condition;
+            Func = _FuncAddr;
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+            List<byte> Data = new List<byte>();
+
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Value.Vartype, Data);
+            Helpers.AddObjectToByteList(Condition, Data);
+            Helpers.AddObjectToByteList(Value.Value, Data);
+            Helpers.AddObjectToByteList(Func, Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
 
             return Data.ToArray();
         }

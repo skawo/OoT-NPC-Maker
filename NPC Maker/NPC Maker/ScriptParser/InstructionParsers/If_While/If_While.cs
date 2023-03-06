@@ -6,7 +6,7 @@ namespace NPC_Maker.Scripts
 {
     public partial class ScriptParser
     {
-        private List<Instruction> ParseIfWhileInstruction(int ID, List<string> Lines, string[] SplitLine, ref int LineNo)
+        private List<Instruction> ParseIfWhileInstruction(int ID, CCodeEntry CodeEntry, List<string> Lines, string[] SplitLine, ref int LineNo)
         {
             try
             {
@@ -291,6 +291,27 @@ namespace NPC_Maker.Scripts
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.EQUALTO;
 
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Condition, EndIf, Else, LabelR));
+                                return Instructions;
+                            }
+                        case (int)Lists.IfSubTypes.CCALL:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 5);
+
+                                var Func = CodeEntry.Functions.Find(x => x.Key.ToUpper() == SplitLine[2].ToUpper());
+
+                                if (Func.Key == null)
+                                    throw ParseException.CFunctionNotFound(SplitLine);
+
+                                Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
+                                var Value = new ScriptVarVal();
+
+                                if (SplitLine.Length == 5)
+                                {
+                                    Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
+                                    Value = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, Int32.MaxValue);
+                                }
+
+                                Instructions.Insert(InsertIdx, new InstructionIfWhileCCall((byte)ID, Convert.ToByte(SubID), Value, Func.Value,  Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         default:

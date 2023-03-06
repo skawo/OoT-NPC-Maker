@@ -36,6 +36,17 @@ namespace NPC_Maker.Scripts
             return new ParseException("Procedure defined twice or more: ", String.Join(" ", _Line));
         }
 
+        public static ParseException CFunctionNotFound(string[] _Line)
+        {
+            return new ParseException("C Function not found: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException CFunctionDestWrong(string[] _Line)
+        {
+            return new ParseException("C Destination cannot be constant or random: ", String.Join(" ", _Line));
+        }
+
+
         public static ParseException AndOrCanOnlyBeInIfWhile(string _Line)
         {
             return new ParseException("And and Or keywords may only be used for IF and WHILE instructions: ", _Line);

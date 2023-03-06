@@ -147,6 +147,8 @@
     <Compile Include="ScriptParser\InstructionParsers\Trade\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Script\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Script\Script.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\CCall\Classes.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\CCall\CCall.cs" />
     <Compile Include="ScriptParser\ScriptHelpers.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Await\Classes.cs" />
     <Compile Include="ScriptParser\Exceptions.cs" />
