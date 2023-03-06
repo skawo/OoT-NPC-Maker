@@ -52,10 +52,6 @@ namespace NPC_Maker
                 Application.Run(new MainWindow());
             else
             {
-                StreamWriter _stdOutWriter;
-                var stdout = Console.OpenStandardOutput();
-                _stdOutWriter = new StreamWriter(stdout);
-                _stdOutWriter.AutoFlush = true;
                 AttachConsole(-1);
                 Console.WriteLine();
 

@@ -30,7 +30,7 @@ namespace NPC_Maker
             return "\"" + text + "\"";
         }
         
-        public static UInt32 Int2HexLeading(this string text)
+        public static UInt32 HexLeading2UInt32(this string text)
         {
             return text.TrimStart('0') == "" ? (UInt32)0: UInt32.Parse(text.TrimStart('0'), System.Globalization.NumberStyles.HexNumber);
         }

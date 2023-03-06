@@ -2287,18 +2287,14 @@ namespace NPC_Maker
 
         private void Button_OpenCCode_Click(object sender, EventArgs e)
         {
-            if (!CCode.CreateCTempDirectory(
-                                                (CCode.eCodeEditors)Enum.Parse(typeof(CCode.eCodeEditors),
-                                                Combo_CodeEditor.SelectedItem.ToString()),
-                                                SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code)
-                                           )
+            if (!CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code))
                 return;
 
             if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
                 Program.CodeEditorProcess.Kill();
 
             Program.CodeEditorProcess = CCode.OpenCodeEditor(
-                                                                (CCode.eCodeEditors)Enum.Parse(typeof(CCode.eCodeEditors), Combo_CodeEditor.SelectedItem.ToString()),
+                                                                (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
                                                                 TextBox_CodeEditorPath.Text,
                                                                 Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.EmbeddedCodeFile.AppendQuotation()).Replace("$CODEFOLDER", CCode.tempFolder.AppendQuotation())
                                                             );

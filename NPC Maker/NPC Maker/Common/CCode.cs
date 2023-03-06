@@ -10,7 +10,7 @@ namespace NPC_Maker
 {
     public static class CCode
     {
-        public enum eCodeEditors
+        public enum CodeEditorEnum
         {
             VSCode,
             Notepad,
@@ -22,12 +22,12 @@ namespace NPC_Maker
 
         public static string[] CodeEditors = new string[]
         {
-            eCodeEditors.VSCode.ToString(),
-            eCodeEditors.Notepad.ToString(),
-            eCodeEditors.NotepadPlusPlus.ToString(),
-            eCodeEditors.Sublime.ToString(),
-            eCodeEditors.WordPad.ToString(),
-            eCodeEditors.Other.ToString()
+            CodeEditorEnum.VSCode.ToString(),
+            CodeEditorEnum.Notepad.ToString(),
+            CodeEditorEnum.NotepadPlusPlus.ToString(),
+            CodeEditorEnum.Sublime.ToString(),
+            CodeEditorEnum.WordPad.ToString(),
+            CodeEditorEnum.Other.ToString()
         };
 
         public static string tempFolder = Path.Combine(Program.ExecPath, "temp");
@@ -53,18 +53,23 @@ namespace NPC_Maker
 
         public static void Clean()
         {
-            if (File.Exists(oFile))
-                File.Delete(oFile);
+            try
+            {
+                if (File.Exists(oFile))
+                    File.Delete(oFile);
 
-            if (File.Exists(elfFile))
-                File.Delete(elfFile);
+                if (File.Exists(elfFile))
+                    File.Delete(elfFile);
 
-            if (File.Exists(ovlFile))
-                File.Delete(ovlFile);
+                if (File.Exists(ovlFile))
+                    File.Delete(ovlFile);
+            }
+            catch ()
+            { }
         }
 
         
-        public static List<KeyValuePair<string, UInt32>> GetNpcMakerFunctionsFromO(string elfPath)
+        public static List<KeyValuePair<string, UInt32>> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath)
         {
             ProcessStartInfo objDump = new ProcessStartInfo
             {
@@ -89,19 +94,13 @@ namespace NPC_Maker
             List<KeyValuePair<string, UInt32>> Functions = new List<KeyValuePair<string, UInt32>>();
             Dictionary<string, UInt32> SectionOffsets = new Dictionary<string, UInt32>();
 
-            foreach (string Line in Lines)
-            {
-                List<string> Words = Line.Split(' ').ToList();
+            byte[] ovl = File.ReadAllBytes(ovlPath);
+            UInt32 SectionOffs = Program.BEConverter.ToUInt32(ovl, ovl.Length - 4);
 
-                if (Words.Count != 6)
-                    continue;
-
-                if (Words[2] != "d")
-                    continue;
-
-                if (Words[5] == ".text" || Words[5] == ".data" || Words[5] == ".bss")
-                    SectionOffsets.Add(Words[5], Words[0].Int2HexLeading() - BaseAddr);
-            }
+            SectionOffsets.Add(".text", 0);
+            SectionOffsets.Add(".data", SectionOffsets[".text"] + Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - SectionOffs)));
+            SectionOffsets.Add(".rodata", SectionOffsets[".data"] + Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - SectionOffs + 4)));
+            SectionOffsets.Add(".bss", SectionOffsets[".rodata"] + Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - SectionOffs + 8)));
 
             foreach (string Line in Lines)
             {
@@ -116,7 +115,7 @@ namespace NPC_Maker
                 if (!Words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
                     continue;
                 else
-                    Functions.Add(new KeyValuePair<string, UInt32>(Words[5], (UInt32)(Words[0].Int2HexLeading() - BaseAddr + SectionOffsets[Words[3]])));
+                    Functions.Add(new KeyValuePair<string, UInt32>(Words[5], (UInt32)(Words[0].HexLeading2UInt32() - BaseAddr + SectionOffsets[Words[3]])));
             }
 
             return Functions.OrderBy(x => x.Key).ToList();
@@ -197,7 +196,7 @@ namespace NPC_Maker
                 CreateNoWindow = true,
                 FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
                 Arguments =
-                $"-c -A 0x{BaseAddr.ToString("X")} -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
+                $"-c -A 0x{BaseAddr:X} -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
             };
 
             p = Process.Start(nOVLInfo);
@@ -209,14 +208,14 @@ namespace NPC_Maker
             else
                 CompileErrors += "Compilation successful!";
 
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFile);
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFile, ovlFile);
 
             return File.ReadAllBytes(ovlFile);
             #endregion
 
         }
 
-        public static bool CreateCTempDirectory(eCodeEditors Editor, string Code)
+        public static bool CreateCTempDirectory(string Code)
         {
             try
             {
@@ -241,7 +240,7 @@ namespace NPC_Maker
             }
         }
 
-        public static Process OpenCodeEditor(eCodeEditors SelectedCodeEditor, string Path, string Args)
+        public static Process OpenCodeEditor(CodeEditorEnum SelectedCodeEditor, string Path, string Args)
         {
             try
             {
@@ -254,28 +253,28 @@ namespace NPC_Maker
 
                 switch (SelectedCodeEditor)
                 {
-                    case CCode.eCodeEditors.VSCode:
+                    case CCode.CodeEditorEnum.VSCode:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
                             startInfo.Arguments = $"-a {CCode.tempFolder.AppendQuotation()}";
                             break;
                         }
-                    case CCode.eCodeEditors.Notepad:
+                    case CCode.CodeEditorEnum.Notepad:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\notepad.exe";
                             break;
                         }
-                    case CCode.eCodeEditors.NotepadPlusPlus:
+                    case CCode.CodeEditorEnum.NotepadPlusPlus:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Notepad++\notepad++.exe";
                             break;
                         }
-                    case CCode.eCodeEditors.Sublime:
+                    case CCode.CodeEditorEnum.Sublime:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Sublime Text\subl.exe";
                             break;
                         }
-                    case CCode.eCodeEditors.WordPad:
+                    case CCode.CodeEditorEnum.WordPad:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\write.exe";
                             break;
