@@ -131,7 +131,7 @@ void Draw_Setup(NpcMaker* en, PlayState* playState, int drawType)
 void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: Drawing lights", en->npcId);
+        osSyncPrintf("_%2d: Drawing light", en->npcId);
     #endif 
 
     Vec3f transl_in_dir;
@@ -155,7 +155,7 @@ void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
     }  
 
     #if LOGGING == 1
-        osSyncPrintf("_%2d: Drawing lights complete", en->npcId);
+        osSyncPrintf("_%2d: Drawing light complete", en->npcId);
     #endif   
 }
 
@@ -298,6 +298,10 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
 {
     NpcMaker* en = (NpcMaker*)instance;
     int sLimbNumber = limbNumber - 1;
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing limb %2d", en->npcId, sLimbNumber);
+    #endif
 
 #pragma region LimbRotations
 
@@ -610,6 +614,6 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     }
 
     #if LOGGING == 1
-        osSyncPrintf("_%2d: Drawing the model complete.", en->npcId);
+        osSyncPrintf("_%2d: Drawing the skeleton complete.", en->npcId);
     #endif  
 }
