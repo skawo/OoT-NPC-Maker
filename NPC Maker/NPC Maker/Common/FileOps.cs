@@ -9,7 +9,30 @@ namespace NPC_Maker
 {
     public static class FileOps
     {
-        public static NPCFile ParseJSONFile(string FileName)
+        public static NPCMakerSettings ParseSettingsJSON(string FileName)
+        {
+            if (!File.Exists(FileName))
+                return new NPCMakerSettings();
+
+            string Text = File.ReadAllText(FileName);
+            NPCMakerSettings Deserialized = JsonConvert.DeserializeObject<NPCMakerSettings>(Text);
+
+            return Deserialized;
+        }
+
+        public static void SaveSettingsJSON(string Path, NPCMakerSettings Data)
+        {
+            try
+            {
+                File.WriteAllText(Path, JsonConvert.SerializeObject(Data, Formatting.Indented));
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"Failed to write settings: {ex.Message}");
+            }
+        }
+
+        public static NPCFile ParseNPCJsonFile(string FileName)
         {
             try
             {
@@ -75,7 +98,7 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveJSONFile(string Path, NPCFile Data)
+        public static void SaveNPCJSON(string Path, NPCFile Data)
         {
             try
             {
@@ -113,11 +136,21 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveBinaryFile(string Path, NPCFile Data)
+        private static void ShowMsg(bool CLIMode, string Msg)
+        {
+            if (CLIMode)
+                Console.WriteLine(Msg);
+            else
+                System.Windows.Forms.MessageBox.Show(Msg);
+
+            return;
+        }
+
+        public static void SaveBinaryFile(string Path, NPCFile Data, bool CLIMode = false)
         {
             if (Data.Entries.Count() == 0)
             {
-                System.Windows.Forms.MessageBox.Show("Nothing to save.");
+                ShowMsg(CLIMode, "Nothing to save.");
                 return;
             }
 
@@ -128,6 +161,8 @@ namespace NPC_Maker
                 List<byte> EntryAddresses = new List<byte>();
                 List<List<byte>> EntryData = new List<List<byte>>();
                 List<string> ParseErrors = new List<string>();
+
+                string CompErrors = "";
 
                 foreach (NPCEntry Entry in Data.Entries)
                 {
@@ -252,7 +287,7 @@ namespace NPC_Maker
 
                         if (BlinkPat.Length > 4 || TalkPat.Length > 4)
                         {
-                            System.Windows.Forms.MessageBox.Show("Talking and blinking patterns may only be 4 entries long!");
+                            ShowMsg(CLIMode, $"{Entry.NPCName}: Talking and blinking patterns may only be 4 entries long!");
                             return;
                         }
 
@@ -264,7 +299,7 @@ namespace NPC_Maker
 
                                 if (Index == -1)
                                 {
-                                    System.Windows.Forms.MessageBox.Show("Couldn't find one of the blink pattern textures: " + BlinkPat[i]);
+                                    ShowMsg(CLIMode, $"{Entry.NPCName}: Couldn't find one of the blink pattern textures: " + BlinkPat[i]);
                                     return;
                                 }
                                 else
@@ -282,7 +317,7 @@ namespace NPC_Maker
 
                                 if (Index == -1)
                                 {
-                                    System.Windows.Forms.MessageBox.Show("Couldn't find one of the talking pattern textures: " + TalkPat[i]);
+                                    ShowMsg(CLIMode, $"{Entry.NPCName}: Couldn't find one of the talk pattern textures: " + TalkPat[i]);
                                     return;
                                 }
                                 else
@@ -312,7 +347,10 @@ namespace NPC_Maker
                             MsgData.AddRange(Message);
 
                             if (Message.Count > 640)
-                                throw new Exception("One of the messages has exceeded 640 bytes (the maximum allowed), and could not be saved.");
+                            {
+                                ShowMsg(CLIMode, $"{Entry.NPCName}: One of the messages ({Msg.Name}) has exceeded 640 bytes (the maximum allowed), and could not be saved.");
+                                return;
+                            }
 
                             Header.AddRangeBigEndian(MsgOffset);
                             Header.Add(Msg.GetMessageTypePos());
@@ -453,6 +491,66 @@ namespace NPC_Maker
 
                         #endregion
 
+                        #region CCode
+
+                        if (Entry.EmbeddedOverlayCode.Code != "")
+                        {
+                            CompErrors += "+==========================+" + Entry.NPCName + "+==========================+";
+                            byte[] Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
+
+                            if (Overlay == null)
+                                ParseErrors.Add(Entry.NPCName);
+                            else
+                            {
+                                CurLen += 4;
+
+                                if (Entry.EmbeddedOverlayCode.Functions.Count != 0)
+                                {
+                                    EntryBytes.AddRangeBigEndian(Overlay.Length);
+
+                                    List<byte> FuncsList = new List<byte>();
+                                    List<byte> FuncsWhenList = new List<byte>();
+
+                                    for (int i = 0; i < Entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0); i++)
+                                    {
+                                        int FuncIdx = Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0];
+                                        UInt32 FuncAddr = 0xFFFFFFFF;
+
+                                        if (FuncIdx >= 0)
+                                            FuncAddr = Entry.EmbeddedOverlayCode.Functions.ToList()[Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0]].Value;
+
+                                        FuncsList.AddRangeBigEndian((UInt32)FuncAddr);
+                                        FuncsWhenList.Add((byte)Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 1]);
+                                    }
+
+                                    EntryBytes.AddRange(FuncsList.ToArray());
+                                    EntryBytes.AddRange(FuncsWhenList.ToArray());
+                                    Helpers.Ensure4ByteAlign(EntryBytes);
+
+                                    CurLen += 20 + 8;
+                                    Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                                    EntryBytes.AddRange(Overlay);
+                                    CurLen += Overlay.Length;
+                                    Helpers.Ensure4ByteAlign(EntryBytes);
+
+                                    if (Overlay.Length % 4 != 0)
+                                        CurLen += Overlay.Length % 4;
+
+                                    Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+                                }
+                                else
+                                    EntryBytes.AddRangeBigEndian(-1);
+                            }
+                        }
+                        else
+                        {
+                            EntryBytes.AddRangeBigEndian(-1);
+                            CurLen += 4;
+                        }
+
+                        #endregion
+
                         #region Scripts
 
                         List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
@@ -516,13 +614,16 @@ namespace NPC_Maker
                     Output.AddRange(Entry);
 
                 if (ParseErrors.Count != 0)
-                    System.Windows.Forms.MessageBox.Show($"File could not be saved.{Environment.NewLine}{Environment.NewLine}There were errors parsing scripts for NPC(s): {String.Join(",", ParseErrors)}.");
+                    ShowMsg(CLIMode,
+                            $"File could not be saved." +
+                            $"" + Environment.NewLine + Environment.NewLine +
+                            $"There were errors parsing scripts or compiling code for NPC(s): {String.Join(",", ParseErrors)}");
                 else
                     File.WriteAllBytes(Path, Output.ToArray());
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"Error writing file: {ex.Message}");
+                ShowMsg(CLIMode, $"Error writing file: {ex.Message}");
             }
         }
 

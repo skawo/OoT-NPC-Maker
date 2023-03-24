@@ -4,7 +4,7 @@ namespace NPC_Maker.Scripts
 {
     public partial class ScriptParser
     {
-        private Instruction ParseAwaitInstruction(string[] SplitLine)
+        private Instruction ParseAwaitInstruction(CCodeEntry CodeEntry, string[] SplitLine)
         {
             try
             {
@@ -134,6 +134,28 @@ namespace NPC_Maker.Scripts
                                 var State = ScriptHelpers.GetScriptVarVal(SplitLine, 2, typeof(Lists.StateTypes), ParseException.UnrecognizedState(SplitLine));
 
                                 return new InstructionAwait((byte)SubID, State, Lists.ConditionTypes.EQUALTO);
+                            }
+                        case (int)Lists.AwaitSubTypes.CCALL:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 5);
+
+                                var Func = CodeEntry.Functions.Find(x => x.Key.ToUpper() == SplitLine[2].ToUpper());
+
+                                if (Func.Key == null)
+                                    throw ParseException.CFunctionNotFound(SplitLine);
+
+                                Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
+                                var Value = new ScriptVarVal();
+                                byte IsBool = 1;
+
+                                if (SplitLine.Length == 5)
+                                {
+                                    Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
+                                    Value = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, Int32.MaxValue);
+                                    IsBool = 0;
+                                }
+
+                                return new InstructionAwaitCCall((byte)SubID, Value, Func.Value, Condition, IsBool);
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);

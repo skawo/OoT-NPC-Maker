@@ -100,23 +100,27 @@ void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dest, u32 fil
         Rom_LoadDataFromObjectFromROM(objId, dest, fileOffs, size);
 }
 
-void Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
+s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
 {
+    s32 bankIndex = -1;
+
     if (objId < 0)
-        return;
+        return bankIndex;
 
     #if LOGGING == 1
         osSyncPrintf("_Loading object %4d...", objId);
     #endif   
 
     if (!Object_IsLoaded(&playState->objectCtx, Object_GetIndex(&playState->objectCtx, objId)))
-        Object_Spawn(&playState->objectCtx, objId);
+        bankIndex = Object_Spawn(&playState->objectCtx, objId);
     else
     {
         #if LOGGING == 1
             osSyncPrintf("_It's already loaded.");
         #endif         
     }
+
+    return bankIndex;
 }
 
 bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileStart)

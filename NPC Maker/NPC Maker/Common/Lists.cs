@@ -183,6 +183,12 @@ namespace NPC_Maker
             VarTypes.VARF.ToString(),
         };
 
+        public enum GameVersions
+        {
+            oot_mq_debug,
+            oot_u10
+        }
+
         public enum VarTypes
         {
             NORMAL = 0,
@@ -236,6 +242,7 @@ namespace NPC_Maker
             FADEIN,
             FADEOUT,
             QUAKE,
+            CCALL,
             NOP,
         }
 
@@ -442,6 +449,7 @@ namespace NPC_Maker
             ROOM_ID,
 
             CURRENT_STATE,
+            CCALL,
         }
 
         public enum StateTypes
@@ -652,6 +660,7 @@ namespace NPC_Maker
             EXT_VARF,
 
             CURRENT_STATE,
+            CCALL,
         }
 
         public enum EffectsIfAttacked

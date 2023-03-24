@@ -80,6 +80,12 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->refActor = &en->actor;
     en->hasStaticExDlists = false;
 
+    for (int i = 0; i < 5; i++)
+        en->CFuncs[i] = 0xFFFFFFFF;
+    
+    for (int i = 0; i < 8; i++)
+        en->CFuncsWhen[i] = 0xFF;
+
     Movement_SetNextDelay(en);
 
     // Get the dummy message.
@@ -167,6 +173,55 @@ void Setup_ScriptVars(NpcMaker* en, void** ptr, u32 count)
         Lib_MemSet((void*)*ptr, 4 * count, 0);
 }
 
+static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 len)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_Allocating %2d bytes", len);
+    #endif
+
+    u8* addr = ZeldaArena_Malloc(len);
+    
+    #if LOGGING == 1
+        osSyncPrintf("_Copying overlay to 0x%8x", addr);
+    #endif
+    
+    bcopy(buffer + offset, addr, len);
+
+    u32 ovlOffset = AVAL(addr + len, u32, -4);
+
+    #if LOGGING == 1
+        osSyncPrintf("_Ovl Offset is at 0x%8x", ovlOffset);
+    #endif
+
+    OverlayRelocationSection* ovl = (OverlayRelocationSection*)(addr + len - ovlOffset);
+
+    #if LOGGING == 1
+        osSyncPrintf("_Relocating section is at 0x%8x", ovl);
+        osSyncPrintf("_Relocations num is %2d", ovl->nRelocations);
+    #endif
+
+    Overlay_Relocate(addr, ovl, (u32*)0x80800000);
+
+    #if LOGGING == 1
+        osSyncPrintf("_Clearing bss...");
+    #endif
+
+    if (ovl->bssSize != 0)
+        bzero((void*)addr + len, ovl->bssSize);
+
+    int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
+    bzero(ovl, size);
+
+    #if LOGGING == 1
+        osSyncPrintf("_Invalidating cache...");
+    #endif
+
+    osWritebackDCache(addr, len);
+    osInvalICache(addr, len);
+
+    return addr;
+}
+
 bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 {
     u16 settingsObjectId = en->actor.params;
@@ -229,7 +284,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     u8* buffer = ZeldaArena_Malloc(entrySize);
 
     #if LOGGING == 1
-        osSyncPrintf("_%2d: Loading entry size bytes: %08x", en->npcId, entrySize);
+        osSyncPrintf("_%2d: Loading entry size bytes: 0x%08x", en->npcId, entrySize);
     #endif
 
     Rom_LoadDataFromObject(playState, settingsObjectId, buffer, entryAddress + 4, entrySize, en->getSettingsFromRAMObject);
@@ -251,11 +306,49 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     };
 
     #if LOGGING == 1
-        osSyncPrintf("_Loading sections: animations, extra display lists, colors, segment data, scripts.");
+        osSyncPrintf("_Loading sections: animations, extra display lists, colors, segment data, overlay, scripts.");
     #endif
 
     for (int i = 0; i < ARRAY_COUNT(sLoadList); i++)
     {
+        // Load Overlay
+        if (i == 4)
+        {
+            #if LOGGING == 1
+                osSyncPrintf("_Loading embedded overlay...");
+            #endif
+
+            int overlayLen = AVAL(buffer, u32, offset);
+
+            #if LOGGING == 1
+                osSyncPrintf("_Size: 0x%8x", overlayLen);
+            #endif
+
+            if (overlayLen != 0xFFFFFFFF)
+            {
+                offset += 4;
+                bcopy(buffer + offset, &en->CFuncs, 20);
+                bcopy(buffer + offset + 20, &en->CFuncsWhen, 8);
+                offset += 28;
+
+                en->embeddedOverlay = Setup_LoadEmbeddedOverlay(en, playState, buffer, offset, overlayLen);
+
+                #if LOGGING == 1
+                    osSyncPrintf("_Embedded overlay loaded!");
+                #endif
+
+                offset += overlayLen;
+            }
+            else
+            {
+                #if LOGGING == 1
+                    osSyncPrintf("_There is no embedded overlay.");
+                #endif
+
+                offset += 4;
+            }
+        }
+
         int size = (i == ARRAY_COUNT(sLoadList) - 1) ? entrySize - offset : -1;
         offset = Setup_LoadSection(en, 
                                    playState, 
@@ -384,6 +477,10 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
 
     if (en->scripts != NULL)
     {
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: Allocating space for scripts: 0x%8x", en->npcId, en->scripts->numScripts * sizeof(ScriptInstance));
+        #endif
+
         en->scriptInstances = ZeldaArena_Malloc(en->scripts->numScripts * sizeof(ScriptInstance));
         u32* offset = AADDR(en->scripts, 4 + (4 * en->scripts->numScripts));
 
@@ -401,6 +498,10 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
             
             Scripts_FreeTemp(&en->scriptInstances[i]);
         }
+
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: Script init complete.", en->npcId);
+        #endif            
     }
 
     #pragma endregion
@@ -442,10 +543,18 @@ void Setup_Path(NpcMaker* en, PlayState* playState, int pathId)
 
 void Setup_Model(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Setting up model.", en->npcId);
+    #endif
+    
     if (en->settings.objectId > 0)
     {
         // We assume the model is in Segment 6.
         en->settings.skeleton = OFFSET_ADDRESS(6, en->settings.skeleton);
+
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: Setting up skeleton at 0x%08x.", en->npcId, en->settings.skeleton);
+        #endif        
 
         switch (en->settings.drawType)
         {
@@ -483,11 +592,19 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         }
     }
 
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Setting default animation.", en->npcId);
+    #endif
+
     if (en->animations[ANIM_IDLE].offset != 0)
     {
         Setup_Animation(en, playState, ANIM_IDLE, false, false, true, false);
         Update_Animations(en, playState);
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Detecting static ExDlists.", en->npcId);
+    #endif
 
     for (int i = 0; i < en->numExDLists; i++)
     {
@@ -499,6 +616,10 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
             break;
         }
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Model initialized.", en->npcId);
+    #endif
 }
 
 void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interpolate, bool playOnce, bool forceSet, bool doNothing)
@@ -592,7 +713,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                 animAddr = OFFSET_ADDRESS(4, animAddr);
                 
                 #if LOGGING == 1
-                    osSyncPrintf("_Link animation type at %08x, animation mode %01d", animAddr, animMode);
+                    osSyncPrintf("_Link animation type at 0x%08x, animation mode %01d", animAddr, animMode);
                 #endif
 
                 int endFrame = MIN(Animation_GetLastFrame((void*)animAddr), animEnd);
@@ -617,7 +738,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                 animAddr = OFFSET_ADDRESS(6, animAddr);
 
                 #if LOGGING == 1
-                    osSyncPrintf("_Normal animation type at %08x, animation mode %01d", animAddr, animMode);
+                    osSyncPrintf("_Normal animation type at 0x%08x, animation mode %01d", animAddr, animMode);
                 #endif
 
                 if (actorObject != object && object > 0)
@@ -625,7 +746,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                     if (!Rom_SetObjectToActor(actor, playState, object, fileStart))
                     {
                         #if LOGGING == 1
-                            osSyncPrintf("_Animation needs object %08x, but it's not loaded, so the animation won't play", object);
+                            osSyncPrintf("_Animation needs object 0x%08x, but it's not loaded, so the animation won't play", object);
                         #endif
 
                         return false;

@@ -10,15 +10,31 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
     en->lastDayTime = gSaveContext.dayTime;
 
     if (en->stopPlayer)
+    {
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: Stopping player!", en->npcId);
+        #endif           
+
         GET_PLAYER(playState)->stateFlags1 |= PLAYER_STOPPED_MASK;
+    }
         
     if (en->cameraId - 1 > 0)
+    {
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: Setting camera ID to %2d", en->npcId, en->cameraId - 1);
+        #endif   
+
         Camera_ChangeBgCamIndex(&playState->mainCamera, en->cameraId - 1);
+    }
 
     #if EXDLIST_EDITOR == 1
 
     if (en->dbgEnabledPosEditor && en->numExDLists != 0)
     {
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: EXDLIST editor is enabled.", en->npcId);
+        #endif   
+
         if (en->dbgPosEditorCooldown)
         {
             en->dbgPosEditorCooldown--;
@@ -110,6 +126,10 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 
 void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating texture animations.", en->npcId);
+    #endif    
+
     if (en->exSegData == NULL)
         return;
 
@@ -190,10 +210,18 @@ void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
     }
 
     #pragma endregion
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating texture animations complete.", en->npcId);
+    #endif       
 }
 
 void Update_Animations(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating animation.", en->npcId);
+    #endif    
+
     if (en->animations == NULL || en->currentAnimId < 0)
     {
         en->animationFinished = true;
@@ -239,6 +267,10 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
     
     if (realObjId != en->settings.objectId)
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating animation complete.", en->npcId);
+    #endif            
 }
 
 void Update_HeadWaistRot(NpcMaker *en, PlayState* playState)
@@ -262,6 +294,10 @@ void Update_HeadWaistRot(NpcMaker *en, PlayState* playState)
 
 void Update_Conversation(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating conversation status.", en->npcId);
+    #endif    
+
     int talkState = Message_GetState(&playState->msgCtx);
 
     // Checking if the player has talked to the NPC.
@@ -331,10 +367,18 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
         // Setting textbox number to maximum, so that any AWAIT TEXTBOX_NUM commands pass.
         en->textboxNum = __INT8_MAX__;
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Conversation status updated.", en->npcId);
+    #endif       
 }
 
 void Update_HitsReaction(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Checking for hits.", en->npcId);
+    #endif    
+
     en->wasHitThisFrame = en->collider.base.acFlags & AC_HIT;
 
     // If we're riding something, that thing sets up our hit reacting, so we don't do anything here.
@@ -390,10 +434,18 @@ void Update_HitsReaction(NpcMaker* en, PlayState* playState)
             Setup_Animation(en, playState, ANIM_IDLE, true, false, false, false);
         }
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Checking for hits complete.", en->npcId);
+    #endif       
 }
 
 void Update_Collision(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating collision.", en->npcId);
+    #endif    
+
     // Update the collider
     Collider_UpdateCylinder(&en->actor, &en->collider);
 
@@ -409,10 +461,18 @@ void Update_Collision(NpcMaker* en, PlayState* playState)
 
     if (en->collider.base.acFlags & AC_ON)
         CollisionCheck_SetAC(playState, &playState->colChkCtx, &en->collider.base);
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating collision complete.", en->npcId);
+    #endif 
 }
 
 void Update_ModelAlpha(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating model transparency.", en->npcId);
+    #endif   
+
     if (en->settings.fadeOut)
     {
         if (en->actor.xzDistToPlayer > FADE_OUT_DISTANCE && en->curAlpha)
@@ -436,4 +496,9 @@ void Update_ModelAlpha(NpcMaker* en, PlayState* playState)
         en->curAlpha = en->settings.alpha;
         en->actor.shape.shadowAlpha = SHADOW_ALPHA;
     }    
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Updating model transparency complete.", en->npcId);
+    #endif   
+
 }

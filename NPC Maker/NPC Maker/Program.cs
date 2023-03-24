@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace NPC_Maker
 {
@@ -10,11 +14,20 @@ namespace NPC_Maker
         public static string ExecPath = "";
         public static bool IsRunningUnderMono = false;
 
+        public static FileSystemWatcher Watcher;
+        public static Process CodeEditorProcess;
+
+        public static string SettingsFilePath;
+        public static NPCMakerSettings Settings;
+
+        [DllImport("kernel32.dll")]
+        private static extern bool AttachConsole(int dwProcessId);
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -23,6 +36,7 @@ namespace NPC_Maker
             Application.CurrentCulture = ci;
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+            SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
 
             Type t = Type.GetType("Mono.Runtime");
 
@@ -38,7 +52,52 @@ namespace NPC_Maker
 
             }
 
-            Application.Run(new MainWindow());
+            Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
+
+
+            if (args.Length == 0)
+            {
+                Application.Run(new MainWindow());
+                FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
+            }
+            else
+            {
+                AttachConsole(-1);
+                Console.WriteLine();
+
+                if (args[0].ToUpper() == "/?" || args[0].ToUpper() == "-HELP" || args.Length != 2)
+                {
+                    Console.WriteLine($"Zelda Ocarina of Time NPC Creation Tool v.{FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}");
+                    Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj]");
+                    Console.WriteLine("Press ENTER to exit...");
+                }
+                else if (args.Length == 2)
+                {
+                    NPCFile InFile = null;
+
+                    try
+                    {
+                        InFile = FileOps.ParseNPCJsonFile(args[0]);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error reading input JSON:" + ex.Message);
+                    }
+
+                    try
+                    {
+                        Console.WriteLine("Writing output ZOBJ...");
+                        FileOps.SaveBinaryFile(args[1], InFile, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error writing output:" + ex.Message);
+                    }
+
+                    Console.WriteLine("Press ENTER to exit...");
+                }
+            }
+
         }
     }
 }

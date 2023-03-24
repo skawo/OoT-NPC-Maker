@@ -326,6 +326,7 @@ typedef enum IfWhileSubId
     IF_ROOM_ID,
 
     IF_CURRENT_STATE,
+    IF_CCALL,
 
 } IfWhileSubId;
 
@@ -368,6 +369,7 @@ typedef enum AwaitSubId
     AWAIT_EXT_VARF,
 
     AWAIT_CURRENT_STATE,
+    AWAIT_CCALL,
 
 } AwaitSubId;
 

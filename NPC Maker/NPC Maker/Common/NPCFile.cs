@@ -124,6 +124,8 @@ namespace NPC_Maker
 
         public bool ExistInAllRooms { get; set; } 
 
+        public CCodeEntry EmbeddedOverlayCode { get; set; }
+
         public NPCEntry()
         {
             NPCName = "";
@@ -222,6 +224,8 @@ namespace NPC_Maker
 
             NumVars = 2;
             NumFVars = 2;
+
+            EmbeddedOverlayCode = new CCodeEntry();
         }
 
         public List<OutputColorEntry> ParseColorEntries()
@@ -835,6 +839,35 @@ namespace NPC_Maker
             Color = _Color;
             ObjectID = _ObjectID;
             FileStart = _FileStart;
+        }
+    }
+
+    public class CCodeEntry
+    {
+        public string Code { get; set; }
+        public List<KeyValuePair<string, UInt32>> Functions { get; set; }
+
+        public int[,] FuncsRunWhen { get; set; }
+
+        public CCodeEntry(string _Code = "", List<KeyValuePair<string, UInt32>> _Funcs = null, int[,] _FuncsRunWhen = null)
+        {
+            Code = _Code;
+            Functions = _Funcs;
+
+            if (Functions == null)
+                Functions = new List<KeyValuePair<string, UInt32>>();
+
+            FuncsRunWhen = _FuncsRunWhen;
+
+            if (FuncsRunWhen == null)
+                FuncsRunWhen = new int[5, 2]
+                {
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                }; 
         }
     }
 }

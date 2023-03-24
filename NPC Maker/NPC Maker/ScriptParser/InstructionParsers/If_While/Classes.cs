@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NPC_Maker.Scripts
 {
@@ -38,6 +39,50 @@ namespace NPC_Maker.Scripts
             Helpers.Ensure4ByteAlign(Data);
 
             ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+
+            return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + SubID.ToString() + " " + GotoTrue.ToString() + " " + GotoFalse.ToString();
+        }
+    }
+
+    public class InstructionIfWhileCCall : InstructionIfWhile
+    {
+        public UInt32 Func;
+        public byte IsBool;
+
+        public InstructionIfWhileCCall(byte _ID, byte _SubID, ScriptVarVal _Value, UInt32 _FuncAddr, byte _IsBool, Lists.ConditionTypes _Condition, int _EndIfLineNo, int _ElseLineNo, string LabelStr)
+                             : base(_ID, _SubID, _Value, _Condition, _EndIfLineNo, _ElseLineNo, LabelStr )
+        {
+            Condition = (byte)_Condition;
+            Value = _Value;
+            Func = _FuncAddr;
+            ElseLineNo = _ElseLineNo;
+            EndIfLineNo = _EndIfLineNo;
+            IsBool = _IsBool;
+            GotoTrue = new InstructionLabel("__IFTRUE__" + LabelStr);
+            GotoFalse = new InstructionLabel("__IFFALSE__" + LabelStr);
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+
+            List<byte> Data = new List<byte>();
+
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Value.Vartype, IsBool, 4), Data);
+            Helpers.AddObjectToByteList(Condition, Data);
+            Helpers.AddObjectToByteList(Value.Value, Data);
+            Helpers.AddObjectToByteList(Func, Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoTrue, ref Data);
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoFalse, ref Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
 
             return Data.ToArray();
         }

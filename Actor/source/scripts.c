@@ -27,8 +27,16 @@ inline ScrInstr* Scripts_GetInstrPtr(ScriptInstance* script, u32 instruction_num
 
 void Scripts_Main(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: ******* Scripts ******* ", en->npcId, playState->gameplayFrames);
+    #endif
+    
     for (int i = 0; i < en->scripts->numScripts; i++)
     {
+        #if LOGGING == 1
+            en->curScriptNum = i;
+        #endif
+
         ScriptInstance* script = &en->scriptInstances[i];
 
         if (script->scriptPtr != NULL)
@@ -48,12 +56,22 @@ void Scripts_Main(NpcMaker* en, PlayState* playState)
                 }
 
                 if (script->waitTimer != 0)
+                {
+                    #if LOGGING == 1
+                        osSyncPrintf("_[%2d, %1d]: WAITING for %02d more frames.", en->npcId, en->curScriptNum, script->waitTimer);
+                    #endif
+
                     script->waitTimer--;
+                }
                 else
                     while(Scripts_Execute(en, playState, script));
             }
         }   
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: ******* Scripts End *******", en->npcId, playState->gameplayFrames);
+    #endif
 }
 
 void Scripts_ResponseInstruction(NpcMaker* en, PlayState* playState, ScriptInstance* script)
@@ -114,6 +132,7 @@ void* ScriptFuncs[] =
     &Scripts_InstructionFadeIn,             // FADEIN
     &Scripts_InstructionFadeOut,            // FADEOUT
     &Scripts_InstructionQuake,              // QUAKE
+    &Scripts_InstructionCCall,              // CCALL
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -129,7 +148,7 @@ bool Scripts_Execute(NpcMaker* en, PlayState* playState, ScriptInstance* script)
 bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: SAVE", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: SAVE", en->npcId, en->curScriptNum);
     #endif		
 
     Play_SaveSceneFlags(playState);
@@ -139,10 +158,37 @@ bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance*
     return SCRIPT_CONTINUE;
 }
 
+bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrCCall* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_[%2d, %1d], : CCALL", en->npcId, en->curScriptNum);
+    #endif		
+
+    float out = NpcMaker_RunCFunc(en, playState, in->funcOffs); 
+    
+    if (in->varType > 1)
+    {
+        u32 valt;
+        void* addr = Scripts_RamSubIdSetup(en, playState, in->DestVar.ui32, SUBT_GLOBAL8 - 2 + in->varType, &valt);
+
+        switch (valt)
+        {
+            case INT8:      AVAL(addr, s8, 0) = out; break;
+            case INT16:     AVAL(addr, s16, 0) = out; break;
+            case INT32:     AVAL(addr, s32, 0) = out; break;
+            case FLOAT:     AVAL(addr, float, 0) = out; break;
+            default: break;
+        }
+    }
+
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
 bool Scripts_InstructionQuake(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrQuake* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: QUAKE", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: QUAKE", en->npcId, en->curScriptNum);
     #endif		
 
     s16 quakeId = Quake_Add(GET_ACTIVE_CAM(playState), Scripts_GetVarval(en, playState, in->varTypeType, in->type, false));
@@ -157,7 +203,7 @@ bool Scripts_InstructionQuake(NpcMaker* en, PlayState* playState, ScriptInstance
 bool Scripts_InstructionFadeIn(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrFade* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: FADEIN", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: FADEIN", en->npcId, en->curScriptNum);
     #endif		
 
     if (playState->envCtx.screenFillColor[3] != 0)
@@ -183,7 +229,7 @@ bool Scripts_InstructionFadeIn(NpcMaker* en, PlayState* playState, ScriptInstanc
 bool Scripts_InstructionFadeOut(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrFade* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: FADEOUT", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: FADEOUT", en->npcId, en->curScriptNum);
     #endif		
 
     bool firstRun = Scripts_SetupTemp(script, in);
@@ -216,7 +262,7 @@ bool Scripts_InstructionFadeOut(NpcMaker* en, PlayState* playState, ScriptInstan
 bool Scripts_InstructionNop(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: NOP", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: NOP", en->npcId, en->curScriptNum);
     #endif		
 	
     script->curInstrNum++; 
@@ -226,7 +272,7 @@ bool Scripts_InstructionNop(NpcMaker* en, PlayState* playState, ScriptInstance* 
 bool Scripts_InstructionCloseTextbox(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: CLOSE TEXTBOX", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: CLOSE TEXTBOX", en->npcId, en->curScriptNum);
     #endif		
 	
     playState->msgCtx.msgMode = MSGMODE_TEXT_CLOSING; 
@@ -237,7 +283,7 @@ bool Scripts_InstructionCloseTextbox(NpcMaker* en, PlayState* playState, ScriptI
 bool Scripts_InstructionForceTalk(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: FORCE TALK", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: FORCE TALK", en->npcId, en->curScriptNum);
     #endif	
 	
     en->isTalking = true; 
@@ -249,7 +295,7 @@ bool Scripts_InstructionForceTalk(NpcMaker* en, PlayState* playState, ScriptInst
 bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrParticle* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: PARTICLE", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: PARTICLE", en->npcId, en->curScriptNum);
     #endif
 
     Vec3f pos = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
@@ -272,6 +318,7 @@ bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInsta
             Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
         }
     }
+
 
     Vec3f accel = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->accelXType, in->accelYType, in->accelZType}, (ScriptVarval[]){in->accelX, in->accelY, in->accelZ}, 100);
     Vec3f vel = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->velXType, in->velYType, in->velZType}, (ScriptVarval[]){in->velX, in->velY, in->velZ}, 100);
@@ -360,7 +407,7 @@ bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInsta
 bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrIf* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: IF/WHILE with subtype %02d.", en->npcId, in->subId);
+        osSyncPrintf("_[%2d, %1d]: IF/WHILE with subtype %02d.", en->npcId, en->curScriptNum, in->subId);
     #endif
 
     u16 branch = script->curInstrNum + 1;
@@ -545,6 +592,18 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
             branch = Scripts_IfValue(en, playState, i, in, INT32); 
             break;
         }
+        case IF_CCALL:
+        {
+            ScrInstrIfCCall* instr = (ScrInstrIfCCall*)in;
+            float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs);
+            
+            if (!instr->isBool)
+                branch = Scripts_IfValueCommon(en, playState, out, FLOAT, instr->condition, instr->varType, instr->value, instr->trueInstrNum, instr->falseInstrNum);
+            else
+                branch = Scripts_IfCommon(en, playState, out, instr->condition, instr->trueInstrNum, instr->falseInstrNum);
+
+            break;   
+        }
         case SUBT_RANDOM:
         {
             ScrInstrDoubleIf* instr = (ScrInstrDoubleIf*)in;
@@ -599,7 +658,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
 bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrAwait* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: AWAIT with subtype %02d.", en->npcId, in->subId);
+        osSyncPrintf("_[%2d, %1d]: AWAIT with subtype %02d.", en->npcId, en->curScriptNum, in->subId);
     #endif
     
     bool firstRun = Scripts_SetupTemp(script, in);
@@ -709,6 +768,13 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
             conditionMet = en->actor.bgCheckFlags & (1 << (int)Scripts_GetVarval(en, playState, in->varType, in->value, false));
             break;
         }
+        case AWAIT_CCALL:
+        {
+            ScrInstrAwaitCCall* instr = (ScrInstrAwaitCCall*)in;
+            float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs); 
+            conditionMet = Scripts_AwaitValue(en, playState, out, instr->isBool ? BOOL : FLOAT, instr->condition, instr->varType, instr->value);
+            break;
+        }
         case SUBT_GLOBAL8:
         case SUBT_GLOBAL16:
         case SUBT_GLOBAL32:
@@ -760,7 +826,10 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
 bool Scripts_InstructionGoto(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGoto* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: GOTO going to %04d.", en->npcId, in->instrNum);
+        if (in->instrNum == 65535)
+            osSyncPrintf("_[%2d, %1d]: RETURN", en->npcId, en->curScriptNum);
+        else
+            osSyncPrintf("_[%2d, %1d]: GOTO going to %04d.", en->npcId, en->curScriptNum, in->instrNum);
     #endif
 
     script->curInstrNum = in->instrNum == SCRIPT_RETURN ? script->startInstrNum : in->instrNum;
@@ -770,7 +839,7 @@ bool Scripts_InstructionGoto(NpcMaker* en, PlayState* playState, ScriptInstance*
 bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrSet* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: SET with subtype %02d.", en->npcId, in->subId);
+        osSyncPrintf("_[%2d, %1d]: SET with subtype %02d.", en->npcId, en->curScriptNum, in->subId);
     #endif
 
     switch (in->subId)
@@ -1255,7 +1324,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
 bool Scripts_InstructionEnableTalking(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrTextbox* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: ENABLE_TALKING", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: ENABLE_TALKING", en->npcId, en->curScriptNum);
     #endif  
 
     if (en->wasHit)
@@ -1277,7 +1346,7 @@ bool Scripts_InstructionEnableTalking(NpcMaker* en, PlayState* playState, Script
 bool Scripts_InstructionShowTextbox(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrTextbox* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: SHOW_TEXTBOX", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: SHOW_TEXTBOX", en->npcId, en->curScriptNum);
     #endif  
 
     u32 id = Scripts_GetTextId(en, playState, in->vartypeChild, in->childMsgId, in->varTypeAdult, in->adultMsgId);
@@ -1306,7 +1375,7 @@ bool Scripts_InstructionShowTextbox(NpcMaker* en, PlayState* playState, ScriptIn
 bool Scripts_InstructionEnableTrade(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrTrade* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: ENABLE_TRADE", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: ENABLE_TRADE", en->npcId, en->curScriptNum);
     #endif  
 
     if (en->wasHit)
@@ -1370,7 +1439,7 @@ bool Scripts_InstructionEnableTrade(NpcMaker* en, PlayState* playState, ScriptIn
 bool Scripts_InstructionFace(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrFace* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: FACE", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: FACE", en->npcId, en->curScriptNum);
     #endif      
 
     if (en->pickedUpState != STATE_IDLE)
@@ -1452,7 +1521,7 @@ bool Scripts_InstructionRotation(NpcMaker* en, PlayState* playState, ScriptInsta
     #define ROT ((Vec3f*)&script->fTempValues[1])
 
     #if LOGGING == 1
-        osSyncPrintf("_%2d: ROTATE", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: ROTATE", en->npcId, en->curScriptNum);
     #endif  
 
     bool firstRun = Scripts_SetupTemp(script, in);
@@ -1513,7 +1582,7 @@ bool Scripts_InstructionRotation(NpcMaker* en, PlayState* playState, ScriptInsta
 bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrPosition* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: POSITION", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: POSITION", en->npcId, en->curScriptNum);
     #endif 
 
     #define ACTOR ((Actor*)script->tempValues[0])
@@ -1655,7 +1724,7 @@ bool Scripts_InstructionScale(NpcMaker* en, PlayState* playState, ScriptInstance
     #define SCALE (script->fTempValues[1])
 
     #if LOGGING == 1
-        osSyncPrintf("_%2d: SCALE", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: SCALE", en->npcId, en->curScriptNum);
     #endif  
 
     bool firstRun = Scripts_SetupTemp(script, in);
@@ -1718,7 +1787,7 @@ bool Scripts_InstructionScale(NpcMaker* en, PlayState* playState, ScriptInstance
 bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrPlay* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: PLAY", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: PLAY", en->npcId, en->curScriptNum);
     #endif     
 
     u32 value = Scripts_GetVarval(en, playState, in->varType, in->value, false);
@@ -1755,7 +1824,7 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
 bool Scripts_InstructionKill(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrKill* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: KILL", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: KILL", en->npcId, en->curScriptNum);
     #endif   
 
     Actor* actor = Scripts_GetActorByType(en, playState, in->subId, in->actorNumType, in->actorNum);
@@ -1775,7 +1844,7 @@ bool Scripts_InstructionKill(NpcMaker* en, PlayState* playState, ScriptInstance*
 bool Scripts_InstructionOcarina(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrOcarina* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: OCARINA", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: OCARINA", en->npcId, en->curScriptNum);
     #endif   
 
     u32 song = Scripts_GetVarval(en, playState, in->ocaSongType, in->ocaSong, false);
@@ -1862,7 +1931,7 @@ bool Scripts_InstructionOcarina(NpcMaker* en, PlayState* playState, ScriptInstan
 bool Scripts_InstructionSpawn(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrSpawn* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: SPAWN", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: SPAWN", en->npcId, en->curScriptNum);
     #endif
     
     bool setAsRef = in->posType >= 10;
@@ -1907,7 +1976,7 @@ bool Scripts_InstructionSpawn(NpcMaker* en, PlayState* playState, ScriptInstance
 bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrItem* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: ITEM", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: ITEM", en->npcId, en->curScriptNum);
     #endif   
 
     u32 item = Scripts_GetVarval(en, playState, in->itemVarType, in->item, true);
@@ -2018,7 +2087,7 @@ bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance*
 bool Scripts_InstructionWarp(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrWarp* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: WARP", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: WARP", en->npcId, en->curScriptNum);
     #endif  
 
     u32 warpId = Scripts_GetVarval(en, playState, in->warpIdvarType, in->warpId, false);
@@ -2038,7 +2107,7 @@ bool Scripts_InstructionWarp(NpcMaker* en, PlayState* playState, ScriptInstance*
 bool Scripts_InstructionScript(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrScript* in)
 {
     #if LOGGING == 1
-        osSyncPrintf("_%2d: SCRIPT", en->npcId);
+        osSyncPrintf("_[%2d, %1d]: SCRIPT", en->npcId, en->curScriptNum);
     #endif  
 
     u32 scriptID = Scripts_GetVarval(en, playState, in->scriptIdVarType, in->scriptId, false);

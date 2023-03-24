@@ -7,6 +7,10 @@
 
 void Draw_Debug(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: DEBUG DRAW", en->npcId);
+    #endif   
+
     #if COLLISION_VIEWER == 1
 
         if (en->settings.showColsDebugOn && en->settings.hasCollision)
@@ -93,7 +97,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 
             GfxPrint_SetPos(&printer, 3, 1);
 
-            GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08x]", MAJOR_VERSION, MINOR_VERSION, playState->csCtx.frames, en->dbgVar2);
+            GfxPrint_Printf(&printer, "DEBUG v.%01d.%01d [%08x] [%08f]", MAJOR_VERSION, MINOR_VERSION, en->dbgVar, en->fDbgVar);
 
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);
@@ -105,6 +109,10 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
         #endif
 
     #endif    
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: DEBUG DRAW END", en->npcId);
+    #endif 
 }
 
 inline u32 Draw_GetDrawDestType(NpcMaker* en, PlayState* playState)
@@ -122,6 +130,10 @@ void Draw_Setup(NpcMaker* en, PlayState* playState, int drawType)
 
 void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing light", en->npcId);
+    #endif 
+
     Vec3f transl_in_dir;
     Math_Vec3s_ToVec3f(&transl_in_dir, &en->settings.lightPosOffset);
     Math_AffectMatrixByRot(en->actor.shape.rot.y, &transl_in_dir, NULL);
@@ -140,11 +152,19 @@ void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
                             en->settings.lightGlow ? Rand_S16Offset(en->settings.lightRadius, 15) : en->settings.lightRadius,
                             en->settings.lightGlow ? LIGHT_POINT_GLOW : LIGHT_POINT_NOGLOW);
 
-    }    
+    }  
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing light complete", en->npcId);
+    #endif   
 }
 
 void Draw_LightsRebind(NpcMaker* en, PlayState* playState) 
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Rebinding lights", en->npcId);
+    #endif 
+
     Vec3f bindPos = en->actor.world.pos;
     bindPos.y += ((en->actor.focus.pos.y - en->actor.world.pos.y) / 2);
 
@@ -152,6 +172,10 @@ void Draw_LightsRebind(NpcMaker* en, PlayState* playState)
     lights = LightContext_NewLights(&playState->lightCtx, playState->state.gfxCtx);
     Lights_BindAll(lights, playState->lightCtx.listHead, &bindPos);
     Lights_Draw(lights, playState->state.gfxCtx);
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Rebinding lights done", en->npcId);
+    #endif     
 }
 
 inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
@@ -175,6 +199,10 @@ inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
 // Matrix should be set before this is called.
 void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing extra display list at limb %2d", en->npcId, dList->limb);
+    #endif 
+
     s32 object = R_OBJECT(en, dList->objectId);
     u32 dListOffset = object == OBJECT_RAM ? dList->offset : OFFSET_ADDRESS(6, dList->offset);
 
@@ -219,6 +247,10 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
         gSPSegment(dest->p++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, playState), en->settings.fileStart));
 
     Draw_SetEnvColor(&dest->p, en->curColor, en->curAlpha);
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing extra display list complete", en->npcId);
+    #endif 
 }
 
 void Draw_AffectMatrix(ExDListEntry dlist, Vec3f* translation, Vec3s* rotation)
@@ -266,6 +298,10 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
 {
     NpcMaker* en = (NpcMaker*)instance;
     int sLimbNumber = limbNumber - 1;
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing limb %2d", en->npcId, sLimbNumber);
+    #endif
 
 #pragma region LimbRotations
 
@@ -362,11 +398,17 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
 
 #pragma endregion
 
+    NpcMaker_RunCFunc(en, playState, en->CFuncs[3]);
+
     return 0;
 }
 
 void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Setting up segment data.", en->npcId);
+    #endif 
+
     if (en->exSegData == NULL)
         return;
 
@@ -407,6 +449,10 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
             gSPSegment(POLY_OPA.p++, i + 8, pointer + data->offset + (R_FILESTART(en, data->fileStart)));
         }
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Setting up segment data done.", en->npcId);
+    #endif     
 }
 
 void Draw_SetGlobalEnvColor(NpcMaker* en, PlayState* playState)
@@ -429,6 +475,10 @@ void Draw_SetGlobalEnvColor(NpcMaker* en, PlayState* playState)
 
 void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 {
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing static ExDLists.", en->npcId);
+    #endif  
+
     for (int i = 0; i < en->numExDLists; i++)
     {
         ExDListEntry dlist = en->extraDLists[i];
@@ -483,6 +533,10 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
             }
         }
     }   
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing static ExDLists done.", en->npcId);
+    #endif 
 }
 
 void Draw_Model(NpcMaker* en, PlayState* playState)
@@ -503,6 +557,10 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     // Draw static exdlists (ones not attached to a limb)
     if (en->hasStaticExDlists)
         Draw_StaticExtDLists(en, playState);
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing the skeleton.", en->npcId);
+    #endif  
 
     // Draw skeleton
     if (en->settings.objectId > 0)
@@ -554,4 +612,8 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
             default: break;
         }
     }
+
+    #if LOGGING == 1
+        osSyncPrintf("_%2d: Drawing the skeleton complete.", en->npcId);
+    #endif  
 }

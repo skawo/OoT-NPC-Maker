@@ -104,16 +104,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CCode.cs" />
     <Compile Include="Common\Defaults.cs" />
     <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Common\NPCMakerSettings.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Fade\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Fade\Fade.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Quake\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Quake\Quake.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Save\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Save\Save.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Player_Talk\Classes.cs" />
@@ -148,6 +148,10 @@
     <Compile Include="ScriptParser\InstructionParsers\Trade\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Script\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Script\Script.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\CCall\Classes.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\CCall\CCall.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\Quake\Classes.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\Quake\Quake.cs" />
     <Compile Include="ScriptParser\ScriptHelpers.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Await\Classes.cs" />
     <Compile Include="ScriptParser\Exceptions.cs" />
@@ -233,6 +237,12 @@
     <Compile Include="Windows\PickableListEntryEdit.Designer.cs">
       <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Controls\ScriptEditor.resx">
       <DependentUpon>ScriptEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -262,6 +272,9 @@
     <EmbeddedResource Include="Windows\PickableListEntryEdit.resx">
       <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Dicts\Actors.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -287,13 +300,17 @@
     <None Include="Dicts\SFX.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\settings.json" />
+    <None Include="Resources\tasks.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="nUhhuh.ico" />
+    <None Include="Resources\EmbeddedOverlay.c" />
     <Content Include="uhhuh.ico" />
+    <None Include="Resources\c_cpp_properties.json" />
     <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>

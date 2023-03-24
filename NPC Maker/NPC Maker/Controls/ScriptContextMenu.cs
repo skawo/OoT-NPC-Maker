@@ -29,9 +29,9 @@ namespace NPC_Maker
         private static ToolStripMenuItem linkAnimsStripMenuItem;
         private static ToolStripMenuItem damageTypesStripMenuItem;
         private static ToolStripMenuItem stateTypesStripMenuItem;
+        private static ToolStripMenuItem cFunctionsStripMenuItem;
         private static ToolStripMenuItem quakeTypesStripMenuItem;
-
-        public static void MakeContextMenu()
+        public static void MakeContextMenu(CCodeEntry CodeEntry)
         {
             ContextMenuStrip = new ContextMenuStrip();
 
@@ -52,6 +52,7 @@ namespace NPC_Maker
             linkAnimsStripMenuItem = new ToolStripMenuItem();
             damageTypesStripMenuItem = new ToolStripMenuItem();
             stateTypesStripMenuItem = new ToolStripMenuItem();
+            cFunctionsStripMenuItem = new ToolStripMenuItem();
             quakeTypesStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
@@ -73,6 +74,7 @@ namespace NPC_Maker
                                                                     actorstoolStripMenuItem,
                                                                     objectstoolStripMenuItem,
                                                                     linkAnimsStripMenuItem,
+                                                                    cFunctionsStripMenuItem,
                                                                 });
 
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
@@ -91,6 +93,7 @@ namespace NPC_Maker
             ocarinaSongstoolStripMenuItem.Text = "Ocarina songs";
             particlestoolStripMenuItem.Text = "Particles";
             quakeTypesStripMenuItem.Text = "Quake types";
+            cFunctionsStripMenuItem.Text = "C Functions";
 
             soundEffectsToolStripMenuItem.Text = "Sound effects";
             soundEffectsToolStripMenuItem.Click += SoundEffectsToolStripMenuItem_Click;
@@ -137,6 +140,13 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), particlestoolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.StateTypes)), stateTypesStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuakeTypes)), quakeTypesStripMenuItem);
+
+            List<string> FunctionNames = new List<string>();
+
+            foreach (var kvp in CodeEntry.Functions)
+                FunctionNames.Add(kvp.Key);
+
+            AddItemCollectionToToolStripMenuItem(FunctionNames.ToArray(), cFunctionsStripMenuItem);
         }
 
         private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)

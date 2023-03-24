@@ -59,5 +59,68 @@ namespace NPC_Maker.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;configurations&quot;: [
+        ///    {
+        ///      &quot;name&quot;: &quot;MIPS&quot;,
+        ///      &quot;includePath&quot;: [
+        ///        &quot;${workspaceFolder}/**&quot;,
+        ///        &quot;../gcc/mips64/include/z64hdr/**&quot;,
+        ///        &quot;../gcc/mips64/include&quot;
+        ///      ],
+        ///      &quot;defines&quot;: [
+        ///        &quot;_DEBUG&quot;,
+        ///        &quot;UNICODE&quot;,
+        ///        &quot;_UNICODE&quot;,
+        ///        &quot;_LANGUAGE_C &quot;
+        ///      ],
+        ///      &quot;compilerPath&quot;: &quot;C:/msys64/mingw32/bin/gcc.exe&quot;
+        ///    }
+        ///  ],
+        ///  &quot;version&quot;: 4
+        ///}.
+        /// </summary>
+        internal static string c_cpp_properties {
+            get {
+                return ResourceManager.GetString("c_cpp_properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #include &lt;z64hdr/oot_mq_debug/z64hdr.h&gt;
+        ///
+        ////*
+        ///To make NPC Maker able to use your function, it must have the following form:
+        ///
+        ///1. Its name must have a NpcM_type_ prefix (eg. NpcM_s32_Function),
+        ///2. Prefix type should match return type,
+        ///3. Return type should be one of the following: u8, s8, u16, s16, u32, s32, float
+        ///4. Must have two parameters: NpcMaker* and PlayState*
+        ///5. A unique name
+        ///
+        ///Examples of valid function signatures are thus:
+        ///
+        ///s32 NpcM_s32_Function(NpcMaker* npc, PlayState* play)
+        ///float NpcM_ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EmbeddedOverlay {
+            get {
+                return ResourceManager.GetString("EmbeddedOverlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///    &quot;files.associations&quot;: {
+        ///    },
+        ///}.
+        /// </summary>
+        internal static string settings {
+            get {
+                return ResourceManager.GetString("settings", resourceCulture);
+            }
+        }
     }
 }

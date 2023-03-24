@@ -26,7 +26,7 @@ extern RomFile* objectTable;
 
 void Rom_LoadObject(int objId, void *dram_addr);
 void Rom_LoadDataFromObjectFromROM(int objId, void* dram_addr, u32 offset_into_file, size_t size);
-void Rom_LoadObjectIfUnloaded(PlayState* playState, s16 object_id);
+s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 object_id);
 bool Rom_SetObjectToActor(Actor* en, PlayState*playState, u16 object, s32 fileStart);
 void* Rom_GetObjectDataPtr(u16 object_id, PlayState*playState);
 MessageEntry* Rom_GetMessageEntry(s16 msg_id);

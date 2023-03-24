@@ -87,7 +87,12 @@ namespace NPC_Maker
         private static void H_SetStyle(List<string> List, Style s, Range r)
         {
             foreach (string KWord in List)
-                r.SetStyle(s, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            {
+                if (KWord == "CCALL")
+                    r.SetStyle(SyntaxHighlighter.RedStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                else
+                    r.SetStyle(s, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            }
         }
 
     }

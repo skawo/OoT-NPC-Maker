@@ -33,7 +33,7 @@ namespace NPC_Maker.Windows
                     Text = Entry.Name
                 };
 
-                ScriptEditor Se = new ScriptEditor(ref Dummy2, ref Dummy, Entry, SyntaxH, CheckSynt) { Dock = DockStyle.Fill };
+                ScriptEditor Se = new ScriptEditor(ref Dummy2, ref Dummy, Entry, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax) { Dock = DockStyle.Fill };
                 Page.Controls.Add(Se);
 
                 Tab.TabPages.Add(Page);
@@ -59,7 +59,7 @@ namespace NPC_Maker.Windows
             ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
             EditedFile.GlobalHeaders.Add(Sc);
 
-            ScriptEditor Se = new ScriptEditor(ref Dummy2, ref Dummy, Sc, SyntaxHeader, CheckSyntax)
+            ScriptEditor Se = new ScriptEditor(ref Dummy2, ref Dummy, Sc, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax)
             {
                 Dock = DockStyle.Fill
             };

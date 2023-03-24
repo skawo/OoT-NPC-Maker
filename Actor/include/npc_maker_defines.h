@@ -132,6 +132,21 @@
     #define MIN(a, b)               ((a) < (b) ? (a) : (b))
 #endif
 
+typedef enum cfunc_update_when
+{
+	BEFORE_SCRIPTS = 0,
+	INSTEAD_OF_SCRIPTS = 1,
+	AFTER_SCRIPTS = 2,
+	REPLACE_UPDATE = 3,
+} cfunc_update_when;
+
+typedef enum cfunc_draw_when
+{
+	BEFORE_MODEL = 0,
+	AFTER_MODEL = 1,
+	REPLACE_DRAW = 2,
+} cfunc_draw_when;
+
 typedef enum dlist_visibility
 {
 	NOT_VISIBLE = 0,

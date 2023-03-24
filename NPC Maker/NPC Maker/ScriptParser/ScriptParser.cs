@@ -528,7 +528,7 @@ namespace NPC_Maker.Scripts
                     {
                         case (int)Lists.Instructions.IF:
                         case (int)Lists.Instructions.WHILE:
-                            Instructions.AddRange(ParseIfWhileInstruction(InstructionID, Lines, SplitLine, ref i)); break;
+                            Instructions.AddRange(ParseIfWhileInstruction(InstructionID, Entry.EmbeddedOverlayCode, Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.OCARINA:
                             Instructions.AddRange(ParseOcarinaInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.TALK:
@@ -538,7 +538,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.TRADE: Instructions.Add(ParseTradeInstruction(Lines, SplitLine, ref i)); break;
                         case (int)Lists.Instructions.NOP: Instructions.Add(ParseNopInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SET: Instructions.Add(ParseSetInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.AWAIT: Instructions.Add(ParseAwaitInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.AWAIT: Instructions.Add(ParseAwaitInstruction(Entry.EmbeddedOverlayCode, SplitLine)); break;
                         case (int)Lists.Instructions.SHOW_TEXTBOX: Instructions.Add(ParseShowTextboxInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SHOW_TEXTBOX_SP: Instructions.Add(ParseShowTextboxSPInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.ENABLE_TALKING: Instructions.Add(ParseEnableTalkingInstruction(SplitLine)); break;
@@ -558,9 +558,10 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.PICKUP: Instructions.Add(ParsePickupInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.RETURN: Instructions.Add(ParseReturnInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SAVE: Instructions.Add(ParseSaveInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.FADEIN: 
+                        case (int)Lists.Instructions.FADEIN:
                         case (int)Lists.Instructions.FADEOUT: Instructions.Add(ParseFadeInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.QUAKE: Instructions.Add(ParseQuakeInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.CCALL: Instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, SplitLine)); break;
                         default:
                             {
                                 byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);

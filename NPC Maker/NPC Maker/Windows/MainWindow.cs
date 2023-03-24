@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Text;
+using System.Text.RegularExpressions;
+
 
 namespace NPC_Maker
 {
@@ -15,6 +21,7 @@ namespace NPC_Maker
         int SelectedIndex = -1;
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
         private readonly System.Windows.Forms.Timer MsgPreviewTimer = new Timer();
+        public static List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
 
         public MainWindow()
         {
@@ -31,6 +38,15 @@ namespace NPC_Maker
                 Page.Controls.Add(sg);
             }
 
+
+            Combo_CodeEditor.SelectedIndexChanged -= Combo_CodeEditor_SelectedIndexChanged;
+            Combo_CodeEditor.Items.Clear();
+            Combo_CodeEditor.Items.AddRange(Enum.GetNames(typeof(CCode.CodeEditorEnum)));
+            Combo_CodeEditor.Text = Program.Settings.CodeEditor.ToString();
+            Textbox_CodeEditorArgs.Text = Program.Settings.CustomCodeEditorArgs;
+            TextBox_CodeEditorPath.Text = Program.Settings.CustomCodeEditorPath;
+            Combo_CodeEditor.SelectedIndexChanged += Combo_CodeEditor_SelectedIndexChanged;
+
             MsgPreviewTimer.Interval = 100;
             MsgPreviewTimer.Tick += MsgPreviewTimer_Tick;
             MsgPreviewTimer.Stop();
@@ -38,6 +54,15 @@ namespace NPC_Maker
             MessagesContextMenu.MakeContextMenu();
             MsgText.ContextMenuStrip = MessagesContextMenu.MenuStrip;
             MessagesContextMenu.SetTextBox(MsgText);
+
+            FunctionComboBoxes = new List<KeyValuePair<ComboBox, ComboBox>>()
+                        {
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnInit, null),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnUpdate, Combo_WhenOnUpdate ),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnDraw, Combo_WhenOnDraw ),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnLimb, null ),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnDelete, null ),
+                        };
 
             this.DoubleBuffered = true;
 
@@ -74,6 +99,16 @@ namespace NPC_Maker
                         e.Cancel = true;
                     }
                 }
+            }
+
+            try
+            {
+                if (Program.CodeEditorProcess != null)
+                    Program.CodeEditorProcess.Kill();
+            }
+            catch (Exception)
+            {
+
             }
         }
 
@@ -225,35 +260,34 @@ namespace NPC_Maker
             #region Script Tab Pages
             List<TabPage> ReusableTabPages = new List<TabPage>();
 
-            foreach (TabPage Page in TabControl.TabPages)
-            {
-                if ((string)Page.Tag == "SCRIPT")
-                    ReusableTabPages.Add(Page);
-            }
+            foreach (TabPage Page in TabControl_Scripts.TabPages)
+                ReusableTabPages.Add(Page);
 
             foreach (ScriptEntry ScriptT in SelectedEntry.Scripts)
             {
                 TabPage Page;
 
+                string PageName = ScriptT.Name == "" ? "Script" : ScriptT.Name;
+
                 if (ReusableTabPages.Count != 0)
                 {
                     Page = ReusableTabPages.First();
-                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
-                    Page.Text = ScriptT.Name;
+                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax);
+                    Page.Text = PageName;
                     ReusableTabPages.Remove(Page);
                 }
                 else
                 {
-                    Page = new TabPage(ScriptT.Name) { Tag = "SCRIPT" };
-                    TabControl.TabPages.Add(Page);
+                    Page = new TabPage(PageName);
+                    TabControl_Scripts.TabPages.Add(Page);
 
-                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked) { Dock = DockStyle.Fill };
+                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, ScriptT, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax) { Dock = DockStyle.Fill };
                     Page.Controls.Add(Se);
                 }
             }
 
             foreach (TabPage Page in ReusableTabPages)
-                TabControl.TabPages.Remove(Page);
+                TabControl_Scripts.TabPages.Remove(Page);
 
             #endregion
 
@@ -280,7 +314,7 @@ namespace NPC_Maker
             foreach (AnimationEntry Animation in SelectedEntry.Animations)
             {
                 if (SelectedEntry.AnimationType == 1)
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID)});
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
                 else
                     DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
             }
@@ -342,7 +376,102 @@ namespace NPC_Maker
 
             #endregion
 
+            #region CCode
+
+
+            string CompileErrors = "";
+
+            if (SelectedEntry.EmbeddedOverlayCode.Code != "")
+                CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+
+            TextBox_CompileMsg.Text = CompileErrors;
+
+            int Index = 0;
+
+            foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
+            {
+                ComboBox c = kvp.Key;
+                ComboBox w = kvp.Value;
+
+                c.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
+
+                if (w != null)
+                    w.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
+
+
+                if (SelectedEntry.EmbeddedOverlayCode.Functions == null || SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
+                    c.DataSource = null;
+                else
+                {
+                    c.DisplayMember = "Key";
+                    c.ValueMember = "Value";
+                    c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
+                    c.SelectedIndex = -1;
+
+                    if (SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 0] < c.Items.Count)
+                        c.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 0];
+                    else
+                        c.SelectedIndex = -1;
+
+                    if (w != null)
+                        w.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 1];
+                }
+
+                Index++;
+
+                c.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
+
+                if (w != null)
+                    w.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
+            }
+
+
+            #endregion
+
             TabControl.ResumeLayout();
+        }
+
+        private void TabControlScripts_MouseUp(object sender, MouseEventArgs e)
+        {
+            int PageClicked = -1;
+
+            for (int i = 0; i < TabControl_Scripts.TabCount; i++)
+            {
+                if (TabControl_Scripts.GetTabRect(i).Contains(e.Location))
+                    PageClicked = i;
+            }
+
+            if (PageClicked < 0)
+                return;
+
+            if (e.Button == MouseButtons.Right)
+            {
+                // Gotta select the menu so we can reuse the main menu strip code.
+                TabControl_Scripts.SelectedTab = TabControl_Scripts.TabPages[PageClicked];
+
+                ContextMenuStrip mn = new ContextMenuStrip();
+
+                ToolStripMenuItem renameScript = new ToolStripMenuItem();
+                ToolStripMenuItem deleteScript = new ToolStripMenuItem();
+                ToolStripMenuItem newScript = new ToolStripMenuItem();
+
+                mn.Items.AddRange(new ToolStripItem[] { newScript, renameScript, deleteScript });
+
+                renameScript.Size = new System.Drawing.Size(156, 22);
+                renameScript.Text = "Rename script";
+                renameScript.Click += RenameScript_Click;
+
+                deleteScript.Size = new System.Drawing.Size(156, 22);
+                deleteScript.Text = "Delete script";
+                deleteScript.Click += DeleteScript_Click;
+
+                newScript.Size = new System.Drawing.Size(156, 22);
+                newScript.Text = "New script";
+                newScript.Click += NewScript_Click;
+
+                mn.Show(TabControl_Scripts.PointToScreen(new Point(e.X, e.Y)));
+            }
+
         }
 
         #region MenuStrip
@@ -388,7 +517,7 @@ namespace NPC_Maker
 
             if (OFD.FileName != "")
             {
-                EditedFile = FileOps.ParseJSONFile(OFD.FileName);
+                EditedFile = FileOps.ParseNPCJsonFile(OFD.FileName);
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
                 if (EditedFile != null)
@@ -429,7 +558,7 @@ namespace NPC_Maker
             if (SFD.FileName != "")
             {
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                FileOps.SaveJSONFile(SFD.FileName, EditedFile);
+                FileOps.SaveNPCJSON(SFD.FileName, EditedFile);
             }
         }
 
@@ -443,7 +572,7 @@ namespace NPC_Maker
             else
             {
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                FileOps.SaveJSONFile(OpenedPath, EditedFile);
+                FileOps.SaveNPCJSON(OpenedPath, EditedFile);
             }
         }
 
@@ -499,7 +628,7 @@ namespace NPC_Maker
             if (EditedFile == null)
                 return;
 
-            Windows.GlobalHeader gh = new Windows.GlobalHeader(ref EditedFile, checkSyntaxToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
+            Windows.GlobalHeader gh = new Windows.GlobalHeader(ref EditedFile, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax);
             gh.ShowDialog();
         }
 
@@ -509,30 +638,19 @@ namespace NPC_Maker
             Window.ShowDialog();
         }
 
-        private void SyntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void NewScript_Click(object sender, EventArgs e)
         {
-            foreach (TabPage Page in TabControl.TabPages)
-            {
-                if ((string)Page.Tag == "SCRIPT")
-                {
-                    if (Page.Controls.Count != 0)
-                        (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting((sender as ToolStripMenuItem).Checked);
-
-                }
-            }
+            AddNewScriptToolStripMenuItem_Click(null, null);
         }
 
-        private void CheckSyntaxToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void DeleteScript_Click(object sender, EventArgs e)
         {
-            foreach (TabPage Page in TabControl.TabPages)
-            {
-                if ((string)Page.Tag == "SCRIPT")
-                {
-                    if (Page.Controls.Count != 0)
-                        (Page.Controls[0] as ScriptEditor).SetAutoParsing((sender as ToolStripMenuItem).Checked);
+            DeleteCurrentScriptToolStripMenuItem_Click(null, null);
+        }
 
-                }
-            }
+        private void RenameScript_Click(object sender, EventArgs e)
+        {
+            RenameCurrentScriptToolStripMenuItem_Click(null, null);
         }
 
         private void FileMenu_Click(object sender, EventArgs e)
@@ -564,9 +682,9 @@ namespace NPC_Maker
 
             if (OnTab)
             {
-                if ((string)TabControl.SelectedTab.Tag != "SCRIPT")
+                if (TabControl.SelectedTab != Tab5_Scripts)
                 {
-                    MessageBox.Show("Select a script tab first.");
+                    MessageBox.Show("Select the script tab first.");
                     return false;
                 }
             }
@@ -581,27 +699,26 @@ namespace NPC_Maker
 
             string ScriptName = GetScriptName();
 
-            if (SelectedEntry.Scripts.Count >= 255)
+            if (Name != "")
             {
-                MessageBox.Show("Cannot define more than 255 scripts.");
-                return;
+                if (SelectedEntry.Scripts.Count >= 255)
+                {
+                    MessageBox.Show("Cannot define more than 255 scripts.");
+                    return;
+                }
+
+                TabPage Page = new TabPage(ScriptName);
+                ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
+                SelectedEntry.Scripts.Add(Sc);
+
+                ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, Sc, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax)
+                {
+                    Dock = DockStyle.Fill
+                };
+
+                Page.Controls.Add(Se);
+                TabControl_Scripts.TabPages.Add(Page);
             }
-
-            TabPage Page = new TabPage(ScriptName)
-            {
-                Tag = "SCRIPT"
-            };
-
-            ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
-            SelectedEntry.Scripts.Add(Sc);
-
-            ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, Sc, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
-            {
-                Dock = DockStyle.Fill
-            };
-
-            Page.Controls.Add(Se);
-            TabControl.TabPages.Add(Page);
         }
 
         private void RenameCurrentScriptToolStripMenuItem_Click(object sender, EventArgs e)
@@ -609,13 +726,12 @@ namespace NPC_Maker
             if (!CheckScriptOpForValidity(true))
                 return;
 
-            string Name = GetScriptName(TabControl.SelectedTab.Text);
+            string Name = GetScriptName(TabControl_Scripts.SelectedTab.Text);
 
             if (Name != "")
             {
-
-                (TabControl.SelectedTab.Controls[0] as ScriptEditor).Script.Name = Name;
-                TabControl.SelectedTab.Text = Name;
+                (TabControl_Scripts.SelectedTab.Controls[0] as ScriptEditor).Script.Name = Name;
+                TabControl_Scripts.SelectedTab.Text = Name;
             }
         }
 
@@ -628,8 +744,8 @@ namespace NPC_Maker
 
             if (Res == DialogResult.Yes)
             {
-                SelectedEntry.Scripts.Remove((TabControl.SelectedTab.Controls[0] as ScriptEditor).Script);
-                TabControl.TabPages.Remove(TabControl.SelectedTab);
+                SelectedEntry.Scripts.Remove((TabControl_Scripts.SelectedTab.Controls[0] as ScriptEditor).Script);
+                TabControl_Scripts.TabPages.Remove(TabControl_Scripts.SelectedTab);
             }
         }
 
@@ -676,6 +792,8 @@ namespace NPC_Maker
 
             for (int i = 0; i < 8; i++)
                 Entry.Segments.Add(new List<SegmentEntry>());
+
+            Entry.Scripts.Add(new ScriptEntry() { Name = "Script" });
 
             EditedFile.Entries.Add(Entry);
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
@@ -754,7 +872,6 @@ namespace NPC_Maker
         #endregion
 
         #region Field changes
-
 
         private void Txb_ReactIfAtt_KeyUp(object sender, KeyEventArgs e)
         {
@@ -1976,7 +2093,7 @@ namespace NPC_Maker
             {
                 for (int i = 0; i < mp.MessageCount; i++)
                 {
-                    Bitmap bmpTemp = mp.GetPreview(i, improveMessagePreviewReadabilityToolStripMenuItem.Checked, 1.5f);
+                    Bitmap bmpTemp = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
                     grfx.DrawImage(bmpTemp, 0, bmpTemp.Height * i);
                 }
             }
@@ -2071,65 +2188,189 @@ namespace NPC_Maker
 
         #endregion
 
-        private void TabControl_MouseUp(object sender, MouseEventArgs e)
+        #region CCompile
+
+        private void Button_CCompile_Click(object sender, EventArgs e)
         {
-            int PageClicked = -1;
+            CompileCode();
+        }
+        private void Combo_CodeEditor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Program.Settings.CodeEditor = (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString());
+        }
 
-            for (int i = 0; i < TabControl.TabCount; i++)
+        private void TextBox_CodeEditorPath_TextChanged(object sender, EventArgs e)
+        {
+            Program.Settings.CustomCodeEditorPath = TextBox_CodeEditorPath.Text;
+        }
+
+        private void Textbox_CodeEditorArgs_TextChanged(object sender, EventArgs e)
+        {
+            Program.Settings.CustomCodeEditorArgs = Textbox_CodeEditorArgs.Text;
+        }
+
+        private void WatchFile()
+        {
+            if (Program.Watcher != null)
+                Program.Watcher.Dispose();
+
+            Program.Watcher = new FileSystemWatcher(CCode.tempFolder);
+            Program.Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            Program.Watcher.Changed += Watcher_Changed;
+            Program.Watcher.IncludeSubdirectories = true;
+            Program.Watcher.EnableRaisingEvents = true;
+            Program.Watcher.Filter = CCode.codeFileName;
+        }
+
+        private void CompileCode()
+        {
+
+            string CompileMsgs = "";
+            CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
+
+            this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
             {
-                if (TabControl.GetTabRect(i).Contains(e.Location))
-                    PageClicked = i;
-            }
+                TextBox_CompileMsg.Text = CompileMsgs;
+            });
 
-            if (PageClicked < 0)
+            foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
+            {
+                ComboBox c = kvp.Key;
+
+                c.Invoke((MethodInvoker)delegate
+                {
+                    string CurrentSelection = c.Text;
+
+                    if (SelectedEntry.EmbeddedOverlayCode.Functions == null || SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
+                        c.DataSource = null;
+                    else
+                    {
+                        c.DisplayMember = "Key";
+                        c.ValueMember = "Value";
+                        c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
+                        c.SelectedIndex = -1;
+
+                        KeyValuePair<string, UInt32>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
+
+                        if (Function != null)
+                            c.SelectedIndex = c.Items.IndexOf(Function);
+                        else
+                            c.SelectedIndex = -1;
+                    }
+                });
+            }
+        }
+
+        private void Watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            try
+            {
+                if (e.ChangeType == WatcherChangeTypes.Changed)
+                {
+                    FileStream fs;
+
+                    // Hacky workaround
+                    try
+                    {
+                        fs = File.Open(Path.Combine(CCode.tempFolder, CCode.codeFileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    }
+                    catch (Exception)
+                    {
+                        fs = File.Open(Path.Combine(CCode.tempFolder, CCode.codeFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
+                    }
+
+                    using (var sr = new StreamReader(fs, Encoding.Default))
+                    {
+                        SelectedEntry.EmbeddedOverlayCode.Code = sr.ReadToEnd();
+
+                        if (Program.Settings.AutoComp_Save)
+                            CompileCode();
+                    }
+
+                    fs.Close();
+                    fs.Dispose();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error has occurred while attempting to update the embedded overlay: " + ex.Message);
+            }
+        }
+
+        private void Button_OpenCCode_Click(object sender, EventArgs e)
+        {
+            if (!CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code))
                 return;
 
-            if (e.Button == MouseButtons.Right)
+            if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
+                Program.CodeEditorProcess.Kill();
+
+            Program.CodeEditorProcess = CCode.OpenCodeEditor(
+                                                                (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
+                                                                TextBox_CodeEditorPath.Text,
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.EmbeddedCodeFile.AppendQuotation()).Replace("$CODEFOLDER", CCode.tempFolder.AppendQuotation())
+                                                            );
+
+            if (Program.CodeEditorProcess == null)
+                return;
+            else
+                WatchFile();
+        }
+
+        private void Button_FindCodeEditor_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog oF = new OpenFileDialog();
+            var Res = oF.ShowDialog();
+
+            if (Res == DialogResult.OK)
             {
-                // Gotta select the menu so we can reuse the main menu strip code.
-                TabControl.SelectedTab = TabControl.TabPages[PageClicked];
-
-                ContextMenuStrip mn = new ContextMenuStrip();
-
-                ToolStripMenuItem renameScript = new ToolStripMenuItem();
-                ToolStripMenuItem deleteScript = new ToolStripMenuItem();
-                ToolStripMenuItem newScript = new ToolStripMenuItem();
-
-                if ((string)TabControl.TabPages[PageClicked].Tag == "SCRIPT")
-                    mn.Items.AddRange(new ToolStripItem[] { newScript, renameScript, deleteScript });
-                else
-                    mn.Items.AddRange(new ToolStripItem[] { newScript });
-
-                renameScript.Size = new System.Drawing.Size(156, 22);
-                renameScript.Text = "Rename script";
-                renameScript.Click += RenameScript_Click;
-
-                deleteScript.Size = new System.Drawing.Size(156, 22);
-                deleteScript.Text = "Delete script";
-                deleteScript.Click += DeleteScript_Click;
-
-                newScript.Size = new System.Drawing.Size(156, 22);
-                newScript.Text = "New script";
-                newScript.Click += NewScript_Click;
-
-                mn.Show(TabControl.PointToScreen(new Point(e.X, e.Y)));
+                TextBox_CodeEditorPath.Text = oF.FileName;
+                Textbox_CodeEditorArgs.Text = "$CODEFILE";
+                Combo_CodeEditor.SelectedItem = CCode.CodeEditorEnum.Other.ToString();
+                Combo_CodeEditor.Refresh();
             }
 
         }
 
-        private void NewScript_Click(object sender, EventArgs e)
+        private void Combo_Func_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AddNewScriptToolStripMenuItem_Click(null, null);
+            ComboBox c = (sender as ComboBox);
+
+            int ComboId = Convert.ToInt32(c.Tag);
+
+            if (ComboId < 5)
+                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId, 0] = c.SelectedIndex;
+            else
+                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId - 5, 1] = c.SelectedIndex;
         }
 
-        private void DeleteScript_Click(object sender, EventArgs e)
+        private void Combo_Func_MouseDown(object sender, MouseEventArgs e)
         {
-            DeleteCurrentScriptToolStripMenuItem_Click(null, null);
+            if (e.Button == MouseButtons.Right)
+                (sender as ComboBox).SelectedIndex = -1;
         }
 
-        private void RenameScript_Click(object sender, EventArgs e)
+
+
+        #endregion
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RenameCurrentScriptToolStripMenuItem_Click(null, null);
+            NPC_Maker.Windows.Settings s = new Windows.Settings();
+            s.ShowDialog();
+
+            foreach (TabPage Page in TabControl_Scripts.TabPages)
+            {
+                if (Page.Controls.Count != 0)
+                {
+                    (Page.Controls[0] as ScriptEditor).SetAutoParsing(Program.Settings.CheckSyntax);
+                    (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting(Program.Settings.ColorizeScriptSyntax);
+                }
+            }
+
+            MsgText_TextChanged(null, null);
+
         }
     }
 }

@@ -208,6 +208,20 @@ typedef struct ScrInstrIf
 
 } ScrInstrIf;
 
+typedef struct ScrInstrIfCCall
+{
+    u8 id;
+    u8 subId;
+    u8 varType : 4;
+    u8 isBool : 4;
+    u8 condition;
+    ScriptVarval value;
+    u32 funcOffs;
+    u16 trueInstrNum;
+    u16 falseInstrNum;
+
+} ScrInstrIfCCall;
+
 typedef struct ScrInstrDoubleIf
 {
     u8 id;
@@ -251,6 +265,18 @@ typedef struct ScrInstrAwait
     ScriptVarval value;
 
 } ScrInstrAwait;
+
+typedef struct ScrInstrAwaitCCall
+{
+    u8 id;
+    u8 subId;
+    u8 varType : 4;
+    u8 isBool : 4;
+    u8 condition;
+    ScriptVarval value;
+    u32 funcOffs;
+
+} ScrInstrAwaitCCall;
 
 typedef struct ScrInstrDoubleAwait
 {
@@ -635,6 +661,21 @@ typedef struct ScrInstrQuake
     ScriptVarval type;
     ScriptVarval duration;
 } ScrInstrQuake;
+
+
+#pragma endregion
+
+#pragma region ccall
+
+typedef struct ScrInstrCCall
+{
+    u8 id;
+    u8 varType;
+    u8 pad1;
+    u8 pad2;
+    u32 funcOffs;
+    ScriptVarval DestVar;
+} ScrInstrCCall;
 
 
 #pragma endregion

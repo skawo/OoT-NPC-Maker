@@ -36,6 +36,20 @@ namespace NPC_Maker.Scripts
             return new ParseException("Procedure defined twice or more: ", String.Join(" ", _Line));
         }
 
+        public static ParseException CFunctionNotFound(string[] _Line)
+        {
+            return new ParseException("C Function not found: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException CFunctionDestWrong(string[] _Line)
+        {
+            return new ParseException("C Destination cannot be constant or random: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException UnrecognizedQuake(string[] _Line)
+        {
+            return new ParseException("Not a valid quake type: ", String.Join(" ", _Line));
+        }
         public static ParseException AndOrCanOnlyBeInIfWhile(string _Line)
         {
             return new ParseException("And and Or keywords may only be used for IF and WHILE instructions: ", _Line);
@@ -314,11 +328,6 @@ namespace NPC_Maker.Scripts
         public static ParseException UnrecognizedEffectIfAttacked(string[] _Line)
         {
             return new ParseException("Not a valid effect if attacked: ", String.Join(" ", _Line));
-        }
-
-        public static ParseException UnrecognizedQuake(string[] _Line)
-        {
-            return new ParseException("Not a valid quake type: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedLookAtStyle(string[] _Line)

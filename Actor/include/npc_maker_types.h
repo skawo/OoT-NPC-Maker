@@ -267,6 +267,10 @@ typedef struct NpcMaker
     Actor* refActor;
     MessageEntry* dummyMesEntry;
     u16 curTextBuffPos;
+
+    u32 CFuncs[5];
+    u8 CFuncsWhen[8];    
+    u8* embeddedOverlay;
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;
@@ -278,6 +282,7 @@ typedef struct NpcMaker
         u8 dbgPosEditorCooldown;
         u8 dbgPosEditorCursorPos;
         u8 dbgPosEditorCurEditing;
+        u8 curScriptNum;
     #endif
 
 } NpcMaker;
