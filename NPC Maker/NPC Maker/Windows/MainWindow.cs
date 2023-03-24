@@ -39,10 +39,13 @@ namespace NPC_Maker
             }
 
 
-            // SETTINGS!!
+            Combo_CodeEditor.SelectedIndexChanged -= Combo_CodeEditor_SelectedIndexChanged;
             Combo_CodeEditor.Items.Clear();
-            Combo_CodeEditor.Items.AddRange(CCode.CodeEditors);
-            Combo_CodeEditor.SelectedIndex = 0;
+            Combo_CodeEditor.Items.AddRange(Enum.GetNames(typeof(CCode.CodeEditorEnum)));
+            Combo_CodeEditor.Text = Program.Settings.CodeEditor.ToString();
+            Textbox_CodeEditorArgs.Text = Program.Settings.CustomCodeEditorArgs;
+            TextBox_CodeEditorPath.Text = Program.Settings.CustomCodeEditorPath;
+            Combo_CodeEditor.SelectedIndexChanged += Combo_CodeEditor_SelectedIndexChanged;
 
             MsgPreviewTimer.Interval = 100;
             MsgPreviewTimer.Tick += MsgPreviewTimer_Tick;
@@ -269,7 +272,7 @@ namespace NPC_Maker
                 if (ReusableTabPages.Count != 0)
                 {
                     Page = ReusableTabPages.First();
-                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
+                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax);
                     Page.Text = PageName;
                     ReusableTabPages.Remove(Page);
                 }
@@ -278,7 +281,7 @@ namespace NPC_Maker
                     Page = new TabPage(PageName);
                     TabControl_Scripts.TabPages.Add(Page);
 
-                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, ScriptT, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked) { Dock = DockStyle.Fill };
+                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, ScriptT, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax) { Dock = DockStyle.Fill };
                     Page.Controls.Add(Se);
                 }
             }
@@ -514,7 +517,7 @@ namespace NPC_Maker
 
             if (OFD.FileName != "")
             {
-                EditedFile = FileOps.ParseJSONFile(OFD.FileName);
+                EditedFile = FileOps.ParseNPCJsonFile(OFD.FileName);
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
                 if (EditedFile != null)
@@ -555,7 +558,7 @@ namespace NPC_Maker
             if (SFD.FileName != "")
             {
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                FileOps.SaveJSONFile(SFD.FileName, EditedFile);
+                FileOps.SaveNPCJSON(SFD.FileName, EditedFile);
             }
         }
 
@@ -569,7 +572,7 @@ namespace NPC_Maker
             else
             {
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                FileOps.SaveJSONFile(OpenedPath, EditedFile);
+                FileOps.SaveNPCJSON(OpenedPath, EditedFile);
             }
         }
 
@@ -625,7 +628,7 @@ namespace NPC_Maker
             if (EditedFile == null)
                 return;
 
-            Windows.GlobalHeader gh = new Windows.GlobalHeader(ref EditedFile, checkSyntaxToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked);
+            Windows.GlobalHeader gh = new Windows.GlobalHeader(ref EditedFile, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax);
             gh.ShowDialog();
         }
 
@@ -648,24 +651,6 @@ namespace NPC_Maker
         private void RenameScript_Click(object sender, EventArgs e)
         {
             RenameCurrentScriptToolStripMenuItem_Click(null, null);
-        }
-
-        private void SyntaxHighlightingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-        {
-            foreach (TabPage Page in TabControl_Scripts.TabPages)
-            {
-                if (Page.Controls.Count != 0)
-                    (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting((sender as ToolStripMenuItem).Checked);
-            }
-        }
-
-        private void CheckSyntaxToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
-        {
-            foreach (TabPage Page in TabControl_Scripts.TabPages)
-            {
-                if (Page.Controls.Count != 0)
-                    (Page.Controls[0] as ScriptEditor).SetAutoParsing((sender as ToolStripMenuItem).Checked);
-            }
         }
 
         private void FileMenu_Click(object sender, EventArgs e)
@@ -726,7 +711,7 @@ namespace NPC_Maker
                 ScriptEntry Sc = new ScriptEntry() { Name = ScriptName, ParseErrors = new List<string>(), Text = "" };
                 SelectedEntry.Scripts.Add(Sc);
 
-                ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, Sc, syntaxHighlightingToolStripMenuItem.Checked, checkSyntaxToolStripMenuItem.Checked)
+                ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, Sc, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax)
                 {
                     Dock = DockStyle.Fill
                 };
@@ -807,6 +792,8 @@ namespace NPC_Maker
 
             for (int i = 0; i < 8; i++)
                 Entry.Segments.Add(new List<SegmentEntry>());
+
+            Entry.Scripts.Add(new ScriptEntry() { Name = "Script" });
 
             EditedFile.Entries.Add(Entry);
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
@@ -2106,7 +2093,7 @@ namespace NPC_Maker
             {
                 for (int i = 0; i < mp.MessageCount; i++)
                 {
-                    Bitmap bmpTemp = mp.GetPreview(i, improveMessagePreviewReadabilityToolStripMenuItem.Checked, 1.5f);
+                    Bitmap bmpTemp = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
                     grfx.DrawImage(bmpTemp, 0, bmpTemp.Height * i);
                 }
             }
@@ -2203,6 +2190,25 @@ namespace NPC_Maker
 
         #region CCompile
 
+        private void Button_CCompile_Click(object sender, EventArgs e)
+        {
+            CompileCode();
+        }
+        private void Combo_CodeEditor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Program.Settings.CodeEditor = (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString());
+        }
+
+        private void TextBox_CodeEditorPath_TextChanged(object sender, EventArgs e)
+        {
+            Program.Settings.CustomCodeEditorPath = TextBox_CodeEditorPath.Text;
+        }
+
+        private void Textbox_CodeEditorArgs_TextChanged(object sender, EventArgs e)
+        {
+            Program.Settings.CustomCodeEditorArgs = Textbox_CodeEditorArgs.Text;
+        }
+
         private void WatchFile()
         {
             if (Program.Watcher != null)
@@ -2214,6 +2220,45 @@ namespace NPC_Maker
             Program.Watcher.IncludeSubdirectories = true;
             Program.Watcher.EnableRaisingEvents = true;
             Program.Watcher.Filter = CCode.codeFileName;
+        }
+
+        private void CompileCode()
+        {
+
+            string CompileMsgs = "";
+            CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
+
+            this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
+            {
+                TextBox_CompileMsg.Text = CompileMsgs;
+            });
+
+            foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
+            {
+                ComboBox c = kvp.Key;
+
+                c.Invoke((MethodInvoker)delegate
+                {
+                    string CurrentSelection = c.Text;
+
+                    if (SelectedEntry.EmbeddedOverlayCode.Functions == null || SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
+                        c.DataSource = null;
+                    else
+                    {
+                        c.DisplayMember = "Key";
+                        c.ValueMember = "Value";
+                        c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
+                        c.SelectedIndex = -1;
+
+                        KeyValuePair<string, UInt32>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
+
+                        if (Function != null)
+                            c.SelectedIndex = c.Items.IndexOf(Function);
+                        else
+                            c.SelectedIndex = -1;
+                    }
+                });
+            }
         }
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
@@ -2238,40 +2283,8 @@ namespace NPC_Maker
                     {
                         SelectedEntry.EmbeddedOverlayCode.Code = sr.ReadToEnd();
 
-                        string CompileErrs = "";
-                        CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileErrs);
-
-                        this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
-                        {
-                            TextBox_CompileMsg.Text = CompileErrs;
-                        });
-
-                        foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
-                        {
-                            ComboBox c = kvp.Key;
-
-                            c.Invoke((MethodInvoker)delegate
-                            {
-                                string CurrentSelection = c.Text;
-
-                                if (SelectedEntry.EmbeddedOverlayCode.Functions == null || SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
-                                    c.DataSource = null;
-                                else
-                                {
-                                    c.DisplayMember = "Key";
-                                    c.ValueMember = "Value";
-                                    c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
-                                    c.SelectedIndex = -1;
-
-                                    KeyValuePair<string, UInt32>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
-
-                                    if (Function != null)
-                                        c.SelectedIndex = c.Items.IndexOf(Function);
-                                    else
-                                        c.SelectedIndex = -1;
-                                }
-                            });
-                        }
+                        if (Program.Settings.AutoComp_Save)
+                            CompileCode();
                     }
 
                     fs.Close();
@@ -2314,7 +2327,7 @@ namespace NPC_Maker
             {
                 TextBox_CodeEditorPath.Text = oF.FileName;
                 Textbox_CodeEditorArgs.Text = "$CODEFILE";
-                Combo_CodeEditor.SelectedItem = CCode.CodeEditors.Last();
+                Combo_CodeEditor.SelectedItem = CCode.CodeEditorEnum.Other.ToString();
                 Combo_CodeEditor.Refresh();
             }
 
@@ -2338,9 +2351,26 @@ namespace NPC_Maker
                 (sender as ComboBox).SelectedIndex = -1;
         }
 
+
+
         #endregion
 
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NPC_Maker.Windows.Settings s = new Windows.Settings();
+            s.ShowDialog();
 
+            foreach (TabPage Page in TabControl_Scripts.TabPages)
+            {
+                if (Page.Controls.Count != 0)
+                {
+                    (Page.Controls[0] as ScriptEditor).SetAutoParsing(Program.Settings.CheckSyntax);
+                    (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting(Program.Settings.ColorizeScriptSyntax);
+                }
+            }
 
+            MsgText_TextChanged(null, null);
+
+        }
     }
 }

@@ -1,4 +1,5 @@
 #include <z64hdr/oot_mq_debug/z64hdr.h>
+#include <npcmaker/npc_maker_types.h>
 
 /*
 To make NPC Maker able to use your function, it must have the following form:

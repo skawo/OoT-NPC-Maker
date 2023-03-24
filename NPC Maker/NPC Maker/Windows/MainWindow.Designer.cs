@@ -300,9 +300,6 @@
             this.renameCurrentScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editGlobalHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.syntaxHighlightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkSyntaxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.improveMessagePreviewReadabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.listsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -313,6 +310,7 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.Button_CCompile = new System.Windows.Forms.Button();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -3171,6 +3169,7 @@
             // 
             // Tab6_EmbeddedOverlay
             // 
+            this.Tab6_EmbeddedOverlay.Controls.Add(this.Button_CCompile);
             this.Tab6_EmbeddedOverlay.Controls.Add(this.Label_OtherArguments);
             this.Tab6_EmbeddedOverlay.Controls.Add(this.Textbox_CodeEditorArgs);
             this.Tab6_EmbeddedOverlay.Controls.Add(this.TextBox_CodeEditorPath);
@@ -3219,6 +3218,7 @@
             this.Textbox_CodeEditorArgs.Name = "Textbox_CodeEditorArgs";
             this.Textbox_CodeEditorArgs.Size = new System.Drawing.Size(324, 20);
             this.Textbox_CodeEditorArgs.TabIndex = 24;
+            this.Textbox_CodeEditorArgs.TextChanged += new System.EventHandler(this.Textbox_CodeEditorArgs_TextChanged);
             // 
             // TextBox_CodeEditorPath
             // 
@@ -3228,6 +3228,7 @@
             this.TextBox_CodeEditorPath.Name = "TextBox_CodeEditorPath";
             this.TextBox_CodeEditorPath.Size = new System.Drawing.Size(387, 20);
             this.TextBox_CodeEditorPath.TabIndex = 23;
+            this.TextBox_CodeEditorPath.TextChanged += new System.EventHandler(this.TextBox_CodeEditorPath_TextChanged);
             // 
             // Button_FindCodeEditor
             // 
@@ -3252,6 +3253,7 @@
             this.Combo_CodeEditor.Name = "Combo_CodeEditor";
             this.Combo_CodeEditor.Size = new System.Drawing.Size(169, 21);
             this.Combo_CodeEditor.TabIndex = 21;
+            this.Combo_CodeEditor.SelectedIndexChanged += new System.EventHandler(this.Combo_CodeEditor_SelectedIndexChanged);
             // 
             // LblCodeEditor
             // 
@@ -3740,43 +3742,10 @@
             // 
             // optionsToolStripMenuItem
             // 
-            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.syntaxHighlightingToolStripMenuItem,
-            this.checkSyntaxToolStripMenuItem,
-            this.improveMessagePreviewReadabilityToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
-            // 
-            // syntaxHighlightingToolStripMenuItem
-            // 
-            this.syntaxHighlightingToolStripMenuItem.Checked = true;
-            this.syntaxHighlightingToolStripMenuItem.CheckOnClick = true;
-            this.syntaxHighlightingToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.syntaxHighlightingToolStripMenuItem.Name = "syntaxHighlightingToolStripMenuItem";
-            this.syntaxHighlightingToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this.syntaxHighlightingToolStripMenuItem.Text = "Syntax highlighting";
-            this.syntaxHighlightingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.SyntaxHighlightingToolStripMenuItem_CheckedChanged);
-            // 
-            // checkSyntaxToolStripMenuItem
-            // 
-            this.checkSyntaxToolStripMenuItem.Checked = true;
-            this.checkSyntaxToolStripMenuItem.CheckOnClick = true;
-            this.checkSyntaxToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkSyntaxToolStripMenuItem.Name = "checkSyntaxToolStripMenuItem";
-            this.checkSyntaxToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this.checkSyntaxToolStripMenuItem.Text = "Check syntax";
-            this.checkSyntaxToolStripMenuItem.CheckedChanged += new System.EventHandler(this.CheckSyntaxToolStripMenuItem_CheckedChanged);
-            // 
-            // improveMessagePreviewReadabilityToolStripMenuItem
-            // 
-            this.improveMessagePreviewReadabilityToolStripMenuItem.Checked = true;
-            this.improveMessagePreviewReadabilityToolStripMenuItem.CheckOnClick = true;
-            this.improveMessagePreviewReadabilityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.improveMessagePreviewReadabilityToolStripMenuItem.Name = "improveMessagePreviewReadabilityToolStripMenuItem";
-            this.improveMessagePreviewReadabilityToolStripMenuItem.Size = new System.Drawing.Size(269, 22);
-            this.improveMessagePreviewReadabilityToolStripMenuItem.Text = "Improve message preview readability";
-            this.improveMessagePreviewReadabilityToolStripMenuItem.Click += new System.EventHandler(this.ImproveMessagePreviewReadabilityToolStripMenuItem_Click);
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -3860,6 +3829,18 @@
             // 
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
+            // 
+            // Button_CCompile
+            // 
+            this.Button_CCompile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_CCompile.Location = new System.Drawing.Point(586, 306);
+            this.Button_CCompile.Name = "Button_CCompile";
+            this.Button_CCompile.Size = new System.Drawing.Size(174, 38);
+            this.Button_CCompile.TabIndex = 26;
+            this.Button_CCompile.Text = "Compile";
+            this.Button_CCompile.UseVisualStyleBackColor = true;
+            this.Button_CCompile.Click += new System.EventHandler(this.Button_CCompile_Click);
             // 
             // MainWindow
             // 
@@ -4135,7 +4116,6 @@
         private System.Windows.Forms.ToolStripMenuItem deleteCurrentScriptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem renameCurrentScriptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem syntaxHighlightingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.MenuStrip MenuStrip;
         private System.Windows.Forms.ToolStripMenuItem listsToolStripMenuItem;
@@ -4143,7 +4123,6 @@
         private System.Windows.Forms.ToolStripMenuItem actorsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem sFXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem musicToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem checkSyntaxToolStripMenuItem;
         private System.Windows.Forms.CheckBox Chkb_IgnoreY;
         private System.Windows.Forms.Label SmoothingCnts;
         private System.Windows.Forms.NumericUpDown NumUp_Smoothing;
@@ -4203,7 +4182,6 @@
         private System.Windows.Forms.NumericUpDown NumUp_MaxRoam;
         private System.Windows.Forms.ToolStripMenuItem colorPickerToolStripMenuItem;
         private System.Windows.Forms.PictureBox MsgPreview;
-        private System.Windows.Forms.ToolStripMenuItem improveMessagePreviewReadabilityToolStripMenuItem;
         private System.Windows.Forms.Panel PanelMsgPreview;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.NumericUpDown numUpFileStart;
@@ -4251,6 +4229,7 @@
         private System.Windows.Forms.TextBox Textbox_CodeEditorArgs;
         private System.Windows.Forms.TabPage Tab5_Scripts;
         private System.Windows.Forms.TabControl TabControl_Scripts;
+        private System.Windows.Forms.Button Button_CCompile;
     }
 }
 

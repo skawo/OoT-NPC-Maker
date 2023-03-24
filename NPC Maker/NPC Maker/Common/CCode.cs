@@ -122,7 +122,7 @@ namespace NPC_Maker
 
         }
 
-        public static byte[] Compile(bool OotVer, CCodeEntry CodeEntry, ref string CompileErrors)
+        public static byte[] Compile(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
             Clean();
 
@@ -137,16 +137,19 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
                 Arguments =
-                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" }).AppendQuotation()} " +
+                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
-                $"-G 0 -Os -fno-reorder-blocks -std=gnu99 -mtune=vr4300 -march=vr4300 -mabi=32 -c -mips3 -mno-explicit-relocs -mno-memcpy -mno-check-zero-division " +
+                Program.Settings.GCCFlags + " " + 
                 $"{Path.Combine(tempFolder, codeFileName).AppendQuotation()}",
             };
+
+            if (Program.Settings.Verbose)
+                CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
 
             Process p = Process.Start(gccInfo);
             p.WaitForExit();
 
-            GetOutput(p, "GCC", ref CompileErrors);
+            GetOutput(p, "GCC", ref CompileMsgs);
 
             #endregion
 
@@ -154,7 +157,7 @@ namespace NPC_Maker
 
             if (!File.Exists(oFile))
             {
-                CompileErrors += "Compilation failed.";
+                CompileMsgs += "Compilation failed.";
                 return null;
             }
 
@@ -167,20 +170,24 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
                 Arguments =
-                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", OotVer ? "oot_mq_debug" : "oot_u10" }).AppendQuotation()} " +
+                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
+                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
                 $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
                 $"-o {elfFile.AppendQuotation()} {oFile.AppendQuotation()}"
             };
 
+            if (Program.Settings.Verbose)
+                CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
+
             p = Process.Start(ldInfo);
             p.WaitForExit();
-            GetOutput(p, "LINKER", ref CompileErrors);
+            GetOutput(p, "LINKER", ref CompileMsgs);
 
 
             if (!File.Exists(elfFile))
             {
-                CompileErrors += "Compilation failed.";
+                CompileMsgs += "Compilation failed.";
                 return null;
             }
 
@@ -196,17 +203,20 @@ namespace NPC_Maker
                 CreateNoWindow = true,
                 FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
                 Arguments =
-                $"-c -A 0x{BaseAddr:X} -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
+                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
             };
+
+            if (Program.Settings.Verbose)
+                CompileMsgs += nOVLInfo.FileName + " " + nOVLInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(nOVLInfo);
             p.WaitForExit();
-            GetOutput(p, "NOVL", ref CompileErrors);
+            GetOutput(p, "NOVL", ref CompileMsgs);
 
             if (!File.Exists(ovlFile))
-                CompileErrors += "Compilation failed.";
+                CompileMsgs += "Compilation failed.";
             else
-                CompileErrors += "Compilation successful!";
+                CompileMsgs += "Compilation successful!";
 
             CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFile, ovlFile);
 

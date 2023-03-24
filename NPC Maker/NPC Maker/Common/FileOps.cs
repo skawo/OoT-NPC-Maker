@@ -9,7 +9,30 @@ namespace NPC_Maker
 {
     public static class FileOps
     {
-        public static NPCFile ParseJSONFile(string FileName)
+        public static NPCMakerSettings ParseSettingsJSON(string FileName)
+        {
+            if (!File.Exists(FileName))
+                return new NPCMakerSettings();
+
+            string Text = File.ReadAllText(FileName);
+            NPCMakerSettings Deserialized = JsonConvert.DeserializeObject<NPCMakerSettings>(Text);
+
+            return Deserialized;
+        }
+
+        public static void SaveSettingsJSON(string Path, NPCMakerSettings Data)
+        {
+            try
+            {
+                File.WriteAllText(Path, JsonConvert.SerializeObject(Data, Formatting.Indented));
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"Failed to write settings: {ex.Message}");
+            }
+        }
+
+        public static NPCFile ParseNPCJsonFile(string FileName)
         {
             try
             {
@@ -75,7 +98,7 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveJSONFile(string Path, NPCFile Data)
+        public static void SaveNPCJSON(string Path, NPCFile Data)
         {
             try
             {

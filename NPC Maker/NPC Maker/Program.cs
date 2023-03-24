@@ -17,6 +17,9 @@ namespace NPC_Maker
         public static FileSystemWatcher Watcher;
         public static Process CodeEditorProcess;
 
+        public static string SettingsFilePath;
+        public static NPCMakerSettings Settings;
+
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
 
@@ -33,6 +36,7 @@ namespace NPC_Maker
             Application.CurrentCulture = ci;
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+            SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
 
             Type t = Type.GetType("Mono.Runtime");
 
@@ -48,8 +52,14 @@ namespace NPC_Maker
 
             }
 
+            Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
+
+
             if (args.Length == 0)
+            {
                 Application.Run(new MainWindow());
+                FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
+            }
             else
             {
                 AttachConsole(-1);
@@ -67,7 +77,7 @@ namespace NPC_Maker
 
                     try
                     {
-                        InFile = FileOps.ParseJSONFile(args[0]);
+                        InFile = FileOps.ParseNPCJsonFile(args[0]);
                     }
                     catch (Exception ex)
                     {

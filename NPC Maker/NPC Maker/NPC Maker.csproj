@@ -108,6 +108,7 @@
     <Compile Include="Common\Defaults.cs" />
     <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Common\NPCMakerSettings.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />
@@ -236,6 +237,12 @@
     <Compile Include="Windows\PickableListEntryEdit.Designer.cs">
       <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Controls\ScriptEditor.resx">
       <DependentUpon>ScriptEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -264,6 +271,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\PickableListEntryEdit.resx">
       <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Dicts\Actors.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

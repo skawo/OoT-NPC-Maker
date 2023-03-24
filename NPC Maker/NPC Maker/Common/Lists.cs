@@ -183,6 +183,12 @@ namespace NPC_Maker
             VarTypes.VARF.ToString(),
         };
 
+        public enum GameVersions
+        {
+            oot_mq_debug,
+            oot_u10
+        }
+
         public enum VarTypes
         {
             NORMAL = 0,
