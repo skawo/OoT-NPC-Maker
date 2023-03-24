@@ -397,10 +397,8 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
     Draw_SetEnvColor(gfxP, en->curColor, en->curAlpha);
 
 #pragma endregion
-
-    NpcMaker_RunCFunc(en, playState, en->CFuncs[3]);
-
-    return 0;
+	
+    return NpcMaker_RunCFunc(en, playState, en->CFuncs[3]);
 }
 
 void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
