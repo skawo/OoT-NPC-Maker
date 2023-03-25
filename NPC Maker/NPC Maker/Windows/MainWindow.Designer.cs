@@ -243,6 +243,7 @@
             this.Tab5_Scripts = new System.Windows.Forms.TabPage();
             this.TabControl_Scripts = new System.Windows.Forms.TabControl();
             this.Tab6_EmbeddedOverlay = new System.Windows.Forms.TabPage();
+            this.Button_CCompile = new System.Windows.Forms.Button();
             this.Label_OtherArguments = new System.Windows.Forms.Label();
             this.Textbox_CodeEditorArgs = new System.Windows.Forms.TextBox();
             this.TextBox_CodeEditorPath = new System.Windows.Forms.TextBox();
@@ -310,7 +311,6 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.Button_CCompile = new System.Windows.Forms.Button();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -3201,6 +3201,17 @@
             this.Tab6_EmbeddedOverlay.Text = "C Code";
             this.Tab6_EmbeddedOverlay.UseVisualStyleBackColor = true;
             // 
+            // Button_CCompile
+            // 
+            this.Button_CCompile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_CCompile.Location = new System.Drawing.Point(586, 306);
+            this.Button_CCompile.Name = "Button_CCompile";
+            this.Button_CCompile.Size = new System.Drawing.Size(174, 38);
+            this.Button_CCompile.TabIndex = 26;
+            this.Button_CCompile.Text = "Compile";
+            this.Button_CCompile.UseVisualStyleBackColor = true;
+            this.Button_CCompile.Click += new System.EventHandler(this.Button_CCompile_Click);
+            // 
             // Label_OtherArguments
             // 
             this.Label_OtherArguments.AutoSize = true;
@@ -3829,18 +3840,6 @@
             // 
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
-            // 
-            // Button_CCompile
-            // 
-            this.Button_CCompile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_CCompile.Location = new System.Drawing.Point(586, 306);
-            this.Button_CCompile.Name = "Button_CCompile";
-            this.Button_CCompile.Size = new System.Drawing.Size(174, 38);
-            this.Button_CCompile.TabIndex = 26;
-            this.Button_CCompile.Text = "Compile";
-            this.Button_CCompile.UseVisualStyleBackColor = true;
-            this.Button_CCompile.Click += new System.EventHandler(this.Button_CCompile_Click);
             // 
             // MainWindow
             // 
