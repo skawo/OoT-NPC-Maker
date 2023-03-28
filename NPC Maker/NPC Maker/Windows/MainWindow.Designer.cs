@@ -2196,6 +2196,7 @@
             this.NumUpDown_WaistLimb.Size = new System.Drawing.Size(60, 20);
             this.NumUpDown_WaistLimb.TabIndex = 38;
             this.NumUpDown_WaistLimb.Tag = "WAISTLIMB";
+            this.NumUpDown_WaistLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // ComboBox_LookAtType
             // 
