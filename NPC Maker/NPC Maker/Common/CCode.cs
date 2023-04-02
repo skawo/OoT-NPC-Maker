@@ -222,7 +222,7 @@ namespace NPC_Maker
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 WorkingDirectory = Path.Combine(Program.ExecPath, "nOVL"),
-                FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
+                FileName = Path.Combine(Program.ExecPath, "nOVL", "nOVL.exe"),
                 Arguments =
                 $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFileMono.AppendQuotation()} {elfFileMono.AppendQuotation()}",
             };
