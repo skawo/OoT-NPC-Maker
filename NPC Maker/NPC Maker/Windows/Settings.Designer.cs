@@ -147,6 +147,7 @@ namespace NPC_Maker.Windows
             this.Cb_AutoCompile.Tag = "AUTOCOMP_SAVE";
             this.Cb_AutoCompile.Text = "Auto compile code when file is saved";
             this.Cb_AutoCompile.UseVisualStyleBackColor = true;
+            this.Cb_AutoCompile.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
             // Settings
             // 

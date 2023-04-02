@@ -2214,6 +2214,9 @@ namespace NPC_Maker
 
         private void WatchFile()
         {
+            if (Program.IsRunningUnderMono)
+                Environment.SetEnvironmentVariable("MONO_MANAGED_WATCHER", "1");
+
             if (Program.Watcher != null)
                 Program.Watcher.Dispose();
 
@@ -2223,6 +2226,23 @@ namespace NPC_Maker
             Program.Watcher.IncludeSubdirectories = true;
             Program.Watcher.EnableRaisingEvents = true;
             Program.Watcher.Filter = CCode.codeFileName;
+
+            var t = Task.Factory.StartNew(() =>
+            {
+                while (!Program.CodeEditorProcess.HasExited)
+                {
+                    System.Threading.Thread.Sleep(200);
+                }
+
+                Program.Watcher.Dispose();
+
+                Button_CCompile.Invoke((MethodInvoker)delegate
+                {
+                    Button_CCompile.Enabled = true;
+                });
+
+                return;
+            });
         }
 
         private void CompileCode()
@@ -2297,12 +2317,14 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error has occurred while attempting to update the embedded overlay: " + ex.Message);
+                //MessageBox.Show("An error has occurred while attempting to update the embedded overlay: " + ex.Message);
             }
         }
 
         private void Button_OpenCCode_Click(object sender, EventArgs e)
         {
+            Button_CCompile.Enabled = false;
+
             if (!CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code))
                 return;
 

@@ -68,7 +68,7 @@ namespace NPC_Maker
             { }
         }
 
-        
+
         public static List<KeyValuePair<string, UInt32>> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath)
         {
             ProcessStartInfo objDump = new ProcessStartInfo
@@ -124,6 +124,136 @@ namespace NPC_Maker
 
         public static byte[] Compile(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
+            try
+            {
+                return Program.IsRunningUnderMono ? CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs);
+            }
+            catch (Exception ex)
+            {
+                CompileMsgs = "Compilation failed: " + ex.Message;
+                return new byte[0];
+            }
+        }
+
+        public static byte[] CompileUnderMono(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
+        {
+            Clean();
+
+            string oFileMono = Path.Combine("..", "bin", "EmbeddedOverlay.o");
+            string elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay.elf");
+
+            #region GCC
+
+            ProcessStartInfo gccInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
+                Arguments =
+                $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
+                $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
+                Program.Settings.GCCFlags + " " +
+                $"{Path.Combine("..", "..", "temp", codeFileName).AppendQuotation()}",
+            };
+
+            if (Program.Settings.Verbose)
+                CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
+
+            Process p = Process.Start(gccInfo);
+            p.WaitForExit();
+
+            GetOutput(p, "GCC", ref CompileMsgs);
+
+            #endregion
+
+            #region LD
+
+            if (!File.Exists(oFile))
+            {
+                CompileMsgs += "Compilation failed.";
+                return null;
+            }
+
+            ProcessStartInfo ldInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
+                Arguments =
+                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
+                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
+                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
+                    $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
+                    $"-o {elfFileMono.AppendQuotation()} {oFileMono.AppendQuotation()}"
+            };
+
+            if (Program.Settings.Verbose)
+                CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
+
+            p = Process.Start(ldInfo);
+            p.WaitForExit();
+            p.WaitForExit();
+            GetOutput(p, "LINKER", ref CompileMsgs);
+
+
+            if (!File.Exists(elfFile))
+            {
+                CompileMsgs += "Compilation failed.";
+                return null;
+            }
+
+            #endregion
+
+            #region NOVL
+
+            elfFileMono = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay.elf");
+            string ovlFileMono = Path.Combine("..", "temp", "EmbeddedOverlay.ovl");
+
+            ProcessStartInfo nOVLInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "nOVL"),
+                FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
+                Arguments =
+                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFileMono.AppendQuotation()} {elfFileMono.AppendQuotation()}",
+            };
+
+            if (Program.Settings.Verbose)
+                CompileMsgs += nOVLInfo.FileName + " " + nOVLInfo.Arguments + Environment.NewLine;
+
+      
+            p = Process.Start(nOVLInfo);
+            p.WaitForExit();
+            GetOutput(p, "NOVL", ref CompileMsgs);
+
+            elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay.elf");
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFile);
+
+            if (!File.Exists(ovlFile))
+            {
+                CompileMsgs += "Compilation failed.";
+                return new byte[0];
+            }
+            else
+                CompileMsgs += "Compilation successful!";
+
+
+            return File.ReadAllBytes(ovlFile);
+            #endregion
+
+        }
+
+        public static byte[] CompileUnderWindows(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
+        {
             Clean();
 
             #region GCC
@@ -139,7 +269,7 @@ namespace NPC_Maker
                 Arguments =
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
-                Program.Settings.GCCFlags + " " + 
+                Program.Settings.GCCFlags + " " +
                 $"{Path.Combine(tempFolder, codeFileName).AppendQuotation()}",
             };
 
