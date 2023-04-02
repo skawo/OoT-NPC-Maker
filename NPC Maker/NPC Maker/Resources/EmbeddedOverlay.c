@@ -15,6 +15,12 @@ void NpcM_Function(NpcMaker* npc, PlayState* play)
 float NpcM_Function2(NpcMaker* npc, PlayState* play)
 float NpcM_DoAThing(NpcMaker* npc, PlayState* play)
 
+The exception for this is functions which should run "On limb", their signature is as follows:
+
+int NpcM_Function(NpcMaker* npc, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP)
+
+This function should return 0 if the limb is meant to be drawn, and 1 if it is not.
+
 Warning; When using these functions from scripts, make sure
 the return type is valid.
 */

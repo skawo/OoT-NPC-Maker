@@ -397,8 +397,28 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
     Draw_SetEnvColor(gfxP, en->curColor, en->curAlpha);
 
 #pragma endregion
+
+    u32 cFuncOffs = en->CFuncs[3];
 	
-    return NpcMaker_RunCFunc(en, playState, en->CFuncs[3]);
+    if (cFuncOffs == 0xFFFFFFFF)
+        return 0;
+    else
+    {
+
+        #if LOGGING == 1
+            osSyncPrintf("_Running embedded limb function %8x", en->embeddedOverlay + cFuncOffs);
+        #endif
+
+        typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP);
+        EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + cFuncOffs;
+        float out = f(en, playState, limbNumber, dListPtr, translation, rotation, instance, gfxP);
+
+        #if LOGGING == 1
+            osSyncPrintf("_Embedded function finished.");
+        #endif
+
+        return out;
+    }
 }
 
 void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
