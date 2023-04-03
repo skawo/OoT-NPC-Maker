@@ -202,28 +202,25 @@ namespace NPC_Maker
 
         private static Dictionary<Lists.ParticleSubOptions, string> ParticleSubOptionUsages = new Dictionary<Lists.ParticleSubOptions, string>()
         {
-            {Lists.ParticleSubOptions.POSITION,                     $"[POSITION {{{Lists.SpawnPosParams.ABSOLUTE}|{Lists.SpawnPosParams.RELATIVE}|{Lists.SpawnPosParams.DIRECTION}|{Lists.SpawnPosParams.DIRECTION_REF_ACTOR}|{Lists.SpawnPosParams.RELATIVE_REF_ACTOR}}} x y z]" },
-            {Lists.ParticleSubOptions.VELOCITY,                     $"[VELOCITY x y z]" },
-            {Lists.ParticleSubOptions.ACCELERATION,                 $"[ACCELERATION x y z]" },
-            {Lists.ParticleSubOptions.COLOR1,                       $"[COLOR1 r g b a]" },
-            {Lists.ParticleSubOptions.COLOR2,                       $"[COLOR2 r g b a]" },
-            {Lists.ParticleSubOptions.SCALE,                        $"[SCALE value]" },
-            {Lists.ParticleSubOptions.SCALE_UPDATE,                 $"[SCALE_UPDATE value]" },
-            {Lists.ParticleSubOptions.SCALE_UPDATE_DOWN,            $"[SCALE_UPDATE_DOWN value]" },
-            {Lists.ParticleSubOptions.OPACITY,                      $"[OPACITY value]" },
-            {Lists.ParticleSubOptions.RANDOMIZE_XZ,                 $"[RANDOMIZE_XZ {BooleanUsage}]" },
-            {Lists.ParticleSubOptions.SCORE_AMOUNT,                 $"[SCORE_AMOUNT {{0|1|2}}]" },
-            {Lists.ParticleSubOptions.COUNT,                        $"[COUNT value]" },
-            {Lists.ParticleSubOptions.LIGHTPOINT_COLOR,             $"[LIGHTPOINT_COLOR {{WHITE|BLUE|RED|YELLOW|PURPLE|PINK|ORANGE|GRAY}}]" },
-            {Lists.ParticleSubOptions.FADE_DELAY,                   $"[FADE_DELAY value]" },
-            {Lists.ParticleSubOptions.DURATION,                     $"[DURATION value]" },
-            {Lists.ParticleSubOptions.YAW,                          $"[YAW value]" },
-            {Lists.ParticleSubOptions.DLIST,                        $"[DLIST *extra_dlist_name*]" },
-            {Lists.ParticleSubOptions.SPOTTED,                      $"[SPOTTED label]" },
+            {Lists.ParticleSubOptions.POSITION,                     $"[{Lists.ParticleSubOptions.POSITION} {{{Lists.SpawnPosParams.ABSOLUTE}|{Lists.SpawnPosParams.RELATIVE}|{Lists.SpawnPosParams.DIRECTION}|{Lists.SpawnPosParams.DIRECTION_REF_ACTOR}|{Lists.SpawnPosParams.RELATIVE_REF_ACTOR}}} x y z]" },
+            {Lists.ParticleSubOptions.VELOCITY,                     $"[{Lists.ParticleSubOptions.VELOCITY} x y z]" },
+            {Lists.ParticleSubOptions.ACCELERATION,                 $"[{Lists.ParticleSubOptions.ACCELERATION} x y z]" },
+            {Lists.ParticleSubOptions.COLOR1,                       $"[{Lists.ParticleSubOptions.COLOR1} r g b a]" },
+            {Lists.ParticleSubOptions.COLOR2,                       $"[{Lists.ParticleSubOptions.COLOR2} r g b a]" },
+            {Lists.ParticleSubOptions.SCALE,                        $"[{Lists.ParticleSubOptions.SCALE} value]" },
+            {Lists.ParticleSubOptions.SCALE_UPDATE,                 $"[{Lists.ParticleSubOptions.SCALE_UPDATE} value]" },
+            {Lists.ParticleSubOptions.SCALE_UPDATE_DOWN,            $"[{Lists.ParticleSubOptions.SCALE_UPDATE_DOWN} value]" },
+            {Lists.ParticleSubOptions.OPACITY,                      $"[{Lists.ParticleSubOptions.OPACITY} value]" },
+            {Lists.ParticleSubOptions.RANDOMIZE_XZ,                 $"[{Lists.ParticleSubOptions.RANDOMIZE_XZ} {BooleanUsage}]" },
+            {Lists.ParticleSubOptions.SCORE_AMOUNT,                 $"[{Lists.ParticleSubOptions.SCORE_AMOUNT} {{0|1|2}}]" },
+            {Lists.ParticleSubOptions.COUNT,                        $"[{Lists.ParticleSubOptions.COUNT} value]" },
+            {Lists.ParticleSubOptions.LIGHTPOINT_COLOR,             $"[{Lists.ParticleSubOptions.LIGHTPOINT_COLOR} {{WHITE|BLUE|RED|YELLOW|PURPLE|PINK|ORANGE|GRAY}}]" },
+            {Lists.ParticleSubOptions.FADE_DELAY,                   $"[{Lists.ParticleSubOptions.FADE_DELAY} value]" },
+            {Lists.ParticleSubOptions.DURATION,                     $"[{Lists.ParticleSubOptions.DURATION} value]" },
+            {Lists.ParticleSubOptions.YAW,                          $"[{Lists.ParticleSubOptions.YAW} value]" },
+            {Lists.ParticleSubOptions.DLIST,                        $"[{Lists.ParticleSubOptions.DLIST} *extra_dlist_name*]" },
+            {Lists.ParticleSubOptions.SPOTTED,                      $"[{Lists.ParticleSubOptions.SPOTTED} label]" },
         };
-
-
-
 
         public static string GetUsage(Lists.Instructions Instruction, string SubType)
         {
