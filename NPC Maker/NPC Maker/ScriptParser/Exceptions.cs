@@ -13,7 +13,7 @@ namespace NPC_Maker.Scripts
 
         public override string ToString()
         {
-            return Message + " " + Line;
+            return Message + " " + Line + Environment.NewLine + "===============================";
         }
 
         public static ParseException GeneralError(string _Line)
@@ -112,7 +112,9 @@ namespace NPC_Maker.Scripts
 
         public static ParseException ParamCountWrong(string[] _Line)
         {
-            return new ParseException("Wrong number of parameters: ", String.Join(" ", _Line));
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), _Line[0].ToUpper()), _Line.Length > 1 ? _Line[1].ToUpper() : "");
+
+            return new ParseException($"Wrong number of parameters.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", String.Join(" ", _Line));
         }
 
         public static ParseException ParamCountSmall(string[] _Line)
@@ -137,27 +139,37 @@ namespace NPC_Maker.Scripts
 
         public static ParseException IfNotClosed(string _Line)
         {
-            return new ParseException("This IF does not have a corresponding ENDIF: ", _Line);
+            string[] Words = _Line.Split(' ');
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
+            return new ParseException($"This IF does not have a corresponding ENDIF.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
         }
 
         public static ParseException OcarinaNotClosed(string _Line)
         {
-            return new ParseException("This OCARINA does not have a corresponding ENDOCARINA: ", _Line);
+            string[] Words = _Line.Split(' ');
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
+            return new ParseException($"This OCARINA does not have a corresponding ENDOCARINA.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
         }
 
         public static ParseException SpawnNotClosed(string _Line)
         {
-            return new ParseException("This SPAWN does not have a corresponding ENDSPAWN: ", _Line);
+            string[] Words = _Line.Split(' ');
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
+            return new ParseException($"This SPAWN does not have a corresponding ENDSPAWN.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
         }
 
         public static ParseException TalkNotClosed(string _Line)
         {
-            return new ParseException("This TALK does not have a corresponding ENDTALK: ", _Line);
+            string[] Words = _Line.Split(' ');
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
+            return new ParseException($"This TALK does not have a corresponding ENDTALK.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
         }
 
         public static ParseException TradeNotClosed(string _Line)
         {
-            return new ParseException("This TRADE does not have a corresponding ENDTRADE: ", _Line);
+            string[] Words = _Line.Split(' ');
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
+            return new ParseException($"This TRADE does not have a corresponding ENDTRADE.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
         }
 
         public static ParseException FaceCantBeSame(string _Line)
@@ -167,7 +179,9 @@ namespace NPC_Maker.Scripts
 
         public static ParseException ParticleNotClosed(string _Line)
         {
-            return new ParseException("This PARTICLE does not have a corresponding ENDPARTICLE: ", _Line);
+            string[] Words = _Line.Split(' ');
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
+            return new ParseException($"This PARTICLE does not have a corresponding PARTICLE.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
         }
 
         public static ParseException FaceCantBeSame(string[] _Line)

@@ -28,7 +28,7 @@ namespace NPC_Maker.Scripts
                             FaceType = GetFaceType(SplitLine, 3);
                             TargetType = (byte)GetActor(SplitLine, 4, ref ActorNum2);
 
-                            if (TargetType == SubjectType && ActorNum1.Value == ActorNum2.Value && ActorNum1.Vartype == ActorNum2.Vartype)
+                            if ((TargetType == SubjectType) && (Convert.ToInt32(ActorNum1.Value) == Convert.ToInt32(ActorNum2.Value)) && (ActorNum1.Vartype == ActorNum2.Vartype))
                                 throw ParseException.FaceCantBeSame(SplitLine);
 
                             break;
@@ -37,10 +37,10 @@ namespace NPC_Maker.Scripts
                         {
                             ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 5);
 
-                            FaceType = GetFaceType(SplitLine, 4);
-                            TargetType = (byte)GetActor(SplitLine, 5, ref ActorNum2);
+                            FaceType = GetFaceType(SplitLine, 3);
+                            TargetType = (byte)GetActor(SplitLine, 4, ref ActorNum2);
 
-                            if (TargetType == SubjectType && ActorNum1.Value == ActorNum2.Value && ActorNum1.Vartype == ActorNum2.Vartype)
+                            if ((TargetType == SubjectType) && (Convert.ToInt32(ActorNum1.Value) == Convert.ToInt32(ActorNum2.Value)) && (ActorNum1.Vartype == ActorNum2.Vartype))
                                 throw ParseException.FaceCantBeSame(SplitLine);
 
                             break;

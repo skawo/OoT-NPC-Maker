@@ -21,7 +21,7 @@ namespace NPC_Maker.Scripts
                 int LineNoEnd = GetCorrespondingEndOcarina(Lines, LineNo);
 
                 if (LineNoEnd < 0)
-                    throw ParseException.IfNotClosed(SplitLine);
+                    throw ParseException.OcarinaNotClosed(SplitLine);
 
                 var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 1, typeof(Lists.OcarinaSongs), ParseException.UnrecognizedOcarinaSong(SplitLine));
 

@@ -109,6 +109,7 @@
     <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\NPCMakerSettings.cs" />
+    <Compile Include="Common\ScriptsUsages.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />

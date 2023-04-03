@@ -9,7 +9,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsBigger(SplitLine, 3);
+                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
 
                 List<Instruction> outl = new List<Instruction>();
 

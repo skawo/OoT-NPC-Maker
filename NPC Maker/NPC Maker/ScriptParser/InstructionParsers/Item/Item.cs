@@ -8,10 +8,11 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ItemSubTypes));
-
                 try
                 {
+                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
+                    int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.ItemSubTypes));
+
                     switch (SubID)
                     {
                         case (int)Lists.ItemSubTypes.AWARD:

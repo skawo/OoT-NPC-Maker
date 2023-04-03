@@ -28,7 +28,7 @@ namespace NPC_Maker.Scripts
         public static void ErrorIfNumParamsSmaller(string[] Splitline, int Number)
         {
             if (Splitline.Count() < Number)
-                throw ParseException.ParamCountSmall(Splitline);
+                throw ParseException.ParamCountWrong(Splitline);
         }
 
         public static void ErrorIfNumParamsBigger(string[] Splitline, int Number)
