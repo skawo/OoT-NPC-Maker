@@ -82,7 +82,7 @@ namespace NPC_Maker
                     { Lists.IfSubTypes.DAMAGED_BY,                          $" *damage_type_name*" },
                     { Lists.IfSubTypes.ROOM_ID,                             $" operator value" },
 
-                    { Lists.IfSubTypes.CURRENT_STATE,                       $" state_name" },
+                    { Lists.IfSubTypes.CURRENT_STATE,                       $" *state_name*" },
                     { Lists.IfSubTypes.CCALL,                               $" c_function_name [operator] [value]" },
                     { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,              $".min_range->max_range operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
@@ -145,6 +145,57 @@ namespace NPC_Maker
                 {
                     { Lists.ScriptSubtypes.START,                           $" script_id" },
                     { Lists.ScriptSubtypes.STOP,                            $" script_id" },
+                }
+            },
+            { Lists.Instructions.AWAIT,  new Dictionary<object, string>()
+                {
+                    { Lists.AwaitSubTypes.FLAG_INF,                         $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FLAG_EVENT,                       $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FLAG_SWITCH,                      $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FLAG_SCENE,                       $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FLAG_TREASURE,                    $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FLAG_ROOM_CLEAR,                  $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FLAG_SCENE_COLLECT,               $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FLAG_TEMPORARY,                   $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FLAG_INTERNAL,                    $" flag_number {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.MOVEMENT_PATH_END,                $"" },
+                    { Lists.AwaitSubTypes.RESPONSE,                         $"" },
+                    { Lists.AwaitSubTypes.TALKING_END,                      $"" },
+                    { Lists.AwaitSubTypes.TEXTBOX_ON_SCREEN,                $" {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.FOREVER,                          $"" },
+                    { Lists.AwaitSubTypes.PATH_NODE,                        $" node_id" },
+                    { Lists.AwaitSubTypes.FRAMES,                           $" frames_num" },
+                    { Lists.AwaitSubTypes.ANIMATION_FRAME,                  $" operator frame_num" },
+                    { Lists.AwaitSubTypes.CUTSCENE_FRAME,                   $" operator frame_num" },
+                    { Lists.AwaitSubTypes.TIME_OF_DAY,                      $" operator HH:mm" },
+                    { Lists.AwaitSubTypes.STICK_X,                          $" operator value" },
+                    { Lists.AwaitSubTypes.STICK_Y,                          $" operator value" },
+                    { Lists.AwaitSubTypes.BUTTON_PRESSED,                   $" *button_name*" },
+                    { Lists.AwaitSubTypes.BUTTON_HELD,                      $" *button_name*" },
+                    { Lists.AwaitSubTypes.TEXTBOX_NUM,                      $" textbox_num" },
+                    { Lists.AwaitSubTypes.TEXTBOX_DISMISSED,                $"" },
+                    { Lists.AwaitSubTypes.TEXTBOX_DRAWING,                  $" {BooleanUsage}" },
+                    { Lists.AwaitSubTypes.ANIMATION_END,                    $"" },
+                    { Lists.AwaitSubTypes.PLAYER_ANIMATION_END,             $"" },
+                    { Lists.AwaitSubTypes.EXT_VAR,                          $" npc_id variable_num operator value" },
+                    { Lists.AwaitSubTypes.EXT_VARF,                         $" npc_id variable_num operator value" },
+                    { Lists.AwaitSubTypes.CURRENT_STATE,                    $" *state_name*" },
+                    { Lists.AwaitSubTypes.CCALL,                            $" c_function_name [operator] [value]" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,              $".min_range->max_range operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL32,            $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBALF,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR8,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR16,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR32,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTORF,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE8,               $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE16,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE32,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVEF,               $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.VAR,                 $".varnum operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.VARF,                $".varnum operator value" },
                 }
             },
         };
@@ -357,6 +408,30 @@ namespace NPC_Maker
                                                            $"   {Lists.Keyword_TradeNone} textbox_name [textbox_child]" + Environment.NewLine +
                                                            $"END{Lists.Instructions.TRADE}";
 
+                    }
+                case Lists.Instructions.SAVE:
+                    return $"{Lists.Instructions.SAVE}";
+                case Lists.Instructions.RETURN:
+                    return $"{Lists.Instructions.RETURN}";
+                case Lists.Instructions.AWAIT:
+                    {
+                        bool res = Enum.TryParse<Lists.AwaitSubTypes>(SubType, out Lists.AwaitSubTypes oSubType);
+
+                        if (res)
+                            return $"{Lists.Instructions.AWAIT} {oSubType}{Usages[Instruction][oSubType]}";
+                        else
+                        {
+                            if (SubType.Contains('.'))
+                                SubType = SubType.Substring(0, SubType.IndexOf("."));
+
+
+                            bool res2 = Enum.TryParse<Lists.IfWhileAwaitSetRamSubTypes>(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
+
+                            if (res2)
+                                return $"{Lists.Instructions.AWAIT} {oSubType2}{Usages[Instruction][oSubType2]}";
+                            else
+                                return $"{Lists.Instructions.AWAIT} *subtype*";
+                        }
                     }
                 default:
                     return "";
