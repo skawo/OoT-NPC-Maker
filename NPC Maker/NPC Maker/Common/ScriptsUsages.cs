@@ -213,17 +213,9 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.FACE:
                     {
-                        return $"{Lists.Instructions.FACE} {{{Lists.TargetActorSubtypes.SELF}|" +
-                                                           $"{Lists.TargetActorSubtypes.PLAYER}|" +
-                                                           $"{Lists.TargetActorSubtypes.REF_ACTOR}|" +
-                                                           $"{Lists.TargetActorSubtypes.ACTOR_ID} actor_id|" +
-                                                           $"{Lists.TargetActorSubtypes.NPCMAKER} npc_id}} " +
+                        return $"{Lists.Instructions.FACE} {TargetActorUsage} " +
                                                            $"{{{Lists.FaceSubtypes.TOWARDS}|{Lists.FaceSubtypes.AWAY_FROM}|{Lists.FaceSubtypes.TOGETHER_WITH}}} " +
-                                                           $"{{{Lists.TargetActorSubtypes.SELF}|" +
-                                                           $"{Lists.TargetActorSubtypes.PLAYER}|" +
-                                                           $"{Lists.TargetActorSubtypes.REF_ACTOR}|" +
-                                                           $"{Lists.TargetActorSubtypes.ACTOR_ID} actor_id|" +
-                                                           $"{Lists.TargetActorSubtypes.NPCMAKER} npc_id}}";
+                                                           $"{TargetActorUsage}";
                     }
                 case Lists.Instructions.CCALL:
                     return $"{Lists.Instructions.CCALL} c_function_name";
@@ -286,11 +278,7 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.KILL:
                     {
-                        return $"{Lists.Instructions.KILL} {{{Lists.TargetActorSubtypes.SELF}|" +
-                                                           $"{Lists.TargetActorSubtypes.PLAYER}|" +
-                                                           $"{Lists.TargetActorSubtypes.REF_ACTOR}|" +
-                                                           $"{Lists.TargetActorSubtypes.ACTOR_ID} actor_id|" +
-                                                           $"{Lists.TargetActorSubtypes.NPCMAKER} npc_id}}";
+                        return $"{Lists.Instructions.KILL} {TargetActorUsage}";
                     }
                 case Lists.Instructions.PICKUP:
                     return $"{Lists.Instructions.PICKUP}";
@@ -357,6 +345,18 @@ namespace NPC_Maker
                             return $"{Lists.Instructions.SCRIPT} {oSubType}{Usages[Instruction][oSubType]}";
                         else
                             return $"{Lists.Instructions.SCRIPT} *script_subtype* ..";
+                    }
+                case Lists.Instructions.TRADE:
+                    {
+                        return $"{Lists.Instructions.TRADE} *trade_item_name* " + Environment.NewLine +
+                                                           $"   {Lists.Keyword_TradeSucccess} textbox_name [textbox_child]" + Environment.NewLine + 
+                                                           $"   {Lists.Keyword_TradeFailure}" + Environment.NewLine +
+                                                           $"       [*trade_item_name* textbox_name [textbox_child]]" + Environment.NewLine +
+                                                           $"       {Lists.Keyword_TradeDefault} textbox_name [textbox_child]" + Environment.NewLine +
+                                                           $"   {Lists.Keyword_EndTradeFailure}" + Environment.NewLine +
+                                                           $"   {Lists.Keyword_TradeNone} textbox_name [textbox_child]" + Environment.NewLine +
+                                                           $"END{Lists.Instructions.TRADE}";
+
                     }
                 default:
                     return "";
