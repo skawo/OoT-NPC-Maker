@@ -7,109 +7,172 @@ namespace NPC_Maker
 {
     public static class ScriptsUsages
     {
-        public static Dictionary<Lists.Instructions, Dictionary<object, string>> Usages = new Dictionary<Lists.Instructions, Dictionary<object, string>>()
+        private static string TargetActorUsage = $"{{{Lists.TargetActorSubtypes.SELF}|" +
+                                                 $"{Lists.TargetActorSubtypes.PLAYER}|" +
+                                                 $"{Lists.TargetActorSubtypes.REF_ACTOR}|" +
+                                                 $"{Lists.TargetActorSubtypes.ACTOR_ID} actor_id|" +
+                                                 $"{Lists.TargetActorSubtypes.NPCMAKER} npc_id}}";
+
+        private static string BooleanUsage = $"{{{Lists.Keyword_True}|{Lists.Keyword_False}}}";
+
+        private static Dictionary<Lists.Instructions, Dictionary<object, string>> Usages = new Dictionary<Lists.Instructions, Dictionary<object, string>>()
         {
             { Lists.Instructions.IF,  new Dictionary<object, string>()
                 {
-                    { Lists.IfSubTypes.FLAG_INF,                        $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.FLAG_EVENT,                      $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.FLAG_SWITCH,                     $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.FLAG_SCENE,                      $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.FLAG_TREASURE,                   $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.FLAG_ROOM_CLEAR,                 $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.FLAG_SCENE_COLLECT,              $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.FLAG_TEMPORARY,                  $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.FLAG_INTERNAL,                   $" flag_number {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
+                    { Lists.IfSubTypes.FLAG_INF,                            $" flag_number {BooleanUsage}" },
+                    { Lists.IfSubTypes.FLAG_EVENT,                          $" flag_number {BooleanUsage}" },
+                    { Lists.IfSubTypes.FLAG_SWITCH,                         $" flag_number {BooleanUsage}" },
+                    { Lists.IfSubTypes.FLAG_SCENE,                          $" flag_number {BooleanUsage}" },
+                    { Lists.IfSubTypes.FLAG_TREASURE,                       $" flag_number {BooleanUsage}" },
+                    { Lists.IfSubTypes.FLAG_ROOM_CLEAR,                     $" flag_number {BooleanUsage}" },
+                    { Lists.IfSubTypes.FLAG_SCENE_COLLECT,                  $" flag_number {BooleanUsage}" },
+                    { Lists.IfSubTypes.FLAG_TEMPORARY,                      $" flag_number {BooleanUsage}" },
+                    { Lists.IfSubTypes.FLAG_INTERNAL,                       $" flag_number {BooleanUsage}" },
 
-                    { Lists.IfSubTypes.LINK_IS_ADULT,                   $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.IS_DAY,                          $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.IS_TALKING,                      $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.PLAYER_HAS_EMPTY_BOTTLE,         $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.IN_CUTSCENE,                     $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.TEXTBOX_ON_SCREEN,               $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.TEXTBOX_DRAWING,                 $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.PLAYER_HAS_MAGIC,                $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.ATTACKED,                        $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.REF_ACTOR_EXISTS,                $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.PICKUP_IDLE,                     $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.PICKUP_PICKED_UP,                $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.PICKUP_THROWN,                   $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.PICKUP_LANDED,                   $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
+                    { Lists.IfSubTypes.LINK_IS_ADULT,                       $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.IS_DAY,                              $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.IS_TALKING,                          $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.PLAYER_HAS_EMPTY_BOTTLE,             $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.IN_CUTSCENE,                         $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.TEXTBOX_ON_SCREEN,                   $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.TEXTBOX_DRAWING,                     $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.PLAYER_HAS_MAGIC,                    $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.ATTACKED,                            $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.REF_ACTOR_EXISTS,                    $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.PICKUP_IDLE,                         $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.PICKUP_PICKED_UP,                    $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.PICKUP_THROWN,                       $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.PICKUP_LANDED,                       $" {BooleanUsage}" },
 
-                    { Lists.IfSubTypes.PLAYER_RUPEES,                   $" operator value" },
-                    { Lists.IfSubTypes.SCENE_ID,                        $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_SKULLTULAS,               $" operator value" },
-                    { Lists.IfSubTypes.PATH_NODE,                       $" operator value" },
-                    { Lists.IfSubTypes.ANIMATION_FRAME,                 $" operator value" },
-                    { Lists.IfSubTypes.CUTSCENE_FRAME,                  $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_HEALTH,                   $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_BOMBS,                    $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_BOMBCHUS,                 $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_ARROWS,                   $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_DEKUNUTS,                 $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_DEKUSTICKS,               $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_BEANS,                    $" operator value" },
-                    { Lists.IfSubTypes.PLAYER_SEEDS,                    $" operator value" },
-                    { Lists.IfSubTypes.EXT_VAR,                         $" npc_id variable_num operator value" },
-                    { Lists.IfSubTypes.EXT_VARF,                        $" npc_id variable_num operator value" },
+                    { Lists.IfSubTypes.PLAYER_RUPEES,                       $" operator value" },
+                    { Lists.IfSubTypes.SCENE_ID,                            $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_SKULLTULAS,                   $" operator value" },
+                    { Lists.IfSubTypes.PATH_NODE,                           $" operator value" },
+                    { Lists.IfSubTypes.ANIMATION_FRAME,                     $" operator value" },
+                    { Lists.IfSubTypes.CUTSCENE_FRAME,                      $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_HEALTH,                       $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_BOMBS,                        $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_BOMBCHUS,                     $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_ARROWS,                       $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_DEKUNUTS,                     $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_DEKUSTICKS,                   $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_BEANS,                        $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_SEEDS,                        $" operator value" },
+                    { Lists.IfSubTypes.EXT_VAR,                             $" npc_id variable_num operator value" },
+                    { Lists.IfSubTypes.EXT_VARF,                            $" npc_id variable_num operator value" },
 
-                    { Lists.IfSubTypes.STICK_X,                         $" operator value" },
-                    { Lists.IfSubTypes.STICK_Y,                         $" operator value" },
+                    { Lists.IfSubTypes.STICK_X,                             $" operator value" },
+                    { Lists.IfSubTypes.STICK_Y,                             $" operator value" },
 
-                    { Lists.IfSubTypes.ITEM_BEING_TRADED,               $" *trade_item_name*" },
-                    { Lists.IfSubTypes.TRADE_STATUS,                    $" {{{Lists.Keyword_TradeSucccess}|{Lists.Keyword_TradeFailure}|{Lists.Keyword_TradeNone}}}" },
-                    { Lists.IfSubTypes.PLAYER_MASK,                     $" *mask_name*" },
-                    { Lists.IfSubTypes.TIME_OF_DAY,                     $" operator HH:mm" },
-                    { Lists.IfSubTypes.ANIMATION,                       $" *animation_name*" },
-                    { Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM,       $" *inventory_item_name*" },
-                    { Lists.IfSubTypes.PLAYER_HAS_QUEST_ITEM,           $" *quest_item_name*" },
-                    { Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM,         $" *dungeon_item_name*" },
-                    { Lists.IfSubTypes.BUTTON_PRESSED,                  $" *button_name*" },
-                    { Lists.IfSubTypes.BUTTON_HELD,                     $" *button_name*" },
-                    { Lists.IfSubTypes.TARGETTED,                       $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
+                    { Lists.IfSubTypes.ITEM_BEING_TRADED,                   $" *trade_item_name*" },
+                    { Lists.IfSubTypes.TRADE_STATUS,                        $" {{{Lists.Keyword_TradeSucccess}|{Lists.Keyword_TradeFailure}|{Lists.Keyword_TradeNone}}}" },
+                    { Lists.IfSubTypes.PLAYER_MASK,                         $" *mask_name*" },
+                    { Lists.IfSubTypes.TIME_OF_DAY,                         $" operator HH:mm" },
+                    { Lists.IfSubTypes.ANIMATION,                           $" *animation_name*" },
+                    { Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM,           $" *inventory_item_name*" },
+                    { Lists.IfSubTypes.PLAYER_HAS_QUEST_ITEM,               $" *quest_item_name*" },
+                    { Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM,             $" *dungeon_item_name*" },
+                    { Lists.IfSubTypes.BUTTON_PRESSED,                      $" *button_name*" },
+                    { Lists.IfSubTypes.BUTTON_HELD,                         $" *button_name*" },
+                    { Lists.IfSubTypes.TARGETTED,                           $" {BooleanUsage}" },
 
-                    { Lists.IfSubTypes.DISTANCE_FROM_PLAYER,            $" operator value" },
-                    { Lists.IfSubTypes.DISTANCE_FROM_REF_ACTOR,         $" operator value" },
-                    { Lists.IfSubTypes.LENS_OF_TRUTH_ON,                $" {{{Lists.Keyword_True}|{Lists.Keyword_False}}}" },
-                    { Lists.IfSubTypes.DAMAGED_BY,                      $" *damage_type_name*" },
-                    { Lists.IfSubTypes.ROOM_ID,                         $" operator value" },
+                    { Lists.IfSubTypes.DISTANCE_FROM_PLAYER,                $" operator value" },
+                    { Lists.IfSubTypes.DISTANCE_FROM_REF_ACTOR,             $" operator value" },
+                    { Lists.IfSubTypes.LENS_OF_TRUTH_ON,                    $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.DAMAGED_BY,                          $" *damage_type_name*" },
+                    { Lists.IfSubTypes.ROOM_ID,                             $" operator value" },
 
-                    { Lists.IfSubTypes.CURRENT_STATE,                   $" state_name" },
-                    { Lists.IfSubTypes.CCALL,                           $" c_function_name [operator] [value]" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,          $".min_range->max_range operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,         $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,        $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL32,        $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBALF,         $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR8,          $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR16,         $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR32,         $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.ACTORF,          $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE8,           $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE16,          $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE32,          $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.SAVEF,           $".0xoffset operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.VAR,             $".varnum operator value" },
-                    { Lists.IfWhileAwaitSetRamSubTypes.VARF,            $".varnum operator value" },
+                    { Lists.IfSubTypes.CURRENT_STATE,                       $" state_name" },
+                    { Lists.IfSubTypes.CCALL,                               $" c_function_name [operator] [value]" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,              $".min_range->max_range operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL32,            $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBALF,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR8,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR16,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR32,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTORF,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE8,               $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE16,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE32,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVEF,               $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.VAR,                 $".varnum operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.VARF,                $".varnum operator value" },
                 }
             },
             { Lists.Instructions.ITEM,  new Dictionary<object, string>()
                 {
-                    { Lists.ItemSubTypes.AWARD,                         $" *award_item_name*" },
-                    { Lists.ItemSubTypes.GIVE,                          $" *inventory_item_name*" },
-                    { Lists.ItemSubTypes.TAKE,                          $" *inventory_item_name*" },
+                    { Lists.ItemSubTypes.AWARD,                             $" *award_item_name*" },
+                    { Lists.ItemSubTypes.GIVE,                              $" *inventory_item_name*" },
+                    { Lists.ItemSubTypes.TAKE,                              $" *inventory_item_name*" },
                 }
             },
             { Lists.Instructions.PLAY,  new Dictionary<object, string>()
                 {
-                    { Lists.PlaySubTypes.BGM,                           $" *bgm_name*" },
-                    { Lists.PlaySubTypes.SFX,                           $" *sfx_name*" },
-                    { Lists.PlaySubTypes.SFX_GLOBAL,                    $" *sfx_name*" },
-                    { Lists.PlaySubTypes.CUTSCENE,                      $"" },
-                    { Lists.PlaySubTypes.CUTSCENE_ID,                   $" header_id" },
+                    { Lists.PlaySubTypes.BGM,                               $" *bgm_name*" },
+                    { Lists.PlaySubTypes.SFX,                               $" *sfx_name*" },
+                    { Lists.PlaySubTypes.SFX_GLOBAL,                        $" *sfx_name*" },
+                    { Lists.PlaySubTypes.CUTSCENE,                          $"" },
+                    { Lists.PlaySubTypes.CUTSCENE_ID,                       $" header_id" },
+                }
+            },
+            { Lists.Instructions.POSITION,  new Dictionary<object, string>()
+                {
+                    { Lists.PositionSubTypes.SET,                           $" {TargetActorUsage} x y z" },
+                    { Lists.PositionSubTypes.MOVE_BY,                       $" {TargetActorUsage} x y z speed [ignore_y:{BooleanUsage}]" },
+                    { Lists.PositionSubTypes.MOVE_TO,                       $" {TargetActorUsage} x y z speed [ignore_y:{BooleanUsage}]" },
+                    { Lists.PositionSubTypes.DIRECTION_MOVE_BY,             $" {TargetActorUsage} x y z speed [ignore_y:{BooleanUsage}]" },
+                    { Lists.PositionSubTypes.MOVE_BY_REF_ACTOR,             $" {TargetActorUsage} x y z speed [ignore_y:{BooleanUsage}]" },
+                    { Lists.PositionSubTypes.DIRECTION_MOVE_BY_REF_ACTOR,   $" {TargetActorUsage} x y z speed [ignore_y:{BooleanUsage}]" },
+                }
+            },
+            { Lists.Instructions.ROTATION,  new Dictionary<object, string>()
+                {
+                    { Lists.RotationSubTypes.SET,                           $" {TargetActorUsage} x y z" },
+                    { Lists.RotationSubTypes.ROTATE_BY,                     $" {TargetActorUsage} x y z speed" },
+                    { Lists.RotationSubTypes.ROTATE_TO,                     $" {TargetActorUsage} x y z speed" },
+                }
+            },
+            { Lists.Instructions.SCALE,  new Dictionary<object, string>()
+                {
+                    { Lists.ScaleSubTypes.SET,                              $" {TargetActorUsage} scale" },
+                    { Lists.ScaleSubTypes.SCALE_BY,                         $" {TargetActorUsage} scale speed" },
+                    { Lists.ScaleSubTypes.SCALE_TO,                         $" {TargetActorUsage} scale speed" },
+                }
+            },
+            { Lists.Instructions.SCRIPT,  new Dictionary<object, string>()
+                {
+                    { Lists.ScriptSubtypes.START,                           $" script_id" },
+                    { Lists.ScriptSubtypes.STOP,                            $" script_id" },
                 }
             },
         };
+
+        private static Dictionary<Lists.ParticleSubOptions, string> ParticleSubOptionUsages = new Dictionary<Lists.ParticleSubOptions, string>()
+        {
+            {Lists.ParticleSubOptions.POSITION,                     $"[POSITION {{{Lists.SpawnPosParams.ABSOLUTE}|{Lists.SpawnPosParams.RELATIVE}|{Lists.SpawnPosParams.DIRECTION}|{Lists.SpawnPosParams.DIRECTION_REF_ACTOR}|{Lists.SpawnPosParams.RELATIVE_REF_ACTOR}}} x y z]" },
+            {Lists.ParticleSubOptions.VELOCITY,                     $"[VELOCITY x y z]" },
+            {Lists.ParticleSubOptions.ACCELERATION,                 $"[ACCELERATION x y z]" },
+            {Lists.ParticleSubOptions.COLOR1,                       $"[COLOR1 r g b a]" },
+            {Lists.ParticleSubOptions.COLOR2,                       $"[COLOR2 r g b a]" },
+            {Lists.ParticleSubOptions.SCALE,                        $"[SCALE value]" },
+            {Lists.ParticleSubOptions.SCALE_UPDATE,                 $"[SCALE_UPDATE value]" },
+            {Lists.ParticleSubOptions.SCALE_UPDATE_DOWN,            $"[SCALE_UPDATE_DOWN value]" },
+            {Lists.ParticleSubOptions.OPACITY,                      $"[OPACITY value]" },
+            {Lists.ParticleSubOptions.RANDOMIZE_XZ,                 $"[RANDOMIZE_XZ {BooleanUsage}]" },
+            {Lists.ParticleSubOptions.SCORE_AMOUNT,                 $"[SCORE_AMOUNT {{0|1|2}}]" },
+            {Lists.ParticleSubOptions.COUNT,                        $"[COUNT value]" },
+            {Lists.ParticleSubOptions.LIGHTPOINT_COLOR,             $"[LIGHTPOINT_COLOR {{WHITE|BLUE|RED|YELLOW|PURPLE|PINK|ORANGE|GRAY}}]" },
+            {Lists.ParticleSubOptions.FADE_DELAY,                   $"[FADE_DELAY value]" },
+            {Lists.ParticleSubOptions.DURATION,                     $"[DURATION value]" },
+            {Lists.ParticleSubOptions.YAW,                          $"[YAW value]" },
+            {Lists.ParticleSubOptions.DLIST,                        $"[DLIST *extra_dlist_name*]" },
+            {Lists.ParticleSubOptions.SPOTTED,                      $"[SPOTTED label]" },
+        };
+
+
+
 
         public static string GetUsage(Lists.Instructions Instruction, string SubType)
         {
@@ -119,13 +182,12 @@ namespace NPC_Maker
                 case Lists.Instructions.WHILE:
                     {
                         bool res = Enum.TryParse<Lists.IfSubTypes>(SubType, out Lists.IfSubTypes oSubType);
-                        string EndKeyword = Instruction == Lists.Instructions.IF ? Lists.Keyword_EndIf : Lists.Keyword_EndWhile;
 
                         if (res)
                         {
                             return Environment.NewLine + $"{Instruction} {oSubType}{Usages[Instruction][oSubType]}" + Environment.NewLine +
                                                          $"   ~instructions~ " + Environment.NewLine +
-                                                         $"{EndKeyword}";
+                                                         $"END{Instruction}";
                         }
                         else
                         {
@@ -139,13 +201,13 @@ namespace NPC_Maker
                             {
                                 return Environment.NewLine + $"{Instruction} {oSubType2}{Usages[Instruction][oSubType2]}" + Environment.NewLine +
                                                              $"   ~instructions~ " + Environment.NewLine +
-                                                             $"{EndKeyword}";
+                                                             $"END{Instruction}";
                             }
                             else
                             {
                                 return Environment.NewLine + $"{Instruction} *subtype*" + Environment.NewLine +
                                         $"   ~instructions~ " + Environment.NewLine +
-                                        $"{EndKeyword}";
+                                        $"END{Instruction}";
                             }
                         }
                     }
@@ -170,7 +232,7 @@ namespace NPC_Maker
                 case Lists.Instructions.FADEIN:
                     return $"{Lists.Instructions.FADEIN} fadein_rate";
                 case Lists.Instructions.FADEOUT:
-                    return $"{Lists.Instructions.FADEOUT} r_color g_color b_color fadeout_rate";
+                    return $"{Lists.Instructions.FADEOUT} r g b fadeout_rate";
                 case Lists.Instructions.FORCE_TALK:
                     return $"{Lists.Instructions.FORCE_TALK} textbox [textbox_child]";
                 case Lists.Instructions.GOTO:
@@ -188,7 +250,7 @@ namespace NPC_Maker
                                $"   [POSITION {{{Lists.SpawnPosParams.ABSOLUTE}|{Lists.SpawnPosParams.RELATIVE}|{Lists.SpawnPosParams.DIRECTION}|{Lists.SpawnPosParams.DIRECTION_REF_ACTOR}|{Lists.SpawnPosParams.RELATIVE_REF_ACTOR}}} x y z]" + Environment.NewLine +
                                $"   [ROTATION x y z]" + Environment.NewLine +
                                $"   [SET_AS_REF {{{Lists.Keyword_True}|{Lists.Keyword_False}}}]" + Environment.NewLine +
-                               $"ENDSPAWN";
+                               $"END{Lists.Instructions.SPAWN}";
                     }
                 case Lists.Instructions.ITEM:
                     {
@@ -214,13 +276,87 @@ namespace NPC_Maker
                     {
                         return Environment.NewLine + $"{Lists.Instructions.OCARINA} song_name" + Environment.NewLine +
                                $"   ~instructions~ " + Environment.NewLine +
-                               $"ENDOCARINA";
+                               $"END{Lists.Instructions.OCARINA}";
                     }
                 case Lists.Instructions.TALK:
                     {
                         return Environment.NewLine + $"{Lists.Instructions.TALK} textbox_name [textbox_name_child]" + Environment.NewLine +
                                $"   ~instructions~ " + Environment.NewLine +
-                               $"ENDTALK";
+                               $"END{Lists.Instructions.TALK}";
+                    }
+                case Lists.Instructions.KILL:
+                    {
+                        return $"{Lists.Instructions.KILL} {{{Lists.TargetActorSubtypes.SELF}|" +
+                                                           $"{Lists.TargetActorSubtypes.PLAYER}|" +
+                                                           $"{Lists.TargetActorSubtypes.REF_ACTOR}|" +
+                                                           $"{Lists.TargetActorSubtypes.ACTOR_ID} actor_id|" +
+                                                           $"{Lists.TargetActorSubtypes.NPCMAKER} npc_id}}";
+                    }
+                case Lists.Instructions.PICKUP:
+                    return $"{Lists.Instructions.PICKUP}";
+                case Lists.Instructions.PARTICLE:
+                    {
+                        bool res = Enum.TryParse<Lists.ParticleTypes>(SubType, out Lists.ParticleTypes oSubType);
+
+                        if (!res)
+                        {
+                            string Out = $"{Lists.Instructions.PARTICLE} {SubType}" + Environment.NewLine;
+
+                            foreach (Lists.ParticleSubOptions sub in Enum.GetValues(typeof(Lists.ParticleSubOptions)))
+                                Out += $"   {ParticleSubOptionUsages[sub]}" + Environment.NewLine;
+
+                            Out += $"END{Lists.Instructions.PARTICLE}";
+                            return Out;
+                        }
+                        else
+                        {
+                            string Out = $"{Lists.Instructions.PARTICLE} {SubType}" + Environment.NewLine;
+
+                            foreach (Lists.ParticleSubOptions sub in Enum.GetValues(typeof(Lists.ParticleSubOptions)))
+                            {
+                                if (Dicts.UsableParticleSubOptions[oSubType].Contains(sub))
+                                    Out += $"   {ParticleSubOptionUsages[sub]}" + Environment.NewLine;
+                            }
+
+                            Out += $"END{Lists.Instructions.PARTICLE}";
+                            return Out;
+                        }
+                    }
+                case Lists.Instructions.POSITION:
+                    {
+                        bool res = Enum.TryParse<Lists.PositionSubTypes>(SubType, out Lists.PositionSubTypes oSubType);
+
+                        if (res)
+                            return $"{Lists.Instructions.POSITION} {oSubType}{Usages[Instruction][oSubType]}";
+                        else
+                            return $"{Lists.Instructions.POSITION} *position_subtype* ..";
+                    }
+                case Lists.Instructions.ROTATION:
+                    {
+                        bool res = Enum.TryParse<Lists.RotationSubTypes>(SubType, out Lists.RotationSubTypes oSubType);
+
+                        if (res)
+                            return $"{Lists.Instructions.ROTATION} {oSubType}{Usages[Instruction][oSubType]}";
+                        else
+                            return $"{Lists.Instructions.ROTATION} *rotation_subtype* ..";
+                    }
+                case Lists.Instructions.SCALE:
+                    {
+                        bool res = Enum.TryParse<Lists.ScaleSubTypes>(SubType, out Lists.ScaleSubTypes oSubType);
+
+                        if (res)
+                            return $"{Lists.Instructions.SCALE} {oSubType}{Usages[Instruction][oSubType]}";
+                        else
+                            return $"{Lists.Instructions.SCALE} *scale_subtype* ..";
+                    }
+                case Lists.Instructions.SCRIPT:
+                    {
+                        bool res = Enum.TryParse<Lists.ScriptSubtypes>(SubType, out Lists.ScriptSubtypes oSubType);
+
+                        if (res)
+                            return $"{Lists.Instructions.SCRIPT} {oSubType}{Usages[Instruction][oSubType]}";
+                        else
+                            return $"{Lists.Instructions.SCRIPT} *script_subtype* ..";
                     }
                 default:
                     return "";

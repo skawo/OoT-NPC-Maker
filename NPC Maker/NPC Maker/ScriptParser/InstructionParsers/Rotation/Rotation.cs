@@ -9,6 +9,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
+                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.RotationSubTypes), 1);
 
                 ScriptVarVal ActorNum = new ScriptVarVal();
@@ -103,6 +104,11 @@ namespace NPC_Maker.Scripts
                     outScript.ParseErrors.Add(pEx);
                     return new InstructionNop();
                 }
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Add(pEx);
+                return new InstructionNop();
             }
             catch (Exception)
             {

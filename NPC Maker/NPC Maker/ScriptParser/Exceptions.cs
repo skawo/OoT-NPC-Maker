@@ -16,6 +16,13 @@ namespace NPC_Maker.Scripts
             return Message + " " + Line + Environment.NewLine + "===============================";
         }
 
+        public static ParseException UsageError(string _Line)
+        {
+            string[] Words = _Line.Split(' ');
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
+            return new ParseException($"This {Words[0].ToUpper()} does not have a corresponding END{Words[0].ToUpper()}.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
+        }
+
         public static ParseException GeneralError(string _Line)
         {
             return new ParseException("Error parsing line: ", _Line);
@@ -139,37 +146,27 @@ namespace NPC_Maker.Scripts
 
         public static ParseException IfNotClosed(string _Line)
         {
-            string[] Words = _Line.Split(' ');
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
-            return new ParseException($"This IF does not have a corresponding ENDIF.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
+            return UsageError(_Line);
         }
 
         public static ParseException OcarinaNotClosed(string _Line)
         {
-            string[] Words = _Line.Split(' ');
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
-            return new ParseException($"This OCARINA does not have a corresponding ENDOCARINA.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
+            return UsageError(_Line);
         }
 
         public static ParseException SpawnNotClosed(string _Line)
         {
-            string[] Words = _Line.Split(' ');
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
-            return new ParseException($"This SPAWN does not have a corresponding ENDSPAWN.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
+            return UsageError(_Line);
         }
 
         public static ParseException TalkNotClosed(string _Line)
         {
-            string[] Words = _Line.Split(' ');
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
-            return new ParseException($"This TALK does not have a corresponding ENDTALK.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
+            return UsageError(_Line);
         }
 
         public static ParseException TradeNotClosed(string _Line)
         {
-            string[] Words = _Line.Split(' ');
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
-            return new ParseException($"This TRADE does not have a corresponding ENDTRADE.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
+            return UsageError(_Line);
         }
 
         public static ParseException FaceCantBeSame(string _Line)
@@ -179,9 +176,7 @@ namespace NPC_Maker.Scripts
 
         public static ParseException ParticleNotClosed(string _Line)
         {
-            string[] Words = _Line.Split(' ');
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
-            return new ParseException($"This PARTICLE does not have a corresponding PARTICLE.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
+            return UsageError(_Line);
         }
 
         public static ParseException FaceCantBeSame(string[] _Line)
