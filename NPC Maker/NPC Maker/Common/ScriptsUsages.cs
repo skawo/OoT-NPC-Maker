@@ -7,15 +7,15 @@ namespace NPC_Maker
 {
     public static class ScriptsUsages
     {
-        private static string TargetActorUsage = $"{{{Lists.TargetActorSubtypes.SELF}|" +
+        private static readonly string TargetActorUsage = $"{{{Lists.TargetActorSubtypes.SELF}|" +
                                                  $"{Lists.TargetActorSubtypes.PLAYER}|" +
                                                  $"{Lists.TargetActorSubtypes.REF_ACTOR}|" +
                                                  $"{Lists.TargetActorSubtypes.ACTOR_ID} actor_id|" +
                                                  $"{Lists.TargetActorSubtypes.NPCMAKER} npc_id}}";
 
-        private static string BooleanUsage = $"{{{Lists.Keyword_True}|{Lists.Keyword_False}}}";
+        private static readonly string BooleanUsage = $"{{{Lists.Keyword_True}|{Lists.Keyword_False}}}";
 
-        private static Dictionary<Lists.Instructions, Dictionary<object, string>> Usages = new Dictionary<Lists.Instructions, Dictionary<object, string>>()
+        private static readonly Dictionary<Lists.Instructions, Dictionary<object, string>> Usages = new Dictionary<Lists.Instructions, Dictionary<object, string>>()
         {
             { Lists.Instructions.IF,  new Dictionary<object, string>()
                 {
@@ -200,7 +200,7 @@ namespace NPC_Maker
             },
         };
 
-        private static Dictionary<Lists.ParticleSubOptions, string> ParticleSubOptionUsages = new Dictionary<Lists.ParticleSubOptions, string>()
+        private static readonly Dictionary<Lists.ParticleSubOptions, string> ParticleSubOptionUsages = new Dictionary<Lists.ParticleSubOptions, string>()
         {
             {Lists.ParticleSubOptions.POSITION,                     $"[{Lists.ParticleSubOptions.POSITION} {{{Lists.SpawnPosParams.ABSOLUTE}|{Lists.SpawnPosParams.RELATIVE}|{Lists.SpawnPosParams.DIRECTION}|{Lists.SpawnPosParams.DIRECTION_REF_ACTOR}|{Lists.SpawnPosParams.RELATIVE_REF_ACTOR}}} x y z]" },
             {Lists.ParticleSubOptions.VELOCITY,                     $"[{Lists.ParticleSubOptions.VELOCITY} x y z]" },
@@ -243,7 +243,7 @@ namespace NPC_Maker
                                 SubType = SubType.Substring(0, SubType.IndexOf("."));
 
 
-                            bool res2 = Enum.TryParse<Lists.IfWhileAwaitSetRamSubTypes>(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
+                            bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
 
                             if (res2)
                             {
@@ -294,7 +294,7 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.ITEM:
                     {
-                        bool res = Enum.TryParse<Lists.ItemSubTypes>(SubType, out Lists.ItemSubTypes oSubType);
+                        bool res = Enum.TryParse(SubType, out Lists.ItemSubTypes oSubType);
 
                         if (res)
                             return $"{Lists.Instructions.ITEM} {oSubType}{Usages[Instruction][oSubType]}";
@@ -303,7 +303,7 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.PLAY:
                     {
-                        bool res = Enum.TryParse<Lists.PlaySubTypes>(SubType, out Lists.PlaySubTypes oSubType);
+                        bool res = Enum.TryParse(SubType, out Lists.PlaySubTypes oSubType);
 
                         if (res)
                             return $"{Lists.Instructions.PLAY} {oSubType}{Usages[Instruction][oSubType]}";
@@ -332,7 +332,7 @@ namespace NPC_Maker
                     return $"{Lists.Instructions.PICKUP}";
                 case Lists.Instructions.PARTICLE:
                     {
-                        bool res = Enum.TryParse<Lists.ParticleTypes>(SubType, out Lists.ParticleTypes oSubType);
+                        bool res = Enum.TryParse(SubType, out Lists.ParticleTypes oSubType);
 
                         if (!res)
                         {
@@ -360,7 +360,7 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.POSITION:
                     {
-                        bool res = Enum.TryParse<Lists.PositionSubTypes>(SubType, out Lists.PositionSubTypes oSubType);
+                        bool res = Enum.TryParse(SubType, out Lists.PositionSubTypes oSubType);
 
                         if (res)
                             return $"{Lists.Instructions.POSITION} {oSubType}{Usages[Instruction][oSubType]}";
@@ -369,7 +369,7 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.ROTATION:
                     {
-                        bool res = Enum.TryParse<Lists.RotationSubTypes>(SubType, out Lists.RotationSubTypes oSubType);
+                        bool res = Enum.TryParse(SubType, out Lists.RotationSubTypes oSubType);
 
                         if (res)
                             return $"{Lists.Instructions.ROTATION} {oSubType}{Usages[Instruction][oSubType]}";
@@ -378,7 +378,7 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.SCALE:
                     {
-                        bool res = Enum.TryParse<Lists.ScaleSubTypes>(SubType, out Lists.ScaleSubTypes oSubType);
+                        bool res = Enum.TryParse(SubType, out Lists.ScaleSubTypes oSubType);
 
                         if (res)
                             return $"{Lists.Instructions.SCALE} {oSubType}{Usages[Instruction][oSubType]}";
@@ -387,7 +387,7 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.SCRIPT:
                     {
-                        bool res = Enum.TryParse<Lists.ScriptSubtypes>(SubType, out Lists.ScriptSubtypes oSubType);
+                        bool res = Enum.TryParse(SubType, out Lists.ScriptSubtypes oSubType);
 
                         if (res)
                             return $"{Lists.Instructions.SCRIPT} {oSubType}{Usages[Instruction][oSubType]}";
@@ -412,7 +412,7 @@ namespace NPC_Maker
                     return $"{Lists.Instructions.RETURN}";
                 case Lists.Instructions.AWAIT:
                     {
-                        bool res = Enum.TryParse<Lists.AwaitSubTypes>(SubType, out Lists.AwaitSubTypes oSubType);
+                        bool res = Enum.TryParse(SubType, out Lists.AwaitSubTypes oSubType);
 
                         if (res)
                             return $"{Lists.Instructions.AWAIT} {oSubType}{Usages[Instruction][oSubType]}";
@@ -422,7 +422,7 @@ namespace NPC_Maker
                                 SubType = SubType.Substring(0, SubType.IndexOf("."));
 
 
-                            bool res2 = Enum.TryParse<Lists.IfWhileAwaitSetRamSubTypes>(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
+                            bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
 
                             if (res2)
                                 return $"{Lists.Instructions.AWAIT} {oSubType2}{Usages[Instruction][oSubType2]}";
