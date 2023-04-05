@@ -383,6 +383,7 @@ namespace NPC_Maker
             {Lists.ParticleSubOptions.YAW,                          $"[{Lists.ParticleSubOptions.YAW} value]" },
             {Lists.ParticleSubOptions.DLIST,                        $"[{Lists.ParticleSubOptions.DLIST} *extra_dlist_name*]" },
             {Lists.ParticleSubOptions.SPOTTED,                      $"[{Lists.ParticleSubOptions.SPOTTED} label]" },
+            {Lists.ParticleSubOptions.VARIABLE,                     $"[{Lists.ParticleSubOptions.VARIABLE} value]" },
         };
 
         public static string GetUsage(Lists.Instructions Instruction, string SubType)
@@ -396,7 +397,7 @@ namespace NPC_Maker
 
                         if (res)
                         {
-                            return Environment.NewLine + $"{Instruction} {oSubType}{Usages[Instruction][oSubType]}" + Environment.NewLine +
+                            return Environment.NewLine + $"{Instruction} {oSubType}{Usages[Lists.Instructions.IF][oSubType]}" + Environment.NewLine +
                                                          $"   ~instructions~ " + Environment.NewLine +
                                                          $"END{Instruction}";
                         }
@@ -410,7 +411,7 @@ namespace NPC_Maker
 
                             if (res2)
                             {
-                                return Environment.NewLine + $"{Instruction} {oSubType2}{Usages[Instruction][oSubType2]}" + Environment.NewLine +
+                                return Environment.NewLine + $"{Instruction} {oSubType2}{Usages[Lists.Instructions.IF][oSubType2]}" + Environment.NewLine +
                                                              $"   ~instructions~ " + Environment.NewLine +
                                                              $"END{Instruction}";
                             }
@@ -489,7 +490,10 @@ namespace NPC_Maker
                     }
                 case Lists.Instructions.KILL:
                     {
-                        return $"{Lists.Instructions.KILL} {TargetActorUsage}";
+                        if (SubType != "")
+                            return $"{Lists.Instructions.KILL} {SubType}";
+                        else
+                            return $"{Lists.Instructions.KILL} {TargetActorUsage}";
                     }
                 case Lists.Instructions.PICKUP:
                     return $"{Lists.Instructions.PICKUP}";

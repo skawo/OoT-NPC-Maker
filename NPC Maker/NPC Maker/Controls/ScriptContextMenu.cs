@@ -132,10 +132,21 @@ namespace NPC_Maker
                 }
                 else if (TalkInstructions.Contains(Item))
                 {
+                    if (Entry.Messages.Count != 0)
+                    { 
+                        Tsmi.DoubleClickEnabled = true;
+                        Tsmi.DoubleClick += Tsmi_DoubleClick;
+                        AddItemCollectionToToolStripMenuItem(Entry.Messages.Select(x => x.Name).ToArray(), Tsmi);
+                    }
+                    else
+                        Tsmi.Click += Tsmi_Click;
+
+                }
+                else if (Item == Lists.Instructions.PARTICLE.ToString())
+                {
                     Tsmi.DoubleClickEnabled = true;
                     Tsmi.DoubleClick += Tsmi_DoubleClick;
-                    AddItemCollectionToToolStripMenuItem(Entry.Messages.Select(x => x.Name).ToArray(), Tsmi);
-
+                    AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), Tsmi);
                 }
                 else
                     Tsmi.Click += Tsmi_Click;
@@ -205,18 +216,25 @@ namespace NPC_Maker
 
         private static void Tsmi_DoubleClick(object sender, EventArgs e)
         {
-            InsertTxtToScript((sender as ToolStripItem).Text + " ");
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), (sender as ToolStripItem).Text), "");
+            Usage = Usage.Trim(Environment.NewLine.ToCharArray());
+
+            InsertTxtToScript(Usage == "" ? (sender as ToolStripItem).Text : Usage);
         }
 
         private static void Tsmi_Click(object sender, EventArgs e)
         {
-            InsertTxtToScript((sender as ToolStripItem).Text + " ");
+            Tsmi_DoubleClick(sender, e);
         }
 
         private static void SubItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem s = (sender as ToolStripMenuItem);
-            InsertTxtToScript(s.OwnerItem.Text + " " + s.Text);
+            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), s.OwnerItem.Text), s.Text);
+
+            Usage = Usage.Trim(Environment.NewLine.ToCharArray());
+
+            InsertTxtToScript(Usage == "" ? s.OwnerItem.Text + " " + s.Text : Usage);
         }
 
         private static void SoundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
