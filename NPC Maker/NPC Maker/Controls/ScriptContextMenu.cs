@@ -230,11 +230,17 @@ namespace NPC_Maker
         private static void SubItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem s = (sender as ToolStripMenuItem);
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), s.OwnerItem.Text), s.Text);
 
-            Usage = Usage.Trim(Environment.NewLine.ToCharArray());
+            bool res = Enum.TryParse(s.OwnerItem.Text, out Lists.Instructions oInst);
 
-            InsertTxtToScript(Usage == "" ? s.OwnerItem.Text + " " + s.Text : Usage);
+            if (res)
+            {
+                string Usage = ScriptsUsages.GetUsage(oInst, s.Text);
+                Usage = Usage.Trim(Environment.NewLine.ToCharArray());
+                InsertTxtToScript(Usage == "" ? s.OwnerItem.Text + " " + s.Text : Usage);
+            }
+            else
+                InsertTxtToScript(s.Text);
         }
 
         private static void SoundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
