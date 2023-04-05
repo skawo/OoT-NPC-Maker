@@ -134,8 +134,7 @@ namespace NPC_Maker
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                if (ScriptContextMenu.ContextMenuStrip == null)
-                    ScriptContextMenu.MakeContextMenu(Entry.EmbeddedOverlayCode);
+                ScriptContextMenu.MakeContextMenu(Entry);
 
                 Cursor.Current = Cursors.Default;
 

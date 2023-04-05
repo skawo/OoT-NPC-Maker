@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace NPC_Maker
 {
@@ -31,8 +32,11 @@ namespace NPC_Maker
         private static ToolStripMenuItem stateTypesStripMenuItem;
         private static ToolStripMenuItem cFunctionsStripMenuItem;
         private static ToolStripMenuItem quakeTypesStripMenuItem;
-        public static void MakeContextMenu(CCodeEntry CodeEntry)
+        public static void MakeContextMenu(NPCEntry Entry)
         {
+            if (ContextMenuStrip != null)
+                ContextMenuStrip.Dispose();
+
             ContextMenuStrip = new ContextMenuStrip();
 
             functionsToolStripMenuItem = new ToolStripMenuItem();
@@ -110,6 +114,11 @@ namespace NPC_Maker
             linkAnimsStripMenuItem.Text = "Player animations";
             linkAnimsStripMenuItem.Click += LinkAnimsStripMenuItem_Click;
 
+            List<string> TalkInstructions = new List<string>() { Lists.Instructions.TALK.ToString(), 
+                                                                 Lists.Instructions.FORCE_TALK.ToString(), 
+                                                                 Lists.Instructions.SHOW_TEXTBOX.ToString(), 
+                                                                 Lists.Instructions.SHOW_TEXTBOX_SP.ToString() };
+
 
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
@@ -120,6 +129,13 @@ namespace NPC_Maker
                     Tsmi.DoubleClickEnabled = true;
                     Tsmi.DoubleClick += Tsmi_DoubleClick;
                     AddItemCollectionToToolStripMenuItem(Dicts.FunctionSubtypes[Item], Tsmi);
+                }
+                else if (TalkInstructions.Contains(Item))
+                {
+                    Tsmi.DoubleClickEnabled = true;
+                    Tsmi.DoubleClick += Tsmi_DoubleClick;
+                    AddItemCollectionToToolStripMenuItem(Entry.Messages.Select(x => x.Name).ToArray(), Tsmi);
+
                 }
                 else
                     Tsmi.Click += Tsmi_Click;
@@ -143,7 +159,7 @@ namespace NPC_Maker
 
             List<string> FunctionNames = new List<string>();
 
-            foreach (var kvp in CodeEntry.Functions)
+            foreach (var kvp in Entry.EmbeddedOverlayCode.Functions)
                 FunctionNames.Add(kvp.Key);
 
             AddItemCollectionToToolStripMenuItem(FunctionNames.ToArray(), cFunctionsStripMenuItem);
@@ -199,7 +215,8 @@ namespace NPC_Maker
 
         private static void SubItem_Click(object sender, EventArgs e)
         {
-            InsertTxtToScript((sender as ToolStripItem).Text);
+            ToolStripMenuItem s = (sender as ToolStripMenuItem);
+            InsertTxtToScript(s.OwnerItem.Text + " " + s.Text);
         }
 
         private static void SoundEffectsToolStripMenuItem_Click(object sender, EventArgs e)

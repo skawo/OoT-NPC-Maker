@@ -217,6 +217,10 @@ namespace NPC_Maker
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.KILL), Enum.GetNames(typeof(Lists.TargetActorSubtypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.ITEM), Enum.GetNames(typeof(Lists.ItemSubTypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.FACE), Lists.FaceSubTypesForCtxMenu.ToArray() },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.SCRIPT),  Enum.GetNames(typeof(Lists.ScriptSubtypes)) },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.ROTATION),  Enum.GetNames(typeof(Lists.RotationSubTypes)) },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.POSITION),  Enum.GetNames(typeof(Lists.PositionSubTypes)) },
+            {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.SCALE),  Enum.GetNames(typeof(Lists.ScaleSubTypes)) },
         };
 
         public static Dictionary<Lists.MsgControlCode, string> MessageControlCodes = PopulateCodeDictionary();
