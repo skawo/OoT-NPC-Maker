@@ -388,237 +388,244 @@ namespace NPC_Maker
 
         public static string GetUsage(Lists.Instructions Instruction, string SubType)
         {
-            switch (Instruction)
+            try
             {
-                case Lists.Instructions.IF:
-                case Lists.Instructions.WHILE:
-                    {
-                        bool res = Enum.TryParse<Lists.IfSubTypes>(SubType, out Lists.IfSubTypes oSubType);
-
-                        if (res)
+                switch (Instruction)
+                {
+                    case Lists.Instructions.IF:
+                    case Lists.Instructions.WHILE:
                         {
-                            return Environment.NewLine + $"{Instruction} {oSubType}{Usages[Lists.Instructions.IF][oSubType]}" + Environment.NewLine +
-                                                         $"   ~instructions~ " + Environment.NewLine +
-                                                         $"END{Instruction}";
-                        }
-                        else
-                        {
-                            if (SubType.Contains('.'))
-                                SubType = SubType.Substring(0, SubType.IndexOf("."));
+                            bool res = Enum.TryParse<Lists.IfSubTypes>(SubType, out Lists.IfSubTypes oSubType);
 
-
-                            bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
-
-                            if (res2)
+                            if (res)
                             {
-                                return Environment.NewLine + $"{Instruction} {oSubType2}{Usages[Lists.Instructions.IF][oSubType2]}" + Environment.NewLine +
+                                return Environment.NewLine + $"{Instruction} {oSubType}{Usages[Lists.Instructions.IF][oSubType]}" + Environment.NewLine +
                                                              $"   ~instructions~ " + Environment.NewLine +
                                                              $"END{Instruction}";
                             }
                             else
                             {
-                                return Environment.NewLine + $"{Instruction} *subtype*" + Environment.NewLine +
-                                        $"   ~instructions~ " + Environment.NewLine +
-                                        $"END{Instruction}";
+                                if (SubType.Contains('.'))
+                                    SubType = SubType.Substring(0, SubType.IndexOf("."));
+
+
+                                bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
+
+                                if (res2)
+                                {
+                                    return Environment.NewLine + $"{Instruction} {oSubType2}{Usages[Lists.Instructions.IF][oSubType2]}" + Environment.NewLine +
+                                                                 $"   ~instructions~ " + Environment.NewLine +
+                                                                 $"END{Instruction}";
+                                }
+                                else
+                                {
+                                    return Environment.NewLine + $"{Instruction} *subtype*" + Environment.NewLine +
+                                            $"   ~instructions~ " + Environment.NewLine +
+                                            $"END{Instruction}";
+                                }
                             }
                         }
-                    }
-                case Lists.Instructions.FACE:
-                    {
-                        return $"{Lists.Instructions.FACE} {TargetActorUsage} " +
-                                                           $"{GetListFromEnum(typeof(Lists.FaceSubtypes))} " +
-                                                           $"{TargetActorUsage}";
-                    }
-                case Lists.Instructions.CCALL:
-                    return $"{Lists.Instructions.CCALL} c_function_name [out_variable]";
-                case Lists.Instructions.CLOSE_TEXTBOX:
-                    return $"{Lists.Instructions.CLOSE_TEXTBOX}";
-                case Lists.Instructions.FADEIN:
-                    return $"{Lists.Instructions.FADEIN} fadein_rate";
-                case Lists.Instructions.FADEOUT:
-                    return $"{Lists.Instructions.FADEOUT} r g b fadeout_rate";
-                case Lists.Instructions.FORCE_TALK:
-                    return $"{Lists.Instructions.FORCE_TALK} textbox [textbox_child]";
-                case Lists.Instructions.GOTO:
-                    return $"{Lists.Instructions.GOTO} label";
-                case Lists.Instructions.SHOW_TEXTBOX:
-                    return $"{Lists.Instructions.SHOW_TEXTBOX} textbox [textbox_child]";
-                case Lists.Instructions.SHOW_TEXTBOX_SP:
-                    return $"{Lists.Instructions.SHOW_TEXTBOX} textbox [textbox_child]";
-                case Lists.Instructions.WARP:
-                    return $"{Lists.Instructions.WARP} route_id [scene_load_flag] [next_cutscene_index]";
-                case Lists.Instructions.SPAWN:
-                    {
-                        return Environment.NewLine + $"{Lists.Instructions.SPAWN} actor_id" + Environment.NewLine +
-                               $"   [VARIABLE value]" + Environment.NewLine +
-                               $"   [POSITION {GetListFromEnum(typeof(Lists.EffectsIfAttacked))} x y z]" + Environment.NewLine +
-                               $"   [ROTATION x y z]" + Environment.NewLine +
-                               $"   [SET_AS_REF {BooleanUsage}]" + Environment.NewLine +
-                               $"END{Lists.Instructions.SPAWN}";
-                    }
-                case Lists.Instructions.ITEM:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.ItemSubTypes oSubType);
-
-                        if (res)
-                            return $"{Lists.Instructions.ITEM} {oSubType}{Usages[Instruction][oSubType]}";
-                        else
-                            return $"{Lists.Instructions.ITEM} *item_subtype* ..";
-                    }
-                case Lists.Instructions.PLAY:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.PlaySubTypes oSubType);
-
-                        if (res)
-                            return $"{Lists.Instructions.PLAY} {oSubType}{Usages[Instruction][oSubType]}";
-                        else
-                            return $"{Lists.Instructions.PLAY} *play_subtype* ..";
-                    }
-                case Lists.Instructions.QUAKE:
-                    return $"{Lists.Instructions.QUAKE} *quake_type_name* speed duration";
-                case Lists.Instructions.OCARINA:
-                    {
-                        return Environment.NewLine + $"{Lists.Instructions.OCARINA} song_name" + Environment.NewLine +
-                               $"   ~instructions~ " + Environment.NewLine +
-                               $"END{Lists.Instructions.OCARINA}";
-                    }
-                case Lists.Instructions.TALK:
-                    {
-                        return Environment.NewLine + $"{Lists.Instructions.TALK} textbox_name [textbox_name_child]" + Environment.NewLine +
-                               $"   ~instructions~ " + Environment.NewLine +
-                               $"END{Lists.Instructions.TALK}";
-                    }
-                case Lists.Instructions.KILL:
-                    {
-                        if (SubType != "")
-                            return $"{Lists.Instructions.KILL} {SubType}";
-                        else
-                            return $"{Lists.Instructions.KILL} {TargetActorUsage}";
-                    }
-                case Lists.Instructions.PICKUP:
-                    return $"{Lists.Instructions.PICKUP}";
-                case Lists.Instructions.PARTICLE:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.ParticleTypes oSubType);
-
-                        if (!res)
+                    case Lists.Instructions.FACE:
                         {
-                            string Out = $"{Lists.Instructions.PARTICLE} {SubType}" + Environment.NewLine;
-
-                            foreach (Lists.ParticleSubOptions sub in Enum.GetValues(typeof(Lists.ParticleSubOptions)))
-                                Out += $"   {ParticleSubOptionUsages[sub]}" + Environment.NewLine;
-
-                            Out += $"END{Lists.Instructions.PARTICLE}";
-                            return Out;
+                            return $"{Lists.Instructions.FACE} {TargetActorUsage} " +
+                                                               $"{GetListFromEnum(typeof(Lists.FaceSubtypes))} " +
+                                                               $"{TargetActorUsage}";
                         }
-                        else
+                    case Lists.Instructions.CCALL:
+                        return $"{Lists.Instructions.CCALL} c_function_name [out_variable]";
+                    case Lists.Instructions.CLOSE_TEXTBOX:
+                        return $"{Lists.Instructions.CLOSE_TEXTBOX}";
+                    case Lists.Instructions.FADEIN:
+                        return $"{Lists.Instructions.FADEIN} fadein_rate";
+                    case Lists.Instructions.FADEOUT:
+                        return $"{Lists.Instructions.FADEOUT} r g b fadeout_rate";
+                    case Lists.Instructions.FORCE_TALK:
+                        return $"{Lists.Instructions.FORCE_TALK} textbox [textbox_child]";
+                    case Lists.Instructions.GOTO:
+                        return $"{Lists.Instructions.GOTO} label";
+                    case Lists.Instructions.SHOW_TEXTBOX:
+                        return $"{Lists.Instructions.SHOW_TEXTBOX} textbox [textbox_child]";
+                    case Lists.Instructions.SHOW_TEXTBOX_SP:
+                        return $"{Lists.Instructions.SHOW_TEXTBOX} textbox [textbox_child]";
+                    case Lists.Instructions.WARP:
+                        return $"{Lists.Instructions.WARP} route_id [scene_load_flag] [next_cutscene_index]";
+                    case Lists.Instructions.SPAWN:
                         {
-                            string Out = $"{Lists.Instructions.PARTICLE} {SubType}" + Environment.NewLine;
+                            return Environment.NewLine + $"{Lists.Instructions.SPAWN} actor_id" + Environment.NewLine +
+                                   $"   [VARIABLE value]" + Environment.NewLine +
+                                   $"   [POSITION {GetListFromEnum(typeof(Lists.EffectsIfAttacked))} x y z]" + Environment.NewLine +
+                                   $"   [ROTATION x y z]" + Environment.NewLine +
+                                   $"   [SET_AS_REF {BooleanUsage}]" + Environment.NewLine +
+                                   $"END{Lists.Instructions.SPAWN}";
+                        }
+                    case Lists.Instructions.ITEM:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.ItemSubTypes oSubType);
 
-                            foreach (Lists.ParticleSubOptions sub in Enum.GetValues(typeof(Lists.ParticleSubOptions)))
+                            if (res)
+                                return $"{Lists.Instructions.ITEM} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                                return $"{Lists.Instructions.ITEM} *item_subtype* ..";
+                        }
+                    case Lists.Instructions.PLAY:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.PlaySubTypes oSubType);
+
+                            if (res)
+                                return $"{Lists.Instructions.PLAY} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                                return $"{Lists.Instructions.PLAY} *play_subtype* ..";
+                        }
+                    case Lists.Instructions.QUAKE:
+                        return $"{Lists.Instructions.QUAKE} *quake_type_name* speed duration";
+                    case Lists.Instructions.OCARINA:
+                        {
+                            return Environment.NewLine + $"{Lists.Instructions.OCARINA} song_name" + Environment.NewLine +
+                                   $"   ~instructions~ " + Environment.NewLine +
+                                   $"END{Lists.Instructions.OCARINA}";
+                        }
+                    case Lists.Instructions.TALK:
+                        {
+                            return Environment.NewLine + $"{Lists.Instructions.TALK} textbox_name [textbox_name_child]" + Environment.NewLine +
+                                   $"   ~instructions~ " + Environment.NewLine +
+                                   $"END{Lists.Instructions.TALK}";
+                        }
+                    case Lists.Instructions.KILL:
+                        {
+                            if (SubType != "")
+                                return $"{Lists.Instructions.KILL} {SubType}";
+                            else
+                                return $"{Lists.Instructions.KILL} {TargetActorUsage}";
+                        }
+                    case Lists.Instructions.PICKUP:
+                        return $"{Lists.Instructions.PICKUP}";
+                    case Lists.Instructions.PARTICLE:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.ParticleTypes oSubType);
+
+                            if (!res)
                             {
-                                if (Dicts.UsableParticleSubOptions[oSubType].Contains(sub))
+                                string Out = $"{Lists.Instructions.PARTICLE} {SubType}" + Environment.NewLine;
+
+                                foreach (Lists.ParticleSubOptions sub in Enum.GetValues(typeof(Lists.ParticleSubOptions)))
                                     Out += $"   {ParticleSubOptionUsages[sub]}" + Environment.NewLine;
+
+                                Out += $"END{Lists.Instructions.PARTICLE}";
+                                return Out;
                             }
-
-                            Out += $"END{Lists.Instructions.PARTICLE}";
-                            return Out;
-                        }
-                    }
-                case Lists.Instructions.POSITION:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.PositionSubTypes oSubType);
-
-                        if (res)
-                            return $"{Lists.Instructions.POSITION} {oSubType}{Usages[Instruction][oSubType]}";
-                        else
-                            return $"{Lists.Instructions.POSITION} *position_subtype* ..";
-                    }
-                case Lists.Instructions.ROTATION:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.RotationSubTypes oSubType);
-
-                        if (res)
-                            return $"{Lists.Instructions.ROTATION} {oSubType}{Usages[Instruction][oSubType]}";
-                        else
-                            return $"{Lists.Instructions.ROTATION} *rotation_subtype* ..";
-                    }
-                case Lists.Instructions.SCALE:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.ScaleSubTypes oSubType);
-
-                        if (res)
-                            return $"{Lists.Instructions.SCALE} {oSubType}{Usages[Instruction][oSubType]}";
-                        else
-                            return $"{Lists.Instructions.SCALE} *scale_subtype* ..";
-                    }
-                case Lists.Instructions.SCRIPT:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.ScriptSubtypes oSubType);
-
-                        if (res)
-                            return $"{Lists.Instructions.SCRIPT} {oSubType}{Usages[Instruction][oSubType]}";
-                        else
-                            return $"{Lists.Instructions.SCRIPT} *script_subtype* ..";
-                    }
-                case Lists.Instructions.TRADE:
-                    {
-                        return $"{Lists.Instructions.TRADE} *trade_item_name* " + Environment.NewLine +
-                                                           $"   {Lists.Keyword_TradeSucccess} textbox_name [textbox_child]" + Environment.NewLine + 
-                                                           $"   {Lists.Keyword_TradeFailure}" + Environment.NewLine +
-                                                           $"       [*trade_item_name* textbox_name [textbox_child]]" + Environment.NewLine +
-                                                           $"       {Lists.Keyword_TradeDefault} textbox_name [textbox_child]" + Environment.NewLine +
-                                                           $"   {Lists.Keyword_EndTradeFailure}" + Environment.NewLine +
-                                                           $"   {Lists.Keyword_TradeNone} textbox_name [textbox_child]" + Environment.NewLine +
-                                                           $"END{Lists.Instructions.TRADE}";
-
-                    }
-                case Lists.Instructions.SAVE:
-                    return $"{Lists.Instructions.SAVE}";
-                case Lists.Instructions.RETURN:
-                    return $"{Lists.Instructions.RETURN}";
-                case Lists.Instructions.AWAIT:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.AwaitSubTypes oSubType);
-
-                        if (res)
-                            return $"{Lists.Instructions.AWAIT} {oSubType}{Usages[Instruction][oSubType]}";
-                        else
-                        {
-                            if (SubType.Contains('.'))
-                                SubType = SubType.Substring(0, SubType.IndexOf("."));
-
-
-                            bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
-
-                            if (res2)
-                                return $"{Lists.Instructions.AWAIT} {oSubType2}{Usages[Instruction][oSubType2]}";
                             else
-                                return $"{Lists.Instructions.AWAIT} *subtype*";
-                        }
-                    }
-                case Lists.Instructions.SET:
-                    {
-                        bool res = Enum.TryParse(SubType, out Lists.SetSubTypes oSubType);
+                            {
+                                string Out = $"{Lists.Instructions.PARTICLE} {SubType}" + Environment.NewLine;
 
-                        if (res)
-                            return $"{Lists.Instructions.SET} {oSubType}{Usages[Instruction][oSubType]}";
-                        else
+                                foreach (Lists.ParticleSubOptions sub in Enum.GetValues(typeof(Lists.ParticleSubOptions)))
+                                {
+                                    if (Dicts.UsableParticleSubOptions[oSubType].Contains(sub))
+                                        Out += $"   {ParticleSubOptionUsages[sub]}" + Environment.NewLine;
+                                }
+
+                                Out += $"END{Lists.Instructions.PARTICLE}";
+                                return Out;
+                            }
+                        }
+                    case Lists.Instructions.POSITION:
                         {
-                            if (SubType.Contains('.'))
-                                SubType = SubType.Substring(0, SubType.IndexOf("."));
+                            bool res = Enum.TryParse(SubType, out Lists.PositionSubTypes oSubType);
 
-
-                            bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
-
-                            if (res2)
-                                return $"{Lists.Instructions.SET} {oSubType2}{Usages[Instruction][oSubType2]}";
+                            if (res)
+                                return $"{Lists.Instructions.POSITION} {oSubType}{Usages[Instruction][oSubType]}";
                             else
-                                return $"{Lists.Instructions.SET} *subtype*";
+                                return $"{Lists.Instructions.POSITION} *position_subtype* ..";
                         }
-                    }
-                default:
-                    return "";
+                    case Lists.Instructions.ROTATION:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.RotationSubTypes oSubType);
+
+                            if (res)
+                                return $"{Lists.Instructions.ROTATION} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                                return $"{Lists.Instructions.ROTATION} *rotation_subtype* ..";
+                        }
+                    case Lists.Instructions.SCALE:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.ScaleSubTypes oSubType);
+
+                            if (res)
+                                return $"{Lists.Instructions.SCALE} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                                return $"{Lists.Instructions.SCALE} *scale_subtype* ..";
+                        }
+                    case Lists.Instructions.SCRIPT:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.ScriptSubtypes oSubType);
+
+                            if (res)
+                                return $"{Lists.Instructions.SCRIPT} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                                return $"{Lists.Instructions.SCRIPT} *script_subtype* ..";
+                        }
+                    case Lists.Instructions.TRADE:
+                        {
+                            return $"{Lists.Instructions.TRADE} *trade_item_name* " + Environment.NewLine +
+                                                               $"   {Lists.Keyword_TradeSucccess} textbox_name [textbox_child]" + Environment.NewLine +
+                                                               $"   {Lists.Keyword_TradeFailure}" + Environment.NewLine +
+                                                               $"       [*trade_item_name* textbox_name [textbox_child]]" + Environment.NewLine +
+                                                               $"       {Lists.Keyword_TradeDefault} textbox_name [textbox_child]" + Environment.NewLine +
+                                                               $"   {Lists.Keyword_EndTradeFailure}" + Environment.NewLine +
+                                                               $"   {Lists.Keyword_TradeNone} textbox_name [textbox_child]" + Environment.NewLine +
+                                                               $"END{Lists.Instructions.TRADE}";
+
+                        }
+                    case Lists.Instructions.SAVE:
+                        return $"{Lists.Instructions.SAVE}";
+                    case Lists.Instructions.RETURN:
+                        return $"{Lists.Instructions.RETURN}";
+                    case Lists.Instructions.AWAIT:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.AwaitSubTypes oSubType);
+
+                            if (res)
+                                return $"{Lists.Instructions.AWAIT} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                            {
+                                if (SubType.Contains('.'))
+                                    SubType = SubType.Substring(0, SubType.IndexOf("."));
+
+
+                                bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
+
+                                if (res2)
+                                    return $"{Lists.Instructions.AWAIT} {oSubType2}{Usages[Instruction][oSubType2]}";
+                                else
+                                    return $"{Lists.Instructions.AWAIT} *subtype*";
+                            }
+                        }
+                    case Lists.Instructions.SET:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.SetSubTypes oSubType);
+
+                            if (res)
+                                return $"{Lists.Instructions.SET} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                            {
+                                if (SubType.Contains('.'))
+                                    SubType = SubType.Substring(0, SubType.IndexOf("."));
+
+
+                                bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
+
+                                if (res2)
+                                    return $"{Lists.Instructions.SET} {oSubType2}{Usages[Instruction][oSubType2]}";
+                                else
+                                    return $"{Lists.Instructions.SET} *subtype*";
+                            }
+                        }
+                    default:
+                        return "";
+                }
+            }
+            catch (Exception)
+            {
+                return "Error retrieving function usage.";
             }
         }
 
