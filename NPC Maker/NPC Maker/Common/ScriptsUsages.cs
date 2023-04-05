@@ -486,7 +486,7 @@ namespace NPC_Maker
                         }
                     case Lists.Instructions.TALK:
                         {
-                            return Environment.NewLine + $"{Lists.Instructions.TALK} textbox_name [textbox_name_child]" + Environment.NewLine +
+                            return Environment.NewLine + $"{Lists.Instructions.TALK} message_name [message_name_child]" + Environment.NewLine +
                                    $"   ~instructions~ " + Environment.NewLine +
                                    $"END{Lists.Instructions.TALK}";
                         }
@@ -566,12 +566,12 @@ namespace NPC_Maker
                     case Lists.Instructions.TRADE:
                         {
                             return $"{Lists.Instructions.TRADE} *trade_item_name* " + Environment.NewLine +
-                                                               $"   {Lists.Keyword_TradeSucccess} textbox_name [textbox_child]" + Environment.NewLine +
+                                                               $"   {Lists.Keyword_TradeSucccess} message_name [textbox_child]" + Environment.NewLine +
                                                                $"   {Lists.Keyword_TradeFailure}" + Environment.NewLine +
-                                                               $"       [*trade_item_name* textbox_name [textbox_child]]" + Environment.NewLine +
-                                                               $"       {Lists.Keyword_TradeDefault} textbox_name [textbox_child]" + Environment.NewLine +
+                                                               $"       [*trade_item_name* message_name [textbox_child]]" + Environment.NewLine +
+                                                               $"       {Lists.Keyword_TradeDefault} message_name [textbox_child]" + Environment.NewLine +
                                                                $"   {Lists.Keyword_EndTradeFailure}" + Environment.NewLine +
-                                                               $"   {Lists.Keyword_TradeNone} textbox_name [textbox_child]" + Environment.NewLine +
+                                                               $"   {Lists.Keyword_TradeNone} message_name [textbox_child]" + Environment.NewLine +
                                                                $"END{Lists.Instructions.TRADE}";
 
                         }
