@@ -15,6 +15,7 @@ namespace NPC_Maker
 
         private static readonly string BooleanUsage = $"{{{Lists.Keyword_True}|{Lists.Keyword_False}}}";
 
+
         private static readonly Dictionary<Lists.Instructions, Dictionary<object, string>> Usages = new Dictionary<Lists.Instructions, Dictionary<object, string>>()
         {
             { Lists.Instructions.IF,  new Dictionary<object, string>()
@@ -198,11 +199,173 @@ namespace NPC_Maker
                     { Lists.IfWhileAwaitSetRamSubTypes.VARF,                $".varnum operator value" },
                 }
             },
+            { Lists.Instructions.SET,  new Dictionary<object, string>()
+                {
+                    { Lists.SetSubTypes.TARGET_LIMB,                        $" operator value" },
+                    { Lists.SetSubTypes.TARGET_DISTANCE,                    $" operator value" },
+                    { Lists.SetSubTypes.HEAD_LIMB,                          $" operator value" },
+                    { Lists.SetSubTypes.WAIST_LIMB,                         $" operator value" },
+                    { Lists.SetSubTypes.LOOKAT_TYPE,                        $" {GetListFromEnum(typeof(Lists.LookAtStyles))}" },
+                    { Lists.SetSubTypes.HEAD_VERT_AXIS,                     $" operator value" },
+                    { Lists.SetSubTypes.HEAD_HORIZ_AXIS,                    $" operator value" },
+                    { Lists.SetSubTypes.WAIST_VERT_AXIS,                    $" operator value" },
+                    { Lists.SetSubTypes.WAIST_HORIZ_AXIS,                   $" operator value" },
+                    { Lists.SetSubTypes.CUTSCENE_SLOT,                      $" operator value" },
+                    { Lists.SetSubTypes.BLINK_SEGMENT,                      $" {{SEG_8-F}}" },
+                    { Lists.SetSubTypes.TALK_SEGMENT,                       $" {{SEG_8-F}}" },
+                    { Lists.SetSubTypes.ALPHA,                              $" operator value" },
+
+                    { Lists.SetSubTypes.MOVEMENT_DISTANCE,                  $" operator value" },
+                    { Lists.SetSubTypes.MAXIMUM_ROAM,                       $" operator value" },
+                    { Lists.SetSubTypes.MOVEMENT_LOOP_DELAY,                $" operator value" },
+                    { Lists.SetSubTypes.ATTACKED_SFX,                       $" *sfx_name*" },
+                    { Lists.SetSubTypes.LIGHT_RADIUS,                       $" operator value" },
+                    { Lists.SetSubTypes.CUTSCENE_FRAME,                     $" operator value" },
+
+                    { Lists.SetSubTypes.COLLISION_RADIUS,                   $" operator value" },
+                    { Lists.SetSubTypes.COLLISION_HEIGHT,                   $" operator value" },
+                    { Lists.SetSubTypes.MOVEMENT_LOOP_START,                $" operator value" },
+                    { Lists.SetSubTypes.MOVEMENT_LOOP_END,                  $" operator value" },
+                    { Lists.SetSubTypes.COLLISION_YOFFSET,                  $" operator value" },
+                    { Lists.SetSubTypes.TARGET_OFFSET_X,                    $" operator value" },
+                    { Lists.SetSubTypes.TARGET_OFFSET_Y,                    $" operator value" },
+                    { Lists.SetSubTypes.TARGET_OFFSET_Z,                    $" operator value" },
+                    { Lists.SetSubTypes.MODEL_OFFSET_X,                     $" operator value" },
+                    { Lists.SetSubTypes.MODEL_OFFSET_Y,                     $" operator value" },
+                    { Lists.SetSubTypes.MODEL_OFFSET_Z,                     $" operator value" },
+                    { Lists.SetSubTypes.CAMERA_ID,                          $" operator value" },
+                    { Lists.SetSubTypes.LOOKAT_OFFSET_X,                    $" operator value" },
+                    { Lists.SetSubTypes.LOOKAT_OFFSET_Y,                    $" operator value" },
+                    { Lists.SetSubTypes.LOOKAT_OFFSET_Z,                    $" operator value" },
+                    { Lists.SetSubTypes.CURRENT_PATH_NODE,                  $" operator value" },
+                    { Lists.SetSubTypes.CURRENT_ANIMATION_FRAME,            $" operator value" },
+                    { Lists.SetSubTypes.LIGHT_OFFSET_X,                     $" operator value" },
+                    { Lists.SetSubTypes.LIGHT_OFFSET_Y,                     $" operator value" },
+                    { Lists.SetSubTypes.LIGHT_OFFSET_Z,                     $" operator value" },
+                    { Lists.SetSubTypes.TIMED_PATH_START_TIME,              $" operator HH:mm" },
+                    { Lists.SetSubTypes.TIMED_PATH_END_TIME,                $" operator HH:mm" },
+
+                    { Lists.SetSubTypes.MOVEMENT_SPEED,                     $" operator value" },
+                    { Lists.SetSubTypes.TALK_RADIUS,                        $" operator value" },
+                    { Lists.SetSubTypes.SMOOTHING_CONSTANT,                 $" operator value" },
+                    { Lists.SetSubTypes.SHADOW_RADIUS,                      $" operator value" },
+
+                    { Lists.SetSubTypes.LOOP_MOVEMENT,                      $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.HAS_COLLISION,                      $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.DO_BLINKING_ANIMATIONS,             $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.DO_TALKING_ANIMATIONS,              $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.JUST_SCRIPT,                        $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.OPEN_DOORS,                         $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.MOVEMENT_IGNORE_Y,                  $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.FADES_OUT,                          $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.LIGHT_GLOW,                         $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.PAUSE_CUTSCENE,                     $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.INVISIBLE,                          $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.TALK_PERSIST,                       $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.CASTS_SHADOW,                       $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.NO_AUTO_ANIM,                       $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.TALK_MODE,                          $" {BooleanUsage}" },
+
+
+                    { Lists.SetSubTypes.PLAYER_BOMBS,                       $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_BOMBCHUS,                    $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_ARROWS,                      $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_DEKUNUTS,                    $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_DEKUSTICKS,                  $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_BEANS,                       $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_SEEDS,                       $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_RUPEES,                      $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_HEALTH,                      $" operator value" },
+
+                    { Lists.SetSubTypes.ENV_COLOR,                          $" r g b" },
+                    { Lists.SetSubTypes.LIGHT_COLOR,                        $" r g b" },
+
+                    { Lists.SetSubTypes.RESPONSE_ACTIONS,                   $" label_option1 label_option2 [labeel_option3]" },
+
+                    { Lists.SetSubTypes.ANIMATION_OBJECT,                   $" operator value" },
+                    { Lists.SetSubTypes.ANIMATION_OFFSET,                   $" operator value" },
+                    { Lists.SetSubTypes.ANIMATION_STARTFRAME,               $" operator value" },
+                    { Lists.SetSubTypes.ANIMATION_ENDFRAME,                 $" operator value" },
+                    { Lists.SetSubTypes.ANIMATION_SPEED,                    $" operator value" },
+                    { Lists.SetSubTypes.FLAG_INF,                           $" flag_id {BooleanUsage}" },
+                    { Lists.SetSubTypes.FLAG_EVENT,                         $" flag_id {BooleanUsage}" },
+                    { Lists.SetSubTypes.FLAG_SWITCH,                        $" flag_id {BooleanUsage}" },
+                    { Lists.SetSubTypes.FLAG_SCENE,                         $" flag_id {BooleanUsage}" },
+                    { Lists.SetSubTypes.FLAG_TREASURE,                      $" flag_id {BooleanUsage}" },
+                    { Lists.SetSubTypes.FLAG_ROOM_CLEAR,                    $" flag_id {BooleanUsage}" },
+                    { Lists.SetSubTypes.FLAG_SCENE_COLLECT,                 $" flag_id {BooleanUsage}" },
+                    { Lists.SetSubTypes.FLAG_TEMPORARY,                     $" flag_id {BooleanUsage}" },
+                    { Lists.SetSubTypes.FLAG_INTERNAL,                      $" flag_id {BooleanUsage}" },
+
+                    { Lists.SetSubTypes.MASS,                               $" operator value" },
+
+                    { Lists.SetSubTypes.PRESS_SWITCHES,                     $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.IS_TARGETTABLE,                     $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.AFFECTED_BY_LENS,                   $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.IS_ALWAYS_ACTIVE,                   $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.IS_ALWAYS_DRAWN,                    $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.REACTS_IF_ATTACKED,                 $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.EXISTS_IN_ALL_ROOMS,                $" {BooleanUsage}" },
+
+                    { Lists.SetSubTypes.GRAVITY_FORCE,                      $" operator value" },
+                    { Lists.SetSubTypes.MOVEMENT_PATH_ID,                   $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_CAN_MOVE,                    $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.ACTOR_CAN_MOVE,                     $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.ANIMATION,                          $" *animation_name*" },
+                    { Lists.SetSubTypes.ANIMATION_INSTANTLY,                $" *animation_name*" },
+                    { Lists.SetSubTypes.SCRIPT_START,                       $" label" },
+                    { Lists.SetSubTypes.BLINK_PATTERN,                      $" *texture_1* [*texture_2*] [*texture_3*] [*texture_4*]" },
+                    { Lists.SetSubTypes.TALK_PATTERN,                       $" *texture_1* [*texture_2*] [*texture_3*] [*texture_4*]" },
+                    { Lists.SetSubTypes.SEGMENT_ENTRY,                      $" {{SEG_8-F}} *texture_name*" },
+                    { Lists.SetSubTypes.DLIST_VISIBILITY,                   $" {GetListFromEnum(typeof(Lists.DListVisibilityOptions))}" },
+                    { Lists.SetSubTypes.CAMERA_TRACKING_ON,                 $" {TargetActorUsage}" },
+                    { Lists.SetSubTypes.EXT_VAR,                            $" actor_id var_num operator value" },
+                    { Lists.SetSubTypes.EXT_VARF,                           $" actor_id var_num operator value" },
+                    { Lists.SetSubTypes.TIME_OF_DAY,                        $" operator HH:mm" },
+                    { Lists.SetSubTypes.ATTACKED_EFFECT,                    $" {GetListFromEnum(typeof(Lists.EffectsIfAttacked))}" },
+                    { Lists.SetSubTypes.MOVEMENT_TYPE,                      $" {GetListFromEnum(typeof(Lists.MovementStyles))}" },
+                    { Lists.SetSubTypes.GENERATES_LIGHT,                    $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.REF_ACTOR,                          $" {TargetActorUsage}" },
+                    { Lists.SetSubTypes.PLAYER_ANIMATION,                   $" *link_animation_name* speed [start_frame] [end_frame] [\"once\"] " },
+                    { Lists.SetSubTypes.PLAYER_ANIMATE_MODE,                $" {BooleanUsage}" },
+
+                    { Lists.SetSubTypes.DLIST_COLOR,                        $" *ex_dlist_name* r g b" },
+                    { Lists.SetSubTypes.DLIST_OFFSET,                       $" *ex_dlist_name* 0xOffset" },
+
+                    { Lists.SetSubTypes.DLIST_TRANS_X,                      $" *ex_dlist_name* operator value" },
+                    { Lists.SetSubTypes.DLIST_TRANS_Y,                      $" *ex_dlist_name* operator value" },
+                    { Lists.SetSubTypes.DLIST_TRANS_Z,                      $" *ex_dlist_name* operator value" },
+                    { Lists.SetSubTypes.DLIST_SCALE,                        $" *ex_dlist_name* operator value" },
+
+                    { Lists.SetSubTypes.DLIST_ROT_X,                        $" *ex_dlist_name* operator value" },
+                    { Lists.SetSubTypes.DLIST_ROT_Y,                        $" *ex_dlist_name* operator value" },
+                    { Lists.SetSubTypes.DLIST_ROT_Z,                        $" *ex_dlist_name* operator value" },
+
+                    { Lists.SetSubTypes.DLIST_LIMB,                         $" *ex_dlist_name* operator value" },
+                    { Lists.SetSubTypes.DLIST_OBJECT,                       $" *ex_dlist_name* operator value" },
+
+                    { Lists.SetSubTypes.RAM,                                $" {{Data size:8|16|32}} 0xOffset value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL32,            $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.GLOBALF,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR8,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR16,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTOR32,             $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.ACTORF,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE8,               $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE16,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVE32,              $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.SAVEF,               $".0xoffset operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.VAR,                 $".varnum operator value" },
+                    { Lists.IfWhileAwaitSetRamSubTypes.VARF,                $".varnum operator value" },
+                }
+            },
         };
 
         private static readonly Dictionary<Lists.ParticleSubOptions, string> ParticleSubOptionUsages = new Dictionary<Lists.ParticleSubOptions, string>()
         {
-            {Lists.ParticleSubOptions.POSITION,                     $"[{Lists.ParticleSubOptions.POSITION} {{{Lists.SpawnPosParams.ABSOLUTE}|{Lists.SpawnPosParams.RELATIVE}|{Lists.SpawnPosParams.DIRECTION}|{Lists.SpawnPosParams.DIRECTION_REF_ACTOR}|{Lists.SpawnPosParams.RELATIVE_REF_ACTOR}}} x y z]" },
+            {Lists.ParticleSubOptions.POSITION,                     $"[{Lists.ParticleSubOptions.POSITION} {GetListFromEnum(typeof(Lists.SpawnPosParams))} x y z]" },
             {Lists.ParticleSubOptions.VELOCITY,                     $"[{Lists.ParticleSubOptions.VELOCITY} x y z]" },
             {Lists.ParticleSubOptions.ACCELERATION,                 $"[{Lists.ParticleSubOptions.ACCELERATION} x y z]" },
             {Lists.ParticleSubOptions.COLOR1,                       $"[{Lists.ParticleSubOptions.COLOR1} r g b a]" },
@@ -262,11 +425,11 @@ namespace NPC_Maker
                 case Lists.Instructions.FACE:
                     {
                         return $"{Lists.Instructions.FACE} {TargetActorUsage} " +
-                                                           $"{{{Lists.FaceSubtypes.TOWARDS}|{Lists.FaceSubtypes.AWAY_FROM}|{Lists.FaceSubtypes.TOGETHER_WITH}}} " +
+                                                           $"{GetListFromEnum(typeof(Lists.FaceSubtypes))} " +
                                                            $"{TargetActorUsage}";
                     }
                 case Lists.Instructions.CCALL:
-                    return $"{Lists.Instructions.CCALL} c_function_name";
+                    return $"{Lists.Instructions.CCALL} c_function_name [out_variable]";
                 case Lists.Instructions.CLOSE_TEXTBOX:
                     return $"{Lists.Instructions.CLOSE_TEXTBOX}";
                 case Lists.Instructions.FADEIN:
@@ -287,9 +450,9 @@ namespace NPC_Maker
                     {
                         return Environment.NewLine + $"{Lists.Instructions.SPAWN} actor_id" + Environment.NewLine +
                                $"   [VARIABLE value]" + Environment.NewLine +
-                               $"   [POSITION {{{Lists.SpawnPosParams.ABSOLUTE}|{Lists.SpawnPosParams.RELATIVE}|{Lists.SpawnPosParams.DIRECTION}|{Lists.SpawnPosParams.DIRECTION_REF_ACTOR}|{Lists.SpawnPosParams.RELATIVE_REF_ACTOR}}} x y z]" + Environment.NewLine +
+                               $"   [POSITION {GetListFromEnum(typeof(Lists.EffectsIfAttacked))} x y z]" + Environment.NewLine +
                                $"   [ROTATION x y z]" + Environment.NewLine +
-                               $"   [SET_AS_REF {{{Lists.Keyword_True}|{Lists.Keyword_False}}}]" + Environment.NewLine +
+                               $"   [SET_AS_REF {BooleanUsage}]" + Environment.NewLine +
                                $"END{Lists.Instructions.SPAWN}";
                     }
                 case Lists.Instructions.ITEM:
@@ -430,9 +593,41 @@ namespace NPC_Maker
                                 return $"{Lists.Instructions.AWAIT} *subtype*";
                         }
                     }
+                case Lists.Instructions.SET:
+                    {
+                        bool res = Enum.TryParse(SubType, out Lists.SetSubTypes oSubType);
+
+                        if (res)
+                            return $"{Lists.Instructions.SET} {oSubType}{Usages[Instruction][oSubType]}";
+                        else
+                        {
+                            if (SubType.Contains('.'))
+                                SubType = SubType.Substring(0, SubType.IndexOf("."));
+
+
+                            bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
+
+                            if (res2)
+                                return $"{Lists.Instructions.SET} {oSubType2}{Usages[Instruction][oSubType2]}";
+                            else
+                                return $"{Lists.Instructions.SET} *subtype*";
+                        }
+                    }
                 default:
                     return "";
             }
+        }
+
+        private static string GetListFromEnum(Type t)
+        {
+            string outs = "{";
+
+            foreach (var s in Enum.GetNames(t))
+                outs += s + "|";
+
+            outs = outs.Trim('|');
+            outs += "}";
+            return outs;
         }
     }
 }
