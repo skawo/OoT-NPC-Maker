@@ -8,6 +8,8 @@ namespace NPC_Maker.Scripts
         {
             try
             {
+                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
+
                 try
                 {
                     Instruction Ram = H_SetRam(SplitLine);
@@ -459,6 +461,11 @@ namespace NPC_Maker.Scripts
                     return new InstructionNop();
                 }
 
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Add(pEx);
+                return new InstructionNop();
             }
             catch (Exception)
             {
