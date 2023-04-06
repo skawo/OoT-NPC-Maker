@@ -3,6 +3,7 @@
 #define EXDLIST_EDITOR 0
 #define DEBUG_STRUCT 0
 #define LOG_VERSION 0
+#define LOOKAT_EDITOR 0
 #define COLLISION_VIEWER 1
 #define DIRECT_ROM_LOAD 0
 #define GAME_VERSION 0
