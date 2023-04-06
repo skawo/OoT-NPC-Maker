@@ -118,6 +118,9 @@ namespace NPC_Maker
         public List<MessageEntry> Messages { get; set; }
 
         public bool DEBUGShowCols { get; set; }
+        public bool DEBUGPrintToScreen{ get; set; }
+        public bool DEBUGLookAtEditor { get; set; }
+        public bool DEBUGExDlistEditor { get; set; }
 
         public byte NumVars { get; set; }
         public byte NumFVars { get; set; }
@@ -219,6 +222,9 @@ namespace NPC_Maker
             VisibleUnderLensOfTruth = false;
             Invisible = false;
             DEBUGShowCols = false;
+            DEBUGLookAtEditor = false;
+            DEBUGPrintToScreen = false;
+            DEBUGExDlistEditor = false;
 
             FileStart = 0;
 
@@ -329,6 +335,9 @@ namespace NPC_Maker
             ROAMMAX,
             EXISTALLROOMS,
             FILESTART,
+            DEBUGLOOKAT,
+            DEBUGPRINTSCR,
+            DEBUGDLISTED,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -453,6 +462,9 @@ namespace NPC_Maker
                 case Members.ROAMMAX: MaxDistRoam = Convert.ToUInt16(Value); break;
                 case Members.EXISTALLROOMS: ExistInAllRooms = Convert.ToBoolean(Value); break;
                 case Members.FILESTART: FileStart = Convert.ToInt32(Value); break;
+                case Members.DEBUGLOOKAT: DEBUGLookAtEditor = Convert.ToBoolean(Value); break;
+                case Members.DEBUGPRINTSCR: DEBUGPrintToScreen = Convert.ToBoolean(Value); break;
+                case Members.DEBUGDLISTED: DEBUGExDlistEditor = Convert.ToBoolean(Value); break;
 
                 default: break;
             }

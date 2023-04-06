@@ -59,7 +59,9 @@ typedef struct NpcSettings
     u8 numVars;
 
     u8 numFVars;
-    u8 pad[3];
+    u8 showDlistEditorDebugOn;
+    u8 showLookAtEditorDebugOn;
+    u8 printToScreenDebugOn;
 
     u16 objectId;
     u16 lookAtDegreesVert;
@@ -278,7 +280,7 @@ typedef struct NpcMaker
         float fDbgVar;
         float fDbgVar2;
         u8 dgbDrawVersion;
-        u8 dbgEnabledPosEditor;
+        u8 dbgUnused;
         u8 dbgPosEditorCooldown;
         u8 dbgPosEditorCursorPos;
         u8 dbgPosEditorCurEditing;

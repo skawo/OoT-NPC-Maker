@@ -222,6 +222,9 @@ namespace NPC_Maker
                         EntryBytes.Add(Convert.ToByte(Entry.ExistInAllRooms));
                         EntryBytes.Add(Convert.ToByte(Entry.NumVars));
                         EntryBytes.Add(Convert.ToByte(Entry.NumFVars));
+                        EntryBytes.Add(Convert.ToByte(Entry.DEBUGExDlistEditor));
+                        EntryBytes.Add(Convert.ToByte(Entry.DEBUGLookAtEditor));
+                        EntryBytes.Add(Convert.ToByte(Entry.DEBUGPrintToScreen));
 
 
                         Helpers.Ensure4ByteAlign(EntryBytes);

@@ -27,9 +27,89 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
         Camera_ChangeBgCamIndex(&playState->mainCamera, en->cameraId - 1);
     }
 
+    #define SET_FIELD(field, margin, marginmin, mul) if (field + 1 < margin) field += (1 * mul); else field = marginmin;
+    #define SET_FIELD_MINUS(field, margin, marginmin, mul) if (field - 1 >= marginmin) field -= (1 * mul); else field = margin - 1;
+
+    #if LOOKAT_EDITOR == 1
+
+    if (en->settings.showLookAtEditorDebugOn)
+    {
+        #if LOGGING == 1
+            osSyncPrintf("_%2d: LOOKAT editor is enabled.", en->npcId);
+        #endif  
+
+        if (en->dbgPosEditorCooldown)
+        {
+            en->dbgPosEditorCooldown--;
+            return;
+        }
+
+        if (CHECK_BTN_ALL(playState->state.input->press.button, BTN_DDOWN))
+        {
+            SET_FIELD(en->dbgPosEditorCursorPos, 12, 0, 1); 
+        }
+        else if (CHECK_BTN_ALL(playState->state.input->press.button, BTN_DUP))
+        {
+            SET_FIELD_MINUS(en->dbgPosEditorCursorPos, 12, 0, 1); 
+        }
+        else if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_DRIGHT))
+        {
+            en->dbgPosEditorCooldown = 2;
+
+            float mul = 1;
+
+            if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_B))
+                mul = 100;
+
+            switch (en->dbgPosEditorCursorPos)
+            {
+                case 0: SET_FIELD(en->settings.lookAtType, 5, 0, 1); break;
+                case 1: SET_FIELD(en->settings.lookAtDegreesHor, 360, 0, mul == 100 ? 10 : 1); break;
+                case 2: SET_FIELD(en->settings.lookAtDegreesVert, 360, 0, mul == 100 ? 10 : 1); break;
+                case 3: en->settings.headLimb += 1; break;
+                case 4: SET_FIELD(en->settings.headVertAxis, 6, 0, 1); break;
+                case 5: SET_FIELD(en->settings.headHorAxis, 6, 0, 1); break;
+                case 6: en->settings.waistLimb += 1; break;
+                case 7: SET_FIELD(en->settings.waistVertAxis, 6, 0, 1); break;
+                case 8: SET_FIELD(en->settings.waistHorAxis, 6, 0, 1); break;
+                case 9: SET_FIELD(en->settings.lookAtPosOffset.x, 32767, -332767, mul); break;
+                case 10: SET_FIELD(en->settings.lookAtPosOffset.y, 32767, -332767, mul); break;
+                case 11: SET_FIELD(en->settings.lookAtPosOffset.z, 32767, -332767, mul); break;
+            }
+        }
+        else if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_DLEFT))
+        {
+            en->dbgPosEditorCooldown = 2;
+
+            float mul = 1;
+
+            if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_B))
+                mul = 100;
+
+
+            switch (en->dbgPosEditorCursorPos)
+            {
+                case 0: SET_FIELD_MINUS(en->settings.lookAtType, 5, 0, 1); break;
+                case 1: SET_FIELD_MINUS(en->settings.lookAtDegreesHor, 360, 0, mul == 100 ? 10 : 1); break;
+                case 2: SET_FIELD_MINUS(en->settings.lookAtDegreesVert, 360, 0, mul == 100 ? 10 : 1); break;
+                case 3: en->settings.headLimb -= 1; break;
+                case 4: SET_FIELD_MINUS(en->settings.headVertAxis, 6, 0, 1); break;
+                case 5: SET_FIELD_MINUS(en->settings.headHorAxis, 6, 0, 1); break;
+                case 6: en->settings.waistLimb -= 1; break;
+                case 7: SET_FIELD_MINUS(en->settings.waistVertAxis, 6, 0, 1); break;
+                case 8: SET_FIELD_MINUS(en->settings.waistHorAxis, 6, 0, 1); break;
+                case 9: SET_FIELD_MINUS(en->settings.lookAtPosOffset.x, 32767, -332767, mul); break;
+                case 10: SET_FIELD_MINUS(en->settings.lookAtPosOffset.y, 32767, -332767, mul); break;
+                case 11: SET_FIELD_MINUS(en->settings.lookAtPosOffset.z, 32767, -332767, mul); break;
+            }
+        }
+    }
+
+    #endif
+
     #if EXDLIST_EDITOR == 1
 
-    if (en->dbgEnabledPosEditor && en->numExDLists != 0)
+    if (en->settings.showDlistEditorDebugOn && en->numExDLists != 0)
     {
         #if LOGGING == 1
             osSyncPrintf("_%2d: EXDLIST editor is enabled.", en->npcId);
@@ -63,7 +143,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 
             float mul = 1;
 
-            if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_L))
+            if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_B))
                 mul = 100;
 
             switch (en->dbgPosEditorCursorPos)
@@ -93,7 +173,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 
             float mul = 1;
 
-            if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_L))
+            if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_B))
                 mul = 100;
 
 

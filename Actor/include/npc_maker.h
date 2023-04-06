@@ -2,7 +2,7 @@
 #define NPC_MAKER_H
 
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 501
+#define MINOR_VERSION 502
 
 #ifndef GAME_VERSION
     #define GAME_VERSION 0
@@ -40,6 +40,10 @@
 
 #ifndef EXDLIST_EDITOR
     #define EXDLIST_EDITOR 1
+#endif
+
+#ifndef LOOKAT_EDITOR
+    #define LOOKAT_EDITOR 1
 #endif
 
 #ifndef DIRECT_ROM_LOAD

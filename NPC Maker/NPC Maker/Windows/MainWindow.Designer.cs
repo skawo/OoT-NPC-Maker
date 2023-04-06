@@ -311,6 +311,10 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -1308,6 +1312,10 @@
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
+            this.Tab3_BehaviorData.Controls.Add(this.label4);
+            this.Tab3_BehaviorData.Controls.Add(this.checkBox4);
+            this.Tab3_BehaviorData.Controls.Add(this.checkBox3);
+            this.Tab3_BehaviorData.Controls.Add(this.checkBox2);
             this.Tab3_BehaviorData.Controls.Add(this.checkBox1);
             this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_ScriptsFVar);
             this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_ScriptsVar);
@@ -1344,7 +1352,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(584, 237);
+            this.checkBox1.Location = new System.Drawing.Point(422, 235);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(103, 17);
             this.checkBox1.TabIndex = 87;
@@ -1426,12 +1434,12 @@
             // ChkBox_DebugCol
             // 
             this.ChkBox_DebugCol.AutoSize = true;
-            this.ChkBox_DebugCol.Location = new System.Drawing.Point(422, 237);
+            this.ChkBox_DebugCol.Location = new System.Drawing.Point(422, 523);
             this.ChkBox_DebugCol.Name = "ChkBox_DebugCol";
-            this.ChkBox_DebugCol.Size = new System.Drawing.Size(138, 17);
+            this.ChkBox_DebugCol.Size = new System.Drawing.Size(91, 17);
             this.ChkBox_DebugCol.TabIndex = 80;
             this.ChkBox_DebugCol.Tag = "DEBUGSHOWCOLS";
-            this.ChkBox_DebugCol.Text = "Draw collision (DEBUG)";
+            this.ChkBox_DebugCol.Text = "Draw collision";
             this.ChkBox_DebugCol.UseVisualStyleBackColor = true;
             this.ChkBox_DebugCol.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
@@ -1450,7 +1458,7 @@
             this.Panel_Colors.Controls.Add(this.ChkBox_Glow);
             this.Panel_Colors.Controls.Add(this.NumUp_LightLimb);
             this.Panel_Colors.Controls.Add(this.ChkBox_GenLight);
-            this.Panel_Colors.Location = new System.Drawing.Point(419, 383);
+            this.Panel_Colors.Location = new System.Drawing.Point(419, 348);
             this.Panel_Colors.Name = "Panel_Colors";
             this.Panel_Colors.Size = new System.Drawing.Size(341, 134);
             this.Panel_Colors.TabIndex = 77;
@@ -1664,7 +1672,7 @@
             this.Btn_ReactIfAtt.Controls.Add(this.Txtbox_ReactIfAtt);
             this.Btn_ReactIfAtt.Controls.Add(this.Lbl_ReactIfAttSnd);
             this.Btn_ReactIfAtt.Controls.Add(this.Chkb_ReactIfAtt);
-            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 290);
+            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 255);
             this.Btn_ReactIfAtt.Name = "Btn_ReactIfAtt";
             this.Btn_ReactIfAtt.Size = new System.Drawing.Size(341, 87);
             this.Btn_ReactIfAtt.TabIndex = 76;
@@ -3842,6 +3850,51 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(422, 543);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(80, 17);
+            this.checkBox2.TabIndex = 88;
+            this.checkBox2.Tag = "DEBUGDLISTED";
+            this.checkBox2.Text = "DList Editor";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(584, 523);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(94, 17);
+            this.checkBox3.TabIndex = 89;
+            this.checkBox3.Tag = "DEBUGPRINTSCR";
+            this.checkBox3.Text = "Print to screen";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(584, 543);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(89, 17);
+            this.checkBox4.TabIndex = 90;
+            this.checkBox4.Tag = "DEBUGLOOKAT";
+            this.checkBox4.Text = "Lookat Editor";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(419, 493);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(107, 13);
+            this.label4.TabIndex = 91;
+            this.label4.Text = "Development options";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4230,6 +4283,10 @@
         private System.Windows.Forms.TabPage Tab5_Scripts;
         private System.Windows.Forms.TabControl TabControl_Scripts;
         private System.Windows.Forms.Button Button_CCompile;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }
 

@@ -403,15 +403,10 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
                      en->npcId, en->settings.collisionRadius, en->settings.collisionHeight, en->settings.collisionyShift);
     #endif
 	
-	#if DEBUG_STRUCT == 1
-		if (en->actor.shape.rot.x == 1)
-			en->dgbDrawVersion = true;
+    // Only one of these can be enabled
+    if (en->settings.showDlistEditorDebugOn && en->settings.showLookAtEditorDebugOn)
+        en->settings.showLookAtEditorDebugOn = false;
 
-		if (en->actor.shape.rot.x == 2)
-			en->dbgEnabledPosEditor = true;
-    #endif
-	
-	
     Collider_InitCylinder(playState, &en->collider);
     Collider_SetCylinder(playState, &en->collider, &en->actor, &npcMakerCollision);
     en->collider.dim.radius = en->settings.collisionRadius;

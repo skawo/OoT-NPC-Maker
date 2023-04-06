@@ -33,9 +33,67 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 
     #if DEBUG_STRUCT == 1
 
+        #if LOOKAT_EDITOR == 1
+
+        if (en->settings.showLookAtEditorDebugOn)
+        {
+            #if LOGGING == 1
+                osSyncPrintf("_%2d: LOOKAT editor is enabled.", en->npcId);
+            #endif  
+
+            Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
+            gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
+            GfxPrint printer;
+
+            GfxPrint_Init(&printer);
+            GfxPrint_Open(&printer, gfx);
+            GfxPrint_SetColor(&printer, 255, 255, 255, 255);
+
+
+            char lookAts[5][15] = {"None", "Body", "Head", "Waist", "H & W"}; 
+            char axises[6][3] = {"+X", "-X", "+Y", "-Y", "+Z", "-Z"}; 
+
+
+            GfxPrint_SetPos(&printer, 24, 10);
+            GfxPrint_Printf(&printer, "Type %s", lookAts[en->settings.lookAtType]);
+            GfxPrint_SetPos(&printer, 24, 11);
+            GfxPrint_Printf(&printer, "Deg Hor %d", en->settings.lookAtDegreesHor);         
+            GfxPrint_SetPos(&printer, 24, 12);
+            GfxPrint_Printf(&printer, "Deg Ver %d", en->settings.lookAtDegreesVert);    
+            GfxPrint_SetPos(&printer, 24, 13);
+            GfxPrint_Printf(&printer, "Head limb %d", en->settings.headLimb); 
+            GfxPrint_SetPos(&printer, 24, 14);
+            GfxPrint_Printf(&printer, "Head V Axis %s", axises[en->settings.headVertAxis]); 
+            GfxPrint_SetPos(&printer, 24, 15);
+            GfxPrint_Printf(&printer, "Head H Axis %s", axises[en->settings.headHorAxis]); 
+            GfxPrint_SetPos(&printer, 24, 16);
+            GfxPrint_Printf(&printer, "Waist limb %d", en->settings.waistLimb); 
+            GfxPrint_SetPos(&printer, 24, 17);
+            GfxPrint_Printf(&printer, "Waist V Axis %s", axises[en->settings.waistVertAxis]); 
+            GfxPrint_SetPos(&printer, 24, 18);
+            GfxPrint_Printf(&printer, "Waist H Axis %s", axises[en->settings.waistHorAxis]); 
+            GfxPrint_SetPos(&printer, 24, 19);
+            GfxPrint_Printf(&printer, "Offset X %d", (int)en->settings.lookAtPosOffset.x); 
+            GfxPrint_SetPos(&printer, 24, 20);
+            GfxPrint_Printf(&printer, "Offset Y %d", (int)en->settings.lookAtPosOffset.y); 
+            GfxPrint_SetPos(&printer, 24, 21);
+            GfxPrint_Printf(&printer, "Offset Z %d", (int)en->settings.lookAtPosOffset.z);   
+
+            GfxPrint_SetPos(&printer, 22, 10 + en->dbgPosEditorCursorPos);
+            GfxPrint_Printf(&printer, ">");   
+
+            gfx = GfxPrint_Close(&printer);
+            GfxPrint_Destroy(&printer);
+            gSPEndDisplayList(gfx++);
+            Graph_BranchDlist(playState->state.gfxCtx->polyOpa.p, gfx);
+            playState->state.gfxCtx->polyOpa.p = gfx;                     
+        }
+
+        #endif
+
         #if EXDLIST_EDITOR == 1
 
-        if (en->dbgEnabledPosEditor && en->numExDLists != 0)
+        if (en->settings.showDlistEditorDebugOn && en->numExDLists != 0)
         {
             Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
             gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
@@ -85,7 +143,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 
         #if LOG_VERSION == 1
 
-        if (en->dgbDrawVersion)
+        if (en->settings.printToScreenDebugOn)
         {
             Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
             gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
