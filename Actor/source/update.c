@@ -139,7 +139,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 
         if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_DRIGHT))
         {
-            en->dbgPosEditorCooldown = 1;
+            en->dbgPosEditorCooldown = 2;
 
             float mul = 1;
 
@@ -169,7 +169,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
         }
         if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_DLEFT))
         {
-            en->dbgPosEditorCooldown = 1;
+            en->dbgPosEditorCooldown = 2;
 
             float mul = 1;
 
