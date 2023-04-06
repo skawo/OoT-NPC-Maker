@@ -2195,7 +2195,10 @@ namespace NPC_Maker
 
         private void Button_CCompile_Click(object sender, EventArgs e)
         {
-            CompileCode();
+            if (SelectedEntry.EmbeddedOverlayCode.Code != "")
+                CompileCode();
+            else
+                TextBox_CompileMsg.Text = "No code to compile!";
         }
         private void Combo_CodeEditor_SelectedIndexChanged(object sender, EventArgs e)
         {
