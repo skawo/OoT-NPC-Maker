@@ -55,23 +55,23 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 
 
             GfxPrint_SetPos(&printer, 24, 10);
-            GfxPrint_Printf(&printer, "Type %s", lookAts[en->settings.lookAtType]);
+            GfxPrint_Printf(&printer, "Type %s", lookAts[en->settings.lookAtType]);  
             GfxPrint_SetPos(&printer, 24, 11);
-            GfxPrint_Printf(&printer, "Deg Hor %d", en->settings.lookAtDegreesHor);         
-            GfxPrint_SetPos(&printer, 24, 12);
-            GfxPrint_Printf(&printer, "Deg Ver %d", en->settings.lookAtDegreesVert);    
-            GfxPrint_SetPos(&printer, 24, 13);
             GfxPrint_Printf(&printer, "Head limb %d", en->settings.headLimb); 
-            GfxPrint_SetPos(&printer, 24, 14);
+            GfxPrint_SetPos(&printer, 24, 12);
             GfxPrint_Printf(&printer, "Head V Axis %s", axises[en->settings.headVertAxis]); 
-            GfxPrint_SetPos(&printer, 24, 15);
+            GfxPrint_SetPos(&printer, 24, 13);
             GfxPrint_Printf(&printer, "Head H Axis %s", axises[en->settings.headHorAxis]); 
-            GfxPrint_SetPos(&printer, 24, 16);
+            GfxPrint_SetPos(&printer, 24, 14);
             GfxPrint_Printf(&printer, "Waist limb %d", en->settings.waistLimb); 
-            GfxPrint_SetPos(&printer, 24, 17);
+            GfxPrint_SetPos(&printer, 24, 15);
             GfxPrint_Printf(&printer, "Waist V Axis %s", axises[en->settings.waistVertAxis]); 
-            GfxPrint_SetPos(&printer, 24, 18);
+            GfxPrint_SetPos(&printer, 24, 16);
             GfxPrint_Printf(&printer, "Waist H Axis %s", axises[en->settings.waistHorAxis]); 
+            GfxPrint_SetPos(&printer, 24, 17);
+            GfxPrint_Printf(&printer, "Deg Ver %d", en->settings.lookAtDegreesVert);  
+            GfxPrint_SetPos(&printer, 24, 18);
+            GfxPrint_Printf(&printer, "Deg Hor %d", en->settings.lookAtDegreesHor);         
             GfxPrint_SetPos(&printer, 24, 19);
             GfxPrint_Printf(&printer, "Offset X %d", (int)en->settings.lookAtPosOffset.x); 
             GfxPrint_SetPos(&printer, 24, 20);

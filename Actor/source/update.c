@@ -64,14 +64,14 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
             switch (en->dbgPosEditorCursorPos)
             {
                 case 0: SET_FIELD(en->settings.lookAtType, 5, 0, 1); break;
-                case 1: SET_FIELD(en->settings.lookAtDegreesHor, 360, 0, mul == 100 ? 10 : 1); break;
-                case 2: SET_FIELD(en->settings.lookAtDegreesVert, 360, 0, mul == 100 ? 10 : 1); break;
-                case 3: en->settings.headLimb += 1; break;
-                case 4: SET_FIELD(en->settings.headVertAxis, 6, 0, 1); break;
-                case 5: SET_FIELD(en->settings.headHorAxis, 6, 0, 1); break;
-                case 6: en->settings.waistLimb += 1; break;
-                case 7: SET_FIELD(en->settings.waistVertAxis, 6, 0, 1); break;
-                case 8: SET_FIELD(en->settings.waistHorAxis, 6, 0, 1); break;
+                case 1: en->settings.headLimb += 1; break;
+                case 2: SET_FIELD(en->settings.headVertAxis, 6, 0, 1); break;
+                case 3: SET_FIELD(en->settings.headHorAxis, 6, 0, 1); break;
+                case 4: en->settings.waistLimb += 1; break;
+                case 5: SET_FIELD(en->settings.waistVertAxis, 6, 0, 1); break;
+                case 6: SET_FIELD(en->settings.waistHorAxis, 6, 0, 1); break;
+                case 7: SET_FIELD(en->settings.lookAtDegreesVert, 360, 0, mul == 100 ? 10 : 1); break;
+                case 8: SET_FIELD(en->settings.lookAtDegreesHor, 360, 0, mul == 100 ? 10 : 1); break;
                 case 9: SET_FIELD(en->settings.lookAtPosOffset.x, 32767, -332767, mul); break;
                 case 10: SET_FIELD(en->settings.lookAtPosOffset.y, 32767, -332767, mul); break;
                 case 11: SET_FIELD(en->settings.lookAtPosOffset.z, 32767, -332767, mul); break;
@@ -90,14 +90,14 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
             switch (en->dbgPosEditorCursorPos)
             {
                 case 0: SET_FIELD_MINUS(en->settings.lookAtType, 5, 0, 1); break;
-                case 1: SET_FIELD_MINUS(en->settings.lookAtDegreesHor, 360, 0, mul == 100 ? 10 : 1); break;
-                case 2: SET_FIELD_MINUS(en->settings.lookAtDegreesVert, 360, 0, mul == 100 ? 10 : 1); break;
-                case 3: en->settings.headLimb -= 1; break;
-                case 4: SET_FIELD_MINUS(en->settings.headVertAxis, 6, 0, 1); break;
-                case 5: SET_FIELD_MINUS(en->settings.headHorAxis, 6, 0, 1); break;
-                case 6: en->settings.waistLimb -= 1; break;
-                case 7: SET_FIELD_MINUS(en->settings.waistVertAxis, 6, 0, 1); break;
-                case 8: SET_FIELD_MINUS(en->settings.waistHorAxis, 6, 0, 1); break;
+                case 1: en->settings.headLimb -= 1; break;
+                case 2: SET_FIELD_MINUS(en->settings.headVertAxis, 6, 0, 1); break;
+                case 3: SET_FIELD_MINUS(en->settings.headHorAxis, 6, 0, 1); break;
+                case 4: en->settings.waistLimb -= 1; break;
+                case 5: SET_FIELD_MINUS(en->settings.waistVertAxis, 6, 0, 1); break;
+                case 6: SET_FIELD_MINUS(en->settings.waistHorAxis, 6, 0, 1); break;
+                case 7: SET_FIELD_MINUS(en->settings.lookAtDegreesVert, 360, 0, mul == 100 ? 10 : 1); break;
+                case 8: SET_FIELD_MINUS(en->settings.lookAtDegreesHor, 360, 0, mul == 100 ? 10 : 1); break;                
                 case 9: SET_FIELD_MINUS(en->settings.lookAtPosOffset.x, 32767, -332767, mul); break;
                 case 10: SET_FIELD_MINUS(en->settings.lookAtPosOffset.y, 32767, -332767, mul); break;
                 case 11: SET_FIELD_MINUS(en->settings.lookAtPosOffset.z, 32767, -332767, mul); break;

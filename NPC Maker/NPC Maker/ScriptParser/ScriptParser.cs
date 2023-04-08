@@ -335,7 +335,7 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(pEx);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing OR"));
             }
@@ -413,7 +413,7 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(pEx);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing AND"));
             }
@@ -481,7 +481,7 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(pEx);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing ELIF"));
             }

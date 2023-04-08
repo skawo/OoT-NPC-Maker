@@ -74,7 +74,6 @@ namespace NPC_Maker.Scripts
                 if (IsHex(Splitstring[Index]))
                 {
                     string str = Splitstring[Index];
-                    bool neg = false;
 
                     if (str.StartsWith("-"))
                     {

@@ -155,7 +155,7 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Add(pEx);
                 return new InstructionNop();
             }
-            catch (Exception exx)
+            catch (Exception)
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
                 return new InstructionNop();

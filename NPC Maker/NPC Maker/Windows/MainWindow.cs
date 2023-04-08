@@ -2318,7 +2318,7 @@ namespace NPC_Maker
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageBox.Show("An error has occurred while attempting to update the embedded overlay: " + ex.Message);
             }
