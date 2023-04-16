@@ -277,7 +277,11 @@ namespace NPC_Maker
                 CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
 
             Process p = Process.Start(gccInfo);
-            p.WaitForExit();
+
+            p.WaitForExit(2000);
+
+            if (!p.HasExited)
+                p.Kill();
 
             GetOutput(p, "GCC", ref CompileMsgs);
 
@@ -311,9 +315,12 @@ namespace NPC_Maker
                 CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(ldInfo);
-            p.WaitForExit();
-            GetOutput(p, "LINKER", ref CompileMsgs);
+            p.WaitForExit(2000);
 
+            if (!p.HasExited)
+                p.Kill();
+
+            GetOutput(p, "LINKER", ref CompileMsgs);
 
             if (!File.Exists(elfFile))
             {
@@ -340,7 +347,11 @@ namespace NPC_Maker
                 CompileMsgs += nOVLInfo.FileName + " " + nOVLInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(nOVLInfo);
-            p.WaitForExit();
+            p.WaitForExit(2000);
+
+            if (!p.HasExited)
+                p.Kill();
+
             GetOutput(p, "NOVL", ref CompileMsgs);
 
             if (!File.Exists(ovlFile))

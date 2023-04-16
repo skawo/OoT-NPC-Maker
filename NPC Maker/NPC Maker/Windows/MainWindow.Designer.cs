@@ -106,6 +106,10 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.NumUpDown_ScriptsFVar = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ScriptsVar = new System.Windows.Forms.NumericUpDown();
@@ -311,10 +315,6 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -1349,6 +1349,51 @@
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(419, 493);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(107, 13);
+            this.label4.TabIndex = 91;
+            this.label4.Text = "Development options";
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(584, 543);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(89, 17);
+            this.checkBox4.TabIndex = 90;
+            this.checkBox4.Tag = "DEBUGLOOKAT";
+            this.checkBox4.Text = "Lookat Editor";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(584, 523);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(94, 17);
+            this.checkBox3.TabIndex = 89;
+            this.checkBox3.Tag = "DEBUGPRINTSCR";
+            this.checkBox3.Text = "Print to screen";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(422, 543);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(80, 17);
+            this.checkBox2.TabIndex = 88;
+            this.checkBox2.Tag = "DEBUGDLISTED";
+            this.checkBox2.Text = "DList Editor";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
@@ -2144,7 +2189,7 @@
             // 
             // NumUpDown_DegVert
             // 
-            this.NumUpDown_DegVert.Location = new System.Drawing.Point(125, 276);
+            this.NumUpDown_DegVert.Location = new System.Drawing.Point(125, 251);
             this.NumUpDown_DegVert.Maximum = new decimal(new int[] {
             360,
             0,
@@ -2168,7 +2213,7 @@
             // Label_DegVert
             // 
             this.Label_DegVert.AutoSize = true;
-            this.Label_DegVert.Location = new System.Drawing.Point(5, 278);
+            this.Label_DegVert.Location = new System.Drawing.Point(5, 253);
             this.Label_DegVert.Name = "Label_DegVert";
             this.Label_DegVert.Size = new System.Drawing.Size(94, 13);
             this.Label_DegVert.TabIndex = 26;
@@ -2225,7 +2270,7 @@
             // 
             // NumUpDown_DegHoz
             // 
-            this.NumUpDown_DegHoz.Location = new System.Drawing.Point(125, 250);
+            this.NumUpDown_DegHoz.Location = new System.Drawing.Point(125, 277);
             this.NumUpDown_DegHoz.Maximum = new decimal(new int[] {
             360,
             0,
@@ -2258,7 +2303,7 @@
             // Label_DegHoz
             // 
             this.Label_DegHoz.AutoSize = true;
-            this.Label_DegHoz.Location = new System.Drawing.Point(5, 252);
+            this.Label_DegHoz.Location = new System.Drawing.Point(5, 278);
             this.Label_DegHoz.Name = "Label_DegHoz";
             this.Label_DegHoz.Size = new System.Drawing.Size(105, 13);
             this.Label_DegHoz.TabIndex = 24;
@@ -2522,8 +2567,8 @@
             this.Panel_Movement.BackColor = System.Drawing.Color.Transparent;
             this.Panel_Movement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Panel_Movement.Controls.Add(this.label2);
-            this.Panel_Movement.Controls.Add(this.NumUp_MaxRoam);
             this.Panel_Movement.Controls.Add(this.Chkb_IgnoreY);
+            this.Panel_Movement.Controls.Add(this.NumUp_MaxRoam);
             this.Panel_Movement.Controls.Add(this.SmoothingCnts);
             this.Panel_Movement.Controls.Add(this.NumUp_Smoothing);
             this.Panel_Movement.Controls.Add(this.Lb_PathEnd);
@@ -2537,16 +2582,16 @@
             this.Panel_Movement.Controls.Add(this.NumUpDown_LoopStartNode);
             this.Panel_Movement.Controls.Add(this.NumUpDown_GravityForce);
             this.Panel_Movement.Controls.Add(this.NumUpDown_LoopDelay);
-            this.Panel_Movement.Controls.Add(this.Label_LoopEndNode);
-            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopEndNode);
             this.Panel_Movement.Controls.Add(this.Label_PathFollowID);
             this.Panel_Movement.Controls.Add(this.NumUpDown_PathFollowID);
-            this.Panel_Movement.Controls.Add(this.NumUpDown_MovDistance);
+            this.Panel_Movement.Controls.Add(this.Label_LoopEndNode);
             this.Panel_Movement.Controls.Add(this.Combo_MovementType);
             this.Panel_Movement.Controls.Add(this.Label_MovementType);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_LoopEndNode);
             this.Panel_Movement.Controls.Add(this.NumUpDown_MovSpeed);
-            this.Panel_Movement.Controls.Add(this.Label_Distance);
+            this.Panel_Movement.Controls.Add(this.NumUpDown_MovDistance);
             this.Panel_Movement.Controls.Add(this.Label_Speed);
+            this.Panel_Movement.Controls.Add(this.Label_Distance);
             this.Panel_Movement.Location = new System.Drawing.Point(213, 8);
             this.Panel_Movement.Name = "Panel_Movement";
             this.Panel_Movement.Size = new System.Drawing.Size(200, 369);
@@ -2555,7 +2600,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 86);
+            this.label2.Location = new System.Drawing.Point(5, 138);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 70;
@@ -2563,7 +2608,7 @@
             // 
             // NumUp_MaxRoam
             // 
-            this.NumUp_MaxRoam.Location = new System.Drawing.Point(123, 84);
+            this.NumUp_MaxRoam.Location = new System.Drawing.Point(124, 136);
             this.NumUp_MaxRoam.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2604,7 +2649,7 @@
             0,
             0,
             65536});
-            this.NumUp_Smoothing.Location = new System.Drawing.Point(123, 162);
+            this.NumUp_Smoothing.Location = new System.Drawing.Point(124, 162);
             this.NumUp_Smoothing.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2624,7 +2669,7 @@
             // Lb_PathEnd
             // 
             this.Lb_PathEnd.AutoSize = true;
-            this.Lb_PathEnd.Location = new System.Drawing.Point(5, 320);
+            this.Lb_PathEnd.Location = new System.Drawing.Point(5, 268);
             this.Lb_PathEnd.Name = "Lb_PathEnd";
             this.Lb_PathEnd.Size = new System.Drawing.Size(75, 13);
             this.Lb_PathEnd.TabIndex = 66;
@@ -2634,7 +2679,7 @@
             // 
             this.tmpicker_timedPathStart.CustomFormat = "HH:mm";
             this.tmpicker_timedPathStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.tmpicker_timedPathStart.Location = new System.Drawing.Point(123, 292);
+            this.tmpicker_timedPathStart.Location = new System.Drawing.Point(124, 240);
             this.tmpicker_timedPathStart.Name = "tmpicker_timedPathStart";
             this.tmpicker_timedPathStart.ShowUpDown = true;
             this.tmpicker_timedPathStart.Size = new System.Drawing.Size(66, 20);
@@ -2645,7 +2690,7 @@
             // Label_PathStTime
             // 
             this.Label_PathStTime.AutoSize = true;
-            this.Label_PathStTime.Location = new System.Drawing.Point(5, 295);
+            this.Label_PathStTime.Location = new System.Drawing.Point(5, 243);
             this.Label_PathStTime.Name = "Label_PathStTime";
             this.Label_PathStTime.Size = new System.Drawing.Size(77, 13);
             this.Label_PathStTime.TabIndex = 64;
@@ -2655,7 +2700,7 @@
             // 
             this.tmpicker_timedPathEnd.CustomFormat = "HH:mm";
             this.tmpicker_timedPathEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.tmpicker_timedPathEnd.Location = new System.Drawing.Point(123, 318);
+            this.tmpicker_timedPathEnd.Location = new System.Drawing.Point(124, 266);
             this.tmpicker_timedPathEnd.Name = "tmpicker_timedPathEnd";
             this.tmpicker_timedPathEnd.ShowUpDown = true;
             this.tmpicker_timedPathEnd.Size = new System.Drawing.Size(65, 20);
@@ -2675,7 +2720,7 @@
             // Label_LoopDelay
             // 
             this.Label_LoopDelay.AutoSize = true;
-            this.Label_LoopDelay.Location = new System.Drawing.Point(5, 138);
+            this.Label_LoopDelay.Location = new System.Drawing.Point(5, 84);
             this.Label_LoopDelay.Name = "Label_LoopDelay";
             this.Label_LoopDelay.Size = new System.Drawing.Size(88, 13);
             this.Label_LoopDelay.TabIndex = 47;
@@ -2684,7 +2729,7 @@
             // Label_LoopStartNode
             // 
             this.Label_LoopStartNode.AutoSize = true;
-            this.Label_LoopStartNode.Location = new System.Drawing.Point(4, 242);
+            this.Label_LoopStartNode.Location = new System.Drawing.Point(5, 294);
             this.Label_LoopStartNode.Name = "Label_LoopStartNode";
             this.Label_LoopStartNode.Size = new System.Drawing.Size(84, 13);
             this.Label_LoopStartNode.TabIndex = 45;
@@ -2704,7 +2749,7 @@
             // 
             // NumUpDown_LoopStartNode
             // 
-            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(123, 240);
+            this.NumUpDown_LoopStartNode.Location = new System.Drawing.Point(124, 292);
             this.NumUpDown_LoopStartNode.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2734,7 +2779,7 @@
             0,
             0,
             65536});
-            this.NumUpDown_GravityForce.Location = new System.Drawing.Point(123, 188);
+            this.NumUpDown_GravityForce.Location = new System.Drawing.Point(124, 188);
             this.NumUpDown_GravityForce.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2748,7 +2793,7 @@
             // 
             // NumUpDown_LoopDelay
             // 
-            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(123, 136);
+            this.NumUpDown_LoopDelay.Location = new System.Drawing.Point(124, 82);
             this.NumUpDown_LoopDelay.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2763,7 +2808,7 @@
             // Label_LoopEndNode
             // 
             this.Label_LoopEndNode.AutoSize = true;
-            this.Label_LoopEndNode.Location = new System.Drawing.Point(5, 269);
+            this.Label_LoopEndNode.Location = new System.Drawing.Point(5, 320);
             this.Label_LoopEndNode.Name = "Label_LoopEndNode";
             this.Label_LoopEndNode.Size = new System.Drawing.Size(82, 13);
             this.Label_LoopEndNode.TabIndex = 43;
@@ -2771,7 +2816,7 @@
             // 
             // NumUpDown_LoopEndNode
             // 
-            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(123, 266);
+            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(124, 318);
             this.NumUpDown_LoopEndNode.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2804,7 +2849,7 @@
             // 
             // NumUpDown_PathFollowID
             // 
-            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(123, 214);
+            this.NumUpDown_PathFollowID.Location = new System.Drawing.Point(124, 214);
             this.NumUpDown_PathFollowID.Maximum = new decimal(new int[] {
             255,
             0,
@@ -2818,7 +2863,7 @@
             // 
             // NumUpDown_MovDistance
             // 
-            this.NumUpDown_MovDistance.Location = new System.Drawing.Point(123, 58);
+            this.NumUpDown_MovDistance.Location = new System.Drawing.Point(124, 110);
             this.NumUpDown_MovDistance.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2865,7 +2910,7 @@
             0,
             0,
             131072});
-            this.NumUpDown_MovSpeed.Location = new System.Drawing.Point(123, 110);
+            this.NumUpDown_MovSpeed.Location = new System.Drawing.Point(124, 56);
             this.NumUpDown_MovSpeed.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -2880,7 +2925,7 @@
             // Label_Distance
             // 
             this.Label_Distance.AutoSize = true;
-            this.Label_Distance.Location = new System.Drawing.Point(4, 60);
+            this.Label_Distance.Location = new System.Drawing.Point(5, 112);
             this.Label_Distance.Name = "Label_Distance";
             this.Label_Distance.Size = new System.Drawing.Size(103, 13);
             this.Label_Distance.TabIndex = 35;
@@ -2889,7 +2934,7 @@
             // Label_Speed
             // 
             this.Label_Speed.AutoSize = true;
-            this.Label_Speed.Location = new System.Drawing.Point(4, 112);
+            this.Label_Speed.Location = new System.Drawing.Point(5, 58);
             this.Label_Speed.Name = "Label_Speed";
             this.Label_Speed.Size = new System.Drawing.Size(92, 13);
             this.Label_Speed.TabIndex = 36;
@@ -3849,51 +3894,6 @@
             // 
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(422, 543);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(80, 17);
-            this.checkBox2.TabIndex = 88;
-            this.checkBox2.Tag = "DEBUGDLISTED";
-            this.checkBox2.Text = "DList Editor";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(584, 523);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(94, 17);
-            this.checkBox3.TabIndex = 89;
-            this.checkBox3.Tag = "DEBUGPRINTSCR";
-            this.checkBox3.Text = "Print to screen";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(584, 543);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(89, 17);
-            this.checkBox4.TabIndex = 90;
-            this.checkBox4.Tag = "DEBUGLOOKAT";
-            this.checkBox4.Text = "Lookat Editor";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(419, 493);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(107, 13);
-            this.label4.TabIndex = 91;
-            this.label4.Text = "Development options";
             // 
             // MainWindow
             // 
