@@ -106,18 +106,18 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.Lbl_DBGOpts = new System.Windows.Forms.Label();
+            this.ChkBox_DBGLookAt = new System.Windows.Forms.CheckBox();
+            this.ChkBox_DBGPrint = new System.Windows.Forms.CheckBox();
+            this.ChkBox_DBGDlist = new System.Windows.Forms.CheckBox();
+            this.ChkBox_ExistInAll = new System.Windows.Forms.CheckBox();
             this.NumUpDown_ScriptsFVar = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ScriptsVar = new System.Windows.Forms.NumericUpDown();
             this.Lbl_ScriptsFVars = new System.Windows.Forms.Label();
             this.Lbl_ScriptsVars = new System.Windows.Forms.Label();
             this.ChkInvisible = new System.Windows.Forms.CheckBox();
             this.ChkOnlyWhenLens = new System.Windows.Forms.CheckBox();
-            this.ChkBox_DebugCol = new System.Windows.Forms.CheckBox();
+            this.ChkBox_DBGCol = new System.Windows.Forms.CheckBox();
             this.Panel_Colors = new System.Windows.Forms.Panel();
             this.Lbl_Radius = new System.Windows.Forms.Label();
             this.NumUp_LightRadius = new System.Windows.Forms.NumericUpDown();
@@ -201,8 +201,8 @@
             this.NumUpDown_TargetLimb = new System.Windows.Forms.NumericUpDown();
             this.Panel_Movement = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.NumUp_MaxRoam = new System.Windows.Forms.NumericUpDown();
             this.Chkb_IgnoreY = new System.Windows.Forms.CheckBox();
+            this.NumUp_MaxRoam = new System.Windows.Forms.NumericUpDown();
             this.SmoothingCnts = new System.Windows.Forms.Label();
             this.NumUp_Smoothing = new System.Windows.Forms.NumericUpDown();
             this.Lb_PathEnd = new System.Windows.Forms.Label();
@@ -216,16 +216,16 @@
             this.NumUpDown_LoopStartNode = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_GravityForce = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
-            this.Label_LoopEndNode = new System.Windows.Forms.Label();
-            this.NumUpDown_LoopEndNode = new System.Windows.Forms.NumericUpDown();
             this.Label_PathFollowID = new System.Windows.Forms.Label();
             this.NumUpDown_PathFollowID = new System.Windows.Forms.NumericUpDown();
-            this.NumUpDown_MovDistance = new System.Windows.Forms.NumericUpDown();
+            this.Label_LoopEndNode = new System.Windows.Forms.Label();
             this.Combo_MovementType = new System.Windows.Forms.ComboBox();
             this.Label_MovementType = new System.Windows.Forms.Label();
+            this.NumUpDown_LoopEndNode = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_MovSpeed = new System.Windows.Forms.NumericUpDown();
-            this.Label_Distance = new System.Windows.Forms.Label();
+            this.NumUpDown_MovDistance = new System.Windows.Forms.NumericUpDown();
             this.Label_Speed = new System.Windows.Forms.Label();
+            this.Label_Distance = new System.Windows.Forms.Label();
             this.Checkbox_AlwaysDraw = new System.Windows.Forms.CheckBox();
             this.NumUpDown_CutsceneSlot = new System.Windows.Forms.NumericUpDown();
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
@@ -373,10 +373,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_GravityForce)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_PathFollowID)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
             this.Tab4_Messages.SuspendLayout();
             this.PanelMsgPreview.SuspendLayout();
@@ -1312,18 +1312,18 @@
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
-            this.Tab3_BehaviorData.Controls.Add(this.label4);
-            this.Tab3_BehaviorData.Controls.Add(this.checkBox4);
-            this.Tab3_BehaviorData.Controls.Add(this.checkBox3);
-            this.Tab3_BehaviorData.Controls.Add(this.checkBox2);
-            this.Tab3_BehaviorData.Controls.Add(this.checkBox1);
+            this.Tab3_BehaviorData.Controls.Add(this.Lbl_DBGOpts);
+            this.Tab3_BehaviorData.Controls.Add(this.ChkBox_DBGLookAt);
+            this.Tab3_BehaviorData.Controls.Add(this.ChkBox_DBGPrint);
+            this.Tab3_BehaviorData.Controls.Add(this.ChkBox_DBGDlist);
+            this.Tab3_BehaviorData.Controls.Add(this.ChkBox_ExistInAll);
             this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_ScriptsFVar);
             this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_ScriptsVar);
             this.Tab3_BehaviorData.Controls.Add(this.Lbl_ScriptsFVars);
             this.Tab3_BehaviorData.Controls.Add(this.Lbl_ScriptsVars);
             this.Tab3_BehaviorData.Controls.Add(this.ChkInvisible);
             this.Tab3_BehaviorData.Controls.Add(this.ChkOnlyWhenLens);
-            this.Tab3_BehaviorData.Controls.Add(this.ChkBox_DebugCol);
+            this.Tab3_BehaviorData.Controls.Add(this.ChkBox_DBGCol);
             this.Tab3_BehaviorData.Controls.Add(this.Panel_Colors);
             this.Tab3_BehaviorData.Controls.Add(this.NumUp_RiddenBy);
             this.Tab3_BehaviorData.Controls.Add(this.Label_RiddenBy);
@@ -1349,62 +1349,62 @@
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
             // 
-            // label4
+            // Lbl_DBGOpts
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(419, 493);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(107, 13);
-            this.label4.TabIndex = 91;
-            this.label4.Text = "Development options";
+            this.Lbl_DBGOpts.AutoSize = true;
+            this.Lbl_DBGOpts.Location = new System.Drawing.Point(419, 493);
+            this.Lbl_DBGOpts.Name = "Lbl_DBGOpts";
+            this.Lbl_DBGOpts.Size = new System.Drawing.Size(107, 13);
+            this.Lbl_DBGOpts.TabIndex = 91;
+            this.Lbl_DBGOpts.Text = "Development options";
             // 
-            // checkBox4
+            // ChkBox_DBGLookAt
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(584, 543);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(89, 17);
-            this.checkBox4.TabIndex = 90;
-            this.checkBox4.Tag = "DEBUGLOOKAT";
-            this.checkBox4.Text = "Lookat Editor";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            this.ChkBox_DBGLookAt.AutoSize = true;
+            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 543);
+            this.ChkBox_DBGLookAt.Name = "ChkBox_DBGLookAt";
+            this.ChkBox_DBGLookAt.Size = new System.Drawing.Size(89, 17);
+            this.ChkBox_DBGLookAt.TabIndex = 90;
+            this.ChkBox_DBGLookAt.Tag = "DEBUGLOOKAT";
+            this.ChkBox_DBGLookAt.Text = "Lookat Editor";
+            this.ChkBox_DBGLookAt.UseVisualStyleBackColor = true;
+            this.ChkBox_DBGLookAt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
-            // checkBox3
+            // ChkBox_DBGPrint
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(584, 523);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(94, 17);
-            this.checkBox3.TabIndex = 89;
-            this.checkBox3.Tag = "DEBUGPRINTSCR";
-            this.checkBox3.Text = "Print to screen";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            this.ChkBox_DBGPrint.AutoSize = true;
+            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 523);
+            this.ChkBox_DBGPrint.Name = "ChkBox_DBGPrint";
+            this.ChkBox_DBGPrint.Size = new System.Drawing.Size(94, 17);
+            this.ChkBox_DBGPrint.TabIndex = 89;
+            this.ChkBox_DBGPrint.Tag = "DEBUGPRINTSCR";
+            this.ChkBox_DBGPrint.Text = "Print to screen";
+            this.ChkBox_DBGPrint.UseVisualStyleBackColor = true;
+            this.ChkBox_DBGPrint.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
-            // checkBox2
+            // ChkBox_DBGDlist
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(422, 543);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(80, 17);
-            this.checkBox2.TabIndex = 88;
-            this.checkBox2.Tag = "DEBUGDLISTED";
-            this.checkBox2.Text = "DList Editor";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            this.ChkBox_DBGDlist.AutoSize = true;
+            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 543);
+            this.ChkBox_DBGDlist.Name = "ChkBox_DBGDlist";
+            this.ChkBox_DBGDlist.Size = new System.Drawing.Size(80, 17);
+            this.ChkBox_DBGDlist.TabIndex = 88;
+            this.ChkBox_DBGDlist.Tag = "DEBUGDLISTED";
+            this.ChkBox_DBGDlist.Text = "DList Editor";
+            this.ChkBox_DBGDlist.UseVisualStyleBackColor = true;
+            this.ChkBox_DBGDlist.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
-            // checkBox1
+            // ChkBox_ExistInAll
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(422, 235);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(103, 17);
-            this.checkBox1.TabIndex = 87;
-            this.checkBox1.Tag = "EXISTALLROOMS";
-            this.checkBox1.Text = "Exist in all rooms";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            this.ChkBox_ExistInAll.AutoSize = true;
+            this.ChkBox_ExistInAll.Location = new System.Drawing.Point(422, 235);
+            this.ChkBox_ExistInAll.Name = "ChkBox_ExistInAll";
+            this.ChkBox_ExistInAll.Size = new System.Drawing.Size(103, 17);
+            this.ChkBox_ExistInAll.TabIndex = 87;
+            this.ChkBox_ExistInAll.Tag = "EXISTALLROOMS";
+            this.ChkBox_ExistInAll.Text = "Exist in all rooms";
+            this.ChkBox_ExistInAll.UseVisualStyleBackColor = true;
+            this.ChkBox_ExistInAll.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUpDown_ScriptsFVar
             // 
@@ -1476,17 +1476,17 @@
             this.ChkOnlyWhenLens.UseVisualStyleBackColor = true;
             this.ChkOnlyWhenLens.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
-            // ChkBox_DebugCol
+            // ChkBox_DBGCol
             // 
-            this.ChkBox_DebugCol.AutoSize = true;
-            this.ChkBox_DebugCol.Location = new System.Drawing.Point(422, 523);
-            this.ChkBox_DebugCol.Name = "ChkBox_DebugCol";
-            this.ChkBox_DebugCol.Size = new System.Drawing.Size(91, 17);
-            this.ChkBox_DebugCol.TabIndex = 80;
-            this.ChkBox_DebugCol.Tag = "DEBUGSHOWCOLS";
-            this.ChkBox_DebugCol.Text = "Draw collision";
-            this.ChkBox_DebugCol.UseVisualStyleBackColor = true;
-            this.ChkBox_DebugCol.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            this.ChkBox_DBGCol.AutoSize = true;
+            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 523);
+            this.ChkBox_DBGCol.Name = "ChkBox_DBGCol";
+            this.ChkBox_DBGCol.Size = new System.Drawing.Size(91, 17);
+            this.ChkBox_DBGCol.TabIndex = 80;
+            this.ChkBox_DBGCol.Tag = "DEBUGSHOWCOLS";
+            this.ChkBox_DBGCol.Text = "Draw collision";
+            this.ChkBox_DBGCol.UseVisualStyleBackColor = true;
+            this.ChkBox_DBGCol.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Panel_Colors
             // 
@@ -2606,6 +2606,18 @@
             this.label2.TabIndex = 70;
             this.label2.Text = "(Roam) Max dist:";
             // 
+            // Chkb_IgnoreY
+            // 
+            this.Chkb_IgnoreY.AutoSize = true;
+            this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 344);
+            this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
+            this.Chkb_IgnoreY.Size = new System.Drawing.Size(115, 17);
+            this.Chkb_IgnoreY.TabIndex = 67;
+            this.Chkb_IgnoreY.Tag = "IGNORENODEYAXIS";
+            this.Chkb_IgnoreY.Text = "Ignore node Y Axis";
+            this.Chkb_IgnoreY.UseVisualStyleBackColor = true;
+            this.Chkb_IgnoreY.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // NumUp_MaxRoam
             // 
             this.NumUp_MaxRoam.Location = new System.Drawing.Point(124, 136);
@@ -2619,18 +2631,6 @@
             this.NumUp_MaxRoam.TabIndex = 69;
             this.NumUp_MaxRoam.Tag = "ROAMMAX";
             this.NumUp_MaxRoam.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // Chkb_IgnoreY
-            // 
-            this.Chkb_IgnoreY.AutoSize = true;
-            this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 344);
-            this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
-            this.Chkb_IgnoreY.Size = new System.Drawing.Size(115, 17);
-            this.Chkb_IgnoreY.TabIndex = 67;
-            this.Chkb_IgnoreY.Tag = "IGNORENODEYAXIS";
-            this.Chkb_IgnoreY.Text = "Ignore node Y Axis";
-            this.Chkb_IgnoreY.UseVisualStyleBackColor = true;
-            this.Chkb_IgnoreY.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // SmoothingCnts
             // 
@@ -2805,39 +2805,6 @@
             this.NumUpDown_LoopDelay.Tag = "MOVDEL";
             this.NumUpDown_LoopDelay.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
-            // Label_LoopEndNode
-            // 
-            this.Label_LoopEndNode.AutoSize = true;
-            this.Label_LoopEndNode.Location = new System.Drawing.Point(5, 320);
-            this.Label_LoopEndNode.Name = "Label_LoopEndNode";
-            this.Label_LoopEndNode.Size = new System.Drawing.Size(82, 13);
-            this.Label_LoopEndNode.TabIndex = 43;
-            this.Label_LoopEndNode.Text = "Loop end node:";
-            // 
-            // NumUpDown_LoopEndNode
-            // 
-            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(124, 318);
-            this.NumUpDown_LoopEndNode.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.NumUpDown_LoopEndNode.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.NumUpDown_LoopEndNode.Name = "NumUpDown_LoopEndNode";
-            this.NumUpDown_LoopEndNode.Size = new System.Drawing.Size(66, 20);
-            this.NumUpDown_LoopEndNode.TabIndex = 42;
-            this.NumUpDown_LoopEndNode.Tag = "PATHENDID";
-            this.NumUpDown_LoopEndNode.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            -2147483648});
-            this.NumUpDown_LoopEndNode.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
             // Label_PathFollowID
             // 
             this.Label_PathFollowID.AutoSize = true;
@@ -2861,19 +2828,14 @@
             this.NumUpDown_PathFollowID.Tag = "PATHID";
             this.NumUpDown_PathFollowID.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
-            // NumUpDown_MovDistance
+            // Label_LoopEndNode
             // 
-            this.NumUpDown_MovDistance.Location = new System.Drawing.Point(124, 110);
-            this.NumUpDown_MovDistance.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.NumUpDown_MovDistance.Name = "NumUpDown_MovDistance";
-            this.NumUpDown_MovDistance.Size = new System.Drawing.Size(66, 20);
-            this.NumUpDown_MovDistance.TabIndex = 35;
-            this.NumUpDown_MovDistance.Tag = "MOVDISTANCE";
-            this.NumUpDown_MovDistance.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            this.Label_LoopEndNode.AutoSize = true;
+            this.Label_LoopEndNode.Location = new System.Drawing.Point(5, 320);
+            this.Label_LoopEndNode.Name = "Label_LoopEndNode";
+            this.Label_LoopEndNode.Size = new System.Drawing.Size(82, 13);
+            this.Label_LoopEndNode.TabIndex = 43;
+            this.Label_LoopEndNode.Text = "Loop end node:";
             // 
             // Combo_MovementType
             // 
@@ -2902,6 +2864,30 @@
             this.Label_MovementType.TabIndex = 60;
             this.Label_MovementType.Text = "Movement type:";
             // 
+            // NumUpDown_LoopEndNode
+            // 
+            this.NumUpDown_LoopEndNode.Location = new System.Drawing.Point(124, 318);
+            this.NumUpDown_LoopEndNode.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_LoopEndNode.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LoopEndNode.Name = "NumUpDown_LoopEndNode";
+            this.NumUpDown_LoopEndNode.Size = new System.Drawing.Size(66, 20);
+            this.NumUpDown_LoopEndNode.TabIndex = 42;
+            this.NumUpDown_LoopEndNode.Tag = "PATHENDID";
+            this.NumUpDown_LoopEndNode.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.NumUpDown_LoopEndNode.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
             // NumUpDown_MovSpeed
             // 
             this.NumUpDown_MovSpeed.DecimalPlaces = 2;
@@ -2922,14 +2908,19 @@
             this.NumUpDown_MovSpeed.Tag = "MOVSPEED";
             this.NumUpDown_MovSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
-            // Label_Distance
+            // NumUpDown_MovDistance
             // 
-            this.Label_Distance.AutoSize = true;
-            this.Label_Distance.Location = new System.Drawing.Point(5, 112);
-            this.Label_Distance.Name = "Label_Distance";
-            this.Label_Distance.Size = new System.Drawing.Size(103, 13);
-            this.Label_Distance.TabIndex = 35;
-            this.Label_Distance.Text = "Movement distance:";
+            this.NumUpDown_MovDistance.Location = new System.Drawing.Point(124, 110);
+            this.NumUpDown_MovDistance.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.NumUpDown_MovDistance.Name = "NumUpDown_MovDistance";
+            this.NumUpDown_MovDistance.Size = new System.Drawing.Size(66, 20);
+            this.NumUpDown_MovDistance.TabIndex = 35;
+            this.NumUpDown_MovDistance.Tag = "MOVDISTANCE";
+            this.NumUpDown_MovDistance.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Label_Speed
             // 
@@ -2939,6 +2930,15 @@
             this.Label_Speed.Size = new System.Drawing.Size(92, 13);
             this.Label_Speed.TabIndex = 36;
             this.Label_Speed.Text = "Movement speed:";
+            // 
+            // Label_Distance
+            // 
+            this.Label_Distance.AutoSize = true;
+            this.Label_Distance.Location = new System.Drawing.Point(5, 112);
+            this.Label_Distance.Name = "Label_Distance";
+            this.Label_Distance.Size = new System.Drawing.Size(103, 13);
+            this.Label_Distance.TabIndex = 35;
+            this.Label_Distance.Text = "Movement distance:";
             // 
             // Checkbox_AlwaysDraw
             // 
@@ -3977,10 +3977,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopStartNode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_GravityForce)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopDelay)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_PathFollowID)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_LoopEndNode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
             this.Tab4_Messages.ResumeLayout(false);
             this.Tab4_Messages.PerformLayout();
@@ -4201,7 +4201,7 @@
         private System.Windows.Forms.CheckBox ChkBox_Glow;
         private System.Windows.Forms.NumericUpDown NumUp_LightLimb;
         private System.Windows.Forms.CheckBox ChkBox_GenLight;
-        private System.Windows.Forms.CheckBox ChkBox_DebugCol;
+        private System.Windows.Forms.CheckBox ChkBox_DBGCol;
         private System.Windows.Forms.Label Lbl_LimbColors;
         private CustomDataGridView ColorsDataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn StartLimbColumn;
@@ -4236,7 +4236,7 @@
         private System.Windows.Forms.ToolStripMenuItem colorPickerToolStripMenuItem;
         private System.Windows.Forms.PictureBox MsgPreview;
         private System.Windows.Forms.Panel PanelMsgPreview;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox ChkBox_ExistInAll;
         private System.Windows.Forms.NumericUpDown numUpFileStart;
         private System.Windows.Forms.Label Lbl_ObjectOffset;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_AnimName;
@@ -4283,10 +4283,10 @@
         private System.Windows.Forms.TabPage Tab5_Scripts;
         private System.Windows.Forms.TabControl TabControl_Scripts;
         private System.Windows.Forms.Button Button_CCompile;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Label Lbl_DBGOpts;
+        private System.Windows.Forms.CheckBox ChkBox_DBGLookAt;
+        private System.Windows.Forms.CheckBox ChkBox_DBGPrint;
+        private System.Windows.Forms.CheckBox ChkBox_DBGDlist;
     }
 }
 

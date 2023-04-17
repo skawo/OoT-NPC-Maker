@@ -32,10 +32,12 @@ namespace NPC_Maker
 
         public static string tempFolder = Path.Combine(Program.ExecPath, "temp");
         public static string codeFileName = "EmbeddedOverlay.c";
+        public static string codeFilenameForCompile = "EmbeddedOverlay_comp.c";
         public static string EmbeddedCodeFile = $"{Path.Combine(tempFolder, codeFileName)}";
-        public static string oFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.o");
-        public static string elfFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay.elf");
-        public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay.ovl");
+        public static string compileFile = Path.Combine(tempFolder, codeFilenameForCompile);
+        public static string oFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay_comp.o");
+        public static string elfFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay_comp.elf");
+        public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay_comp.ovl");
         public static UInt32 BaseAddr = 0x80800000;
 
         public static void GetOutput(Process p, string Section, ref string CompileErrors)
@@ -63,6 +65,9 @@ namespace NPC_Maker
 
                 if (File.Exists(ovlFile))
                     File.Delete(ovlFile);
+
+                if (File.Exists(compileFile))
+                    File.Delete(compileFile);
             }
             catch (Exception)
             { }
@@ -126,7 +131,13 @@ namespace NPC_Maker
         {
             try
             {
-                return Program.IsRunningUnderMono ? CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs);
+                Clean();
+                string Code = CCode.ReplaceGameVersionInclude(CodeEntry.Code);
+                File.WriteAllText(compileFile, Code);
+                byte[] outf = (Program.IsRunningUnderMono ? CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs));
+               
+                Clean();
+                return outf;
             }
             catch (Exception ex)
             {
@@ -137,8 +148,6 @@ namespace NPC_Maker
 
         public static byte[] CompileUnderMono(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
-            Clean();
-
             string oFileMono = Path.Combine("..", "bin", "EmbeddedOverlay.o");
             string elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay.elf");
 
@@ -156,7 +165,7 @@ namespace NPC_Maker
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
                 Program.Settings.GCCFlags + " " +
-                $"{Path.Combine("..", "..", "temp", codeFileName).AppendQuotation()}",
+                $"{Path.Combine("..", "..", "temp", codeFilenameForCompile).AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
@@ -254,8 +263,6 @@ namespace NPC_Maker
 
         public static byte[] CompileUnderWindows(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
-            Clean();
-
             #region GCC
 
             ProcessStartInfo gccInfo = new ProcessStartInfo
@@ -270,7 +277,7 @@ namespace NPC_Maker
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
                 Program.Settings.GCCFlags + " " +
-                $"{Path.Combine(tempFolder, codeFileName).AppendQuotation()}",
+                $"{Path.Combine(tempFolder, codeFilenameForCompile).AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
@@ -364,6 +371,13 @@ namespace NPC_Maker
             return File.ReadAllBytes(ovlFile);
             #endregion
 
+        }
+
+        public static string ReplaceGameVersionInclude(string Code)
+        {
+            Code = Code.Replace("#include <z64hdr/oot_u10/z64hdr.h>", $"#include <z64hdr/{Program.Settings.GameVersion}/z64hdr.h>");
+            Code = Code.Replace("#include <z64hdr/oot_mq_debug/z64hdr.h>", $"#include <z64hdr/{Program.Settings.GameVersion}/z64hdr.h>");
+            return Code;
         }
 
         public static bool CreateCTempDirectory(string Code)

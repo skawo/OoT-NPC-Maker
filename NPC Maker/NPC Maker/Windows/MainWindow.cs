@@ -167,7 +167,10 @@ namespace NPC_Maker
             NumUp_LightXOffs.Value = SelectedEntry.LightPositionOffsets[0];
             NumUp_LightYOffs.Value = SelectedEntry.LightPositionOffsets[1];
             NumUp_LightZOffs.Value = SelectedEntry.LightPositionOffsets[2];
-            ChkBox_DebugCol.Checked = SelectedEntry.DEBUGShowCols;
+            ChkBox_DBGCol.Checked = SelectedEntry.DEBUGShowCols;
+            ChkBox_DBGLookAt.Checked = SelectedEntry.DEBUGLookAtEditor;
+            ChkBox_DBGDlist.Checked = SelectedEntry.DEBUGLookAtEditor;
+            ChkBox_DBGPrint.Checked = SelectedEntry.DEBUGPrintToScreen;
             NumUp_LightRadius.Value = SelectedEntry.LightRadius;
 
             ChkOnlyWhenLens.Checked = SelectedEntry.VisibleUnderLensOfTruth;
@@ -382,10 +385,7 @@ namespace NPC_Maker
             string CompileErrors = "";
 
             if (SelectedEntry.EmbeddedOverlayCode.Code != "")
-            {
-                CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
                 CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
-            }
 
             TextBox_CompileMsg.Text = CompileErrors;
 
@@ -2196,7 +2196,10 @@ namespace NPC_Maker
         private void Button_CCompile_Click(object sender, EventArgs e)
         {
             if (SelectedEntry.EmbeddedOverlayCode.Code != "")
+            {
+                CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
                 CompileCode();
+            }
             else
                 TextBox_CompileMsg.Text = "No code to compile!";
         }
@@ -2328,7 +2331,10 @@ namespace NPC_Maker
         {
             Button_CCompile.Enabled = false;
 
-            if (!CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code))
+            string Code = SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code;
+            Code = CCode.ReplaceGameVersionInclude(Code);
+
+            if (!CCode.CreateCTempDirectory(Code))
                 return;
 
             if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
