@@ -39,6 +39,9 @@ namespace NPC_Maker.Windows
             this.Lbl_GCCArgs = new System.Windows.Forms.Label();
             this.BtnSave = new System.Windows.Forms.Button();
             this.Cb_AutoCompile = new System.Windows.Forms.CheckBox();
+            this.Label_CompileTimeout = new System.Windows.Forms.Label();
+            this.NumUpCompileTimeout = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
             this.SuspendLayout();
             // 
             // Cb_ImproveTextReadability
@@ -95,7 +98,7 @@ namespace NPC_Maker.Windows
             this.Combo_CompileFor.FormattingEnabled = true;
             this.Combo_CompileFor.Location = new System.Drawing.Point(91, 135);
             this.Combo_CompileFor.Name = "Combo_CompileFor";
-            this.Combo_CompileFor.Size = new System.Drawing.Size(121, 21);
+            this.Combo_CompileFor.Size = new System.Drawing.Size(131, 21);
             this.Combo_CompileFor.TabIndex = 4;
             this.Combo_CompileFor.Tag = "GAMEVERSION";
             this.Combo_CompileFor.SelectedIndexChanged += new System.EventHandler(this.ComboSettingChanged);
@@ -111,7 +114,7 @@ namespace NPC_Maker.Windows
             // 
             // Txt_GCCArgs
             // 
-            this.Txt_GCCArgs.Location = new System.Drawing.Point(13, 182);
+            this.Txt_GCCArgs.Location = new System.Drawing.Point(13, 207);
             this.Txt_GCCArgs.Name = "Txt_GCCArgs";
             this.Txt_GCCArgs.Size = new System.Drawing.Size(450, 20);
             this.Txt_GCCArgs.TabIndex = 6;
@@ -121,7 +124,7 @@ namespace NPC_Maker.Windows
             // Lbl_GCCArgs
             // 
             this.Lbl_GCCArgs.AutoSize = true;
-            this.Lbl_GCCArgs.Location = new System.Drawing.Point(12, 166);
+            this.Lbl_GCCArgs.Location = new System.Drawing.Point(12, 191);
             this.Lbl_GCCArgs.Name = "Lbl_GCCArgs";
             this.Lbl_GCCArgs.Size = new System.Drawing.Size(85, 13);
             this.Lbl_GCCArgs.TabIndex = 7;
@@ -129,7 +132,7 @@ namespace NPC_Maker.Windows
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(343, 209);
+            this.BtnSave.Location = new System.Drawing.Point(343, 234);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(120, 29);
             this.BtnSave.TabIndex = 8;
@@ -149,11 +152,46 @@ namespace NPC_Maker.Windows
             this.Cb_AutoCompile.UseVisualStyleBackColor = true;
             this.Cb_AutoCompile.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
+            // Label_CompileTimeout
+            // 
+            this.Label_CompileTimeout.AutoSize = true;
+            this.Label_CompileTimeout.Location = new System.Drawing.Point(12, 166);
+            this.Label_CompileTimeout.Name = "Label_CompileTimeout";
+            this.Label_CompileTimeout.Size = new System.Drawing.Size(84, 13);
+            this.Label_CompileTimeout.TabIndex = 10;
+            this.Label_CompileTimeout.Text = "Compile timeout:";
+            // 
+            // NumUpCompileTimeout
+            // 
+            this.NumUpCompileTimeout.Location = new System.Drawing.Point(102, 164);
+            this.NumUpCompileTimeout.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.NumUpCompileTimeout.Minimum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.NumUpCompileTimeout.Name = "NumUpCompileTimeout";
+            this.NumUpCompileTimeout.Size = new System.Drawing.Size(120, 20);
+            this.NumUpCompileTimeout.TabIndex = 11;
+            this.NumUpCompileTimeout.Tag = "COMPILETIMEOUT";
+            this.NumUpCompileTimeout.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.NumUpCompileTimeout.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 245);
+            this.ClientSize = new System.Drawing.Size(475, 278);
+            this.Controls.Add(this.NumUpCompileTimeout);
+            this.Controls.Add(this.Label_CompileTimeout);
             this.Controls.Add(this.Cb_AutoCompile);
             this.Controls.Add(this.BtnSave);
             this.Controls.Add(this.Lbl_GCCArgs);
@@ -167,6 +205,7 @@ namespace NPC_Maker.Windows
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Settings";
             this.Text = "Settings";
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -184,5 +223,7 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.Label Lbl_GCCArgs;
         private System.Windows.Forms.Button BtnSave;
         private System.Windows.Forms.CheckBox Cb_AutoCompile;
+        private System.Windows.Forms.Label Label_CompileTimeout;
+        private System.Windows.Forms.NumericUpDown NumUpCompileTimeout;
     }
 }

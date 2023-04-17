@@ -278,7 +278,7 @@ namespace NPC_Maker
 
             Process p = Process.Start(gccInfo);
 
-            p.WaitForExit(2000);
+            p.WaitForExit((int)Program.Settings.CompileTimeout);
 
             if (!p.HasExited)
                 p.Kill();
@@ -315,7 +315,7 @@ namespace NPC_Maker
                 CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(ldInfo);
-            p.WaitForExit(2000);
+            p.WaitForExit((int)Program.Settings.CompileTimeout);
 
             if (!p.HasExited)
                 p.Kill();
@@ -347,7 +347,7 @@ namespace NPC_Maker
                 CompileMsgs += nOVLInfo.FileName + " " + nOVLInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(nOVLInfo);
-            p.WaitForExit(2000);
+            p.WaitForExit((int)Program.Settings.CompileTimeout);
 
             if (!p.HasExited)
                 p.Kill();

@@ -29,6 +29,8 @@ namespace NPC_Maker
 
         public bool AutoComp_Save { get; set; }
 
+        public UInt32 CompileTimeout { get; set; }
+
 
         public NPCMakerSettings()
         {
@@ -43,6 +45,7 @@ namespace NPC_Maker
             ImproveTextMsgReadability = true;
             CheckSyntax = true;
             AutoComp_Save = true;
+            CompileTimeout = 2500;
         }
 
         public enum Members
@@ -57,6 +60,7 @@ namespace NPC_Maker
             CODEEDITORPATH,
             CODEEDITORARGS,
             NOMEMBER,
+            COMPILETIMEOUT,
             AUTOCOMP_SAVE,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -95,7 +99,7 @@ namespace NPC_Maker
                 case Members.CODEEDITORPATH: CustomCodeEditorPath = (string)Value; break;
                 case Members.GCCARGS: GCCFlags = (string)Value; break;
                 case Members.GAMEVERSION: GameVersion = (Lists.GameVersions)Enum.Parse(typeof(Lists.GameVersions), (string)Value); break;
-
+                case Members.COMPILETIMEOUT: CompileTimeout = Convert.ToUInt32(Value); break;
                 default: break;
             }
         }

@@ -15,7 +15,6 @@ namespace NPC_Maker.Windows
     {
         public NPCMakerSettings EditedSettings;
 
-
         public Settings()
         {
             InitializeComponent();
@@ -33,6 +32,7 @@ namespace NPC_Maker.Windows
             Txt_GCCArgs.Text = EditedSettings.GCCFlags;
             Combo_CompileFor.Text = EditedSettings.GameVersion.ToString();
             Cb_AutoCompile.Checked = EditedSettings.AutoComp_Save;
+            NumUpCompileTimeout.Value = EditedSettings.CompileTimeout;
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)
@@ -45,6 +45,12 @@ namespace NPC_Maker.Windows
         {
             NPCMakerSettings.Members Member = NPCMakerSettings.GetMemberFromTag((sender as ComboBox).Tag, (sender as ComboBox).Name);
             EditedSettings.ChangeValueOfMember(Member, (sender as ComboBox).Text);
+        }
+
+        private void NumUpSettingChanged(object sender, EventArgs e)
+        {
+            NPCMakerSettings.Members Member = NPCMakerSettings.GetMemberFromTag((sender as NumericUpDown).Tag, (sender as NumericUpDown).Name);
+            EditedSettings.ChangeValueOfMember(Member, (sender as NumericUpDown).Value);
         }
 
         private void TextBoxChanged(object sender, EventArgs e)
