@@ -260,7 +260,7 @@ void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
     // but whenever the actor is talking.
     if (en->settings.talkTexSegment >= 8 && en->exSegData[en->settings.talkTexSegment - 8] != 0 && en->doTalkingAnm && en->settings.talkPattern[0] != 0xFF)
     {
-        if (en->isTalking && Message_GetState(&playState->msgCtx) == MSGMODE_TEXT_DISPLAYING)
+        if (en->isTalking && playState->msgCtx.msgMode == MSGMODE_TEXT_DISPLAYING)
         {
             if (en->talkingFramesBetween >= en->settings.talkAnimSpeed)
             {
