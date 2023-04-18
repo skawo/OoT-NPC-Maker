@@ -41,6 +41,7 @@ namespace NPC_Maker
                 var Version = JObject.Parse(Text).SelectToken("Version");
 
                 NPCFile Deserialized = JsonConvert.DeserializeObject<NPCFile>(Text);
+                
 
                 if (Version == null || (int)Version < 2)
                 {
@@ -163,6 +164,20 @@ namespace NPC_Maker
                 List<string> ParseErrors = new List<string>();
 
                 string CompErrors = "";
+
+                Progress pr = new Progress();
+
+                if (Program.mw != null)
+                {
+                    pr.SetProgress(0);
+                    pr.Show();
+                    pr.Location = new System.Drawing.Point(Program.mw.Location.X + Program.mw.Width / 2 - pr.Width / 2, Program.mw.Location.Y + Program.mw.Height / 2 - pr.Height / 2);
+                    pr.Refresh();
+                }
+
+                float ProgressPer = 100 / Data.Entries.Count;
+                float CurProgress = 0;
+                int EntriesDone = 0;
 
                 foreach (NPCEntry Entry in Data.Entries)
                 {
@@ -498,6 +513,8 @@ namespace NPC_Maker
 
                         if (Entry.EmbeddedOverlayCode.Code != "")
                         {
+                            pr.SetProgress((int)Math.Floor(CurProgress), $"Compiling C {EntriesDone}/{Data.Entries.Count()}");
+
                             CompErrors += "+==========================+" + Entry.NPCName + "+==========================+";
                             byte[] Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
 
@@ -606,7 +623,14 @@ namespace NPC_Maker
                     {
                         EntryAddresses.AddRangeBigEndian((UInt32)0);
                     }
+
+                    EntriesDone += 1;
+                    CurProgress += ProgressPer;
+                    pr.SetProgress((int)Math.Floor(CurProgress), $"Saved {EntriesDone}/{Data.Entries.Count()}");
                 }
+
+                pr.SetProgress(100, "Done!");
+                pr.Refresh();
 
                 List<byte> Output = new List<byte>();
 
@@ -623,6 +647,8 @@ namespace NPC_Maker
                             $"There were errors parsing scripts or compiling code for NPC(s): {String.Join(",", ParseErrors)}");
                 else
                     File.WriteAllBytes(Path, Output.ToArray());
+
+                pr.Dispose();
             }
             catch (Exception ex)
             {

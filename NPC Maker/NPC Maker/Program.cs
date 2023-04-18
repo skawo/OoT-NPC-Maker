@@ -19,6 +19,7 @@ namespace NPC_Maker
 
         public static string SettingsFilePath;
         public static NPCMakerSettings Settings;
+        public static MainWindow mw;
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
@@ -57,7 +58,8 @@ namespace NPC_Maker
 
             if (args.Length == 0)
             {
-                Application.Run(new MainWindow());
+                mw = new MainWindow();
+                Application.Run(mw);
                 FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
             }
             else

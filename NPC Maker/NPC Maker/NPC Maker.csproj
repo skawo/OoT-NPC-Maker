@@ -256,6 +256,12 @@
     <Compile Include="Windows\PickableListEntryEdit.Designer.cs">
       <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Progress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\Progress.Designer.cs">
+      <DependentUpon>Progress.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -290,6 +296,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\PickableListEntryEdit.resx">
       <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\Progress.resx">
+      <DependentUpon>Progress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
