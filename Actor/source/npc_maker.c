@@ -213,7 +213,8 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
 
 /* .data */
 
-ActorInit __attribute__((section(".data"))) sNpcMakerInit = 
+#ifdef NPCM_Z64ROM
+ActorInit sNpcMakerInit = 	
 {
     .id = 0x0003, // <-- Set this to whichever actor ID you're using.
     .category = ACTORCAT_NPC,
@@ -225,7 +226,7 @@ ActorInit __attribute__((section(".data"))) sNpcMakerInit =
     .update = (ActorFunc)NpcMaker_PostInit,
     .draw = (ActorFunc)NpcMaker_Draw
 };
-
+#else
 ActorInitExplPad __attribute__((section(".data"))) sActorVars = 
 {
     .id = 0xDEAD, .padding = 0xBEEF, // <-- magic values, do not change
@@ -238,3 +239,7 @@ ActorInitExplPad __attribute__((section(".data"))) sActorVars =
     .update = (ActorFunc)NpcMaker_PostInit,
     .draw = (ActorFunc)NpcMaker_Draw
 };
+#endif
+
+
+
