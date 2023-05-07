@@ -79,15 +79,6 @@
             this.Label_BlinkingSegment = new System.Windows.Forms.Label();
             this.Label_ExtraTextures = new System.Windows.Forms.Label();
             this.Label_ExtraDisplayLists = new System.Windows.Forms.Label();
-            this.TabControl_Segments = new System.Windows.Forms.TabControl();
-            this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_E = new System.Windows.Forms.TabPage();
-            this.TabPage_Segment_F = new System.Windows.Forms.TabPage();
             this.NumUpDown_TalkSegment = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_BlinkSegment = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_TalkSpeed = new System.Windows.Forms.NumericUpDown();
@@ -315,6 +306,13 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.TabPage_Segment_D = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_C = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_B = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
+            this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
+            this.TabControl_Segments = new System.Windows.Forms.TabControl();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -329,7 +327,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).BeginInit();
             this.Tab2_ExtraData.SuspendLayout();
-            this.TabControl_Segments.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSegment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSegment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).BeginInit();
@@ -389,6 +386,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
+            this.TabControl_Segments.SuspendLayout();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -1003,104 +1001,6 @@
             this.Label_ExtraDisplayLists.Size = new System.Drawing.Size(89, 13);
             this.Label_ExtraDisplayLists.TabIndex = 52;
             this.Label_ExtraDisplayLists.Text = "Extra display lists:";
-            // 
-            // TabControl_Segments
-            // 
-            this.TabControl_Segments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_8);
-            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_9);
-            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_A);
-            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_B);
-            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_C);
-            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_D);
-            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_E);
-            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_F);
-            this.TabControl_Segments.Location = new System.Drawing.Point(9, 314);
-            this.TabControl_Segments.Name = "TabControl_Segments";
-            this.TabControl_Segments.SelectedIndex = 0;
-            this.TabControl_Segments.Size = new System.Drawing.Size(756, 255);
-            this.TabControl_Segments.TabIndex = 41;
-            // 
-            // TabPage_Segment_8
-            // 
-            this.TabPage_Segment_8.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_8.Name = "TabPage_Segment_8";
-            this.TabPage_Segment_8.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_8.Size = new System.Drawing.Size(748, 229);
-            this.TabPage_Segment_8.TabIndex = 0;
-            this.TabPage_Segment_8.Text = "Segment 8";
-            this.TabPage_Segment_8.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_9
-            // 
-            this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_9.Name = "TabPage_Segment_9";
-            this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_9.Size = new System.Drawing.Size(748, 229);
-            this.TabPage_Segment_9.TabIndex = 1;
-            this.TabPage_Segment_9.Text = "Segment 9";
-            this.TabPage_Segment_9.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_A
-            // 
-            this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_A.Name = "TabPage_Segment_A";
-            this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_A.Size = new System.Drawing.Size(748, 229);
-            this.TabPage_Segment_A.TabIndex = 2;
-            this.TabPage_Segment_A.Text = "Segment A";
-            this.TabPage_Segment_A.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_B
-            // 
-            this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_B.Name = "TabPage_Segment_B";
-            this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_B.Size = new System.Drawing.Size(748, 229);
-            this.TabPage_Segment_B.TabIndex = 3;
-            this.TabPage_Segment_B.Text = "Segment B";
-            this.TabPage_Segment_B.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_C
-            // 
-            this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_C.Name = "TabPage_Segment_C";
-            this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_C.Size = new System.Drawing.Size(748, 229);
-            this.TabPage_Segment_C.TabIndex = 4;
-            this.TabPage_Segment_C.Text = "Segment C";
-            this.TabPage_Segment_C.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_D
-            // 
-            this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_D.Name = "TabPage_Segment_D";
-            this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_D.Size = new System.Drawing.Size(748, 229);
-            this.TabPage_Segment_D.TabIndex = 5;
-            this.TabPage_Segment_D.Text = "Segment D";
-            this.TabPage_Segment_D.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_E
-            // 
-            this.TabPage_Segment_E.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_E.Name = "TabPage_Segment_E";
-            this.TabPage_Segment_E.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_E.Size = new System.Drawing.Size(748, 229);
-            this.TabPage_Segment_E.TabIndex = 6;
-            this.TabPage_Segment_E.Text = "Segment E";
-            this.TabPage_Segment_E.UseVisualStyleBackColor = true;
-            // 
-            // TabPage_Segment_F
-            // 
-            this.TabPage_Segment_F.Location = new System.Drawing.Point(4, 22);
-            this.TabPage_Segment_F.Name = "TabPage_Segment_F";
-            this.TabPage_Segment_F.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_F.Size = new System.Drawing.Size(748, 229);
-            this.TabPage_Segment_F.TabIndex = 7;
-            this.TabPage_Segment_F.Text = "Segment F";
-            this.TabPage_Segment_F.UseVisualStyleBackColor = true;
             // 
             // NumUpDown_TalkSegment
             // 
@@ -3895,6 +3795,82 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // TabPage_Segment_D
+            // 
+            this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_D.Name = "TabPage_Segment_D";
+            this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_D.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_D.TabIndex = 5;
+            this.TabPage_Segment_D.Text = "Segment D";
+            this.TabPage_Segment_D.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_C
+            // 
+            this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_C.Name = "TabPage_Segment_C";
+            this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_C.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_C.TabIndex = 4;
+            this.TabPage_Segment_C.Text = "Segment C";
+            this.TabPage_Segment_C.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_B
+            // 
+            this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_B.Name = "TabPage_Segment_B";
+            this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_B.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_B.TabIndex = 3;
+            this.TabPage_Segment_B.Text = "Segment B";
+            this.TabPage_Segment_B.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_A
+            // 
+            this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_A.Name = "TabPage_Segment_A";
+            this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_A.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_A.TabIndex = 2;
+            this.TabPage_Segment_A.Text = "Segment A";
+            this.TabPage_Segment_A.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_9
+            // 
+            this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_9.Name = "TabPage_Segment_9";
+            this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_9.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_9.TabIndex = 1;
+            this.TabPage_Segment_9.Text = "Segment 9";
+            this.TabPage_Segment_9.UseVisualStyleBackColor = true;
+            // 
+            // TabPage_Segment_8
+            // 
+            this.TabPage_Segment_8.Location = new System.Drawing.Point(4, 22);
+            this.TabPage_Segment_8.Name = "TabPage_Segment_8";
+            this.TabPage_Segment_8.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPage_Segment_8.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_8.TabIndex = 0;
+            this.TabPage_Segment_8.Text = "Segment 8";
+            this.TabPage_Segment_8.UseVisualStyleBackColor = true;
+            // 
+            // TabControl_Segments
+            // 
+            this.TabControl_Segments.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_8);
+            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_9);
+            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_A);
+            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_B);
+            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_C);
+            this.TabControl_Segments.Controls.Add(this.TabPage_Segment_D);
+            this.TabControl_Segments.Location = new System.Drawing.Point(9, 314);
+            this.TabControl_Segments.Name = "TabControl_Segments";
+            this.TabControl_Segments.SelectedIndex = 0;
+            this.TabControl_Segments.Size = new System.Drawing.Size(756, 255);
+            this.TabControl_Segments.TabIndex = 41;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3925,7 +3901,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).EndInit();
             this.Tab2_ExtraData.ResumeLayout(false);
             this.Tab2_ExtraData.PerformLayout();
-            this.TabControl_Segments.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSegment)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSegment)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).EndInit();
@@ -3996,6 +3971,7 @@
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
+            this.TabControl_Segments.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -4061,15 +4037,6 @@
         private System.Windows.Forms.Label Label_BlinkingSegment;
         private System.Windows.Forms.Label Label_ExtraTextures;
         private System.Windows.Forms.Label Label_ExtraDisplayLists;
-        private System.Windows.Forms.TabControl TabControl_Segments;
-        private System.Windows.Forms.TabPage TabPage_Segment_8;
-        private System.Windows.Forms.TabPage TabPage_Segment_9;
-        private System.Windows.Forms.TabPage TabPage_Segment_A;
-        private System.Windows.Forms.TabPage TabPage_Segment_B;
-        private System.Windows.Forms.TabPage TabPage_Segment_C;
-        private System.Windows.Forms.TabPage TabPage_Segment_D;
-        private System.Windows.Forms.TabPage TabPage_Segment_E;
-        private System.Windows.Forms.TabPage TabPage_Segment_F;
         private CustomDataGridView DataGridView_ExtraDLists;
         private System.Windows.Forms.TabPage Tab3_BehaviorData;
         private System.Windows.Forms.CheckBox Chkb_Opendoors;
@@ -4287,6 +4254,13 @@
         private System.Windows.Forms.CheckBox ChkBox_DBGLookAt;
         private System.Windows.Forms.CheckBox ChkBox_DBGPrint;
         private System.Windows.Forms.CheckBox ChkBox_DBGDlist;
+        private System.Windows.Forms.TabControl TabControl_Segments;
+        private System.Windows.Forms.TabPage TabPage_Segment_8;
+        private System.Windows.Forms.TabPage TabPage_Segment_9;
+        private System.Windows.Forms.TabPage TabPage_Segment_A;
+        private System.Windows.Forms.TabPage TabPage_Segment_B;
+        private System.Windows.Forms.TabPage TabPage_Segment_C;
+        private System.Windows.Forms.TabPage TabPage_Segment_D;
     }
 }
 

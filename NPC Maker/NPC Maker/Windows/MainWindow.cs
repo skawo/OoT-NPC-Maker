@@ -326,7 +326,7 @@ namespace NPC_Maker
 
             #region Segments grid
 
-            for (int j = 0; j < SelectedEntry.Segments.Count; j++)
+            for (int j = 0; j < TabControl_Segments.TabPages.Count; j++)
             {
                 DataGridView Grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
 
