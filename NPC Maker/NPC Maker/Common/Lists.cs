@@ -1522,16 +1522,16 @@ namespace NPC_Maker
             SEGMENT_B = 3,
             SEGMENT_C = 4,
             SEGMENT_D = 5,
-            SEGMENT_E = 6,
-            SEGMENT_F = 7,
+            //SEGMENT_E = 6,
+            //SEGMENT_F = 7,
             SEG_8 = 0,
             SEG_9 = 1,
             SEG_A = 2,
             SEG_B = 3,
             SEG_C = 4,
             SEG_D = 5,
-            SEG_E = 6,
-            SEG_F = 7,
+            //SEG_E = 6,
+            //SEG_F = 7,
         }
 
         public enum FaceSubtypes
