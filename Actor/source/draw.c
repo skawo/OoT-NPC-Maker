@@ -488,7 +488,7 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
     if (en->exSegData == NULL)
         return;
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 6; i++)
     {
         u32* texaddress = (u32*)en->exSegData[i];
 
