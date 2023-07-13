@@ -1,11 +1,12 @@
 {
-  "Version": 2,
+  "Version": 4,
   "Entries": [
     {
       "NPCName": "FollowGoron",
       "IsNull": false,
       "ObjectID": 201,
       "Hierarchy": 65264,
+      "FileStart": 0,
       "HierarchyType": 0,
       "ModelPositionOffsets": [
         0,
@@ -89,7 +90,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Walking",
@@ -97,7 +99,8 @@
           "ObjID": -1,
           "Speed": 2.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Attacked",
@@ -105,7 +108,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Attack",
@@ -113,7 +117,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         }
       ],
       "Scripts": [
@@ -123,49 +128,55 @@
           "Name": "Talking"
         },
         {
-          "Text": "#define SHOWING_MESSAGE var.1\r\n#define CURRENTLY_BREAKING var.2  \r\n\r\nif CURRENTLY_BREAKING == 0\r\n\r\n    // Warp to player if he gets too far away\r\n    if DISTANCE_FROM_PLAYER > 250\r\n\r\n        set has_collision false\r\n        set GRAVITY_FORCE = 0\r\n\r\n        set ref_actor player\r\n        position set self actor.posX actor.posY actor.posZ\r\n\r\n       particle DUST\r\n            duration 100\r\n            scale 1500\r\n            position direction 0 0 0\r\n            color1 255 255 255 255\r\n            color2 255 128 255 255\r\n            acceleration random.-30->30 random.-100->0 random.-30->30\r\n            velocity random.-30->30 random.-100->0 random.-30->30\r\n       endparticle \r\n\r\n        await frames 4\r\n        set has_collision true\r\n        set GRAVITY_FORCE = -1\r\n\r\n    endif\r\n\r\nendif\r\n\r\nif SHOWING_MESSAGE == 0\r\n\r\n    // Break a boulder if D-Pad Down is pressed\r\n    if BUTTON_PRESSED BTN_DDOWN\r\n\r\n        // Set ref_actor to closest Bombable Boulder...\r\n        set REF_ACTOR actor_id OBJ_BOMBIWA\r\n\r\n        // If one is found, and it's less than 300 units away from the NPC...\r\n        if ref_actor_exists and distance_from_ref_actor < 300\r\n\r\n                set CURRENTLY_BREAKING = 1\r\n\r\n                // Stop following the player\r\n                set MOVEMENT_TYPE none\r\n\r\n                // Move to 110 units in front of the bombable boulder in the direction it's facing\r\n                play sfx NA_SE_EN_GOLON_WAKE_UP\r\n                set REF_ACTOR actor_id OBJ_BOMBIWA\r\n                position direction_move_by_ref_actor self 0 0 40 2 ignore_y\r\n                face self towards actor_id OBJ_BOMBIWA\r\n        \r\n                // Play the punch animation, wait for it to end, reset animation\r\n                set no_auto_anim true\r\n                play sfx NA_SE_EN_GOLON_CRY\r\n                set animation Attack once\r\n                await animation_end\r\n                set no_auto_anim false\r\n                set animation Idle\r\n\r\n                // Destroy the bombable boulder while playing animations\r\n                play sfx NA_SE_IT_BOMB_EXPLOSION\r\n                set REF_ACTOR actor_id OBJ_BOMBIWA\r\n\r\n                particle DISPLAY_LIST\r\n                    scale 12\r\n                    SCALE_UPDATE 2\r\n                    DURATION 100\r\n                    COUNT 12\r\n                    DLIST BombableBoulder\r\n                    position absolute actor.posX actor.posY actor.posZ \r\n                endparticle \r\n\r\n                particle EXPLOSION\r\n                    scale 500\r\n                    SCALE_UPDATE 21\r\n                    ACCELERATION 0 10 0\r\n                    VELOCITY 0 10 0\r\n                    position absolute actor.posX actor.posY actor.posZ \r\n                endparticle \r\n\r\n                kill actor_id OBJ_BOMBIWA\r\n                set MOVEMENT_TYPE follow\r\n\r\n                set CURRENTLY_BREAKING = 0\r\n       else\r\n\r\n            set SHOWING_MESSAGE = 1\r\n            play sfx NA_SE_EN_GOLON_WAKE_UP\r\n            show_textbox_sp NothingHere\r\n            await textbox_on_screen false\r\n            set SHOWING_MESSAGE = 0\r\n       endif\r\n    endif\r\nendif\r\n",
+          "Text": "#define SHOWING_MESSAGE var.1\r\n#define CURRENTLY_BREAKING var.2  \r\n\r\nif CURRENTLY_BREAKING == 0\r\n\r\n    // Warp to player if he gets too far away\r\n    if DISTANCE_FROM_PLAYER > 250\r\n\r\n        set has_collision false\r\n        set GRAVITY_FORCE = 0\r\n\r\n        set ref_actor player\r\n        position set self actor.posX actor.posY actor.posZ\r\n\r\n       particle DUST\r\n            duration 100\r\n            scale 1500\r\n            position direction 0 0 0\r\n            color1 255 255 255 255\r\n            color2 255 128 255 255\r\n            acceleration random.-30->30 random.-100->0 random.-30->30\r\n            velocity random.-30->30 random.-100->0 random.-30->30\r\n       endparticle \r\n\r\n        await frames 4\r\n        set has_collision true\r\n        set GRAVITY_FORCE = -1\r\n\r\n    endif\r\n\r\nendif\r\n\r\nif SHOWING_MESSAGE == 0\r\n\r\n    // Break a boulder if D-Pad Down is pressed\r\n    if BUTTON_PRESSED BTN_DDOWN\r\n\r\n        // Set ref_actor to closest Bombable Boulder...\r\n        set REF_ACTOR actor_id OBJ_BOMBIWA\r\n\r\n        // If one is found, and it's less than 300 units away from the NPC...\r\n        if ref_actor_exists and distance_from_ref_actor < 300\r\n\r\n                set CURRENTLY_BREAKING = 1\r\n\r\n                // Stop following the player\r\n                set MOVEMENT_TYPE none\r\n\r\n                // Move to 40 units in front of the bombable boulder in the direction it's facing\r\n                play sfx NA_SE_EN_GOLON_WAKE_UP\r\n                set REF_ACTOR actor_id OBJ_BOMBIWA\r\n                position direction_move_by_ref_actor self 0 0 40 2 ignore_y\r\n                face self towards actor_id OBJ_BOMBIWA\r\n        \r\n                // Play the punch animation, wait for it to end, reset animation\r\n                set no_auto_anim true\r\n                play sfx NA_SE_EN_GOLON_CRY\r\n                set animation Attack once\r\n                await animation_end\r\n                set no_auto_anim false\r\n                set animation Idle\r\n\r\n                // Destroy the bombable boulder while playing animations\r\n                play sfx NA_SE_IT_BOMB_EXPLOSION\r\n                set REF_ACTOR actor_id OBJ_BOMBIWA\r\n\r\n                particle DISPLAY_LIST\r\n                    scale 12\r\n                    SCALE_UPDATE 2\r\n                    DURATION 100\r\n                    COUNT 12\r\n                    DLIST BombableBoulder\r\n                    position absolute actor.posX actor.posY actor.posZ \r\n                endparticle \r\n\r\n                particle EXPLOSION\r\n                    scale 500\r\n                    SCALE_UPDATE 21\r\n                    ACCELERATION 0 10 0\r\n                    VELOCITY 0 10 0\r\n                    position absolute actor.posX actor.posY actor.posZ \r\n                endparticle \r\n\r\n                kill actor_id OBJ_BOMBIWA\r\n                set MOVEMENT_TYPE follow\r\n\r\n                set CURRENTLY_BREAKING = 0\r\n       else\r\n\r\n            set SHOWING_MESSAGE = 1\r\n            play sfx NA_SE_EN_GOLON_WAKE_UP\r\n            show_textbox_sp NothingHere\r\n            await textbox_on_screen false\r\n            set SHOWING_MESSAGE = 0\r\n       endif\r\n    endif\r\nendif\r\n",
           "ParseErrors": [],
           "Name": "Follower"
         }
       ],
-      "EnvironmentColor": "Transparent",
+      "EnvironmentColor": "0, 255, 255, 255",
       "Segments": [
         [
           {
             "Name": "1",
             "Address": 52864,
-            "ObjectID": -1
+            "ObjectID": -1,
+            "FileStart": -1
           },
           {
             "Name": "2",
             "Address": 53888,
-            "ObjectID": -1
+            "ObjectID": -1,
+            "FileStart": -1
           },
           {
             "Name": "3",
             "Address": 54912,
-            "ObjectID": -1
+            "ObjectID": -1,
+            "FileStart": -1
           }
         ],
         [
           {
             "Name": "1",
             "Address": 56960,
-            "ObjectID": -1
+            "ObjectID": -1,
+            "FileStart": -1
           }
         ],
         [
           {
             "Name": "Texture_0",
             "Address": 0,
-            "ObjectID": -5
+            "ObjectID": -5,
+            "FileStart": -1
           }
         ],
         [
           {
             "Name": "Texture_0",
             "Address": 0,
-            "ObjectID": -5
+            "ObjectID": -5,
+            "FileStart": -1
           }
         ],
         [],
@@ -173,11 +184,10 @@
           {
             "Name": "Texture_0",
             "Address": 0,
-            "ObjectID": -5
+            "ObjectID": -5,
+            "FileStart": -1
           }
-        ],
-        [],
-        []
+        ]
       ],
       "BlinkPattern": "1,2,3",
       "TalkPattern": "1",
@@ -199,7 +209,8 @@
           "ShowType": 0,
           "Limb": 0,
           "Color": "White",
-          "ObjectID": 355
+          "ObjectID": 355,
+          "FileStart": -1
         }
       ],
       "DisplayListColors": [],
@@ -218,9 +229,38 @@
         }
       ],
       "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
       "NumVars": 10,
       "NumFVars": 10,
-      "ExistInAllRooms": false
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
     }
   ],
   "GlobalHeaders": [
