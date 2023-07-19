@@ -1782,7 +1782,7 @@ namespace NPC_Maker
                 dgv.Rows[Index].Cells[(int)SegmentsColumns.Object].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
 
             if (SkipIndex != (int)SegmentsColumns.FileStart)
-                dgv.Rows[Index].Cells[(int)SegmentsColumns.Address].Value = (FileStart == -1 ? "Same as main" : ((int)FileStart).ToString("X"));
+                dgv.Rows[Index].Cells[(int)SegmentsColumns.FileStart].Value = (FileStart == -1 ? "Same as main" : ((int)FileStart).ToString("X"));
         }
 
         private void DataGridViewSegments_CellParse(object sender, DataGridViewCellParsingEventArgs e)
