@@ -1,0 +1,351 @@
+{
+  "Version": 4,
+  "Entries": [
+    {
+      "NPCName": "Stop N Swop",
+      "IsNull": false,
+      "ObjectID": 20,
+      "Hierarchy": 227316,
+      "FileStart": 0,
+      "HierarchyType": 0,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 1,
+      "LookAtType": 4,
+      "HeadLimb": 10,
+      "HeadHorizAxis": 2,
+      "HeadVertAxis": 4,
+      "WaistLimb": 9,
+      "WaistHorizAxis": 1,
+      "WaistVertAxis": 3,
+      "LookAtDegreesVertical": 60,
+      "LookAtDegreesHorizontal": 80,
+      "LookAtPositionOffsets": [
+        0.0,
+        490.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": true,
+      "IsAlwaysDrawn": true,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": true,
+      "SfxIfAttacked": 26629,
+      "EffectIfAttacked": 10,
+      "OpensDoors": true,
+      "CollisionRadius": 33,
+      "CollisionHeight": 30,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 41,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": true,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 9,
+      "TargetLimb": 10,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 150.0,
+      "MovementType": 0,
+      "MovementDistance": 100,
+      "MovementSpeed": 4.0,
+      "GravityForce": 1.0,
+      "PathID": 1,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": true,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 0.0,
+      "TimedPathStart": 8738,
+      "TimedPathEnd": 58345,
+      "MaxDistRoam": 65535,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "0, 0, 0, 0",
+      "LightRadius": 0,
+      "AnimationType": 1,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 12864,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Walking",
+          "Address": 12944,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Attacked",
+          "Address": 9456,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Talking",
+          "Address": 12712,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Yawn",
+          "Address": 13360,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "SwordPlay",
+          "Address": 13344,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Toes",
+          "Address": 13288,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Magic3",
+          "Address": 11520,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Magic1",
+          "Address": 11496,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Magic2",
+          "Address": 11544,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "TALK Message1\r\n\r\n    SET NO_AUTO_ANIM TRUE\r\n    SET ANIMATION TALKING\r\n    FACE SELF TOWARDS PLAYER\r\n    SET TALK_MODE TRUE\r\n\r\n    AWAIT TEXTBOX_NUM 2\r\n    SET ANIMATION TOES once\r\n    AWAIT ANIMATION_END\r\n    SET ANIMATION TALKING\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n    SHOW_TEXTBOX Message2\r\n    SET TALK_PERSIST FALSE\r\n\r\n    AWAIT TEXTBOX_NUM 3\r\n    SET ANIMATION SwordPlay once\r\n    AWAIT ANIMATION_END\r\n    SET ANIMATION TALKING\r\n \r\n    AWAIT TEXTBOX_NUM 4\r\n    SET ANIMATION TOES once\r\n    AWAIT ANIMATION_END\r\n    SET ANIMATION TALKING\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n    SHOW_TEXTBOX Message2\r\n    SET TALK_PERSIST FALSE\r\n\r\n    AWAIT TEXTBOX_NUM 2\r\n    SET DO_TALKING_ANIMATIONS FALSE\r\n    SET SEGMENT_ENTRY SEG_9 MouthSmile\r\n\r\n    AWAIT TEXTBOX_NUM 3\r\n    SET DO_TALKING_ANIMATIONS TRUE\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n    SHOW_TEXTBOX Message3\r\n    SET TALK_PERSIST FALSE\r\n\r\n    AWAIT TEXTBOX_NUM 4\r\n    SET ANIMATION Magic1 once\r\n    PLAY SFX NA_SE_VO_LI_AUTO_JUMP\r\n    AWAIT TEXTBOX_NUM 5\r\n    PLAY SFX NA_SE_VO_LI_LASH\r\n    SET ANIMATION Magic2 once\r\n    AWAIT TEXTBOX_NUM 6\r\n    PLAY SFX NA_SE_VO_LI_SWORD_N\r\n    SET ANIMATION Magic3 once\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n\r\n    CCALL NpcM_StopNSwop\r\n\r\n    SHOW_TEXTBOX MessageGO\r\n    PLAY SFX NA_SE_VO_LI_FALL_L\r\n    PLAY SFX NA_SE_IT_BOMB_EXPLOSION\r\n    SET REF_ACTOR SELF\r\n\r\n    PARTICLE EXPLOSION\r\n        SCALE 400\r\n        SCALE_UPDATE 21\r\n        ACCELERATION 0 10 0\r\n        VELOCITY 0 10 0\r\n        POSITION ABSOLUTE ACTORF.0x24 ACTORF.0x28 ACTORF.0x2C\r\n    ENDPARTICLE \r\n\r\n    SET INVISIBLE true\r\n    SET CASTS_SHADOW FALSE\r\n    AWAIT FOREVER\r\nENDTALK\r\n",
+          "ParseErrors": [],
+          "Name": "Test"
+        }
+      ],
+      "EnvironmentColor": "26, 26, 26",
+      "Segments": [
+        [
+          {
+            "Name": "EyeNormal",
+            "Address": 0,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "EyeHalf",
+            "Address": 2048,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "EyeClosed",
+            "Address": 4096,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "EyeRight",
+            "Address": 6144,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "EyeLeft",
+            "Address": 8192,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "EyeWide",
+            "Address": 10240,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "EyeDown",
+            "Address": 12288,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "EyeShut",
+            "Address": 14336,
+            "ObjectID": -1,
+            "FileStart": -1
+          }
+        ],
+        [
+          {
+            "Name": "MouthClose",
+            "Address": 16384,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "MouthHalf",
+            "Address": 17408,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "MouthOpen",
+            "Address": 18432,
+            "ObjectID": -1,
+            "FileStart": -1
+          },
+          {
+            "Name": "MouthSmile",
+            "Address": 19456,
+            "ObjectID": -1,
+            "FileStart": -1
+          }
+        ],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "BlinkPattern": "EyeNormal,EyeHalf,EyeClosed",
+      "TalkPattern": "MouthClose,MouthHalf,MouthOpen,MouthSmile",
+      "BlinkSegment": 8,
+      "TalkSegment": 9,
+      "BlinkSpeed": 1,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "Message1",
+          "MessageText": "So, uh, you're probably wondering\r\nwhy we're in Zelda while this video\r\nis focusing on <B>Banjo-<R>Kazooie.\r\n<New box>\r\nWell, uh, this was genuinely the\r\nsimplest way for me to do this.\r\n<New box>\r\nNow then, a word of explanation for\r\nwhat's about to happen:\r\n<New box>\r\nIf you don't know what <G>Stop n' Swop\r\n<W>is about, it was a planned way of \r\ntransferring data between Rare \r\ngames on the <R>Nintendo 64.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Message3",
+          "MessageText": "Most games didn't implement code \r\nto support this feature...\r\n<New box>\r\nHowever, <B>Banjo-<R>Kazooie<W> does!\r\n<New box>\r\nThanks to some reverse-engineering, we\r\nnow know what the game is expecting\r\nin memory to unlock its <G>Stop n' Swop<W>\r\nsecrets...\r\n<New box>\r\nThe secrets themselves have been \r\nknown for a while, but I've never seen\r\nanyone actually attempt the cartridge\r\nswapperoo method on a real N64...\r\n<New box>\r\n...and so I'm now going to insert the \r\npayload into memory, and real-world-me \r\nis going to swap this cartridge for \r\n<B>Banjo-<R>Kazooie.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Message2",
+          "MessageText": "Long story short, once the console is\r\nshut off, the contents of the memory\r\nare retained for a short while.\r\n<New box>\r\nIf the next game was inserted into the \r\nmachine quickly enough, it could detect \r\nthis and unlock something.\r\n<New box>\r\nUnfortunately, a <R>motherboard revision<W> \r\nmade this difficult, because the memory \r\nretention time was shortened, and so \r\nthe idea was scrapped.\r\n<New box>\r\n...Why they didn't just use the <G>Memory\r\nPak <W>for this, I don't know, but that's\r\nentirely beside the point.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Message4",
+          "MessageText": "Incidentally, I checked, and my <R>N64 \r\nmotherboard<W> is dated 1996, so it\r\nshould exhibit the \"old\" memory\r\nretention behaviour...\r\n<New box>\r\n...but, to be safe, I'm going to try\r\nto do it as fast as I can anyway.\r\n<New box>\r\nOK, ready? The payload is now \r\nin place!\r\n<New box>\r\n<Shift:90>3!\r\n<New box>\r\n<Shift:90>2!\r\n<New box>\r\n<Shift:90>1!",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "MessageGO",
+          "MessageText": "<Shift:80><R>GO!<PERSISTENT>",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
+      "NumVars": 2,
+      "NumFVars": 2,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "#include <z64hdr/oot_u10/z64hdr.h>\r\n\r\n// ^ Change the above to \r\n// #include <z64hdr/oot_u10/z64hdr.h>\r\n// if compiling for OoT 1.0\r\n\r\n#include <npcmaker/npc_maker_types.h>\r\n\r\n/*\r\nTo make NPC Maker able to use your function, it must have the following form:\r\n\r\n1. Its name must have a NpcM_ prefix (eg. NpcM_Function),\r\n2. Must have two parameters: NpcMaker* and PlayState*\r\n3. If you plan to pass the result to scripts, the return type must be float\r\n4. A unique name\r\n\r\nExamples of valid function signatures are thus:\r\n\r\nvoid NpcM_Function(NpcMaker* npc, PlayState* play)\r\nfloat NpcM_Function2(NpcMaker* npc, PlayState* play)\r\nfloat NpcM_DoAThing(NpcMaker* npc, PlayState* play)\r\n\r\nThe exception for this is functions which should run \"On limb\", their signature is as follows:\r\n\r\nint NpcM_Function(NpcMaker* npc, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP)\r\n\r\nThis function should return 0 if the limb is meant to be drawn, and 1 if it is not.\r\n\r\nWarning; When using these functions from scripts, make sure\r\nthe return type is valid.\r\n*/\r\n\r\nu32 sns_data[] = {\r\n                    0xC908C52F, 0x0000010C, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x2B0E5073, 0xB0F15CEA\r\n                  };\r\n\r\n// Technically unnecessary, as just having the above definition is enough to get this payload into memory, but, whatever.\r\nvoid NpcM_StopNSwop(NpcMaker* npc, PlayState* play)\r\n{\r\n    u32* sns = ZeldaArena_Malloc(128);\r\n    bcopy(sns_data, sns, 128);\r\n}",
+        "Functions": [
+          {
+            "Key": "NpcM_StopNSwop",
+            "Value": 0
+          }
+        ],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
+    }
+  ],
+  "GlobalHeaders": []
+}
