@@ -2406,5 +2406,10 @@ namespace NPC_Maker
             MsgText_TextChanged(null, null);
 
         }
+
+        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/skawo/OoT-NPC-Maker/wiki");
+        }
     }
 }
