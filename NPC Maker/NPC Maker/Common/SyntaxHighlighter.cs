@@ -90,6 +90,8 @@ namespace NPC_Maker
             {
                 if (KWord == "CCALL")
                     r.SetStyle(SyntaxHighlighter.RedStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                else if (KWord == "SET")
+                    r.SetStyle(SyntaxHighlighter.PurpleStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
                 else
                     r.SetStyle(s, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
             }
