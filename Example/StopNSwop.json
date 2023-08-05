@@ -177,7 +177,7 @@
       ],
       "Scripts": [
         {
-          "Text": "TALK Message1\r\n\r\n    SET NO_AUTO_ANIM TRUE\r\n    SET ANIMATION TALKING\r\n    FACE SELF TOWARDS PLAYER\r\n    SET TALK_MODE TRUE\r\n\r\n    AWAIT TEXTBOX_NUM 2\r\n    SET ANIMATION TOES once\r\n    AWAIT ANIMATION_END\r\n    SET ANIMATION TALKING\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n    SHOW_TEXTBOX Message2\r\n    SET TALK_PERSIST FALSE\r\n\r\n    AWAIT TEXTBOX_NUM 3\r\n    SET ANIMATION SwordPlay once\r\n    AWAIT ANIMATION_END\r\n    SET ANIMATION TALKING\r\n \r\n    AWAIT TEXTBOX_NUM 4\r\n    SET ANIMATION TOES once\r\n    AWAIT ANIMATION_END\r\n    SET ANIMATION TALKING\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n    SHOW_TEXTBOX Message2\r\n    SET TALK_PERSIST FALSE\r\n\r\n    AWAIT TEXTBOX_NUM 2\r\n    SET DO_TALKING_ANIMATIONS FALSE\r\n    SET SEGMENT_ENTRY SEG_9 MouthSmile\r\n\r\n    AWAIT TEXTBOX_NUM 3\r\n    SET DO_TALKING_ANIMATIONS TRUE\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n    SHOW_TEXTBOX Message3\r\n    SET TALK_PERSIST FALSE\r\n\r\n    AWAIT TEXTBOX_NUM 4\r\n    SET ANIMATION Magic1 once\r\n    PLAY SFX NA_SE_VO_LI_AUTO_JUMP\r\n    AWAIT TEXTBOX_NUM 5\r\n    PLAY SFX NA_SE_VO_LI_LASH\r\n    SET ANIMATION Magic2 once\r\n    AWAIT TEXTBOX_NUM 6\r\n    PLAY SFX NA_SE_VO_LI_SWORD_N\r\n    SET ANIMATION Magic3 once\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n\r\n    CCALL NpcM_StopNSwop\r\n\r\n    SHOW_TEXTBOX MessageGO\r\n    PLAY SFX NA_SE_VO_LI_FALL_L\r\n    PLAY SFX NA_SE_IT_BOMB_EXPLOSION\r\n    SET REF_ACTOR SELF\r\n\r\n    PARTICLE EXPLOSION\r\n        SCALE 400\r\n        SCALE_UPDATE 21\r\n        ACCELERATION 0 10 0\r\n        VELOCITY 0 10 0\r\n        POSITION ABSOLUTE ACTORF.0x24 ACTORF.0x28 ACTORF.0x2C\r\n    ENDPARTICLE \r\n\r\n    SET INVISIBLE true\r\n    SET CASTS_SHADOW FALSE\r\n    AWAIT FOREVER\r\nENDTALK\r\n",
+          "Text": "\r\nSPAWN 3 \r\n    VARIABLE 0x4\r\n    ROTATION 0 0 1\r\n    POSITION RELATIVE 0 0 200\r\nENDSPAWN\r\n\r\nSPAWN 3 \r\n    VARIABLE 0x4\r\n    ROTATION 0 0 2\r\n    POSITION RELATIVE 200 0 -200\r\nENDSPAWN\r\n\r\nSPAWN 3 \r\n    VARIABLE 0x4\r\n    ROTATION 0 0 3\r\n    POSITION RELATIVE 200 0 300\r\nENDSPAWN\r\n\r\nSPAWN 3 \r\n    VARIABLE 0x4\r\n    ROTATION 0 0 4\r\n    POSITION RELATIVE 500 0 140\r\nENDSPAWN\r\n\r\nSPAWN 3 \r\n    VARIABLE 0x4\r\n    ROTATION 0 0 5\r\n    POSITION RELATIVE -200 0 -340\r\nENDSPAWN\r\n\r\nSPAWN 3 \r\n    VARIABLE 0x4\r\n    ROTATION 0 0 6\r\n    POSITION RELATIVE 100 0 -540\r\nENDSPAWN\r\n\r\nSPAWN 3 \r\n    VARIABLE 0x4\r\n    ROTATION 0 0 7\r\n    POSITION RELATIVE -300 0 40\r\nENDSPAWN\r\n\r\nset SCRIPT_START AFTERSPAWN\r\nAFTERSPAWN:\r\n\r\n\r\nTALK Talk\r\n    SET NO_AUTO_ANIM TRUE\r\n    SET ANIMATION TALKING\r\n    FACE SELF TOWARDS PLAYER\r\n    SET TALK_MODE TRUE\r\n    SET RESPONSE_ACTIONS ENDCONV ENABLEALL GO\r\n    AWAIT RESPONSE\r\n\r\n\r\n\r\nENDCONV:\r\n    SHOW_TEXTBOX OhOK\r\n    AWAIT TALKING_END\r\n    SET TALK_MODE FALSE\r\n    RETURN\r\n\r\nENABLEALL:\r\n    SHOW_TEXTBOX Enabled\r\n    SET VAR.1 = 1\r\n    SET VAR.2 = 1\r\n    SET VAR.3 = 1\r\n    SET VAR.4 = 1\r\n    SET VAR.5 = 1\r\n    SET VAR.6 = 1\r\n    SET VAR.7 = 1\r\n    AWAIT TALKING_END\r\n    SET TALK_MODE FALSE\r\n    RETURN  \r\n\r\n\r\n\r\n\r\nGO:\r\n    CCALL NpcM_StopNSwop\r\n\r\n    SHOW_TEXTBOX Message1\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n    SHOW_TEXTBOX Message4\r\n    SET TALK_PERSIST FALSE\r\n\r\n    SET ANIMATION Magic1 once\r\n    PLAY SFX NA_SE_VO_LI_AUTO_JUMP\r\n    AWAIT TEXTBOX_NUM 2\r\n    PLAY SFX NA_SE_VO_LI_LASH\r\n    SET ANIMATION Magic2 once\r\n    AWAIT TEXTBOX_NUM 3\r\n    PLAY SFX NA_SE_VO_LI_SWORD_N\r\n    SET ANIMATION Magic3 once\r\n\r\n    SET TALK_PERSIST TRUE\r\n    AWAIT TALKING_END\r\n\r\n\r\n    SHOW_TEXTBOX MessageGO\r\n    PLAY SFX NA_SE_VO_LI_FALL_L\r\n    PLAY SFX NA_SE_IT_BOMB_EXPLOSION\r\n    SET REF_ACTOR SELF\r\n\r\n    PARTICLE EXPLOSION\r\n        SCALE 400\r\n        SCALE_UPDATE 21\r\n        ACCELERATION 0 10 0\r\n        VELOCITY 0 10 0\r\n        POSITION ABSOLUTE ACTORF.0x24 ACTORF.0x28 ACTORF.0x2C\r\n    ENDPARTICLE \r\n\r\n    SET INVISIBLE true\r\n    SET CASTS_SHADOW FALSE\r\n    AWAIT FOREVER\r\nENDTALK\r\n",
           "ParseErrors": [],
           "Name": "Test"
         }
@@ -278,31 +278,37 @@
       "Messages": [
         {
           "Name": "Message1",
-          "MessageText": "So, uh, you're probably wondering\r\nwhy we're in Zelda while this video\r\nis focusing on <B>Banjo-<R>Kazooie.\r\n<New box>\r\nWell, uh, this was genuinely the\r\nsimplest way for me to do this.\r\n<New box>\r\nNow then, a word of explanation for\r\nwhat's about to happen:\r\n<New box>\r\nIf you don't know what <G>Stop n' Swop\r\n<W>is about, it was a planned way of \r\ntransferring data between Rare \r\ngames on the <R>Nintendo 64.",
-          "Type": 0,
-          "Position": 0
-        },
-        {
-          "Name": "Message3",
-          "MessageText": "Most games didn't implement code \r\nto support this feature...\r\n<New box>\r\nHowever, <B>Banjo-<R>Kazooie<W> does!\r\n<New box>\r\nThanks to some reverse-engineering, we\r\nnow know what the game is expecting\r\nin memory to unlock its <G>Stop n' Swop<W>\r\nsecrets...\r\n<New box>\r\nThe secrets themselves have been \r\nknown for a while, but I've never seen\r\nanyone actually attempt the cartridge\r\nswapperoo method on a real N64...\r\n<New box>\r\n...and so I'm now going to insert the \r\npayload into memory, and real-world-me \r\nis going to swap this cartridge for \r\n<B>Banjo-<R>Kazooie.",
-          "Type": 0,
-          "Position": 0
-        },
-        {
-          "Name": "Message2",
-          "MessageText": "Long story short, once the console is\r\nshut off, the contents of the memory\r\nare retained for a short while.\r\n<New box>\r\nIf the next game was inserted into the \r\nmachine quickly enough, it could detect \r\nthis and unlock something.\r\n<New box>\r\nUnfortunately, a <R>motherboard revision<W> \r\nmade this difficult, because the memory \r\nretention time was shortened, and so \r\nthe idea was scrapped.\r\n<New box>\r\n...Why they didn't just use the <G>Memory\r\nPak <W>for this, I don't know, but that's\r\nentirely beside the point.",
+          "MessageText": "<SOUND:NA_SE_SY_PIECE_OF_HEART>Alright, here we go!\r\nThe data is already in place!",
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "Message4",
-          "MessageText": "Incidentally, I checked, and my <R>N64 \r\nmotherboard<W> is dated 1996, so it\r\nshould exhibit the \"old\" memory\r\nretention behaviour...\r\n<New box>\r\n...but, to be safe, I'm going to try\r\nto do it as fast as I can anyway.\r\n<New box>\r\nOK, ready? The payload is now \r\nin place!\r\n<New box>\r\n<Shift:90>3!\r\n<New box>\r\n<Shift:90>2!\r\n<New box>\r\n<Shift:90>1!",
+          "MessageText": "<Shift:90><NS>3!\r\n<New box>\r\n<Shift:90><DI><NS>2!\r\n<New box>\r\n<Shift:90><DI><NS>1!",
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "MessageGO",
-          "MessageText": "<Shift:80><R>GO!<PERSISTENT>",
+          "MessageText": "<Shift:80><R><DI>GO!<PERSISTENT>",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Talk",
+          "MessageText": "Set everything up first by talking\r\nto the items you need!\r\n<New box>\r\n<Three choices>Or... are you already done?<G>\r\nNope, hold on.\r\nJust enable EVERYTHING!\r\nI am ready,",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "OhOK",
+          "MessageText": "Oh, OK. Take your time.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Enabled",
+          "MessageText": "OK, everything is now on!\r\nTalk to me again to begin.",
           "Type": 0,
           "Position": 0
         }
@@ -311,15 +317,15 @@
       "DEBUGPrintToScreen": false,
       "DEBUGLookAtEditor": false,
       "DEBUGExDlistEditor": false,
-      "NumVars": 2,
+      "NumVars": 10,
       "NumFVars": 2,
       "ExistInAllRooms": false,
       "EmbeddedOverlayCode": {
-        "Code": "#include <z64hdr/oot_u10/z64hdr.h>\r\n\r\n// ^ Change the above to \r\n// #include <z64hdr/oot_u10/z64hdr.h>\r\n// if compiling for OoT 1.0\r\n\r\n#include <npcmaker/npc_maker_types.h>\r\n\r\n/*\r\nTo make NPC Maker able to use your function, it must have the following form:\r\n\r\n1. Its name must have a NpcM_ prefix (eg. NpcM_Function),\r\n2. Must have two parameters: NpcMaker* and PlayState*\r\n3. If you plan to pass the result to scripts, the return type must be float\r\n4. A unique name\r\n\r\nExamples of valid function signatures are thus:\r\n\r\nvoid NpcM_Function(NpcMaker* npc, PlayState* play)\r\nfloat NpcM_Function2(NpcMaker* npc, PlayState* play)\r\nfloat NpcM_DoAThing(NpcMaker* npc, PlayState* play)\r\n\r\nThe exception for this is functions which should run \"On limb\", their signature is as follows:\r\n\r\nint NpcM_Function(NpcMaker* npc, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP)\r\n\r\nThis function should return 0 if the limb is meant to be drawn, and 1 if it is not.\r\n\r\nWarning; When using these functions from scripts, make sure\r\nthe return type is valid.\r\n*/\r\n\r\nu32 sns_data[] = {\r\n                    0xC908C52F, 0x0000010C, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x2B0E5073, 0xB0F15CEA\r\n                  };\r\n\r\n// Technically unnecessary, as just having the above definition is enough to get this payload into memory, but, whatever.\r\nvoid NpcM_StopNSwop(NpcMaker* npc, PlayState* play)\r\n{\r\n    u32* sns = ZeldaArena_Malloc(128);\r\n    bcopy(sns_data, sns, 128);\r\n}",
+        "Code": "#include <z64hdr/oot_u10/z64hdr.h>\r\n\r\n// ^ Change the above to \r\n// #include <z64hdr/oot_u10/z64hdr.h>\r\n// if compiling for OoT 1.0\r\n\r\n#include <npcmaker/npc_maker_types.h>\r\n\r\n/*\r\nTo make NPC Maker able to use your function, it must have the following form:\r\n\r\n1. Its name must have a NpcM_ prefix (eg. NpcM_Function),\r\n2. Must have two parameters: NpcMaker* and PlayState*\r\n3. If you plan to pass the result to scripts, the return type must be float\r\n4. A unique name\r\n\r\nExamples of valid function signatures are thus:\r\n\r\nvoid NpcM_Function(NpcMaker* npc, PlayState* play)\r\nfloat NpcM_Function2(NpcMaker* npc, PlayState* play)\r\nfloat NpcM_DoAThing(NpcMaker* npc, PlayState* play)\r\n\r\nThe exception for this is functions which should run \"On limb\", their signature is as follows:\r\n\r\nint NpcM_Function(NpcMaker* npc, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP)\r\n\r\nThis function should return 0 if the limb is meant to be drawn, and 1 if it is not.\r\n\r\nWarning; When using these functions from scripts, make sure\r\nthe return type is valid.\r\n*/\r\n\r\nu32 funct[] = { 0xDC870000, 0x000737FC, 0x00072FF8, 0x000637FA, 0x0005283E, 0x00073B3C, \r\n               0x00C53025, 0x0007383E, 0x00C73026, 0x00063D3A, 0x30E70FFF, 0x00E63826,\r\n               0x0007103C, 0xFC870000, 0x03E00008, 0x0002103F, 0x00000000 };\r\n\r\nu32 sns_data[] = {\r\n                    0xC908C52F, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000,\r\n                    0x00000000, 0x00000000, 0x00000000, 0x00000000\r\n                  };\r\n\r\nvoid glcrc_calc_checksum(void *start, void *end)\r\n{\r\n    u8 *p;\r\n\r\n    u32 shift = 0;\r\n\r\n    u64 seed = 0x8F809F473108B3C1;\r\n\r\n    u32 crc1 = 0;\r\n    u32 crc2 = 0;\r\n\r\n    u32 tmp;\r\n\r\n    typedef u32 func(u64 *seed);\r\n    func* func_8025C29C = (func*)funct;\r\n\r\n    // CRC1: Iterate forwards over bytes\r\n    for (p = start; (void *)p < end; p++)\r\n    {\r\n        seed += *p << (shift & 15);\r\n\r\n        tmp = func_8025C29C(&seed);\r\n\r\n        shift += 7;\r\n\r\n        crc1 ^= tmp;\r\n    }\r\n\r\n    // CRC2: Iterate backwards over bytes\r\n    for (p = (u8 *)end - 1; (void *)p >= start; p--)\r\n    {\r\n        seed += *p << (shift & 15);\r\n\r\n        tmp = func_8025C29C(&seed);\r\n\r\n        shift += 3;\r\n\r\n        crc2 ^= tmp;\r\n    }\r\n\r\n    sns_data[30] = crc1;\r\n    sns_data[31] = crc2;\r\n}\r\n\r\n\r\n// Technically unnecessary, as just having the above definition is enough to get this payload into memory, but, whatever.\r\nvoid NpcM_StopNSwop(NpcMaker* npc, PlayState* play)\r\n{\r\n    int j = 0;\r\n\r\n    for (int i = 0; i < 7; i++)\r\n    {\r\n        if (npc->scriptVars[i])\r\n        {\r\n          sns_data[1 + j] = 0x108 + i;\r\n          j++;\r\n        }\r\n    }\r\n\r\n    glcrc_calc_checksum(&sns_data, &sns_data[30]);\r\n}",
         "Functions": [
           {
             "Key": "NpcM_StopNSwop",
-            "Value": 0
+            "Value": 328
           }
         ],
         "FuncsRunWhen": [
@@ -345,7 +351,1600 @@
           ]
         ]
       }
+    },
+    {
+      "NPCName": "Yellow Egg",
+      "IsNull": false,
+      "ObjectID": 0,
+      "Hierarchy": 0,
+      "FileStart": 0,
+      "HierarchyType": 1,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 0,
+      "LookAtType": 0,
+      "HeadLimb": 0,
+      "HeadHorizAxis": 0,
+      "HeadVertAxis": 0,
+      "WaistLimb": 0,
+      "WaistHorizAxis": 0,
+      "WaistVertAxis": 0,
+      "LookAtDegreesVertical": 0,
+      "LookAtDegreesHorizontal": 0,
+      "LookAtPositionOffsets": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": false,
+      "IsAlwaysDrawn": false,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": false,
+      "SfxIfAttacked": -1,
+      "EffectIfAttacked": 10,
+      "OpensDoors": false,
+      "CollisionRadius": 40,
+      "CollisionHeight": 51,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 17,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": false,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 1,
+      "TargetLimb": 0,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 150.0,
+      "MovementType": 0,
+      "MovementDistance": 0,
+      "MovementSpeed": 1.0,
+      "GravityForce": 0.1,
+      "PathID": 0,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": false,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 15.0,
+      "TimedPathStart": 0,
+      "TimedPathEnd": 65490,
+      "MaxDistRoam": 65535,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "255, 255, 255",
+      "LightRadius": 0,
+      "AnimationType": 0,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Walking",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Attacked",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "\r\n\r\nIF DISTANCE_FROM_PLAYER < 20 AND VAR.1 != 1\r\n\r\n    VAR.1 = 1\r\n    SET TALK_PERSIST TRUE\r\n\r\n    IF EXT_VAR 0 1 = 1\r\n        SET RESPONSE_ACTIONS DISABLE ENABLE\r\n        FORCE_TALK Enabled\r\n        AWAIT RESPONSE\r\n    ELSE\r\n        SET RESPONSE_ACTIONS ENABLE DISABLE\r\n        FORCE_TALK Disabled\r\n        AWAIT RESPONSE\r\n    ENDIF\r\nELIF DISTANCE_FROM_PLAYER > 20\r\n    VAR.1 = 0\r\nENDIF\r\n\r\nRETURN\r\n\r\n\r\nDISABLE:\r\n    SET EXT_VAR 0 1 = 0\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN\r\n\r\nENABLE:\r\n    SET EXT_VAR 0 1 = 1\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN \r\n\r\n\r\n",
+          "ParseErrors": [],
+          "Name": "Script"
+        },
+        {
+          "Text": "\r\nSET DLIST_ROT_Y egg2 += 200",
+          "ParseErrors": [],
+          "Name": "YouSpinMeRightRound"
+        }
+      ],
+      "EnvironmentColor": "255, 0, 255",
+      "Segments": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "BlinkPattern": "",
+      "TalkPattern": "",
+      "BlinkSegment": 7,
+      "TalkSegment": 7,
+      "BlinkSpeed": 1,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [
+        {
+          "Name": "egg",
+          "Address": 4048,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Yellow",
+          "ObjectID": 218,
+          "FileStart": -1
+        },
+        {
+          "Name": "egg2",
+          "Address": 4104,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Yellow",
+          "ObjectID": 218,
+          "FileStart": -1
+        }
+      ],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "Enabled",
+          "MessageText": "The Yellow Egg is enabled.\r\n<New box>\r\n<Two choices>Turn it off?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Disabled",
+          "MessageText": "The Yellow Egg is disabled.\r\n<New box>\r\n<Two choices>Turn it on?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Done!",
+          "MessageText": "Very well.",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
+      "NumVars": 2,
+      "NumFVars": 2,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "NPCName": "Red Egg",
+      "IsNull": false,
+      "ObjectID": 0,
+      "Hierarchy": 0,
+      "FileStart": 0,
+      "HierarchyType": 1,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 0,
+      "LookAtType": 0,
+      "HeadLimb": 0,
+      "HeadHorizAxis": 0,
+      "HeadVertAxis": 0,
+      "WaistLimb": 0,
+      "WaistHorizAxis": 0,
+      "WaistVertAxis": 0,
+      "LookAtDegreesVertical": 0,
+      "LookAtDegreesHorizontal": 0,
+      "LookAtPositionOffsets": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": false,
+      "IsAlwaysDrawn": false,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": false,
+      "SfxIfAttacked": -1,
+      "EffectIfAttacked": 10,
+      "OpensDoors": false,
+      "CollisionRadius": 40,
+      "CollisionHeight": 51,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 17,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": false,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 1,
+      "TargetLimb": 0,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 150.0,
+      "MovementType": 0,
+      "MovementDistance": 0,
+      "MovementSpeed": 1.0,
+      "GravityForce": 0.1,
+      "PathID": 0,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": false,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 15.0,
+      "TimedPathStart": 0,
+      "TimedPathEnd": 65490,
+      "MaxDistRoam": 65535,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "White",
+      "LightRadius": 0,
+      "AnimationType": 0,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Walking",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Attacked",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "\r\n\r\nIF DISTANCE_FROM_PLAYER < 20 AND VAR.1 != 1\r\n\r\n    VAR.1 = 1\r\n    SET TALK_PERSIST TRUE\r\n\r\n    IF EXT_VAR 0 2 = 1\r\n        SET RESPONSE_ACTIONS DISABLE ENABLE\r\n        FORCE_TALK Enabled\r\n        AWAIT RESPONSE\r\n    ELSE\r\n        SET RESPONSE_ACTIONS ENABLE DISABLE\r\n        FORCE_TALK Disabled\r\n        AWAIT RESPONSE\r\n    ENDIF\r\nELIF DISTANCE_FROM_PLAYER > 20\r\n    VAR.1 = 0\r\nENDIF\r\n\r\nRETURN\r\n\r\n\r\nDISABLE:\r\n    SET EXT_VAR 0 2 = 0\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN\r\n\r\nENABLE:\r\n    SET EXT_VAR 0 2 = 1\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN \r\n\r\n\r\n",
+          "ParseErrors": [],
+          "Name": "Script"
+        },
+        {
+          "Text": "\r\nSET DLIST_ROT_Y egg2 += 200",
+          "ParseErrors": [],
+          "Name": "YouSpinMeRightRound"
+        }
+      ],
+      "EnvironmentColor": "Magenta",
+      "Segments": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "BlinkPattern": "",
+      "TalkPattern": "",
+      "BlinkSegment": 7,
+      "TalkSegment": 7,
+      "BlinkSpeed": 1,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [
+        {
+          "Name": "egg",
+          "Address": 4048,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Red",
+          "ObjectID": 218,
+          "FileStart": -1
+        },
+        {
+          "Name": "egg2",
+          "Address": 4104,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Red",
+          "ObjectID": 218,
+          "FileStart": -1
+        }
+      ],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "Enabled",
+          "MessageText": "The Red Egg is enabled.\r\n<New box>\r\n<Two choices>Turn it off?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Disabled",
+          "MessageText": "The Red Egg is disabled.\r\n<New box>\r\n<Two choices>Turn it on?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Done!",
+          "MessageText": "You got it!",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
+      "NumVars": 2,
+      "NumFVars": 2,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "NPCName": "Green Egg",
+      "IsNull": false,
+      "ObjectID": 0,
+      "Hierarchy": 0,
+      "FileStart": 0,
+      "HierarchyType": 1,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 0,
+      "LookAtType": 0,
+      "HeadLimb": 0,
+      "HeadHorizAxis": 0,
+      "HeadVertAxis": 0,
+      "WaistLimb": 0,
+      "WaistHorizAxis": 0,
+      "WaistVertAxis": 0,
+      "LookAtDegreesVertical": 0,
+      "LookAtDegreesHorizontal": 0,
+      "LookAtPositionOffsets": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": false,
+      "IsAlwaysDrawn": false,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": false,
+      "SfxIfAttacked": -1,
+      "EffectIfAttacked": 10,
+      "OpensDoors": false,
+      "CollisionRadius": 40,
+      "CollisionHeight": 51,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 17,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": false,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 1,
+      "TargetLimb": 0,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 150.0,
+      "MovementType": 0,
+      "MovementDistance": 0,
+      "MovementSpeed": 1.0,
+      "GravityForce": 0.1,
+      "PathID": 0,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": false,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 15.0,
+      "TimedPathStart": 0,
+      "TimedPathEnd": 65490,
+      "MaxDistRoam": 65535,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "White",
+      "LightRadius": 0,
+      "AnimationType": 0,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Walking",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Attacked",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "\r\n\r\nIF DISTANCE_FROM_PLAYER < 20 AND VAR.1 != 1\r\n\r\n    VAR.1 = 1\r\n    SET TALK_PERSIST TRUE\r\n\r\n    IF EXT_VAR 0 3 = 1\r\n        SET RESPONSE_ACTIONS DISABLE ENABLE\r\n        FORCE_TALK Enabled\r\n        AWAIT RESPONSE\r\n    ELSE\r\n        SET RESPONSE_ACTIONS ENABLE DISABLE\r\n        FORCE_TALK Disabled\r\n        AWAIT RESPONSE\r\n    ENDIF\r\nELIF DISTANCE_FROM_PLAYER > 20\r\n    VAR.1 = 0\r\nENDIF\r\n\r\nRETURN\r\n\r\n\r\nDISABLE:\r\n    SET EXT_VAR 0 3 = 0\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN\r\n\r\nENABLE:\r\n    SET EXT_VAR 0 3 = 1\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN \r\n\r\n\r\n",
+          "ParseErrors": [],
+          "Name": "Script"
+        },
+        {
+          "Text": "\r\nSET DLIST_ROT_Y egg2 += 200",
+          "ParseErrors": [],
+          "Name": "YouSpinMeRightRound"
+        }
+      ],
+      "EnvironmentColor": "Magenta",
+      "Segments": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "BlinkPattern": "",
+      "TalkPattern": "",
+      "BlinkSegment": 7,
+      "TalkSegment": 7,
+      "BlinkSpeed": 1,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [
+        {
+          "Name": "egg",
+          "Address": 4048,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Lime",
+          "ObjectID": 218,
+          "FileStart": -1
+        },
+        {
+          "Name": "egg2",
+          "Address": 4104,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Lime",
+          "ObjectID": 218,
+          "FileStart": -1
+        }
+      ],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "Enabled",
+          "MessageText": "The Green Egg is enabled.\r\n<New box>\r\n<Two choices>Turn it off?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Disabled",
+          "MessageText": "The Green Egg is disabled.\r\n<New box>\r\n<Two choices>Turn it on?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Done!",
+          "MessageText": "Well, if I must.",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
+      "NumVars": 2,
+      "NumFVars": 2,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "NPCName": "Blue Egg",
+      "IsNull": false,
+      "ObjectID": 0,
+      "Hierarchy": 0,
+      "FileStart": 0,
+      "HierarchyType": 1,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 0,
+      "LookAtType": 0,
+      "HeadLimb": 0,
+      "HeadHorizAxis": 0,
+      "HeadVertAxis": 0,
+      "WaistLimb": 0,
+      "WaistHorizAxis": 0,
+      "WaistVertAxis": 0,
+      "LookAtDegreesVertical": 0,
+      "LookAtDegreesHorizontal": 0,
+      "LookAtPositionOffsets": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": false,
+      "IsAlwaysDrawn": false,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": false,
+      "SfxIfAttacked": -1,
+      "EffectIfAttacked": 10,
+      "OpensDoors": false,
+      "CollisionRadius": 40,
+      "CollisionHeight": 51,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 17,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": false,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 1,
+      "TargetLimb": 0,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 150.0,
+      "MovementType": 0,
+      "MovementDistance": 0,
+      "MovementSpeed": 1.0,
+      "GravityForce": 0.1,
+      "PathID": 0,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": false,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 15.0,
+      "TimedPathStart": 0,
+      "TimedPathEnd": 65490,
+      "MaxDistRoam": 65535,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "White",
+      "LightRadius": 0,
+      "AnimationType": 0,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Walking",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Attacked",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "\r\n\r\nIF DISTANCE_FROM_PLAYER < 20 AND VAR.1 != 1\r\n\r\n    VAR.1 = 1\r\n    SET TALK_PERSIST TRUE\r\n\r\n    IF EXT_VAR 0 4 = 1\r\n        SET RESPONSE_ACTIONS DISABLE ENABLE\r\n        FORCE_TALK Enabled\r\n        AWAIT RESPONSE\r\n    ELSE\r\n        SET RESPONSE_ACTIONS ENABLE DISABLE\r\n        FORCE_TALK Disabled\r\n        AWAIT RESPONSE\r\n    ENDIF\r\nELIF DISTANCE_FROM_PLAYER > 20\r\n    VAR.1 = 0\r\nENDIF\r\n\r\nRETURN\r\n\r\n\r\nDISABLE:\r\n    SET EXT_VAR 0 4 = 0\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN\r\n\r\nENABLE:\r\n    SET EXT_VAR 0 4 = 1\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN \r\n\r\n\r\n",
+          "ParseErrors": [],
+          "Name": "Script"
+        },
+        {
+          "Text": "\r\nSET DLIST_ROT_Y egg2 += 200",
+          "ParseErrors": [],
+          "Name": "YouSpinMeRightRound"
+        }
+      ],
+      "EnvironmentColor": "Magenta",
+      "Segments": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "BlinkPattern": "",
+      "TalkPattern": "",
+      "BlinkSegment": 7,
+      "TalkSegment": 7,
+      "BlinkSpeed": 1,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [
+        {
+          "Name": "egg",
+          "Address": 4048,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Blue",
+          "ObjectID": 218,
+          "FileStart": -1
+        },
+        {
+          "Name": "egg2",
+          "Address": 4104,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Blue",
+          "ObjectID": 218,
+          "FileStart": -1
+        }
+      ],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "Enabled",
+          "MessageText": "The Blue Egg is enabled.\r\n<New box>\r\n<Two choices>Turn it off?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Disabled",
+          "MessageText": "The Blue Egg is disabled.\r\n<New box>\r\n<Two choices>Turn it on?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Done!",
+          "MessageText": "As you wish.",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
+      "NumVars": 2,
+      "NumFVars": 2,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "NPCName": "Pink Egg",
+      "IsNull": false,
+      "ObjectID": 0,
+      "Hierarchy": 0,
+      "FileStart": 0,
+      "HierarchyType": 1,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 0,
+      "LookAtType": 0,
+      "HeadLimb": 0,
+      "HeadHorizAxis": 0,
+      "HeadVertAxis": 0,
+      "WaistLimb": 0,
+      "WaistHorizAxis": 0,
+      "WaistVertAxis": 0,
+      "LookAtDegreesVertical": 0,
+      "LookAtDegreesHorizontal": 0,
+      "LookAtPositionOffsets": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": false,
+      "IsAlwaysDrawn": false,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": false,
+      "SfxIfAttacked": -1,
+      "EffectIfAttacked": 10,
+      "OpensDoors": false,
+      "CollisionRadius": 40,
+      "CollisionHeight": 51,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 17,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": false,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 1,
+      "TargetLimb": 0,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 150.0,
+      "MovementType": 0,
+      "MovementDistance": 0,
+      "MovementSpeed": 1.0,
+      "GravityForce": 0.1,
+      "PathID": 0,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": false,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 15.0,
+      "TimedPathStart": 0,
+      "TimedPathEnd": 65490,
+      "MaxDistRoam": 65535,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "White",
+      "LightRadius": 0,
+      "AnimationType": 0,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Walking",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Attacked",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "\r\n\r\nIF DISTANCE_FROM_PLAYER < 20 AND VAR.1 != 1\r\n\r\n    VAR.1 = 1\r\n    SET TALK_PERSIST TRUE\r\n\r\n    IF EXT_VAR 0 5 = 1\r\n        SET RESPONSE_ACTIONS DISABLE ENABLE\r\n        FORCE_TALK Enabled\r\n        AWAIT RESPONSE\r\n    ELSE\r\n        SET RESPONSE_ACTIONS ENABLE DISABLE\r\n        FORCE_TALK Disabled\r\n        AWAIT RESPONSE\r\n    ENDIF\r\nELIF DISTANCE_FROM_PLAYER > 20\r\n    VAR.1 = 0\r\nENDIF\r\n\r\nRETURN\r\n\r\n\r\nDISABLE:\r\n    SET EXT_VAR 0 5 = 0\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN\r\n\r\nENABLE:\r\n    SET EXT_VAR 0 5 = 1\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN \r\n\r\n\r\n",
+          "ParseErrors": [],
+          "Name": "Script"
+        },
+        {
+          "Text": "\r\nSET DLIST_ROT_Y egg2 += 200",
+          "ParseErrors": [],
+          "Name": "YouSpinMeRightRound"
+        }
+      ],
+      "EnvironmentColor": "Magenta",
+      "Segments": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "BlinkPattern": "",
+      "TalkPattern": "",
+      "BlinkSegment": 7,
+      "TalkSegment": 7,
+      "BlinkSpeed": 1,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [
+        {
+          "Name": "egg",
+          "Address": 4048,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Fuchsia",
+          "ObjectID": 218,
+          "FileStart": -1
+        },
+        {
+          "Name": "egg2",
+          "Address": 4104,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Fuchsia",
+          "ObjectID": 218,
+          "FileStart": -1
+        }
+      ],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "Enabled",
+          "MessageText": "The Pink Egg is enabled.\r\n<New box>\r\n<Two choices>Turn it off?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Disabled",
+          "MessageText": "The Pink Egg is disabled.\r\n<New box>\r\n<Two choices>Turn it on?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Done!",
+          "MessageText": "No problem.",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
+      "NumVars": 2,
+      "NumFVars": 2,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "NPCName": "Cyan Egg",
+      "IsNull": false,
+      "ObjectID": 0,
+      "Hierarchy": 0,
+      "FileStart": 0,
+      "HierarchyType": 1,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 0,
+      "LookAtType": 0,
+      "HeadLimb": 0,
+      "HeadHorizAxis": 0,
+      "HeadVertAxis": 0,
+      "WaistLimb": 0,
+      "WaistHorizAxis": 0,
+      "WaistVertAxis": 0,
+      "LookAtDegreesVertical": 0,
+      "LookAtDegreesHorizontal": 0,
+      "LookAtPositionOffsets": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": false,
+      "IsAlwaysDrawn": false,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": false,
+      "SfxIfAttacked": -1,
+      "EffectIfAttacked": 10,
+      "OpensDoors": false,
+      "CollisionRadius": 40,
+      "CollisionHeight": 51,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 17,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": false,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 1,
+      "TargetLimb": 0,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 150.0,
+      "MovementType": 0,
+      "MovementDistance": 0,
+      "MovementSpeed": 1.0,
+      "GravityForce": 0.1,
+      "PathID": 0,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": false,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 15.0,
+      "TimedPathStart": 0,
+      "TimedPathEnd": 65490,
+      "MaxDistRoam": 65535,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "White",
+      "LightRadius": 0,
+      "AnimationType": 0,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Walking",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Attacked",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "\r\n\r\nIF DISTANCE_FROM_PLAYER < 20 AND VAR.1 != 1\r\n\r\n    VAR.1 = 1\r\n    SET TALK_PERSIST TRUE\r\n\r\n    IF EXT_VAR 0 6 = 1\r\n        SET RESPONSE_ACTIONS DISABLE ENABLE\r\n        FORCE_TALK Enabled\r\n        AWAIT RESPONSE\r\n    ELSE\r\n        SET RESPONSE_ACTIONS ENABLE DISABLE\r\n        FORCE_TALK Disabled\r\n        AWAIT RESPONSE\r\n    ENDIF\r\nELIF DISTANCE_FROM_PLAYER > 20\r\n    VAR.1 = 0\r\nENDIF\r\n\r\nRETURN\r\n\r\n\r\nDISABLE:\r\n    SET EXT_VAR 0 6 = 0\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN\r\n\r\nENABLE:\r\n    SET EXT_VAR 0 6 = 1\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN \r\n\r\n\r\n",
+          "ParseErrors": [],
+          "Name": "Script"
+        },
+        {
+          "Text": "\r\nSET DLIST_ROT_Y egg2 += 200",
+          "ParseErrors": [],
+          "Name": "YouSpinMeRightRound"
+        }
+      ],
+      "EnvironmentColor": "Magenta",
+      "Segments": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "BlinkPattern": "",
+      "TalkPattern": "",
+      "BlinkSegment": 7,
+      "TalkSegment": 7,
+      "BlinkSpeed": 1,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [
+        {
+          "Name": "egg",
+          "Address": 4048,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Aqua",
+          "ObjectID": 218,
+          "FileStart": -1
+        },
+        {
+          "Name": "egg2",
+          "Address": 4104,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Aqua",
+          "ObjectID": 218,
+          "FileStart": -1
+        }
+      ],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "Enabled",
+          "MessageText": "The Cyan Egg is enabled.\r\n<New box>\r\n<Two choices>Turn it off?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Disabled",
+          "MessageText": "The Cyan Egg is disabled.\r\n<New box>\r\n<Two choices>Turn it on?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Done!",
+          "MessageText": "Very well.",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
+      "NumVars": 2,
+      "NumFVars": 2,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "NPCName": "Key",
+      "IsNull": false,
+      "ObjectID": 0,
+      "Hierarchy": 0,
+      "FileStart": 0,
+      "HierarchyType": 1,
+      "ModelPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "ModelScale": 0.01,
+      "CutsceneID": 0,
+      "LookAtType": 0,
+      "HeadLimb": 0,
+      "HeadHorizAxis": 0,
+      "HeadVertAxis": 0,
+      "WaistLimb": 0,
+      "WaistHorizAxis": 0,
+      "WaistVertAxis": 0,
+      "LookAtDegreesVertical": 0,
+      "LookAtDegreesHorizontal": 0,
+      "LookAtPositionOffsets": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "HasCollision": true,
+      "PushesSwitches": false,
+      "Mass": 254,
+      "IsAlwaysActive": false,
+      "IsAlwaysDrawn": false,
+      "ExecuteJustScript": false,
+      "ReactsIfAttacked": false,
+      "SfxIfAttacked": -1,
+      "EffectIfAttacked": 10,
+      "OpensDoors": false,
+      "CollisionRadius": 40,
+      "CollisionHeight": 51,
+      "CollisionYShift": 0,
+      "NPCToRide": -1,
+      "CastsShadow": true,
+      "ShadowRadius": 17,
+      "VisibleUnderLensOfTruth": false,
+      "Invisible": false,
+      "IsTargettable": false,
+      "FadeOut": false,
+      "Alpha": 255,
+      "TargetDistance": 1,
+      "TargetLimb": 0,
+      "TargetPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "TalkRadius": 150.0,
+      "MovementType": 0,
+      "MovementDistance": 0,
+      "MovementSpeed": 1.0,
+      "GravityForce": 0.1,
+      "PathID": 0,
+      "PathStartNodeID": -1,
+      "PathEndNodeID": -1,
+      "MovementDelayTime": 0,
+      "LoopPath": false,
+      "IgnoreYAxis": true,
+      "SmoothingConstant": 15.0,
+      "TimedPathStart": 0,
+      "TimedPathEnd": 65490,
+      "MaxDistRoam": 65535,
+      "GenLight": false,
+      "Glow": false,
+      "LightLimb": 0,
+      "LightPositionOffsets": [
+        0,
+        0,
+        0
+      ],
+      "LightColor": "White",
+      "LightRadius": 0,
+      "AnimationType": 0,
+      "Animations": [
+        {
+          "Name": "Idle",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Walking",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        },
+        {
+          "Name": "Attacked",
+          "Address": 0,
+          "ObjID": -1,
+          "Speed": 1.0,
+          "StartFrame": 0,
+          "EndFrame": 255,
+          "FileStart": -1
+        }
+      ],
+      "Scripts": [
+        {
+          "Text": "\r\n\r\nIF DISTANCE_FROM_PLAYER < 20 AND VAR.1 != 1\r\n\r\n    VAR.1 = 1\r\n    SET TALK_PERSIST TRUE\r\n\r\n    IF EXT_VAR 0 7 = 1\r\n        SET RESPONSE_ACTIONS DISABLE ENABLE\r\n        FORCE_TALK Enabled\r\n        AWAIT RESPONSE\r\n    ELSE\r\n        SET RESPONSE_ACTIONS ENABLE DISABLE\r\n        FORCE_TALK Disabled\r\n        AWAIT RESPONSE\r\n    ENDIF\r\nELIF DISTANCE_FROM_PLAYER > 20\r\n    VAR.1 = 0\r\nENDIF\r\n\r\nRETURN\r\n\r\n\r\nDISABLE:\r\n    SET EXT_VAR 0 7 = 0\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN\r\n\r\nENABLE:\r\n    SET EXT_VAR 0 7 = 1\r\n    SHOW_TEXTBOX Done!\r\n    SET TALK_PERSIST FALSE\r\n    AWAIT TALKING_END\r\n    RETURN \r\n\r\n\r\n",
+          "ParseErrors": [],
+          "Name": "Script"
+        },
+        {
+          "Text": "\r\nSET DLIST_ROT_Y key += 200",
+          "ParseErrors": [],
+          "Name": "YouSpinMeRightRound"
+        }
+      ],
+      "EnvironmentColor": "Magenta",
+      "Segments": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "BlinkPattern": "",
+      "TalkPattern": "",
+      "BlinkSegment": 7,
+      "TalkSegment": 7,
+      "BlinkSpeed": 1,
+      "TalkSpeed": 1,
+      "ExtraDisplayLists": [
+        {
+          "Name": "key",
+          "Address": 2048,
+          "TransX": 0.0,
+          "TransY": 20.0,
+          "TransZ": 0.0,
+          "RotX": 0,
+          "RotY": 0,
+          "RotZ": 0,
+          "Scale": 100.0,
+          "ShowType": 3,
+          "Limb": -1,
+          "Color": "Aqua",
+          "ObjectID": 170,
+          "FileStart": -1
+        }
+      ],
+      "DisplayListColors": [],
+      "Messages": [
+        {
+          "Name": "Enabled",
+          "MessageText": "The Ice Key is enabled.\r\n<New box>\r\n<Two choices>Turn it off?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Disabled",
+          "MessageText": "The Ice Key is disabled.\r\n<New box>\r\n<Two choices>Turn it on?\r\n<G>\r\nYep!\r\nNope.",
+          "Type": 0,
+          "Position": 0
+        },
+        {
+          "Name": "Done!",
+          "MessageText": "Welp.",
+          "Type": 0,
+          "Position": 0
+        }
+      ],
+      "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
+      "NumVars": 2,
+      "NumFVars": 2,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
     }
   ],
-  "GlobalHeaders": []
+  "GlobalHeaders": [
+    {
+      "Text": "",
+      "ParseErrors": [],
+      "Name": ""
+    }
+  ]
 }
