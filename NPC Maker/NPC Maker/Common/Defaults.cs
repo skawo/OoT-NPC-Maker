@@ -36,6 +36,10 @@ $@"#define actor.posX actorf.0x24
 #define actor.rotX actor16.0xB4 
 #define actor.rotY actor16.0xB6 
 #define actor.rotZ actor16.0xB8
+
+#define player_magic save8.0x3A
+#define player_double_magic save8.0x3B
+
 "
         };
 
