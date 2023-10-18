@@ -9,15 +9,15 @@ Check out the <a href="https://github.com/skawo/OoT-NPC-Maker/wiki">documentatio
       <img src="https://user-images.githubusercontent.com/43761362/148636741-7398b6b3-3fe6-4db6-83b6-13c1bf710d04.png">
     </td>
     <td> 
-      <img src="https://user-images.githubusercontent.com/43761362/148636747-9fa7c9ac-9c9f-4e57-95e8-f121f7a4e488.png">
+      <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/43761362/265679623-a4902819-6d2c-4031-bb39-d575ad7b4b79.png">
     </td> 
   </tr>
   <tr>
     <td>
-      <img src="https://user-images.githubusercontent.com/43761362/148636751-7f6fd856-fab1-4b36-bb6f-791af81cfbcd.png">
+      <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/43761362/265679956-a2191ba1-4977-4b74-85ce-90391d5b439d.png">
     </td>
     <td>
-      <img src="https://user-images.githubusercontent.com/43761362/148636806-9ec8bcbd-0ef1-49ea-afb9-3063a4b7744f.png">
+      <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/43761362/265679109-f5125f80-fffe-4d50-a19f-474b0145912c.png">
     </td>
   </tr>
   <tr>
