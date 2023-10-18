@@ -38,7 +38,8 @@ $@"#define actor.posX actorf.0x24
 #define actor.rotZ actor16.0xB8
 
 #define player_magic save8.0x3A
-#define player_double_magic save8.0x3B
+#define player_double_magic save8.0x3C
+#define player_double_defence save8.0x3D
 
 "
         };
