@@ -448,6 +448,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
         case IF_ANIMATION_FRAME:                branch = Scripts_IfValue(en, playState, (u16)en->skin.skelAnime.curFrame, in, INT16); break;
         case IF_CUTSCENE_FRAME:                 branch = Scripts_IfValue(en, playState, playState->csCtx.frames, in, INT16); break;
         case IF_PLAYER_HEALTH:                  branch = Scripts_IfValue(en, playState, gSaveContext.health, in, INT16); break;       
+        case IF_PLAYER_MAGIC:                   branch = Scripts_IfValue(en, playState, gSaveContext.magic, in, INT16); break;     
         
         case IF_PLAYER_BOMBS:                   
         case IF_PLAYER_BOMBCHUS:                   

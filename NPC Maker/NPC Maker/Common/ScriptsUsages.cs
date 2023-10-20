@@ -52,6 +52,7 @@ namespace NPC_Maker
                     { Lists.IfSubTypes.ANIMATION_FRAME,                     $" operator value" },
                     { Lists.IfSubTypes.CUTSCENE_FRAME,                      $" operator value" },
                     { Lists.IfSubTypes.PLAYER_HEALTH,                       $" operator value" },
+                    { Lists.IfSubTypes.PLAYER_MAGIC,                        $" operator value" },
                     { Lists.IfSubTypes.PLAYER_BOMBS,                        $" operator value" },
                     { Lists.IfSubTypes.PLAYER_BOMBCHUS,                     $" operator value" },
                     { Lists.IfSubTypes.PLAYER_ARROWS,                       $" operator value" },
@@ -276,6 +277,7 @@ namespace NPC_Maker
                     { Lists.SetSubTypes.PLAYER_SEEDS,                       $" operator value" },
                     { Lists.SetSubTypes.PLAYER_RUPEES,                      $" operator value" },
                     { Lists.SetSubTypes.PLAYER_HEALTH,                      $" operator value" },
+                    { Lists.SetSubTypes.PLAYER_MAGIC,                       $" operator value" },
 
                     { Lists.SetSubTypes.ENV_COLOR,                          $" r g b" },
                     { Lists.SetSubTypes.LIGHT_COLOR,                        $" r g b" },

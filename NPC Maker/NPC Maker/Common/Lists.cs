@@ -331,6 +331,7 @@ namespace NPC_Maker
             ANIMATION_FRAME,
             CUTSCENE_FRAME,
             PLAYER_HEALTH,
+            PLAYER_MAGIC,
             PLAYER_BOMBS,
             PLAYER_BOMBCHUS,
             PLAYER_ARROWS,

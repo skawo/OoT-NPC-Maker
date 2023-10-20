@@ -144,6 +144,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.ANIMATION_FRAME:
                         case (int)Lists.IfSubTypes.CUTSCENE_FRAME:
                         case (int)Lists.IfSubTypes.PLAYER_HEALTH:
+                        case (int)Lists.IfSubTypes.PLAYER_MAGIC:
                         case (int)Lists.IfSubTypes.PLAYER_BEANS:
                         case (int)Lists.IfSubTypes.PLAYER_BOMBS:
                         case (int)Lists.IfSubTypes.PLAYER_BOMBCHUS:
