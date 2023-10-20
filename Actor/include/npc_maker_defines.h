@@ -132,6 +132,13 @@
     #define MIN(a, b)               ((a) < (b) ? (a) : (b))
 #endif
 
+typedef enum item_award_upgrades
+{
+	UPGRADE_MAGIC = 0xF0,
+	UPGRADE_DOUBLE_MAGIC = 0xF1,
+	UPGRADE_DOUBLE_DEFENCE = 0xF2,
+} item_award_upgrades;
+
 typedef enum cfunc_update_when
 {
 	BEFORE_SCRIPTS = 0,

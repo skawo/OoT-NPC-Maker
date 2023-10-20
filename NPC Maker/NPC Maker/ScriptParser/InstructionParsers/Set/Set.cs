@@ -118,6 +118,8 @@ namespace NPC_Maker.Scripts
                             return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue);
                         case (int)Lists.SetSubTypes.PLAYER_HEALTH:
                             return H_SimpleSet(SubID, SplitLine, -20, 20);
+                        case (int)Lists.SetSubTypes.PLAYER_MAGIC:
+                            return H_SimpleSet(SubID, SplitLine, -96, 96);
                         case (int)Lists.SetSubTypes.RESPONSE_ACTIONS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);

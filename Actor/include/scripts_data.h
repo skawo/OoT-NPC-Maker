@@ -112,6 +112,7 @@ u8 inventory_set_slots[][2] =
     {ITEM_SEEDS, SLOT_SLINGSHOT},
     {ITEM_RUPEE_BLUE, 0},
     {ITEM_RECOVERY_HEART, 0},
+    {ITEM_MAGIC_SMALL, 0},
 };
 
 #endif

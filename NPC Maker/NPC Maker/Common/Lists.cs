@@ -463,6 +463,7 @@ namespace NPC_Maker
             PLAYER_SEEDS,
             PLAYER_RUPEES,
             PLAYER_HEALTH,
+            PLAYER_MAGIC,
 
             ENV_COLOR,
             LIGHT_COLOR,
@@ -1259,6 +1260,12 @@ namespace NPC_Maker
             ITEM_NUT_UPGRADE_30,
             /* 0x9B */
             ITEM_NUT_UPGRADE_40,
+            
+            ITEM_MAGIC = 0xF0,
+
+            ITEM_DOUBLE_MAGIC = 0xF1,
+
+            ITEM_DOUBLE_DEFENSE = 0xF2,
             /* 0xFC */
             ITEM_LAST_USED = 0xFC,
             /* 0xFE */

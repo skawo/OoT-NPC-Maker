@@ -296,7 +296,8 @@ void Scripts_SetInventory(NpcMaker* en, PlayState* playState, u8 slotSettings[],
     switch (slotSettings[0])
     {
         case ITEM_RUPEE_BLUE:               curVal = gSaveContext.rupees + gSaveContext.rupeeAccumulator; break;
-        case ITEM_RECOVERY_HEART:                    curVal = gSaveContext.health + gSaveContext.healthAccumulator; break;
+        case ITEM_RECOVERY_HEART:           curVal = gSaveContext.health + gSaveContext.healthAccumulator; break;
+        case ITEM_MAGIC_SMALL:              curVal = gSaveContext.magicTarget; break;
         default:                            curVal = gSaveContext.inventory.ammo[slotSettings[1]]; break;
     }
     
@@ -313,7 +314,14 @@ void Scripts_SetInventory(NpcMaker* en, PlayState* playState, u8 slotSettings[],
     switch (slotSettings[0])
     {
         case ITEM_RUPEE_BLUE:               Rupees_ChangeBy(difference); break;
-        case ITEM_RECOVERY_HEART:                    Health_ChangeBy(playState, difference); break;
+        case ITEM_RECOVERY_HEART:           Health_ChangeBy(playState, difference); break;
+        case ITEM_MAGIC_SMALL:              
+        {
+            if (gSaveContext.magicTarget + chgVal < 0)
+                difference = -gSaveContext.magicTarget;
+            
+            Magic_RequestChange(playState, difference, MAGIC_ADD); break;
+        }
         default:                            Inventory_ChangeAmmo(slotSettings[0], difference); break;
     }
 }

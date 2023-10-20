@@ -514,13 +514,20 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
         {
             u32 item = (u32)Scripts_GetVarval(en, playState, in->vartype, in->value, false);
 
-            if (item == ITEM_BOTTLE)
-                branch = Scripts_IfBool(en, playState, Inventory_HasEmptyBottle(), in);
-            else if (IS_BOTTLE_ITEM(item))
+            if (IS_BOTTLE_ITEM(item))
                 branch = Scripts_IfBool(en, playState, Inventory_HasSpecificBottle(item), in);
             else
-                branch = Scripts_IfBool(en, playState, INV_CONTENT(item) == item, in); 
-                
+            {
+                switch (item)
+                {
+                    case ITEM_BOTTLE:                   branch = Scripts_IfBool(en, playState, Inventory_HasEmptyBottle(), in); break;
+                    case UPGRADE_MAGIC:                 branch = Scripts_IfBool(en, playState, gSaveContext.isMagicAcquired, in); break; 
+                    case UPGRADE_DOUBLE_MAGIC:          branch = Scripts_IfBool(en, playState, gSaveContext.isDoubleMagicAcquired, in); break; 
+                    case UPGRADE_DOUBLE_DEFENCE:        branch = Scripts_IfBool(en, playState, gSaveContext.isDoubleDefenseAcquired, in); break; 
+                    default:                            branch = Scripts_IfBool(en, playState, INV_CONTENT(item) == item, in); 
+                }
+            }
+
             break; 
         }
         case IF_PLAYER_HAS_QUEST_ITEM: branch = Scripts_IfBool(en, playState, CHECK_QUEST_ITEM((u32)Scripts_GetVarval(en, playState, in->vartype, in->value, false)), in); break; 
@@ -1057,7 +1064,8 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_PLAYER_BEANS:                      
         case SET_PLAYER_SEEDS:                      
         case SET_PLAYER_RUPEES:                      
-        case SET_PLAYER_HEALTH:                     Scripts_SetInventory(en, playState, inventory_set_slots[in->subId - SET_PLAYER_BOMBS], in); break;  
+        case SET_PLAYER_HEALTH:                     
+        case SET_PLAYER_MAGIC:                      Scripts_SetInventory(en, playState, inventory_set_slots[in->subId - SET_PLAYER_BOMBS], in); break;  
 
         case SET_ENV_COLOR:                         Scripts_SetColor(en, playState, &en->settings.envColor, in); break;
         case SET_LIGHT_COLOR:                       Scripts_SetColor(en, playState, &en->settings.lightColor, in); break;
@@ -2048,33 +2056,65 @@ bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance*
             }
             case ITEM_GIVE: 
             {
-                // Don't give the player anything if they don't have an empty bottle and the item is a bottled item.
-                if (IS_BOTTLE_ITEM(item))
+                if (item > GI_MAX)
                 {
-                    if (!Inventory_HasEmptyBottle())
-                        break;
+                    switch (item)
+                    {
+                        case UPGRADE_MAGIC:                 gSaveContext.isMagicAcquired = true; break;
+                        case UPGRADE_DOUBLE_MAGIC:          gSaveContext.isDoubleMagicAcquired = true; gSaveContext.magicLevel = 0; break;
+                        case UPGRADE_DOUBLE_DEFENCE:        gSaveContext.isDoubleDefenseAcquired = true; break;
+                    }
+
+                    break; 
+                }
+                else
+                {
+                    // Don't give the player anything if they don't have an empty bottle and the item is a bottled item.
+                    if (IS_BOTTLE_ITEM(item))
+                    {
+                        if (!Inventory_HasEmptyBottle())
+                            break;
+                    }
+
+                    Item_Give(playState, item);        
+                    break; 
                 }
 
-                Item_Give(playState, item);        
-                break; 
+                break;
             }
             case ITEM_TAKE: 
             {
-                // Remove Link's mask if we're taking it away.
-                if (IS_MASK(item))
-                    Player_UnsetMask(playState);
-                // Code for bottle items
-                else if (IS_BOTTLE_ITEM(item))
+                if (item > ITEM_NUT_UPGRADE_40)
                 {
-                    // If player is holding the item in question, we take that one specifically.
-                    if ((GET_PLAYER(playState)->heldItemButton != 0) && 
-                    (gSaveContext.inventory.items[gSaveContext.equips.cButtonSlots[GET_PLAYER(playState)->heldItemButton - 1]] == item))
-                        Player_UpdateBottleHeld(playState, GET_PLAYER(playState), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
-                    else
-                        Inventory_ReplaceItem(playState, item, ITEM_BOTTLE);
+                    switch (item)
+                    {
+                        // Fall through on purpose - if magic is taken away, then double magic is taken away too.
+                        case UPGRADE_MAGIC:                 gSaveContext.isMagicAcquired = false; 
+                        case UPGRADE_DOUBLE_MAGIC:          gSaveContext.isDoubleMagicAcquired = false; gSaveContext.magicLevel = 0; break;
+                        case UPGRADE_DOUBLE_DEFENCE:        gSaveContext.isDoubleDefenseAcquired = false; break;
+                    }
+                    break; 
                 }
                 else
-                    Inventory_DeleteItem(item, SLOT(item));
+                {
+                    // Remove Link's mask if we're taking it away.
+                    if (IS_MASK(item))
+                        Player_UnsetMask(playState);
+                    // Code for bottle items
+                    else if (IS_BOTTLE_ITEM(item))
+                    {
+                        // If player is holding the item in question, we take that one specifically.
+                        if ((GET_PLAYER(playState)->heldItemButton != 0) && 
+                        (gSaveContext.inventory.items[gSaveContext.equips.cButtonSlots[GET_PLAYER(playState)->heldItemButton - 1]] == item))
+                            Player_UpdateBottleHeld(playState, GET_PLAYER(playState), ITEM_BOTTLE, PLAYER_AP_BOTTLE);
+                        else
+                            Inventory_ReplaceItem(playState, item, ITEM_BOTTLE);
+                    }
+                    else
+                        Inventory_DeleteItem(item, SLOT(item));
+
+                    break;
+                }
 
                 break;
             }
