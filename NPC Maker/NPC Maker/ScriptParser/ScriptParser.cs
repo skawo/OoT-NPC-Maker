@@ -634,14 +634,20 @@ namespace NPC_Maker.Scripts
                 {
                     byte[] Data = Inst.ToBytes(Labels);
 
-                    Offsets.Add((UInt16)HeaderOffs);
+                    if (HeaderOffs % 4 != 0)
+                        throw ParseException.AlignmentError();
+
+                    Offsets.Add((UInt16)(HeaderOffs / 4));
                     InstructionBytes.AddRange(Data);
                     HeaderOffs += (UInt16)Data.Length;
                 }
 
                 // Add the size of the header to the offsets
+                UInt16 OffsetsOffset = (UInt16)((Offsets.Count * 2 + ((Offsets.Count % 2 != 0) ? 2 : 0)) / 4);
+
+                // Add the size of the header to the offsets
                 for (int i = 0; i < Offsets.Count; i++)
-                    Offsets[i] += (UInt16)(Offsets.Count * 2 + ((Offsets.Count % 2 != 0) ? 2 : 0));
+                    Offsets[i] += OffsetsOffset;
 
                 // Ensure there's an even amount of offsets so everything is 4-aligned
                 if (Offsets.Count % 2 != 0)
@@ -653,8 +659,8 @@ namespace NPC_Maker.Scripts
                 Out.AddRange(InstructionBytes);
                 Helpers.Ensure4ByteAlign(Out);
 
-                // If we exceed 16 bit range of addresses, the script is deemed too big (So, max script size is about 63KB. Plenty enough.)
-                if (Out.Count > UInt16.MaxValue)
+                // If we exceed 16 bit range of addresses, the script is deemed too big (So, max script size is about 240KB. Plenty enough.)
+                if ((Out.Count / 4) > UInt16.MaxValue)
                     throw ParseException.ScriptTooBigError();
 
                 return Out.ToArray();

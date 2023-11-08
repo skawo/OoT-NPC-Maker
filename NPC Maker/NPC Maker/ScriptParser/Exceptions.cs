@@ -66,6 +66,10 @@ namespace NPC_Maker.Scripts
         {
             return new ParseException("Script has exceeded the maximum allowed amount of bytes.", "");
         }
+        public static ParseException AlignmentError()
+        {
+            return new ParseException("CRITICAL ERROR: Not aligned to 4.", "");
+        }
 
         public static ParseException DefineError()
         {

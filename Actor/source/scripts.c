@@ -22,7 +22,7 @@ void Scripts_PlayerAnimateMode(Player* pl, PlayState* playState)
 inline ScrInstr* Scripts_GetInstrPtr(ScriptInstance* script, u32 instruction_num)
 {
     u32 curOffs = AVAL(script->scriptPtr, u16, SCRIPT_INSTR_SIZE * instruction_num);
-    return (ScrInstr*)AADDR(script->scriptPtr, curOffs);
+    return (ScrInstr*)AADDR(script->scriptPtr, curOffs * 4);
 }
 
 void Scripts_Main(NpcMaker* en, PlayState* playState)
