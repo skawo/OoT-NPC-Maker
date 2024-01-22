@@ -796,6 +796,7 @@ namespace NPC_Maker
                                     output.AddRangeBigEndian((UInt16)0);
                                 }
                             }
+                            break;
                         }
                     default:
                         {
