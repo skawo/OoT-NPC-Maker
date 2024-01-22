@@ -749,6 +749,31 @@ namespace NPC_Maker
                             output.Add((byte)(int)Enum.Parse(typeof(Lists.MsgHighScore), code[1]));
                             break;
                         }
+                    case "PAUSE":
+                        {
+                            // Fake tag to facilitate text pauses
+                            // <PAUSE:TextCharPrintSpeed:NumOfPauseTextChars>
+                            output.Add((byte)Lists.MsgControlCode.SPEED);
+
+                            // Pause length (This number * number of DC characters)
+                            if (code.Length == 2)
+                                output.Add(Convert.ToByte(code[1]));
+                            else
+                                output.Add(Convert.ToByte(3));
+
+                            // Number of DC characters
+                            UInt32 DCCharsCount = 3;
+
+                            if (code.Length == 3)
+                                DCCharsCount = Convert.ToUInt32(code[2]);
+
+                            for(int i = 0; i < DCCharsCount; i++)
+                                output.Add((byte)Lists.MsgControlCode.DC);
+
+                            output.Add((byte)Lists.MsgControlCode.SPEED);
+                            output.Add(Convert.ToByte(0));
+                            break;
+                        }
                     case "SOUND":
                         {
                             output.Add((byte)Lists.MsgControlCode.SOUND);
@@ -771,8 +796,6 @@ namespace NPC_Maker
                                     output.AddRangeBigEndian((UInt16)0);
                                 }
                             }
-
-                            break;
                         }
                     default:
                         {
