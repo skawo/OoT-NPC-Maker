@@ -417,17 +417,20 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
         {
             s32 object = R_OBJECT(en, dlist.objectId);  
 
-            if (dlist.showType >= INSTEAD_OF_LIMB)
+            if (dlist.showType == INSTEAD_OF_LIMB || dlist.showType == IN_SKELETON)
                 *dListPtr = 0;
 
-            if (dlist.showType == CONTROL && object == en->settings.objectId)
+            if (dlist.showType > IN_SKELETON && object == en->settings.objectId)
             {
                 Math_Vec3s_Sum(rotation, &dlist.rotation, rotation);
                 Math_Vec3f_Sum(translation, &dlist.translation, translation);
                 Matrix_Scale(dlist.scale, dlist.scale, dlist.scale, 1);
-
-                u32 dListOffset = object == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
-                *dListPtr = (Gfx*)dListOffset;
+				
+				if (dlist.showType != CONTROL_EXISTING)
+				{
+					u32 dListOffset = object == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
+					*dListPtr = (Gfx*)dListOffset;
+				}
 
             }
             else if (dlist.showType != NOT_VISIBLE)
