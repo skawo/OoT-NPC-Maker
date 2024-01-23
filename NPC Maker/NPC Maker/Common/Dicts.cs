@@ -13,6 +13,7 @@ namespace NPC_Maker
             { "With limb", 1 },
             { "Replaces limb", 2 },
             { "In Skeleton", 3 },
+            { "Control existing", 4 },
         };
 
         public static Dictionary<Lists.DictType, string> DictFilenames = new Dictionary<Lists.DictType, string>()

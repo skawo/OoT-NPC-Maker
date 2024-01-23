@@ -169,7 +169,7 @@ namespace NPC_Maker
             NumUp_LightZOffs.Value = SelectedEntry.LightPositionOffsets[2];
             ChkBox_DBGCol.Checked = SelectedEntry.DEBUGShowCols;
             ChkBox_DBGLookAt.Checked = SelectedEntry.DEBUGLookAtEditor;
-            ChkBox_DBGDlist.Checked = SelectedEntry.DEBUGLookAtEditor;
+            ChkBox_DBGDlist.Checked = SelectedEntry.DEBUGExDlistEditor;
             ChkBox_DBGPrint.Checked = SelectedEntry.DEBUGPrintToScreen;
             NumUp_LightRadius.Value = SelectedEntry.LightRadius;
 
@@ -516,9 +516,9 @@ namespace NPC_Maker
                 return;
 
             OpenFileDialog OFD = new OpenFileDialog();
-            OFD.ShowDialog();
+            DialogResult DR = OFD.ShowDialog();
 
-            if (OFD.FileName != "")
+            if (DR == DialogResult.OK)
             {
                 EditedFile = FileOps.ParseNPCJsonFile(OFD.FileName);
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
@@ -556,9 +556,9 @@ namespace NPC_Maker
                 Filter = "Json Files | *.json"
             };
 
-            SFD.ShowDialog();
+            DialogResult DR = SFD.ShowDialog();
 
-            if (SFD.FileName != "")
+            if (DR == DialogResult.OK)
             {
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 FileOps.SaveNPCJSON(SFD.FileName, EditedFile);
@@ -590,9 +590,9 @@ namespace NPC_Maker
                 FileName = "zobj.zobj",
                 Filter = "Zelda Object Files | *.zobj"
             };
-            SFD.ShowDialog();
+            DialogResult DR = SFD.ShowDialog();
 
-            if (SFD.FileName != "")
+            if (DR == DialogResult.OK)
             {
                 FileOps.SaveBinaryFile(SFD.FileName, EditedFile);
             }

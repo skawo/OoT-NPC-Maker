@@ -1486,7 +1486,8 @@ namespace NPC_Maker
             NOT_VISIBLE = 0,
             WITH_LIMB = 1,
             REPLACES_LIMB = 2,
-            IN_SKELETON = 3
+            IN_SKELETON = 3,
+            CONTROL_EXISTING = 4,
         }
 
         public enum PlaySubTypes
