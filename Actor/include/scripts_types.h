@@ -680,4 +680,21 @@ typedef struct ScrInstrCCall
 
 #pragma endregion
 
+
+#pragma region get
+
+typedef struct ScrInstrGetExtVar
+{
+    u8 id;
+    u8 subid;
+    u8 extvarnum;
+    u8 varTypeActorNum : 4;
+    u8 varTypeDestVar : 4;
+    ScriptVarval ActorNum;
+    ScriptVarval DestVar;
+} ScrInstrGetExtVar;
+
+
+#pragma endregion
+
 #endif

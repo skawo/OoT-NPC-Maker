@@ -133,6 +133,7 @@ void* ScriptFuncs[] =
     &Scripts_InstructionFadeOut,            // FADEOUT
     &Scripts_InstructionQuake,              // QUAKE
     &Scripts_InstructionCCall,              // CCALL
+    &Scripts_InstructionGet,                // GET
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -153,6 +154,44 @@ bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance*
 
     Play_SaveSceneFlags(playState);
     Sram_WriteSave(&playState->sramCtx);
+
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;
+}
+
+bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGetExtVar* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_[%2d, %1d], : GET", en->npcId, en->curScriptNum);
+    #endif		    
+
+    switch (in->subid)
+    {
+        case GET_EXT_VAR:
+        case GET_EXT_VARF:
+        {
+            u32 actor_id = Scripts_GetVarval(en, playState, in->varTypeActorNum, in->ActorNum, false);
+            float out = 0;
+
+            if (in->subid == GET_EXT_VAR)
+                out = Scene_GetNpcMakerByID(en, playState, actor_id)->scriptVars[in->extvarnum - 1];
+            else
+                out = Scene_GetNpcMakerByID(en, playState, actor_id)->scriptFVars[in->extvarnum - 1];
+
+            u32 valt;
+            void* addr = Scripts_RamSubIdSetup(en, playState, in->DestVar.ui32, SUBT_GLOBAL8 - 2 + in->varTypeDestVar, &valt);
+
+            switch (valt)
+            {
+                case INT8:      AVAL(addr, s8, 0) = out; break;
+                case INT16:     AVAL(addr, s16, 0) = out; break;
+                case INT32:     AVAL(addr, s32, 0) = out; break;
+                case FLOAT:     AVAL(addr, float, 0) = out; break;
+                default: break;
+            }            
+        }
+        default: break;
+    }
 
     script->curInstrNum++; 
     return SCRIPT_CONTINUE;
@@ -438,6 +477,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
         case IF_PICKUP_PICKED_UP:
         case IF_PICKUP_THROWN:
         case IF_PICKUP_LANDED:                  branch = Scripts_IfBool(en, playState, en->pickedUpState == (in->subId - IF_PICKUP_IDLE), in); break; 
+        case IF_IS_SPEAKING:                    branch = Scripts_IfBool(en, playState, en->isTalking, in); break; 
         case IF_LENS_OF_TRUTH_ON:               branch = Scripts_IfBool(en, playState, playState->actorCtx.lensActive, in); break; 
 
         case IF_PLAYER_RUPEES:                  branch = Scripts_IfValue(en, playState, gSaveContext.rupees, in, INT16); break;
@@ -752,15 +792,6 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
             break;               
         }
         case AWAIT_EXT_VAR: 
-        {
-            ScrInstrExtVarAwait* instr = (ScrInstrExtVarAwait*)in;
-
-            u32 actor_id = Scripts_GetVarval(en, playState, instr->actorNumVarType, instr->actorNum, false);
-            NpcMaker* exActor = Scene_GetNpcMakerByID(en, playState, actor_id);
-
-            conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptVars[instr->extVarNum - 1], INT32, instr->condition, instr->varType, instr->value); break;
-            break;
-        }
         case AWAIT_EXT_VARF: 
         {
             ScrInstrExtVarAwait* instr = (ScrInstrExtVarAwait*)in;
@@ -768,7 +799,11 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
             u32 actor_id = Scripts_GetVarval(en, playState, instr->actorNumVarType, instr->actorNum, false);
             NpcMaker* exActor = Scene_GetNpcMakerByID(en, playState, actor_id);
 
-            conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptFVars[instr->extVarNum - 1], FLOAT, instr->condition, instr->varType, instr->value); break;
+            if (in->id == AWAIT_EXT_VAR)
+                conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptVars[instr->extVarNum - 1], INT32, instr->condition, instr->varType, instr->value);
+            else
+                conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptFVars[instr->extVarNum - 1], FLOAT, instr->condition, instr->varType, instr->value);
+
             break;
         }
         case AWAIT_CURRENT_STATE:
@@ -922,7 +957,8 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_LIGHT_GLOW:                        
         case SET_PAUSE_CUTSCENE:       
         case SET_INVISIBLE:                         
-        case SET_TALK_PERSIST:                      Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, BOOL); break;
+        case SET_TALK_PERSIST:                      
+        case SET_IS_SPEAKING:                       Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, BOOL); break;
         case SET_TIME_OF_DAY:                       
         {
             bool first_run = Scripts_SetupTemp(script, in);

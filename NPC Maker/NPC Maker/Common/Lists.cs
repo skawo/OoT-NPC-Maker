@@ -243,6 +243,7 @@ namespace NPC_Maker
             FADEOUT,
             QUAKE,
             CCALL,
+            GET,
             NOP,
         }
 
@@ -323,6 +324,7 @@ namespace NPC_Maker
             PICKUP_PICKED_UP,
             PICKUP_THROWN,
             PICKUP_LANDED,
+            IS_SPEAKING,
 
             PLAYER_RUPEES,
             SCENE_ID,
@@ -385,6 +387,12 @@ namespace NPC_Maker
             AWARD,
             GIVE,
             TAKE,
+        }
+
+        public enum GetSubTypes
+        {
+            EXT_VAR,
+            EXT_VARF,
         }
 
         public enum SetSubTypes
@@ -450,6 +458,7 @@ namespace NPC_Maker
             PAUSE_CUTSCENE,
             INVISIBLE,
             TALK_PERSIST,
+            IS_SPEAKING,
             CASTS_SHADOW,
             NO_AUTO_ANIM,
             TALK_MODE,

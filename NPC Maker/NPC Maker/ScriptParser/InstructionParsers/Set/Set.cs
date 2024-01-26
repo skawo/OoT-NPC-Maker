@@ -87,6 +87,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.CASTS_SHADOW:
                         case (int)Lists.SetSubTypes.EXISTS_IN_ALL_ROOMS:
                         case (int)Lists.SetSubTypes.PLAYER_ANIMATE_MODE:
+                        case (int)Lists.SetSubTypes.IS_SPEAKING:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
@@ -387,6 +388,7 @@ namespace NPC_Maker.Scripts
 
                             }
                         case (int)Lists.SetSubTypes.EXT_VAR:
+                        case (int)Lists.SetSubTypes.EXT_VARF:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 6);
 

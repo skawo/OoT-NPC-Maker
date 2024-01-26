@@ -176,6 +176,7 @@ typedef enum SetSubId
     SET_PAUSE_CUTSCENE,
     SET_INVISIBLE,
     SET_TALK_PERSIST,
+    SET_IS_SPEAKING,
     SET_CASTS_SHADOW,
     SET_NO_AUTO_ANIM,
     SET_TALK_MODE,
@@ -261,6 +262,12 @@ typedef enum SetSubId
     SET_RAM,
 } SetSubId;
 
+typedef enum GetSubId
+{
+    GET_EXT_VAR,
+    GET_EXT_VARF,
+} GetSubId;
+
 typedef enum IfWhileSubId
 {
     IF_FLAG_INF,
@@ -287,6 +294,7 @@ typedef enum IfWhileSubId
     IF_PICKUP_PICKED_UP,
     IF_PICKUP_THROWN,
     IF_PICKUP_LANDED,
+    IF_IS_SPEAKING,
 
     IF_PLAYER_RUPEES,
     IF_SCENE_ID,

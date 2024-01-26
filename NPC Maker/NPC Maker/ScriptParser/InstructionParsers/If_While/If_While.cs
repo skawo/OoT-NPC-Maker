@@ -125,6 +125,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.PICKUP_THROWN:
                         case (int)Lists.IfSubTypes.PICKUP_LANDED:
                         case (int)Lists.IfSubTypes.PICKUP_PICKED_UP:
+                        case (int)Lists.IfSubTypes.IS_SPEAKING:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
@@ -174,6 +175,7 @@ namespace NPC_Maker.Scripts
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.EXT_VAR:
+                        case (int)Lists.IfSubTypes.EXT_VARF:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6);
 

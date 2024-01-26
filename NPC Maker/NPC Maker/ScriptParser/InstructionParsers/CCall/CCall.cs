@@ -23,7 +23,7 @@ namespace NPC_Maker.Scripts
                     Destination = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt32.MaxValue);
 
                     if (Destination.Vartype <= (byte)Lists.VarTypes.RANDOM)
-                        throw ParseException.CFunctionDestWrong(SplitLine);
+                        throw ParseException.DestValWrong(SplitLine);
                 }
 
                 return new InstructionCCall(Func.Value, Destination);

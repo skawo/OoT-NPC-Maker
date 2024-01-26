@@ -28,6 +28,7 @@ bool Scripts_InstructionWarp(NpcMaker* en, PlayState* playState, ScriptInstance*
 bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrParticle* in);
 bool Scripts_InstructionScript(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrScript* in);
 bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrCCall* in);
+bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGetExtVar* in);
 
 float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset);
 

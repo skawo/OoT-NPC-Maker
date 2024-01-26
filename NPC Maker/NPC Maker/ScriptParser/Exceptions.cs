@@ -48,9 +48,9 @@ namespace NPC_Maker.Scripts
             return new ParseException("C Function not found: ", String.Join(" ", _Line));
         }
 
-        public static ParseException CFunctionDestWrong(string[] _Line)
+        public static ParseException DestValWrong(string[] _Line)
         {
-            return new ParseException("C Destination cannot be constant or random: ", String.Join(" ", _Line));
+            return new ParseException("Destination cannot be constant or random: ", String.Join(" ", _Line));
         }
 
         public static ParseException UnrecognizedQuake(string[] _Line)

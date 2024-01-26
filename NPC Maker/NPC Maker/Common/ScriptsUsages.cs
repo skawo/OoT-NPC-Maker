@@ -44,6 +44,7 @@ namespace NPC_Maker
                     { Lists.IfSubTypes.PICKUP_PICKED_UP,                    $" {BooleanUsage}" },
                     { Lists.IfSubTypes.PICKUP_THROWN,                       $" {BooleanUsage}" },
                     { Lists.IfSubTypes.PICKUP_LANDED,                       $" {BooleanUsage}" },
+                    { Lists.IfSubTypes.IS_SPEAKING,                         $" {BooleanUsage}" },
 
                     { Lists.IfSubTypes.PLAYER_RUPEES,                       $" operator value" },
                     { Lists.IfSubTypes.SCENE_ID,                            $" operator value" },
@@ -308,6 +309,7 @@ namespace NPC_Maker
                     { Lists.SetSubTypes.IS_ALWAYS_DRAWN,                    $" {BooleanUsage}" },
                     { Lists.SetSubTypes.REACTS_IF_ATTACKED,                 $" {BooleanUsage}" },
                     { Lists.SetSubTypes.EXISTS_IN_ALL_ROOMS,                $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.IS_SPEAKING,                        $" {BooleanUsage}" },
 
                     { Lists.SetSubTypes.GRAVITY_FORCE,                      $" operator value" },
                     { Lists.SetSubTypes.MOVEMENT_PATH_ID,                   $" operator value" },
@@ -363,7 +365,15 @@ namespace NPC_Maker
                     { Lists.IfWhileAwaitSetRamSubTypes.VARF,                $".varnum operator value" },
                 }
             },
+            { Lists.Instructions.GET, new Dictionary<object, string>()
+                {
+                    {Lists.GetSubTypes.EXT_VAR, $" out_variable actor_id var_num" },
+                    {Lists.GetSubTypes.EXT_VARF, $" out_variable actor_id var_num" },
+                }
+            },
         };
+
+
 
         private static readonly Dictionary<Lists.ParticleSubOptions, string> ParticleSubOptionUsages = new Dictionary<Lists.ParticleSubOptions, string>()
         {
@@ -620,6 +630,16 @@ namespace NPC_Maker
                                 else
                                     return $"{Lists.Instructions.SET} *subtype*";
                             }
+                        }
+                    case Lists.Instructions.GET:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.GetSubTypes oSubType);
+
+                            if (res)
+                                return $"{Lists.Instructions.GET} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                                return $"{Lists.Instructions.GET} *subtype*";
+
                         }
                     default:
                         return "";

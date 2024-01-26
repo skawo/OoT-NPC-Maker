@@ -162,6 +162,8 @@
     <Compile Include="ScriptParser\InstructionParsers\Item\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Item\Item.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Return\Return.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\Get\Classes.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\Get\Get.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Textbox\Close_Textbox.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Textbox\Show_TextboxSp.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Trade\Classes.cs" />

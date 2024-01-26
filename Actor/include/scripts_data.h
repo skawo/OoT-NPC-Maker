@@ -67,6 +67,7 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, pauseCutscene),
     offsetof(NpcMaker, settings.invisible),
     offsetof(NpcMaker, persistTalk),
+    offsetof(NpcMaker, isTalking),
 };
 
 u8 setAnimsOffsets[] = 
