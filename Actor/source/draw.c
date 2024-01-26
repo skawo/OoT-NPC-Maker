@@ -420,7 +420,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
             if (dlist.showType == INSTEAD_OF_LIMB || dlist.showType == IN_SKELETON)
                 *dListPtr = 0;
 
-            if (dlist.showType > IN_SKELETON && object == en->settings.objectId)
+            if (dlist.showType >= IN_SKELETON && object == en->settings.objectId)
             {
                 Math_Vec3s_Sum(rotation, &dlist.rotation, rotation);
                 Math_Vec3f_Sum(translation, &dlist.translation, translation);
