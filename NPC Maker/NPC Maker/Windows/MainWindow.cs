@@ -2310,7 +2310,12 @@ namespace NPC_Maker
 
                     using (var sr = new StreamReader(fs, Encoding.Default))
                     {
-                        SelectedEntry.EmbeddedOverlayCode.Code = sr.ReadToEnd();
+                        string Code = sr.ReadToEnd();
+
+                        if (Code == "" && SelectedEntry.EmbeddedOverlayCode.Code != "")
+                            return;
+                        else
+                            SelectedEntry.EmbeddedOverlayCode.Code = Code;
 
                         if (Program.Settings.AutoComp_Save)
                             CompileCode();
