@@ -140,7 +140,7 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
         osSyncPrintf("_%2d: Drawing actor.", en->npcId);
     #endif
 
-    if (en->CFuncsWhen[2] == REPLACE_UPDATE)
+    if (en->CFuncsWhen[2] == REPLACE_DRAW)
         NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
     else
     {
