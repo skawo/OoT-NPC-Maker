@@ -404,7 +404,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     // save current textbox buffer position.
     if (en->isTalking && playState->msgCtx.msgMode == MSGMODE_TEXT_NEXT_MSG)
     {
-        en->curTextBuffPos = AVAL(&playState->msgCtx, u16, 0xE3CE);
+        en->curTextBuffPos = playState->msgCtx.msgBufPos;
         en->textboxNum++;
     }
 
