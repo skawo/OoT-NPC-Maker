@@ -148,8 +148,8 @@ namespace NPC_Maker
 
         public static byte[] CompileUnderMono(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
-            string oFileMono = Path.Combine("..", "bin", "EmbeddedOverlay.o");
-            string elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay.elf");
+            string oFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.o");
+            string elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
 
             #region GCC
 
@@ -221,8 +221,8 @@ namespace NPC_Maker
 
             #region NOVL
 
-            elfFileMono = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay.elf");
-            string ovlFileMono = Path.Combine("..", "temp", "EmbeddedOverlay.ovl");
+            elfFileMono = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay_comp.elf");
+            string ovlFileMono = Path.Combine("..", "temp", "EmbeddedOverlay_comp.ovl");
 
             ProcessStartInfo nOVLInfo = new ProcessStartInfo
             {
@@ -244,7 +244,7 @@ namespace NPC_Maker
             p.WaitForExit();
             GetOutput(p, "NOVL", ref CompileMsgs);
 
-            elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay.elf");
+            elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
             CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFile);
 
             if (!File.Exists(ovlFile))
