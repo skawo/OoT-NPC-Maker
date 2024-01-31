@@ -88,17 +88,21 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
 
     Movement_SetNextDelay(en);
 
-    // Get the dummy message.
-    en->dummyMesEntry = Rom_GetMessageEntry(DUMMY_MESSAGE);
+    // Get a message.
+    int msgID = DUMMY_MESSAGE;
+    en->dummyMesEntry = Rom_GetMessageEntry(msgID);
     
-    if (en->dummyMesEntry == NULL)
+    while (en->dummyMesEntry == NULL)
     {
         #if LOGGING == 1
-            osSyncPrintf("_%2d: Did not find message %4x... ", en->npcId, DUMMY_MESSAGE);
+            osSyncPrintf("_%2d: WARNING: Did not find message %4x... ", en->npcId, msgID);
         #endif
-        
-        return;
+
+        msgID++;
+        en->dummyMesEntry = Rom_GetMessageEntry(msgID);
     }
+
+    return;
 }
 
 u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 entryAddress,
