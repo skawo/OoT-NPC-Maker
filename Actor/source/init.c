@@ -89,7 +89,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     Movement_SetNextDelay(en);
 
     // Get a message.
-    int msgID = DUMMY_MESSAGE;
+    u32 msgID = DUMMY_MESSAGE;
     en->dummyMesEntry = Rom_GetMessageEntry(msgID);
     
     while (en->dummyMesEntry == NULL)
