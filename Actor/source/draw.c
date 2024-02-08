@@ -584,7 +584,9 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
                         if (playState->csCtx.state != 0)
                             cam = Play_GetCamera(playState, playState->csCtx.subCamId);
 
+                        // Get vector from cam
                         OLib_Vec3fDistNormalize(&translation, &cam->eye, &cam->at);
+                        // Translation.z -> used as distance from the camera
                         Math_Vec3f_Scale(&translation, dlist.translation.z);
                         Math_Vec3f_Sum(&translation, &cam->eye, &translation);
 
