@@ -122,6 +122,7 @@ Color_RGBA8 Scripts_GetVarvalRGBA(NpcMaker* en, PlayState* playState, Vartype co
     return out;
 }
 
+// Returns address to write/read to/from
 void* Scripts_RamSubIdSetup(NpcMaker* en, PlayState* playState, u32 value, u32 subId, u32* outValtype)
 {
     if (subId == SUBT_VARF)
