@@ -786,7 +786,7 @@ namespace NPC_Maker
 
         #region NPCList
 
-        private void Button_Add_Click(object sender, EventArgs e)
+        private NPCEntry GetNewNPCEntry()
         {
             NPCEntry Entry = new NPCEntry();
             Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, -1, 0, 255, -1));
@@ -797,6 +797,12 @@ namespace NPC_Maker
                 Entry.Segments.Add(new List<SegmentEntry>());
 
             Entry.Scripts.Add(new ScriptEntry() { Name = "Script" });
+            return Entry;
+        }
+
+        private void Button_Add_Click(object sender, EventArgs e)
+        {
+            NPCEntry Entry = GetNewNPCEntry();
 
             EditedFile.Entries.Add(Entry);
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
@@ -825,10 +831,7 @@ namespace NPC_Maker
             }
             else
             {
-                SelectedEntry = new NPCEntry
-                {
-                    IsNull = true
-                };
+                SelectedEntry = GetNewNPCEntry();
                 EditedFile.Entries[SelectedIndex] = SelectedEntry;
                 DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = "Null";
                 DataGrid_NPCs_SelectionChanged(this, null);
