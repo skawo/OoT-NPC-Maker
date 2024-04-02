@@ -831,7 +831,10 @@ namespace NPC_Maker
             }
             else
             {
-                SelectedEntry = GetNewNPCEntry();
+                SelectedEntry = new NPCEntry
+                {
+                    IsNull = true
+                };
                 EditedFile.Entries[SelectedIndex] = SelectedEntry;
                 DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = "Null";
                 DataGrid_NPCs_SelectionChanged(this, null);
@@ -865,10 +868,7 @@ namespace NPC_Maker
             if (DataGrid_NPCs.SelectedRows.Count != 0 &&
                 EditedFile.Entries[DataGrid_NPCs.SelectedRows[0].Index].IsNull)
             {
-                SelectedEntry = new NPCEntry
-                {
-                    IsNull = false
-                };
+                SelectedEntry = GetNewNPCEntry();
                 EditedFile.Entries[SelectedIndex] = SelectedEntry;
                 DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = "";
                 DataGrid_NPCs_SelectionChanged(this, null);
