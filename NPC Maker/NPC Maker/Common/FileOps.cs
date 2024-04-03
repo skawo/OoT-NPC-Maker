@@ -311,7 +311,7 @@ namespace NPC_Maker
 
                         for (int i = 0; i < 4; i++)
                         {
-                            if (BlinkPat.Length > i)
+                            if (BlinkPat.Length > i && (Entry.BlinkSegment - 8) >= 0)
                             {
                                 int Index = Entry.Segments[Entry.BlinkSegment - 8].FindIndex(x => x.Name.ToLower() == BlinkPat[i].ToLower());
 
