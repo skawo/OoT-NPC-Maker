@@ -275,7 +275,7 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
         default:
         {
             // Setting segment 6 if object is different to the currently loaded object...
-            if (object != en->settings.objectId)
+            if (object != en->settings.objectId || dList->fileStart != OBJECT_CURRENT)
             {
                 void* pointer = Rom_GetObjectDataPtr(object, playState);
 
@@ -301,7 +301,7 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
     
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
-    if (en->settings.objectId > 0 && object != en->settings.objectId)
+    if ((en->settings.objectId > 0 && object != en->settings.objectId) || dList->fileStart != OBJECT_CURRENT)
         gSPSegment(dest->p++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, playState), en->settings.fileStart));
 
     Draw_SetEnvColor(&dest->p, en->curColor, en->curAlpha);
