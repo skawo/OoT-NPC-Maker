@@ -908,13 +908,22 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_LIGHT_RADIUS:                      Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, UINT16); break;
         case SET_CUTSCENE_FRAME:                    
         {
-            Scripts_Set(en, playState, AADDR(playState, basic_set_offsets[in->subId]), in, UINT16); 
+			void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
+			
+			extern void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
+				#if GAME_VERSION == 0
+					asm("Cutscene_Execute = 0x80068ECC");
+				#elif GAME_VERSION == 1
+					asm("Cutscene_Execute = 0x80056A94");
+				#endif			
+			
+			
+			playState->csCtx.state = 0;
+			Cutscene_SetSegment(playState, playState->csCtx.segment);
+			Cutscene_Execute(playState, &playState->csCtx);
+			Scripts_Set(en, playState, AADDR(playState, basic_set_offsets[in->subId]), in, UINT16); 
+			Cutscene_Execute(playState, &playState->csCtx);
 
-            if (playState->csCtx.unk_18 > playState->csCtx.frames)
-            {
-                playState->csCtx.state = 0;
-                Cutscene_SetSegment(playState, playState->csCtx.segment); 
-            }
             break;
         }
 
