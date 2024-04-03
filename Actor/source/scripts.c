@@ -799,7 +799,7 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
             u32 actor_id = Scripts_GetVarval(en, playState, instr->actorNumVarType, instr->actorNum, false);
             NpcMaker* exActor = Scene_GetNpcMakerByID(en, playState, actor_id);
 
-            if (in->id == AWAIT_EXT_VAR)
+            if (in->subId == AWAIT_EXT_VAR)
                 conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptVars[instr->extVarNum - 1], INT32, instr->condition, instr->varType, instr->value);
             else
                 conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptFVars[instr->extVarNum - 1], FLOAT, instr->condition, instr->varType, instr->value);
