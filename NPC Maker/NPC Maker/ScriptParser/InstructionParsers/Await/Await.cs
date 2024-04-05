@@ -124,9 +124,13 @@ namespace NPC_Maker.Scripts
                                 var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 5, float.MinValue, float.MaxValue);
                                 var NPCID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue);
 
-                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.NORMAL, 0, 5));
+                                var ExtVarNum = ScriptHelpers.GetScriptExtVarVal(SplitLine, 3, 0, Int16.MaxValue);
 
-                                return new InstructionAwaitExtVar((byte)SubID, ExtVarNum, Value, NPCID, Condition);
+                                int SubIdN = (ExtVarNum.Vartype == (byte)Lists.VarTypes.VAR ?
+                                                (int)Lists.AwaitSubTypes.EXT_VAR : ExtVarNum.Vartype == (byte)Lists.VarTypes.VARF ?
+                                                (int)Lists.AwaitSubTypes.EXT_VARF : SubID);
+
+                                return new InstructionAwaitExtVar((byte)SubIdN, (byte)ExtVarNum.Value, Value, NPCID, Condition);
                             }
                         case (int)Lists.AwaitSubTypes.CURRENT_STATE:
                             {

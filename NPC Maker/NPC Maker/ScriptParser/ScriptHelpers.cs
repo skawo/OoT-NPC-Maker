@@ -191,6 +191,25 @@ namespace NPC_Maker.Scripts
             return outv;
         }
 
+        public static ScriptVarVal GetScriptExtVarVal(string[] SplitLine, int Index, float Min, float Max)
+        {
+            var outv = new ScriptVarVal();
+
+            byte Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
+
+            if (Vartype > (byte)Lists.VarTypes.NORMAL && Vartype < (byte)Lists.VarTypes.VAR)
+                throw ParseException.ParamOutOfRange(SplitLine);
+
+            outv.Value = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, Index, Vartype, Min, Max));
+
+            if ((byte)outv.Value < 1 || (byte)outv.Value > Lists.Num_User_Vars)
+                throw ParseException.ParamOutOfRange(SplitLine);
+
+            outv.Vartype = Vartype;
+
+            return outv;
+        }
+
         public static void GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max, ref object Value, ref byte Type)
         {
             Type = ScriptHelpers.GetVarType(SplitLine, Index);

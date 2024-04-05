@@ -397,9 +397,13 @@ namespace NPC_Maker.Scripts
                                 var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 5, float.MinValue, float.MaxValue);
                                 var ActorID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, Int16.MaxValue);
 
-                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 3, (int)Lists.VarTypes.NORMAL, 1, Lists.Num_User_Vars));
+                                var ExtVarNum = ScriptHelpers.GetScriptExtVarVal(SplitLine, 3, 0, Int16.MaxValue);
 
-                                return new InstructionSetExtVar((byte)SubID, ExtVarNum, Value, ActorID, Operator);
+                                int SubIdN = (ExtVarNum.Vartype == (byte)Lists.VarTypes.VAR ? 
+                                                (int)Lists.SetSubTypes.EXT_VAR : ExtVarNum.Vartype == (byte)Lists.VarTypes.VARF ? 
+                                                (int)Lists.SetSubTypes.EXT_VARF : SubID);
+
+                                return new InstructionSetExtVar((byte)SubIdN, Convert.ToByte(ExtVarNum.Value), Value, ActorID, Operator);
                             }
                         case (int)Lists.SetSubTypes.PLAYER_ANIMATION:
                             {

@@ -30,9 +30,14 @@ namespace NPC_Maker.Scripts
 
                                 var ActorID = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, Int16.MaxValue);
 
-                                byte ExtVarNum = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, 4, (int)Lists.VarTypes.NORMAL, 1, Lists.Num_User_Vars));
+                                var ExtVarNum = ScriptHelpers.GetScriptExtVarVal(SplitLine, 4, 0, Int16.MaxValue);
 
-                                return new InstructionGetExtVar((byte)SubID, ExtVarNum, ActorID, Destination);
+                                int SubIdN = (ExtVarNum.Vartype == (byte)Lists.VarTypes.VAR ?
+                                                (int)Lists.GetSubTypes.EXT_VAR : ExtVarNum.Vartype == (byte)Lists.VarTypes.VARF ?
+                                                (int)Lists.GetSubTypes.EXT_VARF : SubID);
+
+
+                                return new InstructionGetExtVar((byte)SubIdN, (byte)ExtVarNum.Value, ActorID, Destination);
                             }
                        
                         default: throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
