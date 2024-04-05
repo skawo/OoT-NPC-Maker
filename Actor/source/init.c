@@ -205,12 +205,17 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
     int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
     bzero(ovl, size);
 
+/*
+    Doesn't seem necessary?
+
     #if LOGGING == 1
         osSyncPrintf("_Clearing bss...");
     #endif
 
     if (ovl->bssSize != 0)
         bzero((void*)addr + len, ovl->bssSize);    
+
+*/
 
     #if LOGGING == 1
         osSyncPrintf("_Invalidating cache...");
