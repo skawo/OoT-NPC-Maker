@@ -205,17 +205,12 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
     int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
     bzero(ovl, size);
 
-/*
-    Doesn't seem necessary?
-
     #if LOGGING == 1
         osSyncPrintf("_Clearing bss...");
     #endif
 
     if (ovl->bssSize != 0)
         bzero((void*)addr + len, ovl->bssSize);    
-
-*/
 
     #if LOGGING == 1
         osSyncPrintf("_Invalidating cache...");
@@ -659,6 +654,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
                                              anim.offset, 
                                              en->settings.animationType, 
                                              R_OBJECT(en, anim.objectId),
+                                             anim.fileStart,
                                              (R_FILESTART(en, anim.fileStart)),
                                              en->settings.objectId, 
                                              en->settings.fileStart,
@@ -676,7 +672,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
     }
 }
 
-bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int actorObject, int actorObjectFileStart,
+bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int rFileStart, int actorObject, int actorObjectFileStart,
                            int animStart, int animEnd, float speed, bool interpolate, bool playOnce)
 {
 #pragma region AnimMode
@@ -741,9 +737,9 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                     osSyncPrintf("_Normal animation type at 0x%08x, animation mode %01d", animAddr, animMode);
                 #endif
 
-                if (actorObject != object && object > 0)
+                if ((actorObject != object && object > 0) || (fileStart != OBJECT_CURRENT))
                 {
-                    if (!Rom_SetObjectToActor(actor, playState, object, fileStart))
+                    if (!Rom_SetObjectToActor(actor, playState, object, rFileStart))
                     {
                         #if LOGGING == 1
                             osSyncPrintf("_Animation needs object 0x%08x, but it's not loaded, so the animation won't play", object);
@@ -768,7 +764,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                 skelanime->curFrame = animStart;
                 skelanime->endFrame = endFrame;
 
-                if (actorObject != object && actorObject > 0)
+                if ((actorObject != object && actorObject > 0) || (fileStart != OBJECT_CURRENT))
                     Rom_SetObjectToActor(actor, playState, actorObject, actorObjectFileStart);
 
                 break;

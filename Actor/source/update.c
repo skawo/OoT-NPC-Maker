@@ -311,7 +311,7 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
     NpcAnimationEntry anim = en->animations[en->currentAnimId];
     s32 realObjId = R_OBJECT(en, anim.objectId);
 
-    if (realObjId != en->settings.objectId)
+    if (realObjId != en->settings.objectId || anim.fileStart != OBJECT_CURRENT)
     {
         if (!Rom_SetObjectToActor(&en->actor, playState, realObjId, (R_FILESTART(en, anim.fileStart))))
         {
@@ -345,7 +345,7 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
     }
 
     
-    if (realObjId != en->settings.objectId)
+    if (realObjId != en->settings.objectId || anim.fileStart != OBJECT_CURRENT)
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
 
     #if LOGGING == 1

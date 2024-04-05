@@ -507,8 +507,8 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
             {
                 case OBJECT_NONE:           continue;
                 case OBJECT_RAM:            pointer = 0; break;
-                case OBJECT_XLUDLIST:       pointer = 0; data->offset = (u32)&transparencyDList; break;
-                case OBJECT_ENDDLIST:       pointer = 0; data->offset = (u32)&endDList; break;
+                case OBJECT_XLUDLIST:       pointer = 0; data->fileStart = 0; data->offset = (u32)&transparencyDList; break;
+                case OBJECT_ENDDLIST:       pointer = 0; data->fileStart = 0; data->offset = (u32)&endDList; break;
                 default:
                 {
                     pointer = (u32)Rom_GetObjectDataPtr(r_obj, playState);
@@ -628,7 +628,7 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     Draw_Setup(en, playState, dT);
 
     // Reset the file location to account for the file start offset.
-    if (en->settings.fileStart)
+    if (1)
     {
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
         gSPSegment(POLY_XLU.p++, 0x06, playState->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
