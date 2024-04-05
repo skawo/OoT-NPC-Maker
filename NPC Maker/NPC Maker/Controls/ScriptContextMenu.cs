@@ -32,6 +32,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem stateTypesStripMenuItem;
         private static ToolStripMenuItem cFunctionsStripMenuItem;
         private static ToolStripMenuItem quakeTypesStripMenuItem;
+        private static ToolStripMenuItem messagesStripMenuItem;
         public static void MakeContextMenu(NPCEntry Entry)
         {
             if (ContextMenuStrip != null)
@@ -58,6 +59,7 @@ namespace NPC_Maker
             stateTypesStripMenuItem = new ToolStripMenuItem();
             cFunctionsStripMenuItem = new ToolStripMenuItem();
             quakeTypesStripMenuItem = new ToolStripMenuItem();
+            messagesStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -79,6 +81,7 @@ namespace NPC_Maker
                                                                     objectstoolStripMenuItem,
                                                                     linkAnimsStripMenuItem,
                                                                     cFunctionsStripMenuItem,
+                                                                    messagesStripMenuItem,
                                                                 });
 
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
@@ -98,6 +101,7 @@ namespace NPC_Maker
             particlestoolStripMenuItem.Text = "Particles";
             quakeTypesStripMenuItem.Text = "Quake types";
             cFunctionsStripMenuItem.Text = "C Functions";
+            messagesStripMenuItem.Text = "Messages";
 
             soundEffectsToolStripMenuItem.Text = "Sound effects";
             soundEffectsToolStripMenuItem.Click += SoundEffectsToolStripMenuItem_Click;
@@ -114,11 +118,11 @@ namespace NPC_Maker
             linkAnimsStripMenuItem.Text = "Player animations";
             linkAnimsStripMenuItem.Click += LinkAnimsStripMenuItem_Click;
 
+
             List<string> TalkInstructions = new List<string>() { Lists.Instructions.TALK.ToString(), 
                                                                  Lists.Instructions.FORCE_TALK.ToString(), 
                                                                  Lists.Instructions.SHOW_TEXTBOX.ToString(), 
                                                                  Lists.Instructions.SHOW_TEXTBOX_SP.ToString() };
-
 
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
@@ -174,9 +178,23 @@ namespace NPC_Maker
                 FunctionNames.Add(kvp.Key);
 
             AddItemCollectionToToolStripMenuItem(FunctionNames.ToArray(), cFunctionsStripMenuItem);
+
+            List<string> MessageNames = new List<string>();
+            List<string> MessageToolTips = new List<string>();
+
+            foreach (var msg in Entry.Messages)
+            {
+                MessageNames.Add(msg.Name);
+                MessageToolTips.Add(msg.MessageText.Substring(0, Math.Min(80, msg.MessageText.Length)) + (msg.MessageText.Length > 80 ? "..." : ""));
+
+            }
+
+            AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), messagesStripMenuItem, MessageToolTips.ToArray());
+
+
         }
 
-        private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem)
+        private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem, string[] ToolTips = null)
         {
             MenuItem.DropDown.MaximumSize = new Size(300, 700);
 
@@ -185,6 +203,13 @@ namespace NPC_Maker
             for (int i = 0; i < Items.Length; i++)
             {
                 ToolStripMenuItem SubItem = new ToolStripMenuItem(Collection[i]);
+
+                if (ToolTips != null)
+                {
+                    SubItem.ToolTipText = ToolTips[i];
+                    SubItem.AutoToolTip = true;
+                }
+
                 SubItem.Click += SubItem_Click;
                 Items[i] = SubItem;
             }
