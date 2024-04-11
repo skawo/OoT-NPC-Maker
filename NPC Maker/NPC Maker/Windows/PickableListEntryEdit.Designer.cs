@@ -57,13 +57,18 @@ namespace NPC_Maker
             // 
             this.NumUp_ID.Location = new System.Drawing.Point(126, 7);
             this.NumUp_ID.Maximum = new decimal(new int[] {
-            65535,
+            32767,
             0,
             0,
             0});
             this.NumUp_ID.Name = "NumUp_ID";
             this.NumUp_ID.Size = new System.Drawing.Size(189, 20);
             this.NumUp_ID.TabIndex = 1;
+            this.NumUp_ID.Value = new decimal(new int[] {
+            32767,
+            0,
+            0,
+            0});
             this.NumUp_ID.ValueChanged += new System.EventHandler(this.NumUp_ID_ValueChanged);
             // 
             // Lbl_Name
@@ -117,7 +122,7 @@ namespace NPC_Maker
             this.NumUp_HexID.Hexadecimal = true;
             this.NumUp_HexID.Location = new System.Drawing.Point(126, 31);
             this.NumUp_HexID.Maximum = new decimal(new int[] {
-            65535,
+            32767,
             0,
             0,
             0});
