@@ -42,6 +42,10 @@ namespace NPC_Maker
 
         private void Btn_SelectObject_Click(object sender, EventArgs e)
         {
+            NumUp_ID_ValueChanged(null, null);
+            NumUp_HexID_ValueChanged(null, null);
+
+
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

@@ -57,7 +57,7 @@ namespace NPC_Maker
             // 
             this.NumUp_ID.Location = new System.Drawing.Point(126, 7);
             this.NumUp_ID.Maximum = new decimal(new int[] {
-            32767,
+            65535,
             0,
             0,
             0});
@@ -117,7 +117,7 @@ namespace NPC_Maker
             this.NumUp_HexID.Hexadecimal = true;
             this.NumUp_HexID.Location = new System.Drawing.Point(126, 31);
             this.NumUp_HexID.Maximum = new decimal(new int[] {
-            32767,
+            65535,
             0,
             0,
             0});

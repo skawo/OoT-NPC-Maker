@@ -157,14 +157,21 @@ namespace NPC_Maker
 
             if (dr == DialogResult.OK)
             {
-                if (Sel.ID == pE.Out_EntryID ||
+                if (Sel.ID != pE.Out_EntryID && (Data.FindIndex(x => x.ID == pE.Out_EntryID) >= 0) &&
                     MessageBox.Show("New entry ID already exists on the list. Replace?", "Replace ID?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
+                    Data.Remove(Sel);
+
                     int DataIndex = Data.FindIndex(x => x.ID == pE.Out_EntryID);
-
-                    ListEntry NewEntry = new ListEntry(pE.Out_EntryID, pE.Out_Name, pE.Out_Desc);
-
-                    Data[DataIndex] = NewEntry;
+                    Sel = new ListEntry(pE.Out_EntryID, pE.Out_Name, pE.Out_Desc);
+                    Data[DataIndex] = Sel;
+                    SetListView(SkipEntries);
+                }
+                else if (Sel.ID == pE.Out_EntryID ||( Data.FindIndex(x => x.ID == pE.Out_EntryID) < 0))
+                {
+                    int DataIndex = Data.FindIndex(x => x.ID == Sel.ID);
+                    Sel = new ListEntry(pE.Out_EntryID, pE.Out_Name, pE.Out_Desc);
+                    Data[DataIndex] = Sel;
                     SetListView(SkipEntries);
                 }
 
