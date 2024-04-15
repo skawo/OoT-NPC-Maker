@@ -15,8 +15,7 @@ namespace NPC_Maker
 {
     public partial class MainWindow : Form
     {
-        public static string OpenedPath = "";
-        public static string GlobalHFile = Path.Combine(Program.ExecPath, "globalh.json");
+        string OpenedPath = "";
         NPCFile EditedFile = null;
         NPCEntry SelectedEntry = null;
         int SelectedIndex = -1;
@@ -2419,36 +2418,6 @@ namespace NPC_Maker
         private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/skawo/OoT-NPC-Maker/wiki");
-        }
-
-        private void globalHeadersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<ScriptEntry> gheaders = new List<ScriptEntry>();
-
-            try
-            {
-                if (File.Exists(GlobalHFile))
-                    gheaders = JsonConvert.DeserializeObject<List<ScriptEntry>>(File.ReadAllText(GlobalHFile));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error opening global headers: {ex.Message}");
-            }
-
-            NPCFile f = new NPCFile();
-            f.GlobalHeaders = gheaders;
-
-            Windows.GlobalHeader gh = new Windows.GlobalHeader(ref f, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax);
-            gh.ShowDialog();
-
-            try
-            {
-                File.WriteAllText(GlobalHFile, JsonConvert.SerializeObject(f.GlobalHeaders));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error writing global headers: {ex.Message}");
-            }
         }
     }
 }
