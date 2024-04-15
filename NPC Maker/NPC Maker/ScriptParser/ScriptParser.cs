@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace NPC_Maker.Scripts
 {
@@ -14,7 +16,19 @@ namespace NPC_Maker.Scripts
 
         public ScriptParser(NPCEntry _Entry, string _ScriptText, List<ScriptEntry> _GlobalHeader)
         {
-            ScriptText = String.Join(Environment.NewLine, _GlobalHeader.Select(x => x.Text).ToArray()) + Environment.NewLine + _ScriptText;
+            string Headers = "";
+
+            if (File.Exists(MainWindow.GlobalHFile))
+            {
+                List<ScriptEntry> gheaders = JsonConvert.DeserializeObject<List<ScriptEntry>>(File.ReadAllText(MainWindow.GlobalHFile));
+                Headers = String.Join(Environment.NewLine, gheaders.Select(x => x.Text).ToArray()) + Environment.NewLine;
+            }
+
+            Headers += String.Join(Environment.NewLine, _GlobalHeader.Select(x => x.Text).ToArray());
+
+
+            ScriptText = Headers + Environment.NewLine + _ScriptText;
+
             Entry = _Entry;
         }
 

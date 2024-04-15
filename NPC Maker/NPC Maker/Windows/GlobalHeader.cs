@@ -75,7 +75,7 @@ namespace NPC_Maker.Windows
             if (Tab.TabPages.Count == 0)
                 return;
 
-            DialogResult Res = MessageBox.Show("Are you sure you want to delete this global header? You cannot reverse this action!", "Removing a header", MessageBoxButtons.YesNoCancel);
+            DialogResult Res = MessageBox.Show("Are you sure you want to delete this header? You cannot reverse this action!", "Removing a header", MessageBoxButtons.YesNoCancel);
 
             if (Res == DialogResult.Yes)
             {
