@@ -276,7 +276,7 @@ namespace NPC_Maker
                 if (ReusableTabPages.Count != 0)
                 {
                     Page = ReusableTabPages.First();
-                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax);
+                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax, false);
                     Page.Text = PageName;
                     ReusableTabPages.Remove(Page);
                 }
@@ -2438,7 +2438,7 @@ namespace NPC_Maker
             NPCFile f = new NPCFile();
             f.GlobalHeaders = gheaders;
 
-            Windows.GlobalHeader gh = new Windows.GlobalHeader(ref f, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax);
+            Windows.GlobalHeader gh = new Windows.GlobalHeader(ref f, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax, true);
             gh.ShowDialog();
 
             try
