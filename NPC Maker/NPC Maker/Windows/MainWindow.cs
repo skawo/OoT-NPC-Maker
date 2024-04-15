@@ -540,6 +540,7 @@ namespace NPC_Maker
                 return;
 
             EditedFile = new NPCFile();
+            EditedFile.GlobalHeaders.AddRange(new List<ScriptEntry>() { Defaults.DefaultDefines, Defaults.DefaultMacros });
 
             Panel_Editor.Enabled = true;
             InsertDataIntoActorListGrid();
@@ -2428,9 +2429,6 @@ namespace NPC_Maker
             {
                 if (File.Exists(GlobalHFile))
                     gheaders = JsonConvert.DeserializeObject<List<ScriptEntry>>(File.ReadAllText(GlobalHFile));
-                else
-                    gheaders = new List<ScriptEntry>(){ Defaults.DefaultDefines, Defaults.DefaultMacros };
-                    
             }
             catch (Exception ex)
             {
