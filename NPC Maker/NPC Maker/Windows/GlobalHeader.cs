@@ -14,19 +14,17 @@ namespace NPC_Maker.Windows
         readonly NPCFile EditedFile;
         readonly bool SyntaxHeader;
         readonly bool CheckSyntax;
-        readonly bool IsGHeader;
 
         NPCFile Dummy = new NPCFile();
         NPCEntry Dummy2 = new NPCEntry();
 
-        public GlobalHeader(ref NPCFile File, bool SyntaxH, bool CheckSynt, bool _IsGHeader = false)
+        public GlobalHeader(ref NPCFile File, bool SyntaxH, bool CheckSynt)
         {
             InitializeComponent();
 
             EditedFile = File;
             SyntaxHeader = SyntaxH;
             CheckSyntax = CheckSynt;
-            IsGHeader = _IsGHeader;
 
             foreach (ScriptEntry Entry in File.GlobalHeaders)
             {
@@ -35,7 +33,7 @@ namespace NPC_Maker.Windows
                     Text = Entry.Name
                 };
 
-                ScriptEditor Se = new ScriptEditor(ref Dummy2, ref Dummy, Entry, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax, IsGHeader) { Dock = DockStyle.Fill };
+                ScriptEditor Se = new ScriptEditor(ref Dummy2, ref Dummy, Entry, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax) { Dock = DockStyle.Fill };
                 Page.Controls.Add(Se);
 
                 Tab.TabPages.Add(Page);
@@ -65,6 +63,8 @@ namespace NPC_Maker.Windows
             {
                 Dock = DockStyle.Fill
             };
+
+            
 
             Page.Controls.Add(Se);
             Tab.TabPages.Add(Page);

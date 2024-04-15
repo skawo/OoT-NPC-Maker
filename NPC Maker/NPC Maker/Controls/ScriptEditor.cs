@@ -12,12 +12,11 @@ namespace NPC_Maker
         private bool AutoParse;
         public ScriptEntry Script;
         private NPCFile File;
-        private bool IsGHeader;
 
         private readonly System.Windows.Forms.Timer AutoParseTimer;
         private readonly System.Windows.Forms.Timer ColorizeTimer;
 
-        public ScriptEditor(ref NPCEntry _Entry, ref NPCFile _File, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse, bool _IsGHeader = false)
+        public ScriptEditor(ref NPCEntry _Entry, ref NPCFile _File, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
             InitializeComponent();
 
@@ -33,17 +32,16 @@ namespace NPC_Maker
             };
             ColorizeTimer.Tick += ColorizeTimer_Tick;
 
-            Init(ref _Entry, ref _File, _Script, _SyntaxHighlighting, _AutoParse, _IsGHeader);
+            Init(ref _Entry, ref _File, _Script, _SyntaxHighlighting, _AutoParse);
         }
 
-        public void Init(ref NPCEntry _Entry, ref NPCFile _File, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse, bool _IsGHeader)
+        public void Init(ref NPCEntry _Entry, ref NPCFile _File, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
             Entry = _Entry;
             SyntaxHighlighting = _SyntaxHighlighting;
             AutoParse = _AutoParse;
             Script = _Script;
             File = _File;
-            IsGHeader = _IsGHeader;
 
             Textbox_Script.Text = Script.Text;
 
@@ -102,7 +100,7 @@ namespace NPC_Maker
             Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
             r.ClearStyle(SyntaxHighlighter.ErrorStyle);
 
-            Scripts.ScriptParser Parser = new Scripts.ScriptParser(Entry, IsGHeader ? "" : Script.Text, File.GlobalHeaders);
+            Scripts.ScriptParser Parser = new Scripts.ScriptParser(Entry, Script.Text, File.GlobalHeaders);
             Textbox_ParseErrors.Clear();
 
             Script.ParseErrors.Clear();
