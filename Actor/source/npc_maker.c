@@ -206,10 +206,10 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
 
     NpcMaker_RunCFunc(en, playState, en->CFuncs[4]);
 	
-	if (en->embeddedOverlay != 0)
-		ZeldaArena_Free(en->embeddedOverlay);
+    if (en->embeddedOverlay != 0)
+        ZeldaArena_Free(en->embeddedOverlay);
 	
-	SkelAnime_Free(&en->skin.skelAnime, playState);	
+    SkelAnime_Free(&en->skin.skelAnime, playState);	
 
     #if LOGGING == 1
         osSyncPrintf("_%2d: Destroying actor complete.", en->npcId);
