@@ -2393,7 +2393,14 @@ namespace NPC_Maker
                 (sender as ComboBox).SelectedIndex = -1;
         }
 
-
+        private void Button_CDelete_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure? This operation wipes the code completely and cannot be reversed.", "Code Removal", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+            {
+                SelectedEntry.EmbeddedOverlayCode.Code = "";
+                Button_CCompile_Click(null, null);
+            }
+        }
 
         #endregion
 
@@ -2419,5 +2426,6 @@ namespace NPC_Maker
         {
             System.Diagnostics.Process.Start("https://github.com/skawo/OoT-NPC-Maker/wiki");
         }
+
     }
 }
