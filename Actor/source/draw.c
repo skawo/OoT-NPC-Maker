@@ -124,6 +124,8 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
                 GfxPrint_SetPos(&printer, 24, 17);
                 GfxPrint_Printf(&printer, "Sc %04f", dlist.scale);
                 GfxPrint_SetPos(&printer, 24, 18);
+                GfxPrint_Printf(&printer, "St %01d", dlist.showType);                
+                GfxPrint_SetPos(&printer, 24, 19);
                 GfxPrint_Printf(&printer, "L %04d", dlist.limb);
             }
             else

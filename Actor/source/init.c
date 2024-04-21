@@ -601,14 +601,21 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         osSyncPrintf("_%2d: Detecting static ExDlists.", en->npcId);
     #endif
 
-    for (int i = 0; i < en->numExDLists; i++)
+    if (en->settings.showDlistEditorDebugOn)
     {
-        ExDListEntry dlist = en->extraDLists[i];
-
-        if (dlist.limb < 0)
+        en->hasStaticExDlists = true;
+    }
+    else
+    {
+        for (int i = 0; i < en->numExDLists; i++)
         {
-            en->hasStaticExDlists = true;
-            break;
+            ExDListEntry dlist = en->extraDLists[i];
+
+            if (dlist.limb < 0)
+            {
+                en->hasStaticExDlists = true;
+                break;
+            }
         }
     }
 
