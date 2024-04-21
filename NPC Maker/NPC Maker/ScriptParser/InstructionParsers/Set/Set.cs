@@ -239,7 +239,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
                                 var DlistID = ScriptHelpers.Helper_GetDListID(SplitLine, 2, Entry.ExtraDisplayLists);
-                                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, float.MaxValue);
+                                var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 4, float.MinValue, float.MaxValue);
                                 byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
 
                                 return new InstructionSetWTwoValues((byte)SubID, DlistID, Value, Operator);
