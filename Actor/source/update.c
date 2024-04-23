@@ -167,8 +167,8 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
                 case 5: en->extraDLists[en->dbgPosEditorCurEditing].rotation.y += (10 * mul); break;
                 case 6: en->extraDLists[en->dbgPosEditorCurEditing].rotation.z += (10 * mul); break;
                 case 7: en->extraDLists[en->dbgPosEditorCurEditing].scale += (0.01f * mul); break;
-                case 8: en->extraDLists[en->dbgPosEditorCurEditing].limb += 1; break;
-                case 9: en->extraDLists[en->dbgPosEditorCurEditing].showType += 1; break;
+                case 8: en->extraDLists[en->dbgPosEditorCurEditing].showType += 1; break;
+                case 9: en->extraDLists[en->dbgPosEditorCurEditing].limb += 1; break;
             }
         }
         if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_DLEFT))
@@ -201,8 +201,8 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
                 case 5: en->extraDLists[en->dbgPosEditorCurEditing].rotation.y -= (10 * mul); break;
                 case 6: en->extraDLists[en->dbgPosEditorCurEditing].rotation.z -= (10 * mul); break;
                 case 7: en->extraDLists[en->dbgPosEditorCurEditing].scale -= (0.01f * mul); break;
-                case 8: en->extraDLists[en->dbgPosEditorCurEditing].limb -= 1; break;
-                case 9: en->extraDLists[en->dbgPosEditorCurEditing].showType -= 1; break;
+                case 8: en->extraDLists[en->dbgPosEditorCurEditing].showType -= 1; break;
+                case 9: en->extraDLists[en->dbgPosEditorCurEditing].limb -= 1; break;                
             }
         }
     }
