@@ -2,7 +2,7 @@
 {
     public class InstructionNop : Instruction
     {
-        public InstructionNop() : base(255)
+        public InstructionNop() : base((int)Lists.Instructions.NOP)
         {
 
         }
