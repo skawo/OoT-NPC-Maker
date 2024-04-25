@@ -74,8 +74,9 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
                                 var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt16.MaxValue);
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
 
-                                return new InstructionAwait((byte)SubID, Val, Lists.ConditionTypes.EQUALTO);
+                                return new InstructionAwait((byte)SubID, Val, Condition);
                             }
                         case (int)Lists.AwaitSubTypes.STICK_X:
                         case (int)Lists.AwaitSubTypes.STICK_Y:
