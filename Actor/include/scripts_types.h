@@ -242,8 +242,9 @@ typedef struct ScrInstrExtVarIf
     u8 subId;
     u8 varType : 4;
     u8 actorNumVarType : 4;
-    u8 condition : 4;
-    u8 extVarNum : 4; 
+    u8 condition;
+    u8 extVarNum; 
+    u8 pad[3];
     ScriptVarval value;
     ScriptVarval actorNum;
     u16 trueInstrNum;

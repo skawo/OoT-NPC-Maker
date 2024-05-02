@@ -605,7 +605,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
             if (ex_actor == NULL)
                 branch = in->falseInstrNum;
             else
-                branch = Scripts_IfExtVar(en, playState, ex_actor->scriptVars[instr->extVarNum - 1], in, INT32);
+                branch = Scripts_IfExtVar(en, playState, (float)ex_actor->scriptVars[instr->extVarNum - 1], in, INT32);
                 
             break;
         }

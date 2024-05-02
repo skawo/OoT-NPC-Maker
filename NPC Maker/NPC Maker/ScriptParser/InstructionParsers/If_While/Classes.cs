@@ -149,14 +149,19 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(ID, Data);
             Helpers.AddObjectToByteList(SubID, Data);
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Value.Vartype, Value2.Vartype, 4), Data);
-            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Condition, ExtVarNum, 4), Data);
+            Helpers.AddObjectToByteList(Condition, Data);
+            Helpers.AddObjectToByteList(ExtVarNum, Data);
+            Helpers.AddObjectToByteList((byte)0, Data);
+            Helpers.AddObjectToByteList((byte)0, Data);
+            Helpers.AddObjectToByteList((byte)0, Data);
+            Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(Value.Value, Data);
             Helpers.AddObjectToByteList(Value2.Value, Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoTrue, ref Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoFalse, ref Data);
             Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 20);
 
             return Data.ToArray();
         }

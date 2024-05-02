@@ -179,6 +179,8 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 6);
 
+                                //if ext_var 10 18 = 1
+
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 4);
 
                                 var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 5, float.MinValue, float.MaxValue);
