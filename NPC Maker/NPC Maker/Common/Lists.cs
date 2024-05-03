@@ -55,6 +55,7 @@ namespace NPC_Maker
         public const string Keyword_Debug_Skip_Label_Check = "__SKIPCHECK__";
         public const string Keyword_Label_Return = "__RETURN__";
         public const string Keyword_Label_Null = "__NULL__";
+        public const string Keyword_Label_HERE = "HERE";
 
         public const int Num_User_Vars = 255;
 
@@ -83,6 +84,7 @@ namespace NPC_Maker
             Keyword_CallProcedure,
             Keyword_EndOcarina,
             Keyword_Once,
+            Keyword_Label_HERE,
 
             VarTypes.NORMAL.ToString(),
             VarTypes.RANDOM.ToString(),

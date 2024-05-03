@@ -40,6 +40,7 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceElifs(Lines, ref outScript);
             Lines = ReplaceOrs(Lines, ref outScript);
             Lines = ReplaceAnds(Lines, ref outScript);
+            Lines = ReplaceScriptStartHeres(Lines, ref outScript);
             CheckLabels(Lines);
 
             List<Instruction> Instructions = GetInstructions(Lines);
@@ -131,10 +132,12 @@ namespace NPC_Maker.Scripts
             {
                 if (Line.EndsWith(":"))
                 {
-                    if (Lists.AllKeywords.Contains(Line.Remove(Line.Length - 1))
-                        || Line.StartsWith("__"))
+                    string labelN = Line.Remove(Line.Length - 1);
+
+                    if (Lists.AllKeywords.Contains(labelN) || Line.StartsWith("__") || 
+                        labelN.Equals(Lists.Keyword_Label_HERE, StringComparison.OrdinalIgnoreCase))
                     {
-                        outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(Line));
+                        outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(labelN));
                         continue;
                     }
                 }
@@ -420,6 +423,25 @@ namespace NPC_Maker.Scripts
 
 
             return Lines;
+        }
+
+        private List<string> ReplaceScriptStartHeres(List<string> Lines, ref BScript outScript)
+        {
+            List<string> outl = new List<string>();
+
+            foreach (string s in Lines)
+            {
+                if (s.ToUpper() == $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}")
+                {
+                    string nlabel = ScriptDataHelpers.RandomString(this, 7);
+                    outl.Add($"{nlabel}:");
+                    outl.Add($"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {nlabel}");
+                }
+                else
+                    outl.Add(s);
+            }
+
+            return outl;
         }
 
         // Change Elifs into proper sets of Else EndIf

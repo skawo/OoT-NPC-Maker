@@ -82,6 +82,8 @@ namespace NPC_Maker
             // Color in keywords
             foreach (KeyValuePair<List<string>, Style> entry in StyleDict)
                 H_SetStyle(entry.Key, entry.Value, r);
+
+            r.SetStyle(SyntaxHighlighter.RedStyle, @"\b" + Lists.Keyword_Label_HERE + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
         }
 
         private static void H_SetStyle(List<string> List, Style s, Range r)
