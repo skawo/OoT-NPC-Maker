@@ -9,7 +9,7 @@ namespace NPC_Maker.Scripts
             try
             {
                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
-                return new InstructionGoto(SplitLine[1]);
+                return new InstructionGoto(SplitLine[1].TrimEnd(':'));
             }
             catch (ParseException pEx)
             {
