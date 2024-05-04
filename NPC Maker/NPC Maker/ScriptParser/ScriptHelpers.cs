@@ -470,7 +470,7 @@ namespace NPC_Maker.Scripts
             {
                 try
                 {
-                    outV.Value = (float)GetValueByType(SplitLine, Index, outV.Vartype, RangeMin, RangeMax);
+                    outV.Value = GetValueByType(SplitLine, Index, outV.Vartype, RangeMin, RangeMax);
                     return outV;
                 }
                 catch (Exception)
