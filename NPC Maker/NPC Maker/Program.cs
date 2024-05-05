@@ -5,6 +5,8 @@ using System.IO;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NPC_Maker
 {
@@ -20,6 +22,13 @@ namespace NPC_Maker
         public static string SettingsFilePath;
         public static NPCMakerSettings Settings;
         public static MainWindow mw;
+
+        public static string CacheFolder = "";
+        public static string CacheFile = "";
+        public static string CacheEntryFile = "";
+
+        public static List<List<byte>> Cache = new List<List<byte>>();
+        public static List<string> EntryCache = new List<string>();
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
@@ -38,6 +47,16 @@ namespace NPC_Maker
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
             SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
+            CacheFolder = Path.Combine(Program.ExecPath, "_cache");
+            CacheFile = Path.Combine(CacheFolder, "_b");
+            CacheEntryFile = Path.Combine(CacheFolder, "_e");
+
+            if (Directory.Exists(CacheFolder) && File.Exists(CacheFile) && File.Exists(CacheEntryFile))
+            {
+                Cache = JsonConvert.DeserializeObject<List<List<byte>>>(File.ReadAllText(CacheFile));
+                EntryCache = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(CacheEntryFile));
+            }
+
 
             Type t = Type.GetType("Mono.Runtime");
 

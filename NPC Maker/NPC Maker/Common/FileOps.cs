@@ -9,8 +9,7 @@ namespace NPC_Maker
 {
     public static class FileOps
     {
-        public static List<List<byte>> Cache = new List<List<byte>>();
-        public static List<string> EntryCache = new List<string>();
+
 
         public static NPCMakerSettings ParseSettingsJSON(string FileName)
         {
@@ -170,7 +169,6 @@ namespace NPC_Maker
 
                 string CompErrors = "";
 
-        
                 if (Program.mw != null)
                 {
                     pr.SetProgress(0);
@@ -188,8 +186,8 @@ namespace NPC_Maker
                     string objDes = JsonConvert.SerializeObject(Entry);
                     string objCached = "";
 
-                    if (EntryCache.Count > EntriesDone)
-                        objCached = EntryCache[EntriesDone];
+                    if (Program.EntryCache.Count > EntriesDone)
+                        objCached = Program.EntryCache[EntriesDone];
 
                     if (!String.Equals(objCached, objDes))
                     {
@@ -631,39 +629,39 @@ namespace NPC_Maker
                             EntryAddresses.AddRangeBigEndian(Offset);
                             Offset += EntryBytes.Count();
 
-                            if (Cache.Count <= EntriesDone)
+                            if (Program.Cache.Count <= EntriesDone)
                             {
-                                Cache.Add(EntryBytes);
-                                EntryCache.Add(objDes);
+                                Program.Cache.Add(EntryBytes);
+                                Program.EntryCache.Add(objDes);
                             }
                             else
                             {
-                                Cache[EntriesDone] = EntryBytes;
-                                EntryCache[EntriesDone] = objDes;
+                                Program.Cache[EntriesDone] = EntryBytes;
+                                Program.EntryCache[EntriesDone] = objDes;
                             }
                         }
                         else
                         {
                             EntryAddresses.AddRangeBigEndian((UInt32)0);
 
-                            if (Cache.Count <= EntriesDone)
+                            if (Program.Cache.Count <= EntriesDone)
                             {
-                                Cache.Add(new List<byte>());
-                                EntryCache.Add(objDes);
+                                Program.Cache.Add(new List<byte>());
+                                Program.EntryCache.Add(objDes);
                             }
                             else
                             {
-                                Cache[EntriesDone] = new List<byte>();
-                                EntryCache[EntriesDone] = objDes;
+                                Program.Cache[EntriesDone] = new List<byte>();
+                                Program.EntryCache[EntriesDone] = objDes;
                             }
 
                         }
                     }
                     else
                     {
-                        EntryData.Add(Cache[EntriesDone]);
+                        EntryData.Add(Program.Cache[EntriesDone]);
                         EntryAddresses.AddRangeBigEndian(Offset);
-                        Offset += Cache[EntriesDone].Count();
+                        Offset += Program.Cache[EntriesDone].Count();
                     }
 
 
@@ -676,11 +674,18 @@ namespace NPC_Maker
                 pr.SetProgress(100, "Done!");
                 pr.Refresh();
 
-                while (Data.Entries.Count != Cache.Count)
+                while (Data.Entries.Count != Program.Cache.Count)
                 {
-                    Cache.RemoveAt(Cache.Count - 1);
-                    EntryCache.RemoveAt(Cache.Count - 1);
+                    Program.Cache.RemoveAt(Program.Cache.Count - 1);
+                    Program.EntryCache.RemoveAt(Program.Cache.Count - 1);
                 }
+
+                if (!Directory.Exists(Program.CacheFolder))
+                    Directory.CreateDirectory(Program.CacheFolder);
+
+                File.WriteAllText(Program.CacheEntryFile, JsonConvert.SerializeObject(Program.EntryCache));
+                File.WriteAllText(Program.CacheFile, JsonConvert.SerializeObject(Program.Cache));
+
 
                 List<byte> Output = new List<byte>();
 
