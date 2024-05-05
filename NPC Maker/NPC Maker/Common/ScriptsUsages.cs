@@ -457,7 +457,9 @@ namespace NPC_Maker
                     case Lists.Instructions.FORCE_TALK:
                         return $"{Lists.Instructions.FORCE_TALK} textbox [textbox_child]";
                     case Lists.Instructions.GOTO:
-                        return $"{Lists.Instructions.GOTO} {{label | variable}}";
+                        return $"{Lists.Instructions.GOTO} label";
+                    case Lists.Instructions.GOTO_VAR:
+                        return $"{Lists.Instructions.GOTO} variable";
                     case Lists.Instructions.SHOW_TEXTBOX:
                         return $"{Lists.Instructions.SHOW_TEXTBOX} textbox [textbox_child]";
                     case Lists.Instructions.SHOW_TEXTBOX_SP:
