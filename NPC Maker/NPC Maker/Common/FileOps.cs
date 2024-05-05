@@ -183,7 +183,7 @@ namespace NPC_Maker
 
 
                 // Invalidate cache if differing headers are found
-                if (!String.Equals(Data.GlobalHeaders, Program.HeadersCache))
+                if (!String.Equals(JsonConvert.SerializeObject(Data.GlobalHeaders), Program.HeadersCache))
                 {
                     Program.Cache = new List<List<byte>>();
                     Program.EntryCache = new List<string>();
@@ -702,8 +702,8 @@ namespace NPC_Maker
                 File.WriteAllText(Program.CacheEntryFile, JsonConvert.SerializeObject(Program.EntryCache));
                 File.WriteAllText(Program.CacheFile, JsonConvert.SerializeObject(Program.Cache));
 
-                string HeadersCache = JsonConvert.SerializeObject(Data.GlobalHeaders);
-                Program.HeadersCache = HeadersCache;
+                string nHeadersCache = JsonConvert.SerializeObject(Data.GlobalHeaders);
+                Program.HeadersCache = nHeadersCache;
 
                 File.WriteAllText(Program.CacheHeadersFile, JsonConvert.SerializeObject(Data.GlobalHeaders));
 
