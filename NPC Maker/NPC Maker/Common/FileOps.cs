@@ -181,6 +181,15 @@ namespace NPC_Maker
                 float CurProgress = 0;
                 int EntriesDone = 0;
 
+
+                // Invalidate cache if differing headers are found
+                if (!String.Equals(Data.GlobalHeaders, Program.HeadersCache))
+                {
+                    Program.Cache = new List<List<byte>>();
+                    Program.EntryCache = new List<string>();
+                    Program.HeadersCache = "";
+                }
+
                 foreach (NPCEntry Entry in Data.Entries)
                 {
                     string objDes = JsonConvert.SerializeObject(Entry);
@@ -191,6 +200,13 @@ namespace NPC_Maker
 
                     if (!String.Equals(objCached, objDes))
                     {
+                        // Invalidate cache if differing object is found
+                        for (int i = EntriesDone; i < Program.EntryCache.Count; i++)
+                        {
+                            Program.EntryCache.RemoveAt(i);
+                            Program.Cache.RemoveAt(i);
+                        }
+
                         if (Entry.IsNull == false)
                         {
                             List<byte> EntryBytes = new List<byte>();
@@ -685,7 +701,7 @@ namespace NPC_Maker
 
                 File.WriteAllText(Program.CacheEntryFile, JsonConvert.SerializeObject(Program.EntryCache));
                 File.WriteAllText(Program.CacheFile, JsonConvert.SerializeObject(Program.Cache));
-
+                File.WriteAllText(Program.CacheHeadersFile, JsonConvert.SerializeObject(Data.GlobalHeaders));
 
                 List<byte> Output = new List<byte>();
 
