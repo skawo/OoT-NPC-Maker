@@ -460,6 +460,23 @@ namespace NPC_Maker.Scripts
                                 return new InstructionSetRAM((byte)SubID, Offset, Value, Len);
 
                             }
+                        case (int)Lists.SetSubTypes.LABEL_TO_VAR:
+                        case (int)Lists.SetSubTypes.LABEL_TO_VARF:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+
+                                var Destination = new ScriptVarVal(0, 0);
+
+                                Destination = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt32.MaxValue);
+
+                                if (Destination.Vartype <= (byte)Lists.VarTypes.RANDOM)
+                                    throw ParseException.DestValWrong(SplitLine);
+
+                                byte? SubIDa = ScriptHelpers.GetSubIDForRamType(SplitLine[3]);
+
+                                return new InstructionSetLabelTo((byte)SubIDa, SplitLine[2], Destination);
+
+                            }
                         default: throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
                 }

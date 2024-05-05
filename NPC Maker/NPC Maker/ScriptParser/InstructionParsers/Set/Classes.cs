@@ -74,6 +74,42 @@ namespace NPC_Maker.Scripts
         }
     }
 
+    public class InstructionSetLabelTo : InstructionSub
+    {
+        public string Label = "";
+        public InstructionLabel LabelInstr;
+        ScriptVarVal Destination { get; set; }
+
+        public InstructionSetLabelTo(byte _SubID, string _Label, ScriptVarVal _Dest) : base((int)Lists.Instructions.SET, _SubID)
+        {
+            Destination = _Dest;
+            Label = _Label;
+            LabelInstr = new InstructionLabel(Label);
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+            List<byte> Data = new List<byte>();
+
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList((byte)Lists.ConditionTypes.EQUALTO, Data);
+            Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Destination.Vartype, (byte)Lists.VarTypes.NORMAL, 4), Data);
+            Helpers.AddObjectToByteList(Destination.Value, Data);
+            Helpers.AddObjectToByteList((float)ScriptDataHelpers.FindLabel(Labels, LabelInstr), Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+
+            return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
+        }
+    }
+
     public class InstructionSetWTwoValues : InstructionSub
     {
         ScriptVarVal Value { get; set; }

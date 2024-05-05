@@ -4,12 +4,14 @@ namespace NPC_Maker.Scripts
 {
     public partial class ScriptParser
     {
-        private Instruction ParseGotoInstruction(string[] SplitLine)
+        private Instruction ParseGotoVarInstruction(string[] SplitLine)
         {
             try
             {
                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
-                return new InstructionGoto(SplitLine[1].TrimEnd(':'));
+
+                ScriptVarVal s = ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt32.MaxValue);
+                return new InstructionGotoVar(s);
             }
             catch (ParseException pEx)
             {

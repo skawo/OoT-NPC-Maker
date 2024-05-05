@@ -32,11 +32,13 @@ namespace NPC_Maker.Scripts
 
         public static void FindLabelAndAddToByteList(List<InstructionLabel> Labels, InstructionLabel ToFind, ref List<byte> Data)
         {
+            Helpers.AddObjectToByteList(FindLabel(Labels, ToFind), Data);
+        }
+
+        public static UInt16 FindLabel(List<InstructionLabel> Labels, InstructionLabel ToFind)
+        {
             if (ToFind.Name == Lists.Keyword_Label_Return || ToFind.Name == Lists.Keyword_Label_Null)
-            {
-                Helpers.AddObjectToByteList(UInt16.MaxValue, Data);
-                return;
-            }
+                return UInt16.MaxValue; 
 
             bool SkipCheck = false;
 #if DEBUG
@@ -49,7 +51,7 @@ namespace NPC_Maker.Scripts
             if (Found == null && !SkipCheck)
                 throw ParseException.LabelNotFound(ToFind.Name);
 
-            Helpers.AddObjectToByteList(Found == null ? UInt16.MaxValue : Found.InstructionNumber, Data);
+            return Found == null ? UInt16.MaxValue : Found.InstructionNumber;
         }
     }
 }

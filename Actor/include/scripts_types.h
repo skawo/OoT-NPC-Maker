@@ -194,6 +194,19 @@ typedef struct ScrInstrGoto
 
 #pragma endregion
 
+#pragma region gotovar
+
+typedef struct ScrInstrGotoVar
+{
+    u8 id;
+    u8 vartype;
+    u8 pad[2];
+    ScriptVarval value;
+} ScrInstrGotoVar;
+
+
+#pragma endregion
+
 #pragma region if
 
 typedef struct ScrInstrIf

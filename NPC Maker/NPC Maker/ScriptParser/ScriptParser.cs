@@ -20,6 +20,16 @@ namespace NPC_Maker.Scripts
 
         public BScript ParseScript()
         {
+            string s = "";
+            int id = 0x8000;
+
+            foreach (var m in Entry.Messages)
+            {
+                s += $"#{Lists.Keyword_Define} {m.Name} {id++};";
+            }
+
+            ScriptText = s + ScriptText;
+
             RegexText(ref ScriptText);
 
             outScript = new BScript();
@@ -30,6 +40,7 @@ namespace NPC_Maker.Scripts
 
             if (outScript.ParseErrors.Count != 0)
                 return outScript;
+
 
             // Split text into lines
             List<string> Lines = SplitLines(ScriptText);
@@ -585,6 +596,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.QUAKE: Instructions.Add(ParseQuakeInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.CCALL: Instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, SplitLine)); break;
                         case (int)Lists.Instructions.GET:   Instructions.Add(ParseGetInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.GOTO_VAR: Instructions.Add(ParseGotoVarInstruction(SplitLine)); break;
                         default:
                             {
                                 byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);

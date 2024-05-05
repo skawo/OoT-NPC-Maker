@@ -32,5 +32,6 @@ namespace NPC_Maker.Scripts
             return ((Lists.Instructions)ID).ToString() + " " + Goto;
         }
     }
+
 }
 

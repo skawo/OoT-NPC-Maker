@@ -246,6 +246,7 @@ namespace NPC_Maker
             QUAKE,
             CCALL,
             GET,
+            GOTO_VAR,
             NOP,
         }
 
@@ -545,6 +546,8 @@ namespace NPC_Maker
             DLIST_OBJECT,
 
             RAM,
+            LABEL_TO_VAR,
+            LABEL_TO_VARF,
         }
 
         public enum AwaitSubTypes

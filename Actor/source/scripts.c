@@ -134,6 +134,7 @@ void* ScriptFuncs[] =
     &Scripts_InstructionQuake,              // QUAKE
     &Scripts_InstructionCCall,              // CCALL
     &Scripts_InstructionGet,                // GET
+    &Scripts_InstructionGotoVar,            // GOTOVAR
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -879,6 +880,21 @@ bool Scripts_InstructionGoto(NpcMaker* en, PlayState* playState, ScriptInstance*
     return in->instrNum != SCRIPT_RETURN;
 }
 
+bool Scripts_InstructionGotoVar(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGotoVar* in)
+{
+    u32 instrNum = Scripts_GetVarval(en, playState, in->vartype, in->value, false);
+
+    #if LOGGING == 1
+        if (instrNum == 65535)
+            osSyncPrintf("_[%2d, %1d]: VARIABLE INDUCED RETURN", en->npcId, en->curScriptNum);
+        else
+            osSyncPrintf("_[%2d, %1d]: GOTOVAR going to %04d.", en->npcId, en->curScriptNum, instrNum);
+    #endif
+
+    script->curInstrNum = instrNum == SCRIPT_RETURN ? script->startInstrNum : instrNum;
+    return instrNum != SCRIPT_RETURN;
+}
+
 bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrSet* in)
 {
     #if LOGGING == 1
@@ -1337,7 +1353,11 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
 			
             break;   
         }
-
+        case SET_LABELTOVAR:
+        case SET_LABELTOVARF:
+        {
+            break;
+        }
         case SUBT_GLOBAL8:
         case SUBT_GLOBAL16:
         case SUBT_GLOBAL32:

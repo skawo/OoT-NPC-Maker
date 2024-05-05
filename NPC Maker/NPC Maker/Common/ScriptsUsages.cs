@@ -349,6 +349,9 @@ namespace NPC_Maker
                     { Lists.SetSubTypes.DLIST_OBJECT,                       $" *ex_dlist_name* operator value" },
 
                     { Lists.SetSubTypes.RAM,                                $" {{Data size:8|16|32}} 0xOffset value" },
+
+                    { Lists.SetSubTypes.LABEL_TO_VAR,                       $" label out_variable" },
+                    { Lists.SetSubTypes.LABEL_TO_VARF,                      $" label out_variable" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL32,            $".0xoffset operator value" },
@@ -454,7 +457,7 @@ namespace NPC_Maker
                     case Lists.Instructions.FORCE_TALK:
                         return $"{Lists.Instructions.FORCE_TALK} textbox [textbox_child]";
                     case Lists.Instructions.GOTO:
-                        return $"{Lists.Instructions.GOTO} label";
+                        return $"{Lists.Instructions.GOTO} {{label | variable}}";
                     case Lists.Instructions.SHOW_TEXTBOX:
                         return $"{Lists.Instructions.SHOW_TEXTBOX} textbox [textbox_child]";
                     case Lists.Instructions.SHOW_TEXTBOX_SP:

@@ -133,6 +133,8 @@
     <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Fade\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Fade\Fade.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\GotoVar\Classes.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\GotoVar\GotoVar.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Save\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Save\Save.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Player_Talk\Classes.cs" />

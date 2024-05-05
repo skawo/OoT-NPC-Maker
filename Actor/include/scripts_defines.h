@@ -260,6 +260,8 @@ typedef enum SetSubId
     SET_DLIST_OBJECT,
 
     SET_RAM,
+    SET_LABELTOVAR,
+    SET_LABELTOVARF,
 } SetSubId;
 
 typedef enum GetSubId
