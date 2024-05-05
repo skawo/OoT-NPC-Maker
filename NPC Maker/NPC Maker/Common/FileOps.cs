@@ -701,6 +701,10 @@ namespace NPC_Maker
 
                 File.WriteAllText(Program.CacheEntryFile, JsonConvert.SerializeObject(Program.EntryCache));
                 File.WriteAllText(Program.CacheFile, JsonConvert.SerializeObject(Program.Cache));
+
+                string HeadersCache = JsonConvert.SerializeObject(Data.GlobalHeaders);
+                Program.HeadersCache = HeadersCache;
+
                 File.WriteAllText(Program.CacheHeadersFile, JsonConvert.SerializeObject(Data.GlobalHeaders));
 
                 List<byte> Output = new List<byte>();
