@@ -739,6 +739,8 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
         }
         case AWAIT_RESPONSE:                
         {
+            Rand_Seed(script->tempValues[1]);
+            Rand_Next();
             en->isWaitingForResponse = true;
             return SCRIPT_STOP;
         }
