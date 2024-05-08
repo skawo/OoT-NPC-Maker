@@ -690,14 +690,25 @@ namespace NPC_Maker
                 pr.SetProgress(100, "Done!");
                 pr.Refresh();
 
-                while (Data.Entries.Count != Program.Cache.Count)
+                if (ParseErrors.Count == 0)
                 {
-                    Program.Cache.RemoveAt(Program.Cache.Count - 1);
-                    Program.EntryCache.RemoveAt(Program.Cache.Count - 1);
+
+                    while (Data.Entries.Count != Program.Cache.Count)
+                    {
+                        Program.Cache.RemoveAt(Program.Cache.Count - 1);
+                        Program.EntryCache.RemoveAt(Program.Cache.Count - 1);
+                    }
+
+                    if (!Directory.Exists(Program.CacheFolder))
+                        Directory.CreateDirectory(Program.CacheFolder);
+                }
+                else
+                {
+                    Program.Cache = new List<List<byte>>();
+                    Program.EntryCache = new List<string>();
+                    Program.HeadersCache = "";
                 }
 
-                if (!Directory.Exists(Program.CacheFolder))
-                    Directory.CreateDirectory(Program.CacheFolder);
 
                 File.WriteAllText(Program.CacheEntryFile, JsonConvert.SerializeObject(Program.EntryCache));
                 File.WriteAllText(Program.CacheFile, JsonConvert.SerializeObject(Program.Cache));
