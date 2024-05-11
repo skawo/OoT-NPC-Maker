@@ -492,7 +492,7 @@ namespace NPC_Maker.Scripts
 
         public static ScriptVarVal Helper_GetMusicId(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, -1, Int16.MaxValue, Dicts.Music, ParseException.UnrecognizedBGM(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, -1, UInt16.MaxValue, Dicts.Music, ParseException.UnrecognizedBGM(SplitLine));
         }
 
         public static ScriptVarVal Helper_GetLinkAnimation(string[] SplitLine, int Index)

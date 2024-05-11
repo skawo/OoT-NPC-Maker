@@ -195,8 +195,8 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
                                 var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
-                                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt32.MaxValue);
-                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 4);
+                                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, UInt32.MaxValue);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
 
                                 return new InstructionSetWTwoValues((byte)SubID, AnimID, Value2, Operator);
                             }
@@ -216,8 +216,8 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
 
                                 var AnimID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
-                                var Frame = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, byte.MaxValue);
-                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 4);
+                                var Frame = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, byte.MaxValue);
+                                byte Operator = ScriptHelpers.GetOperator(SplitLine, 3);
 
                                 return new InstructionSetWTwoValues((byte)SubID, AnimID, Frame, Operator);
                             }

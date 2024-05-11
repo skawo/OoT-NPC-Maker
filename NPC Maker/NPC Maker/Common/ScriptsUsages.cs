@@ -285,11 +285,11 @@ namespace NPC_Maker
 
                     { Lists.SetSubTypes.RESPONSE_ACTIONS,                   $" label_option1 label_option2 [label_option3]" },
 
-                    { Lists.SetSubTypes.ANIMATION_OBJECT,                   $" operator value" },
-                    { Lists.SetSubTypes.ANIMATION_OFFSET,                   $" operator value" },
-                    { Lists.SetSubTypes.ANIMATION_STARTFRAME,               $" operator value" },
-                    { Lists.SetSubTypes.ANIMATION_ENDFRAME,                 $" operator value" },
-                    { Lists.SetSubTypes.ANIMATION_SPEED,                    $" operator value" },
+                    { Lists.SetSubTypes.ANIMATION_OBJECT,                   $" animation_name operator value" },
+                    { Lists.SetSubTypes.ANIMATION_OFFSET,                   $" animation_name operator value" },
+                    { Lists.SetSubTypes.ANIMATION_STARTFRAME,               $" animation_name operator value" },
+                    { Lists.SetSubTypes.ANIMATION_ENDFRAME,                 $" animation_name operator value" },
+                    { Lists.SetSubTypes.ANIMATION_SPEED,                    $" animation_name operator value" },
                     { Lists.SetSubTypes.FLAG_INF,                           $" flag_id {BooleanUsage}" },
                     { Lists.SetSubTypes.FLAG_EVENT,                         $" flag_id {BooleanUsage}" },
                     { Lists.SetSubTypes.FLAG_SWITCH,                        $" flag_id {BooleanUsage}" },
