@@ -8,10 +8,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
-
-                ScriptVarVal s = ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt32.MaxValue);
-                return new InstructionGotoVar(s);
+                return ParseGotoVarInstruction_Internal(SplitLine);
             }
             catch (ParseException pEx)
             {
@@ -23,6 +20,14 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
                 return new InstructionNop();
             }
+        }
+
+        public Instruction ParseGotoVarInstruction_Internal(string[] SplitLine)
+        {
+            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
+
+            ScriptVarVal s = ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt32.MaxValue);
+            return new InstructionGotoVar(s);
         }
     }
 }

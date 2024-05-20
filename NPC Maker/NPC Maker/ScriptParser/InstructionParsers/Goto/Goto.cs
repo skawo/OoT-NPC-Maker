@@ -8,8 +8,15 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
-                return new InstructionGoto(SplitLine[1].TrimEnd(':'));
+                try
+                {
+                    return ParseGotoVarInstruction_Internal(SplitLine);
+                }
+                catch (ParseException)
+                {
+                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
+                    return new InstructionGoto(SplitLine[1].TrimEnd(':'));
+                }
             }
             catch (ParseException pEx)
             {
