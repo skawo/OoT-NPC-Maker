@@ -472,7 +472,7 @@ namespace NPC_Maker
                                    $"   [VARIABLE value]" + Environment.NewLine +
                                    $"   [POSITION {GetListFromEnum(typeof(Lists.EffectsIfAttacked))} x y z]" + Environment.NewLine +
                                    $"   [ROTATION x y z]" + Environment.NewLine +
-                                   $"   [SET_AS_REF {BooleanUsage}]" + Environment.NewLine +
+                                   $"   SET_AS_REF" + Environment.NewLine +
                                    $"END{Lists.Instructions.SPAWN}";
                         }
                     case Lists.Instructions.ITEM:
