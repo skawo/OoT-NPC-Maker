@@ -150,6 +150,12 @@ namespace NPC_Maker
                     { Lists.ScriptSubtypes.STOP,                            $" script_id" },
                 }
             },
+            { Lists.Instructions.STOP,  new Dictionary<object, string>()
+                {
+                    { Lists.StopSubtypes.SFX,                            $" sfx_id" },
+                    { Lists.StopSubtypes.BGM,                            $" fade_duration" },
+                }
+            },
             { Lists.Instructions.AWAIT,  new Dictionary<object, string>()
                 {
                     { Lists.AwaitSubTypes.FLAG_INF,                         $" flag_number {BooleanUsage}" },
@@ -579,6 +585,15 @@ namespace NPC_Maker
                                 return $"{Lists.Instructions.SCRIPT} {oSubType}{Usages[Instruction][oSubType]}";
                             else
                                 return $"{Lists.Instructions.SCRIPT} *script_subtype* ..";
+                        }
+                    case Lists.Instructions.STOP:
+                        {
+                            bool res = Enum.TryParse(SubType, out Lists.StopSubtypes oSubType);
+
+                            if (res)
+                                return $"{Lists.Instructions.STOP} {oSubType}{Usages[Instruction][oSubType]}";
+                            else
+                                return $"{Lists.Instructions.STOP} *script_subtype* ..";
                         }
                     case Lists.Instructions.TRADE:
                         {

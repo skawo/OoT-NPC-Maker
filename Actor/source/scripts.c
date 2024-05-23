@@ -135,6 +135,7 @@ void* ScriptFuncs[] =
     &Scripts_InstructionCCall,              // CCALL
     &Scripts_InstructionGet,                // GET
     &Scripts_InstructionGotoVar,            // GOTOVAR
+    &Scripts_InstructionStop,               // STOP
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -2220,6 +2221,34 @@ bool Scripts_InstructionScript(NpcMaker* en, PlayState* playState, ScriptInstanc
 
     u32 scriptID = Scripts_GetVarval(en, playState, in->scriptIdVarType, in->scriptId, false);
     en->scriptInstances[scriptID].active = in->subID;
+    script->curInstrNum++;
+    return SCRIPT_CONTINUE; 
+}
+
+extern void Audio_StopBGMAndFanfares(u16 FadeoutDur);
+    #if GAME_VERSION == 0
+        asm("Audio_StopBGMAndFanfares = 0x800F6AB0");
+    #elif GAME_VERSION == 1
+        asm("Audio_StopBGMAndFanfares = 0x800C77D0");
+    #endif	
+
+bool Scripts_InstructionStop(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrStop* in)
+{
+    #if LOGGING == 1
+        osSyncPrintf("_[%2d, %1d]: STOP", en->npcId, en->curScriptNum);
+    #endif  
+
+    u32 Val = Scripts_GetVarval(en, playState, in->stopIdVarType, in->stopId, false);
+
+    gSaveContext.rupees += 1;
+
+    switch (in->subID)
+    {
+        case STOP_SFX:  Audio_StopSfxById(Val); break;
+        case STOP_BGM:  Audio_StopBGMAndFanfares(Val); break;
+        default: break;
+    }
+
     script->curInstrNum++;
     return SCRIPT_CONTINUE; 
 }

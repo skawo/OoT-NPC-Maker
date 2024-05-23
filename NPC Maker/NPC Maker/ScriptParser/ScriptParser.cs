@@ -597,6 +597,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.CCALL: Instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, SplitLine)); break;
                         case (int)Lists.Instructions.GET:   Instructions.Add(ParseGetInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.GOTO_VAR: Instructions.Add(ParseGotoVarInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.STOP: Instructions.Add(ParseStopInstruction(SplitLine)); break;
                         default:
                             {
                                 byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);

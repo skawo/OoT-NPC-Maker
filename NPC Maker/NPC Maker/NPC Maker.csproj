@@ -166,6 +166,8 @@
     <Compile Include="ScriptParser\InstructionParsers\Return\Return.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Get\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Get\Get.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\Stop\Classes.cs" />
+    <Compile Include="ScriptParser\InstructionParsers\Stop\Stop.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Textbox\Close_Textbox.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Textbox\Show_TextboxSp.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Trade\Classes.cs" />

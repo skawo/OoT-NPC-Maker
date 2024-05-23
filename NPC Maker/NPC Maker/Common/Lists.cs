@@ -247,6 +247,7 @@ namespace NPC_Maker
             CCALL,
             GET,
             GOTO_VAR,
+            STOP,
             NOP,
         }
 
@@ -1595,6 +1596,12 @@ namespace NPC_Maker
         {
             STOP = 0,
             START = 1,
+        }
+
+        public enum StopSubtypes
+        {
+            SFX = 0,
+            BGM = 1,
         }
 
         public enum Buttons

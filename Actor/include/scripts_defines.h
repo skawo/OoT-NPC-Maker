@@ -41,6 +41,11 @@ typedef enum InstructionId
     SAVE,
     FADEIN,
     FADEOUT,
+    QUAKE,
+    CCALL,
+    GET,
+    GOTO_VAR,
+    STOP,
     NOP,
 } InstructionId;
 
@@ -501,5 +506,11 @@ typedef enum Particle_TypeId
     PARTICLE_DISPERSED_STAR,
     PARTICLE_FIRE_TAIL
 } Particle_TypeId;
+
+typedef enum StopSubIds
+{
+    STOP_SFX,
+    STOP_BGM,
+} StopSubIds;
 
 #endif

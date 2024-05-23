@@ -30,6 +30,7 @@ bool Scripts_InstructionScript(NpcMaker* en, PlayState* playState, ScriptInstanc
 bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrCCall* in);
 bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGetExtVar* in);
 bool Scripts_InstructionGotoVar(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGotoVar* instruction);
+bool Scripts_InstructionStop(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrStop* in);
 float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset);
 
 #endif

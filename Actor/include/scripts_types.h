@@ -565,7 +565,7 @@ typedef struct ScrInstrWarp
 
 #pragma endregion
 
-#pragma region scripts
+#pragma region script
 
 typedef struct ScrInstrScript
 {
@@ -575,6 +575,20 @@ typedef struct ScrInstrScript
     u8 pad;
     ScriptVarval scriptId;
 } ScrInstrScript;
+
+
+#pragma endregion
+
+#pragma region stop
+
+typedef struct ScrInstrStop
+{
+    u8 id;
+    u8 subID;
+    u8 stopIdVarType;
+    u8 pad;
+    ScriptVarval stopId;
+} ScrInstrStop;
 
 
 #pragma endregion
