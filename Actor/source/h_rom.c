@@ -112,7 +112,11 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
     #endif   
 
     if (!Object_IsLoaded(&playState->objectCtx, Object_GetIndex(&playState->objectCtx, objId)))
+    {
+        u32 numPersistent = playState->objectCtx.unk_09;
         bankIndex = Object_Spawn(&playState->objectCtx, objId);
+        playState->objectCtx.unk_09 = numPersistent;
+    }
     else
     {
         #if LOGGING == 1
