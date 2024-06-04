@@ -2240,8 +2240,6 @@ bool Scripts_InstructionStop(NpcMaker* en, PlayState* playState, ScriptInstance*
 
     u32 Val = Scripts_GetVarval(en, playState, in->stopIdVarType, in->stopId, false);
 
-    gSaveContext.rupees += 1;
-
     switch (in->subID)
     {
         case STOP_SFX:  Audio_StopSfxById(Val); break;
