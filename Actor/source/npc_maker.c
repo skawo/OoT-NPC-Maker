@@ -12,6 +12,7 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState);
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState);
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState);
 static void NpcMaker_Draw(NpcMaker* en, PlayState* playState);
+static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState);
 
 float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset)
 {
@@ -38,9 +39,14 @@ static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
     #if LOGGING == 1
         osSyncPrintf("___NPC MAKER DEBUG___");
     #endif
+}
 
+// Setting up the object needs to happen in update for some unknown reason,
+// because otherwise it fails if the object is already loaded in by the scene.
+static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
+{
     Setup_Defaults(en, playState);
-
+		
     if (!Setup_LoadSetup(en, playState))
     {
         Actor_Kill(&en->actor);
@@ -48,12 +54,7 @@ static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
     }
 
     NpcMaker_RunCFunc(en, playState, en->CFuncs[0]);
-}
 
-// Setting up the object needs to happen in update for some unknown reason,
-// because otherwise it fails if the object is already loaded in by the scene.
-static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
-{
     Setup_Objects(en, playState);
     Setup_Misc(en, playState);
     Setup_Model(en, playState);
@@ -63,7 +64,8 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
     #endif    
 
     en->actor.update = (ActorFunc)&NpcMaker_Update;
-    NpcMaker_Update(en, playState);
+	en->actor.draw = (ActorFunc)&NpcMaker_Draw;
+	en->actor.destroy = (ActorFunc)&NpcMaker_Destroy;
 }
 
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
@@ -216,6 +218,10 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
     #endif
 }
 
+static void NpcMaker_None(NpcMaker* en, PlayState* playState)
+{
+}
+
 /* .data */
 
 #ifdef NPCM_Z64ROM
@@ -227,9 +233,9 @@ ActorInit sNpcMakerInit =
     .objectId = 0x1,
     .instanceSize = sizeof(NpcMaker),
     .init = (ActorFunc)NpcMaker_Init,
-    .destroy = (ActorFunc)NpcMaker_Destroy,
+    .destroy = (ActorFunc)NpcMaker_None,
     .update = (ActorFunc)NpcMaker_PostInit,
-    .draw = (ActorFunc)NpcMaker_Draw
+    .draw = (ActorFunc)NpcMaker_None
 };
 #else
 ActorInitExplPad __attribute__((section(".data"))) sActorVars = 
@@ -240,9 +246,9 @@ ActorInitExplPad __attribute__((section(".data"))) sActorVars =
     .objectId = 0x1,
     .instanceSize = sizeof(NpcMaker),
     .init = (ActorFunc)NpcMaker_Init,
-    .destroy = (ActorFunc)NpcMaker_Destroy,
+    .destroy = (ActorFunc)NpcMaker_None,
     .update = (ActorFunc)NpcMaker_PostInit,
-    .draw = (ActorFunc)NpcMaker_Draw
+    .draw = (ActorFunc)NpcMaker_None
 };
 #endif
 
