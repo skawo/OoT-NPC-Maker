@@ -54,6 +54,7 @@ namespace NPC_Maker
             CacheEntryFile = Path.Combine(CacheFolder, "_e");
             CacheHeadersFile = Path.Combine(CacheFolder, "_h");
 
+            /*
             if (Directory.Exists(CacheFolder) && File.Exists(CacheFile) && File.Exists(CacheEntryFile) && File.Exists(CacheHeadersFile))
             {
                 Cache = JsonConvert.DeserializeObject<List<List<byte>>>(File.ReadAllText(CacheFile));
@@ -68,6 +69,7 @@ namespace NPC_Maker
                     HeadersCache = "";
                 }
             }
+            */
 
 
             Type t = Type.GetType("Mono.Runtime");
