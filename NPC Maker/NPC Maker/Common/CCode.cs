@@ -42,7 +42,7 @@ namespace NPC_Maker
 
         public static void GetOutput(Process p, string Section, ref string CompileErrors)
         {
-            CompileErrors += $"+==============+ {Section} +==============+";
+            CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
 
             string Out = Environment.NewLine + p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine) + Environment.NewLine + p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine);
 
@@ -146,6 +146,11 @@ namespace NPC_Maker
             }
         }
 
+        public static void ConsoleWriteCompileFail(string CompilationMsgs)
+        {
+            Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{CompilationMsgs}{Environment.NewLine}{Environment.NewLine}");
+        }
+
         public static byte[] CompileUnderMono(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
             string oFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.o");
@@ -183,6 +188,7 @@ namespace NPC_Maker
             if (!File.Exists(oFile))
             {
                 CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
                 return null;
             }
 
@@ -214,6 +220,7 @@ namespace NPC_Maker
             if (!File.Exists(elfFile))
             {
                 CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
                 return null;
             }
 
@@ -250,6 +257,7 @@ namespace NPC_Maker
             if (!File.Exists(ovlFile))
             {
                 CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
                 return new byte[0];
             }
             else
@@ -299,6 +307,7 @@ namespace NPC_Maker
             if (!File.Exists(oFile))
             {
                 CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
                 return null;
             }
 
@@ -332,6 +341,7 @@ namespace NPC_Maker
             if (!File.Exists(elfFile))
             {
                 CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
                 return null;
             }
 
@@ -362,7 +372,10 @@ namespace NPC_Maker
             GetOutput(p, "NOVL", ref CompileMsgs);
 
             if (!File.Exists(ovlFile))
+            {
                 CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
+            }
             else
                 CompileMsgs += "Compilation successful!";
 

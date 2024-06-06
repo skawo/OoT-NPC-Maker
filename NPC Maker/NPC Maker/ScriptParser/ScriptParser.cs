@@ -18,7 +18,7 @@ namespace NPC_Maker.Scripts
             Entry = _Entry;
         }
 
-        public BScript ParseScript()
+        public BScript ParseScript(string ScrName)
         {
             string s = "";
             int id = 0x8000;
@@ -33,6 +33,8 @@ namespace NPC_Maker.Scripts
             RegexText(ref ScriptText);
 
             outScript = new BScript();
+            outScript.Name = ScrName;
+
             RandomLabels = new List<string>();
 
             if (ScriptText.Trim() == "")

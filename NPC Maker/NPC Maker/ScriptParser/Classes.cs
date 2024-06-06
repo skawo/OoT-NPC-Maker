@@ -8,11 +8,14 @@ namespace NPC_Maker.Scripts
         public List<string> ScriptDebug { get; set; }
         public List<ParseException> ParseErrors { get; set; }
 
+        public string Name;
+
         public BScript()
         {
             Script = new byte[0];
             ScriptDebug = new List<string>();
             ParseErrors = new List<ParseException>();
+            Name = "";
         }
     }
 

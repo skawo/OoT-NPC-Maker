@@ -104,7 +104,7 @@ namespace NPC_Maker
             Textbox_ParseErrors.Clear();
 
             Script.ParseErrors.Clear();
-            Scripts.BScript Output = Parser.ParseScript();
+            Scripts.BScript Output = Parser.ParseScript(Script.Name);
 
             if (Output.ParseErrors.Count() == 0)
                 Textbox_ParseErrors.Text = "Parsed successfully!";

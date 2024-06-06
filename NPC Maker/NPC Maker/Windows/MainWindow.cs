@@ -2086,9 +2086,9 @@ namespace NPC_Maker
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
             Entry.MessageText = MsgText.Text;
 
-            List<byte> Data = Entry.ConvertTextData(false);
+            List<byte> Data = Entry.ConvertTextData(SelectedEntry.NPCName,false);
 
-            if (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText))
+            if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return;
 
             ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray());

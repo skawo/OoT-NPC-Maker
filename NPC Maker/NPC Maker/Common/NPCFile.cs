@@ -602,7 +602,7 @@ namespace NPC_Maker
             return (byte)(Out | Position);
         }
 
-        public List<byte> ConvertTextData(bool ShowErrors = true)
+        public List<byte> ConvertTextData(string NPCName, bool ShowErrors = true)
         {
             List<byte> data = new List<byte>();
             List<string> errors = new List<string>();
@@ -679,13 +679,19 @@ namespace NPC_Maker
 
             data.Add((byte)Lists.MsgControlCode.END);
 
-            if (ShowErrors && errors.Count != 0)
-                System.Windows.Forms.MessageBox.Show($"Errors parsing message {Name}: " + Environment.NewLine + String.Join(Environment.NewLine, errors.ToArray()));
+            if (errors.Count != 0)
+            {
+                if (ShowErrors)
+                    System.Windows.Forms.MessageBox.Show($"Errors parsing message \"{Name}\" in actor \"{NPCName}\": " + Environment.NewLine + String.Join(Environment.NewLine, errors.ToArray()));
+
+                Console.Write($"{Environment.NewLine}{Environment.NewLine}Errors parsing message \"{Name}\":{Environment.NewLine}{String.Join(Environment.NewLine, errors.ToArray())}{Environment.NewLine}");
+            }
+            
 
             if (errors.Count == 0)
                 return data;
             else
-                return new List<byte>();
+                return null;
         }
 
         private List<byte> GetControlCode(string[] code, ref List<string> errors)
