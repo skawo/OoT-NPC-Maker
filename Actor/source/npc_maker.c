@@ -229,7 +229,7 @@ ActorInit sNpcMakerInit =
 {
     .id = 0x0003, // <-- Set this to whichever actor ID you're using.
     .category = ACTORCAT_NPC,
-    .flags = 0x00000000,
+    .flags = 0x00000010,
     .objectId = 0x1,
     .instanceSize = sizeof(NpcMaker),
     .init = (ActorFunc)NpcMaker_Init,
@@ -242,7 +242,7 @@ ActorInitExplPad __attribute__((section(".data"))) sActorVars =
 {
     .id = 0xDEAD, .padding = 0xBEEF, // <-- magic values, do not change
     .category = ACTORCAT_NPC,
-    .flags = 0x00000000,
+    .flags = 0x00000010,
     .objectId = 0x1,
     .instanceSize = sizeof(NpcMaker),
     .init = (ActorFunc)NpcMaker_Init,
