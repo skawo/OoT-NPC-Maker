@@ -440,8 +440,8 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
         if (en->settings.pushesSwitches)
             en->actor.flags |= PUSH_SWITCHES_MASK;
 
-        if (!en->settings.alwaysActive)
-            en->actor.flags &= ~ALWAYS_ACTIVE_MASK;
+        if (en->settings.alwaysActive)
+            en->actor.flags |= ALWAYS_ACTIVE_MASK;
 
         if (en->settings.alwaysDrawn)
             en->actor.flags |= ALWAYS_DRAWN_MASK;
