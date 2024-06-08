@@ -45,6 +45,13 @@ static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
 // because otherwise it fails if the object is already loaded in by the scene.
 static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 {
+	// Sometimes game crashes if objects try to get loaded too early
+	if (!en->spawnTimer)
+	{
+		en->spawnTimer++;
+		return;
+	}
+	
     Setup_Defaults(en, playState);
 		
     if (!Setup_LoadSetup(en, playState))
@@ -229,7 +236,7 @@ ActorInit sNpcMakerInit =
 {
     .id = 0x0003, // <-- Set this to whichever actor ID you're using.
     .category = ACTORCAT_NPC,
-    .flags = 0x00000000,
+    .flags = 0x00000010,
     .objectId = 0x1,
     .instanceSize = sizeof(NpcMaker),
     .init = (ActorFunc)NpcMaker_Init,
@@ -242,7 +249,7 @@ ActorInitExplPad __attribute__((section(".data"))) sActorVars =
 {
     .id = 0xDEAD, .padding = 0xBEEF, // <-- magic values, do not change
     .category = ACTORCAT_NPC,
-    .flags = 0x00000000,
+    .flags = 0x00000010,
     .objectId = 0x1,
     .instanceSize = sizeof(NpcMaker),
     .init = (ActorFunc)NpcMaker_Init,

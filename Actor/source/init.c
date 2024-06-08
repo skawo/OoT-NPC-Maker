@@ -434,14 +434,14 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
 
     #pragma region Actor flags
 
+        if (!en->settings.alwaysActive)
+            en->actor.flags &= ~ALWAYS_ACTIVE_MASK;
+
         if (en->settings.isTargettable)
             en->actor.flags |= TARGETTABLE_MASK;
 
         if (en->settings.pushesSwitches)
             en->actor.flags |= PUSH_SWITCHES_MASK;
-
-        if (en->settings.alwaysActive)
-            en->actor.flags |= ALWAYS_ACTIVE_MASK;
 
         if (en->settings.alwaysDrawn)
             en->actor.flags |= ALWAYS_DRAWN_MASK;
