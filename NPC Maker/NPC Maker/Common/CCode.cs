@@ -44,13 +44,13 @@ namespace NPC_Maker
         {
             CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
 
-            string Out = Environment.NewLine + p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine) + Environment.NewLine + p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine);
+            string Out = $"{Environment.NewLine}{p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine)}{Environment.NewLine}{p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine)}";
 
             if (!String.IsNullOrWhiteSpace(Out))
                 CompileErrors += Out;
 
             if (p.ExitCode == 0)
-                CompileErrors += Environment.NewLine + "OK!" + Environment.NewLine;
+                CompileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
         }
 
         public static void Clean()
