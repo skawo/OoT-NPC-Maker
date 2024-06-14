@@ -76,7 +76,7 @@ namespace NPC_Maker.Scripts
 #if DEBUG
             if (outScript.ParseErrors.Count == 0)
 #else
-            if (outScript.ParseErrors.Count == 0 && GetBytes)
+            if (outScript.ParseErrors.Count == 0 && GetBytes == true)
 #endif
             {
                 outScript.Script = ConvertScriptToBytes(Labels, ref outScript, ref Instructions);
@@ -113,23 +113,21 @@ namespace NPC_Maker.Scripts
 
         private static void RegexText(ref string ScriptText)
         {
-            string[] Operators = { "+=", "-=", "/=", "*=", "!=", "==", "=+", "=-", "=/", "=!", ">=", "<=" };
 
-            // Separate oparators
-            foreach (string op in Operators)
-                ScriptText = ScriptText.Replace(op, " " + op + " ");
+            ScriptText = Regex.Replace(ScriptText, @"(\+=|-=|/=|\*=|!=|==|=\+|=-|=/|=!|>=|<=)", m => $" {m.Groups[1].Value} ");    // Separate operators
 
-            ScriptText = Regex.Replace(ScriptText, @"([^>^<^=^\-^+^/^*^!])(=)([^=^\-^+^/^*^!^>^<])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
-            ScriptText = Regex.Replace(ScriptText, @"([^=])(<)([^=])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
-            ScriptText = Regex.Replace(ScriptText, @"([^=^-])(>)([^=])", m => m.Groups[1].Value + " " + m.Groups[2].Value + " " + m.Groups[3].Value);
+            ScriptText = Regex.Replace(ScriptText, @"([^><=\-+/*!])(=)([^=\-+/*!><])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}"); // Separate single =s
+            ScriptText = Regex.Replace(ScriptText, @"([^=])(<)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}"); // Separate single <s
+            ScriptText = Regex.Replace(ScriptText, @"([^=-])(>)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}"); // Separate singe >s
 
             ScriptText = Regex.Replace(ScriptText, @"\\\s+\n", "");                                                             // Override line carriage return if preceded by \
-            ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
+
+            ScriptText = Regex.Replace(ScriptText, @"[,{}()\t]", " ");
+           // ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
             ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty);                                        // Remove comment blocks
             ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                                       // Remove inline comments
             ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();              // Remove empty lines
-            ScriptText = ScriptText.Replace("\t", "");                                                                          // Remove tabs
             ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ");                                                            // Remove double spaces
         }
 
