@@ -18,7 +18,7 @@ namespace NPC_Maker.Scripts
             Entry = _Entry;
         }
 
-        public BScript ParseScript(string ScrName)
+        public BScript ParseScript(string ScrName, bool GetBytes)
         {
             string s = "";
             int id = 0x8000;
@@ -73,7 +73,11 @@ namespace NPC_Maker.Scripts
             List<InstructionLabel> Labels = GetLabelsAndRemove(ref outScript, ref Instructions);
 
             // If everything was successful up 'till now, try parsing.
+#if DEBUG
             if (outScript.ParseErrors.Count == 0)
+#else
+            if (outScript.ParseErrors.Count == 0 && GetBytes)
+#endif
             {
                 outScript.Script = ConvertScriptToBytes(Labels, ref outScript, ref Instructions);
 

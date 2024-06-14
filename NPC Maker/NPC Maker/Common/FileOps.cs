@@ -612,7 +612,7 @@ namespace NPC_Maker
                         foreach (ScriptEntry Scr in NonEmptyEntries)
                         {
                             Scripts.ScriptParser Par = new Scripts.ScriptParser(Entry, Scr.Text, Data.GlobalHeaders);
-                            ParsedScripts.Add(Par.ParseScript(Scr.Name));
+                            ParsedScripts.Add(Par.ParseScript(Scr.Name, true));
                         }
 
                         foreach (Scripts.BScript Scr in ParsedScripts)
