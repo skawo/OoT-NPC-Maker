@@ -2108,7 +2108,7 @@ bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance*
                     {
                         // Wait for textbox end...
                         // Player talk state
-                        if (Message_GetState(&playState->msgCtx) != TEXT_STATE_CLOSING)
+                        if (Message_GetState(&playState->msgCtx) != TEXT_STATE_CLOSING && Message_GetState(&playState->msgCtx) != TEXT_STATE_NONE)
                             return SCRIPT_STOP;
 
                         //...after which, if Link WAS in a cutscene, we restore the cutscene state.
