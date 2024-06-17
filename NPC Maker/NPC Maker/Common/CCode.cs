@@ -285,9 +285,7 @@ namespace NPC_Maker
             p.WaitForExit();
             GetOutput(p, "Mono NOVL", ref CompileMsgs);
 
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFile, true);
-
-            if (!File.Exists(ovlFile))
+            if (!File.Exists(ovlFileMono))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -296,6 +294,7 @@ namespace NPC_Maker
             else
                 CompileMsgs += "Compilation successful!";
 
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFileMono, true);
 
             return File.ReadAllBytes(ovlFile);
             #endregion

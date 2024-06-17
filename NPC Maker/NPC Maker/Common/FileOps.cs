@@ -536,6 +536,9 @@ namespace NPC_Maker
 
                             CompErrors = "";
                             CompErrors = "";
+
+
+                            CCode.CreateCTempDirectory(Entry.EmbeddedOverlayCode.Code);
                             byte[] Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
 
                             if (Overlay == null)

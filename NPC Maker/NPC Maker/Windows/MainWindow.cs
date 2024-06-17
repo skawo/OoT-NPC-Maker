@@ -385,7 +385,10 @@ namespace NPC_Maker
             string CompileErrors = "";
 
             if (SelectedEntry.EmbeddedOverlayCode.Code != "")
+            {
+                CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
                 CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+            }
 
             TextBox_CompileMsg.Text = CompileErrors;
 
