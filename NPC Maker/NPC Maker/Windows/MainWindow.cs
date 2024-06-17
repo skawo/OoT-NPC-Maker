@@ -518,7 +518,12 @@ namespace NPC_Maker
             if (SaveChangesAsPrompt() == false)
                 return;
 
-            OpenFileDialog OFD = new OpenFileDialog();
+            OpenFileDialog OFD = new OpenFileDialog()
+            {
+                InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
+                RestoreDirectory = true,
+            };
+
             DialogResult DR = OFD.ShowDialog();
 
             if (DR == DialogResult.OK)
@@ -531,6 +536,7 @@ namespace NPC_Maker
                     OpenedPath = OFD.FileName;
                     Panel_Editor.Enabled = true;
                     InsertDataIntoActorListGrid();
+                    Program.Settings.LastOpenPath = OFD.FileName;
                 }
             }
 
@@ -555,6 +561,8 @@ namespace NPC_Maker
 
             SaveFileDialog SFD = new SaveFileDialog
             {
+                InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
+                RestoreDirectory = true,
                 FileName = "ActorData.json",
                 Filter = "Json Files | *.json"
             };
@@ -565,6 +573,8 @@ namespace NPC_Maker
             {
                 OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 FileOps.SaveNPCJSON(SFD.FileName, EditedFile);
+
+                Program.Settings.LastOpenPath = SFD.FileName;
             }
         }
 
@@ -590,6 +600,8 @@ namespace NPC_Maker
 
             SaveFileDialog SFD = new SaveFileDialog
             {
+                InitialDirectory = Path.GetDirectoryName(Program.Settings.LastSaveBinaryPath),
+                RestoreDirectory = true,
                 FileName = "zobj.zobj",
                 Filter = "Zelda Object Files | *.zobj"
             };
@@ -598,6 +610,7 @@ namespace NPC_Maker
             if (DR == DialogResult.OK)
             {
                 FileOps.SaveBinaryFile(SFD.FileName, EditedFile);
+                Program.Settings.LastSaveBinaryPath = SFD.FileName;
             }
 
             //InsertDataToEditor();

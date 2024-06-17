@@ -31,6 +31,10 @@ namespace NPC_Maker
 
         public UInt32 CompileTimeout { get; set; }
 
+        public string LastSaveBinaryPath { get; set; }
+
+        public string LastOpenPath { get; set; }
+
 
         public NPCMakerSettings()
         {
@@ -46,6 +50,8 @@ namespace NPC_Maker
             CheckSyntax = true;
             AutoComp_Save = true;
             CompileTimeout = 2500;
+            LastOpenPath = "/";
+            LastSaveBinaryPath = "/";
         }
 
         public enum Members
