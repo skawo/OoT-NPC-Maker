@@ -5,6 +5,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace NPC_Maker
 {
@@ -40,11 +41,21 @@ namespace NPC_Maker
         public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay_comp.ovl");
         public static UInt32 BaseAddr = 0x80800000;
 
+        private static string GetStreamOutput(StreamReader stream)
+        {
+            //Read output in separate task to avoid deadlocks
+            var outputReadTask = Task.Factory.StartNew<string>(() => { return stream.ReadToEnd(); });
+            return outputReadTask.Result;
+        }
+
         public static void GetOutput(Process p, string Section, ref string CompileErrors)
         {
             CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
 
-            string Out = $"{Environment.NewLine}{p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine)}{Environment.NewLine}{p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine)}";
+            String outputResult = GetStreamOutput(p.StandardOutput);
+            String errorResult = GetStreamOutput(p.StandardError);
+
+            string Out = $"{Environment.NewLine}{errorResult.Replace("\n", Environment.NewLine)}{Environment.NewLine}{outputResult.Replace("\n", Environment.NewLine)}";
 
             if (!String.IsNullOrWhiteSpace(Out))
                 CompileErrors += Out;
@@ -74,25 +85,47 @@ namespace NPC_Maker
         }
 
 
-        public static List<KeyValuePair<string, UInt32>> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath)
+        public static List<KeyValuePair<string, UInt32>> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
         {
-            ProcessStartInfo objDump = new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-objdump.exe"),
-                Arguments =
-                $"-t {elfPath.AppendQuotation()}"
-            };
+            string Out;
 
-            Process p = Process.Start(objDump);
-            string Out = p.StandardOutput.ReadToEnd();
+            if (!mono)
+            {
+                ProcessStartInfo objDump = new ProcessStartInfo
+                {
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
+                    FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-objdump.exe"),
+                    Arguments =
+                    $"-t {elfPath.AppendQuotation()}"
+                };
+
+                Process p = Process.Start(objDump);
+                Out = p.StandardOutput.ReadToEnd();
+            }
+            else
+            {
+                ProcessStartInfo objDump = new ProcessStartInfo
+                {
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "binmono"),
+                    FileName = Path.Combine(Program.ExecPath, "gcc", "binmono", "mips64-elf-objdump"),
+                    Arguments =
+                    $"-t {elfPath.AppendQuotation()}"
+                };
+
+                Process p = Process.Start(objDump);
+                Out = p.StandardOutput.ReadToEnd();
+            }
+
             Out = Out.Replace("\t", " ");
             Out = Regex.Replace(Out, "[ ]{2,}", " ");
-
             List<string> Lines = Out.Split(new[] { '\n' }).ToList();
 
 
@@ -153,8 +186,8 @@ namespace NPC_Maker
 
         public static byte[] CompileUnderMono(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
-            string oFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.o");
-            string elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
+            string oFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", "EmbeddedOverlay_comp.o");
+            string elfFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", "EmbeddedOverlay_comp.elf");
 
             #region GCC
 
@@ -164,12 +197,13 @@ namespace NPC_Maker
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "binmono"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "binmono", "mips64-elf-gcc"),
                 Arguments =
+                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include" }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
-                Program.Settings.GCCFlags + " " +
+                Program.Settings.GCCFlags + " " + $"-B {Path.Combine(new string[] { "..", "mips64", "binmono" })} " +
                 $"{Path.Combine("..", "..", "temp", codeFilenameForCompile).AppendQuotation()}",
             };
 
@@ -179,13 +213,13 @@ namespace NPC_Maker
             Process p = Process.Start(gccInfo);
             p.WaitForExit();
 
-            GetOutput(p, "GCC", ref CompileMsgs);
+            GetOutput(p, "Mono GCC", ref CompileMsgs);
 
             #endregion
 
             #region LD
 
-            if (!File.Exists(oFile))
+            if (!File.Exists(oFileMono))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -198,8 +232,8 @@ namespace NPC_Maker
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "binmono"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "binmono", "mips64-elf-ld"),
                 Arguments =
                     $"-L {Path.Combine(new string[] { "..", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                     $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
@@ -214,10 +248,10 @@ namespace NPC_Maker
             p = Process.Start(ldInfo);
             p.WaitForExit();
             p.WaitForExit();
-            GetOutput(p, "LINKER", ref CompileMsgs);
+            GetOutput(p, "Mono LINKER", ref CompileMsgs);
 
 
-            if (!File.Exists(elfFile))
+            if (!File.Exists(elfFileMono))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -228,8 +262,8 @@ namespace NPC_Maker
 
             #region NOVL
 
-            elfFileMono = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay_comp.elf");
-            string ovlFileMono = Path.Combine("..", "temp", "EmbeddedOverlay_comp.ovl");
+            // elfFileMono = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay_comp.elf");
+            string ovlFileMono = Path.Combine(Program.ExecPath, "temp", "EmbeddedOverlay_comp.ovl");
 
             ProcessStartInfo nOVLInfo = new ProcessStartInfo
             {
@@ -238,7 +272,7 @@ namespace NPC_Maker
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 WorkingDirectory = Path.Combine(Program.ExecPath, "nOVL"),
-                FileName = Path.Combine(Program.ExecPath, "nOVL", "nOVL.exe"),
+                FileName = Path.Combine(Program.ExecPath, "nOVL", "nOVL"),
                 Arguments =
                 $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFileMono.AppendQuotation()} {elfFileMono.AppendQuotation()}",
             };
@@ -249,10 +283,9 @@ namespace NPC_Maker
       
             p = Process.Start(nOVLInfo);
             p.WaitForExit();
-            GetOutput(p, "NOVL", ref CompileMsgs);
+            GetOutput(p, "Mono NOVL", ref CompileMsgs);
 
-            elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFile);
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFile, true);
 
             if (!File.Exists(ovlFile))
             {
@@ -282,6 +315,7 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
                 Arguments =
+                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include" }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
                 Program.Settings.GCCFlags + " " +
@@ -379,7 +413,7 @@ namespace NPC_Maker
             else
                 CompileMsgs += "Compilation successful!";
 
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFile, ovlFile);
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFile, ovlFile, false);
 
             return File.ReadAllBytes(ovlFile);
             #endregion
