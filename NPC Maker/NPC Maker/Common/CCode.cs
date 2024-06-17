@@ -57,6 +57,8 @@ namespace NPC_Maker
 
             string Out = $"{Environment.NewLine}{errorResult.Replace("\n", Environment.NewLine)}{Environment.NewLine}{outputResult.Replace("\n", Environment.NewLine)}";
 
+            Out = Regex.Replace(Out, @"\x1B\[[^@-~]*[@-~]", "");
+
             if (!String.IsNullOrWhiteSpace(Out))
                 CompileErrors += Out;
 
