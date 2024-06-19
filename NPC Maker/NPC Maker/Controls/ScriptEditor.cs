@@ -59,7 +59,7 @@ namespace NPC_Maker
             AutoParseTimer.Stop();
 
             if (AutoParse)
-                DoParse();
+                DoParse(true);
 
             SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
         }
@@ -96,7 +96,7 @@ namespace NPC_Maker
             ColorizeTimer.Start();
         }
 
-        private Scripts.BScript DoParse()
+        private Scripts.BScript DoParse(bool GetBytes)
         {
             string[] Lines = Textbox_Script.Text.Replace(";", Environment.NewLine).Split(new[] { "\n" }, StringSplitOptions.None);
             Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
@@ -106,7 +106,7 @@ namespace NPC_Maker
             Textbox_ParseErrors.Clear();
 
             Script.ParseErrors.Clear();
-            Scripts.BScript Output = Parser.ParseScript(Script.Name, true);
+            Scripts.BScript Output = Parser.ParseScript(Script.Name, GetBytes);
 
             if (Output.ParseErrors.Count() == 0)
                 Textbox_ParseErrors.Text = "Parsed successfully!";
@@ -118,7 +118,7 @@ namespace NPC_Maker
 
         private void Button_TryParse_Click(object sender, EventArgs e)
         {
-            Scripts.BScript Output = DoParse();
+            Scripts.BScript Output = DoParse(true);
 
 #if DEBUG
 

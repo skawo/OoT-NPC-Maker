@@ -124,7 +124,7 @@ namespace NPC_Maker.Scripts
             ScriptText = Regex.Replace(ScriptText, @"\\\r?\n", "");                                                             // Override line carriage return if preceded by \
 
             ScriptText = Regex.Replace(ScriptText, @"[,{}()\t]", " ");
-           // ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
+            // ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
             ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty);                                        // Remove comment blocks
             ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                                       // Remove inline comments
@@ -150,7 +150,7 @@ namespace NPC_Maker.Scripts
                 {
                     string labelN = Line.Remove(Line.Length - 1);
 
-                    if (Lists.AllKeywords.Contains(labelN) || Line.StartsWith("__") || 
+                    if (Lists.AllKeywords.Contains(labelN) || Line.StartsWith("__") ||
                         labelN.Equals(Lists.Keyword_Label_HERE, StringComparison.OrdinalIgnoreCase))
                     {
                         outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(labelN));
@@ -187,20 +187,29 @@ namespace NPC_Maker.Scripts
                     return Lines;
 
                 // Otherwise, loop through all lines and replace the defines.
-                List<string> NewLines = new List<string>();
+                List<string> NewLines = Lines.Where(x => !x.ToUpper().StartsWith(Lists.Keyword_SharpDefine)).ToList();
 
+                string s = String.Join(Environment.NewLine, NewLines);
+
+                foreach (string[] Def in Defines)
+                     s = ScriptHelpers.ReplaceExprIfNotDefine(s, Def[0], Def[1]);
+
+                Lines = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                /*
                 for (int i = 0; i < Lines.Count(); i++)
                 {
                     if (Lines[i].ToUpper().StartsWith(Lists.Keyword_SharpDefine))
                         continue;
 
                     foreach (string[] Def in Defines)
-                        Lines[i] = ScriptHelpers.ReplaceExpr(Lines[i], Def[0], Def[1]);
+                        Lines[i] = ScriptHelpers.ReplaceExprIfNotDefine(Lines[i], Def[0], Def[1]);
 
                     NewLines.Add(Lines[i]);
                 }
+                */
 
-                return NewLines;
+                return Lines;
             }
             catch (ParseException pEx)
             {
@@ -600,7 +609,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.FADEOUT: Instructions.Add(ParseFadeInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.QUAKE: Instructions.Add(ParseQuakeInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.CCALL: Instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, SplitLine)); break;
-                        case (int)Lists.Instructions.GET:   Instructions.Add(ParseGetInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.GET: Instructions.Add(ParseGetInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.GOTO_VAR: Instructions.Add(ParseGotoVarInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.STOP: Instructions.Add(ParseStopInstruction(SplitLine)); break;
                         default:

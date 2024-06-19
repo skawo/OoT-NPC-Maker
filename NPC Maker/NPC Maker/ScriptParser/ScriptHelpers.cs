@@ -12,6 +12,11 @@ namespace NPC_Maker.Scripts
             string Pattern = String.Format(@"\b{0}\b", Regex.Escape(Expr));
             return Regex.Replace(Orig, Pattern, Replacement, regexOptions);
         }
+        static public string ReplaceExprIfNotDefine(this string Orig, string Expr, string Replacement, RegexOptions regexOptions = RegexOptions.None)
+        {
+            string Pattern = String.Format(@"\b(?<!#){0}\b", Regex.Escape(Expr));
+            return Regex.Replace(Orig, Pattern, Replacement, regexOptions);
+        }
 
         static public string ReplaceFirstExpr(this string Orig, string Expr, string Replacement, RegexOptions regexOptions = RegexOptions.None)
         {
