@@ -192,7 +192,7 @@ namespace NPC_Maker.Scripts
                 string s = String.Join(Environment.NewLine, NewLines);
 
                 foreach (string[] Def in Defines)
-                     s = ScriptHelpers.ReplaceExprIfNotDefine(s, Def[0], Def[1]);
+                     s = ScriptHelpers.ReplaceExpr(s, Def[0], Def[1]);
 
                 Lines = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
