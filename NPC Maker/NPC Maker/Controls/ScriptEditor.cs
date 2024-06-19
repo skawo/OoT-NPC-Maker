@@ -22,13 +22,13 @@ namespace NPC_Maker
 
             AutoParseTimer = new System.Windows.Forms.Timer
             {
-                Interval =  1000
+                Interval = (int)Program.Settings.ParseTime,
             };
             AutoParseTimer.Tick += AutoParseTimer_Tick;
 
             ColorizeTimer = new System.Windows.Forms.Timer
             {
-                Interval = 500
+                Interval= (int)Program.Settings.ParseTime / 2,
             };
             ColorizeTimer.Tick += ColorizeTimer_Tick;
 
@@ -89,8 +89,10 @@ namespace NPC_Maker
             Script.Text = Textbox_Script.Text;
 
             AutoParseTimer.Stop();
+            AutoParseTimer.Interval = (int)Program.Settings.ParseTime;
             AutoParseTimer.Start();
             ColorizeTimer.Stop();
+            ColorizeTimer.Interval = (int)Program.Settings.ParseTime;
             ColorizeTimer.Start();
         }
 

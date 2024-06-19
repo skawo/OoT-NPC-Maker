@@ -35,6 +35,7 @@ namespace NPC_Maker
 
         public string LastOpenPath { get; set; }
 
+        public UInt32 ParseTime { get; set; }
 
         public NPCMakerSettings()
         {
@@ -49,9 +50,10 @@ namespace NPC_Maker
             ImproveTextMsgReadability = true;
             CheckSyntax = true;
             AutoComp_Save = true;
-            CompileTimeout = 2500;
+            CompileTimeout = 5000;
             LastOpenPath = "/";
             LastSaveBinaryPath = "/";
+            ParseTime = 1000;
         }
 
         public enum Members
@@ -68,6 +70,7 @@ namespace NPC_Maker
             NOMEMBER,
             COMPILETIMEOUT,
             AUTOCOMP_SAVE,
+            PARSETIME,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -106,6 +109,7 @@ namespace NPC_Maker
                 case Members.GCCARGS: GCCFlags = (string)Value; break;
                 case Members.GAMEVERSION: GameVersion = (Lists.GameVersions)Enum.Parse(typeof(Lists.GameVersions), (string)Value); break;
                 case Members.COMPILETIMEOUT: CompileTimeout = Convert.ToUInt32(Value); break;
+                case Members.PARSETIME: ParseTime = Convert.ToUInt32(Value); break;
                 default: break;
             }
         }

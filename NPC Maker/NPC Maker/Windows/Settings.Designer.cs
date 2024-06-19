@@ -41,7 +41,9 @@ namespace NPC_Maker.Windows
             this.Cb_AutoCompile = new System.Windows.Forms.CheckBox();
             this.Label_CompileTimeout = new System.Windows.Forms.Label();
             this.NumUpCompileTimeout = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // Cb_ImproveTextReadability
@@ -73,10 +75,10 @@ namespace NPC_Maker.Windows
             this.Cb_CheckSyntax.AutoSize = true;
             this.Cb_CheckSyntax.Location = new System.Drawing.Point(13, 59);
             this.Cb_CheckSyntax.Name = "Cb_CheckSyntax";
-            this.Cb_CheckSyntax.Size = new System.Drawing.Size(118, 17);
+            this.Cb_CheckSyntax.Size = new System.Drawing.Size(169, 17);
             this.Cb_CheckSyntax.TabIndex = 2;
             this.Cb_CheckSyntax.Tag = "CHECKSYNTAX";
-            this.Cb_CheckSyntax.Text = "Check script syntax";
+            this.Cb_CheckSyntax.Text = "Check script syntax every (ms)";
             this.Cb_CheckSyntax.UseVisualStyleBackColor = true;
             this.Cb_CheckSyntax.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
@@ -157,13 +159,13 @@ namespace NPC_Maker.Windows
             this.Label_CompileTimeout.AutoSize = true;
             this.Label_CompileTimeout.Location = new System.Drawing.Point(12, 166);
             this.Label_CompileTimeout.Name = "Label_CompileTimeout";
-            this.Label_CompileTimeout.Size = new System.Drawing.Size(84, 13);
+            this.Label_CompileTimeout.Size = new System.Drawing.Size(106, 13);
             this.Label_CompileTimeout.TabIndex = 10;
-            this.Label_CompileTimeout.Text = "Compile timeout:";
+            this.Label_CompileTimeout.Text = "Compile timeout (ms):";
             // 
             // NumUpCompileTimeout
             // 
-            this.NumUpCompileTimeout.Location = new System.Drawing.Point(102, 164);
+            this.NumUpCompileTimeout.Location = new System.Drawing.Point(119, 164);
             this.NumUpCompileTimeout.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -179,17 +181,42 @@ namespace NPC_Maker.Windows
             this.NumUpCompileTimeout.TabIndex = 11;
             this.NumUpCompileTimeout.Tag = "COMPILETIMEOUT";
             this.NumUpCompileTimeout.Value = new decimal(new int[] {
-            2000,
+            5000,
             0,
             0,
             0});
             this.NumUpCompileTimeout.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(188, 58);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 12;
+            this.numericUpDown1.Tag = "PARSETIME";
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
             // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(475, 278);
+            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.NumUpCompileTimeout);
             this.Controls.Add(this.Label_CompileTimeout);
             this.Controls.Add(this.Cb_AutoCompile);
@@ -206,6 +233,7 @@ namespace NPC_Maker.Windows
             this.Name = "Settings";
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -225,5 +253,6 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.CheckBox Cb_AutoCompile;
         private System.Windows.Forms.Label Label_CompileTimeout;
         private System.Windows.Forms.NumericUpDown NumUpCompileTimeout;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }
