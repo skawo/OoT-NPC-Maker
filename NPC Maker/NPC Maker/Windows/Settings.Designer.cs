@@ -41,9 +41,9 @@ namespace NPC_Maker.Windows
             this.Cb_AutoCompile = new System.Windows.Forms.CheckBox();
             this.Label_CompileTimeout = new System.Windows.Forms.Label();
             this.NumUpCompileTimeout = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.NumUpParseTime = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).BeginInit();
             this.SuspendLayout();
             // 
             // Cb_ImproveTextReadability
@@ -187,36 +187,36 @@ namespace NPC_Maker.Windows
             0});
             this.NumUpCompileTimeout.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
             // 
-            // numericUpDown1
+            // NumUpParseTime
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(188, 58);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.NumUpParseTime.Location = new System.Drawing.Point(188, 58);
+            this.NumUpParseTime.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.NumUpParseTime.Minimum = new decimal(new int[] {
             500,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 12;
-            this.numericUpDown1.Tag = "PARSETIME";
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.NumUpParseTime.Name = "NumUpParseTime";
+            this.NumUpParseTime.Size = new System.Drawing.Size(120, 20);
+            this.NumUpParseTime.TabIndex = 12;
+            this.NumUpParseTime.Tag = "PARSETIME";
+            this.NumUpParseTime.Value = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
+            this.NumUpParseTime.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
             // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(475, 278);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.NumUpParseTime);
             this.Controls.Add(this.NumUpCompileTimeout);
             this.Controls.Add(this.Label_CompileTimeout);
             this.Controls.Add(this.Cb_AutoCompile);
@@ -233,7 +233,7 @@ namespace NPC_Maker.Windows
             this.Name = "Settings";
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -253,6 +253,6 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.CheckBox Cb_AutoCompile;
         private System.Windows.Forms.Label Label_CompileTimeout;
         private System.Windows.Forms.NumericUpDown NumUpCompileTimeout;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown NumUpParseTime;
     }
 }

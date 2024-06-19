@@ -33,6 +33,7 @@ namespace NPC_Maker.Windows
             Combo_CompileFor.Text = EditedSettings.GameVersion.ToString();
             Cb_AutoCompile.Checked = EditedSettings.AutoComp_Save;
             NumUpCompileTimeout.Value = EditedSettings.CompileTimeout;
+            NumUpParseTime.Value = EditedSettings.ParseTime;
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)
