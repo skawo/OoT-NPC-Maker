@@ -1156,7 +1156,7 @@ namespace NPC_Maker
                         {
                             var entry = SelectedEntry.Animations.Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
 
-                            if (entry != null && entry != SelectedEntry.Animations[e.RowIndex])
+                            if (Helpers.DgCheckAddSanity(entry, SelectedEntry.Animations.ToArray(), SelectedEntry.Animations.Count, e.RowIndex))
                                 e.Value += "_";
                             else
                                 break;
@@ -1541,7 +1541,7 @@ namespace NPC_Maker
                         {
                             var entry = SelectedEntry.ExtraDisplayLists.Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
 
-                            if (entry != null && entry != SelectedEntry.ExtraDisplayLists[e.RowIndex])
+                            if (Helpers.DgCheckAddSanity(entry, SelectedEntry.ExtraDisplayLists.ToArray(), SelectedEntry.ExtraDisplayLists.Count, e.RowIndex))
                                 e.Value += "_";
                             else
                                 break;
@@ -1828,7 +1828,7 @@ namespace NPC_Maker
                         {
                             var entry = SelectedEntry.Segments[DataGridIndex].Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
 
-                            if (entry != null && entry != SelectedEntry.Segments[DataGridIndex][e.RowIndex])
+                            if (Helpers.DgCheckAddSanity(entry, SelectedEntry.Segments[DataGridIndex].ToArray(), SelectedEntry.Segments[DataGridIndex].Count, e.RowIndex))
                                 e.Value += "_";
                             else
                                 break;

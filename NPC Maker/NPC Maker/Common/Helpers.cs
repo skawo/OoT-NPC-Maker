@@ -6,6 +6,16 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static bool DgCheckAddSanity(object entry, object[] current, int entrycount, int rowindex)
+        {
+            if (entry != null && rowindex < entrycount && entry != current[rowindex])
+                return false;
+            else if (entry != null && rowindex == entrycount)
+                return true;
+            else
+                return false;
+        }
+
         public static UInt16 GetOcarinaTime(string MilitaryTimeString)
         {
             string ExceptionMsg = "Time is in wrong format!";
