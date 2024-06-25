@@ -34,6 +34,7 @@ namespace NPC_Maker.Windows
             Cb_AutoCompile.Checked = EditedSettings.AutoComp_Save;
             NumUpCompileTimeout.Value = EditedSettings.CompileTimeout;
             NumUpParseTime.Value = EditedSettings.ParseTime;
+            WineCompatMode.Checked = EditedSettings.UseWine;
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)
@@ -63,6 +64,10 @@ namespace NPC_Maker.Windows
         private void BtnSave_Click(object sender, EventArgs e)
         {
             Program.Settings = EditedSettings;
+
+            if (Program.Settings.UseWine)
+                Program.IsRunningUnderMono = false;
+
             this.Close();
         }
     }

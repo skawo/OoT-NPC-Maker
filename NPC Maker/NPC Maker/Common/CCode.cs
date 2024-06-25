@@ -168,7 +168,9 @@ namespace NPC_Maker
             {
                 Clean();
                 string Code = CCode.ReplaceGameVersionInclude(CodeEntry.Code);
-                File.WriteAllText(compileFile, Code);
+
+                File.WriteAllText(Path.Combine(tempFolder, codeFilenameForCompile), Code);
+
                 byte[] outf = (Program.IsRunningUnderMono ? CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs));
                
                 Clean();

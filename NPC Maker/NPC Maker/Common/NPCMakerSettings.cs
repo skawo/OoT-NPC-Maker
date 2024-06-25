@@ -37,6 +37,8 @@ namespace NPC_Maker
 
         public UInt32 ParseTime { get; set; }
 
+        public bool UseWine { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -54,6 +56,7 @@ namespace NPC_Maker
             LastOpenPath = Environment.CurrentDirectory;
             LastSaveBinaryPath = Environment.CurrentDirectory;
             ParseTime = 1000;
+            UseWine = false;
         }
 
         public enum Members
@@ -71,6 +74,7 @@ namespace NPC_Maker
             COMPILETIMEOUT,
             AUTOCOMP_SAVE,
             PARSETIME,
+            USEWINE,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -110,6 +114,7 @@ namespace NPC_Maker
                 case Members.GAMEVERSION: GameVersion = (Lists.GameVersions)Enum.Parse(typeof(Lists.GameVersions), (string)Value); break;
                 case Members.COMPILETIMEOUT: CompileTimeout = Convert.ToUInt32(Value); break;
                 case Members.PARSETIME: ParseTime = Convert.ToUInt32(Value); break;
+                case Members.USEWINE: UseWine = (bool)Value; break;
                 default: break;
             }
         }

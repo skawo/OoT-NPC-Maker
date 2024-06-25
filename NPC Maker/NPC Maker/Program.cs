@@ -66,7 +66,9 @@ namespace NPC_Maker
             }
             else
             {
-                AttachConsole(-1);
+                if (!IsRunningUnderMono)
+                    AttachConsole(-1);
+
                 Console.WriteLine();
 
                 if (args[0].ToUpper() == "/?" || args[0].ToUpper() == "-HELP" || args.Length != 2)
