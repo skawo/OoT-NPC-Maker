@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace NPC_Maker
 {
@@ -91,6 +92,20 @@ namespace NPC_Maker
 
                     }
                 }
+
+                // For cross-compatibility with Linux, update all messages converting linebreaks into native system linebreaks.
+                if ((int)Version == 3)
+                {
+                    foreach (NPCEntry e in Deserialized.Entries)
+                    {
+                        foreach (MessageEntry entry in e.Messages)
+                        { 
+                            entry.MessageText = Regex.Replace(entry.MessageText, @"\r?\n", Environment.NewLine);
+                        }
+                    }
+                }
+              
+
 
                 return Deserialized;
             }
