@@ -180,8 +180,6 @@ namespace NPC_Maker
                 float ProgressPer = 100 / Data.Entries.Count;
                 float CurProgress = 0;
                 int EntriesDone = 0;
-                int ParseErrorsCount = 0;
-
 
                 foreach (NPCEntry Entry in Data.Entries)
                 { 

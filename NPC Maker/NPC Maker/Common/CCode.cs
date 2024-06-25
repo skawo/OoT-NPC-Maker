@@ -171,7 +171,7 @@ namespace NPC_Maker
 
                 File.WriteAllText(Path.Combine(tempFolder, codeFilenameForCompile), Code);
 
-                byte[] outf = (Program.IsRunningUnderMono ? CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs));
+                byte[] outf = (Program.IsRunningUnderMono ? Program.Settings.UseWine ? CompileUnderWine(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs));
                
                 Clean();
                 return outf;
@@ -186,6 +186,125 @@ namespace NPC_Maker
         public static void ConsoleWriteCompileFail(string CompilationMsgs)
         {
             Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{CompilationMsgs}{Environment.NewLine}{Environment.NewLine}");
+        }
+
+        public static byte[] CompileUnderWine(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
+        {
+            string oFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.o");
+            string elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
+
+            #region GCC
+
+            ProcessStartInfo gccInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
+                Arguments =
+                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include" }).AppendQuotation()} " +
+                $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
+                $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
+                Program.Settings.GCCFlags + " " +
+                $"{Path.Combine("..", "..", "temp", codeFilenameForCompile).AppendQuotation()}",
+            };
+
+            if (Program.Settings.Verbose)
+                CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
+
+            Process p = Process.Start(gccInfo);
+            p.WaitForExit();
+
+            GetOutput(p, "WINE GCC", ref CompileMsgs);
+
+            #endregion
+
+            #region LD
+
+            if (!File.Exists(oFile))
+            {
+                CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
+                return null;
+            }
+
+            ProcessStartInfo ldInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
+                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
+                Arguments =
+                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
+                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
+                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
+                    $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
+                    $"-o {elfFileMono.AppendQuotation()} {oFileMono.AppendQuotation()}"
+            };
+
+            if (Program.Settings.Verbose)
+                CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
+
+            p = Process.Start(ldInfo);
+            p.WaitForExit();
+            p.WaitForExit();
+            GetOutput(p, "WINE LINKER", ref CompileMsgs);
+
+
+            if (!File.Exists(elfFile))
+            {
+                CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
+                return null;
+            }
+
+            #endregion
+
+            #region NOVL
+
+            elfFileMono = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay_comp.elf");
+            string ovlFileMono = Path.Combine("..", "temp", "EmbeddedOverlay_comp.ovl");
+
+            ProcessStartInfo nOVLInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "nOVL"),
+                FileName = Path.Combine(Program.ExecPath, "nOVL", "nOVL.exe"),
+                Arguments =
+                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFileMono.AppendQuotation()} {elfFileMono.AppendQuotation()}",
+            };
+
+            if (Program.Settings.Verbose)
+                CompileMsgs += nOVLInfo.FileName + " " + nOVLInfo.Arguments + Environment.NewLine;
+
+
+            p = Process.Start(nOVLInfo);
+            p.WaitForExit();
+            GetOutput(p, "WINE NOVL", ref CompileMsgs);
+
+            elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFile, false);
+
+            if (!File.Exists(ovlFile))
+            {
+                CompileMsgs += "Compilation failed.";
+                ConsoleWriteCompileFail(CompileMsgs);
+                return new byte[0];
+            }
+            else
+                CompileMsgs += "Compilation successful!";
+
+
+            return File.ReadAllBytes(ovlFile);
+            #endregion
+
         }
 
         public static byte[] CompileUnderMono(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
