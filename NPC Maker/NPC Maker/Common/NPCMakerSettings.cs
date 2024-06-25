@@ -51,8 +51,8 @@ namespace NPC_Maker
             CheckSyntax = true;
             AutoComp_Save = true;
             CompileTimeout = 5000;
-            LastOpenPath = "/";
-            LastSaveBinaryPath = "/";
+            LastOpenPath = Environment.CurrentDirectory;
+            LastSaveBinaryPath = Environment.CurrentDirectory;
             ParseTime = 1000;
         }
 
