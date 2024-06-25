@@ -1891,7 +1891,16 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
 			
 			break;
 		}
-        case PLAY_SFX_GLOBAL: Audio_PlaySfxGeneral(value, &gSfxDefaultPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); break;
+        case PLAY_SFX_GLOBAL: 
+		{
+			Vec3f pos;
+			pos.x = gSfxDefaultPos.x - 1;
+			pos.y = gSfxDefaultPos.y;
+			pos.z = gSfxDefaultPos.z;		
+			
+			Audio_PlaySfxGeneral(value, &pos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); break;
+			
+		}
     }
 
     script->curInstrNum++;
