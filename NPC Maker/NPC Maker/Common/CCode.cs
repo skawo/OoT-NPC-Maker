@@ -41,21 +41,11 @@ namespace NPC_Maker
         public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay_comp.ovl");
         public static UInt32 BaseAddr = 0x80800000;
 
-        private static string GetStreamOutput(StreamReader stream)
-        {
-            //Read output in separate task to avoid deadlocks
-            var outputReadTask = Task.Factory.StartNew<string>(() => { return stream.ReadToEnd(); });
-            return outputReadTask.Result;
-        }
-
         public static void GetOutput(Process p, string Section, ref string CompileErrors)
         {
             CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
 
-            String outputResult = GetStreamOutput(p.StandardOutput);
-            String errorResult = GetStreamOutput(p.StandardError);
-
-            string Out = $"{Environment.NewLine}{errorResult.Replace("\n", Environment.NewLine)}{Environment.NewLine}{outputResult.Replace("\n", Environment.NewLine)}";
+            string Out = $"{Environment.NewLine}{p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine)}{Environment.NewLine}{p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine)}";
 
             Out = Regex.Replace(Out, @"\x1B\[[^@-~]*[@-~]", "");
 
