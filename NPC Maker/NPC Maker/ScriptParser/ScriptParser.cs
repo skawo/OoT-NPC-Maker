@@ -255,9 +255,11 @@ namespace NPC_Maker.Scripts
                     else
                         outScript.ParseErrors.Add(ParseException.ProcDoubleError(SplitDefinition));
 
+                    int RecurCheck = ProcLines.FindIndex(x => x.ToUpper().StartsWith(ProcedureString));
+
                     // Error if procedure recursion is detected
-                    if (ProcLines.Find(x => x.ToUpper().StartsWith(ProcedureString)) != null)
-                        throw ParseException.ProcRecursion(Lines[ProcLineIndex]);
+                    if (RecurCheck != -1)
+                        throw ParseException.ProcRecursion(ProcLines[RecurCheck]);
 
                     int ProcCallIndex = Lines.FindIndex(x => x.Split(' ')[0].ToUpper() == ProcedureString);
 
@@ -300,12 +302,12 @@ namespace NPC_Maker.Scripts
             catch (ParseException pEx)
             {
                 outScript.ParseErrors.Add(pEx);
-                return Lines;
+                return new List<string>();
             }
             catch (Exception)
             {
                 outScript.ParseErrors.Add(ParseException.ProcedureError());
-                return Lines;
+                return new List<string>();
             }
         }
 
