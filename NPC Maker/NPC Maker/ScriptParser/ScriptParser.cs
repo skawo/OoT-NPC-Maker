@@ -256,7 +256,7 @@ namespace NPC_Maker.Scripts
                         outScript.ParseErrors.Add(ParseException.ProcDoubleError(SplitDefinition));
 
                     // Error if procedure recursion is detected
-                    if (ProcLines.Select(x => x.ToUpper()).Contains(ProcedureString))
+                    if (ProcLines.Find(x => x.ToUpper().StartsWith(ProcedureString)) != null)
                         throw ParseException.ProcRecursion(Lines[ProcLineIndex]);
 
                     int ProcCallIndex = Lines.FindIndex(x => x.Split(' ')[0].ToUpper() == ProcedureString);
@@ -279,15 +279,12 @@ namespace NPC_Maker.Scripts
                         {
                             List<string> Instructions = new List<string>();
 
-                            foreach (string Instruction in ProcLines)
-                            {
-                                string NewInstruction = Instruction;
+                            string s = String.Join(Environment.NewLine, ProcLines);
 
-                                for (int f = 0; f < Args.Count; f++)
-                                    NewInstruction = ScriptHelpers.ReplaceExpr(NewInstruction, ProcArgs[f], Args[f]);
+                            for (int f = 0; f < Args.Count; f++)
+                                s = ScriptHelpers.ReplaceExpr(s, ProcArgs[f], Args[f]);
 
-                                Instructions.Add(NewInstruction);
-                            }
+                            Instructions = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
                             Lines.InsertRange(ProcCallIndex, Instructions);
                         }
@@ -538,16 +535,12 @@ namespace NPC_Maker.Scripts
 
         private int GetCorrespondingEndProcedure(List<string> Lines, int LineNo)
         {
-            for (int i = LineNo + 1; i < Lines.Count(); i++)
-            {
-                if (Lines[i].ToUpper().StartsWith(Lists.Keyword_Procedure))
-                    throw ParseException.ProcRecursion(Lines[i]);
+            int outIndex = Lines.FindIndex(x => x.ToUpper().Trim() == Lists.Keyword_EndProcedure);
 
-                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndProcedure)
-                    return i;
-            }
-
-            throw ParseException.ProcedureNotClosed(Lines[LineNo]);
+            if (outIndex == -1)
+                throw ParseException.ProcedureNotClosed(Lines[LineNo]);
+            else
+                return outIndex;
         }
 
         private List<Instruction> GetInstructions(List<string> Lines)
