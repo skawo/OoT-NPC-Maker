@@ -527,9 +527,9 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(pEx);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing ELIF"));
+                outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing ELIF " + ex.Message));
             }
 
             return Lines;
@@ -657,9 +657,9 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(pEx);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                outScript.ParseErrors.Add(ParseException.GeneralError("Unknown error parsing labels."));
+                outScript.ParseErrors.Add(ParseException.GeneralError("Error parsing labels: " + ex.Message));
             }
 
             return OutList;
