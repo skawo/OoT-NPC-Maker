@@ -2361,12 +2361,8 @@ namespace NPC_Maker
 
         private void Button_OpenCCode_Click(object sender, EventArgs e)
         {
-            Button_CCompile.Enabled = false;
-
             string Code = SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code;
             Code = CCode.ReplaceGameVersionInclude(Code);
-
-            Button_OpenCCode.Enabled = false;
 
             if (!CCode.CreateCTempDirectory(Code))
                 return;
@@ -2383,7 +2379,12 @@ namespace NPC_Maker
             if (Program.CodeEditorProcess == null)
                 return;
             else
+            {
+                Button_CCompile.Enabled = false;
+                Button_OpenCCode.Enabled = false;
+
                 WatchFile(SelectedEntry);
+            }
         }
 
         private void Button_FindCodeEditor_Click(object sender, EventArgs e)
