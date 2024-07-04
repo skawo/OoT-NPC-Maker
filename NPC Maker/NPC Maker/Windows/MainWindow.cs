@@ -2268,6 +2268,7 @@ namespace NPC_Maker
                 Button_CCompile.Invoke((MethodInvoker)delegate
                 {
                     Button_CCompile.Enabled = true;
+                    Button_OpenCCode.Enabled = true;
                 });
 
                 return;
@@ -2364,6 +2365,8 @@ namespace NPC_Maker
 
             string Code = SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code;
             Code = CCode.ReplaceGameVersionInclude(Code);
+
+            Button_OpenCCode.Enabled = false;
 
             if (!CCode.CreateCTempDirectory(Code))
                 return;
