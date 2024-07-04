@@ -388,7 +388,7 @@ namespace NPC_Maker
 
             if (SelectedEntry.EmbeddedOverlayCode.Code != "")
             {
-                CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
+                //CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
                 CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
             }
 
@@ -2218,7 +2218,7 @@ namespace NPC_Maker
         {
             if (SelectedEntry.EmbeddedOverlayCode.Code != "")
             {
-                CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
+                //CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
                 CompileCode();
             }
             else
@@ -2239,13 +2239,15 @@ namespace NPC_Maker
             Program.Settings.CustomCodeEditorArgs = Textbox_CodeEditorArgs.Text;
         }
 
-        private void WatchFile()
+        private void WatchFile(NPCEntry EditedEntry)
         {
             if (Program.IsRunningUnderMono)
                 Environment.SetEnvironmentVariable("MONO_MANAGED_WATCHER", "1");
 
             if (Program.Watcher != null)
                 Program.Watcher.Dispose();
+
+            WatchedEntry = EditedEntry;
 
             Program.Watcher = new FileSystemWatcher(CCode.tempFolder);
             Program.Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
@@ -2311,6 +2313,9 @@ namespace NPC_Maker
             }
         }
 
+
+        NPCEntry WatchedEntry = null;
+
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
             try
@@ -2333,10 +2338,10 @@ namespace NPC_Maker
                     {
                         string Code = sr.ReadToEnd();
 
-                        if (Code == "" && SelectedEntry.EmbeddedOverlayCode.Code != "")
+                        if (Code == "" && WatchedEntry.EmbeddedOverlayCode.Code != "")
                             return;
                         else
-                            SelectedEntry.EmbeddedOverlayCode.Code = Code;
+                            WatchedEntry.EmbeddedOverlayCode.Code = Code;
 
                         if (Program.Settings.AutoComp_Save)
                             CompileCode();
@@ -2375,7 +2380,7 @@ namespace NPC_Maker
             if (Program.CodeEditorProcess == null)
                 return;
             else
-                WatchFile();
+                WatchFile(SelectedEntry);
         }
 
         private void Button_FindCodeEditor_Click(object sender, EventArgs e)

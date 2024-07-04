@@ -539,7 +539,7 @@ namespace NPC_Maker
             return Code;
         }
 
-        public static bool CreateCTempDirectory(string Code)
+        public static bool CreateCTempDirectory(string Code, bool ErrorMsg = true)
         {
             try
             {
@@ -559,7 +559,9 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error creating temporary directory: " + ex.Message);
+                if (ErrorMsg)
+                    MessageBox.Show("Error creating temporary directory: " + ex.Message);
+
                 return false;
             }
         }
