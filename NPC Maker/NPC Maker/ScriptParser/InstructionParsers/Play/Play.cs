@@ -39,7 +39,7 @@ namespace NPC_Maker.Scripts
                                     if (SplitLine.Length == 6)
                                         Reverb = ScriptHelpers.GetScriptVarVal(SplitLine, 5, -127, 127);
 
-                                    return new InstructionPlayWithParams((byte)Lists.PlaySubTypes.SFX_WITH_PARAMS, SND, Volume, Pitch, Reverb);
+                                    return new InstructionPlayWithParams(SubID == (int)Lists.PlaySubTypes.SFX ? (byte)Lists.PlaySubTypes.SFX_WITH_PARAMS : (byte)Lists.PlaySubTypes.SFX_GLOBAL_WITH_PARAMS, SND, Volume, Pitch, Reverb);
                                 }
                             }
                         case (int)Lists.PlaySubTypes.BGM:
