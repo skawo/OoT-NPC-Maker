@@ -114,8 +114,8 @@ namespace NPC_Maker
             { Lists.Instructions.PLAY,  new Dictionary<object, string>()
                 {
                     { Lists.PlaySubTypes.BGM,                               $" *bgm_name*" },
-                    { Lists.PlaySubTypes.SFX,                               $" *sfx_name*" },
-                    { Lists.PlaySubTypes.SFX_GLOBAL,                        $" *sfx_name*" },
+                    { Lists.PlaySubTypes.SFX,                               $" *sfx_name [volume] [pitch] [reverb]*" },
+                    { Lists.PlaySubTypes.SFX_GLOBAL,                        $" *sfx_name [volume] [pitch] [reverb]*" },
                     { Lists.PlaySubTypes.CUTSCENE,                          $"" },
                     { Lists.PlaySubTypes.CUTSCENE_ID,                       $" header_id" },
                 }

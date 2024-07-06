@@ -274,6 +274,10 @@ typedef struct NpcMaker
     u8 CFuncsWhen[8];    
     u8* embeddedOverlay;
     u8 spawnTimer;
+
+    float scriptVolTemp;
+    float scriptPitchTemp;
+    s8 scriptReverbTemp;
 	
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

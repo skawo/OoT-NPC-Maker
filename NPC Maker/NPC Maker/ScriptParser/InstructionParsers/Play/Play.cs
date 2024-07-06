@@ -16,14 +16,37 @@ namespace NPC_Maker.Scripts
                     {
                         case (int)Lists.PlaySubTypes.SFX:
                         case (int)Lists.PlaySubTypes.SFX_GLOBAL:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 6);
+
+                                ScriptVarVal SND = ScriptHelpers.Helper_GetSFXId(SplitLine, 2);
+
+                                if (Convert.ToInt32(SND.Value) < 0)
+                                    throw ParseException.ParamOutOfRange(SplitLine);
+
+                                if (SplitLine.Length == 3)
+                                    return new InstructionPlay((byte)SubID, SND);
+                                else
+                                {
+                                    ScriptVarVal Volume = new ScriptVarVal() { Value = 1.0f, Vartype = (byte)Lists.VarTypes.NORMAL };
+                                    ScriptVarVal Pitch = new ScriptVarVal() { Value = 1.0f, Vartype = (byte)Lists.VarTypes.NORMAL };
+                                    ScriptVarVal Reverb = new ScriptVarVal() { Value = 0, Vartype = (byte)Lists.VarTypes.NORMAL };
+
+                                    if (SplitLine.Length >= 4)
+                                        Volume = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0.0f, 1.0f);
+                                    if (SplitLine.Length >= 5)
+                                        Pitch = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0.0f, 1.0f);
+                                    if (SplitLine.Length == 6)
+                                        Reverb = ScriptHelpers.GetScriptVarVal(SplitLine, 5, -127, 127);
+
+                                    return new InstructionPlayWithParams((byte)Lists.PlaySubTypes.SFX_WITH_PARAMS, SND, Volume, Pitch, Reverb);
+                                }
+                            }
                         case (int)Lists.PlaySubTypes.BGM:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
-                                ScriptVarVal SND = (SubID == (int)Lists.PlaySubTypes.BGM) ?
-                                                       ScriptHelpers.Helper_GetMusicId(SplitLine, 2)
-                                                                               :
-                                                       ScriptHelpers.Helper_GetSFXId(SplitLine, 2);
+                                ScriptVarVal SND = ScriptHelpers.Helper_GetMusicId(SplitLine, 2);
 
                                 if (Convert.ToInt32(SND.Value) < 0)
                                     throw ParseException.ParamOutOfRange(SplitLine);

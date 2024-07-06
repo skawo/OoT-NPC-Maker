@@ -1512,6 +1512,8 @@ namespace NPC_Maker
             CUTSCENE,
             CUTSCENE_ID,
             SFX_GLOBAL,
+            SFX_WITH_PARAMS,
+            SFX_GLOBAL_WITH_PARAMS,
         }
 
         public enum RotationSubTypes

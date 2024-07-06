@@ -1867,11 +1867,13 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
         osSyncPrintf("_[%2d, %1d]: PLAY", en->npcId, en->curScriptNum);
     #endif     
 
-    u32 value = Scripts_GetVarval(en, playState, in->varType, in->value, false);
+    u32 value = 0; 
+    
+    if (in->subId < PLAY_SFX_PARAMS)
+        value = Scripts_GetVarval(en, playState, in->varType, in->value, false);
 
     switch (in->subId)
     {
-        case PLAY_SFX: Audio_PlayActorSfx2(&en->actor,value); break;
         case PLAY_BGM: Audio_QueueSeqCmd(value); break;
         case PLAY_CUTSCENE: 
 		{
@@ -1891,16 +1893,48 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
 			
 			break;
 		}
+        case PLAY_SFX:
         case PLAY_SFX_GLOBAL: 
 		{
 			Vec3f pos;
-			pos.x = gSfxDefaultPos.x - 1;
-			pos.y = gSfxDefaultPos.y;
-			pos.z = gSfxDefaultPos.z;		
+
+            if (in->subId == PLAY_SFX)
+                pos = en->actor.world.pos;
+            else
+            {
+                pos.x = gSfxDefaultPos.x - 1;
+                pos.y = gSfxDefaultPos.y;
+                pos.z = gSfxDefaultPos.z;		
+            }
 			
-			Audio_PlaySfxGeneral(value, &pos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); break;
+			Audio_PlaySfxGeneral(value, &pos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); 
+            break;
 			
 		}
+        case PLAY_SFX_PARAMS:
+        case PLAY_SFX_GLOBAL_PARAMS:
+        {
+            ScrInstrPlayWithParams* inP = (ScrInstrPlayWithParams*)in;
+
+            value = Scripts_GetVarval(en, playState, inP->idVarType, inP->value, false);
+            en->scriptVolTemp = Scripts_GetVarval(en, playState, inP->volumeVarType, inP->volume, false); 
+            en->scriptPitchTemp = Scripts_GetVarval(en, playState, inP->pitchVarType, inP->pitch, false); 
+            en->scriptReverbTemp = Scripts_GetVarval(en, playState, inP->reverbVarType, inP->reverb, true); 
+
+			Vec3f pos;
+
+            if (in->subId == PLAY_SFX_PARAMS)
+                pos = en->actor.world.pos;
+            else
+            {
+                pos.x = gSfxDefaultPos.x - 1;
+                pos.y = gSfxDefaultPos.y;
+                pos.z = gSfxDefaultPos.z;		
+            }
+
+           	Audio_PlaySfxGeneral(value, &pos, 4, &en->scriptPitchTemp, &en->scriptVolTemp, &en->scriptReverbTemp); 
+            break; 
+        }
     }
 
     script->curInstrNum++;

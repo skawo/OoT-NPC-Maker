@@ -457,6 +457,8 @@ typedef enum Play_SubId
     PLAY_CUTSCENE,
     PLAY_CUTSCENE_ID,
     PLAY_SFX_GLOBAL,
+    PLAY_SFX_PARAMS,
+    PLAY_SFX_GLOBAL_PARAMS,
 } Play_SubId;
 
 typedef enum Item_SubId

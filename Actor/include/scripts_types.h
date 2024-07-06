@@ -471,6 +471,22 @@ typedef struct ScrInstrPlay
     ScriptVarval value;
 } ScrInstrPlay;
 
+typedef struct ScrInstrPlayWithParams
+{
+    u8 id;
+    u8 subId;
+    u8 idVarType : 4;
+    u8 volumeVarType : 4;
+    u8 pitchVarType : 4;
+    u8 reverbVarType : 4;
+    ScriptVarval value;
+    ScriptVarval volume;
+    ScriptVarval pitch;
+    ScriptVarval reverb;
+
+} ScrInstrPlayWithParams;
+
+
 
 #pragma endregion
 
