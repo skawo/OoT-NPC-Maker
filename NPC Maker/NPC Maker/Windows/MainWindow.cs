@@ -2434,6 +2434,7 @@ namespace NPC_Maker
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NPC_Maker.Windows.Settings s = new Windows.Settings();
+            s.StartPosition = FormStartPosition.CenterParent;
             s.ShowDialog();
 
             foreach (TabPage Page in TabControl_Scripts.TabPages)

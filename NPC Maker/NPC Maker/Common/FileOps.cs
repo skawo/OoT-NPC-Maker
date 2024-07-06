@@ -680,7 +680,8 @@ namespace NPC_Maker
                     EntriesDone += 1;
                     CurProgress += ProgressPer;
 
-                    pr.SetProgress((int)Math.Floor(CurProgress), $"Saved {EntriesDone}/{Data.Entries.Count()}");
+                    pr.SetProgress((int)Math.Ceiling(CurProgress), $"Saved {EntriesDone}/{Data.Entries.Count()}");
+                    pr.Refresh();
                 }
 
                 pr.SetProgress(100, "Done!");
