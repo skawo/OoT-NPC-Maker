@@ -195,12 +195,14 @@ namespace NPC_Maker
 
             AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), messagesStripMenuItem, MessageToolTips.ToArray());
 
+            List<string> NPCs = new List<string>();
+
             foreach (var npc in File.Entries)
             {
-                MessageNames.Add("NPC_" + npc.NPCName);
+                NPCs.Add("NPC_" + npc.NPCName);
             }
 
-            AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), npcsStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(NPCs.ToArray(), npcsStripMenuItem);
 
         }
 
