@@ -144,8 +144,9 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 int MaxFlagId = (SubID == (int)Lists.SetSubTypes.FLAG_INTERNAL ? 31 : UInt16.MaxValue);
+                                int MinFlagId = (SubID == (int)Lists.SetSubTypes.FLAG_INTERNAL ? 1 : 0);
 
-                                var FlagID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, MaxFlagId);
+                                var FlagID = ScriptHelpers.GetScriptVarVal(SplitLine, 2, MinFlagId, MaxFlagId);
                                 var Val = new ScriptVarVal();
 
                                 Val.Vartype = ScriptHelpers.GetVarType(SplitLine, 3);
