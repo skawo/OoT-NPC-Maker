@@ -2428,7 +2428,21 @@ namespace NPC_Maker
             if (MessageBox.Show("Are you sure? This operation wipes the code completely and cannot be reversed.", "Code Removal", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
             {
                 SelectedEntry.EmbeddedOverlayCode.Code = "";
-                Button_CCompile_Click(null, null);
+                SelectedEntry.EmbeddedOverlayCode.Functions = new List<KeyValuePair<string, uint>>();
+                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen = new int[5, 2];
+
+                foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
+                {
+                    ComboBox c = kvp.Key;
+                    ComboBox w = kvp.Value;
+
+                    c.DataSource = null;
+
+                    if (w != null)
+                        w.DataSource = null;
+                }
+
+                 Button_CCompile_Click(null, null);
             }
         }
 
