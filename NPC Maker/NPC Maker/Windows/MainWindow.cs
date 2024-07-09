@@ -1153,7 +1153,12 @@ namespace NPC_Maker
             {
                 case (int)AnimGridColumns.Name:
                     {
-                        e.Value = e.Value.ToString().Replace(" ", "_");
+                        string Name = e.Value.ToString();
+
+                        if (!SanitizeName(ref Name))
+                            e.Value = "Animation_" + e.RowIndex;
+                        else
+                            e.Value = Name;
 
                         while (true)
                         {
@@ -1538,7 +1543,12 @@ namespace NPC_Maker
             {
                 case (int)EDlistsColumns.Purpose:
                     {
-                        e.Value = e.Value.ToString().Replace(" ", "_");
+                        string Name = e.Value.ToString();
+
+                        if (!SanitizeName(ref Name))
+                            e.Value = "Dlist_" + e.RowIndex;
+                        else
+                            e.Value = Name;
 
                         while (true)
                         {
@@ -1825,7 +1835,12 @@ namespace NPC_Maker
             {
                 case (int)SegmentsColumns.Name:
                     {
-                        e.Value = e.Value.ToString().Replace(" ", "_");
+                        string Name = e.Value.ToString();
+
+                        if (!SanitizeName(ref Name))
+                            e.Value = "Data_" + e.RowIndex;
+                        else
+                            e.Value = Name;
 
                         while (true)
                         {
@@ -2167,7 +2182,8 @@ namespace NPC_Maker
             string Title = "";
             InputBox.ShowInputDialog("Message title?", ref Title);
 
-            Title = Title.Replace(" ", "_");
+            if (!SanitizeName(ref Title))
+                return;
 
             if (SelectedEntry.Messages.Find(x => x.Name.ToUpper() == Title.ToUpper()) != null)
             {
@@ -2198,7 +2214,9 @@ namespace NPC_Maker
             string Title = (MessagesGrid.SelectedRows[0].Cells[0].Value as string);
             InputBox.ShowInputDialog("New message title?", ref Title);
 
-            Title = Title.Replace(" ", "_");
+            if (!SanitizeName(ref Title))
+                return;
+
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
 
             MessageEntry same = SelectedEntry.Messages.Find(x => x.Name.ToUpper() == Title.ToUpper());
@@ -2209,8 +2227,36 @@ namespace NPC_Maker
                 return;
             }
 
+            if (Title.IsNumeric())
+            {
+                MessageBox.Show("Message name cannot be just a number.");
+                return;
+            }
+
             Entry.Name = Title;
             MessagesGrid.SelectedRows[0].Cells[0].Value = Title;
+        }
+
+        private bool SanitizeName(ref string Title)
+        {
+            Title = Title.Replace(" ", "_");
+
+            if (Title.IsNumeric())
+            {
+                MessageBox.Show("Name cannot be just a number.");
+                return false;
+            }
+
+            foreach (string s in Lists.AllKeywords)
+            {
+                if (s.ToUpper() == Title.ToUpper() || (Title.ToUpper().StartsWith(s.ToUpper()) && Title.Contains(".")))
+                {
+                    MessageBox.Show("Name cannot be a script keyword.");
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         #endregion

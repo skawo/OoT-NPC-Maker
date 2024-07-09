@@ -185,7 +185,7 @@ namespace NPC_Maker
 
             foreach (var msg in Entry.Messages)
             {
-                MessageNames.Add("MSG_" + msg.Name);
+                MessageNames.Add(msg.Name);
                 MessageToolTips.Add(msg.MessageText.Substring(0, Math.Min(80, msg.MessageText.Length)) + (msg.MessageText.Length > 80 ? "..." : ""));
 
             }

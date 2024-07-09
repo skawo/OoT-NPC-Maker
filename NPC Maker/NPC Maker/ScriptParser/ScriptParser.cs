@@ -27,7 +27,7 @@ namespace NPC_Maker.Scripts
 
             foreach (var m in Entry.Messages)
             {
-                s += $"#{Lists.Keyword_Define} MSG_{m.Name} {id++};";
+                s += $"#{Lists.Keyword_Define} {m.Name} {id++};";
             }
 
             ScriptText = s + ScriptText;
