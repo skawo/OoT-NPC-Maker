@@ -8,14 +8,16 @@ namespace NPC_Maker.Scripts
     public partial class ScriptParser
     {
         private readonly NPCEntry Entry;
+        private readonly NPCFile File;
         private string ScriptText;
         public List<string> RandomLabels { get; set; }
         private BScript outScript;
 
-        public ScriptParser(NPCEntry _Entry, string _ScriptText, List<ScriptEntry> _GlobalHeader)
+        public ScriptParser(NPCFile _File, NPCEntry _Entry, string _ScriptText, List<ScriptEntry> _GlobalHeader)
         {
             ScriptText = String.Join(Environment.NewLine, _GlobalHeader.Select(x => x.Text).ToArray()) + Environment.NewLine + _ScriptText;
             Entry = _Entry;
+            File = _File;
         }
 
         public BScript ParseScript(string ScrName, bool GetBytes)
@@ -25,7 +27,14 @@ namespace NPC_Maker.Scripts
 
             foreach (var m in Entry.Messages)
             {
-                s += $"#{Lists.Keyword_Define} {m.Name} {id++};";
+                s += $"#{Lists.Keyword_Define} MSG_{m.Name} {id++};";
+            }
+
+            id = 0;
+
+            foreach (var o in File.Entries)
+            {
+                s += $"#{Lists.Keyword_Define} NPC_{o.NPCName} {id++};";
             }
 
             ScriptText = s + ScriptText;
