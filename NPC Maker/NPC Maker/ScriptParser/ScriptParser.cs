@@ -30,6 +30,13 @@ namespace NPC_Maker.Scripts
                 s += $"#{Lists.Keyword_Define} MSG_{m.Name} {id++};";
             }
 
+            id = 0;
+
+            foreach (var o in File.Entries)
+            {
+                s += $"#{Lists.Keyword_Define} NPC_{o.NPCName} {id++};";
+            }
+
             ScriptText = s + ScriptText;
 
             RegexText(ref ScriptText);
