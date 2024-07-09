@@ -61,7 +61,6 @@ namespace NPC_Maker
             cFunctionsStripMenuItem = new ToolStripMenuItem();
             quakeTypesStripMenuItem = new ToolStripMenuItem();
             messagesStripMenuItem = new ToolStripMenuItem();
-            npcsStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -84,7 +83,6 @@ namespace NPC_Maker
                                                                     linkAnimsStripMenuItem,
                                                                     cFunctionsStripMenuItem,
                                                                     messagesStripMenuItem,
-                                                                    npcsStripMenuItem,
                                                                 });
 
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
@@ -105,7 +103,6 @@ namespace NPC_Maker
             quakeTypesStripMenuItem.Text = "Quake types";
             cFunctionsStripMenuItem.Text = "C Functions";
             messagesStripMenuItem.Text = "Messages";
-            npcsStripMenuItem.Text = "NPCs";
 
             soundEffectsToolStripMenuItem.Text = "Sound effects";
             soundEffectsToolStripMenuItem.Click += SoundEffectsToolStripMenuItem_Click;
@@ -194,16 +191,6 @@ namespace NPC_Maker
             }
 
             AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), messagesStripMenuItem, MessageToolTips.ToArray());
-
-            List<string> NPCs = new List<string>();
-
-            foreach (var npc in File.Entries)
-            {
-                NPCs.Add("NPC_" + npc.NPCName);
-            }
-
-            AddItemCollectionToToolStripMenuItem(NPCs.ToArray(), npcsStripMenuItem);
-
         }
 
         private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem, string[] ToolTips = null)
