@@ -136,7 +136,7 @@ namespace NPC_Maker
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                ScriptContextMenu.MakeContextMenu(Entry);
+                ScriptContextMenu.MakeContextMenu(File, Entry);
 
                 Cursor.Current = Cursors.Default;
 

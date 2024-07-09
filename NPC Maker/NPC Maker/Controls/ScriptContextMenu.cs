@@ -33,7 +33,8 @@ namespace NPC_Maker
         private static ToolStripMenuItem cFunctionsStripMenuItem;
         private static ToolStripMenuItem quakeTypesStripMenuItem;
         private static ToolStripMenuItem messagesStripMenuItem;
-        public static void MakeContextMenu(NPCEntry Entry)
+        private static ToolStripMenuItem npcsStripMenuItem;
+        public static void MakeContextMenu(NPCFile File, NPCEntry Entry)
         {
             if (ContextMenuStrip != null)
                 ContextMenuStrip.Dispose();
@@ -60,6 +61,7 @@ namespace NPC_Maker
             cFunctionsStripMenuItem = new ToolStripMenuItem();
             quakeTypesStripMenuItem = new ToolStripMenuItem();
             messagesStripMenuItem = new ToolStripMenuItem();
+            npcsStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -82,6 +84,7 @@ namespace NPC_Maker
                                                                     linkAnimsStripMenuItem,
                                                                     cFunctionsStripMenuItem,
                                                                     messagesStripMenuItem,
+                                                                    npcsStripMenuItem,
                                                                 });
 
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
@@ -102,6 +105,7 @@ namespace NPC_Maker
             quakeTypesStripMenuItem.Text = "Quake types";
             cFunctionsStripMenuItem.Text = "C Functions";
             messagesStripMenuItem.Text = "Messages";
+            npcsStripMenuItem.Text = "NPCs";
 
             soundEffectsToolStripMenuItem.Text = "Sound effects";
             soundEffectsToolStripMenuItem.Click += SoundEffectsToolStripMenuItem_Click;
@@ -184,13 +188,19 @@ namespace NPC_Maker
 
             foreach (var msg in Entry.Messages)
             {
-                MessageNames.Add(msg.Name);
+                MessageNames.Add("MSG_" + msg.Name);
                 MessageToolTips.Add(msg.MessageText.Substring(0, Math.Min(80, msg.MessageText.Length)) + (msg.MessageText.Length > 80 ? "..." : ""));
 
             }
 
             AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), messagesStripMenuItem, MessageToolTips.ToArray());
 
+            foreach (var npc in File.Entries)
+            {
+                MessageNames.Add("NPC_" + npc.NPCName);
+            }
+
+            AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), npcsStripMenuItem);
 
         }
 
