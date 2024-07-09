@@ -889,6 +889,7 @@ namespace NPC_Maker
                 EditedFile.Entries[DataGrid_NPCs.SelectedRows[0].Index].IsNull)
             {
                 SelectedEntry = GetNewNPCEntry();
+                SelectedEntry.NPCName = $"NPC_{SelectedIndex}";
                 EditedFile.Entries[SelectedIndex] = SelectedEntry;
                 DataGrid_NPCs.Rows[SelectedIndex].Cells[1].Value = "";
                 DataGrid_NPCs_SelectionChanged(this, null);
