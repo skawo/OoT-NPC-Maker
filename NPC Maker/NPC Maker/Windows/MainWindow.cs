@@ -835,7 +835,7 @@ namespace NPC_Maker
             string Obj = JsonConvert.SerializeObject(SelectedEntry, Formatting.Indented);
             NPCEntry Entry = JsonConvert.DeserializeObject<NPCEntry>(Obj);
             EditedFile.Entries.Add(Entry);
-            Entry.NPCName = $"{Entry.NPCName}_{EditedFile.Entries.Count}";
+            Entry.NPCName = $"{Entry.NPCName}_{EditedFile.Entries.Count - 1}";
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
         }
 
