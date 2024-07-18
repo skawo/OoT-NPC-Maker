@@ -1896,18 +1896,16 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
         case PLAY_SFX:
         case PLAY_SFX_GLOBAL: 
 		{
-			Vec3f pos;
-
             if (in->subId == PLAY_SFX)
-                pos = en->actor.world.pos;
+                en->scriptSfxTempPos = en->actor.world.pos;
             else
             {
-                pos.x = gSfxDefaultPos.x - 1;
-                pos.y = gSfxDefaultPos.y;
-                pos.z = gSfxDefaultPos.z;		
+                en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
+                en->scriptSfxTempPos.y = gSfxDefaultPos.y;
+                en->scriptSfxTempPos.z = gSfxDefaultPos.z;		
             }
 			
-			Audio_PlaySfxGeneral(value, &pos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); 
+			Audio_PlaySfxGeneral(value, &en->scriptSfxTempPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); 
             break;
 			
 		}
@@ -1921,18 +1919,16 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
             en->scriptPitchTemp = Scripts_GetVarval(en, playState, inP->pitchVarType, inP->pitch, false); 
             en->scriptReverbTemp = Scripts_GetVarval(en, playState, inP->reverbVarType, inP->reverb, true); 
 
-			Vec3f pos;
-
             if (in->subId == PLAY_SFX_PARAMS)
-                pos = en->actor.world.pos;
+                en->scriptSfxTempPos = en->actor.world.pos;
             else
             {
-                pos.x = gSfxDefaultPos.x - 1;
-                pos.y = gSfxDefaultPos.y;
-                pos.z = gSfxDefaultPos.z;		
+                en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
+                en->scriptSfxTempPos.y = gSfxDefaultPos.y;
+                en->scriptSfxTempPos.z = gSfxDefaultPos.z;		
             }
 
-           	Audio_PlaySfxGeneral(value, &pos, 4, &en->scriptPitchTemp, &en->scriptVolTemp, &en->scriptReverbTemp); 
+           	Audio_PlaySfxGeneral(value, &en->scriptSfxTempPos, 4, &en->scriptPitchTemp, &en->scriptVolTemp, &en->scriptReverbTemp); 
             break; 
         }
     }

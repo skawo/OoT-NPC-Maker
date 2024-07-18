@@ -278,6 +278,7 @@ typedef struct NpcMaker
     float scriptVolTemp;
     float scriptPitchTemp;
     s8 scriptReverbTemp;
+    Vec3f scriptSfxTempPos;
 	
     #if DEBUG_STRUCT == 1
         s32 dbgVar;
@@ -293,4 +294,5 @@ typedef struct NpcMaker
     #endif
 
 } NpcMaker;
+
 #endif

@@ -298,6 +298,7 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
     }
 
     Draw_SetEnvColor(&dest->p, dList->envColor, en->curAlpha);
+    gDPPipeSync(dest->p++);    
     gSPMatrix(dest->p++, Matrix_NewMtx(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
     gSPDisplayList(dest->p++, dListOffset);
     
