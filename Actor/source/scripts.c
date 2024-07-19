@@ -232,10 +232,16 @@ bool Scripts_InstructionQuake(NpcMaker* en, PlayState* playState, ScriptInstance
         osSyncPrintf("_[%2d, %1d]: QUAKE", en->npcId, en->curScriptNum);
     #endif		
 
-    s16 quakeId = Quake_Add(GET_ACTIVE_CAM(playState), Scripts_GetVarval(en, playState, in->varTypeType, in->type, false));
-    Quake_SetSpeed(quakeId, Scripts_GetVarval(en, playState, in->varTypeSpeed, in->speed, false));
+    float speed = Scripts_GetVarval(en, playState, in->varTypeSpeed, in->speed, false);
+    float dur = Scripts_GetVarval(en, playState, in->varTypeDuration, in->duration, false);
+    float type =  Scripts_GetVarval(en, playState, in->varTypeType, in->type, false);
+
+    s16 quakeId = Quake_Add(GET_ACTIVE_CAM(playState), type);
+    Quake_SetSpeed(quakeId, speed);
     Quake_SetQuakeValues(quakeId, 0, 1, 0xFA, 1);
-    Quake_SetCountdown(quakeId, Scripts_GetVarval(en, playState, in->varTypeDuration, in->duration, false));
+    Quake_SetCountdown(quakeId, dur);
+
+    Rumble_Request(en->actor.xyzDistToPlayerSq, 255, dur, 150);
 
     script->curInstrNum++; 
     return SCRIPT_CONTINUE;
