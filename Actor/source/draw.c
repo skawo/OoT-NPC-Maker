@@ -257,7 +257,7 @@ inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
 }
 
 // Matrix should be set before this is called.
-void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool SwapDest)
+void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
 {
     #if LOGGING == 1
         osSyncPrintf("_%2d: Drawing extra display list at limb %2d", en->npcId, dList->limb);
@@ -269,10 +269,7 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool
     // Always drawing to the other buffer than the main model is.
     int dT = Draw_GetDrawDestType(en, playState);
 
-    TwoHeadGfxArena* dest = dT ? &POLY_XLU : &POLY_OPA;
-
-    if (SwapDest)
-        dest = dT ? &POLY_OPA : &POLY_XLU;
+    TwoHeadGfxArena* dest = dT ? &POLY_OPA : &POLY_XLU;
 
     switch (object)
     {
@@ -305,7 +302,6 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool
     gDPPipeSync(dest->p++);    
     gSPMatrix(dest->p++, Matrix_NewMtx(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
     gSPDisplayList(dest->p++, dListOffset);
-    
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
     if ((en->settings.objectId > 0 && object != en->settings.objectId) || dList->fileStart != OBJECT_CURRENT)
@@ -444,7 +440,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
             {
                 Matrix_Push();
                 Draw_AffectMatrix(dlist, translation, rotation);
-                Draw_ExtDList(en, playState, &dlist, true);
+                Draw_ExtDList(en, playState, &dlist);
                 Matrix_Pop();                
             }
         }
@@ -616,7 +612,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
                 float scale = dlist.scale *= en->actor.scale.x;
 
                 Matrix_Scale(scale, scale, scale, 1);
-                Draw_ExtDList(en, playState, &dlist, false);
+                Draw_ExtDList(en, playState, &dlist);
                 Matrix_Pop();                
             }
         }
@@ -631,7 +627,14 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
 {
     int dT = Draw_GetDrawDestType(en, playState);
 
-    TwoHeadGfxArena* dest = (dT ? &POLY_XLU : &POLY_OPA);
+    TwoHeadGfxArena* destXlu = &POLY_XLU;
+    TwoHeadGfxArena* destOpa = &POLY_OPA;
+
+    TwoHeadGfxArena* dest = (dT ? destXlu : destOpa);
+
+    gDPPipeSync(destXlu->p++);   
+    gDPPipeSync(destOpa->p++);   
+
     Draw_Setup(en, playState, dT);
 
     // Reset the file location to account for the file start offset.
