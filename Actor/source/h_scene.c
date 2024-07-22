@@ -115,6 +115,9 @@ float Scene_GetPathLen(PlayState* playState, s16 pathId, s16 startNodeId, s16 en
 
 NpcMaker* Scene_GetNpcMakerByID(NpcMaker* en, PlayState* playState, u16 ID)
 {
+    if (en->npcId == ID)
+        return en;
+	
     NpcMaker* npc = (NpcMaker*)playState->actorCtx.actorLists[ACTORCAT_NPC].head;
 
     while (npc)
