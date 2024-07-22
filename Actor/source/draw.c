@@ -628,6 +628,7 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     int dT = Draw_GetDrawDestType(en, playState);
 
     TwoHeadGfxArena* dest = (dT ? &POLY_XLU : &POLY_OPA);
+	
     Draw_Setup(en, playState, dT);
 
     // Reset the file location to account for the file start offset.

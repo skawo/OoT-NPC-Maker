@@ -119,19 +119,26 @@ NpcMaker* Scene_GetNpcMakerByID(NpcMaker* en, PlayState* playState, u16 ID)
         return en;
 	
     NpcMaker* npc = (NpcMaker*)playState->actorCtx.actorLists[ACTORCAT_NPC].head;
+	bool found = false
 
     while (npc)
     {
         if (npc->actor.id == en->actor.id)
         {
             if (npc->npcId == ID)
+			{
+				found = true;
                 break;
+			}
         }
 
         npc = (NpcMaker*)npc->actor.next;
     }
 
-    return npc;
+	if (!found)
+		return NULL;
+	else
+		return npc;
 }
 
 Actor* Scene_GetActorByID(int ID, PlayState* playState, Actor* closestTo, Actor* skip)
