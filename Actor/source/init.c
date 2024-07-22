@@ -179,7 +179,11 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
         osSyncPrintf("_Allocating %2d bytes", len);
     #endif
 
-    u8* addr = ZeldaArena_Malloc(len);
+
+    u32 ovlOffset = AVAL(buffer + offset + len, u32, -4);
+    OverlayRelocationSection* ovl = (OverlayRelocationSection*)(buffer + offset + len - ovlOffset);
+
+    u8* addr = ZeldaArena_Malloc(len + ovl->bssSize);
     
     #if LOGGING == 1
         osSyncPrintf("_Copying overlay to 0x%8x", addr);
@@ -187,14 +191,16 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
     
     bcopy(buffer + offset, addr, len);
 
-    u32 ovlOffset = AVAL(addr + len, u32, -4);
+   
+    ovlOffset = AVAL(addr + len, u32, -4);
 
     #if LOGGING == 1
         osSyncPrintf("_Ovl Offset is at 0x%8x", ovlOffset);
     #endif
 
-    OverlayRelocationSection* ovl = (OverlayRelocationSection*)(addr + len - ovlOffset);
+    ovl = (OverlayRelocationSection*)(addr + len - ovlOffset);
 
+    
     #if LOGGING == 1
         osSyncPrintf("_Relocating section is at 0x%8x", ovl);
         osSyncPrintf("_Relocations num is %2d", ovl->nRelocations);
@@ -202,15 +208,15 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
 
     Overlay_Relocate(addr, ovl, (u32*)0x80800000);
 
-    int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
-    bzero(ovl, size);
-
     #if LOGGING == 1
         osSyncPrintf("_Clearing bss...");
     #endif
-
+    
     if (ovl->bssSize != 0)
         bzero((void*)addr + len, ovl->bssSize);    
+    
+    int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
+    bzero(ovl, size);   
 
     #if LOGGING == 1
         osSyncPrintf("_Invalidating cache...");
@@ -402,7 +408,7 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
         osSyncPrintf("_%2d: Setting up collision with radius %04d, height %04d, yoffs %04d", 
                      en->npcId, en->settings.collisionRadius, en->settings.collisionHeight, en->settings.collisionyShift);
     #endif
-	
+    
     // Only one of these can be enabled
     if (en->settings.showDlistEditorDebugOn && en->settings.showLookAtEditorDebugOn)
         en->settings.showLookAtEditorDebugOn = false;
