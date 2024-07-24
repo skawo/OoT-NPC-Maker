@@ -2180,7 +2180,10 @@ namespace NPC_Maker
         private void Btn_AddMsg_Click(object sender, EventArgs e)
         {
             string Title = "";
-            InputBox.ShowInputDialog("Message title?", ref Title);
+            DialogResult DR = InputBox.ShowInputDialog("Message title?", ref Title);
+
+            if (DR != DialogResult.OK)
+                return;
 
             if (!SanitizeName(ref Title))
                 return;
@@ -2239,6 +2242,12 @@ namespace NPC_Maker
 
         private bool SanitizeName(ref string Title)
         {
+            if (String.IsNullOrWhiteSpace(Title))
+            {
+                MessageBox.Show("Name cannot be empty.");
+                return false;
+            }
+
             Title = Title.Replace(" ", "_");
 
             if (Title.IsNumeric())
