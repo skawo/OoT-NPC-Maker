@@ -81,7 +81,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
         osSyncPrintf("_%2d: ======== Actor update, frame %2d ======== ", en->npcId, playState->gameplayFrames);
     #endif
 
-    if (en->CFuncsWhen[1] == REPLACE_UPDATE)
+    if (en->CFuncsWhen[1] == REPLACE_UPDATE && en->CFuncs[1] != 0xFFFFFFFF)
     {
         NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
         return;
@@ -149,7 +149,7 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
         osSyncPrintf("_%2d: Drawing actor.", en->npcId);
     #endif
 
-    if (en->CFuncsWhen[2] == REPLACE_DRAW)
+    if (en->CFuncsWhen[2] == REPLACE_DRAW && en->CFuncs[2] != 0xFFFFFFF)
         NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
     else
     {
