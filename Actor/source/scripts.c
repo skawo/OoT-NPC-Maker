@@ -1900,16 +1900,15 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
 			break;
 		}
         case PLAY_SFX:
+        {
+            Audio_PlayActorSfx2(&en->actor, value);
+            break;
+        }
         case PLAY_SFX_GLOBAL: 
 		{
-            if (in->subId == PLAY_SFX)
-                en->scriptSfxTempPos = en->actor.world.pos;
-            else
-            {
-                en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
-                en->scriptSfxTempPos.y = gSfxDefaultPos.y;
-                en->scriptSfxTempPos.z = gSfxDefaultPos.z;		
-            }
+            en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
+            en->scriptSfxTempPos.y = gSfxDefaultPos.y;
+            en->scriptSfxTempPos.z = gSfxDefaultPos.z;	
 			
 			Audio_PlaySfxGeneral(value, &en->scriptSfxTempPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); 
             break;
@@ -1926,7 +1925,11 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
             en->scriptReverbTemp = Scripts_GetVarval(en, playState, inP->reverbVarType, inP->reverb, true); 
 
             if (in->subId == PLAY_SFX_PARAMS)
-                en->scriptSfxTempPos = en->actor.world.pos;
+            {
+                en->scriptSfxTempPos.x = en->actor.world.pos.x;
+                en->scriptSfxTempPos.y = en->actor.world.pos.y;
+                en->scriptSfxTempPos.x = en->actor.world.pos.z;
+            }
             else
             {
                 en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
