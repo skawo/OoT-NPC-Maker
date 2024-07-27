@@ -88,6 +88,9 @@ namespace NPC_Maker
             {
                 string CurrentFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
+                File.WriteAllText("cur", CurrentFile);
+                File.WriteAllText("op", OpenedFile);
+
                 if (!String.Equals(CurrentFile, OpenedFile))
                 {
                     DialogResult Res = MessageBox.Show("Save changes before exiting?", "Save changes?", MessageBoxButtons.YesNoCancel);
@@ -1016,9 +1019,11 @@ namespace NPC_Maker
         private void Checkbox_EnvColor_CheckedChanged(object sender, EventArgs e)
         {
             if (Checkbox_EnvColor.Checked)
-                SelectedEntry.EnvironmentColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
+                SelectedEntry.EnvironmentColor = Button_EnvironmentColorPreview.BackColor;
             else
                 SelectedEntry.EnvironmentColor = Color.FromArgb(0, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
+
+            SelectedEntry.EnvironmentColor = Helpers.TryGetColorWithName(SelectedEntry.EnvironmentColor);
         }
 
         private void Btn_LightColor_Click(object sender, EventArgs e)

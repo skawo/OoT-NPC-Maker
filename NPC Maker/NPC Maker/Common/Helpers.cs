@@ -1,11 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Reflection;
 
 namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static Color TryGetColorWithName(Color color)
+        {
+            var colorLookup = typeof(Color)
+                   .GetProperties(BindingFlags.Public | BindingFlags.Static)
+                   .Select(f => (Color)f.GetValue(null, null))
+                   .Where(c => c.IsNamedColor)
+                   .ToLookup(c => c.ToArgb());
+
+            if (colorLookup[color.ToArgb()].Count() != 0)
+                return colorLookup[color.ToArgb()].First();
+            else
+                return color;
+        }
         public static bool DgCheckAddSanity(object entry, object[] current, int entrycount, int rowindex)
         {
             if (entry != null && rowindex < entrycount && entry != current[rowindex])
