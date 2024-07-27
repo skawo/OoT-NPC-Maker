@@ -88,9 +88,6 @@ namespace NPC_Maker
             {
                 string CurrentFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
-                File.WriteAllText("cur", CurrentFile);
-                File.WriteAllText("op", OpenedFile);
-
                 if (!String.Equals(CurrentFile, OpenedFile))
                 {
                     DialogResult Res = MessageBox.Show("Save changes before exiting?", "Save changes?", MessageBoxButtons.YesNoCancel);
