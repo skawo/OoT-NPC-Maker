@@ -36,7 +36,7 @@ namespace NPC_Maker.Scripts
 
         public override string ToString()
         {
-            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.SetSubTypes)SubID).ToString();
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.GetSubTypes)SubID).ToString();
         }
     }
 
