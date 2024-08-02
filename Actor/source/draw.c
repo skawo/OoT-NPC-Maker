@@ -359,6 +359,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
 {
     NpcMaker* en = (NpcMaker*)instance;
     int sLimbNumber = limbNumber - 1;
+    s32 out = 0;
 
     #if LOGGING == 1
         osSyncPrintf("_%2d: Drawing limb %2d", en->npcId, sLimbNumber);
@@ -438,10 +439,15 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
             }
             else if (dlist.showType != NOT_VISIBLE)
             {
-                Matrix_Push();
-                Draw_AffectMatrix(dlist, translation, rotation);
-                Draw_ExtDList(en, playState, &dlist);
-                Matrix_Pop();                
+                if (dlist.objectId != OBJECT_ENDDLIST)
+                {
+                    Matrix_Push();
+                    Draw_AffectMatrix(dlist, translation, rotation);
+                    Draw_ExtDList(en, playState, &dlist);
+                    Matrix_Pop();               
+                }
+                else
+                    out = 1;
             }
         }
     }
@@ -465,7 +471,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
     u32 cFuncOffs = en->CFuncs[3];
 	
     if (cFuncOffs == 0xFFFFFFFF)
-        return 0;
+        return out;
     else
     {
 
@@ -475,7 +481,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
 
         typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP);
         EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + cFuncOffs;
-        float out = f(en, playState, limbNumber, dListPtr, translation, rotation, instance, gfxP);
+        out = f(en, playState, limbNumber, dListPtr, translation, rotation, instance, gfxP);
 
         #if LOGGING == 1
             osSyncPrintf("_Embedded function finished.");
