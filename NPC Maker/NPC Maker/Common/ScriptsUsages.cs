@@ -500,7 +500,7 @@ namespace NPC_Maker
                                 return $"{Lists.Instructions.PLAY} *play_subtype* ..";
                         }
                     case Lists.Instructions.QUAKE:
-                        return $"{Lists.Instructions.QUAKE} *quake_type_name* speed duration";
+                        return $"{Lists.Instructions.QUAKE} *quake_type_name* speed duration x y zoom zrot";
                     case Lists.Instructions.OCARINA:
                         {
                             return Environment.NewLine + $"{Lists.Instructions.OCARINA} song_name" + Environment.NewLine +
