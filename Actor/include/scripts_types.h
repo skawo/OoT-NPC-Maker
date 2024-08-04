@@ -702,9 +702,19 @@ typedef struct ScrInstrQuake
     u8 varTypeSpeed;
     u8 varTypeType;
     u8 varTypeDuration;
+	
+    u8 varTypeX;
+    u8 varTypeY;
+    u8 varTypeZRot;
+    u8 varTypeZoom;	
+	
     ScriptVarval speed;
     ScriptVarval type;
     ScriptVarval duration;
+    ScriptVarval x;
+    ScriptVarval y;
+    ScriptVarval zrot;
+    ScriptVarval zoom;
 } ScrInstrQuake;
 
 

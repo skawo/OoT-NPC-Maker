@@ -235,10 +235,15 @@ bool Scripts_InstructionQuake(NpcMaker* en, PlayState* playState, ScriptInstance
     float speed = Scripts_GetVarval(en, playState, in->varTypeSpeed, in->speed, false);
     float dur = Scripts_GetVarval(en, playState, in->varTypeDuration, in->duration, false);
     float type =  Scripts_GetVarval(en, playState, in->varTypeType, in->type, false);
+	
+    float x =  Scripts_GetVarval(en, playState, in->varTypeX, in->x, false);
+    float y =  Scripts_GetVarval(en, playState, in->varTypeY, in->y, false);
+    float zrot =  Scripts_GetVarval(en, playState, in->varTypeZRot, in->zrot, false);
+    float zoom =  Scripts_GetVarval(en, playState, in->varTypeZoom, in->zoom, false);
 
     s16 quakeId = Quake_Add(GET_ACTIVE_CAM(playState), type);
     Quake_SetSpeed(quakeId, speed);
-    Quake_SetQuakeValues(quakeId, 0, 1, 0xFA, 1);
+    Quake_SetQuakeValues(quakeId, x, y, zoom, zrot);
     Quake_SetCountdown(quakeId, dur);
 
     Rumble_Request(en->actor.xyzDistToPlayerSq, 255, dur, 150);
