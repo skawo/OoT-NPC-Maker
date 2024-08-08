@@ -57,7 +57,7 @@ namespace NPC_Maker
                 return;
 
             string[] Lines = txb.Text.Split(new[] { "\n" }, StringSplitOptions.None);
-            Range r = new Range(txb, 0, 0, Lines[Lines.Length - 1].Length - 1, Lines.Length - 1);
+            Range r = new Range(txb, 0, 0, Lines[Lines.Length - 1].Length, Lines.Length - 1);
 
             txb.ClearStyle(StyleIndex.All);
 
