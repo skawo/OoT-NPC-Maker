@@ -57,6 +57,11 @@ namespace NPC_Maker.Scripts
         {
             return new ParseException("Not a valid quake type: ", String.Join(" ", _Line));
         }
+
+        public static ParseException UnrecognizedTransition(string[] _Line)
+        {
+            return new ParseException("Not a valid transition type: ", String.Join(" ", _Line));
+        }
         public static ParseException AndOrCanOnlyBeInIfWhile(string _Line)
         {
             return new ParseException("And and Or keywords may only be used for IF and WHILE instructions: ", _Line);

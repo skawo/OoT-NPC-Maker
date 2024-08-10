@@ -471,7 +471,7 @@ namespace NPC_Maker
                     case Lists.Instructions.SHOW_TEXTBOX_SP:
                         return $"{Lists.Instructions.SHOW_TEXTBOX} textbox [textbox_child]";
                     case Lists.Instructions.WARP:
-                        return $"{Lists.Instructions.WARP} route_id [scene_load_flag] [next_cutscene_index]";
+                        return $"{Lists.Instructions.WARP} route_id [transition_type] [next_cutscene_index]";
                     case Lists.Instructions.SPAWN:
                         {
                             return Environment.NewLine + $"{Lists.Instructions.SPAWN} actor_id" + Environment.NewLine +

@@ -33,7 +33,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem cFunctionsStripMenuItem;
         private static ToolStripMenuItem quakeTypesStripMenuItem;
         private static ToolStripMenuItem messagesStripMenuItem;
-        private static ToolStripMenuItem npcsStripMenuItem;
+        private static ToolStripMenuItem transitionTypesStripMenuItem;
         public static void MakeContextMenu(NPCFile File, NPCEntry Entry)
         {
             if (ContextMenuStrip != null)
@@ -60,6 +60,7 @@ namespace NPC_Maker
             stateTypesStripMenuItem = new ToolStripMenuItem();
             cFunctionsStripMenuItem = new ToolStripMenuItem();
             quakeTypesStripMenuItem = new ToolStripMenuItem();
+            transitionTypesStripMenuItem = new ToolStripMenuItem();
             messagesStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
@@ -73,6 +74,7 @@ namespace NPC_Maker
                                                                     damageTypesStripMenuItem,
                                                                     stateTypesStripMenuItem,
                                                                     quakeTypesStripMenuItem,
+                                                                    transitionTypesStripMenuItem,
                                                                     playerMasksToolStripMenuItem,
                                                                     ocarinaSongstoolStripMenuItem,
                                                                     particlestoolStripMenuItem,
@@ -101,6 +103,8 @@ namespace NPC_Maker
             ocarinaSongstoolStripMenuItem.Text = "Ocarina songs";
             particlestoolStripMenuItem.Text = "Particles";
             quakeTypesStripMenuItem.Text = "Quake types";
+            quakeTypesStripMenuItem.Text = "Quake types";
+            transitionTypesStripMenuItem.Text = "Transition types";
             cFunctionsStripMenuItem.Text = "C Functions";
             messagesStripMenuItem.Text = "Messages";
 
@@ -172,6 +176,7 @@ namespace NPC_Maker
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), particlestoolStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.StateTypes)), stateTypesStripMenuItem);
             AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuakeTypes)), quakeTypesStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TransitionTypes)), transitionTypesStripMenuItem);
 
             List<string> FunctionNames = new List<string>();
 

@@ -1896,5 +1896,51 @@ namespace NPC_Maker
             QUAKE_TYPE4,
             QUAKE_TYPE5,
         }
+
+        public enum TransitionTypes
+        {
+            /*  0 */
+            TRANS_TYPE_WIPE,
+            /*  1 */
+            TRANS_TYPE_TRIFORCE,
+            /*  2 */
+            TRANS_TYPE_FADE_BLACK,
+            /*  3 */
+            TRANS_TYPE_FADE_WHITE,
+            /*  4 */
+            TRANS_TYPE_FADE_BLACK_FAST,
+            /*  5 */
+            TRANS_TYPE_FADE_WHITE_FAST,
+            /*  6 */
+            TRANS_TYPE_FADE_BLACK_SLOW,
+            /*  7 */
+            TRANS_TYPE_FADE_WHITE_SLOW,
+            /*  8 */
+            TRANS_TYPE_WIPE_FAST,
+            /*  9 */
+            TRANS_TYPE_FILL_WHITE2,
+            /* 10 */
+            TRANS_TYPE_FILL_WHITE,
+            /* 11 */
+            TRANS_TYPE_INSTANT,
+            /* 12 */
+            TRANS_TYPE_FILL_BROWN,
+            /* 13 */
+            TRANS_TYPE_FADE_WHITE_CS_DELAYED,
+            /* 14 */
+            TRANS_TYPE_SANDSTORM_PERSIST,
+            /* 15 */
+            TRANS_TYPE_SANDSTORM_END,
+            /* 16 */
+            TRANS_TYPE_CS_BLACK_FILL,
+            /* 17 */
+            TRANS_TYPE_FADE_WHITE_INSTANT,
+            /* 18 */
+            TRANS_TYPE_FADE_GREEN,
+            /* 19 */
+            TRANS_TYPE_FADE_BLUE,
+            /* 255 */
+            TRANS_TYPE_ROUTE = 0xFF,
+        }
     }
 }

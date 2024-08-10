@@ -12,15 +12,15 @@ namespace NPC_Maker.Scripts
                 var WarpID = ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt16.MaxValue);
                 var NextCutsceneIndex = new ScriptVarVal(0, 0);
 
-                var SceneLoadFlag = new ScriptVarVal(1, 0);
+                var transType = new ScriptVarVal(0xFF, 0);
 
                 if (SplitLine.Length == 4)
                     NextCutsceneIndex = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, 16);
 
-                if (SplitLine.Length == 3)
-                    SceneLoadFlag = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, Int32.MaxValue);
+                if (SplitLine.Length >= 3)
+                    transType = ScriptHelpers.GetScriptVarVal(SplitLine, 2, typeof(Lists.TransitionTypes), ParseException.UnrecognizedTransition(SplitLine));
 
-                return new InstructionWarp(WarpID, NextCutsceneIndex, SceneLoadFlag);
+                return new InstructionWarp(WarpID, NextCutsceneIndex, transType);
             }
             catch (ParseException pEx)
             {

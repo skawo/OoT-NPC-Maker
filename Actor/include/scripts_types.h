@@ -572,10 +572,10 @@ typedef struct ScrInstrWarp
     u8 id;
     u8 warpIdvarType;
     u8 cutsceneIdvarType;
-    u8 sceneLoadFlagType;
+    u8 transTypeType;
     ScriptVarval warpId;
     ScriptVarval cutsceneId;
-    ScriptVarval sceneLoadFlag;
+    ScriptVarval transType;
 } ScrInstrWarp;
 
 
