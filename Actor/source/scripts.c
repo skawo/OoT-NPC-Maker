@@ -2257,7 +2257,9 @@ bool Scripts_InstructionWarp(NpcMaker* en, PlayState* playState, ScriptInstance*
     u32 transType = Scripts_GetVarval(en, playState, in->transTypeType, in->transType, false);
     playState->nextEntranceIndex = warpId;
     playState->transitionTrigger = TRANS_TRIGGER_START;
-    playState->transitionType = transType;
+
+    if (transType != 0xFF)
+        playState->transitionType = transType;
 
     if (cutsceneId > 0)
         cutsceneId = 0xFFF0 + (cutsceneId - 4);

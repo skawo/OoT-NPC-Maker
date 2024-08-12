@@ -163,9 +163,6 @@ namespace NPC_Maker
 
                 byte[] outf = (Program.IsRunningUnderMono ? Program.Settings.UseWine ? CompileUnderWine(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs));
 
-                if (outf == null)
-                    throw new Exception("Compilation returned nothing.");
-
                 Clean();
                 return outf;
             }
