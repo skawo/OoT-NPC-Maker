@@ -93,7 +93,7 @@ namespace NPC_Maker
                     }
                 }
 
-                if ((int)Version == 4)
+                if ((int)Version > 3)
                 {
                     foreach (NPCEntry e in Deserialized.Entries)
                     {
@@ -107,6 +107,15 @@ namespace NPC_Maker
                         s.Text = String.Join(Environment.NewLine, s.TextLines);
                 }
 
+                if ((int)Version > 4)
+                {
+                    foreach (NPCEntry e in Deserialized.Entries)
+                    {
+                        foreach (MessageEntry s in e.Messages)
+                            s.MessageText = String.Join(Environment.NewLine, s.MessageTextLines);
+                    }
+                }
+
 
                 // For cross-compatibility with Linux, update all messages converting linebreaks into native system linebreaks.
                 foreach (NPCEntry e in Deserialized.Entries)
@@ -118,8 +127,8 @@ namespace NPC_Maker
                 }
 
 
-                Deserialized.Version = 4;
-                Version = 4;
+                Deserialized.Version = 5;
+                Version = 5;
 
                 return Deserialized;
             }
@@ -142,6 +151,13 @@ namespace NPC_Maker
                     {
                         s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
                         s.Text = "";
+                    }
+
+                    foreach (MessageEntry entry in e.Messages)
+                    {
+                        entry.MessageText = Regex.Replace(entry.MessageText, Environment.NewLine, "\n");
+                        entry.MessageTextLines = Regex.Split(entry.MessageText, "\r?\n").ToList();
+                        entry.MessageText = "";
                     }
 
                     e.EmbeddedOverlayCode.CodeLines = Regex.Split(e.EmbeddedOverlayCode.Code, "\r?\n").ToList();

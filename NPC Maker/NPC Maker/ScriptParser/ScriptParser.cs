@@ -161,23 +161,19 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                List<string[]> Defines = new List<string[]>();
+                List<string[]> Defines = Lines.FindAll(x => x.StartsWith(Lists.Keyword_SharpDefine, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Split(' ')).ToList();
 
-                // Get all define lines...
-                foreach (string Line in Lines)
-                {
-                    if (Line.ToUpper().StartsWith(Lists.Keyword_SharpDefine))
-                    {
-                        string[] Split = Line.Split(' ');
+                List<string[]> ParamCountWrong = Defines.FindAll(x => x.Length != 3).ToList();
 
-                        ScriptHelpers.ErrorIfNumParamsNotEq(Split, 3);
+                foreach (string[] dd in ParamCountWrong)
+                    outScript.ParseErrors.Add(ParseException.DefineIncorrect(dd));
 
-                        if (Defines.Find(x => x[0] == Split[1]) == null)
-                            Defines.Add(new string[] { Split[1], Split[2] });
-                        else
-                            outScript.ParseErrors.Add(ParseException.RepeatDefine(Line));
-                    }
-                }
+                Defines = (List<string[]>)Defines.Except(ParamCountWrong).ToList();
+
+                List<string> Repeats = Defines.GroupBy(x => x[1]).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+
+                foreach (string dd in Repeats)
+                    outScript.ParseErrors.Add(ParseException.RepeatDefine(dd));
 
                 // If none found, there's nothing to do.
                 if (Defines.Count == 0)
@@ -189,22 +185,10 @@ namespace NPC_Maker.Scripts
                 string s = String.Join(Environment.NewLine, NewLines);
 
                 foreach (string[] Def in Defines)
-                     s = ScriptHelpers.ReplaceExpr(s, Def[0], Def[1]);
+                     s = ScriptHelpers.ReplaceExpr(s, Def[1], Def[2]);
 
                 Lines = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                /*
-                for (int i = 0; i < Lines.Count(); i++)
-                {
-                    if (Lines[i].ToUpper().StartsWith(Lists.Keyword_SharpDefine))
-                        continue;
-
-                    foreach (string[] Def in Defines)
-                        Lines[i] = ScriptHelpers.ReplaceExprIfNotDefine(Lines[i], Def[0], Def[1]);
-
-                    NewLines.Add(Lines[i]);
-                }
-                */
 
                 return Lines;
             }

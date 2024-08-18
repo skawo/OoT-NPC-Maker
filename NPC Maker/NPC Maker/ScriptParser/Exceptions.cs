@@ -126,6 +126,11 @@ namespace NPC_Maker.Scripts
             return LabelNameCannotBe(String.Join(" ", _Line));
         }
 
+        public static ParseException DefineIncorrect(string[] _Line)
+        {
+            return new ParseException("Incorrectly formatted define: ", String.Join(" ", _Line));
+        }
+
         public static ParseException ParamCountWrong(string[] _Line)
         {
             string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), _Line[0].ToUpper()), _Line.Length > 1 ? _Line[1].ToUpper() : "");

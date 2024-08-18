@@ -14,7 +14,7 @@ namespace NPC_Maker
 
         public NPCFile()
         {
-            Version = 4;
+            Version = 5;
             Entries = new List<NPCEntry>();
             GlobalHeaders = new List<ScriptEntry>();
         }
@@ -590,6 +590,9 @@ namespace NPC_Maker
     {
         public string Name { get; set; }
         public string MessageText { get; set; }
+
+        public List<string> MessageTextLines { get; set; }
+
         public int Type { get; set; }
         public int Position { get; set; }
 
