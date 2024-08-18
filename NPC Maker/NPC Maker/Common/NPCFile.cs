@@ -474,12 +474,16 @@ namespace NPC_Maker
     public class ScriptEntry
     {
         public string Text { get; set; }
+
+        public List<string> TextLines { get; set; }
+
         public List<string> ParseErrors { get; set; }
         public string Name { get; set; }
 
         public ScriptEntry()
         {
             Text = "";
+            TextLines = new List<string>();
             ParseErrors = new List<string>();
             Name = "Script";
         }
@@ -888,6 +892,8 @@ namespace NPC_Maker
     public class CCodeEntry
     {
         public string Code { get; set; }
+
+        public List<string> CodeLines { get; set; }
         public List<KeyValuePair<string, UInt32>> Functions { get; set; }
 
         public int[,] FuncsRunWhen { get; set; }
@@ -895,6 +901,7 @@ namespace NPC_Maker
         public CCodeEntry(string _Code = "", List<KeyValuePair<string, UInt32>> _Funcs = null, int[,] _FuncsRunWhen = null)
         {
             Code = _Code;
+            CodeLines = new List<string>();
             Functions = _Funcs;
 
             if (Functions == null)

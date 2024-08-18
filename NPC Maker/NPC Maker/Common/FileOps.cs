@@ -93,19 +93,33 @@ namespace NPC_Maker
                     }
                 }
 
-                // For cross-compatibility with Linux, update all messages converting linebreaks into native system linebreaks.
-                if ((int)Version == 3)
+                if ((int)Version == 4)
                 {
                     foreach (NPCEntry e in Deserialized.Entries)
                     {
-                        foreach (MessageEntry entry in e.Messages)
-                        { 
-                            entry.MessageText = Regex.Replace(entry.MessageText, @"\r?\n", Environment.NewLine);
-                        }
+                        foreach (ScriptEntry s in e.Scripts)
+                            s.Text = String.Join(Environment.NewLine, s.TextLines);
+
+                        e.EmbeddedOverlayCode.Code = String.Join(Environment.NewLine, e.EmbeddedOverlayCode.CodeLines);
+                    }
+
+                    foreach (ScriptEntry s in Deserialized.GlobalHeaders)
+                        s.Text = String.Join(Environment.NewLine, s.TextLines);
+                }
+
+
+                // For cross-compatibility with Linux, update all messages converting linebreaks into native system linebreaks.
+                foreach (NPCEntry e in Deserialized.Entries)
+                {
+                    foreach (MessageEntry entry in e.Messages)
+                    {
+                        entry.MessageText = Regex.Replace(entry.MessageText, @"\r?\n", Environment.NewLine);
                     }
                 }
-              
 
+
+                Deserialized.Version = 4;
+                Version = 4;
 
                 return Deserialized;
             }
@@ -120,12 +134,38 @@ namespace NPC_Maker
         {
             try
             {
-                File.WriteAllText(Path, JsonConvert.SerializeObject(Data, Formatting.Indented));
+                NPCFile outD = Clone(Data);
+
+                foreach (NPCEntry e in outD.Entries)
+                {
+                    foreach (ScriptEntry s in e.Scripts)
+                    {
+                        s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
+                        s.Text = "";
+                    }
+
+                    e.EmbeddedOverlayCode.CodeLines = Regex.Split(e.EmbeddedOverlayCode.Code, "\r?\n").ToList();
+                    e.EmbeddedOverlayCode.Code = "";
+                }
+
+                foreach (ScriptEntry s in outD.GlobalHeaders)
+                {
+                    s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
+                    s.Text = "";
+                }
+
+                File.WriteAllText(Path, JsonConvert.SerializeObject(outD, Formatting.Indented));
             }
             catch (Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show($"Failed to write JSON: {ex.Message}");
             }
+        }
+
+        public static NPCFile Clone(NPCFile Data)
+        {
+            string t = JsonConvert.SerializeObject(Data, Formatting.Indented);
+            return JsonConvert.DeserializeObject<NPCFile>(t);
         }
 
         public static Dictionary<string, int> GetDictionary(string Filename)
