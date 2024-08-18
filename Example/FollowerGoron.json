@@ -1,5 +1,5 @@
 {
-  "Version": 4,
+  "Version": 5,
   "Entries": [
     {
       "NPCName": "FollowGoron",
@@ -123,17 +123,133 @@
       ],
       "Scripts": [
         {
-          "Text": "#define SHOWING_MESSAGE var.1 \r\n#define CURRENTLY_BREAKING var.2  \r\n\r\nif SHOWING_MESSAGE == 0 and CURRENTLY_BREAKING == 0\r\n    talk TalkMsg\r\n       set talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       set talk_mode false\r\n    endtalk\r\nendif\r\n\r\n\r\n",
+          "Text": "",
+          "TextLines": [
+            "#define SHOWING_MESSAGE var.1 ",
+            "#define CURRENTLY_BREAKING var.2  ",
+            "",
+            "if SHOWING_MESSAGE == 0 and CURRENTLY_BREAKING == 0",
+            "    talk TalkMsg",
+            "       set talk_mode true",
+            "       face self towards player",
+            "       await talking_end",
+            "       set talk_mode false",
+            "    endtalk",
+            "endif",
+            "",
+            "",
+            ""
+          ],
           "ParseErrors": [],
           "Name": "Talking"
         },
         {
-          "Text": "#define SHOWING_MESSAGE var.1\r\n#define CURRENTLY_BREAKING var.2  \r\n\r\nif CURRENTLY_BREAKING == 0\r\n\r\n    // Warp to player if he gets too far away\r\n    if DISTANCE_FROM_PLAYER > 250\r\n\r\n        set has_collision false\r\n        set GRAVITY_FORCE = 0\r\n\r\n        set ref_actor player\r\n        position set self actor.posX actor.posY actor.posZ\r\n\r\n       particle DUST\r\n            duration 100\r\n            scale 1500\r\n            position direction 0 0 0\r\n            color1 255 255 255 255\r\n            color2 255 128 255 255\r\n            acceleration random.-30->30 random.-100->0 random.-30->30\r\n            velocity random.-30->30 random.-100->0 random.-30->30\r\n       endparticle \r\n\r\n        await frames 4\r\n        set has_collision true\r\n        set GRAVITY_FORCE = -1\r\n\r\n    endif\r\n\r\nendif\r\n\r\nif SHOWING_MESSAGE == 0\r\n\r\n    // Break a boulder if D-Pad Down is pressed\r\n    if BUTTON_PRESSED BTN_DDOWN\r\n\r\n        // Set ref_actor to closest Bombable Boulder...\r\n        set REF_ACTOR actor_id OBJ_BOMBIWA\r\n\r\n        // If one is found, and it's less than 300 units away from the NPC...\r\n        if ref_actor_exists and distance_from_ref_actor < 300\r\n\r\n                set CURRENTLY_BREAKING = 1\r\n\r\n                // Stop following the player\r\n                set MOVEMENT_TYPE none\r\n\r\n                // Move to 40 units in front of the bombable boulder in the direction it's facing\r\n                play sfx NA_SE_EN_GOLON_WAKE_UP\r\n                set REF_ACTOR actor_id OBJ_BOMBIWA\r\n                position direction_move_by_ref_actor self 0 0 40 2 ignore_y\r\n                face self towards actor_id OBJ_BOMBIWA\r\n        \r\n                // Play the punch animation, wait for it to end, reset animation\r\n                set no_auto_anim true\r\n                play sfx NA_SE_EN_GOLON_CRY\r\n                set animation Attack once\r\n                await animation_end\r\n                set no_auto_anim false\r\n                set animation Idle\r\n\r\n                // Destroy the bombable boulder while playing animations\r\n                play sfx NA_SE_IT_BOMB_EXPLOSION\r\n                set REF_ACTOR actor_id OBJ_BOMBIWA\r\n\r\n                particle DISPLAY_LIST\r\n                    scale 12\r\n                    SCALE_UPDATE 2\r\n                    DURATION 100\r\n                    COUNT 12\r\n                    DLIST BombableBoulder\r\n                    position absolute actor.posX actor.posY actor.posZ \r\n                endparticle \r\n\r\n                particle EXPLOSION\r\n                    scale 500\r\n                    SCALE_UPDATE 21\r\n                    ACCELERATION 0 10 0\r\n                    VELOCITY 0 10 0\r\n                    position absolute actor.posX actor.posY actor.posZ \r\n                endparticle \r\n\r\n                kill actor_id OBJ_BOMBIWA\r\n                set MOVEMENT_TYPE follow\r\n\r\n                set CURRENTLY_BREAKING = 0\r\n       else\r\n\r\n            set SHOWING_MESSAGE = 1\r\n            play sfx NA_SE_EN_GOLON_WAKE_UP\r\n            show_textbox_sp NothingHere\r\n            await textbox_on_screen false\r\n            set SHOWING_MESSAGE = 0\r\n       endif\r\n    endif\r\nendif\r\n",
+          "Text": "",
+          "TextLines": [
+            "#define SHOWING_MESSAGE var.1",
+            "#define CURRENTLY_BREAKING var.2  ",
+            "",
+            "if CURRENTLY_BREAKING == 0",
+            "",
+            "    // Warp to player if he gets too far away",
+            "    if DISTANCE_FROM_PLAYER > 250",
+            "",
+            "        set has_collision false",
+            "        set GRAVITY_FORCE = 0",
+            "",
+            "        set ref_actor player",
+            "        position set self actor.posX actor.posY actor.posZ",
+            "",
+            "       particle DUST",
+            "            duration 100",
+            "            scale 1500",
+            "            position direction 0 0 0",
+            "            color1 255 255 255 255",
+            "            color2 255 128 255 255",
+            "            acceleration random.-30->30 random.-100->0 random.-30->30",
+            "            velocity random.-30->30 random.-100->0 random.-30->30",
+            "       endparticle ",
+            "",
+            "        await frames 4",
+            "        set has_collision true",
+            "        set GRAVITY_FORCE = -1",
+            "",
+            "    endif",
+            "",
+            "endif",
+            "",
+            "if SHOWING_MESSAGE == 0",
+            "",
+            "    // Break a boulder if D-Pad Down is pressed",
+            "    if BUTTON_PRESSED BTN_DDOWN",
+            "",
+            "        // Set ref_actor to closest Bombable Boulder...",
+            "        set REF_ACTOR actor_id OBJ_BOMBIWA",
+            "",
+            "        // If one is found, and it's less than 300 units away from the NPC...",
+            "        if ref_actor_exists and distance_from_ref_actor < 300",
+            "",
+            "                set CURRENTLY_BREAKING = 1",
+            "",
+            "                // Stop following the player",
+            "                set MOVEMENT_TYPE none",
+            "",
+            "                // Move to 40 units in front of the bombable boulder in the direction it's facing",
+            "                play sfx NA_SE_EN_GOLON_WAKE_UP",
+            "                set REF_ACTOR actor_id OBJ_BOMBIWA",
+            "                position direction_move_by_ref_actor self 0 0 40 2 ignore_y",
+            "                face self towards actor_id OBJ_BOMBIWA",
+            "        ",
+            "                // Play the punch animation, wait for it to end, reset animation",
+            "                set no_auto_anim true",
+            "                play sfx NA_SE_EN_GOLON_CRY",
+            "                set animation Attack once",
+            "                await animation_end",
+            "                set no_auto_anim false",
+            "                set animation Idle",
+            "",
+            "                // Destroy the bombable boulder while playing animations",
+            "                play sfx NA_SE_IT_BOMB_EXPLOSION",
+            "                set REF_ACTOR actor_id OBJ_BOMBIWA",
+            "",
+            "                particle DISPLAY_LIST",
+            "                    scale 12",
+            "                    SCALE_UPDATE 2",
+            "                    DURATION 100",
+            "                    COUNT 12",
+            "                    DLIST BombableBoulder",
+            "                    position absolute actor.posX actor.posY actor.posZ ",
+            "                endparticle ",
+            "",
+            "                particle EXPLOSION",
+            "                    scale 500",
+            "                    SCALE_UPDATE 21",
+            "                    ACCELERATION 0 10 0",
+            "                    VELOCITY 0 10 0",
+            "                    position absolute actor.posX actor.posY actor.posZ ",
+            "                endparticle ",
+            "",
+            "                kill actor_id OBJ_BOMBIWA",
+            "                set MOVEMENT_TYPE follow",
+            "",
+            "                set CURRENTLY_BREAKING = 0",
+            "       else",
+            "",
+            "            set SHOWING_MESSAGE = 1",
+            "            play sfx NA_SE_EN_GOLON_WAKE_UP",
+            "            show_textbox_sp NothingHere",
+            "            await textbox_on_screen false",
+            "            set SHOWING_MESSAGE = 0",
+            "       endif",
+            "    endif",
+            "endif",
+            ""
+          ],
           "ParseErrors": [],
           "Name": "Follower"
         }
       ],
-      "EnvironmentColor": "0, 255, 255, 255",
+      "EnvironmentColor": "Transparent",
       "Segments": [
         [
           {
@@ -217,13 +333,19 @@
       "Messages": [
         {
           "Name": "TalkMsg",
-          "MessageText": "Let's go!",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Let's go!"
+          ],
           "Type": 0,
           "Position": 1
         },
         {
           "Name": "NothingHere",
-          "MessageText": "Nothing to break here, goro!<fade:40>",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Nothing to break here, goro!<fade:40>"
+          ],
           "Type": 0,
           "Position": 0
         }
@@ -237,6 +359,9 @@
       "ExistInAllRooms": false,
       "EmbeddedOverlayCode": {
         "Code": "",
+        "CodeLines": [
+          ""
+        ],
         "Functions": [],
         "FuncsRunWhen": [
           [
@@ -265,7 +390,35 @@
   ],
   "GlobalHeaders": [
     {
-      "Text": "#define actor.posX actorf.0x24\r\n#define actor.posY actorf.0x28 \r\n#define actor.posZ actorf.0x2C \r\n#define actor.dirX actor16.0x30 \r\n#define actor.dirY actor16.0x32 \r\n#define actor.dirZ actor16.0x34 \r\n\r\n#define actor.homePosX actorf.0x8 \r\n#define actor.homePosY actorf.0xC \r\n#define actor.homePosZ actorf.0x10 \r\n#define actor.homeDirX actor16.0x12 \r\n#define actor.homeDirY actor16.0x14 \r\n#define actor.homeDirZ actor16.0x16 \r\n                \r\n#define actor.scaleX actorf.0x50 \r\n#define actor.scaleY actorf.0x54 \r\n#define actor.scaleZ actorf.0x58 \r\n\r\n#define actor.velocityX actorf.0x5C \r\n#define actor.velocityY actorf.0x60 \r\n#define actor.velocityZ actorf.0x64 \r\n\r\n#define actor.rotX actor16.0xB4 \r\n#define actor.rotY actor16.0xB6 \r\n#define actor.rotZ actor16.0xB8\r\n",
+      "Text": "",
+      "TextLines": [
+        "#define actor.posX actorf.0x24",
+        "#define actor.posY actorf.0x28 ",
+        "#define actor.posZ actorf.0x2C ",
+        "#define actor.dirX actor16.0x30 ",
+        "#define actor.dirY actor16.0x32 ",
+        "#define actor.dirZ actor16.0x34 ",
+        "",
+        "#define actor.homePosX actorf.0x8 ",
+        "#define actor.homePosY actorf.0xC ",
+        "#define actor.homePosZ actorf.0x10 ",
+        "#define actor.homeDirX actor16.0x12 ",
+        "#define actor.homeDirY actor16.0x14 ",
+        "#define actor.homeDirZ actor16.0x16 ",
+        "                ",
+        "#define actor.scaleX actorf.0x50 ",
+        "#define actor.scaleY actorf.0x54 ",
+        "#define actor.scaleZ actorf.0x58 ",
+        "",
+        "#define actor.velocityX actorf.0x5C ",
+        "#define actor.velocityY actorf.0x60 ",
+        "#define actor.velocityZ actorf.0x64 ",
+        "",
+        "#define actor.rotX actor16.0xB4 ",
+        "#define actor.rotY actor16.0xB6 ",
+        "#define actor.rotZ actor16.0xB8",
+        ""
+      ],
       "ParseErrors": [],
       "Name": ""
     }

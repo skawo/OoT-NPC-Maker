@@ -1,11 +1,12 @@
 {
-  "Version": 2,
+  "Version": 5,
   "Entries": [
     {
       "NPCName": "DeadHand",
       "IsNull": false,
       "ObjectID": 166,
       "Hierarchy": 32392,
+      "FileStart": 0,
       "HierarchyType": 0,
       "ModelPositionOffsets": [
         0,
@@ -89,7 +90,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Walking",
@@ -97,7 +99,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Attacked",
@@ -105,7 +108,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Talking",
@@ -113,7 +117,8 @@
           "ObjID": -1,
           "Speed": 0.6,
           "StartFrame": 5,
-          "EndFrame": 10
+          "EndFrame": 10,
+          "FileStart": -1
         },
         {
           "Name": "Surprise",
@@ -121,7 +126,8 @@
           "ObjID": -1,
           "Speed": 0.1,
           "StartFrame": 4,
-          "EndFrame": 5
+          "EndFrame": 5,
+          "FileStart": -1
         },
         {
           "Name": "Eat",
@@ -129,7 +135,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Twitching",
@@ -137,7 +144,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Dead",
@@ -145,17 +153,230 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         }
       ],
       "Scripts": [
         {
-          "Text": "#define trade_complete var.1\r\n#define talk_animation_cancel var.2\r\n#define particle_counter var.3\r\n#define hp var.4\r\n#define death_particle_counter var.5\r\n#define was_attacked var.6\r\n\r\nproc basic_talk\r\n   set talk_mode true\r\n   face self towards player\r\n   await talking_end\r\n   set animation idle\r\n   set talk_mode false\r\nendproc\r\n\r\n\r\n// If actor hasn't been attacked...\r\nif was_attacked = 0\r\n    // ...and chicken hasn't yet been traded...\r\n    if trade_complete == 0\r\n   \r\n\r\n\r\n        // Setup a trade with chicken.\r\n        trade EXCH_ITEM_CHICKEN\r\n            // If chicken presented, show the correct item message\r\n            success MsgCorrectItem\r\n\r\n            // If any other (default) item presented, show incorrect item message.\r\n            // Can list other items if a specific message should be displayed for\r\n            // specific item.\r\n            failure\r\n                default MsgBadItem\r\n            endfailure\r\n\r\n            // Otherwise, show a regular talking message\r\n            talked_to MsgTalking\r\n        endtrade\r\n\r\n\r\n\r\n        // If resulting trade was a success...\r\n        if trade_status success\r\n\r\n           // Standard talking stuff, take away control from player, etc.\r\n           set talk_mode true\r\n           face self towards player\r\n           await talking_end\r\n\r\n           // Remove chicken from inventory\r\n           item take ITEM_CHICKEN\r\n\r\n           // Show the external dlist of the chicken in Dead Hand's mouth and chomp\r\n           set dlist_visibility ChickenDlist with_limb\r\n           set animation eat once\r\n           await animation_frame = 5\r\n\r\n           // Spray blood particles\r\n           while particle_counter < 50\r\n\r\n               particle BUBBLE\r\n                    duration 100\r\n                    scale 100\r\n                    position direction 0 35 20\r\n                    color1 178 38 41 255\r\n                    color2 94 8 17 255\r\n                    acceleration random.-30->30 random.-100->0 random.-30->30\r\n                    velocity random.-30->30 random.-100->0 random.-30->30\r\n               endparticle \r\n               particle_counter += 1\r\n\r\n           endwhile\r\n\r\n           // Sound effects for added effect!\r\n           play sfx NA_SE_EV_CHICKEN_CRY_A\r\n           play sfx NA_SE_EN_DODO_J_EAT\r\n\r\n           // Hide the chicken.\r\n           set dlist_visibility ChickenDlist not_visible\r\n           set trade_complete = 1\r\n\r\n           // Give player control back\r\n           set animation idle\r\n           set talk_mode false\r\n\r\n        // For failure or just regular talking, just run basic talking stuff\r\n        elif trade_status failure\r\n            ::basic_talk\r\n\r\n        elif trade_status talked_to\r\n            ::basic_talk\r\n            \r\n        endif\r\n    // If chicken HAS been traded...\r\n    else\r\n        // Once the trade is complete, and player talks to actor again,show a question...\r\n        talk MsgConsumed\r\n            set talk_mode true\r\n\r\n            // The question has two responses, so we indicate what they do here.\r\n            set response_actions resp_1 resp_2\r\n            face self towards player\r\n            await response\r\n        endtalk\r\n\r\n        // If nothing was picked, we're done.\r\n        return\r\n\r\n        // This runs if option 1 is picked\r\n        resp_1:\r\n            show_textbox MsgMaybe\r\n\r\n            // We're switching to another animation, so we don't want the talking one\r\n            // to play in the meantime\r\n            set talk_animation_cancel = 1\r\n            set animation surprise\r\n\r\n            play sfx NA_SE_EN_DEADHAND_DEAD\r\n            await talking_end\r\n            set talk_mode false\r\n            set animation idle\r\n            set talk_animation_cancel = 0\r\n            return\r\n\r\n        // This runs if option 2 is picked\r\n        resp_2:\r\n            show_textbox MsgNoWay\r\n            await talking_end\r\n            set talk_mode false\r\n            set animation idle\r\n            return\r\n   endif\r\n\r\nendif\r\n",
+          "Text": "",
+          "TextLines": [
+            "#define trade_complete var.1",
+            "#define talk_animation_cancel var.2",
+            "#define particle_counter var.3",
+            "#define hp var.4",
+            "#define death_particle_counter var.5",
+            "#define was_attacked var.6",
+            "",
+            "proc basic_talk",
+            "   set talk_mode true",
+            "   face self towards player",
+            "   await talking_end",
+            "   set animation idle",
+            "   set talk_mode false",
+            "endproc",
+            "",
+            "",
+            "// If actor hasn't been attacked...",
+            "if was_attacked = 0",
+            "    // ...and chicken hasn't yet been traded...",
+            "    if trade_complete == 0",
+            "   ",
+            "",
+            "",
+            "        // Setup a trade with chicken.",
+            "        trade EXCH_ITEM_CHICKEN",
+            "            // If chicken presented, show the correct item message",
+            "            success MsgCorrectItem",
+            "",
+            "            // If any other (default) item presented, show incorrect item message.",
+            "            // Can list other items if a specific message should be displayed for",
+            "            // specific item.",
+            "            failure",
+            "                default MsgBadItem",
+            "            endfailure",
+            "",
+            "            // Otherwise, show a regular talking message",
+            "            talked_to MsgTalking",
+            "        endtrade",
+            "",
+            "",
+            "",
+            "        // If resulting trade was a success...",
+            "        if trade_status success",
+            "",
+            "           // Standard talking stuff, take away control from player, etc.",
+            "           set talk_mode true",
+            "           face self towards player",
+            "           await talking_end",
+            "",
+            "           // Remove chicken from inventory",
+            "           item take ITEM_CHICKEN",
+            "",
+            "           // Show the external dlist of the chicken in Dead Hand's mouth and chomp",
+            "           set dlist_visibility ChickenDlist with_limb",
+            "           set animation eat once",
+            "           await animation_frame = 5",
+            "",
+            "           // Spray blood particles",
+            "           while particle_counter < 50",
+            "",
+            "               particle BUBBLE",
+            "                    duration 100",
+            "                    scale 100",
+            "                    position direction 0 35 20",
+            "                    color1 178 38 41 255",
+            "                    color2 94 8 17 255",
+            "                    acceleration random.-30->30 random.-100->0 random.-30->30",
+            "                    velocity random.-30->30 random.-100->0 random.-30->30",
+            "               endparticle ",
+            "               particle_counter += 1",
+            "",
+            "           endwhile",
+            "",
+            "           // Sound effects for added effect!",
+            "           play sfx NA_SE_EV_CHICKEN_CRY_A",
+            "           play sfx NA_SE_EN_DODO_J_EAT",
+            "",
+            "           // Hide the chicken.",
+            "           set dlist_visibility ChickenDlist not_visible",
+            "           set trade_complete = 1",
+            "",
+            "           // Give player control back",
+            "           set animation idle",
+            "           set talk_mode false",
+            "",
+            "        // For failure or just regular talking, just run basic talking stuff",
+            "        elif trade_status failure",
+            "            ::basic_talk",
+            "",
+            "        elif trade_status talked_to",
+            "            ::basic_talk",
+            "            ",
+            "        endif",
+            "    // If chicken HAS been traded...",
+            "    else",
+            "        // Once the trade is complete, and player talks to actor again,show a question...",
+            "        talk MsgConsumed",
+            "            set talk_mode true",
+            "",
+            "            // The question has two responses, so we indicate what they do here.",
+            "            set response_actions resp_1 resp_2",
+            "            face self towards player",
+            "            await response",
+            "        endtalk",
+            "",
+            "        // If nothing was picked, we're done.",
+            "        return",
+            "",
+            "        // This runs if option 1 is picked",
+            "        resp_1:",
+            "            show_textbox MsgMaybe",
+            "",
+            "            // We're switching to another animation, so we don't want the talking one",
+            "            // to play in the meantime",
+            "            set talk_animation_cancel = 1",
+            "            set animation surprise",
+            "",
+            "            play sfx NA_SE_EN_DEADHAND_DEAD",
+            "            await talking_end",
+            "            set talk_mode false",
+            "            set animation idle",
+            "            set talk_animation_cancel = 0",
+            "            return",
+            "",
+            "        // This runs if option 2 is picked",
+            "        resp_2:",
+            "            show_textbox MsgNoWay",
+            "            await talking_end",
+            "            set talk_mode false",
+            "            set animation idle",
+            "            return",
+            "   endif",
+            "",
+            "endif",
+            ""
+          ],
           "ParseErrors": [],
           "Name": "MainBehavior"
         },
         {
-          "Text": "#define trade_complete var.1\r\n#define talk_animation_cancel var.2\r\n#define particle_counter var.3\r\n#define hp var.4\r\n#define death_particle_counter var.5\r\n#define was_attacked var.6\r\n\r\n// The actor can take three hits, so we set the HP to 3.\r\nhp = 3\r\n// Then we set where the script starts - so that we don't set the HP to 3 again.\r\nset script_start hp_set\r\n\r\nhp_set:\r\n\r\n// This makes the talking animation work\r\nif is_talking and textbox_drawing and talk_animation_cancel == 0\r\n    set animation talking once\r\n    await animation_end\r\nendif\r\n\r\n\r\nif attacked\r\n    set was_attacked = 1\r\n    set reacts_if_attacked false\r\n\r\n    // If HP has been depleted...\r\n    if hp = 1\r\n        // Turn on the manual animation mode and show a textbox...\r\n        set no_auto_anim true\r\n        show_textbox_sp MsgDying\r\n\r\n        // Play the dying animation\r\n        set animation dead once\r\n        await animation_end\r\n        set animation twitching once\r\n        await animation_end\r\n\r\n        // Sound effects for emphasis. Also, scale itself down to 0.\r\n        play sfx NA_SE_EN_DEADHAND_DEAD\r\n        scale scale_to self 0 0.0005\r\n        play sfx NA_SE_EN_AWA_BREAK\r\n\r\n        // Blood spray\r\n        while death_particle_counter < 100\r\n\r\n            particle BUBBLE\r\n                duration 100\r\n                scale 100\r\n                position direction random.-10->30 0 random.-10->30\r\n                color1 random.120->180 38 41 255\r\n                color2 94 8 17 255\r\n                acceleration random.-30->30 random.0->100 random.-30->30\r\n                velocity random.-30->30 random.0->100 random.-30->30\r\n            endparticle \r\n\r\n            set death_particle_counter += 1\r\n\r\n        endwhile\r\n\r\n        // Delete actor\r\n        kill self\r\n    else\r\n        // If HP hasn't been depleted, subtract 1 from it and show a textbox\r\n        set no_auto_anim true\r\n        set hp -= 1\r\n        show_textbox_sp MsgAttacked\r\n        await textbox_on_screen false\r\n        set animation idle\r\n        set no_auto_anim false\r\n        set was_attacked = 0\r\n        set reacts_if_attacked true\r\n    endif\r\nendif",
+          "Text": "",
+          "TextLines": [
+            "#define trade_complete var.1",
+            "#define talk_animation_cancel var.2",
+            "#define particle_counter var.3",
+            "#define hp var.4",
+            "#define death_particle_counter var.5",
+            "#define was_attacked var.6",
+            "",
+            "// The actor can take three hits, so we set the HP to 3.",
+            "hp = 3",
+            "// Then we set where the script starts - so that we don't set the HP to 3 again.",
+            "set script_start hp_set",
+            "",
+            "hp_set:",
+            "",
+            "// This makes the talking animation work",
+            "if is_talking and textbox_drawing and talk_animation_cancel == 0",
+            "    set animation talking once",
+            "    await animation_end",
+            "endif",
+            "",
+            "",
+            "if attacked",
+            "    set was_attacked = 1",
+            "    set reacts_if_attacked false",
+            "",
+            "    // If HP has been depleted...",
+            "    if hp = 1",
+            "        // Turn on the manual animation mode and show a textbox...",
+            "        set no_auto_anim true",
+            "        show_textbox_sp MsgDying",
+            "",
+            "        // Play the dying animation",
+            "        set animation dead once",
+            "        await animation_end",
+            "        set animation twitching once",
+            "        await animation_end",
+            "",
+            "        // Sound effects for emphasis. Also, scale itself down to 0.",
+            "        play sfx NA_SE_EN_DEADHAND_DEAD",
+            "        scale scale_to self 0 0.0005",
+            "        play sfx NA_SE_EN_AWA_BREAK",
+            "",
+            "        // Blood spray",
+            "        while death_particle_counter < 100",
+            "",
+            "            particle BUBBLE",
+            "                duration 100",
+            "                scale 100",
+            "                position direction random.-10->30 0 random.-10->30",
+            "                color1 random.120->180 38 41 255",
+            "                color2 94 8 17 255",
+            "                acceleration random.-30->30 random.0->100 random.-30->30",
+            "                velocity random.-30->30 random.0->100 random.-30->30",
+            "            endparticle ",
+            "",
+            "            set death_particle_counter += 1",
+            "",
+            "        endwhile",
+            "",
+            "        // Delete actor",
+            "        kill self",
+            "    else",
+            "        // If HP hasn't been depleted, subtract 1 from it and show a textbox",
+            "        set no_auto_anim true",
+            "        set hp -= 1",
+            "        show_textbox_sp MsgAttacked",
+            "        await textbox_on_screen false",
+            "        set animation idle",
+            "        set no_auto_anim false",
+            "        set was_attacked = 0",
+            "        set reacts_if_attacked true",
+            "    endif",
+            "endif"
+          ],
           "ParseErrors": [],
           "Name": "AttackedBehavior"
         }
@@ -166,7 +387,8 @@
           {
             "Name": "Texture_0",
             "Address": 0,
-            "ObjectID": -4
+            "ObjectID": -4,
+            "FileStart": -1
           }
         ],
         [],
@@ -197,7 +419,8 @@
           "ShowType": 0,
           "Limb": 12,
           "Color": "White",
-          "ObjectID": 265
+          "ObjectID": 265,
+          "FileStart": -1
         }
       ],
       "DisplayListColors": [
@@ -221,56 +444,125 @@
       "Messages": [
         {
           "Name": "MsgCorrectItem",
-          "MessageText": "Yessssss... Down the hatch.",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Yessssss... Down the hatch."
+          ],
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "MsgTalking",
-          "MessageText": "Give me... give me <Speed:1><G>sustenance<W>.\r\n<New box>\r\n<Speed:2>A... delicious feathery dish.\r\n<New box>\r\n<SOUND:NA_SE_EN_DEADHAND_LAUGH> Mweeeeeeee heeeeeee heeeeeeeeeee",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Give me... give me <Speed:1><G>sustenance<W>.",
+            "<New box>",
+            "<Speed:2>A... delicious feathery dish.",
+            "<New box>",
+            "<SOUND:NA_SE_EN_DEADHAND_LAUGH> Mweeeeeeee heeeeeee heeeeeeeeeee"
+          ],
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "MsgBadItem",
-          "MessageText": "Nooooo...",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Nooooo..."
+          ],
           "Type": 0,
           "Position": 2
         },
         {
           "Name": "MsgConsumed",
-          "MessageText": "<Speed:5><SOUND:NA_SE_EN_REDEAD_CRY>Delicious.\r\n<New Box>\r\nIs... is there more?\r\n<Two Choices>\r\n<G>Maybe\r\nNo way<W>",
+          "MessageText": "",
+          "MessageTextLines": [
+            "<Speed:5><SOUND:NA_SE_EN_REDEAD_CRY>Delicious.",
+            "<New Box>",
+            "Is... is there more?",
+            "<Two Choices>",
+            "<G>Maybe",
+            "No way<W>"
+          ],
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "MsgMaybe",
-          "MessageText": "That would be<Delay:30>\r\n<SPEED:1><SOUND:NA_SE_EN_DEADHAND_LAUGH>...divine.",
+          "MessageText": "",
+          "MessageTextLines": [
+            "That would be<Delay:30>",
+            "<SPEED:1><SOUND:NA_SE_EN_DEADHAND_LAUGH>...divine."
+          ],
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "MsgNoWay",
-          "MessageText": "Not... acceptable.\r\n<New box>\r\nBring me more.",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Not... acceptable.",
+            "<New box>",
+            "Bring me more."
+          ],
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "MsgAttacked",
-          "MessageText": "Hey, STOP!<Fade:20>",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Hey, STOP!<Fade:20>"
+          ],
           "Type": 0,
           "Position": 3
         },
         {
           "Name": "MsgDying",
-          "MessageText": "ARGHHHHH!<Fade:20>",
+          "MessageText": "",
+          "MessageTextLines": [
+            "ARGHHHHH!<Fade:20>"
+          ],
           "Type": 0,
           "Position": 3
         }
       ],
       "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
       "NumVars": 8,
-      "NumFVars": 0
+      "NumFVars": 0,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "CodeLines": [
+          ""
+        ],
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
     }
   ],
   "GlobalHeaders": []

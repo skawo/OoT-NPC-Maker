@@ -98,13 +98,13 @@ namespace NPC_Maker
                     foreach (NPCEntry e in Deserialized.Entries)
                     {
                         foreach (ScriptEntry s in e.Scripts)
-                            s.Text = String.Join(Environment.NewLine, s.TextLines);
+                            s.Text = String.Join(Environment.NewLine, s.TextLines.Select(x => x.TrimEnd()).ToList());
 
                         e.EmbeddedOverlayCode.Code = String.Join(Environment.NewLine, e.EmbeddedOverlayCode.CodeLines);
                     }
 
                     foreach (ScriptEntry s in Deserialized.GlobalHeaders)
-                        s.Text = String.Join(Environment.NewLine, s.TextLines);
+                        s.Text = String.Join(Environment.NewLine, s.TextLines.Select(x => x.TrimEnd()).ToList());
                 }
 
                 if ((int)Version > 4)

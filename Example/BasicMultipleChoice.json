@@ -1,5 +1,5 @@
 {
-  "Version": 3,
+  "Version": 5,
   "Entries": [
     {
       "NPCName": "Wallmaster2",
@@ -132,12 +132,71 @@
       ],
       "Scripts": [
         {
-          "Text": "// If the player hasn't chosen to get the rupees yet...\r\nif var.1 == 0\r\n    // Display the starting message if talked to\r\n    talk StartMessage\r\n\r\n       // Set what the responses for the textbox do - \r\n       // jump to \"giverupees\" if the first option is chosen\r\n       // or to \"nothing\" if the second option is chosen\r\n       set response_actions giverupees nothing\r\n\r\n       set talk_mode true\r\n       face self towards player\r\n       // Wait until the response is chosen.\r\n       await response\r\n    endtalk\r\n\r\n    // If the player hasn't talked to the actor, do nothing else\r\n    return\r\n\r\n    giverupees:\r\n    show_textbox GiveFifty\r\n    await talking_end\r\n    item award GI_RUPEE_PURPLE  \r\n    // Mark the fact we've chosen this option.\r\n    set var.1 = 1\r\n    set talk_mode false\r\n    return\r\n\r\n    nothing:\r\n    show_textbox GiveNothing\r\n    await talking_end\r\n    set talk_mode false   \r\n    return\r\n\r\n\r\n\r\n\r\n// Otherwise, show another message\r\nelse\r\n    talk GiveBack\r\n       set talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       set talk_mode false\r\n    endtalk\r\nendif\r\n\r\n\r\n",
+          "Text": "",
+          "TextLines": [
+            "// If the player hasn't chosen to get the rupees yet...",
+            "if var.1 == 0",
+            "    // Display the starting message if talked to",
+            "    talk StartMessage",
+            "",
+            "       // Set what the responses for the textbox do -",
+            "       // jump to \"giverupees\" if the first option is chosen",
+            "       // or to \"nothing\" if the second option is chosen",
+            "       set response_actions giverupees nothing",
+            "",
+            "       set talk_mode true",
+            "       face self towards player",
+            "       // Wait until the response is chosen.",
+            "       await response",
+            "    endtalk",
+            "",
+            "    // If the player hasn't talked to the actor, do nothing else",
+            "    return",
+            "",
+            "    giverupees:",
+            "    show_textbox GiveFifty",
+            "    await talking_end",
+            "    item award GI_RUPEE_PURPLE",
+            "    // Mark the fact we've chosen this option.",
+            "    set var.1 = 1",
+            "    set talk_mode false",
+            "    return",
+            "",
+            "    nothing:",
+            "    show_textbox GiveNothing",
+            "    await talking_end",
+            "    set talk_mode false",
+            "    return",
+            "",
+            "",
+            "",
+            "",
+            "// Otherwise, show another message",
+            "else",
+            "    talk GiveBack",
+            "       set talk_mode true",
+            "       face self towards player",
+            "       await talking_end",
+            "       set talk_mode false",
+            "    endtalk",
+            "endif",
+            "",
+            "",
+            ""
+          ],
           "ParseErrors": [],
           "Name": "Talking"
         },
         {
-          "Text": "// Displays the talking animation while the textbox is drawing text\r\nif is_talking and textbox_drawing\r\n    set animation Talking once\r\n    await animation_end\r\nendif\r\n",
+          "Text": "",
+          "TextLines": [
+            "// Displays the talking animation while the textbox is drawing text",
+            "if is_talking and textbox_drawing",
+            "    set animation Talking once",
+            "    await animation_end",
+            "endif",
+            ""
+          ],
           "ParseErrors": [],
           "Name": "Talking animation"
         }
@@ -171,33 +230,82 @@
       "Messages": [
         {
           "Name": "StartMessage",
-          "MessageText": "Hello! What would you like?\r\n<TWO_CHOICES>\r\nGive me 50 Rupees\r\nNothing",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Hello! What would you like?",
+            "<TWO_CHOICES>",
+            "Give me 50 Rupees",
+            "Nothing"
+          ],
           "Type": 0,
           "Position": 1
         },
         {
           "Name": "GiveFifty",
-          "MessageText": "Having money trouble? No problem.\r\nHere you go!",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Having money trouble? No problem.",
+            "Here you go!"
+          ],
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "GiveNothing",
-          "MessageText": "Really? Well, feel free to ask\r\nif something comes up!",
+          "MessageText": "",
+          "MessageTextLines": [
+            "Really? Well, feel free to ask",
+            "if something comes up!"
+          ],
           "Type": 0,
           "Position": 0
         },
         {
           "Name": "GiveBack",
-          "MessageText": "You will repay eventually, right?",
+          "MessageText": "",
+          "MessageTextLines": [
+            "You will repay eventually, right?"
+          ],
           "Type": 0,
           "Position": 0
         }
       ],
       "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
       "NumVars": 8,
       "NumFVars": 0,
-      "ExistInAllRooms": false
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "CodeLines": [
+          ""
+        ],
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
     }
   ],
   "GlobalHeaders": []

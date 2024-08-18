@@ -1,11 +1,12 @@
 {
-  "Version": 2,
+  "Version": 5,
   "Entries": [
     {
       "NPCName": "Wallmaster",
       "IsNull": false,
       "ObjectID": 11,
       "Hierarchy": 36784,
+      "FileStart": 0,
       "HierarchyType": 0,
       "ModelPositionOffsets": [
         0,
@@ -89,7 +90,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Walking",
@@ -97,7 +99,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Attacked",
@@ -105,7 +108,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 0,
-          "EndFrame": 255
+          "EndFrame": 255,
+          "FileStart": -1
         },
         {
           "Name": "Talking",
@@ -113,7 +117,8 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 5,
-          "EndFrame": 10
+          "EndFrame": 10,
+          "FileStart": -1
         },
         {
           "Name": "Surprise",
@@ -121,17 +126,53 @@
           "ObjID": -1,
           "Speed": 1.0,
           "StartFrame": 4,
-          "EndFrame": 5
+          "EndFrame": 5,
+          "FileStart": -1
         }
       ],
       "Scripts": [
         {
-          "Text": "if var.1 == 0\r\n    talk StartMessage\r\n       set talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       item take ITEM_GAUNTLETS_GOLD\r\n       item award GI_GAUNTLETS_GOLD\r\n       face player towards self\r\n       show_textbox MessageAfterGiven\r\n       await talking_end\r\n       set animation Idle\r\n       set talk_mode false\r\n       set var.1 = 1\r\n    endtalk\r\nelse\r\n    talk MessageAfterGiven\r\n       set talk_mode true\r\n       face self towards player\r\n       await talking_end\r\n       set talk_mode false\r\n    endtalk\r\nendif\r\n\r\n\r\n",
+          "Text": "",
+          "TextLines": [
+            "if var.1 == 0",
+            "    talk StartMessage",
+            "       set talk_mode true",
+            "       face self towards player",
+            "       await talking_end",
+            "       item take ITEM_GAUNTLETS_GOLD",
+            "       item award GI_GAUNTLETS_GOLD",
+            "       face player towards self",
+            "       show_textbox MessageAfterGiven",
+            "       await talking_end",
+            "       set animation Idle",
+            "       set talk_mode false",
+            "       set var.1 = 1",
+            "    endtalk",
+            "else",
+            "    talk MessageAfterGiven",
+            "       set talk_mode true",
+            "       face self towards player",
+            "       await talking_end",
+            "       set talk_mode false",
+            "    endtalk",
+            "endif",
+            "",
+            "",
+            ""
+          ],
           "ParseErrors": [],
           "Name": "Talking"
         },
         {
-          "Text": "\r\nif is_talking and textbox_drawing\r\n    set animation Talking once\r\n    await animation_end\r\nendif\r\n",
+          "Text": "",
+          "TextLines": [
+            "",
+            "if is_talking and textbox_drawing",
+            "    set animation Talking once",
+            "    await animation_end",
+            "endif",
+            ""
+          ],
           "ParseErrors": [],
           "Name": "Talking animation"
         }
@@ -142,7 +183,8 @@
           {
             "Name": "Texture_0",
             "Address": 0,
-            "ObjectID": -4
+            "ObjectID": -4,
+            "FileStart": -1
           }
         ],
         [],
@@ -164,20 +206,72 @@
       "Messages": [
         {
           "Name": "StartMessage",
-          "MessageText": "You've gotta hand it to me.\r\nI'm a pretty handsome guy.\r\n<New box>\r\nThat's pretty handy in life, let \r\nme tell you.\r\n<New box>\r\nBut, enough about me. Let me \r\nextend a helping hand and give \r\nyou... this!",
+          "MessageText": "",
+          "MessageTextLines": [
+            "You've gotta hand it to me.",
+            "I'm a pretty handsome guy.",
+            "<New box>",
+            "That's pretty handy in life, let ",
+            "me tell you.",
+            "<New box>",
+            "But, enough about me. Let me ",
+            "extend a helping hand and give ",
+            "you... this!"
+          ],
           "Type": 0,
           "Position": 1
         },
         {
           "Name": "MessageAfterGiven",
-          "MessageText": "I know certain things can be\r\na handful to deal with, so an extra \r\nbit of strength can't hurt.\r\n<New box>\r\nJust a wee bit of help for \r\nmy enslaved brethren.",
+          "MessageText": "",
+          "MessageTextLines": [
+            "I know certain things can be",
+            "a handful to deal with, so an extra ",
+            "bit of strength can't hurt.",
+            "<New box>",
+            "Just a wee bit of help for ",
+            "my enslaved brethren."
+          ],
           "Type": 0,
           "Position": 0
         }
       ],
       "DEBUGShowCols": false,
+      "DEBUGPrintToScreen": false,
+      "DEBUGLookAtEditor": false,
+      "DEBUGExDlistEditor": false,
       "NumVars": 8,
-      "NumFVars": 0
+      "NumFVars": 0,
+      "ExistInAllRooms": false,
+      "EmbeddedOverlayCode": {
+        "Code": "",
+        "CodeLines": [
+          ""
+        ],
+        "Functions": [],
+        "FuncsRunWhen": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            -1
+          ]
+        ]
+      }
     }
   ],
   "GlobalHeaders": []
