@@ -18,15 +18,21 @@ namespace NPC_Maker.Scripts
         {
             List<byte> Data = new List<byte>();
 
+            byte SkipChildText = (AdultText.Value == ChildText.Value && AdultText.Vartype == ChildText.Vartype) ? (byte)1 : (byte)0;
+
             Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SkipChildText, Data);
             Helpers.AddObjectToByteList(AdultText.Vartype, Data);
             Helpers.AddObjectToByteList(ChildText.Vartype, Data);
             Helpers.Ensure4ByteAlign(Data);
             Helpers.AddObjectToByteList(AdultText.Value, Data);
-            Helpers.AddObjectToByteList(ChildText.Value, Data);
+
+            if (SkipChildText == 0)
+                Helpers.AddObjectToByteList(ChildText.Value, Data);
+
             Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, SkipChildText == 1 ? 8 : 12);
 
             return Data.ToArray();
         }

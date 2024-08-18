@@ -1424,7 +1424,7 @@ bool Scripts_InstructionEnableTalking(NpcMaker* en, PlayState* playState, Script
     //z_actor_poll_speak_cube
     en->canTalk = func_8002F2CC(&en->actor, playState, en->settings.talkRadius + en->collider.dim.radius);
 
-    u32 id = Scripts_GetTextId(en, playState, in->vartypeChild, in->childMsgId, in->varTypeAdult, in->adultMsgId);
+    u32 id = Scripts_GetTextId(en, playState, in->skipChildMsgId, in->vartypeChild, in->childMsgId, in->varTypeAdult, in->adultMsgId);
     Scripts_SetMessage(en, playState, id, &en->actor.textId, false, true);
 
     script->curInstrNum++;
@@ -1437,7 +1437,7 @@ bool Scripts_InstructionShowTextbox(NpcMaker* en, PlayState* playState, ScriptIn
         osSyncPrintf("_[%2d, %1d]: SHOW_TEXTBOX", en->npcId, en->curScriptNum);
     #endif  
 
-    u32 id = Scripts_GetTextId(en, playState, in->vartypeChild, in->childMsgId, in->varTypeAdult, in->adultMsgId);
+    u32 id = Scripts_GetTextId(en, playState, in->skipChildMsgId, in->vartypeChild, in->childMsgId, in->varTypeAdult, in->adultMsgId);
 
     if (in->id == SHOW_TEXTBOX)
     {
@@ -1483,7 +1483,7 @@ bool Scripts_InstructionEnableTrade(NpcMaker* en, PlayState* playState, ScriptIn
             // If the item being traded is correct, set the correct text ID.
             if (en->tradeItem == curTradedItem)
             {
-                int id = Scripts_GetTextId(en, playState, in->correct.varTypeChild, in->correct.childMsgId, in->correct.varTypeAdult, in->correct.adultMsgId);
+                int id = Scripts_GetTextId(en, playState, 0, in->correct.varTypeChild, in->correct.childMsgId, in->correct.varTypeAdult, in->correct.adultMsgId);
                 Scripts_SetMessage(en, playState, id, &en->actor.textId, false, true);
             }
             // If the item traded is wrong, set the incorrect id.
@@ -1500,7 +1500,7 @@ bool Scripts_InstructionEnableTrade(NpcMaker* en, PlayState* playState, ScriptIn
                         // Set the message if the item matches, or item in the list is -1 (which is the default for all items not set specifically, and shuffled to always be at the very end).
                         if (fail_item == -1 || fail_item == curTradedItem)
                         {
-                            int id = Scripts_GetTextId(en, playState, in->failure[i].varTypeChild, in->failure[i].childMsgId, in->failure[i].varTypeAdult, in->failure[i].adultMsgId);
+                            int id = Scripts_GetTextId(en, playState, 0, in->failure[i].varTypeChild, in->failure[i].childMsgId, in->failure[i].varTypeAdult, in->failure[i].adultMsgId);
                             Scripts_SetMessage(en, playState, id, &en->actor.textId, false, true);
                             break;
                         }
@@ -1509,7 +1509,7 @@ bool Scripts_InstructionEnableTrade(NpcMaker* en, PlayState* playState, ScriptIn
                 // If nothing is being traded, set that text id (this is what will be displayed when the player speaks to the NPC)
                 else
                 {
-                    int id = Scripts_GetTextId(en, playState, in->varTypeTalkChild, in->childTalkMsgId, in->varTypeTalkAdult, in->adultTalkMsgId);
+                    int id = Scripts_GetTextId(en, playState, 0, in->varTypeTalkChild, in->childTalkMsgId, in->varTypeTalkAdult, in->adultTalkMsgId);
                     Scripts_SetMessage(en, playState, id, &en->actor.textId, false, true);         
                 }
             }

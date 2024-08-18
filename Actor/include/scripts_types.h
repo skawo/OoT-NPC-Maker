@@ -327,9 +327,9 @@ typedef struct ScrInstrExtVarAwait
 typedef struct ScrInstrTextbox
 {
     u8 id;
+    u8 skipChildMsgId;
     u8 varTypeAdult;
     u8 vartypeChild;
-    u8 pad;
     ScriptVarval adultMsgId;
     ScriptVarval childMsgId;
 

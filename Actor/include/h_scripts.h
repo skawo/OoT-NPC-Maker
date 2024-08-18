@@ -28,7 +28,7 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, PlayState* playState, u32 value, u32 s
 u16 Scripts_IfCommon(NpcMaker* en, PlayState* playState, bool checked, u32 condition, u16 goto_true, u16 goto_false);
 bool Scripts_AwaitBool(NpcMaker* en, PlayState* playState, bool checked, u32 condition);
 bool Scripts_AwaitValue(NpcMaker* en, PlayState* playState, float value, DataType read_type, u32 condition, u8 val_type, ScriptVarval compared_value);
-u32 Scripts_GetTextId(NpcMaker* en, PlayState* playState, u8 vartype_child, ScriptVarval child, u8 vartype_adult, ScriptVarval adult);
+u32 Scripts_GetTextId(NpcMaker* en, PlayState* playState, u8 skipChildMsgId, u8 vartype_child, ScriptVarval child, u8 vartype_adult, ScriptVarval adult);
 bool Scripts_SetupTemp(ScriptInstance* script, void* instruction);
 void Scripts_FreeTemp(ScriptInstance* script);
 bool Scripts_FreeAndContinue(ScriptInstance* script);

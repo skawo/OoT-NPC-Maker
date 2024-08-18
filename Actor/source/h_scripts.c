@@ -598,9 +598,9 @@ u16 Scripts_IfValue(NpcMaker* en, PlayState* playState, float value, void* instr
 
 #pragma region TEXT
 
-u32 Scripts_GetTextId(NpcMaker* en, PlayState* playState, u8 varTypeChild, ScriptVarval child, u8 varTypeAdult, ScriptVarval adult)
+u32 Scripts_GetTextId(NpcMaker* en, PlayState* playState, u8 skipChildMsgId, u8 varTypeChild, ScriptVarval child, u8 varTypeAdult, ScriptVarval adult)
 {
-    if (playState->linkAgeOnLoad)
+    if (playState->linkAgeOnLoad && !skipChildMsgId)
         return Scripts_GetVarval(en, playState, varTypeChild, child, true);
     else
         return Scripts_GetVarval(en, playState, varTypeAdult, adult, true);
