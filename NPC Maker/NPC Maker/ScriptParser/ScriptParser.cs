@@ -136,12 +136,7 @@ namespace NPC_Maker.Scripts
 
         private static List<string> SplitLines(string ScriptText)
         {
-            List<string> Lines = ScriptText.Split(new[] { "\n" }, StringSplitOptions.None).ToList();
-
-            for (int i = 0; i < Lines.Count(); i++)
-                Lines[i] = Lines[i].Trim();
-
-            return Lines;
+            return (List<string>)Regex.Split(ScriptText, "\r?\n").ToList().Select(x => x.Trim()).ToList();
         }
 
         private void CheckLabels(List<string> Lines)
