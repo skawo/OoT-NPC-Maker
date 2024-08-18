@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace NPC_Maker
 {
@@ -33,6 +35,26 @@ namespace NPC_Maker
         public static UInt32 HexLeading2UInt32(this string text)
         {
             return text.TrimStart('0') == "" ? (UInt32)0: UInt32.Parse(text.TrimStart('0'), System.Globalization.NumberStyles.HexNumber);
+        }
+    }
+}
+public class JsonTextWriterEx : JsonTextWriter
+{
+    public string NewLine { get; set; }
+
+    public JsonTextWriterEx(TextWriter textWriter) : base(textWriter)
+    {
+        NewLine = Environment.NewLine;
+    }
+
+    protected override void WriteIndent()
+    {
+        if (Formatting == Formatting.Indented)
+        {
+            WriteWhitespace(NewLine);
+            int currentIndentCount = Top * Indentation;
+            for (int i = 0; i < currentIndentCount; i++)
+                WriteIndentSpace();
         }
     }
 }

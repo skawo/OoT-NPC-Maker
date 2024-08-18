@@ -154,7 +154,7 @@ namespace NPC_Maker
                     s.Text = "";
                 }
 
-                File.WriteAllText(Path, JsonConvert.SerializeObject(outD, Formatting.Indented));
+                File.WriteAllText(Path, JsonConvert.SerializeObject(outD, Formatting.Indented).Replace(Environment.NewLine, "\n"));
             }
             catch (Exception ex)
             {
