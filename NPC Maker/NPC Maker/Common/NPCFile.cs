@@ -14,7 +14,7 @@ namespace NPC_Maker
 
         public NPCFile()
         {
-            Version = 3;
+            Version = 4;
             Entries = new List<NPCEntry>();
             GlobalHeaders = new List<ScriptEntry>();
         }
