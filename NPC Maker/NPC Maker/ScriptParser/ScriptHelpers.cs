@@ -9,7 +9,6 @@ namespace NPC_Maker.Scripts
     {
         static public int GetCorresponding(List<string> Lines, int LineNo, string Statement, string EndStatement)
         {
-            int depth = 0;
             for (int i = LineNo + 1; i < Lines.Count; i++)
             {
                 string firstWord = Lines[i].Split(' ')[0].ToUpper();
@@ -21,12 +20,7 @@ namespace NPC_Maker.Scripts
                         throw ParseException.StatementNotClosed(Lines[LineNo]);
                 }
                 else if (firstWord == EndStatement)
-                {
-                    if (depth == 0)
-                        return i;
-                    else
-                        depth--;
-                }
+                    return i;
             }
 
             return -1;
