@@ -394,13 +394,15 @@ namespace NPC_Maker.Scripts
         {
             for (int i = LineSt + 1; i < LineEnd; i++)
             {
-                if (Lines[i].Split(' ')[0].ToUpper() == Lists.Instructions.IF.ToString())
+                string firstWord = Lines[i].Split(' ')[0].ToUpper();
+
+                if (firstWord == Lists.Instructions.IF.ToString())
                 {
                     i = GetCorrespondingEndIf(Lines, i);
                     continue;
                 }
 
-                if (Lines[i].ToUpper().Trim() == Lists.Keyword_Else)
+                if (firstWord == Lists.Keyword_Else)
                     return i;
             }
 
@@ -409,48 +411,12 @@ namespace NPC_Maker.Scripts
 
         public int GetCorrespondingEndIf(List<string> Lines, int LineNo)
         {
-            for (int i = LineNo + 1; i < Lines.Count(); i++)
-            {
-                if (Lines[i].Split(' ')[0].ToUpper() == Lists.Instructions.IF.ToString())
-                {
-                    int j = i;
-
-                    i = GetCorrespondingEndIf(Lines, i);
-
-                    if (i < 0)
-                        throw ParseException.IfNotClosed(Lines[j]);
-
-                    continue;
-                }
-
-                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndIf)
-                    return i;
-            }
-
-            return -1;
+            return ScriptHelpers.GetCorresponding(Lines, LineNo, Lists.Instructions.IF.ToString(), Lists.Keyword_EndIf);
         }
 
-        private int GetCorrespondingEndWhile(List<string> Lines, int LineNo)
+        public int GetCorrespondingEndWhile(List<string> Lines, int LineNo)
         {
-            for (int i = LineNo + 1; i < Lines.Count(); i++)
-            {
-                if (Lines[i].Split(' ')[0].ToUpper() == Lists.Instructions.WHILE.ToString())
-                {
-                    int j = i;
-
-                    i = GetCorrespondingEndWhile(Lines, i);
-
-                    if (i < 0)
-                        throw ParseException.IfNotClosed(Lines[j]);
-
-                    continue;
-                }
-
-                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndWhile)
-                    return i;
-            }
-
-            return -1;
+            return ScriptHelpers.GetCorresponding(Lines, LineNo, Lists.Instructions.WHILE.ToString(), Lists.Keyword_EndWhile);
         }
     }
 }

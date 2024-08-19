@@ -7,14 +7,42 @@ namespace NPC_Maker.Scripts
 {
     public static class ScriptHelpers
     {
+        static public int GetCorresponding(List<string> Lines, int LineNo, string Statement, string EndStatement)
+        {
+            int depth = 0;
+            for (int i = LineNo + 1; i < Lines.Count; i++)
+            {
+                string firstWord = Lines[i].Split(' ')[0].ToUpper();
+
+                if (firstWord == Statement)
+                {
+                    i = GetCorresponding(Lines, i, Statement, EndStatement);
+                    if (i < 0)
+                        throw ParseException.StatementNotClosed(Lines[LineNo]);
+                }
+                else if (firstWord == EndStatement)
+                {
+                    if (depth == 0)
+                        return i;
+                    else
+                        depth--;
+                }
+            }
+
+            return -1;
+        }
+
         static public string ReplaceExpr(this string Orig, string Expr, string Replacement, RegexOptions regexOptions = RegexOptions.None)
         {
-            string Pattern = String.Format(@"\b{0}\b", Regex.Escape(Expr));
-            return Regex.Replace(Orig, Pattern, Replacement, regexOptions);
+            string pattern = $@"\b{Regex.Escape(Expr)}\b";
+            Regex regex = new Regex(pattern, regexOptions);
+            return regex.Replace(Orig, Replacement);
         }
+
         static public string ReplaceFirstExpr(this string Orig, string Expr, string Replacement, RegexOptions regexOptions = RegexOptions.None)
         {
-            var regex = new Regex(String.Format(@"\b{0}\b", Regex.Escape(Expr)), regexOptions);
+            string pattern = $@"\b{Regex.Escape(Expr)}\b";
+            Regex regex = new Regex(pattern, regexOptions);
             return regex.Replace(Orig, Replacement, 1);
         }
 
@@ -274,8 +302,11 @@ namespace NPC_Maker.Scripts
 
                         Values[0] = Values[0].Substring(0, Values[0].Length - 1);
 
-                        Int16 MinV = Convert.ToInt16(GetNormalVar(Values, 0, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
-                        Int16 MaxV = Convert.ToInt16(GetNormalVar(Values, 1, (float)Min < Int16.MinValue ? Int16.MinValue : Min, (float)Max > Int16.MaxValue ? Int16.MaxValue : Max));
+                        float minValue = (float)Min < Int16.MinValue ? Int16.MinValue : Min;
+                        float maxValue = (float)Max > Int16.MaxValue ? Int16.MaxValue : Max;
+
+                        Int16 MinV = Convert.ToInt16(GetNormalVar(Values, 0, minValue, maxValue));
+                        Int16 MaxV = Convert.ToInt16(GetNormalVar(Values, 1, minValue, maxValue));
 
                         return Helpers.TwoInt16ToWord(MinV, MaxV);
                     }
@@ -356,14 +387,7 @@ namespace NPC_Maker.Scripts
 
         public static bool IsHex(string Number)
         {
-            try
-            {
-                return (Number.Length >= 3 && Number.ToUpper().StartsWith("0X") || Number.Length >= 4 && Number.ToUpper().StartsWith("-0X"));
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return (Number.Length >= 3 && Number.ToUpper().StartsWith("0X") || Number.Length >= 4 && Number.ToUpper().StartsWith("-0X"));
         }
 
         public static object Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
@@ -430,27 +454,37 @@ namespace NPC_Maker.Scripts
         {
             ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
 
-            TextID_Adult = new ScriptVarVal();
-            TextID_Child = new ScriptVarVal();
-
-            TextID_Adult.Value = (float)GetNPCMakerEmbeddedTextID(SplitLine[Index], Messages);
-            TextID_Adult.Vartype = 0;
+            TextID_Adult = new ScriptVarVal
+            {
+                Value = GetNPCMakerEmbeddedTextID(SplitLine[Index], Messages),
+                Vartype = 0
+            };
 
             if ((float)TextID_Adult.Value < 0)
-                ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt16.MaxValue, ref TextID_Adult);
-
-            if (SplitLine.Count() == 3)
             {
-                TextID_Child.Value = (float)GetNPCMakerEmbeddedTextID(SplitLine[2], Messages);
-                TextID_Child.Vartype = 0;
+                ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt16.MaxValue, ref TextID_Adult);
+            }
+
+            if (SplitLine.Length == 3)
+            {
+                TextID_Child = new ScriptVarVal
+                {
+                    Value = GetNPCMakerEmbeddedTextID(SplitLine[2], Messages),
+                    Vartype = 0
+                };
 
                 if ((float)TextID_Child.Value < 0)
+                {
                     ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue, ref TextID_Child);
+                }
             }
             else
             {
-                TextID_Child.Vartype = TextID_Adult.Vartype;
-                TextID_Child.Value = TextID_Adult.Value;
+                TextID_Child = new ScriptVarVal
+                {
+                    Value = TextID_Adult.Value,
+                    Vartype = TextID_Adult.Vartype
+                };
             }
         }
 
@@ -501,33 +535,30 @@ namespace NPC_Maker.Scripts
 
         private static ScriptVarVal Helper_GetFromStringList(string[] SplitLine, int Index, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow, int? VarTypeOverride = null)
         {
-            var outV = new ScriptVarVal();
-            bool found = false;
-            outV.Vartype = VarTypeOverride == null ? GetVarType(SplitLine, Index) : (byte)VarTypeOverride;
+            var outV = new ScriptVarVal
+            {
+                Vartype = (byte)(VarTypeOverride ?? GetVarType(SplitLine, Index))
+            };
+
+            string target = SplitLine[Index].ToLower().Replace(" ", "");
 
             for (int i = 0; i < SList.Count; i++)
             {
-                if (SplitLine[Index].ToLower() == SList[i].Replace(" ", "").ToLower())
+                if (target == SList[i].Replace(" ", "").ToLower())
                 {
                     outV.Value = (float)i;
-                    found = true;
-                    break;
+                    return outV;
                 }
             }
 
-            if (found)
-                return outV;
-            else
+            try
             {
-                try
-                {
-                    outV.Value = GetValueByType(SplitLine, Index, outV.Vartype, RangeMin, RangeMax);
-                    return outV;
-                }
-                catch (Exception)
-                {
-                    throw ToThrow;
-                }
+                outV.Value = GetValueByType(SplitLine, Index, outV.Vartype, RangeMin, RangeMax);
+                return outV;
+            }
+            catch (Exception)
+            {
+                throw ToThrow;
             }
         }
 

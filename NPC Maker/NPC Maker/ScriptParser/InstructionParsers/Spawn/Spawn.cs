@@ -112,25 +112,7 @@ namespace NPC_Maker.Scripts
 
         private int GetCorrespondingEndSpawn(List<string> Lines, int LineNo)
         {
-            for (int i = LineNo + 1; i < Lines.Count(); i++)
-            {
-                if (Lines[i].Split(' ')[0].ToUpper() == Lists.Instructions.SPAWN.ToString())
-                {
-                    int j = i;
-
-                    i = GetCorrespondingEndWhile(Lines, i);
-
-                    if (i < 0)
-                        throw ParseException.IfNotClosed(Lines[j]);
-
-                    continue;
-                }
-
-                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndSpawn)
-                    return i;
-            }
-
-            return -1;
+            return ScriptHelpers.GetCorresponding(Lines, LineNo, Lists.Instructions.SPAWN.ToString(), Lists.Keyword_EndSpawn);
         }
     }
 }

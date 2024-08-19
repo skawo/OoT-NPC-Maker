@@ -243,25 +243,7 @@ namespace NPC_Maker.Scripts
 
         private int GetCorrespondingEndParticle(List<string> Lines, int LineNo)
         {
-            for (int i = LineNo + 1; i < Lines.Count(); i++)
-            {
-                if (Lines[i].Split(' ')[0].ToUpper() == Lists.Instructions.PARTICLE.ToString())
-                {
-                    int j = i;
-
-                    i = GetCorrespondingEndParticle(Lines, i);
-
-                    if (i < 0)
-                        throw ParseException.ParticleNotClosed(Lines[j]);
-
-                    continue;
-                }
-
-                if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndParticle)
-                    return i;
-            }
-
-            return -1;
+            return ScriptHelpers.GetCorresponding(Lines, LineNo, Lists.Instructions.PARTICLE.ToString(), Lists.Keyword_EndParticle);
         }
     }
 }

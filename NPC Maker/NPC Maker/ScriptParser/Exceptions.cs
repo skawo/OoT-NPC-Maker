@@ -158,6 +158,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("This ELIF does not fall into IF scope: ", _Line);
         }
 
+        public static ParseException StatementNotClosed(string _Line)
+        {
+            return UsageError(_Line);
+        }
+
         public static ParseException IfNotClosed(string _Line)
         {
             return UsageError(_Line);
