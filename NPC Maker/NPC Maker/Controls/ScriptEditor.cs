@@ -43,7 +43,14 @@ namespace NPC_Maker
             Script = _Script;
             File = _File;
 
+            Textbox_Script.TextChanged -= Textbox_Script_TextChanged;
+
             Textbox_Script.Text = Script.Text;
+
+            if (SyntaxHighlighting)
+                SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
+
+            Textbox_Script.TextChanged += Textbox_Script_TextChanged;
 
             Textbox_ParseErrors.Clear();
             Textbox_Script.ClearUndo();
@@ -91,6 +98,7 @@ namespace NPC_Maker
             AutoParseTimer.Stop();
             AutoParseTimer.Interval = (int)Program.Settings.ParseTime;
             AutoParseTimer.Start();
+
             ColorizeTimer.Stop();
             ColorizeTimer.Interval = (int)Program.Settings.ParseTime;
             ColorizeTimer.Start();

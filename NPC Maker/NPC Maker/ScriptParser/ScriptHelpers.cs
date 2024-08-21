@@ -11,15 +11,16 @@ namespace NPC_Maker.Scripts
         {
             for (int i = LineNo + 1; i < Lines.Count; i++)
             {
-                string firstWord = Lines[i].Split(' ')[0].ToUpper();
+                int spaceIndex = Lines[i].IndexOf(' ');
+                string firstWord = spaceIndex >= 0 ? Lines[i].Substring(0, spaceIndex) : Lines[i];
 
-                if (firstWord == Statement)
+                if (String.Equals(firstWord, Statement, StringComparison.OrdinalIgnoreCase))
                 {
                     i = GetCorresponding(Lines, i, Statement, EndStatement);
                     if (i < 0)
                         throw ParseException.StatementNotClosed(Lines[LineNo]);
                 }
-                else if (firstWord == EndStatement)
+                else if (String.Equals(firstWord, EndStatement, StringComparison.OrdinalIgnoreCase))
                     return i;
             }
 
@@ -334,7 +335,8 @@ namespace NPC_Maker.Scripts
 
         public static byte? GetSubIDForRamType(string RamType)
         {
-            RamType = RamType.ToUpper().Split('.')[0];
+            int dotIndex = RamType.IndexOf('.');
+            RamType = dotIndex >= 0 ? RamType.Substring(0, dotIndex).ToUpper() : RamType.ToUpper();
 
             if (Enum.IsDefined(typeof(Lists.IfWhileAwaitSetRamSubTypes), RamType))
                 return (byte)(int)Enum.Parse(typeof(Lists.IfWhileAwaitSetRamSubTypes), RamType);
@@ -371,9 +373,11 @@ namespace NPC_Maker.Scripts
 
         public static byte GetVarType(string[] SplitLine, int Index)
         {
-            string Type = SplitLine[Index].ToUpper().Split('.')[0];
+            int dotIndex = SplitLine[Index].IndexOf('.');
 
-            if (SplitLine[Index].Contains(".") && Enum.IsDefined(typeof(Lists.VarTypes), Type))
+            string Type = dotIndex >= 0 ? SplitLine[Index].Substring(0, dotIndex).ToUpper() : SplitLine[Index].ToUpper();
+
+            if (dotIndex >= 0 && Enum.IsDefined(typeof(Lists.VarTypes), Type))
                 return (byte)(int)Enum.Parse(typeof(Lists.VarTypes), Type);
             else
                 return (byte)Lists.VarTypes.NORMAL;

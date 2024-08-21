@@ -161,7 +161,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                List<string[]> Defines = Lines.FindAll(x => x.StartsWith(Lists.Keyword_SharpDefine, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Split(' ')).ToList();
+                List<string[]> Defines = Lines.FindAll(x => x.StartsWith(Lists.Keyword_SharpDefine, StringComparison.OrdinalIgnoreCase)).Select(x => x.Split(' ')).ToList();
 
                 List<string[]> ParamCountWrong = Defines.FindAll(x => x.Length != 3).ToList();
 
@@ -211,7 +211,7 @@ namespace NPC_Maker.Scripts
                 List<string> Procedures = new List<string>();
 
                 List<string> NewLines = Lines.Select(item => (string)item.Clone()).ToList();
-                int ProcLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Procedure));
+                int ProcLineIndex = Lines.FindIndex(x => x.StartsWith(Lists.Keyword_Procedure, StringComparison.OrdinalIgnoreCase));
 
                 // Looping through all lines until we can't find a line containing the keyword...
                 while (ProcLineIndex != -1)
@@ -236,7 +236,7 @@ namespace NPC_Maker.Scripts
                     else
                         outScript.ParseErrors.Add(ParseException.ProcDoubleError(SplitDefinition));
 
-                    int RecurCheck = ProcLines.FindIndex(x => x.ToUpper().StartsWith(ProcedureString));
+                    int RecurCheck = ProcLines.FindIndex(x => x.StartsWith(ProcedureString, StringComparison.OrdinalIgnoreCase));
 
                     // Error if procedure recursion is detected
                     if (RecurCheck != -1)
@@ -275,7 +275,7 @@ namespace NPC_Maker.Scripts
                         ProcCallIndex = Lines.FindIndex(x => x.Split()[0].ToUpper() == ProcedureString);
                     }
 
-                    ProcLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Procedure));
+                    ProcLineIndex = Lines.FindIndex(x => x.StartsWith(Lists.Keyword_Procedure, StringComparison.OrdinalIgnoreCase));
                 }
 
                 return Lines;
@@ -518,7 +518,7 @@ namespace NPC_Maker.Scripts
 
         private int GetCorrespondingEndProcedure(List<string> Lines, int LineNo)
         {
-            int outIndex = Lines.FindIndex(x => x.ToUpper().Trim() == Lists.Keyword_EndProcedure);
+            int outIndex = Lines.FindIndex(x => String.Equals(x.Trim(), Lists.Keyword_EndProcedure, StringComparison.OrdinalIgnoreCase));
 
             if (outIndex == -1)
                 throw ParseException.ProcedureNotClosed(Lines[LineNo]);
@@ -538,14 +538,16 @@ namespace NPC_Maker.Scripts
 
                     if (SplitLine.Count() == 1 && SplitLine[0].EndsWith(":"))
                     {
-                        Instructions.Add(new InstructionLabel(SplitLine[0].Remove(SplitLine[0].Length - 1)));
+                        Instructions.Add(new InstructionLabel(SplitLine[0].TrimEnd(new char[] { ':' })));
                         continue;
                     }
 
                     int InstructionID = -1;
 
-                    if (Enum.IsDefined(typeof(Lists.Instructions), SplitLine[0].ToUpper()))
-                        InstructionID = (int)System.Enum.Parse(typeof(Lists.Instructions), SplitLine[0].ToUpper());
+                    string instructionUpperCase = SplitLine[0].ToUpper();
+
+                    if (Enum.IsDefined(typeof(Lists.Instructions), instructionUpperCase))
+                        InstructionID = (int)System.Enum.Parse(typeof(Lists.Instructions), instructionUpperCase);
 
                     switch (InstructionID)
                     {
@@ -592,7 +594,7 @@ namespace NPC_Maker.Scripts
                             {
                                 byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);
 
-                                if (matchesSetRAM != null || Enum.IsDefined(typeof(Lists.SetSubTypes), SplitLine[0].ToUpper()))
+                                if (matchesSetRAM != null || Enum.IsDefined(typeof(Lists.SetSubTypes), instructionUpperCase))
                                 {
                                     List<string> sp = SplitLine.ToList();
                                     sp.Insert(0, Lists.Instructions.SET.ToString());

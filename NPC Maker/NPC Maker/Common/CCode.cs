@@ -202,7 +202,7 @@ namespace NPC_Maker
             };
 
             if (Program.Settings.Verbose)
-                CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
+                CompileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
 
             Process p = Process.Start(gccInfo);
             p.WaitForExit();
@@ -240,7 +240,6 @@ namespace NPC_Maker
                 CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(ldInfo);
-            p.WaitForExit();
             p.WaitForExit();
             GetOutput(p, "WINE LINKER", ref CompileMsgs);
 
@@ -435,7 +434,7 @@ namespace NPC_Maker
             };
 
             if (Program.Settings.Verbose)
-                CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
+                CompileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
 
             Process p = Process.Start(gccInfo);
 
