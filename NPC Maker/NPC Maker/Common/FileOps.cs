@@ -150,6 +150,7 @@ namespace NPC_Maker
                     foreach (ScriptEntry s in e.Scripts)
                     {
                         s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
+                        s.TextLines.ForEach(x => x.TrimEnd());
                         s.Text = "";
                     }
 
@@ -167,6 +168,7 @@ namespace NPC_Maker
                 foreach (ScriptEntry s in outD.GlobalHeaders)
                 {
                     s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
+                    s.TextLines.ForEach(x => x.TrimEnd());
                     s.Text = "";
                 }
 
