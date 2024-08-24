@@ -2287,6 +2287,20 @@ namespace NPC_Maker
         private void Combo_CodeEditor_SelectedIndexChanged(object sender, EventArgs e)
         {
             Program.Settings.CodeEditor = (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString());
+
+            if (Combo_CodeEditor.SelectedIndex == Combo_CodeEditor.Items.Count - 1)
+            {
+                Button_FindCodeEditor.Enabled = true;
+                Textbox_CodeEditorArgs.Enabled = true;
+                TextBox_CodeEditorPath.Enabled = true;
+            }
+            else
+            {
+                Button_FindCodeEditor.Enabled = false;
+                Textbox_CodeEditorArgs.Enabled = false;
+                TextBox_CodeEditorPath.Enabled = false;
+            }
+
         }
 
         private void TextBox_CodeEditorPath_TextChanged(object sender, EventArgs e)
@@ -2299,22 +2313,39 @@ namespace NPC_Maker
             Program.Settings.CustomCodeEditorArgs = Textbox_CodeEditorArgs.Text;
         }
 
+        Timer autoSaveTimer;
+        DateTime LastWriteTime;
+
         private void WatchFile(NPCEntry EditedEntry)
         {
-            if (Program.IsRunningUnderMono)
-                Environment.SetEnvironmentVariable("MONO_MANAGED_WATCHER", "1");
+            if (Program.Settings.AutoSave)
+            {
+                WatchedEntry = EditedEntry;
+                LastWriteTime = GetLastWriteTimeForCFile();
 
-            if (Program.Watcher != null)
-                Program.Watcher.Dispose();
+                autoSaveTimer = new Timer();
+                autoSaveTimer.Interval = (int)Program.Settings.AutoSaveTime;
+                autoSaveTimer.Tick += AutoSaveTimer_Tick;
+                autoSaveTimer.Start();
+            }
+            else
+            {
 
-            WatchedEntry = EditedEntry;
+                if (Program.IsRunningUnderMono)
+                    Environment.SetEnvironmentVariable("MONO_MANAGED_WATCHER", "1");
 
-            Program.Watcher = new FileSystemWatcher(CCode.tempFolder);
-            Program.Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-            Program.Watcher.Changed += Watcher_Changed;
-            Program.Watcher.IncludeSubdirectories = true;
-            Program.Watcher.EnableRaisingEvents = true;
-            Program.Watcher.Filter = CCode.codeFileName;
+                if (Program.Watcher != null)
+                    Program.Watcher.Dispose();
+
+                WatchedEntry = EditedEntry;
+
+                Program.Watcher = new FileSystemWatcher(CCode.tempFolder);
+                Program.Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+                Program.Watcher.Changed += Watcher_Changed;
+                Program.Watcher.IncludeSubdirectories = true;
+                Program.Watcher.EnableRaisingEvents = true;
+                Program.Watcher.Filter = CCode.codeFileName;
+            }
 
             var t = Task.Factory.StartNew(() =>
             {
@@ -2323,16 +2354,50 @@ namespace NPC_Maker
                     System.Threading.Thread.Sleep(200);
                 }
 
+                Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
                 Program.Watcher.Dispose();
 
                 Button_CCompile.Invoke((MethodInvoker)delegate
                 {
                     Button_CCompile.Enabled = true;
                     Button_OpenCCode.Enabled = true;
+                    Button_UpdateCompile.Enabled = false;
                 });
 
                 return;
             });
+        }
+
+        private DateTime GetLastWriteTimeForCFile()
+        {
+            try
+            {
+                string fPath = Path.Combine(CCode.tempFolder, CCode.codeFileName);
+
+                if (File.Exists(fPath))
+                {
+                    return File.GetLastWriteTime(fPath);
+                }
+                else
+                    return new DateTime();
+            }
+            catch (Exception)
+            {
+                return new DateTime();
+            }
+        }
+
+        private void AutoSaveTimer_Tick(object sender, EventArgs e)
+        {
+            autoSaveTimer.Stop();
+
+            var Dt = GetLastWriteTimeForCFile();
+
+            if (Dt != LastWriteTime)
+                Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
+
+            LastWriteTime = Dt;
+            autoSaveTimer.Start();
         }
 
         private void CompileCode()
@@ -2374,6 +2439,11 @@ namespace NPC_Maker
             }
         }
 
+        private void ManualWatcher(object sender, EventArgs e)
+        {
+            Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
+        }
+
 
         NPCEntry WatchedEntry = null;
 
@@ -2404,7 +2474,7 @@ namespace NPC_Maker
                         else
                             WatchedEntry.EmbeddedOverlayCode.Code = Code;
 
-                        if (Program.Settings.AutoComp_Save)
+                        if (Program.Settings.AutoComp_Save || e.FullPath == "")
                             CompileCode();
                     }
 
@@ -2442,6 +2512,7 @@ namespace NPC_Maker
             {
                 Button_CCompile.Enabled = false;
                 Button_OpenCCode.Enabled = false;
+                Button_UpdateCompile.Enabled = true;
 
                 WatchFile(SelectedEntry);
             }

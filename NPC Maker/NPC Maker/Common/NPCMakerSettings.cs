@@ -39,6 +39,10 @@ namespace NPC_Maker
 
         public bool UseWine { get; set; }
 
+        public bool AutoSave { get; set; }
+
+        public UInt32 AutoSaveTime { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -57,6 +61,8 @@ namespace NPC_Maker
             LastSaveBinaryPath = Environment.CurrentDirectory;
             ParseTime = 1000;
             UseWine = false;
+            AutoSave = false;
+            AutoSaveTime = 1000;
         }
 
         public enum Members
@@ -75,6 +81,8 @@ namespace NPC_Maker
             AUTOCOMP_SAVE,
             PARSETIME,
             USEWINE,
+            AUTOSAVE,
+            AUTOSAVETIME,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -115,6 +123,8 @@ namespace NPC_Maker
                 case Members.COMPILETIMEOUT: CompileTimeout = Convert.ToUInt32(Value); break;
                 case Members.PARSETIME: ParseTime = Convert.ToUInt32(Value); break;
                 case Members.USEWINE: UseWine = (bool)Value; break;
+                case Members.AUTOSAVE: AutoSave = (bool)Value; break;
+                case Members.AUTOSAVETIME: AutoSaveTime = Convert.ToUInt32(Value); break;
                 default: break;
             }
         }
