@@ -2124,7 +2124,7 @@ namespace NPC_Maker
             MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
             Entry.MessageText = MsgText.Text;
 
-            List<byte> Data = Entry.ConvertTextData(SelectedEntry.NPCName,false);
+            List<byte> Data = Entry.ConvertTextData(SelectedEntry.NPCName, false);
 
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return;
@@ -2347,15 +2347,19 @@ namespace NPC_Maker
                 Program.Watcher.Filter = CCode.codeFileName;
             }
 
+            //Process.HasExited doesn't work under mono...
+
             var t = Task.Factory.StartNew(() =>
             {
                 while (!Program.CodeEditorProcess.HasExited)
                 {
-                    System.Threading.Thread.Sleep(200);
+                    System.Threading.Thread.Sleep(100);
                 }
 
                 Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
-                Program.Watcher.Dispose();
+
+                if (Program.Watcher != null)
+                    Program.Watcher.Dispose();
 
                 Button_CCompile.Invoke((MethodInvoker)delegate
                 {
@@ -2366,6 +2370,7 @@ namespace NPC_Maker
 
                 return;
             });
+
         }
 
         private DateTime GetLastWriteTimeForCFile()
@@ -2451,6 +2456,9 @@ namespace NPC_Maker
         {
             try
             {
+                if (WatchedEntry == null)
+                    return;
+
                 if (e.ChangeType == WatcherChangeTypes.Changed)
                 {
                     FileStream fs;
@@ -2491,6 +2499,12 @@ namespace NPC_Maker
 
         private void Button_OpenCCode_Click(object sender, EventArgs e)
         {
+            if (autoSaveTimer != null)
+            {
+                autoSaveTimer.Stop();
+                autoSaveTimer.Dispose();
+            }
+
             string Code = SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code;
             Code = CCode.ReplaceGameVersionInclude(Code);
 
@@ -2513,7 +2527,6 @@ namespace NPC_Maker
                 Button_CCompile.Enabled = false;
                 Button_OpenCCode.Enabled = false;
                 Button_UpdateCompile.Enabled = true;
-
                 WatchFile(SelectedEntry);
             }
         }
@@ -2570,7 +2583,7 @@ namespace NPC_Maker
                         w.DataSource = null;
                 }
 
-                 Button_CCompile_Click(null, null);
+                Button_CCompile_Click(null, null);
             }
         }
 
