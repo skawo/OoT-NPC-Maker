@@ -86,7 +86,7 @@ namespace NPC_Maker
                     { Lists.IfSubTypes.ROOM_ID,                             $" operator value" },
 
                     { Lists.IfSubTypes.CURRENT_STATE,                       $" {GetListFromEnum(typeof(Lists.StateTypes))}" },
-                    { Lists.IfSubTypes.CCALL,                               $" c_function_name [operator] [value]" },
+                    { Lists.IfSubTypes.CCALL,                               $" c_function_name [0-8 arguments] [operator] [value]" },
                     { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,              $".min_range->max_range operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },
@@ -189,7 +189,7 @@ namespace NPC_Maker
                     { Lists.AwaitSubTypes.EXT_VAR,                          $" npc_id variable_num operator value" },
                     { Lists.AwaitSubTypes.EXT_VARF,                         $" npc_id variable_num operator value" },
                     { Lists.AwaitSubTypes.CURRENT_STATE,                    $" {GetListFromEnum(typeof(Lists.StateTypes))}" },
-                    { Lists.AwaitSubTypes.CCALL,                            $" c_function_name [operator] [value]" },
+                    { Lists.AwaitSubTypes.CCALL,                            $" c_function_name [0-8 arguments] [operator] [value]" },
                     { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,              $".min_range->max_range operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },
@@ -453,7 +453,7 @@ namespace NPC_Maker
                                                                $"{TargetActorUsage}";
                         }
                     case Lists.Instructions.CCALL:
-                        return $"{Lists.Instructions.CCALL} c_function_name [out_variable]";
+                        return $"{Lists.Instructions.CCALL} c_function_name [out_variable] [0-8 arguments]";
                     case Lists.Instructions.CLOSE_TEXTBOX:
                         return $"{Lists.Instructions.CLOSE_TEXTBOX}";
                     case Lists.Instructions.FADEIN:
