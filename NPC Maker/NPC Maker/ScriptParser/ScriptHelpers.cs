@@ -354,6 +354,24 @@ namespace NPC_Maker.Scripts
             }
         }
 
+        public static bool IsCondition(string[] SplitLine, int Index)
+        {
+            switch (SplitLine[Index])
+            {
+                case "=":
+                case "==":
+                case "<": 
+                case ">":
+                case ">=": 
+                case "!=": 
+                case "<>":
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         public static Lists.ConditionTypes GetConditionID(string[] SplitLine, int Index)
         {
             switch (SplitLine[Index])

@@ -205,7 +205,15 @@ bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance
         osSyncPrintf("_[%2d, %1d], : CCALL", en->npcId, en->curScriptNum);
     #endif		
 
-    float out = NpcMaker_RunCFunc(en, playState, in->funcOffs); 
+    float args[in->numArgs]; 
+
+    if (in->numArgs != 0)
+    {
+        for (int i = 0; i < in->numArgs; i++)
+            args[i] = Scripts_GetVarval(en, playState, ((in->varTypeArgs[i / 2]) >> (i % 2 ? 0 : 4)) & 0xF, in->Arg[i], false); 
+    }
+
+    float out = NpcMaker_RunCFunc(en, playState, in->funcOffs, in->numArgs ? args : NULL); 
     
     if (in->varType > 1)
     {
@@ -656,7 +664,16 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
         case IF_CCALL:
         {
             ScrInstrIfCCall* instr = (ScrInstrIfCCall*)in;
-            float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs);
+
+            float args[instr->numArgs];
+
+            if (instr->numArgs != 0)
+            {
+                for (int i = 0; i < instr->numArgs; i++)
+                    args[i] = Scripts_GetVarval(en, playState, ((instr->varTypeArgs[i / 2]) >> (i % 2 ? 0 : 4)) & 0xF, instr->Arg[i], false);
+            }
+
+            float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs, instr->numArgs ? args : NULL);
             
             if (!instr->isBool)
                 branch = Scripts_IfValueCommon(en, playState, out, FLOAT, instr->condition, instr->varType, instr->value, instr->trueInstrNum, instr->falseInstrNum);
@@ -829,7 +846,13 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
         case AWAIT_CCALL:
         {
             ScrInstrAwaitCCall* instr = (ScrInstrAwaitCCall*)in;
-            float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs); 
+
+            float args[instr->numArgs]; 
+
+            for (int i = 0; i < instr->numArgs; i++)
+                args[i] = Scripts_GetVarval(en, playState, ((instr->varTypeArgs[i / 2]) >> (i % 2 ? 0 : 4)) & 0xF, instr->Arg[i], false);
+
+            float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs, args); 
             conditionMet = Scripts_AwaitValue(en, playState, out, instr->isBool ? BOOL : FLOAT, instr->condition, instr->varType, instr->value);
             break;
         }

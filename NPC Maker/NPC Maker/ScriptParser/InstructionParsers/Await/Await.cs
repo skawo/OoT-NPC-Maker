@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NPC_Maker.Scripts
 {
@@ -143,7 +144,7 @@ namespace NPC_Maker.Scripts
                             }
                         case (int)Lists.AwaitSubTypes.CCALL:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 5);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 13);
 
                                 var Func = CodeEntry.Functions.Find(x => x.Key.ToUpper() == SplitLine[2].ToUpper());
 
@@ -152,16 +153,29 @@ namespace NPC_Maker.Scripts
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
                                 var Value = new ScriptVarVal();
-                                byte IsBool = 1;
+                                bool IsBool = true;
 
-                                if (SplitLine.Length == 5)
+                                if (ScriptHelpers.IsCondition(SplitLine, SplitLine.Length - 2))
                                 {
-                                    Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
-                                    Value = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, Int32.MaxValue);
-                                    IsBool = 0;
+                                    Condition = ScriptHelpers.GetConditionID(SplitLine, SplitLine.Length - 2);
+                                    Value = ScriptHelpers.GetScriptVarVal(SplitLine, SplitLine.Length - 1, 0, Int32.MaxValue);
+                                    IsBool = false;
+                                }
+                                else
+                                    ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 11);
+
+                                List<ScriptVarVal> Args = new List<ScriptVarVal>();
+
+                                if (((SplitLine.Length > 3) && IsBool) || ((SplitLine.Length > 5) && !IsBool))
+                                {
+                                    for (int i = 3; i < (IsBool ? SplitLine.Length : SplitLine.Length - 2); i++)
+                                    {
+                                        var Arg = ScriptHelpers.GetScriptVarVal(SplitLine, i, float.MinValue, float.MaxValue);
+                                        Args.Add(Arg);
+                                    }
                                 }
 
-                                return new InstructionAwaitCCall((byte)SubID, Value, Func.Value, Condition, IsBool);
+                                return new InstructionAwaitCCall((byte)SubID, Value, Func.Value, Condition, Args, (byte)(IsBool ? 1 : 0));
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);

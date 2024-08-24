@@ -16,5 +16,4 @@ float Scene_GetPathLen(PlayState* playState, s16 path_id, s16 start_node_id, s16
 NpcMaker* Scene_GetNpcMakerByID(NpcMaker* en, PlayState*playState, u16 ID);
 Actor* Scene_GetActorByID(int ID, PlayState* playState, Actor* closestTo, Actor* skip);
 
-
 #endif

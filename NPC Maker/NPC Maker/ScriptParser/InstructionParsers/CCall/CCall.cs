@@ -9,7 +9,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
+                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 11);
 
                 var Func = CodeEntry.Functions.Find(x => x.Key.ToUpper() == SplitLine[1].ToUpper());
 
@@ -18,7 +18,7 @@ namespace NPC_Maker.Scripts
 
                 var Destination = new ScriptVarVal(0, 0);
 
-                if (SplitLine.Length > 2)
+                if (SplitLine.Length > 2 && SplitLine[2] != "_")
                 {
                     Destination = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt32.MaxValue);
 
@@ -26,7 +26,18 @@ namespace NPC_Maker.Scripts
                         throw ParseException.DestValWrong(SplitLine);
                 }
 
-                return new InstructionCCall(Func.Value, Destination);
+                List<ScriptVarVal> Args = new List<ScriptVarVal>();
+
+                if (SplitLine.Length > 3)
+                {
+                    for (int i = 3; i < SplitLine.Length; i++)
+                    {
+                        var Arg = ScriptHelpers.GetScriptVarVal(SplitLine, i, float.MinValue, float.MaxValue);
+                        Args.Add(Arg);
+                    }
+                }
+
+                return new InstructionCCall(Func.Value, Destination, Args);
             }
             catch (ParseException pEx)
             {

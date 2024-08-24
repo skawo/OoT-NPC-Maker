@@ -80,6 +80,12 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->refActor = &en->actor;
     en->hasStaticExDlists = false;
 
+    en->FindNPCMakerFunction = &Scene_GetNpcMakerByID;
+    en->FindActorFunction = &Scene_GetActorByID;
+    en->FindCutscenePtrFunction = &Scene_GetCutscenePtr;
+    en->FindSceneHeaderFunction = &Scene_GetHeaderPtr;
+	en->FindPathPtrFunction = &Scene_GetPathPtr;
+       
     for (int i = 0; i < 5; i++)
         en->CFuncs[i] = 0xFFFFFFFF;
     

@@ -14,7 +14,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState);
 static void NpcMaker_Draw(NpcMaker* en, PlayState* playState);
 static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState);
 
-float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset)
+float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset, float* Args)
 {
     if (offset == 0xFFFFFFFF)
         return 0;
@@ -24,8 +24,20 @@ float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset)
     #endif
 
     typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState);
-    EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + offset;
-    float out = f(en, playState);
+    typedef float EmbeddedFunctionWithParams(NpcMaker* en, PlayState* playState, float arg0, float arg1, float arg2, float arg3, float arg4, float arg5, float arg6, float arg7);
+
+    float out = 0;
+
+    if (Args == NULL)
+    {
+        EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + offset;
+        out = f(en, playState);
+    }
+    else
+    {
+        EmbeddedFunctionWithParams* f = (EmbeddedFunctionWithParams*)en->embeddedOverlay + offset;
+        out = f(en, playState, Args[0], Args[1], Args[2], Args[3], Args[4], Args[5], Args[6], Args[7]);
+    }
 
     #if LOGGING == 1
         osSyncPrintf("_Embedded function finished.");
@@ -60,7 +72,7 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
         return;
     }
 
-    NpcMaker_RunCFunc(en, playState, en->CFuncs[0]);
+    NpcMaker_RunCFunc(en, playState, en->CFuncs[0], NULL);
 
     Setup_Objects(en, playState);
     Setup_Misc(en, playState);
@@ -83,7 +95,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 
     if (en->CFuncsWhen[1] == REPLACE_UPDATE && en->CFuncs[1] != 0xFFFFFFFF)
     {
-        NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[1], NULL);
         return;
     }
 
@@ -92,15 +104,15 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
 
     if (en->CFuncsWhen[1] == BEFORE_SCRIPTS)
-        NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[1], NULL);
     
     if (en->CFuncsWhen[1] == INSTEAD_OF_SCRIPTS)
-        NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[1], NULL);
     else
         Scripts_Main(en, playState);
 
     if (en->CFuncsWhen[1] == AFTER_SCRIPTS)
-        NpcMaker_RunCFunc(en, playState, en->CFuncs[1]);
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[1], NULL);
 
     // Update current conversation status and copy messages into message context if need be...
     Update_Conversation(en, playState);
@@ -150,11 +162,11 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
     #endif
 
     if (en->CFuncsWhen[2] == REPLACE_DRAW && en->CFuncs[2] != 0xFFFFFFF)
-        NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
+        NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
     else
     {
         if (en->CFuncsWhen[2] == BEFORE_MODEL)
-            NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
+            NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
 
         Draw_Debug(en, playState);
 
@@ -177,7 +189,7 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
         }
 
         if (en->CFuncsWhen[2] == AFTER_MODEL)
-            NpcMaker_RunCFunc(en, playState, en->CFuncs[2]);
+            NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
     }
 
     #if LOGGING == 1
@@ -213,7 +225,7 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
             ZeldaArena_Free(frees[i]);
     }
 
-    NpcMaker_RunCFunc(en, playState, en->CFuncs[4]);
+    NpcMaker_RunCFunc(en, playState, en->CFuncs[4], NULL);
 	
     if (en->embeddedOverlay != 0)
         ZeldaArena_Free(en->embeddedOverlay);

@@ -6,7 +6,30 @@
 #include "npc_maker_defines.h"
 #include "scripts_defines.h"
 
+
 typedef struct NpcMaker NpcMaker;
+ 
+ #ifndef GetNPCMakerFunc
+	typedef NpcMaker* GetNPCMakerFunc(NpcMaker* en, PlayState*playState, u16 ID);
+#endif
+
+#ifndef GetPathPtrFunc
+	typedef Path* GetPathPtrFunc(PlayState* playState, s16 path_id);
+#endif
+
+#ifndef GetActorFunc
+	typedef Actor* GetActorFunc(int ID, PlayState* playState, Actor* closestTo, Actor* skip);
+#endif
+
+#ifndef GetCutscenePtrFunc
+	typedef u32* GetCutscenePtrFunc(PlayState* playState, int setup_index);
+#endif
+
+#ifndef GetSceneHeaderFunc
+	typedef u32* GetSceneHeaderFunc(PlayState* playState, int setup_index);
+#endif
+
+ 
  
 typedef struct NpcSettings
 {
@@ -279,6 +302,12 @@ typedef struct NpcMaker
     float scriptPitchTemp;
     s8 scriptReverbTemp;
     Vec3f scriptSfxTempPos;
+
+    GetNPCMakerFunc* FindNPCMakerFunction;
+    GetActorFunc* FindActorFunction;
+    GetCutscenePtrFunc* FindCutscenePtrFunction;
+    GetSceneHeaderFunc* FindSceneHeaderFunction;
+	GetPathPtrFunc* FindPathPtrFunction;
 	
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

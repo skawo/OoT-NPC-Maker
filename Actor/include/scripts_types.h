@@ -227,11 +227,17 @@ typedef struct ScrInstrIfCCall
     u8 subId;
     u8 varType : 4;
     u8 isBool : 4;
-    u8 condition;
+    u8 numArgs : 4;
+    u8 condition : 4;
+
+    u8 varTypeArgs[4];
+
     ScriptVarval value;
     u32 funcOffs;
     u16 trueInstrNum;
     u16 falseInstrNum;
+
+    ScriptVarval Arg[]; 
 
 } ScrInstrIfCCall;
 
@@ -286,9 +292,14 @@ typedef struct ScrInstrAwaitCCall
     u8 subId;
     u8 varType : 4;
     u8 isBool : 4;
-    u8 condition;
+    u8 numArgs : 4;
+    u8 condition : 4;
+
+    u8 varTypeArgs[4];
+
     ScriptVarval value;
     u32 funcOffs;
+    ScriptVarval Arg[]; 
 
 } ScrInstrAwaitCCall;
 
@@ -725,11 +736,15 @@ typedef struct ScrInstrQuake
 typedef struct ScrInstrCCall
 {
     u8 id;
+    u8 numArgs;
     u8 varType;
-    u8 pad1;
-    u8 pad2;
+    u8 pad;
+    u8 varTypeArgs[4];
+
     u32 funcOffs;
     ScriptVarval DestVar;
+
+    ScriptVarval Arg[];    
 } ScrInstrCCall;
 
 
