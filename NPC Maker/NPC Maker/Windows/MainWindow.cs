@@ -2369,7 +2369,6 @@ namespace NPC_Maker
                 {
                     Button_CCompile.Enabled = true;
                     Button_OpenCCode.Enabled = true;
-                    Button_UpdateCompile.Enabled = false;
                 });
 
                 return;
