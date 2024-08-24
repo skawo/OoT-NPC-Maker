@@ -83,29 +83,35 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(NumArgs, Condition, 4), Data);
             Helpers.Ensure4ByteAlign(Data);
 
-            for (int i = 0; i < 8; i += 2)
-            {
-                if (NumArgs > i + 1)
-                    Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Params[i].Vartype, Params[i + 1].Vartype, 4), Data);
-                else if (NumArgs > i)
-                    Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Params[i].Vartype, (byte)0, 4), Data);
-                else
-                    Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether((byte)0, (byte)0, 4), Data);
-            }
-
-            Helpers.Ensure4ByteAlign(Data);
-
             Helpers.AddObjectToByteList(Value.Value, Data);
             Helpers.AddObjectToByteList(Func, Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoTrue, ref Data);
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, GotoFalse, ref Data);
+
+            Helpers.Ensure4ByteAlign(Data);
+
+            if (NumArgs != 0)
+            {
+
+                for (int i = 0; i < 8; i += 2)
+                {
+                    if (NumArgs > i + 1)
+                        Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Params[i].Vartype, Params[i + 1].Vartype, 4), Data);
+                    else if (NumArgs > i)
+                        Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Params[i].Vartype, (byte)0, 4), Data);
+                    else
+                        Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether((byte)0, (byte)0, 4), Data);
+                }
+
+                Helpers.Ensure4ByteAlign(Data);
+            }
 
             for (int i = 0; i < NumArgs; i++)
                 Helpers.AddObjectToByteList(Params[i].Value, Data);
 
             Helpers.Ensure4ByteAlign(Data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 20 + (NumArgs * 4));
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 16 + (NumArgs != 0 ? 4 : 0) + (NumArgs * 4));
 
             return Data.ToArray();
         }

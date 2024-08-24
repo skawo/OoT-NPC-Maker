@@ -207,7 +207,7 @@ bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance
 
     float args[in->numArgs]; 
 
-    if (in->numArgs != 0)
+    if (in->numArgs)
     {
         for (int i = 0; i < in->numArgs; i++)
             args[i] = Scripts_GetVarval(en, playState, ((in->varTypeArgs[i / 2]) >> (i % 2 ? 0 : 4)) & 0xF, in->Arg[i], false); 
@@ -667,7 +667,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
 
             float args[instr->numArgs];
 
-            if (instr->numArgs != 0)
+            if (instr->numArgs)
             {
                 for (int i = 0; i < instr->numArgs; i++)
                     args[i] = Scripts_GetVarval(en, playState, ((instr->varTypeArgs[i / 2]) >> (i % 2 ? 0 : 4)) & 0xF, instr->Arg[i], false);
@@ -849,8 +849,11 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
 
             float args[instr->numArgs]; 
 
-            for (int i = 0; i < instr->numArgs; i++)
-                args[i] = Scripts_GetVarval(en, playState, ((instr->varTypeArgs[i / 2]) >> (i % 2 ? 0 : 4)) & 0xF, instr->Arg[i], false);
+            if (instr->numArgs)
+            {
+                for (int i = 0; i < instr->numArgs; i++)
+                    args[i] = Scripts_GetVarval(en, playState, ((instr->varTypeArgs[i / 2]) >> (i % 2 ? 0 : 4)) & 0xF, instr->Arg[i], false);
+            }
 
             float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs, args); 
             conditionMet = Scripts_AwaitValue(en, playState, out, instr->isBool ? BOOL : FLOAT, instr->condition, instr->varType, instr->value);

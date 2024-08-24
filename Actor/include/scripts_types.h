@@ -230,13 +230,12 @@ typedef struct ScrInstrIfCCall
     u8 numArgs : 4;
     u8 condition : 4;
 
-    u8 varTypeArgs[4];
-
     ScriptVarval value;
     u32 funcOffs;
     u16 trueInstrNum;
     u16 falseInstrNum;
 
+    u8 varTypeArgs[4];
     ScriptVarval Arg[]; 
 
 } ScrInstrIfCCall;
@@ -295,10 +294,10 @@ typedef struct ScrInstrAwaitCCall
     u8 numArgs : 4;
     u8 condition : 4;
 
-    u8 varTypeArgs[4];
-
     ScriptVarval value;
     u32 funcOffs;
+
+    u8 varTypeArgs[4];
     ScriptVarval Arg[]; 
 
 } ScrInstrAwaitCCall;
@@ -739,11 +738,11 @@ typedef struct ScrInstrCCall
     u8 numArgs;
     u8 varType;
     u8 pad;
-    u8 varTypeArgs[4];
 
     u32 funcOffs;
     ScriptVarval DestVar;
 
+    u8 varTypeArgs[4];
     ScriptVarval Arg[];    
 } ScrInstrCCall;
 
