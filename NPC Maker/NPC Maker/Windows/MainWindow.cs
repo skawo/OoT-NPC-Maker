@@ -2351,24 +2351,14 @@ namespace NPC_Maker
 
             var t = Task.Factory.StartNew(() =>
             {
-                while (!Program.CodeEditorProcess.HasExited)
-                {
-                    System.Threading.Thread.Sleep(100);
-                }
+                Program.CodeEditorProcess.WaitForExit();
 
                 try
                 {
-
                     Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
 
                     if (Program.Watcher != null)
                         Program.Watcher.Dispose();
-
-                    if (autoSaveTimer != null)
-                    {
-                        autoSaveTimer.Stop();
-                        autoSaveTimer.Dispose();
-                    }
                 }
                 catch (Exception)
                 {
