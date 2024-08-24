@@ -2356,10 +2356,24 @@ namespace NPC_Maker
                     System.Threading.Thread.Sleep(100);
                 }
 
-                Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
+                try
+                {
 
-                if (Program.Watcher != null)
-                    Program.Watcher.Dispose();
+                    Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
+
+                    if (Program.Watcher != null)
+                        Program.Watcher.Dispose();
+
+                    if (autoSaveTimer != null)
+                    {
+                        autoSaveTimer.Stop();
+                        autoSaveTimer.Dispose();
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
 
                 Button_CCompile.Invoke((MethodInvoker)delegate
                 {
