@@ -200,8 +200,10 @@ namespace NPC_Maker
                 Textbox_Script.VerticalScroll.Value = ScrollPos;
                 Textbox_Script.SelectionStart = Caret + (Comment ? 2 : -2);
 
-                if (Textbox_Script.Selection.Start.iLine != iLineStart)
+                if (Textbox_Script.Selection.Start.iLine < iLineStart)
                     Textbox_Script.SelectionStart += 2;
+                else if (Textbox_Script.Selection.Start.iLine < iLineStart)
+                    Textbox_Script.SelectionStart -= 2;
 
                 Textbox_Script.UpdateScrollbars();
    
