@@ -166,15 +166,16 @@ namespace NPC_Maker
             if (e.Control && e.KeyCode == Keys.OemQuestion)
             {
                 int Caret = Textbox_Script.SelectionStart;
+                int iLineStart = Textbox_Script.Selection.Start.iLine;
 
                 int ScrollPos = Textbox_Script.VerticalScroll.Value;
 
-                List<string> l = Regex.Split(Textbox_Script.Text, "\r?\n").ToList();
+                List<string> i = Regex.Split(Textbox_Script.Text, "\r?\n").ToList();
 
                 int Start = Math.Min(Textbox_Script.Selection.Start.iLine, Textbox_Script.Selection.End.iLine);
                 int End = Math.Max(Textbox_Script.Selection.Start.iLine, Textbox_Script.Selection.End.iLine);
 
-                l = l.Skip(Start).Take(End - Start + 1).ToList();
+                List<string> l = i.Skip(Start).Take(End - Start + 1).ToList();
 
                 List<string> n = new List<string>();
 
@@ -191,15 +192,20 @@ namespace NPC_Maker
                         n.Add(!Comment ? s.Substring(2) : "//" + s);
                 }
 
-                string RString = String.Join(Environment.NewLine, l);
+                string RString = String.Join(Environment.NewLine, i.Take(Start));
                 string NString = String.Join(Environment.NewLine, n);
+                string PString = String.Join(Environment.NewLine, i.Skip(End + 1));
 
                 if (String.IsNullOrEmpty(RString))
                     return;
 
-                Textbox_Script.Text = Textbox_Script.Text.Replace(RString, NString);
+                Textbox_Script.Text = RString + Environment.NewLine + NString + Environment.NewLine + PString;
                 Textbox_Script.VerticalScroll.Value = ScrollPos;
-                Textbox_Script.SelectionStart = Caret;
+                Textbox_Script.SelectionStart = Caret + (Comment ? 2 : -2);
+
+                if (Textbox_Script.Selection.Start.iLine != iLineStart)
+                    Textbox_Script.SelectionStart += 2;
+
                 Textbox_Script.UpdateScrollbars();
    
             }
