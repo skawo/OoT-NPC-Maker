@@ -202,7 +202,7 @@ namespace NPC_Maker
 
                 if (Textbox_Script.Selection.Start.iLine < iLineStart)
                     Textbox_Script.SelectionStart += 2;
-                else if (Textbox_Script.Selection.Start.iLine < iLineStart)
+                else if (Textbox_Script.Selection.Start.iLine > iLineStart)
                     Textbox_Script.SelectionStart -= 2;
 
                 Textbox_Script.UpdateScrollbars();
