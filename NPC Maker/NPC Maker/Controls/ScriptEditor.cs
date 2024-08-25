@@ -196,7 +196,7 @@ namespace NPC_Maker
                 string NString = String.Join(Environment.NewLine, n);
                 string PString = String.Join(Environment.NewLine, i.Skip(End + 1));
 
-                Textbox_Script.Text = RString + Environment.NewLine + NString + Environment.NewLine + PString;
+                Textbox_Script.Text = (Start != 0 ? (RString + Environment.NewLine) : "") + NString + (End + 1 != i.Count ? (Environment.NewLine + PString) : "");
                 Textbox_Script.VerticalScroll.Value = ScrollPos;
                 Textbox_Script.SelectionStart = Caret + (Comment ? 2 : -2);
 
