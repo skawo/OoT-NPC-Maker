@@ -1,6 +1,8 @@
 ﻿using FastColoredTextBoxNS;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace NPC_Maker
@@ -153,5 +155,54 @@ namespace NPC_Maker
             }
         }
 
+        private void Textbox_Script_KeyPressed(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void Textbox_Script_KeyUp(object sender, KeyEventArgs e)
+        {
+            // CONTROL + /
+            if (e.Control && e.KeyCode == Keys.OemQuestion)
+            {
+                int Caret = Textbox_Script.SelectionStart;
+
+                int ScrollPos = Textbox_Script.VerticalScroll.Value;
+
+                List<string> l = Regex.Split(Textbox_Script.Text, "\r?\n").ToList();
+
+                int Start = Math.Min(Textbox_Script.Selection.Start.iLine, Textbox_Script.Selection.End.iLine);
+                int End = Math.Max(Textbox_Script.Selection.Start.iLine, Textbox_Script.Selection.End.iLine);
+
+                l = l.Skip(Start).Take(End - Start + 1).ToList();
+
+                List<string> n = new List<string>();
+
+                bool Comment = true;
+
+                if (l.All(x => String.IsNullOrWhiteSpace(x) || x.TrimStart().StartsWith("//")))
+                    Comment = false;
+
+                foreach (string s in l)
+                {
+                    if (String.IsNullOrWhiteSpace(s))
+                        n.Add(s);
+                    else
+                        n.Add(!Comment ? s.Substring(2) : "//" + s);
+                }
+
+                string RString = String.Join(Environment.NewLine, l);
+                string NString = String.Join(Environment.NewLine, n);
+
+                if (String.IsNullOrEmpty(RString))
+                    return;
+
+                Textbox_Script.Text = Textbox_Script.Text.Replace(RString, NString);
+                Textbox_Script.VerticalScroll.Value = ScrollPos;
+                Textbox_Script.SelectionStart = Caret;
+                Textbox_Script.UpdateScrollbars();
+   
+            }
+        }
     }
 }

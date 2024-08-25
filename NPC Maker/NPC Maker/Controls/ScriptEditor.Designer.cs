@@ -79,6 +79,8 @@ namespace NPC_Maker
             this.Textbox_Script.WordWrapAutoIndent = false;
             this.Textbox_Script.Zoom = 100;
             this.Textbox_Script.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.Textbox_Script_TextChanged);
+            this.Textbox_Script.KeyPressed += new System.Windows.Forms.KeyPressEventHandler(this.Textbox_Script_KeyPressed);
+            this.Textbox_Script.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Textbox_Script_KeyUp);
             this.Textbox_Script.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Textbox_Script_MouseClick);
             // 
             // Textbox_ParseErrors
