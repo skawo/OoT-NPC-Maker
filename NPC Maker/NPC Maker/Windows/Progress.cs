@@ -21,6 +21,9 @@ namespace NPC_Maker
 
         public void SetProgress(int Progress, string Msg = "")
         {
+            if (Progress > 100)
+                Progress = 100;
+
             if (Progress + 1 <= progressBar1.Maximum)
                 progressBar1.Value = Progress + 1;
 

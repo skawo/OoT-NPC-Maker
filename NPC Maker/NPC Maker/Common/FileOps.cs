@@ -250,7 +250,7 @@ namespace NPC_Maker
                     pr.Refresh();
                 }
 
-                float ProgressPer = 100 / Data.Entries.Count;
+                float ProgressPer = (float)((float)100 / (float)Data.Entries.Count);
                 float CurProgress = 0;
                 int EntriesDone = 0;
 
