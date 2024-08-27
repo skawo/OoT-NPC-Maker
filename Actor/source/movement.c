@@ -47,7 +47,7 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, PlayState* playState, float speed
     en->currentDistToNextPos = DIST_TO_NEXT_POS(en, ignoreY);
 
     // If we're moving and we're close enough to the end, or the distance travelled has exceeded the initial distance calculated, we don't move.
-    if (Movement_HasReachedDestination(en, MOVEMENT_DISTANCE_EQUAL_MARGIN))
+    if (movementType != MOVEMENT_CUTSCENE && Movement_HasReachedDestination(en, MOVEMENT_DISTANCE_EQUAL_MARGIN))
     {
         Movement_StopMoving(en, playState, setAnims);
         Movement_Apply(&en->actor, NULL);
@@ -516,6 +516,9 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                 int curFrame = playState->csCtx.frames;
                 int framesRemain = curActionPtr->endFrame + 2 - curFrame;
 
+                if (curActionPtr->startFrame < 2 && curFrame > 0)
+                    curActionPtr->startFrame = 2;
+
                 if (curActionPtr->startFrame + 1 == curFrame)
                 {
                     // Set the animation based on the current action.
@@ -537,7 +540,9 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                     speed = en->cutsceneMovementSpeed;
 
                     en->stopped = false;
-                    en->isMoving = true;
+                    en->distanceTotal = DIST_TO_NEXT_POS(en, ignoreY);
+                    en->traversedDistance = 0;
+
                 }
                 else if (curActionPtr->endFrame + 1 == curFrame)
                     Movement_StopMoving(en, playState, true);
