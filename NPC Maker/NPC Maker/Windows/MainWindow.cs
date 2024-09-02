@@ -1000,6 +1000,8 @@ namespace NPC_Maker
 
         private void Button_EnvironmentColorPreview_Click(object sender, EventArgs e)
         {
+            ColorDialog.Color = SelectedEntry.EnvironmentColor;
+
             if (ColorDialog.ShowDialog() == DialogResult.OK)
             {
                 Button_EnvironmentColorPreview.BackColor = ColorDialog.Color;
@@ -1025,6 +1027,8 @@ namespace NPC_Maker
 
         private void Btn_LightColor_Click(object sender, EventArgs e)
         {
+            ColorDialog.Color = SelectedEntry.LightColor;
+
             if (ColorDialog.ShowDialog() == DialogResult.OK)
             {
                 Btn_LightColor.BackColor = ColorDialog.Color;
@@ -1420,6 +1424,8 @@ namespace NPC_Maker
             }
             else if (e.ColumnIndex == (int)EDlistsColumns.Color)
             {
+                ColorDialog.Color = DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
+
                 if (ColorDialog.ShowDialog() == DialogResult.OK)
                 {
                     DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
