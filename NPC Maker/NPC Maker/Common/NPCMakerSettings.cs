@@ -43,6 +43,8 @@ namespace NPC_Maker
 
         public UInt32 AutoSaveTime { get; set; }
 
+        public bool UseSpaceWithFromFont { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -63,6 +65,7 @@ namespace NPC_Maker
             UseWine = false;
             AutoSave = false;
             AutoSaveTime = 1000;
+            UseSpaceWithFromFont = false;
         }
 
         public enum Members
@@ -83,6 +86,7 @@ namespace NPC_Maker
             USEWINE,
             AUTOSAVE,
             AUTOSAVETIME,
+            USESPACEFONT,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -125,6 +129,7 @@ namespace NPC_Maker
                 case Members.USEWINE: UseWine = (bool)Value; break;
                 case Members.AUTOSAVE: AutoSave = (bool)Value; break;
                 case Members.AUTOSAVETIME: AutoSaveTime = Convert.ToUInt32(Value); break;
+                case Members.USESPACEFONT: UseSpaceWithFromFont = (bool)Value; break;
                 default: break;
             }
         }

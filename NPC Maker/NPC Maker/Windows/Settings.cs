@@ -37,6 +37,8 @@ namespace NPC_Maker.Windows
             WineCompatMode.Checked = EditedSettings.UseWine;
             AutoSaveC.Checked = EditedSettings.AutoSave;
             NumUpDown_AutoSaveCTime.Value = EditedSettings.AutoSaveTime;
+            ChkBox_UseSpaceFont.Checked = EditedSettings.UseSpaceWithFromFont;
+
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)

@@ -2135,7 +2135,7 @@ namespace NPC_Maker
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return;
 
-            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray());
+            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray(), null, null, Program.Settings.UseSpaceWithFromFont);
             Bitmap bmp = new Bitmap(384, mp.MessageCount * 108);
             bmp.MakeTransparent();
 
