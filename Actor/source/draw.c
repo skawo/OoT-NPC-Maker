@@ -439,7 +439,11 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
             }
             else if (dlist.showType != NOT_VISIBLE)
             {
-                if (dlist.objectId != OBJECT_ENDDLIST)
+				if (dlist.objectId == OBJECT_ENDDLIST)
+					*dListPtr = (Gfx*)&endDList;
+				else if (dlist.objectId == OBJECT_XLUDLIST)
+					*dListPtr = (Gfx*)&transparencyDList;
+                else if (dlist.objectId != OBJECT_NONE)
                 {
                     Matrix_Push();
                     Draw_AffectMatrix(dlist, translation, rotation);
