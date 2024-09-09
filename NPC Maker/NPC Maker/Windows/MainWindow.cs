@@ -2103,6 +2103,7 @@ namespace NPC_Maker
 
                 MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
                 MsgText.Text = Entry.MessageText;
+                MsgText.ClearUndo();
                 Combo_MsgType.SelectedIndex = Entry.Type;
                 Combo_MsgPos.SelectedIndex = Entry.Position;
 

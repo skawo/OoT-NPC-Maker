@@ -1783,6 +1783,9 @@ namespace NPC_Maker
             HIGH_SCORE = 0x1E,
             TIME = 0x1F,
 
+            LCHEVRON = 0x3C,
+            RCHEVRON = 0x3E,
+
             DASH = 0x7F,
             À = 0x80,
             Î = 0x81,
