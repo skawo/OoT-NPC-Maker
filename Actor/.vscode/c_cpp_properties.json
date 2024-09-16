@@ -4,7 +4,7 @@
             "name": "MIPS",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:\\msys64\\opt\\n64\\mips64\\include",
+                "C:\\msys64\\opt\\n64\\mips64\\include\\**",
                 "C:/msys64/opt/n64/mips64/include/z64hdr/include"
             ],
             "defines": [
@@ -17,23 +17,6 @@
             "cStandard": "c11",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "gcc-x86"
-        },
-        {
-            "name": "Mips64",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "C:/msys64/opt/n64/mips64/include/**"
-            ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE",
-                "_LANGUAGE_C"
-            ],
-            "compilerPath": "C:\\msys64\\mingw32\\bin\\gcc.exe",
-            "cStandard": "gnu17",
-            "cppStandard": "gnu++14",
-            "intelliSenseMode": "windows-gcc-x86"
         }
     ],
     "version": 4
