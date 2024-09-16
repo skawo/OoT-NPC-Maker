@@ -14,7 +14,7 @@ CC   = mips64-gcc
 LD   = mips64-ld
 NOVL = novl
 
-CFLAGS = -G 0 $(OPTIMIZATION) $(Z64HDR) --std=gnu99 -mtune=vr4300 -mabi=32 -mips3 -fno-builtin -fno-reorder-blocks -ffast-math -mno-explicit-relocs -fno-unsafe-math-optimizations -fno-optimize-sibling-calls -mno-memcpy -mno-check-zero-division -Wmissing-field-initializers -Wall -Wno-unknown-pragmas
+CFLAGS = -G 0 $(OPTIMIZATION) $(Z64HDR) --std=gnu99 -mtune=vr4300 -mabi=32 -mips3 -fno-builtin -mno-split-addresses -fno-reorder-blocks -ffast-math -mno-explicit-relocs -fno-unsafe-math-optimizations -fno-optimize-sibling-calls -mno-memcpy -mno-check-zero-division -Wmissing-field-initializers -Wall -Wno-unknown-pragmas
 NOVLFLAGS = -c -A $(ADDRESS) -o $(OVLOUT)
 DEFINES = -DGAME_VERSION=$(GAME_VERSION) -DLOOKAT_EDITOR=$(LOOKAT_EDITOR) -DLOGGING=$(LOGGING) -DCOLLISION_VIEWER=$(COLLISION_VIEWER) -DDEBUG_STRUCT=$(DEBUG_STRUCT) -DZZROMTOOL=$(ZZROMTOOL) -DLOG_VERSION=$(LOG_VERSION) -DEXDLIST_EDITOR=$(EXDLIST_EDITOR)
 
