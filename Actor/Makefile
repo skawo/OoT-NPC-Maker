@@ -29,7 +29,7 @@ debug: COLLISION_VIEWER = 1
 debug: GAME_VERSION = 0 
 debug: LOOKAT_EDITOR = 1
 debug: OPTIMIZATION = -Os
-debug: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_mq_debug
+debug: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_mq_debug -I/opt/n64/mips64/include
 debug: LDFLAGS = -L/opt/n64/mips64/include/z64hdr/common -L/opt/n64/mips64/include/z64hdr/oot_mq_debug/ -T /opt/n64/mips64/include/z64hdr/common/z64hdr.ld --emit-relocs
 debug: create_dir $(PROGRAM).ovl
 
@@ -42,7 +42,7 @@ debugr: COLLISION_VIEWER = 0
 debugr: GAME_VERSION = 0 
 debug: LOOKAT_EDITOR = 1
 debugr: OPTIMIZATION = -Os
-debugr: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_mq_debug
+debugr: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_mq_debug -I/opt/n64/mips64/include
 debugr: LDFLAGS = -L/opt/n64/mips64/include/z64hdr/common -L/opt/n64/mips64/include/z64hdr/oot_mq_debug/ -T /opt/n64/mips64/include/z64hdr/common/z64hdr.ld --emit-relocs
 debugr: create_dir $(PROGRAM).ovl
 
@@ -55,7 +55,7 @@ debugr: create_dir $(PROGRAM).ovl
 10: GAME_VERSION = 1 
 10: LOOKAT_EDITOR = 0
 10: OPTIMIZATION = -Os
-10: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_u10
+10: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_u10 -I/opt/n64/mips64/include
 10: LDFLAGS = -L/opt/n64/mips64/include/z64hdr/common -L/opt/n64/mips64/include/z64hdr/oot_u10/ -T /opt/n64/mips64/include/z64hdr/common/z64hdr.ld --emit-relocs
 10: create_dir $(PROGRAM).ovl
 
@@ -68,7 +68,7 @@ debugr: create_dir $(PROGRAM).ovl
 10D: GAME_VERSION = 1 
 10D: LOOKAT_EDITOR = 1
 10D: OPTIMIZATION = -Os
-10D: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_u10
+10D: Z64HDR = -I/opt/n64/mips64/include/z64hdr/include -I/opt/n64/mips64/include/z64hdr/oot_u10 -I/opt/n64/mips64/include
 10D: LDFLAGS = -L/opt/n64/mips64/include/z64hdr/common -L/opt/n64/mips64/include/z64hdr/oot_u10/ -T /opt/n64/mips64/include/z64hdr/common/z64hdr.ld --emit-relocs
 10D: create_dir $(PROGRAM).ovl
 
