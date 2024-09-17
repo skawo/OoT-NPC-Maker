@@ -229,6 +229,7 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
             this.MsgText = new FastColoredTextBoxNS.FastColoredTextBox();
@@ -2973,6 +2974,7 @@
             // 
             // Tab4_Messages
             // 
+            this.Tab4_Messages.Controls.Add(this.ChkBox_UseSpaceFont);
             this.Tab4_Messages.Controls.Add(this.PanelMsgPreview);
             this.Tab4_Messages.Controls.Add(this.MsgText);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgRename);
@@ -2991,6 +2993,18 @@
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
+            // 
+            // ChkBox_UseSpaceFont
+            // 
+            this.ChkBox_UseSpaceFont.AutoSize = true;
+            this.ChkBox_UseSpaceFont.Location = new System.Drawing.Point(631, 5);
+            this.ChkBox_UseSpaceFont.Name = "ChkBox_UseSpaceFont";
+            this.ChkBox_UseSpaceFont.Size = new System.Drawing.Size(129, 17);
+            this.ChkBox_UseSpaceFont.TabIndex = 73;
+            this.ChkBox_UseSpaceFont.Tag = "USESPACEFONT";
+            this.ChkBox_UseSpaceFont.Text = "Space width from font";
+            this.ChkBox_UseSpaceFont.UseVisualStyleBackColor = true;
+            this.ChkBox_UseSpaceFont.CheckedChanged += new System.EventHandler(this.ChkBox_UseSpaceFont_CheckedChanged);
             // 
             // PanelMsgPreview
             // 
@@ -3087,7 +3101,7 @@
             "Top",
             "Center",
             "Bottom"});
-            this.Combo_MsgPos.Location = new System.Drawing.Point(457, 3);
+            this.Combo_MsgPos.Location = new System.Drawing.Point(444, 3);
             this.Combo_MsgPos.Name = "Combo_MsgPos";
             this.Combo_MsgPos.Size = new System.Drawing.Size(181, 21);
             this.Combo_MsgPos.TabIndex = 65;
@@ -3097,7 +3111,7 @@
             // Lbl_MsgPos
             // 
             this.Lbl_MsgPos.AutoSize = true;
-            this.Lbl_MsgPos.Location = new System.Drawing.Point(404, 6);
+            this.Lbl_MsgPos.Location = new System.Drawing.Point(391, 6);
             this.Lbl_MsgPos.Name = "Lbl_MsgPos";
             this.Lbl_MsgPos.Size = new System.Drawing.Size(47, 13);
             this.Lbl_MsgPos.TabIndex = 64;
@@ -3116,7 +3130,7 @@
             "None (Black text)"});
             this.Combo_MsgType.Location = new System.Drawing.Point(217, 3);
             this.Combo_MsgType.Name = "Combo_MsgType";
-            this.Combo_MsgType.Size = new System.Drawing.Size(181, 21);
+            this.Combo_MsgType.Size = new System.Drawing.Size(168, 21);
             this.Combo_MsgType.TabIndex = 63;
             this.Combo_MsgType.Tag = "MOVEMENT";
             this.Combo_MsgType.SelectedIndexChanged += new System.EventHandler(this.Combo_MsgType_SelectedIndexChanged);
@@ -4316,6 +4330,7 @@
         private System.Windows.Forms.Button Button_CDelete;
         private System.Windows.Forms.ToolTip CodeParamsTooltip;
         private System.Windows.Forms.Button Button_UpdateCompile;
+        private System.Windows.Forms.CheckBox ChkBox_UseSpaceFont;
     }
 }
 

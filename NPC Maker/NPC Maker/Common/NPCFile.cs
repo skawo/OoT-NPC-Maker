@@ -11,12 +11,14 @@ namespace NPC_Maker
         public int Version { get; set; }
         public List<NPCEntry> Entries { get; set; }
         public List<ScriptEntry> GlobalHeaders { get; set; }
+        public bool SpaceFromFont { get; set; }
 
         public NPCFile()
         {
             Version = 5;
             Entries = new List<NPCEntry>();
             GlobalHeaders = new List<ScriptEntry>();
+            SpaceFromFont = false;
         }
     }
 
@@ -125,7 +127,7 @@ namespace NPC_Maker
         public byte NumVars { get; set; }
         public byte NumFVars { get; set; }
 
-        public bool ExistInAllRooms { get; set; } 
+        public bool ExistInAllRooms { get; set; }
 
         public CCodeEntry EmbeddedOverlayCode { get; set; }
 

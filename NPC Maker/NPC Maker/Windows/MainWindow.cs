@@ -538,6 +538,7 @@ namespace NPC_Maker
                     OpenedPath = OFD.FileName;
                     Panel_Editor.Enabled = true;
                     InsertDataIntoActorListGrid();
+                    ChkBox_UseSpaceFont.Checked = EditedFile.SpaceFromFont;
                     Program.Settings.LastOpenPath = OFD.FileName;
                 }
             }
@@ -2136,7 +2137,7 @@ namespace NPC_Maker
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return;
 
-            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray(), null, null, Program.Settings.UseSpaceWithFromFont);
+            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray(), null, null, EditedFile.SpaceFromFont);
             Bitmap bmp = new Bitmap(384, mp.MessageCount * 108);
             bmp.MakeTransparent();
 
@@ -2623,5 +2624,9 @@ namespace NPC_Maker
             System.Diagnostics.Process.Start("https://github.com/skawo/OoT-NPC-Maker/wiki");
         }
 
+        private void ChkBox_UseSpaceFont_CheckedChanged(object sender, EventArgs e)
+        {
+            EditedFile.SpaceFromFont = (sender as CheckBox).Checked;
+        }
     }
 }
