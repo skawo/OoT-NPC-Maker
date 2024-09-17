@@ -2627,6 +2627,7 @@ namespace NPC_Maker
         private void ChkBox_UseSpaceFont_CheckedChanged(object sender, EventArgs e)
         {
             EditedFile.SpaceFromFont = (sender as CheckBox).Checked;
+            MsgText_TextChanged(null, null);
         }
     }
 }
