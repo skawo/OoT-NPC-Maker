@@ -2072,6 +2072,70 @@ namespace NPC_Maker
 
         #region Messages
 
+        private void Btn_MsgMoveUp_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (MessagesGrid.SelectedRows.Count == 0)
+                    return;
+
+                string Title = (MessagesGrid.SelectedRows[0].Cells[0].Value as string);
+
+                int i = SelectedEntry.Messages.FindIndex(x => x.Name == Title);
+
+                if (i <= 0)
+                    return;
+                else
+                {
+                    string titleToSwap = SelectedEntry.Messages[i - 1].Name;
+                    MessageEntry msg = SelectedEntry.Messages[i];
+                    SelectedEntry.Messages.RemoveAt(i);
+                    SelectedEntry.Messages.Insert(i - 1, msg);
+
+                    MessagesGrid.Rows[i].Cells[0].Value = titleToSwap;
+                    MessagesGrid.Rows[i - 1].Cells[0].Value = Title;
+                    MessagesGrid.Rows[i - 1].Selected = true;
+                    MessagesGrid.CurrentCell = MessagesGrid.Rows[i - 1].Cells[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Btn_MsgMoveDown_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (MessagesGrid.SelectedRows.Count == 0)
+                    return;
+
+                string Title = (MessagesGrid.SelectedRows[0].Cells[0].Value as string);
+
+                int i = SelectedEntry.Messages.FindIndex(x => x.Name == Title);
+
+                if (i >= SelectedEntry.Messages.Count - 1)
+                    return;
+                else
+                {
+                    string titleToSwap = SelectedEntry.Messages[i + 1].Name;
+                    MessageEntry msg = SelectedEntry.Messages[i];
+                    SelectedEntry.Messages.RemoveAt(i);
+                    SelectedEntry.Messages.Insert(i + 1, msg);
+
+                    MessagesGrid.Rows[i].Cells[0].Value = titleToSwap;
+                    MessagesGrid.Rows[i + 1].Cells[0].Value = Title;
+                    MessagesGrid.Rows[i + 1].Selected = true;
+                    MessagesGrid.CurrentCell = MessagesGrid.Rows[i + 1].Cells[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         private void SetMsgBackground(int Type)
         {
             if (Type == (int)ZeldaMessage.Data.BoxType.None_White)

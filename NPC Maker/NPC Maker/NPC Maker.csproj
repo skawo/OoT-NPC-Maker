@@ -309,10 +309,18 @@
     <EmbeddedResource Include="Windows\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Dicts\Actors.csv" />
-    <None Include="Dicts\LinkAnims.csv" />
-    <None Include="Dicts\Music.csv" />
-    <None Include="Dicts\Objects.csv" />
+    <None Include="Dicts\Actors.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dicts\LinkAnims.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dicts\Music.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dicts\Objects.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -323,7 +331,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Dicts\SFX.csv" />
+    <None Include="Dicts\SFX.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\settings.json" />
     <None Include="Resources\tasks.json" />
   </ItemGroup>

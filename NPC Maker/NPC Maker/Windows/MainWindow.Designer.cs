@@ -229,6 +229,8 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.Btn_MsgMoveDown = new System.Windows.Forms.Button();
+            this.Btn_MsgMoveUp = new System.Windows.Forms.Button();
             this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
@@ -242,7 +244,6 @@
             this.Btn_DeleteMsg = new System.Windows.Forms.Button();
             this.Btn_AddMsg = new System.Windows.Forms.Button();
             this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tab5_Scripts = new System.Windows.Forms.TabPage();
             this.TabControl_Scripts = new System.Windows.Forms.TabControl();
             this.Tab6_EmbeddedOverlay = new System.Windows.Forms.TabPage();
@@ -318,6 +319,7 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CodeParamsTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -2974,6 +2976,8 @@
             // 
             // Tab4_Messages
             // 
+            this.Tab4_Messages.Controls.Add(this.Btn_MsgMoveDown);
+            this.Tab4_Messages.Controls.Add(this.Btn_MsgMoveUp);
             this.Tab4_Messages.Controls.Add(this.ChkBox_UseSpaceFont);
             this.Tab4_Messages.Controls.Add(this.PanelMsgPreview);
             this.Tab4_Messages.Controls.Add(this.MsgText);
@@ -2993,6 +2997,28 @@
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
+            // 
+            // Btn_MsgMoveDown
+            // 
+            this.Btn_MsgMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_MsgMoveDown.Location = new System.Drawing.Point(161, 590);
+            this.Btn_MsgMoveDown.Name = "Btn_MsgMoveDown";
+            this.Btn_MsgMoveDown.Size = new System.Drawing.Size(31, 31);
+            this.Btn_MsgMoveDown.TabIndex = 75;
+            this.Btn_MsgMoveDown.Text = "↓";
+            this.Btn_MsgMoveDown.UseVisualStyleBackColor = true;
+            this.Btn_MsgMoveDown.Click += new System.EventHandler(this.Btn_MsgMoveDown_Click);
+            // 
+            // Btn_MsgMoveUp
+            // 
+            this.Btn_MsgMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_MsgMoveUp.Location = new System.Drawing.Point(161, 553);
+            this.Btn_MsgMoveUp.Name = "Btn_MsgMoveUp";
+            this.Btn_MsgMoveUp.Size = new System.Drawing.Size(31, 31);
+            this.Btn_MsgMoveUp.TabIndex = 74;
+            this.Btn_MsgMoveUp.Text = "↑";
+            this.Btn_MsgMoveUp.UseVisualStyleBackColor = true;
+            this.Btn_MsgMoveUp.Click += new System.EventHandler(this.Btn_MsgMoveUp_Click);
             // 
             // ChkBox_UseSpaceFont
             // 
@@ -3015,17 +3041,17 @@
             this.PanelMsgPreview.BackColor = System.Drawing.Color.White;
             this.PanelMsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PanelMsgPreview.Controls.Add(this.MsgPreview);
-            this.PanelMsgPreview.Location = new System.Drawing.Point(163, 269);
+            this.PanelMsgPreview.Location = new System.Drawing.Point(198, 269);
             this.PanelMsgPreview.Margin = new System.Windows.Forms.Padding(0);
             this.PanelMsgPreview.Name = "PanelMsgPreview";
-            this.PanelMsgPreview.Size = new System.Drawing.Size(597, 352);
+            this.PanelMsgPreview.Size = new System.Drawing.Size(562, 352);
             this.PanelMsgPreview.TabIndex = 72;
             this.PanelMsgPreview.Resize += new System.EventHandler(this.PanelMsgPreview_Resize);
             // 
             // MsgPreview
             // 
             this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MsgPreview.Location = new System.Drawing.Point(74, 39);
+            this.MsgPreview.Location = new System.Drawing.Point(48, 39);
             this.MsgPreview.Margin = new System.Windows.Forms.Padding(0);
             this.MsgPreview.Name = "MsgPreview";
             this.MsgPreview.Size = new System.Drawing.Size(474, 275);
@@ -3059,13 +3085,13 @@
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
             this.MsgText.IsReplaceMode = false;
-            this.MsgText.Location = new System.Drawing.Point(163, 50);
+            this.MsgText.Location = new System.Drawing.Point(198, 50);
             this.MsgText.Name = "MsgText";
             this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
             this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
             this.MsgText.ShowLineNumbers = false;
-            this.MsgText.Size = new System.Drawing.Size(597, 216);
+            this.MsgText.Size = new System.Drawing.Size(562, 216);
             this.MsgText.TabIndex = 68;
             this.MsgText.Tag = "0";
             this.MsgText.WordWrapAutoIndent = false;
@@ -3075,7 +3101,7 @@
             // Btn_MsgRename
             // 
             this.Btn_MsgRename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_MsgRename.Location = new System.Drawing.Point(81, 553);
+            this.Btn_MsgRename.Location = new System.Drawing.Point(82, 553);
             this.Btn_MsgRename.Name = "Btn_MsgRename";
             this.Btn_MsgRename.Size = new System.Drawing.Size(73, 31);
             this.Btn_MsgRename.TabIndex = 67;
@@ -3086,7 +3112,7 @@
             // Lbl_Text
             // 
             this.Lbl_Text.AutoSize = true;
-            this.Lbl_Text.Location = new System.Drawing.Point(161, 34);
+            this.Lbl_Text.Location = new System.Drawing.Point(195, 34);
             this.Lbl_Text.Name = "Lbl_Text";
             this.Lbl_Text.Size = new System.Drawing.Size(31, 13);
             this.Lbl_Text.TabIndex = 66;
@@ -3101,9 +3127,9 @@
             "Top",
             "Center",
             "Bottom"});
-            this.Combo_MsgPos.Location = new System.Drawing.Point(444, 3);
+            this.Combo_MsgPos.Location = new System.Drawing.Point(431, 3);
             this.Combo_MsgPos.Name = "Combo_MsgPos";
-            this.Combo_MsgPos.Size = new System.Drawing.Size(181, 21);
+            this.Combo_MsgPos.Size = new System.Drawing.Size(194, 21);
             this.Combo_MsgPos.TabIndex = 65;
             this.Combo_MsgPos.Tag = "MOVEMENT";
             this.Combo_MsgPos.SelectedIndexChanged += new System.EventHandler(this.Combo_MsgPos_SelectedIndexChanged);
@@ -3128,9 +3154,9 @@
             "Ocarina",
             "None (White text)",
             "None (Black text)"});
-            this.Combo_MsgType.Location = new System.Drawing.Point(217, 3);
+            this.Combo_MsgType.Location = new System.Drawing.Point(252, 3);
             this.Combo_MsgType.Name = "Combo_MsgType";
-            this.Combo_MsgType.Size = new System.Drawing.Size(168, 21);
+            this.Combo_MsgType.Size = new System.Drawing.Size(133, 21);
             this.Combo_MsgType.TabIndex = 63;
             this.Combo_MsgType.Tag = "MOVEMENT";
             this.Combo_MsgType.SelectedIndexChanged += new System.EventHandler(this.Combo_MsgType_SelectedIndexChanged);
@@ -3138,7 +3164,7 @@
             // Lbl_MsgType
             // 
             this.Lbl_MsgType.AutoSize = true;
-            this.Lbl_MsgType.Location = new System.Drawing.Point(160, 6);
+            this.Lbl_MsgType.Location = new System.Drawing.Point(195, 6);
             this.Lbl_MsgType.Name = "Lbl_MsgType";
             this.Lbl_MsgType.Size = new System.Drawing.Size(51, 13);
             this.Lbl_MsgType.TabIndex = 62;
@@ -3160,7 +3186,7 @@
             this.Btn_AddMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Btn_AddMsg.Location = new System.Drawing.Point(3, 590);
             this.Btn_AddMsg.Name = "Btn_AddMsg";
-            this.Btn_AddMsg.Size = new System.Drawing.Size(151, 31);
+            this.Btn_AddMsg.Size = new System.Drawing.Size(152, 31);
             this.Btn_AddMsg.TabIndex = 8;
             this.Btn_AddMsg.Text = "Add";
             this.Btn_AddMsg.UseVisualStyleBackColor = true;
@@ -3177,6 +3203,7 @@
             this.MessagesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.MessagesGrid.BackgroundColor = System.Drawing.Color.White;
             this.MessagesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MessagesGrid.ColumnHeadersVisible = false;
             this.MessagesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn2});
             this.MessagesGrid.Location = new System.Drawing.Point(3, 3);
@@ -3185,15 +3212,8 @@
             this.MessagesGrid.ReadOnly = true;
             this.MessagesGrid.RowHeadersVisible = false;
             this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MessagesGrid.Size = new System.Drawing.Size(151, 544);
+            this.MessagesGrid.Size = new System.Drawing.Size(189, 544);
             this.MessagesGrid.TabIndex = 3;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "Message title";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Tab5_Scripts
             // 
@@ -3936,6 +3956,15 @@
             this.CodeParamsTooltip.ReshowDelay = 100;
             this.CodeParamsTooltip.ShowAlways = true;
             // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Message title";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4250,7 +4279,6 @@
         private System.Windows.Forms.Button Btn_DeleteMsg;
         private System.Windows.Forms.Button Btn_AddMsg;
         private CustomDataGridView MessagesGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.Label Lbl_Text;
         private System.Windows.Forms.ComboBox Combo_MsgPos;
         private System.Windows.Forms.Label Lbl_MsgPos;
@@ -4331,6 +4359,9 @@
         private System.Windows.Forms.ToolTip CodeParamsTooltip;
         private System.Windows.Forms.Button Button_UpdateCompile;
         private System.Windows.Forms.CheckBox ChkBox_UseSpaceFont;
+        private System.Windows.Forms.Button Btn_MsgMoveDown;
+        private System.Windows.Forms.Button Btn_MsgMoveUp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     }
 }
 
