@@ -11,6 +11,10 @@ namespace NPC_Maker.Scripts
                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
 
                 int SubID = ScriptHelpers.GetSubIDValue(SplitLine, typeof(Lists.StopSubtypes));
+
+                if (SubID == -1)
+                    throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
+
                 ScriptVarVal Val = (SubID == (int)Lists.StopSubtypes.BGM) ?
                                        ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue)
                                                                :
