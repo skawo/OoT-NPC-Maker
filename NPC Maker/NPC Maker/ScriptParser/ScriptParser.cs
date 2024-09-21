@@ -9,7 +9,7 @@ namespace NPC_Maker.Scripts
     {
         private readonly NPCEntry Entry;
         private readonly NPCFile File;
-        private string ScriptText;
+        private string ScriptText = "";
         public List<string> RandomLabels { get; set; }
         private BScript outScript;
 
@@ -18,12 +18,17 @@ namespace NPC_Maker.Scripts
             ScriptText = String.Join(Environment.NewLine, _GlobalHeader.Select(x => x.Text).ToArray()) + Environment.NewLine + _ScriptText;
             Entry = _Entry;
             File = _File;
+            RandomLabels = new List<string>();
+            outScript = new BScript();
         }
 
         public BScript ParseScript(string ScrName, bool GetBytes)
         {
             string s = "";
             int id = 0x8000;
+
+            if (ScrName == "ThinkingFadeIn")
+                ;
 
             foreach (var m in Entry.Messages)
             {

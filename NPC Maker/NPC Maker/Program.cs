@@ -23,6 +23,8 @@ namespace NPC_Maker
         public static NPCMakerSettings Settings;
         public static MainWindow mw;
 
+        public static string CachePath = "";
+
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
 
@@ -40,6 +42,7 @@ namespace NPC_Maker
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
             SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
+            CachePath = Path.Combine(ExecPath, "cache");
 
             Type t = Type.GetType("Mono.Runtime");
 
@@ -58,6 +61,10 @@ namespace NPC_Maker
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
 
             CCode.CreateCTempDirectory("", false);
+
+            if (!Directory.Exists(CachePath))
+                Directory.CreateDirectory(CachePath);
+
 
             if (args.Length == 0)
             {

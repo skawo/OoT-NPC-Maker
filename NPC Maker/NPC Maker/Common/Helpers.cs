@@ -31,6 +31,16 @@ namespace NPC_Maker
                 return false;
         }
 
+        public static void DeleteFileStartingWith(string Path, string Prefix)
+        {
+            string[] f = System.IO.Directory.GetFiles(Path);
+
+            List<string> s = f.Where(x => System.IO.Path.GetFileName(x).StartsWith(Prefix)).ToList();
+
+            foreach (string p in s)
+                System.IO.File.Delete(p);
+        }
+
         public static UInt16 GetOcarinaTime(string MilitaryTimeString)
         {
             string ExceptionMsg = "Time is in wrong format!";

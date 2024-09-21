@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NPC_Maker
@@ -253,6 +255,24 @@ namespace NPC_Maker
                 float ProgressPer = (float)((float)100 / (float)Data.Entries.Count);
                 float CurProgress = 0;
                 int EntriesDone = 0;
+
+                string gh = String.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text));
+                bool cacheInvalid = false;
+
+                // Check if the Global Headers changed - if they have, we need to redo everything.
+                using (SHA1 s = SHA1.Create())
+                {
+                    string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(gh))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+
+                    string cachedHeaders = System.IO.Path.Combine(Program.CachePath, "gh_" + hash);
+
+                    if (!File.Exists(cachedHeaders))
+                    {
+                        Helpers.DeleteFileStartingWith(Program.CachePath, "gh_");
+                        File.WriteAllText(cachedHeaders, "");
+                        cacheInvalid = true;
+                    }
+                }
 
                 foreach (NPCEntry Entry in Data.Entries)
                 { 
@@ -607,10 +627,32 @@ namespace NPC_Maker
 
                             CompErrors = "";
                             CompErrors = "";
-
+                            byte[] Overlay;
 
                             //CCode.CreateCTempDirectory(Entry.EmbeddedOverlayCode.Code);
-                            byte[] Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
+
+                            using (SHA1 s = SHA1.Create())
+                            {
+                                string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
+                                string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(CodeString))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                                string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_funcs_" + hash);
+                                string cachedcodeFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_code_" + hash);
+
+                                if (File.Exists(cachedFile) && File.Exists(cachedcodeFile))
+                                {
+                                    Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedFile));
+                                    Overlay = File.ReadAllBytes(cachedcodeFile);
+                                }
+                                else
+                                {
+                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_funcs_");
+                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_code_");
+
+                                    Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
+                                    File.WriteAllText(cachedFile, CodeString);
+                                    File.WriteAllBytes(cachedcodeFile, Overlay);
+                                }
+                            }
 
                             if (Overlay == null)
                             {
@@ -683,10 +725,29 @@ namespace NPC_Maker
 
                         List<Scripts.BScript> ParsedScripts = new List<Scripts.BScript>();
 
-                        foreach (ScriptEntry Scr in NonEmptyEntries)
+                        int scriptNum = 0;
+
+                        using (SHA1 s = SHA1.Create())
                         {
-                            Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, Data.GlobalHeaders);
-                            ParsedScripts.Add(Par.ParseScript(Scr.Name, true));
+                            foreach (ScriptEntry Scr in NonEmptyEntries)
+                            {
+                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, Data.GlobalHeaders);
+
+                                string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Scr.Text))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                                string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_script{scriptNum}_" + hash);
+
+                                if (!cacheInvalid && File.Exists(cachedFile))
+                                    ParsedScripts.Add(new Scripts.BScript() { Script = File.ReadAllBytes(cachedFile), ParseErrors = new List<Scripts.ParseException>() });
+                                else
+                                {
+                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script{scriptNum}_");
+                                    Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
+                                    ParsedScripts.Add(scr);
+                                    File.WriteAllBytes(cachedFile, scr.Script);
+                                }
+
+                                scriptNum++;
+                            }
                         }
 
                         foreach (Scripts.BScript Scr in ParsedScripts)
