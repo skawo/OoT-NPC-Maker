@@ -27,9 +27,6 @@ namespace NPC_Maker.Scripts
             string s = "";
             int id = 0x8000;
 
-            if (ScrName == "ThinkingFadeIn")
-                ;
-
             foreach (var m in Entry.Messages)
             {
                 s += $"#{Lists.Keyword_Define} {m.Name} {id++};";

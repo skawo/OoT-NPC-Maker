@@ -77,7 +77,7 @@ namespace NPC_Maker
         }
 
 
-        public static List<KeyValuePair<string, UInt32>> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
+        public static List<FunctionEntry> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
         {
             string Out;
 
@@ -121,7 +121,7 @@ namespace NPC_Maker
             List<string> Lines = Out.Split(new[] { '\n' }).ToList();
 
 
-            List<KeyValuePair<string, UInt32>> Functions = new List<KeyValuePair<string, UInt32>>();
+            List<FunctionEntry> Functions = new List<FunctionEntry>();
             Dictionary<string, UInt32> SectionOffsets = new Dictionary<string, UInt32>();
 
             byte[] ovl = File.ReadAllBytes(ovlPath);
@@ -145,10 +145,10 @@ namespace NPC_Maker
                 if (!Words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
                     continue;
                 else
-                    Functions.Add(new KeyValuePair<string, UInt32>(Words[5], (UInt32)(Words[0].HexLeading2UInt32() - BaseAddr + SectionOffsets[Words[3]])));
+                    Functions.Add(new FunctionEntry(Words[5], (UInt32)(Words[0].HexLeading2UInt32() - BaseAddr + SectionOffsets[Words[3]])));
             }
 
-            return Functions.OrderBy(x => x.Key).ToList();
+            return Functions.OrderBy(x => x.FuncName).ToList();
 
         }
 

@@ -11,9 +11,9 @@ namespace NPC_Maker.Scripts
             {
                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 11);
 
-                var Func = CodeEntry.Functions.Find(x => x.Key.ToUpper() == SplitLine[1].ToUpper());
+                var Func = CodeEntry.Functions.Find(x => x.FuncName.ToUpper() == SplitLine[1].ToUpper());
 
-                if (Func.Key == null)
+                if (Func.FuncName == null)
                     throw ParseException.CFunctionNotFound(SplitLine);
 
                 var Destination = new ScriptVarVal(0, 0);
@@ -37,7 +37,7 @@ namespace NPC_Maker.Scripts
                     }
                 }
 
-                return new InstructionCCall(Func.Value, Destination, Args);
+                return new InstructionCCall(Func.Addr, Destination, Args);
             }
             catch (ParseException pEx)
             {

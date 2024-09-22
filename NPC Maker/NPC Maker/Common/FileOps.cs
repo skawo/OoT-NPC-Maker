@@ -679,7 +679,7 @@ namespace NPC_Maker
                                         UInt32 FuncAddr = 0xFFFFFFFF;
 
                                         if (FuncIdx >= 0)
-                                            FuncAddr = Entry.EmbeddedOverlayCode.Functions.ToList()[Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0]].Value;
+                                            FuncAddr = Entry.EmbeddedOverlayCode.Functions[FuncIdx].Addr;
 
                                         FuncsList.AddRangeBigEndian((UInt32)FuncAddr);
                                         FuncsWhenList.Add((byte)Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 1]);

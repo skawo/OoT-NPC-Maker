@@ -411,10 +411,11 @@ namespace NPC_Maker
                     c.DataSource = null;
                 else
                 {
-                    c.DisplayMember = "Key";
-                    c.ValueMember = "Value";
-                    c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
+                    c.DisplayMember = "FuncName";
+                    c.ValueMember = "Addr";
+                    c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions;
                     c.SelectedIndex = -1;
+                    c.BindingContext = new BindingContext();
 
                     if (SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 0] < c.Items.Count)
                         c.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 0];
@@ -2503,12 +2504,13 @@ namespace NPC_Maker
                         c.DataSource = null;
                     else
                     {
-                        c.DisplayMember = "Key";
-                        c.ValueMember = "Value";
-                        c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions.ToList();
+                        c.DisplayMember = "FuncName";
+                        c.ValueMember = "Addr";
+                        c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions;
                         c.SelectedIndex = -1;
+                        c.BindingContext = new BindingContext();
 
-                        KeyValuePair<string, UInt32>? Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Key == CurrentSelection);
+                        FunctionEntry Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.FuncName == CurrentSelection);
 
                         if (Function != null)
                             c.SelectedIndex = c.Items.IndexOf(Function);
@@ -2644,8 +2646,15 @@ namespace NPC_Maker
             if (MessageBox.Show("Are you sure? This operation wipes the code completely and cannot be reversed.", "Code Removal", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
             {
                 SelectedEntry.EmbeddedOverlayCode.Code = "";
-                SelectedEntry.EmbeddedOverlayCode.Functions = new List<KeyValuePair<string, uint>>();
-                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen = new int[5, 2];
+                SelectedEntry.EmbeddedOverlayCode.Functions = new List<FunctionEntry>();
+                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen = new int[5, 2]
+                {
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                    {-1, -1},
+                };
 
                 foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
                 {

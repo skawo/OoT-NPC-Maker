@@ -146,9 +146,9 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 13);
 
-                                var Func = CodeEntry.Functions.Find(x => x.Key.ToUpper() == SplitLine[2].ToUpper());
+                                var Func = CodeEntry.Functions.Find(x => x.FuncName.ToUpper() == SplitLine[2].ToUpper());
 
-                                if (Func.Key == null)
+                                if (Func.FuncName == null)
                                     throw ParseException.CFunctionNotFound(SplitLine);
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
@@ -175,7 +175,7 @@ namespace NPC_Maker.Scripts
                                     }
                                 }
 
-                                return new InstructionAwaitCCall((byte)SubID, Value, Func.Value, Condition, Args, (byte)(IsBool ? 1 : 0));
+                                return new InstructionAwaitCCall((byte)SubID, Value, Func.Addr, Condition, Args, (byte)(IsBool ? 1 : 0));
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);

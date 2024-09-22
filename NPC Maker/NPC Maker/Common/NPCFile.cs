@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
@@ -899,18 +900,18 @@ namespace NPC_Maker
         public string Code { get; set; }
 
         public List<string> CodeLines { get; set; }
-        public List<KeyValuePair<string, UInt32>> Functions { get; set; }
+        public List<FunctionEntry> Functions { get; set; }
 
         public int[,] FuncsRunWhen { get; set; }
 
-        public CCodeEntry(string _Code = "", List<KeyValuePair<string, UInt32>> _Funcs = null, int[,] _FuncsRunWhen = null)
+        public CCodeEntry(string _Code = "", List<FunctionEntry> _Funcs = null, int[,] _FuncsRunWhen = null)
         {
             Code = _Code;
             CodeLines = new List<string>();
             Functions = _Funcs;
 
             if (Functions == null)
-                Functions = new List<KeyValuePair<string, UInt32>>();
+                Functions = new List<FunctionEntry>();
 
             FuncsRunWhen = _FuncsRunWhen;
 
@@ -922,7 +923,23 @@ namespace NPC_Maker
                     {-1, -1},
                     {-1, -1},
                     {-1, -1},
-                }; 
+                };
         }
     }
-}
+
+
+        public class FunctionEntry
+        {
+            public string FuncName { get; set; }
+
+            [JsonIgnore]
+            public UInt32 Addr { get; set; }
+
+            public FunctionEntry(string _Name = "", UInt32 _Addr = 0xFFFFFFFF)
+            {
+                FuncName = _Name;
+                Addr = _Addr;
+            }
+        }
+
+    }

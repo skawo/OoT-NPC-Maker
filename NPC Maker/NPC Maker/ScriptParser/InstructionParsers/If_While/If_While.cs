@@ -306,9 +306,9 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 13);
 
-                                var Func = CodeEntry.Functions.Find(x => x.Key.ToUpper() == SplitLine[2].ToUpper());
+                                var Func = CodeEntry.Functions.Find(x => x.FuncName.ToUpper() == SplitLine[2].ToUpper());
 
-                                if (Func.Key == null)
+                                if (Func.FuncName == null)
                                     throw ParseException.CFunctionNotFound(SplitLine);
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;
@@ -335,7 +335,7 @@ namespace NPC_Maker.Scripts
                                     }
                                 }
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhileCCall((byte)ID, Convert.ToByte(SubID), Value, Func.Value, Args, (byte)(IsBool ? 1 : 0), Condition, EndIf, Else, LabelR));
+                                Instructions.Insert(InsertIdx, new InstructionIfWhileCCall((byte)ID, Convert.ToByte(SubID), Value, Func.Addr, Args, (byte)(IsBool ? 1 : 0), Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         default:
