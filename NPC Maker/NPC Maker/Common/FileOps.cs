@@ -638,7 +638,7 @@ namespace NPC_Maker
                                 string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_funcs_" + hash);
                                 string cachedcodeFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_code_" + hash);
 
-                                if (File.Exists(cachedFile) && File.Exists(cachedcodeFile))
+                                if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedcodeFile))
                                 {
                                     Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedFile));
                                     Overlay = File.ReadAllBytes(cachedcodeFile);
@@ -647,6 +647,7 @@ namespace NPC_Maker
                                 {
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_funcs_");
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_code_");
+                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script_");
 
                                     Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
                                     CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
