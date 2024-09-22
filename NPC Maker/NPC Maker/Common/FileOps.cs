@@ -647,7 +647,7 @@ namespace NPC_Maker
                                 {
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_funcs_");
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_code_");
-                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script_");
+                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script");
 
                                     Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
                                     CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
