@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace NPC_Maker
 {
@@ -121,7 +123,7 @@ namespace NPC_Maker
         public List<MessageEntry> Messages { get; set; }
 
         public bool DEBUGShowCols { get; set; }
-        public bool DEBUGPrintToScreen{ get; set; }
+        public bool DEBUGPrintToScreen { get; set; }
         public bool DEBUGLookAtEditor { get; set; }
         public bool DEBUGExDlistEditor { get; set; }
 
@@ -654,7 +656,7 @@ namespace NPC_Maker
 
                     if (controlCode.Count == 0)
                         continue;
-                    
+
                     // Remove the < chevron from the beginning of the code
                     controlCode.RemoveAt(0);
 
@@ -672,9 +674,9 @@ namespace NPC_Maker
                             string s;
 
                             if (Environment.NewLine.Length == 2)
-                               s = String.Concat(MessageText[i + 1], MessageText[i + 2]);
+                                s = String.Concat(MessageText[i + 1], MessageText[i + 2]);
                             else
-                               s = String.Concat(MessageText[i + 1]);
+                                s = String.Concat(MessageText[i + 1]);
 
                             if (s == Environment.NewLine)
                             {
@@ -696,10 +698,10 @@ namespace NPC_Maker
 
                 Console.Write($"{Environment.NewLine}{Environment.NewLine}Errors parsing message \"{Name}\":{Environment.NewLine}{String.Join(Environment.NewLine, errors.ToArray())}{Environment.NewLine}");
             }
-            
+
 
             if (errors.Count == 0)
-                
+
                 return data;
             else
                 return null;
@@ -784,7 +786,7 @@ namespace NPC_Maker
                             if (code.Length == 3)
                                 DCCharsCount = Convert.ToUInt32(code[2]);
 
-                            for(int i = 0; i < DCCharsCount; i++)
+                            for (int i = 0; i < DCCharsCount; i++)
                                 output.Add((byte)Lists.MsgControlCode.DC);
 
                             output.Add((byte)Lists.MsgControlCode.SPEED);
@@ -928,18 +930,28 @@ namespace NPC_Maker
     }
 
 
-        public class FunctionEntry
+    public class FunctionEntry
+    {
+        public string FuncName { get; set; }
+
+        [JsonIgnore]
+        public UInt32 Addr { get; set; }
+
+        public FunctionEntry(string _Name = "", UInt32 _Addr = 0xFFFFFFFF)
         {
-            public string FuncName { get; set; }
-
-            [JsonIgnore]
-            public UInt32 Addr { get; set; }
-
-            public FunctionEntry(string _Name = "", UInt32 _Addr = 0xFFFFFFFF)
-            {
-                FuncName = _Name;
-                Addr = _Addr;
-            }
+            FuncName = _Name;
+            Addr = _Addr;
         }
-
     }
+
+    public class JsonIgnoreAttributeIgnorerContractResolver : DefaultContractResolver
+    {
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            var property = base.CreateProperty(member, memberSerialization);
+            property.Ignored = false; 
+            return property;
+        }
+    }
+
+}

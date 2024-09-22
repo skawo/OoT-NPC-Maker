@@ -636,25 +636,33 @@ namespace NPC_Maker
 
                             using (SHA1 s = SHA1.Create())
                             {
+                                // This is terrible
+                                // The reason it needs to save both the cachedFile and cachedAddrs file is because we can only serialize cachedFile from the data in the json to compare if it changed
+                                // But we need to use cachedAddrsFile for the actual cache
                                 string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
                                 string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(CodeString))).Replace("+", "_").Replace("/", "-").Replace("=", "");
                                 string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_funcs_" + hash);
+                                string cachedAddrsFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_funcsaddrs_" + hash);
                                 string cachedcodeFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_code_" + hash);
 
-                                if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedcodeFile))
+                                if (File.Exists(cachedFile) && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
                                 {
-                                    Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedFile));
+                                    Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
                                     Overlay = File.ReadAllBytes(cachedcodeFile);
                                 }
                                 else
                                 {
+                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_funcsaddrs_");
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_funcs_");
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_code_");
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script");
 
                                     Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
                                     CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
+                                    string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
+
                                     File.WriteAllText(cachedFile, CodeString);
+                                    File.WriteAllText(cachedAddrsFile, CodeAddrsString);
                                     File.WriteAllBytes(cachedcodeFile, Overlay);
                                 }
                             }
