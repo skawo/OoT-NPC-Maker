@@ -2,8 +2,10 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -258,13 +260,14 @@ namespace NPC_Maker
 
                 string gh = String.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text));
                 bool cacheInvalid = false;
+                string Ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
 
                 // Check if the Global Headers changed - if they have, we need to redo everything.
                 using (SHA1 s = SHA1.Create())
                 {
                     string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(gh))).Replace("+", "_").Replace("/", "-").Replace("=", "");
 
-                    string cachedHeaders = System.IO.Path.Combine(Program.CachePath, "gh_" + hash);
+                    string cachedHeaders = System.IO.Path.Combine(Program.CachePath, $"gh_{Ver}" + hash);
 
                     if (!File.Exists(cachedHeaders))
                     {
