@@ -165,9 +165,6 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
         NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
     else
     {
-        if (en->CFuncsWhen[2] == BEFORE_MODEL)
-            NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
-
         Draw_Debug(en, playState);
 
         if (en->settings.execJustScript)
@@ -176,6 +173,9 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
         Draw_LightsRebind(en, playState);
         Draw_SetGlobalEnvColor(en, playState);
         Draw_SetupSegments(en, playState);
+		
+        if (en->CFuncsWhen[2] == BEFORE_MODEL)
+            NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);		
 
         if (!en->settings.invisible && en->curAlpha != 0)
             Draw_Model(en, playState);
