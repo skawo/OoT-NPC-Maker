@@ -169,7 +169,7 @@ namespace NPC_Maker
             catch (Exception ex)
             {
                 CompileMsgs = "Compilation failed: " + ex.Message;
-                return new byte[0];
+                return null;
             }
         }
 

@@ -14,8 +14,6 @@ namespace NPC_Maker
 {
     public static class FileOps
     {
-
-
         public static NPCMakerSettings ParseSettingsJSON(string FileName)
         {
             if (!File.Exists(FileName))
@@ -629,7 +627,6 @@ namespace NPC_Maker
                             pr.SetProgress((int)Math.Floor(CurProgress), $"Compiling C {EntriesDone}/{Data.Entries.Count()}");
 
                             CompErrors = "";
-                            CompErrors = "";
                             byte[] Overlay;
 
                             //CCode.CreateCTempDirectory(Entry.EmbeddedOverlayCode.Code);
@@ -658,12 +655,16 @@ namespace NPC_Maker
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script");
 
                                     Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
-                                    CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
-                                    string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
 
-                                    File.WriteAllText(cachedFile, CodeString);
-                                    File.WriteAllText(cachedAddrsFile, CodeAddrsString);
-                                    File.WriteAllBytes(cachedcodeFile, Overlay);
+                                    if (Overlay != null)
+                                    {
+                                        CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
+                                        string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
+
+                                        File.WriteAllText(cachedFile, CodeString);
+                                        File.WriteAllText(cachedAddrsFile, CodeAddrsString);
+                                        File.WriteAllBytes(cachedcodeFile, Overlay);
+                                    }
                                 }
                             }
 
