@@ -25,7 +25,13 @@ namespace NPC_Maker
                 SkipEntries = new List<int>();
 
             DictType = Dict;
-            FileName = Dicts.DictFilenames[DictType];
+
+            string Folder = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
+
+            FileName = Path.Combine(Folder, Dicts.DictFilenames[DictType]);
+
+            if (!File.Exists(FileName))
+                FileName = Path.Combine(Program.ExecPath, Dicts.DictFilenames[DictType]);
 
             try
             {
@@ -244,8 +250,6 @@ namespace NPC_Maker
             try
             {
                 string Out = "";
-
-
 
                 foreach (ListEntry Entry in Data)
                     Out = String.Concat(Out, Entry.ID.ToString(), ",", Entry.Name, ",", Entry.Description, Environment.NewLine);

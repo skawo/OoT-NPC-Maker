@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using static NPC_Maker.Lists;
 
@@ -18,18 +19,18 @@ namespace NPC_Maker
 
         public static Dictionary<Lists.DictType, string> DictFilenames = new Dictionary<Lists.DictType, string>()
         {
-            { Lists.DictType.SFX, $"{Program.ExecPath}/Dicts/SFX.csv" },
-            { Lists.DictType.Music, $"{Program.ExecPath}/Dicts/Music.csv" },
-            { Lists.DictType.Actors, $"{Program.ExecPath}/Dicts/Actors.csv" },
-            { Lists.DictType.Objects, $"{Program.ExecPath}/Dicts/Objects.csv" },
-            { Lists.DictType.LinkAnims, $"{Program.ExecPath}/Dicts/LinkAnims.csv" },
+            { Lists.DictType.SFX, $"Dicts/SFX.csv" },
+            { Lists.DictType.Music, $"Dicts/Music.csv" },
+            { Lists.DictType.Actors, $"Dicts/Actors.csv" },
+            { Lists.DictType.Objects, $"Dicts/Objects.csv" },
+            { Lists.DictType.LinkAnims, $"Dicts/LinkAnims.csv" },
         };
 
-        public static Dictionary<string, int> ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]);
-        public static Dictionary<string, int> SFXes = FileOps.GetDictionary(DictFilenames[Lists.DictType.SFX]);
-        public static Dictionary<string, int> Music = FileOps.GetDictionary(DictFilenames[Lists.DictType.Music]);
-        public static Dictionary<string, int> Actors = FileOps.GetDictionary(DictFilenames[Lists.DictType.Actors]);
-        public static Dictionary<string, int> LinkAnims = FileOps.GetDictionary(DictFilenames[Lists.DictType.LinkAnims]);
+        public static Dictionary<string, int> ObjectIDs;
+        public static Dictionary<string, int> SFXes;
+        public static Dictionary<string, int> Music;
+        public static Dictionary<string, int> Actors;
+        public static Dictionary<string, int> LinkAnims;
         public static Dictionary<Lists.ParticleTypes, List<ParticleSubOptions>> UsableParticleSubOptions = new Dictionary<ParticleTypes, List<ParticleSubOptions>>()
         {
             {ParticleTypes.DUST, 
@@ -227,16 +228,50 @@ namespace NPC_Maker
 
         public static Dictionary<Lists.MsgControlCode, string> MessageControlCodes = PopulateCodeDictionary();
 
+        public static void LoadDicts()
+        {
+            ReloadDict(DictType.Objects);
+            ReloadDict(DictType.LinkAnims);
+            ReloadDict(DictType.Actors);
+            ReloadDict(DictType.Music);
+            ReloadDict(DictType.SFX);
+        }
+
+
         public static void ReloadDict(Lists.DictType Type)
         {
-            switch (Type)
+            try
             {
-                case Lists.DictType.Actors: ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Actors]); break;
-                case Lists.DictType.SFX: SFXes = FileOps.GetDictionary(DictFilenames[Lists.DictType.SFX]); break;
-                case Lists.DictType.Music: Music = FileOps.GetDictionary(DictFilenames[Lists.DictType.Music]); break;
-                case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(DictFilenames[Lists.DictType.Objects]); break;
-                case Lists.DictType.LinkAnims: LinkAnims = FileOps.GetDictionary(DictFilenames[Lists.DictType.LinkAnims]); break;
-                default: break;
+                string FileCheck = "";
+                string Folder = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
+
+                switch (Type)
+                {
+                    case Lists.DictType.Actors: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Actors]); break;
+                    case Lists.DictType.SFX: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.SFX]); break;
+                    case Lists.DictType.Music: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Music]); break;
+                    case Lists.DictType.Objects: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Objects]); break;
+                    case Lists.DictType.LinkAnims: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims]); break;
+                    default: break;
+                }
+
+                if (!File.Exists(FileCheck))
+                    Folder = Program.ExecPath;
+
+                switch (Type)
+                {
+                    case Lists.DictType.Actors: Actors = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Actors])); break;
+                    case Lists.DictType.SFX: SFXes = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.SFX])); break;
+                    case Lists.DictType.Music: Music = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Music])); break;
+                    case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Objects])); break;
+                    case Lists.DictType.LinkAnims: LinkAnims = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims])); break;
+                    default: break;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"Error loading the {Type.ToString()} dict: {ex.Message}");
+                return;
             }
         }
 

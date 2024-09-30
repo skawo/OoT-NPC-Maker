@@ -257,6 +257,15 @@ namespace NPC_Maker
                 int EntriesDone = 0;
 
                 string gh = String.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text));
+                string dicts = String.Join(
+                                             JsonConvert.SerializeObject(Dicts.Actors),
+                                             JsonConvert.SerializeObject(Dicts.ObjectIDs),
+                                             JsonConvert.SerializeObject(Dicts.SFXes),
+                                             JsonConvert.SerializeObject(Dicts.LinkAnims),
+                                             JsonConvert.SerializeObject(Dicts.Music)
+                                          );
+
+
                 bool cacheInvalid = false;
                 string Ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
 
@@ -271,6 +280,16 @@ namespace NPC_Maker
                     {
                         Helpers.DeleteFileStartingWith(Program.CachePath, "gh_");
                         File.WriteAllText(cachedHeaders, "");
+                        cacheInvalid = true;
+                    }
+
+                    hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(dicts))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                    string cachedDicts = System.IO.Path.Combine(Program.CachePath, $"dicts_{Ver}" + hash);
+
+                    if (!File.Exists(cachedDicts))
+                    {
+                        Helpers.DeleteFileStartingWith(Program.CachePath, "dicts_");
+                        File.WriteAllText(cachedDicts, "");
                         cacheInvalid = true;
                     }
                 }

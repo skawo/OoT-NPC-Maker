@@ -537,10 +537,12 @@ namespace NPC_Maker
                 if (EditedFile != null)
                 {
                     OpenedPath = OFD.FileName;
+                    Program.JsonPath = OpenedPath;
                     Panel_Editor.Enabled = true;
                     InsertDataIntoActorListGrid();
                     ChkBox_UseSpaceFont.Checked = EditedFile.SpaceFromFont;
                     Program.Settings.LastOpenPath = OFD.FileName;
+                    Dicts.LoadDicts();
                 }
             }
 

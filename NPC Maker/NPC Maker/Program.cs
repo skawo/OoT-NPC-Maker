@@ -24,6 +24,7 @@ namespace NPC_Maker
         public static MainWindow mw;
 
         public static string CachePath = "";
+        public static string JsonPath = "";
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
@@ -64,6 +65,8 @@ namespace NPC_Maker
 
             if (!Directory.Exists(CachePath))
                 Directory.CreateDirectory(CachePath);
+
+            Dicts.LoadDicts();
 
 
             if (args.Length == 0)
