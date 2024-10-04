@@ -8,6 +8,7 @@
 
 
 typedef struct NpcMaker NpcMaker;
+typedef struct InternalMsgEntry InternalMsgEntry;
  
  #ifndef GetNPCMakerFunc
 	typedef NpcMaker* GetNPCMakerFunc(NpcMaker* en, PlayState*playState, u16 ID);
@@ -29,7 +30,9 @@ typedef struct NpcMaker NpcMaker;
 	typedef u32* GetSceneHeaderFunc(PlayState* playState, int setup_index);
 #endif
 
- 
+#ifndef GetInternalMessageFunc
+	typedef void GetInternalMessageFunc(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer);
+#endif
  
 typedef struct NpcSettings
 {
@@ -308,6 +311,7 @@ typedef struct NpcMaker
     GetCutscenePtrFunc* FindCutscenePtrFunction;
     GetSceneHeaderFunc* FindSceneHeaderFunction;
 	GetPathPtrFunc* FindPathPtrFunction;
+	GetInternalMessageFunc* GetInternalMsgFunc;
 	
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

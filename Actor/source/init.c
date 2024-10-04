@@ -84,7 +84,8 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->FindActorFunction = &Scene_GetActorByID;
     en->FindCutscenePtrFunction = &Scene_GetCutscenePtr;
     en->FindSceneHeaderFunction = &Scene_GetHeaderPtr;
-	en->FindPathPtrFunction = &Scene_GetPathPtr;
+    en->FindPathPtrFunction = &Scene_GetPathPtr;
+    en->GetInternalMsgFunc = &Message_Get;
        
     for (int i = 0; i < 5; i++)
         en->CFuncs[i] = 0xFFFFFFFF;

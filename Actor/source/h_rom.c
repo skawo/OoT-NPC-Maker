@@ -143,10 +143,10 @@ bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileS
 
 void* Rom_GetObjectDataPtr(u16 objId, PlayState* playState)
 {
-	int index = Object_GetIndex(&playState->objectCtx, objId);
+    int index = Object_GetIndex(&playState->objectCtx, objId);
 
-	if (index < 0)
-		return NULL;
+    if (index < 0)
+        return NULL;
 
     return playState->objectCtx.status[index].segment;
 }
@@ -166,6 +166,11 @@ MessageEntry* Rom_GetMessageEntry(s16 msgId)
 
 void Message_Overwrite(NpcMaker* en, PlayState* playState, s16 msgId)
 {
+    Message_Get(en, playState, msgId, playState->msgCtx.font.msgBuf);
+}
+
+void Message_Get(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer)
+{
     InternalMsgEntry msgdata = Data_GetCustomMessage(en, playState, msgId);
-    Rom_LoadDataFromObject(playState, en->actor.params, &playState->msgCtx.font.msgBuf, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->getSettingsFromRAMObject);
+    Rom_LoadDataFromObject(playState, en->actor.params, buffer, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->getSettingsFromRAMObject);
 }
