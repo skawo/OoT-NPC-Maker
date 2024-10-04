@@ -257,7 +257,7 @@ inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
 }
 
 // Matrix should be set before this is called.
-void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
+void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool SwapDest)
 {
     #if LOGGING == 1
         osSyncPrintf("_%2d: Drawing extra display list at limb %2d", en->npcId, dList->limb);
@@ -269,8 +269,13 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
     // Always drawing to the other buffer than the main model is.
     int dT = Draw_GetDrawDestType(en, playState);
 
-    TwoHeadGfxArena* dest = dT ? &POLY_OPA : &POLY_XLU;
-
+    TwoHeadGfxArena* dest;
+	
+	if (SwapDest)
+		dest = dT ? &POLY_OPA : &POLY_XLU;
+	else
+		dest = dT ? &POLY_XLU : &POLY_OPA;
+	
     switch (object)
     {
         case OBJECT_NONE: return;
@@ -447,7 +452,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
                 {
                     Matrix_Push();
                     Draw_AffectMatrix(dlist, translation, rotation);
-                    Draw_ExtDList(en, playState, &dlist);
+                    Draw_ExtDList(en, playState, &dlist, true);
                     Matrix_Pop();               
                 }
                 else
@@ -622,7 +627,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
                 float scale = dlist.scale *= en->actor.scale.x;
 
                 Matrix_Scale(scale, scale, scale, 1);
-                Draw_ExtDList(en, playState, &dlist);
+                Draw_ExtDList(en, playState, &dlist, false);
                 Matrix_Pop();                
             }
         }
@@ -652,6 +657,7 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     // Draw static exdlists (ones not attached to a limb)
     if (en->hasStaticExDlists)
         Draw_StaticExtDLists(en, playState);
+	
 
     #if LOGGING == 1
         osSyncPrintf("_%2d: Drawing the skeleton.", en->npcId);
