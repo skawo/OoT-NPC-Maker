@@ -632,7 +632,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
             NpcMaker* ex_actor = Scene_GetNpcMakerByID(en, playState, actor_id);
 
             if (ex_actor == NULL)
-                branch = in->falseInstrNum;
+                branch = instr->falseInstrNum;
             else
                 branch = Scripts_IfExtVar(en, playState, (float)ex_actor->scriptVars[instr->extVarNum - 1], in, INT32);
                 
@@ -645,7 +645,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
             NpcMaker* ex_actor = Scene_GetNpcMakerByID(en, playState, actor_id);
 
             if (ex_actor == NULL)
-                branch = in->falseInstrNum;
+                branch = instr->falseInstrNum;
             else
                 branch = Scripts_IfExtVar(en, playState, ex_actor->scriptFVars[instr->extVarNum - 1], in, FLOAT);
                 
