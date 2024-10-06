@@ -371,6 +371,8 @@ namespace NPC_Maker
 
             CURRENT_STATE,
             CCALL,
+            DEBUG_VAR,
+            DEBUG_VARF,
         }
 
         public enum StateTypes
@@ -549,6 +551,8 @@ namespace NPC_Maker
             RAM,
             LABEL_TO_VAR,
             LABEL_TO_VARF,
+            DEBUG_VAR,
+            DEBUG_VARF,
         }
 
         public enum AwaitSubTypes

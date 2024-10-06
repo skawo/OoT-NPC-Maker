@@ -267,6 +267,9 @@ typedef enum SetSubId
     SET_RAM,
     SET_LABELTOVAR,
     SET_LABELTOVARF,
+
+    SET_DEBUG_VAR,
+    SET_DEBUG_VARF,
 } SetSubId;
 
 typedef enum GetSubId
@@ -344,6 +347,8 @@ typedef enum IfWhileSubId
 
     IF_CURRENT_STATE,
     IF_CCALL,
+    IF_DEBUG_VAR,
+    IF_DEBUG_VARF,
 
 } IfWhileSubId;
 

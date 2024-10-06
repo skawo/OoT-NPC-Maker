@@ -55,6 +55,9 @@ namespace NPC_Maker.Scripts
                         // case s32:
                         //H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue, typeof(Int32));
                         case (int)Lists.SetSubTypes.GRAVITY_FORCE:
+                        case (int)Lists.SetSubTypes.DEBUG_VAR:
+                            return H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue);
+                        case (int)Lists.SetSubTypes.DEBUG_VARF:
                             return H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue);
                         case (int)Lists.SetSubTypes.MOVEMENT_SPEED:
                         case (int)Lists.SetSubTypes.TALK_RADIUS:

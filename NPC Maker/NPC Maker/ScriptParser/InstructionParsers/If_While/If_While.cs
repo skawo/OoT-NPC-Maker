@@ -164,12 +164,24 @@ namespace NPC_Maker.Scripts
                             }
                         case (int)Lists.IfSubTypes.DISTANCE_FROM_PLAYER:
                         case (int)Lists.IfSubTypes.DISTANCE_FROM_REF_ACTOR:
+                        case (int)Lists.IfSubTypes.DEBUG_VARF:
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
 
                                 var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 3, float.MinValue, float.MaxValue);
+
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Val, Condition, EndIf, Else, LabelR));
+                                return Instructions;
+                            }
+                        case (int)Lists.IfSubTypes.DEBUG_VAR:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+
+                                var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 3, Int32.MinValue, Int32.MaxValue);
 
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Val, Condition, EndIf, Else, LabelR));
                                 return Instructions;
