@@ -511,7 +511,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
         case IF_PLAYER_HEALTH:                  branch = Scripts_IfValue(en, playState, gSaveContext.health, in, INT16); break;       
         case IF_PLAYER_MAGIC:                   branch = Scripts_IfValue(en, playState, gSaveContext.magic, in, INT16); break;     
 
-#ifdef DEBUG_STRUCT == 1
+#if DEBUG_STRUCT == 1
         case IF_DEBUG_VAR:                      branch = Scripts_IfValue(en, playState, en->dbgVar, in, INT32); break;    
         case IF_DEBUG_VARF:                     branch = Scripts_IfValue(en, playState, en->fDbgVar, in, FLOAT); break;    
 #else
@@ -1033,7 +1033,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_TALK_PERSIST:                      
         case SET_IS_SPEAKING:                       Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, BOOL); break;
 
-#ifdef DEBUG_STRUCT == 1
+#if DEBUG_STRUCT == 1
         case SET_DEBUG_VAR:                         Scripts_Set(en, playState, &en->dbgVar, in, INT32); break;
         case SET_DEBUG_VARF:                        Scripts_Set(en, playState, &en->fDbgVar, in, FLOAT); break;
 #else
