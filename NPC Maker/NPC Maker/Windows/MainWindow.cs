@@ -2204,8 +2204,10 @@ namespace NPC_Maker
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return;
 
+            bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;
+
             ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray(), null, null, EditedFile.SpaceFromFont);
-            Bitmap bmp = new Bitmap(384, mp.MessageCount * 108);
+            Bitmap bmp = new Bitmap((CreditsTxBox ? 480 : 384), mp.MessageCount * (CreditsTxBox ? 360 : 108));
             bmp.MakeTransparent();
 
             using (Graphics grfx = Graphics.FromImage(bmp))
@@ -2214,10 +2216,11 @@ namespace NPC_Maker
                 {
                     Bitmap bmpTemp = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
                     grfx.DrawImage(bmpTemp, 0, bmpTemp.Height * i);
+                    bmpTemp.Save("test.bmp");
                 }
             }
 
-            MsgPreview.Size = new Size(384, bmp.Height);
+            MsgPreview.Size = new Size((CreditsTxBox ? 480 : 384), bmp.Height);
             MsgPreview.Location = new Point((this.PanelMsgPreview.Width - MsgPreview.Width) / 2, 0 - PanelMsgPreview.VerticalScroll.Value);
             MsgPreview.Image = bmp;
         }
