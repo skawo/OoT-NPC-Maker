@@ -362,7 +362,8 @@ namespace NPC_Maker.Scripts
                 case "==":
                 case "<": 
                 case ">":
-                case ">=": 
+                case ">=":
+                case "<=":
                 case "!=": 
                 case "<>":
                     return true;
