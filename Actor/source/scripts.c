@@ -1291,7 +1291,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
             s32 animId = Scripts_GetVarval(en, playState, instr->varType1, instr->value1, false);
             s32 once = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, false);
 
-            Setup_Animation(en, playState, animId, instr->subId == SET_ANIMATION, once, true, false);
+            Setup_Animation(en, playState, animId, instr->subId == SET_ANIMATION, once, true, false, false);
             break;
         }        
         case SET_PLAYER_ANIMATION:
@@ -1303,7 +1303,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
             u32 endFrame = Scripts_GetVarval(en, playState, instr->endFrameType, instr->endFrame, false);
             float speed = Scripts_GetVarval(en, playState, instr->speedType, instr->speed, false);   
 
-            Setup_AnimationImpl(&GET_PLAYER(playState)->actor, playState, &GET_PLAYER(playState)->skelAnime, offset, ANIMTYPE_LINK, -1, 0, -1, -1, 0, startFrame, endFrame, speed, true, instr->once);
+            Setup_AnimationImpl(&GET_PLAYER(playState)->actor, playState, &GET_PLAYER(playState)->skelAnime, offset, ANIMTYPE_LINK, -1, 0, -1, -1, 0, startFrame, endFrame, speed, true, instr->once, true);
             break;       
         }
         case SET_SCRIPT_START:
@@ -1783,7 +1783,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInsta
         NPCACTOR->stopped = false;
         NPCACTOR->settings.movementType = MOVEMENT_MISC;
 
-        Setup_Animation(en, playState, ANIM_WALK, true, false, false, !NPCACTOR->autoAnims);
+        Setup_Animation(NPCACTOR, playState, ANIM_WALK, true, false, false, !NPCACTOR->autoAnims, true);
     }
 
     // Caculate movement vector, add it to the position and rotate towards the goal.
@@ -1834,7 +1834,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInsta
             NPCACTOR->stopped = true;
             NPCACTOR->settings.movementType = script->tempValues[1];
 
-            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !NPCACTOR->autoAnims);
+            Setup_Animation(NPCACTOR, playState, ANIM_IDLE, true, false, false, !NPCACTOR->autoAnims, true);
         }
 
         return Scripts_FreeAndContinue(script);

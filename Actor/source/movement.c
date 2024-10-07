@@ -70,7 +70,7 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, PlayState* playState, float speed
         }
 
         if (setAnims && en->currentAnimId != ANIM_WALK)
-            Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims);
+            Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims, false);
 
         // Calculate the direction. Set the rotation faced immediately to the smoothed direction.
         Math_SmoothStepToS(&en->actor.world.rot.y, 
@@ -118,7 +118,7 @@ bool Movement_RideActor(NpcMaker* en, PlayState* playState)
                         Audio_PlayActorSfx2(&en->actor, en->settings.sfxIfAttacked);
 
                     // Play the attacked animation and setup info that we've been hit.
-                    Setup_Animation(en, playState, ANIM_ATTACKED, true, true, false, !en->autoAnims);
+                    Setup_Animation(en, playState, ANIM_ATTACKED, true, true, false, !en->autoAnims, false);
                     en->wasHit = true;
                     en->canMove = false;
                 }
@@ -134,9 +134,9 @@ bool Movement_RideActor(NpcMaker* en, PlayState* playState)
 
                 // Set the appropriate animation...
                 if (en->riddenNpc->isMoving)
-                    Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims);
+                    Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims, false);
                 else
-                    Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims);
+                    Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims, false);
             }
         }
 
@@ -414,7 +414,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
 
                         if (dist > 0)
                         {
-                            Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims); 
+                            Setup_Animation(en, playState, ANIM_WALK, true, false, false, !en->autoAnims, false); 
 
                             // Multiply animation speed according to how quickly time is passing. 
                             u32 time_diff = gSaveContext.dayTime < en->lastDayTime ? 0xFFFF - en->lastDayTime : gSaveContext.dayTime - en->lastDayTime;
@@ -428,7 +428,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                                 en->actor.shape.rot.y = Math_Vec3f_Yaw(&en->actor.world.pos, &en->movementNextPos);
                         }
                         else
-                            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims);
+                            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims, false);
                     }
 
                     // Actually move the character.
@@ -462,12 +462,12 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                         en->movementDelayCounter = en->settings.movementDelay;
 
                         if (en->movementDelayCounter != 0)
-                            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims); 
+                            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims, false); 
                     }
                     else
                     {
                         en->curPathNode = INVALID_NODE;
-                        Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims); 
+                        Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims, false); 
                         break;
                     }
                 }
@@ -522,7 +522,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                 if (curActionPtr->startFrame + 1 == curFrame)
                 {
                     // Set the animation based on the current action.
-                    Setup_Animation(en, playState, curActionPtr->action - 1, true, false, false, false);
+                    Setup_Animation(en, playState, curActionPtr->action - 1, true, false, false, false, false);
 
                     // Set start position...
                     en->movementStartPos = en->actor.world.pos;
@@ -596,7 +596,7 @@ void Movement_SetNextPos(NpcMaker* en, Vec3f* next_pos)
 void Movement_StopMoving(NpcMaker* en, PlayState* playState, bool stopAnim)
 {
     if (stopAnim)
-        Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims);
+        Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims, false);
 
     en->stopped = true;
     en->isMoving = false;

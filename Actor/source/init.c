@@ -606,7 +606,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
 
     if (en->animations[ANIM_IDLE].offset != 0)
     {
-        Setup_Animation(en, playState, ANIM_IDLE, false, false, true, false);
+        Setup_Animation(en, playState, ANIM_IDLE, false, false, true, false, false);
         Update_Animations(en, playState);
     }
 
@@ -637,7 +637,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
     #endif
 }
 
-void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interpolate, bool playOnce, bool forceSet, bool doNothing)
+void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interpolate, bool playOnce, bool forceSet, bool doNothing, bool external)
 {
     if (doNothing)
         return;
@@ -682,7 +682,8 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
                                              anim.endFrame, 
                                              anim.speed, 
                                              interpolate, 
-                                             playOnce);
+                                             playOnce,
+                                             external);
 
         if (was_set)
         {
@@ -693,7 +694,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
 }
 
 bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int rFileStart, int actorObject, int actorObjectFileStart,
-                           int animStart, int animEnd, float speed, bool interpolate, bool playOnce)
+                           int animStart, int animEnd, float speed, bool interpolate, bool playOnce, bool external)
 {
 #pragma region AnimMode
         /*
@@ -757,7 +758,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                     osSyncPrintf("_Normal animation type at 0x%08x, animation mode %01d", animAddr, animMode);
                 #endif
 
-                if ((actorObject != object && object > 0) || (fileStart != OBJECT_CURRENT))
+                if (external || (actorObject != object && object > 0) || (fileStart != OBJECT_CURRENT))
                 {
                     if (!Rom_SetObjectToActor(actor, playState, object, rFileStart))
                     {
@@ -784,7 +785,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                 skelanime->curFrame = animStart;
                 skelanime->endFrame = endFrame;
 
-                if ((actorObject != object && actorObject > 0) || (fileStart != OBJECT_CURRENT))
+                if (external || (actorObject != object && actorObject > 0) || (fileStart != OBJECT_CURRENT))
                     Rom_SetObjectToActor(actor, playState, actorObject, actorObjectFileStart);
 
                 break;
