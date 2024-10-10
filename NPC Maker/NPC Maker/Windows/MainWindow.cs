@@ -2216,7 +2216,6 @@ namespace NPC_Maker
                 {
                     Bitmap bmpTemp = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
                     grfx.DrawImage(bmpTemp, 0, bmpTemp.Height * i);
-                    bmpTemp.Save("test.bmp");
                 }
             }
 
