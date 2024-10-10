@@ -11,7 +11,7 @@ namespace NPC_Maker.Scripts
             try
             {
                 List<Instruction> Instructions = new List<Instruction>();
-                string LabelR = ScriptDataHelpers.RandomString(this);
+                string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
 
                 string True = "__OCARINATRUE__" + LabelR;
                 string End = "__OCARINAEND__" + LabelR;

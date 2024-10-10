@@ -118,22 +118,22 @@ namespace NPC_Maker.Scripts
         private static void RegexText(ref string ScriptText)
         {
 
-            ScriptText = Regex.Replace(ScriptText, @"(\+=|-=|/=|\*=|!=|==|=\+|=-|=/|=!|>=|<=)", m => $" {m.Groups[1].Value} ");    // Separate operators
+            ScriptText = Regex.Replace(ScriptText, @"(\+=|-=|/=|\*=|!=|==|=\+|=-|=/|=!|>=|<=)", m => $" {m.Groups[1].Value} ", RegexOptions.Compiled);    // Separate operators
 
-            ScriptText = Regex.Replace(ScriptText, @"([^><=\-+/*!])(=)([^=\-+/*!><])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}"); // Separate single =s
-            ScriptText = Regex.Replace(ScriptText, @"([^=])(<)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}"); // Separate single <s
-            ScriptText = Regex.Replace(ScriptText, @"([^=-])(>)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}"); // Separate singe >s
+            ScriptText = Regex.Replace(ScriptText, @"([^><=\-+/*!])(=)([^=\-+/*!><])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled); // Separate single =s
+            ScriptText = Regex.Replace(ScriptText, @"([^=])(<)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled); // Separate single <s
+            ScriptText = Regex.Replace(ScriptText, @"([^=-])(>)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled); // Separate singe >s
 
 
-            ScriptText = Regex.Replace(ScriptText, @"\\\s*\r?\n", "");                                                          // Override line carriage return if preceded by \
+            ScriptText = Regex.Replace(ScriptText, @"\\\s*\r?\n", "", RegexOptions.Compiled);                                                          // Override line carriage return if preceded by \
 
-            ScriptText = Regex.Replace(ScriptText, @"[,{}()\t]", " ");
+            ScriptText = Regex.Replace(ScriptText, @"[,{}()\t]", " ", RegexOptions.Compiled);
             // ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
-            ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                          // Change ;s into linebreaks
-            ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty);                                        // Remove comment blocks
-            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty);                                                       // Remove inline comments
-            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline).TrimEnd();              // Remove empty lines
-            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ");                                                            // Remove double spaces
+            ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                                                 // Change ;s into linebreaks
+            ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty, RegexOptions.Compiled);                                        // Remove comment blocks
+            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty, RegexOptions.Compiled);                                                       // Remove inline comments
+            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline | RegexOptions.Compiled).TrimEnd();             // Remove empty lines
+            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ", RegexOptions.Compiled);                                                            // Remove double spaces
         }
 
         private static List<string> SplitLines(string ScriptText)
@@ -149,7 +149,7 @@ namespace NPC_Maker.Scripts
                 {
                     string labelN = Line.Remove(Line.Length - 1);
 
-                    if (Lists.AllKeywords.Contains(labelN) || Line.StartsWith("__") ||
+                    if (Lists.AllKeywords.Contains(labelN) || Line.StartsWith("__") || labelN.IsNumeric() || ScriptHelpers.IsHex(labelN) || ScriptHelpers.OnlyHexInString(labelN) ||
                         labelN.Equals(Lists.Keyword_Label_HERE, StringComparison.OrdinalIgnoreCase))
                     {
                         outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(labelN));
@@ -304,7 +304,7 @@ namespace NPC_Maker.Scripts
 
                 while (OrLineIndex != -1)
                 {
-                    string Label = ScriptDataHelpers.RandomString(this);
+                    string Label = ScriptDataHelpers.GetRandomLabelString(this);
                     string Line = Lines[OrLineIndex].ToUpper();
 
                     bool If = Line.StartsWith(Lists.Instructions.IF.ToString());
@@ -328,7 +328,7 @@ namespace NPC_Maker.Scripts
                         else
                             Repl = First.Substring(0, EndOfInstr + 1);
 
-                        Second = Second.ReplaceFirstExpr($"{Lists.Keyword_Or} ", Repl, RegexOptions.IgnoreCase);
+                        Second = Second.ReplaceFirstExpr($"{Lists.Keyword_Or} ", Repl, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
                         Lines.RemoveAt(OrLineIndex);
                         Lines.Insert(OrLineIndex, First);
@@ -407,7 +407,7 @@ namespace NPC_Maker.Scripts
 
                             if (Else != -1)
                             {
-                                string JumpElseLabel = ScriptDataHelpers.RandomString(this, 5);
+                                string JumpElseLabel = ScriptDataHelpers.GetRandomLabelString(this, 5);
 
                                 Lines.Insert(Else + 2, $"ANDELSE_{JumpElseLabel}:");
                                 Lines.Insert(End + 3, Lists.Keyword_Else);
@@ -440,7 +440,7 @@ namespace NPC_Maker.Scripts
             {
                 if (s.ToUpper() == $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}")
                 {
-                    string nlabel = ScriptDataHelpers.RandomString(this, 7);
+                    string nlabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
                     outl.Add($"{nlabel}:");
                     outl.Add($"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {nlabel}");
                 }

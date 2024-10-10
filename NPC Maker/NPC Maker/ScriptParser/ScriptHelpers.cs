@@ -407,6 +407,11 @@ namespace NPC_Maker.Scripts
             return (Number.Length >= 3 && Number.ToUpper().StartsWith("0X") || Number.Length >= 4 && Number.ToUpper().StartsWith("-0X"));
         }
 
+        public static bool OnlyHexInString(string test)
+        {
+            return Regex.IsMatch(test, @"\A\b[0-9a-fA-F]+\b\Z", RegexOptions.Compiled);
+        }
+
         public static object Helper_GetEnumByName(string[] SplitLine, int Index, Type EnumType, ParseException ErrorToThrow = null)
         {
 

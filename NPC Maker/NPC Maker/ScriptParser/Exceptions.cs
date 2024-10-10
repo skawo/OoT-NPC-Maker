@@ -103,7 +103,7 @@ namespace NPC_Maker.Scripts
 
         public static ParseException LabelNameCannotBe(string _Line)
         {
-            return new ParseException("Label name cannot be using a keyword: ", _Line);
+            return new ParseException("Label name cannot be using a keyword or numeral: ", _Line);
         }
 
         public static ParseException RepeatDefine(string _Line)

@@ -12,7 +12,7 @@ namespace NPC_Maker.Scripts
                 System.Windows.Forms.MessageBox.Show($"Critical error: Got wrong amount of bytes: {(Lists.Instructions)ByteList[0]}, data: {BitConverter.ToString(ByteList.ToArray())}");
         }
 
-        public static string RandomString(ScriptParser Prs, int length = 5)
+        public static string GetRandomLabelString(ScriptParser Prs, int length = 5)
         {
             Random random = new Random();
 
@@ -22,7 +22,7 @@ namespace NPC_Maker.Scripts
 
             do
             {
-                Out = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+                Out = "lbl_" + new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
             }
             while (Prs.RandomLabels.Contains(Out));
 
