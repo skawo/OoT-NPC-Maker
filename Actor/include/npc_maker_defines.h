@@ -56,6 +56,7 @@
 #define STATIC_EXDLIST_RELATIVE -1
 #define STATIC_EXDLIST_ABSOLUTE -2 
 #define STATIC_EXDLIST_AT_CAM -3 
+#define STATIC_EXDLIST_AT_DISPLAY -4 
 
 #define SEG_OFFSET(seg) (0x01000000 * seg)
 #define OFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset : offset + SEG_OFFSET(segment)

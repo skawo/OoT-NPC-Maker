@@ -582,7 +582,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 
         if (dlist.limb < 0)
         {
-            if (dlist.showType != NOT_VISIBLE)
+            if (dlist.showType != NOT_VISIBLE && dlist.limb != STATIC_EXDLIST_AT_DISPLAY)
             {
                 Vec3f translation = (Vec3f){0,0,0};
                 Vec3s rotation = (Vec3s){0,0,0};
@@ -629,6 +629,21 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
                 Matrix_Scale(scale, scale, scale, 1);
                 Draw_ExtDList(en, playState, &dlist, false);
                 Matrix_Pop();                
+            }
+            else if (dlist.showType != NOT_VISIBLE && dlist.limb == STATIC_EXDLIST_AT_DISPLAY)
+            {
+                Matrix_Push();
+
+                Matrix_Translate(playState->view.eye.x, playState->view.eye.y, playState->view.eye.z, MTXMODE_NEW);
+         
+                Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
+                Matrix_ReplaceRotation(&playState->billboardMtxF);
+                Matrix_Translate(dlist.translation.x, dlist.translation.y, (1 / dlist.scale) * dlist.translation.z * (1000 / playState->view.fovy) - playState->view.fovy, MTXMODE_APPLY); 
+                Matrix_RotateZYX(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, MTXMODE_APPLY);               
+
+                Draw_ExtDList(en, playState, &dlist, false);
+                
+                Matrix_Pop();
             }
         }
     }   

@@ -144,7 +144,10 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
             Update_Animations(en, playState);
 
         Update_TextureAnimations(en, playState);
-        Update_Collision(en, playState);
+
+        if (en->settings.hasCollision)
+            Update_Collision(en, playState);
+        
         Update_ModelAlpha(en, playState);
     }
 
