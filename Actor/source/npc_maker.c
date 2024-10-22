@@ -120,7 +120,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
     if (en->pauseCutscene)
     {
         playState->csCtx.frames--;
-        playState->csCtx.unk_18 = 0xF000;
+        //playState->csCtx.unk_18 = 0xF000;
     }
 
     // Don't run some stuff if "just script" option is set.
