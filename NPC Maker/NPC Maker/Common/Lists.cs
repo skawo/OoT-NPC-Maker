@@ -1455,14 +1455,14 @@ namespace NPC_Maker
 
         public enum PlayerMasks
         {
-            ITEM_MASK_KEATON,
-            ITEM_MASK_SPOOKY,
-            ITEM_MASK_SKULL,
-            ITEM_MASK_BUNNY,
-            ITEM_MASK_TRUTH,
-            ITEM_MASK_ZORA,
-            ITEM_MASK_GORON,
-            ITEM_MASK_GERUDO
+            ITEM_MASK_KEATON = 1,
+            ITEM_MASK_SKULL = 2,
+            ITEM_MASK_SPOOKY = 3,
+            ITEM_MASK_BUNNY = 4,
+            ITEM_MASK_GORON = 5,
+            ITEM_MASK_ZORA = 6,
+            ITEM_MASK_GERUDO = 7,
+            ITEM_MASK_TRUTH = 8,
         }
 
         public enum MovementStyles
