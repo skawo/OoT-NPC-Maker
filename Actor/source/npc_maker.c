@@ -164,6 +164,10 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
         osSyncPrintf("_%2d: Drawing actor.", en->npcId);
     #endif
 
+    // Compute the focus point; this is later replaced if the model is drawn with a focus point based on limb
+    Vec3f in = { en->settings.targetPosOffset.x, en->settings.targetPosOffset.y, en->settings.targetPosOffset.z };
+    Matrix_MultVec3f(&in, &en->actor.focus.pos);    
+
     if (en->CFuncsWhen[2] == REPLACE_DRAW && en->CFuncs[2] != 0xFFFFFFF)
         NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
     else
