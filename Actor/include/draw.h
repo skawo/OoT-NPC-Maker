@@ -18,6 +18,7 @@ void set_env_color(NpcMaker* en, PlayState* playState);
 void Draw_Model(NpcMaker* en, PlayState* playState);
 void Draw_CalcFocusPos(PlayState* playState, s32 limb, NpcMaker* en);
 void Draw_SetEnvColor(Gfx** destP, Color_RGB8 color, u8 alpha);
+void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, Gfx** dest);
 
 float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset, float* Args);
 

@@ -256,8 +256,22 @@ inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
    *((u16*)rotation + axis / 2) += (axis % 2 ? -value : value);
 }
 
-// Matrix should be set before this is called.
 void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool SwapDest)
+{
+    int dT = Draw_GetDrawDestType(en, playState);
+
+    TwoHeadGfxArena* dest;
+
+	if (SwapDest)
+		dest = dT ? &POLY_OPA : &POLY_XLU;
+	else
+		dest = dT ? &POLY_XLU : &POLY_OPA;
+
+    Draw_ExtDListInt(en, playState, dList, &dest->p);
+}
+
+// Matrix should be set before this is called.
+void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, Gfx** gfxP)
 {
     #if LOGGING == 1
         osSyncPrintf("_%2d: Drawing extra display list at limb %2d", en->npcId, dList->limb);
@@ -265,16 +279,6 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool
 
     s32 object = R_OBJECT(en, dList->objectId);
     u32 dListOffset = object == OBJECT_RAM ? dList->offset : OFFSET_ADDRESS(6, dList->offset);
-
-    // Always drawing to the other buffer than the main model is.
-    int dT = Draw_GetDrawDestType(en, playState);
-
-    TwoHeadGfxArena* dest;
-	
-	if (SwapDest)
-		dest = dT ? &POLY_OPA : &POLY_XLU;
-	else
-		dest = dT ? &POLY_XLU : &POLY_OPA;
 	
     switch (object)
     {
@@ -296,23 +300,23 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool
                     return;
                 }
                 else  
-                    gSPSegment(dest->p++, 6, AADDR(pointer, (R_FILESTART(en, dList->fileStart))));
+                    gSPSegment((*gfxP)++, 6, AADDR(pointer, (R_FILESTART(en, dList->fileStart))));
             }
                 
             break;
         }
     }
 
-    Draw_SetEnvColor(&dest->p, dList->envColor, en->curAlpha);
-    gDPPipeSync(dest->p++);    
-    gSPMatrix(dest->p++, Matrix_NewMtx(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
-    gSPDisplayList(dest->p++, dListOffset);
+    Draw_SetEnvColor(gfxP, dList->envColor, en->curAlpha);
+    gDPPipeSync((*gfxP)++);    
+    gSPMatrix((*gfxP)++, Matrix_NewMtx(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
+    gSPDisplayList((*gfxP)++, dListOffset);
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
     if ((en->settings.objectId > 0 && object != en->settings.objectId) || dList->fileStart != OBJECT_CURRENT)
-        gSPSegment(dest->p++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, playState), en->settings.fileStart));
+        gSPSegment((*gfxP)++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, playState), en->settings.fileStart));
 
-    Draw_SetEnvColor(&dest->p, en->curColor, en->curAlpha);
+    Draw_SetEnvColor(gfxP, en->curColor, en->curAlpha);
 
     #if LOGGING == 1
         osSyncPrintf("_%2d: Drawing extra display list complete", en->npcId);
@@ -570,6 +574,13 @@ void Draw_SetGlobalEnvColor(NpcMaker* en, PlayState* playState)
     }
 }
 
+extern void __View_ApplyTo(View* view, s32 mask, Gfx** gfxP);
+#if GAME_VERSION == 0
+    asm("__View_ApplyTo = 0x800AB9EC");
+#elif GAME_VERSION == 1
+    asm("__View_ApplyTo = 0x80092A88");
+#endif	
+
 void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING == 1
@@ -582,7 +593,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 
         if (dlist.limb < 0)
         {
-            if (dlist.showType != NOT_VISIBLE && dlist.limb != STATIC_EXDLIST_AT_DISPLAY)
+            if (dlist.showType != NOT_VISIBLE && dlist.limb > STATIC_EXDLIST_AT_DISPLAY)
             {
                 Vec3f translation = (Vec3f){0,0,0};
                 Vec3s rotation = (Vec3s){0,0,0};
@@ -642,6 +653,45 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
                 Matrix_RotateZYX(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, MTXMODE_APPLY);               
 
                 Draw_ExtDList(en, playState, &dlist, false);
+                
+                Matrix_Pop();
+            }
+            else if (dlist.showType != NOT_VISIBLE && dlist.limb == STATIC_EXDLIST_ORTHOGRAPHIC)
+            {
+                #define __gfxCtx playState->state.gfxCtx
+
+                View view;
+                View_Init(&view, playState->state.gfxCtx);
+                view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
+
+                Gfx* gfxRef = POLY_OPA_DISP;
+                Gfx* gfx = Graph_GfxPlusOne(gfxRef);
+                gSPDisplayList(OVERLAY_DISP++, gfx);                
+
+                SET_FULLSCREEN_VIEWPORT(&view);
+
+                __View_ApplyTo(&view, VIEW_ALL, &gfx);
+
+                gDPPipeSync(gfx++);
+                gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
+                gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2);
+                gDPSetOtherMode(gfx++, G_AD_NOTPATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                                    G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                                G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2);
+                gSPSetGeometryMode(gfx++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH);
+
+                Matrix_Push();
+
+                int z = dlist.translation.z - 200;
+                Matrix_Translate(dlist.translation.x, dlist.translation.y, z, MTXMODE_NEW);
+                Matrix_Scale(dlist.scale , dlist.scale, dlist.scale, MTXMODE_APPLY);
+                Matrix_RotateZYX(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, MTXMODE_APPLY);   
+
+                Draw_ExtDListInt(en, playState, &dlist, &gfx);
+
+                gSPEndDisplayList(gfx++);
+                Graph_BranchDlist(gfxRef, gfx);
+                POLY_OPA_DISP = gfx;
                 
                 Matrix_Pop();
             }
