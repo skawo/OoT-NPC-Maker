@@ -787,7 +787,7 @@ namespace NPC_Maker
                             }
 
                             Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_msgs");
-                            File.WriteAllText(cachedmsgFile, m);
+                            File.WriteAllText(cachedmsgFile, "");
 
                         }
 
