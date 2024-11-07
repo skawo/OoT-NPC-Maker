@@ -762,6 +762,10 @@ namespace NPC_Maker
 
                         using (SHA1 s = SHA1.Create())
                         {
+                            string m = JsonConvert.SerializeObject(Entry.Messages);
+                            string hashM = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(m))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                            string cachedmsgFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_msgs_" + hashM);
+
                             foreach (ScriptEntry Scr in NonEmptyEntries)
                             {
                                 Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, Data.GlobalHeaders);
@@ -769,7 +773,7 @@ namespace NPC_Maker
                                 string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Scr.Text))).Replace("+", "_").Replace("/", "-").Replace("=", "");
                                 string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_script{scriptNum}_" + hash);
 
-                                if (!cacheInvalid && File.Exists(cachedFile))
+                                if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedmsgFile))
                                     ParsedScripts.Add(new Scripts.BScript() { Script = File.ReadAllBytes(cachedFile), ParseErrors = new List<Scripts.ParseException>() });
                                 else
                                 {
@@ -781,6 +785,10 @@ namespace NPC_Maker
 
                                 scriptNum++;
                             }
+
+                            Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_msgs");
+                            File.WriteAllText(cachedmsgFile, m);
+
                         }
 
                         foreach (Scripts.BScript Scr in ParsedScripts)
