@@ -1182,9 +1182,9 @@
             this.UncullZLabel.AutoSize = true;
             this.UncullZLabel.Location = new System.Drawing.Point(591, 15);
             this.UncullZLabel.Name = "UncullZLabel";
-            this.UncullZLabel.Size = new System.Drawing.Size(50, 13);
+            this.UncullZLabel.Size = new System.Drawing.Size(145, 13);
             this.UncullZLabel.TabIndex = 92;
-            this.UncullZLabel.Text = "dd some ";
+            this.UncullZLabel.Text = "Uncull Zone (Foward/Down):";
             // 
             // UncullFwd
             // 
