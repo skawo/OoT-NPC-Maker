@@ -82,6 +82,11 @@
             this.Textbox_TalkingPattern = new System.Windows.Forms.TextBox();
             this.NumUpDown_BlinkSpeed = new System.Windows.Forms.NumericUpDown();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.UncullScale = new System.Windows.Forms.NumericUpDown();
+            this.UncullDown = new System.Windows.Forms.NumericUpDown();
+            this.UncullZLabel = new System.Windows.Forms.Label();
+            this.UncullFwd = new System.Windows.Forms.NumericUpDown();
             this.Lbl_DBGOpts = new System.Windows.Forms.Label();
             this.ChkBox_DBGLookAt = new System.Windows.Forms.CheckBox();
             this.ChkBox_DBGPrint = new System.Windows.Forms.CheckBox();
@@ -320,11 +325,6 @@
             this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
             this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UncullFwd = new System.Windows.Forms.NumericUpDown();
-            this.UncullZLabel = new System.Windows.Forms.Label();
-            this.UncullDown = new System.Windows.Forms.NumericUpDown();
-            this.UncullScale = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -343,6 +343,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
             this.Tab3_BehaviorData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.UncullScale)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UncullDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UncullFwd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsFVar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsVar)).BeginInit();
             this.Panel_Colors.SuspendLayout();
@@ -399,9 +402,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.UncullFwd)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.UncullDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.UncullScale)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -1127,6 +1127,84 @@
             this.Tab3_BehaviorData.Size = new System.Drawing.Size(768, 627);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(591, 71);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(94, 13);
+            this.label5.TabIndex = 95;
+            this.label5.Text = "Uncull zone scale:";
+            // 
+            // UncullScale
+            // 
+            this.UncullScale.DecimalPlaces = 2;
+            this.UncullScale.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.UncullScale.Location = new System.Drawing.Point(594, 86);
+            this.UncullScale.Maximum = new decimal(new int[] {
+            1410065407,
+            2,
+            0,
+            0});
+            this.UncullScale.Name = "UncullScale";
+            this.UncullScale.Size = new System.Drawing.Size(71, 20);
+            this.UncullScale.TabIndex = 94;
+            this.UncullScale.Tag = "CULLSCALE";
+            this.UncullScale.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // UncullDown
+            // 
+            this.UncullDown.DecimalPlaces = 2;
+            this.UncullDown.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.UncullDown.Location = new System.Drawing.Point(671, 37);
+            this.UncullDown.Maximum = new decimal(new int[] {
+            1410065407,
+            2,
+            0,
+            0});
+            this.UncullDown.Name = "UncullDown";
+            this.UncullDown.Size = new System.Drawing.Size(71, 20);
+            this.UncullDown.TabIndex = 93;
+            this.UncullDown.Tag = "CULLDWN";
+            this.UncullDown.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // UncullZLabel
+            // 
+            this.UncullZLabel.AutoSize = true;
+            this.UncullZLabel.Location = new System.Drawing.Point(591, 15);
+            this.UncullZLabel.Name = "UncullZLabel";
+            this.UncullZLabel.Size = new System.Drawing.Size(50, 13);
+            this.UncullZLabel.TabIndex = 92;
+            this.UncullZLabel.Text = "dd some ";
+            // 
+            // UncullFwd
+            // 
+            this.UncullFwd.DecimalPlaces = 2;
+            this.UncullFwd.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.UncullFwd.Location = new System.Drawing.Point(594, 37);
+            this.UncullFwd.Maximum = new decimal(new int[] {
+            1410065407,
+            2,
+            0,
+            0});
+            this.UncullFwd.Name = "UncullFwd";
+            this.UncullFwd.Size = new System.Drawing.Size(71, 20);
+            this.UncullFwd.TabIndex = 71;
+            this.UncullFwd.Tag = "CULLFWD";
+            this.UncullFwd.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // Lbl_DBGOpts
             // 
@@ -3972,84 +4050,6 @@
             this.Col_Name.ReadOnly = true;
             this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // UncullFwd
-            // 
-            this.UncullFwd.DecimalPlaces = 2;
-            this.UncullFwd.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.UncullFwd.Location = new System.Drawing.Point(594, 37);
-            this.UncullFwd.Maximum = new decimal(new int[] {
-            1410065407,
-            2,
-            0,
-            0});
-            this.UncullFwd.Name = "UncullFwd";
-            this.UncullFwd.Size = new System.Drawing.Size(71, 20);
-            this.UncullFwd.TabIndex = 71;
-            this.UncullFwd.Tag = "CULLFWD";
-            this.UncullFwd.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // UncullZLabel
-            // 
-            this.UncullZLabel.AutoSize = true;
-            this.UncullZLabel.Location = new System.Drawing.Point(591, 15);
-            this.UncullZLabel.Name = "UncullZLabel";
-            this.UncullZLabel.Size = new System.Drawing.Size(143, 13);
-            this.UncullZLabel.TabIndex = 92;
-            this.UncullZLabel.Text = "Uncull zone (Foward/Down):";
-            // 
-            // UncullDown
-            // 
-            this.UncullDown.DecimalPlaces = 2;
-            this.UncullDown.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.UncullDown.Location = new System.Drawing.Point(671, 37);
-            this.UncullDown.Maximum = new decimal(new int[] {
-            1410065407,
-            2,
-            0,
-            0});
-            this.UncullDown.Name = "UncullDown";
-            this.UncullDown.Size = new System.Drawing.Size(71, 20);
-            this.UncullDown.TabIndex = 93;
-            this.UncullDown.Tag = "CULLDWN";
-            this.UncullDown.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // UncullScale
-            // 
-            this.UncullScale.DecimalPlaces = 2;
-            this.UncullScale.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.UncullScale.Location = new System.Drawing.Point(594, 86);
-            this.UncullScale.Maximum = new decimal(new int[] {
-            1410065407,
-            2,
-            0,
-            0});
-            this.UncullScale.Name = "UncullScale";
-            this.UncullScale.Size = new System.Drawing.Size(71, 20);
-            this.UncullScale.TabIndex = 94;
-            this.UncullScale.Tag = "CULLSCALE";
-            this.UncullScale.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(591, 71);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(94, 13);
-            this.label5.TabIndex = 95;
-            this.label5.Text = "Uncull zone scale:";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4085,6 +4085,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).EndInit();
             this.Tab3_BehaviorData.ResumeLayout(false);
             this.Tab3_BehaviorData.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.UncullScale)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UncullDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.UncullFwd)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsFVar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ScriptsVar)).EndInit();
             this.Panel_Colors.ResumeLayout(false);
@@ -4151,9 +4154,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.UncullFwd)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.UncullDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.UncullScale)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

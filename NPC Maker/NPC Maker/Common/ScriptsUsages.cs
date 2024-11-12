@@ -230,6 +230,13 @@ namespace NPC_Maker
                     { Lists.SetSubTypes.LIGHT_RADIUS,                       $" operator value" },
                     { Lists.SetSubTypes.CUTSCENE_FRAME,                     $" operator value" },
 
+                    { Lists.SetSubTypes.NPC_ID,                             $" operator value" },
+                    { Lists.SetSubTypes.RIDDEN_NPC,                         $" operator value" },
+                    { Lists.SetSubTypes.UNCULL_FORWARD,                     $" operator value" },
+                    { Lists.SetSubTypes.UNCULL_DOWN,                        $" operator value" },
+                    { Lists.SetSubTypes.UNCULL_SCALE,                       $" operator value" },
+
+
                     { Lists.SetSubTypes.COLLISION_RADIUS,                   $" operator value" },
                     { Lists.SetSubTypes.COLLISION_HEIGHT,                   $" operator value" },
                     { Lists.SetSubTypes.MOVEMENT_LOOP_START,                $" operator value" },
@@ -667,7 +674,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                return "Error retrieving function usage.";
+                return "Usage documentation not yet implemented.";
             }
         }
 
