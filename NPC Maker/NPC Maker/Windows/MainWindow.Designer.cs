@@ -1651,7 +1651,7 @@
             // 
             this.NumUp_RiddenBy.Location = new System.Drawing.Point(526, 36);
             this.NumUp_RiddenBy.Maximum = new decimal(new int[] {
-            15,
+            32767,
             0,
             0,
             0});
