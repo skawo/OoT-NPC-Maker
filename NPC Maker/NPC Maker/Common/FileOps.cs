@@ -765,9 +765,9 @@ namespace NPC_Maker
 
                         using (SHA1 s = SHA1.Create())
                         {
-                            string m = JsonConvert.SerializeObject(Entry.Messages);
+                            string m = JsonConvert.SerializeObject(Entry.Messages) + JsonConvert.SerializeObject(Entry.ExtraDisplayLists) + JsonConvert.SerializeObject(Entry.Segments) + JsonConvert.SerializeObject(Entry.Animations);
                             string hashM = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(m))).Replace("+", "_").Replace("/", "-").Replace("=", "");
-                            string cachedmsgFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_msgs_" + hashM);
+                            string cachedmsgFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_exdata_" + hashM);
 
                             foreach (ScriptEntry Scr in NonEmptyEntries)
                             {
@@ -789,7 +789,7 @@ namespace NPC_Maker
                                 scriptNum++;
                             }
 
-                            Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_msgs");
+                            Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_exdata_");
                             File.WriteAllText(cachedmsgFile, "");
 
                         }
