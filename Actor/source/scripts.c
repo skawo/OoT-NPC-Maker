@@ -969,7 +969,8 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_MAXIMUM_ROAM:      
         case SET_MOVEMENT_LOOP_DELAY:               
         case SET_ATTACKED_SFX:                   
-        case SET_LIGHT_RADIUS:                      Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, UINT16); break;
+        case SET_LIGHT_RADIUS:
+        case SET_NPC_ID:                            Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, UINT16); break;
         case SET_CUTSCENE_FRAME:                    
         {
 			void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
@@ -1002,7 +1003,8 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_MODEL_OFFSET_X:                    
         case SET_MODEL_OFFSET_Y:                    
         case SET_MODEL_OFFSET_Z:                    
-        case SET_CAMERA_ID:                         
+        case SET_CAMERA_ID:    
+        case SET_RIDDEN_NPC:                            
         case SET_LOOKAT_OFFSET_X:                   
         case SET_LOOKAT_OFFSET_Y:                   
         case SET_LOOKAT_OFFSET_Z:                   
@@ -1017,7 +1019,10 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_MOVEMENT_SPEED:                    
         case SET_TALK_RADIUS:                       
         case SET_SMOOTHING_CONSTANT:                
-        case SET_SHADOW_RADIUS:                     Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, FLOAT); break;
+        case SET_SHADOW_RADIUS:                
+        case SET_UNCULL_FORWARD:         
+        case SET_UNCULL_DOWN:         
+        case SET_UNCULL_SCALE:                      Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, FLOAT); break;
 
         case SET_LOOP_MOVEMENT:                     
         case SET_HAS_COLLISION:                    

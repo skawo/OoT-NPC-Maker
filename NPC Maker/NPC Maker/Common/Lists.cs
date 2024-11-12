@@ -422,6 +422,7 @@ namespace NPC_Maker
             MOVEMENT_LOOP_DELAY,
             ATTACKED_SFX,
             LIGHT_RADIUS,
+            NPC_ID,
             CUTSCENE_FRAME,
 
             COLLISION_RADIUS,
@@ -436,6 +437,7 @@ namespace NPC_Maker
             MODEL_OFFSET_Y,
             MODEL_OFFSET_Z,
             CAMERA_ID,
+            RIDDEN_NPC,
             LOOKAT_OFFSET_X,
             LOOKAT_OFFSET_Y,
             LOOKAT_OFFSET_Z,
@@ -451,6 +453,9 @@ namespace NPC_Maker
             TALK_RADIUS,
             SMOOTHING_CONSTANT,
             SHADOW_RADIUS,
+            UNCULL_FORWARD,
+            UNCULL_DOWN,
+            UNCULL_SCALE,
 
             LOOP_MOVEMENT,
             HAS_COLLISION,

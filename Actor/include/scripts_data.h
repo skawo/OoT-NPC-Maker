@@ -25,6 +25,7 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, settings.movementDelay),
     offsetof(NpcMaker, settings.sfxIfAttacked),
     offsetof(NpcMaker, settings.lightRadius),
+    offsetof(NpcMaker, npcId),
     offsetof(PlayState, csCtx.frames),
 
     offsetof(NpcMaker, collider.dim.radius),
@@ -39,6 +40,7 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, settings.modelPosOffset.y),
     offsetof(NpcMaker, settings.modelPosOffset.z),
     offsetof(NpcMaker, cameraId),
+    offsetof(NpcMaker, settings.riddenNPCId),
     offsetof(NpcMaker, settings.lookAtPosOffset.x),
     offsetof(NpcMaker, settings.lookAtPosOffset.y),
     offsetof(NpcMaker, settings.lookAtPosOffset.z),
@@ -54,6 +56,9 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, settings.talkRadius),
     offsetof(NpcMaker, settings.smoothingConstant),
     offsetof(NpcMaker, settings.shadowRadius),
+    offsetof(NpcMaker, actor.uncullZoneForward),
+    offsetof(NpcMaker, actor.uncullZoneDownward),
+    offsetof(NpcMaker, actor.uncullZoneScale),
     
     offsetof(NpcMaker, settings.loopPath),
     offsetof(NpcMaker, settings.hasCollision),

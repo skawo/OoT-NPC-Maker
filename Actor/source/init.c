@@ -445,6 +445,11 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
     if (en->settings.generatesLight)
         en->lightNode = LightContext_InsertLight(playState, &playState->lightCtx, &en->light);
 
+
+    en->actor.uncullZoneForward = en->settings.UncullFwd;
+    en->actor.uncullZoneDownward = en->settings.UncullDwn;
+    en->actor.uncullZoneScale = en->settings.UncullScale;
+
     #pragma region Actor flags
 
         if (!en->settings.alwaysActive)

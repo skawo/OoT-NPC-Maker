@@ -402,12 +402,15 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.SmoothingConstant);
                         EntryBytes.AddRangeBigEndian(Entry.Hierarchy);
                         EntryBytes.AddRangeBigEndian(Entry.FileStart);
+                        EntryBytes.AddRangeBigEndian(Entry.CullForward);
+                        EntryBytes.AddRangeBigEndian(Entry.CullDown);
+                        EntryBytes.AddRangeBigEndian(Entry.CullScale);
                         EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[0]);
                         EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[1]);
                         EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets[2]);
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 40;
+                        CurLen += 52;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #region Blink and talk patterns

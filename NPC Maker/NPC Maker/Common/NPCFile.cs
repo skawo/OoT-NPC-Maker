@@ -132,6 +132,12 @@ namespace NPC_Maker
 
         public bool ExistInAllRooms { get; set; }
 
+        public float CullForward { get; set; }
+
+        public float CullDown { get; set; }
+
+        public float CullScale { get; set; }
+
         public CCodeEntry EmbeddedOverlayCode { get; set; }
 
         public NPCEntry()
@@ -203,6 +209,9 @@ namespace NPC_Maker
             TimedPathStart = Helpers.GetOcarinaTime("00:00");
             TimedPathEnd = Helpers.GetOcarinaTime("23:59");
             MaxDistRoam = 65535;
+            CullForward = 1000.0f;
+            CullDown = 700.0f;
+            CullScale = 350.0f;
 
             Animations = new List<AnimationEntry>();
             AnimationType = 0;
@@ -343,6 +352,9 @@ namespace NPC_Maker
             DEBUGLOOKAT,
             DEBUGPRINTSCR,
             DEBUGDLISTED,
+            CULLFWD,
+            CULLDWN,
+            CULLSCALE,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -470,6 +482,10 @@ namespace NPC_Maker
                 case Members.DEBUGLOOKAT: DEBUGLookAtEditor = Convert.ToBoolean(Value); break;
                 case Members.DEBUGPRINTSCR: DEBUGPrintToScreen = Convert.ToBoolean(Value); break;
                 case Members.DEBUGDLISTED: DEBUGExDlistEditor = Convert.ToBoolean(Value); break;
+
+                case Members.CULLFWD: CullForward = (float)Convert.ToDecimal(Value); break;
+                case Members.CULLDWN: CullDown = (float)Convert.ToDecimal(Value); break;
+                case Members.CULLSCALE: CullScale = (float)Convert.ToDecimal(Value); break;
 
                 default: break;
             }

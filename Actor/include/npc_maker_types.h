@@ -117,6 +117,9 @@ typedef struct NpcSettings
     float smoothingConstant;
     u32 skeleton;
     s32 fileStart;
+    float UncullFwd;
+    float UncullDwn;
+    float UncullScale;
     Vec3f lookAtPosOffset;
 
     u8 blinkPattern[4];

@@ -226,6 +226,10 @@ namespace NPC_Maker
             NumUpDown_ZTargetOffs.Value = SelectedEntry.TargetPositionOffsets[2];
             NumUpDown_TalkRadi.Value = (decimal)SelectedEntry.TalkRadius;
 
+            UncullFwd.Value = (decimal)SelectedEntry.CullForward;
+            UncullDown.Value = (decimal)SelectedEntry.CullDown;
+            UncullScale.Value = (decimal)SelectedEntry.CullScale;
+
             Combo_MovementType.SelectedIndex = SelectedEntry.MovementType;
             NumUpDown_MovDistance.Value = SelectedEntry.MovementDistance;
             NumUp_MaxRoam.Value = SelectedEntry.MaxDistRoam;

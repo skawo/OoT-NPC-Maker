@@ -27,6 +27,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.COLLISION_RADIUS:
                         case (int)Lists.SetSubTypes.COLLISION_HEIGHT:
                         case (int)Lists.SetSubTypes.CUTSCENE_FRAME:
+                        case (int)Lists.SetSubTypes.NPC_ID:
                             return H_SimpleSet(SubID, SplitLine, 0, UInt16.MaxValue);
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_START:
                         case (int)Lists.SetSubTypes.MOVEMENT_LOOP_END:
@@ -49,6 +50,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.LIGHT_OFFSET_Z:
                         case (int)Lists.SetSubTypes.LIGHT_RADIUS:
                         case (int)Lists.SetSubTypes.SHADOW_RADIUS:
+                        case (int)Lists.SetSubTypes.RIDDEN_NPC:
                             return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue);
                         // case u32:
                         //return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));
@@ -61,6 +63,9 @@ namespace NPC_Maker.Scripts
                             return H_SimpleSet(SubID, SplitLine, Int32.MinValue, Int32.MaxValue);
                         case (int)Lists.SetSubTypes.MOVEMENT_SPEED:
                         case (int)Lists.SetSubTypes.TALK_RADIUS:
+                        case (int)Lists.SetSubTypes.UNCULL_FORWARD:
+                        case (int)Lists.SetSubTypes.UNCULL_DOWN:
+                        case (int)Lists.SetSubTypes.UNCULL_SCALE:
                             return H_SimpleSet(SubID, SplitLine, 0, Int32.MaxValue);
                         case (int)Lists.SetSubTypes.SMOOTHING_CONSTANT:
                             return H_SimpleSet(SubID, SplitLine, -2, 65535);
