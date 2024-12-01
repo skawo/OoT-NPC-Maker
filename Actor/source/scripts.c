@@ -1161,7 +1161,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         {
             en->actor.home.pos = en->actor.world.pos;
             Scripts_Set(en, playState, &en->settings.movementType, in, UINT8);
-            Movement_StopMoving(en, playState, false);
+            Movement_StopMoving(en, playState, true);
             break;
         }       
         case SET_TALK_MODE:                         
