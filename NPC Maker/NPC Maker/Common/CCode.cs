@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace NPC_Maker
 {
@@ -45,7 +46,23 @@ namespace NPC_Maker
         {
             CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
 
-            string Out = $"{Environment.NewLine}{p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine)}{Environment.NewLine}{p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine)}";
+            string outputResult = "";
+            string errorResult = "";
+
+            Thread r = new Thread(() => { outputResult = p.StandardOutput.ReadToEnd(); });
+            r.Start();
+            Thread r2 = new Thread(() => { errorResult = p.StandardError.ReadToEnd(); });
+            r2.Start();
+
+            p.WaitForExit((int)Program.Settings.CompileTimeout);
+
+            if (!p.HasExited)
+                p.Kill();
+
+            r.Join();
+            r2.Join();
+
+            string Out = $"{Environment.NewLine}{outputResult.Replace("\n", Environment.NewLine)}{Environment.NewLine}{errorResult.Replace("\n", Environment.NewLine)}";
 
             Out = Regex.Replace(Out, @"\x1B\[[^@-~]*[@-~]", "");
 
@@ -205,8 +222,7 @@ namespace NPC_Maker
                 CompileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
 
             Process p = Process.Start(gccInfo);
-            p.WaitForExit();
-
+     
             GetOutput(p, "WINE GCC", ref CompileMsgs);
 
             #endregion
@@ -240,7 +256,7 @@ namespace NPC_Maker
                 CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(ldInfo);
-            p.WaitForExit();
+  
             GetOutput(p, "WINE LINKER", ref CompileMsgs);
 
 
@@ -275,7 +291,6 @@ namespace NPC_Maker
 
 
             p = Process.Start(nOVLInfo);
-            p.WaitForExit();
             GetOutput(p, "WINE NOVL", ref CompileMsgs);
 
             elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
@@ -323,7 +338,6 @@ namespace NPC_Maker
                 CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
 
             Process p = Process.Start(gccInfo);
-            p.WaitForExit();
 
             GetOutput(p, "Mono GCC", ref CompileMsgs);
 
@@ -358,8 +372,6 @@ namespace NPC_Maker
                 CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(ldInfo);
-            p.WaitForExit();
-            p.WaitForExit();
             GetOutput(p, "Mono LINKER", ref CompileMsgs);
 
 
@@ -394,7 +406,6 @@ namespace NPC_Maker
 
       
             p = Process.Start(nOVLInfo);
-            p.WaitForExit();
             GetOutput(p, "Mono NOVL", ref CompileMsgs);
 
             if (!File.Exists(ovlFileMono))
@@ -438,11 +449,6 @@ namespace NPC_Maker
 
             Process p = Process.Start(gccInfo);
 
-            p.WaitForExit((int)Program.Settings.CompileTimeout);
-
-            if (!p.HasExited)
-                p.Kill();
-
             GetOutput(p, "GCC", ref CompileMsgs);
 
             #endregion
@@ -476,10 +482,6 @@ namespace NPC_Maker
                 CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(ldInfo);
-            p.WaitForExit((int)Program.Settings.CompileTimeout);
-
-            if (!p.HasExited)
-                p.Kill();
 
             GetOutput(p, "LINKER", ref CompileMsgs);
 
@@ -509,11 +511,6 @@ namespace NPC_Maker
                 CompileMsgs += nOVLInfo.FileName + " " + nOVLInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(nOVLInfo);
-            p.WaitForExit((int)Program.Settings.CompileTimeout);
-
-            if (!p.HasExited)
-                p.Kill();
-
             GetOutput(p, "NOVL", ref CompileMsgs);
 
             if (!File.Exists(ovlFile))
