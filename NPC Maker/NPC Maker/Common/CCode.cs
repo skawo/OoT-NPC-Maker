@@ -578,7 +578,7 @@ namespace NPC_Maker
                     case CCode.CodeEditorEnum.VSCode:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
-                            startInfo.Arguments = $"-a {CCode.tempFolder.AppendQuotation()}";
+                            startInfo.Arguments = $"-n {CCode.tempFolder.AppendQuotation()}";
                             break;
                         }
                     case CCode.CodeEditorEnum.Notepad:
