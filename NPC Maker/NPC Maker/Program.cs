@@ -95,6 +95,8 @@ namespace NPC_Maker
                     try
                     {
                         InFile = FileOps.ParseNPCJsonFile(args[0]);
+                        Program.JsonPath = args[0];
+                        Dicts.LoadDicts();
                     }
                     catch (Exception ex)
                     {

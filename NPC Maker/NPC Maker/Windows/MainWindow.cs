@@ -2409,7 +2409,7 @@ namespace NPC_Maker
                 autoSaveTimer.Tick += AutoSaveTimer_Tick;
                 autoSaveTimer.Start();
             }
-            else
+            else if (Program.Settings.AutoComp_Save)
             {
 
                 if (Program.IsRunningUnderMono)
@@ -2426,6 +2426,10 @@ namespace NPC_Maker
                 Program.Watcher.IncludeSubdirectories = true;
                 Program.Watcher.EnableRaisingEvents = true;
                 Program.Watcher.Filter = CCode.codeFileName;
+            }
+            else
+            {
+                WatchedEntry = EditedEntry;
             }
 
             //Process.HasExited doesn't work under mono...
@@ -2567,8 +2571,7 @@ namespace NPC_Maker
                         else
                             WatchedEntry.EmbeddedOverlayCode.Code = Code;
 
-                        if (Program.Settings.AutoComp_Save || e.FullPath == "")
-                            CompileCode();
+                        CompileCode();
                     }
 
                     fs.Close();
@@ -2578,6 +2581,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
+                Console.WriteLine("Share error");
                 //MessageBox.Show("An error has occurred while attempting to update the embedded overlay: " + ex.Message);
             }
         }

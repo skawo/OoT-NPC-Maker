@@ -73,21 +73,30 @@ namespace NPC_Maker
                 CompileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
         }
 
-        public static void Clean()
+        public static void GetOutputMono(Process p, string Section, ref string CompileErrors)
+        {
+            CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
+
+            string Out = $"{Environment.NewLine}{p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine)}{Environment.NewLine}{p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine)}";
+            
+            Out = Regex.Replace(Out, @"\x1B\[[^@-~]*[@-~]", "");
+
+            if (!String.IsNullOrWhiteSpace(Out))
+                CompileErrors += Out;
+
+            if (p.ExitCode == 0)
+                CompileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
+        }
+
+        public static void Clean(string[] Files)
         {
             try
             {
-                if (File.Exists(oFile))
-                    File.Delete(oFile);
-
-                if (File.Exists(elfFile))
-                    File.Delete(elfFile);
-
-                if (File.Exists(ovlFile))
-                    File.Delete(ovlFile);
-
-                if (File.Exists(compileFile))
-                    File.Delete(compileFile);
+                foreach (string f in Files)
+                {
+                    if (File.Exists(f))
+                        File.Delete(f);
+                }
             }
             catch (Exception)
             { }
@@ -173,14 +182,15 @@ namespace NPC_Maker
         {
             try
             {
-                Clean();
                 string Code = CCode.ReplaceGameVersionInclude(CodeEntry.Code);
+
+                if (File.Exists(compileFile))
+                    File.Delete(compileFile);
 
                 File.WriteAllText(Path.Combine(tempFolder, codeFilenameForCompile), Code);
 
                 byte[] outf = (Program.IsRunningUnderMono ? Program.Settings.UseWine ? CompileUnderWine(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs));
 
-                Clean();
                 return outf;
             }
             catch (Exception ex)
@@ -197,8 +207,10 @@ namespace NPC_Maker
 
         public static byte[] CompileUnderWine(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
-            string oFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.o");
-            string elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
+            string oFileWine = Path.Combine("..", "bin", "EmbeddedOverlay_comp.o");
+            string elfFileWine = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
+
+            Clean(new string[] { oFileWine, elfFileWine });
 
             #region GCC
 
@@ -249,7 +261,7 @@ namespace NPC_Maker
                     $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                     $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
                     $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
-                    $"-o {elfFileMono.AppendQuotation()} {oFileMono.AppendQuotation()}"
+                    $"-o {elfFileWine.AppendQuotation()} {oFileWine.AppendQuotation()}"
             };
 
             if (Program.Settings.Verbose)
@@ -271,8 +283,10 @@ namespace NPC_Maker
 
             #region NOVL
 
-            elfFileMono = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay_comp.elf");
-            string ovlFileMono = Path.Combine("..", "temp", "EmbeddedOverlay_comp.ovl");
+            elfFileWine = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay_comp.elf");
+            string ovlFileWine = Path.Combine("..", "temp", "EmbeddedOverlay_comp.ovl");
+
+            Clean(new string[] { elfFileWine, ovlFileWine });
 
             ProcessStartInfo nOVLInfo = new ProcessStartInfo
             {
@@ -283,7 +297,7 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "nOVL"),
                 FileName = Path.Combine(Program.ExecPath, "nOVL", "nOVL.exe"),
                 Arguments =
-                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFileMono.AppendQuotation()} {elfFileMono.AppendQuotation()}",
+                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFileWine.AppendQuotation()} {elfFileWine.AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
@@ -293,8 +307,8 @@ namespace NPC_Maker
             p = Process.Start(nOVLInfo);
             GetOutput(p, "WINE NOVL", ref CompileMsgs);
 
-            elfFileMono = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFile, false);
+            elfFileWine = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileWine, ovlFile, false);
 
             if (!File.Exists(ovlFile))
             {
@@ -315,6 +329,9 @@ namespace NPC_Maker
         {
             string oFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", "EmbeddedOverlay_comp.o");
             string elfFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", "EmbeddedOverlay_comp.elf");
+            string ovlFileMono = Path.Combine(Program.ExecPath, "temp", "EmbeddedOverlay_comp.ovl");
+
+            Clean(new string[] { oFileMono, elfFileMono, ovlFileMono });
 
             #region GCC
 
@@ -338,8 +355,9 @@ namespace NPC_Maker
                 CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
 
             Process p = Process.Start(gccInfo);
+            p.WaitForExit();
 
-            GetOutput(p, "Mono GCC", ref CompileMsgs);
+            GetOutputMono(p, "Mono GCC", ref CompileMsgs);
 
             #endregion
 
@@ -372,7 +390,8 @@ namespace NPC_Maker
                 CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
 
             p = Process.Start(ldInfo);
-            GetOutput(p, "Mono LINKER", ref CompileMsgs);
+            p.WaitForExit();
+            GetOutputMono(p, "Mono LINKER", ref CompileMsgs);
 
 
             if (!File.Exists(elfFileMono))
@@ -385,9 +404,6 @@ namespace NPC_Maker
             #endregion
 
             #region NOVL
-
-            // elfFileMono = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay_comp.elf");
-            string ovlFileMono = Path.Combine(Program.ExecPath, "temp", "EmbeddedOverlay_comp.ovl");
 
             ProcessStartInfo nOVLInfo = new ProcessStartInfo
             {
@@ -406,7 +422,8 @@ namespace NPC_Maker
 
       
             p = Process.Start(nOVLInfo);
-            GetOutput(p, "Mono NOVL", ref CompileMsgs);
+            p.WaitForExit();
+            GetOutputMono(p, "Mono NOVL", ref CompileMsgs);
 
             if (!File.Exists(ovlFileMono))
             {
@@ -427,6 +444,8 @@ namespace NPC_Maker
         public static byte[] CompileUnderWindows(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
             #region GCC
+
+            Clean(new string[] { oFile, elfFile, ovlFile });
 
             ProcessStartInfo gccInfo = new ProcessStartInfo
             {
