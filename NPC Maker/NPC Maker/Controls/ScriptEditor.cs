@@ -50,7 +50,7 @@ namespace NPC_Maker
             Textbox_Script.Text = Script.Text;
 
             if (SyntaxHighlighting)
-                SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
+                SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting, _File, _Entry);
 
             Textbox_Script.TextChanged += Textbox_Script_TextChanged;
 
@@ -70,13 +70,13 @@ namespace NPC_Maker
             if (AutoParse)
                 DoParse(true);
 
-            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
+            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting, File, Entry);
         }
 
         private void ColorizeTimer_Tick(object sender, EventArgs e)
         {
             ColorizeTimer.Stop();
-            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
+            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting, File, Entry);
         }
 
         public void SetSyntaxHighlighting(bool Value)

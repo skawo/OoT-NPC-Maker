@@ -21,6 +21,7 @@ namespace NPC_Maker
         public static Style BoldRedStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
         public static Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         public static Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
+        public static Style DefineStyle = new TextStyle(Brushes.Black, null, FontStyle.Bold);
 
         public static Dictionary<List<string>, Style> StyleDict = new Dictionary<List<string>, Style>()
         {
@@ -51,7 +52,7 @@ namespace NPC_Maker
             { @"#define.+", SyntaxHighlighter.GreenStyle},               // Defines
         };
 
-        public static void ApplySyntaxHighlight(FastColoredTextBox txb, bool SyntaxHighlightingOn)
+        public static void ApplySyntaxHighlight(FastColoredTextBox txb, bool SyntaxHighlightingOn, NPCFile File, NPCEntry Entry)
         {
             if (String.IsNullOrEmpty(txb.Text))
                 return;
@@ -63,6 +64,11 @@ namespace NPC_Maker
 
             if (!SyntaxHighlightingOn)
                 return;
+
+            //List<string[]> Defines = Scripts.ScriptParser.GetDefines(txb.Text, File, Entry);
+
+            //foreach (string[] def in Defines)
+            //    r.SetStyle(SyntaxHighlighter.DefineStyle, @"\b" + def[1] + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             // Color in regexed values
             foreach (KeyValuePair<string, Style> regex in RegexDict)
