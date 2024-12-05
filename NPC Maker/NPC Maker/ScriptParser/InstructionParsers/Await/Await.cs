@@ -148,7 +148,7 @@ namespace NPC_Maker.Scripts
 
                                 var Func = CodeEntry.Functions.Find(x => x.FuncName.ToUpper() == SplitLine[2].ToUpper());
 
-                                if (Func.FuncName == null)
+                                if (Func == null)
                                     throw ParseException.CFunctionNotFound(SplitLine);
 
                                 Lists.ConditionTypes Condition = Lists.ConditionTypes.TRUE;

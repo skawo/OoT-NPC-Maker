@@ -13,7 +13,7 @@ namespace NPC_Maker.Scripts
 
                 var Func = CodeEntry.Functions.Find(x => x.FuncName.ToUpper() == SplitLine[1].ToUpper());
 
-                if (Func.FuncName == null)
+                if (Func == null)
                     throw ParseException.CFunctionNotFound(SplitLine);
 
                 var Destination = new ScriptVarVal(0, 0);
