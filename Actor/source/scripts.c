@@ -301,12 +301,14 @@ bool Scripts_InstructionFadeOut(NpcMaker* en, PlayState* playState, ScriptInstan
         playState->envCtx.screenFillColor[2] = Scripts_GetVarval(en, playState, in->varTypeB, in->B, false);
         playState->envCtx.fillScreen = 1;
     }
+    
+    int alphaCur = playState->envCtx.screenFillColor[3];
 
-    if (playState->envCtx.screenFillColor[3] != 255)
+    if (alphaCur != 255)
     {
         float rate = Scripts_GetVarval(en, playState, in->varTypeRate, in->rate, false);
 
-        if (rate + playState->envCtx.screenFillColor[3] >= 255)
+        if (rate + alphaCur >= 255)
             playState->envCtx.screenFillColor[3] = 255;
         else
         {
