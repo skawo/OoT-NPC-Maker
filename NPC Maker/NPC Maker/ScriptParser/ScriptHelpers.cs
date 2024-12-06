@@ -34,6 +34,14 @@ namespace NPC_Maker.Scripts
             return regex.Replace(Orig, Replacement);
         }
 
+        static public string ReplaceExprAndEscaped(this string Orig, string Expr, string Replacement, RegexOptions regexOptions = RegexOptions.None)
+        {
+            Orig = Orig.Replace($"${Expr}$", Replacement);
+            string pattern = $@"\b{Regex.Escape(Expr)}\b";
+            Regex regex = new Regex(pattern, regexOptions);
+            return regex.Replace(Orig, Replacement);
+        }
+
         static public string ReplaceFirstExpr(this string Orig, string Expr, string Replacement, RegexOptions regexOptions = RegexOptions.None)
         {
             string pattern = $@"\b{Regex.Escape(Expr)}\b";

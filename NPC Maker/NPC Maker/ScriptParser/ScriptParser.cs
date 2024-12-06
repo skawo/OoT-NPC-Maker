@@ -292,7 +292,7 @@ namespace NPC_Maker.Scripts
                             string s = String.Join(Environment.NewLine, ProcLines);
 
                             for (int f = 0; f < Args.Count; f++)
-                                s = ScriptHelpers.ReplaceExpr(s, ProcArgs[f], Args[f]);
+                                s = ScriptHelpers.ReplaceExprAndEscaped(s, ProcArgs[f], Args[f]);
 
                             Instructions = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
