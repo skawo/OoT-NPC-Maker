@@ -659,6 +659,7 @@ namespace NPC_Maker
                                 // The reason it needs to save both the cachedFile and cachedAddrs file is because we can only serialize cachedFile from the data in the json to compare if it changed
                                 // But we need to use cachedAddrsFile for the actual cache
                                 string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
+                                CodeString = CCode.ReplaceGameVersionInclude(CodeString);
                                 string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(CodeString))).Replace("+", "_").Replace("/", "-").Replace("=", "");
                                 string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_funcs_" + hash);
                                 string cachedAddrsFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_funcsaddrs_" + hash);
