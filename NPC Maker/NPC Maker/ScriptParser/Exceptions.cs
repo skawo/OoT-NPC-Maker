@@ -46,6 +46,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Procedure defined twice or more: ", String.Join(" ", _Line));
         }
 
+        public static ParseException IllegalProcedureNameError(string[] _Line)
+        {
+            return new ParseException("Invalid procedure name: ", String.Join(" ", _Line));
+        }
+
         public static ParseException CFunctionNotFound(string[] _Line)
         {
             return new ParseException("C Function not found: ", String.Join(" ", _Line));

@@ -288,26 +288,31 @@ namespace NPC_Maker.Scripts
 
                         foreach (string arg in ArgsPreprocessed)
                         {
-                            if (arg.StartsWith("$"))
+                            if (arg.StartsWith("\""))
                             {
                                 if (multiArg)
                                     throw ParseException.ArgsMalformedError(SplitRepLine);
                                 else
                                 {
-                                    multiArg = true;
-                                    curArg = $"{arg.TrimStart('$')}";
+                                    if (arg.EndsWith("\""))
+                                        Args.Add(arg.Trim('\"'));
+                                    else
+                                    {
+                                        multiArg = true;
+                                        curArg = $"{arg.TrimStart('\"')}";
+                                    }
                                 }
 
                                 continue;
                             }
 
-                            if (arg.EndsWith("$"))
+                            if (arg.EndsWith("\""))
                             {
                                 if (!multiArg)
                                     throw ParseException.ArgsMalformedError(SplitRepLine);
                                 else
                                 {
-                                    curArg = $"{curArg} {arg.TrimEnd('$')}";
+                                    curArg = $"{curArg} {arg.TrimEnd('\"')}";
                                     Args.Add(curArg);
                                     multiArg = false;
                                 }
