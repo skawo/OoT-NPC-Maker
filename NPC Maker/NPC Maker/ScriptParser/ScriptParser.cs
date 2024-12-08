@@ -263,7 +263,7 @@ namespace NPC_Maker.Scripts
                     else
                         outScript.ParseErrors.Add(ParseException.ProcDoubleError(SplitDefinition));
 
-                    int RecurCheck = ProcLines.FindIndex(x => x.StartsWith(ProcedureString, StringComparison.OrdinalIgnoreCase));
+                    int RecurCheck = ProcLines.FindIndex(x => x.StartsWith(ProcedureString + " ", StringComparison.OrdinalIgnoreCase));
 
                     // Error if procedure recursion is detected
                     if (RecurCheck != -1)
