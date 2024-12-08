@@ -276,10 +276,53 @@ namespace NPC_Maker.Scripts
                         string RepLine = Lines[ProcCallIndex];
                         string[] SplitRepLine = RepLine.Split(' ');
 
-                        List<string> Args = new List<string>();
+                        List<string> ArgsPreprocessed = new List<string>();
 
                         if (SplitRepLine.Length > 1)
-                            Args = SplitRepLine.Skip(1).ToList();
+                            ArgsPreprocessed = SplitRepLine.Skip(1).ToList();
+
+                        List<string> Args = new List<string>();
+                        string curArg = "";
+                        bool multiArg = false;
+
+
+                        foreach (string arg in ArgsPreprocessed)
+                        {
+                            if (arg.StartsWith("$"))
+                            {
+                                if (multiArg)
+                                    throw ParseException.ArgsMalformedError(SplitRepLine);
+                                else
+                                {
+                                    multiArg = true;
+                                    curArg = $"{arg.TrimStart('$')}";
+                                }
+
+                                continue;
+                            }
+
+                            if (arg.EndsWith("$"))
+                            {
+                                if (!multiArg)
+                                    throw ParseException.ArgsMalformedError(SplitRepLine);
+                                else
+                                {
+                                    curArg = $"{curArg} {arg.TrimEnd('$')}";
+                                    Args.Add(curArg);
+                                    multiArg = false;
+                                }
+
+                                continue;
+                            }
+
+                            if (!multiArg)
+                                Args.Add(arg);
+                            else
+                                curArg = $"{curArg} {arg}";
+                        }
+
+                        if (multiArg)
+                            throw ParseException.ArgsMalformedError(SplitRepLine);
 
                         Lines.RemoveAt(ProcCallIndex);
 

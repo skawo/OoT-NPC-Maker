@@ -37,7 +37,10 @@ namespace NPC_Maker.Scripts
         {
             return new ParseException($"Number of arguments doesn't match (Args should be: {String.Join(",", Args)}) ", String.Join(" ", _Line));
         }
-
+        public static ParseException ArgsMalformedError(string[] _Line)
+        {
+            return new ParseException($"Malformed arguments for procedure: ", String.Join(" ", _Line));
+        }
         public static ParseException ProcDoubleError(string[] _Line)
         {
             return new ParseException("Procedure defined twice or more: ", String.Join(" ", _Line));
