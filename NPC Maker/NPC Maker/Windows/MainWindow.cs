@@ -193,6 +193,8 @@ namespace NPC_Maker
             Combo_Waist_Horiz.SelectedIndex = SelectedEntry.WaistHorizAxis;
             Combo_Waist_Vert.SelectedIndex = SelectedEntry.WaistVertAxis;
 
+            ChkBox_ExistInAll.Checked = SelectedEntry.ExistInAllRooms;
+
             NumUpDown_HeadLimb.Value = SelectedEntry.HeadLimb;
             NumUpDown_WaistLimb.Value = SelectedEntry.WaistLimb;
             NumUpDown_LookAt_X.Value = (decimal)SelectedEntry.LookAtPositionOffsets[0];
