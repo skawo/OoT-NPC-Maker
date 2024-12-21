@@ -803,7 +803,7 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
             break;
         }
         case AWAIT_FOREVER:                         conditionMet = false; break;
-        case AWAIT_MOVEMENT_PATH_END:               conditionMet = Scripts_AwaitBool(en, playState, (en->stopped && (en->curPathNode >= en->curPathNumNodes)), C_TRUE); break;
+        case AWAIT_MOVEMENT_PATH_END:               conditionMet = Scripts_AwaitBool(en, playState, (en->stopped && (en->curPathNode == STOPPED_NODE)), C_TRUE); break;
         case AWAIT_TALKING_END:                     conditionMet = Scripts_AwaitBool(en, playState, en->talkingFinished, C_TRUE); break;
         case AWAIT_TEXTBOX_ON_SCREEN:               conditionMet = Scripts_AwaitBool(en, playState, Message_GetState(&playState->msgCtx) != TEXT_STATE_NONE, in->condition); break;
         case AWAIT_TEXTBOX_DRAWING:                 conditionMet = Scripts_AwaitBool(en, playState, playState->msgCtx.msgMode == MSGMODE_TEXT_DISPLAYING, in->condition); break;

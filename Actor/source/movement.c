@@ -466,7 +466,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                     }
                     else
                     {
-                        en->curPathNode = INVALID_NODE;
+                        en->curPathNode = STOPPED_NODE;
                         Setup_Animation(en, playState, ANIM_IDLE, true, false, false, !en->autoAnims, false); 
                         break;
                     }
