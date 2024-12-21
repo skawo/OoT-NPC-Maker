@@ -327,6 +327,8 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
         case MOVEMENT_TIMED_PATH:
         {
             // We don't do anything if the Path ID is 0 (we're using SharpOcarina's path IDs here, and path 0 doesn't exist) or if the path list address wasn't found.
+            // EDIT: SharpOcarina has changed the path indexes, so this is now wrong, but it can't be changed, or it'll break all previously made actors.
+            // Great!
             if (en->settings.pathId == INVALID_PATH || playState->setupPathList == NULL || en->curPathNode < 0)
                 break;
 
