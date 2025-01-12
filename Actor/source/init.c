@@ -1,3 +1,4 @@
+
 #include "../include/init.h"
 #include "../include/movement.h"
 #include "../include/scripts_defines.h"
@@ -86,6 +87,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->FindSceneHeaderFunction = &Scene_GetHeaderPtr;
     en->FindPathPtrFunction = &Scene_GetPathPtr;
     en->GetInternalMsgFunc = &Message_Get;
+    en->GetInternalMsgPtrFunc = &Message_GetMessageRAMAddr;
        
     for (int i = 0; i < 5; i++)
         en->CFuncs[i] = 0xFFFFFFFF;
