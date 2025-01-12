@@ -88,7 +88,8 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->FindPathPtrFunction = &Scene_GetPathPtr;
     en->GetInternalMsgFunc = &Message_Get;
     en->GetInternalMsgPtrFunc = &Message_GetMessageRAMAddr;
-       
+    en->GetInternalMsgDataPtrFunc = &Data_GetCustomMessage;
+
     for (int i = 0; i < 5; i++)
         en->CFuncs[i] = 0xFFFFFFFF;
     

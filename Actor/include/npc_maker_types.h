@@ -37,6 +37,10 @@ typedef struct InternalMsgEntry InternalMsgEntry;
 #ifndef GetInternalMessagePtrFunc
 	typedef void* GetInternalMessagePtrFunc(NpcMaker* en, PlayState* playState, s16 msgId);
 #endif
+
+#ifndef GetInternalMessageDataFunc
+	typedef InternalMsgEntry GetInternalMessageDataFunc(NpcMaker* en, PlayState* playState, int ID);
+#endif
  
 typedef struct NpcSettings
 {
@@ -320,6 +324,7 @@ typedef struct NpcMaker
 	GetPathPtrFunc* FindPathPtrFunction;
 	GetInternalMessageFunc* GetInternalMsgFunc;
 	GetInternalMessagePtrFunc* GetInternalMsgPtrFunc;
+    GetInternalMessageDataFunc* GetInternalMsgDataPtrFunc;
 
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

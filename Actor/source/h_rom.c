@@ -175,7 +175,7 @@ void Message_Get(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer)
     Rom_LoadDataFromObject(playState, en->actor.params, buffer, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->getSettingsFromRAMObject);
 }
 
-void* Message_GetCustomMessageRAMAddr(NpcMaker* en, PlayState* playState, s16 msgId)
+void* Message_GetMessageRAMAddr(NpcMaker* en, PlayState* playState, s16 msgId)
 {
     InternalMsgEntry msgdata = Data_GetCustomMessage(en, playState, msgId);
     void* ptr = Rom_GetObjectDataPtr(en->actor.params, playState);
