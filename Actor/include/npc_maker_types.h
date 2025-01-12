@@ -34,10 +34,6 @@ typedef struct InternalMsgEntry InternalMsgEntry;
 	typedef void GetInternalMessageFunc(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer);
 #endif
 
-#ifndef GetInternalMessageDataPtrFunc
-	typedef void* GetInternalMessageDataPtrFunc(NpcMaker* en, PlayState* playState, s16 msgId);
-#endif
-
 #ifndef GetInternalMessagePtrFunc
 	typedef void* GetInternalMessagePtrFunc(NpcMaker* en, PlayState* playState, s16 msgId);
 #endif
@@ -323,8 +319,7 @@ typedef struct NpcMaker
     GetSceneHeaderFunc* FindSceneHeaderFunction;
 	GetPathPtrFunc* FindPathPtrFunction;
 	GetInternalMessageFunc* GetInternalMsgFunc;
-    GetInternalMessagePtrFunc* GetInternalMsgPtrFunc;
-	GetInternalMessageDataPtrFunc* GetInternalMsgDataPtrFunc;
+	GetInternalMessagePtrFunc* GetInternalMsgPtrFunc;
 
     #if DEBUG_STRUCT == 1
         s32 dbgVar;
