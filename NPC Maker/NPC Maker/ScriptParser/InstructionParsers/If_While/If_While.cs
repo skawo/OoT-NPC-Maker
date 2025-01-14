@@ -210,10 +210,23 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.STICK_X:
                         case (int)Lists.IfSubTypes.STICK_Y:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 4, 5);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 3, sbyte.MinValue, sbyte.MaxValue);
+
+                                if (SplitLine.Length == 5)
+                                {
+                                    float valCur = (float)Value.Value;
+                                    float add = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 4, typeof(Lists.Controllers), ParseException.UnrecognizedController(SplitLine));
+
+                                    if (valCur < 0)
+                                        valCur -= add;
+                                    else
+                                        valCur += add;
+
+                                    Value.Value = valCur;
+                                }
 
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;
@@ -291,7 +304,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.IfSubTypes.BUTTON_HELD:
                         case (int)Lists.IfSubTypes.BUTTON_PRESSED:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 5);
                                 var Value = new ScriptVarVal();
                                 Value.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons), ParseException.UnrecognizedButton(SplitLine));
 
@@ -299,6 +312,14 @@ namespace NPC_Maker.Scripts
 
                                 if (SplitLine.Length == 4)
                                     Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
+
+                                if (SplitLine.Length == 5)
+                                {
+                                    float valCur = (float)Value.Value;
+                                    float add = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 4, typeof(Lists.Controllers), ParseException.UnrecognizedController(SplitLine));
+                                    valCur += add;
+                                    Value.Value = valCur;
+                                }
 
                                 Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Condition, EndIf, Else, LabelR));
                                 return Instructions;

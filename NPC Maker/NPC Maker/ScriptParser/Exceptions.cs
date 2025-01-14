@@ -341,6 +341,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Not a valid button: ", String.Join(" ", _Line));
         }
 
+        public static ParseException UnrecognizedController(string[] _Line)
+        {
+            return new ParseException("Not a valid controller: ", String.Join(" ", _Line));
+        }
+
         public static ParseException UnrecognizedDungeonItem(string[] _Line)
         {
             return new ParseException("Not a valid dungeon item: ", String.Join(" ", _Line));

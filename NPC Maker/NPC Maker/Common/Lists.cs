@@ -1633,6 +1633,14 @@ namespace NPC_Maker
             BTN_A = 0x8000,
         }
 
+        public enum Controllers
+        {
+            CONTROLLER_1 = 0,
+            CONTROLLER_2 = 0x10000,
+            CONTROLLER_3 = 0x20000,
+            CONTROLLER_4 = 0x30000,
+        }
+
         public enum MsgIcon
         {
             DEKU_STICK,

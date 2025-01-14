@@ -529,9 +529,58 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
         case IF_PLAYER_BEANS:                    
         case IF_PLAYER_SEEDS:                   branch = Scripts_IfValue(en, playState, gSaveContext.inventory.ammo[inventory_set_slots[in->subId - IF_PLAYER_BOMBS][1]], in, INT16); break;      
 
-        case IF_STICK_X:                        branch = Scripts_IfValue(en, playState, playState->state.input->cur.stick_x, in, INT8); break;
-        case IF_STICK_Y:                        branch = Scripts_IfValue(en, playState, playState->state.input->cur.stick_y, in, INT8); break;
+        case IF_STICK_X:                        
+        {
+            ScrInstrIf nn;
+            bcopy(in, &nn, sizeof(ScrInstrIf));
+            u8 controller = 0;
 
+            if (nn.value.flo < 0)
+            {
+                while (nn.value.flo <= -0x10000)
+                {
+                    nn.value.flo += 0x10000;
+                    controller++;
+                }
+            }
+            else
+            {
+                while (nn.value.flo >= 0x10000)
+                {
+                    nn.value.flo -= 0x10000;
+                    controller++;
+                }                
+            }
+
+            branch = Scripts_IfValue(en, playState, playState->state.input[controller].cur.stick_x, &nn, INT8); 
+            break;
+        }
+        case IF_STICK_Y:                        
+        {
+            ScrInstrIf nn;
+            bcopy(in, &nn, sizeof(ScrInstrIf));
+            u8 controller = 0;
+
+            if (nn.value.flo < 0)
+            {
+                while (nn.value.flo <= -0x10000)
+                {
+                    nn.value.flo += 0x10000;
+                    controller++;
+                }
+            }
+            else
+            {
+                while (nn.value.flo >= 0x10000)
+                {
+                    nn.value.flo -= 0x10000;
+                    controller++;
+                }                
+            }
+
+            branch = Scripts_IfValue(en, playState, playState->state.input[controller].cur.stick_y, &nn, INT8); 
+            break;
+        }
         case IF_CURRENT_STATE:                  
         {
             // Checks current state derived from collision.
@@ -614,13 +663,21 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
         }
         case IF_BUTTON_PRESSED: 
         {
-            bool pressed = CHECK_BTN_ALL(playState->state.input->press.button, (u32)Scripts_GetVarval(en, playState, in->vartype, in->value, false));
+            u32 btn = (u32)Scripts_GetVarval(en, playState, in->vartype, in->value, false);
+            u8 controller = btn >> 16;
+            btn &= 0xFFFF;
+
+            bool pressed = CHECK_BTN_ALL(playState->state.input[controller].press.button, btn);
             branch = Scripts_IfBool(en, playState, pressed, in); 
             break;
         }
         case IF_BUTTON_HELD: 
         {
-            bool held = CHECK_BTN_ALL(playState->state.input->cur.button, (u32)Scripts_GetVarval(en, playState, in->vartype, in->value, false));
+            u32 btn = (u32)Scripts_GetVarval(en, playState, in->vartype, in->value, false);
+            u8 controller = btn >> 16;
+            btn &= 0xFFFF;
+
+            bool held = CHECK_BTN_ALL(playState->state.input[controller].cur.button, btn);
             branch = Scripts_IfBool(en, playState, held, in); 
             break;
         }
@@ -813,10 +870,75 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
         case AWAIT_CUTSCENE_FRAME:                  conditionMet = Scripts_AwaitValue(en, playState, playState->csCtx.frames, UINT16, in->condition, in->varType, in->value); break;
         case AWAIT_TIME_OF_DAY:                     conditionMet = Scripts_AwaitValue(en, playState, gSaveContext.dayTime, UINT16, in->condition, in->varType, in->value); break;
         case AWAIT_TEXTBOX_NUM:                     conditionMet = Scripts_AwaitValue(en, playState, en->textboxNum + 1, INT8, C_MOREOREQ, in->varType, in->value); break;
-        case AWAIT_STICK_X:                         conditionMet = Scripts_AwaitValue(en, playState, playState->state.input->cur.stick_x, INT8, in->condition, in->varType, in->value); break;
-        case AWAIT_STICK_Y:                         conditionMet = Scripts_AwaitValue(en, playState, playState->state.input->cur.stick_y, INT8, in->condition, in->varType, in->value); break;
-        case AWAIT_BUTTON_HELD:                     conditionMet = CHECK_BTN_ALL(playState->state.input->cur.button, (u32)Scripts_GetVarval(en, playState, in->varType, in->value, false)); break;
-        case AWAIT_BUTTON_PRESSED:                  conditionMet = CHECK_BTN_ALL(playState->state.input->press.button, (u32)Scripts_GetVarval(en, playState, in->varType, in->value, false)); break;
+        case AWAIT_STICK_X:                         
+        {
+            ScriptVarval v = in->value;
+            u8 controller = 0;
+            
+            if (v.flo < 0)
+            {
+                while (v.flo <= -0x10000)
+                {
+                    v.flo += 0x10000;
+                    controller++;
+                }
+            }
+            else
+            {
+                while (v.flo >= 0x10000)
+                {
+                    v.flo -= 0x10000;
+                    controller++;
+                }                
+            }
+
+            conditionMet = Scripts_AwaitValue(en, playState, playState->state.input[controller].cur.stick_x, INT8, in->condition, in->varType, v); 
+            break;
+
+        }
+        case AWAIT_STICK_Y:                         
+        {
+            ScriptVarval v = in->value;
+            u8 controller = 0;
+            
+            if (v.flo < 0)
+            {
+                while (v.flo <= -0x10000)
+                {
+                    v.flo += 0x10000;
+                    controller++;
+                }
+            }
+            else
+            {
+                while (v.flo >= 0x10000)
+                {
+                    v.flo -= 0x10000;
+                    controller++;
+                }                
+            }
+
+            conditionMet = Scripts_AwaitValue(en, playState, playState->state.input[controller].cur.stick_y, INT8, in->condition, in->varType, v); 
+            break;
+        }
+        case AWAIT_BUTTON_HELD:                     
+        {
+            u32 btn = (u32)Scripts_GetVarval(en, playState, in->varType, in->value, false);
+            u8 controller = btn >> 16;
+            btn &= 0xFFFF;
+
+            conditionMet = CHECK_BTN_ALL(playState->state.input[controller].cur.button, btn); 
+            break;
+        }
+        case AWAIT_BUTTON_PRESSED:                  
+        {
+            u32 btn = (u32)Scripts_GetVarval(en, playState, in->varType, in->value, false);
+            u8 controller = btn >> 16;
+            btn &= 0xFFFF;
+
+            conditionMet = CHECK_BTN_ALL(playState->state.input[controller].press.button, btn); 
+            break;
+        }
         case AWAIT_ANIMATION_END:                   
         {
             if (firstRun)

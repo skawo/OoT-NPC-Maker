@@ -82,20 +82,41 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.AwaitSubTypes.STICK_X:
                         case (int)Lists.AwaitSubTypes.STICK_Y:
                             {
-                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 4);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 4, 5);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
                                 var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 3, sbyte.MinValue, sbyte.MaxValue);
+
+                                if (SplitLine.Length == 5)
+                                {
+                                    float valCur = (float)Val.Value;
+                                    float add = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 4, typeof(Lists.Controllers), ParseException.UnrecognizedController(SplitLine));
+                                    
+                                    if (valCur < 0)
+                                        valCur -= add;
+                                    else
+                                        valCur += add;
+
+                                    Val.Value = valCur;
+                                }
 
                                 return new InstructionAwait((byte)SubID, Val, Condition);
                             }
                         case (int)Lists.AwaitSubTypes.BUTTON_HELD:
                         case (int)Lists.AwaitSubTypes.BUTTON_PRESSED:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
 
                                 var Val = new ScriptVarVal();
                                 Val.Value = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.Buttons), ParseException.UnrecognizedButton(SplitLine));
+
+                                if (SplitLine.Length == 4)
+                                {
+                                    float valCur = (float)Val.Value;
+                                    float add = (float)ScriptHelpers.Helper_GetEnumByName(SplitLine, 3, typeof(Lists.Controllers), ParseException.UnrecognizedController(SplitLine));
+                                    valCur += add;
+                                    Val.Value = valCur;
+                                }
 
                                 return new InstructionAwait((byte)SubID, Val, Lists.ConditionTypes.EQUALTO);
 
