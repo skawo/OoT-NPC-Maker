@@ -810,7 +810,10 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
 
     // On the first run, generate a new random number and store it.
     if (firstRun)
+    {
         script->tempValues[0] = Rand_Next();
+        script->tempValues[1] = script->tempValues[0];
+    }
     // On every next run, generate the next number and store it, then restore the number from the first run.
     // This is so that if a random value await is used, the same random value will be checked every time, and not a random value generated every frame.
     // After the function runs, we restore the seed that's generated before seeding with the first-run seed,
@@ -831,6 +834,7 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
             script->curInstrNum++; 
             Rand_Seed(script->tempValues[1]);
             Rand_Next();
+            Scripts_FreeTemp(script);
             return SCRIPT_STOP;
         }
         case AWAIT_RESPONSE:                
