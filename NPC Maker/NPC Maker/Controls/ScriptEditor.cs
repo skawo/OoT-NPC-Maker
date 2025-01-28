@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace NPC_Maker
 {
@@ -14,9 +15,11 @@ namespace NPC_Maker
         private bool AutoParse;
         public ScriptEntry Script;
         private NPCFile File;
+        private Scripts.BScript Output = null;
 
         private readonly System.Windows.Forms.Timer AutoParseTimer;
         private readonly System.Windows.Forms.Timer ColorizeTimer;
+        private readonly System.Windows.Forms.Timer ResultsTimer;
 
         public ScriptEditor(ref NPCEntry _Entry, ref NPCFile _File, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
@@ -33,6 +36,14 @@ namespace NPC_Maker
                 Interval= (int)Program.Settings.ParseTime / 2,
             };
             ColorizeTimer.Tick += ColorizeTimer_Tick;
+
+            ResultsTimer = new System.Windows.Forms.Timer
+            {
+                Interval = 100,
+            };
+            ResultsTimer.Tick += ResultsTimer_Tick;
+
+            ResultsTimer.Start();
 
             Init(ref _Entry, ref _File, _Script, _SyntaxHighlighting, _AutoParse);
         }
@@ -79,6 +90,26 @@ namespace NPC_Maker
             SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting, File, Entry);
         }
 
+        private void ResultsTimer_Tick(object sender, EventArgs e)
+        {
+            ResultsTimer.Stop();
+
+            if (Output != null)
+            {
+                Textbox_ParseErrors.Clear();
+                Script.ParseErrors.Clear();
+
+                if (Output.ParseErrors.Count() == 0)
+                    Textbox_ParseErrors.Text = "Parsed successfully!";
+                else
+                    Textbox_ParseErrors.Text = String.Join(Environment.NewLine, Output.ParseErrors);
+
+                Output = null;
+            }
+
+            ResultsTimer.Start();
+        }
+
         public void SetSyntaxHighlighting(bool Value)
         {
             SyntaxHighlighting = Value;
@@ -106,34 +137,30 @@ namespace NPC_Maker
             ColorizeTimer.Start();
         }
 
-        private Scripts.BScript DoParse(bool GetBytes)
+
+
+        private void DoParse(bool GetBytes)
         {
-            string[] Lines = Textbox_Script.Text.Replace(";", Environment.NewLine).Split(new[] { "\n" }, StringSplitOptions.None);
-            Range r = new Range(Textbox_Script, 0, 0, Textbox_Script.Text.Length, Lines.Length);
-            r.ClearStyle(SyntaxHighlighter.ErrorStyle);
+            Thread th = new Thread(() => 
+            {
+                Scripts.ScriptParser Parser = new Scripts.ScriptParser(File, Entry, Script.Text, File.GlobalHeaders);
+                Output = Parser.ParseScript(Script.Name, GetBytes);
+            });
 
-            Scripts.ScriptParser Parser = new Scripts.ScriptParser(File, Entry, Script.Text, File.GlobalHeaders);
-            Textbox_ParseErrors.Clear();
-
-            Script.ParseErrors.Clear();
-            Scripts.BScript Output = Parser.ParseScript(Script.Name, GetBytes);
-
-            if (Output.ParseErrors.Count() == 0)
-                Textbox_ParseErrors.Text = "Parsed successfully!";
-            else
-                Textbox_ParseErrors.Text = String.Join(Environment.NewLine, Output.ParseErrors);
-
-            return Output;
+            th.Start();
+            return;
         }
 
         private void Button_TryParse_Click(object sender, EventArgs e)
         {
-            Scripts.BScript Output = DoParse(true);
+            DoParse(true);
 
 #if DEBUG
 
-            Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
-            Dbg.Show();
+            //Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
+            //Dbg.Show();
+
+
 
 #endif
 
