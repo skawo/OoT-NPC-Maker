@@ -94,18 +94,23 @@ namespace NPC_Maker
         {
             ResultsTimer.Stop();
 
-            if (Output != null)
+            try
             {
-                Textbox_ParseErrors.Clear();
-                Script.ParseErrors.Clear();
+                if (Output != null)
+                {
+                    Textbox_ParseErrors.Clear();
+                    Script.ParseErrors.Clear();
 
-                if (Output.ParseErrors.Count() == 0)
-                    Textbox_ParseErrors.Text = "Parsed successfully!";
-                else
-                    Textbox_ParseErrors.Text = String.Join(Environment.NewLine, Output.ParseErrors);
+                    if (Output.ParseErrors.Count() == 0)
+                        Textbox_ParseErrors.Text = "Parsed successfully!";
+                    else
+                        Textbox_ParseErrors.Text = String.Join(Environment.NewLine, Output.ParseErrors);
 
-                Output = null;
+                    Output = null;
+                }
             }
+            catch (Exception)
+            { }
 
             ResultsTimer.Start();
         }
@@ -143,8 +148,13 @@ namespace NPC_Maker
         {
             Thread th = new Thread(() => 
             {
-                Scripts.ScriptParser Parser = new Scripts.ScriptParser(File, Entry, Script.Text, File.GlobalHeaders);
-                Output = Parser.ParseScript(Script.Name, GetBytes);
+                try
+                {
+                    Scripts.ScriptParser Parser = new Scripts.ScriptParser(File, Entry, Script.Text, File.GlobalHeaders);
+                    Output = Parser.ParseScript(Script.Name, GetBytes);
+                }
+                catch (Exception)
+                { }
             });
 
             th.Start();
