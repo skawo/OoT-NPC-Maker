@@ -57,7 +57,7 @@ namespace NPC_Maker
             if (String.IsNullOrEmpty(txb.Text))
                 return;
 
-            Range r = new Range(txb, 0, 0, txb.Text.Length, txb.LinesCount);
+            Range r = new Range(txb, 0, 0, txb.Text.Length - 1, txb.LinesCount - 1);
 
             txb.ClearStyle(StyleIndex.All);
 
