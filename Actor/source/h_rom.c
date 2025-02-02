@@ -1,14 +1,14 @@
 #include "../include/h_rom.h"
 
-inline bool Rom_IsObjectCompressed(int objId)
+bool Rom_IsObjectCompressed(int objId)
 {
-    return Rom_GetObjectROMAddr(objId).End != 0;
+    RomFile* rv = Rom_GetObjectVROMAddr(objId);
+    return Rom_GetPhysicalROMAddrFromVirtual(rv->vromStart).End != 0;
 }
 
-RomSection Rom_GetObjectROMAddr(int objId)
+inline RomFile* Rom_GetObjectVROMAddr(int objId)
 {
-    RomSection* obj = &objectTable[objId];
-    return Rom_GetPhysicalROMAddrFromVirtual(obj->Start);
+    return (RomFile*)&objectTable[objId];
 }
 
 RomSection Rom_GetPhysicalROMAddrFromVirtual(u32 virtual)
@@ -39,21 +39,21 @@ RomSection Rom_GetPhysicalROMAddrFromVirtual(u32 virtual)
 // Loads data from given object directly from the cartridge (if it's not compressed!)
 void Rom_LoadObject(int objId, void *dest)
 {
-    RomSection obj = Rom_GetObjectROMAddr(objId);
+    RomFile* obj = Rom_GetObjectVROMAddr(objId);
 
     #ifdef OOT_MQ_DEBUG_PAL
-        DmaMgr_SendRequest1(dest, obj.Start, obj.End - obj.Start, "", __LINE__);
+        DmaMgr_SendRequest1(dest, obj->vromStart, obj->vromEnd - obj->vromStart, "", __LINE__);
     #else
-        DmaMgr_SendRequest1(dest, obj.Start, obj.End - obj.Start);
+        DmaMgr_SendRequest1(dest, obj->vromStart, obj->vromEnd - obj->vromStart);
     #endif
 }
 
 // Loads data from given object directly from the cartridge (if it's not compressed!)
-void Rom_LoadDataFromObjectFromROM(int objId, void* dest, u32 fileOffs, size_t size)
+void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t size)
 {
-    RomSection obj = Rom_GetObjectROMAddr(objId);
+    RomFile* obj = Rom_GetObjectVROMAddr(objId);
 
-    if (obj.Start == 0)
+    if (obj->vromStart == 0)
     {
         #if LOGGING == 1
             osSyncPrintf("_Object %4d was not found!", objId);
@@ -62,10 +62,16 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* dest, u32 fileOffs, size_t s
         return;
     }
 
-    if (size > obj.End - (obj.Start + fileOffs))
-        size = obj.End - (obj.Start + fileOffs);
+    if (size > obj->vromEnd - (obj->vromStart + fileOffs))
+        size = obj->vromEnd - (obj->vromStart + fileOffs);
 
-    u32 start = obj.Start + fileOffs;
+    u32 start = obj->vromStart + fileOffs;
+
+    u8 buf[16];
+    void* dest = ram;
+
+    if (size < 16)
+        dest = buf;
 
     #if LOGGING == 1
         osSyncPrintf("_Loading 0x%08x bytes from ROM at 0x%08x", size, start);
@@ -77,6 +83,8 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* dest, u32 fileOffs, size_t s
         DmaMgr_SendRequest1(dest, start, size);
     #endif
 
+    if (size < 16)
+        bcopy(buf, ram, size);
 }
 
 void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dest, u32 fileOffs, size_t size, bool fromRam)
