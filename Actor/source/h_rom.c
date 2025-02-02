@@ -69,18 +69,22 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
 
     u8 buf[16];
     void* dest = ram;
+    size_t sz = size;
 
     if (size < 16)
+    {
+        sz = 16;
         dest = buf;
+    }
 
     #if LOGGING == 1
         osSyncPrintf("_Loading 0x%08x bytes from ROM at 0x%08x", size, start);
     #endif    
 
     #ifdef OOT_MQ_DEBUG_PAL
-        DmaMgr_SendRequest1(dest, start, size, "", __LINE__);
+        DmaMgr_SendRequest1(dest, start, sz, "", __LINE__);
     #else
-        DmaMgr_SendRequest1(dest, start, size);
+        DmaMgr_SendRequest1(dest, start, sz);
     #endif
 
     if (size < 16)
