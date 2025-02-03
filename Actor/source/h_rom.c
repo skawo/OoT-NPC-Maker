@@ -56,7 +56,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
     if (obj->vromStart == 0)
     {
         #if LOGGING == 1
-            osSyncPrintf("_Object %4d was not found!", objId);
+            is64Printf("_Object %4d was not found!\n", objId);
         #endif       
 
         return;
@@ -78,7 +78,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
     }
 
     #if LOGGING == 1
-        osSyncPrintf("_Loading 0x%08x bytes from ROM at 0x%08x", size, start);
+        is64Printf("_Loading 0x%08x bytes from ROM at 0x%08x\n", size, start);
     #endif    
 
     #ifdef OOT_MQ_DEBUG_PAL
@@ -100,7 +100,7 @@ void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dest, u32 fil
         if (ptr == NULL)
         {
             #if LOGGING == 1
-                osSyncPrintf("_The file to load from was not found in RAM!");
+                is64Printf("_The file to load from was not found in RAM!\n");
             #endif   
 
             return;
@@ -120,7 +120,7 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
         return bankIndex;
 
     #if LOGGING == 1
-        osSyncPrintf("_Loading object %4d...", objId);
+        is64Printf("_Loading object %4d...\n", objId);
     #endif   
 
     if (!Object_IsLoaded(&playState->objectCtx, Object_GetIndex(&playState->objectCtx, objId)))
@@ -132,7 +132,7 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
     else
     {
         #if LOGGING == 1
-            osSyncPrintf("_It's already loaded.");
+            is64Printf("_It's already loaded.\n");
         #endif         
     }
 
