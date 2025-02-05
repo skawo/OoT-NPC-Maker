@@ -184,13 +184,20 @@ void Message_Overwrite(NpcMaker* en, PlayState* playState, s16 msgId)
 void Message_Get(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer)
 {
     InternalMsgEntry msgdata = Data_GetCustomMessage(en, playState, msgId);
-    Rom_LoadDataFromObject(playState, en->actor.params, buffer, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->getSettingsFromRAMObject);
+
+    if (en->getSettingsFromRAMObject)
+        Rom_LoadDataFromObject(playState, en->actor.params, buffer, en->messagesDataOffset + msgdata.offset, msgdata.msgLen, en->getSettingsFromRAMObject);
+    else
+        bcopy((void*)(en->messagesDataOffset + msgdata.offset), buffer, msgdata.msgLen);
 }
 
 void* Message_GetMessageRAMAddr(NpcMaker* en, PlayState* playState, s16 msgId)
 {
     InternalMsgEntry msgdata = Data_GetCustomMessage(en, playState, msgId);
-    void* ptr = Rom_GetObjectDataPtr(en->actor.params, playState);
+    void* ptr = 0;
+    
+    if (en->getSettingsFromRAMObject)
+        ptr = Rom_GetObjectDataPtr(en->actor.params, playState);
 
     return AADDR(ptr, en->messagesDataOffset + msgdata.offset);
 }

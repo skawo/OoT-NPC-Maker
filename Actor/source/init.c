@@ -309,8 +309,20 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     bcopy(buffer, &en->settings, sizeof(NpcSettings));
     u32 offset = sizeof(NpcSettings);
 
-    en->messagesDataOffset = AVAL(buffer, u32, offset + 4);
-    offset += AVAL(buffer, u32, offset);
+    if (en->getSettingsFromRAMObject)
+    {
+        en->messagesDataOffset = AVAL(buffer, u32, offset + 4);
+        offset += AVAL(buffer, u32, offset);
+    }
+    else
+    {
+        u32 len = AVAL(buffer, u32, offset);
+        u8* msgBuf = ZeldaArena_Malloc(len - 8);
+        bcopy(buffer + offset + 8, msgBuf, len - 8);
+        en->messagesDataOffset = (u32)msgBuf;
+
+        offset += len;
+    }
 
     SectionLoad sLoadList[] = 
     {
