@@ -103,7 +103,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     
     if (en->dummyMesEntry == NULL)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: WARNING: Did not find message %4x... \n", en->npcId, DUMMY_MESSAGE);
         #endif
     }
@@ -114,7 +114,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
 u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 entryAddress,
                       u32* allocDest, u16* entriesNumberOut,  u32 entrySize, u32 nullSize, bool noCopy, s32 blockSize)
 {
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Loading a section.\n");
     #endif
 
@@ -144,7 +144,7 @@ u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset
             {
                 *entriesNumberOut = 0;
 
-                #if LOGGING == 1
+                #if LOGGING > 0
                     is64Printf("_Failed to allocate section!\n");
                 #endif
             }
@@ -154,7 +154,7 @@ u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset
     }
     else
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_No entries defined for section.\n");
         #endif        
 
@@ -175,7 +175,7 @@ void Setup_ScriptVars(NpcMaker* en, void** ptr, u32 count)
 
     if (*ptr == NULL && count != 0)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Could not allocate script variables!\n", en->npcId);
         #endif
     }
@@ -185,17 +185,16 @@ void Setup_ScriptVars(NpcMaker* en, void** ptr, u32 count)
 
 static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 len)
 {
-    #if LOGGING == 1
-        is64Printf("_Allocating %2d bytes\n", len);
+    #if LOGGING > 0
+        is64Printf("_Allocating %2d bytes for embedded overlay.\n", len);
     #endif
-
 
     u32 ovlOffset = AVAL(buffer + offset + len, u32, -4);
     OverlayRelocationSection* ovl = (OverlayRelocationSection*)(buffer + offset + len - ovlOffset);
 
     u8* addr = ZeldaArena_Malloc(len + ovl->bssSize);
     
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Copying overlay to 0x%8x\n", addr);
     #endif
     
@@ -204,21 +203,21 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
    
     ovlOffset = AVAL(addr + len, u32, -4);
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Ovl Offset is at 0x%8x\n", ovlOffset);
     #endif
 
     ovl = (OverlayRelocationSection*)(addr + len - ovlOffset);
 
     
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Relocating section is at 0x%8x\n", ovl);
         is64Printf("_Relocations num is %2d\n", ovl->nRelocations);
     #endif
 
     Overlay_Relocate(addr, ovl, (u32*)0x80800000);
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Clearing bss...\n");
     #endif
     
@@ -228,7 +227,7 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
     int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
     bzero(ovl, size);   
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Invalidating cache...\n");
     #endif
 
@@ -243,7 +242,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     u16 settingsObjectId = en->actor.params;
     en->npcId = en->actor.shape.rot.z;
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Loading NPC Entry %2d from object %4d.\n", en->npcId, settingsObjectId);
     #endif
 
@@ -255,8 +254,8 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 
     if (en->getSettingsFromRAMObject)
     {
-        #if LOGGING == 1
-            is64Printf("_Loading settings file into RAM...\n");
+        #if LOGGING > 0
+            is64Printf("_%2d: _Loading settings file into RAM...\n", en->npcId);
         #endif  
 
         Rom_LoadObjectIfUnloaded(playState, settingsObjectId);
@@ -271,7 +270,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     // If the selected entry id is bigger than the number of entries, exit.
     if (en->npcId >= numEntries)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_NPC Entry %2d not found in file\n", en->npcId);
         #endif
 
@@ -285,7 +284,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     // If the entry offset is 0, the actor was nulled.
     if (entryAddress == 0)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_NPC Entry %2d is null.\n", en->npcId);
         #endif
 
@@ -299,7 +298,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     // We load the whole entry here to avoid multiple tiny reads from ROM.
     u8* buffer = ZeldaArena_Malloc(entrySize);
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_%2d: Loading entry size bytes: 0x%08x\n", en->npcId, entrySize);
     #endif
 
@@ -333,8 +332,8 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         {.allocDest = (u32*)&en->scripts,     .entriesNumberOut = NULL,                 .entrySize = 0,                          .nullBlockSize = NULL_SCRIPTS_BLOCK_SIZE,   .noCopy = true},
     };
 
-    #if LOGGING == 1
-        is64Printf("_Loading sections: animations, extra display lists, colors, segment data, overlay, scripts.\n");
+    #if LOGGING > 0
+        is64Printf("_%2d: _Loading sections: animations, extra display lists, colors, segment data, overlay, scripts.\n", en->npcId);
     #endif
 
     for (int i = 0; i < ARRAY_COUNT(sLoadList); i++)
@@ -342,13 +341,13 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         // Load Overlay
         if (i == 4)
         {
-            #if LOGGING == 1
+            #if LOGGING > 0
                 is64Printf("_Loading embedded overlay...\n");
             #endif
 
             int overlayLen = AVAL(buffer, u32, offset);
 
-            #if LOGGING == 1
+            #if LOGGING > 0
                 is64Printf("_Size: 0x%8x", overlayLen);
             #endif
 
@@ -361,7 +360,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 
                 en->embeddedOverlay = Setup_LoadEmbeddedOverlay(en, playState, buffer, offset, overlayLen);
 
-                #if LOGGING == 1
+                #if LOGGING > 0
                     is64Printf("_Embedded overlay loaded!\n");
                 #endif
 
@@ -369,7 +368,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             }
             else
             {
-                #if LOGGING == 1
+                #if LOGGING > 0
                     is64Printf("_There is no embedded overlay.\n");
                 #endif
 
@@ -391,7 +390,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
                                    size);
     }
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_%2d: Allocating script variables...\n", en->npcId);
     #endif  
 
@@ -426,7 +425,7 @@ void Setup_Objects(NpcMaker* en, PlayState* playState)
 
 void Setup_Misc(NpcMaker* en, PlayState* playState)
 {
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_%2d: Setting up collision with radius %04d, height %04d, yoffs %04d\n", 
                      en->npcId, en->settings.collisionRadius, en->settings.collisionHeight, en->settings.collisionyShift);
     #endif
@@ -444,7 +443,7 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
     
     if (en->settings.castsShadow)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Setting up a shadow with radius %04d.\n", en->npcId, en->settings.shadowRadius);
         #endif
 
@@ -505,7 +504,7 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
 
     if (en->scripts != NULL)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Allocating space for scripts: 0x%8x\n", en->npcId, en->scripts->numScripts * sizeof(ScriptInstance));
         #endif
 
@@ -527,7 +526,7 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
             Scripts_FreeTemp(&en->scriptInstances[i]);
         }
 
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Script init complete.\n", en->npcId);
         #endif            
     }
@@ -546,7 +545,7 @@ void Setup_Path(NpcMaker* en, PlayState* playState, int pathId)
     {
         en->curPathNode = INVALID_NODE;
 
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Tried to setup an invalid path.\n", en->npcId);
         #endif  
 
@@ -555,7 +554,7 @@ void Setup_Path(NpcMaker* en, PlayState* playState, int pathId)
 
     if (en->curPathNumNodes == 0)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Requested path doesn't exist, or path list was not found.\n", en->npcId);
         #endif     
 
@@ -571,7 +570,7 @@ void Setup_Path(NpcMaker* en, PlayState* playState, int pathId)
 
 void Setup_Model(NpcMaker* en, PlayState* playState)
 {
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_%2d: Setting up model.\n", en->npcId);
     #endif
     
@@ -580,7 +579,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         // We assume the model is in Segment 6.
         en->settings.skeleton = OFFSET_ADDRESS(6, en->settings.skeleton);
 
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Setting up skeleton at 0x%08x.\n", en->npcId, en->settings.skeleton);
         #endif        
 
@@ -620,7 +619,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         }
     }
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_%2d: Setting default animation.\n", en->npcId);
     #endif
 
@@ -630,7 +629,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         Update_Animations(en, playState);
     }
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_%2d: Detecting static ExDlists.\n", en->npcId);
     #endif
 
@@ -652,7 +651,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         }
     }
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_%2d: Model initialized.\n", en->npcId);
     #endif
 }
@@ -664,7 +663,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
 
     if (en->animations == NULL)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Animations are undefined, or couldn't be allocated.\n", en->npcId, animId);
         #endif      
 
@@ -675,14 +674,14 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
     {
         if (en->numAnims <= animId)
         {
-            #if LOGGING == 1
+            #if LOGGING > 0
                 is64Printf("_%2d: Tried to set animation ID %02d, but it wasn't defined.\n", en->npcId, animId);
             #endif
 
             return;
         }
 
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_%2d: Setting animation ID: %02d\n", en->npcId, animId);
         #endif
 
@@ -749,7 +748,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
             {
                 animAddr = OFFSET_ADDRESS(4, animAddr);
                 
-                #if LOGGING == 1
+                #if LOGGING > 1
                     is64Printf("_Link animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
                 #endif
 
@@ -774,7 +773,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
             {
                 animAddr = OFFSET_ADDRESS(6, animAddr);
 
-                #if LOGGING == 1
+                #if LOGGING > 1
                     is64Printf("_Normal animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
                 #endif
 
@@ -782,7 +781,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                 {
                     if (!Rom_SetObjectToActor(actor, playState, object, rFileStart))
                     {
-                        #if LOGGING == 1
+                        #if LOGGING > 0
                             is64Printf("_Animation needs object 0x%08x, but it's not loaded, so the animation won't play\n", object);
                         #endif
 

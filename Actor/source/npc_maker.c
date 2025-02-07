@@ -19,7 +19,7 @@ float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset, float* A
     if (offset == 0xFFFFFFFF)
         return 0;
 
-    #if LOGGING == 1
+    #if LOGGING > 2
         is64Printf("_Running embedded function %8x\n", en->embeddedOverlay + offset);
     #endif
 
@@ -39,7 +39,7 @@ float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset, float* A
         out = f(en, playState, Args[0], Args[1], Args[2], Args[3], Args[4], Args[5], Args[6], Args[7]);
     }
 
-    #if LOGGING == 1
+    #if LOGGING > 2
         is64Printf("_Embedded function finished.\n");
     #endif
 
@@ -48,8 +48,8 @@ float NpcMaker_RunCFunc(NpcMaker* en, PlayState* playState, u32 offset, float* A
 
 static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
 {
-    #if LOGGING == 1
-        is64Printf("___NPC MAKER DEBUG___\n");
+    #if LOGGING > 0
+        is64Printf("___NPC MAKER SPAWNED___\n");
     #endif
 }
 
@@ -78,7 +78,7 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
     Setup_Misc(en, playState);
     Setup_Model(en, playState);
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_%2d: Initialization complete.\n", en->npcId);
     #endif    
 
@@ -89,7 +89,7 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 {
-    #if LOGGING == 1
+    #if LOGGING > 1
         is64Printf("_%2d: ======== Actor update, frame %2d ======== \n", en->npcId, playState->gameplayFrames);
     #endif
 
@@ -153,14 +153,14 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 
     Update_Misc(en, playState);
 
-    #if LOGGING == 1
+    #if LOGGING > 1
         is64Printf("_%2d: Actor update complete.\n", en->npcId);
     #endif
 }
 
 static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
 {
-    #if LOGGING == 1
+    #if LOGGING > 1
         is64Printf("_%2d: Drawing actor.\n", en->npcId);
     #endif
 
@@ -199,14 +199,14 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
             NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
     }
 
-    #if LOGGING == 1
+    #if LOGGING > 1
         is64Printf("_%2d: Drawing actor complete.\n", en->npcId);
     #endif
 }
 
 static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
 {
-    #if LOGGING == 1
+    #if LOGGING > 1
         is64Printf("_%2d: Destroying actor.\n", en->npcId);
     #endif
 
@@ -239,7 +239,7 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
 	
     SkelAnime_Free(&en->skin.skelAnime, playState);	
 
-    #if LOGGING == 1
+    #if LOGGING > 1
         is64Printf("_%2d: Destroying actor complete.\n", en->npcId);
     #endif
 }

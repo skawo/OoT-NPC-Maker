@@ -142,7 +142,6 @@ extern void is64Printf(const char* fmt, ...);
         //is64Printf does not really work in 1.0. Substitute your own!          
     #endif		
 
-
 typedef enum item_award_upgrades
 {
 	UPGRADE_MAGIC = 0xF0,

@@ -27,13 +27,13 @@ inline ScrInstr* Scripts_GetInstrPtr(ScriptInstance* script, u32 instruction_num
 
 void Scripts_Main(NpcMaker* en, PlayState* playState)
 {
-    #if LOGGING == 1
+    #if LOGGING > 2
         is64Printf("_%2d: ******* Scripts ******* \n", en->npcId, playState->gameplayFrames);
     #endif
     
     for (int i = 0; i < en->scripts->numScripts; i++)
     {
-        #if LOGGING == 1
+        #if LOGGING > 3
             en->curScriptNum = i;
         #endif
 
@@ -57,7 +57,7 @@ void Scripts_Main(NpcMaker* en, PlayState* playState)
 
                 if (script->waitTimer != 0)
                 {
-                    #if LOGGING == 1
+                    #if LOGGING > 3
                         is64Printf("_[%2d, %1d]: WAITING for %02d more frames.\n", en->npcId, en->curScriptNum, script->waitTimer);
                     #endif
 
@@ -69,7 +69,7 @@ void Scripts_Main(NpcMaker* en, PlayState* playState)
         }   
     }
 
-    #if LOGGING == 1
+    #if LOGGING > 2
         is64Printf("_%2d: ******* Scripts End *******\n", en->npcId, playState->gameplayFrames);
     #endif
 }
@@ -150,7 +150,7 @@ bool Scripts_Execute(NpcMaker* en, PlayState* playState, ScriptInstance* script)
 
 bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: SAVE\n", en->npcId, en->curScriptNum);
     #endif		
 
@@ -163,7 +163,7 @@ bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance*
 
 bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGetExtVar* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d], : GET\n", en->npcId, en->curScriptNum);
     #endif		    
 
@@ -201,7 +201,7 @@ bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* 
 
 bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrCCall* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d], : CCALL\n", en->npcId, en->curScriptNum);
     #endif		
 
@@ -236,7 +236,7 @@ bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance
 
 bool Scripts_InstructionQuake(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrQuake* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: QUAKE\n", en->npcId, en->curScriptNum);
     #endif		
 
@@ -262,7 +262,7 @@ bool Scripts_InstructionQuake(NpcMaker* en, PlayState* playState, ScriptInstance
 
 bool Scripts_InstructionFadeIn(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrFade* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: FADEIN\n", en->npcId, en->curScriptNum);
     #endif		
 
@@ -288,7 +288,7 @@ bool Scripts_InstructionFadeIn(NpcMaker* en, PlayState* playState, ScriptInstanc
 
 bool Scripts_InstructionFadeOut(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrFade* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: FADEOUT\n", en->npcId, en->curScriptNum);
     #endif		
 
@@ -323,7 +323,7 @@ bool Scripts_InstructionFadeOut(NpcMaker* en, PlayState* playState, ScriptInstan
 
 bool Scripts_InstructionNop(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: NOP\n", en->npcId, en->curScriptNum);
     #endif		
 	
@@ -333,7 +333,7 @@ bool Scripts_InstructionNop(NpcMaker* en, PlayState* playState, ScriptInstance* 
 
 bool Scripts_InstructionCloseTextbox(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: CLOSE TEXTBOX\n", en->npcId, en->curScriptNum);
     #endif		
 	
@@ -344,7 +344,7 @@ bool Scripts_InstructionCloseTextbox(NpcMaker* en, PlayState* playState, ScriptI
 
 bool Scripts_InstructionForceTalk(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: FORCE TALK\n", en->npcId, en->curScriptNum);
     #endif	
 	
@@ -356,7 +356,7 @@ bool Scripts_InstructionForceTalk(NpcMaker* en, PlayState* playState, ScriptInst
 
 bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrParticle* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: PARTICLE\n", en->npcId, en->curScriptNum);
     #endif
 
@@ -468,7 +468,7 @@ bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInsta
 
 bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrIf* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: IF/WHILE with subtype %02d.\n", en->npcId, en->curScriptNum, in->subId);
     #endif
 
@@ -802,7 +802,7 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
 
 bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrAwait* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: AWAIT with subtype %02d.\n", en->npcId, en->curScriptNum, in->subId);
     #endif
     
@@ -1045,7 +1045,7 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
 
 bool Scripts_InstructionGoto(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGoto* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         if (in->instrNum == 65535)
             is64Printf("_[%2d, %1d]: RETURN\n", en->npcId, en->curScriptNum);
         else
@@ -1060,7 +1060,7 @@ bool Scripts_InstructionGotoVar(NpcMaker* en, PlayState* playState, ScriptInstan
 {
     u32 instrNum = Scripts_GetVarval(en, playState, in->vartype, in->value, false);
 
-    #if LOGGING == 1
+    #if LOGGING > 3
         if (instrNum == 65535)
             is64Printf("_[%2d, %1d]: VARIABLE INDUCED RETURN\n", en->npcId, en->curScriptNum);
         else
@@ -1073,7 +1073,7 @@ bool Scripts_InstructionGotoVar(NpcMaker* en, PlayState* playState, ScriptInstan
 
 bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrSet* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: SET with subtype %02d.\n", en->npcId, en->curScriptNum, in->subId);
     #endif
 
@@ -1586,7 +1586,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
 
 bool Scripts_InstructionEnableTalking(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrTextbox* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: ENABLE_TALKING\n", en->npcId, en->curScriptNum);
     #endif  
 
@@ -1608,7 +1608,7 @@ bool Scripts_InstructionEnableTalking(NpcMaker* en, PlayState* playState, Script
 
 bool Scripts_InstructionShowTextbox(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrTextbox* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: SHOW_TEXTBOX\n", en->npcId, en->curScriptNum);
     #endif  
 
@@ -1637,7 +1637,7 @@ bool Scripts_InstructionShowTextbox(NpcMaker* en, PlayState* playState, ScriptIn
 
 bool Scripts_InstructionEnableTrade(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrTrade* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: ENABLE_TRADE\n", en->npcId, en->curScriptNum);
     #endif  
 
@@ -1701,7 +1701,7 @@ bool Scripts_InstructionEnableTrade(NpcMaker* en, PlayState* playState, ScriptIn
 
 bool Scripts_InstructionFace(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrFace* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: FACE\n", en->npcId, en->curScriptNum);
     #endif      
 
@@ -1783,7 +1783,7 @@ bool Scripts_InstructionRotation(NpcMaker* en, PlayState* playState, ScriptInsta
     #define SPEED (script->fTempValues[4])
     #define ROT ((Vec3f*)&script->fTempValues[1])
 
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: ROTATE\n", en->npcId, en->curScriptNum);
     #endif  
 
@@ -1844,7 +1844,7 @@ bool Scripts_InstructionRotation(NpcMaker* en, PlayState* playState, ScriptInsta
 
 bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrPosition* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: POSITION\n", en->npcId, en->curScriptNum);
     #endif 
 
@@ -1986,7 +1986,7 @@ bool Scripts_InstructionScale(NpcMaker* en, PlayState* playState, ScriptInstance
     #define SPEED (script->fTempValues[0])
     #define SCALE (script->fTempValues[1])
 
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: SCALE\n", en->npcId, en->curScriptNum);
     #endif  
 
@@ -2049,7 +2049,7 @@ bool Scripts_InstructionScale(NpcMaker* en, PlayState* playState, ScriptInstance
 
 bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrPlay* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: PLAY\n", en->npcId, en->curScriptNum);
     #endif     
 
@@ -2128,7 +2128,7 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
 
 bool Scripts_InstructionKill(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrKill* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: KILL\n", en->npcId, en->curScriptNum);
     #endif   
 
@@ -2148,7 +2148,7 @@ bool Scripts_InstructionKill(NpcMaker* en, PlayState* playState, ScriptInstance*
 
 bool Scripts_InstructionOcarina(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrOcarina* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: OCARINA\n", en->npcId, en->curScriptNum);
     #endif   
 
@@ -2169,7 +2169,7 @@ bool Scripts_InstructionOcarina(NpcMaker* en, PlayState* playState, ScriptInstan
                 GET_PLAYER(playState)->stateFlags2 |= 0x2000000;
                 GET_PLAYER(playState)->unk_6A8 = &en->actor;
 
-                #if LOGGING == 1
+                #if LOGGING > 3
                     is64Printf("_%2d: Player whipped out an ocarina!\n", en->npcId);
                 #endif   
 
@@ -2203,7 +2203,7 @@ bool Scripts_InstructionOcarina(NpcMaker* en, PlayState* playState, ScriptInstan
         // in the instruction, jump to the instruction block.
         if ((song > 5 && *songState == SONGSTATUS_CORRECT) || (song <= 5 && *playedSong == song))
         {
-            #if LOGGING == 1
+            #if LOGGING > 3
                 is64Printf("_%2d: Correct song was heard.\n", en->npcId);
             #endif   
             
@@ -2235,7 +2235,7 @@ bool Scripts_InstructionOcarina(NpcMaker* en, PlayState* playState, ScriptInstan
 
 bool Scripts_InstructionSpawn(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrSpawn* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: SPAWN\n", en->npcId, en->curScriptNum);
     #endif
     
@@ -2280,7 +2280,7 @@ bool Scripts_InstructionSpawn(NpcMaker* en, PlayState* playState, ScriptInstance
 
 bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrItem* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: ITEM\n", en->npcId, en->curScriptNum);
     #endif   
 
@@ -2423,7 +2423,7 @@ bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance*
 
 bool Scripts_InstructionWarp(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrWarp* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: WARP\n", en->npcId, en->curScriptNum);
     #endif  
 
@@ -2446,7 +2446,7 @@ bool Scripts_InstructionWarp(NpcMaker* en, PlayState* playState, ScriptInstance*
 
 bool Scripts_InstructionScript(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrScript* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: SCRIPT\n", en->npcId, en->curScriptNum);
     #endif  
 
@@ -2465,7 +2465,7 @@ extern void Audio_StopBGMAndFanfares(u16 FadeoutDur);
 
 bool Scripts_InstructionStop(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrStop* in)
 {
-    #if LOGGING == 1
+    #if LOGGING > 3
         is64Printf("_[%2d, %1d]: STOP\n", en->npcId, en->curScriptNum);
     #endif  
 

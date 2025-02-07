@@ -55,7 +55,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
 
     if (obj->vromStart == 0)
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_Object %4d was not found!\n", objId);
         #endif       
 
@@ -77,7 +77,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
         dest = buf;
     }
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Loading 0x%08x bytes from ROM at 0x%08x\n", size, start);
     #endif    
 
@@ -99,7 +99,7 @@ void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dest, u32 fil
 
         if (ptr == NULL)
         {
-            #if LOGGING == 1
+            #if LOGGING > 0
                 is64Printf("_The file to load from was not found in RAM!\n");
             #endif   
 
@@ -119,7 +119,7 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
     if (objId < 0)
         return bankIndex;
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         is64Printf("_Loading object %4d...\n", objId);
     #endif   
 
@@ -131,7 +131,7 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
     }
     else
     {
-        #if LOGGING == 1
+        #if LOGGING > 0
             is64Printf("_It's already loaded.\n");
         #endif         
     }

@@ -64,7 +64,7 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, PlayState* playState, float speed
             en->lastTraversedDistance = 0;
             en->movementStartPos = en->actor.world.pos;
             
-            #if LOGGING == 1
+            #if LOGGING > 0
                 is64Printf("_Started movement.\n");
             #endif  
         }
@@ -492,7 +492,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
 
                     if (next_node == NULL)
                     {
-                        #if LOGGING == 1
+                        #if LOGGING > 0
                             is64Printf("_Error: Next node was NULL.\n");
                         #endif                         
 
@@ -590,7 +590,7 @@ void Movement_SetNextPos(NpcMaker* en, Vec3f* next_pos)
     en->stopped = false;
     en->movementNextPos = *next_pos;
 
-    #if LOGGING == 1
+    #if LOGGING > 1
         is64Printf("_Set next position at %08x, %08x, %08x.\n", en->movementNextPos.x, en->movementNextPos.y, en->movementNextPos.z);
     #endif  
 }
@@ -612,7 +612,7 @@ bool Movement_HasReachedDestination(NpcMaker* en, float distance_margin)
                    (en->currentDistToNextPos < distance_margin)) || 
                    (en->isMoving && en->traversedDistance >= en->distanceTotal));
 
-    #if LOGGING == 1
+    #if LOGGING > 0
         if (result)
             is64Printf("_Reached end position or travelled far enough.\n");
     #endif  

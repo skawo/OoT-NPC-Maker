@@ -71,7 +71,7 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
         {
             if (en->scriptVars == NULL || en->settings.numVars < value.ui32)
             {
-                #if LOGGING == 1
+                #if LOGGING > 0
                     is64Printf("_%2d: Attempted read from script var out of range.\n");
                 #endif       
             }
@@ -86,7 +86,7 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
             {
                 out = 0;
 
-                #if LOGGING == 1
+                #if LOGGING > 0
                     is64Printf("_%2d: Attempted read from float script var out of range.\n");
                 #endif       
             }
@@ -131,7 +131,7 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, PlayState* playState, u32 value, u32 s
 
         if (en->scriptFVars == NULL || en->settings.numFVars < value)
         {
-            #if LOGGING == 1
+            #if LOGGING > 0
                 is64Printf("_%2d: Attempted write to float script var out of range.\n");
             #endif   
 
@@ -146,7 +146,7 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, PlayState* playState, u32 value, u32 s
 
         if (en->scriptVars == NULL || en->settings.numVars < value)
         {
-            #if LOGGING == 1
+            #if LOGGING > 0
                 is64Printf("_%2d: Attempted write to script var out of range.\n");
             #endif   
 
@@ -202,7 +202,7 @@ void Scripts_MathOperation(void* dest, float value, Operator op, DataType dataTy
                 temp /= value;
             else
             {
-                #if LOGGING == 1
+                #if LOGGING > 0
                         is64Printf("_Script attempted divide by zero! Returning original value.\n");
                 #endif 
             }
