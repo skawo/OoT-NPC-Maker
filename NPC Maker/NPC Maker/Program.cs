@@ -61,7 +61,7 @@ namespace NPC_Maker
 
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
 
-            CCode.CreateCTempDirectory("", false);
+            CCode.CreateCTempDirectory("", "", false);
 
             if (!Directory.Exists(CachePath))
                 Directory.CreateDirectory(CachePath);

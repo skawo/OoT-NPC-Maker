@@ -16,12 +16,18 @@ namespace NPC_Maker
         public List<ScriptEntry> GlobalHeaders { get; set; }
         public bool SpaceFromFont { get; set; }
 
+        public string CHeader { get; set; }
+
+        public List<string> CHeaderLines { get; set; }
+
         public NPCFile()
         {
-            Version = 5;
+            Version = 6;
             Entries = new List<NPCEntry>();
             GlobalHeaders = new List<ScriptEntry>();
             SpaceFromFont = false;
+            CHeader = "";
+            CHeaderLines = new List<string>();
         }
     }
 
@@ -922,6 +928,8 @@ namespace NPC_Maker
 
         public int[,] FuncsRunWhen { get; set; }
 
+        public string[] SetFuncNames { get; set; }
+
         public CCodeEntry(string _Code = "", List<FunctionEntry> _Funcs = null, int[,] _FuncsRunWhen = null)
         {
             Code = _Code;
@@ -932,6 +940,7 @@ namespace NPC_Maker
                 Functions = new List<FunctionEntry>();
 
             FuncsRunWhen = _FuncsRunWhen;
+            SetFuncNames = new string[5];
 
             if (FuncsRunWhen == null)
                 FuncsRunWhen = new int[5, 2]

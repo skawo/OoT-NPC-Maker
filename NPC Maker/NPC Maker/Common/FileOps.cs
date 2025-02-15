@@ -118,6 +118,26 @@ namespace NPC_Maker
                     }
                 }
 
+                if ((int)Version < 6)
+                {
+                    Deserialized.CHeader = String.Join(Environment.NewLine, Deserialized.CHeaderLines.Select(x => x.TrimEnd()).ToList());
+
+                    foreach (NPCEntry e in Deserialized.Entries)
+                    {
+                        for (int i = 0; i < 5; i++)
+                        {
+                            int idx = e.EmbeddedOverlayCode.FuncsRunWhen[i, 0];
+
+                            if (idx >= 0)
+                            {
+                                if (e.EmbeddedOverlayCode.Functions.Count > idx)
+                                    e.EmbeddedOverlayCode.SetFuncNames[i] = e.EmbeddedOverlayCode.Functions[idx].FuncName;
+                                else
+                                    e.EmbeddedOverlayCode.SetFuncNames[i] = "Not found?";
+                            }
+                        }
+                    }
+                }
 
                 // For cross-compatibility with Linux, update all messages converting linebreaks into native system linebreaks.
                 foreach (NPCEntry e in Deserialized.Entries)
@@ -129,8 +149,8 @@ namespace NPC_Maker
                 }
 
 
-                Deserialized.Version = 5;
-                Version = 5;
+                Deserialized.Version = 6;
+                Version = 6;
 
                 return Deserialized;
             }
@@ -173,6 +193,10 @@ namespace NPC_Maker
                     s.TextLines.ForEach(x => x.TrimEnd());
                     s.Text = "";
                 }
+                
+                outD.CHeaderLines = Regex.Split(outD.CHeader, "\r?\n").ToList();
+                outD.CHeaderLines.ForEach(x => x.TrimEnd());
+                outD.CHeader = "";
 
                 File.WriteAllText(Path, JsonConvert.SerializeObject(outD, Formatting.Indented).Replace(Environment.NewLine, "\n"));
             }
@@ -267,6 +291,7 @@ namespace NPC_Maker
 
 
                 bool cacheInvalid = false;
+                bool CcacheInvalid = false;
                 string Ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
 
                 // Check if the Global Headers changed - if they have, we need to redo everything.
@@ -291,6 +316,16 @@ namespace NPC_Maker
                         Helpers.DeleteFileStartingWith(Program.CachePath, "dicts_");
                         File.WriteAllText(cachedDicts, "");
                         cacheInvalid = true;
+                    }
+
+                    hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Data.CHeader))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                    string cachedHeader = System.IO.Path.Combine(Program.CachePath, $"ch_{Ver}" + hash);
+
+                    if (!File.Exists(cachedHeader))
+                    {
+                        Helpers.DeleteFileStartingWith(Program.CachePath, "ch_");
+                        File.WriteAllText(cachedHeader, "");
+                        CcacheInvalid = true;
                     }
                 }
 
@@ -665,7 +700,7 @@ namespace NPC_Maker
                                 string cachedAddrsFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_funcsaddrs_" + hash);
                                 string cachedcodeFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_code_" + hash);
 
-                                if (File.Exists(cachedFile) && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
+                                if (!CcacheInvalid && File.Exists(cachedFile) && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
                                 {
                                     Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
                                     Overlay = File.ReadAllBytes(cachedcodeFile);
@@ -677,7 +712,7 @@ namespace NPC_Maker
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_code_");
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script");
 
-                                    Overlay = CCode.Compile(true, Entry.EmbeddedOverlayCode, ref CompErrors);
+                                    Overlay = CCode.Compile(true, Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors);
 
                                     if (Overlay != null)
                                     {
@@ -711,7 +746,15 @@ namespace NPC_Maker
 
                                     for (int i = 0; i < Entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0); i++)
                                     {
-                                        int FuncIdx = Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 0];
+                                        string FName = Entry.EmbeddedOverlayCode.SetFuncNames[i];
+                                        int FuncIdx = Entry.EmbeddedOverlayCode.Functions.FindIndex(x => x.FuncName == FName);
+
+                                        if (FuncIdx == -1 && FName != null && FName != "")
+                                        {
+                                            System.Windows.Forms.MessageBox.Show($"Error: Function {FName} not found in the C Code for actor {Entry.NPCName}");
+                                            return;
+                                        }
+
                                         UInt32 FuncAddr = 0xFFFFFFFF;
 
                                         if (FuncIdx >= 0)

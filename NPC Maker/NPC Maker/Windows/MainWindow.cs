@@ -395,7 +395,7 @@ namespace NPC_Maker
             if (SelectedEntry.EmbeddedOverlayCode.Code != "")
             {
                 //CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
-                CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+                CCode.Compile(true, EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
             }
 
             TextBox_CompileMsg.Text = CompileErrors;
@@ -423,10 +423,7 @@ namespace NPC_Maker
                     c.SelectedIndex = -1;
                     c.BindingContext = new BindingContext();
 
-                    if (SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 0] < c.Items.Count)
-                        c.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 0];
-                    else
-                        c.SelectedIndex = -1;
+                    c.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.Functions.FindIndex(x => x.FuncName == SelectedEntry.EmbeddedOverlayCode.SetFuncNames[Index]);
 
                     if (w != null)
                         w.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 1];
@@ -2404,7 +2401,9 @@ namespace NPC_Maker
             if (Program.Settings.AutoSave)
             {
                 WatchedEntry = EditedEntry;
-                LastWriteTime = GetLastWriteTimeForCFile();
+
+                string fPath = Path.Combine(CCode.tempFolderPath, CCode.codeFileName);
+                LastWriteTime = GetLastWriteTimeForFile(fPath);
 
                 autoSaveTimer = new Timer();
                 autoSaveTimer.Interval = (int)Program.Settings.AutoSaveTime;
@@ -2422,12 +2421,12 @@ namespace NPC_Maker
 
                 WatchedEntry = EditedEntry;
 
-                Program.Watcher = new FileSystemWatcher(CCode.tempFolder);
+                Program.Watcher = new FileSystemWatcher(CCode.tempFolderPath);
                 Program.Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
                 Program.Watcher.Changed += Watcher_Changed;
                 Program.Watcher.IncludeSubdirectories = true;
                 Program.Watcher.EnableRaisingEvents = true;
-                Program.Watcher.Filter = CCode.codeFileName;
+                Program.Watcher.Filter = "*.*";
             }
             else
             {
@@ -2454,6 +2453,7 @@ namespace NPC_Maker
 
                 Button_CCompile.Invoke((MethodInvoker)delegate
                 {
+                    globalCHeaderToolStripMenuItem.Enabled = true;
                     Button_CCompile.Enabled = true;
                     Button_OpenCCode.Enabled = true;
                 });
@@ -2463,15 +2463,13 @@ namespace NPC_Maker
 
         }
 
-        private DateTime GetLastWriteTimeForCFile()
+        private DateTime GetLastWriteTimeForFile(string Filename)
         {
             try
             {
-                string fPath = Path.Combine(CCode.tempFolder, CCode.codeFileName);
-
-                if (File.Exists(fPath))
+                if (File.Exists(Filename))
                 {
-                    return File.GetLastWriteTime(fPath);
+                    return File.GetLastWriteTime(Filename);
                 }
                 else
                     return new DateTime();
@@ -2486,7 +2484,9 @@ namespace NPC_Maker
         {
             autoSaveTimer.Stop();
 
-            var Dt = GetLastWriteTimeForCFile();
+            string fPath = Path.Combine(CCode.tempFolderPath, CCode.codeFileName);
+
+            var Dt = GetLastWriteTimeForFile(fPath);
 
             if (Dt != LastWriteTime)
                 Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
@@ -2499,7 +2499,7 @@ namespace NPC_Maker
         {
 
             string CompileMsgs = "";
-            CCode.Compile(true, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
+            CCode.Compile(true, EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
 
             this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
             {
@@ -2552,32 +2552,59 @@ namespace NPC_Maker
 
                 if (e.ChangeType == WatcherChangeTypes.Changed)
                 {
-                    FileStream fs;
+                    FileStream fs = null;
+                    FileStream fs2 = null;
 
                     // Hacky workaround
                     try
                     {
-                        fs = File.Open(Path.Combine(CCode.tempFolder, CCode.codeFileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        if (File.Exists(CCode.editCodeFilePath))
+                            fs = File.Open(CCode.editCodeFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+                        if (File.Exists(CCode.editHeaderFilePath))
+                            fs2 = File.Open(CCode.editHeaderFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     }
                     catch (Exception)
                     {
-                        fs = File.Open(Path.Combine(CCode.tempFolder, CCode.codeFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
+                        if (File.Exists(CCode.editCodeFilePath))
+                            fs = File.Open(Path.Combine(CCode.tempFolderPath, CCode.codeFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                        if (File.Exists(CCode.editHeaderFilePath))
+                            fs2 = File.Open(Path.Combine(CCode.tempFolderPath, CCode.headerFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
                     }
 
-                    using (var sr = new StreamReader(fs, Encoding.Default))
+                    if (fs2 != null)
                     {
-                        string Code = sr.ReadToEnd();
+                        using (var sr = new StreamReader(fs2, Encoding.Default))
+                        {
+                            string Header = sr.ReadToEnd();
 
-                        if (Code == "" && WatchedEntry.EmbeddedOverlayCode.Code != "")
-                            return;
-                        else
-                            WatchedEntry.EmbeddedOverlayCode.Code = Code;
+                            if (Header == "" && EditedFile.CHeader != "")
+                                return;
+                            else
+                                EditedFile.CHeader = Header;
+                        }
+
+                        fs2.Close();
+                        fs2.Dispose();
+                    }
+
+                    if (fs != null)
+                    {
+                        using (var sr = new StreamReader(fs, Encoding.Default))
+                        {
+                            string Code = sr.ReadToEnd();
+
+                            if (Code == "" && WatchedEntry.EmbeddedOverlayCode.Code != "")
+                                return;
+                            else
+                                WatchedEntry.EmbeddedOverlayCode.Code = Code;
+                        }
 
                         CompileCode();
+                        fs.Close();
+                        fs.Dispose();
                     }
-
-                    fs.Close();
-                    fs.Dispose();
                 }
 
             }
@@ -2599,7 +2626,10 @@ namespace NPC_Maker
             string Code = SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code;
             Code = CCode.ReplaceGameVersionInclude(Code);
 
-            if (!CCode.CreateCTempDirectory(Code))
+            string Header = EditedFile.CHeader == "" ? Properties.Resources.CHeader : EditedFile.CHeader;
+            Header = CCode.ReplaceGameVersionInclude(Header);
+
+            if (!CCode.CreateCTempDirectory(Code, Header))
                 return;
 
             if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
@@ -2608,13 +2638,14 @@ namespace NPC_Maker
             Program.CodeEditorProcess = CCode.OpenCodeEditor(
                                                                 (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
                                                                 TextBox_CodeEditorPath.Text,
-                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.EmbeddedCodeFile.AppendQuotation()).Replace("$CODEFOLDER", CCode.tempFolder.AppendQuotation())
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.editCodeFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.tempFolderPath.AppendQuotation())
                                                             );
 
             if (Program.CodeEditorProcess == null)
                 return;
             else
             {
+                globalCHeaderToolStripMenuItem.Enabled = false;
                 Button_CCompile.Enabled = false;
                 Button_OpenCCode.Enabled = false;
                 Button_UpdateCompile.Enabled = true;
@@ -2644,7 +2675,11 @@ namespace NPC_Maker
             int ComboId = Convert.ToInt32(c.Tag);
 
             if (ComboId < 5)
+            {
                 SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId, 0] = c.SelectedIndex;
+                SelectedEntry.EmbeddedOverlayCode.SetFuncNames[ComboId] = c.Text;
+
+            }
             else
                 SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId - 5, 1] = c.SelectedIndex;
         }
@@ -2669,6 +2704,8 @@ namespace NPC_Maker
                     {-1, -1},
                     {-1, -1},
                 };
+
+                SelectedEntry.EmbeddedOverlayCode.SetFuncNames = new string[5];
 
                 foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
                 {
@@ -2715,6 +2752,44 @@ namespace NPC_Maker
         {
             EditedFile.SpaceFromFont = (sender as CheckBox).Checked;
             MsgText_TextChanged(null, null);
+        }
+
+        private void globalCHeaderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (autoSaveTimer != null)
+            {
+                autoSaveTimer.Stop();
+                autoSaveTimer.Dispose();
+            }
+
+            string Code = SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code;
+            Code = CCode.ReplaceGameVersionInclude(Code);
+
+            string Header = EditedFile.CHeader == "" ? Properties.Resources.CHeader : EditedFile.CHeader;
+            Header = CCode.ReplaceGameVersionInclude(Header);
+
+            if (!CCode.CreateCTempDirectory(Code, Header, true, true))
+                return;
+
+            if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
+                Program.CodeEditorProcess.Kill();
+
+            Program.CodeEditorProcess = CCode.OpenCodeEditor(
+                                                                (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
+                                                                TextBox_CodeEditorPath.Text,
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.editHeaderFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.tempFolderPath.AppendQuotation())
+                                                            );
+
+            if (Program.CodeEditorProcess == null)
+                return;
+            else
+            {
+                globalCHeaderToolStripMenuItem.Enabled = false;
+                Button_CCompile.Enabled = false;
+                Button_OpenCCode.Enabled = false;
+                Button_UpdateCompile.Enabled = true;
+                WatchFile(SelectedEntry);
+            }
         }
     }
 }

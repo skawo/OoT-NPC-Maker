@@ -325,6 +325,7 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CodeParamsTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.globalCHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -3909,6 +3910,7 @@
             this.addNewScriptToolStripMenuItem,
             this.deleteCurrentScriptToolStripMenuItem,
             this.renameCurrentScriptToolStripMenuItem,
+            this.globalCHeaderToolStripMenuItem,
             this.editGlobalHeaderToolStripMenuItem});
             this.scriptsToolStripMenuItem.Name = "scriptsToolStripMenuItem";
             this.scriptsToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
@@ -4049,6 +4051,13 @@
             this.CodeParamsTooltip.InitialDelay = 100;
             this.CodeParamsTooltip.ReshowDelay = 100;
             this.CodeParamsTooltip.ShowAlways = true;
+            // 
+            // globalCHeaderToolStripMenuItem
+            // 
+            this.globalCHeaderToolStripMenuItem.Name = "globalCHeaderToolStripMenuItem";
+            this.globalCHeaderToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.globalCHeaderToolStripMenuItem.Text = "Global C Header";
+            this.globalCHeaderToolStripMenuItem.Click += new System.EventHandler(this.globalCHeaderToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -4455,6 +4464,7 @@
         private System.Windows.Forms.NumericUpDown UncullDown;
         private System.Windows.Forms.Label UncullZLabel;
         private System.Windows.Forms.NumericUpDown UncullFwd;
+        private System.Windows.Forms.ToolStripMenuItem globalCHeaderToolStripMenuItem;
     }
 }
 

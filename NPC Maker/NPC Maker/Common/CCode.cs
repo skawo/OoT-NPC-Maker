@@ -32,14 +32,20 @@ namespace NPC_Maker
             CodeEditorEnum.Other.ToString()
         };
 
-        public static string tempFolder = Path.Combine(Program.ExecPath, "temp");
+        public static string tempFolderName = "temp";
+        public static string compileFolderName = "compile";
+        public static string tempFolderPath = Path.Combine(Program.ExecPath, tempFolderName);
+        public static string compileFolderPath = Path.Combine(Program.ExecPath, compileFolderName);
         public static string codeFileName = "EmbeddedOverlay.c";
-        public static string codeFilenameForCompile = "EmbeddedOverlay_comp.c";
-        public static string EmbeddedCodeFile = $"{Path.Combine(tempFolder, codeFileName)}";
-        public static string compileFile = Path.Combine(tempFolder, codeFilenameForCompile);
-        public static string oFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay_comp.o");
-        public static string elfFile = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay_comp.elf");
-        public static string ovlFile = Path.Combine(tempFolder, "EmbeddedOverlay_comp.ovl");
+        public static string headerFileName = "npc_maker_header.h";
+        public static string editCodeFilePath = $"{Path.Combine(tempFolderPath, codeFileName)}";
+        public static string editHeaderFilePath = $"{Path.Combine(tempFolderPath, headerFileName)}";
+        public static string compileCodeFileName = "EmbeddedOverlay_comp.c";
+        public static string compileFilePath = Path.Combine(compileFolderPath, compileCodeFileName);
+        public static string compileHeaderPath = Path.Combine(compileFolderPath, headerFileName);
+        public static string oFilePath = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay_comp.o");
+        public static string elfFilePath = Path.Combine(Program.ExecPath, "gcc", "bin", "EmbeddedOverlay_comp.elf");
+        public static string ovlFilePath = Path.Combine(compileFolderPath, "EmbeddedOverlay_comp.ovl");
         public static UInt32 BaseAddr = 0x80800000;
 
         public static void GetOutput(Process p, string Section, ref string CompileErrors)
@@ -178,18 +184,24 @@ namespace NPC_Maker
 
         }
 
-        public static byte[] Compile(bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
+        public static byte[] Compile(bool OotVer, string Header, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
             try
             {
                 string Code = CCode.ReplaceGameVersionInclude(CodeEntry.Code);
+                string _Header = CCode.ReplaceGameVersionInclude(Header);
 
-                if (File.Exists(compileFile))
-                    File.Delete(compileFile);
+                if (Directory.Exists(compileFolderPath))
+                    Directory.Delete(compileFolderPath, true);
 
-                File.WriteAllText(Path.Combine(tempFolder, codeFilenameForCompile), Code);
+                Directory.CreateDirectory(compileFolderPath);
+
+                File.WriteAllText(compileFilePath, Code);
+                File.WriteAllText(compileHeaderPath, _Header);
 
                 byte[] outf = (Program.IsRunningUnderMono ? Program.Settings.UseWine ? CompileUnderWine(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderMono(OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(OotVer, CodeEntry, ref CompileMsgs));
+
+                Directory.Delete(compileFolderPath, true);
 
                 return outf;
             }
@@ -227,7 +239,7 @@ namespace NPC_Maker
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
                 Program.Settings.GCCFlags + " " +
-                $"{Path.Combine("..", "..", "temp", codeFilenameForCompile).AppendQuotation()}",
+                $"{Path.Combine("..", "..", compileFolderName, compileCodeFileName).AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
@@ -241,7 +253,7 @@ namespace NPC_Maker
 
             #region LD
 
-            if (!File.Exists(oFile))
+            if (!File.Exists(oFilePath))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -272,7 +284,7 @@ namespace NPC_Maker
             GetOutput(p, "WINE LINKER", ref CompileMsgs);
 
 
-            if (!File.Exists(elfFile))
+            if (!File.Exists(elfFilePath))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -284,7 +296,7 @@ namespace NPC_Maker
             #region NOVL
 
             elfFileWine = Path.Combine("..", "gcc", "bin", "EmbeddedOverlay_comp.elf");
-            string ovlFileWine = Path.Combine("..", "temp", "EmbeddedOverlay_comp.ovl");
+            string ovlFileWine = Path.Combine("..", compileFolderName, "EmbeddedOverlay_comp.ovl");
 
             Clean(new string[] { elfFileWine, ovlFileWine });
 
@@ -308,9 +320,9 @@ namespace NPC_Maker
             GetOutput(p, "WINE NOVL", ref CompileMsgs);
 
             elfFileWine = Path.Combine("..", "bin", "EmbeddedOverlay_comp.elf");
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileWine, ovlFile, false);
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileWine, ovlFilePath, false);
 
-            if (!File.Exists(ovlFile))
+            if (!File.Exists(ovlFilePath))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -320,7 +332,7 @@ namespace NPC_Maker
                 CompileMsgs += "Compilation successful!";
 
 
-            return File.ReadAllBytes(ovlFile);
+            return File.ReadAllBytes(ovlFilePath);
             #endregion
 
         }
@@ -329,7 +341,7 @@ namespace NPC_Maker
         {
             string oFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", "EmbeddedOverlay_comp.o");
             string elfFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", "EmbeddedOverlay_comp.elf");
-            string ovlFileMono = Path.Combine(Program.ExecPath, "temp", "EmbeddedOverlay_comp.ovl");
+            string ovlFileMono = Path.Combine(Program.ExecPath, compileFolderName, "EmbeddedOverlay_comp.ovl");
 
             Clean(new string[] { oFileMono, elfFileMono, ovlFileMono });
 
@@ -348,7 +360,7 @@ namespace NPC_Maker
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
                 Program.Settings.GCCFlags + " " + $"-B {Path.Combine(new string[] { "..", "mips64", "binmono" })} " +
-                $"{Path.Combine("..", "..", "temp", codeFilenameForCompile).AppendQuotation()}",
+                $"{Path.Combine("..", "..", compileFolderName, compileCodeFileName).AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
@@ -436,7 +448,7 @@ namespace NPC_Maker
 
             CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFileMono, true);
 
-            return File.ReadAllBytes(ovlFile);
+            return File.ReadAllBytes(ovlFilePath);
             #endregion
 
         }
@@ -445,7 +457,7 @@ namespace NPC_Maker
         {
             #region GCC
 
-            Clean(new string[] { oFile, elfFile, ovlFile });
+            Clean(new string[] { oFilePath, elfFilePath, ovlFilePath });
 
             ProcessStartInfo gccInfo = new ProcessStartInfo
             {
@@ -460,7 +472,7 @@ namespace NPC_Maker
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
                 Program.Settings.GCCFlags + " " +
-                $"{Path.Combine(tempFolder, codeFilenameForCompile).AppendQuotation()}",
+                $"{Path.Combine(compileFolderPath, compileCodeFileName).AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
@@ -474,7 +486,7 @@ namespace NPC_Maker
 
             #region LD
 
-            if (!File.Exists(oFile))
+            if (!File.Exists(oFilePath))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -494,7 +506,7 @@ namespace NPC_Maker
                 $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
                 $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
-                $"-o {elfFile.AppendQuotation()} {oFile.AppendQuotation()}"
+                $"-o {elfFilePath.AppendQuotation()} {oFilePath.AppendQuotation()}"
             };
 
             if (Program.Settings.Verbose)
@@ -504,7 +516,7 @@ namespace NPC_Maker
 
             GetOutput(p, "LINKER", ref CompileMsgs);
 
-            if (!File.Exists(elfFile))
+            if (!File.Exists(elfFilePath))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -523,7 +535,7 @@ namespace NPC_Maker
                 CreateNoWindow = true,
                 FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
                 Arguments =
-                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFile.AppendQuotation()} {elfFile.AppendQuotation()}",
+                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFilePath.AppendQuotation()} {elfFilePath.AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
@@ -532,7 +544,7 @@ namespace NPC_Maker
             p = Process.Start(nOVLInfo);
             GetOutput(p, "NOVL", ref CompileMsgs);
 
-            if (!File.Exists(ovlFile))
+            if (!File.Exists(ovlFilePath))
             {
                 CompileMsgs += "Compilation failed.";
                 ConsoleWriteCompileFail(CompileMsgs);
@@ -540,9 +552,9 @@ namespace NPC_Maker
             else
                 CompileMsgs += "Compilation successful!";
 
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFile, ovlFile, false);
+            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFilePath, ovlFilePath, false);
 
-            return File.ReadAllBytes(ovlFile);
+            return File.ReadAllBytes(ovlFilePath);
             #endregion
 
         }
@@ -554,22 +566,25 @@ namespace NPC_Maker
             return Code;
         }
 
-        public static bool CreateCTempDirectory(string Code, bool ErrorMsg = true)
+        public static bool CreateCTempDirectory(string Code, string Header, bool ErrorMsg = true, bool HeaderOnly = false)
         {
             try
             {
-                if (Directory.Exists(tempFolder))
-                    Directory.Delete(tempFolder, true);
+                if (Directory.Exists(tempFolderPath))
+                    Directory.Delete(tempFolderPath, true);
 
-                Directory.CreateDirectory(tempFolder);
+                Directory.CreateDirectory(tempFolderPath);
 
-                string vscodeFolder = Path.Combine(tempFolder, ".vscode");
+                string vscodeFolder = Path.Combine(tempFolderPath, ".vscode");
 
                 Directory.CreateDirectory(vscodeFolder);
                 File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), Properties.Resources.c_cpp_properties);
                 File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
 
-                File.WriteAllText(Path.Combine(tempFolder, codeFileName), Code);
+                if (!HeaderOnly)
+                    File.WriteAllText(Path.Combine(tempFolderPath, codeFileName), Code);
+                
+                File.WriteAllText(Path.Combine(tempFolderPath, headerFileName), Header);
                 return true;
             }
             catch (Exception ex)
@@ -597,7 +612,7 @@ namespace NPC_Maker
                     case CCode.CodeEditorEnum.VSCode:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
-                            startInfo.Arguments = $"-n -b {CCode.tempFolder.AppendQuotation()}";
+                            startInfo.Arguments = $"-n {CCode.tempFolderPath.AppendQuotation()}";
                             break;
                         }
                     case CCode.CodeEditorEnum.Notepad:
