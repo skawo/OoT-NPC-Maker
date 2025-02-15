@@ -589,7 +589,7 @@ namespace NPC_Maker
                 {
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    Arguments = CCode.EmbeddedCodeFile.AppendQuotation()
+                    Arguments = Args
                 };
 
                 switch (SelectedCodeEditor)
@@ -597,7 +597,7 @@ namespace NPC_Maker
                     case CCode.CodeEditorEnum.VSCode:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
-                            startInfo.Arguments = $"-n {CCode.tempFolder.AppendQuotation()}";
+                            startInfo.Arguments = $"-n -b {CCode.tempFolder.AppendQuotation()}";
                             break;
                         }
                     case CCode.CodeEditorEnum.Notepad:
@@ -608,6 +608,7 @@ namespace NPC_Maker
                     case CCode.CodeEditorEnum.NotepadPlusPlus:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Notepad++\notepad++.exe";
+                            startInfo.Arguments += " -multiInst";
                             break;
                         }
                     case CCode.CodeEditorEnum.Sublime:
