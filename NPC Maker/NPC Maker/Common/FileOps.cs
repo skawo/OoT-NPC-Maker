@@ -120,8 +120,6 @@ namespace NPC_Maker
 
                 if ((int)Version < 6)
                 {
-                    Deserialized.CHeader = String.Join(Environment.NewLine, Deserialized.CHeaderLines.Select(x => x.TrimEnd()).ToList());
-
                     foreach (NPCEntry e in Deserialized.Entries)
                     {
                         for (int i = 0; i < 5; i++)
@@ -137,7 +135,13 @@ namespace NPC_Maker
                             }
                         }
                     }
+
+                    Version = 6;
                 }
+
+                if ((int)Version == 6)
+                    Deserialized.CHeader = String.Join(Environment.NewLine, Deserialized.CHeaderLines.Select(x => x.TrimEnd()).ToList());
+
 
                 // For cross-compatibility with Linux, update all messages converting linebreaks into native system linebreaks.
                 foreach (NPCEntry e in Deserialized.Entries)
