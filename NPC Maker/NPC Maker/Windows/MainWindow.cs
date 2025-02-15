@@ -2410,6 +2410,7 @@ namespace NPC_Maker
                 autoSaveTimer.Tick += AutoSaveTimer_Tick;
                 autoSaveTimer.Start();
             }
+            /*
             else if (Program.Settings.AutoComp_Save)
             {
 
@@ -2428,6 +2429,7 @@ namespace NPC_Maker
                 Program.Watcher.EnableRaisingEvents = true;
                 Program.Watcher.Filter = "*.*";
             }
+            */
             else
             {
                 WatchedEntry = EditedEntry;
@@ -2443,8 +2445,8 @@ namespace NPC_Maker
                 {
                     Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
 
-                    if (Program.Watcher != null)
-                        Program.Watcher.Dispose();
+                    //if (Program.Watcher != null)
+                    //    Program.Watcher.Dispose();
                 }
                 catch (Exception)
                 {

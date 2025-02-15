@@ -16,7 +16,7 @@ namespace NPC_Maker
         public static string ExecPath = "";
         public static bool IsRunningUnderMono = false;
 
-        public static FileSystemWatcher Watcher;
+        //public static FileSystemWatcher Watcher;
         public static Process CodeEditorProcess;
 
         public static string SettingsFilePath;

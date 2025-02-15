@@ -31,7 +31,7 @@ namespace NPC_Maker.Windows
             Cb_Verbose.Checked = EditedSettings.Verbose;
             Txt_GCCArgs.Text = EditedSettings.GCCFlags;
             Combo_CompileFor.Text = EditedSettings.GameVersion.ToString();
-            Cb_AutoCompile.Checked = EditedSettings.AutoComp_Save;
+            //Cb_AutoCompile.Checked = EditedSettings.AutoComp_Save;
             NumUpCompileTimeout.Value = EditedSettings.CompileTimeout;
             NumUpParseTime.Value = EditedSettings.ParseTime;
             WineCompatMode.Checked = EditedSettings.UseWine;
