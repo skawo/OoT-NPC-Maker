@@ -322,6 +322,7 @@ namespace NPC_Maker
                         cacheInvalid = true;
                     }
 
+                    Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
                     hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Data.CHeader))).Replace("+", "_").Replace("/", "-").Replace("=", "");
                     string cachedHeader = System.IO.Path.Combine(Program.CachePath, $"ch_{Ver}" + hash);
 
