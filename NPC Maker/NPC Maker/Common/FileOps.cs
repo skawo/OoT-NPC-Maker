@@ -755,7 +755,7 @@ namespace NPC_Maker
 
                                         if (FuncIdx == -1 && FName != null && FName != "")
                                         {
-                                            System.Windows.Forms.MessageBox.Show($"Error: Function {FName} not found in the C Code for actor {Entry.NPCName}");
+                                            ShowMsg(CLIMode, $"{Entry.NPCName}: Function {FName} not found in the C Code!");
                                             return;
                                         }
 
