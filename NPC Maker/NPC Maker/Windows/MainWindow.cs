@@ -2395,6 +2395,7 @@ namespace NPC_Maker
 
         Timer autoSaveTimer;
         DateTime LastWriteTime;
+        DateTime LastWriteTime2;
 
         private void WatchFile(NPCEntry EditedEntry)
         {
@@ -2486,14 +2487,14 @@ namespace NPC_Maker
         {
             autoSaveTimer.Stop();
 
-            string fPath = Path.Combine(CCode.tempFolderPath, CCode.codeFileName);
+            var Dt = GetLastWriteTimeForFile(CCode.editCodeFilePath);
+            var Dt2 = GetLastWriteTimeForFile(CCode.editHeaderFilePath);
 
-            var Dt = GetLastWriteTimeForFile(fPath);
-
-            if (Dt != LastWriteTime)
+            if (Dt != LastWriteTime || Dt2 != LastWriteTime2)
                 Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
 
             LastWriteTime = Dt;
+            LastWriteTime2 = Dt2;
             autoSaveTimer.Start();
         }
 
