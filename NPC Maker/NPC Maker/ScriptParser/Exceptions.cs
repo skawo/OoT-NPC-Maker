@@ -32,6 +32,10 @@ namespace NPC_Maker.Scripts
         {
             return new ParseException("Problem with procedures.", "");
         }
+        public static ParseException FunctionError()
+        {
+            return new ParseException("Problem with functions.", "");
+        }
 
         public static ParseException ProcNumArgsError(string[] _Line, string[] Args)
         {
@@ -44,6 +48,10 @@ namespace NPC_Maker.Scripts
         public static ParseException ProcDoubleError(string[] _Line)
         {
             return new ParseException("Procedure defined twice or more: ", String.Join(" ", _Line));
+        }
+        public static ParseException FuncDoubleError(string[] _Line)
+        {
+            return new ParseException("Function defined twice or more: ", String.Join(" ", _Line));
         }
 
         public static ParseException IllegalProcedureNameError(string[] _Line)

@@ -395,7 +395,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     #endif  
 
     Setup_ScriptVars(en, (void*)&en->scriptVars, en->settings.numVars);
-    Setup_ScriptVars(en, (void*)&en->scriptFVars, en->settings.numFVars);
+    Setup_ScriptVars(en, (void*)&en->scriptFVars, en->settings.numFVars + 8);
 
     ZeldaArena_Free(buffer);
     return true;
@@ -522,7 +522,11 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
             en->scriptInstances[i].spotted = 0;
             en->scriptInstances[i].jumpToWhenSpottedInstrNum = -1;
             en->scriptInstances[i].active = 1;
-            
+            en->scriptInstances[i].funcCallStackDepth = 0;
+
+            Lib_MemSet((u8*)&en->scriptInstances[i].funcCallStack, 12 * 4, 0);
+            Lib_MemSet((u8*)&en->scriptInstances[i].funcRetStack, 12 * 2, 0);
+
             Scripts_FreeTemp(&en->scriptInstances[i]);
         }
 

@@ -82,7 +82,7 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
         }
         case SCRIPT_VARF:       
         {
-            if (en->scriptFVars == NULL || en->settings.numFVars < value.ui32)
+            if (en->scriptFVars == NULL || en->settings.numFVars + 8 < value.ui32)
             {
                 out = 0;
 

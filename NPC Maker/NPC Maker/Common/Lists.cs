@@ -8,12 +8,17 @@ namespace NPC_Maker
         public const string Keyword_True = "TRUE";
         public const string Keyword_False = "FALSE";
         public const string Keyword_Return = "RETURN";
+        public const string Keyword_ReturnFunc = "RET_FUNC_____";
+        public const string Keyword_FuncSplit = "SPLIT_FUNC_____:";
+        public const string Keyword_CallFunc = "CALL_FUNC_";
         public const string Keyword_SharpDefine = "#DEFINE";
         public const string Keyword_Define = "DEFINE";
         public const string Keyword_Procedure = "PROC";
+        public const string Keyword_Function = "FUNC";
         public const string Keyword_Elif = "ELIF";
         public const string Keyword_CallProcedure = "::";
         public const string Keyword_EndProcedure = "ENDPROC";
+        public const string Keyword_EndFunc = "ENDFUNC";
         public const string Keyword_End = "END";
         public const string Keyword_EndIf = "ENDIF";
         public const string Keyword_EndWhile = "ENDWHILE";
@@ -54,6 +59,7 @@ namespace NPC_Maker
         public const string Keyword_Ignore_Y = "IGNORE_Y";
         public const string Keyword_Debug_Skip_Label_Check = "__SKIPCHECK__";
         public const string Keyword_Label_Return = "__RETURN__";
+        public const string Keyword_Label_ReturnFunc = "__RETURNFUNC__";
         public const string Keyword_Label_Null = "__NULL__";
         public const string Keyword_Label_HERE = "HERE";
 
@@ -248,6 +254,8 @@ namespace NPC_Maker
             GET,
             GOTO_VAR,
             STOP,
+            CALL,
+            RETURN_FUNC,
             NOP,
         }
 
@@ -280,6 +288,8 @@ namespace NPC_Maker
             Objects,
             LinkAnims,
         }
+
+        public static byte ID_RESERVED = 240;
 
         public enum IfWhileAwaitSetRamSubTypes
         {

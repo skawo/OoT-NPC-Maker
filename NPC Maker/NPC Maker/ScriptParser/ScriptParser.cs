@@ -72,12 +72,15 @@ namespace NPC_Maker.Scripts
             if (outScript.ParseErrors.Count != 0)
                 return outScript;
 
-
             // Split text into lines
             List<string> Lines = SplitLines(ScriptText);
 
             // "Preprocessor"
+
+            Lines.Insert(0, $"{Lists.Instructions.SET} {Lists.Keyword_FuncSplit}");
+
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
+            Lines = ProcessFunctions(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
             Lines = ReplaceOrs(Lines, ref outScript);
@@ -89,8 +92,9 @@ namespace NPC_Maker.Scripts
 
             // Add a return instruction at the end if one doesn't exist.
             if (Instructions.Count == 0 ||
-                !(Instructions[Instructions.Count - 1] is InstructionGoto) ||
-                ((Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_Return))
+              !(Instructions[Instructions.Count - 1] is InstructionGoto) ||
+               (((Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_Return) &&
+                (Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_ReturnFunc))
             {
                 Instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
             }
@@ -228,6 +232,75 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(ParseException.DefineError());
                 return Lines;
+            }
+        }
+
+        private List<string> ProcessFunctions(List<string> Lines, ref BScript outScript)
+        {
+            try
+            {
+                Lines.Add(Lists.Keyword_Return);
+                Lines.Add(Lists.Keyword_FuncSplit);
+
+                List<string> Functions = new List<string>();
+
+                List<string> NewLines = Lines.Select(item => (string)item.Clone()).ToList();
+                int FuncNameIndex = Lines.FindIndex(x => x.StartsWith(Lists.Keyword_Function, StringComparison.OrdinalIgnoreCase));
+
+                // Looping through all lines until we can't find a line containing the keyword...
+                while (FuncNameIndex != -1)
+                {
+                    string[] SplitDefinition = Lines[FuncNameIndex].Split(' ');
+                    ScriptHelpers.ErrorIfNumParamsSmaller(SplitDefinition, 2);
+
+                    string FuncName = SplitDefinition[1];
+
+                    int EndMacro = GetCorrespondingEndFunc(Lines, FuncNameIndex);
+                    List<string> ProcLines = Lines.Skip(FuncNameIndex + 1).Take(EndMacro - FuncNameIndex - 1).ToList();
+                    List<string> ProcArgs = new List<string>();
+
+                    if (SplitDefinition.Length > 2)
+                        ProcArgs = SplitDefinition.Skip(2).Take(SplitDefinition.Length - 2).ToList();
+
+                    Lines.RemoveRange(FuncNameIndex, EndMacro - FuncNameIndex + 1);
+
+                    if (!Functions.Contains(FuncName))
+                        Functions.Add(FuncName);
+                    else
+                        outScript.ParseErrors.Add(ParseException.ProcDoubleError(SplitDefinition));
+
+                    if (Lines.FindIndex(x => x.StartsWith($"{Lists.Keyword_CallProcedure}{FuncName}", StringComparison.OrdinalIgnoreCase)) != -1)
+                    {
+                        List<string> Instructions = new List<string>();
+
+                        ProcLines.Insert(0, $"{Lists.Keyword_CallFunc}{FuncName}:".ToUpper());
+                        ProcLines.Add(Lists.Instructions.RETURN_FUNC.ToString());
+                        string s = String.Join(Environment.NewLine, ProcLines);
+                        List<string> Args = SplitDefinition.Skip(1).ToList();
+
+                        for (int f = 0; f < Args.Count; f++)
+                            s = ScriptHelpers.ReplaceExprAndEscaped(s, Args[f], $"{Lists.VarTypes.VARF}.{f + Entry.NumFVars}");
+
+                        Instructions = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        Lines.AddRange(Instructions);
+                    }
+
+                    FuncNameIndex = Lines.FindIndex(x => x.StartsWith(Lists.Keyword_Function, StringComparison.OrdinalIgnoreCase));
+                }
+
+                return Lines;
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Add(pEx);
+                return new List<string>();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(ex.Message);
+                outScript.ParseErrors.Add(ParseException.FunctionError());
+                return new List<string>();
             }
         }
 
@@ -600,6 +673,15 @@ namespace NPC_Maker.Scripts
             else
                 return outIndex;
         }
+        private int GetCorrespondingEndFunc(List<string> Lines, int LineNo)
+        {
+            int outIndex = Lines.FindIndex(x => String.Equals(x.Trim(), Lists.Keyword_EndFunc, StringComparison.OrdinalIgnoreCase));
+
+            if (outIndex == -1)
+                throw ParseException.ProcedureNotClosed(Lines[LineNo]);
+            else
+                return outIndex;
+        }
 
         private List<Instruction> GetInstructions(List<string> Lines)
         {
@@ -657,6 +739,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.ITEM: Instructions.Add(ParseItemInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.PICKUP: Instructions.Add(ParsePickupInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.RETURN: Instructions.Add(ParseReturnInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.RETURN_FUNC: Instructions.Add(ParseReturnFuncInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.SAVE: Instructions.Add(ParseSaveInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.FADEIN:
                         case (int)Lists.Instructions.FADEOUT: Instructions.Add(ParseFadeInstruction(SplitLine)); break;
@@ -667,16 +750,23 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.STOP: Instructions.Add(ParseStopInstruction(SplitLine)); break;
                         default:
                             {
-                                byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);
-
-                                if (matchesSetRAM != null || Enum.IsDefined(typeof(Lists.SetSubTypes), instructionUpperCase))
+                                if (SplitLine[0].StartsWith(Lists.Keyword_CallProcedure))
                                 {
-                                    List<string> sp = SplitLine.ToList();
-                                    sp.Insert(0, Lists.Instructions.SET.ToString());
-                                    Instructions.Add(ParseSetInstruction(sp.ToArray())); break;
+                                    Instructions.Add(ParseCallInstruction(SplitLine)); break;
                                 }
                                 else
-                                    outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(SplitLine)); break;
+                                {
+                                    byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);
+
+                                    if (matchesSetRAM != null || Enum.IsDefined(typeof(Lists.SetSubTypes), instructionUpperCase))
+                                    {
+                                        List<string> sp = SplitLine.ToList();
+                                        sp.Insert(0, Lists.Instructions.SET.ToString());
+                                        Instructions.Add(ParseSetInstruction(sp.ToArray())); break;
+                                    }
+                                    else
+                                        outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(SplitLine)); break;
+                                }
                             }
                     }
                 }
@@ -705,6 +795,9 @@ namespace NPC_Maker.Scripts
 
                         if (OutList.Find(x => x.Name == lbl.Name) != null)
                             throw ParseException.LabelAlreadyExists(lbl.Name);
+
+                        if (lbl.Name == Lists.Keyword_FuncSplit.TrimEnd(':'))
+                            Instructions[0] = new InstructionSet((byte)Lists.ID_RESERVED, new ScriptVarVal(i, (byte)Lists.VarTypes.NORMAL), 0);
 
                         OutList.Add(lbl);
                         i--;

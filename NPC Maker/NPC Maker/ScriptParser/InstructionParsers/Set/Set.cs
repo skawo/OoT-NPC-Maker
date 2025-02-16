@@ -12,6 +12,9 @@ namespace NPC_Maker.Scripts
 
                 try
                 {
+                    if (SplitLine.Length == 2 && SplitLine[1] == Lists.Keyword_FuncSplit)
+                        return new InstructionSet((byte)Lists.ID_RESERVED, new ScriptVarVal(0), 0);
+
                     Instruction Ram = H_SetRam(SplitLine);
 
                     if (Ram != null)

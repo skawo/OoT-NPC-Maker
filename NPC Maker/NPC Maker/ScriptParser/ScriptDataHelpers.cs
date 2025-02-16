@@ -38,7 +38,10 @@ namespace NPC_Maker.Scripts
         public static UInt16 FindLabel(List<InstructionLabel> Labels, InstructionLabel ToFind)
         {
             if (ToFind.Name == Lists.Keyword_Label_Return || ToFind.Name == Lists.Keyword_Label_Null)
-                return UInt16.MaxValue; 
+                return UInt16.MaxValue;
+
+            if (ToFind.Name == Lists.Keyword_Label_ReturnFunc)
+                return UInt16.MaxValue - 1;
 
             bool SkipCheck = false;
 #if DEBUG

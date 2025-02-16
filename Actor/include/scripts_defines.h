@@ -275,6 +275,8 @@ typedef enum SetSubId
 
     SET_DEBUG_VAR,
     SET_DEBUG_VARF,
+
+    SET_FIRST_FUNC = 240,
 } SetSubId;
 
 typedef enum GetSubId

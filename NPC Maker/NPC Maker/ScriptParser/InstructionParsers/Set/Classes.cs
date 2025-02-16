@@ -5,7 +5,7 @@ namespace NPC_Maker.Scripts
 {
     public class InstructionSet : InstructionSub
     {
-        ScriptVarVal Value { get; set; }
+        public ScriptVarVal Value { get; set; }
         public byte Operator;
 
         public InstructionSet(byte _SubID, ScriptVarVal _Value, byte _Operator)

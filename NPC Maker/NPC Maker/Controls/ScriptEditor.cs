@@ -166,9 +166,11 @@ namespace NPC_Maker
             DoParse(true);
 
 #if DEBUG
+            Thread.Sleep(5000);
 
-            //Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
-            //Dbg.Show();
+
+            Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
+            Dbg.Show();
 
 
 

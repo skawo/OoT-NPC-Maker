@@ -10,27 +10,6 @@ typedef struct ScriptsHeader
     u32* scriptDataOffsets[];
 } ScriptsHeader;
 
-typedef struct ScriptInstance
-{
-    u32* scriptPtr;
-    void* instrUsingTempValuesPtr;
-    float fTempValues[NUM_SCRIPT_TEMP_VARS];
-    s32 tempValues[NUM_SCRIPT_TEMP_VARS];
-    void* PlayerUpdate;
-
-    s16 responsesInstrNum;
-    s16 jumpToWhenReponded;
-    s16 jumpToWhenSpottedInstrNum;
-    s16 spotted;
-
-    u16 waitTimer;
-    u16 curInstrNum;
-    u16 startInstrNum;
-    u8 active;
-    u8 pad;
-    
-} ScriptInstance;
-
 typedef struct ScrInstr
 {
     u8 id;
@@ -765,5 +744,47 @@ typedef struct ScrInstrGetExtVar
 
 
 #pragma endregion
+
+#pragma region call
+
+typedef struct ScrInstrCall
+{
+    u8 id;
+    u8 numArgs;
+    u16 gotoAdr;
+    u8 varTypeArgs[4];
+    ScriptVarval Arg[];  
+} ScrInstrCall;
+
+
+#pragma endregion
+
+
+typedef struct ScriptInstance
+{
+    u32* scriptPtr;
+    void* instrUsingTempValuesPtr;
+    float fTempValues[NUM_SCRIPT_TEMP_VARS];
+    s32 tempValues[NUM_SCRIPT_TEMP_VARS];
+    void* PlayerUpdate;
+
+    s16 responsesInstrNum;
+    s16 jumpToWhenReponded;
+    s16 jumpToWhenSpottedInstrNum;
+    s16 spotted;
+
+    u16 waitTimer;
+    u16 curInstrNum;
+    u16 startInstrNum;
+    u16 firstFunc;
+    u8 funcCallStackDepth;
+    u8 active;
+    u8 pad;
+    u8 pad2;
+
+    u16 funcRetStack[12];
+    ScrInstrCall* funcCallStack[12];
+    
+} ScriptInstance;
 
 #endif

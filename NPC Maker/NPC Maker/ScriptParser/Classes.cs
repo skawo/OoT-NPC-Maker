@@ -10,12 +10,15 @@ namespace NPC_Maker.Scripts
 
         public string Name;
 
+        public int Split;
+
         public BScript()
         {
             Script = new byte[0];
             ScriptDebug = new List<string>();
             ParseErrors = new List<ParseException>();
             Name = "";
+            Split = 0;
         }
     }
 

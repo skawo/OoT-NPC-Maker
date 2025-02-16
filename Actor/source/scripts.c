@@ -39,6 +39,9 @@ void Scripts_Main(NpcMaker* en, PlayState* playState)
 
         ScriptInstance* script = &en->scriptInstances[i];
 
+        if (script->funcCallStackDepth)
+            InstructionCall_FillArgs(en, playState, script, script->funcCallStack[script->funcCallStackDepth - 1]);
+
         if (script->scriptPtr != NULL)
         {
             if (script->active)
@@ -136,6 +139,8 @@ void* ScriptFuncs[] =
     &Scripts_InstructionGet,                // GET
     &Scripts_InstructionGotoVar,            // GOTOVAR
     &Scripts_InstructionStop,               // STOP
+    &Scripts_InstructionCall,               // CALL
+    &Scripts_InstructionNop,                // RETFUNC
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -146,6 +151,31 @@ bool Scripts_Execute(NpcMaker* en, PlayState* playState, ScriptInstance* script)
     typedef bool ScriptFunc(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in);
     ScriptFunc* f = (ScriptFunc*)ScriptFuncs[instruction->id];
     return f(en, playState, script, instruction);
+}
+
+void InstructionCall_FillArgs(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrCall* in)
+{
+    for (int i = 0; i < in->numArgs; i++)
+        en->scriptFVars[en->settings.numFVars + i] = Scripts_GetVarval(en, playState, ((in->varTypeArgs[i / 2]) >> (i % 2 ? 0 : 4)) & 0xF, in->Arg[i], false);    
+}
+
+bool Scripts_InstructionCall(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrCall* in)
+{
+    #if LOGGING > 3
+        is64Printf("_[%2d, %1d], : CALL\n", en->npcId, en->curScriptNum);
+    #endif		
+
+    is64Printf("_[%2d, %1d]: CALLING\n", en->npcId, script->funcRetStack[script->funcCallStackDepth]); 
+
+    script->funcCallStack[script->funcCallStackDepth] = in;
+    script->funcRetStack[script->funcCallStackDepth] = script->curInstrNum + 1;
+    script->funcCallStackDepth++;
+
+    if (in->numArgs)
+        InstructionCall_FillArgs(en, playState, script, in);
+
+    script->curInstrNum = in->gotoAdr;
+    return SCRIPT_CONTINUE;
 }
 
 bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)
@@ -1046,13 +1076,49 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
 bool Scripts_InstructionGoto(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGoto* in)
 {
     #if LOGGING > 3
-        if (in->instrNum == 65535)
-            is64Printf("_[%2d, %1d]: RETURN\n", en->npcId, en->curScriptNum);
-        else
-            is64Printf("_[%2d, %1d]: GOTO going to %04d.\n", en->npcId, en->curScriptNum, in->instrNum);
+        switch (in->instrNum)
+        {
+            case 65535:
+                is64Printf("_[%2d, %1d]: RETURN\n", en->npcId, en->curScriptNum); break;
+            case 65534:
+                is64Printf("_[%2d, %1d]: FUNC RETURN\n", en->npcId, en->curScriptNum); break;
+            default:
+                is64Printf("_[%2d, %1d]: GOTO going to %04d.\n", en->npcId, en->curScriptNum, in->instrNum); break;
+        }
     #endif
 
-    script->curInstrNum = in->instrNum == SCRIPT_RETURN ? script->startInstrNum : in->instrNum;
+    switch (in->instrNum)
+    {
+        case 65535:
+            script->curInstrNum = script->startInstrNum; break;
+        case 65534:
+        {
+            #if LOGGING > 0
+                if (!script->funcCallStackDepth)
+                {
+                    is64Printf("_[%2d, %1d]: STACK FAIL\n", en->npcId, en->curScriptNum); 
+                    break;
+                }
+            #endif
+
+            if (script->funcCallStackDepth)
+            {
+                script->funcCallStackDepth--;
+                InstructionCall_FillArgs(en, playState, script, script->funcCallStack[script->funcCallStackDepth]);
+                script->curInstrNum = script->funcRetStack[script->funcCallStackDepth];
+            }
+            break;
+        }
+        default:
+        {
+            if (in->instrNum < script->firstFunc)
+                script->funcCallStackDepth = 0;
+
+            script->curInstrNum = in->instrNum; 
+            break;
+        }
+    }
+
     return in->instrNum != SCRIPT_RETURN;
 }
 
@@ -1545,6 +1611,11 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_LABELTOVAR:
         case SET_LABELTOVARF:
         {
+            break;
+        }
+        case SET_FIRST_FUNC:
+        {
+            script->firstFunc = Scripts_GetVarval(en, playState, in->varType, in->value, false);
             break;
         }
         case SUBT_GLOBAL8:
