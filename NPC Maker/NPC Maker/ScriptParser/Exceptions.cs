@@ -89,6 +89,26 @@ namespace NPC_Maker.Scripts
             return new ParseException("Problem with defines.", "");
         }
 
+        public static ParseException CaseInCaseError(string[] _Line)
+        {
+            return new ParseException("Case in case error in switch statement: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException CaseFormatError(string[] _Line)
+        {
+            return new ParseException("Mis-formatted switch case: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException CaseNotConstantError(string[] _Line)
+        {
+            return new ParseException("Switch cases cannot be a random value: ", String.Join(" ", _Line));
+        }
+
+        public static ParseException StatementOutsideCaseError(string[] _Line)
+        {
+            return new ParseException("Statement outside of case: ", String.Join(" ", _Line));
+        }
+
         public static ParseException GeneralError(string[] _Line)
         {
             return GeneralError(String.Join(" ", _Line));
@@ -176,6 +196,11 @@ namespace NPC_Maker.Scripts
             return UsageError(_Line);
         }
 
+        public static ParseException SwitchNotClosed(string _Line)
+        {
+            return UsageError(_Line);
+        }
+
         public static ParseException OcarinaNotClosed(string _Line)
         {
             return UsageError(_Line);
@@ -249,6 +274,11 @@ namespace NPC_Maker.Scripts
         public static ParseException IfNotClosed(string[] _Line)
         {
             return IfNotClosed(String.Join(" ", _Line));
+        }
+
+        public static ParseException SwitchNotClosed(string[] _Line)
+        {
+            return SwitchNotClosed(String.Join(" ", _Line));
         }
 
         public static ParseException OcarinaNotClosed(string[] _Line)

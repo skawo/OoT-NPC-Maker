@@ -605,7 +605,9 @@ namespace NPC_Maker.Scripts
         {
             List<Instruction> Instructions = new List<Instruction>();
 
-            for (int i = 0; i < Lines.Count(); i++)
+            int j = Lines.Count();
+
+            for (int i = 0; i < j; i++)
             {
                 try
                 {
@@ -665,6 +667,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.GET: Instructions.Add(ParseGetInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.GOTO_VAR: Instructions.Add(ParseGotoVarInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.STOP: Instructions.Add(ParseStopInstruction(SplitLine)); break;
+                        case (int)Lists.Instructions.SWITCH: Instructions.Add(ParseSwitchInstruction(ref Lines, SplitLine, ref i)); break;
                         default:
                             {
                                 byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);
@@ -685,6 +688,8 @@ namespace NPC_Maker.Scripts
                     outScript.ParseErrors.Add(ParseException.GeneralError(Lines[i]));
                     continue;
                 }
+
+                j = Lines.Count();
             }
 
             return Instructions;
