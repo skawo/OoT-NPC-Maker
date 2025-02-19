@@ -24,6 +24,7 @@ namespace NPC_Maker
         public const string Keyword_EndSwitch = "ENDSWITCH";
         public const string Keyword_Case = "CASE";
         public const string Keyword_EndCase = "ENDCASE";
+        public const string Keyword_DefaultCase = "DEFAULT";
         public const string Keyword_EndTrade = "ENDTRADE";
         public const string Keyword_TradeDefault = "DEFAULT";
         public const string Keyword_TradeSucccess = "SUCCESS";

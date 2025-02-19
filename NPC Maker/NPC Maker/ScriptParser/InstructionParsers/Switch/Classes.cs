@@ -8,10 +8,13 @@ namespace NPC_Maker.Scripts
         ScriptVarVal SwitchedVar { get; set; }
         List<SwitchEntry> Entries { get; set; }
 
-        public InstructionSwitch(ScriptVarVal swVar, List<SwitchEntry> entryList) : base((byte)Lists.Instructions.SWITCH)
+        InstructionLabel defaultE { get; set; }
+
+        public InstructionSwitch(ScriptVarVal swVar, List<SwitchEntry> entryList, InstructionLabel defaultEntry) : base((byte)Lists.Instructions.SWITCH)
         {
             SwitchedVar = swVar;
             Entries = entryList;
+            defaultE = defaultEntry;
         }
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
@@ -22,7 +25,12 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList((UInt16)Entries.Count, Data);
             Helpers.Ensure4ByteAlign(Data);
 
-            foreach(SwitchEntry e in Entries)
+            ScriptDataHelpers.FindLabelAndAddToByteList(Labels, defaultE, ref Data);
+            Helpers.AddObjectToByteList((byte)0, Data);
+            Helpers.AddObjectToByteList((byte)0, Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            foreach (SwitchEntry e in Entries)
             {
                 Helpers.AddObjectToByteList(e.var.Value, Data);
                 ScriptDataHelpers.FindLabelAndAddToByteList(Labels, e.l, ref Data);
@@ -30,7 +38,7 @@ namespace NPC_Maker.Scripts
                 Helpers.AddObjectToByteList((byte)0, Data);
             }
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 4 + 8 * Entries.Count);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 4 + 4 + 8 * Entries.Count);
 
             return Data.ToArray();
         }

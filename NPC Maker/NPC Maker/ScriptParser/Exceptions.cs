@@ -104,6 +104,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("Switch cases cannot be a random value: ", String.Join(" ", _Line));
         }
 
+        public static ParseException MultipleDefaultsError(string[] _Line)
+        {
+            return new ParseException("Multiple default statements are not allowed: ", String.Join(" ", _Line));
+        }
+
         public static ParseException StatementOutsideCaseError(string[] _Line)
         {
             return new ParseException("Statement outside of case: ", String.Join(" ", _Line));

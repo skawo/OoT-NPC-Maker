@@ -20,7 +20,8 @@ namespace NPC_Maker.Scripts
                     throw ParseException.IfNotClosed(SplitLine);
 
                 string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
-                Lines.Insert(End + 1, $"__SWITCHRETURN__{LabelR}:");
+                string ReturnLabel = $"__SWITCHRETURN__{LabelR}";
+                Lines.Insert(End + 1, $"{ReturnLabel}:");
 
                 if (Lines[Lines.Count - 1].ToUpper().Trim() != (Lists.Instructions.RETURN.ToString()))
                     Lines.Add(Lists.Instructions.RETURN.ToString());
@@ -31,6 +32,8 @@ namespace NPC_Maker.Scripts
                 bool inCase = false;
                 bool lastWasCase = false;
                 string lastGotoLabel = "";
+
+                string defaultEntry = ReturnLabel;
 
                 while (Lines[i].ToUpper().Trim() != Lists.Keyword_EndSwitch)
                 {
@@ -44,24 +47,42 @@ namespace NPC_Maker.Scripts
                         else
                         {
                             SplitL[1] = SplitL[1].TrimEnd(':');
-                            var CaseVar = ScriptHelpers.GetScriptVarVal(SplitL, 1, float.MinValue, float.MaxValue);
 
-                            if (CaseVar.Vartype == (int)Lists.VarTypes.RANDOM)
-                                throw ParseException.CaseNotConstantError(SplitLine);
+                            ScriptVarVal CaseVar = null;
+
+                            if (SplitL[1].ToUpper().Trim() != Lists.Keyword_DefaultCase)
+                            {
+                                CaseVar = ScriptHelpers.GetScriptVarVal(SplitL, 1, float.MinValue, float.MaxValue);
+
+                                if (CaseVar.Vartype == (int)Lists.VarTypes.RANDOM)
+                                    throw ParseException.CaseNotConstantError(SplitLine);
+                            }
+                            else if (defaultEntry != ReturnLabel)
+                                throw ParseException.MultipleDefaultsError(SplitLine);
 
                             if (!lastWasCase)
                             {
                                 lastGotoLabel = $"__GOTOSWITCH_{ScriptDataHelpers.GetRandomLabelString(this)}";
 
-                                SwitchEntry currentEntry = new SwitchEntry(lastGotoLabel, CaseVar);
-                                entries.Add(currentEntry);
+                                if (CaseVar == null)
+                                    defaultEntry = lastGotoLabel;
+                                else
+                                {
+                                    SwitchEntry currentEntry = new SwitchEntry(lastGotoLabel, CaseVar);
+                                    entries.Add(currentEntry);
+                                }
 
                                 Lines.Add($"{lastGotoLabel}:");
                             }
                             else
                             {
-                                SwitchEntry currentEntry = new SwitchEntry(lastGotoLabel, CaseVar);
-                                entries.Add(currentEntry);
+                                if (CaseVar == null)
+                                    defaultEntry = lastGotoLabel;
+                                else
+                                {
+                                    SwitchEntry currentEntry = new SwitchEntry(lastGotoLabel, CaseVar);
+                                    entries.Add(currentEntry);
+                                }
                             }
                         }
 
@@ -87,7 +108,7 @@ namespace NPC_Maker.Scripts
 
                 Lines.Add($"{Lists.Instructions.GOTO} __SWITCHRETURN__{LabelR}");
 
-                return new InstructionSwitch(switchedVar, entries);
+                return new InstructionSwitch(switchedVar, entries, new InstructionLabel(defaultEntry));
             }
             catch (ParseException pEx)
             {
