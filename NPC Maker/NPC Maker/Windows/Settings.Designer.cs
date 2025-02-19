@@ -44,6 +44,8 @@ namespace NPC_Maker.Windows
             this.WineCompatMode = new System.Windows.Forms.CheckBox();
             this.AutoSaveC = new System.Windows.Forms.CheckBox();
             this.NumUpDown_AutoSaveCTime = new System.Windows.Forms.NumericUpDown();
+            this.Cb_AutoCompile = new System.Windows.Forms.CheckBox();
+            this.Btn_ResetCache = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AutoSaveCTime)).BeginInit();
@@ -101,7 +103,7 @@ namespace NPC_Maker.Windows
             // 
             this.Combo_CompileFor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_CompileFor.FormattingEnabled = true;
-            this.Combo_CompileFor.Location = new System.Drawing.Point(93, 152);
+            this.Combo_CompileFor.Location = new System.Drawing.Point(121, 174);
             this.Combo_CompileFor.Name = "Combo_CompileFor";
             this.Combo_CompileFor.Size = new System.Drawing.Size(149, 21);
             this.Combo_CompileFor.TabIndex = 4;
@@ -111,7 +113,7 @@ namespace NPC_Maker.Windows
             // Lbl_CompileFor
             // 
             this.Lbl_CompileFor.AutoSize = true;
-            this.Lbl_CompileFor.Location = new System.Drawing.Point(10, 155);
+            this.Lbl_CompileFor.Location = new System.Drawing.Point(10, 177);
             this.Lbl_CompileFor.Name = "Lbl_CompileFor";
             this.Lbl_CompileFor.Size = new System.Drawing.Size(75, 13);
             this.Lbl_CompileFor.TabIndex = 5;
@@ -119,7 +121,7 @@ namespace NPC_Maker.Windows
             // 
             // Txt_GCCArgs
             // 
-            this.Txt_GCCArgs.Location = new System.Drawing.Point(13, 231);
+            this.Txt_GCCArgs.Location = new System.Drawing.Point(12, 248);
             this.Txt_GCCArgs.Name = "Txt_GCCArgs";
             this.Txt_GCCArgs.Size = new System.Drawing.Size(450, 20);
             this.Txt_GCCArgs.TabIndex = 6;
@@ -129,7 +131,7 @@ namespace NPC_Maker.Windows
             // Lbl_GCCArgs
             // 
             this.Lbl_GCCArgs.AutoSize = true;
-            this.Lbl_GCCArgs.Location = new System.Drawing.Point(12, 215);
+            this.Lbl_GCCArgs.Location = new System.Drawing.Point(11, 232);
             this.Lbl_GCCArgs.Name = "Lbl_GCCArgs";
             this.Lbl_GCCArgs.Size = new System.Drawing.Size(85, 13);
             this.Lbl_GCCArgs.TabIndex = 7;
@@ -137,7 +139,7 @@ namespace NPC_Maker.Windows
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(343, 257);
+            this.BtnSave.Location = new System.Drawing.Point(342, 274);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(120, 29);
             this.BtnSave.TabIndex = 8;
@@ -148,7 +150,7 @@ namespace NPC_Maker.Windows
             // Label_CompileTimeout
             // 
             this.Label_CompileTimeout.AutoSize = true;
-            this.Label_CompileTimeout.Location = new System.Drawing.Point(10, 185);
+            this.Label_CompileTimeout.Location = new System.Drawing.Point(10, 203);
             this.Label_CompileTimeout.Name = "Label_CompileTimeout";
             this.Label_CompileTimeout.Size = new System.Drawing.Size(106, 13);
             this.Label_CompileTimeout.TabIndex = 10;
@@ -156,7 +158,7 @@ namespace NPC_Maker.Windows
             // 
             // NumUpCompileTimeout
             // 
-            this.NumUpCompileTimeout.Location = new System.Drawing.Point(122, 183);
+            this.NumUpCompileTimeout.Location = new System.Drawing.Point(121, 201);
             this.NumUpCompileTimeout.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -205,7 +207,7 @@ namespace NPC_Maker.Windows
             // WineCompatMode
             // 
             this.WineCompatMode.AutoSize = true;
-            this.WineCompatMode.Location = new System.Drawing.Point(13, 129);
+            this.WineCompatMode.Location = new System.Drawing.Point(14, 151);
             this.WineCompatMode.Name = "WineCompatMode";
             this.WineCompatMode.Size = new System.Drawing.Size(144, 17);
             this.WineCompatMode.TabIndex = 13;
@@ -217,7 +219,7 @@ namespace NPC_Maker.Windows
             // AutoSaveC
             // 
             this.AutoSaveC.AutoSize = true;
-            this.AutoSaveC.Location = new System.Drawing.Point(13, 106);
+            this.AutoSaveC.Location = new System.Drawing.Point(13, 128);
             this.AutoSaveC.Name = "AutoSaveC";
             this.AutoSaveC.Size = new System.Drawing.Size(162, 17);
             this.AutoSaveC.TabIndex = 14;
@@ -228,7 +230,7 @@ namespace NPC_Maker.Windows
             // 
             // NumUpDown_AutoSaveCTime
             // 
-            this.NumUpDown_AutoSaveCTime.Location = new System.Drawing.Point(188, 105);
+            this.NumUpDown_AutoSaveCTime.Location = new System.Drawing.Point(188, 127);
             this.NumUpDown_AutoSaveCTime.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -250,11 +252,35 @@ namespace NPC_Maker.Windows
             0});
             this.NumUpDown_AutoSaveCTime.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
             // 
+            // Cb_AutoCompile
+            // 
+            this.Cb_AutoCompile.AutoSize = true;
+            this.Cb_AutoCompile.Location = new System.Drawing.Point(13, 105);
+            this.Cb_AutoCompile.Name = "Cb_AutoCompile";
+            this.Cb_AutoCompile.Size = new System.Drawing.Size(194, 17);
+            this.Cb_AutoCompile.TabIndex = 16;
+            this.Cb_AutoCompile.Tag = "AUTOSAVESWITCH";
+            this.Cb_AutoCompile.Text = "Auto Compile Code on Actor Switch";
+            this.Cb_AutoCompile.UseVisualStyleBackColor = true;
+            this.Cb_AutoCompile.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // Btn_ResetCache
+            // 
+            this.Btn_ResetCache.Location = new System.Drawing.Point(12, 274);
+            this.Btn_ResetCache.Name = "Btn_ResetCache";
+            this.Btn_ResetCache.Size = new System.Drawing.Size(120, 29);
+            this.Btn_ResetCache.TabIndex = 17;
+            this.Btn_ResetCache.Text = "Reset Cache";
+            this.Btn_ResetCache.UseVisualStyleBackColor = true;
+            this.Btn_ResetCache.Click += new System.EventHandler(this.ResetCache_Click);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 294);
+            this.ClientSize = new System.Drawing.Size(475, 313);
+            this.Controls.Add(this.Btn_ResetCache);
+            this.Controls.Add(this.Cb_AutoCompile);
             this.Controls.Add(this.NumUpDown_AutoSaveCTime);
             this.Controls.Add(this.AutoSaveC);
             this.Controls.Add(this.WineCompatMode);
@@ -298,5 +324,7 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.CheckBox WineCompatMode;
         private System.Windows.Forms.CheckBox AutoSaveC;
         private System.Windows.Forms.NumericUpDown NumUpDown_AutoSaveCTime;
+        private System.Windows.Forms.CheckBox Cb_AutoCompile;
+        private System.Windows.Forms.Button Btn_ResetCache;
     }
 }

@@ -29,6 +29,8 @@ namespace NPC_Maker
 
         public bool AutoComp_Save { get; set; }
 
+        public bool AutoComp_ActorSwitch { get; set; }
+
         public UInt32 CompileTimeout { get; set; }
 
         public string LastSaveBinaryPath { get; set; }
@@ -66,6 +68,7 @@ namespace NPC_Maker
             AutoSave = false;
             AutoSaveTime = 1000;
             UseSpaceWithFromFont = false;
+            AutoComp_ActorSwitch = false;
         }
 
         public enum Members
@@ -86,6 +89,7 @@ namespace NPC_Maker
             USEWINE,
             AUTOSAVE,
             AUTOSAVETIME,
+            AUTOSAVESWITCH,
             USESPACEFONT,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -114,7 +118,7 @@ namespace NPC_Maker
         {
             switch (Member)
             {
-                case Members.AUTOCOMP_SAVE: AutoComp_Save = (bool)Value; break;
+                case Members.AUTOSAVESWITCH: AutoComp_ActorSwitch = (bool)Value; break;
                 case Members.CHECKSYNTAX: CheckSyntax = (bool)Value; break;
                 case Members.COLORIZESYNTAX: ColorizeScriptSyntax = (bool)Value; break;
                 case Members.IMPROVEMSGPRV: ImproveTextMsgReadability = (bool)Value; break;

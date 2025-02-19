@@ -69,7 +69,7 @@ namespace NPC_Maker
             this.ResizeBegin += Form1_ResizeBegin;
             this.ResizeEnd += Form1_ResizeEnd;
 
-            CodeParamsTooltip.SetToolTip(Textbox_CodeEditorArgs, "Available constants: $CODEFILE, $CODEFOLDER");
+            CodeParamsTooltip.SetToolTip(Textbox_CodeEditorArgs, "Available constants: $CODEFILE, $CODEHEADER, $CODEFOLDER");
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -389,16 +389,14 @@ namespace NPC_Maker
 
             #region CCode
 
-
-            string CompileErrors = "";
-
-            if (SelectedEntry.EmbeddedOverlayCode.Code != "")
+            if (SelectedEntry.EmbeddedOverlayCode.Code != "" && Program.Settings.AutoComp_ActorSwitch)
             {
-                //CCode.CreateCTempDirectory(SelectedEntry.EmbeddedOverlayCode.Code);
+                string CompileErrors = "";
                 CCode.Compile(true, EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+                TextBox_CompileMsg.Text = CompileErrors;
             }
-
-            TextBox_CompileMsg.Text = CompileErrors;
+            else
+                TextBox_CompileMsg.Text = "Click \"Compile\"!";
 
             int Index = 0;
 
@@ -2641,7 +2639,7 @@ namespace NPC_Maker
             Program.CodeEditorProcess = CCode.OpenCodeEditor(
                                                                 (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
                                                                 TextBox_CodeEditorPath.Text,
-                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.editCodeFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.tempFolderPath.AppendQuotation())
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.editCodeFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.tempFolderPath.AppendQuotation()).Replace("$CODEHEADER", CCode.editHeaderFilePath.AppendQuotation())
                                                             );
 
             if (Program.CodeEditorProcess == null)

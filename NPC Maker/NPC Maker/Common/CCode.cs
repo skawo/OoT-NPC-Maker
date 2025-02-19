@@ -19,6 +19,7 @@ namespace NPC_Maker
             NotepadPlusPlus,
             Sublime,
             WordPad,
+            Kate,
             Other
         };
 
@@ -618,12 +619,14 @@ namespace NPC_Maker
                     case CCode.CodeEditorEnum.Notepad:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\notepad.exe";
+                            startInfo.Arguments = $"-n {CCode.editCodeFilePath.AppendQuotation()}";
                             break;
                         }
                     case CCode.CodeEditorEnum.NotepadPlusPlus:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Notepad++\notepad++.exe";
-                            startInfo.Arguments += " -multiInst";
+                            startInfo.Arguments = $"{CCode.editHeaderFilePath.AppendQuotation()} {CCode.editCodeFilePath.AppendQuotation()} -multiInst";
+
                             break;
                         }
                     case CCode.CodeEditorEnum.Sublime:
@@ -634,6 +637,14 @@ namespace NPC_Maker
                     case CCode.CodeEditorEnum.WordPad:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\write.exe";
+                            startInfo.Arguments = $"-n {CCode.editCodeFilePath.AppendQuotation()}";
+                            break;
+                        }
+                    case CCode.CodeEditorEnum.Kate:
+                        {
+                            startInfo.FileName = "kate";
+                            startInfo.Arguments = $"{CCode.editHeaderFilePath.AppendQuotation()} {CCode.editCodeFilePath.AppendQuotation()}";
+
                             break;
                         }
                     default:

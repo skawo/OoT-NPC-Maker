@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace NPC_Maker.Windows
 {
@@ -31,7 +32,7 @@ namespace NPC_Maker.Windows
             Cb_Verbose.Checked = EditedSettings.Verbose;
             Txt_GCCArgs.Text = EditedSettings.GCCFlags;
             Combo_CompileFor.Text = EditedSettings.GameVersion.ToString();
-            //Cb_AutoCompile.Checked = EditedSettings.AutoComp_Save;
+            Cb_AutoCompile.Checked = EditedSettings.AutoComp_ActorSwitch;
             NumUpCompileTimeout.Value = EditedSettings.CompileTimeout;
             NumUpParseTime.Value = EditedSettings.ParseTime;
             WineCompatMode.Checked = EditedSettings.UseWine;
@@ -71,6 +72,15 @@ namespace NPC_Maker.Windows
                 Program.IsRunningUnderMono = false;
 
             this.Close();
+        }
+
+        private void ResetCache_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(Program.CachePath))
+                Directory.Delete(Program.CachePath, true);
+
+            if (!Directory.Exists(Program.CachePath))
+                Directory.CreateDirectory(Program.CachePath);
         }
     }
 }
