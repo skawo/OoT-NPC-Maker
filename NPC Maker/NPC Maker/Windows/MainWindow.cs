@@ -395,8 +395,10 @@ namespace NPC_Maker
                 CCode.Compile(true, EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
                 TextBox_CompileMsg.Text = CompileErrors;
             }
-            else
+            else if (SelectedEntry.EmbeddedOverlayCode.Code != "")
                 TextBox_CompileMsg.Text = "Click \"Compile\"!";
+            else
+                TextBox_CompileMsg.Text = "No code to compile.";
 
             int Index = 0;
 
