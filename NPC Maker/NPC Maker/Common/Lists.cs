@@ -33,11 +33,11 @@ namespace NPC_Maker
         public const string Keyword_And = "AND";
 
 
-        // Unused ========
+        public const string Keyword_Switch = "SWITCH";
         public const string Keyword_Case = "CASE";
         public const string Keyword_EndCase = "ENDCASE";
-        public const string Keyword_DefaultCase = "DEFAULT";
-        // Unused ========
+        public const string Keyword_DefaultCase = "DEFAULT:";
+        
 
         /*
         public const string Keyword_ScriptVar = "VAR";
@@ -120,6 +120,12 @@ namespace NPC_Maker
             Keyword_False,
         };
 
+        public static List<string> KeywordsCyan = new List<string>()
+        {
+            Keyword_Switch,
+            Keyword_EndSwitch,
+        };
+
         public static List<string> KeywordsPurple = new List<string>()
         {
             Keyword_Else,
@@ -134,6 +140,12 @@ namespace NPC_Maker
             Keyword_EndTalk,
             Keyword_EndTrade,
             Keyword_EndParticle,
+            Keyword_EndCase,
+        };
+
+        public static List<string> KeywordsMPurpleBold = new List<string>()
+        {
+            Keyword_DefaultCase,
         };
 
         public static List<string> KeywordsRed = new List<string>()
@@ -258,7 +270,6 @@ namespace NPC_Maker
             GET,
             GOTO_VAR,
             STOP,
-            SWITCH,
             NOP,
         }
 

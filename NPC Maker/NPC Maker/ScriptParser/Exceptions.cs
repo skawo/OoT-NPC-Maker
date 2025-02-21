@@ -99,6 +99,12 @@ namespace NPC_Maker.Scripts
             return new ParseException("Mis-formatted switch case: ", String.Join(" ", _Line));
         }
 
+        public static ParseException DefaultStatementMustBeLast(string[] _Line)
+        {
+            return new ParseException("The default statement of switch case must be the last one in that switch case: ", String.Join(" ", _Line));
+        }
+
+
         public static ParseException CaseNotConstantError(string[] _Line)
         {
             return new ParseException("Switch cases cannot be a random value: ", String.Join(" ", _Line));

@@ -15,6 +15,7 @@ namespace NPC_Maker
         public static Style ErrorStyle = new TextStyle(Brushes.Black, Brushes.Red, FontStyle.Bold);
         public static Style PurpleStyle = new TextStyle(Brushes.Purple, null, FontStyle.Regular);
         public static Style MPurpleStyle = new TextStyle(Brushes.MediumPurple, null, FontStyle.Regular);
+        public static Style MPurpleBoldStyle = new TextStyle(Brushes.MediumPurple, null, FontStyle.Bold);
         public static Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
         public static Style DarkGrayStyle = new TextStyle(Brushes.DarkGray, null, FontStyle.Regular);
         public static Style CyanStyle = new TextStyle(Brushes.DarkCyan, null, FontStyle.Bold);
@@ -31,11 +32,13 @@ namespace NPC_Maker
             {Enum.GetNames(typeof(Lists.AwardItems)).ToList(),  SyntaxHighlighter.CyanStyle},
             {Enum.GetNames(typeof(Lists.QuestItems)).ToList(),  SyntaxHighlighter.CyanStyle},
             {Enum.GetNames(typeof(Lists.Instructions)).ToList(),  SyntaxHighlighter.PurpleStyle},
+            {Lists.KeywordsCyan,  SyntaxHighlighter.CyanStyle},
             {Lists.KeywordsBlue,  SyntaxHighlighter.BlueStyle},
             {Lists.KeywordsRed,  SyntaxHighlighter.RedStyle},
             {Lists.KeywordsGray,  SyntaxHighlighter.GrayStyle},
             {Lists.KeywordsPurple,  SyntaxHighlighter.PurpleStyle},
             {Lists.KeywordsMPurple,  SyntaxHighlighter.MPurpleStyle},
+            {Lists.KeywordsMPurpleBold,  SyntaxHighlighter.MPurpleBoldStyle},
             {Dicts.SFXes.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
             {Dicts.Music.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
             {Dicts.Actors.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
@@ -47,6 +50,8 @@ namespace NPC_Maker
         {
             { @"\/\*([\s\S]*?)\*\/", SyntaxHighlighter.GreenStyle},      // Comments like /* comment */
             { @"//.+", SyntaxHighlighter.GreenStyle},                    // Comments like // comment
+            { @"case .+:", SyntaxHighlighter.MPurpleBoldStyle},          // Cases
+            { @"default:", SyntaxHighlighter.MPurpleBoldStyle},          // Defaults
             { @".+:[\n\r ]+", SyntaxHighlighter.BoldRedStyle},           // Labels
             { @"::([\S]+)", SyntaxHighlighter.RedStyle},                 // Procedure calls
             { @"#define.+", SyntaxHighlighter.GreenStyle},               // Defines

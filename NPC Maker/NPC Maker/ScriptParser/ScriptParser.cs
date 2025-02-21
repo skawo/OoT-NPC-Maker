@@ -79,6 +79,7 @@ namespace NPC_Maker.Scripts
             // "Preprocessor"
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
+            Lines = ReplaceSwitches(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
             Lines = ReplaceOrs(Lines, ref outScript);
             Lines = ReplaceAnds(Lines, ref outScript);
@@ -133,7 +134,7 @@ namespace NPC_Maker.Scripts
 
             for (int i = 0; i < Lines.Count(); i++)
             {
-                if (Lines[i].EndsWith(":"))
+                if (Lines[i].EndsWith(":") && !(Lines[i].ToUpper() == $"{Lists.Keyword_DefaultCase}") && !Lines[i].ToUpper().StartsWith($"{Lists.Keyword_Case} "))
                     Labels.Add(Lines[i].Substring(0, Lines[i].Length - 1));
             }
 
@@ -526,6 +527,161 @@ namespace NPC_Maker.Scripts
             }
 
             return outl;
+        }
+
+        // Change Switch Cases into If...Elif...Endif
+        private List<string> ReplaceSwitches(List<string> Lines, ref BScript outScript)
+        {
+            try
+            {
+                int SwitchLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Switch));
+
+                while (SwitchLineIndex != -1)
+                {
+                    string[] splitL = Lines[SwitchLineIndex].ToUpper().Trim().Split(' ');
+
+                    if (splitL.Length != 2)
+                        outScript.ParseErrors.Add(ParseException.ParamCountWrong(splitL));
+
+                    string swVar = splitL[1];
+
+                    int end = ScriptHelpers.GetCorresponding(Lines, SwitchLineIndex, Lists.Keyword_Switch, Lists.Keyword_EndSwitch);
+
+                    if (end < 0)
+                        throw ParseException.SwitchNotClosed(Lines[SwitchLineIndex]);
+
+                    bool InCase = false;
+                    bool firstCase = true;
+                    bool hasDefault = false;
+                    int switchInner = 0;
+
+                    Lines[SwitchLineIndex] = "";
+                    Lines[end] = $"{Lists.Keyword_EndIf}";
+
+                    for (int i = SwitchLineIndex + 1; i < end; i++)
+                    {
+                        string[] splitLl = Lines[i].ToUpper().Trim().Split(' ');
+
+                        string st = splitLl[0];
+
+                        if (st == Lists.Keyword_Switch)
+                        {
+                            switchInner++;
+                            continue;
+                        }
+
+                        if (st == Lists.Keyword_EndSwitch)
+                        {
+                            switchInner--;
+                            continue;
+                        }
+
+                        if (switchInner > 0)
+                            continue;
+
+                        if (!InCase)
+                        {
+                            if (st == Lists.Keyword_Case)
+                            {
+                                if (hasDefault)
+                                    throw ParseException.DefaultStatementMustBeLast(splitL);
+
+                                if (splitLl.Length != 2 || !splitLl[1].EndsWith(":"))
+                                    throw ParseException.CaseFormatError(splitLl);
+
+                                string swVarL = splitLl[1].TrimEnd(':');
+
+                                if (firstCase)
+                                    Lines[i] = $"{Lists.Instructions.IF} {swVar} == {swVarL}";
+                                else
+                                    Lines[i] = $"{Lists.Keyword_Elif} {swVar} == {swVarL}";
+
+                                InCase = true;
+                                firstCase = false;
+                            }
+                            else if (st == Lists.Keyword_DefaultCase)
+                            {
+                                if (hasDefault)
+                                    throw ParseException.MultipleDefaultsError(splitL);
+
+                                hasDefault = true;
+                                InCase = true;
+
+                                if (firstCase)
+                                {
+                                    Lines[i] = "";
+                                    Lines[end] = "";
+                                    firstCase = false;
+                                }
+                                else
+                                    Lines[i] = $"{Lists.Keyword_Else}";
+                            }
+                            else
+                                throw ParseException.StatementOutsideCaseError(splitLl);
+                        }
+                        else
+                        {
+                            if (st == Lists.Keyword_EndCase)
+                            {
+                                Lines[i] = "";
+                                InCase = false;
+                                continue;
+                            }
+                            else if (st == Lists.Keyword_Case)
+                            {
+                                if (hasDefault)
+                                    throw ParseException.DefaultStatementMustBeLast(splitL);
+
+                                string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
+                                Lines.Insert(i, $"{Lists.Instructions.GOTO} {LabelR}");
+                                i++;
+                                end++;
+
+                                if (splitLl.Length != 2)
+                                    throw ParseException.CaseFormatError(splitLl);
+
+                                string swVarL = splitLl[1].TrimEnd(':');
+
+                                Lines[i] = $"{Lists.Keyword_Elif} {swVar} == {swVarL}";
+                                Lines.Insert(i + 1, $"{LabelR}:");
+                                i++;
+                                end++;
+                            }
+                            else if (st == Lists.Keyword_DefaultCase)
+                            {
+                                if (hasDefault)
+                                    throw ParseException.MultipleDefaultsError(splitL);
+
+                                hasDefault = true;
+
+                                string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
+                                Lines.Insert(i - 1, $"{Lists.Instructions.GOTO} {LabelR}");
+                                i++;
+                                end++;
+
+                                Lines[i] = $"{Lists.Keyword_Else}";
+                                Lines.Insert(i + 1, $"{LabelR}:");
+                                i++;
+                                end++;
+                            }
+                            else
+                                continue;
+                        }
+                    }
+
+                    SwitchLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Switch));
+                }
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Add(pEx);
+            }
+            catch (Exception ex)
+            {
+                outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing SWITCH " + ex.Message));
+            }
+
+            return Lines.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         }
 
         // Change Elifs into proper sets of Else EndIf
