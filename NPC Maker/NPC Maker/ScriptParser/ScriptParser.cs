@@ -655,7 +655,7 @@ namespace NPC_Maker.Scripts
                                 hasDefault = true;
 
                                 string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
-                                Lines.Insert(i - 1, $"{Lists.Instructions.GOTO} {LabelR}");
+                                Lines.Insert(i, $"{Lists.Instructions.GOTO} {LabelR}");
                                 i++;
                                 end++;
 
@@ -680,6 +680,8 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing SWITCH " + ex.Message));
             }
+
+            System.IO.File.WriteAllText("test", string.Join(Environment.NewLine, Lines.Where(x => !string.IsNullOrWhiteSpace(x))));
 
             return Lines.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         }
