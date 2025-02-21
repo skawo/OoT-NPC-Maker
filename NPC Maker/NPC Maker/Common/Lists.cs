@@ -89,6 +89,11 @@ namespace NPC_Maker
             Keyword_EndOcarina,
             Keyword_Once,
             Keyword_Label_HERE,
+            Keyword_DefaultCase,
+            Keyword_Degree,
+            Keyword_EndSwitch,
+            Keyword_EndCase,
+            Keyword_Case,
 
             VarTypes.NORMAL.ToString(),
             VarTypes.RANDOM.ToString(),

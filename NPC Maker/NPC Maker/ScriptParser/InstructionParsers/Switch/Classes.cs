@@ -25,6 +25,8 @@ namespace NPC_Maker.Scripts
             Helpers.AddObjectToByteList((UInt16)Entries.Count, Data);
             Helpers.Ensure4ByteAlign(Data);
 
+            Helpers.AddObjectToByteList(SwitchedVar.Value, Data);
+
             ScriptDataHelpers.FindLabelAndAddToByteList(Labels, defaultE, ref Data);
             Helpers.AddObjectToByteList((byte)0, Data);
             Helpers.AddObjectToByteList((byte)0, Data);
@@ -38,7 +40,7 @@ namespace NPC_Maker.Scripts
                 Helpers.AddObjectToByteList((byte)0, Data);
             }
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 4 + 4 + 8 * Entries.Count);
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12 + 8 * Entries.Count);
 
             return Data.ToArray();
         }

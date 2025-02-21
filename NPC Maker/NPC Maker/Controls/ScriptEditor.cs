@@ -165,14 +165,13 @@ namespace NPC_Maker
         {
             DoParse(true);
 
+
 #if DEBUG
-
-            //Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
-            //Dbg.Show();
-
-
-
+            Thread.Sleep(1000);
+            Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
+            Dbg.Show();
 #endif
+
 
         }
 

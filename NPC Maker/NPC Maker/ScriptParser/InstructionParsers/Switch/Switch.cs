@@ -13,11 +13,12 @@ namespace NPC_Maker.Scripts
                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 2);
 
                 int End = GetCorrespondingEndSwitch(Lines, LineNo);
-                int i = LineNo + 1;
-                LineNo = End;
 
                 if (End < 0)
-                    throw ParseException.IfNotClosed(SplitLine);
+                    throw ParseException.SwitchNotClosed(SplitLine);
+
+                int i = LineNo + 1;
+                LineNo = End;
 
                 string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
                 string ReturnLabel = $"__SWITCHRETURN__{LabelR}";
@@ -31,15 +32,37 @@ namespace NPC_Maker.Scripts
                 var switchedVar = ScriptHelpers.GetScriptVarVal(SplitLine, 1, float.MinValue, float.MaxValue);
                 bool inCase = false;
                 bool lastWasCase = false;
+                int switchNest = 0;
                 string lastGotoLabel = "";
 
                 string defaultEntry = ReturnLabel;
 
-                while (Lines[i].ToUpper().Trim() != Lists.Keyword_EndSwitch)
+                while (Lines[i].ToUpper().Trim() != Lists.Keyword_EndSwitch || switchNest != 0)
                 {
-                    if (Lines[i].ToUpper().Trim().StartsWith(Lists.Keyword_Case))
+                    string CurLine = Lines[i].ToUpper().Trim();
+
+                    if (CurLine == Lists.Keyword_EndSwitch)
+                        switchNest--;
+
+                    if (CurLine.StartsWith(Lists.Instructions.SWITCH.ToString()))
+                        switchNest++;
+
+                    if (switchNest > 0)
                     {
-                        string[] SplitL = Lines[i].Trim().Split(' ');
+                        Lines.Add(Lines[i]);
+                        i++;
+                        continue;
+                    }
+
+                    if (CurLine.TrimEnd(':') == Lists.Keyword_DefaultCase)
+                    {
+                        Lines[i] = $"{Lists.Keyword_Case} {Lists.Keyword_DefaultCase}:";
+                        CurLine = Lines[i];
+                    }
+
+                    if (CurLine.StartsWith(Lists.Keyword_Case))
+                    {
+                        string[] SplitL = CurLine.Split(' ');
                         ScriptHelpers.ErrorIfNumParamsNotEq(SplitL, 2);
 
                         if (!SplitL[1].EndsWith(":"))

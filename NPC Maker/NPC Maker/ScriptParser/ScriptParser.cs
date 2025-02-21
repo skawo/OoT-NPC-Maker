@@ -511,7 +511,11 @@ namespace NPC_Maker.Scripts
 
             foreach (string s in Lines)
             {
-                if (s.ToUpper() == $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}")
+                string cmp = s.ToUpper().Trim();
+
+                if (cmp == $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}" ||
+                    cmp == $"{Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}")
+
                 {
                     string nlabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
                     outl.Add($"{nlabel}:");
