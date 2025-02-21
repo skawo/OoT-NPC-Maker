@@ -22,9 +22,6 @@ namespace NPC_Maker
         public const string Keyword_EndTalk = "ENDTALK";
         public const string Keyword_EndOcarina = "ENDOCARINA";
         public const string Keyword_EndSwitch = "ENDSWITCH";
-        public const string Keyword_Case = "CASE";
-        public const string Keyword_EndCase = "ENDCASE";
-        public const string Keyword_DefaultCase = "DEFAULT";
         public const string Keyword_EndTrade = "ENDTRADE";
         public const string Keyword_TradeDefault = "DEFAULT";
         public const string Keyword_TradeSucccess = "SUCCESS";
@@ -34,6 +31,13 @@ namespace NPC_Maker
         public const string Keyword_Else = "ELSE";
         public const string Keyword_Or = "OR";
         public const string Keyword_And = "AND";
+
+
+        // Unused ========
+        public const string Keyword_Case = "CASE";
+        public const string Keyword_EndCase = "ENDCASE";
+        public const string Keyword_DefaultCase = "DEFAULT";
+        // Unused ========
 
         /*
         public const string Keyword_ScriptVar = "VAR";
@@ -89,11 +93,12 @@ namespace NPC_Maker
             Keyword_EndOcarina,
             Keyword_Once,
             Keyword_Label_HERE,
-            Keyword_DefaultCase,
             Keyword_Degree,
             Keyword_EndSwitch,
+
             Keyword_EndCase,
             Keyword_Case,
+            Keyword_DefaultCase,
 
             VarTypes.NORMAL.ToString(),
             VarTypes.RANDOM.ToString(),

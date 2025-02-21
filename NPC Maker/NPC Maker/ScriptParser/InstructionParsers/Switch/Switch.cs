@@ -22,10 +22,8 @@ namespace NPC_Maker.Scripts
 
                 string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
                 string ReturnLabel = $"__SWITCHRETURN__{LabelR}";
+                string GotoReturnLabel = $"{Lists.Instructions.GOTO} __SWITCHRETURN__{LabelR}";
                 Lines.Insert(End + 1, $"{ReturnLabel}:");
-
-                if (Lines[Lines.Count - 1].ToUpper().Trim() != (Lists.Instructions.RETURN.ToString()))
-                    Lines.Add(Lists.Instructions.RETURN.ToString());
 
                 List<SwitchEntry> entries = new List<SwitchEntry>();
 
@@ -41,11 +39,20 @@ namespace NPC_Maker.Scripts
                 {
                     string CurLine = Lines[i].ToUpper().Trim();
 
-                    if (CurLine == Lists.Keyword_EndSwitch)
+                    if (switchNest > 0 && CurLine == Lists.Keyword_EndSwitch)
+                    {
+                        Lines.Add(Lines[i]);
+                        i++;
                         switchNest--;
+                        lastWasCase = false;
+                        continue;
+                    }
 
                     if (CurLine.StartsWith(Lists.Instructions.SWITCH.ToString()))
+                    {
+                        lastWasCase = false;
                         switchNest++;
+                    }
 
                     if (switchNest > 0)
                     {
@@ -118,7 +125,7 @@ namespace NPC_Maker.Scripts
                     }
                     else if (Lines[i].ToUpper().Trim() == Lists.Keyword_EndCase)
                     {
-                        Lines.Add($"{Lists.Instructions.GOTO} __SWITCHRETURN__{LabelR}");
+                        Lines.Add(GotoReturnLabel);
                     }
                     else
                     {
@@ -129,7 +136,8 @@ namespace NPC_Maker.Scripts
                     i++;
                 }
 
-                Lines.Add($"{Lists.Instructions.GOTO} __SWITCHRETURN__{LabelR}");
+                if (Lines[Lines.Count - 1] != GotoReturnLabel)
+                    Lines.Add(GotoReturnLabel);
 
                 return new InstructionSwitch(switchedVar, entries, new InstructionLabel(defaultEntry));
             }

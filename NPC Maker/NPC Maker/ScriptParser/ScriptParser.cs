@@ -75,6 +75,7 @@ namespace NPC_Maker.Scripts
 
             // Split text into lines
             List<string> Lines = SplitLines(ScriptText);
+            Lines.Add(Lists.Keyword_Return);
 
             // "Preprocessor"
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
