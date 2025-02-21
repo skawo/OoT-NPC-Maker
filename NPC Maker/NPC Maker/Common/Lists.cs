@@ -96,10 +96,6 @@ namespace NPC_Maker
             Keyword_Degree,
             Keyword_EndSwitch,
 
-            Keyword_EndCase,
-            Keyword_Case,
-            Keyword_DefaultCase,
-
             VarTypes.NORMAL.ToString(),
             VarTypes.RANDOM.ToString(),
             VarTypes.GLOBAL8.ToString(),

@@ -136,7 +136,6 @@ void* ScriptFuncs[] =
     &Scripts_InstructionGet,                // GET
     &Scripts_InstructionGotoVar,            // GOTOVAR
     &Scripts_InstructionStop,               // STOP
-    &Scripts_InstructionSwitch,             // SWITCH
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -147,29 +146,6 @@ bool Scripts_Execute(NpcMaker* en, PlayState* playState, ScriptInstance* script)
     typedef bool ScriptFunc(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in);
     ScriptFunc* f = (ScriptFunc*)ScriptFuncs[instruction->id];
     return f(en, playState, script, instruction);
-}
-
-bool Scripts_InstructionSwitch(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrSwitch* in)
-{
-    #if LOGGING > 3
-        is64Printf("_[%2d, %1d]: SWITCH\n", en->npcId, en->curScriptNum);
-    #endif		
-
-    float check = Scripts_GetVarval(en, playState, in->swVarVarType, in->swVar, true);
-
-    for (int i = 0; i < in->entriesNum; i++)
-    {
-        float entryC = Scripts_GetVarval(en, playState, in->entries[i].varType, in->entries[i].var, true);
-        
-        if (entryC == check)
-        {
-            script->curInstrNum = in->entries[i].varGoto;
-            return SCRIPT_CONTINUE;
-        }
-    }
-
-    script->curInstrNum = in->defaultGoto;
-    return SCRIPT_CONTINUE;
 }
 
 bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)

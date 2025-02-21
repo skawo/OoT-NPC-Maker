@@ -75,7 +75,6 @@ namespace NPC_Maker.Scripts
 
             // Split text into lines
             List<string> Lines = SplitLines(ScriptText);
-            Lines.Add(Lists.Keyword_Return);
 
             // "Preprocessor"
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
@@ -672,7 +671,6 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.Instructions.GET: Instructions.Add(ParseGetInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.GOTO_VAR: Instructions.Add(ParseGotoVarInstruction(SplitLine)); break;
                         case (int)Lists.Instructions.STOP: Instructions.Add(ParseStopInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.SWITCH: Instructions.Add(ParseSwitchInstruction(ref Lines, SplitLine, ref i)); break;
                         default:
                             {
                                 byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);

@@ -766,27 +766,4 @@ typedef struct ScrInstrGetExtVar
 
 #pragma endregion
 
-#pragma region switch
-
-typedef struct SwitchEntry
-{
-    ScriptVarval var; 
-    u16 varGoto;
-    u8 varType;
-    u8 pad;
-} SwitchEntry;
-
-typedef struct ScrInstrSwitch
-{
-    u8 id;
-    u8 swVarVarType;
-    u16 entriesNum;
-    ScriptVarval swVar;
-    u16 defaultGoto;
-    u16 pad;
-    SwitchEntry entries[];
-} ScrInstrSwitch;
-
-#pragma endregion
-
 #endif
