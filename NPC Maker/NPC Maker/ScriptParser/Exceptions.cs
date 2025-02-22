@@ -19,7 +19,7 @@ namespace NPC_Maker.Scripts
         public static ParseException UsageError(string _Line)
         {
             string[] Words = _Line.Split(' ');
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), Words[0].ToUpper()), Words.Length > 1 ? Words[1].ToUpper() : "");
+            string Usage = ScriptsUsages.GetUsage(Words[0].ToUpper(), Words.Length > 1 ? Words[1].ToUpper() : "");
             return new ParseException($"This {Words[0].ToUpper()} does not have a corresponding END{Words[0].ToUpper()}.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", _Line);
         }
 
@@ -172,7 +172,7 @@ namespace NPC_Maker.Scripts
 
         public static ParseException ParamCountWrong(string[] _Line)
         {
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), _Line[0].ToUpper()), _Line.Length > 1 ? _Line[1].ToUpper() : "");
+            string Usage = ScriptsUsages.GetUsage(_Line[0].ToUpper(), _Line.Length > 1 ? _Line[1].ToUpper() : "");
 
             return new ParseException($"Wrong number of parameters.{(Usage == "" ? "" : $"{Environment.NewLine}Usage: {Usage}")} {Environment.NewLine}Line:", String.Join(" ", _Line));
         }

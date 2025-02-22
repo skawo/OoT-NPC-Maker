@@ -245,7 +245,7 @@ namespace NPC_Maker
 
         private static void Tsmi_DoubleClick(object sender, EventArgs e)
         {
-            string Usage = ScriptsUsages.GetUsage((Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), (sender as ToolStripItem).Text), "");
+            string Usage = ScriptsUsages.GetUsage((sender as ToolStripItem).Text, "");
             Usage = Usage.Trim(Environment.NewLine.ToCharArray());
 
             InsertTxtToScript(Usage == "" ? (sender as ToolStripItem).Text : Usage);
@@ -264,7 +264,7 @@ namespace NPC_Maker
 
             if (res)
             {
-                string Usage = ScriptsUsages.GetUsage(oInst, s.Text);
+                string Usage = ScriptsUsages.GetUsage(s.OwnerItem.Text, s.Text);
                 Usage = Usage.Trim(Environment.NewLine.ToCharArray());
                 InsertTxtToScript(Usage == "" ? s.OwnerItem.Text + " " + s.Text : Usage);
             }

@@ -365,6 +365,10 @@ namespace NPC_Maker
 
                     { Lists.SetSubTypes.LABEL_TO_VAR,                       $" label out_variable" },
                     { Lists.SetSubTypes.LABEL_TO_VARF,                      $" label out_variable" },
+
+                    {Lists.SetSubTypes.DEBUG_VAR,                           $" operator value" },
+                    {Lists.SetSubTypes.DEBUG_VARF,                          $" operator value" },
+
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL32,            $".0xoffset operator value" },
@@ -414,10 +418,60 @@ namespace NPC_Maker
             {Lists.ParticleSubOptions.VARIABLE,                     $"[{Lists.ParticleSubOptions.VARIABLE} value]" },
         };
 
-        public static string GetUsage(Lists.Instructions Instruction, string SubType)
+        public static string GetUsage(string InstructionS, string SubType)
         {
             try
             {
+                switch (InstructionS)
+                {
+                    case Lists.Keyword_Switch:
+                        {
+                            bool res = Enum.TryParse<Lists.IfSubTypes>(SubType, out Lists.IfSubTypes oSubType);
+
+                            if (res)
+                            {
+                                return Environment.NewLine + $"{Lists.Keyword_Switch} {oSubType}{Usages[Lists.Instructions.IF][oSubType]}" + Environment.NewLine +
+                                                             $"   {Lists.Keyword_Case} value:   " + Environment.NewLine +
+                                                             $"         ~instructions~          " + Environment.NewLine +
+                                                             $"   [{Lists.Keyword_EndCase}]     " + Environment.NewLine +
+                                                             $"   [{Lists.Keyword_DefaultCase}] " + Environment.NewLine +
+                                                             $"         ~instructions~          " + Environment.NewLine +
+                                                             $"END{Lists.Keyword_Switch}";
+                            }
+                            else
+                            {
+                                if (SubType.Contains('.'))
+                                    SubType = SubType.Substring(0, SubType.IndexOf("."));
+
+
+                                bool res2 = Enum.TryParse(SubType, out Lists.IfWhileAwaitSetRamSubTypes oSubType2);
+
+                                if (res2)
+                                {
+                                    return Environment.NewLine + $"{Lists.Keyword_Switch} {oSubType2}{Usages[Lists.Instructions.IF][oSubType2]}" + Environment.NewLine +
+                                                                 $"   {Lists.Keyword_Case} value:   " + Environment.NewLine +
+                                                                 $"         ~instructions~          " + Environment.NewLine +
+                                                                 $"   [{Lists.Keyword_EndCase}]     " + Environment.NewLine +
+                                                                 $"   [{Lists.Keyword_DefaultCase}] " + Environment.NewLine +
+                                                                 $"         ~instructions~          " + Environment.NewLine +
+                                                                 $"END{Lists.Keyword_Switch}";
+                                }
+                                else
+                                {
+                                    return Environment.NewLine + $"{Lists.Keyword_Switch} *IF Subtype*" + Environment.NewLine +
+                                                                 $"   {Lists.Keyword_Case} value:   " + Environment.NewLine +
+                                                                 $"         ~instructions~          " + Environment.NewLine +
+                                                                 $"   [{Lists.Keyword_EndCase}]     " + Environment.NewLine +
+                                                                 $"   [{Lists.Keyword_DefaultCase}] " + Environment.NewLine +
+                                                                 $"         ~instructions~          " + Environment.NewLine +
+                                                                 $"END{Lists.Keyword_Switch}";
+                                }
+                            }
+                        }
+                }
+
+                Lists.Instructions Instruction = (Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), InstructionS);
+
                 switch (Instruction)
                 {
                     case Lists.Instructions.IF:
@@ -452,7 +506,7 @@ namespace NPC_Maker
                                             $"END{Instruction}";
                                 }
                             }
-                        }
+                        } 
                     case Lists.Instructions.FACE:
                         {
                             return $"{Lists.Instructions.FACE} {TargetActorUsage} " +
