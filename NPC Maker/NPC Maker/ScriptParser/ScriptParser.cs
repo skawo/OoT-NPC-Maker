@@ -534,7 +534,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                int SwitchLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Switch));
+                int SwitchLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith($"{Lists.Keyword_Switch} "));
 
                 while (SwitchLineIndex != -1)
                 {
@@ -669,7 +669,7 @@ namespace NPC_Maker.Scripts
                         }
                     }
 
-                    SwitchLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Switch));
+                    SwitchLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith($"{Lists.Keyword_Switch} "));
                 }
             }
             catch (ParseException pEx)
@@ -680,8 +680,6 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing SWITCH " + ex.Message));
             }
-
-            System.IO.File.WriteAllText("test", string.Join(Environment.NewLine, Lines.Where(x => !string.IsNullOrWhiteSpace(x))));
 
             return Lines.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         }
