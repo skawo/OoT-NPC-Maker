@@ -31,8 +31,8 @@ namespace NPC_Maker
         public const string Keyword_Else = "ELSE";
         public const string Keyword_Or = "OR";
         public const string Keyword_And = "AND";
-
-
+        public const string Keyword_Ternary = "?";
+        public const string Keyword_TernarySplit = ":";
         public const string Keyword_Switch = "SWITCH";
         public const string Keyword_Case = "CASE";
         public const string Keyword_EndCase = "ENDCASE";

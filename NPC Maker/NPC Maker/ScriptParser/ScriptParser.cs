@@ -80,6 +80,7 @@ namespace NPC_Maker.Scripts
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
             Lines = ReplaceSwitches(Lines, ref outScript);
+            Lines = ReplaceTertiary(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
             Lines = ReplaceOrs(Lines, ref outScript);
             Lines = ReplaceAnds(Lines, ref outScript);
@@ -213,7 +214,7 @@ namespace NPC_Maker.Scripts
                 string s = String.Join(Environment.NewLine, NewLines);
 
                 foreach (string[] Def in Defines)
-                     s = ScriptHelpers.ReplaceExpr(s, Def[1], Def[2]);
+                    s = ScriptHelpers.ReplaceExpr(s, Def[1], Def[2]);
 
                 Lines = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
@@ -682,6 +683,45 @@ namespace NPC_Maker.Scripts
             }
 
             return Lines.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+        }
+
+        private List<string> ReplaceTertiary(List<string> Lines, ref BScript outScript)
+        {
+            try
+            {
+                int TernaryIndex = Lines.FindIndex(x => x.ToUpper().Contains($" {Lists.Keyword_Ternary} "));
+
+                while (TernaryIndex != -1)
+                {
+                    string[] SplitLine = Lines[TernaryIndex].Trim().Split(' ');
+                    Lines.RemoveAt(TernaryIndex);
+
+                    if (!SplitLine.Contains(Lists.Keyword_TernarySplit))
+                        throw ParseException.MalformedTernary(SplitLine);
+
+                    string IfSt = String.Join(" ", SplitLine.TakeWhile(x => x != Lists.Keyword_Ternary));
+                    string Condition = String.Join(" ", SplitLine.SkipWhile(x => x != Lists.Keyword_Ternary).Skip(1).TakeWhile(x => x != Lists.Keyword_TernarySplit));
+                    string Condition2 = String.Join(" ", SplitLine.SkipWhile(x => x != Lists.Keyword_TernarySplit).Skip(1));
+
+                    Lines.Insert(TernaryIndex, $"{Lists.Instructions.IF} {IfSt}");
+                    Lines.Insert(TernaryIndex + 1, Condition);
+                    Lines.Insert(TernaryIndex + 2, Lists.Keyword_Else);
+                    Lines.Insert(TernaryIndex + 3, Condition2);
+                    Lines.Insert(TernaryIndex + 4, Lists.Keyword_EndIf);
+
+                    TernaryIndex = Lines.FindIndex(x => x.ToUpper().Contains($" {Lists.Keyword_Ternary} "));
+                }
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Add(pEx);
+            }
+            catch (Exception ex)
+            {
+                outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing ELIF " + ex.Message));
+            }
+
+            return Lines;
         }
 
         // Change Elifs into proper sets of Else EndIf

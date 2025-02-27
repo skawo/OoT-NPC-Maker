@@ -52,7 +52,7 @@ namespace NPC_Maker
             { @"//.+", SyntaxHighlighter.GreenStyle},                    // Comments like // comment
             { @"case .+:", SyntaxHighlighter.MPurpleBoldStyle},          // Cases
             { @"default:", SyntaxHighlighter.MPurpleBoldStyle},          // Defaults
-            { @".+:[\n\r ]+", SyntaxHighlighter.BoldRedStyle},           // Labels
+            { @".+:[\n\r ]?$", SyntaxHighlighter.BoldRedStyle},           // Labels
             { @"::([\S]+)", SyntaxHighlighter.RedStyle},                 // Procedure calls
             { @"#define.+", SyntaxHighlighter.GreenStyle},               // Defines
         };
