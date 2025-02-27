@@ -77,8 +77,8 @@ namespace NPC_Maker.Scripts
             List<string> Lines = SplitLines(ScriptText);
 
             // "Preprocessor"
-            Lines = GetAndReplaceProcedures(Lines, ref outScript);
             Lines = ReplaceTernary(Lines, ref outScript);
+            Lines = GetAndReplaceProcedures(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
             Lines = ReplaceSwitches(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
