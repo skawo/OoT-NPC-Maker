@@ -696,9 +696,6 @@ namespace NPC_Maker.Scripts
                     string[] SplitLine = Lines[TernaryIndex].Trim().Split(' ');
                     Lines.RemoveAt(TernaryIndex);
 
-                    if (!SplitLine.Contains(Lists.Keyword_TernarySplit))
-                        throw ParseException.MalformedTernary(SplitLine);
-
                     string IfSt = String.Join(" ", SplitLine.TakeWhile(x => x != Lists.Keyword_Ternary));
                     string Condition = String.Join(" ", SplitLine.SkipWhile(x => x != Lists.Keyword_Ternary).Skip(1).TakeWhile(x => x != Lists.Keyword_TernarySplit));
                     string Condition2 = String.Join(" ", SplitLine.SkipWhile(x => x != Lists.Keyword_TernarySplit).Skip(1));
