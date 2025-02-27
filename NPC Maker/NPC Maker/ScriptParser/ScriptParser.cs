@@ -78,9 +78,9 @@ namespace NPC_Maker.Scripts
 
             // "Preprocessor"
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
+            Lines = ReplaceTernary(Lines, ref outScript);
             Lines = ReplaceDefines(Lines, ref outScript);
             Lines = ReplaceSwitches(Lines, ref outScript);
-            Lines = ReplaceTertiary(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
             Lines = ReplaceOrs(Lines, ref outScript);
             Lines = ReplaceAnds(Lines, ref outScript);
@@ -685,7 +685,7 @@ namespace NPC_Maker.Scripts
             return Lines.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         }
 
-        private List<string> ReplaceTertiary(List<string> Lines, ref BScript outScript)
+        private List<string> ReplaceTernary(List<string> Lines, ref BScript outScript)
         {
             try
             {
