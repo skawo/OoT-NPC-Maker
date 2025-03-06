@@ -831,6 +831,8 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
         case AWAIT_FRAMES:                          
         {
             script->waitTimer = Scripts_GetVarval(en, playState, in->varType, in->value, false); 
+            script->waitTimer *= (float)((float)3 / (float)R_UPDATE_RATE);
+            
             script->curInstrNum++; 
             Rand_Seed(script->tempValues[1]);
             Rand_Next();

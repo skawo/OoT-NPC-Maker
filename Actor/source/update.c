@@ -243,6 +243,7 @@ void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
                     en->currentBlinkFrame = 0;
                     segTexture = en->settings.blinkPattern[en->currentBlinkFrame];
                     en->blinkTimer = Rand_S16Offset(RANDOM_BLINK_MIN_FRAMES, RANDOM_BLINK_MAX_FRAMES);
+                    en->blinkTimer *= (float)((float)3 / (float)R_UPDATE_RATE);
                 }
 
                 // We iterate the current texture for next time.
@@ -269,7 +270,9 @@ void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
     {
         if (en->isTalking && playState->msgCtx.msgMode == MSGMODE_TEXT_DISPLAYING)
         {
-            if (en->talkingFramesBetween >= en->settings.talkAnimSpeed)
+            float rate = (float)((float)3 / (float)R_UPDATE_RATE);
+            
+            if (en->talkingFramesBetween >= (en->settings.talkAnimSpeed * rate))
             {
                 en->talkingFramesBetween = 0;
                 s32 segTexture = en->settings.talkPattern[en->currentTalkFrame];
