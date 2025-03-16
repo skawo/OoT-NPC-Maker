@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Media;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace NPC_Maker
 {
@@ -2797,7 +2799,9 @@ namespace NPC_Maker
 
         int LastSearchDepth = 0;
         int LastMsgCount = 0;
-        string LastSearch = ""; 
+        string LastSearch = "";
+        int ScrollToMsg = 0;
+        Timer t = new Timer();
 
         private void FindMsgBtn_Click(object sender, EventArgs e)
         {
@@ -2829,17 +2833,48 @@ namespace NPC_Maker
 
                         if (CurSearchDepth >= LastSearchDepth)
                         {
-                            this.SuspendLayout();
-                            DataGrid_NPCs.ClearSelection();
-                            DataGrid_NPCs.Rows[RowIndex].Selected = true;
-                            DataGrid_NPCs.FirstDisplayedScrollingRowIndex = RowIndex;
-                            TabControl.SelectedTab = Tab4_Messages;
-                            MessagesGrid.ClearSelection();
-                            MessagesGrid.Rows[MsgRowIndex].Selected = true;
-                            MessagesGrid.FirstDisplayedScrollingRowIndex = MsgRowIndex;
-                            LastSearchDepth = CurSearchDepth + 1;
-                            LastSearch = txBox_Search.Text;
-                            this.ResumeLayout();
+                            try
+                            {
+                                DataGrid_NPCs.SuspendLayout();
+                                MessagesGrid.SuspendLayout();
+
+                                DataGrid_NPCs.ClearSelection();
+                                MessagesGrid.ClearSelection();
+
+                                DataGrid_NPCs.Rows[RowIndex].Selected = true;
+                                
+                                DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
+                                DataGrid_NPCs.FirstDisplayedScrollingRowIndex = RowIndex;
+                                DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
+                                TabControl.SelectedTab = Tab4_Messages;
+
+                                MessagesGrid.Rows[MsgRowIndex].Selected = true;
+
+                                if (Program.IsRunningUnderMono)
+                                {
+                                    ScrollToMsg = MsgRowIndex;
+                                    t.Interval = 10;
+                                    t.Tick += T_Tick;
+                                    t.Start();
+                                }
+                                else
+                                {
+                                    MessagesGrid.FirstDisplayedScrollingRowIndex = MsgRowIndex;
+                                }
+
+                                LastSearchDepth = CurSearchDepth + 1;
+                                LastSearch = txBox_Search.Text;
+                
+                            }
+                            catch (Exception)
+                            {
+                            }
+                            finally
+                            {
+                                DataGrid_NPCs.ResumeLayout();
+                                MessagesGrid.ResumeLayout();
+                            }
+
                             return;
                         }
                         else
@@ -2860,6 +2895,13 @@ namespace NPC_Maker
                 LastSearchDepth = 0;
                 FindMsgBtn_Click(null, null);
             }
+        }
+
+        private void T_Tick(object sender, EventArgs e)
+        {
+            t.Stop();
+            MessagesGrid.CurrentCell = MessagesGrid.Rows[ScrollToMsg].Cells[0];
+            MessagesGrid.FirstDisplayedScrollingRowIndex = ScrollToMsg;
         }
 
         private void txBox_Search_KeyDown(object sender, KeyEventArgs e)
