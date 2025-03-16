@@ -2809,6 +2809,8 @@ namespace NPC_Maker
             if (LastSearch != txBox_Search.Text || LastMsgCount != MsgCount)
                 LastSearchDepth = 0;
 
+            LastMsgCount = MsgCount;
+
             int CurSearchDepth = 0;
             int RowIndex = 0;
             bool thereWereMessages = false;
