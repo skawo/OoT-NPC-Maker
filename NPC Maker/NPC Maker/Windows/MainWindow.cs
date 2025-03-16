@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Text;
 using System.Text.RegularExpressions;
-
+using System.Media;
 
 namespace NPC_Maker
 {
@@ -2792,6 +2792,81 @@ namespace NPC_Maker
                 Button_OpenCCode.Enabled = false;
                 Button_UpdateCompile.Enabled = true;
                 WatchFile(SelectedEntry);
+            }
+        }
+
+        int LastSearchDepth = 0;
+        int LastMsgCount = 0;
+        string LastSearch = ""; 
+
+        private void FindMsgBtn_Click(object sender, EventArgs e)
+        {
+            int MsgCount = 0;
+
+            foreach (NPCEntry n in EditedFile.Entries)
+                MsgCount += n.Messages.Count;
+
+            if (LastSearch != txBox_Search.Text || LastMsgCount != MsgCount)
+                LastSearchDepth = 0;
+
+            int CurSearchDepth = 0;
+            int RowIndex = 0;
+            bool thereWereMessages = false;
+
+            foreach (NPCEntry n in EditedFile.Entries)
+            {
+                int MsgRowIndex = 0;
+
+                foreach (MessageEntry msg in n.Messages)
+                {
+                    string r = Regex.Replace(msg.MessageText.ToUpper().Replace(Environment.NewLine, " "), @"<([\s\S]*?)>", string.Empty, RegexOptions.Compiled);
+
+                    if (r.Contains(txBox_Search.Text.ToUpper()))
+                    {
+                        thereWereMessages = true;
+
+                        if (CurSearchDepth >= LastSearchDepth)
+                        {
+                            this.SuspendLayout();
+                            DataGrid_NPCs.ClearSelection();
+                            DataGrid_NPCs.Rows[RowIndex].Selected = true;
+                            DataGrid_NPCs.FirstDisplayedScrollingRowIndex = RowIndex;
+                            TabControl.SelectedTab = Tab4_Messages;
+                            MessagesGrid.ClearSelection();
+                            MessagesGrid.Rows[MsgRowIndex].Selected = true;
+                            MessagesGrid.FirstDisplayedScrollingRowIndex = MsgRowIndex;
+                            LastSearchDepth = CurSearchDepth + 1;
+                            LastSearch = txBox_Search.Text;
+                            this.ResumeLayout();
+                            return;
+                        }
+                        else
+                            CurSearchDepth++;
+                    }
+
+                    MsgRowIndex++;
+                }
+
+                RowIndex++;
+
+            }
+
+            SystemSounds.Exclamation.Play();
+
+            if (thereWereMessages)
+            {
+                LastSearchDepth = 0;
+                FindMsgBtn_Click(null, null);
+            }
+        }
+
+        private void txBox_Search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                FindMsgBtn_Click(null, null);
             }
         }
     }

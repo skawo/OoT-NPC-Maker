@@ -793,7 +793,7 @@ namespace NPC_Maker
                     case "PAUSE":
                         {
                             // Fake tag to facilitate text pauses
-                            // <PAUSE:TextCharPrintSpeed:NumOfPauseTextChars>
+                            // PA:TextCharPrintSpeed:NumOfPauseTextChars>
                             output.Add((byte)Lists.MsgControlCode.SPEED);
 
                             // Pause length (This number * number of DC characters)

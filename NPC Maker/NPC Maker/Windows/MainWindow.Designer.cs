@@ -311,6 +311,7 @@
             this.addNewScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteCurrentScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameCurrentScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.globalCHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editGlobalHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -325,7 +326,8 @@
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CodeParamsTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.globalCHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txBox_Search = new System.Windows.Forms.TextBox();
+            this.btn_FindMsg = new System.Windows.Forms.Button();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -3937,6 +3939,13 @@
             this.renameCurrentScriptToolStripMenuItem.Text = "Rename current script";
             this.renameCurrentScriptToolStripMenuItem.Click += new System.EventHandler(this.RenameCurrentScriptToolStripMenuItem_Click);
             // 
+            // globalCHeaderToolStripMenuItem
+            // 
+            this.globalCHeaderToolStripMenuItem.Name = "globalCHeaderToolStripMenuItem";
+            this.globalCHeaderToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.globalCHeaderToolStripMenuItem.Text = "Global C Header";
+            this.globalCHeaderToolStripMenuItem.Click += new System.EventHandler(this.globalCHeaderToolStripMenuItem_Click);
+            // 
             // editGlobalHeaderToolStripMenuItem
             // 
             this.editGlobalHeaderToolStripMenuItem.Name = "editGlobalHeaderToolStripMenuItem";
@@ -4052,12 +4061,23 @@
             this.CodeParamsTooltip.ReshowDelay = 100;
             this.CodeParamsTooltip.ShowAlways = true;
             // 
-            // globalCHeaderToolStripMenuItem
+            // txBox_Search
             // 
-            this.globalCHeaderToolStripMenuItem.Name = "globalCHeaderToolStripMenuItem";
-            this.globalCHeaderToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.globalCHeaderToolStripMenuItem.Text = "Global C Header";
-            this.globalCHeaderToolStripMenuItem.Click += new System.EventHandler(this.globalCHeaderToolStripMenuItem_Click);
+            this.txBox_Search.Location = new System.Drawing.Point(810, 2);
+            this.txBox_Search.Name = "txBox_Search";
+            this.txBox_Search.Size = new System.Drawing.Size(207, 20);
+            this.txBox_Search.TabIndex = 6;
+            this.txBox_Search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txBox_Search_KeyDown);
+            // 
+            // btn_FindMsg
+            // 
+            this.btn_FindMsg.Location = new System.Drawing.Point(722, 2);
+            this.btn_FindMsg.Name = "btn_FindMsg";
+            this.btn_FindMsg.Size = new System.Drawing.Size(82, 21);
+            this.btn_FindMsg.TabIndex = 7;
+            this.btn_FindMsg.Text = "Find message";
+            this.btn_FindMsg.UseVisualStyleBackColor = true;
+            this.btn_FindMsg.Click += new System.EventHandler(this.FindMsgBtn_Click);
             // 
             // MainWindow
             // 
@@ -4065,6 +4085,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1021, 683);
+            this.Controls.Add(this.btn_FindMsg);
+            this.Controls.Add(this.txBox_Search);
             this.Controls.Add(this.Panel_Editor);
             this.Controls.Add(this.MenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -4465,6 +4487,8 @@
         private System.Windows.Forms.Label UncullZLabel;
         private System.Windows.Forms.NumericUpDown UncullFwd;
         private System.Windows.Forms.ToolStripMenuItem globalCHeaderToolStripMenuItem;
+        private System.Windows.Forms.TextBox txBox_Search;
+        private System.Windows.Forms.Button btn_FindMsg;
     }
 }
 
