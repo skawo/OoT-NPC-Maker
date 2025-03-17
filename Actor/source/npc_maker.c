@@ -189,10 +189,28 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
             
         if (en->settings.castsShadow && !en->settings.hasCollision)
         {
-            Vec3f shadow;
-            shadow.z = shadow.y = shadow.x = en->settings.shadowRadius / 90.0f;
-            //z_actor_shadow_draw_vec3f
-            func_80033C30(&en->actor.world.pos, &shadow, 127, playState);
+            // Simple shadow for stationary, collisionless, ground-based objects.
+            if (en->settings.mass == 0)
+            {
+                GraphicsContext* __gfxCtx = playState->state.gfxCtx;
+                POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_20);
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 127);
+                Matrix_Translate(en->actor.world.pos.x ,
+                                 en->actor.world.pos.y,
+                                 en->actor.world.pos.z,
+                                 MTXMODE_NEW);
+                Matrix_Scale((float)en->settings.shadowRadius / 90.0f, 1.0f, (float)en->settings.shadowRadius / 90.0f, MTXMODE_APPLY);
+                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(__gfxCtx, __FILE__, __LINE__), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPDisplayList(POLY_OPA_DISP++, CIRCLE_SHADOW);
+            }         
+            // This shadow will respect the ground position
+            else
+            {                
+                Vec3f shadow;
+                shadow.z = shadow.y = shadow.x = en->settings.shadowRadius / 90.0f;
+                //z_actor_shadow_draw_vec3f
+                func_80033C30(&en->actor.world.pos, &shadow, 127, playState);
+            }
         }
 
         if (en->CFuncsWhen[2] == AFTER_MODEL)

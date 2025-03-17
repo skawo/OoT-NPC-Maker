@@ -140,7 +140,16 @@ extern void is64Printf(const char* fmt, ...);
         asm("is64Printf = osSyncPrintf");
     #else
         //is64Printf does not really work in 1.0. Substitute your own!          
-    #endif		
+    #endif	
+
+#ifndef CIRCLE_SHADOW
+    #if GAME_VERSION == 0
+        #define CIRCLE_SHADOW 0x04049210
+    #else
+        #define CIRCLE_SHADOW 0x0404E740
+    #endif
+#endif
+   
 
 typedef enum item_award_upgrades
 {
