@@ -241,6 +241,8 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 {
     u16 settingsObjectId = en->actor.params;
     en->npcId = en->actor.shape.rot.z;
+    en->actor.shape.rot.z = 0;
+    en->actor.world.rot.z = 0;
 
     #if LOGGING > 0
         is64Printf("_Loading NPC Entry %2d from object %4d.\n", en->npcId, settingsObjectId);
