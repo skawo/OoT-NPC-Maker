@@ -234,6 +234,8 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.MessagesFilter = new System.Windows.Forms.TextBox();
             this.Btn_MsgMoveDown = new System.Windows.Forms.Button();
             this.Btn_MsgMoveUp = new System.Windows.Forms.Button();
             this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
@@ -330,8 +332,6 @@
             this.CodeParamsTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
-            this.MessagesFilter = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -3098,6 +3098,25 @@
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 530);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(32, 13);
+            this.label6.TabIndex = 80;
+            this.label6.Text = "Filter:";
+            // 
+            // MessagesFilter
+            // 
+            this.MessagesFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.MessagesFilter.Location = new System.Drawing.Point(41, 527);
+            this.MessagesFilter.Name = "MessagesFilter";
+            this.MessagesFilter.Size = new System.Drawing.Size(151, 20);
+            this.MessagesFilter.TabIndex = 80;
+            this.MessagesFilter.TextChanged += new System.EventHandler(this.MessagesFilter_TextChanged);
+            // 
             // Btn_MsgMoveDown
             // 
             this.Btn_MsgMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -3695,6 +3714,7 @@
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(4, 595);
             this.label4.Name = "label4";
@@ -3702,10 +3722,11 @@
             this.label4.TabIndex = 79;
             this.label4.Text = "Filter:";
             // 
-            // textBox1
+            // NpcsFilter
             // 
+            this.NpcsFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.NpcsFilter.Location = new System.Drawing.Point(42, 592);
-            this.NpcsFilter.Name = "textBox1";
+            this.NpcsFilter.Name = "NpcsFilter";
             this.NpcsFilter.Size = new System.Drawing.Size(197, 20);
             this.NpcsFilter.TabIndex = 7;
             this.NpcsFilter.TextChanged += new System.EventHandler(this.NpcsFilter_TextChanged);
@@ -4103,23 +4124,6 @@
             this.btn_FindMsg.Text = "Find message";
             this.btn_FindMsg.UseVisualStyleBackColor = true;
             this.btn_FindMsg.Click += new System.EventHandler(this.FindMsgBtn_Click);
-            // 
-            // textBox2
-            // 
-            this.MessagesFilter.Location = new System.Drawing.Point(41, 527);
-            this.MessagesFilter.Name = "textBox2";
-            this.MessagesFilter.Size = new System.Drawing.Size(151, 20);
-            this.MessagesFilter.TabIndex = 80;
-            this.MessagesFilter.TextChanged += new System.EventHandler(this.MessagesFilter_TextChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 530);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(32, 13);
-            this.label6.TabIndex = 80;
-            this.label6.Text = "Filter:";
             // 
             // MainWindow
             // 
