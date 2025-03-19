@@ -280,6 +280,8 @@
             this.LblFuncToRun = new System.Windows.Forms.Label();
             this.Button_OpenCCode = new System.Windows.Forms.Button();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.NpcsFilter = new System.Windows.Forms.TextBox();
             this.Button_Duplicate = new System.Windows.Forms.Button();
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
@@ -328,6 +330,8 @@
             this.CodeParamsTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
+            this.MessagesFilter = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.Panel_Editor.SuspendLayout();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -3070,6 +3074,8 @@
             // 
             // Tab4_Messages
             // 
+            this.Tab4_Messages.Controls.Add(this.label6);
+            this.Tab4_Messages.Controls.Add(this.MessagesFilter);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgMoveDown);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgMoveUp);
             this.Tab4_Messages.Controls.Add(this.ChkBox_UseSpaceFont);
@@ -3307,7 +3313,7 @@
             this.MessagesGrid.ReadOnly = true;
             this.MessagesGrid.RowHeadersVisible = false;
             this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MessagesGrid.Size = new System.Drawing.Size(189, 544);
+            this.MessagesGrid.Size = new System.Drawing.Size(189, 520);
             this.MessagesGrid.TabIndex = 3;
             // 
             // dataGridViewTextBoxColumn2
@@ -3676,6 +3682,8 @@
             // 
             this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.Panel_NPCList.Controls.Add(this.label4);
+            this.Panel_NPCList.Controls.Add(this.NpcsFilter);
             this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
             this.Panel_NPCList.Controls.Add(this.Button_Delete);
             this.Panel_NPCList.Controls.Add(this.Button_Add);
@@ -3684,6 +3692,23 @@
             this.Panel_NPCList.Name = "Panel_NPCList";
             this.Panel_NPCList.Size = new System.Drawing.Size(244, 653);
             this.Panel_NPCList.TabIndex = 5;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(4, 595);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(32, 13);
+            this.label4.TabIndex = 79;
+            this.label4.Text = "Filter:";
+            // 
+            // textBox1
+            // 
+            this.NpcsFilter.Location = new System.Drawing.Point(42, 592);
+            this.NpcsFilter.Name = "textBox1";
+            this.NpcsFilter.Size = new System.Drawing.Size(197, 20);
+            this.NpcsFilter.TabIndex = 7;
+            this.NpcsFilter.TextChanged += new System.EventHandler(this.NpcsFilter_TextChanged);
             // 
             // Button_Duplicate
             // 
@@ -3738,7 +3763,7 @@
             this.DataGrid_NPCs.ReadOnly = true;
             this.DataGrid_NPCs.RowHeadersVisible = false;
             this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid_NPCs.Size = new System.Drawing.Size(236, 612);
+            this.DataGrid_NPCs.Size = new System.Drawing.Size(236, 590);
             this.DataGrid_NPCs.TabIndex = 2;
             this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
             this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
@@ -4079,6 +4104,23 @@
             this.btn_FindMsg.UseVisualStyleBackColor = true;
             this.btn_FindMsg.Click += new System.EventHandler(this.FindMsgBtn_Click);
             // 
+            // textBox2
+            // 
+            this.MessagesFilter.Location = new System.Drawing.Point(41, 527);
+            this.MessagesFilter.Name = "textBox2";
+            this.MessagesFilter.Size = new System.Drawing.Size(151, 20);
+            this.MessagesFilter.TabIndex = 80;
+            this.MessagesFilter.TextChanged += new System.EventHandler(this.MessagesFilter_TextChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 530);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(32, 13);
+            this.label6.TabIndex = 80;
+            this.label6.Text = "Filter:";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4181,6 +4223,7 @@
             this.Tab6_EmbeddedOverlay.ResumeLayout(false);
             this.Tab6_EmbeddedOverlay.PerformLayout();
             this.Panel_NPCList.ResumeLayout(false);
+            this.Panel_NPCList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
@@ -4489,6 +4532,10 @@
         private System.Windows.Forms.ToolStripMenuItem globalCHeaderToolStripMenuItem;
         private System.Windows.Forms.TextBox txBox_Search;
         private System.Windows.Forms.Button btn_FindMsg;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox NpcsFilter;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox MessagesFilter;
     }
 }
 

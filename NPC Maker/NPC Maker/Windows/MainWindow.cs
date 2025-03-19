@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Data;
 
 namespace NPC_Maker
 {
@@ -2835,6 +2836,8 @@ namespace NPC_Maker
                         {
                             try
                             {
+                                NpcsFilter.Text = "";
+                                MessagesFilter.Text = "";
                                 DataGrid_NPCs.SuspendLayout();
                                 MessagesGrid.SuspendLayout();
 
@@ -2911,6 +2914,40 @@ namespace NPC_Maker
                 e.Handled = true;
                 e.SuppressKeyPress = true;
                 FindMsgBtn_Click(null, null);
+            }
+        }
+
+        private void NpcsFilter_TextChanged(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            foreach (NPCEntry entry in EditedFile.Entries)
+            {
+                if (String.IsNullOrWhiteSpace(NpcsFilter.Text))
+                    DataGrid_NPCs.Rows[index].Visible = true;
+                else if (entry.NPCName.ToUpper().Contains(NpcsFilter.Text.ToUpper()))
+                    DataGrid_NPCs.Rows[index].Visible = true;
+                else
+                    DataGrid_NPCs.Rows[index].Visible = false;
+
+                index++;
+            }
+        }
+
+        private void MessagesFilter_TextChanged(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            foreach (MessageEntry entry in SelectedEntry.Messages)
+            {
+                if (String.IsNullOrWhiteSpace(MessagesFilter.Text))
+                    MessagesGrid.Rows[index].Visible = true;
+                else if (entry.Name.ToUpper().Contains(MessagesFilter.Text.ToUpper()))
+                    MessagesGrid.Rows[index].Visible = true;
+                else
+                    MessagesGrid.Rows[index].Visible = false;
+
+                index++;
             }
         }
     }
