@@ -196,7 +196,7 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
                 POLY_OPA_DISP = Gfx_SetupDL(POLY_OPA_DISP, SETUPDL_20);
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 0, 0, 0, 127);
                 Matrix_Translate(en->actor.world.pos.x ,
-                                 en->actor.world.pos.y,
+                                 en->actor.world.pos.y + 1,
                                  en->actor.world.pos.z,
                                  MTXMODE_NEW);
                 Matrix_Scale((float)en->settings.shadowRadius / 90.0f, 1.0f, (float)en->settings.shadowRadius / 90.0f, MTXMODE_APPLY);
