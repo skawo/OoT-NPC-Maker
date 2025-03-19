@@ -4109,6 +4109,7 @@
             // 
             // txBox_Search
             // 
+            this.txBox_Search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txBox_Search.Location = new System.Drawing.Point(810, 2);
             this.txBox_Search.Name = "txBox_Search";
             this.txBox_Search.Size = new System.Drawing.Size(207, 20);
@@ -4117,6 +4118,7 @@
             // 
             // btn_FindMsg
             // 
+            this.btn_FindMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_FindMsg.Location = new System.Drawing.Point(722, 2);
             this.btn_FindMsg.Name = "btn_FindMsg";
             this.btn_FindMsg.Size = new System.Drawing.Size(82, 21);
