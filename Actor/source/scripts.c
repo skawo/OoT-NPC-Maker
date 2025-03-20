@@ -1266,6 +1266,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
 
             en->actor.shape.shadowAlpha = SHADOW_ALPHA;
             en->settings.castsShadow = val;
+            break;
         }
         case SET_GENERATES_LIGHT:  
         {
