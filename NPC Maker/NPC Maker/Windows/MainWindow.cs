@@ -2916,6 +2916,13 @@ namespace NPC_Maker
 
         private void txBox_Search_KeyDown(object sender, KeyEventArgs e)
         {
+            if (!btn_FindMsg.Enabled)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+
             if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
