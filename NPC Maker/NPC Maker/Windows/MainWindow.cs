@@ -2807,6 +2807,7 @@ namespace NPC_Maker
         private void FindMsgBtn_Click(object sender, EventArgs e)
         {
             int MsgCount = 0;
+            btn_FindMsg.Enabled = false;
 
             foreach (NPCEntry n in EditedFile.Entries)
                 MsgCount += n.Messages.Count;
@@ -2878,6 +2879,9 @@ namespace NPC_Maker
                                 MessagesGrid.ResumeLayout();
                             }
 
+                            if (!Program.IsRunningUnderMono)
+                                btn_FindMsg.Enabled = true;
+
                             return;
                         }
                         else
@@ -2898,6 +2902,8 @@ namespace NPC_Maker
                 LastSearchDepth = 0;
                 FindMsgBtn_Click(null, null);
             }
+            else
+                btn_FindMsg.Enabled = true;
         }
 
         private void T_Tick(object sender, EventArgs e)
@@ -2905,6 +2911,7 @@ namespace NPC_Maker
             t.Stop();
             MessagesGrid.CurrentCell = MessagesGrid.Rows[ScrollToMsg].Cells[0];
             MessagesGrid.FirstDisplayedScrollingRowIndex = ScrollToMsg;
+            btn_FindMsg.Enabled = true;
         }
 
         private void txBox_Search_KeyDown(object sender, KeyEventArgs e)
