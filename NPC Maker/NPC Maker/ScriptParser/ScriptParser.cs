@@ -161,6 +161,8 @@ namespace NPC_Maker.Scripts
             ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty, RegexOptions.Compiled);                                                       // Remove inline comments
             ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline | RegexOptions.Compiled).TrimEnd();             // Remove empty lines
             ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ", RegexOptions.Compiled);                                                            // Remove double spaces
+            ScriptText = Regex.Replace(ScriptText, $@"{Lists.Keyword_Else} {Lists.Instructions.IF}", $"{Lists.Keyword_Elif}", RegexOptions.Compiled | RegexOptions.IgnoreCase);                                                            // Remove double spaces
+
         }
 
         private static List<string> SplitLines(string ScriptText)
