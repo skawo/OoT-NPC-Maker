@@ -839,6 +839,26 @@ namespace NPC_Maker
                             }
                             break;
                         }
+                    case "BYTE":
+                        {
+                            try
+                            {
+                                byte b = 0;
+
+                                if (NPC_Maker.Scripts.ScriptHelpers.IsHex(code[1]))
+                                    b = Convert.ToByte(code[1].ToUpper().Replace("0X", ""), 16);
+                                else
+                                    b = Convert.ToByte(code[1]);
+
+                                output.Add(b);
+                            }
+                            catch (Exception ex)
+                            {
+                                errors.Add($"{code[1]} is not a valid byte.");
+                                output.AddRangeBigEndian((UInt16)0);
+                            }
+                            break;
+                        }
                     default:
                         {
                             if (Enum.IsDefined(typeof(Lists.MsgColor), code[0]))
