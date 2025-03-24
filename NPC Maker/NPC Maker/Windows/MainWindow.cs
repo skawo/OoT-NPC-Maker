@@ -2765,7 +2765,7 @@ namespace NPC_Maker
             if (EditedFile == null)
                 return;
 
-                if (autoSaveTimer != null)
+            if (autoSaveTimer != null)
             {
                 autoSaveTimer.Stop();
                 autoSaveTimer.Dispose();
@@ -2849,7 +2849,7 @@ namespace NPC_Maker
                                 MessagesGrid.ClearSelection();
 
                                 DataGrid_NPCs.Rows[RowIndex].Selected = true;
-                                
+
                                 DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
                                 DataGrid_NPCs.FirstDisplayedScrollingRowIndex = RowIndex;
                                 DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
@@ -2871,7 +2871,7 @@ namespace NPC_Maker
 
                                 LastSearchDepth = CurSearchDepth + 1;
                                 LastSearch = txBox_Search.Text;
-                
+
                             }
                             catch (Exception)
                             {
