@@ -51,7 +51,7 @@ namespace NPC_Maker
         {
             Version = 3;
             GameVersion = Lists.GameVersions.oot_mq_debug;
-            GCCFlags = "-G 0 -Os -fno-builtin -fno-reorder-blocks -std=gnu99 -mtune=vr4300 -march=vr4300 -mabi=32 -c -mips3 -mno-explicit-relocs -mno-memcpy -mno-check-zero-division";
+            GCCFlags = "-G 0 -Os -fno-builtin -fno-reorder-blocks -std=gnu99 -mtune=vr4300 -march=vr4300 -mabi=32 -c -mips3 -mno-explicit-relocs -mno-memcpy -mno-check-zero-division -fno-optimize-sibling-calls";
             CodeEditor = CCode.CodeEditorEnum.VSCode;
             CustomCodeEditorPath = "";
             CustomCodeEditorArgs = "";
