@@ -2762,7 +2762,10 @@ namespace NPC_Maker
 
         private void globalCHeaderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (autoSaveTimer != null)
+            if (EditedFile == null)
+                return;
+
+                if (autoSaveTimer != null)
             {
                 autoSaveTimer.Stop();
                 autoSaveTimer.Dispose();
