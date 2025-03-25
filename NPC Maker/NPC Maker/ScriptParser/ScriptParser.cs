@@ -516,6 +516,7 @@ namespace NPC_Maker.Scripts
             foreach (string s in Lines)
             {
                 string cmp = s.ToUpper().Trim();
+                string[] cmpS = s.Split(' ');
 
                 if (cmp == $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}" ||
                     cmp == $"{Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}")
@@ -524,6 +525,13 @@ namespace NPC_Maker.Scripts
                     string nlabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
                     outl.Add($"{nlabel}:");
                     outl.Add($"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {nlabel}");
+                }
+                else if (cmpS.Length >= 4 && (cmp.StartsWith($"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VAR} {Lists.Keyword_Label_HERE.ToUpper()} ") ||
+                         cmp.StartsWith($"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VARF} {Lists.Keyword_Label_HERE.ToUpper()} ")))
+                {
+                    string nlabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
+                    outl.Add($"{nlabel}:");
+                    outl.Add($"{Lists.Instructions.SET} {cmpS[1]} {nlabel} {cmpS[3]}");
                 }
                 else
                     outl.Add(s);
