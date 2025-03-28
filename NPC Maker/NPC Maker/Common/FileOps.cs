@@ -902,10 +902,16 @@ namespace NPC_Maker
                     Output.AddRange(Entry);
 
                 if (ParseErrors.Count != 0)
+                {
+                    Helpers.DeleteFileStartingWith(Program.CachePath, "gh_");
+                    Helpers.DeleteFileStartingWith(Program.CachePath, "ch_");
+
                     ShowMsg(CLIMode,
                             $"File could not be saved." +
                             $"" + Environment.NewLine + Environment.NewLine +
                             $"There are errors in NPC: {String.Join(",", ParseErrors)}");
+
+                }
                 else
                     File.WriteAllBytes(Path, Output.ToArray());
             }
