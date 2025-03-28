@@ -365,7 +365,7 @@ namespace NPC_Maker
             };
 
             if (Program.Settings.Verbose)
-                CompileMsgs += gccInfo.FileName + " " + gccInfo.Arguments + Environment.NewLine;
+                CompileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
 
             Process p = Process.Start(gccInfo);
             p.WaitForExit();
@@ -400,7 +400,7 @@ namespace NPC_Maker
             };
 
             if (Program.Settings.Verbose)
-                CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
+                CompileMsgs += $"{ldInfo.FileName} {ldInfo.Arguments}{Environment.NewLine}";
 
             p = Process.Start(ldInfo);
             p.WaitForExit();
@@ -431,9 +431,9 @@ namespace NPC_Maker
             };
 
             if (Program.Settings.Verbose)
-                CompileMsgs += nOVLInfo.FileName + " " + nOVLInfo.Arguments + Environment.NewLine;
+                CompileMsgs += $"{nOVLInfo.FileName} {nOVLInfo.Arguments}{Environment.NewLine}";
 
-      
+
             p = Process.Start(nOVLInfo);
             p.WaitForExit();
             GetOutputMono(p, "Mono NOVL", ref CompileMsgs);
@@ -469,11 +469,11 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
                 Arguments =
-                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include" }).AppendQuotation()} " +
-                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
-                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
+                $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include").AppendQuotation()} " +
+                $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()).AppendQuotation()} " +
+                $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include").AppendQuotation()} " +
                 Program.Settings.GCCFlags + " " +
-                $"{Path.Combine(compileFolderPath, compileCodeFileName).AppendQuotation()}",
+                $@"{Path.Combine(compileFolderPath, compileCodeFileName).AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
@@ -503,15 +503,15 @@ namespace NPC_Maker
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
                 FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
                 Arguments =
-                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
-                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
-                $"-L {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
-                $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
-                $"-o {elfFilePath.AppendQuotation()} {oFilePath.AppendQuotation()}"
+                $@"-L {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString()).AppendQuotation()} " +
+                $@"-L {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()).AppendQuotation()} " +
+                $@"-L {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common").AppendQuotation()} " +
+                $@"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
+                $@"-o {elfFilePath.AppendQuotation()} {oFilePath.AppendQuotation()}"
             };
 
             if (Program.Settings.Verbose)
-                CompileMsgs += ldInfo.FileName + " " + ldInfo.Arguments + Environment.NewLine;
+                CompileMsgs += $"{ldInfo.FileName} {ldInfo.Arguments}{Environment.NewLine}";
 
             p = Process.Start(ldInfo);
 
@@ -536,11 +536,11 @@ namespace NPC_Maker
                 CreateNoWindow = true,
                 FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
                 Arguments =
-                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFilePath.AppendQuotation()} {elfFilePath.AppendQuotation()}",
+                $@"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{BaseAddr:X} -o {ovlFilePath.AppendQuotation()} {elfFilePath.AppendQuotation()}",
             };
 
             if (Program.Settings.Verbose)
-                CompileMsgs += nOVLInfo.FileName + " " + nOVLInfo.Arguments + Environment.NewLine;
+                CompileMsgs += $"{nOVLInfo.FileName} {nOVLInfo.Arguments}{Environment.NewLine}";
 
             p = Process.Start(nOVLInfo);
             GetOutput(p, "NOVL", ref CompileMsgs);
