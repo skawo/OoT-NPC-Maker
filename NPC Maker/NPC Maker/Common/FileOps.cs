@@ -903,8 +903,11 @@ namespace NPC_Maker
 
                 if (ParseErrors.Count != 0)
                 {
-                    Helpers.DeleteFileStartingWith(Program.CachePath, "gh_");
-                    Helpers.DeleteFileStartingWith(Program.CachePath, "ch_");
+                    if (cacheInvalid)
+                    {
+                        Helpers.DeleteFileStartingWith(Program.CachePath, "gh_");
+                        Helpers.DeleteFileStartingWith(Program.CachePath, "ch_");
+                    }
 
                     ShowMsg(CLIMode,
                             $"File could not be saved." +
