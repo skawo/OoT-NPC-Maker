@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace NPC_Maker.Scripts
 {
@@ -14,20 +15,23 @@ namespace NPC_Maker.Scripts
 
         public static string GetRandomLabelString(ScriptParser Prs, int length = 5)
         {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder sb = new StringBuilder();
             Random random = new Random();
 
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-            string Out = "";
-
-            do
+            while (true)
             {
-                Out = "lbl_" + new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
-            }
-            while (Prs.RandomLabels.Contains(Out));
+                sb.Clear();
+                sb.Append("lbl_");
+                sb.Append(new string(Enumerable.Range(0, length).Select(_ => chars[random.Next(chars.Length)]).ToArray()));
+                string randomLabel = sb.ToString();
 
-            Prs.RandomLabels.Add(Out);
-            return Out;
+                if (!Prs.RandomLabels.Contains(randomLabel))
+                {
+                    Prs.RandomLabels.Add(randomLabel);
+                    return randomLabel;
+                }
+            }
         }
 
         public static void FindLabelAndAddToByteList(List<InstructionLabel> Labels, InstructionLabel ToFind, ref List<byte> Data)

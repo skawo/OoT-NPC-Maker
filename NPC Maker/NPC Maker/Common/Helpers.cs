@@ -116,35 +116,28 @@ namespace NPC_Maker
             return BitConverter.ToUInt32(Bytes.ToArray(), 0);
         }
 
-        public static void AddObjectToByteList(object Value, List<byte> ByteList)
+        public static void AddObjectToByteList(object value, List<byte> byteList)
         {
-            if (Value.GetType() == typeof(byte))
-                ByteList.Add((byte)Value);
-            else if (Value.GetType() == typeof(sbyte))
-                ByteList.Add((byte)Value);
+            if (value.GetType() == typeof(byte) || value.GetType() == typeof(sbyte))
+            {
+                byteList.Add((byte)value);
+            }
             else
             {
-                Ensure2ByteAlign(ByteList);
-
-                if (Value.GetType() == typeof(UInt16))
-                    ByteList.AddRange(Program.BEConverter.GetBytes((UInt16)Value));
-                else if (Value.GetType() == typeof(Int16))
-                    ByteList.AddRange(Program.BEConverter.GetBytes((Int16)Value));
+                if (value.GetType() == typeof(UInt16) || value.GetType() == typeof(Int16))
+                {
+                    Ensure2ByteAlign(byteList);
+                    byteList.AddRange(Program.BEConverter.GetBytes((dynamic)value));
+                }
+                else if (value.GetType() == typeof(UInt32) || value.GetType() == typeof(Int32) || value.GetType() == typeof(float))
+                {
+                    Ensure4ByteAlign(byteList);
+                    byteList.AddRange(Program.BEConverter.GetBytes((dynamic)value));
+                }
                 else
                 {
-                    Ensure2ByteAlign(ByteList);
-
-                    if (Value.GetType() == typeof(UInt32))
-                        ByteList.AddRange(Program.BEConverter.GetBytes((UInt32)Value));
-                    else if (Value.GetType() == typeof(Int32))
-                        ByteList.AddRange(Program.BEConverter.GetBytes((Int32)Value));
-                    else if (Value.GetType() == typeof(float))
-                        ByteList.AddRange(Program.BEConverter.GetBytes((float)Value));
-                    else
-                    {
-                        System.Windows.Forms.MessageBox.Show(Value.GetType().ToString());
-                        throw new Exception();
-                    }
+                    System.Windows.Forms.MessageBox.Show(value.GetType().ToString());
+                    throw new Exception();
                 }
             }
         }

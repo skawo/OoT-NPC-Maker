@@ -108,10 +108,12 @@ namespace NPC_Maker.Scripts
         {
             List<string> Labels = new List<string>();
 
-            for (int i = 0; i < Lines.Count(); i++)
+            foreach (string line in Lines)
             {
-                if (Lines[i].EndsWith(":") && !(Lines[i].ToUpper() == $"{Lists.Keyword_DefaultCase}") && !Lines[i].ToUpper().StartsWith($"{Lists.Keyword_Case} "))
-                    Labels.Add(Lines[i].Substring(0, Lines[i].Length - 1));
+                string lineUpper = line.ToUpper();
+
+                if (line.EndsWith(":") && lineUpper != $"{Lists.Keyword_DefaultCase}" && !lineUpper.StartsWith($"{Lists.Keyword_Case} "))
+                    Labels.Add(line.Substring(0, line.Length - 1));
             }
 
             return Labels;
@@ -142,7 +144,9 @@ namespace NPC_Maker.Scripts
 
         private static List<string> SplitLines(string ScriptText)
         {
-            return (List<string>)Regex.Split(ScriptText, "\r?\n").ToList().Select(x => x.Trim()).ToList();
+            return Regex.Split(ScriptText, "\r?\n")
+                        .Select(x => x.Trim())
+                        .ToList();
         }
 
         private void CheckLabels(List<string> Lines)
@@ -151,13 +155,13 @@ namespace NPC_Maker.Scripts
             {
                 if (Line.EndsWith(":"))
                 {
-                    string labelN = Line.Remove(Line.Length - 1);
+                    string labelN = Line.Substring(0, Line.Length - 1);
 
-                    if (Lists.AllKeywords.Contains(labelN) || Line.StartsWith("__") || labelN.IsNumeric() || ScriptHelpers.IsHex(labelN) || ScriptHelpers.OnlyHexInString(labelN) ||
+                    if (Lists.AllKeywords.Contains(labelN) || Line.StartsWith("__") || labelN.IsNumeric() ||
+                        ScriptHelpers.IsHex(labelN) || ScriptHelpers.OnlyHexInString(labelN) ||
                         labelN.Equals(Lists.Keyword_Label_HERE, StringComparison.OrdinalIgnoreCase))
                     {
                         outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(labelN));
-                        continue;
                     }
                 }
             }
@@ -214,9 +218,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                List<string> Procedures = new List<string>();
-
-                List<string> NewLines = Lines.Select(item => (string)item.Clone()).ToList();
+                HashSet<string> uniqueProcedures = new HashSet<string>();
                 int ProcLineIndex = Lines.FindIndex(x => x.StartsWith(Lists.Keyword_Procedure, StringComparison.OrdinalIgnoreCase));
 
                 // Looping through all lines until we can't find a line containing the keyword...
@@ -237,8 +239,8 @@ namespace NPC_Maker.Scripts
 
                     Lines.RemoveRange(ProcLineIndex, EndMacro - ProcLineIndex + 1);
 
-                    if (!Procedures.Contains(ProcName))
-                        Procedures.Add(ProcName);
+                    if (!uniqueProcedures.Contains(ProcName))
+                        uniqueProcedures.Add(ProcName);
                     else
                         outScript.ParseErrors.Add(ParseException.ProcDoubleError(SplitDefinition));
 
@@ -255,58 +257,45 @@ namespace NPC_Maker.Scripts
                         string RepLine = Lines[ProcCallIndex];
                         string[] SplitRepLine = RepLine.Split(' ');
 
-                        List<string> ArgsPreprocessed = new List<string>();
-
-                        if (SplitRepLine.Length > 1)
-                            ArgsPreprocessed = SplitRepLine.Skip(1).ToList();
-
                         List<string> Args = new List<string>();
-                        string curArg = "";
-                        bool multiArg = false;
+                        int argIndex = 1; // Start with the first argument index
 
-
-                        foreach (string arg in ArgsPreprocessed)
+                        while (argIndex < SplitRepLine.Length)
                         {
+                            string arg = SplitRepLine[argIndex];
+
                             if (arg.StartsWith("\""))
                             {
-                                if (multiArg)
-                                    throw ParseException.ArgsMalformedError(SplitRepLine);
-                                else
+                                // Handle quoted arguments
+                                string processedArg = arg.Trim('\"');
+                                argIndex++;
+
+                                // Check if the quoted argument ends in the same split
+                                while (!arg.EndsWith("\"") && argIndex < SplitRepLine.Length)
                                 {
-                                    if (arg.EndsWith("\""))
-                                        Args.Add(arg.Trim('\"'));
-                                    else
-                                    {
-                                        multiArg = true;
-                                        curArg = $"{arg.TrimStart('\"')}";
-                                    }
+                                    arg = SplitRepLine[argIndex];
+                                    processedArg += $" {arg.TrimEnd('\"')}";
+                                    argIndex++;
                                 }
 
-                                continue;
-                            }
-
-                            if (arg.EndsWith("\""))
-                            {
-                                if (!multiArg)
+                                if (!arg.EndsWith("\""))
                                     throw ParseException.ArgsMalformedError(SplitRepLine);
-                                else
-                                {
-                                    curArg = $"{curArg} {arg.TrimEnd('\"')}";
-                                    Args.Add(curArg);
-                                    multiArg = false;
-                                }
 
-                                continue;
+                                Args.Add(processedArg);
                             }
-
-                            if (!multiArg)
-                                Args.Add(arg);
                             else
-                                curArg = $"{curArg} {arg}";
+                            {
+                                // Handle non-quoted arguments
+                                Args.Add(arg);
+                                argIndex++;
+                            }
                         }
 
-                        if (multiArg)
+                        if (argIndex != SplitRepLine.Length)
+                        {
+                            // Check if all arguments have been processed
                             throw ParseException.ArgsMalformedError(SplitRepLine);
+                        }
 
                         Lines.RemoveAt(ProcCallIndex);
 
@@ -486,33 +475,34 @@ namespace NPC_Maker.Scripts
 
         private List<string> ReplaceScriptStartHeres(List<string> Lines, ref BScript outScript)
         {
-            List<string> outl = new List<string>();
+            List<string> outputLines = new List<string>();
 
-            foreach (string s in Lines)
+            foreach (string line in Lines)
             {
-                string cmp = s.ToUpper().Trim();
-                string[] cmpS = s.Split(' ');
+                string[] splitLine = line.Split(' ');
+                string lineUpper = line.ToUpper().Trim();
 
-                if (cmp == $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}" ||
-                    cmp == $"{Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE.ToUpper()}")
-
+                if (lineUpper == $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE}" ||
+                    lineUpper == $"{Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE}")
                 {
-                    string nlabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
-                    outl.Add($"{nlabel}:");
-                    outl.Add($"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {nlabel}");
+                    string newLabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
+                    outputLines.Add($"{newLabel}:");
+                    outputLines.Add($"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {newLabel}");
                 }
-                else if (cmpS.Length >= 4 && (cmp.StartsWith($"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VAR} {Lists.Keyword_Label_HERE.ToUpper()} ") ||
-                         cmp.StartsWith($"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VARF} {Lists.Keyword_Label_HERE.ToUpper()} ")))
+                else if (splitLine.Length >= 4 && (lineUpper.StartsWith($"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VAR} {Lists.Keyword_Label_HERE} ") ||
+                         lineUpper.StartsWith($"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VARF} {Lists.Keyword_Label_HERE} ")))
                 {
-                    string nlabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
-                    outl.Add($"{nlabel}:");
-                    outl.Add($"{Lists.Instructions.SET} {cmpS[1]} {nlabel} {cmpS[3]}");
+                    string newLabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
+                    outputLines.Add($"{newLabel}:");
+                    outputLines.Add($"{Lists.Instructions.SET} {splitLine[1]} {newLabel} {splitLine[3]}");
                 }
                 else
-                    outl.Add(s);
+                {
+                    outputLines.Add(line);
+                }
             }
 
-            return outl;
+            return outputLines;
         }
 
         // Change Switch Cases into If...Elif...Endif
