@@ -852,7 +852,7 @@ namespace NPC_Maker
 
                                 output.Add(b);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                                 errors.Add($"{code[1]} is not a valid byte.");
                                 output.AddRangeBigEndian((UInt16)0);

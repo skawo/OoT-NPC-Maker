@@ -22,31 +22,6 @@ namespace NPC_Maker.Scripts
             outScript = new BScript();
         }
 
-        public static List<string[]> GetDefines(string ScriptText, NPCFile File, NPCEntry Entry)
-        {
-            ScriptText = String.Join(Environment.NewLine, File.GlobalHeaders.Select(x => x.Text).ToArray()) + Environment.NewLine + ScriptText;
-            int id = 0x8000;
-
-            foreach (var m in Entry.Messages)
-            {
-                ScriptText += $"#{Lists.Keyword_Define} {m.Name} {id++};";
-            }
-
-            ScriptText = ScriptText + ScriptText;
-
-            RegexText(ref ScriptText);
-
-            // Split text into lines
-            List<string> Lines = SplitLines(ScriptText);
-
-            List<string[]> Defines = Lines.FindAll(x => x.StartsWith(Lists.Keyword_SharpDefine, StringComparison.OrdinalIgnoreCase)).Select(x => x.Split(' ')).ToList();
-
-            List<string[]> ParamCountWrong = Defines.FindAll(x => x.Length != 3).ToList();
-
-            return (List<string[]>)Defines.Except(ParamCountWrong).ToList();
-
-        }
-
         public BScript ParseScript(string ScrName, bool GetBytes)
         {
             string s = "";
