@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace NPC_Maker.Controls
 {
@@ -8,10 +7,6 @@ namespace NPC_Maker.Controls
         public SegmentDataGrid()
         {
             InitializeComponent();
-
-            typeof(Control).InvokeMember("DoubleBuffered",
-                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty,
-                null, this, new object[] { DoubleBuffered });
         }
     }
 }

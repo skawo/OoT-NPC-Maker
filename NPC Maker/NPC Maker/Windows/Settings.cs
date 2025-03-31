@@ -35,6 +35,7 @@ namespace NPC_Maker.Windows
             Cb_AutoCompile.Checked = EditedSettings.AutoComp_ActorSwitch;
             NumUpCompileTimeout.Value = EditedSettings.CompileTimeout;
             NumUpParseTime.Value = EditedSettings.ParseTime;
+            WineCompatMode.Checked = EditedSettings.UseWine;
             AutoSaveC.Checked = EditedSettings.AutoSave;
             NumUpDown_AutoSaveCTime.Value = EditedSettings.AutoSaveTime;
         }
