@@ -116,6 +116,7 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.MASS:
                         case (int)Lists.SetSubTypes.ALPHA:
                         case (int)Lists.SetSubTypes.MOVEMENT_PATH_ID:
+                        case (int)Lists.SetSubTypes.ANIMATION_INTERP_FRAMES:
                             return H_SimpleSet(SubID, SplitLine, byte.MinValue, byte.MaxValue);
                         case (int)Lists.SetSubTypes.PLAYER_BOMBS:
                         case (int)Lists.SetSubTypes.PLAYER_BOMBCHUS:

@@ -68,6 +68,8 @@ typedef struct NpcSettings
     s8 lightLimb;
     Color_RGB8 envColor;
     Color_RGB8 lightColor;
+    u8 animInterpFrames;
+    u8 pad[3];
     
     u8 hasCollision;
     u8 pushesSwitches;

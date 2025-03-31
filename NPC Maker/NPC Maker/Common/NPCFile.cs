@@ -144,6 +144,8 @@ namespace NPC_Maker
 
         public float CullScale { get; set; }
 
+        public byte AnimInterpFrames { get; set; }
+
         public CCodeEntry EmbeddedOverlayCode { get; set; }
 
         public NPCEntry()
@@ -250,6 +252,8 @@ namespace NPC_Maker
 
             NumVars = 2;
             NumFVars = 2;
+
+            AnimInterpFrames = 4;
 
             EmbeddedOverlayCode = new CCodeEntry();
         }
@@ -361,6 +365,7 @@ namespace NPC_Maker
             CULLFWD,
             CULLDWN,
             CULLSCALE,
+            ANIMINTERPFRAMES,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -492,6 +497,8 @@ namespace NPC_Maker
                 case Members.CULLFWD: CullForward = (float)Convert.ToDecimal(Value); break;
                 case Members.CULLDWN: CullDown = (float)Convert.ToDecimal(Value); break;
                 case Members.CULLSCALE: CullScale = (float)Convert.ToDecimal(Value); break;
+
+                case Members.ANIMINTERPFRAMES: AnimInterpFrames = Convert.ToByte(Value); break;
 
                 default: break;
             }

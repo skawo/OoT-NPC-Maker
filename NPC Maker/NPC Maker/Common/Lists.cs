@@ -492,6 +492,7 @@ namespace NPC_Maker
             INVISIBLE,
             TALK_PERSIST,
             IS_SPEAKING,
+            ANIMATION_INTERP_FRAMES,
             CASTS_SHADOW,
             NO_AUTO_ANIM,
             TALK_MODE,

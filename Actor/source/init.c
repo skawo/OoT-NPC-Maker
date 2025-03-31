@@ -702,6 +702,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
                                              anim.startFrame, 
                                              anim.endFrame, 
                                              anim.speed, 
+                                             -en->settings.animInterpFrames,
                                              interpolate, 
                                              playOnce,
                                              external);
@@ -715,7 +716,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
 }
 
 bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int rFileStart, int actorObject, int actorObjectFileStart,
-                           int animStart, int animEnd, float speed, bool interpolate, bool playOnce, bool external)
+                           int animStart, int animEnd, float speed, int interpolateFrames, bool interpolate, bool playOnce, bool external)
 {
 #pragma region AnimMode
         /*
@@ -764,7 +765,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                                      startFrame,
                                      endFrame, 
                                      animMode,
-                                     interpolate ? -4 : -1);
+                                     interpolate ? interpolateFrames : -1);
 
                 skelanime->curFrame = animStart;
                 skelanime->endFrame = endFrame;
@@ -801,7 +802,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                                  startFrame,
                                  animLen,
                                  animMode,
-                                 interpolate ? -4 : -1);
+                                 interpolate ? interpolateFrames : -1);
 
                 skelanime->curFrame = animStart;
                 skelanime->endFrame = endFrame;

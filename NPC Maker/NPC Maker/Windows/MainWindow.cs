@@ -269,6 +269,8 @@ namespace NPC_Maker
             NumUpDown_TalkSegment.Value = SelectedEntry.TalkSegment;
             NumUpDown_TalkSpeed.Value = SelectedEntry.TalkSpeed;
 
+            NumUpDown_AnimInterpFrames.Value = SelectedEntry.AnimInterpFrames;
+
             #endregion
             // Create tab pages for the script, reusing ones that already existed prior to switching to this NPC.
             #region Script Tab Pages

@@ -373,6 +373,10 @@ namespace NPC_Maker
                         EntryBytes.Add(Entry.LightColor.R);
                         EntryBytes.Add(Entry.LightColor.G);
                         EntryBytes.Add(Entry.LightColor.B);
+                        EntryBytes.Add(Entry.AnimInterpFrames);
+                        EntryBytes.Add(0);
+                        EntryBytes.Add(0);
+                        EntryBytes.Add(0);
 
                         EntryBytes.Add(Convert.ToByte(Entry.HasCollision));
                         EntryBytes.Add(Convert.ToByte(Entry.PushesSwitches));
@@ -398,10 +402,9 @@ namespace NPC_Maker
                         EntryBytes.Add(Convert.ToByte(Entry.DEBUGExDlistEditor));
                         EntryBytes.Add(Convert.ToByte(Entry.DEBUGLookAtEditor));
                         EntryBytes.Add(Convert.ToByte(Entry.DEBUGPrintToScreen));
-
-
+                        
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 52;
+                        CurLen += 56;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         EntryBytes.AddRangeBigEndian(Entry.ObjectID);

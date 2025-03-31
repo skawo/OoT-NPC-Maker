@@ -104,7 +104,9 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
-            this.label5 = new System.Windows.Forms.Label();
+            this.NumUpDown_AnimInterpFrames = new System.Windows.Forms.NumericUpDown();
+            this.Label_AnimInterpFrames = new System.Windows.Forms.Label();
+            this.Label_UncullZoneScale = new System.Windows.Forms.Label();
             this.UncullScale = new System.Windows.Forms.NumericUpDown();
             this.UncullDown = new System.Windows.Forms.NumericUpDown();
             this.UncullZLabel = new System.Windows.Forms.Label();
@@ -353,6 +355,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
             this.Tab3_BehaviorData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AnimInterpFrames)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncullScale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncullDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncullFwd)).BeginInit();
@@ -1311,7 +1314,9 @@
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
-            this.Tab3_BehaviorData.Controls.Add(this.label5);
+            this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_AnimInterpFrames);
+            this.Tab3_BehaviorData.Controls.Add(this.Label_AnimInterpFrames);
+            this.Tab3_BehaviorData.Controls.Add(this.Label_UncullZoneScale);
             this.Tab3_BehaviorData.Controls.Add(this.UncullScale);
             this.Tab3_BehaviorData.Controls.Add(this.UncullDown);
             this.Tab3_BehaviorData.Controls.Add(this.UncullZLabel);
@@ -1353,14 +1358,37 @@
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
             // 
-            // label5
+            // NumUpDown_AnimInterpFrames
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(591, 71);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(94, 13);
-            this.label5.TabIndex = 95;
-            this.label5.Text = "Uncull zone scale:";
+            this.NumUpDown_AnimInterpFrames.Location = new System.Drawing.Point(526, 112);
+            this.NumUpDown_AnimInterpFrames.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.NumUpDown_AnimInterpFrames.Name = "NumUpDown_AnimInterpFrames";
+            this.NumUpDown_AnimInterpFrames.Size = new System.Drawing.Size(52, 20);
+            this.NumUpDown_AnimInterpFrames.TabIndex = 97;
+            this.NumUpDown_AnimInterpFrames.Tag = "ANIMINTERPFRAMES";
+            this.NumUpDown_AnimInterpFrames.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Label_AnimInterpFrames
+            // 
+            this.Label_AnimInterpFrames.AutoSize = true;
+            this.Label_AnimInterpFrames.Location = new System.Drawing.Point(419, 114);
+            this.Label_AnimInterpFrames.Name = "Label_AnimInterpFrames";
+            this.Label_AnimInterpFrames.Size = new System.Drawing.Size(103, 13);
+            this.Label_AnimInterpFrames.TabIndex = 96;
+            this.Label_AnimInterpFrames.Text = "Anim Interp. Frames:";
+            // 
+            // Label_UncullZoneScale
+            // 
+            this.Label_UncullZoneScale.AutoSize = true;
+            this.Label_UncullZoneScale.Location = new System.Drawing.Point(591, 65);
+            this.Label_UncullZoneScale.Name = "Label_UncullZoneScale";
+            this.Label_UncullZoneScale.Size = new System.Drawing.Size(94, 13);
+            this.Label_UncullZoneScale.TabIndex = 95;
+            this.Label_UncullZoneScale.Text = "Uncull zone scale:";
             // 
             // UncullScale
             // 
@@ -1370,7 +1398,7 @@
             0,
             0,
             131072});
-            this.UncullScale.Location = new System.Drawing.Point(594, 86);
+            this.UncullScale.Location = new System.Drawing.Point(594, 81);
             this.UncullScale.Maximum = new decimal(new int[] {
             1410065407,
             2,
@@ -1434,7 +1462,7 @@
             // Lbl_DBGOpts
             // 
             this.Lbl_DBGOpts.AutoSize = true;
-            this.Lbl_DBGOpts.Location = new System.Drawing.Point(419, 493);
+            this.Lbl_DBGOpts.Location = new System.Drawing.Point(419, 519);
             this.Lbl_DBGOpts.Name = "Lbl_DBGOpts";
             this.Lbl_DBGOpts.Size = new System.Drawing.Size(107, 13);
             this.Lbl_DBGOpts.TabIndex = 91;
@@ -1443,7 +1471,7 @@
             // ChkBox_DBGLookAt
             // 
             this.ChkBox_DBGLookAt.AutoSize = true;
-            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 543);
+            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 569);
             this.ChkBox_DBGLookAt.Name = "ChkBox_DBGLookAt";
             this.ChkBox_DBGLookAt.Size = new System.Drawing.Size(89, 17);
             this.ChkBox_DBGLookAt.TabIndex = 90;
@@ -1455,7 +1483,7 @@
             // ChkBox_DBGPrint
             // 
             this.ChkBox_DBGPrint.AutoSize = true;
-            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 523);
+            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 549);
             this.ChkBox_DBGPrint.Name = "ChkBox_DBGPrint";
             this.ChkBox_DBGPrint.Size = new System.Drawing.Size(94, 17);
             this.ChkBox_DBGPrint.TabIndex = 89;
@@ -1467,7 +1495,7 @@
             // ChkBox_DBGDlist
             // 
             this.ChkBox_DBGDlist.AutoSize = true;
-            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 543);
+            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 569);
             this.ChkBox_DBGDlist.Name = "ChkBox_DBGDlist";
             this.ChkBox_DBGDlist.Size = new System.Drawing.Size(80, 17);
             this.ChkBox_DBGDlist.TabIndex = 88;
@@ -1479,7 +1507,7 @@
             // ChkBox_ExistInAll
             // 
             this.ChkBox_ExistInAll.AutoSize = true;
-            this.ChkBox_ExistInAll.Location = new System.Drawing.Point(422, 235);
+            this.ChkBox_ExistInAll.Location = new System.Drawing.Point(422, 261);
             this.ChkBox_ExistInAll.Name = "ChkBox_ExistInAll";
             this.ChkBox_ExistInAll.Size = new System.Drawing.Size(103, 17);
             this.ChkBox_ExistInAll.TabIndex = 87;
@@ -1490,7 +1518,7 @@
             // 
             // NumUpDown_ScriptsFVar
             // 
-            this.NumUpDown_ScriptsFVar.Location = new System.Drawing.Point(507, 86);
+            this.NumUpDown_ScriptsFVar.Location = new System.Drawing.Point(507, 81);
             this.NumUpDown_ScriptsFVar.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1504,7 +1532,7 @@
             // 
             // NumUpDown_ScriptsVar
             // 
-            this.NumUpDown_ScriptsVar.Location = new System.Drawing.Point(422, 87);
+            this.NumUpDown_ScriptsVar.Location = new System.Drawing.Point(422, 81);
             this.NumUpDown_ScriptsVar.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1519,7 +1547,7 @@
             // Lbl_ScriptsFVars
             // 
             this.Lbl_ScriptsFVars.AutoSize = true;
-            this.Lbl_ScriptsFVars.Location = new System.Drawing.Point(504, 71);
+            this.Lbl_ScriptsFVars.Location = new System.Drawing.Point(504, 65);
             this.Lbl_ScriptsFVars.Name = "Lbl_ScriptsFVars";
             this.Lbl_ScriptsFVars.Size = new System.Drawing.Size(78, 13);
             this.Lbl_ScriptsFVars.TabIndex = 84;
@@ -1528,7 +1556,7 @@
             // Lbl_ScriptsVars
             // 
             this.Lbl_ScriptsVars.AutoSize = true;
-            this.Lbl_ScriptsVars.Location = new System.Drawing.Point(419, 71);
+            this.Lbl_ScriptsVars.Location = new System.Drawing.Point(420, 65);
             this.Lbl_ScriptsVars.Name = "Lbl_ScriptsVars";
             this.Lbl_ScriptsVars.Size = new System.Drawing.Size(53, 13);
             this.Lbl_ScriptsVars.TabIndex = 83;
@@ -1537,7 +1565,7 @@
             // ChkInvisible
             // 
             this.ChkInvisible.AutoSize = true;
-            this.ChkInvisible.Location = new System.Drawing.Point(584, 212);
+            this.ChkInvisible.Location = new System.Drawing.Point(584, 238);
             this.ChkInvisible.Name = "ChkInvisible";
             this.ChkInvisible.Size = new System.Drawing.Size(64, 17);
             this.ChkInvisible.TabIndex = 82;
@@ -1549,7 +1577,7 @@
             // ChkOnlyWhenLens
             // 
             this.ChkOnlyWhenLens.AutoSize = true;
-            this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 212);
+            this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 238);
             this.ChkOnlyWhenLens.Name = "ChkOnlyWhenLens";
             this.ChkOnlyWhenLens.Size = new System.Drawing.Size(146, 17);
             this.ChkOnlyWhenLens.TabIndex = 81;
@@ -1561,7 +1589,7 @@
             // ChkBox_DBGCol
             // 
             this.ChkBox_DBGCol.AutoSize = true;
-            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 523);
+            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 549);
             this.ChkBox_DBGCol.Name = "ChkBox_DBGCol";
             this.ChkBox_DBGCol.Size = new System.Drawing.Size(91, 17);
             this.ChkBox_DBGCol.TabIndex = 80;
@@ -1585,7 +1613,7 @@
             this.Panel_Colors.Controls.Add(this.ChkBox_Glow);
             this.Panel_Colors.Controls.Add(this.NumUp_LightLimb);
             this.Panel_Colors.Controls.Add(this.ChkBox_GenLight);
-            this.Panel_Colors.Location = new System.Drawing.Point(419, 348);
+            this.Panel_Colors.Location = new System.Drawing.Point(419, 374);
             this.Panel_Colors.Name = "Panel_Colors";
             this.Panel_Colors.Size = new System.Drawing.Size(341, 134);
             this.Panel_Colors.TabIndex = 77;
@@ -1781,7 +1809,7 @@
             // ChkB_FadeOut
             // 
             this.ChkB_FadeOut.AutoSize = true;
-            this.ChkB_FadeOut.Location = new System.Drawing.Point(584, 164);
+            this.ChkB_FadeOut.Location = new System.Drawing.Point(584, 190);
             this.ChkB_FadeOut.Name = "ChkB_FadeOut";
             this.ChkB_FadeOut.Size = new System.Drawing.Size(150, 17);
             this.ChkB_FadeOut.TabIndex = 77;
@@ -1799,7 +1827,7 @@
             this.Btn_ReactIfAtt.Controls.Add(this.Txtbox_ReactIfAtt);
             this.Btn_ReactIfAtt.Controls.Add(this.Lbl_ReactIfAttSnd);
             this.Btn_ReactIfAtt.Controls.Add(this.Chkb_ReactIfAtt);
-            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 255);
+            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 281);
             this.Btn_ReactIfAtt.Name = "Btn_ReactIfAtt";
             this.Btn_ReactIfAtt.Size = new System.Drawing.Size(341, 87);
             this.Btn_ReactIfAtt.TabIndex = 76;
@@ -1885,7 +1913,7 @@
             // Chkb_Opendoors
             // 
             this.Chkb_Opendoors.AutoSize = true;
-            this.Chkb_Opendoors.Location = new System.Drawing.Point(584, 142);
+            this.Chkb_Opendoors.Location = new System.Drawing.Point(584, 168);
             this.Chkb_Opendoors.Name = "Chkb_Opendoors";
             this.Chkb_Opendoors.Size = new System.Drawing.Size(167, 17);
             this.Chkb_Opendoors.TabIndex = 74;
@@ -1897,7 +1925,7 @@
             // ChkRunJustScript
             // 
             this.ChkRunJustScript.AutoSize = true;
-            this.ChkRunJustScript.Location = new System.Drawing.Point(584, 187);
+            this.ChkRunJustScript.Location = new System.Drawing.Point(584, 213);
             this.ChkRunJustScript.Name = "ChkRunJustScript";
             this.ChkRunJustScript.Size = new System.Drawing.Size(91, 17);
             this.ChkRunJustScript.TabIndex = 73;
@@ -1909,7 +1937,7 @@
             // Lbl_Misc
             // 
             this.Lbl_Misc.AutoSize = true;
-            this.Lbl_Misc.Location = new System.Drawing.Point(419, 121);
+            this.Lbl_Misc.Location = new System.Drawing.Point(419, 147);
             this.Lbl_Misc.Name = "Lbl_Misc";
             this.Lbl_Misc.Size = new System.Drawing.Size(32, 13);
             this.Lbl_Misc.TabIndex = 71;
@@ -3025,7 +3053,7 @@
             // Checkbox_AlwaysDraw
             // 
             this.Checkbox_AlwaysDraw.AutoSize = true;
-            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(422, 166);
+            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(422, 192);
             this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
             this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(146, 17);
             this.Checkbox_AlwaysDraw.TabIndex = 70;
@@ -3051,7 +3079,7 @@
             // Checkbox_AlwaysActive
             // 
             this.Checkbox_AlwaysActive.AutoSize = true;
-            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(422, 143);
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(422, 169);
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
             this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(156, 17);
             this.Checkbox_AlwaysActive.TabIndex = 68;
@@ -3063,7 +3091,7 @@
             // Checkbox_CanPressSwitches
             // 
             this.Checkbox_CanPressSwitches.AutoSize = true;
-            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(422, 189);
+            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(422, 215);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
             this.Checkbox_CanPressSwitches.TabIndex = 58;
@@ -4167,6 +4195,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             this.Tab3_BehaviorData.ResumeLayout(false);
             this.Tab3_BehaviorData.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AnimInterpFrames)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncullScale)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncullDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncullFwd)).EndInit();
@@ -4530,7 +4559,7 @@
         private System.Windows.Forms.Button Btn_MsgMoveDown;
         private System.Windows.Forms.Button Btn_MsgMoveUp;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label Label_UncullZoneScale;
         private System.Windows.Forms.NumericUpDown UncullScale;
         private System.Windows.Forms.NumericUpDown UncullDown;
         private System.Windows.Forms.Label UncullZLabel;
@@ -4542,6 +4571,8 @@
         private System.Windows.Forms.TextBox NpcsFilter;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox MessagesFilter;
+        private System.Windows.Forms.NumericUpDown NumUpDown_AnimInterpFrames;
+        private System.Windows.Forms.Label Label_AnimInterpFrames;
     }
 }
 

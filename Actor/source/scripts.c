@@ -1092,7 +1092,8 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_WAIST_HORIZ_AXIS:                  
         case SET_CUTSCENE_SLOT:                     
         case SET_BLINK_SEGMENT:                     
-        case SET_TALK_SEGMENT:                      
+        case SET_TALK_SEGMENT:   
+        case SET_ANIM_INTERP_FRAMES:         
         case SET_ALPHA:                             Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, UINT8); break;
 
         case SET_MOVEMENT_DISTANCE:           
@@ -1439,7 +1440,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
             u32 endFrame = Scripts_GetVarval(en, playState, instr->endFrameType, instr->endFrame, false);
             float speed = Scripts_GetVarval(en, playState, instr->speedType, instr->speed, false);   
 
-            Setup_AnimationImpl(&GET_PLAYER(playState)->actor, playState, &GET_PLAYER(playState)->skelAnime, offset, ANIMTYPE_LINK, -1, 0, -1, -1, 0, startFrame, endFrame, speed, true, instr->once, true);
+            Setup_AnimationImpl(&GET_PLAYER(playState)->actor, playState, &GET_PLAYER(playState)->skelAnime, offset, ANIMTYPE_LINK, -1, 0, -1, -1, 0, startFrame, endFrame, speed, -4, true, instr->once, true);
             break;       
         }
         case SET_SCRIPT_START:
