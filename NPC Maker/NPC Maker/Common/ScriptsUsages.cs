@@ -323,6 +323,7 @@ namespace NPC_Maker
                     { Lists.SetSubTypes.REACTS_IF_ATTACKED,                 $" {BooleanUsage}" },
                     { Lists.SetSubTypes.EXISTS_IN_ALL_ROOMS,                $" {BooleanUsage}" },
                     { Lists.SetSubTypes.IS_SPEAKING,                        $" {BooleanUsage}" },
+                    { Lists.SetSubTypes.ANIMATION_INTERP_FRAMES,            $" operator value" },
 
                     { Lists.SetSubTypes.GRAVITY_FORCE,                      $" operator value" },
                     { Lists.SetSubTypes.MOVEMENT_PATH_ID,                   $" operator value" },
