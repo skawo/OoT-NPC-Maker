@@ -59,7 +59,7 @@ namespace NPC_Maker.Scripts
             id = 0;
 
             foreach (ScriptEntry se in Entry.Scripts)
-                sb.Append($"#{Lists.Keyword_Define} SCRIPTID_{se.Name} {id++};");
+                sb.Append($"#{Lists.Keyword_Define} SCRIPTID_{se.Name.Replace(' ', '_')} {id++};");
 
             ScriptText = sb.ToString();
 
