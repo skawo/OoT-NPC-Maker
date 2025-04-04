@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NPC_Maker.Scripts
@@ -24,15 +25,43 @@ namespace NPC_Maker.Scripts
 
         public BScript ParseScript(string ScrName, bool GetBytes)
         {
-            string s = "";
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(ScriptText);
+            sb.Append(Environment.NewLine);
+
             int id = 0x8000;
 
             foreach (var m in Entry.Messages)
+                sb.Append($"#{Lists.Keyword_Define} MSGID_{m.Name} {id++};");
+
+            id = 0;
+
+            foreach (var m in Entry.ExtraDisplayLists)
+                sb.Append($"#{Lists.Keyword_Define} DLISTID_{m.Name} {id++};");
+
+            id = 0;
+
+            foreach (var m in Entry.Animations)
+                sb.Append($"#{Lists.Keyword_Define} ANIMID_{m.Name} {id++};");
+
+            int i = 8;
+            id = 0;
+
+            foreach (List<SegmentEntry> m in Entry.Segments)
             {
-                s += $"#{Lists.Keyword_Define} {m.Name} {id++};";
+                foreach (var p in m)
+                    sb.Append($"#{Lists.Keyword_Define} SEG{i}_DATAID_{p.Name} {id++};");
+
+                i++;
             }
 
-            ScriptText = s + ScriptText;
+            id = 0;
+
+            foreach (ScriptEntry se in Entry.Scripts)
+                sb.Append($"#{Lists.Keyword_Define} SCRIPTID_{se.Name} {id++};");
+
+            ScriptText = sb.ToString();
 
             RegexText(ref ScriptText);
 
