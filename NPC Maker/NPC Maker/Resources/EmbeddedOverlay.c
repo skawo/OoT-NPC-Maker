@@ -21,6 +21,10 @@ float NpcM_Function(NpcMaker* npc, PlayState* playState, s32 limbNumber, Gfx** d
 
 This function should return 0 if the limb is meant to be drawn, and 1 if it is not.
 
+For "post limb" functions, the signature is the same, but some of the arguments might be NULL, and the function doesn't return anything.
+For "Skin" models, only the limb number is available.
+For others, everything but the translation is available.
+
 Warning; When using these functions from scripts, make sure
 the return type is valid.
 */

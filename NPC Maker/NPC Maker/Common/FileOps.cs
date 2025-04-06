@@ -139,9 +139,38 @@ namespace NPC_Maker
                     Version = 6;
                 }
 
-                if ((int)Version == 6)
-                    Deserialized.CHeader = String.Join(Environment.NewLine, Deserialized.CHeaderLines.Select(x => x.TrimEnd()).ToList());
+                if ((int)Version < 7)
+                {
+                    foreach (NPCEntry e in Deserialized.Entries)
+                    {
+                        List<string> s = e.EmbeddedOverlayCode.SetFuncNames.ToList();
+                        s.Add("");
+                        e.EmbeddedOverlayCode.SetFuncNames = s.ToArray();
 
+                        int[,] FuncsRunWhen = new int[6, 2]
+                        {
+                            {-1, -1},
+                            {-1, -1},
+                            {-1, -1},
+                            {-1, -1},
+                            {-1, -1},
+                            {-1, -1},
+                        };
+
+                        for (int i = 0; i < 5; i++)
+                        {
+                            FuncsRunWhen[i, 0] = e.EmbeddedOverlayCode.FuncsRunWhen[i, 0];
+                            FuncsRunWhen[i, 1] = e.EmbeddedOverlayCode.FuncsRunWhen[i, 1];
+                        }
+
+                        e.EmbeddedOverlayCode.FuncsRunWhen = FuncsRunWhen;
+                    }
+
+                    Version = 7;
+                }
+
+                if ((int)Version >= 6)
+                    Deserialized.CHeader = String.Join(Environment.NewLine, Deserialized.CHeaderLines.Select(x => x.TrimEnd()).ToList());
 
                 // For cross-compatibility with Linux, update all messages converting linebreaks into native system linebreaks.
                 foreach (NPCEntry e in Deserialized.Entries)
@@ -152,9 +181,8 @@ namespace NPC_Maker
                     }
                 }
 
-
-                Deserialized.Version = 6;
-                Version = 6;
+                Deserialized.Version = 7;
+                Version = 7;
 
                 return Deserialized;
             }
@@ -770,7 +798,7 @@ namespace NPC_Maker
                                     EntryBytes.AddRange(FuncsWhenList.ToArray());
                                     Helpers.Ensure4ByteAlign(EntryBytes);
 
-                                    CurLen += 20 + 8;
+                                    CurLen += 24 + 8;
                                     Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                                     EntryBytes.AddRange(Overlay);

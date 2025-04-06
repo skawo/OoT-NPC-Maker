@@ -90,7 +90,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->GetInternalMsgPtrFunc = &Message_GetMessageRAMAddr;
     en->GetInternalMsgDataPtrFunc = &Data_GetCustomMessage;
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 6; i++)
         en->CFuncs[i] = 0xFFFFFFFF;
     
     for (int i = 0; i < 8; i++)
@@ -356,9 +356,9 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             if (overlayLen != 0xFFFFFFFF)
             {
                 offset += 4;
-                bcopy(buffer + offset, &en->CFuncs, 20);
-                bcopy(buffer + offset + 20, &en->CFuncsWhen, 8);
-                offset += 28;
+                bcopy(buffer + offset, &en->CFuncs, 24);
+                bcopy(buffer + offset + 24, &en->CFuncsWhen, 8);
+                offset += 32;
 
                 en->embeddedOverlay = Setup_LoadEmbeddedOverlay(en, playState, buffer, offset, overlayLen);
 

@@ -352,6 +352,23 @@ void Draw_PostLimbDraw(PlayState* playState, s32 limb, Gfx** dListPtr, Vec3s* ro
 {
     NpcMaker* en = (NpcMaker*)instance;
     Draw_CalcFocusPos(playState, limb, en);
+    
+    u32 cFuncOffs = en->CFuncs[5];
+	
+    if (cFuncOffs != 0xFFFFFFFF)
+    {
+        #if LOGGING > 2
+            is64Printf("_Running embedded post-limb function %8x\n", en->embeddedOverlay + cFuncOffs);
+        #endif
+        
+        typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP);
+        EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + cFuncOffs;
+        f(en, playState, limb, dListPtr, NULL, rot, instance, gfxP);
+
+        #if LOGGING > 2
+            is64Printf("_Embedded function finished.\n");
+        #endif
+    }
 }
 
 s32 Draw_PostLimbDrawSkin(Actor* instance, PlayState* playState, s32 limb, Skin* skelanime)
@@ -360,6 +377,23 @@ s32 Draw_PostLimbDrawSkin(Actor* instance, PlayState* playState, s32 limb, Skin*
     NpcMaker* en = (NpcMaker*)instance;
     Draw_SetupSegments(en, playState);
     Draw_CalcFocusPos(playState, limb, en);
+    
+    u32 cFuncOffs = en->CFuncs[5];
+	
+    if (cFuncOffs != 0xFFFFFFFF)
+    {
+        #if LOGGING > 2
+            is64Printf("_Running embedded post-limb function %8x\n", en->embeddedOverlay + cFuncOffs);
+        #endif
+        
+        typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP);
+        EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + cFuncOffs;
+        s32 out = f(en, playState, limb, NULL, NULL, NULL, instance, NULL);
+
+        #if LOGGING > 2
+            is64Printf("_Embedded function finished.\n");
+        #endif
+    }
     
     return 1;
 }

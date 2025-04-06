@@ -309,7 +309,7 @@ typedef struct NpcMaker
     MessageEntry* dummyMesEntry;
     u16 curTextBuffPos;
 
-    u32 CFuncs[5];
+    u32 CFuncs[6];
     u8 CFuncsWhen[8];    
     u8* embeddedOverlay;
     u8 spawnTimer;

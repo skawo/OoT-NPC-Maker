@@ -65,6 +65,7 @@ namespace NPC_Maker
                             new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnDraw, Combo_WhenOnDraw ),
                             new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnLimb, null ),
                             new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnDelete, null ),
+                            new KeyValuePair<ComboBox, ComboBox>(Combo_postLimb, null ),
                         };
 
             this.DoubleBuffered = true;
@@ -2682,14 +2683,14 @@ namespace NPC_Maker
 
             int ComboId = Convert.ToInt32(c.Tag);
 
-            if (ComboId < 5)
+            if (ComboId < 6)
             {
                 SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId, 0] = c.SelectedIndex;
                 SelectedEntry.EmbeddedOverlayCode.SetFuncNames[ComboId] = c.Text;
 
             }
             else
-                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId - 5, 1] = c.SelectedIndex;
+                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId - 6, 1] = c.SelectedIndex;
         }
 
         private void Combo_Func_MouseDown(object sender, MouseEventArgs e)

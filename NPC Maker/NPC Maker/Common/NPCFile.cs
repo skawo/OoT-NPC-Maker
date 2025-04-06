@@ -22,7 +22,7 @@ namespace NPC_Maker
 
         public NPCFile()
         {
-            Version = 6;
+            Version = 7;
             Entries = new List<NPCEntry>();
             GlobalHeaders = new List<ScriptEntry>();
             SpaceFromFont = false;
@@ -967,11 +967,12 @@ namespace NPC_Maker
                 Functions = new List<FunctionEntry>();
 
             FuncsRunWhen = _FuncsRunWhen;
-            SetFuncNames = new string[5];
+            SetFuncNames = new string[6];
 
             if (FuncsRunWhen == null)
-                FuncsRunWhen = new int[5, 2]
+                FuncsRunWhen = new int[6, 2]
                 {
+                    {-1, -1},
                     {-1, -1},
                     {-1, -1},
                     {-1, -1},
