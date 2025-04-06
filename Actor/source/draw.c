@@ -388,7 +388,7 @@ s32 Draw_PostLimbDrawSkin(Actor* instance, PlayState* playState, s32 limb, Skin*
         
         typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP);
         EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + cFuncOffs;
-        s32 out = f(en, playState, limb, NULL, NULL, NULL, instance, NULL);
+        f(en, playState, limb, NULL, NULL, NULL, instance, NULL);
 
         #if LOGGING > 2
             is64Printf("_Embedded function finished.\n");
