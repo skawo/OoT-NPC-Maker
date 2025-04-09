@@ -521,7 +521,7 @@ namespace NPC_Maker
 
                         for (int i = 0; i < 4; i++)
                         {
-                            if (TalkPat.Length > i)
+                            if (TalkPat.Length > i && (Entry.TalkSegment - 8) >= 0)
                             {
                                 int Index = Entry.Segments[Entry.TalkSegment - 8].FindIndex(x => x.Name.ToLower() == TalkPat[i].ToLower());
 
