@@ -2722,10 +2722,14 @@ namespace NPC_Maker
                     ComboBox c = kvp.Key;
                     ComboBox w = kvp.Value;
 
+                    c.SelectedIndex = -1;
                     c.DataSource = null;
 
                     if (w != null)
+                    {
+                        w.SelectedIndex = -1;
                         w.DataSource = null;
+                    }
                 }
 
                 Button_CCompile_Click(null, null);
