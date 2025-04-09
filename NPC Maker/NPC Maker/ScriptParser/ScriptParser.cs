@@ -65,17 +65,18 @@ namespace NPC_Maker.Scripts
 
             RegexText(ref ScriptText);
 
-            outScript = new BScript();
-            outScript.Name = ScrName;
+            outScript = new BScript
+            {
+                Name = ScrName
+            };
 
             RandomLabels = new List<string>();
 
-            if (ScriptText.Trim() == "")
+            if (String.IsNullOrWhiteSpace(ScriptText))
                 return outScript;
 
             if (outScript.ParseErrors.Count != 0)
                 return outScript;
-
 
             // Split text into lines
             List<string> Lines = SplitLines(ScriptText);

@@ -597,9 +597,12 @@ namespace NPC_Maker.Scripts
             return Helper_GetFromStringList(SplitLine, Index, Animations.Select(x => x.Name).ToList(), 0, Animations.Count, ParseException.UnrecognizedAnimation(SplitLine));
         }
 
-        public static ScriptVarVal Helper_GetSegmentDataEntryID(string[] SplitLine, int Index, int Segment, List<List<SegmentEntry>> Textures)
+        public static ScriptVarVal Helper_GetSegmentDataEntryID(string[] SplitLine, int Index, int Segment, List<List<SegmentEntry>> Textures, bool forceNormal = false)
         {
-            return Helper_GetFromStringList(SplitLine, Index, Textures[Segment].Select(x => x.Name).ToList(), 0, Textures.Count, ParseException.UnrecognizedSegmentDataEntry(SplitLine), (int)Lists.VarTypes.NORMAL);
+            if (forceNormal)
+                return Helper_GetFromStringList(SplitLine, Index, Textures[Segment].Select(x => x.Name).ToList(), 0, Textures.Count, ParseException.UnrecognizedSegmentDataEntry(SplitLine), (int)Lists.VarTypes.NORMAL);
+            else
+                return Helper_GetFromStringList(SplitLine, Index, Textures[Segment].Select(x => x.Name).ToList(), 0, Textures.Count, ParseException.UnrecognizedSegmentDataEntry(SplitLine));
         }
 
         public static ScriptVarVal Helper_GetDListID(string[] SplitLine, int Index, List<DListEntry> DLists)
