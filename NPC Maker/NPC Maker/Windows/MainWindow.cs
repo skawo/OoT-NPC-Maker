@@ -2705,8 +2705,9 @@ namespace NPC_Maker
             {
                 SelectedEntry.EmbeddedOverlayCode.Code = "";
                 SelectedEntry.EmbeddedOverlayCode.Functions = new List<FunctionEntry>();
-                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen = new int[5, 2]
+                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen = new int[6, 2]
                 {
+                    {-1, -1},
                     {-1, -1},
                     {-1, -1},
                     {-1, -1},
@@ -2714,7 +2715,7 @@ namespace NPC_Maker
                     {-1, -1},
                 };
 
-                SelectedEntry.EmbeddedOverlayCode.SetFuncNames = new string[5];
+                SelectedEntry.EmbeddedOverlayCode.SetFuncNames = new string[6];
 
                 foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
                 {
