@@ -2213,6 +2213,13 @@ namespace NPC_Maker
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return;
 
+            if (Data.Count > 1280)
+            {
+                Entry = new MessageEntry();
+                Entry.MessageText = "Error: Over 1280 bytes.";
+                Data = Entry.ConvertTextData(SelectedEntry.NPCName, false);
+            }
+
             bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;
 
             ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, Data.ToArray(), null, null, EditedFile.SpaceFromFont);

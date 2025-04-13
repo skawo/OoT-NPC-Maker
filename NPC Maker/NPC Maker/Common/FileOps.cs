@@ -330,35 +330,44 @@ namespace NPC_Maker
                 using (SHA1 s = SHA1.Create())
                 {
                     string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(gh))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                    string hash2 = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(dicts))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                    Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
+                    string hash3 = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Data.CHeader))).Replace("+", "_").Replace("/", "-").Replace("=", "");
 
                     string cachedHeaders = System.IO.Path.Combine(Program.CachePath, $"gh_{Ver}" + hash);
+                    string cachedDicts = System.IO.Path.Combine(Program.CachePath, $"dicts_{Ver}" + hash2);
+                    string cachedHeader = System.IO.Path.Combine(Program.CCachePath, $"ch_{Ver}" + hash3);
 
-                    if (!File.Exists(cachedHeaders))
+                    if ((!File.Exists(cachedHeaders)) || (!File.Exists(cachedDicts)))
                     {
-                        Helpers.DeleteFileStartingWith(Program.CachePath, "gh_");
+                        cacheInvalid = true;
+                        Directory.Delete(Program.CachePath, true);
+                        if (!Directory.Exists(Program.CachePath))
+                            Directory.CreateDirectory(Program.CachePath);
+                        else
+                        {
+                            ShowMsg(CLIMode, $"Error removing the saved cache.");
+                            return;
+                        }
+
                         File.WriteAllText(cachedHeaders, "");
-                        cacheInvalid = true;
-                    }
-
-                    hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(dicts))).Replace("+", "_").Replace("/", "-").Replace("=", "");
-                    string cachedDicts = System.IO.Path.Combine(Program.CachePath, $"dicts_{Ver}" + hash);
-
-                    if (!File.Exists(cachedDicts))
-                    {
-                        Helpers.DeleteFileStartingWith(Program.CachePath, "dicts_");
                         File.WriteAllText(cachedDicts, "");
-                        cacheInvalid = true;
                     }
-
-                    Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
-                    hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Data.CHeader))).Replace("+", "_").Replace("/", "-").Replace("=", "");
-                    string cachedHeader = System.IO.Path.Combine(Program.CachePath, $"ch_{Ver}" + hash);
 
                     if (!File.Exists(cachedHeader))
                     {
-                        Helpers.DeleteFileStartingWith(Program.CachePath, "ch_");
-                        File.WriteAllText(cachedHeader, "");
                         CcacheInvalid = true;
+                        Directory.Delete(Program.CCachePath, true);
+
+                        if (!Directory.Exists(Program.CCachePath))
+                            Directory.CreateDirectory(Program.CCachePath);
+                        else
+                        {
+                            ShowMsg(CLIMode, $"Error removing the saved cache.");
+                            return;
+                        }
+
+                        File.WriteAllText(cachedHeader, "");
                     }
                 }
 
@@ -565,9 +574,9 @@ namespace NPC_Maker
                             Helpers.Ensure4ByteAlign(Message);
                             MsgData.AddRange(Message);
 
-                            if (Message.Count > 640)
+                            if (Message.Count > 1280)
                             {
-                                ShowMsg(CLIMode, $"{Entry.NPCName}: One of the messages ({Msg.Name}) has exceeded 640 bytes (the maximum allowed), and could not be saved.");
+                                ShowMsg(CLIMode, $"{Entry.NPCName}: One of the messages ({Msg.Name}) has exceeded 1280 bytes (the maximum allowed), and could not be saved.");
                                 Message = new List<byte>();
 
                                 if (!ParseErrors.Contains(Entry.NPCName))
@@ -729,8 +738,8 @@ namespace NPC_Maker
                                 string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
                                 CodeString = CCode.ReplaceGameVersionInclude(CodeString);
                                 string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(CodeString))).Replace("+", "_").Replace("/", "-").Replace("=", "");
-                                string cachedAddrsFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_funcsaddrs_" + hash);
-                                string cachedcodeFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_code_" + hash);
+                                string cachedAddrsFile = System.IO.Path.Combine(Program.CCachePath, $"{EntriesDone}_funcsaddrs_" + hash);
+                                string cachedcodeFile = System.IO.Path.Combine(Program.CCachePath, $"{EntriesDone}_code_" + hash);
 
                                 if (!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
                                 {
@@ -739,9 +748,9 @@ namespace NPC_Maker
                                 }
                                 else
                                 {
-                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_funcsaddrs_");
-                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_code_");
-                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script");
+                                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_funcsaddrs_");
+                                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_code_");
+                                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_script");
 
                                     Overlay = CCode.Compile(true, Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors);
 
@@ -934,12 +943,6 @@ namespace NPC_Maker
 
                 if (ParseErrors.Count != 0)
                 {
-                    if (cacheInvalid)
-                    {
-                        Helpers.DeleteFileStartingWith(Program.CachePath, "gh_");
-                        Helpers.DeleteFileStartingWith(Program.CachePath, "ch_");
-                    }
-
                     ShowMsg(CLIMode,
                             $"File could not be saved." +
                             $"" + Environment.NewLine + Environment.NewLine +

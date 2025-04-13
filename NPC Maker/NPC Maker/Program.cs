@@ -24,6 +24,7 @@ namespace NPC_Maker
         public static MainWindow mw;
 
         public static string CachePath = "";
+        public static string CCachePath = "";
         public static string JsonPath = "";
 
         [DllImport("kernel32.dll")]
@@ -44,6 +45,7 @@ namespace NPC_Maker
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
             SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
             CachePath = Path.Combine(ExecPath, "cache");
+            CCachePath = Path.Combine(ExecPath, "Ccache");
 
             Type t = Type.GetType("Mono.Runtime");
 
@@ -65,6 +67,9 @@ namespace NPC_Maker
 
             if (!Directory.Exists(CachePath))
                 Directory.CreateDirectory(CachePath);
+
+            if (!Directory.Exists(CCachePath))
+                Directory.CreateDirectory(CCachePath);
 
             Dicts.LoadDicts();
 
