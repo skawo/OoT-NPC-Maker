@@ -750,7 +750,7 @@ namespace NPC_Maker
                                 {
                                     Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_funcsaddrs_");
                                     Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_code_");
-                                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_script");
+                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script");
 
                                     Overlay = CCode.Compile(true, Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors);
 
