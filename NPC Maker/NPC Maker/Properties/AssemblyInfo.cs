@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Skawo")]
 [assembly: AssemblyProduct("NPC Maker")]
-[assembly: AssemblyCopyright("Copyright © 2022 - 2024")]
+[assembly: AssemblyCopyright("Copyright © 2022 - 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
