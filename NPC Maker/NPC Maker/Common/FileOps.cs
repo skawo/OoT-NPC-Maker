@@ -383,7 +383,7 @@ namespace NPC_Maker
                     int EntryID = dictEntry.Key;
 
                     string CompErrors = "";
-                    byte[] Overlay;
+                    byte[] Overlay = null;
 
                     using (SHA1 s = SHA1.Create())
                     {
@@ -401,7 +401,8 @@ namespace NPC_Maker
                             Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntryID}_funcsaddrs_");
                             Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntryID}_code_");
 
-                            Overlay = CCode.Compile(true, Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors, $"NPCCOMPILE{EntryID}");
+                            if (Entry.EmbeddedOverlayCode.Code != "")
+                                Overlay = CCode.Compile(true, Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors, $"NPCCOMPILE{EntryID}");
 
                             if (Overlay != null)
                             {
