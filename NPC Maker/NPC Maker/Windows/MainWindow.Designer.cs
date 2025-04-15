@@ -4191,6 +4191,7 @@
             this.progressL.Name = "progressL";
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
+            this.progressL.Visible = false;
             // 
             // MainWindow
             // 

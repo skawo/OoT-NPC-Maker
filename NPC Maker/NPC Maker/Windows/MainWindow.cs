@@ -46,7 +46,6 @@ namespace NPC_Maker
             compileTimer.Interval = 100;
             compileTimer.Tick += CompileTimer_Tick;
 
-
             Combo_CodeEditor.SelectedIndexChanged -= Combo_CodeEditor_SelectedIndexChanged;
             Combo_CodeEditor.Items.Clear();
             Combo_CodeEditor.Items.AddRange(Enum.GetNames(typeof(CCode.CodeEditorEnum)));
@@ -90,6 +89,7 @@ namespace NPC_Maker
                 MenuStrip.Enabled = true;
                 Panel_Editor.Enabled = true;
                 btn_FindMsg.Enabled = true;
+                progressL.Visible = false;
             }
             else
                 compileTimer.Start();
@@ -649,6 +649,7 @@ namespace NPC_Maker
                 this.MenuStrip.Enabled = false;
                 this.Panel_Editor.Enabled = false;
                 this.btn_FindMsg.Enabled = false;
+                this.progressL.Visible = true;
 
                 compileTimer.Start();
 
