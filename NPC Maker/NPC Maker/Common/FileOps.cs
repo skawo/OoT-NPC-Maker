@@ -979,7 +979,9 @@ namespace NPC_Maker
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script{scriptNum}_");
                                     Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
                                     ParsedScripts.Add(scr);
-                                    File.WriteAllBytes(cachedFile, scr.Script);
+
+                                    if (scr.ParseErrors.Count == 0)
+                                        File.WriteAllBytes(cachedFile, scr.Script);
                                 }
 
                                 scriptNum++;
