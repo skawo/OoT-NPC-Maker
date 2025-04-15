@@ -25,6 +25,7 @@ namespace NPC_Maker
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
         private readonly System.Windows.Forms.Timer MsgPreviewTimer = new Timer();
         public static List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
+        Timer compileTimer;
 
         public MainWindow()
         {
@@ -40,6 +41,10 @@ namespace NPC_Maker
 
                 Page.Controls.Add(sg);
             }
+
+            compileTimer = new Timer();
+            compileTimer.Interval = 100;
+            compileTimer.Tick += CompileTimer_Tick;
 
 
             Combo_CodeEditor.SelectedIndexChanged -= Combo_CodeEditor_SelectedIndexChanged;
@@ -74,6 +79,20 @@ namespace NPC_Maker
             this.ResizeEnd += Form1_ResizeEnd;
 
             CodeParamsTooltip.SetToolTip(Textbox_CodeEditorArgs, "Available constants: $CODEFILE, $CODEHEADER, $CODEFOLDER");
+        }
+
+        private void CompileTimer_Tick(object sender, EventArgs e)
+        {
+            compileTimer.Stop();
+
+            if (!Program.CompileInProgress)
+            {
+                MenuStrip.Enabled = true;
+                Panel_Editor.Enabled = true;
+                btn_FindMsg.Enabled = true;
+            }
+            else
+                compileTimer.Start();
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -609,9 +628,8 @@ namespace NPC_Maker
 
         private async void FileMenu_SaveBinary_Click(object sender, EventArgs e)
         {
-            if (EditedFile == null)
+            if (EditedFile == null || Program.CompileInProgress)
                 return;
-
 
             SaveFileDialog SFD = new SaveFileDialog
             {
@@ -626,6 +644,13 @@ namespace NPC_Maker
             {
                 IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.newProgress = n);
                 progress.Report(new Common.ProgressReport("Starting...", 0));
+
+                Program.CompileInProgress = true;
+                this.MenuStrip.Enabled = false;
+                this.Panel_Editor.Enabled = false;
+                this.btn_FindMsg.Enabled = false;
+
+                compileTimer.Start();
 
                 await TaskEx.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress); });
 

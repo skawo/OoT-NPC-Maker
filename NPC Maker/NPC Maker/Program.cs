@@ -28,6 +28,8 @@ namespace NPC_Maker
         public static string CCachePath = "";
         public static string JsonPath = "";
 
+        public static bool CompileInProgress = false;
+
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
 

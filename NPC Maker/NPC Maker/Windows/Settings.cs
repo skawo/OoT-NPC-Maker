@@ -75,6 +75,9 @@ namespace NPC_Maker.Windows
 
         private void ResetCache_Click(object sender, EventArgs e)
         {
+            if (Program.CompileInProgress)
+                return;
+
             if (Directory.Exists(Program.CachePath))
                 Directory.Delete(Program.CachePath, true);
 

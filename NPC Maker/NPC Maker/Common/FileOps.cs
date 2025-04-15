@@ -357,7 +357,10 @@ namespace NPC_Maker
                 bool[] cacheStatus = GetCacheStatus(Data, CLIMode);
 
                 if (cacheStatus == null)
+                {
+                    Program.CompileInProgress = false;
                     return;
+                }
 
                 bool cacheInvalid = cacheStatus[0];
                 bool CcacheInvalid = cacheStatus[1];
@@ -381,8 +384,6 @@ namespace NPC_Maker
 
                     string CompErrors = "";
                     byte[] Overlay;
-
-                    //CCode.CreateCTempDirectory(Entry.EmbeddedOverlayCode.Code);
 
                     using (SHA1 s = SHA1.Create())
                     {
@@ -458,6 +459,7 @@ namespace NPC_Maker
                 });
 
                 SaveBinaryFile(Path, Data, progress, false, false, CLIMode);
+                Program.CompileInProgress = false;
             });
         }
 
