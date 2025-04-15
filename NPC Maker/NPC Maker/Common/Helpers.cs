@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace NPC_Maker
 {
@@ -168,6 +169,19 @@ namespace NPC_Maker
             res |= (byte)((h != 0 ? 1 : 0) << 0);
 
             return res;
+        }
+
+        public static double AddInterlocked(ref float location1, float value)
+        {
+            float newCurrentValue = location1; // non-volatile read, so may be stale
+            while (true)
+            {
+                float currentValue = newCurrentValue;
+                float newValue = currentValue + value;
+                newCurrentValue = Interlocked.CompareExchange(ref location1, newValue, currentValue);
+                if (newCurrentValue.Equals(currentValue)) // see "Update" below
+                    return newValue;
+            }
         }
     }
 }

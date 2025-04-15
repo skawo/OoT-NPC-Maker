@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace NPC_Maker
 {
@@ -110,8 +111,13 @@ namespace NPC_Maker
 
                     try
                     {
-                        Console.WriteLine("Writing output ZOBJ...");
-                        FileOps.SaveBinaryFile(args[1], InFile, true);
+                        bool[] cacheStatus = FileOps.GetCacheStatus(InFile, true);
+
+                        if (cacheStatus != null)
+                        {
+                            Console.WriteLine("Writing output ZOBJ...");
+                            FileOps.SaveBinaryFile(args[1], InFile, null, cacheStatus[0], cacheStatus[1], true);
+                        }
                     }
                     catch (Exception ex)
                     {

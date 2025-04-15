@@ -9,6 +9,9 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -225,7 +228,7 @@ namespace NPC_Maker
                     s.TextLines.ForEach(x => x.TrimEnd());
                     s.Text = "";
                 }
-                
+
                 outD.CHeaderLines = Regex.Split(outD.CHeader, "\r?\n").ToList();
                 outD.CHeaderLines.ForEach(x => x.TrimEnd());
                 outD.CHeader = "";
@@ -275,20 +278,196 @@ namespace NPC_Maker
             if (CLIMode)
                 Console.WriteLine(Msg);
             else
-                System.Windows.Forms.MessageBox.Show(Msg);
+                System.Windows.Forms.MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
             return;
         }
 
-        public static void SaveBinaryFile(string Path, NPCFile Data, bool CLIMode = false)
+        public static bool[] GetCacheStatus(NPCFile Data, bool CLIMode = false)
+        {
+            string gh = String.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text));
+            string dicts = String.Join(
+                                         JsonConvert.SerializeObject(Dicts.Actors),
+                                         JsonConvert.SerializeObject(Dicts.ObjectIDs),
+                                         JsonConvert.SerializeObject(Dicts.SFXes),
+                                         JsonConvert.SerializeObject(Dicts.LinkAnims),
+                                         JsonConvert.SerializeObject(Dicts.Music)
+                                      );
+
+
+            bool cacheInvalid = false;
+            bool CcacheInvalid = false;
+            string Ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+
+            // Check if the Global Headers changed - if they have, we need to redo everything.
+            using (SHA1 s = SHA1.Create())
+            {
+                string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(gh))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                string hash2 = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(dicts))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
+                string hash3 = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Data.CHeader))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+
+                string cachedHeaders = System.IO.Path.Combine(Program.CachePath, $"gh_{Ver}" + hash);
+                string cachedDicts = System.IO.Path.Combine(Program.CachePath, $"dicts_{Ver}" + hash2);
+                string cachedHeader = System.IO.Path.Combine(Program.CCachePath, $"ch_{Ver}" + hash3);
+
+                if ((!File.Exists(cachedHeaders)) || (!File.Exists(cachedDicts)))
+                {
+                    cacheInvalid = true;
+                    Directory.Delete(Program.CachePath, true);
+                    if (!Directory.Exists(Program.CachePath))
+                        Directory.CreateDirectory(Program.CachePath);
+                    else
+                    {
+                        ShowMsg(CLIMode, $"Error removing the saved cache.");
+                        return null;
+                    }
+
+                    File.WriteAllText(cachedHeaders, "");
+                    File.WriteAllText(cachedDicts, "");
+                }
+
+                if (!File.Exists(cachedHeader))
+                {
+                    CcacheInvalid = true;
+                    Directory.Delete(Program.CCachePath, true);
+
+                    if (!Directory.Exists(Program.CCachePath))
+                        Directory.CreateDirectory(Program.CCachePath);
+                    else
+                    {
+                        ShowMsg(CLIMode, $"Error removing the saved cache.");
+                        return null;
+                    }
+
+                    File.WriteAllText(cachedHeader, "");
+                }
+            }
+
+            return new bool[2] { cacheInvalid, CcacheInvalid };
+        }
+
+        public async static void PreprocessCodeAndScripts(string Path, NPCFile Data, IProgress<Common.ProgressReport> progress, bool CLIMode = false)
+        {
+            float ProgressPer = (float)((float)100 / (float)Data.Entries.Count);
+            float CurProgress = 0;
+
+            await TaskEx.Run(() =>
+            {
+                bool[] cacheStatus = GetCacheStatus(Data, CLIMode);
+
+                if (cacheStatus == null)
+                    return;
+
+                bool cacheInvalid = cacheStatus[0];
+                bool CcacheInvalid = cacheStatus[1];
+
+                Dictionary<int, NPCEntry> dict = new Dictionary<int, NPCEntry>();
+
+                int id = 0;
+
+                foreach (NPCEntry Entry in Data.Entries)
+                {
+                    dict.Add(id, Entry);
+                    id++;
+                }
+
+                Console.Write($"Compiling...");
+
+                Parallel.ForEach(dict, dictEntry =>
+                {
+                    NPCEntry Entry = dictEntry.Value;
+                    int EntryID = dictEntry.Key;
+
+                    string CompErrors = "";
+                    byte[] Overlay;
+
+                    //CCode.CreateCTempDirectory(Entry.EmbeddedOverlayCode.Code);
+
+                    using (SHA1 s = SHA1.Create())
+                    {
+                        string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
+                        CodeString = CCode.ReplaceGameVersionInclude(CodeString);
+                        string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(CodeString))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                        string cachedAddrsFile = System.IO.Path.Combine(Program.CCachePath, $"{EntryID}_funcsaddrs_" + hash);
+                        string cachedcodeFile = System.IO.Path.Combine(Program.CCachePath, $"{EntryID}_code_" + hash);
+
+                        if (!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
+                        {
+                        }
+                        else
+                        {
+                            Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntryID}_funcsaddrs_");
+                            Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntryID}_code_");
+
+                            Overlay = CCode.Compile(true, Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors, $"NPCCOMPILE{EntryID}");
+
+                            if (Overlay != null)
+                            {
+                                Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntryID}_script");
+                                CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
+                                string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
+
+                                File.WriteAllText(cachedAddrsFile, CodeAddrsString);
+                                File.WriteAllBytes(cachedcodeFile, Overlay);
+                            }
+                        }
+
+
+                        int scriptNum = 0;
+                        List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
+
+                        string m = JsonConvert.SerializeObject(Entry.Messages) + JsonConvert.SerializeObject(Entry.ExtraDisplayLists) + JsonConvert.SerializeObject(Entry.Segments) + JsonConvert.SerializeObject(Entry.Animations);
+                        string hashM = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(m))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                        string cachedmsgFile = System.IO.Path.Combine(Program.CachePath, $"{EntryID}_exdata_" + hashM);
+
+                        foreach (ScriptEntry Scr in NonEmptyEntries)
+                        {
+                            Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, Data.GlobalHeaders);
+
+                            hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Scr.Text))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+                            string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntryID}_script{scriptNum}_" + hash);
+
+                            if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedmsgFile))
+                            {
+                            }
+                            else
+                            {
+                                Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntryID}_script{scriptNum}_");
+                                Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
+
+                                if (scr.ParseErrors.Count == 0)
+                                    File.WriteAllBytes(cachedFile, scr.Script);
+                            }
+
+                            scriptNum++;
+                        }
+
+                        if (!File.Exists(cachedmsgFile))
+                        {
+                            Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntryID}_exdata_");
+                            File.WriteAllText(cachedmsgFile, "");
+                        }
+                    }
+
+                    if (progress != null)
+                    {
+                        Helpers.AddInterlocked(ref CurProgress, ProgressPer);
+                        progress.Report(new Common.ProgressReport($"Compiling {String.Format("{0:0.##}", CurProgress)}%", CurProgress));
+                    }
+                });
+
+                SaveBinaryFile(Path, Data, progress, false, false, CLIMode);
+            });
+        }
+
+        public static void SaveBinaryFile(string Path, NPCFile Data, IProgress<Common.ProgressReport> progress, bool cacheInvalid, bool CcacheInvalid, bool CLIMode = false)
         {
             if (Data.Entries.Count() == 0)
             {
                 ShowMsg(CLIMode, "Nothing to save.");
                 return;
             }
-
-            Progress pr = new Progress();
 
             try
             {
@@ -300,79 +479,15 @@ namespace NPC_Maker
 
                 string CompErrors = "";
 
-                if (Program.mw != null)
-                {
-                    pr.SetProgress(0);
-                    pr.Show();
-                    pr.Location = new System.Drawing.Point(Program.mw.Location.X + Program.mw.Width / 2 - pr.Width / 2, Program.mw.Location.Y + Program.mw.Height / 2 - pr.Height / 2);
-                    pr.Refresh();
-                }
-
                 float ProgressPer = (float)((float)100 / (float)Data.Entries.Count);
                 float CurProgress = 0;
                 int EntriesDone = 0;
 
-                string gh = String.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text));
-                string dicts = String.Join(
-                                             JsonConvert.SerializeObject(Dicts.Actors),
-                                             JsonConvert.SerializeObject(Dicts.ObjectIDs),
-                                             JsonConvert.SerializeObject(Dicts.SFXes),
-                                             JsonConvert.SerializeObject(Dicts.LinkAnims),
-                                             JsonConvert.SerializeObject(Dicts.Music)
-                                          );
-
-
-                bool cacheInvalid = false;
-                bool CcacheInvalid = false;
-                string Ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-
-                // Check if the Global Headers changed - if they have, we need to redo everything.
-                using (SHA1 s = SHA1.Create())
-                {
-                    string hash = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(gh))).Replace("+", "_").Replace("/", "-").Replace("=", "");
-                    string hash2 = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(dicts))).Replace("+", "_").Replace("/", "-").Replace("=", "");
-                    Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
-                    string hash3 = Convert.ToBase64String(s.ComputeHash(Encoding.UTF8.GetBytes(Data.CHeader))).Replace("+", "_").Replace("/", "-").Replace("=", "");
-
-                    string cachedHeaders = System.IO.Path.Combine(Program.CachePath, $"gh_{Ver}" + hash);
-                    string cachedDicts = System.IO.Path.Combine(Program.CachePath, $"dicts_{Ver}" + hash2);
-                    string cachedHeader = System.IO.Path.Combine(Program.CCachePath, $"ch_{Ver}" + hash3);
-
-                    if ((!File.Exists(cachedHeaders)) || (!File.Exists(cachedDicts)))
-                    {
-                        cacheInvalid = true;
-                        Directory.Delete(Program.CachePath, true);
-                        if (!Directory.Exists(Program.CachePath))
-                            Directory.CreateDirectory(Program.CachePath);
-                        else
-                        {
-                            ShowMsg(CLIMode, $"Error removing the saved cache.");
-                            return;
-                        }
-
-                        File.WriteAllText(cachedHeaders, "");
-                        File.WriteAllText(cachedDicts, "");
-                    }
-
-                    if (!File.Exists(cachedHeader))
-                    {
-                        CcacheInvalid = true;
-                        Directory.Delete(Program.CCachePath, true);
-
-                        if (!Directory.Exists(Program.CCachePath))
-                            Directory.CreateDirectory(Program.CCachePath);
-                        else
-                        {
-                            ShowMsg(CLIMode, $"Error removing the saved cache.");
-                            return;
-                        }
-
-                        File.WriteAllText(cachedHeader, "");
-                    }
-                }
+                if (progress != null)
+                    progress.Report(new Common.ProgressReport($"Saving...", 0));
 
                 foreach (NPCEntry Entry in Data.Entries)
-                { 
+                {
 
                     if (Entry.IsNull == false)
                     {
@@ -439,7 +554,7 @@ namespace NPC_Maker
                         EntryBytes.Add(Convert.ToByte(Entry.DEBUGExDlistEditor));
                         EntryBytes.Add(Convert.ToByte(Entry.DEBUGLookAtEditor));
                         EntryBytes.Add(Convert.ToByte(Entry.DEBUGPrintToScreen));
-                        
+
                         Helpers.Ensure4ByteAlign(EntryBytes);
                         CurLen += 56;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
@@ -726,8 +841,6 @@ namespace NPC_Maker
 
                         if (Entry.EmbeddedOverlayCode.Code != "")
                         {
-                            pr.SetProgress((int)Math.Floor(CurProgress), $"Compiling C {EntriesDone}/{Data.Entries.Count()}");
-
                             CompErrors = "";
                             byte[] Overlay;
 
@@ -926,12 +1039,12 @@ namespace NPC_Maker
                     EntriesDone += 1;
                     CurProgress += ProgressPer;
 
-                    pr.SetProgress((int)Math.Ceiling(CurProgress), $"Saved {EntriesDone}/{Data.Entries.Count()}");
-                    pr.Refresh();
+                    if (progress != null)
+                        progress.Report(new Common.ProgressReport($"Saving {EntriesDone}/{Data.Entries.Count}", CurProgress));
                 }
 
-                pr.SetProgress(100, "Done!");
-                pr.Refresh();
+                if (progress != null)
+                    progress.Report(new Common.ProgressReport($"Done!", 100));
 
                 List<byte> Output = new List<byte>();
 
@@ -958,9 +1071,7 @@ namespace NPC_Maker
             }
             finally
             {
-                pr.Dispose();
             }
         }
-
     }
 }

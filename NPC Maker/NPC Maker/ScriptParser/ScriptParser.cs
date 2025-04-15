@@ -118,8 +118,8 @@ namespace NPC_Maker.Scripts
                 outScript.Script = ConvertScriptToBytes(Labels, ref outScript, ref Instructions);
 
 #if DEBUG
-                outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
-                System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
+                //outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
+                //System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
 #endif
             }
 
