@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 
 namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static string GetBase64Hash(SHA1 hasher, string s)
+        {
+            return Convert.ToBase64String(hasher.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+        }
+
         public static Color TryGetColorWithName(Color color)
         {
             var colorLookup = typeof(Color)
