@@ -37,6 +37,7 @@ namespace NPC_Maker.Windows
             NumUpParseTime.Value = EditedSettings.ParseTime;
             AutoSaveC.Checked = EditedSettings.AutoSave;
             NumUpDown_AutoSaveCTime.Value = EditedSettings.AutoSaveTime;
+            checkBox_CompileInParallel.Checked = EditedSettings.CompileInParallel;
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)

@@ -653,7 +653,18 @@ namespace NPC_Maker
 
                 compileTimer.Start();
 
-                await TaskEx.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress); });
+                if (Program.Settings.CompileInParallel)
+                {
+                    await TaskEx.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress); });
+                }
+                else
+                {
+                    await TaskEx.Run(() =>
+                    {
+                        bool[] caches = FileOps.GetCacheStatus(EditedFile);
+                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, caches[0], caches[1]);
+                    });
+                }
 
                 Program.Settings.LastSaveBinaryPath = SFD.FileName;
             }

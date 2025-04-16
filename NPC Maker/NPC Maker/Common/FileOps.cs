@@ -1075,6 +1075,7 @@ namespace NPC_Maker
             }
             finally
             {
+                Program.CompileInProgress = false;
             }
         }
     }

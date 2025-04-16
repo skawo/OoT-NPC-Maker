@@ -47,6 +47,7 @@ namespace NPC_Maker
 
         public bool UseSpaceWithFromFont { get; set; }
 
+        public bool CompileInParallel { get; set; }
         public NPCMakerSettings()
         {
             Version = 3;
@@ -69,6 +70,7 @@ namespace NPC_Maker
             AutoSaveTime = 1000;
             UseSpaceWithFromFont = false;
             AutoComp_ActorSwitch = false;
+            CompileInParallel = true;
         }
 
         public enum Members
@@ -91,6 +93,7 @@ namespace NPC_Maker
             AUTOSAVETIME,
             AUTOSAVESWITCH,
             USESPACEFONT,
+            PARALLEL,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -134,6 +137,7 @@ namespace NPC_Maker
                 case Members.AUTOSAVE: AutoSave = (bool)Value; break;
                 case Members.AUTOSAVETIME: AutoSaveTime = Convert.ToUInt32(Value); break;
                 case Members.USESPACEFONT: UseSpaceWithFromFont = (bool)Value; break;
+                case Members.PARALLEL: CompileInParallel = (bool)Value; break;
                 default: break;
             }
         }
