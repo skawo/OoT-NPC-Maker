@@ -171,7 +171,9 @@ namespace NPC_Maker.Scripts
 
         public static byte GetOperator(string[] SplitLine, int Index)
         {
-            switch (SplitLine[Index].ToUpper())
+            string operatorString = SplitLine[Index].ToUpper();
+
+            switch (operatorString)
             {
                 case "=": return 0;
                 case "-=": return 1;
@@ -461,7 +463,7 @@ namespace NPC_Maker.Scripts
                 }
                 else
                 {
-                    return (float)(int)System.Enum.Parse(EnumType, SplitLine[Index].ToUpper());
+                    return (float)(int)Enum.Parse(EnumType, SplitLine[Index].ToUpper());
                 }
             }
             catch (Exception)

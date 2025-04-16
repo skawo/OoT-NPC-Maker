@@ -33,7 +33,7 @@ namespace NPC_Maker
             CodeEditorEnum.Other.ToString()
         };
 
-        
+
         public static string gtempFolderName = "temp";
         public static string gcompileFolderName = "compile";
         public static string gtempFolderPath = Path.Combine(Program.ExecPath, gtempFolderName);
@@ -44,7 +44,7 @@ namespace NPC_Maker
         public static string geditHeaderFilePath = $"{Path.Combine(gtempFolderPath, gheaderFileName)}";
 
         public static UInt32 gBaseAddr = 0x80800000;
-        
+
 
         public static void GetOutput(Process p, string Section, ref string CompileErrors)
         {
@@ -82,7 +82,7 @@ namespace NPC_Maker
             CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
 
             string Out = $"{Environment.NewLine}{p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine)}{Environment.NewLine}{p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine)}";
-            
+
             Out = Regex.Replace(Out, @"\x1B\[[^@-~]*[@-~]", "");
 
             if (!String.IsNullOrWhiteSpace(Out))
@@ -146,39 +146,38 @@ namespace NPC_Maker
             }
 
             Out = Out.Replace("\t", " ");
-            Out = Regex.Replace(Out, "[ ]{2,}", " ");
+            Out = Regex.Replace(Out, "[ ]{2,}", " ", RegexOptions.Compiled);
             List<string> Lines = Out.Split(new[] { '\n' }).ToList();
 
-
-            List<FunctionEntry> Functions = new List<FunctionEntry>();
-            Dictionary<string, UInt32> SectionOffsets = new Dictionary<string, UInt32>();
-
             byte[] ovl = File.ReadAllBytes(ovlPath);
-            UInt32 SectionOffs = Program.BEConverter.ToUInt32(ovl, ovl.Length - 4);
+            UInt32 sectionOffs = Program.BEConverter.ToUInt32(ovl, ovl.Length - 4);
 
-            SectionOffsets.Add(".text", 0);
-            SectionOffsets.Add(".data", SectionOffsets[".text"] + Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - SectionOffs)));
-            SectionOffsets.Add(".rodata", SectionOffsets[".data"] + Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - SectionOffs + 4)));
-            SectionOffsets.Add(".bss", SectionOffsets[".rodata"] + Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - SectionOffs + 8)));
+            // Calculate section offsets once
+            Dictionary<string, UInt32> sectionOffsets = new Dictionary<string, UInt32>
+            {
+                { ".text", 0 },
+                { ".data", Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - sectionOffs)) },
+                { ".rodata", Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - sectionOffs + 4)) },
+                { ".bss", Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - sectionOffs + 8)) }
+            };
 
+            sectionOffsets[".data"] += sectionOffsets[".text"];
+            sectionOffsets[".rodata"] += sectionOffsets[".data"];
+            sectionOffsets[".bss"] += sectionOffsets[".rodata"];
+
+            List<FunctionEntry> functions = new List<FunctionEntry>();
             foreach (string Line in Lines)
             {
-                List<string> Words = Line.Split(' ').ToList();
+                string[] words = Line.Split(' ');
 
-                if (Words.Count != 6)
+                if (words.Length != 6 || words[2] != "F" || !words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                if (Words[2] != "F")
-                    continue;
-
-                if (!Words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
-                    continue;
-                else
-                    Functions.Add(new FunctionEntry(Words[5], (UInt32)(Words[0].HexLeading2UInt32() - gBaseAddr + SectionOffsets[Words[3]])));
+                if (UInt32.TryParse(words[0], System.Globalization.NumberStyles.HexNumber, null, out UInt32 address) && sectionOffsets.TryGetValue(words[3], out UInt32 sectionOffset))
+                    functions.Add(new FunctionEntry(words[5], address - gBaseAddr + sectionOffset));
             }
 
-            return Functions.OrderBy(x => x.FuncName).ToList();
-
+            return functions.OrderBy(x => x.FuncName).ToList();
         }
 
         public static byte[] Compile(bool OotVer, string Header, CCodeEntry CodeEntry, ref string CompileMsgs, string folder = "default")
@@ -222,7 +221,7 @@ namespace NPC_Maker
 
         public static byte[] CompileUnderMono(string folder, bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
- 
+
             string compileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName, folder);
             string compileFileName = $"{gcodeFileNameBase}{folder}";
             string oFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", $"{compileFileName}.o");
@@ -476,7 +475,7 @@ namespace NPC_Maker
 
                 if (!HeaderOnly)
                     File.WriteAllText(Path.Combine(gtempFolderPath, $"{CCode.gcodeFileNameBase}.c"), Code);
-                
+
                 File.WriteAllText(Path.Combine(gtempFolderPath, gheaderFileName), Header);
                 return true;
             }
