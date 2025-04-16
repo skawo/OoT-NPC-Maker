@@ -411,7 +411,12 @@ namespace NPC_Maker
                                 File.WriteAllBytes(cachedcodeFile, Overlay);
                             }
                         }
-
+                        else
+                        {
+                            // Need to load the overlay in so that the function addresses for the scripts are present.
+                            Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
+                            Overlay = File.ReadAllBytes(cachedcodeFile);
+                        }
 
                         int scriptNum = 0;
                         List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
