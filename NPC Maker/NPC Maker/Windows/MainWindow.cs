@@ -59,6 +59,8 @@ namespace NPC_Maker
             TextBox_CodeEditorPath.Text = Program.Settings.CustomCodeEditorPath;
             Combo_CodeEditor.SelectedIndexChanged += Combo_CodeEditor_SelectedIndexChanged;
 
+            Combo_CodeEditor_SelectedIndexChanged(null, null);
+
             MsgPreviewTimer.Interval = 100;
             MsgPreviewTimer.Tick += MsgPreviewTimer_Tick;
             MsgPreviewTimer.Stop();

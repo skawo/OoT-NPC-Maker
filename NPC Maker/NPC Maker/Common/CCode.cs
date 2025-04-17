@@ -501,8 +501,16 @@ namespace NPC_Maker
                 {
                     case CCode.CodeEditorEnum.VSCode:
                         {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
-                            startInfo.Arguments = $"-n {CCode.gtempFolderPath.AppendQuotation()}";
+                            if (Program.IsRunningUnderMono)
+                            {
+                                startInfo.FileName = "code";
+                                startInfo.Arguments = $"-n {CCode.gtempFolderPath.AppendQuotation()}";
+                            }
+                            else
+                            {
+                                startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
+                                startInfo.Arguments = $"-n {CCode.gtempFolderPath.AppendQuotation()}";
+                            }
                             break;
                         }
                     case CCode.CodeEditorEnum.Notepad:
@@ -520,7 +528,16 @@ namespace NPC_Maker
                         }
                     case CCode.CodeEditorEnum.Sublime:
                         {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Sublime Text\subl.exe";
+                            if (Program.IsRunningUnderMono)
+                            {
+                                startInfo.FileName = "subl";
+                                startInfo.Arguments = $"{CCode.geditCodeFilePath.AppendQuotation()}";
+                            }
+                            else
+                            {
+                                startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Sublime Text\subl.exe";
+                                startInfo.Arguments = $"-n {CCode.geditCodeFilePath.AppendQuotation()}";
+                            }
                             break;
                         }
                     case CCode.CodeEditorEnum.WordPad:
