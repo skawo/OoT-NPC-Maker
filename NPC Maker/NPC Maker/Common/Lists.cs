@@ -65,6 +65,15 @@ namespace NPC_Maker
         public const string Keyword_Label_Null = "__NULL__";
         public const string Keyword_Label_HERE = "HERE";
 
+        public const string Keyword_Music = "MUSID_";
+        public const string Keyword_Sfx = "SFXID_";
+        public const string Keyword_Actor = "ACTORID_";
+        public const string Keyword_Msg = "MSGID_";
+        public const string Keyword_Script = "SCRIPTID_";
+        public const string Keyword_Dlist = "DLISTID_";
+        public const string Keyword_Anim = "ANIMID_";
+        public const string Keyword_Seg = "SEGx_DATAID_";
+
         public const int Num_User_Vars = 255;
 
         public static List<string> AllKeywords = new List<string>()
@@ -93,8 +102,16 @@ namespace NPC_Maker
             Keyword_EndOcarina,
             Keyword_Once,
             Keyword_Label_HERE,
-            Keyword_Degree,
             Keyword_EndSwitch,
+            Keyword_Degree,
+            Keyword_Music,
+            Keyword_Sfx,
+            Keyword_Actor,
+            Keyword_Msg,
+            Keyword_Script,
+            Keyword_Dlist,
+            Keyword_Anim,
+            Keyword_Seg,
 
             VarTypes.NORMAL.ToString(),
             VarTypes.RANDOM.ToString(),

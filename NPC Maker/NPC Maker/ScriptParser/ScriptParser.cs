@@ -34,17 +34,17 @@ namespace NPC_Maker.Scripts
             int id = 0x8000;
 
             foreach (var m in Entry.Messages)
-                sb.Append($"#{Lists.Keyword_Define} MSGID_{m.Name} {id++};");
+                sb.Append($"#{Lists.Keyword_Define} {Lists.Keyword_Msg}{m.Name} {id++};");
 
             id = 0;
 
             foreach (var m in Entry.ExtraDisplayLists)
-                sb.Append($"#{Lists.Keyword_Define} DLISTID_{m.Name} {id++};");
+                sb.Append($"#{Lists.Keyword_Define} {Lists.Keyword_Dlist}{m.Name} {id++};");
 
             id = 0;
 
             foreach (var m in Entry.Animations)
-                sb.Append($"#{Lists.Keyword_Define} ANIMID_{m.Name} {id++};");
+                sb.Append($"#{Lists.Keyword_Define} {Lists.Keyword_Anim}{m.Name} {id++};");
 
             int i = 8;
             id = 0;
@@ -60,7 +60,7 @@ namespace NPC_Maker.Scripts
             id = 0;
 
             foreach (ScriptEntry se in Entry.Scripts)
-                sb.Append($"#{Lists.Keyword_Define} SCRIPTID_{se.Name.Replace(' ', '_')} {id++};");
+                sb.Append($"#{Lists.Keyword_Define} {Lists.Keyword_Script}{se.Name.Replace(' ', '_')} {id++};");
 
             ScriptText = sb.ToString();
 
@@ -198,6 +198,16 @@ namespace NPC_Maker.Scripts
             }
         }
 
+        private string[] FullyResolveDefine(List<string[]> Defines, string[] Define)
+        {
+            int index = Defines.FindIndex(x => String.Equals(x[1], Define[2]));
+
+            if (index == -1)
+                return new string[] { Define[0], Define[1], Define[2] };
+            else
+                return FullyResolveDefine(Defines, new string[] { Define[0], Define[1], Defines[index][2] });
+        }
+
         private List<string> ReplaceDefines(List<string> Lines, ref BScript outScript)
         {
             try
@@ -220,6 +230,9 @@ namespace NPC_Maker.Scripts
                 if (Defines.Count == 0)
                     return Lines;
 
+                for (int i = 0; i < Defines.Count; i++)
+                    Defines[i] = FullyResolveDefine(Defines, Defines[i]);
+
                 // Otherwise, loop through all lines and replace the defines.
                 List<string> NewLines = Lines.Where(x => !x.ToUpper().StartsWith(Lists.Keyword_SharpDefine)).ToList();
 
@@ -229,7 +242,6 @@ namespace NPC_Maker.Scripts
                     s = ScriptHelpers.ReplaceExpr(s, Def[1], Def[2]);
 
                 Lines = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-
 
                 return Lines;
             }

@@ -279,20 +279,41 @@ namespace NPC_Maker.Scripts
 
         public static float GetNormalVar(string[] SplitLine, int Index, float Min, float Max)
         {
-            if (SplitLine[Index].ToUpper().StartsWith(Lists.Keyword_Degree))
+            string varString = SplitLine[Index].ToUpper();
+
+            try
             {
-                string[] s = SplitLine[Index].Split('_');
-                float value = (float)ScriptHelpers.GetValueAndCheckRange(s, 1, Min, Max);
-                float degrees = (float)Rot2Deg(Convert.ToInt32(value));
+                if (varString.StartsWith(Lists.Keyword_Degree))
+                {
+                    string[] s = SplitLine[Index].Split('_');
+                    float value = (float)ScriptHelpers.GetValueAndCheckRange(s, 1, Min, Max);
+                    float degrees = (float)Rot2Deg(Convert.ToInt32(value));
 
-                if (degrees < Min || degrees > Max)
-                    throw ParseException.ParamOutOfRange(SplitLine);
+                    if (degrees < Min || degrees > Max)
+                        throw ParseException.ParamOutOfRange(SplitLine);
 
-                return degrees;
+                    return degrees;
 
+                }
+                else if (varString.StartsWith(Lists.Keyword_Music))
+                {
+                    return (float)Dicts.Music[varString.Replace(Lists.Keyword_Music, "")];
+                }
+                else if (varString.StartsWith(Lists.Keyword_Actor))
+                {
+                    return (float)Dicts.Actors[varString.Replace(Lists.Keyword_Actor, "")];
+                }
+                else if (varString.StartsWith(Lists.Keyword_Sfx))
+                {
+                    return (float)Dicts.SFXes[varString.Replace(Lists.Keyword_Sfx, "")];
+                }
+                else
+                    return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
             }
-            else
-                return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
+            catch (Exception)
+            {
+                throw ParseException.UnrecognizedParameter(SplitLine);
+            }
         }
 
         public static object GetValueByType(string[] SplitLine, int Index, int VarType, float Min, float Max)
@@ -625,14 +646,15 @@ namespace NPC_Maker.Scripts
 
         public static string GetBaseDefines(NPCFile npc)
         {
-            /*
             StringBuilder sb = new StringBuilder();
 
+            /*
             sb.Append(AppendDictToBaseDefines(Dicts.Music, "MUSID_"));
             sb.Append(AppendDictToBaseDefines(Dicts.SFXes, "SFXID_"));
             sb.Append(AppendDictToBaseDefines(Dicts.Actors, "ACTORID_"));
             sb.Append(AppendDictToBaseDefines(Dicts.LinkAnims, "LINKANIMID_"));
             sb.Append(AppendDictToBaseDefines(Dicts.ObjectIDs, "OBJECTID_"));
+            */
 
             int id = 0;
 
@@ -652,9 +674,6 @@ namespace NPC_Maker.Scripts
             s = s.Replace("\\", "");
 
             return s;
-            */
-
-            return "";
         }
     }
 }
