@@ -29,6 +29,7 @@ namespace NPC_Maker
         public static string JsonPath = "";
 
         public static bool CompileInProgress = false;
+        public static DateTime CompileStartTime;
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
@@ -118,7 +119,8 @@ namespace NPC_Maker
                         if (cacheStatus != null)
                         {
                             Console.WriteLine("Writing output ZOBJ...");
-                            FileOps.SaveBinaryFile(args[1], InFile, null, cacheStatus[0], cacheStatus[1], true);
+                            string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(InFile);
+                            FileOps.SaveBinaryFile(args[1], InFile, null, baseDefines, cacheStatus[0], cacheStatus[1], true);
                         }
                     }
                     catch (Exception ex)

@@ -23,10 +23,11 @@ namespace NPC_Maker.Scripts
             outScript = new BScript();
         }
 
-        public BScript ParseScript(string ScrName, bool GetBytes)
+        public BScript ParseScript(string ScrName, string baseDefines, bool GetBytes)
         {
             StringBuilder sb = new StringBuilder();
 
+            sb.Append(baseDefines);
             sb.Append(ScriptText);
             sb.Append(Environment.NewLine);
 

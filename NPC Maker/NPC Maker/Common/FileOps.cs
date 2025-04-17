@@ -378,6 +378,8 @@ namespace NPC_Maker
 
                 Console.Write($"Compiling...");
 
+                string BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(Data);
+
                 Parallel.ForEach(dict, dictEntry =>
                 {
                     NPCEntry Entry = dictEntry.Value;
@@ -436,7 +438,7 @@ namespace NPC_Maker
                             if (cacheInvalid || !File.Exists(cachedFile) || !File.Exists(extDataFile))
                             {
                                 Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntryID}_script{scriptNum}_");
-                                Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
+                                Scripts.BScript scr = Par.ParseScript(Scr.Name, BaseDefines, true);
 
                                 if (scr.ParseErrors.Count == 0)
                                     File.WriteAllBytes(cachedFile, scr.Script);
@@ -459,12 +461,12 @@ namespace NPC_Maker
                     }
                 });
 
-                SaveBinaryFile(Path, Data, progress, false, false, CLIMode);
+                SaveBinaryFile(Path, Data, progress, BaseDefines, false, false, CLIMode);
                 Program.CompileInProgress = false;
             });
         }
 
-        public static void SaveBinaryFile(string Path, NPCFile Data, IProgress<Common.ProgressReport> progress, bool cacheInvalid, bool CcacheInvalid, bool CLIMode = false)
+        public static void SaveBinaryFile(string Path, NPCFile Data, IProgress<Common.ProgressReport> progress, string baseDefines, bool cacheInvalid, bool CcacheInvalid, bool CLIMode = false)
         {
             if (Data.Entries.Count() == 0)
             {
@@ -980,7 +982,7 @@ namespace NPC_Maker
                                 else
                                 {
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script{scriptNum}_");
-                                    Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
+                                    Scripts.BScript scr = Par.ParseScript(Scr.Name, baseDefines, true);
                                     ParsedScripts.Add(scr);
 
                                     if (scr.ParseErrors.Count == 0)

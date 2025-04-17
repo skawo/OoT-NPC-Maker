@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace NPC_Maker.Scripts
@@ -610,6 +611,50 @@ namespace NPC_Maker.Scripts
         public static ScriptVarVal Helper_GetDListID(string[] SplitLine, int Index, List<DListEntry> DLists)
         {
             return Helper_GetFromStringList(SplitLine, Index, DLists.Select(x => x.Name).ToList(), 0, DLists.Count, ParseException.UnrecognizedDList(SplitLine));
+        }
+
+        public static string AppendDictToBaseDefines(Dictionary<string, int> dict, string prefix)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var entry in dict)
+                sb.Append($"#{Lists.Keyword_Define} {prefix}{(entry.Key).Replace(" ", "_")} {entry.Value}{Environment.NewLine}");
+
+            return sb.ToString();
+        }
+
+        public static string GetBaseDefines(NPCFile npc)
+        {
+            /*
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(AppendDictToBaseDefines(Dicts.Music, "MUSID_"));
+            sb.Append(AppendDictToBaseDefines(Dicts.SFXes, "SFXID_"));
+            sb.Append(AppendDictToBaseDefines(Dicts.Actors, "ACTORID_"));
+            sb.Append(AppendDictToBaseDefines(Dicts.LinkAnims, "LINKANIMID_"));
+            sb.Append(AppendDictToBaseDefines(Dicts.ObjectIDs, "OBJECTID_"));
+
+            int id = 0;
+
+            foreach (var entry in npc.Entries)
+            {
+                sb.Append($"#{Lists.Keyword_Define} NPCID_{entry.NPCName.Replace(" ", "_")} {id}{Environment.NewLine}");
+                id++;
+            }
+
+            string s = sb.ToString();
+
+            s = s.Replace("(", "");
+            s = s.Replace(")", "");
+            s = s.Replace("{", "");
+            s = s.Replace("}", "");
+            s = s.Replace(";", "");
+            s = s.Replace("\\", "");
+
+            return s;
+            */
+
+            return "";
         }
     }
 }

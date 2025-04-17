@@ -151,7 +151,8 @@ namespace NPC_Maker
                 try
                 {
                     Scripts.ScriptParser Parser = new Scripts.ScriptParser(File, Entry, Script.Text, File.GlobalHeaders);
-                    Output = Parser.ParseScript(Script.Name, GetBytes);
+                    string BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(File);
+                    Output = Parser.ParseScript(Script.Name, BaseDefines, GetBytes);
                 }
                 catch (Exception)
                 { }
@@ -167,9 +168,9 @@ namespace NPC_Maker
 
 
 #if DEBUG
-            Thread.Sleep(5000);
-            Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
-            Dbg.Show();
+            //Thread.Sleep(5000);
+           // Debug Dbg = new Debug(String.Join(Environment.NewLine, Output.ScriptDebug.ToArray()));
+            //Dbg.Show();
 #endif
 
 

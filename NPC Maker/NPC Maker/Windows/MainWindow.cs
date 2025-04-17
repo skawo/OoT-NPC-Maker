@@ -96,7 +96,7 @@ namespace NPC_Maker
                 MenuStrip.Enabled = true;
                 Panel_Editor.Enabled = true;
                 btn_FindMsg.Enabled = true;
-                progressL.Visible = false;
+                progressL.SetProgress(100, $"Completed in {(DateTime.Now - Program.CompileStartTime).Seconds} sec.");
             }
             else
                 compileTimer.Start();
@@ -658,6 +658,8 @@ namespace NPC_Maker
                 this.btn_FindMsg.Enabled = false;
                 this.progressL.Visible = true;
 
+                Program.CompileStartTime = DateTime.Now;
+
                 compileTimer.Start();
 
                 if (Program.Settings.CompileInParallel)
@@ -669,7 +671,8 @@ namespace NPC_Maker
                     await TaskEx.Run(() =>
                     {
                         bool[] caches = FileOps.GetCacheStatus(EditedFile);
-                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, caches[0], caches[1]);
+                        string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
+                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, caches[0], caches[1]);
                     });
                 }
 
