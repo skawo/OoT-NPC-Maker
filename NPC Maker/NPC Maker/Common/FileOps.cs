@@ -275,6 +275,8 @@ namespace NPC_Maker
 
         private static void ShowMsg(bool CLIMode, string Msg)
         {
+            Program.CompileThereWereErrors = true;
+
             if (CLIMode)
                 Console.WriteLine(Msg);
             else
@@ -471,6 +473,7 @@ namespace NPC_Maker
             if (Data.Entries.Count() == 0)
             {
                 ShowMsg(CLIMode, "Nothing to save.");
+                Program.CompileThereWereErrors = false;
                 return;
             }
 

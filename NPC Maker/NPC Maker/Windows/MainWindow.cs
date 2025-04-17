@@ -96,7 +96,18 @@ namespace NPC_Maker
                 MenuStrip.Enabled = true;
                 Panel_Editor.Enabled = true;
                 btn_FindMsg.Enabled = true;
-                progressL.SetProgress(100, $"Completed in {(DateTime.Now - Program.CompileStartTime).Seconds} sec.");
+
+                if (Program.CompileThereWereErrors)
+                    progressL.SetProgress(0, $"Compilation failed.");
+                else
+                {
+                    TimeSpan s = DateTime.Now - Program.CompileStartTime;
+
+                    if (s.Seconds == 0)
+                        progressL.SetProgress(100, $"Completed in {s.Milliseconds} ms.");
+                    else
+                        progressL.SetProgress(100, $"Completed in {s.Seconds} s.");
+                }
             }
             else
                 compileTimer.Start();
@@ -659,6 +670,7 @@ namespace NPC_Maker
                 this.progressL.Visible = true;
 
                 Program.CompileStartTime = DateTime.Now;
+                Program.CompileThereWereErrors = false;
 
                 compileTimer.Start();
 

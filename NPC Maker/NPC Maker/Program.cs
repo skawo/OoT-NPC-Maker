@@ -29,6 +29,7 @@ namespace NPC_Maker
         public static string JsonPath = "";
 
         public static bool CompileInProgress = false;
+        public static bool CompileThereWereErrors = false;
         public static DateTime CompileStartTime;
 
         [DllImport("kernel32.dll")]
