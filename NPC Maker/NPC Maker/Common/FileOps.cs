@@ -400,7 +400,7 @@ namespace NPC_Maker
                             Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntryID}_code_");
 
                             if (Entry.EmbeddedOverlayCode.Code != "")
-                                Overlay = CCode.Compile(true, Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors, $"NPCCOMPILE{EntryID}");
+                                Overlay = CCode.Compile(Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors, $"NPCCOMPILE{EntryID}");
 
                             if (Overlay != null)
                             {
@@ -868,7 +868,7 @@ namespace NPC_Maker
                                     Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_code_");
                                     Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script");
 
-                                    Overlay = CCode.Compile(true, Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors);
+                                    Overlay = CCode.Compile(Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors);
 
                                     if (Overlay != null)
                                     {

@@ -25,7 +25,12 @@ namespace NPC_Maker
         string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
         private readonly System.Windows.Forms.Timer MsgPreviewTimer = new Timer();
         public static List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
-        Timer compileTimer;
+        readonly Timer compileTimer;
+        int LastSearchDepth = 0;
+        int LastMsgCount = 0;
+        string LastSearch = "";
+        int ScrollToMsg = 0;
+        readonly Timer messageSearchTimer = new Timer();
 
         public MainWindow()
         {
@@ -417,7 +422,7 @@ namespace NPC_Maker
             if (SelectedEntry.EmbeddedOverlayCode.Code != "" && Program.Settings.AutoComp_ActorSwitch)
             {
                 string CompileErrors = "";
-                CCode.Compile(true, EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+                CCode.Compile(EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
                 TextBox_CompileMsg.Text = CompileErrors;
             }
             else if (SelectedEntry.EmbeddedOverlayCode.Code != "")
@@ -642,7 +647,7 @@ namespace NPC_Maker
 
             if (DR == DialogResult.OK)
             {
-                IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.newProgress = n);
+                IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
                 progress.Report(new Common.ProgressReport("Starting...", 0));
 
                 Program.CompileInProgress = true;
@@ -854,9 +859,92 @@ namespace NPC_Maker
             Music.ShowDialog();
         }
 
+        private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NPC_Maker.Windows.Settings s = new Windows.Settings();
+            s.StartPosition = FormStartPosition.CenterParent;
+            s.ShowDialog();
+
+            foreach (TabPage Page in TabControl_Scripts.TabPages)
+            {
+                if (Page.Controls.Count != 0)
+                {
+                    (Page.Controls[0] as ScriptEditor).SetAutoParsing(Program.Settings.CheckSyntax);
+                    (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting(Program.Settings.ColorizeScriptSyntax);
+                }
+            }
+
+            MsgText_TextChanged(null, null);
+
+        }
+
+        private void DocumentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/skawo/OoT-NPC-Maker/wiki");
+        }
+
+        private void GlobalCHeaderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditedFile == null)
+                return;
+
+            if (autoSaveTimer != null)
+            {
+                autoSaveTimer.Stop();
+                autoSaveTimer.Dispose();
+            }
+
+            string Code = SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code;
+            Code = CCode.ReplaceGameVersionInclude(Code);
+
+            string Header = EditedFile.CHeader == "" ? Properties.Resources.CHeader : EditedFile.CHeader;
+            Header = CCode.ReplaceGameVersionInclude(Header);
+
+            if (!CCode.CreateCTempDirectory(Code, Header, true, true))
+                return;
+
+            if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
+                Program.CodeEditorProcess.Kill();
+
+            Program.CodeEditorProcess = CCode.OpenCodeEditor(
+                                                                (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
+                                                                TextBox_CodeEditorPath.Text,
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.geditHeaderFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.gtempFolderPath.AppendQuotation())
+                                                            );
+
+            if (Program.CodeEditorProcess == null)
+                return;
+            else
+            {
+                globalCHeaderToolStripMenuItem.Enabled = false;
+                Button_CCompile.Enabled = false;
+                Button_OpenCCode.Enabled = false;
+                Button_UpdateCompile.Enabled = true;
+                WatchFile(SelectedEntry);
+            }
+        }
+
+
         #endregion
 
         #region NPCList
+
+        private void NpcsFilter_TextChanged(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            foreach (NPCEntry entry in EditedFile.Entries)
+            {
+                if (String.IsNullOrWhiteSpace(NpcsFilter.Text))
+                    DataGrid_NPCs.Rows[index].Visible = true;
+                else if (entry.NPCName.ToUpper().Contains(NpcsFilter.Text.ToUpper()))
+                    DataGrid_NPCs.Rows[index].Visible = true;
+                else
+                    DataGrid_NPCs.Rows[index].Visible = false;
+
+                index++;
+            }
+        }
 
         private NPCEntry GetNewNPCEntry()
         {
@@ -2404,6 +2492,156 @@ namespace NPC_Maker
             return true;
         }
 
+        private void ChkBox_UseSpaceFont_CheckedChanged(object sender, EventArgs e)
+        {
+            EditedFile.SpaceFromFont = (sender as CheckBox).Checked;
+            MsgText_TextChanged(null, null);
+        }
+
+        private void FindMsgBtn_Click(object sender, EventArgs e)
+        {
+            int MsgCount = 0;
+            btn_FindMsg.Enabled = false;
+
+            foreach (NPCEntry n in EditedFile.Entries)
+                MsgCount += n.Messages.Count;
+
+            if (LastSearch != txBox_Search.Text || LastMsgCount != MsgCount)
+                LastSearchDepth = 0;
+
+            LastMsgCount = MsgCount;
+
+            int CurSearchDepth = 0;
+            int RowIndex = 0;
+            bool thereWereMessages = false;
+
+            foreach (NPCEntry n in EditedFile.Entries)
+            {
+                int MsgRowIndex = 0;
+
+                foreach (MessageEntry msg in n.Messages)
+                {
+                    string r = Regex.Replace(msg.MessageText.ToUpper().Replace(Environment.NewLine, " "), @"<([\s\S]*?)>", string.Empty, RegexOptions.Compiled);
+
+                    if (r.Contains(txBox_Search.Text.ToUpper()))
+                    {
+                        thereWereMessages = true;
+
+                        if (CurSearchDepth >= LastSearchDepth)
+                        {
+                            try
+                            {
+                                NpcsFilter.Text = "";
+                                MessagesFilter.Text = "";
+                                DataGrid_NPCs.SuspendLayout();
+                                MessagesGrid.SuspendLayout();
+
+                                DataGrid_NPCs.ClearSelection();
+                                MessagesGrid.ClearSelection();
+
+                                DataGrid_NPCs.Rows[RowIndex].Selected = true;
+
+                                DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
+                                DataGrid_NPCs.FirstDisplayedScrollingRowIndex = RowIndex;
+                                DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
+                                TabControl.SelectedTab = Tab4_Messages;
+
+                                MessagesGrid.Rows[MsgRowIndex].Selected = true;
+
+                                if (Program.IsRunningUnderMono)
+                                {
+                                    ScrollToMsg = MsgRowIndex;
+                                    messageSearchTimer.Interval = 10;
+                                    messageSearchTimer.Tick += MessageSearchTimer_Tick;
+                                    messageSearchTimer.Start();
+                                }
+                                else
+                                {
+                                    MessagesGrid.FirstDisplayedScrollingRowIndex = MsgRowIndex;
+                                }
+
+                                LastSearchDepth = CurSearchDepth + 1;
+                                LastSearch = txBox_Search.Text;
+
+                            }
+                            catch (Exception)
+                            {
+                            }
+                            finally
+                            {
+                                DataGrid_NPCs.ResumeLayout();
+                                MessagesGrid.ResumeLayout();
+                            }
+
+                            if (!Program.IsRunningUnderMono)
+                                btn_FindMsg.Enabled = true;
+
+                            return;
+                        }
+                        else
+                            CurSearchDepth++;
+                    }
+
+                    MsgRowIndex++;
+                }
+
+                RowIndex++;
+
+            }
+
+            SystemSounds.Exclamation.Play();
+
+            if (thereWereMessages)
+            {
+                LastSearchDepth = 0;
+                FindMsgBtn_Click(null, null);
+            }
+            else
+                btn_FindMsg.Enabled = true;
+        }
+
+        private void MessageSearchTimer_Tick(object sender, EventArgs e)
+        {
+            messageSearchTimer.Stop();
+            MessagesGrid.CurrentCell = MessagesGrid.Rows[ScrollToMsg].Cells[0];
+            MessagesGrid.FirstDisplayedScrollingRowIndex = ScrollToMsg;
+            btn_FindMsg.Enabled = true;
+        }
+
+        private void TxBox_Search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!btn_FindMsg.Enabled)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                FindMsgBtn_Click(null, null);
+            }
+        }
+
+        private void MessagesFilter_TextChanged(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            foreach (MessageEntry entry in SelectedEntry.Messages)
+            {
+                if (String.IsNullOrWhiteSpace(MessagesFilter.Text))
+                    MessagesGrid.Rows[index].Visible = true;
+                else if (entry.Name.ToUpper().Contains(MessagesFilter.Text.ToUpper()))
+                    MessagesGrid.Rows[index].Visible = true;
+                else
+                    MessagesGrid.Rows[index].Visible = false;
+
+                index++;
+            }
+        }
+
         #endregion
 
         #region CCompile
@@ -2556,7 +2794,7 @@ namespace NPC_Maker
         {
 
             string CompileMsgs = "";
-            CCode.Compile(true, EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
+            CCode.Compile(EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
 
             this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
             {
@@ -2787,242 +3025,6 @@ namespace NPC_Maker
 
         #endregion
 
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            NPC_Maker.Windows.Settings s = new Windows.Settings();
-            s.StartPosition = FormStartPosition.CenterParent;
-            s.ShowDialog();
-
-            foreach (TabPage Page in TabControl_Scripts.TabPages)
-            {
-                if (Page.Controls.Count != 0)
-                {
-                    (Page.Controls[0] as ScriptEditor).SetAutoParsing(Program.Settings.CheckSyntax);
-                    (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting(Program.Settings.ColorizeScriptSyntax);
-                }
-            }
-
-            MsgText_TextChanged(null, null);
-
-        }
-
-        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/skawo/OoT-NPC-Maker/wiki");
-        }
-
-        private void ChkBox_UseSpaceFont_CheckedChanged(object sender, EventArgs e)
-        {
-            EditedFile.SpaceFromFont = (sender as CheckBox).Checked;
-            MsgText_TextChanged(null, null);
-        }
-
-        private void globalCHeaderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (EditedFile == null)
-                return;
-
-            if (autoSaveTimer != null)
-            {
-                autoSaveTimer.Stop();
-                autoSaveTimer.Dispose();
-            }
-
-            string Code = SelectedEntry.EmbeddedOverlayCode.Code == "" ? Properties.Resources.EmbeddedOverlay : SelectedEntry.EmbeddedOverlayCode.Code;
-            Code = CCode.ReplaceGameVersionInclude(Code);
-
-            string Header = EditedFile.CHeader == "" ? Properties.Resources.CHeader : EditedFile.CHeader;
-            Header = CCode.ReplaceGameVersionInclude(Header);
-
-            if (!CCode.CreateCTempDirectory(Code, Header, true, true))
-                return;
-
-            if (Program.CodeEditorProcess != null && !Program.CodeEditorProcess.HasExited)
-                Program.CodeEditorProcess.Kill();
-
-            Program.CodeEditorProcess = CCode.OpenCodeEditor(
-                                                                (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
-                                                                TextBox_CodeEditorPath.Text,
-                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.geditHeaderFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.gtempFolderPath.AppendQuotation())
-                                                            );
-
-            if (Program.CodeEditorProcess == null)
-                return;
-            else
-            {
-                globalCHeaderToolStripMenuItem.Enabled = false;
-                Button_CCompile.Enabled = false;
-                Button_OpenCCode.Enabled = false;
-                Button_UpdateCompile.Enabled = true;
-                WatchFile(SelectedEntry);
-            }
-        }
-
-        int LastSearchDepth = 0;
-        int LastMsgCount = 0;
-        string LastSearch = "";
-        int ScrollToMsg = 0;
-        Timer t = new Timer();
-
-        private void FindMsgBtn_Click(object sender, EventArgs e)
-        {
-            int MsgCount = 0;
-            btn_FindMsg.Enabled = false;
-
-            foreach (NPCEntry n in EditedFile.Entries)
-                MsgCount += n.Messages.Count;
-
-            if (LastSearch != txBox_Search.Text || LastMsgCount != MsgCount)
-                LastSearchDepth = 0;
-
-            LastMsgCount = MsgCount;
-
-            int CurSearchDepth = 0;
-            int RowIndex = 0;
-            bool thereWereMessages = false;
-
-            foreach (NPCEntry n in EditedFile.Entries)
-            {
-                int MsgRowIndex = 0;
-
-                foreach (MessageEntry msg in n.Messages)
-                {
-                    string r = Regex.Replace(msg.MessageText.ToUpper().Replace(Environment.NewLine, " "), @"<([\s\S]*?)>", string.Empty, RegexOptions.Compiled);
-
-                    if (r.Contains(txBox_Search.Text.ToUpper()))
-                    {
-                        thereWereMessages = true;
-
-                        if (CurSearchDepth >= LastSearchDepth)
-                        {
-                            try
-                            {
-                                NpcsFilter.Text = "";
-                                MessagesFilter.Text = "";
-                                DataGrid_NPCs.SuspendLayout();
-                                MessagesGrid.SuspendLayout();
-
-                                DataGrid_NPCs.ClearSelection();
-                                MessagesGrid.ClearSelection();
-
-                                DataGrid_NPCs.Rows[RowIndex].Selected = true;
-
-                                DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
-                                DataGrid_NPCs.FirstDisplayedScrollingRowIndex = RowIndex;
-                                DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
-                                TabControl.SelectedTab = Tab4_Messages;
-
-                                MessagesGrid.Rows[MsgRowIndex].Selected = true;
-
-                                if (Program.IsRunningUnderMono)
-                                {
-                                    ScrollToMsg = MsgRowIndex;
-                                    t.Interval = 10;
-                                    t.Tick += T_Tick;
-                                    t.Start();
-                                }
-                                else
-                                {
-                                    MessagesGrid.FirstDisplayedScrollingRowIndex = MsgRowIndex;
-                                }
-
-                                LastSearchDepth = CurSearchDepth + 1;
-                                LastSearch = txBox_Search.Text;
-
-                            }
-                            catch (Exception)
-                            {
-                            }
-                            finally
-                            {
-                                DataGrid_NPCs.ResumeLayout();
-                                MessagesGrid.ResumeLayout();
-                            }
-
-                            if (!Program.IsRunningUnderMono)
-                                btn_FindMsg.Enabled = true;
-
-                            return;
-                        }
-                        else
-                            CurSearchDepth++;
-                    }
-
-                    MsgRowIndex++;
-                }
-
-                RowIndex++;
-
-            }
-
-            SystemSounds.Exclamation.Play();
-
-            if (thereWereMessages)
-            {
-                LastSearchDepth = 0;
-                FindMsgBtn_Click(null, null);
-            }
-            else
-                btn_FindMsg.Enabled = true;
-        }
-
-        private void T_Tick(object sender, EventArgs e)
-        {
-            t.Stop();
-            MessagesGrid.CurrentCell = MessagesGrid.Rows[ScrollToMsg].Cells[0];
-            MessagesGrid.FirstDisplayedScrollingRowIndex = ScrollToMsg;
-            btn_FindMsg.Enabled = true;
-        }
-
-        private void txBox_Search_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (!btn_FindMsg.Enabled)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                return;
-            }
-
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                FindMsgBtn_Click(null, null);
-            }
-        }
-
-        private void NpcsFilter_TextChanged(object sender, EventArgs e)
-        {
-            int index = 0;
-
-            foreach (NPCEntry entry in EditedFile.Entries)
-            {
-                if (String.IsNullOrWhiteSpace(NpcsFilter.Text))
-                    DataGrid_NPCs.Rows[index].Visible = true;
-                else if (entry.NPCName.ToUpper().Contains(NpcsFilter.Text.ToUpper()))
-                    DataGrid_NPCs.Rows[index].Visible = true;
-                else
-                    DataGrid_NPCs.Rows[index].Visible = false;
-
-                index++;
-            }
-        }
-
-        private void MessagesFilter_TextChanged(object sender, EventArgs e)
-        {
-            int index = 0;
-
-            foreach (MessageEntry entry in SelectedEntry.Messages)
-            {
-                if (String.IsNullOrWhiteSpace(MessagesFilter.Text))
-                    MessagesGrid.Rows[index].Visible = true;
-                else if (entry.Name.ToUpper().Contains(MessagesFilter.Text.ToUpper()))
-                    MessagesGrid.Rows[index].Visible = true;
-                else
-                    MessagesGrid.Rows[index].Visible = false;
-
-                index++;
-            }
-        }
+       
     }
 }

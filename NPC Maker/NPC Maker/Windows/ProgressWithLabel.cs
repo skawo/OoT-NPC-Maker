@@ -11,7 +11,7 @@ namespace NPC_Maker.Windows
 {
     public partial class ProgressWithLabel : UserControl
     {
-        public Common.ProgressReport newProgress
+        public Common.ProgressReport NewProgress
         {
             set { SetProgress((int)Math.Ceiling(value.Value), value.Status); }
         }

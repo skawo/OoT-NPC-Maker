@@ -4047,7 +4047,7 @@
             this.globalCHeaderToolStripMenuItem.Name = "globalCHeaderToolStripMenuItem";
             this.globalCHeaderToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.globalCHeaderToolStripMenuItem.Text = "Global C Header";
-            this.globalCHeaderToolStripMenuItem.Click += new System.EventHandler(this.globalCHeaderToolStripMenuItem_Click);
+            this.globalCHeaderToolStripMenuItem.Click += new System.EventHandler(this.GlobalCHeaderToolStripMenuItem_Click);
             // 
             // editGlobalHeaderToolStripMenuItem
             // 
@@ -4061,7 +4061,7 @@
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -4077,7 +4077,7 @@
             this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
             this.documentationToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.documentationToolStripMenuItem.Text = "Documentation";
-            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.documentationToolStripMenuItem_Click);
+            this.documentationToolStripMenuItem.Click += new System.EventHandler(this.DocumentationToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem1
             // 
@@ -4171,7 +4171,7 @@
             this.txBox_Search.Name = "txBox_Search";
             this.txBox_Search.Size = new System.Drawing.Size(207, 20);
             this.txBox_Search.TabIndex = 6;
-            this.txBox_Search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txBox_Search_KeyDown);
+            this.txBox_Search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxBox_Search_KeyDown);
             // 
             // btn_FindMsg
             // 

@@ -270,7 +270,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"Error loading the {Type.ToString()} dict: {ex.Message}");
+                System.Windows.Forms.MessageBox.Show($"Error loading the {Type} dict: {ex.Message}");
                 return;
             }
         }

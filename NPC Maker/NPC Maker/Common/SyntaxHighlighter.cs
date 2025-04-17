@@ -57,7 +57,7 @@ namespace NPC_Maker
             { @"#define.+", SyntaxHighlighter.GreenStyle},               // Defines
         };
 
-        public static void ApplySyntaxHighlight(FastColoredTextBox txb, bool SyntaxHighlightingOn, NPCFile File, NPCEntry Entry)
+        public static void ApplySyntaxHighlight(FastColoredTextBox txb, bool SyntaxHighlightingOn)
         {
             if (String.IsNullOrEmpty(txb.Text))
                 return;

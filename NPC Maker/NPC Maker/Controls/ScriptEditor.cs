@@ -61,7 +61,7 @@ namespace NPC_Maker
             Textbox_Script.Text = Script.Text;
 
             if (SyntaxHighlighting)
-                SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting, _File, _Entry);
+                SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
 
             Textbox_Script.TextChanged += Textbox_Script_TextChanged;
 
@@ -81,13 +81,13 @@ namespace NPC_Maker
             if (AutoParse)
                 DoParse(true);
 
-            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting, File, Entry);
+            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
         }
 
         private void ColorizeTimer_Tick(object sender, EventArgs e)
         {
             ColorizeTimer.Stop();
-            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting, File, Entry);
+            SyntaxHighlighter.ApplySyntaxHighlight(Textbox_Script, SyntaxHighlighting);
         }
 
         private void ResultsTimer_Tick(object sender, EventArgs e)
@@ -182,7 +182,7 @@ namespace NPC_Maker
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                ScriptContextMenu.MakeContextMenu(File, Entry);
+                ScriptContextMenu.MakeContextMenu(Entry);
 
                 Cursor.Current = Cursors.Default;
 

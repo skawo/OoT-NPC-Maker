@@ -39,8 +39,8 @@ namespace NPC_Maker.Scripts
 
     public class InstructionAwaitCCall : InstructionAwait
     {
-        UInt32 Func;
-        byte IsBool;
+        readonly UInt32 Func;
+        readonly byte IsBool;
         byte NumArgs { get; set; }
         List<ScriptVarVal> Params { get; set; }
 

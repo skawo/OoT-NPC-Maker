@@ -180,7 +180,7 @@ namespace NPC_Maker
             return functions.OrderBy(x => x.FuncName).ToList();
         }
 
-        public static byte[] Compile(bool OotVer, string Header, CCodeEntry CodeEntry, ref string CompileMsgs, string folder = "default")
+        public static byte[] Compile(string Header, CCodeEntry CodeEntry, ref string CompileMsgs, string folder = "default")
         {
             try
             {
@@ -200,7 +200,7 @@ namespace NPC_Maker
                 File.WriteAllText(compileFilePath, Code);
                 File.WriteAllText(compileHeaderPath, _Header);
 
-                byte[] outf = (Program.IsRunningUnderMono ? CompileUnderMono(folder, OotVer, CodeEntry, ref CompileMsgs) : CompileUnderWindows(folder, OotVer, CodeEntry, ref CompileMsgs));
+                byte[] outf = (Program.IsRunningUnderMono ? CompileUnderMono(folder, CodeEntry, ref CompileMsgs) : CompileUnderWindows(folder, CodeEntry, ref CompileMsgs));
 
                 Directory.Delete(compileFolderPath, true);
 
@@ -218,8 +218,7 @@ namespace NPC_Maker
             Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{CompilationMsgs}{Environment.NewLine}{Environment.NewLine}");
         }
 
-
-        public static byte[] CompileUnderMono(string folder, bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
+        public static byte[] CompileUnderMono(string folder, CCodeEntry CodeEntry, ref string CompileMsgs)
         {
 
             string compileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName, folder);
@@ -227,7 +226,6 @@ namespace NPC_Maker
             string oFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", $"{compileFileName}.o");
             string elfFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", $"{compileFileName}.elf");
             string ovlFileMono = Path.Combine(Program.ExecPath, compileFolderPath, $"{compileFileName}.ovl");
-
 
             Clean(new string[] { oFileMono, elfFileMono, ovlFileMono });
 
@@ -339,7 +337,7 @@ namespace NPC_Maker
 
         }
 
-        public static byte[] CompileUnderWindows(string folder, bool OotVer, CCodeEntry CodeEntry, ref string CompileMsgs)
+        public static byte[] CompileUnderWindows(string folder,  CCodeEntry CodeEntry, ref string CompileMsgs)
         {
             string compileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName, folder);
             string compileFileName = $"{gcodeFileNameBase}{folder}";

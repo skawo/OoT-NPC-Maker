@@ -34,7 +34,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem quakeTypesStripMenuItem;
         private static ToolStripMenuItem messagesStripMenuItem;
         private static ToolStripMenuItem transitionTypesStripMenuItem;
-        public static void MakeContextMenu(NPCFile File, NPCEntry Entry)
+        public static void MakeContextMenu(NPCEntry Entry)
         {
             if (ContextMenuStrip != null)
                 ContextMenuStrip.Dispose();
@@ -260,7 +260,7 @@ namespace NPC_Maker
         {
             ToolStripMenuItem s = (sender as ToolStripMenuItem);
 
-            bool res = Enum.TryParse(s.OwnerItem.Text, out Lists.Instructions oInst);
+            bool res = Enum.TryParse(s.OwnerItem.Text, out Lists.Instructions _);
 
             if (res)
             {
