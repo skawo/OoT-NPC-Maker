@@ -79,20 +79,24 @@ namespace NPC_Maker.Windows
             if (Program.CompileInProgress)
                 return;
 
-            // Sometimes the file handles are not released without this
-            System.Threading.Thread.Sleep(200);
+            try
+            {
+                if (Directory.Exists(Program.ScriptCachePath))
+                    Directory.Delete(Program.ScriptCachePath, true);
 
-            if (Directory.Exists(Program.ScriptCachePath))
-                Directory.Delete(Program.ScriptCachePath, true);
+                if (Directory.Exists(Program.CCachePath))
+                    Directory.Delete(Program.CCachePath, true);
 
-            if (Directory.Exists(Program.CCachePath))
-                Directory.Delete(Program.CCachePath, true);
+                if (!Directory.Exists(Program.ScriptCachePath))
+                    Directory.CreateDirectory(Program.ScriptCachePath);
 
-            if (!Directory.Exists(Program.ScriptCachePath))
-                Directory.CreateDirectory(Program.ScriptCachePath);
-
-            if (!Directory.Exists(Program.CCachePath))
-                Directory.CreateDirectory(Program.CCachePath);
+                if (!Directory.Exists(Program.CCachePath))
+                    Directory.CreateDirectory(Program.CCachePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
