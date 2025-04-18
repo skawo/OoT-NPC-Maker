@@ -14,79 +14,85 @@ namespace NPC_Maker.Scripts
         public List<string> RandomLabels { get; set; }
         private BScript outScript;
 
-        public ScriptParser(NPCFile _File, NPCEntry _Entry, string _ScriptText, List<ScriptEntry> _GlobalHeader)
+        public ScriptParser(NPCFile _File, NPCEntry _Entry, string _ScriptText, string baseDefines, List<ScriptEntry> _GlobalHeader)
         {
-            ScriptText = String.Join(Environment.NewLine, _GlobalHeader.Select(x => x.Text).ToArray()) + Environment.NewLine + _ScriptText;
+            ScriptText = String.Join(Environment.NewLine, _GlobalHeader.Select(x => x.Text).ToArray()) + Environment.NewLine + baseDefines + _ScriptText;
             Entry = _Entry;
             File = _File;
             RandomLabels = new List<string>();
             outScript = new BScript();
         }
 
-        public BScript ParseScript(string ScrName, string baseDefines, bool GetBytes)
+        // Why does this not workkkkk
+        public void GetDefines(ref List<string> defines)
         {
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(baseDefines);
-            sb.Append(ScriptText);
-            sb.Append(Environment.NewLine);
-
             int id = 0x8000;
 
-            foreach (var m in Entry.Messages)
-                sb.Append($"#{Lists.Keyword_Define} {Lists.Keyword_Msg}{m.Name} {id++};");
+            defines.AddRange(Entry.Messages.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Msg}{x.Name} {id++}").ToList());
 
             id = 0;
 
-            foreach (var m in Entry.ExtraDisplayLists)
-                sb.Append($"#{Lists.Keyword_Define} {Lists.Keyword_Dlist}{m.Name} {id++};");
+            defines.AddRange(Entry.ExtraDisplayLists.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Dlist}{x.Name} {id++}").ToList());
 
             id = 0;
 
-            foreach (var m in Entry.Animations)
-                sb.Append($"#{Lists.Keyword_Define} {Lists.Keyword_Anim}{m.Name} {id++};");
+            defines.AddRange(Entry.Animations.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Anim}{x.Name} {id++}").ToList());
 
             int i = 8;
             id = 0;
 
             foreach (List<SegmentEntry> m in Entry.Segments)
             {
-                foreach (var p in m)
-                    sb.Append($"#{Lists.Keyword_Define} SEG{i}_DATAID_{p.Name} {id++};");
-
+                defines.AddRange(m.Select(x => $"#{Lists.Keyword_Define} SEG{i}_DATAID_{x.Name} {id++}").ToList());
                 i++;
             }
 
             id = 0;
+            defines.AddRange(Entry.Scripts.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Script}{x.Name.Replace(' ', '_')} {id++}").ToList());
+         
+            //defines.AddRange(Dicts.Music.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Music}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
+            //defines.AddRange(Dicts.SFXes.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Sfx}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
+            //defines.AddRange(Dicts.Actors.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Actor}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
+        }
 
-            foreach (ScriptEntry se in Entry.Scripts)
-                sb.Append($"#{Lists.Keyword_Define} {Lists.Keyword_Script}{se.Name.Replace(' ', '_')} {id++};");
-
-            ScriptText = sb.ToString();
+        public BScript ParseScript(string ScrName, bool GetBytes)
+        {
+            outScript = new BScript();
+            outScript.Name = ScrName;
 
             RegexText(ref ScriptText);
-
-            outScript = new BScript
-            {
-                Name = ScrName
-            };
-
-            RandomLabels = new List<string>();
 
             if (String.IsNullOrWhiteSpace(ScriptText))
                 return outScript;
 
-            if (outScript.ParseErrors.Count != 0)
-                return outScript;
-
+            RandomLabels = new List<string>();
             List<string> Lines = SplitLines(ScriptText);
 
             // Split text into lines
             Lines = SplitLines(ScriptText);
 
+            // Remove all definitions
+            List<string> gDefines = new List<string>();
+            List<string> newLines = new List<string>();
+
+            foreach (string line in Lines)
+            {
+                if (line.ToUpper().StartsWith($"#{Lists.Keyword_Define}"))
+                    gDefines.Add(line);
+                else
+                    newLines.Add(line);
+            }
+
+            Lines = newLines;
+
+            GetDefines(ref gDefines);
+
             // "Preprocessor"
             Lines = ReplaceTernary(Lines, ref outScript);
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
+
+            Lines.InsertRange(0, gDefines);
+
             Lines = ReplaceDefines(Lines, ref outScript);
             Lines = ReplaceSwitches(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
@@ -95,7 +101,6 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceScriptStartHeres(Lines, ref outScript);
             CheckLabels(Lines);
             
-
             List<Instruction> Instructions = GetInstructions(Lines);
 
             // Add a return instruction at the end if one doesn't exist.

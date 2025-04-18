@@ -79,6 +79,9 @@ namespace NPC_Maker.Windows
             if (Program.CompileInProgress)
                 return;
 
+            // Sometimes the file handles are not released without this
+            System.Threading.Thread.Sleep(200);
+
             if (Directory.Exists(Program.ScriptCachePath))
                 Directory.Delete(Program.ScriptCachePath, true);
 

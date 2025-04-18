@@ -150,9 +150,9 @@ namespace NPC_Maker
             {
                 try
                 {
-                    Scripts.ScriptParser Parser = new Scripts.ScriptParser(File, Entry, Script.Text, File.GlobalHeaders);
                     string BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(File);
-                    Output = Parser.ParseScript(Script.Name, BaseDefines, GetBytes);
+                    Scripts.ScriptParser Parser = new Scripts.ScriptParser(File, Entry, Script.Text, BaseDefines, File.GlobalHeaders);
+                    Output = Parser.ParseScript(Script.Name, GetBytes);
                 }
                 catch (Exception)
                 { }

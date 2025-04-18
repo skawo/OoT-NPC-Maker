@@ -432,7 +432,7 @@ namespace NPC_Maker
 
                         foreach (ScriptEntry Scr in NonEmptyEntries)
                         {
-                            Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, Data.GlobalHeaders);
+                            Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, BaseDefines, Data.GlobalHeaders);
 
                             hash = Helpers.GetBase64Hash(s, Scr.Text);
                             string cachedFile = System.IO.Path.Combine(Program.ScriptCachePath, $"{EntryID}_script{scriptNum}_" + hash);
@@ -441,7 +441,7 @@ namespace NPC_Maker
                             {
                                 Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntryID}_script{scriptNum}_");
 
-                                Scripts.BScript scr = Par.ParseScript(Scr.Name, BaseDefines, true);
+                                Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
 
                                 if (scr.ParseErrors.Count == 0)
                                     File.WriteAllBytes(cachedFile, scr.Script);
@@ -976,7 +976,7 @@ namespace NPC_Maker
 
                             foreach (ScriptEntry Scr in NonEmptyEntries)
                             {
-                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, Data.GlobalHeaders);
+                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, baseDefines, Data.GlobalHeaders);
 
                                 string hash = Helpers.GetBase64Hash(s, Scr.Text);
                                 string cachedFile = System.IO.Path.Combine(Program.ScriptCachePath, $"{EntriesDone}_script{scriptNum}_" + hash);
@@ -986,7 +986,7 @@ namespace NPC_Maker
                                 else
                                 {
                                     Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntriesDone}_script{scriptNum}_");
-                                    Scripts.BScript scr = Par.ParseScript(Scr.Name, baseDefines, true);
+                                    Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
                                     ParsedScripts.Add(scr);
 
                                     if (scr.ParseErrors.Count == 0)
