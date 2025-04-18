@@ -309,16 +309,16 @@ namespace NPC_Maker
                 Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
                 string hashCHeader = Helpers.GetBase64Hash(s, Data.CHeader);
 
-                string cachedHeaders = Path.Combine(Program.CachePath, $"gh_{Ver}" + hashGlobalHeaders);
-                string cachedDicts = Path.Combine(Program.CachePath, $"dicts_{Ver}" + hashDicts);
+                string cachedHeaders = Path.Combine(Program.ScriptCachePath, $"gh_{Ver}" + hashGlobalHeaders);
+                string cachedDicts = Path.Combine(Program.ScriptCachePath, $"dicts_{Ver}" + hashDicts);
                 string cachedHeader = Path.Combine(Program.CCachePath, $"ch_{Ver}" + hashCHeader);
 
                 if ((!File.Exists(cachedHeaders)) || (!File.Exists(cachedDicts)))
                 {
                     cacheInvalid = true;
-                    Directory.Delete(Program.CachePath, true);
-                    if (!Directory.Exists(Program.CachePath))
-                        Directory.CreateDirectory(Program.CachePath);
+                    Directory.Delete(Program.ScriptCachePath, true);
+                    if (!Directory.Exists(Program.ScriptCachePath))
+                        Directory.CreateDirectory(Program.ScriptCachePath);
                     else
                     {
                         ShowMsg(CLIMode, $"Error removing the saved cache.");
@@ -408,7 +408,7 @@ namespace NPC_Maker
 
                             if (Overlay != null)
                             {
-                                Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntryID}_script");
+                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntryID}_script");
                                 CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
                                 string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
 
@@ -428,18 +428,19 @@ namespace NPC_Maker
 
                         string extData = JsonConvert.SerializeObject(Entry.Messages) + JsonConvert.SerializeObject(Entry.ExtraDisplayLists) + JsonConvert.SerializeObject(Entry.Segments) + JsonConvert.SerializeObject(Entry.Animations);
                         string extDataHash = Helpers.GetBase64Hash(s, extData);
-                        string extDataFile = System.IO.Path.Combine(Program.CachePath, $"{EntryID}_exdata_" + extDataHash);
+                        string extDataFile = System.IO.Path.Combine(Program.ScriptCachePath, $"{EntryID}_exdata_" + extDataHash);
 
                         foreach (ScriptEntry Scr in NonEmptyEntries)
                         {
                             Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, Data.GlobalHeaders);
 
                             hash = Helpers.GetBase64Hash(s, Scr.Text);
-                            string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntryID}_script{scriptNum}_" + hash);
+                            string cachedFile = System.IO.Path.Combine(Program.ScriptCachePath, $"{EntryID}_script{scriptNum}_" + hash);
 
                             if (cacheInvalid || !File.Exists(cachedFile) || !File.Exists(extDataFile))
                             {
-                                Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntryID}_script{scriptNum}_");
+                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntryID}_script{scriptNum}_");
+
                                 Scripts.BScript scr = Par.ParseScript(Scr.Name, BaseDefines, true);
 
                                 if (scr.ParseErrors.Count == 0)
@@ -451,7 +452,7 @@ namespace NPC_Maker
 
                         if (!File.Exists(extDataFile))
                         {
-                            Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntryID}_exdata_");
+                            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntryID}_exdata_");
                             File.Create(extDataFile);
                         }
                     }
@@ -871,7 +872,7 @@ namespace NPC_Maker
                                 {
                                     Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_funcsaddrs_");
                                     Helpers.DeleteFileStartingWith(Program.CCachePath, $"{EntriesDone}_code_");
-                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script");
+                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntriesDone}_script");
 
                                     Overlay = CCode.Compile(Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors);
 
@@ -971,20 +972,20 @@ namespace NPC_Maker
                         {
                             string extData = JsonConvert.SerializeObject(Entry.Messages) + JsonConvert.SerializeObject(Entry.ExtraDisplayLists) + JsonConvert.SerializeObject(Entry.Segments) + JsonConvert.SerializeObject(Entry.Animations);
                             string extDataHash = Helpers.GetBase64Hash(s, extData);
-                            string cachedExtDataFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_exdata_" + extDataHash);
+                            string cachedExtDataFile = System.IO.Path.Combine(Program.ScriptCachePath, $"{EntriesDone}_exdata_" + extDataHash);
 
                             foreach (ScriptEntry Scr in NonEmptyEntries)
                             {
                                 Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, Data.GlobalHeaders);
 
                                 string hash = Helpers.GetBase64Hash(s, Scr.Text);
-                                string cachedFile = System.IO.Path.Combine(Program.CachePath, $"{EntriesDone}_script{scriptNum}_" + hash);
+                                string cachedFile = System.IO.Path.Combine(Program.ScriptCachePath, $"{EntriesDone}_script{scriptNum}_" + hash);
 
                                 if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedExtDataFile))
                                     ParsedScripts.Add(new Scripts.BScript() { Script = File.ReadAllBytes(cachedFile), ParseErrors = new List<Scripts.ParseException>() });
                                 else
                                 {
-                                    Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_script{scriptNum}_");
+                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntriesDone}_script{scriptNum}_");
                                     Scripts.BScript scr = Par.ParseScript(Scr.Name, baseDefines, true);
                                     ParsedScripts.Add(scr);
 
@@ -995,7 +996,7 @@ namespace NPC_Maker
                                 scriptNum++;
                             }
 
-                            Helpers.DeleteFileStartingWith(Program.CachePath, $"{EntriesDone}_exdata_");
+                            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntriesDone}_exdata_");
                             File.Create(cachedExtDataFile);
 
                         }

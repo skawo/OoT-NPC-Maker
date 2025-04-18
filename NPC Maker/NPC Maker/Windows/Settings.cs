@@ -79,14 +79,14 @@ namespace NPC_Maker.Windows
             if (Program.CompileInProgress)
                 return;
 
-            if (Directory.Exists(Program.CachePath))
-                Directory.Delete(Program.CachePath, true);
+            if (Directory.Exists(Program.ScriptCachePath))
+                Directory.Delete(Program.ScriptCachePath, true);
 
             if (Directory.Exists(Program.CCachePath))
                 Directory.Delete(Program.CCachePath, true);
 
-            if (!Directory.Exists(Program.CachePath))
-                Directory.CreateDirectory(Program.CachePath);
+            if (!Directory.Exists(Program.ScriptCachePath))
+                Directory.CreateDirectory(Program.ScriptCachePath);
 
             if (!Directory.Exists(Program.CCachePath))
                 Directory.CreateDirectory(Program.CCachePath);

@@ -79,8 +79,10 @@ namespace NPC_Maker.Scripts
             if (outScript.ParseErrors.Count != 0)
                 return outScript;
 
-            // Split text into lines
             List<string> Lines = SplitLines(ScriptText);
+
+            // Split text into lines
+            Lines = SplitLines(ScriptText);
 
             // "Preprocessor"
             Lines = ReplaceTernary(Lines, ref outScript);
@@ -92,6 +94,7 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceAnds(Lines, ref outScript);
             Lines = ReplaceScriptStartHeres(Lines, ref outScript);
             CheckLabels(Lines);
+            
 
             List<Instruction> Instructions = GetInstructions(Lines);
 
@@ -309,22 +312,17 @@ namespace NPC_Maker.Scripts
 
                             if (arg.StartsWith("\""))
                             {
-                                // Handle quoted arguments
-                                string processedArg = arg.Trim('\"');
-                                argIndex++;
-
-                                // Check if the quoted argument ends in the same split
-                                while (!arg.EndsWith("\"") && argIndex < SplitRepLine.Length)
+                                // Handle quoted arguments using Regex
+                                Match match = Regex.Match(RepLine.Substring(RepLine.IndexOf(arg)), "\"(?<arg>[^\"]*)\"", RegexOptions.Compiled);
+                                if (match.Success)
                                 {
-                                    arg = SplitRepLine[argIndex];
-                                    processedArg += $" {arg.TrimEnd('\"')}";
-                                    argIndex++;
+                                    Args.Add(match.Groups["arg"].Value);
+                                    argIndex += Regex.Split(match.Value, @"\s+").Length; // Advance index by the number of parts in the quoted argument
                                 }
-
-                                if (!arg.EndsWith("\""))
-                                    throw ParseException.ArgsMalformedError(SplitRepLine);
-
-                                Args.Add(processedArg);
+                                else
+                                {
+                                    throw ParseException.ArgsMalformedError(SplitRepLine); // Missing closing quote
+                                }
                             }
                             else
                             {
