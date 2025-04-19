@@ -198,6 +198,22 @@ namespace NPC_Maker.Scripts
 
                                 return new InstructionAwaitCCall((byte)SubID, Value, Func.Addr, Condition, Args, (byte)(IsBool ? 1 : 0));
                             }
+                        case (int)Lists.IfSubTypes.ACTOR_EXISTS:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
+                                ScriptVarVal ActorNum = new ScriptVarVal();
+
+                                object TrackSubType = ScriptHelpers.Helper_GetEnumByName(SplitLine, 2, typeof(Lists.TargetActorSubtypes), ParseException.UnrecognizedParameter(SplitLine));
+                                int subType = Convert.ToInt32(TrackSubType);
+
+                                if (subType == (byte)Lists.TargetActorSubtypes.NPCMAKER || subType == (byte)Lists.TargetActorSubtypes.ACTOR_ID)
+                                {
+                                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                                    ActorNum = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0, UInt16.MaxValue);
+                                }
+
+                                return new InstructionAwaitActorExists((byte)SubID, ActorNum, (byte)subType);
+                            }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }

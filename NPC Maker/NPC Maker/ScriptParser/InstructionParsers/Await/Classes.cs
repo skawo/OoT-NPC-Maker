@@ -37,6 +37,40 @@ namespace NPC_Maker.Scripts
         }
     }
 
+    public class InstructionAwaitActorExists : InstructionSub
+    {
+        public ScriptVarVal Value { get; set; }
+        public byte ActorType;
+
+        public InstructionAwaitActorExists(byte _SubID, ScriptVarVal _Value, byte _ActorType)
+                                : base((int)Lists.Instructions.AWAIT, _SubID)
+        {
+            Value = _Value;
+            ActorType = (byte)_ActorType;
+        }
+
+        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        {
+            List<byte> Data = new List<byte>();
+
+            Helpers.AddObjectToByteList(ID, Data);
+            Helpers.AddObjectToByteList(SubID, Data);
+            Helpers.AddObjectToByteList(Value.Vartype, Data);
+            Helpers.AddObjectToByteList(ActorType, Data);
+            Helpers.AddObjectToByteList(Value.Value, Data);
+            Helpers.Ensure4ByteAlign(Data);
+
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 8);
+
+            return Data.ToArray();
+        }
+
+        public override string ToString()
+        {
+            return ((Lists.Instructions)ID).ToString() + ", " + ((Lists.AwaitSubTypes)SubID).ToString();
+        }
+    }
+
     public class InstructionAwaitCCall : InstructionAwait
     {
         readonly UInt32 Func;

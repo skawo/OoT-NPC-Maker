@@ -412,6 +412,7 @@ namespace NPC_Maker
             CCALL,
             DEBUG_VAR,
             DEBUG_VARF,
+            ACTOR_EXISTS,
         }
 
         public enum StateTypes
@@ -641,6 +642,7 @@ namespace NPC_Maker
 
             CURRENT_STATE,
             CCALL,
+            ACTOR_EXISTS,
         }
 
         public enum EffectsIfAttacked
