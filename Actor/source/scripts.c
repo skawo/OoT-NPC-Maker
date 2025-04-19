@@ -756,6 +756,12 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
             branch = Scripts_IfTwoValues(en, playState, value, in, INT16);
             break;
         }
+        case IF_ACTOR_EXISTS:
+        {
+            void* actor = Scripts_GetActorByType(en, playState, in->condition, in->vartype, in->value);
+            branch = (actor != NULL) ? in->trueInstrNum : in->falseInstrNum;
+            break;
+        }
         case SUBT_GLOBAL8:
         case SUBT_GLOBAL16:
         case SUBT_GLOBAL32:
@@ -995,6 +1001,12 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
 
             float out = NpcMaker_RunCFunc(en, playState, instr->funcOffs, args); 
             conditionMet = Scripts_AwaitValue(en, playState, out, instr->isBool ? BOOL : FLOAT, instr->condition, instr->varType, instr->value);
+            break;
+        }
+        case AWAIT_ACTOR_EXISTS:
+        {
+            void* actor = Scripts_GetActorByType(en, playState, in->condition, in->varType, in->value);
+            conditionMet = (actor != NULL);
             break;
         }
         case SUBT_GLOBAL8:

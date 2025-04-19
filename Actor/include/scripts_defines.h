@@ -355,6 +355,7 @@ typedef enum IfWhileSubId
     IF_CCALL,
     IF_DEBUG_VAR,
     IF_DEBUG_VARF,
+    IF_ACTOR_EXISTS,
 
 } IfWhileSubId;
 
@@ -398,6 +399,7 @@ typedef enum AwaitSubId
 
     AWAIT_CURRENT_STATE,
     AWAIT_CCALL,
+    AWAIT_ACTOR_EXISTS,
 
 } AwaitSubId;
 
