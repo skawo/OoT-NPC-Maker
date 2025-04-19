@@ -49,7 +49,7 @@ namespace NPC_Maker.Scripts
 
             id = 0;
             defines.AddRange(Entry.Scripts.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Script}{x.Name.Replace(' ', '_')} {id++}").ToList());
-         
+
             //defines.AddRange(Dicts.Music.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Music}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
             //defines.AddRange(Dicts.SFXes.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Sfx}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
             //defines.AddRange(Dicts.Actors.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Actor}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
@@ -100,7 +100,7 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceAnds(Lines, ref outScript);
             Lines = ReplaceScriptStartHeres(Lines, ref outScript);
             CheckLabels(Lines);
-            
+
             List<Instruction> Instructions = GetInstructions(Lines);
 
             // Add a return instruction at the end if one doesn't exist.
@@ -272,6 +272,8 @@ namespace NPC_Maker.Scripts
                 HashSet<string> uniqueProcedures = new HashSet<string>();
                 int ProcLineIndex = Lines.FindIndex(x => x.StartsWith(Lists.Keyword_Procedure, StringComparison.OrdinalIgnoreCase));
 
+                Dictionary<string, List<string>[]> Procedures = new Dictionary<string, List<string>[]>();
+
                 // Looping through all lines until we can't find a line containing the keyword...
                 while (ProcLineIndex != -1)
                 {
@@ -295,76 +297,88 @@ namespace NPC_Maker.Scripts
                     else
                         outScript.ParseErrors.Add(ParseException.ProcDoubleError(SplitDefinition));
 
-                    int RecurCheck = ProcLines.FindIndex(x => x.StartsWith(ProcedureString + " ", StringComparison.OrdinalIgnoreCase));
+                    int RecurCheck = ProcLines.FindIndex(x => x.StartsWith($"{ProcedureString} ", StringComparison.OrdinalIgnoreCase));
 
                     // Error if procedure recursion is detected
                     if (RecurCheck != -1)
                         throw ParseException.ProcRecursion(ProcLines[RecurCheck]);
 
-                    int ProcCallIndex = Lines.FindIndex(x => x.Split(' ')[0].ToUpper() == ProcedureString);
+                    Procedures.Add(ProcedureString, new List<string>[2] { ProcLines, ProcArgs });
+                    ProcLineIndex = Lines.FindIndex(ProcLineIndex, x => x.StartsWith(Lists.Keyword_Procedure, StringComparison.OrdinalIgnoreCase));
+                }
 
-                    while (ProcCallIndex != -1)
+                int ProcCallIndex = Lines.FindIndex(x => x.StartsWith(Lists.Keyword_CallProcedure, StringComparison.OrdinalIgnoreCase));
+
+                while (ProcCallIndex != -1)
+                {
+                    string ProcedureString = Lines[ProcCallIndex].Split(' ')[0].ToUpper();
+
+                    if (!Procedures.ContainsKey(ProcedureString))
+                        throw ParseException.ProcedureNotFoundError(ProcedureString);
+
+                    var proc = Procedures[ProcedureString];
+
+                    List<string> ProcLines = proc[0];
+                    List<string> ProcArgs = proc[1];
+
+                    string RepLine = Lines[ProcCallIndex];
+                    string[] SplitRepLine = RepLine.Split(' ');
+
+                    List<string> Args = new List<string>();
+                    int argIndex = 1; // Start with the first argument index
+
+                    while (argIndex < SplitRepLine.Length)
                     {
-                        string RepLine = Lines[ProcCallIndex];
-                        string[] SplitRepLine = RepLine.Split(' ');
+                        string arg = SplitRepLine[argIndex];
 
-                        List<string> Args = new List<string>();
-                        int argIndex = 1; // Start with the first argument index
-
-                        while (argIndex < SplitRepLine.Length)
+                        if (arg.StartsWith("\""))
                         {
-                            string arg = SplitRepLine[argIndex];
-
-                            if (arg.StartsWith("\""))
+                            // Handle quoted arguments using Regex
+                            Match match = Regex.Match(RepLine.Substring(RepLine.IndexOf(arg)), "\"(?<arg>[^\"]*)\"", RegexOptions.Compiled);
+                            if (match.Success)
                             {
-                                // Handle quoted arguments using Regex
-                                Match match = Regex.Match(RepLine.Substring(RepLine.IndexOf(arg)), "\"(?<arg>[^\"]*)\"", RegexOptions.Compiled);
-                                if (match.Success)
-                                {
-                                    Args.Add(match.Groups["arg"].Value);
-                                    argIndex += Regex.Split(match.Value, @"\s+").Length; // Advance index by the number of parts in the quoted argument
-                                }
-                                else
-                                {
-                                    throw ParseException.ArgsMalformedError(SplitRepLine); // Missing closing quote
-                                }
+                                Args.Add(match.Groups["arg"].Value);
+                                argIndex += Regex.Split(match.Value, @"\s+").Length; // Advance index by the number of parts in the quoted argument
                             }
                             else
                             {
-                                // Handle non-quoted arguments
-                                Args.Add(arg);
-                                argIndex++;
+                                throw ParseException.ArgsMalformedError(SplitRepLine); // Missing closing quote
                             }
                         }
-
-                        if (argIndex != SplitRepLine.Length)
-                        {
-                            // Check if all arguments have been processed
-                            throw ParseException.ArgsMalformedError(SplitRepLine);
-                        }
-
-                        Lines.RemoveAt(ProcCallIndex);
-
-                        if (Args.Count != ProcArgs.Count)
-                            outScript.ParseErrors.Add(ParseException.ProcNumArgsError(SplitRepLine, ProcArgs.ToArray()));
                         else
                         {
-                            List<string> Instructions = new List<string>();
-
-                            string s = String.Join(Environment.NewLine, ProcLines);
-
-                            for (int f = 0; f < Args.Count; f++)
-                                s = ScriptHelpers.ReplaceExprAndEscaped(s, ProcArgs[f], Args[f]);
-
-                            Instructions = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                            Lines.InsertRange(ProcCallIndex, Instructions);
+                            // Handle non-quoted arguments
+                            Args.Add(arg);
+                            argIndex++;
                         }
-
-                        ProcCallIndex = Lines.FindIndex(x => x.Split()[0].ToUpper() == ProcedureString);
                     }
 
-                    ProcLineIndex = Lines.FindIndex(x => x.StartsWith(Lists.Keyword_Procedure, StringComparison.OrdinalIgnoreCase));
+                    if (argIndex != SplitRepLine.Length)
+                    {
+                        // Check if all arguments have been processed
+                        throw ParseException.ArgsMalformedError(SplitRepLine);
+                    }
+
+                    Lines.RemoveAt(ProcCallIndex);
+
+                    if (Args.Count != ProcArgs.Count)
+                        outScript.ParseErrors.Add(ParseException.ProcNumArgsError(SplitRepLine, ProcArgs.ToArray()));
+                    else
+                    {
+                        List<string> Instructions = new List<string>();
+
+                        string s = String.Join(Environment.NewLine, ProcLines);
+
+                        for (int f = 0; f < Args.Count; f++)
+                            s = ScriptHelpers.ReplaceExprAndEscaped(s, ProcArgs[f], Args[f]);
+
+                        Instructions = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                        Lines.InsertRange(ProcCallIndex, Instructions);
+                    }
+
+                    
+                    ProcCallIndex = Lines.FindIndex(ProcCallIndex, x => x.StartsWith(Lists.Keyword_CallProcedure, StringComparison.OrdinalIgnoreCase));
                 }
 
                 return Lines;

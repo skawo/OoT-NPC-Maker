@@ -33,6 +33,12 @@ namespace NPC_Maker.Scripts
             return new ParseException("Problem with procedures.", "");
         }
 
+        public static ParseException ProcedureNotFoundError(string name)
+        {
+            return new ParseException($"Procedure is not defined: ", name);
+        }
+
+
         public static ParseException ProcNumArgsError(string[] _Line, string[] Args)
         {
             return new ParseException($"Number of arguments doesn't match (Args should be: {String.Join(",", Args)}) ", String.Join(" ", _Line));
