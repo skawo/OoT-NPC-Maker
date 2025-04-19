@@ -72,28 +72,25 @@ namespace NPC_Maker.Scripts
             Lines = SplitLines(ScriptText);
 
             // Remove all definitions
-            List<string> gDefines = new List<string>();
+            List<string> defineLines = new List<string>();
             List<string> newLines = new List<string>();
 
             foreach (string line in Lines)
             {
                 if (line.ToUpper().StartsWith($"#{Lists.Keyword_Define}"))
-                    gDefines.Add(line);
+                    defineLines.Add(line);
                 else
                     newLines.Add(line);
             }
 
             Lines = newLines;
 
-            GetDefines(ref gDefines);
+            GetDefines(ref defineLines);
 
             // "Preprocessor"
             Lines = ReplaceTernary(Lines, ref outScript);
             Lines = GetAndReplaceProcedures(Lines, ref outScript);
-
-            Lines.InsertRange(0, gDefines);
-
-            Lines = ReplaceDefines(Lines, ref outScript);
+            Lines = ReplaceDefines(defineLines, Lines, ref outScript);
             Lines = ReplaceSwitches(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
             Lines = ReplaceOrs(Lines, ref outScript);
@@ -216,12 +213,11 @@ namespace NPC_Maker.Scripts
                 return FullyResolveDefine(Defines, new string[] { Define[0], Define[1], Defines[index][2] });
         }
 
-        private List<string> ReplaceDefines(List<string> Lines, ref BScript outScript)
+        private List<string> ReplaceDefines(List<string> DefineLines, List<string> Lines, ref BScript outScript)
         {
             try
             {
-                List<string[]> Defines = Lines.FindAll(x => x.StartsWith(Lists.Keyword_SharpDefine, StringComparison.OrdinalIgnoreCase)).Select(x => x.Split(' ')).ToList();
-
+                List<string[]> Defines = DefineLines.Select(x => x.Split(' ')).ToList();
                 List<string[]> ParamCountWrong = Defines.FindAll(x => x.Length != 3).ToList();
 
                 foreach (string[] dd in ParamCountWrong)
@@ -241,10 +237,7 @@ namespace NPC_Maker.Scripts
                 for (int i = 0; i < Defines.Count; i++)
                     Defines[i] = FullyResolveDefine(Defines, Defines[i]);
 
-                // Otherwise, loop through all lines and replace the defines.
-                List<string> NewLines = Lines.Where(x => !x.ToUpper().StartsWith(Lists.Keyword_SharpDefine)).ToList();
-
-                string s = String.Join(Environment.NewLine, NewLines);
+                string s = String.Join(Environment.NewLine, Lines);
 
                 foreach (string[] Def in Defines)
                     s = ScriptHelpers.ReplaceExpr(s, Def[1], Def[2]);
