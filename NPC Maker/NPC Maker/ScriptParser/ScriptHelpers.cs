@@ -70,8 +70,10 @@ namespace NPC_Maker.Scripts
 
         public static void ErrorIfNumParamsNotBetween(string[] Splitline, int Min, int Max)
         {
-            ErrorIfNumParamsSmaller(Splitline, Min);
-            ErrorIfNumParamsBigger(Splitline, Max);
+            int count = Splitline.Count();
+
+            if (count < Min || count > Max)
+                throw ParseException.ParamCountWrong(Splitline);
         }
 
         public static int GetSubIDValue(string[] SplitLine, Type SubTypeEnum, int Index = 1)
@@ -392,11 +394,11 @@ namespace NPC_Maker.Scripts
             {
                 case "=":
                 case "==":
-                case "<": 
+                case "<":
                 case ">":
                 case ">=":
                 case "<=":
-                case "!=": 
+                case "!=":
                 case "<>":
                     return true;
 
@@ -436,7 +438,8 @@ namespace NPC_Maker.Scripts
 
         public static bool IsHex(string Number)
         {
-            return (Number.Length >= 3 && Number.ToUpper().StartsWith("0X") || Number.Length >= 4 && Number.ToUpper().StartsWith("-0X"));
+            string nU = Number.ToUpper();
+            return (Number.Length >= 3 && nU.StartsWith("0X") || Number.Length >= 4 && nU.StartsWith("-0X"));
         }
 
         public static bool OnlyHexInString(string test)

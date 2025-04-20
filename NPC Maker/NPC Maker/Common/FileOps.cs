@@ -247,7 +247,7 @@ namespace NPC_Maker
             return JsonConvert.DeserializeObject<NPCFile>(t);
         }
 
-        public static Dictionary<string, int> GetDictionary(string Filename)
+        public static Dictionary<string, int> GetDictionary(string Filename, bool allowFail = false)
         {
             Dictionary<string, int> Dict = new Dictionary<string, int>();
 
@@ -268,7 +268,41 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                System.Windows.Forms.MessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
+                if (!allowFail)
+                {
+                    System.Windows.Forms.MessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
+                }
+
+                return Dict;
+            }
+        }
+
+        public static Dictionary<string, string> GetDictionaryStringString(string Filename, bool allowFail = false)
+        {
+            Dictionary<string, string> Dict = new Dictionary<string, string>();
+
+            string OffendingRow = "";
+
+            try
+            {
+                string[] RawData = File.ReadAllLines(Filename);
+
+                foreach (string Row in RawData)
+                {
+                    OffendingRow = Row;
+                    string[] data = Row.Split(',');
+                    Dict.Add(data[0], data[1]);
+                }
+
+                return Dict;
+            }
+            catch (Exception)
+            {
+                if (!allowFail)
+                {
+                    System.Windows.Forms.MessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
+                }
+
                 return Dict;
             }
         }

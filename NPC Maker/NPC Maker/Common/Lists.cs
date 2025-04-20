@@ -318,6 +318,7 @@ namespace NPC_Maker
             Actors,
             Objects,
             LinkAnims,
+            MsgTagOverride,
         }
 
         public enum IfWhileAwaitSetRamSubTypes

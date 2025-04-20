@@ -24,6 +24,7 @@ namespace NPC_Maker
             { Lists.DictType.Actors, $"Dicts/Actors.csv" },
             { Lists.DictType.Objects, $"Dicts/Objects.csv" },
             { Lists.DictType.LinkAnims, $"Dicts/LinkAnims.csv" },
+            { Lists.DictType.MsgTagOverride, $"Dicts/MsgTagOverrides.csv" },
         };
 
         public static Dictionary<string, int> ObjectIDs;
@@ -31,6 +32,7 @@ namespace NPC_Maker
         public static Dictionary<string, int> Music;
         public static Dictionary<string, int> Actors;
         public static Dictionary<string, int> LinkAnims;
+        public static Dictionary<string, string> MsgTagOverride;
         public static Dictionary<Lists.ParticleTypes, List<ParticleSubOptions>> UsableParticleSubOptions = new Dictionary<ParticleTypes, List<ParticleSubOptions>>()
         {
             {ParticleTypes.DUST, 
@@ -235,10 +237,11 @@ namespace NPC_Maker
             ReloadDict(DictType.Actors);
             ReloadDict(DictType.Music);
             ReloadDict(DictType.SFX);
+            ReloadDict(DictType.MsgTagOverride, true);
         }
 
 
-        public static void ReloadDict(Lists.DictType Type)
+        public static void ReloadDict(Lists.DictType Type, bool allowFail = false)
         {
             try
             {
@@ -252,6 +255,7 @@ namespace NPC_Maker
                     case Lists.DictType.Music: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Music]); break;
                     case Lists.DictType.Objects: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Objects]); break;
                     case Lists.DictType.LinkAnims: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims]); break;
+                    case Lists.DictType.MsgTagOverride: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.MsgTagOverride]); break;
                     default: break;
                 }
 
@@ -260,18 +264,22 @@ namespace NPC_Maker
 
                 switch (Type)
                 {
-                    case Lists.DictType.Actors: Actors = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Actors])); break;
-                    case Lists.DictType.SFX: SFXes = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.SFX])); break;
-                    case Lists.DictType.Music: Music = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Music])); break;
-                    case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Objects])); break;
-                    case Lists.DictType.LinkAnims: LinkAnims = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims])); break;
+                    case Lists.DictType.Actors: Actors = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Actors]), allowFail); break;
+                    case Lists.DictType.SFX: SFXes = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.SFX]), allowFail); break;
+                    case Lists.DictType.Music: Music = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Music]), allowFail); break;
+                    case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Objects]), allowFail); break;
+                    case Lists.DictType.LinkAnims: LinkAnims = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims]), allowFail); break;
+                    case Lists.DictType.MsgTagOverride: MsgTagOverride = FileOps.GetDictionaryStringString(Path.Combine(Folder, DictFilenames[Lists.DictType.MsgTagOverride]), allowFail); break;
                     default: break;
                 }
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"Error loading the {Type} dict: {ex.Message}");
-                return;
+                if (!allowFail)
+                {
+                    System.Windows.Forms.MessageBox.Show($"Error loading the {Type} dict: {ex.Message}");
+                    return;
+                }
             }
         }
 

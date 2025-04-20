@@ -648,26 +648,31 @@ namespace NPC_Maker
             List<byte> data = new List<byte>();
             List<string> errors = new List<string>();
 
-            for (int i = 0; i < MessageText.Length; i++)
+            string wMessageText = MessageText;
+
+            foreach (var s in Dicts.MsgTagOverride)
+                wMessageText = wMessageText.Replace(s.Key, s.Value);
+
+            for (int i = 0; i < wMessageText.Length; i++)
             {
                 // Not a control code, copy char to output buffer
-                if (MessageText[i] != '<' && MessageText[i] != '>')
+                if (wMessageText[i] != '<' && wMessageText[i] != '>')
                 {
-                    if (Dicts.MessageControlCodes.ContainsValue(MessageText[i].ToString()))
-                        data.Add((byte)Dicts.MessageControlCodes.First(x => x.Value == MessageText[i].ToString()).Key);
-                    else if (MessageText[i] == '\n')
+                    if (Dicts.MessageControlCodes.ContainsValue(wMessageText[i].ToString()))
+                        data.Add((byte)Dicts.MessageControlCodes.First(x => x.Value == wMessageText[i].ToString()).Key);
+                    else if (wMessageText[i] == '\n')
                         data.Add((byte)Lists.MsgControlCode.LINE_BREAK);
-                    else if (MessageText[i] == '\r')
+                    else if (wMessageText[i] == '\r')
                     {
                         // Do nothing
                     }
                     else
-                        data.Add((byte)MessageText[i]);
+                        data.Add((byte)wMessageText[i]);
 
                     continue;
                 }
                 // Control code end tag. This should never be encountered on its own.
-                else if (MessageText[i] == '>')
+                else if (wMessageText[i] == '>')
                     errors.Add($"Message formatting is not valid: found stray >");
                 // We've got a control code
                 else
@@ -675,10 +680,10 @@ namespace NPC_Maker
                     // Buffer for the control code
                     List<char> controlCode = new List<char>();
 
-                    while (MessageText[i] != '>' && i < MessageText.Length - 1)
+                    while (wMessageText[i] != '>' && i < wMessageText.Length - 1)
                     {
                         // Add code chars to the buffer
-                        controlCode.Add(MessageText[i]);
+                        controlCode.Add(wMessageText[i]);
                         // Increase i so we can skip the code when we're done parsing
                         i++;
                     }
@@ -698,14 +703,14 @@ namespace NPC_Maker
                             if (data[data.Count - 1] == 0x01)
                                 data.RemoveAt(data.Count - 1);
 
-                        if (MessageText.Length > i + Environment.NewLine.Length)
+                        if (wMessageText.Length > i + Environment.NewLine.Length)
                         {
                             string s;
 
                             if (Environment.NewLine.Length == 2)
-                                s = String.Concat(MessageText[i + 1], MessageText[i + 2]);
+                                s = String.Concat(wMessageText[i + 1], wMessageText[i + 2]);
                             else
-                                s = String.Concat(MessageText[i + 1]);
+                                s = String.Concat(wMessageText[i + 1]);
 
                             if (s == Environment.NewLine)
                             {
