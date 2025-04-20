@@ -496,12 +496,12 @@ namespace NPC_Maker.Scripts
 
         private static object GetNPCMakerEmbeddedTextID(string Name, List<MessageEntry> Messages)
         {
-            int id = Messages.FindIndex(x => x.Name == Name);
+            MessageEntry Mes = Messages.Find(x => x.Name == Name);
 
-            if (id < 0)
+            if (Mes == null)
                 return (float)-1;
             else
-                return (float)(1 + Int16.MaxValue + id);
+                return (float)(1 + Int16.MaxValue + Messages.IndexOf(Mes));
         }
 
         public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref ScriptVarVal TextID_Adult, ref ScriptVarVal TextID_Child, List<MessageEntry> Messages, int Index = 1)
