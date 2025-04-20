@@ -106,7 +106,7 @@ namespace NPC_Maker
                     if (s.Seconds == 0)
                         progressL.SetProgress(100, $"Completed in {s.Milliseconds} ms.");
                     else
-                        progressL.SetProgress(100, $"Completed in {s.Seconds} s.");
+                        progressL.SetProgress(100, $"Completed in {s.Seconds} s {s.Milliseconds} ms.");
                 }
             }
             else

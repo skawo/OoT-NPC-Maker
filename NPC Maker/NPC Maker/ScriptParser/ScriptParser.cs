@@ -208,7 +208,7 @@ namespace NPC_Maker.Scripts
             int index = Defines.FindIndex(x => String.Equals(x[1], Define[2]));
 
             if (index == -1)
-                return new string[] { Define[0], Define[1], Define[2] };
+                return Define;
             else
                 return FullyResolveDefine(Defines, new string[] { Define[0], Define[1], Defines[index][2] });
         }
@@ -223,7 +223,7 @@ namespace NPC_Maker.Scripts
                 foreach (string[] dd in ParamCountWrong)
                     outScript.ParseErrors.Add(ParseException.DefineIncorrect(dd));
 
-                Defines = (List<string[]>)Defines.Except(ParamCountWrong).ToList();
+                Defines = Defines.Except(ParamCountWrong).ToList();
 
                 List<string> Repeats = Defines.GroupBy(x => x[1]).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
 
@@ -234,13 +234,16 @@ namespace NPC_Maker.Scripts
                 if (Defines.Count == 0)
                     return Lines;
 
-                for (int i = 0; i < Defines.Count; i++)
-                    Defines[i] = FullyResolveDefine(Defines, Defines[i]);
-
                 string s = String.Join(Environment.NewLine, Lines);
 
                 foreach (string[] Def in Defines)
-                    s = ScriptHelpers.ReplaceExpr(s, Def[1], Def[2]);
+                {
+                    if (s.Contains(Def[1]))
+                    {
+                        string[] fin = FullyResolveDefine(Defines, Def);
+                        s = ScriptHelpers.ReplaceExpr(s, fin[1], fin[2]);
+                    }
+                }
 
                 Lines = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
 
@@ -432,7 +435,7 @@ namespace NPC_Maker.Scripts
                         Lines.Insert(OrLineIndex + 4, $"{Label}:");
                     }
 
-                    OrLineIndex = Lines.FindIndex(x => x.ToUpper().Contains(OrKeyword));
+                    OrLineIndex = Lines.FindIndex(OrLineIndex, x => x.ToUpper().Contains(OrKeyword));
                 }
             }
             catch (ParseException pEx)
@@ -510,7 +513,7 @@ namespace NPC_Maker.Scripts
                         }
                     }
 
-                    AndLineIndex = Lines.FindIndex(x => x.ToUpper().Contains(AndKeyword));
+                    AndLineIndex = Lines.FindIndex(AndLineIndex, x => x.ToUpper().Contains(AndKeyword));
                 }
             }
             catch (ParseException pEx)
@@ -698,7 +701,7 @@ namespace NPC_Maker.Scripts
                         }
                     }
 
-                    SwitchLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith($"{Lists.Keyword_Switch} "));
+                    SwitchLineIndex = Lines.FindIndex(SwitchLineIndex, x => x.ToUpper().StartsWith($"{Lists.Keyword_Switch} "));
                 }
             }
             catch (ParseException pEx)
@@ -734,7 +737,7 @@ namespace NPC_Maker.Scripts
                     Lines.Insert(TernaryIndex + 3, Condition2);
                     Lines.Insert(TernaryIndex + 4, Lists.Keyword_EndIf);
 
-                    TernaryIndex = Lines.FindIndex(x => x.ToUpper().Contains($" {Lists.Keyword_Ternary} "));
+                    TernaryIndex = Lines.FindIndex(TernaryIndex, x => x.ToUpper().Contains($" {Lists.Keyword_Ternary} "));
                 }
             }
             catch (ParseException pEx)
@@ -801,7 +804,7 @@ namespace NPC_Maker.Scripts
                         outScript.ParseErrors.Add(ParseException.IfNotClosed(Lines[ElifLineIndex]));
 
                     Lines.Insert(ElifLineIndex, Lists.Keyword_Else);
-                    ElifLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith(Lists.Keyword_Elif));
+                    ElifLineIndex = Lines.FindIndex(ElifLineIndex, x => x.ToUpper().StartsWith(Lists.Keyword_Elif));
                 }
             }
             catch (ParseException pEx)
