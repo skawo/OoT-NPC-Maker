@@ -76,7 +76,7 @@ namespace NPC_Maker
             if (File.Exists("dict.dic"))
                 dictionary = WeCantSpell.Hunspell.WordList.CreateFromFiles("dict.dic");
             else
-                dictionary = WeCantSpell.Hunspell.WordList.CreateFromWords(new List<string>());
+                dictionary = WeCantSpell.Hunspell.WordList.CreateFromWords(new List<string>() { });
 
 
             CCode.CreateCTempDirectory("", "", false);

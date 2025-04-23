@@ -373,6 +373,9 @@
     <Content Include="nUhhuh.ico" />
     <None Include="Resources\EmbeddedOverlay.c" />
     <None Include="Resources\EmbeddedOverlay1.c" />
+    <Content Include="System.Runtime.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="uhhuh.ico" />
     <None Include="Resources\c_cpp_properties.json" />
     <None Include="Resources\Logo.png" />
