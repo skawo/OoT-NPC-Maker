@@ -32,6 +32,8 @@ namespace NPC_Maker
         public static bool CompileThereWereErrors = false;
         public static DateTime CompileStartTime;
 
+        public static WeCantSpell.Hunspell.WordList dictionary;
+
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
 
@@ -53,7 +55,7 @@ namespace NPC_Maker
             CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
 
             // To create this in memory quicker
-            TaskEx.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
+            Task.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
 
             Type t = Type.GetType("Mono.Runtime");
 
@@ -70,6 +72,12 @@ namespace NPC_Maker
             }
 
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
+
+            if (File.Exists("dict.dic"))
+                dictionary = WeCantSpell.Hunspell.WordList.CreateFromFiles("dict.dic");
+            else
+                dictionary = WeCantSpell.Hunspell.WordList.CreateFromWords(new List<string>());
+
 
             CCode.CreateCTempDirectory("", "", false);
 

@@ -389,7 +389,7 @@ namespace NPC_Maker
             float ProgressPer = (float)((float)100 / (float)Data.Entries.Count);
             float CurProgress = 0;
 
-            await TaskEx.Run(() =>
+            await Task.Run(() =>
             {
                 bool[] cacheStatus = GetCacheStatus(Data, CLIMode);
 

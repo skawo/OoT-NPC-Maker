@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace NPC_Maker
 {
@@ -35,6 +36,17 @@ namespace NPC_Maker
         public static UInt32 HexLeading2UInt32(this string text)
         {
             return text.TrimStart('0') == "" ? (UInt32)0: UInt32.Parse(text.TrimStart('0'), System.Globalization.NumberStyles.HexNumber);
+        }
+
+        public static string StripPunctuation(this string s)
+        {
+            var sb = new StringBuilder();
+            foreach (char c in s)
+            {
+                if (!char.IsPunctuation(c))
+                    sb.Append(c);
+            }
+            return sb.ToString();
         }
     }
 }

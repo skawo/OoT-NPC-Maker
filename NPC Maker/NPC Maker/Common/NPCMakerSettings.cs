@@ -48,6 +48,9 @@ namespace NPC_Maker
         public bool UseSpaceWithFromFont { get; set; }
 
         public bool CompileInParallel { get; set; }
+
+        public bool Spellcheck { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -71,6 +74,7 @@ namespace NPC_Maker
             UseSpaceWithFromFont = false;
             AutoComp_ActorSwitch = false;
             CompileInParallel = true;
+            Spellcheck = false;
         }
 
         public enum Members
@@ -94,6 +98,7 @@ namespace NPC_Maker
             AUTOSAVESWITCH,
             USESPACEFONT,
             PARALLEL,
+            SPELLCHECK,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -138,6 +143,7 @@ namespace NPC_Maker
                 case Members.AUTOSAVETIME: AutoSaveTime = Convert.ToUInt32(Value); break;
                 case Members.USESPACEFONT: UseSpaceWithFromFont = (bool)Value; break;
                 case Members.PARALLEL: CompileInParallel = (bool)Value; break;
+                case Members.SPELLCHECK: Spellcheck = (bool)Value; break;
                 default: break;
             }
         }

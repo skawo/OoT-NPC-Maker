@@ -23,6 +23,7 @@ namespace NPC_Maker
         public static Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         public static Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
         public static Style DefineStyle = new TextStyle(Brushes.Black, null, FontStyle.Bold);
+        public static Style UnderlineStyle = new TextStyle(Brushes.Red, null, FontStyle.Underline);
 
         public static Dictionary<List<string>, Style> StyleDict = new Dictionary<List<string>, Style>()
         {

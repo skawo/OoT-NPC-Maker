@@ -3249,6 +3249,7 @@
             this.MsgText.WordWrapAutoIndent = false;
             this.MsgText.Zoom = 100;
             this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
+            this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
             // 
             // Btn_MsgRename
             // 

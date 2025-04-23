@@ -38,6 +38,8 @@ namespace NPC_Maker.Windows
             AutoSaveC.Checked = EditedSettings.AutoSave;
             NumUpDown_AutoSaveCTime.Value = EditedSettings.AutoSaveTime;
             checkBox_CompileInParallel.Checked = EditedSettings.CompileInParallel;
+            chkBox_Spellcheck.Checked = EditedSettings.Spellcheck;
+
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)

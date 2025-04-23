@@ -99,7 +99,7 @@ namespace NPC_Maker.Properties {
         ///
         ////*
         ///To make use of this header, include
-        ///#include &lt;npcmaker/npc_maker_header.h&gt;
+        ///#include &quot;npc_maker_header.h&quot;
         ///in your Embedded Code file.
         ///*/.
         /// </summary>
@@ -110,7 +110,7 @@ namespace NPC_Maker.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #include &lt;npcmaker/npc_maker_header.h&gt;
+        ///   Looks up a localized string similar to #include &quot;npc_maker_header.h&quot;
         ///#include &lt;npcmaker/npc_maker_types.h&gt;
         ///
         ////*
@@ -123,7 +123,7 @@ namespace NPC_Maker.Properties {
         ///
         ///Examples of valid function signatures are thus, for example:
         ///
-        ///void Npc [rest of string was truncated]&quot;;.
+        ///void NpcM_Functio [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string EmbeddedOverlay {
             get {

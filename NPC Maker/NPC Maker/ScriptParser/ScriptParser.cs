@@ -178,7 +178,7 @@ namespace NPC_Maker.Scripts
 
         }
 
-        private static List<string> SplitLines(string ScriptText)
+        public static List<string> SplitLines(string ScriptText)
         {
             return Regex.Split(ScriptText, "\r?\n")
                         .Select(x => x.Trim())

@@ -13,6 +13,7 @@ using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Data;
+using FastColoredTextBoxNS;
 
 namespace NPC_Maker
 {
@@ -660,7 +661,7 @@ namespace NPC_Maker
 
             if (DR == DialogResult.OK)
             {
-                IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
+                IProgress<Common.ProgressReport> progress = new Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
                 progress.Report(new Common.ProgressReport("Starting...", 0));
 
                 Program.CompileInProgress = true;
@@ -676,11 +677,11 @@ namespace NPC_Maker
 
                 if (Program.Settings.CompileInParallel)
                 {
-                    await TaskEx.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress); });
+                    await Task.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress); });
                 }
                 else
                 {
-                    await TaskEx.Run(() =>
+                    await Task.Run(() =>
                     {
                         bool[] caches = FileOps.GetCacheStatus(EditedFile);
                         string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
@@ -2336,12 +2337,58 @@ namespace NPC_Maker
 
             MsgText.TextChanged += MsgText_TextChanged;
             Combo_MsgType.SelectedIndexChanged += Combo_MsgType_SelectedIndexChanged;
+
+            MsgText.ToolTip.RemoveAll();
+            PerformSpellCheck();
+        }
+
+        private void MsgText_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            FastColoredTextBox box = (FastColoredTextBox)sender;
+            box.ToolTip.RemoveAll();
+
+            string hoverWord = box.SelectedText;
+
+            if (!Program.dictionary.Check(hoverWord))
+            {
+                List<string> sugg = Program.dictionary.Suggest(hoverWord).ToList();
+
+                box.ToolTip.SetToolTip(box, String.Join(Environment.NewLine, sugg));
+
+            }
+        }
+
+        private void PerformSpellCheck()
+        {
+            MsgText.ClearStyle(FastColoredTextBoxNS.StyleIndex.All);
+
+            if (MsgText.Text.Length == 0 || !Program.Settings.Spellcheck)
+                return;
+
+            string tagLess = Regex.Replace(MsgText.Text.ToUpper().Replace(Environment.NewLine, " "), @"<([\s\S]*?)>", string.Empty, RegexOptions.Compiled);
+            string[] strings = tagLess.StripPunctuation().Split(' ');
+
+            Range r = new Range(MsgText, 0, 0, MsgText.Text.Length - 1, MsgText.LinesCount - 1);
+
+            foreach (string s in strings)
+            {
+                try
+                {
+                    if (!Program.dictionary.Check(s))
+                        r.SetStyle(SyntaxHighlighter.UnderlineStyle, @"\b" + s + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                }
+                catch (Exception)
+                { 
+                }
+            }
         }
 
         private void MsgText_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             MsgPreviewTimer.Stop();
             MsgPreviewTimer.Start();
+
+            PerformSpellCheck();
         }
 
         private void MsgPreviewTimer_Tick(object sender, EventArgs e)
@@ -3040,8 +3087,9 @@ namespace NPC_Maker
             }
         }
 
+
         #endregion
 
-       
+
     }
 }
