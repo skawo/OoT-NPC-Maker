@@ -33,7 +33,9 @@ namespace NPC_Maker
         int ScrollToMsg = 0;
         readonly Timer messageSearchTimer = new Timer();
 
-        public MainWindow()
+        private Timer autoBackupTimer = new Timer();
+
+        public MainWindow(string FilePath = "")
         {
             InitializeComponent();
 
@@ -51,6 +53,9 @@ namespace NPC_Maker
             compileTimer = new Timer();
             compileTimer.Interval = 100;
             compileTimer.Tick += CompileTimer_Tick;
+
+            autoBackupTimer.Interval = 1000;
+            autoBackupTimer.Tick += AutoBackupTimer_Tick;
 
             Combo_CodeEditor.SelectedIndexChanged -= Combo_CodeEditor_SelectedIndexChanged;
             Combo_CodeEditor.Items.Clear();
@@ -86,6 +91,35 @@ namespace NPC_Maker
             this.ResizeEnd += Form1_ResizeEnd;
 
             CodeParamsTooltip.SetToolTip(Textbox_CodeEditorArgs, "Available constants: $CODEFILE, $CODEHEADER, $CODEFOLDER");
+
+            if (FilePath != "")
+                OpenFile(FilePath);
+        }
+
+        private void OpenFile(string FilePath)
+        {
+            autoBackupTimer.Stop();
+            EditedFile = FileOps.ParseNPCJsonFile(FilePath);
+            OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+
+            if (EditedFile != null)
+            {
+                OpenedPath = FilePath;
+                Program.JsonPath = OpenedPath;
+                Panel_Editor.Enabled = true;
+                InsertDataIntoActorListGrid();
+                ChkBox_UseSpaceFont.Checked = EditedFile.SpaceFromFont;
+                Program.Settings.LastOpenPath = FilePath;
+                Dicts.LoadDicts();
+                autoBackupTimer.Start();
+            }
+        }
+
+        private void AutoBackupTimer_Tick(object sender, EventArgs e)
+        {
+            autoBackupTimer.Stop();
+            FileOps.SaveNPCJSON("backup", EditedFile);
+            autoBackupTimer.Start();
         }
 
         private void CompileTimer_Tick(object sender, EventArgs e)
@@ -153,6 +187,11 @@ namespace NPC_Maker
             catch (Exception)
             {
 
+            }
+            finally
+            {
+                if (File.Exists("backup"))
+                    File.Delete("backup");
             }
         }
 
@@ -577,22 +616,7 @@ namespace NPC_Maker
             DialogResult DR = OFD.ShowDialog();
 
             if (DR == DialogResult.OK)
-            {
-                EditedFile = FileOps.ParseNPCJsonFile(OFD.FileName);
-                OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-
-                if (EditedFile != null)
-                {
-                    OpenedPath = OFD.FileName;
-                    Program.JsonPath = OpenedPath;
-                    Panel_Editor.Enabled = true;
-                    InsertDataIntoActorListGrid();
-                    ChkBox_UseSpaceFont.Checked = EditedFile.SpaceFromFont;
-                    Program.Settings.LastOpenPath = OFD.FileName;
-                    Dicts.LoadDicts();
-                }
-            }
-
+                OpenFile(OFD.FileName);
         }
 
         private void FileMenu_New_Click(object sender, EventArgs e)

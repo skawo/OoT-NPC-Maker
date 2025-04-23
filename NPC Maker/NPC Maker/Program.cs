@@ -92,8 +92,17 @@ namespace NPC_Maker
 
             if (args.Length == 0)
             {
-                mw = new MainWindow();
+                string fileToOpen = "";
+
+                if (File.Exists("backup"))
+                {
+                    if (MessageBox.Show("NPCMaker was not closed properly the last time it was run. Load auto-saved backup?", "Autosaved backup exists", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                        fileToOpen = "backup";
+                }
+
+                mw = new MainWindow(fileToOpen);
                 Application.Run(mw);
+
                 FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
             }
             else
