@@ -661,7 +661,7 @@ namespace NPC_Maker
 
             if (DR == DialogResult.OK)
             {
-                IProgress<Common.ProgressReport> progress = new Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
+                IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
                 progress.Report(new Common.ProgressReport("Starting...", 0));
 
                 Program.CompileInProgress = true;
@@ -677,11 +677,11 @@ namespace NPC_Maker
 
                 if (Program.Settings.CompileInParallel)
                 {
-                    await Task.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress); });
+                    await TaskEx.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress); });
                 }
                 else
                 {
-                    await Task.Run(() =>
+                    await TaskEx.Run(() =>
                     {
                         bool[] caches = FileOps.GetCacheStatus(EditedFile);
                         string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);

@@ -55,7 +55,7 @@ namespace NPC_Maker
             CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
 
             // To create this in memory quicker
-            Task.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
+            TaskEx.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
 
             Type t = Type.GetType("Mono.Runtime");
 
