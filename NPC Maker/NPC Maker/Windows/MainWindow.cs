@@ -32,8 +32,8 @@ namespace NPC_Maker
         string LastSearch = "";
         int ScrollToMsg = 0;
         readonly Timer messageSearchTimer = new Timer();
-
         private Timer autoBackupTimer = new Timer();
+        private Image lastPreviewImage; 
 
         public MainWindow(string FilePath = "")
         {
@@ -2428,7 +2428,11 @@ namespace NPC_Maker
             List<byte> Data = Entry.ConvertTextData(SelectedEntry.NPCName, false);
 
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
+            {
+                Bitmap b = new Bitmap(lastPreviewImage);
+                MsgPreview.Image = b.SetAlpha(170);
                 return;
+            }
 
             if (Data.Count > 1280)
             {
@@ -2447,8 +2451,8 @@ namespace NPC_Maker
             {
                 for (int i = 0; i < mp.MessageCount; i++)
                 {
-                    Bitmap bmpTemp = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
-                    grfx.DrawImage(bmpTemp, 0, bmpTemp.Height * i);
+                    lastPreviewImage = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
+                    grfx.DrawImage(lastPreviewImage, 0, lastPreviewImage.Height * i);
                 }
             }
 

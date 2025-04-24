@@ -840,7 +840,13 @@ namespace NPC_Maker
                             {
                                 try
                                 {
-                                    short soundValue = Convert.ToInt16(code[1]);
+                                    short soundValue = 0;
+
+                                    if (Scripts.ScriptHelpers.IsHex(code[1]))
+                                        soundValue = Convert.ToInt16(code[1].Substring(2), 16);
+                                    else
+                                        soundValue = Convert.ToInt16(code[1]);
+
                                     output.AddRangeBigEndian(soundValue);
                                 }
                                 catch (Exception)
