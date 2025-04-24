@@ -11,7 +11,7 @@ namespace NPC_Maker
     {
         public static ContextMenuStrip ContextMenuStrip;
 
-        private static FastColoredTextBox LastClickedTextbox;
+        private static FCTB_Mono LastClickedTextbox;
 
         private static ToolStripMenuItem functionsToolStripMenuItem;
         private static ToolStripMenuItem keywordsToolStripMenuItem;
@@ -221,7 +221,7 @@ namespace NPC_Maker
             MenuItem.DropDownItems.AddRange(Items);
         }
 
-        public static void SetTextBox(FastColoredTextBox Box)
+        public static void SetTextBox(FCTB_Mono Box)
         {
             LastClickedTextbox = Box;
         }

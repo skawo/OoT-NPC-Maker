@@ -48,6 +48,16 @@ namespace NPC_Maker
             }
             return sb.ToString();
         }
+
+        public static bool DoubleWaitForExit(this System.Diagnostics.Process process)
+        {
+            var result = process.WaitForExit(500);
+            if (result)
+            {
+                process.WaitForExit();
+            }
+            return result;
+        }
     }
 }
 public class JsonTextWriterEx : JsonTextWriter

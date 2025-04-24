@@ -187,7 +187,7 @@ namespace NPC_Maker
 
                 Cursor.Current = Cursors.Default;
 
-                ScriptContextMenu.SetTextBox(sender as FastColoredTextBox);
+                ScriptContextMenu.SetTextBox(sender as FCTB_Mono);
                 ScriptContextMenu.ContextMenuStrip.Show(sender as Control, e.Location);
             }
         }

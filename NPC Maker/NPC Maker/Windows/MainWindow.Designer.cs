@@ -243,7 +243,7 @@
             this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
-            this.MsgText = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.MsgText = new FCTB_Mono();
             this.Btn_MsgRename = new System.Windows.Forms.Button();
             this.Lbl_Text = new System.Windows.Forms.Label();
             this.Combo_MsgPos = new System.Windows.Forms.ComboBox();
@@ -4520,7 +4520,7 @@
         private System.Windows.Forms.ComboBox Combo_MsgPos;
         private System.Windows.Forms.Label Lbl_MsgPos;
         private System.Windows.Forms.Button Btn_MsgRename;
-        private FastColoredTextBoxNS.FastColoredTextBox MsgText;
+        private FCTB_Mono MsgText;
         private System.Windows.Forms.NumericUpDown NumUpDown_ScriptsFVar;
         private System.Windows.Forms.NumericUpDown NumUpDown_ScriptsVar;
         private System.Windows.Forms.Label Lbl_ScriptsFVars;
