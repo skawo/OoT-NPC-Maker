@@ -55,7 +55,7 @@ namespace NPC_Maker
             compileTimer.Interval = 100;
             compileTimer.Tick += CompileTimer_Tick;
 
-            autoBackupTimer.Interval = 5000;
+            autoBackupTimer.Interval = 2000;
             autoBackupTimer.Tick += AutoBackupTimer_Tick;
 
             Combo_CodeEditor.SelectedIndexChanged -= Combo_CodeEditor_SelectedIndexChanged;
