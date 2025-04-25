@@ -28,6 +28,7 @@ namespace NPC_Maker
         private static ToolStripMenuItem delay;
         private static ToolStripMenuItem buttonPrompt;
         private static ToolStripMenuItem pixelsright;
+        private static ToolStripMenuItem buttons;
 
         public static void MakeContextMenu()
         {
@@ -50,6 +51,7 @@ namespace NPC_Maker
             threechoices = new ToolStripMenuItem();
             delay = new ToolStripMenuItem();
             buttonPrompt = new ToolStripMenuItem();
+            buttons = new ToolStripMenuItem();
 
             MenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     colors,
@@ -69,10 +71,35 @@ namespace NPC_Maker
                                                                     drawchar,
                                                                     twochoices,
                                                                     threechoices,
+                                                                    buttons,
                                                                 });
             MenuStrip.Name = "ContextMenuStrip";
             MenuStrip.Size = new System.Drawing.Size(157, 268);
             MenuStrip.Text = "Items";
+
+            //
+            // buttons
+            //
+
+            buttons.Size = new System.Drawing.Size(156, 22);
+            buttons.Text = "Buttons";
+
+
+            buttons.DropDownItems.AddRange(new ToolStripMenuItem[]
+                                            {
+                                                new ToolStripMenuItem() { Text = "A Button", Tag = $"<{Lists.MsgControlCode.A_BUTTON}>" },
+                                                new ToolStripMenuItem() { Text = "B Button", Tag = $"<{Lists.MsgControlCode.B_BUTTON}>" },
+                                                new ToolStripMenuItem() { Text = "Z Button", Tag = $"<{Lists.MsgControlCode.Z_BUTTON}>" },
+                                                new ToolStripMenuItem() { Text = "C Up Button", Tag = $"<{Lists.MsgControlCode.C_UP}>" },
+                                                new ToolStripMenuItem() { Text = "C Left Button", Tag = $"<{Lists.MsgControlCode.C_LEFT}>" },
+                                                new ToolStripMenuItem() { Text = "C Right Button", Tag = $"<{Lists.MsgControlCode.C_RIGHT}>" },
+                                                new ToolStripMenuItem() { Text = "C Down Button", Tag = $"<{Lists.MsgControlCode.C_DOWN}>" },
+                                                new ToolStripMenuItem() { Text = "D-Pad", Tag = $"<{Lists.MsgControlCode.D_PAD}>" },
+                                                new ToolStripMenuItem() { Text = "Control Stick", Tag = $"<{Lists.MsgControlCode.CONTROL_STICK}>" },
+                                            }
+                                         );
+
+
 
             // 
             // colors
