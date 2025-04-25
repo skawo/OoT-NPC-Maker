@@ -35,8 +35,8 @@ namespace NPC_Maker
                         {
                             if (isWsl)
                                 RunBash($"cat {tempFileName} | clip.exe ");
-                            else
-                                RunBash($"cat {tempFileName} | xsel -i --clipboard ");
+
+                            RunBash($"cat {tempFileName} | xsel -i --clipboard ");
                         }
                         finally
                         {

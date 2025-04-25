@@ -33,6 +33,7 @@ namespace NPC_Maker
         int ScrollToMsg = 0;
         readonly Timer messageSearchTimer = new Timer();
         private Timer autoBackupTimer = new Timer();
+        string LastBackup = "";
         private Image lastPreviewImage; 
 
         public MainWindow(string FilePath = "")
@@ -54,7 +55,7 @@ namespace NPC_Maker
             compileTimer.Interval = 100;
             compileTimer.Tick += CompileTimer_Tick;
 
-            autoBackupTimer.Interval = 1000;
+            autoBackupTimer.Interval = 5000;
             autoBackupTimer.Tick += AutoBackupTimer_Tick;
 
             Combo_CodeEditor.SelectedIndexChanged -= Combo_CodeEditor_SelectedIndexChanged;
@@ -118,7 +119,15 @@ namespace NPC_Maker
         private void AutoBackupTimer_Tick(object sender, EventArgs e)
         {
             autoBackupTimer.Stop();
-            FileOps.SaveNPCJSON("backup", EditedFile);
+
+            string CurrentBackup = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+
+            if (CurrentBackup != LastBackup)
+            {
+                FileOps.SaveNPCJSON("backup", EditedFile);
+                LastBackup = CurrentBackup;
+            }
+                
             autoBackupTimer.Start();
         }
 
