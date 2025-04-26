@@ -812,7 +812,7 @@ namespace NPC_Maker
                             if (code.Length == 2)
                                 output.Add(Convert.ToByte(code[1]));
                             else
-                                output.Add(Convert.ToByte(3));
+                                output.Add(Convert.ToByte(1));
 
                             // Number of DC characters
                             UInt32 DCCharsCount = 3;
