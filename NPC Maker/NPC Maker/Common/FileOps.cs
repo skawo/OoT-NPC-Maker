@@ -506,6 +506,7 @@ namespace NPC_Maker
                 });
 
                 SaveBinaryFile(Path, Data, progress, BaseDefines, false, false, CLIMode);
+                CCode.CleanupCompileArtifacts();
                 Program.CompileInProgress = false;
             });
         }

@@ -39,6 +39,7 @@ namespace NPC_Maker
                 return false;
         }
 
+
         public static void DeleteFileStartingWith(string Path, string Prefix)
         {
             string[] f = System.IO.Directory.GetFiles(Path);

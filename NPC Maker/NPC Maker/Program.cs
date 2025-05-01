@@ -142,6 +142,7 @@ namespace NPC_Maker
                             Console.WriteLine("Writing output ZOBJ...");
                             string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(InFile);
                             FileOps.SaveBinaryFile(args[1], InFile, null, baseDefines, cacheStatus[0], cacheStatus[1], true);
+                            CCode.CleanupCompileArtifacts();
                         }
                     }
                     catch (Exception ex)

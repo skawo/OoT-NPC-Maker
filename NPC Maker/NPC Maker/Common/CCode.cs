@@ -106,6 +106,12 @@ namespace NPC_Maker
             { }
         }
 
+        public static void CleanupCompileArtifacts()
+        {
+            Helpers.DeleteFileStartingWith(System.IO.Path.Combine(Program.ExecPath, "gcc", "bin"), "EmbeddedOverlayNPCCOMPILE");
+            Helpers.DeleteFileStartingWith(System.IO.Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlayNPCCOMPILE");
+        }
+
         public static List<FunctionEntry> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
         {
             string Out;
