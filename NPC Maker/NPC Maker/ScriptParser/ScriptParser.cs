@@ -210,7 +210,12 @@ namespace NPC_Maker.Scripts
             if (index == -1)
                 return Define;
             else
-                return FullyResolveDefine(Defines, new string[] { Define[0], Define[1], Defines[index][2] });
+            {
+                if (Define[1] == Defines[index][2])
+                    return Define;
+                else
+                    return FullyResolveDefine(Defines, new string[] { Define[0], Define[1], Defines[index][2] });
+            }
         }
 
         private List<string> ReplaceDefines(List<string> DefineLines, List<string> Lines, ref BScript outScript)
