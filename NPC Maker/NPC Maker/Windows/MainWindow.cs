@@ -2535,9 +2535,15 @@ namespace NPC_Maker
                 return;
             }
 
-            SelectedEntry.Messages.Add(new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
-            int Index = MessagesGrid.Rows.Add(new object[] { Title });
-            MessagesGrid.Rows[Index].Selected = true;
+            int RowToInsert = MessagesGrid.Rows.Count;
+
+            if (MessagesGrid.SelectedRows.Count != 0)
+                RowToInsert = MessagesGrid.SelectedRows[0].Index + 1;
+
+
+            SelectedEntry.Messages.Insert(RowToInsert, new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
+            MessagesGrid.Rows.Insert(RowToInsert, new object[] { Title });
+            MessagesGrid.Rows[RowToInsert].Selected = true;
         }
 
         private void Btn_DeleteMsg_Click(object sender, EventArgs e)
@@ -2556,7 +2562,9 @@ namespace NPC_Maker
 
 
             string Title = (MessagesGrid.SelectedRows[0].Cells[0].Value as string);
-            InputBox.ShowInputDialog("New message title?", ref Title);
+
+            if (InputBox.ShowInputDialog("New message title?", ref Title) != DialogResult.OK)
+                return;
 
             if (!SanitizeName(ref Title))
                 return;
