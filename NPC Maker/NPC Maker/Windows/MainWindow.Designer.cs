@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.Panel_Editor = new System.Windows.Forms.Panel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.SplitPanel = new System.Windows.Forms.SplitContainer();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
             this.Label_NpcFilter = new System.Windows.Forms.Label();
             this.NpcsFilter = new System.Windows.Forms.TextBox();
@@ -339,10 +339,10 @@
             this.btn_FindMsg = new System.Windows.Forms.Button();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
             this.Panel_Editor.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
+            this.SplitPanel.Panel1.SuspendLayout();
+            this.SplitPanel.Panel2.SuspendLayout();
+            this.SplitPanel.SuspendLayout();
             this.Panel_NPCList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_NPCData.SuspendLayout();
@@ -426,7 +426,7 @@
             // 
             this.Panel_Editor.AutoScroll = true;
             this.Panel_Editor.AutoScrollMinSize = new System.Drawing.Size(936, 647);
-            this.Panel_Editor.Controls.Add(this.splitContainer1);
+            this.Panel_Editor.Controls.Add(this.SplitPanel);
             this.Panel_Editor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel_Editor.Enabled = false;
             this.Panel_Editor.Location = new System.Drawing.Point(0, 24);
@@ -434,23 +434,23 @@
             this.Panel_Editor.Size = new System.Drawing.Size(1095, 659);
             this.Panel_Editor.TabIndex = 5;
             // 
-            // splitContainer1
+            // SplitPanel
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
+            this.SplitPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SplitPanel.Location = new System.Drawing.Point(0, 0);
+            this.SplitPanel.Name = "SplitPanel";
             // 
-            // splitContainer1.Panel1
+            // SplitPanel.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.Panel_NPCList);
-            this.splitContainer1.Panel1.SizeChanged += new System.EventHandler(this.splitContainer1_Panel1_SizeChanged);
+            this.SplitPanel.Panel1.Controls.Add(this.Panel_NPCList);
+            this.SplitPanel.Panel1.SizeChanged += new System.EventHandler(this.splitContainer1_Panel1_SizeChanged);
             // 
-            // splitContainer1.Panel2
+            // SplitPanel.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.Panel_NPCData);
-            this.splitContainer1.Size = new System.Drawing.Size(1095, 659);
-            this.splitContainer1.SplitterDistance = 301;
-            this.splitContainer1.TabIndex = 9;
+            this.SplitPanel.Panel2.Controls.Add(this.Panel_NPCData);
+            this.SplitPanel.Size = new System.Drawing.Size(1095, 659);
+            this.SplitPanel.SplitterDistance = 301;
+            this.SplitPanel.TabIndex = 9;
             // 
             // Panel_NPCList
             // 
@@ -4233,10 +4233,10 @@
             this.Text = "OoT NPC Maker";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Panel_Editor.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.SplitPanel.Panel1.ResumeLayout(false);
+            this.SplitPanel.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).EndInit();
+            this.SplitPanel.ResumeLayout(false);
             this.Panel_NPCList.ResumeLayout(false);
             this.Panel_NPCList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
@@ -4639,7 +4639,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private Windows.ProgressWithLabel progressL;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer SplitPanel;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Name;
     }
