@@ -95,6 +95,21 @@ namespace NPC_Maker
 
             if (FilePath != "")
                 OpenFile(FilePath);
+
+            splitContainer1_Panel1_SizeChanged(null, null);
+        }
+
+        private void splitContainer1_Panel1_SizeChanged(object sender, EventArgs e)
+        {
+            int btnX = (splitContainer1.Panel1.Width - 12) / 3;
+
+            Button_Add.Width = btnX;
+            Button_Duplicate.Width = btnX;
+            Button_Delete.Width = btnX;
+
+            Button_Add.Location = new Point(2, Button_Add.Location.Y);
+            Button_Duplicate.Location = new Point(splitContainer1.Panel1.Width / 2 - btnX / 2, Button_Duplicate.Location.Y);
+            Button_Delete.Location = new Point(splitContainer1.Panel1.Width - btnX, Button_Delete.Location.Y);
         }
 
         private void OpenFile(string FilePath)
@@ -3126,8 +3141,7 @@ namespace NPC_Maker
         }
 
 
+
         #endregion
-
-
     }
 }

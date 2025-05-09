@@ -31,6 +31,16 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.Panel_Editor = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.Panel_NPCList = new System.Windows.Forms.Panel();
+            this.Label_NpcFilter = new System.Windows.Forms.Label();
+            this.NpcsFilter = new System.Windows.Forms.TextBox();
+            this.Button_Duplicate = new System.Windows.Forms.Button();
+            this.Button_Delete = new System.Windows.Forms.Button();
+            this.Button_Add = new System.Windows.Forms.Button();
+            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
@@ -243,7 +253,7 @@
             this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
-            this.MsgText = new FCTB_Mono();
+            this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
             this.Btn_MsgRename = new System.Windows.Forms.Button();
             this.Lbl_Text = new System.Windows.Forms.Label();
             this.Combo_MsgPos = new System.Windows.Forms.ComboBox();
@@ -285,15 +295,6 @@
             this.LblOnInit = new System.Windows.Forms.Label();
             this.LblFuncToRun = new System.Windows.Forms.Label();
             this.Button_OpenCCode = new System.Windows.Forms.Button();
-            this.Panel_NPCList = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.NpcsFilter = new System.Windows.Forms.TextBox();
-            this.Button_Duplicate = new System.Windows.Forms.Button();
-            this.Button_Delete = new System.Windows.Forms.Button();
-            this.Button_Add = new System.Windows.Forms.Button();
-            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColorDialog = new System.Windows.Forms.ColorDialog();
             this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -338,6 +339,12 @@
             this.btn_FindMsg = new System.Windows.Forms.Button();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
             this.Panel_Editor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.Panel_NPCList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.Tab1_Data.SuspendLayout();
@@ -411,8 +418,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.Tab5_Scripts.SuspendLayout();
             this.Tab6_EmbeddedOverlay.SuspendLayout();
-            this.Panel_NPCList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -421,25 +426,148 @@
             // 
             this.Panel_Editor.AutoScroll = true;
             this.Panel_Editor.AutoScrollMinSize = new System.Drawing.Size(936, 647);
-            this.Panel_Editor.Controls.Add(this.Panel_NPCData);
-            this.Panel_Editor.Controls.Add(this.Panel_NPCList);
+            this.Panel_Editor.Controls.Add(this.splitContainer1);
             this.Panel_Editor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel_Editor.Enabled = false;
             this.Panel_Editor.Location = new System.Drawing.Point(0, 24);
             this.Panel_Editor.Name = "Panel_Editor";
-            this.Panel_Editor.Size = new System.Drawing.Size(1021, 659);
+            this.Panel_Editor.Size = new System.Drawing.Size(1095, 659);
             this.Panel_Editor.TabIndex = 5;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.Panel_NPCList);
+            this.splitContainer1.Panel1.SizeChanged += new System.EventHandler(this.splitContainer1_Panel1_SizeChanged);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.Panel_NPCData);
+            this.splitContainer1.Size = new System.Drawing.Size(1095, 659);
+            this.splitContainer1.SplitterDistance = 301;
+            this.splitContainer1.TabIndex = 9;
+            // 
+            // Panel_NPCList
+            // 
+            this.Panel_NPCList.Controls.Add(this.Label_NpcFilter);
+            this.Panel_NPCList.Controls.Add(this.NpcsFilter);
+            this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
+            this.Panel_NPCList.Controls.Add(this.Button_Delete);
+            this.Panel_NPCList.Controls.Add(this.Button_Add);
+            this.Panel_NPCList.Controls.Add(this.DataGrid_NPCs);
+            this.Panel_NPCList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Panel_NPCList.Location = new System.Drawing.Point(0, 0);
+            this.Panel_NPCList.Name = "Panel_NPCList";
+            this.Panel_NPCList.Size = new System.Drawing.Size(301, 659);
+            this.Panel_NPCList.TabIndex = 5;
+            // 
+            // Label_NpcFilter
+            // 
+            this.Label_NpcFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Label_NpcFilter.AutoSize = true;
+            this.Label_NpcFilter.Location = new System.Drawing.Point(4, 601);
+            this.Label_NpcFilter.Name = "Label_NpcFilter";
+            this.Label_NpcFilter.Size = new System.Drawing.Size(32, 13);
+            this.Label_NpcFilter.TabIndex = 79;
+            this.Label_NpcFilter.Text = "Filter:";
+            // 
+            // NpcsFilter
+            // 
+            this.NpcsFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.NpcsFilter.Location = new System.Drawing.Point(42, 598);
+            this.NpcsFilter.Name = "NpcsFilter";
+            this.NpcsFilter.Size = new System.Drawing.Size(256, 20);
+            this.NpcsFilter.TabIndex = 2;
+            this.NpcsFilter.TextChanged += new System.EventHandler(this.NpcsFilter_TextChanged);
+            // 
+            // Button_Duplicate
+            // 
+            this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Duplicate.Location = new System.Drawing.Point(114, 624);
+            this.Button_Duplicate.Name = "Button_Duplicate";
+            this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
+            this.Button_Duplicate.TabIndex = 4;
+            this.Button_Duplicate.Text = "Duplicate";
+            this.Button_Duplicate.UseVisualStyleBackColor = true;
+            this.Button_Duplicate.Click += new System.EventHandler(this.Button_Duplicate_Click);
+            // 
+            // Button_Delete
+            // 
+            this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Delete.Location = new System.Drawing.Point(193, 624);
+            this.Button_Delete.Name = "Button_Delete";
+            this.Button_Delete.Size = new System.Drawing.Size(73, 31);
+            this.Button_Delete.TabIndex = 5;
+            this.Button_Delete.Text = "Delete";
+            this.Button_Delete.UseVisualStyleBackColor = true;
+            this.Button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
+            // 
+            // Button_Add
+            // 
+            this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Add.Location = new System.Drawing.Point(30, 624);
+            this.Button_Add.Name = "Button_Add";
+            this.Button_Add.Size = new System.Drawing.Size(79, 31);
+            this.Button_Add.TabIndex = 3;
+            this.Button_Add.Text = "Add";
+            this.Button_Add.UseVisualStyleBackColor = true;
+            this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
+            // 
+            // DataGrid_NPCs
+            // 
+            this.DataGrid_NPCs.AllowUserToAddRows = false;
+            this.DataGrid_NPCs.AllowUserToDeleteRows = false;
+            this.DataGrid_NPCs.AllowUserToResizeColumns = false;
+            this.DataGrid_NPCs.AllowUserToResizeRows = false;
+            this.DataGrid_NPCs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGrid_NPCs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGrid_NPCs.BackgroundColor = System.Drawing.Color.White;
+            this.DataGrid_NPCs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGrid_NPCs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col_ID,
+            this.Col_Name});
+            this.DataGrid_NPCs.Location = new System.Drawing.Point(3, 0);
+            this.DataGrid_NPCs.MultiSelect = false;
+            this.DataGrid_NPCs.Name = "DataGrid_NPCs";
+            this.DataGrid_NPCs.ReadOnly = true;
+            this.DataGrid_NPCs.RowHeadersVisible = false;
+            this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DataGrid_NPCs.Size = new System.Drawing.Size(295, 592);
+            this.DataGrid_NPCs.TabIndex = 1;
+            this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
+            this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
+            // 
+            // Col_ID
+            // 
+            this.Col_ID.FillWeight = 20F;
+            this.Col_ID.HeaderText = "ID";
+            this.Col_ID.Name = "Col_ID";
+            this.Col_ID.ReadOnly = true;
+            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Name
+            // 
+            this.Col_Name.HeaderText = "NPC Name";
+            this.Col_Name.Name = "Col_Name";
+            this.Col_Name.ReadOnly = true;
+            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Panel_NPCData
             // 
-            this.Panel_NPCData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel_NPCData.Controls.Add(this.TabControl);
+            this.Panel_NPCData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel_NPCData.Enabled = false;
-            this.Panel_NPCData.Location = new System.Drawing.Point(245, 3);
+            this.Panel_NPCData.Location = new System.Drawing.Point(0, 0);
             this.Panel_NPCData.Name = "Panel_NPCData";
-            this.Panel_NPCData.Size = new System.Drawing.Size(776, 653);
+            this.Panel_NPCData.Size = new System.Drawing.Size(790, 659);
             this.Panel_NPCData.TabIndex = 6;
             // 
             // TabControl
@@ -454,7 +582,7 @@
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(776, 653);
+            this.TabControl.Size = new System.Drawing.Size(790, 659);
             this.TabControl.TabIndex = 41;
             // 
             // Tab1_Data
@@ -491,7 +619,7 @@
             this.Tab1_Data.Location = new System.Drawing.Point(4, 22);
             this.Tab1_Data.Name = "Tab1_Data";
             this.Tab1_Data.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab1_Data.Size = new System.Drawing.Size(768, 627);
+            this.Tab1_Data.Size = new System.Drawing.Size(782, 633);
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
             // 
@@ -524,7 +652,7 @@
             this.Lbl_LimbColors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Lbl_LimbColors.AutoSize = true;
-            this.Lbl_LimbColors.Location = new System.Drawing.Point(628, 175);
+            this.Lbl_LimbColors.Location = new System.Drawing.Point(642, 175);
             this.Lbl_LimbColors.Name = "Lbl_LimbColors";
             this.Lbl_LimbColors.Size = new System.Drawing.Size(63, 13);
             this.Lbl_LimbColors.TabIndex = 76;
@@ -613,11 +741,11 @@
             this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.StartLimbColumn,
             this.ColorColumn});
-            this.ColorsDataGridView.Location = new System.Drawing.Point(631, 194);
+            this.ColorsDataGridView.Location = new System.Drawing.Point(645, 194);
             this.ColorsDataGridView.MultiSelect = false;
             this.ColorsDataGridView.Name = "ColorsDataGridView";
             this.ColorsDataGridView.RowHeadersVisible = false;
-            this.ColorsDataGridView.Size = new System.Drawing.Size(129, 427);
+            this.ColorsDataGridView.Size = new System.Drawing.Size(129, 433);
             this.ColorsDataGridView.TabIndex = 75;
             this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
             this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
@@ -749,7 +877,7 @@
             this.DataGrid_Animations.MultiSelect = false;
             this.DataGrid_Animations.Name = "DataGrid_Animations";
             this.DataGrid_Animations.RowHeadersVisible = false;
-            this.DataGrid_Animations.Size = new System.Drawing.Size(614, 427);
+            this.DataGrid_Animations.Size = new System.Drawing.Size(628, 433);
             this.DataGrid_Animations.TabIndex = 9;
             this.DataGrid_Animations.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGrid_Animations_CellMouseDoubleClick);
             this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
@@ -945,7 +1073,7 @@
             this.Tab2_ExtraData.Location = new System.Drawing.Point(4, 22);
             this.Tab2_ExtraData.Name = "Tab2_ExtraData";
             this.Tab2_ExtraData.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab2_ExtraData.Size = new System.Drawing.Size(768, 627);
+            this.Tab2_ExtraData.Size = new System.Drawing.Size(782, 633);
             this.Tab2_ExtraData.TabIndex = 2;
             this.Tab2_ExtraData.Text = "Extra data";
             // 
@@ -1359,7 +1487,7 @@
             this.Tab3_BehaviorData.Location = new System.Drawing.Point(4, 22);
             this.Tab3_BehaviorData.Name = "Tab3_BehaviorData";
             this.Tab3_BehaviorData.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab3_BehaviorData.Size = new System.Drawing.Size(768, 627);
+            this.Tab3_BehaviorData.Size = new System.Drawing.Size(782, 633);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
             // 
@@ -3126,7 +3254,7 @@
             this.Tab4_Messages.Location = new System.Drawing.Point(4, 22);
             this.Tab4_Messages.Name = "Tab4_Messages";
             this.Tab4_Messages.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab4_Messages.Size = new System.Drawing.Size(768, 627);
+            this.Tab4_Messages.Size = new System.Drawing.Size(782, 633);
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
@@ -3384,7 +3512,7 @@
             this.Tab5_Scripts.Location = new System.Drawing.Point(4, 22);
             this.Tab5_Scripts.Name = "Tab5_Scripts";
             this.Tab5_Scripts.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab5_Scripts.Size = new System.Drawing.Size(768, 627);
+            this.Tab5_Scripts.Size = new System.Drawing.Size(782, 633);
             this.Tab5_Scripts.TabIndex = 7;
             this.Tab5_Scripts.Text = "Scripts";
             this.Tab5_Scripts.UseVisualStyleBackColor = true;
@@ -3395,7 +3523,7 @@
             this.TabControl_Scripts.Location = new System.Drawing.Point(3, 3);
             this.TabControl_Scripts.Name = "TabControl_Scripts";
             this.TabControl_Scripts.SelectedIndex = 0;
-            this.TabControl_Scripts.Size = new System.Drawing.Size(762, 621);
+            this.TabControl_Scripts.Size = new System.Drawing.Size(776, 627);
             this.TabControl_Scripts.TabIndex = 0;
             this.TabControl_Scripts.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TabControlScripts_MouseUp);
             // 
@@ -3432,7 +3560,7 @@
             this.Tab6_EmbeddedOverlay.Location = new System.Drawing.Point(4, 22);
             this.Tab6_EmbeddedOverlay.Name = "Tab6_EmbeddedOverlay";
             this.Tab6_EmbeddedOverlay.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab6_EmbeddedOverlay.Size = new System.Drawing.Size(768, 627);
+            this.Tab6_EmbeddedOverlay.Size = new System.Drawing.Size(782, 633);
             this.Tab6_EmbeddedOverlay.TabIndex = 6;
             this.Tab6_EmbeddedOverlay.Text = "C Code";
             this.Tab6_EmbeddedOverlay.UseVisualStyleBackColor = true;
@@ -3755,113 +3883,6 @@
             this.Button_OpenCCode.UseVisualStyleBackColor = true;
             this.Button_OpenCCode.Click += new System.EventHandler(this.Button_OpenCCode_Click);
             // 
-            // Panel_NPCList
-            // 
-            this.Panel_NPCList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.Panel_NPCList.Controls.Add(this.label4);
-            this.Panel_NPCList.Controls.Add(this.NpcsFilter);
-            this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
-            this.Panel_NPCList.Controls.Add(this.Button_Delete);
-            this.Panel_NPCList.Controls.Add(this.Button_Add);
-            this.Panel_NPCList.Controls.Add(this.DataGrid_NPCs);
-            this.Panel_NPCList.Location = new System.Drawing.Point(0, 3);
-            this.Panel_NPCList.Name = "Panel_NPCList";
-            this.Panel_NPCList.Size = new System.Drawing.Size(244, 653);
-            this.Panel_NPCList.TabIndex = 5;
-            // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(4, 595);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(32, 13);
-            this.label4.TabIndex = 79;
-            this.label4.Text = "Filter:";
-            // 
-            // NpcsFilter
-            // 
-            this.NpcsFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.NpcsFilter.Location = new System.Drawing.Point(42, 592);
-            this.NpcsFilter.Name = "NpcsFilter";
-            this.NpcsFilter.Size = new System.Drawing.Size(197, 20);
-            this.NpcsFilter.TabIndex = 7;
-            this.NpcsFilter.TextChanged += new System.EventHandler(this.NpcsFilter_TextChanged);
-            // 
-            // Button_Duplicate
-            // 
-            this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Duplicate.Location = new System.Drawing.Point(87, 618);
-            this.Button_Duplicate.Name = "Button_Duplicate";
-            this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
-            this.Button_Duplicate.TabIndex = 5;
-            this.Button_Duplicate.Text = "Duplicate";
-            this.Button_Duplicate.UseVisualStyleBackColor = true;
-            this.Button_Duplicate.Click += new System.EventHandler(this.Button_Duplicate_Click);
-            // 
-            // Button_Delete
-            // 
-            this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Delete.Location = new System.Drawing.Point(166, 618);
-            this.Button_Delete.Name = "Button_Delete";
-            this.Button_Delete.Size = new System.Drawing.Size(73, 31);
-            this.Button_Delete.TabIndex = 4;
-            this.Button_Delete.Text = "Delete";
-            this.Button_Delete.UseVisualStyleBackColor = true;
-            this.Button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
-            // 
-            // Button_Add
-            // 
-            this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Add.Location = new System.Drawing.Point(3, 618);
-            this.Button_Add.Name = "Button_Add";
-            this.Button_Add.Size = new System.Drawing.Size(79, 31);
-            this.Button_Add.TabIndex = 3;
-            this.Button_Add.Text = "Add";
-            this.Button_Add.UseVisualStyleBackColor = true;
-            this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
-            // 
-            // DataGrid_NPCs
-            // 
-            this.DataGrid_NPCs.AllowUserToAddRows = false;
-            this.DataGrid_NPCs.AllowUserToDeleteRows = false;
-            this.DataGrid_NPCs.AllowUserToResizeColumns = false;
-            this.DataGrid_NPCs.AllowUserToResizeRows = false;
-            this.DataGrid_NPCs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.DataGrid_NPCs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGrid_NPCs.BackgroundColor = System.Drawing.Color.White;
-            this.DataGrid_NPCs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid_NPCs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_ID,
-            this.Col_Name});
-            this.DataGrid_NPCs.Location = new System.Drawing.Point(3, 0);
-            this.DataGrid_NPCs.MultiSelect = false;
-            this.DataGrid_NPCs.Name = "DataGrid_NPCs";
-            this.DataGrid_NPCs.ReadOnly = true;
-            this.DataGrid_NPCs.RowHeadersVisible = false;
-            this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid_NPCs.Size = new System.Drawing.Size(236, 590);
-            this.DataGrid_NPCs.TabIndex = 2;
-            this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
-            this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
-            // 
-            // Col_ID
-            // 
-            this.Col_ID.FillWeight = 40F;
-            this.Col_ID.HeaderText = "NPC ID";
-            this.Col_ID.Name = "Col_ID";
-            this.Col_ID.ReadOnly = true;
-            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Name
-            // 
-            this.Col_Name.HeaderText = "NPC Name";
-            this.Col_Name.Name = "Col_Name";
-            this.Col_Name.ReadOnly = true;
-            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // ContextMenuStrip
             // 
             this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -4099,7 +4120,7 @@
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.MaximumSize = new System.Drawing.Size(2000, 0);
             this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(1021, 24);
+            this.MenuStrip.Size = new System.Drawing.Size(1095, 24);
             this.MenuStrip.TabIndex = 1;
             this.MenuStrip.Text = "menuStrip1";
             // 
@@ -4168,7 +4189,7 @@
             // txBox_Search
             // 
             this.txBox_Search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txBox_Search.Location = new System.Drawing.Point(810, 2);
+            this.txBox_Search.Location = new System.Drawing.Point(884, 2);
             this.txBox_Search.Name = "txBox_Search";
             this.txBox_Search.Size = new System.Drawing.Size(207, 20);
             this.txBox_Search.TabIndex = 6;
@@ -4177,7 +4198,7 @@
             // btn_FindMsg
             // 
             this.btn_FindMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_FindMsg.Location = new System.Drawing.Point(722, 2);
+            this.btn_FindMsg.Location = new System.Drawing.Point(796, 2);
             this.btn_FindMsg.Name = "btn_FindMsg";
             this.btn_FindMsg.Size = new System.Drawing.Size(82, 21);
             this.btn_FindMsg.TabIndex = 7;
@@ -4188,7 +4209,7 @@
             // progressL
             // 
             this.progressL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressL.Location = new System.Drawing.Point(340, 2);
+            this.progressL.Location = new System.Drawing.Point(414, 2);
             this.progressL.Name = "progressL";
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
@@ -4199,7 +4220,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1021, 683);
+            this.ClientSize = new System.Drawing.Size(1095, 683);
             this.Controls.Add(this.progressL);
             this.Controls.Add(this.btn_FindMsg);
             this.Controls.Add(this.txBox_Search);
@@ -4212,6 +4233,13 @@
             this.Text = "OoT NPC Maker";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Panel_Editor.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.Panel_NPCList.ResumeLayout(false);
+            this.Panel_NPCList.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.Panel_NPCData.ResumeLayout(false);
             this.TabControl.ResumeLayout(false);
             this.Tab1_Data.ResumeLayout(false);
@@ -4297,9 +4325,6 @@
             this.Tab5_Scripts.ResumeLayout(false);
             this.Tab6_EmbeddedOverlay.ResumeLayout(false);
             this.Tab6_EmbeddedOverlay.PerformLayout();
-            this.Panel_NPCList.ResumeLayout(false);
-            this.Panel_NPCList.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
@@ -4315,8 +4340,6 @@
         private System.Windows.Forms.Panel Panel_NPCList;
         private System.Windows.Forms.Button Button_Delete;
         private System.Windows.Forms.Button Button_Add;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Name;
         private System.Windows.Forms.ColorDialog ColorDialog;
         private System.Windows.Forms.Button Button_Duplicate;
         private new System.Windows.Forms.ContextMenuStrip ContextMenuStrip;
@@ -4597,7 +4620,7 @@
         private System.Windows.Forms.ToolStripMenuItem globalCHeaderToolStripMenuItem;
         private System.Windows.Forms.TextBox txBox_Search;
         private System.Windows.Forms.Button btn_FindMsg;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label Label_NpcFilter;
         private System.Windows.Forms.TextBox NpcsFilter;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox MessagesFilter;
@@ -4616,6 +4639,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private Windows.ProgressWithLabel progressL;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Name;
     }
 }
 
