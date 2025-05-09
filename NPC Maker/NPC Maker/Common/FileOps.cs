@@ -208,30 +208,30 @@ namespace NPC_Maker
                     {
                         s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
                         s.TextLines.ForEach(x => x.TrimEnd());
-                        s.Text = "";
+                        s.Text = null;
                     }
 
                     foreach (MessageEntry entry in e.Messages)
                     {
                         entry.MessageText = Regex.Replace(entry.MessageText, Environment.NewLine, "\n");
                         entry.MessageTextLines = Regex.Split(entry.MessageText, "\r?\n").ToList();
-                        entry.MessageText = "";
+                        entry.MessageText = null;
                     }
 
                     e.EmbeddedOverlayCode.CodeLines = Regex.Split(e.EmbeddedOverlayCode.Code, "\r?\n").ToList();
-                    e.EmbeddedOverlayCode.Code = "";
+                    e.EmbeddedOverlayCode.Code = null;
                 }
 
                 foreach (ScriptEntry s in outD.GlobalHeaders)
                 {
                     s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
                     s.TextLines.ForEach(x => x.TrimEnd());
-                    s.Text = "";
+                    s.Text = null;
                 }
 
                 outD.CHeaderLines = Regex.Split(outD.CHeader, "\r?\n").ToList();
                 outD.CHeaderLines.ForEach(x => x.TrimEnd());
-                outD.CHeader = "";
+                outD.CHeader = null;
 
                 File.WriteAllText(Path, JsonConvert.SerializeObject(outD, Formatting.Indented).Replace(Environment.NewLine, "\n"));
             }

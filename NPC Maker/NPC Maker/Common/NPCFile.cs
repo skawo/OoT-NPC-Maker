@@ -16,6 +16,7 @@ namespace NPC_Maker
         public List<ScriptEntry> GlobalHeaders { get; set; }
         public bool SpaceFromFont { get; set; }
 
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public string CHeader { get; set; }
 
         public List<string> CHeaderLines { get; set; }
@@ -507,6 +508,7 @@ namespace NPC_Maker
 
     public class ScriptEntry
     {
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public string Text { get; set; }
 
         public List<string> TextLines { get; set; }
@@ -623,6 +625,8 @@ namespace NPC_Maker
     public class MessageEntry
     {
         public string Name { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public string MessageText { get; set; }
 
         public List<string> MessageTextLines { get; set; }
@@ -959,6 +963,7 @@ namespace NPC_Maker
 
     public class CCodeEntry
     {
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public string Code { get; set; }
 
         public List<string> CodeLines { get; set; }
