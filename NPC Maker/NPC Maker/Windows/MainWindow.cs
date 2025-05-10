@@ -157,7 +157,12 @@ namespace NPC_Maker
                 btn_FindMsg.Enabled = true;
 
                 if (Program.CompileThereWereErrors)
+                {
                     progressL.SetProgress(0, $"Compilation failed.");
+
+                    if (Program.IsRunningUnderMono)
+                        MessageBox.Show(Program.CompileMonoErrors, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                }
                 else
                 {
                     TimeSpan s = DateTime.Now - Program.CompileStartTime;
@@ -2454,6 +2459,9 @@ namespace NPC_Maker
 
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
             {
+                if (lastPreviewImage == null)
+                    return;
+
                 Bitmap b = new Bitmap(lastPreviewImage);
                 MsgPreview.Image = b.SetAlpha(170);
                 return;

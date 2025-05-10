@@ -88,7 +88,7 @@ namespace NPC_Maker.Scripts
 
             // "Preprocessor"
             Lines = ReplaceTernary(Lines, ref outScript);
-            Lines = GetAndReplaceProcedures(Lines, ref outScript);
+            Lines = GetAndReplaceProcedures(Lines, defineLines, ref outScript);
             Lines = ReplaceDefines(defineLines, Lines, ref outScript);
             Lines = ReplaceSwitches(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
@@ -265,7 +265,7 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        private List<string> GetAndReplaceProcedures(List<string> Lines, ref BScript outScript)
+        private List<string> GetAndReplaceProcedures(List<string> Lines, List<string> DefineLines, ref BScript outScript)
         {
             try
             {

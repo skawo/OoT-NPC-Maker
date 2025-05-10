@@ -30,6 +30,7 @@ namespace NPC_Maker
 
         public static bool CompileInProgress = false;
         public static bool CompileThereWereErrors = false;
+        public static string CompileMonoErrors = "";
         public static DateTime CompileStartTime;
 
         public static WeCantSpell.Hunspell.WordList dictionary;

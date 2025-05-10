@@ -313,6 +313,9 @@ namespace NPC_Maker
 
             if (CLIMode)
                 Console.WriteLine(Msg);
+            // Occasionally crashes showing messagebox on another thread.
+            else if (Program.IsRunningUnderMono)
+                Program.CompileMonoErrors = Msg;
             else
                 MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
