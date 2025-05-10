@@ -23,7 +23,6 @@ namespace NPC_Maker.Scripts
             outScript = new BScript();
         }
 
-        // Why does this not workkkkk
         public void GetDefines(ref List<string> defines)
         {
             int id = 0x8000;
