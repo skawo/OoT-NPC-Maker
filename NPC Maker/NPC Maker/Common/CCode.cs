@@ -522,7 +522,7 @@ namespace NPC_Maker
                     case CCode.CodeEditorEnum.Notepad:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\notepad.exe";
-                            startInfo.Arguments = $"-n {CCode.geditCodeFilePath.AppendQuotation()}";
+                            startInfo.Arguments = $"{CCode.geditCodeFilePath.AppendQuotation()}";
                             break;
                         }
                     case CCode.CodeEditorEnum.NotepadPlusPlus:
