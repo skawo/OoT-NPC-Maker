@@ -362,8 +362,8 @@ namespace NPC_Maker
                         return null;
                     }
 
-                    File.Create(cachedHeaders);
-                    File.Create(cachedDicts);
+                    File.Create(cachedHeaders).Dispose();
+                    File.Create(cachedDicts).Dispose();
 
                 }
 
@@ -380,7 +380,7 @@ namespace NPC_Maker
                         return null;
                     }
 
-                    File.Create(cachedHeader);
+                    File.Create(cachedHeader).Dispose();
                 }
             }
 
@@ -492,7 +492,7 @@ namespace NPC_Maker
                             if (!File.Exists(extDataFile))
                             {
                                 Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntryID}_exdata_");
-                                File.Create(extDataFile);
+                                File.Create(extDataFile).Dispose();
                             }
                         }
 
@@ -1042,7 +1042,7 @@ namespace NPC_Maker
                             }
 
                             Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{EntriesDone}_exdata_");
-                            File.Create(cachedExtDataFile);
+                            File.Create(cachedExtDataFile).Dispose();
 
                         }
 

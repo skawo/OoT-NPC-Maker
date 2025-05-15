@@ -2378,8 +2378,12 @@ namespace NPC_Maker
 
             if (SelectedEntry.Messages.Count != 0)
             {
+                int index = MessagesGrid.SelectedRows[0].Index;
 
-                MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+                if (index >= MessagesGrid.RowCount)
+                    index = MessagesGrid.RowCount - 1;
+
+                MessageEntry Entry = SelectedEntry.Messages[index];
                 MsgText.Text = Entry.MessageText;
                 MsgText.ClearUndo();
                 Combo_MsgType.SelectedIndex = Entry.Type;
