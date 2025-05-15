@@ -2563,8 +2563,10 @@ namespace NPC_Maker
             if (MessagesGrid.SelectedRows.Count == 0)
                 return;
 
-            SelectedEntry.Messages.RemoveAt(MessagesGrid.SelectedRows[0].Index);
-            MessagesGrid.Rows.RemoveAt(MessagesGrid.SelectedRows[0].Index);
+            int index = MessagesGrid.SelectedRows[0].Index;
+
+            MessagesGrid.Rows.RemoveAt(index);
+            SelectedEntry.Messages.RemoveAt(index);
         }
 
         private void Btn_MsgRename_Click(object sender, EventArgs e)
