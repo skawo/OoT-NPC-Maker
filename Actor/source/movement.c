@@ -233,7 +233,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
 
     // If we've moved, and actor is set to do so, open doors.
     // This has to happen after the first frame of a scene, or the game crashes, which is why it's placed up here.
-    if (en->traversedDistance - en->lastTraversedDistance > 0 && en->settings.opensDoors)
+    if ((movementType == MOVEMENT_MISC || en->traversedDistance - en->lastTraversedDistance > 0) && en->settings.opensDoors)
         Movement_OpenDoors(en, playState);
 
     float speed = en->settings.movementSpeed;
