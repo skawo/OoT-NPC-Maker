@@ -525,6 +525,13 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                 {
                     // Set the animation based on the current action.
                     Setup_Animation(en, playState, curActionPtr->action - 1, true, false, false, false, false);
+                    
+                    if (en->smoothingConstant < 0)
+                    {
+                        en->actor.world.pos.x = curActionPtr->startPos.x;
+                        en->actor.world.pos.y = curActionPtr->startPos.y;
+                        en->actor.world.pos.z = curActionPtr->startPos.z;
+                    }
 
                     // Set start position...
                     en->movementStartPos = en->actor.world.pos;
