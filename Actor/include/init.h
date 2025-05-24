@@ -5,7 +5,7 @@
 
 void Setup_Defaults(NpcMaker* en, PlayState* playState);
 bool Setup_LoadSetup(NpcMaker* en, PlayState* playState);
-void Setup_Objects(NpcMaker* en, PlayState* playState);
+bool Setup_Objects(NpcMaker* en, PlayState* playState);
 void Setup_Misc(NpcMaker* en, PlayState* playState);
 void Setup_Path(NpcMaker* en, PlayState* playState, int path_id);
 void Setup_Model(NpcMaker* en, PlayState* playState);

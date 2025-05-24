@@ -51,30 +51,25 @@ static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
     #if LOGGING > 0
         is64Printf("___NPC MAKER SPAWNED___\n");
     #endif
+    
+    Setup_Defaults(en, playState);
 }
 
 // Setting up the object needs to happen in update for some unknown reason,
 // because otherwise it fails if the object is already loaded in by the scene.
 static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 {
-	// Sometimes game crashes if objects try to get loaded too early
-	if (!en->spawnTimer)
-	{
-		en->spawnTimer++;
-		return;
-	}
-	
-    Setup_Defaults(en, playState);
-		
     if (!Setup_LoadSetup(en, playState))
-    {
-        Actor_Kill(&en->actor);
         return;
-    }
+    
+    if (!Setup_Objects(en, playState))
+        return;
 
+    en->actor.shape.rot.z = 0;
+    en->actor.world.rot.z = 0;      
+   
     NpcMaker_RunCFunc(en, playState, en->CFuncs[0], NULL);
 
-    Setup_Objects(en, playState);
     Setup_Misc(en, playState);
     Setup_Model(en, playState);
 

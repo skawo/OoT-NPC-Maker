@@ -240,9 +240,6 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
 bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 {
     u16 settingsObjectId = en->actor.params;
-    en->npcId = en->actor.shape.rot.z;
-    en->actor.shape.rot.z = 0;
-    en->actor.world.rot.z = 0;
 
     #if LOGGING > 0
         is64Printf("_Loading NPC Entry %2d from object %4d.\n", en->npcId, settingsObjectId);
@@ -260,9 +257,14 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             is64Printf("_%2d: _Loading settings file into RAM...\n", en->npcId);
         #endif  
 
-        Rom_LoadObjectIfUnloaded(playState, settingsObjectId);
+        int bankIndex = Rom_LoadObjectIfUnloaded(playState, settingsObjectId);
+        
+        if (!Object_IsLoaded(&playState->objectCtx, bankIndex))
+            return false;
     }
-
+    
+    en->npcId = en->actor.shape.rot.z;  
+   
     u32 buf;
 
     // Load number of entries from ROM...
@@ -276,6 +278,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             is64Printf("_NPC Entry %2d not found in file\n", en->npcId);
         #endif
 
+        Actor_Kill(&en->actor);
         return false;
     }
 
@@ -290,6 +293,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             is64Printf("_NPC Entry %2d is null.\n", en->npcId);
         #endif
 
+        Actor_Kill(&en->actor);
         return false;
     }
 
@@ -403,13 +407,14 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     return true;
 }
 
-void Setup_Objects(NpcMaker* en, PlayState* playState)
+bool Setup_Objects(NpcMaker* en, PlayState* playState)
 {
     // Loading and setting the main object ID.
     if (en->settings.objectId > 0)
     {
         Rom_LoadObjectIfUnloaded(playState, en->settings.objectId);
-        Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
+        if (!Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
+            return false;
     }
 
     for (int i = 0; i < en->numAnims; i++)
@@ -423,6 +428,8 @@ void Setup_Objects(NpcMaker* en, PlayState* playState)
         ExSegDataEntry* ex = (ExSegDataEntry*)AADDR(en->exSegData, i);
         Rom_LoadObjectIfUnloaded(playState, ex->objectId);
     }
+    
+    return true;
 }
 
 void Setup_Misc(NpcMaker* en, PlayState* playState)

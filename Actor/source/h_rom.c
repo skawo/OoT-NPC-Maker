@@ -116,14 +116,16 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
 {
     s32 bankIndex = -1;
 
-    if (objId < 0)
+    if (objId <= 0)
         return bankIndex;
 
     #if LOGGING > 0
         is64Printf("_Loading object %4d...\n", objId);
     #endif   
+    
+    bankIndex = Object_GetIndex(&playState->objectCtx, objId);
 
-    if (!Object_IsLoaded(&playState->objectCtx, Object_GetIndex(&playState->objectCtx, objId)))
+    if (bankIndex < 0)
     {
         u32 numPersistent = playState->objectCtx.unk_09;
         bankIndex = Object_Spawn(&playState->objectCtx, objId);
@@ -141,6 +143,9 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
 
 bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileStart)
 {
+    if (object == 0)
+        return true;
+    
     int bankIndex = Object_GetIndex(&playState->objectCtx, object);
 
     if (Object_IsLoaded(&playState->objectCtx, bankIndex))
