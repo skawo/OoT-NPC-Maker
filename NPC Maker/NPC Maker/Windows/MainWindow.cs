@@ -2555,6 +2555,10 @@ namespace NPC_Maker
 
             SelectedEntry.Messages.Insert(RowToInsert, new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
             MessagesGrid.Rows.Insert(RowToInsert, new object[] { Title });
+            
+            if(RowToInsert > 0)
+                MessagesGrid.Rows[RowToInsert - 1].Selected = false;
+    
             MessagesGrid.Rows[RowToInsert].Selected = true;
         }
 
