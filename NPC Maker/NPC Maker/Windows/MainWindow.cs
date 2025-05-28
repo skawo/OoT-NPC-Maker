@@ -2639,6 +2639,9 @@ namespace NPC_Maker
 
         private void FindMsgBtn_Click(object sender, EventArgs e)
         {
+            if (EditedFile == null)
+                return;
+
             int MsgCount = 0;
             btn_FindMsg.Enabled = false;
 
