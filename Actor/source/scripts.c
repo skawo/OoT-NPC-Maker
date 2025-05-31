@@ -152,7 +152,7 @@ bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance*
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d]: SAVE\n", en->npcId, en->curScriptNum);
-    #endif		
+    #endif      
 
     Play_SaveSceneFlags(playState);
     Sram_WriteSave(&playState->sramCtx);
@@ -165,7 +165,7 @@ bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* 
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d], : GET\n", en->npcId, en->curScriptNum);
-    #endif		    
+    #endif          
 
     switch (in->subid)
     {
@@ -203,7 +203,7 @@ bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d], : CCALL\n", en->npcId, en->curScriptNum);
-    #endif		
+    #endif      
 
     float args[in->numArgs]; 
 
@@ -238,12 +238,12 @@ bool Scripts_InstructionQuake(NpcMaker* en, PlayState* playState, ScriptInstance
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d]: QUAKE\n", en->npcId, en->curScriptNum);
-    #endif		
+    #endif      
 
     float speed = Scripts_GetVarval(en, playState, in->varTypeSpeed, in->speed, false);
     float dur = Scripts_GetVarval(en, playState, in->varTypeDuration, in->duration, false);
     float type =  Scripts_GetVarval(en, playState, in->varTypeType, in->type, false);
-	
+    
     float x =  Scripts_GetVarval(en, playState, in->varTypeX, in->x, false);
     float y =  Scripts_GetVarval(en, playState, in->varTypeY, in->y, false);
     float zrot =  Scripts_GetVarval(en, playState, in->varTypeZRot, in->zrot, false);
@@ -264,7 +264,7 @@ bool Scripts_InstructionFadeIn(NpcMaker* en, PlayState* playState, ScriptInstanc
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d]: FADEIN\n", en->npcId, en->curScriptNum);
-    #endif		
+    #endif      
 
     if (playState->envCtx.screenFillColor[3] != 0)
     {
@@ -290,7 +290,7 @@ bool Scripts_InstructionFadeOut(NpcMaker* en, PlayState* playState, ScriptInstan
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d]: FADEOUT\n", en->npcId, en->curScriptNum);
-    #endif		
+    #endif      
 
     bool firstRun = Scripts_SetupTemp(script, in);
 
@@ -325,8 +325,8 @@ bool Scripts_InstructionNop(NpcMaker* en, PlayState* playState, ScriptInstance* 
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d]: NOP\n", en->npcId, en->curScriptNum);
-    #endif		
-	
+    #endif      
+    
     script->curInstrNum++; 
     return SCRIPT_CONTINUE;
 }
@@ -335,8 +335,8 @@ bool Scripts_InstructionCloseTextbox(NpcMaker* en, PlayState* playState, ScriptI
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d]: CLOSE TEXTBOX\n", en->npcId, en->curScriptNum);
-    #endif		
-	
+    #endif      
+    
     playState->msgCtx.msgMode = MSGMODE_TEXT_CLOSING; 
     script->curInstrNum++; 
     return SCRIPT_CONTINUE;
@@ -346,8 +346,8 @@ bool Scripts_InstructionForceTalk(NpcMaker* en, PlayState* playState, ScriptInst
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d]: FORCE TALK\n", en->npcId, en->curScriptNum);
-    #endif	
-	
+    #endif  
+    
     en->isTalking = true; 
     playState->talkWithPlayer(playState, &en->actor); 
     script->curInstrNum++; 
@@ -1116,21 +1116,21 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_NPC_ID:                            Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, UINT16); break;
         case SET_CUTSCENE_FRAME:                    
         {
-			void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
-			
-			extern void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
-				#if GAME_VERSION == 0
-					asm("Cutscene_Execute = 0x80068ECC");
-				#elif GAME_VERSION == 1
-					asm("Cutscene_Execute = 0x80056A94");
-				#endif			
-			
-			
-			playState->csCtx.state = 0;
-			Cutscene_SetSegment(playState, playState->csCtx.segment);
-			Cutscene_Execute(playState, &playState->csCtx);
-			Scripts_Set(en, playState, AADDR(playState, basic_set_offsets[in->subId]), in, UINT16); 
-			Cutscene_Execute(playState, &playState->csCtx);
+            void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
+            
+            extern void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
+                #if GAME_VERSION == 0
+                    asm("Cutscene_Execute = 0x80068ECC");
+                #elif GAME_VERSION == 1
+                    asm("Cutscene_Execute = 0x80056A94");
+                #endif          
+            
+            
+            playState->csCtx.state = 0;
+            Cutscene_SetSegment(playState, playState->csCtx.segment);
+            Cutscene_Execute(playState, &playState->csCtx);
+            Scripts_Set(en, playState, AADDR(playState, basic_set_offsets[in->subId]), in, UINT16); 
+            Cutscene_Execute(playState, &playState->csCtx);
 
             break;
         }
@@ -1555,7 +1555,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
                 case 1: AVAL(instr->address, u16, 0) = instr->value; break;
                 case 2: AVAL(instr->address, u32, 0) = instr->value; break;
             }
-			
+            
             break;   
         }
         case SET_LABELTOVAR:
@@ -1590,7 +1590,7 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
                                   Scripts_GetVarval(en, playState, instr->varType2, instr->value2, true), 
                                   instr->operator, 
                                   valt);
-								 	  
+                                      
             break;
         }
         default: break;
@@ -1903,7 +1903,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInsta
 
             *ENDPOS = pos;
             SPEED = Scripts_GetVarval(en, playState, in->speedType, in->speed, true);
-			LASTDIST = Movement_CalcDist(&ACTOR->world.pos, ENDPOS, in->ignoreY);
+            LASTDIST = Movement_CalcDist(&ACTOR->world.pos, ENDPOS, in->ignoreY);
         }
     }
 
@@ -1974,8 +1974,8 @@ bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInsta
     }
     else
     {
-		en->actor.speedXZ = 0;
-		
+        en->actor.speedXZ = 0;
+        
         // Handle switching the animation back to idle if this is the NPC Maker actor.
         if (isNpcMaker)
         {
@@ -2078,33 +2078,37 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
     {
         case PLAY_BGM: Audio_QueueSeqCmd(value); break;
         case PLAY_CUTSCENE: 
-		{
-			Cutscene_SetSegment(playState, Scene_GetCurrentCutscenePtr(playState)); 
-			
-			if (playState->csCtx.segment != NULL)
-				gSaveContext.cutsceneTrigger = 1;
-	
-			break;
-		}
+        {
+            Cutscene_SetSegment(playState, Scene_GetCurrentCutscenePtr(playState)); 
+            
+            if (playState->csCtx.segment != NULL)
+                gSaveContext.cutsceneTrigger = 1;
+    
+            break;
+        }
         case PLAY_CUTSCENE_ID: 
-		{
-			Cutscene_SetSegment(playState, Scene_GetCutscenePtr(playState, value)); 
-			
-			if (playState->csCtx.segment != NULL)
-				gSaveContext.cutsceneTrigger = 1;
-			
-			break;
-		}
+        {
+            Cutscene_SetSegment(playState, Scene_GetCutscenePtr(playState, value)); 
+            
+            if (playState->csCtx.segment != NULL)
+                gSaveContext.cutsceneTrigger = 1;
+            
+            break;
+        }
         case PLAY_SFX:
         {
             Audio_PlayActorSfx2(&en->actor, value);
             break;
         }
         case PLAY_SFX_GLOBAL: 
-		{
-			Audio_PlaySfxGeneral(value, &gSfxDefaultPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); 
+        {
+            en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
+            en->scriptSfxTempPos.y = gSfxDefaultPos.y;
+            en->scriptSfxTempPos.z = gSfxDefaultPos.z;
+            
+            Audio_PlaySfxGeneral(value, &en->scriptSfxTempPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); 
             break;
-		}
+        }
         case PLAY_SFX_PARAMS:
         case PLAY_SFX_GLOBAL_PARAMS:
         {
@@ -2123,12 +2127,12 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
             }
             else
             {
-                en->scriptSfxTempPos.x = gSfxDefaultPos.x;
+                en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
                 en->scriptSfxTempPos.y = gSfxDefaultPos.y;
-                en->scriptSfxTempPos.z = gSfxDefaultPos.z;		
+                en->scriptSfxTempPos.z = gSfxDefaultPos.z;      
             }
 
-           	Audio_PlaySfxGeneral(value, &en->scriptSfxTempPos, 4, &en->scriptPitchTemp, &en->scriptVolTemp, &en->scriptReverbTemp); 
+            Audio_PlaySfxGeneral(value, &en->scriptSfxTempPos, 4, &en->scriptPitchTemp, &en->scriptVolTemp, &en->scriptReverbTemp); 
             break; 
         }
     }
@@ -2320,7 +2324,7 @@ bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance*
                         //z_cutscene_link_action
                         func_8002DF54(playState, &en->actor, 0x7);
                     }
-					
+                    
                     // Save current state to restore later.
                     script->tempValues[1] = en->stopPlayer;
 
@@ -2472,7 +2476,7 @@ extern void Audio_StopBGMAndFanfares(u16 FadeoutDur);
         asm("Audio_StopBGMAndFanfares = 0x800F6AB0");
     #elif GAME_VERSION == 1
         asm("Audio_StopBGMAndFanfares = 0x800C77D0");
-    #endif	
+    #endif  
 
 bool Scripts_InstructionStop(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrStop* in)
 {
