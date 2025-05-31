@@ -2102,13 +2102,8 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
         }
         case PLAY_SFX_GLOBAL: 
 		{
-            en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
-            en->scriptSfxTempPos.y = gSfxDefaultPos.y;
-            en->scriptSfxTempPos.z = gSfxDefaultPos.z;	
-			
-			Audio_PlaySfxGeneral(value, &en->scriptSfxTempPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); 
+			Audio_PlaySfxGeneral(value, &gSfxDefaultPos, 4, &gSfxDefaultFreqAndVolScale, &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb); 
             break;
-			
 		}
         case PLAY_SFX_PARAMS:
         case PLAY_SFX_GLOBAL_PARAMS:
@@ -2128,7 +2123,7 @@ bool Scripts_InstructionPlay(NpcMaker* en, PlayState* playState, ScriptInstance*
             }
             else
             {
-                en->scriptSfxTempPos.x = gSfxDefaultPos.x - 1;
+                en->scriptSfxTempPos.x = gSfxDefaultPos.x;
                 en->scriptSfxTempPos.y = gSfxDefaultPos.y;
                 en->scriptSfxTempPos.z = gSfxDefaultPos.z;		
             }

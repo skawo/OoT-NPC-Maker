@@ -33,7 +33,7 @@ namespace NPC_Maker.Scripts
                                     ScriptVarVal Reverb = new ScriptVarVal() { Value = 0, Vartype = (byte)Lists.VarTypes.NORMAL };
 
                                     if (SplitLine.Length >= 4)
-                                        Volume = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0.0f, 2.0f);
+                                        Volume = ScriptHelpers.GetScriptVarVal(SplitLine, 3, 0.0f, 1.0f);
                                     if (SplitLine.Length >= 5)
                                         Pitch = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0.0f, 2.0f);
                                     if (SplitLine.Length == 6)
