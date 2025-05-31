@@ -312,6 +312,10 @@ namespace NPC_Maker.Scripts
                 else
                     return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
             }
+            catch (ParseException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
                 throw ParseException.UnrecognizedParameter(SplitLine);
