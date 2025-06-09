@@ -718,7 +718,15 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 
                 int z = dlist.translation.z - 200;
                 Matrix_Translate(dlist.translation.x, dlist.translation.y, z, MTXMODE_NEW);
-                Matrix_Scale(dlist.scale , dlist.scale, dlist.scale, MTXMODE_APPLY);
+                
+                // The emulator used for Zelda: OoT on Wii VC has the support for orthographic projection broken; all faces get drawn in the wrong order.
+                // This can be used to fix that; by setting the dlist's draw scale to a negative, the dlist gets drawn properly.
+                // (Note: the emulator used in the GCN Zelda Collector's Edition has this even more broken, and orthographic projection cannot be used there at all!)
+                if (dlist.scale < 0)
+                    Matrix_Scale(-dlist.scale, -dlist.scale, dlist.scale, MTXMODE_APPLY);
+                else
+                    Matrix_Scale(dlist.scale , dlist.scale, dlist.scale, MTXMODE_APPLY);
+                       
                 Matrix_RotateZYX(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, MTXMODE_APPLY);   
 
                 Draw_ExtDListInt(en, playState, &dlist, &gfx);
