@@ -82,9 +82,13 @@ namespace NPC_Maker.Scripts
         {
             return new ParseException("Not a valid transition type: ", String.Join(" ", _Line));
         }
-        public static ParseException AndOrCanOnlyBeInIfWhile(string _Line)
+        public static ParseException AndOrCanOnlyBeInIf(string _Line)
         {
-            return new ParseException("And and Or keywords may only be used for IF and WHILE instructions: ", _Line);
+            return new ParseException("And and Or keywords may only be used for IF instructions: ", _Line);
+        }
+        public static ParseException MixedAndOr(string _Line)
+        {
+            return new ParseException("And and Or statements should not be mixed on a single line: ", _Line);
         }
 
         public static ParseException ScriptTooBigError()

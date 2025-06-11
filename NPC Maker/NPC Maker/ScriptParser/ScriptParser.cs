@@ -377,7 +377,7 @@ namespace NPC_Maker.Scripts
                         Lines.InsertRange(ProcCallIndex, Instructions);
                     }
 
-                    
+
                     ProcCallIndex = Lines.FindIndex(ProcCallIndex, x => x.StartsWith(Lists.Keyword_CallProcedure, StringComparison.OrdinalIgnoreCase));
                 }
 
@@ -400,6 +400,7 @@ namespace NPC_Maker.Scripts
             try
             {
                 string OrKeyword = $" {Lists.Keyword_Or} ";
+                string AndKeyword = $" {Lists.Keyword_And} ";
 
                 int OrLineIndex = Lines.FindIndex(x => x.ToUpper().Contains(OrKeyword));
 
@@ -408,13 +409,16 @@ namespace NPC_Maker.Scripts
                     string Label = ScriptDataHelpers.GetRandomLabelString(this);
                     string Line = Lines[OrLineIndex].ToUpper();
 
-                    bool If = Line.StartsWith(Lists.Instructions.IF.ToString());
-                    bool While = Line.StartsWith(Lists.Instructions.WHILE.ToString());
+                    if (Line.Contains(AndKeyword))
+                        outScript.ParseErrors.Add(ParseException.MixedAndOr(Line));
 
-                    if (!If && !While)
+
+                    bool If = Line.StartsWith(Lists.Instructions.IF.ToString());
+
+                    if (!If)
                     {
                         Lines.RemoveAt(OrLineIndex);
-                        outScript.ParseErrors.Add(ParseException.AndOrCanOnlyBeInIfWhile(Line));
+                        outScript.ParseErrors.Add(ParseException.AndOrCanOnlyBeInIf(Line));
                     }
                     else
                     {
@@ -440,6 +444,7 @@ namespace NPC_Maker.Scripts
                     }
 
                     OrLineIndex = Lines.FindIndex(OrLineIndex, x => x.ToUpper().Contains(OrKeyword));
+
                 }
             }
             catch (ParseException pEx)
@@ -460,6 +465,7 @@ namespace NPC_Maker.Scripts
             try
             {
                 string AndKeyword = $" {Lists.Keyword_And} ";
+                string OrKeyword = $" {Lists.Keyword_Or} ";
 
                 int AndLineIndex = Lines.FindIndex(x => x.ToUpper().Contains(AndKeyword));
 
@@ -467,13 +473,15 @@ namespace NPC_Maker.Scripts
                 {
                     string Line = Lines[AndLineIndex].ToUpper();
 
-                    bool If = Line.StartsWith(Lists.Instructions.IF.ToString());
-                    bool While = Line.StartsWith(Lists.Instructions.WHILE.ToString());
+                    if (Line.Contains(OrKeyword))
+                        outScript.ParseErrors.Add(ParseException.MixedAndOr(Line));
 
-                    if (!If && !While)
+                    bool If = Line.StartsWith(Lists.Instructions.IF.ToString());
+
+                    if (!If)
                     {
                         Lines.RemoveAt(AndLineIndex);
-                        outScript.ParseErrors.Add(ParseException.AndOrCanOnlyBeInIfWhile(Line));
+                        outScript.ParseErrors.Add(ParseException.AndOrCanOnlyBeInIf(Line));
                     }
                     else
                     {
