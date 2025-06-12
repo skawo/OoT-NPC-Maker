@@ -159,6 +159,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ScriptParser\IfParser.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Classes.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Fade\Classes.cs" />

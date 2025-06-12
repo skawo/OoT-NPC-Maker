@@ -70,6 +70,16 @@ namespace NPC_Maker.Scripts
             // Split text into lines
             Lines = SplitLines(ScriptText);
 
+            /*
+            foreach (string l in Lines)
+            {
+                if (l.StartsWith("if"))
+                {
+                    var yy = NPC_Maker.ScriptParser.IfParser.ParseIf(l);
+                }
+            }
+            */
+
             // Remove all definitions
             List<string> defineLines = new List<string>();
             List<string> newLines = new List<string>();

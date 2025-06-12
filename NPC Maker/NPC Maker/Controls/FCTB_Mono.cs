@@ -21,6 +21,17 @@ namespace NPC_Maker
             this.DoubleBuffered = true;
         }
 
+        protected override void OnScroll(ScrollEventArgs se)
+        {
+            if (Program.IsRunningUnderMono)
+            {
+                if (se.Type != ScrollEventType.ThumbTrack && se.Type != ScrollEventType.ThumbPosition && se.Type != ScrollEventType.EndScroll)
+                    base.OnScroll(se, true);
+            }
+            else
+                base.OnScroll(se, true);
+        }
+    
         public override void Copy()
         {
             if (Program.IsRunningUnderMono)
