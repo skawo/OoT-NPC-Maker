@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -310,7 +311,24 @@ namespace NPC_Maker.Scripts
                     return (float)Dicts.SFXes[varString.Replace(Lists.Keyword_Sfx, "")];
                 }
                 else
+                {
+                    try
+                    {
+                        DataTable table = new DataTable();
+                        var res = table.Compute(SplitLine[Index], null).ToString();
+
+                        if (res != null)
+                            SplitLine[Index] = res;
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+                    
                     return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
+
+                }
             }
             catch (ParseException ex)
             {
@@ -328,6 +346,9 @@ namespace NPC_Maker.Scripts
             {
                 case (int)Lists.VarTypes.RANDOM:
                     {
+                        if (SplitLine[Index].Split(' ').Length != 1)
+                            throw ParseException.ParamConversionError(SplitLine);
+
                         string[] Values = SplitLine[Index].Split('.').Last().Split('>');
 
                         if (!Values[0].EndsWith("-") || Values.Length != 2)

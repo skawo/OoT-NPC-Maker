@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -231,7 +232,7 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                List<string[]> Defines = DefineLines.Select(x => x.Split(' ')).ToList();
+                List<string[]> Defines = DefineLines.Select(x => SplitWithQuotes(x)).ToList();
                 List<string[]> ParamCountWrong = Defines.FindAll(x => x.Length != 3).ToList();
 
                 foreach (string[] dd in ParamCountWrong)
@@ -250,13 +251,33 @@ namespace NPC_Maker.Scripts
 
                 string s = String.Join(Environment.NewLine, Lines);
 
-                foreach (string[] Def in Defines)
+                DataTable dt = new DataTable();
+
+                foreach (string[] def in Defines.Where(d => s.Contains(d[1])))
                 {
-                    if (s.Contains(Def[1]))
+                    string[] f = def[2].Trim().Split(' ');
+                    string result;
+
+                    if (f.Length == 1)
                     {
-                        string[] fin = FullyResolveDefine(Defines, Def);
-                        s = ScriptHelpers.ReplaceExpr(s, fin[1], fin[2]);
+                        result = FullyResolveDefine(Defines, def)[2];
                     }
+                    else
+                    {
+                        f = f.Select((term, i) =>
+                            FullyResolveDefine(Defines, new[] { def[0], def[1], term })[2]).ToArray();
+
+                        try
+                        {
+                            result = dt.Compute(string.Join(" ", f), null)?.ToString() ?? $"{string.Join(" ", f)}";
+                        }
+                        catch (Exception)
+                        {
+                            result = string.Join(" ", f);
+                        }
+                    }
+
+                    s = ScriptHelpers.ReplaceExpr(s, def[1], result);
                 }
 
                 Lines = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -268,7 +289,7 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Add(pEx);
                 return Lines;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 outScript.ParseErrors.Add(ParseException.DefineError());
                 return Lines;
@@ -850,6 +871,14 @@ namespace NPC_Maker.Scripts
             else
                 return outIndex;
         }
+        static string[] SplitWithQuotes(string input)
+        {
+            return input.Split('"')
+                        .Select((s, i) => i % 2 == 0 ? s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) : new[] { s })
+                        .SelectMany(s => s)
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
+                        .ToArray();
+        }
 
         private List<Instruction> GetInstructions(List<string> Lines)
         {
@@ -861,7 +890,7 @@ namespace NPC_Maker.Scripts
             {
                 try
                 {
-                    string[] SplitLine = Lines[i].Trim().Split(' ');
+                    string[] SplitLine = SplitWithQuotes(Lines[i].Trim());
 
                     if (SplitLine.Count() == 1 && SplitLine[0].EndsWith(":"))
                     {
