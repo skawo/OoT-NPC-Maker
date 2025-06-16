@@ -364,31 +364,28 @@ namespace NPC_Maker.Scripts
 
                         if (arg.StartsWith("\""))
                         {
-                            // Handle quoted arguments using Regex
-                            Match match = Regex.Match(RepLine.Substring(RepLine.IndexOf(arg)), "\"(?<arg>[^\"]*)\"", RegexOptions.Compiled);
+                            Match match = Regex.Match(RepLine.Substring(RepLine.IndexOf(arg)), "\"(?<arg>(?:\\\\\"|[^\"])*)\"", RegexOptions.Compiled);
                             if (match.Success)
                             {
-                                Args.Add(match.Groups["arg"].Value);
-                                argIndex += Regex.Split(match.Value, @"\s+").Length; // Advance index by the number of parts in the quoted argument
+                                // Unescape the quotes in the captured value
+                                string unescapedArg = match.Groups["arg"].Value.Replace("\\\"", "\"");
+                                Args.Add(unescapedArg);
+                                argIndex += Regex.Split(match.Value, @"\s+").Length; 
                             }
                             else
                             {
-                                throw ParseException.ArgsMalformedError(SplitRepLine); // Missing closing quote
+                                throw ParseException.ArgsMalformedError(SplitRepLine);
                             }
                         }
                         else
                         {
-                            // Handle non-quoted arguments
                             Args.Add(arg);
                             argIndex++;
                         }
                     }
 
                     if (argIndex != SplitRepLine.Length)
-                    {
-                        // Check if all arguments have been processed
                         throw ParseException.ArgsMalformedError(SplitRepLine);
-                    }
 
                     Lines.RemoveAt(ProcCallIndex);
 
