@@ -27,12 +27,12 @@ void Movement_Apply(Actor* act, Vec3f* movementVec)
 
 Vec3f Movement_CalcVector(Vec3f* start, Vec3f* end, float speed)
 {
-    Vec3f vector;
+    const float EPSILON = 1e-6f;
+    Vec3f vector = (Vec3f){0,0,0};
+    
     float dist = Math_Vec3f_DistXYZAndStoreDiff(start, end, &vector);
 
-    if (dist == 0)
-        vector = (Vec3f){0,0,0};
-    else if (speed < dist)
+    if (dist > EPSILON && speed < dist)
     {
         vector.x = (vector.x / dist) * speed;
         vector.y = (vector.y / dist) * speed;
