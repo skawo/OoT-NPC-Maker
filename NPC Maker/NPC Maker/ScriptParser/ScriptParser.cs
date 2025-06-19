@@ -71,16 +71,6 @@ namespace NPC_Maker.Scripts
             // Split text into lines
             Lines = SplitLines(ScriptText);
 
-            /*
-            foreach (string l in Lines)
-            {
-                if (l.StartsWith("if"))
-                {
-                    var yy = NPC_Maker.ScriptParser.IfParser.ParseIf(l);
-                }
-            }
-            */
-
             // Remove all definitions
             List<string> defineLines = new List<string>();
             List<string> newLines = new List<string>();
@@ -103,10 +93,15 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceDefines(defineLines, Lines, ref outScript);
             Lines = ReplaceSwitches(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
+            //Lines = RefactorComplexIfs(Lines, ref outScript);
             Lines = ReplaceOrs(Lines, ref outScript);
             Lines = ReplaceAnds(Lines, ref outScript);
             Lines = ReplaceScriptStartHeres(Lines, ref outScript);
             CheckLabels(Lines);
+
+            Lines = Lines
+                .Select(s => s.Replace("(", "").Replace(")", ""))
+                .ToList();
 
             List<Instruction> Instructions = GetInstructions(Lines);
 
@@ -177,7 +172,7 @@ namespace NPC_Maker.Scripts
 
             ScriptText = Regex.Replace(ScriptText, @"\\\s*\r?\n", "", RegexOptions.Compiled);                                                          // Override line carriage return if preceded by \
 
-            ScriptText = Regex.Replace(ScriptText, @"[,{}()\t]", " ", RegexOptions.Compiled);
+            ScriptText = Regex.Replace(ScriptText, @"[,{}\t]", " ", RegexOptions.Compiled);
             // ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                                                 // Change ;s into linebreaks
             ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty, RegexOptions.Compiled);                                        // Remove comment blocks
@@ -487,6 +482,116 @@ namespace NPC_Maker.Scripts
 
             return Lines;
         }
+
+        private List<string> GenerateScriptFromLogicNode(NPC_Maker.ScriptParser.LogicNode lNode, string TrueLabel, string FalseLabel, ref BScript outScript)
+        {
+            List<string> res = new List<string>();
+
+            switch (lNode.Type)
+            {
+                case NPC_Maker.ScriptParser.NodeType.OR:
+                    {
+                        string False1 = ScriptDataHelpers.GetRandomLabelString(this, 8);
+                        res.AddRange(GenerateScriptFromLogicNode(lNode.Children[0], TrueLabel, False1, ref outScript));
+                        res.Add($"{False1}:");
+                        res.AddRange(GenerateScriptFromLogicNode(lNode.Children[1], TrueLabel, FalseLabel, ref outScript));
+                        break;
+                    }
+                case NPC_Maker.ScriptParser.NodeType.AND:
+                    {
+                        string True1 = ScriptDataHelpers.GetRandomLabelString(this, 8);
+
+                        res.AddRange(GenerateScriptFromLogicNode(lNode.Children[0], True1, FalseLabel, ref outScript));
+                        res.Add($"{True1}:");
+                        res.AddRange(GenerateScriptFromLogicNode(lNode.Children[1], TrueLabel, FalseLabel, ref outScript));
+                        break;
+                    }
+                case NPC_Maker.ScriptParser.NodeType.STATEMENT:
+                    {
+                        res.Add($"{Lists.Instructions.IF} {lNode.Statement}");
+                        res.Add($"{Lists.Instructions.GOTO} {TrueLabel}");
+                        res.Add($"{Lists.Keyword_Else}");
+                        res.Add($"{Lists.Instructions.GOTO} {FalseLabel}");
+                        res.Add($"{Lists.Keyword_EndIf}");
+                        break;
+                    }
+            }
+
+            return res;
+        }
+
+        private int FindNextComplexAndOr(List<string> Lines)
+        {
+            string AndKeyword = $" {Lists.Keyword_And} ";
+            string OrKeyword = $" {Lists.Keyword_Or} ";
+
+            int lIndex = Lines.FindIndex(x =>
+                x.ToUpper().StartsWith(Lists.Instructions.IF.ToString()) &&
+                (x.ToUpper().Contains(AndKeyword) || x.ToUpper().Contains(OrKeyword)) &&
+                (x.Contains("(") && x.Contains(")"))
+            );
+
+            return lIndex;
+        }
+
+        private List<string> RefactorComplexIfs(List<string> Lines, ref BScript outScript)
+        {
+            try
+            {
+                int lIndex = FindNextComplexAndOr(Lines);
+
+                while (lIndex != -1)
+                {
+                    string Line = Lines[lIndex].ToUpper();
+                    
+                    int End = GetCorrespondingEndIf(Lines, lIndex);
+                    int Else = GetCorrespondingElse(Lines, lIndex, End);
+
+                    List<string> LinesTrue = Lines.Skip(lIndex + 1).Take(Else != -1 ? Else - lIndex - 1 : End - lIndex - 1).ToList();
+                    List<string> LinesFalse = Else == -1 ? null : Lines.Skip(Else + 1).Take(End - Else - 1).ToList();
+
+                    Lines.RemoveRange(lIndex, End - lIndex + 1);
+
+                    List<string> NewLines = new List<string>();
+
+                    string TrueLabel = ScriptDataHelpers.GetRandomLabelString(this, 8);
+
+                    NewLines.Add($"{TrueLabel}:");
+                    NewLines.AddRange(LinesTrue);
+
+                    string FalseLabel = ScriptDataHelpers.GetRandomLabelString(this, 8);
+
+                    if (LinesFalse != null)
+                    {
+                        NewLines.Add($"{FalseLabel}:");
+                        NewLines.AddRange(LinesFalse);
+                    }
+                    else
+                        NewLines.Add($"{FalseLabel}:");
+
+                    var lNode = NPC_Maker.ScriptParser.IfParser.ParseIf(Line);
+
+                    List<string> NodeLines = GenerateScriptFromLogicNode(lNode, TrueLabel, FalseLabel, ref outScript);
+
+                    NewLines.InsertRange(0, NodeLines);
+                    Lines.InsertRange(lIndex, NewLines);
+
+                    lIndex = FindNextComplexAndOr(Lines);
+                }
+            }
+            catch (ParseException pEx)
+            {
+                outScript.ParseErrors.Add(pEx);
+            }
+            catch (Exception)
+            {
+                outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing AND"));
+            }
+
+
+            return Lines;
+        }
+
 
         private List<string> ReplaceAnds(List<string> Lines, ref BScript outScript)
         {

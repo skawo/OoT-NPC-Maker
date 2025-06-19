@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NPC_Maker.ScriptParser
 {
@@ -42,8 +41,15 @@ namespace NPC_Maker.ScriptParser
 
             while (pos < expression.Length)
             {
-                if (MatchOperator(expression, ref pos, Lists.Keyword_Or))
+                if (PeekOperator(expression, pos, Lists.Keyword_Or))
                 {
+                    if (!IsWholeWord(expression, pos, Lists.Keyword_Or.Length))
+                    {
+                        pos++;
+                        continue;
+                    }
+
+                    pos += Lists.Keyword_Or.Length;
                     SkipWhitespace(expression, ref pos);
                     var right = ParseLogicalAnd(expression, ref pos);
                     var orNode = new LogicNode { Type = NodeType.OR };
@@ -53,7 +59,9 @@ namespace NPC_Maker.ScriptParser
                     SkipWhitespace(expression, ref pos);
                 }
                 else
+                {
                     break;
+                }
             }
 
             return left;
@@ -62,15 +70,22 @@ namespace NPC_Maker.ScriptParser
         private static LogicNode ParseLogicalAnd(string expression, ref int pos)
         {
             SkipWhitespace(expression, ref pos);
-            var left = ParsePrimary(expression, ref pos);
+            var left = ParseCondition(expression, ref pos);
             SkipWhitespace(expression, ref pos);
 
             while (pos < expression.Length)
             {
-                if (MatchOperator(expression, ref pos, Lists.Keyword_And))
+                if (PeekOperator(expression, pos, Lists.Keyword_And))
                 {
+                    if (!IsWholeWord(expression, pos, Lists.Keyword_And.Length))
+                    {
+                        pos++;
+                        continue;
+                    }
+
+                    pos += Lists.Keyword_And.Length;
                     SkipWhitespace(expression, ref pos);
-                    var right = ParsePrimary(expression, ref pos);
+                    var right = ParseCondition(expression, ref pos);
                     var andNode = new LogicNode { Type = NodeType.AND };
                     andNode.Children.Add(left);
                     andNode.Children.Add(right);
@@ -86,14 +101,14 @@ namespace NPC_Maker.ScriptParser
             return left;
         }
 
-        private static LogicNode ParsePrimary(string expression, ref int pos)
+        private static LogicNode ParseCondition(string expression, ref int pos)
         {
             SkipWhitespace(expression, ref pos);
 
             if (pos >= expression.Length)
                 throw new Scripts.ParseException("Unexpected end of expression:", expression);
 
-            if (expression[pos] == '(') // skip '('
+            if (expression[pos] == '(')
             {
                 pos++; // skip '('
                 var node = ParseLogicalOr(expression, ref pos);
@@ -105,41 +120,70 @@ namespace NPC_Maker.ScriptParser
                 pos++; // skip ')'
                 return node;
             }
-            else
-            {
-                // Parse a statement
-                var start = pos;
 
-                while (pos < expression.Length && !IsLogicalOperator(expression, pos) && expression[pos] != ')')
+            string[] logicalOps = { Lists.Keyword_And, Lists.Keyword_Or };
+            var start = pos;
+            int nestedParens = 0;
+
+            while (pos < expression.Length)
+            {
+                if (expression[pos] == '(')
                 {
+                    nestedParens++;
                     pos++;
+                    continue;
+                }
+                else if (expression[pos] == ')')
+                {
+                    if (nestedParens > 0)
+                    {
+                        nestedParens--;
+                        pos++;
+                        continue;
+                    }
+                    break;
                 }
 
-                if (pos <= start)
-                    throw new Scripts.ParseException("Expected statement:", expression);
+                bool isOperator = false;
+                foreach (var op in logicalOps)
+                {
+                    if (PeekOperator(expression, pos, op) && IsWholeWord(expression, pos, op.Length))
+                    {
+                        isOperator = true;
+                        break;
+                    }
+                }
 
-                var statement = expression.Substring(start, pos - start).Trim();
-                return new LogicNode { Type = NodeType.STATEMENT, Statement = statement };
+                if (isOperator && nestedParens == 0)
+                    break;
+
+                pos++;
             }
+
+            if (pos <= start)
+                throw new Scripts.ParseException("Expected condition:", expression);
+
+            var condition = expression.Substring(start, pos - start).Trim();
+            return new LogicNode { Type = NodeType.STATEMENT, Statement = condition };
         }
 
-        private static bool MatchOperator(string expression, ref int pos, string op)
+        private static bool PeekOperator(string expression, int pos, string op)
         {
             var remaining = expression.Length - pos;
-
-            if (remaining >= op.Length && expression.Substring(pos, op.Length).Equals(op, StringComparison.OrdinalIgnoreCase))
-            {
-                pos += op.Length;
-                return true;
-            }
-
-            return false;
+            return remaining >= op.Length &&
+                   expression.Substring(pos, op.Length).Equals(op, StringComparison.OrdinalIgnoreCase);
         }
 
-        private static bool IsLogicalOperator(string expression, int pos)
+        private static bool IsWholeWord(string expression, int pos, int length)
         {
-            if (pos >= expression.Length) return false;
-            return MatchOperator(expression, ref pos, Lists.Keyword_And) || MatchOperator(expression, ref pos, Lists.Keyword_Or);
+            // Check if the operator is preceded by whitespace or start of string
+            bool startOk = (pos == 0) || char.IsWhiteSpace(expression[pos - 1]);
+
+            // Check if the operator is followed by whitespace or end of string
+            bool endOk = (pos + length >= expression.Length) ||
+                         char.IsWhiteSpace(expression[pos + length]);
+
+            return startOk && endOk;
         }
 
         private static void SkipWhitespace(string expression, ref int pos)
@@ -148,5 +192,4 @@ namespace NPC_Maker.ScriptParser
                 pos++;
         }
     }
-
 }
