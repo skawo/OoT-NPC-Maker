@@ -128,6 +128,7 @@ namespace NPC_Maker
                         InFile = FileOps.ParseNPCJsonFile(args[0]);
                         Program.JsonPath = args[0];
                         Dicts.LoadDicts();
+                        Program.Settings.GameVersion = InFile.GameVersion;
                     }
                     catch (Exception ex)
                     {

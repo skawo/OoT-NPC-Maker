@@ -21,6 +21,8 @@ namespace NPC_Maker
 
         public List<string> CHeaderLines { get; set; }
 
+        public Lists.GameVersions GameVersion { get; set; }
+
         public NPCFile()
         {
             Version = 7;
@@ -29,6 +31,7 @@ namespace NPC_Maker
             SpaceFromFont = false;
             CHeader = "";
             CHeaderLines = new List<string>();
+            GameVersion = Program.Settings.GameVersion;
         }
     }
 

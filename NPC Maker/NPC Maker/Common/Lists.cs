@@ -227,7 +227,7 @@ namespace NPC_Maker
         public enum GameVersions
         {
             oot_mq_debug,
-            oot_u10
+            oot_u10,
         }
 
         public enum VarTypes

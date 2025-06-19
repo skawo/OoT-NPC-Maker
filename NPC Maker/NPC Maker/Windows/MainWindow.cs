@@ -127,6 +127,8 @@ namespace NPC_Maker
                 ChkBox_UseSpaceFont.Checked = EditedFile.SpaceFromFont;
                 Program.Settings.LastOpenPath = FilePath;
                 Dicts.LoadDicts();
+
+                Program.Settings.GameVersion = EditedFile.GameVersion;
                 autoBackupTimer.Start();
             }
         }
@@ -945,6 +947,9 @@ namespace NPC_Maker
                     (Page.Controls[0] as ScriptEditor).SetSyntaxHighlighting(Program.Settings.ColorizeScriptSyntax);
                 }
             }
+
+            if (EditedFile != null)
+                EditedFile.GameVersion = Program.Settings.GameVersion;
 
             MsgText_TextChanged(null, null);
 
