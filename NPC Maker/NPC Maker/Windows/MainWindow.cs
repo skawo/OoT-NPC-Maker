@@ -716,6 +716,7 @@ namespace NPC_Maker
 
             if (DR == DialogResult.OK)
             {
+
                 IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
                 progress.Report(new Common.ProgressReport("Starting...", 0));
 

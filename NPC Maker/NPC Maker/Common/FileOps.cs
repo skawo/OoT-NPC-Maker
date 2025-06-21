@@ -501,12 +501,19 @@ namespace NPC_Maker
                             Helpers.AddInterlocked(ref CurProgress, ProgressPer);
                             progress.Report(new Common.ProgressReport($"Compiling {String.Format("{0:0.##}", CurProgress)}%", CurProgress));
                         }
+                        else
+                        {
+                            Helpers.AddInterlocked(ref CurProgress, ProgressPer);
+                            Console.Write($"\rCompiling {String.Format("{0:0.##}", CurProgress)}%    ");
+                        }
                     }
                     catch (Exception)
                     {
 
                     }
                 });
+
+                Console.WriteLine("\nPre-processing done!");
 
                 SaveBinaryFile(Path, Data, progress, BaseDefines, false, false, CLIMode);
                 CCode.CleanupCompileArtifacts();

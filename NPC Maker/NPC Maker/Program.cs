@@ -137,14 +137,29 @@ namespace NPC_Maker
 
                     try
                     {
-                        bool[] cacheStatus = FileOps.GetCacheStatus(InFile, true);
+                        Console.WriteLine($"NPC Maker: Saving \"{Path.GetFileName(args[0])}\" to binary...");
 
-                        if (cacheStatus != null)
+                        if (Program.Settings.CompileInParallel)
                         {
-                            Console.WriteLine("Writing output ZOBJ...");
-                            string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(InFile);
-                            FileOps.SaveBinaryFile(args[1], InFile, null, baseDefines, cacheStatus[0], cacheStatus[1], true);
-                            CCode.CleanupCompileArtifacts();
+                            Program.CompileInProgress = true;
+
+                            FileOps.PreprocessCodeAndScripts(args[1], InFile, null);
+
+                            while (Program.CompileInProgress)
+                            {
+                                ;
+                            }
+                        }
+                        else
+                        {
+                            bool[] cacheStatus = FileOps.GetCacheStatus(InFile, true);
+
+                            if (cacheStatus != null)
+                            {
+                                string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(InFile);
+                                FileOps.SaveBinaryFile(args[1], InFile, null, baseDefines, cacheStatus[0], cacheStatus[1], true);
+                                CCode.CleanupCompileArtifacts();
+                            }
                         }
                     }
                     catch (Exception ex)
