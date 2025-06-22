@@ -1,5 +1,5 @@
 {
-  "Version": 5,
+  "Version": 7,
   "Entries": [
     {
       "NPCName": "Stop N Swop",
@@ -177,46 +177,45 @@
       ],
       "Scripts": [
         {
-          "Text": "",
           "TextLines": [
             "",
-            "SPAWN 3 ",
+            "SPAWN 3",
             "    VARIABLE 0x4",
             "    ROTATION 0 0 1",
             "    POSITION RELATIVE 0 0 200",
             "ENDSPAWN",
             "",
-            "SPAWN 3 ",
+            "SPAWN 3",
             "    VARIABLE 0x4",
             "    ROTATION 0 0 2",
             "    POSITION RELATIVE 200 0 -200",
             "ENDSPAWN",
             "",
-            "SPAWN 3 ",
+            "SPAWN 3",
             "    VARIABLE 0x4",
             "    ROTATION 0 0 3",
             "    POSITION RELATIVE 200 0 300",
             "ENDSPAWN",
             "",
-            "SPAWN 3 ",
+            "SPAWN 3",
             "    VARIABLE 0x4",
             "    ROTATION 0 0 4",
             "    POSITION RELATIVE 500 0 140",
             "ENDSPAWN",
             "",
-            "SPAWN 3 ",
+            "SPAWN 3",
             "    VARIABLE 0x4",
             "    ROTATION 0 0 5",
             "    POSITION RELATIVE -200 0 -340",
             "ENDSPAWN",
             "",
-            "SPAWN 3 ",
+            "SPAWN 3",
             "    VARIABLE 0x4",
             "    ROTATION 0 0 6",
             "    POSITION RELATIVE 100 0 -540",
             "ENDSPAWN",
             "",
-            "SPAWN 3 ",
+            "SPAWN 3",
             "    VARIABLE 0x4",
             "    ROTATION 0 0 7",
             "    POSITION RELATIVE -300 0 40",
@@ -253,7 +252,7 @@
             "    SET VAR.7 = 1",
             "    AWAIT TALKING_END",
             "    SET TALK_MODE FALSE",
-            "    RETURN  ",
+            "    RETURN",
             "",
             "",
             "",
@@ -291,7 +290,7 @@
             "        ACCELERATION 0 10 0",
             "        VELOCITY 0 10 0",
             "        POSITION ABSOLUTE ACTORF.0x24 ACTORF.0x28 ACTORF.0x2C",
-            "    ENDPARTICLE ",
+            "    ENDPARTICLE",
             "",
             "    SET INVISIBLE true",
             "    SET CASTS_SHADOW FALSE",
@@ -399,7 +398,6 @@
       "Messages": [
         {
           "Name": "Message1",
-          "MessageText": "",
           "MessageTextLines": [
             "<SOUND:NA_SE_SY_PIECE_OF_HEART>Alright, here we go!",
             "The data is already in place!"
@@ -409,7 +407,6 @@
         },
         {
           "Name": "Message4",
-          "MessageText": "",
           "MessageTextLines": [
             "<Shift:90><NS>3!",
             "<New box>",
@@ -422,7 +419,6 @@
         },
         {
           "Name": "MessageGO",
-          "MessageText": "",
           "MessageTextLines": [
             "<Shift:80><R><DI>GO!<PERSISTENT>"
           ],
@@ -431,7 +427,6 @@
         },
         {
           "Name": "Talk",
-          "MessageText": "",
           "MessageTextLines": [
             "Set everything up first by talking",
             "to the items you need!",
@@ -446,7 +441,6 @@
         },
         {
           "Name": "OhOK",
-          "MessageText": "",
           "MessageTextLines": [
             "Oh, OK. Take your time."
           ],
@@ -455,7 +449,6 @@
         },
         {
           "Name": "Enabled",
-          "MessageText": "",
           "MessageTextLines": [
             "OK, everything is now on!",
             "Talk to me again to begin."
@@ -471,8 +464,11 @@
       "NumVars": 10,
       "NumFVars": 2,
       "ExistInAllRooms": false,
+      "CullForward": 1000.0,
+      "CullDown": 700.0,
+      "CullScale": 350.0,
+      "AnimInterpFrames": 4,
       "EmbeddedOverlayCode": {
-        "Code": "",
         "CodeLines": [
           "#include <z64hdr/oot_u10/z64hdr.h>",
           "",
@@ -509,17 +505,7 @@
           "u32 funct[] = { 0xDC870000, 0x000737FC, 0x00072FF8, 0x000637FA, 0x0005283E, 0x00073B3C, ",
           "               0x00C53025, 0x0007383E, 0x00C73026, 0x00063D3A, 0x30E70FFF, 0x00E63826,",
           "               0x0007103C, 0xFC870000, 0x03E00008, 0x0002103F, 0x00000000 };",
-          "",
-          "u32 sns_data[] = {",
-          "                    0xC908C52F, 0x00000000, 0x00000000, 0x00000000,",
-          "                    0x00000000, 0x00000000, 0x00000000, 0x00000000,",
-          "                    0x00000000, 0x00000000, 0x00000000, 0x00000000,",
-          "                    0x00000000, 0x00000000, 0x00000000, 0x00000000,",
-          "                    0x00000000, 0x00000000, 0x00000000, 0x00000000,",
-          "                    0x00000000, 0x00000000, 0x00000000, 0x00000000,",
-          "                    0x00000000, 0x00000000, 0x00000000, 0x00000000,",
-          "                    0x00000000, 0x00000000, 0x00000000, 0x00000000",
-          "                  };",
+          "u32* sns_data;             ",
           "",
           "// Taken from Banjo Kazooie decomp",
           "void glcrc_calc_checksum(void *start, void *end)",
@@ -570,6 +556,14 @@
           "",
           "void NpcM_StopNSwop(NpcMaker* npc, PlayState* play)",
           "{",
+          "    sns_data = ZeldaArena_Malloc(256 * 24);",
+          "    bzero(sns_data, 256 * 24);",
+          "",
+          "    while ((u32)sns_data % 128)",
+          "        sns_data++;",
+          "",
+          "    sns_data[0] = 0xC908C52F;",
+          "",
           "    int j = 0;",
           "",
           "    for (int i = 0; i < 7; i++)",
@@ -581,13 +575,17 @@
           "        }",
           "    }",
           "",
-          "    glcrc_calc_checksum(&sns_data, &sns_data[30]);",
+          "    glcrc_calc_checksum(sns_data, &sns_data[30]);",
+          "",
+          "    for (int i = 0; i < 20; i++)",
+          "    {",
+          "        bcopy(sns_data, &sns_data[i * 32], 128);",
+          "    }",
           "}"
         ],
         "Functions": [
           {
-            "Key": "NpcM_StopNSwop",
-            "Value": 328
+            "FuncName": "NpcM_StopNSwop"
           }
         ],
         "FuncsRunWhen": [
@@ -610,7 +608,20 @@
           [
             -1,
             -1
+          ],
+          [
+            -1,
+            -1
           ]
+        ],
+        "SetFuncNames": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
         ]
       }
     },
@@ -727,7 +738,6 @@
       ],
       "Scripts": [
         {
-          "Text": "",
           "TextLines": [
             "",
             "",
@@ -764,7 +774,7 @@
             "    SHOW_TEXTBOX Done!",
             "    SET TALK_PERSIST FALSE",
             "    AWAIT TALKING_END",
-            "    RETURN ",
+            "    RETURN",
             "",
             "",
             ""
@@ -773,7 +783,6 @@
           "Name": "Script"
         },
         {
-          "Text": "",
           "TextLines": [
             "",
             "SET DLIST_ROT_Y egg2 += 200"
@@ -837,7 +846,6 @@
       "Messages": [
         {
           "Name": "Enabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Yellow Egg is enabled.",
             "<New box>",
@@ -851,7 +859,6 @@
         },
         {
           "Name": "Disabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Yellow Egg is disabled.",
             "<New box>",
@@ -865,7 +872,6 @@
         },
         {
           "Name": "Done!",
-          "MessageText": "",
           "MessageTextLines": [
             "Very well."
           ],
@@ -880,8 +886,11 @@
       "NumVars": 2,
       "NumFVars": 2,
       "ExistInAllRooms": false,
+      "CullForward": 1000.0,
+      "CullDown": 700.0,
+      "CullScale": 350.0,
+      "AnimInterpFrames": 4,
       "EmbeddedOverlayCode": {
-        "Code": "",
         "CodeLines": [
           ""
         ],
@@ -906,7 +915,20 @@
           [
             -1,
             -1
+          ],
+          [
+            -1,
+            -1
           ]
+        ],
+        "SetFuncNames": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          ""
         ]
       }
     },
@@ -1023,7 +1045,6 @@
       ],
       "Scripts": [
         {
-          "Text": "",
           "TextLines": [
             "",
             "",
@@ -1060,7 +1081,7 @@
             "    SHOW_TEXTBOX Done!",
             "    SET TALK_PERSIST FALSE",
             "    AWAIT TALKING_END",
-            "    RETURN ",
+            "    RETURN",
             "",
             "",
             ""
@@ -1069,7 +1090,6 @@
           "Name": "Script"
         },
         {
-          "Text": "",
           "TextLines": [
             "",
             "SET DLIST_ROT_Y egg2 += 200"
@@ -1133,7 +1153,6 @@
       "Messages": [
         {
           "Name": "Enabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Red Egg is enabled.",
             "<New box>",
@@ -1147,7 +1166,6 @@
         },
         {
           "Name": "Disabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Red Egg is disabled.",
             "<New box>",
@@ -1161,7 +1179,6 @@
         },
         {
           "Name": "Done!",
-          "MessageText": "",
           "MessageTextLines": [
             "You got it!"
           ],
@@ -1176,8 +1193,11 @@
       "NumVars": 2,
       "NumFVars": 2,
       "ExistInAllRooms": false,
+      "CullForward": 1000.0,
+      "CullDown": 700.0,
+      "CullScale": 350.0,
+      "AnimInterpFrames": 4,
       "EmbeddedOverlayCode": {
-        "Code": "",
         "CodeLines": [
           ""
         ],
@@ -1202,7 +1222,20 @@
           [
             -1,
             -1
+          ],
+          [
+            -1,
+            -1
           ]
+        ],
+        "SetFuncNames": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          ""
         ]
       }
     },
@@ -1319,7 +1352,6 @@
       ],
       "Scripts": [
         {
-          "Text": "",
           "TextLines": [
             "",
             "",
@@ -1356,7 +1388,7 @@
             "    SHOW_TEXTBOX Done!",
             "    SET TALK_PERSIST FALSE",
             "    AWAIT TALKING_END",
-            "    RETURN ",
+            "    RETURN",
             "",
             "",
             ""
@@ -1365,7 +1397,6 @@
           "Name": "Script"
         },
         {
-          "Text": "",
           "TextLines": [
             "",
             "SET DLIST_ROT_Y egg2 += 200"
@@ -1429,7 +1460,6 @@
       "Messages": [
         {
           "Name": "Enabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Green Egg is enabled.",
             "<New box>",
@@ -1443,7 +1473,6 @@
         },
         {
           "Name": "Disabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Green Egg is disabled.",
             "<New box>",
@@ -1457,7 +1486,6 @@
         },
         {
           "Name": "Done!",
-          "MessageText": "",
           "MessageTextLines": [
             "Well, if I must."
           ],
@@ -1472,8 +1500,11 @@
       "NumVars": 2,
       "NumFVars": 2,
       "ExistInAllRooms": false,
+      "CullForward": 1000.0,
+      "CullDown": 700.0,
+      "CullScale": 350.0,
+      "AnimInterpFrames": 4,
       "EmbeddedOverlayCode": {
-        "Code": "",
         "CodeLines": [
           ""
         ],
@@ -1498,7 +1529,20 @@
           [
             -1,
             -1
+          ],
+          [
+            -1,
+            -1
           ]
+        ],
+        "SetFuncNames": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          ""
         ]
       }
     },
@@ -1615,7 +1659,6 @@
       ],
       "Scripts": [
         {
-          "Text": "",
           "TextLines": [
             "",
             "",
@@ -1652,7 +1695,7 @@
             "    SHOW_TEXTBOX Done!",
             "    SET TALK_PERSIST FALSE",
             "    AWAIT TALKING_END",
-            "    RETURN ",
+            "    RETURN",
             "",
             "",
             ""
@@ -1661,7 +1704,6 @@
           "Name": "Script"
         },
         {
-          "Text": "",
           "TextLines": [
             "",
             "SET DLIST_ROT_Y egg2 += 200"
@@ -1725,7 +1767,6 @@
       "Messages": [
         {
           "Name": "Enabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Blue Egg is enabled.",
             "<New box>",
@@ -1739,7 +1780,6 @@
         },
         {
           "Name": "Disabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Blue Egg is disabled.",
             "<New box>",
@@ -1753,7 +1793,6 @@
         },
         {
           "Name": "Done!",
-          "MessageText": "",
           "MessageTextLines": [
             "As you wish."
           ],
@@ -1768,8 +1807,11 @@
       "NumVars": 2,
       "NumFVars": 2,
       "ExistInAllRooms": false,
+      "CullForward": 1000.0,
+      "CullDown": 700.0,
+      "CullScale": 350.0,
+      "AnimInterpFrames": 4,
       "EmbeddedOverlayCode": {
-        "Code": "",
         "CodeLines": [
           ""
         ],
@@ -1794,7 +1836,20 @@
           [
             -1,
             -1
+          ],
+          [
+            -1,
+            -1
           ]
+        ],
+        "SetFuncNames": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          ""
         ]
       }
     },
@@ -1911,7 +1966,6 @@
       ],
       "Scripts": [
         {
-          "Text": "",
           "TextLines": [
             "",
             "",
@@ -1948,7 +2002,7 @@
             "    SHOW_TEXTBOX Done!",
             "    SET TALK_PERSIST FALSE",
             "    AWAIT TALKING_END",
-            "    RETURN ",
+            "    RETURN",
             "",
             "",
             ""
@@ -1957,7 +2011,6 @@
           "Name": "Script"
         },
         {
-          "Text": "",
           "TextLines": [
             "",
             "SET DLIST_ROT_Y egg2 += 200"
@@ -2021,7 +2074,6 @@
       "Messages": [
         {
           "Name": "Enabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Pink Egg is enabled.",
             "<New box>",
@@ -2035,7 +2087,6 @@
         },
         {
           "Name": "Disabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Pink Egg is disabled.",
             "<New box>",
@@ -2049,7 +2100,6 @@
         },
         {
           "Name": "Done!",
-          "MessageText": "",
           "MessageTextLines": [
             "No problem."
           ],
@@ -2064,8 +2114,11 @@
       "NumVars": 2,
       "NumFVars": 2,
       "ExistInAllRooms": false,
+      "CullForward": 1000.0,
+      "CullDown": 700.0,
+      "CullScale": 350.0,
+      "AnimInterpFrames": 4,
       "EmbeddedOverlayCode": {
-        "Code": "",
         "CodeLines": [
           ""
         ],
@@ -2090,7 +2143,20 @@
           [
             -1,
             -1
+          ],
+          [
+            -1,
+            -1
           ]
+        ],
+        "SetFuncNames": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          ""
         ]
       }
     },
@@ -2207,7 +2273,6 @@
       ],
       "Scripts": [
         {
-          "Text": "",
           "TextLines": [
             "",
             "",
@@ -2244,7 +2309,7 @@
             "    SHOW_TEXTBOX Done!",
             "    SET TALK_PERSIST FALSE",
             "    AWAIT TALKING_END",
-            "    RETURN ",
+            "    RETURN",
             "",
             "",
             ""
@@ -2253,7 +2318,6 @@
           "Name": "Script"
         },
         {
-          "Text": "",
           "TextLines": [
             "",
             "SET DLIST_ROT_Y egg2 += 200"
@@ -2317,7 +2381,6 @@
       "Messages": [
         {
           "Name": "Enabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Cyan Egg is enabled.",
             "<New box>",
@@ -2331,7 +2394,6 @@
         },
         {
           "Name": "Disabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Cyan Egg is disabled.",
             "<New box>",
@@ -2345,7 +2407,6 @@
         },
         {
           "Name": "Done!",
-          "MessageText": "",
           "MessageTextLines": [
             "Very well."
           ],
@@ -2360,8 +2421,11 @@
       "NumVars": 2,
       "NumFVars": 2,
       "ExistInAllRooms": false,
+      "CullForward": 1000.0,
+      "CullDown": 700.0,
+      "CullScale": 350.0,
+      "AnimInterpFrames": 4,
       "EmbeddedOverlayCode": {
-        "Code": "",
         "CodeLines": [
           ""
         ],
@@ -2386,7 +2450,20 @@
           [
             -1,
             -1
+          ],
+          [
+            -1,
+            -1
           ]
+        ],
+        "SetFuncNames": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          ""
         ]
       }
     },
@@ -2503,7 +2580,6 @@
       ],
       "Scripts": [
         {
-          "Text": "",
           "TextLines": [
             "",
             "",
@@ -2540,7 +2616,7 @@
             "    SHOW_TEXTBOX Done!",
             "    SET TALK_PERSIST FALSE",
             "    AWAIT TALKING_END",
-            "    RETURN ",
+            "    RETURN",
             "",
             "",
             ""
@@ -2549,7 +2625,6 @@
           "Name": "Script"
         },
         {
-          "Text": "",
           "TextLines": [
             "",
             "SET DLIST_ROT_Y key += 200"
@@ -2597,7 +2672,6 @@
       "Messages": [
         {
           "Name": "Enabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Ice Key is enabled.",
             "<New box>",
@@ -2611,7 +2685,6 @@
         },
         {
           "Name": "Disabled",
-          "MessageText": "",
           "MessageTextLines": [
             "The Ice Key is disabled.",
             "<New box>",
@@ -2625,7 +2698,6 @@
         },
         {
           "Name": "Done!",
-          "MessageText": "",
           "MessageTextLines": [
             "Welp."
           ],
@@ -2640,8 +2712,11 @@
       "NumVars": 2,
       "NumFVars": 2,
       "ExistInAllRooms": false,
+      "CullForward": 1000.0,
+      "CullDown": 700.0,
+      "CullScale": 350.0,
+      "AnimInterpFrames": 4,
       "EmbeddedOverlayCode": {
-        "Code": "",
         "CodeLines": [
           ""
         ],
@@ -2666,19 +2741,48 @@
           [
             -1,
             -1
+          ],
+          [
+            -1,
+            -1
           ]
+        ],
+        "SetFuncNames": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          ""
         ]
       }
     }
   ],
   "GlobalHeaders": [
     {
-      "Text": "",
       "TextLines": [
         ""
       ],
       "ParseErrors": [],
       "Name": ""
     }
-  ]
+  ],
+  "SpaceFromFont": false,
+  "CHeaderLines": [
+    "#include <z64hdr/oot_u10/z64hdr.h>",
+    "",
+    "// ^ Change the above to ",
+    "// #include <z64hdr/oot_u10/z64hdr.h>",
+    "// if compiling for OoT 1.0",
+    "",
+    "#include <npcmaker/npc_maker_types.h>",
+    "",
+    "/*",
+    "To make use of this header, include",
+    "#include \"npc_maker_header.h\"",
+    "in your Embedded Code file.",
+    "*/"
+  ],
+  "GameVersion": 1
 }
