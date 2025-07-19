@@ -246,6 +246,13 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.SplitMsgContainer = new System.Windows.Forms.SplitContainer();
+            this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
+            this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
+            this.Btn_RemoveLanguage = new System.Windows.Forms.Button();
+            this.Btn_AddNewLanguage = new System.Windows.Forms.Button();
+            this.Combo_Language = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.MessagesFilter = new System.Windows.Forms.TextBox();
             this.Btn_MsgMoveDown = new System.Windows.Forms.Button();
@@ -253,7 +260,6 @@
             this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
-            this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
             this.Btn_MsgRename = new System.Windows.Forms.Button();
             this.Lbl_Text = new System.Windows.Forms.Label();
             this.Combo_MsgPos = new System.Windows.Forms.ComboBox();
@@ -412,9 +418,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
             this.Tab4_Messages.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SplitMsgContainer)).BeginInit();
+            this.SplitMsgContainer.Panel1.SuspendLayout();
+            this.SplitMsgContainer.Panel2.SuspendLayout();
+            this.SplitMsgContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
             this.PanelMsgPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.Tab5_Scripts.SuspendLayout();
             this.Tab6_EmbeddedOverlay.SuspendLayout();
@@ -3235,13 +3246,17 @@
             // 
             // Tab4_Messages
             // 
+            this.Tab4_Messages.Controls.Add(this.SplitMsgContainer);
+            this.Tab4_Messages.Controls.Add(this.Btn_RemoveLanguage);
+            this.Tab4_Messages.Controls.Add(this.Btn_AddNewLanguage);
+            this.Tab4_Messages.Controls.Add(this.Combo_Language);
+            this.Tab4_Messages.Controls.Add(this.label4);
             this.Tab4_Messages.Controls.Add(this.label6);
             this.Tab4_Messages.Controls.Add(this.MessagesFilter);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgMoveDown);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgMoveUp);
             this.Tab4_Messages.Controls.Add(this.ChkBox_UseSpaceFont);
             this.Tab4_Messages.Controls.Add(this.PanelMsgPreview);
-            this.Tab4_Messages.Controls.Add(this.MsgText);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgRename);
             this.Tab4_Messages.Controls.Add(this.Lbl_Text);
             this.Tab4_Messages.Controls.Add(this.Combo_MsgPos);
@@ -3258,6 +3273,156 @@
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
+            // 
+            // SplitMsgContainer
+            // 
+            this.SplitMsgContainer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.SplitMsgContainer.Location = new System.Drawing.Point(202, 50);
+            this.SplitMsgContainer.Name = "SplitMsgContainer";
+            // 
+            // SplitMsgContainer.Panel1
+            // 
+            this.SplitMsgContainer.Panel1.Controls.Add(this.MsgTextDefault);
+            this.SplitMsgContainer.Panel1Collapsed = true;
+            this.SplitMsgContainer.Panel1MinSize = 0;
+            // 
+            // SplitMsgContainer.Panel2
+            // 
+            this.SplitMsgContainer.Panel2.Controls.Add(this.MsgText);
+            this.SplitMsgContainer.Panel2MinSize = 0;
+            this.SplitMsgContainer.Size = new System.Drawing.Size(558, 216);
+            this.SplitMsgContainer.SplitterDistance = 25;
+            this.SplitMsgContainer.TabIndex = 91;
+            // 
+            // MsgTextDefault
+            // 
+            this.MsgTextDefault.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgTextDefault.AutoIndent = false;
+            this.MsgTextDefault.AutoIndentChars = false;
+            this.MsgTextDefault.AutoScrollMinSize = new System.Drawing.Size(2, 12);
+            this.MsgTextDefault.BackBrush = null;
+            this.MsgTextDefault.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgTextDefault.CharHeight = 12;
+            this.MsgTextDefault.CharWidth = 6;
+            this.MsgTextDefault.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgTextDefault.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgTextDefault.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgTextDefault.Enabled = false;
+            this.MsgTextDefault.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgTextDefault.IsReplaceMode = false;
+            this.MsgTextDefault.Location = new System.Drawing.Point(0, 0);
+            this.MsgTextDefault.Name = "MsgTextDefault";
+            this.MsgTextDefault.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgTextDefault.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgTextDefault.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgTextDefault.ServiceColors")));
+            this.MsgTextDefault.ShowLineNumbers = false;
+            this.MsgTextDefault.Size = new System.Drawing.Size(25, 100);
+            this.MsgTextDefault.TabIndex = 69;
+            this.MsgTextDefault.Tag = "0";
+            this.MsgTextDefault.WordWrapAutoIndent = false;
+            this.MsgTextDefault.Zoom = 100;
+            // 
+            // MsgText
+            // 
+            this.MsgText.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgText.AutoIndent = false;
+            this.MsgText.AutoIndentChars = false;
+            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 12);
+            this.MsgText.BackBrush = null;
+            this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgText.CharHeight = 12;
+            this.MsgText.CharWidth = 6;
+            this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgText.IsReplaceMode = false;
+            this.MsgText.Location = new System.Drawing.Point(0, 0);
+            this.MsgText.Name = "MsgText";
+            this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
+            this.MsgText.ShowLineNumbers = false;
+            this.MsgText.Size = new System.Drawing.Size(558, 216);
+            this.MsgText.TabIndex = 68;
+            this.MsgText.Tag = "0";
+            this.MsgText.WordWrapAutoIndent = false;
+            this.MsgText.Zoom = 100;
+            this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
+            this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
+            // 
+            // Btn_RemoveLanguage
+            // 
+            this.Btn_RemoveLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_RemoveLanguage.Location = new System.Drawing.Point(687, 26);
+            this.Btn_RemoveLanguage.Name = "Btn_RemoveLanguage";
+            this.Btn_RemoveLanguage.Size = new System.Drawing.Size(73, 21);
+            this.Btn_RemoveLanguage.TabIndex = 90;
+            this.Btn_RemoveLanguage.Text = "Remove";
+            this.Btn_RemoveLanguage.UseVisualStyleBackColor = true;
+            this.Btn_RemoveLanguage.Click += new System.EventHandler(this.Btn_RemoveLanguage_Click);
+            // 
+            // Btn_AddNewLanguage
+            // 
+            this.Btn_AddNewLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_AddNewLanguage.Location = new System.Drawing.Point(608, 26);
+            this.Btn_AddNewLanguage.Name = "Btn_AddNewLanguage";
+            this.Btn_AddNewLanguage.Size = new System.Drawing.Size(73, 21);
+            this.Btn_AddNewLanguage.TabIndex = 89;
+            this.Btn_AddNewLanguage.Text = "Add new";
+            this.Btn_AddNewLanguage.UseVisualStyleBackColor = true;
+            this.Btn_AddNewLanguage.Click += new System.EventHandler(this.Btn_AddNewLanguage_Click);
+            // 
+            // Combo_Language
+            // 
+            this.Combo_Language.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Combo_Language.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_Language.FormattingEnabled = true;
+            this.Combo_Language.Items.AddRange(new object[] {
+            "Black",
+            "Wood",
+            "Blue",
+            "Ocarina",
+            "None (White text)",
+            "None (Black text)",
+            "Credits"});
+            this.Combo_Language.Location = new System.Drawing.Point(473, 26);
+            this.Combo_Language.Name = "Combo_Language";
+            this.Combo_Language.Size = new System.Drawing.Size(129, 21);
+            this.Combo_Language.TabIndex = 88;
+            this.Combo_Language.Tag = "LANGUAGE";
+            this.Combo_Language.SelectedIndexChanged += new System.EventHandler(this.Combo_Language_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(409, 30);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(58, 13);
+            this.label4.TabIndex = 87;
+            this.label4.Text = "Language:";
             // 
             // label6
             // 
@@ -3321,10 +3486,10 @@
             this.PanelMsgPreview.BackColor = System.Drawing.Color.White;
             this.PanelMsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PanelMsgPreview.Controls.Add(this.MsgPreview);
-            this.PanelMsgPreview.Location = new System.Drawing.Point(198, 269);
+            this.PanelMsgPreview.Location = new System.Drawing.Point(202, 269);
             this.PanelMsgPreview.Margin = new System.Windows.Forms.Padding(0);
             this.PanelMsgPreview.Name = "PanelMsgPreview";
-            this.PanelMsgPreview.Size = new System.Drawing.Size(562, 352);
+            this.PanelMsgPreview.Size = new System.Drawing.Size(558, 352);
             this.PanelMsgPreview.TabIndex = 72;
             this.PanelMsgPreview.Resize += new System.EventHandler(this.PanelMsgPreview_Resize);
             // 
@@ -3338,46 +3503,7 @@
             this.MsgPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.MsgPreview.TabIndex = 69;
             this.MsgPreview.TabStop = false;
-            // 
-            // MsgText
-            // 
-            this.MsgText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.MsgText.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.MsgText.AutoIndent = false;
-            this.MsgText.AutoIndentChars = false;
-            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 12);
-            this.MsgText.BackBrush = null;
-            this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MsgText.CharHeight = 12;
-            this.MsgText.CharWidth = 6;
-            this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
-            this.MsgText.IsReplaceMode = false;
-            this.MsgText.Location = new System.Drawing.Point(198, 50);
-            this.MsgText.Name = "MsgText";
-            this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
-            this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
-            this.MsgText.ShowLineNumbers = false;
-            this.MsgText.Size = new System.Drawing.Size(562, 216);
-            this.MsgText.TabIndex = 68;
-            this.MsgText.Tag = "0";
-            this.MsgText.WordWrapAutoIndent = false;
-            this.MsgText.Zoom = 100;
-            this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
-            this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
+            this.MsgPreview.Click += new System.EventHandler(this.MsgPreview_Click);
             // 
             // Btn_MsgRename
             // 
@@ -3393,7 +3519,7 @@
             // Lbl_Text
             // 
             this.Lbl_Text.AutoSize = true;
-            this.Lbl_Text.Location = new System.Drawing.Point(195, 34);
+            this.Lbl_Text.Location = new System.Drawing.Point(199, 30);
             this.Lbl_Text.Name = "Lbl_Text";
             this.Lbl_Text.Size = new System.Drawing.Size(31, 13);
             this.Lbl_Text.TabIndex = 66;
@@ -3408,9 +3534,9 @@
             "Top",
             "Center",
             "Bottom"});
-            this.Combo_MsgPos.Location = new System.Drawing.Point(431, 3);
+            this.Combo_MsgPos.Location = new System.Drawing.Point(444, 3);
             this.Combo_MsgPos.Name = "Combo_MsgPos";
-            this.Combo_MsgPos.Size = new System.Drawing.Size(194, 21);
+            this.Combo_MsgPos.Size = new System.Drawing.Size(181, 21);
             this.Combo_MsgPos.TabIndex = 65;
             this.Combo_MsgPos.Tag = "MOVEMENT";
             this.Combo_MsgPos.SelectedIndexChanged += new System.EventHandler(this.Combo_MsgPos_SelectedIndexChanged);
@@ -3436,9 +3562,9 @@
             "None (White text)",
             "None (Black text)",
             "Credits"});
-            this.Combo_MsgType.Location = new System.Drawing.Point(252, 3);
+            this.Combo_MsgType.Location = new System.Drawing.Point(256, 3);
             this.Combo_MsgType.Name = "Combo_MsgType";
-            this.Combo_MsgType.Size = new System.Drawing.Size(133, 21);
+            this.Combo_MsgType.Size = new System.Drawing.Size(129, 21);
             this.Combo_MsgType.TabIndex = 63;
             this.Combo_MsgType.Tag = "MOVEMENT";
             this.Combo_MsgType.SelectedIndexChanged += new System.EventHandler(this.Combo_MsgType_SelectedIndexChanged);
@@ -3446,7 +3572,7 @@
             // Lbl_MsgType
             // 
             this.Lbl_MsgType.AutoSize = true;
-            this.Lbl_MsgType.Location = new System.Drawing.Point(195, 6);
+            this.Lbl_MsgType.Location = new System.Drawing.Point(199, 6);
             this.Lbl_MsgType.Name = "Lbl_MsgType";
             this.Lbl_MsgType.Size = new System.Drawing.Size(51, 13);
             this.Lbl_MsgType.TabIndex = 62;
@@ -4318,9 +4444,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
             this.Tab4_Messages.ResumeLayout(false);
             this.Tab4_Messages.PerformLayout();
+            this.SplitMsgContainer.Panel1.ResumeLayout(false);
+            this.SplitMsgContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SplitMsgContainer)).EndInit();
+            this.SplitMsgContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
             this.PanelMsgPreview.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.Tab5_Scripts.ResumeLayout(false);
             this.Tab6_EmbeddedOverlay.ResumeLayout(false);
@@ -4642,6 +4773,12 @@
         private System.Windows.Forms.SplitContainer SplitPanel;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Name;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button Btn_RemoveLanguage;
+        private System.Windows.Forms.Button Btn_AddNewLanguage;
+        private System.Windows.Forms.ComboBox Combo_Language;
+        private System.Windows.Forms.SplitContainer SplitMsgContainer;
+        private FCTB_Mono MsgTextDefault;
     }
 }
 

@@ -23,6 +23,8 @@ namespace NPC_Maker
 
         public Lists.GameVersions GameVersion { get; set; }
 
+        public List<string> Languages { get; set; }
+
         public NPCFile()
         {
             Version = 7;
@@ -32,6 +34,7 @@ namespace NPC_Maker
             CHeader = "";
             CHeaderLines = new List<string>();
             GameVersion = Program.Settings.GameVersion;
+            Languages = new List<string>();
         }
     }
 
@@ -131,6 +134,8 @@ namespace NPC_Maker
         public List<ColorEntry> DisplayListColors { get; set; }
 
         public List<MessageEntry> Messages { get; set; }
+
+        public List<LocalizationEntry> Localization { get; set; }
 
         public bool DEBUGShowCols { get; set; }
         public bool DEBUGPrintToScreen { get; set; }
@@ -233,6 +238,7 @@ namespace NPC_Maker
             Segments = new List<List<SegmentEntry>>();
 
             Messages = new List<MessageEntry>();
+            Localization = new List<LocalizationEntry>();
 
             EnvironmentColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             BlinkPattern = "";
@@ -622,6 +628,18 @@ namespace NPC_Maker
         {
             Color = _Color;
             Limbs = _Limb;
+        }
+    }
+
+    public class LocalizationEntry
+    {
+        public string Language { get; set; }
+        public List<MessageEntry> Messages { get; set; }
+
+        public LocalizationEntry()
+        {
+            Language = "";
+            Messages = new List<MessageEntry>();
         }
     }
 

@@ -118,6 +118,15 @@ namespace NPC_Maker
                     {
                         foreach (MessageEntry s in e.Messages)
                             s.MessageText = String.Join(Environment.NewLine, s.MessageTextLines);
+
+                        foreach (LocalizationEntry loc in e.Localization)
+                        {
+                            foreach (MessageEntry entry in loc.Messages)
+                            {
+                                entry.MessageText = String.Join(Environment.NewLine, entry.MessageTextLines);
+                            }
+                        }
+
                     }
                 }
 
@@ -182,6 +191,14 @@ namespace NPC_Maker
                     {
                         entry.MessageText = Regex.Replace(entry.MessageText, @"\r?\n", Environment.NewLine);
                     }
+
+                    foreach (LocalizationEntry loc in e.Localization)
+                    {
+                        foreach (MessageEntry entry in loc.Messages)
+                        {
+                            entry.MessageText = Regex.Replace(entry.MessageText, @"\r?\n", Environment.NewLine);
+                        }
+                    }
                 }
 
                 Deserialized.Version = 7;
@@ -216,6 +233,16 @@ namespace NPC_Maker
                         entry.MessageText = Regex.Replace(entry.MessageText, Environment.NewLine, "\n");
                         entry.MessageTextLines = Regex.Split(entry.MessageText, "\r?\n").ToList();
                         entry.MessageText = null;
+                    }
+
+                    foreach (LocalizationEntry loc in e.Localization)
+                    {
+                        foreach (MessageEntry entry in loc.Messages)
+                        {
+                            entry.MessageText = Regex.Replace(entry.MessageText, Environment.NewLine, "\n");
+                            entry.MessageTextLines = Regex.Split(entry.MessageText, "\r?\n").ToList();
+                            entry.MessageText = null;
+                        }
                     }
 
                     e.EmbeddedOverlayCode.CodeLines = Regex.Split(e.EmbeddedOverlayCode.Code, "\r?\n").ToList();
@@ -733,9 +760,16 @@ namespace NPC_Maker
                         List<byte> Header = new List<byte>();
                         List<byte> MsgData = new List<byte>();
 
-                        int MsgOffset = 8 * Entry.Messages.Count();
+                        List<MessageEntry> msgListAll = new List<MessageEntry>();
 
-                        foreach (MessageEntry Msg in Entry.Messages)
+                        msgListAll.AddRange(Entry.Messages);
+
+                        foreach (LocalizationEntry loc in Entry.Localization)
+                            msgListAll.AddRange(loc.Messages);
+
+                        int MsgOffset = 8 * msgListAll.Count();
+
+                        foreach (MessageEntry Msg in msgListAll)
                         {
                             List<byte> Message = Msg.ConvertTextData(Entry.NPCName, !CLIMode);
 
@@ -767,12 +801,14 @@ namespace NPC_Maker
                             MsgOffset += Message.Count();
                         }
 
-                        EntryBytes.AddRangeBigEndian(8 + Header.Count + MsgData.Count);
+                        EntryBytes.AddRangeBigEndian(16 + Header.Count + MsgData.Count);
                         EntryBytes.AddRangeBigEndian(Offset + EntryBytes.Count + 8);
+                        EntryBytes.AddRangeBigEndian(Entry.Localization.Count + 1);
+                        EntryBytes.AddRangeBigEndian(Entry.Messages.Count);
                         EntryBytes.AddRange(Header);
                         EntryBytes.AddRange(MsgData);
 
-                        CurLen += 8 + Header.Count + MsgData.Count;
+                        CurLen += 16 + Header.Count + MsgData.Count;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion

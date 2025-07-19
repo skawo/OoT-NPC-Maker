@@ -301,6 +301,8 @@ typedef struct NpcMaker
     ScriptsHeader* scripts;
     ScriptInstance* scriptInstances;
     u32 messagesDataOffset;
+    u32 numLanguages;
+    u32 numMessages;
     s32 customMsgId;
     u32 flags_internal;
 

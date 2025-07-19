@@ -323,8 +323,11 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     {
         u32 len = AVAL(buffer, u32, offset);
         u8* msgBuf = ZeldaArena_Malloc(len - 8);
-        bcopy(buffer + offset + 8, msgBuf, len - 8);
+        bcopy(buffer + offset + 16, msgBuf, len - 16);
+
         en->messagesDataOffset = (u32)msgBuf;
+        en->numLanguages = AVAL(buffer, u32, offset + 8); 
+        en->numMessages = AVAL(buffer, u32, offset + 12);         
 
         offset += len;
     }

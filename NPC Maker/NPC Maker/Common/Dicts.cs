@@ -240,6 +240,39 @@ namespace NPC_Maker
             ReloadDict(DictType.MsgTagOverride, true);
         }
 
+        public static void ReloadMsgTagOverrides(string Language)
+        {
+            try
+            {
+                string FileCheck = "";
+                string FolderDef = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
+                string Folder = FolderDef;
+                string DictFile = $"Dicts/{Language}.csv";
+
+                FileCheck = Path.Combine(Folder, DictFile);
+
+                if (!File.Exists(FileCheck))
+                    Folder = Program.ExecPath;
+
+                FileCheck = Path.Combine(Folder, DictFile);
+
+                if (!File.Exists(FileCheck))
+                {
+                    DictFile = DictFilenames[Lists.DictType.MsgTagOverride];
+                    Folder = FolderDef;
+                }
+
+                FileCheck = Path.Combine(Folder, DictFile);
+
+                if (!File.Exists(FileCheck))
+                    Folder = Program.ExecPath;
+
+                MsgTagOverride = FileOps.GetDictionaryStringString(Path.Combine(Folder, DictFile), true);
+            }
+            catch (Exception)
+            {
+            }
+        }
 
         public static void ReloadDict(Lists.DictType Type, bool allowFail = false)
         {
