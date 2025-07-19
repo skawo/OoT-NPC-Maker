@@ -145,6 +145,16 @@ namespace NPC_Maker
             }
         }
 
+        private void ReloadAllFonts()
+        {
+            fonts.Clear();
+            fontsWidths.Clear();
+            LoadAddFontByName("font");
+
+            foreach (string lan in EditedFile.Languages)
+                LoadAddFontByName(lan);
+        }
+
         private void OpenFile(string FilePath)
         {
             autoBackupTimer.Stop();
@@ -161,16 +171,11 @@ namespace NPC_Maker
 
                 Combo_Language.Items.Clear();
                 Combo_Language.Items.Add("Default");
-                fonts.Clear();
-                fontsWidths.Clear();
 
-                LoadAddFontByName("font");
-               
                 foreach (string lan in EditedFile.Languages)
-                {
                     Combo_Language.Items.Add(lan);
-                    LoadAddFontByName(lan);
-                }
+
+                ReloadAllFonts();
 
                 Combo_Language.SelectedIndex = 0;
                 Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
@@ -2368,6 +2373,13 @@ namespace NPC_Maker
                     SelectedEntry.Messages.RemoveAt(i);
                     SelectedEntry.Messages.Insert(i - 1, msg);
 
+                    foreach (LocalizationEntry l in SelectedEntry.Localization)
+                    {
+                        MessageEntry localMsg = l.Messages[i];
+                        l.Messages.RemoveAt(i);
+                        l.Messages.Insert(i - 1, localMsg);
+                    }
+
                     MessagesGrid.Rows[i].Cells[0].Value = titleToSwap;
                     MessagesGrid.Rows[i - 1].Cells[0].Value = Title;
                     MessagesGrid.Rows[i - 1].Selected = true;
@@ -2399,6 +2411,14 @@ namespace NPC_Maker
                     MessageEntry msg = SelectedEntry.Messages[i];
                     SelectedEntry.Messages.RemoveAt(i);
                     SelectedEntry.Messages.Insert(i + 1, msg);
+
+                    foreach (LocalizationEntry l in SelectedEntry.Localization)
+                    {
+                        MessageEntry localMsg = l.Messages[i];
+                        l.Messages.RemoveAt(i);
+                        l.Messages.Insert(i + 1, localMsg);
+                    }
+
 
                     MessagesGrid.Rows[i].Cells[0].Value = titleToSwap;
                     MessagesGrid.Rows[i + 1].Cells[0].Value = Title;
@@ -2695,11 +2715,11 @@ namespace NPC_Maker
                 return;
             }
 
-            List<MessageEntry> messagesLanguages = SelectedEntry.Messages.FindAll(x => x.Name.ToUpper() == Title.ToUpper());
+            Entry.Name = Title;
 
-            foreach (MessageEntry ms in messagesLanguages)
+            foreach (LocalizationEntry l in SelectedEntry.Localization)
             {
-                ms.Name = Title;
+                l.Messages[MessagesGrid.SelectedRows[0].Index].Name = Title;
             }
 
             MessagesGrid.SelectedRows[0].Cells[0].Value = Title;
@@ -3308,6 +3328,8 @@ namespace NPC_Maker
 
                     entry.Localization.Add(newEntry);
                 }
+
+                ReloadAllFonts();
             }
         }
 
@@ -3325,6 +3347,7 @@ namespace NPC_Maker
                     }
 
                     Combo_Language.Items.RemoveAt(Combo_Language.SelectedIndex);
+                    ReloadAllFonts();
                     Combo_Language.SelectedIndex = 0;
                 }
             }
