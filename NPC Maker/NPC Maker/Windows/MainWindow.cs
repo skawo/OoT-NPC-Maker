@@ -123,12 +123,34 @@ namespace NPC_Maker
             string fontfP = Path.Combine(Path.GetDirectoryName(Program.JsonPath), "font", fontf);
             string fontfWP = Path.Combine(Path.GetDirectoryName(Program.JsonPath), "font", fontfW);
 
+            string fontfDef = $"font.font_static";
+            string fontfWDef = $"font.width_table";
+
+            string fontfPDef = Path.Combine(Path.GetDirectoryName(Program.JsonPath), "font", fontfDef);
+            string fontfWPDef = Path.Combine(Path.GetDirectoryName(Program.JsonPath), "font", fontfWDef);
+
+
             if (File.Exists(fontfP) && File.Exists(fontfWP))
             {
                 fonts.Add(File.ReadAllBytes(fontfP));
                 List<float> fontWidths = new List<float>();
 
                 byte[] widths = System.IO.File.ReadAllBytes(fontfWP);
+
+                for (int i = 0; i < widths.Length; i += 4)
+                {
+                    byte[] width = widths.Skip(i).Take(4).Reverse().ToArray();
+                    fontWidths.Add(BitConverter.ToSingle(width, 0));
+                }
+
+                fontsWidths.Add(fontWidths.ToArray());
+            }
+            else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef))
+            {
+                fonts.Add(File.ReadAllBytes(fontfPDef));
+                List<float> fontWidths = new List<float>();
+
+                byte[] widths = System.IO.File.ReadAllBytes(fontfWPDef);
 
                 for (int i = 0; i < widths.Length; i += 4)
                 {
@@ -2664,7 +2686,7 @@ namespace NPC_Maker
 
             SelectedEntry.Messages.Insert(RowToInsert, new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
 
-            for (int i = 1; i < EditedFile.Languages.Count(); i++)
+            for (int i = 0; i < EditedFile.Languages.Count(); i++)
                 SelectedEntry.Localization[i].Messages.Insert(RowToInsert, new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
 
             MessagesGrid.Rows.Insert(RowToInsert, new object[] { Title });
