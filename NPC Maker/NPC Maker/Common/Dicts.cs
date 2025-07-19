@@ -269,8 +269,6 @@ namespace NPC_Maker
                 if (!File.Exists(FileCheck))
                     Folder = Program.ExecPath;
 
-                Console.WriteLine($"Reloaded dict {Path.Combine(Folder, DictFile)}");
-
                 MsgTagOverride = FileOps.GetDictionaryStringString(Path.Combine(Folder, DictFile), true);
                 CurLang = Language;
             }

@@ -1249,7 +1249,7 @@ namespace NPC_Maker
                         string Text = File.ReadAllText(OFD.FileName);
                         NPCEntry Deserialized = JsonConvert.DeserializeObject<NPCEntry>(Text);
 
-                        int indexSame = 0;
+                        int indexSame = EditedFile.Entries.FindIndex(x => x.NPCName.ToUpper() == Deserialized.NPCName.ToUpper());
 
                         while (indexSame != -1 && indexSame != SelectedIndex)
                         {
