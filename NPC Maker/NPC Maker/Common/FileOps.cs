@@ -754,46 +754,60 @@ namespace NPC_Maker
                         List<byte> Header = new List<byte>();
                         List<byte> MsgData = new List<byte>();
 
-                        List<MessageEntry> msgListAll = new List<MessageEntry>();
+                        List<LocalizationEntry> locales = new List<LocalizationEntry>();
 
-                        msgListAll.AddRange(Entry.Messages);
+                        LocalizationEntry def = new LocalizationEntry() { Language = "Default", Messages = Entry.Messages };
 
-                        foreach (LocalizationEntry loc in Entry.Localization)
-                            msgListAll.AddRange(loc.Messages);
+                        locales.Add(def);
+                        locales.AddRange(Entry.Localization);
 
-                        int MsgOffset = 8 * msgListAll.Count();
+                        int Count = 0;
 
-                        foreach (MessageEntry Msg in msgListAll)
+                        foreach (var l in locales)
+                            Count += l.Messages.Count;
+
+                        int MsgOffset = 8 * Count;
+
+                        string curLang = Dicts.CurLang;
+
+                        foreach (LocalizationEntry loc in locales)
                         {
-                            List<byte> Message = Msg.ConvertTextData(Entry.NPCName, !CLIMode);
+                            Dicts.ReloadMsgTagOverrides(loc.Language);
 
-                            if (Message == null)
+                            foreach (MessageEntry Msg in loc.Messages)
                             {
-                                Message = new List<byte>();
+                                List<byte> Message = Msg.ConvertTextData(Entry.NPCName, !CLIMode);
 
-                                if (!ParseErrors.Contains(Entry.NPCName))
-                                    ParseErrors.Add(Entry.NPCName);
+                                if (Message == null)
+                                {
+                                    Message = new List<byte>();
+
+                                    if (!ParseErrors.Contains(Entry.NPCName))
+                                        ParseErrors.Add(Entry.NPCName);
+                                }
+
+                                Helpers.Ensure4ByteAlign(Message);
+                                MsgData.AddRange(Message);
+
+                                if (Message.Count > 1280)
+                                {
+                                    ShowMsg(CLIMode, $"{Entry.NPCName}: One of the messages ({Msg.Name}) has exceeded 1280 bytes (the maximum allowed), and could not be saved.");
+                                    Message = new List<byte>();
+
+                                    if (!ParseErrors.Contains(Entry.NPCName))
+                                        ParseErrors.Add(Entry.NPCName);
+                                }
+
+                                Header.AddRangeBigEndian(MsgOffset);
+                                Header.Add(Msg.GetMessageTypePos());
+                                Helpers.Ensure2ByteAlign(Header);
+                                Header.AddRangeBigEndian((UInt16)Message.Count);
+
+                                MsgOffset += Message.Count();
                             }
-
-                            Helpers.Ensure4ByteAlign(Message);
-                            MsgData.AddRange(Message);
-
-                            if (Message.Count > 1280)
-                            {
-                                ShowMsg(CLIMode, $"{Entry.NPCName}: One of the messages ({Msg.Name}) has exceeded 1280 bytes (the maximum allowed), and could not be saved.");
-                                Message = new List<byte>();
-
-                                if (!ParseErrors.Contains(Entry.NPCName))
-                                    ParseErrors.Add(Entry.NPCName);
-                            }
-
-                            Header.AddRangeBigEndian(MsgOffset);
-                            Header.Add(Msg.GetMessageTypePos());
-                            Helpers.Ensure2ByteAlign(Header);
-                            Header.AddRangeBigEndian((UInt16)Message.Count);
-
-                            MsgOffset += Message.Count();
                         }
+
+                        Dicts.ReloadMsgTagOverrides(curLang);
 
                         EntryBytes.AddRangeBigEndian(16 + Header.Count + MsgData.Count);
                         EntryBytes.AddRangeBigEndian(Offset + EntryBytes.Count + 8);

@@ -8,6 +8,8 @@ namespace NPC_Maker
 {
     public static class Dicts
     {
+        public static string CurLang = "Default";
+
         public static Dictionary<string, int> LimbShowSubTypes = new Dictionary<string, int>()
         {
             { "Not visible", 0 },
@@ -267,7 +269,10 @@ namespace NPC_Maker
                 if (!File.Exists(FileCheck))
                     Folder = Program.ExecPath;
 
+                Console.WriteLine($"Reloaded dict {Path.Combine(Folder, DictFile)}");
+
                 MsgTagOverride = FileOps.GetDictionaryStringString(Path.Combine(Folder, DictFile), true);
+                CurLang = Language;
             }
             catch (Exception)
             {
