@@ -23,7 +23,7 @@ namespace NPC_Maker
         NPCFile EditedFile = null;
         NPCEntry SelectedEntry = null;
         int SelectedIndex = -1;
-        string OpenedFile = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
+        string NPCSave = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
         private readonly System.Windows.Forms.Timer MsgPreviewTimer = new Timer();
         public static List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
         readonly Timer compileTimer;
@@ -105,14 +105,22 @@ namespace NPC_Maker
         private void splitContainer1_Panel1_SizeChanged(object sender, EventArgs e)
         {
             int btnX = (SplitPanel.Panel1.Width - 12) / 3;
+            int btnXRow2 = (SplitPanel.Panel1.Width - 12) / 2;
 
             Button_Add.Width = btnX;
             Button_Duplicate.Width = btnX;
             Button_Delete.Width = btnX;
 
+            Button_Export.Width = btnXRow2;
+            Button_Import.Width = btnXRow2;
+
             Button_Add.Location = new Point(2, Button_Add.Location.Y);
             Button_Duplicate.Location = new Point(SplitPanel.Panel1.Width / 2 - btnX / 2, Button_Duplicate.Location.Y);
             Button_Delete.Location = new Point(SplitPanel.Panel1.Width - btnX, Button_Delete.Location.Y);
+
+            Button_Export.Location = new Point(2, Button_Export.Location.Y);
+            Button_Import.Location = new Point(SplitPanel.Panel1.Width - btnXRow2, Button_Import.Location.Y);
+
         }
 
         private void LoadAddFontByName(string FontName)
@@ -120,14 +128,16 @@ namespace NPC_Maker
             string fontf = $"{FontName}.font_static";
             string fontfW = $"{FontName}.width_table";
 
-            string fontfP = Path.Combine(Path.GetDirectoryName(Program.JsonPath), "font", fontf);
-            string fontfWP = Path.Combine(Path.GetDirectoryName(Program.JsonPath), "font", fontfW);
+            string basePath = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
+
+            string fontfP = Path.Combine(basePath, "font", fontf);
+            string fontfWP = Path.Combine(basePath, "font", fontfW);
 
             string fontfDef = $"font.font_static";
             string fontfWDef = $"font.width_table";
 
-            string fontfPDef = Path.Combine(Path.GetDirectoryName(Program.JsonPath), "font", fontfDef);
-            string fontfWPDef = Path.Combine(Path.GetDirectoryName(Program.JsonPath), "font", fontfWDef);
+            string fontfPDef = Path.Combine(basePath, "font", fontfDef);
+            string fontfWPDef = Path.Combine(basePath, "font", fontfWDef);
 
 
             if (File.Exists(fontfP) && File.Exists(fontfWP))
@@ -177,11 +187,28 @@ namespace NPC_Maker
                 LoadAddFontByName(lan);
         }
 
+        private void SetupLanguageCombo()
+        {
+            Combo_Language.SelectedIndexChanged -= Combo_Language_SelectedIndexChanged;
+
+            Combo_Language.Items.Clear();
+            Combo_Language.Items.Add("Default");
+
+            foreach (string lan in EditedFile.Languages)
+                Combo_Language.Items.Add(lan);
+
+            ReloadAllFonts();
+
+            Combo_Language.SelectedIndex = 0;
+            Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
+
+        }
+
         private void OpenFile(string FilePath)
         {
             autoBackupTimer.Stop();
             EditedFile = FileOps.ParseNPCJsonFile(FilePath);
-            OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+            NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
             if (EditedFile != null)
             {
@@ -189,18 +216,7 @@ namespace NPC_Maker
                 Program.JsonPath = OpenedPath;
                 Panel_Editor.Enabled = true;
 
-                Combo_Language.SelectedIndexChanged -= Combo_Language_SelectedIndexChanged;
-
-                Combo_Language.Items.Clear();
-                Combo_Language.Items.Add("Default");
-
-                foreach (string lan in EditedFile.Languages)
-                    Combo_Language.Items.Add(lan);
-
-                ReloadAllFonts();
-
-                Combo_Language.SelectedIndex = 0;
-                Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
+                SetupLanguageCombo();
 
                 InsertDataIntoActorListGrid();
                 ChkBox_UseSpaceFont.Checked = EditedFile.SpaceFromFont;
@@ -274,7 +290,7 @@ namespace NPC_Maker
             {
                 string CurrentFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
-                if (!String.Equals(CurrentFile, OpenedFile))
+                if (!String.Equals(CurrentFile, NPCSave))
                 {
                     DialogResult Res = MessageBox.Show("Save changes before exiting?", "Save changes?", MessageBoxButtons.YesNoCancel);
 
@@ -692,7 +708,7 @@ namespace NPC_Maker
             {
                 string CurrentFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
-                if (!String.Equals(CurrentFile, OpenedFile))
+                if (!String.Equals(CurrentFile, NPCSave))
                 {
                     DialogResult DR = MessageBox.Show("Save changes before opening a new file?", "Save changes?", MessageBoxButtons.YesNoCancel);
 
@@ -743,7 +759,10 @@ namespace NPC_Maker
             EditedFile.GlobalHeaders.AddRange(new List<ScriptEntry>() { Defaults.DefaultDefines, Defaults.DefaultMacros });
 
             Panel_Editor.Enabled = true;
+
+            SetupLanguageCombo();
             InsertDataIntoActorListGrid();
+
         }
 
         private void FileMenu_SaveAs_Click(object sender, EventArgs e)
@@ -763,7 +782,7 @@ namespace NPC_Maker
 
             if (DR == DialogResult.OK)
             {
-                OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+                NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 FileOps.SaveNPCJSON(SFD.FileName, EditedFile);
 
                 Program.Settings.LastOpenPath = SFD.FileName;
@@ -779,7 +798,7 @@ namespace NPC_Maker
                 FileMenu_SaveAs_Click(this, null);
             else
             {
-                OpenedFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+                NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 FileOps.SaveNPCJSON(OpenedPath, EditedFile);
             }
         }
@@ -1037,7 +1056,6 @@ namespace NPC_Maker
                 EditedFile.GameVersion = Program.Settings.GameVersion;
 
             MsgText_TextChanged(null, null);
-
         }
 
         private void DocumentationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1089,7 +1107,208 @@ namespace NPC_Maker
 
         #endregion
 
+        #region Tools
+
+        private void importLocalizationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditedFile != null)
+            {
+
+                OpenFileDialog OFD = new OpenFileDialog()
+                {
+                    InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
+                    RestoreDirectory = true,
+                };
+
+                DialogResult DR = OFD.ShowDialog();
+
+                if (DR == DialogResult.OK)
+                {
+                    try
+                    {
+                        NPCFile LocalizationFile = FileOps.ParseNPCJsonFile(OFD.FileName);
+
+                        Windows.ComboPicker pick = new Windows.ComboPicker(LocalizationFile.Languages, "Import which language?", "Language selection");
+
+                        if (pick.ShowDialog() == DialogResult.OK)
+                        {
+                            string SelectedLanguage = pick.SelectedOption;
+                            int SelectedLangIndex = pick.SelectedIndex;
+
+                            int IndexInCur = EditedFile.Languages.FindIndex(x => x == SelectedLanguage);
+
+                            if (IndexInCur != -1)
+                            {
+                                DialogResult Res = MessageBox.Show("This language already exists. Replace it?", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+                                if (Res != DialogResult.Yes)
+                                    return;
+                            }
+                            else
+                            {
+                                EditedFile.Languages.Add(SelectedLanguage);
+
+                                foreach (NPCEntry entry in EditedFile.Entries)
+                                {
+                                    LocalizationEntry newlocEntry = new LocalizationEntry();
+                                    newlocEntry.Language = SelectedLanguage;
+
+                                    foreach (var msg in entry.Messages)
+                                        newlocEntry.Messages.Add(Helpers.Clone<MessageEntry>(msg));
+
+                                    entry.Localization.Add(newlocEntry);
+                                    IndexInCur = EditedFile.Languages.Count - 1;
+                                }
+                            }
+
+                            foreach (NPCEntry entry in EditedFile.Entries)
+                            {
+                                int importIndex = LocalizationFile.Entries.FindIndex(x => x.NPCName == entry.NPCName);
+
+                                if (importIndex == -1)
+                                    continue;
+
+                                NPCEntry ImportedEntry = LocalizationFile.Entries[importIndex];
+                                LocalizationEntry newLocalization = new LocalizationEntry();
+                                newLocalization.Language = SelectedLanguage;
+
+                                foreach (MessageEntry msg in entry.Messages)
+                                {
+                                    int importMsgIndex = ImportedEntry.Localization[SelectedLangIndex].Messages.FindIndex(x => x.Name == msg.Name);
+
+                                    if (importMsgIndex != -1)
+                                    {
+                                        MessageEntry import = ImportedEntry.Localization[SelectedLangIndex].Messages[importMsgIndex];
+                                        newLocalization.Messages.Add(import);
+                                    }
+                                    else
+                                    {
+                                        newLocalization.Messages.Add(Helpers.Clone<MessageEntry>(msg));
+                                    }
+                                }
+
+                                entry.Localization[IndexInCur] = newLocalization;
+                            }
+                        }
+
+                        SetupLanguageCombo();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.Forms.MessageBox.Show($"Failed to read JSON: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region NPCList
+
+        private void Button_Export_Click(object sender, EventArgs e)
+        {
+            if (SelectedEntry != null)
+            {
+                SaveFileDialog SFD = new SaveFileDialog
+                {
+                    InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
+                    RestoreDirectory = true,
+                    FileName = $"{SelectedEntry.NPCName}.json",
+                    Filter = "Json Files | *.json"
+                };
+
+                DialogResult DR = SFD.ShowDialog();
+
+                if (DR == DialogResult.OK)
+                {
+                    NPCSave = JsonConvert.SerializeObject(SelectedEntry, Formatting.Indented);
+                    File.WriteAllText(SFD.FileName, NPCSave);
+
+                    Program.Settings.LastOpenPath = SFD.FileName;
+                }
+            }
+
+        }
+
+        private void Button_Import_Click(object sender, EventArgs e)
+        {
+            if (SelectedEntry != null)
+            {
+                OpenFileDialog OFD = new OpenFileDialog()
+                {
+                    InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
+                    RestoreDirectory = true,
+                };
+
+                DialogResult DR = OFD.ShowDialog();
+
+                if (DR == DialogResult.OK)
+                {
+                    try
+                    {
+                        string Text = File.ReadAllText(OFD.FileName);
+                        NPCEntry Deserialized = JsonConvert.DeserializeObject<NPCEntry>(Text);
+
+                        int indexSame = 0;
+
+                        while (indexSame != -1 && indexSame != SelectedIndex)
+                        {
+                            Deserialized.NPCName += "_";
+                            indexSame = EditedFile.Entries.FindIndex(x => x.NPCName.ToUpper() == Deserialized.NPCName.ToUpper());
+                        }
+
+                        for (int i = 0; i < Deserialized.Messages.Count(); i++)
+                        {
+                            MessageEntry msg = Deserialized.Messages[i];
+
+                            foreach (LocalizationEntry loc in Deserialized.Localization)
+                            {
+                                int index = loc.Messages.FindIndex(x => x.Name == msg.Name);
+
+                                if (index != i)
+                                {
+                                    MessageBox.Show($"NPC is malformed: Localization does not match default messages.");
+                                    break;
+                                }
+                            }
+                        }
+
+                        List<LocalizationEntry> newLoc = new List<LocalizationEntry>();
+
+                        foreach (string Language in EditedFile.Languages)
+                        {
+                            int LocalizeIndex = Deserialized.Localization.FindIndex(x => x.Language == Language);
+
+                            if (LocalizeIndex == -1)
+                            {
+                                LocalizationEntry newLocEntry = new LocalizationEntry();
+                                newLocEntry.Language = Language;
+
+                                foreach (MessageEntry msg in Deserialized.Messages)
+                                    newLocEntry.Messages.Add(msg);
+
+                                newLoc.Add(newLocEntry);
+                            }
+                            else
+                            {
+                                newLoc.Add(Deserialized.Localization[LocalizeIndex]);
+                            }
+                        }
+
+                        Deserialized.Localization = newLoc;
+                        EditedFile.Entries[SelectedIndex] = Deserialized;
+                        SelectedEntry = Deserialized;
+
+                        InsertDataToEditor();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.Forms.MessageBox.Show($"Failed to read NPC Entry JSON: {ex.Message}");
+                    }
+
+                }
+            }
+        }
 
         private void NpcsFilter_TextChanged(object sender, EventArgs e)
         {
@@ -1125,8 +1344,26 @@ namespace NPC_Maker
         private void Button_Add_Click(object sender, EventArgs e)
         {
             NPCEntry Entry = GetNewNPCEntry();
-
             Entry.NPCName = $"NPC_{EditedFile.Entries.Count}";
+
+            string Title = Entry.NPCName;
+            DialogResult DR = InputBox.ShowInputDialog("NPC Name?", ref Title);
+
+            if (DR != DialogResult.OK)
+                return;
+
+            if (!SanitizeName(ref Title))
+                return;
+
+            int indexSame = EditedFile.Entries.FindIndex(x => x.NPCName.ToUpper() == Title.ToUpper());
+
+            if (indexSame != -1)
+            {
+                MessageBox.Show("NPC with that name already exists.");
+                return;
+            }
+
+            Entry.NPCName = Title;
             EditedFile.Entries.Add(Entry);
             DataGrid_NPCs.Rows.Add(new object[] { EditedFile.Entries.Count - 1, Entry.NPCName });
         }
@@ -1283,6 +1520,30 @@ namespace NPC_Maker
                 Txb_ObjectID.Text = Objects.Chosen.ID.ToString();
                 Txb_ObjectID_Leave(null, null);
             }
+        }
+
+        private void Button_NPCRename_Click(object sender, EventArgs e)
+        {
+            if (SelectedEntry == null)
+                return;
+
+            string Title = SelectedEntry.NPCName;
+
+            if (InputBox.ShowInputDialog("New NPC Name?", ref Title) != DialogResult.OK)
+                return;
+
+            if (!SanitizeName(ref Title))
+                return;
+
+            int indexSame = EditedFile.Entries.FindIndex(x => x.NPCName.ToUpper() == Title.ToUpper());
+
+            if (indexSame != -1 && indexSame != SelectedIndex)
+            {
+                MessageBox.Show("NPC with that name already exists.");
+                return;
+            }
+
+            Textbox_NPCName.Text = Title;
         }
 
         private void Textbox_NPCName_TextChanged(object sender, EventArgs e)
@@ -2375,6 +2636,84 @@ namespace NPC_Maker
 
         #region Messages
 
+        private void Btn_AddNewLanguage_Click(object sender, EventArgs e)
+        {
+            if (EditedFile != null)
+            {
+                string Language = "";
+                DialogResult DR = InputBox.ShowInputDialog("Language name?", ref Language);
+
+                if (DR != DialogResult.OK)
+                    return;
+
+                if (EditedFile.Languages.Contains(Language))
+                {
+                    MessageBox.Show("Language already exists.");
+                    return;
+                }
+
+                EditedFile.Languages.Add(Language);
+                Combo_Language.Items.Add(Language);
+
+                foreach (NPCEntry entry in EditedFile.Entries)
+                {
+                    LocalizationEntry newEntry = new LocalizationEntry();
+                    newEntry.Language = Language;
+
+                    foreach (MessageEntry me in entry.Messages)
+                        newEntry.Messages.Add(Helpers.Clone<MessageEntry>(me));
+
+                    entry.Localization.Add(newEntry);
+                }
+
+                ReloadAllFonts();
+            }
+        }
+
+        private void Btn_RemoveLanguage_Click(object sender, EventArgs e)
+        {
+            if (EditedFile != null && Combo_Language.SelectedIndex != 0)
+            {
+                DialogResult Res = MessageBox.Show("Are you sure? All messages of that language will be removed.", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+                if (Res == DialogResult.Yes)
+                {
+                    foreach (NPCEntry entry in EditedFile.Entries)
+                    {
+                        entry.Localization.RemoveAll(x => x.Language == Combo_Language.Text);
+                    }
+
+                    Combo_Language.Items.RemoveAt(Combo_Language.SelectedIndex);
+                    ReloadAllFonts();
+                    Combo_Language.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private void Combo_Language_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Combo_Language.SelectedIndex != 0)
+            {
+                SplitMsgContainer.Panel1Collapsed = false;
+                SplitMsgContainer.Panel1MinSize = 25;
+                SplitMsgContainer.Panel2MinSize = 25;
+                SplitMsgContainer.SplitterDistance = SplitMsgContainer.Width / 2;
+                SplitMsgContainer.IsSplitterFixed = false;
+            }
+            else
+            {
+                SplitMsgContainer.Panel1Collapsed = true;
+                SplitMsgContainer.Panel1MinSize = 0;
+                SplitMsgContainer.Panel2MinSize = 0;
+                SplitMsgContainer.SplitterDistance = 0;
+                SplitMsgContainer.IsSplitterFixed = true;
+            }
+
+            Dicts.ReloadMsgTagOverrides(Combo_Language.Text);
+
+            InsertDataToEditor();
+        }
+
         private void Btn_MsgMoveUp_Click(object sender, EventArgs e)
         {
             try
@@ -2578,7 +2917,7 @@ namespace NPC_Maker
 
             if (Combo_Language.SelectedIndex != 0)
                 MessageList = SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages;
-            
+
             MessageEntry Entry = MessageList[MessagesGrid.SelectedRows[0].Index];
             Entry.MessageText = MsgText.Text;
 
@@ -2603,16 +2942,16 @@ namespace NPC_Maker
 
             bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;
 
-            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type, 
-                                                                              Data.ToArray(), 
+            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type,
+                                                                              Data.ToArray(),
                                                                               fontsWidths[Combo_Language.SelectedIndex].Length == 0 ? null : fontsWidths[Combo_Language.SelectedIndex],
                                                                               fonts[Combo_Language.SelectedIndex].Length == 0 ? null : fonts[Combo_Language.SelectedIndex],
                                                                               EditedFile.SpaceFromFont);
-            
-            
-            
-            
-            
+
+
+
+
+
             Bitmap bmp = new Bitmap((CreditsTxBox ? 480 : 384), mp.MessageCount * (CreditsTxBox ? 360 : 108));
             bmp.MakeTransparent();
 
@@ -2805,7 +3144,12 @@ namespace NPC_Maker
             {
                 int MsgRowIndex = 0;
 
-                foreach (MessageEntry msg in n.Messages)
+                List<MessageEntry> messageList = n.Messages;
+
+                if (Combo_Language.SelectedIndex != 0)
+                    messageList = n.Localization[Combo_Language.SelectedIndex - 1].Messages;
+
+                foreach (MessageEntry msg in messageList)
                 {
                     string r = Regex.Replace(msg.MessageText.ToUpper().Replace(Environment.NewLine, " "), @"<([\s\S]*?)>", string.Empty, RegexOptions.Compiled);
 
@@ -3313,95 +3657,6 @@ namespace NPC_Maker
 
         #endregion
 
-        private void Btn_AddNewLanguage_Click(object sender, EventArgs e)
-        {
-            if (EditedFile != null)
-            {
-                string Language = "";
-                DialogResult DR = InputBox.ShowInputDialog("Language name?", ref Language);
 
-                if (DR != DialogResult.OK)
-                    return;
-
-                if (EditedFile.Languages.Contains(Language))
-                {
-                    MessageBox.Show("Language already exists.");
-                    return;
-                }
-
-                EditedFile.Languages.Add(Language);
-                Combo_Language.Items.Add(Language);
-
-                foreach (NPCEntry entry in EditedFile.Entries)
-                {
-                    LocalizationEntry newEntry = new LocalizationEntry();
-                    newEntry.Language = Language;
-
-                    foreach (MessageEntry me in entry.Messages)
-                    {
-                        MessageEntry nm = new MessageEntry();
-                        nm.Name = me.Name;
-                        nm.Position = me.Position;
-                        nm.Type = me.Type;
-                        nm.MessageText = me.MessageText;
-                        nm.MessageTextLines = me.MessageTextLines;
-                        newEntry.Messages.Add(nm);
-                    }
-
-                    entry.Localization.Add(newEntry);
-                }
-
-                ReloadAllFonts();
-            }
-        }
-
-        private void Btn_RemoveLanguage_Click(object sender, EventArgs e)
-        {
-            if (EditedFile != null && Combo_Language.SelectedIndex != 0)
-            {
-                DialogResult Res = MessageBox.Show("Are you sure? All messages of that language will be removed.", "Confirmation", MessageBoxButtons.YesNoCancel);
-
-                if (Res == DialogResult.Yes)
-                {
-                    foreach (NPCEntry entry in EditedFile.Entries)
-                    {
-                        entry.Localization.RemoveAll(x => x.Language == Combo_Language.Text);
-                    }
-
-                    Combo_Language.Items.RemoveAt(Combo_Language.SelectedIndex);
-                    ReloadAllFonts();
-                    Combo_Language.SelectedIndex = 0;
-                }
-            }
-        }
-
-        private void Combo_Language_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (Combo_Language.SelectedIndex != 0)
-            {
-                SplitMsgContainer.Panel1Collapsed = false;
-                SplitMsgContainer.Panel1MinSize = 25;
-                SplitMsgContainer.Panel2MinSize = 25;
-                SplitMsgContainer.SplitterDistance = SplitMsgContainer.Width / 2;
-                SplitMsgContainer.IsSplitterFixed = false;
-            }
-            else
-            {
-                SplitMsgContainer.Panel1Collapsed = true;
-                SplitMsgContainer.Panel1MinSize = 0;
-                SplitMsgContainer.Panel2MinSize = 0;
-                SplitMsgContainer.SplitterDistance = 0;
-                SplitMsgContainer.IsSplitterFixed = true;
-            }
-
-            Dicts.ReloadMsgTagOverrides(Combo_Language.Text);
-
-            InsertDataToEditor();
-        }
-
-        private void MsgPreview_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

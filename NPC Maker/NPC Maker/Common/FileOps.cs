@@ -217,7 +217,7 @@ namespace NPC_Maker
         {
             try
             {
-                NPCFile outD = Clone(Data);
+                NPCFile outD = (NPCFile)Helpers.Clone<NPCFile>(Data);
 
                 foreach (NPCEntry e in outD.Entries)
                 {
@@ -266,12 +266,6 @@ namespace NPC_Maker
             {
                 System.Windows.Forms.MessageBox.Show($"Failed to write JSON: {ex.Message}");
             }
-        }
-
-        public static NPCFile Clone(NPCFile Data)
-        {
-            string t = JsonConvert.SerializeObject(Data, Formatting.Indented);
-            return JsonConvert.DeserializeObject<NPCFile>(t);
         }
 
         public static Dictionary<string, int> GetDictionary(string Filename, bool allowFail = false)

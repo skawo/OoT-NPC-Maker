@@ -33,6 +33,8 @@
             this.Panel_Editor = new System.Windows.Forms.Panel();
             this.SplitPanel = new System.Windows.Forms.SplitContainer();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
+            this.Button_Import = new System.Windows.Forms.Button();
+            this.Button_Export = new System.Windows.Forms.Button();
             this.Label_NpcFilter = new System.Windows.Forms.Label();
             this.NpcsFilter = new System.Windows.Forms.TextBox();
             this.Button_Duplicate = new System.Windows.Forms.Button();
@@ -44,6 +46,7 @@
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
+            this.Button_NPCRename = new System.Windows.Forms.Button();
             this.numUpFileStart = new System.Windows.Forms.NumericUpDown();
             this.Lbl_ObjectOffset = new System.Windows.Forms.Label();
             this.Lbl_LimbColors = new System.Windows.Forms.Label();
@@ -329,6 +332,7 @@
             this.globalCHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editGlobalHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importLocalizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -344,6 +348,7 @@
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
+            this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
@@ -465,6 +470,8 @@
             // 
             // Panel_NPCList
             // 
+            this.Panel_NPCList.Controls.Add(this.Button_Import);
+            this.Panel_NPCList.Controls.Add(this.Button_Export);
             this.Panel_NPCList.Controls.Add(this.Label_NpcFilter);
             this.Panel_NPCList.Controls.Add(this.NpcsFilter);
             this.Panel_NPCList.Controls.Add(this.Button_Duplicate);
@@ -477,11 +484,33 @@
             this.Panel_NPCList.Size = new System.Drawing.Size(301, 659);
             this.Panel_NPCList.TabIndex = 5;
             // 
+            // Button_Import
+            // 
+            this.Button_Import.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Import.Location = new System.Drawing.Point(149, 612);
+            this.Button_Import.Name = "Button_Import";
+            this.Button_Import.Size = new System.Drawing.Size(79, 31);
+            this.Button_Import.TabIndex = 81;
+            this.Button_Import.Text = "Import";
+            this.Button_Import.UseVisualStyleBackColor = true;
+            this.Button_Import.Click += new System.EventHandler(this.Button_Import_Click);
+            // 
+            // Button_Export
+            // 
+            this.Button_Export.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Button_Export.Location = new System.Drawing.Point(64, 612);
+            this.Button_Export.Name = "Button_Export";
+            this.Button_Export.Size = new System.Drawing.Size(79, 31);
+            this.Button_Export.TabIndex = 80;
+            this.Button_Export.Text = "Export";
+            this.Button_Export.UseVisualStyleBackColor = true;
+            this.Button_Export.Click += new System.EventHandler(this.Button_Export_Click);
+            // 
             // Label_NpcFilter
             // 
             this.Label_NpcFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.Label_NpcFilter.AutoSize = true;
-            this.Label_NpcFilter.Location = new System.Drawing.Point(4, 601);
+            this.Label_NpcFilter.Location = new System.Drawing.Point(4, 552);
             this.Label_NpcFilter.Name = "Label_NpcFilter";
             this.Label_NpcFilter.Size = new System.Drawing.Size(32, 13);
             this.Label_NpcFilter.TabIndex = 79;
@@ -491,7 +520,7 @@
             // 
             this.NpcsFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.NpcsFilter.Location = new System.Drawing.Point(42, 598);
+            this.NpcsFilter.Location = new System.Drawing.Point(42, 549);
             this.NpcsFilter.Name = "NpcsFilter";
             this.NpcsFilter.Size = new System.Drawing.Size(256, 20);
             this.NpcsFilter.TabIndex = 2;
@@ -500,7 +529,7 @@
             // Button_Duplicate
             // 
             this.Button_Duplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Duplicate.Location = new System.Drawing.Point(114, 624);
+            this.Button_Duplicate.Location = new System.Drawing.Point(116, 575);
             this.Button_Duplicate.Name = "Button_Duplicate";
             this.Button_Duplicate.Size = new System.Drawing.Size(73, 31);
             this.Button_Duplicate.TabIndex = 4;
@@ -511,7 +540,7 @@
             // Button_Delete
             // 
             this.Button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Delete.Location = new System.Drawing.Point(193, 624);
+            this.Button_Delete.Location = new System.Drawing.Point(195, 575);
             this.Button_Delete.Name = "Button_Delete";
             this.Button_Delete.Size = new System.Drawing.Size(73, 31);
             this.Button_Delete.TabIndex = 5;
@@ -522,7 +551,7 @@
             // Button_Add
             // 
             this.Button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Button_Add.Location = new System.Drawing.Point(30, 624);
+            this.Button_Add.Location = new System.Drawing.Point(32, 575);
             this.Button_Add.Name = "Button_Add";
             this.Button_Add.Size = new System.Drawing.Size(79, 31);
             this.Button_Add.TabIndex = 3;
@@ -551,7 +580,7 @@
             this.DataGrid_NPCs.ReadOnly = true;
             this.DataGrid_NPCs.RowHeadersVisible = false;
             this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid_NPCs.Size = new System.Drawing.Size(295, 592);
+            this.DataGrid_NPCs.Size = new System.Drawing.Size(295, 545);
             this.DataGrid_NPCs.TabIndex = 1;
             this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
             this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
@@ -600,6 +629,7 @@
             // 
             this.Tab1_Data.BackColor = System.Drawing.Color.White;
             this.Tab1_Data.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Tab1_Data.Controls.Add(this.Button_NPCRename);
             this.Tab1_Data.Controls.Add(this.numUpFileStart);
             this.Tab1_Data.Controls.Add(this.Lbl_ObjectOffset);
             this.Tab1_Data.Controls.Add(this.Lbl_LimbColors);
@@ -634,6 +664,16 @@
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
             // 
+            // Button_NPCRename
+            // 
+            this.Button_NPCRename.Location = new System.Drawing.Point(351, 6);
+            this.Button_NPCRename.Name = "Button_NPCRename";
+            this.Button_NPCRename.Size = new System.Drawing.Size(65, 20);
+            this.Button_NPCRename.TabIndex = 79;
+            this.Button_NPCRename.Text = "Rename";
+            this.Button_NPCRename.UseVisualStyleBackColor = true;
+            this.Button_NPCRename.Click += new System.EventHandler(this.Button_NPCRename_Click);
+            // 
             // numUpFileStart
             // 
             this.numUpFileStart.Hexadecimal = true;
@@ -644,7 +684,7 @@
             0,
             0});
             this.numUpFileStart.Name = "numUpFileStart";
-            this.numUpFileStart.Size = new System.Drawing.Size(245, 20);
+            this.numUpFileStart.Size = new System.Drawing.Size(282, 20);
             this.numUpFileStart.TabIndex = 78;
             this.numUpFileStart.Tag = "FILESTART";
             this.numUpFileStart.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
@@ -671,7 +711,7 @@
             // 
             // NumUpAlpha
             // 
-            this.NumUpAlpha.Location = new System.Drawing.Point(556, 86);
+            this.NumUpAlpha.Location = new System.Drawing.Point(630, 110);
             this.NumUpAlpha.Maximum = new decimal(new int[] {
             255,
             0,
@@ -691,7 +731,7 @@
             // LblAlpha
             // 
             this.LblAlpha.AutoSize = true;
-            this.LblAlpha.Location = new System.Drawing.Point(553, 62);
+            this.LblAlpha.Location = new System.Drawing.Point(627, 86);
             this.LblAlpha.Name = "LblAlpha";
             this.LblAlpha.Size = new System.Drawing.Size(46, 13);
             this.LblAlpha.TabIndex = 53;
@@ -699,7 +739,7 @@
             // 
             // Btn_SelectObject
             // 
-            this.Btn_SelectObject.Location = new System.Drawing.Point(314, 35);
+            this.Btn_SelectObject.Location = new System.Drawing.Point(351, 34);
             this.Btn_SelectObject.Name = "Btn_SelectObject";
             this.Btn_SelectObject.Size = new System.Drawing.Size(65, 20);
             this.Btn_SelectObject.TabIndex = 52;
@@ -713,7 +753,7 @@
             this.Txb_ObjectID.MaxLength = 32;
             this.Txb_ObjectID.Multiline = true;
             this.Txb_ObjectID.Name = "Txb_ObjectID";
-            this.Txb_ObjectID.Size = new System.Drawing.Size(173, 20);
+            this.Txb_ObjectID.Size = new System.Drawing.Size(211, 20);
             this.Txb_ObjectID.TabIndex = 51;
             this.Txb_ObjectID.Tag = "";
             this.Txb_ObjectID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Txb_ObjectID_KeyUp);
@@ -722,7 +762,7 @@
             // Checkbox_EnvColor
             // 
             this.Checkbox_EnvColor.AutoSize = true;
-            this.Checkbox_EnvColor.Location = new System.Drawing.Point(404, 117);
+            this.Checkbox_EnvColor.Location = new System.Drawing.Point(478, 141);
             this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
             this.Checkbox_EnvColor.Size = new System.Drawing.Size(146, 17);
             this.Checkbox_EnvColor.TabIndex = 50;
@@ -733,7 +773,7 @@
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
-            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(556, 113);
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(630, 137);
             this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
             this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(42, 23);
             this.Button_EnvironmentColorPreview.TabIndex = 49;
@@ -790,7 +830,8 @@
             this.Textbox_NPCName.Location = new System.Drawing.Point(134, 8);
             this.Textbox_NPCName.MaxLength = 32;
             this.Textbox_NPCName.Name = "Textbox_NPCName";
-            this.Textbox_NPCName.Size = new System.Drawing.Size(245, 20);
+            this.Textbox_NPCName.ReadOnly = true;
+            this.Textbox_NPCName.Size = new System.Drawing.Size(211, 20);
             this.Textbox_NPCName.TabIndex = 4;
             this.Textbox_NPCName.Tag = "NPCNAME";
             this.Textbox_NPCName.TextChanged += new System.EventHandler(this.Textbox_NPCName_TextChanged);
@@ -806,7 +847,7 @@
             // 
             // NumUpDown_ZModelOffs
             // 
-            this.NumUpDown_ZModelOffs.Location = new System.Drawing.Point(524, 36);
+            this.NumUpDown_ZModelOffs.Location = new System.Drawing.Point(598, 60);
             this.NumUpDown_ZModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -842,14 +883,14 @@
             0,
             0});
             this.NumUpDown_Hierarchy.Name = "NumUpDown_Hierarchy";
-            this.NumUpDown_Hierarchy.Size = new System.Drawing.Size(245, 20);
+            this.NumUpDown_Hierarchy.Size = new System.Drawing.Size(282, 20);
             this.NumUpDown_Hierarchy.TabIndex = 8;
             this.NumUpDown_Hierarchy.Tag = "HIERARCHY";
             this.NumUpDown_Hierarchy.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
             // NumUpDown_YModelOffs
             // 
-            this.NumUpDown_YModelOffs.Location = new System.Drawing.Point(464, 36);
+            this.NumUpDown_YModelOffs.Location = new System.Drawing.Point(538, 60);
             this.NumUpDown_YModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -953,7 +994,7 @@
             // 
             // NumUpDown_XModelOffs
             // 
-            this.NumUpDown_XModelOffs.Location = new System.Drawing.Point(404, 36);
+            this.NumUpDown_XModelOffs.Location = new System.Drawing.Point(478, 60);
             this.NumUpDown_XModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -982,7 +1023,7 @@
             "Skin, full opacity (Horses)"});
             this.ComboBox_HierarchyType.Location = new System.Drawing.Point(134, 114);
             this.ComboBox_HierarchyType.Name = "ComboBox_HierarchyType";
-            this.ComboBox_HierarchyType.Size = new System.Drawing.Size(245, 21);
+            this.ComboBox_HierarchyType.Size = new System.Drawing.Size(282, 21);
             this.ComboBox_HierarchyType.TabIndex = 11;
             this.ComboBox_HierarchyType.Tag = "HIERARCHYTYPE";
             this.ComboBox_HierarchyType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ValueChanged);
@@ -990,7 +1031,7 @@
             // Label_ModelDrawOffs
             // 
             this.Label_ModelDrawOffs.AutoSize = true;
-            this.Label_ModelDrawOffs.Location = new System.Drawing.Point(401, 11);
+            this.Label_ModelDrawOffs.Location = new System.Drawing.Point(475, 35);
             this.Label_ModelDrawOffs.Name = "Label_ModelDrawOffs";
             this.Label_ModelDrawOffs.Size = new System.Drawing.Size(94, 13);
             this.Label_ModelDrawOffs.TabIndex = 35;
@@ -1014,7 +1055,7 @@
             "Link"});
             this.ComboBox_AnimType.Location = new System.Drawing.Point(134, 141);
             this.ComboBox_AnimType.Name = "ComboBox_AnimType";
-            this.ComboBox_AnimType.Size = new System.Drawing.Size(245, 21);
+            this.ComboBox_AnimType.Size = new System.Drawing.Size(282, 21);
             this.ComboBox_AnimType.TabIndex = 13;
             this.ComboBox_AnimType.Tag = "ANIMTYPE";
             this.ComboBox_AnimType.SelectedIndexChanged += new System.EventHandler(this.ComboBox_AnimType_SelectedIndexChanged);
@@ -1031,7 +1072,7 @@
             // Label_Scale
             // 
             this.Label_Scale.AutoSize = true;
-            this.Label_Scale.Location = new System.Drawing.Point(401, 62);
+            this.Label_Scale.Location = new System.Drawing.Point(475, 86);
             this.Label_Scale.Name = "Label_Scale";
             this.Label_Scale.Size = new System.Drawing.Size(37, 13);
             this.Label_Scale.TabIndex = 16;
@@ -1045,7 +1086,7 @@
             0,
             0,
             131072});
-            this.NumUpDown_Scale.Location = new System.Drawing.Point(404, 86);
+            this.NumUpDown_Scale.Location = new System.Drawing.Point(478, 110);
             this.NumUpDown_Scale.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -3504,7 +3545,6 @@
             this.MsgPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.MsgPreview.TabIndex = 69;
             this.MsgPreview.TabStop = false;
-            this.MsgPreview.Click += new System.EventHandler(this.MsgPreview_Click);
             // 
             // Btn_MsgRename
             // 
@@ -4207,10 +4247,18 @@
             // 
             // optionsToolStripMenuItem
             // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importLocalizationToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.optionsToolStripMenuItem.Text = "Tools";
+            // 
+            // importLocalizationToolStripMenuItem
+            // 
+            this.importLocalizationToolStripMenuItem.Name = "importLocalizationToolStripMenuItem";
+            this.importLocalizationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.importLocalizationToolStripMenuItem.Text = "Import localization";
+            this.importLocalizationToolStripMenuItem.Click += new System.EventHandler(this.importLocalizationToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -4243,6 +4291,7 @@
             this.scriptsToolStripMenuItem,
             this.listsToolStripMenuItem,
             this.optionsToolStripMenuItem,
+            this.settingsToolStripMenuItem1,
             this.aboutToolStripMenuItem});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.MaximumSize = new System.Drawing.Size(2000, 0);
@@ -4341,6 +4390,13 @@
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
+            // 
+            // settingsToolStripMenuItem1
+            // 
+            this.settingsToolStripMenuItem1.Name = "settingsToolStripMenuItem1";
+            this.settingsToolStripMenuItem1.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem1.Text = "Settings";
+            this.settingsToolStripMenuItem1.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -4780,6 +4836,11 @@
         private System.Windows.Forms.ComboBox Combo_Language;
         private System.Windows.Forms.SplitContainer SplitMsgContainer;
         private FCTB_Mono MsgTextDefault;
+        private System.Windows.Forms.ToolStripMenuItem importLocalizationToolStripMenuItem;
+        private System.Windows.Forms.Button Button_Import;
+        private System.Windows.Forms.Button Button_Export;
+        private System.Windows.Forms.Button Button_NPCRename;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem1;
     }
 }
 

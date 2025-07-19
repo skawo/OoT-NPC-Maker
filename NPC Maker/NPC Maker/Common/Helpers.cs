@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -190,6 +191,12 @@ namespace NPC_Maker
                 if (newCurrentValue.Equals(currentValue)) // see "Update" below
                     return newValue;
             }
+        }
+
+        public static T Clone<T>(object Data)
+        {
+            string t = JsonConvert.SerializeObject(Data);
+            return JsonConvert.DeserializeObject<T>(t);
         }
     }
 }
