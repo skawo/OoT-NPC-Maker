@@ -51,6 +51,8 @@ namespace NPC_Maker
 
         public bool Spellcheck { get; set; }
 
+        public bool CompressIndividually { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -75,6 +77,7 @@ namespace NPC_Maker
             AutoComp_ActorSwitch = false;
             CompileInParallel = true;
             Spellcheck = false;
+            CompressIndividually = false;
         }
 
         public enum Members
@@ -99,6 +102,7 @@ namespace NPC_Maker
             USESPACEFONT,
             PARALLEL,
             SPELLCHECK,
+            COMPRESS,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -144,6 +148,7 @@ namespace NPC_Maker
                 case Members.USESPACEFONT: UseSpaceWithFromFont = (bool)Value; break;
                 case Members.PARALLEL: CompileInParallel = (bool)Value; break;
                 case Members.SPELLCHECK: Spellcheck = (bool)Value; break;
+                case Members.COMPRESS: CompressIndividually = (bool)Value; break;
                 default: break;
             }
         }

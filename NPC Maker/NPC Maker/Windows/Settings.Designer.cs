@@ -47,6 +47,7 @@ namespace NPC_Maker.Windows
             this.Btn_ResetCache = new System.Windows.Forms.Button();
             this.checkBox_CompileInParallel = new System.Windows.Forms.CheckBox();
             this.chkBox_Spellcheck = new System.Windows.Forms.CheckBox();
+            this.chkBox_Compress = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AutoSaveCTime)).BeginInit();
@@ -104,7 +105,7 @@ namespace NPC_Maker.Windows
             // 
             this.Combo_CompileFor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_CompileFor.FormattingEnabled = true;
-            this.Combo_CompileFor.Location = new System.Drawing.Point(122, 204);
+            this.Combo_CompileFor.Location = new System.Drawing.Point(121, 227);
             this.Combo_CompileFor.Name = "Combo_CompileFor";
             this.Combo_CompileFor.Size = new System.Drawing.Size(149, 21);
             this.Combo_CompileFor.TabIndex = 4;
@@ -114,7 +115,7 @@ namespace NPC_Maker.Windows
             // Lbl_CompileFor
             // 
             this.Lbl_CompileFor.AutoSize = true;
-            this.Lbl_CompileFor.Location = new System.Drawing.Point(11, 207);
+            this.Lbl_CompileFor.Location = new System.Drawing.Point(10, 230);
             this.Lbl_CompileFor.Name = "Lbl_CompileFor";
             this.Lbl_CompileFor.Size = new System.Drawing.Size(75, 13);
             this.Lbl_CompileFor.TabIndex = 5;
@@ -122,7 +123,7 @@ namespace NPC_Maker.Windows
             // 
             // Txt_GCCArgs
             // 
-            this.Txt_GCCArgs.Location = new System.Drawing.Point(13, 278);
+            this.Txt_GCCArgs.Location = new System.Drawing.Point(12, 301);
             this.Txt_GCCArgs.Name = "Txt_GCCArgs";
             this.Txt_GCCArgs.Size = new System.Drawing.Size(450, 20);
             this.Txt_GCCArgs.TabIndex = 6;
@@ -132,7 +133,7 @@ namespace NPC_Maker.Windows
             // Lbl_GCCArgs
             // 
             this.Lbl_GCCArgs.AutoSize = true;
-            this.Lbl_GCCArgs.Location = new System.Drawing.Point(12, 262);
+            this.Lbl_GCCArgs.Location = new System.Drawing.Point(11, 285);
             this.Lbl_GCCArgs.Name = "Lbl_GCCArgs";
             this.Lbl_GCCArgs.Size = new System.Drawing.Size(85, 13);
             this.Lbl_GCCArgs.TabIndex = 7;
@@ -140,7 +141,7 @@ namespace NPC_Maker.Windows
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(343, 304);
+            this.BtnSave.Location = new System.Drawing.Point(342, 327);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(120, 29);
             this.BtnSave.TabIndex = 8;
@@ -151,7 +152,7 @@ namespace NPC_Maker.Windows
             // Label_CompileTimeout
             // 
             this.Label_CompileTimeout.AutoSize = true;
-            this.Label_CompileTimeout.Location = new System.Drawing.Point(11, 233);
+            this.Label_CompileTimeout.Location = new System.Drawing.Point(10, 256);
             this.Label_CompileTimeout.Name = "Label_CompileTimeout";
             this.Label_CompileTimeout.Size = new System.Drawing.Size(106, 13);
             this.Label_CompileTimeout.TabIndex = 10;
@@ -159,7 +160,7 @@ namespace NPC_Maker.Windows
             // 
             // NumUpCompileTimeout
             // 
-            this.NumUpCompileTimeout.Location = new System.Drawing.Point(122, 231);
+            this.NumUpCompileTimeout.Location = new System.Drawing.Point(121, 254);
             this.NumUpCompileTimeout.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -255,7 +256,7 @@ namespace NPC_Maker.Windows
             // 
             // Btn_ResetCache
             // 
-            this.Btn_ResetCache.Location = new System.Drawing.Point(13, 304);
+            this.Btn_ResetCache.Location = new System.Drawing.Point(12, 327);
             this.Btn_ResetCache.Name = "Btn_ResetCache";
             this.Btn_ResetCache.Size = new System.Drawing.Size(120, 29);
             this.Btn_ResetCache.TabIndex = 17;
@@ -278,7 +279,7 @@ namespace NPC_Maker.Windows
             // chkBox_Spellcheck
             // 
             this.chkBox_Spellcheck.AutoSize = true;
-            this.chkBox_Spellcheck.Location = new System.Drawing.Point(13, 174);
+            this.chkBox_Spellcheck.Location = new System.Drawing.Point(13, 197);
             this.chkBox_Spellcheck.Name = "chkBox_Spellcheck";
             this.chkBox_Spellcheck.Size = new System.Drawing.Size(79, 17);
             this.chkBox_Spellcheck.TabIndex = 19;
@@ -287,11 +288,24 @@ namespace NPC_Maker.Windows
             this.chkBox_Spellcheck.UseVisualStyleBackColor = true;
             this.chkBox_Spellcheck.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
+            // chkBox_Compress
+            // 
+            this.chkBox_Compress.AutoSize = true;
+            this.chkBox_Compress.Location = new System.Drawing.Point(13, 174);
+            this.chkBox_Compress.Name = "chkBox_Compress";
+            this.chkBox_Compress.Size = new System.Drawing.Size(126, 17);
+            this.chkBox_Compress.TabIndex = 20;
+            this.chkBox_Compress.Tag = "COMPRESS";
+            this.chkBox_Compress.Text = "Compress individually";
+            this.chkBox_Compress.UseVisualStyleBackColor = true;
+            this.chkBox_Compress.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 341);
+            this.ClientSize = new System.Drawing.Size(475, 364);
+            this.Controls.Add(this.chkBox_Compress);
             this.Controls.Add(this.chkBox_Spellcheck);
             this.Controls.Add(this.checkBox_CompileInParallel);
             this.Controls.Add(this.Btn_ResetCache);
@@ -341,5 +355,6 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.Button Btn_ResetCache;
         private System.Windows.Forms.CheckBox checkBox_CompileInParallel;
         private System.Windows.Forms.CheckBox chkBox_Spellcheck;
+        private System.Windows.Forms.CheckBox chkBox_Compress;
     }
 }

@@ -117,6 +117,7 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.Checkbox_Omitted = new System.Windows.Forms.CheckBox();
             this.NumUpDown_AnimInterpFrames = new System.Windows.Forms.NumericUpDown();
             this.Label_AnimInterpFrames = new System.Windows.Forms.Label();
             this.Label_UncullZoneScale = new System.Windows.Forms.Label();
@@ -344,11 +345,11 @@
             this.musicToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.CodeParamsTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
-            this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
@@ -1499,6 +1500,7 @@
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
+            this.Tab3_BehaviorData.Controls.Add(this.Checkbox_Omitted);
             this.Tab3_BehaviorData.Controls.Add(this.NumUpDown_AnimInterpFrames);
             this.Tab3_BehaviorData.Controls.Add(this.Label_AnimInterpFrames);
             this.Tab3_BehaviorData.Controls.Add(this.Label_UncullZoneScale);
@@ -1542,6 +1544,18 @@
             this.Tab3_BehaviorData.Size = new System.Drawing.Size(782, 633);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
+            // 
+            // Checkbox_Omitted
+            // 
+            this.Checkbox_Omitted.AutoSize = true;
+            this.Checkbox_Omitted.Location = new System.Drawing.Point(422, 590);
+            this.Checkbox_Omitted.Name = "Checkbox_Omitted";
+            this.Checkbox_Omitted.Size = new System.Drawing.Size(74, 17);
+            this.Checkbox_Omitted.TabIndex = 98;
+            this.Checkbox_Omitted.Tag = "OMIT";
+            this.Checkbox_Omitted.Text = "Omit actor";
+            this.Checkbox_Omitted.UseVisualStyleBackColor = true;
+            this.Checkbox_Omitted.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUpDown_AnimInterpFrames
             // 
@@ -4256,7 +4270,7 @@
             // importLocalizationToolStripMenuItem
             // 
             this.importLocalizationToolStripMenuItem.Name = "importLocalizationToolStripMenuItem";
-            this.importLocalizationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.importLocalizationToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.importLocalizationToolStripMenuItem.Text = "Import localization";
             this.importLocalizationToolStripMenuItem.Click += new System.EventHandler(this.importLocalizationToolStripMenuItem_Click);
             // 
@@ -4355,6 +4369,13 @@
             this.colorPickerToolStripMenuItem.Text = "Color Picker";
             this.colorPickerToolStripMenuItem.Click += new System.EventHandler(this.ColorPickerToolStripMenuItem_Click);
             // 
+            // settingsToolStripMenuItem1
+            // 
+            this.settingsToolStripMenuItem1.Name = "settingsToolStripMenuItem1";
+            this.settingsToolStripMenuItem1.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem1.Text = "Settings";
+            this.settingsToolStripMenuItem1.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
+            // 
             // CodeParamsTooltip
             // 
             this.CodeParamsTooltip.AutoPopDelay = 6000;
@@ -4390,13 +4411,6 @@
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
-            // 
-            // settingsToolStripMenuItem1
-            // 
-            this.settingsToolStripMenuItem1.Name = "settingsToolStripMenuItem1";
-            this.settingsToolStripMenuItem1.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem1.Text = "Settings";
-            this.settingsToolStripMenuItem1.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -4841,6 +4855,7 @@
         private System.Windows.Forms.Button Button_Export;
         private System.Windows.Forms.Button Button_NPCRename;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem1;
+        private System.Windows.Forms.CheckBox Checkbox_Omitted;
     }
 }
 

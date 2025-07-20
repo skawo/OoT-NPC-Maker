@@ -155,6 +155,7 @@
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\NPCMakerSettings.cs" />
     <Compile Include="Common\ScriptsUsages.cs" />
+    <Compile Include="Common\Yaz0Compress.cs" />
     <Compile Include="Controls\FCTB_Mono.cs">
       <SubType>UserControl</SubType>
     </Compile>

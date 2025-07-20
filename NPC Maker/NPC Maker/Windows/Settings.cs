@@ -39,6 +39,7 @@ namespace NPC_Maker.Windows
             NumUpDown_AutoSaveCTime.Value = EditedSettings.AutoSaveTime;
             checkBox_CompileInParallel.Checked = EditedSettings.CompileInParallel;
             chkBox_Spellcheck.Checked = EditedSettings.Spellcheck;
+            chkBox_Compress.Checked = EditedSettings.CompressIndividually;
 
         }
 

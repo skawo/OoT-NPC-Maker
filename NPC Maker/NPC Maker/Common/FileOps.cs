@@ -553,7 +553,7 @@ namespace NPC_Maker
 
             try
             {
-                int Offset = Data.Entries.Count() * 4 + 4;
+                int Offset = Data.Entries.Count() * 12 + 4;
 
                 List<byte> EntryAddresses = new List<byte>();
                 List<List<byte>> EntryData = new List<List<byte>>();
@@ -571,7 +571,7 @@ namespace NPC_Maker
                 foreach (NPCEntry Entry in Data.Entries)
                 {
 
-                    if (Entry.IsNull == false)
+                    if (Entry.IsNull == false && !Entry.Omitted)
                     {
                         Console.Write($"Processing entry {EntriesDone}: {Entry.NPCName}... ");
 
@@ -1126,10 +1126,31 @@ namespace NPC_Maker
 
                         #endregion
 
-                        EntryBytes.InsertRange(0, Program.BEConverter.GetBytes(EntryBytes.Count));
-                        EntryData.Add(EntryBytes);
+
+                        List<byte> outCompressed = null;
+
+                        if (Program.Settings.CompressIndividually)
+                        { 
+                            outCompressed = PeepsCompress.YAZ0.Compress(EntryBytes.ToArray(), 0).ToList();
+                            Helpers.Ensure4ByteAlign(outCompressed);
+                        }
+
                         EntryAddresses.AddRangeBigEndian(Offset);
-                        Offset += EntryBytes.Count();
+
+                        if (!Program.Settings.CompressIndividually || outCompressed.Count >= EntryBytes.Count)
+                        {
+                            EntryData.Add(EntryBytes);
+                            EntryAddresses.AddRangeBigEndian(0);
+                            EntryAddresses.AddRangeBigEndian(EntryBytes.Count);
+                            Offset += EntryBytes.Count();
+                        }
+                        else
+                        {
+                            EntryData.Add(outCompressed);
+                            EntryAddresses.AddRangeBigEndian(outCompressed.Count);
+                            EntryAddresses.AddRangeBigEndian(EntryBytes.Count);
+                            Offset += outCompressed.Count();
+                        }
 
                         if (ParseErrors.Count == 0)
                             Console.Write($"OK{Environment.NewLine}");
@@ -1139,7 +1160,9 @@ namespace NPC_Maker
                     else
                     {
                         EntryAddresses.AddRangeBigEndian((UInt32)0);
-                        Console.WriteLine($"Entry {EntriesDone} is blank.");
+                        EntryAddresses.AddRangeBigEndian((UInt32)0);
+                        EntryAddresses.AddRangeBigEndian((UInt32)0);
+                        Console.WriteLine($"Entry {EntriesDone} is blank or omitted.");
 
                     }
 

@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Data;
 using FastColoredTextBoxNS;
 
+
 namespace NPC_Maker
 {
     public partial class MainWindow : Form
@@ -474,6 +475,8 @@ namespace NPC_Maker
             NumUpDown_TalkSpeed.Value = SelectedEntry.TalkSpeed;
 
             NumUpDown_AnimInterpFrames.Value = SelectedEntry.AnimInterpFrames;
+
+            Checkbox_Omitted.Checked = SelectedEntry.Omitted;
 
             #endregion
             // Create tab pages for the script, reusing ones that already existed prior to switching to this NPC.

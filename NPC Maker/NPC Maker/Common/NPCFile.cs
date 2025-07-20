@@ -157,6 +157,8 @@ namespace NPC_Maker
 
         public CCodeEntry EmbeddedOverlayCode { get; set; }
 
+        public bool Omitted { get; set; }
+
         public NPCEntry()
         {
             NPCName = "";
@@ -266,6 +268,8 @@ namespace NPC_Maker
             AnimInterpFrames = 4;
 
             EmbeddedOverlayCode = new CCodeEntry();
+
+            Omitted = false;
         }
 
         public List<OutputColorEntry> ParseColorEntries()
@@ -376,6 +380,7 @@ namespace NPC_Maker
             CULLDWN,
             CULLSCALE,
             ANIMINTERPFRAMES,
+            OMIT,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -509,6 +514,8 @@ namespace NPC_Maker
                 case Members.CULLSCALE: CullScale = (float)Convert.ToDecimal(Value); break;
 
                 case Members.ANIMINTERPFRAMES: AnimInterpFrames = Convert.ToByte(Value); break;
+
+                case Members.OMIT: Omitted = Convert.ToBoolean(Value); break;
 
                 default: break;
             }
