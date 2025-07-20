@@ -208,6 +208,7 @@ namespace NPC_Maker
 
             Combo_Language.SelectedIndex = 0;
             Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
+            Combo_Language_SelectedIndexChanged(null, null);
 
         }
 
@@ -2751,7 +2752,10 @@ namespace NPC_Maker
 
         private void Combo_Language_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int curSelMsg = MessagesGrid.SelectedRows[0].Index;
+            int curSelMsg = 0;
+
+            if (MessagesGrid.SelectedRows.Count != 0)
+                curSelMsg = MessagesGrid.SelectedRows[0].Index;
 
             if (Combo_Language.SelectedIndex != 0)
             {
@@ -2772,19 +2776,22 @@ namespace NPC_Maker
 
             InsertDataToEditor();
 
-            MessagesGrid.Rows[curSelMsg].Selected = true;
+            if (MessagesGrid.Rows.Count > curSelMsg)
+            {
+                MessagesGrid.Rows[curSelMsg].Selected = true;
 
-            if (Program.IsRunningUnderMono)
-            {
-                ScrollToMsg = curSelMsg;
-                messageSearchTimer.Interval = 10;
-                messageSearchTimer.Tick += MessageSearchTimer_Tick;
-                messageSearchTimer.Stop();
-                messageSearchTimer.Start();
-            }
-            else
-            {
-                MessagesGrid.FirstDisplayedScrollingRowIndex = curSelMsg;
+                if (Program.IsRunningUnderMono)
+                {
+                    ScrollToMsg = curSelMsg;
+                    messageSearchTimer.Interval = 10;
+                    messageSearchTimer.Tick += MessageSearchTimer_Tick;
+                    messageSearchTimer.Stop();
+                    messageSearchTimer.Start();
+                }
+                else
+                {
+                    MessagesGrid.FirstDisplayedScrollingRowIndex = curSelMsg;
+                }
             }
 
             MsgPreviewTimer_Tick(null, null);
