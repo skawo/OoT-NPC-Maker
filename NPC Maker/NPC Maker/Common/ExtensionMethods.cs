@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
@@ -85,6 +86,52 @@ namespace NPC_Maker
                 g.DrawImage(bmpIn, r, r.X, r.Y, r.Width, r.Height, GraphicsUnit.Pixel, imageAtt);
 
             return bmpOut;
+        }
+
+        public static Bitmap ResizeImageKeepAspectRatio(this Bitmap originalImage, int maxWidth, int maxHeight)
+        {
+            if (maxWidth == originalImage.Width && maxHeight == originalImage.Height)
+                return originalImage;
+
+            float aspectRatio = (float)originalImage.Width / originalImage.Height;
+            int newWidth, newHeight;
+
+            if (originalImage.Width > originalImage.Height)
+            {
+                newWidth = Math.Min(maxWidth, originalImage.Width);
+                newHeight = (int)(newWidth / aspectRatio);
+
+                if (newHeight > maxHeight)
+                {
+                    newHeight = maxHeight;
+                    newWidth = (int)(newHeight * aspectRatio);
+                }
+            }
+            else
+            {
+                newHeight = Math.Min(maxHeight, originalImage.Height);
+                newWidth = (int)(newHeight * aspectRatio);
+
+                if (newWidth > maxWidth)
+                {
+                    newWidth = maxWidth;
+                    newHeight = (int)(newWidth / aspectRatio);
+                }
+            }
+
+            Bitmap resizedImage = new Bitmap(newWidth, newHeight);
+
+            using (Graphics graphics = Graphics.FromImage(resizedImage))
+            {
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+
+                graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight);
+            }
+
+            return resizedImage;
         }
     }
 }

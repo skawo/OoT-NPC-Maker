@@ -675,14 +675,19 @@ namespace NPC_Maker
             return (byte)(Out | Position);
         }
 
-        public List<byte> ConvertTextData(string NPCName, bool ShowErrors = true)
+        public List<byte> ConvertTextData(string NPCName, string Language, bool ShowErrors = true)
         {
             List<byte> data = new List<byte>();
             List<string> errors = new List<string>();
 
             string wMessageText = MessageText;
 
-            foreach (var s in Dicts.MsgTagOverride)
+            var tagDict = Dicts.MsgTagOverride[Dicts.DefaultLanguage];
+
+            if (Dicts.MsgTagOverride.ContainsKey(Language))
+                tagDict = Dicts.MsgTagOverride[Language];
+
+            foreach (var s in tagDict)
                 wMessageText = wMessageText.Replace(s.Key, s.Value);
 
             for (int i = 0; i < wMessageText.Length; i++)

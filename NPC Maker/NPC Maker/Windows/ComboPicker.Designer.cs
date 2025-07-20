@@ -84,6 +84,7 @@ namespace NPC_Maker.Windows
             this.Controls.Add(this.LblExplanation);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "ComboPicker";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ComboPicker";
             this.ResumeLayout(false);
             this.PerformLayout();

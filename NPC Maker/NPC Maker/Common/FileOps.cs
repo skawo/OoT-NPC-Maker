@@ -754,11 +754,9 @@ namespace NPC_Maker
                         List<byte> Header = new List<byte>();
                         List<byte> MsgData = new List<byte>();
 
-                        List<LocalizationEntry> locales = new List<LocalizationEntry>();
+                        LocalizationEntry def = new LocalizationEntry() { Language = Dicts.DefaultLanguage, Messages = Entry.Messages };
 
-                        LocalizationEntry def = new LocalizationEntry() { Language = "Default", Messages = Entry.Messages };
-
-                        locales.Add(def);
+                        List<LocalizationEntry> locales = new List<LocalizationEntry>() { def };
                         locales.AddRange(Entry.Localization);
 
                         int Count = 0;
@@ -768,15 +766,11 @@ namespace NPC_Maker
 
                         int MsgOffset = 8 * Count;
 
-                        string curLang = Dicts.CurLang;
-
                         foreach (LocalizationEntry loc in locales)
                         {
-                            Dicts.ReloadMsgTagOverrides(loc.Language);
-
                             foreach (MessageEntry Msg in loc.Messages)
                             {
-                                List<byte> Message = Msg.ConvertTextData(Entry.NPCName, !CLIMode);
+                                List<byte> Message = Msg.ConvertTextData(Entry.NPCName, loc.Language, !CLIMode);
 
                                 if (Message == null)
                                 {
@@ -806,8 +800,6 @@ namespace NPC_Maker
                                 MsgOffset += Message.Count();
                             }
                         }
-
-                        Dicts.ReloadMsgTagOverrides(curLang);
 
                         EntryBytes.AddRangeBigEndian(16 + Header.Count + MsgData.Count);
                         EntryBytes.AddRangeBigEndian(Offset + EntryBytes.Count + 8);

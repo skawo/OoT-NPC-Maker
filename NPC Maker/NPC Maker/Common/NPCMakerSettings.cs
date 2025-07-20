@@ -53,6 +53,8 @@ namespace NPC_Maker
 
         public bool CompressIndividually { get; set; }
 
+        public bool OrigPreview { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -78,6 +80,7 @@ namespace NPC_Maker
             CompileInParallel = true;
             Spellcheck = false;
             CompressIndividually = false;
+            OrigPreview = false;
         }
 
         public enum Members
@@ -103,6 +106,7 @@ namespace NPC_Maker
             PARALLEL,
             SPELLCHECK,
             COMPRESS,
+            ORIGPREVIEW,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -149,6 +153,7 @@ namespace NPC_Maker
                 case Members.PARALLEL: CompileInParallel = (bool)Value; break;
                 case Members.SPELLCHECK: Spellcheck = (bool)Value; break;
                 case Members.COMPRESS: CompressIndividually = (bool)Value; break;
+                case Members.ORIGPREVIEW: OrigPreview = (bool)Value; break;
                 default: break;
             }
         }

@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Data;
 using FastColoredTextBoxNS;
-
+using System.Drawing.Drawing2D;
 
 namespace NPC_Maker
 {
@@ -35,7 +35,11 @@ namespace NPC_Maker
         readonly Timer messageSearchTimer = new Timer();
         private Timer autoBackupTimer = new Timer();
         string LastBackup = "";
+
         private Image lastPreviewImage;
+        private Image lastPreviewImageOrig;
+        private List<List<byte>> lastPreviewBoxes;
+        private List<List<byte>> lastPreviewBoxesOrig;
 
         private List<float[]> fontsWidths = new List<float[]>();
         private List<byte[]> fonts = new List<byte[]>();
@@ -80,6 +84,8 @@ namespace NPC_Maker
             MsgText.ContextMenuStrip = MessagesContextMenu.MenuStrip;
             MessagesContextMenu.SetTextBox(MsgText);
 
+            chkBox_ShowDefaultLanguagePreview.Checked = Program.Settings.OrigPreview;
+
             FunctionComboBoxes = new List<KeyValuePair<ComboBox, ComboBox>>()
                         {
                             new KeyValuePair<ComboBox, ComboBox>(Combo_FuncOnInit, null),
@@ -91,7 +97,6 @@ namespace NPC_Maker
                         };
 
             this.DoubleBuffered = true;
-
             this.ResizeBegin += Form1_ResizeBegin;
             this.ResizeEnd += Form1_ResizeEnd;
 
@@ -193,12 +198,13 @@ namespace NPC_Maker
             Combo_Language.SelectedIndexChanged -= Combo_Language_SelectedIndexChanged;
 
             Combo_Language.Items.Clear();
-            Combo_Language.Items.Add("Default");
+            Combo_Language.Items.Add(Dicts.DefaultLanguage);
 
             foreach (string lan in EditedFile.Languages)
                 Combo_Language.Items.Add(lan);
 
             ReloadAllFonts();
+            Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
 
             Combo_Language.SelectedIndex = 0;
             Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
@@ -765,7 +771,6 @@ namespace NPC_Maker
 
             SetupLanguageCombo();
             InsertDataIntoActorListGrid();
-
         }
 
         private void FileMenu_SaveAs_Click(object sender, EventArgs e)
@@ -1131,7 +1136,10 @@ namespace NPC_Maker
                     {
                         NPCFile LocalizationFile = FileOps.ParseNPCJsonFile(OFD.FileName);
 
-                        Windows.ComboPicker pick = new Windows.ComboPicker(LocalizationFile.Languages, "Import which language?", "Language selection");
+                        List<string> LanguagesWithDefault = new List<string>() { Dicts.DefaultLanguage };
+                        LanguagesWithDefault.AddRange(LocalizationFile.Languages);
+
+                        Windows.ComboPicker pick = new Windows.ComboPicker(LanguagesWithDefault, "Import which language?", "Language selection");
 
                         if (pick.ShowDialog() == DialogResult.OK)
                         {
@@ -1140,7 +1148,7 @@ namespace NPC_Maker
 
                             int IndexInCur = EditedFile.Languages.FindIndex(x => x == SelectedLanguage);
 
-                            if (IndexInCur != -1)
+                            if (IndexInCur != -1 || SelectedLanguage == Dicts.DefaultLanguage)
                             {
                                 DialogResult Res = MessageBox.Show("This language already exists. Replace it?", "Confirmation", MessageBoxButtons.YesNoCancel);
 
@@ -1164,6 +1172,7 @@ namespace NPC_Maker
                                 }
                             }
 
+
                             foreach (NPCEntry entry in EditedFile.Entries)
                             {
                                 int importIndex = LocalizationFile.Entries.FindIndex(x => x.NPCName == entry.NPCName);
@@ -1175,26 +1184,68 @@ namespace NPC_Maker
                                 LocalizationEntry newLocalization = new LocalizationEntry();
                                 newLocalization.Language = SelectedLanguage;
 
+                                List<MessageEntry> messageList = ImportedEntry.Messages;
+
+                                if (SelectedLangIndex != 0)
+                                    messageList = ImportedEntry.Localization[SelectedLangIndex - 1].Messages;
+
                                 foreach (MessageEntry msg in entry.Messages)
                                 {
-                                    int importMsgIndex = ImportedEntry.Localization[SelectedLangIndex].Messages.FindIndex(x => x.Name == msg.Name);
+                                    int importMsgIndex = messageList.FindIndex(x => x.Name == msg.Name);
 
                                     if (importMsgIndex != -1)
                                     {
-                                        MessageEntry import = ImportedEntry.Localization[SelectedLangIndex].Messages[importMsgIndex];
+                                        MessageEntry import = messageList[importMsgIndex];
                                         newLocalization.Messages.Add(import);
                                     }
                                     else
                                     {
+                                        if (msg == null)
+                                            ;
+
                                         newLocalization.Messages.Add(Helpers.Clone<MessageEntry>(msg));
                                     }
                                 }
 
-                                entry.Localization[IndexInCur] = newLocalization;
-                            }
-                        }
+                                if (SelectedLangIndex == 0)
+                                    entry.Messages = newLocalization.Messages;
+                                else
+                                    entry.Localization[IndexInCur] = newLocalization;
 
-                        SetupLanguageCombo();
+                                List<MessageEntry> diff = messageList.Where(item2 => !entry.Messages.Any(item1 => item1.Name == item2.Name)).ToList();
+
+                                foreach (MessageEntry msg in diff)
+                                {
+                                    int msgIndex = messageList.IndexOf(msg);
+
+                                    MessageEntry msgN = Helpers.Clone<MessageEntry>(msg);
+
+                                    if (SelectedLangIndex != 0)
+                                    {
+                                        msgN.MessageText = "";
+                                        msgN.MessageTextLines.Clear();
+                                    }
+
+                                    entry.Messages.Insert(msgIndex, msgN);
+
+                                    foreach (var loc in entry.Localization)
+                                    {
+                                        msgN = Helpers.Clone<MessageEntry>(msg);
+
+                                        if (loc.Language != SelectedLanguage)
+                                        {
+                                            msgN.MessageText = "";
+                                            msgN.MessageTextLines.Clear();
+                                        }
+
+                                        loc.Messages.Insert(msgIndex, Helpers.Clone<MessageEntry>(msgN));
+                                    }
+                                }
+                            }
+
+                            InsertDataToEditor();
+                            SetupLanguageCombo();
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -2649,7 +2700,7 @@ namespace NPC_Maker
                 if (DR != DialogResult.OK)
                     return;
 
-                if (EditedFile.Languages.Contains(Language))
+                if (EditedFile.Languages.Contains(Language) || Language == Dicts.DefaultLanguage)
                 {
                     MessageBox.Show("Language already exists.");
                     return;
@@ -2670,6 +2721,7 @@ namespace NPC_Maker
                 }
 
                 ReloadAllFonts();
+                Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
             }
         }
 
@@ -2681,13 +2733,17 @@ namespace NPC_Maker
 
                 if (Res == DialogResult.Yes)
                 {
+                    EditedFile.Languages.Remove(Combo_Language.Text);
+
                     foreach (NPCEntry entry in EditedFile.Entries)
                     {
                         entry.Localization.RemoveAll(x => x.Language == Combo_Language.Text);
                     }
 
                     Combo_Language.Items.RemoveAt(Combo_Language.SelectedIndex);
+
                     ReloadAllFonts();
+                    Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
                     Combo_Language.SelectedIndex = 0;
                 }
             }
@@ -2695,6 +2751,8 @@ namespace NPC_Maker
 
         private void Combo_Language_SelectedIndexChanged(object sender, EventArgs e)
         {
+            int curSelMsg = MessagesGrid.SelectedRows[0].Index;
+
             if (Combo_Language.SelectedIndex != 0)
             {
                 SplitMsgContainer.Panel1Collapsed = false;
@@ -2712,9 +2770,24 @@ namespace NPC_Maker
                 SplitMsgContainer.IsSplitterFixed = true;
             }
 
-            Dicts.ReloadMsgTagOverrides(Combo_Language.Text);
-
             InsertDataToEditor();
+
+            MessagesGrid.Rows[curSelMsg].Selected = true;
+
+            if (Program.IsRunningUnderMono)
+            {
+                ScrollToMsg = curSelMsg;
+                messageSearchTimer.Interval = 10;
+                messageSearchTimer.Tick += MessageSearchTimer_Tick;
+                messageSearchTimer.Stop();
+                messageSearchTimer.Start();
+            }
+            else
+            {
+                MessagesGrid.FirstDisplayedScrollingRowIndex = curSelMsg;
+            }
+
+            MsgPreviewTimer_Tick(null, null);
         }
 
         private void Btn_MsgMoveUp_Click(object sender, EventArgs e)
@@ -2909,38 +2982,18 @@ namespace NPC_Maker
             PerformSpellCheck();
         }
 
-        private void MsgPreviewTimer_Tick(object sender, EventArgs e)
+        private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Image savedPreview, ref List<List<byte>> boxData)
         {
-            MsgPreviewTimer.Stop();
-
-            if (MessagesGrid.SelectedRows.Count == 0)
-                return;
-
-            List<MessageEntry> MessageList = SelectedEntry.Messages;
-
-            if (Combo_Language.SelectedIndex != 0)
-                MessageList = SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages;
-
-            MessageEntry Entry = MessageList[MessagesGrid.SelectedRows[0].Index];
-            Entry.MessageText = MsgText.Text;
-
-            List<byte> Data = Entry.ConvertTextData(SelectedEntry.NPCName, false);
+            List<byte> Data = Entry.ConvertTextData(NPCName, Language, false);
 
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
-            {
-                if (lastPreviewImage == null)
-                    return;
-
-                Bitmap b = new Bitmap(lastPreviewImage);
-                MsgPreview.Image = b.SetAlpha(170);
-                return;
-            }
+                return null;
 
             if (Data.Count > 1280)
             {
                 Entry = new MessageEntry();
                 Entry.MessageText = "Error: Over 1280 bytes.";
-                Data = Entry.ConvertTextData(SelectedEntry.NPCName, false);
+                Data = Entry.ConvertTextData(NPCName, Language, false);
             }
 
             bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;
@@ -2951,30 +3004,110 @@ namespace NPC_Maker
                                                                               fonts[Combo_Language.SelectedIndex].Length == 0 ? null : fonts[Combo_Language.SelectedIndex],
                                                                               EditedFile.SpaceFromFont);
 
+            Bitmap bmp;
 
-
-
-
-            Bitmap bmp = new Bitmap((CreditsTxBox ? 480 : 384), mp.MessageCount * (CreditsTxBox ? 360 : 108));
-            bmp.MakeTransparent();
+            if (boxData != null && mp.Message.Count == boxData.Count)
+            {
+                bmp = (Bitmap)savedPreview;
+            }
+            else
+            {
+                bmp = new Bitmap((CreditsTxBox ? 480 : 384), mp.MessageCount * (CreditsTxBox ? 360 : 108));
+                bmp.MakeTransparent();
+            }
 
             using (Graphics grfx = Graphics.FromImage(bmp))
             {
                 for (int i = 0; i < mp.MessageCount; i++)
                 {
-                    lastPreviewImage = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
-                    grfx.DrawImage(lastPreviewImage, 0, lastPreviewImage.Height * i);
+                    if (boxData == null || mp.Message.Count != boxData.Count || !mp.Message[i].SequenceEqual(boxData[i]))
+                    {
+                        grfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                        Bitmap box = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
+                        grfx.DrawImage(box, 0, box.Height * i);
+                    }
                 }
             }
 
-            MsgPreview.Size = new Size((CreditsTxBox ? 480 : 384), bmp.Height);
-            MsgPreview.Location = new Point((this.PanelMsgPreview.Width - MsgPreview.Width) / 2, 0 - PanelMsgPreview.VerticalScroll.Value);
-            MsgPreview.Image = bmp;
+            savedPreview = bmp;
+            boxData = mp.Message;
+
+            return bmp;
+        }
+
+        private void MsgPreviewTimer_Tick(object sender, EventArgs e)
+        {
+            MsgPreviewTimer.Stop();
+
+            if (MessagesGrid.SelectedRows.Count == 0)
+                return;
+
+            if (Program.Settings.OrigPreview && Combo_Language.SelectedIndex != 0)
+            {
+                PreviewSplitContainer.SplitterDistance = PreviewSplitContainer.Width / 2;
+                PreviewSplitContainer.Panel1Collapsed = false;
+                PreviewSplitContainer.Panel1.AutoScroll = true;
+
+                MessageEntry Entry2 = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+                Entry2.MessageText = MsgTextDefault.Text;
+
+                Bitmap bmp2 = GetMessagePreviewImage(Entry2, Dicts.DefaultLanguage, SelectedEntry.NPCName, ref lastPreviewImageOrig, ref lastPreviewBoxesOrig);
+                bmp2 = bmp2.ResizeImageKeepAspectRatio(Math.Min(this.PreviewSplitContainer.Panel1.Width - 35, bmp2.Width), bmp2.Height);
+
+                if (bmp2 != null)
+                {
+                    MsgPreviewOrig.Size = new Size(bmp2.Width, bmp2.Height);
+                    MsgPreviewOrig.Location = new Point((this.PreviewSplitContainer.Panel1.Width - MsgPreviewOrig.Width) / 2, 0 - PreviewSplitContainer.Panel1.VerticalScroll.Value);
+                    MsgPreviewOrig.Image = bmp2;
+                }
+                else
+                {
+                    if (lastPreviewImageOrig != null)
+                    {
+                        Bitmap b = new Bitmap(lastPreviewImageOrig);
+                        MsgPreviewOrig.Image = b.SetAlpha(170);
+                    }
+                }
+            }
+            else
+            {
+                PreviewSplitContainer.Panel1Collapsed = true;
+            }
+
+            List<MessageEntry> MessageList = SelectedEntry.Messages;
+
+            if (Combo_Language.SelectedIndex != 0)
+                MessageList = SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages;
+
+            MessageEntry Entry = MessageList[MessagesGrid.SelectedRows[0].Index];
+            Entry.MessageText = MsgText.Text;
+
+            Bitmap bmp = GetMessagePreviewImage(Entry, Combo_Language.Text, SelectedEntry.NPCName, ref lastPreviewImage, ref lastPreviewBoxes);
+
+            if (Program.Settings.OrigPreview && Combo_Language.SelectedIndex != 0)
+                bmp = bmp.ResizeImageKeepAspectRatio(Math.Min(this.PreviewSplitContainer.Panel2.Width - 35, bmp.Width), bmp.Height);
+
+            if (bmp != null)
+            {
+                MsgPreview.Size = new Size(bmp.Width, bmp.Height);
+                MsgPreview.Location = new Point((this.PreviewSplitContainer.Panel2.Width - MsgPreview.Width) / 2, 0 - PreviewSplitContainer.Panel2.VerticalScroll.Value);
+                MsgPreview.Image = bmp;
+            }
+            else
+            {
+                if (lastPreviewImage != null)
+                {
+                    Bitmap b = new Bitmap(lastPreviewImage);
+                    MsgPreview.Image = b.SetAlpha(170);
+                }
+            }
         }
 
         private void PanelMsgPreview_Resize(object sender, EventArgs e)
         {
             MsgPreview.Left = (this.PanelMsgPreview.Width - MsgPreview.Width) / 2;
+            MsgPreviewTimer.Stop();
+            MsgPreviewTimer.Start();
         }
 
         private void Combo_MsgPos_SelectedIndexChanged(object sender, EventArgs e)
@@ -2998,7 +3131,8 @@ namespace NPC_Maker
             Combo_MsgType.SelectedIndexChanged -= Combo_MsgType_SelectedIndexChanged;
 
             SetMsgBackground(Entry.Type);
-            MsgPreviewTimer_Tick(null, null);
+            MsgPreviewTimer.Stop();
+            MsgPreviewTimer.Start();
 
             MsgText.TextChanged += MsgText_TextChanged;
             Combo_MsgType.SelectedIndexChanged += Combo_MsgType_SelectedIndexChanged;
@@ -3120,7 +3254,14 @@ namespace NPC_Maker
         private void ChkBox_UseSpaceFont_CheckedChanged(object sender, EventArgs e)
         {
             EditedFile.SpaceFromFont = (sender as CheckBox).Checked;
-            MsgText_TextChanged(null, null);
+            MsgPreviewTimer.Stop();
+            MsgPreviewTimer.Start();
+        }
+        private void chkBox_ShowDefaultLanguagePreview_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Settings.OrigPreview = chkBox_ShowDefaultLanguagePreview.Checked;
+            MsgPreviewTimer.Stop();
+            MsgPreviewTimer.Start();
         }
 
         private void FindMsgBtn_Click(object sender, EventArgs e)
@@ -3658,8 +3799,8 @@ namespace NPC_Maker
 
 
 
-        #endregion
 
+        #endregion
 
     }
 }

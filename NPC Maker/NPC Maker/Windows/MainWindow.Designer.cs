@@ -250,6 +250,7 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.chkBox_ShowDefaultLanguagePreview = new System.Windows.Forms.CheckBox();
             this.SplitMsgContainer = new System.Windows.Forms.SplitContainer();
             this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
             this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
@@ -263,9 +264,10 @@
             this.Btn_MsgMoveUp = new System.Windows.Forms.Button();
             this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
+            this.PreviewSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.MsgPreviewOrig = new System.Windows.Forms.PictureBox();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
             this.Btn_MsgRename = new System.Windows.Forms.Button();
-            this.Lbl_Text = new System.Windows.Forms.Label();
             this.Combo_MsgPos = new System.Windows.Forms.ComboBox();
             this.Lbl_MsgPos = new System.Windows.Forms.Label();
             this.Combo_MsgType = new System.Windows.Forms.ComboBox();
@@ -431,6 +433,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
             this.PanelMsgPreview.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PreviewSplitContainer)).BeginInit();
+            this.PreviewSplitContainer.Panel1.SuspendLayout();
+            this.PreviewSplitContainer.Panel2.SuspendLayout();
+            this.PreviewSplitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgPreviewOrig)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.Tab5_Scripts.SuspendLayout();
@@ -3301,6 +3308,7 @@
             // 
             // Tab4_Messages
             // 
+            this.Tab4_Messages.Controls.Add(this.chkBox_ShowDefaultLanguagePreview);
             this.Tab4_Messages.Controls.Add(this.SplitMsgContainer);
             this.Tab4_Messages.Controls.Add(this.Btn_RemoveLanguage);
             this.Tab4_Messages.Controls.Add(this.Btn_AddNewLanguage);
@@ -3313,7 +3321,6 @@
             this.Tab4_Messages.Controls.Add(this.ChkBox_UseSpaceFont);
             this.Tab4_Messages.Controls.Add(this.PanelMsgPreview);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgRename);
-            this.Tab4_Messages.Controls.Add(this.Lbl_Text);
             this.Tab4_Messages.Controls.Add(this.Combo_MsgPos);
             this.Tab4_Messages.Controls.Add(this.Lbl_MsgPos);
             this.Tab4_Messages.Controls.Add(this.Combo_MsgType);
@@ -3328,6 +3335,20 @@
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
+            // 
+            // chkBox_ShowDefaultLanguagePreview
+            // 
+            this.chkBox_ShowDefaultLanguagePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBox_ShowDefaultLanguagePreview.AutoSize = true;
+            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(584, 29);
+            this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
+            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(175, 17);
+            this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
+            this.chkBox_ShowDefaultLanguagePreview.Tag = "";
+            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default language preview";
+            this.chkBox_ShowDefaultLanguagePreview.UseVisualStyleBackColor = true;
+            this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.chkBox_ShowDefaultLanguagePreview_CheckedChanged);
             // 
             // SplitMsgContainer
             // 
@@ -3430,8 +3451,7 @@
             // 
             // Btn_RemoveLanguage
             // 
-            this.Btn_RemoveLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_RemoveLanguage.Location = new System.Drawing.Point(687, 26);
+            this.Btn_RemoveLanguage.Location = new System.Drawing.Point(506, 26);
             this.Btn_RemoveLanguage.Name = "Btn_RemoveLanguage";
             this.Btn_RemoveLanguage.Size = new System.Drawing.Size(73, 21);
             this.Btn_RemoveLanguage.TabIndex = 90;
@@ -3441,8 +3461,7 @@
             // 
             // Btn_AddNewLanguage
             // 
-            this.Btn_AddNewLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Btn_AddNewLanguage.Location = new System.Drawing.Point(608, 26);
+            this.Btn_AddNewLanguage.Location = new System.Drawing.Point(427, 26);
             this.Btn_AddNewLanguage.Name = "Btn_AddNewLanguage";
             this.Btn_AddNewLanguage.Size = new System.Drawing.Size(73, 21);
             this.Btn_AddNewLanguage.TabIndex = 89;
@@ -3452,7 +3471,6 @@
             // 
             // Combo_Language
             // 
-            this.Combo_Language.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Combo_Language.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_Language.FormattingEnabled = true;
             this.Combo_Language.Items.AddRange(new object[] {
@@ -3463,7 +3481,7 @@
             "None (White text)",
             "None (Black text)",
             "Credits"});
-            this.Combo_Language.Location = new System.Drawing.Point(473, 26);
+            this.Combo_Language.Location = new System.Drawing.Point(292, 27);
             this.Combo_Language.Name = "Combo_Language";
             this.Combo_Language.Size = new System.Drawing.Size(129, 21);
             this.Combo_Language.TabIndex = 88;
@@ -3472,9 +3490,8 @@
             // 
             // label4
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(409, 30);
+            this.label4.Location = new System.Drawing.Point(228, 30);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(58, 13);
             this.label4.TabIndex = 87;
@@ -3541,7 +3558,7 @@
             this.PanelMsgPreview.AutoScroll = true;
             this.PanelMsgPreview.BackColor = System.Drawing.Color.White;
             this.PanelMsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelMsgPreview.Controls.Add(this.MsgPreview);
+            this.PanelMsgPreview.Controls.Add(this.PreviewSplitContainer);
             this.PanelMsgPreview.Location = new System.Drawing.Point(202, 269);
             this.PanelMsgPreview.Margin = new System.Windows.Forms.Padding(0);
             this.PanelMsgPreview.Name = "PanelMsgPreview";
@@ -3549,10 +3566,42 @@
             this.PanelMsgPreview.TabIndex = 72;
             this.PanelMsgPreview.Resize += new System.EventHandler(this.PanelMsgPreview_Resize);
             // 
+            // PreviewSplitContainer
+            // 
+            this.PreviewSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PreviewSplitContainer.IsSplitterFixed = true;
+            this.PreviewSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.PreviewSplitContainer.Name = "PreviewSplitContainer";
+            // 
+            // PreviewSplitContainer.Panel1
+            // 
+            this.PreviewSplitContainer.Panel1.AutoScroll = true;
+            this.PreviewSplitContainer.Panel1.Controls.Add(this.MsgPreviewOrig);
+            this.PreviewSplitContainer.Panel1Collapsed = true;
+            // 
+            // PreviewSplitContainer.Panel2
+            // 
+            this.PreviewSplitContainer.Panel2.AutoScroll = true;
+            this.PreviewSplitContainer.Panel2.Controls.Add(this.MsgPreview);
+            this.PreviewSplitContainer.Size = new System.Drawing.Size(556, 350);
+            this.PreviewSplitContainer.SplitterDistance = 185;
+            this.PreviewSplitContainer.TabIndex = 70;
+            // 
+            // MsgPreviewOrig
+            // 
+            this.MsgPreviewOrig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MsgPreviewOrig.Location = new System.Drawing.Point(-145, -87);
+            this.MsgPreviewOrig.Margin = new System.Windows.Forms.Padding(0);
+            this.MsgPreviewOrig.Name = "MsgPreviewOrig";
+            this.MsgPreviewOrig.Size = new System.Drawing.Size(474, 275);
+            this.MsgPreviewOrig.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.MsgPreviewOrig.TabIndex = 70;
+            this.MsgPreviewOrig.TabStop = false;
+            // 
             // MsgPreview
             // 
             this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MsgPreview.Location = new System.Drawing.Point(48, 39);
+            this.MsgPreview.Location = new System.Drawing.Point(82, 2);
             this.MsgPreview.Margin = new System.Windows.Forms.Padding(0);
             this.MsgPreview.Name = "MsgPreview";
             this.MsgPreview.Size = new System.Drawing.Size(474, 275);
@@ -3570,15 +3619,6 @@
             this.Btn_MsgRename.Text = "Rename";
             this.Btn_MsgRename.UseVisualStyleBackColor = true;
             this.Btn_MsgRename.Click += new System.EventHandler(this.Btn_MsgRename_Click);
-            // 
-            // Lbl_Text
-            // 
-            this.Lbl_Text.AutoSize = true;
-            this.Lbl_Text.Location = new System.Drawing.Point(199, 30);
-            this.Lbl_Text.Name = "Lbl_Text";
-            this.Lbl_Text.Size = new System.Drawing.Size(31, 13);
-            this.Lbl_Text.TabIndex = 66;
-            this.Lbl_Text.Text = "Text:";
             // 
             // Combo_MsgPos
             // 
@@ -4522,6 +4562,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
             this.PanelMsgPreview.ResumeLayout(false);
+            this.PreviewSplitContainer.Panel1.ResumeLayout(false);
+            this.PreviewSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PreviewSplitContainer)).EndInit();
+            this.PreviewSplitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MsgPreviewOrig)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.Tab5_Scripts.ResumeLayout(false);
@@ -4741,7 +4786,6 @@
         private System.Windows.Forms.Button Btn_DeleteMsg;
         private System.Windows.Forms.Button Btn_AddMsg;
         private CustomDataGridView MessagesGrid;
-        private System.Windows.Forms.Label Lbl_Text;
         private System.Windows.Forms.ComboBox Combo_MsgPos;
         private System.Windows.Forms.Label Lbl_MsgPos;
         private System.Windows.Forms.Button Btn_MsgRename;
@@ -4856,6 +4900,9 @@
         private System.Windows.Forms.Button Button_NPCRename;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem1;
         private System.Windows.Forms.CheckBox Checkbox_Omitted;
+        private System.Windows.Forms.SplitContainer PreviewSplitContainer;
+        private System.Windows.Forms.PictureBox MsgPreviewOrig;
+        private System.Windows.Forms.CheckBox chkBox_ShowDefaultLanguagePreview;
     }
 }
 

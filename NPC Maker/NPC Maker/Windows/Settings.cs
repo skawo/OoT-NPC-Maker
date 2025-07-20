@@ -40,7 +40,6 @@ namespace NPC_Maker.Windows
             checkBox_CompileInParallel.Checked = EditedSettings.CompileInParallel;
             chkBox_Spellcheck.Checked = EditedSettings.Spellcheck;
             chkBox_Compress.Checked = EditedSettings.CompressIndividually;
-
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)

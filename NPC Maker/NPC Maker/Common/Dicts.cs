@@ -8,8 +8,6 @@ namespace NPC_Maker
 {
     public static class Dicts
     {
-        public static string CurLang = "Default";
-
         public static Dictionary<string, int> LimbShowSubTypes = new Dictionary<string, int>()
         {
             { "Not visible", 0 },
@@ -29,15 +27,19 @@ namespace NPC_Maker
             { Lists.DictType.MsgTagOverride, $"Dicts/MsgTagOverrides.csv" },
         };
 
+        public static string DefaultLanguage = "Default";
+
+        public static Dictionary<string, Dictionary<string, string>> MsgTagOverride;
+
         public static Dictionary<string, int> ObjectIDs;
         public static Dictionary<string, int> SFXes;
         public static Dictionary<string, int> Music;
         public static Dictionary<string, int> Actors;
         public static Dictionary<string, int> LinkAnims;
-        public static Dictionary<string, string> MsgTagOverride;
+
         public static Dictionary<Lists.ParticleTypes, List<ParticleSubOptions>> UsableParticleSubOptions = new Dictionary<ParticleTypes, List<ParticleSubOptions>>()
         {
-            {ParticleTypes.DUST, 
+            {ParticleTypes.DUST,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
@@ -46,13 +48,13 @@ namespace NPC_Maker
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.SCALE_UPDATE,
                                                 ParticleSubOptions.DURATION} },
-            {ParticleTypes.EXPLOSION, 
+            {ParticleTypes.EXPLOSION,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.SCALE_UPDATE} },
-            {ParticleTypes.SPARK, 
+            {ParticleTypes.SPARK,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
@@ -60,7 +62,7 @@ namespace NPC_Maker
                                                 ParticleSubOptions.COLOR2,
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.SCALE_UPDATE} },
-            {ParticleTypes.BUBBLE, 
+            {ParticleTypes.BUBBLE,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
@@ -70,14 +72,14 @@ namespace NPC_Maker
                                                 ParticleSubOptions.SCALE_UPDATE,
                                                 ParticleSubOptions.DURATION,
                                                 ParticleSubOptions.RANDOMIZE_XZ} },
-            {ParticleTypes.WATER_SPLASH, 
+            {ParticleTypes.WATER_SPLASH,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION} },
-            {ParticleTypes.SMOKE, 
+            {ParticleTypes.SMOKE,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.ICE_CHUNK, 
+            {ParticleTypes.ICE_CHUNK,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
@@ -88,20 +90,20 @@ namespace NPC_Maker
             {ParticleTypes.ICE_BURST,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.RED_FLAME, 
+            {ParticleTypes.RED_FLAME,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.BLUE_FLAME, 
+            {ParticleTypes.BLUE_FLAME,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.ELECTRICITY, 
+            {ParticleTypes.ELECTRICITY,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.FOCUSED_STAR, 
+            {ParticleTypes.FOCUSED_STAR,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
@@ -109,7 +111,7 @@ namespace NPC_Maker
                                                 ParticleSubOptions.COLOR2,
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.DURATION} },
-            {ParticleTypes.DISPERSED_STAR, 
+            {ParticleTypes.DISPERSED_STAR,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
@@ -125,7 +127,7 @@ namespace NPC_Maker
                                                 ParticleSubOptions.SCALE_UPDATE,
                                                 ParticleSubOptions.OPACITY,
                                                 ParticleSubOptions.DURATION} },
-            {ParticleTypes.RING, 
+            {ParticleTypes.RING,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
@@ -135,7 +137,7 @@ namespace NPC_Maker
                                                 ParticleSubOptions.SCALE_UPDATE,
                                                 ParticleSubOptions.SCALE_UPDATE_DOWN,
                                                 ParticleSubOptions.DURATION} },
-            {ParticleTypes.FLAME, 
+            {ParticleTypes.FLAME,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.VELOCITY,
@@ -144,7 +146,7 @@ namespace NPC_Maker
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.SCALE_UPDATE,
                                                 ParticleSubOptions.DURATION} },
-            {ParticleTypes.FIRE_TAIL, 
+            {ParticleTypes.FIRE_TAIL,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.COLOR1,
@@ -153,31 +155,31 @@ namespace NPC_Maker
                                                 ParticleSubOptions.VARIABLE,
                                                 ParticleSubOptions.DURATION} },
 
-            {ParticleTypes.HIT_MARK_FLASH, 
+            {ParticleTypes.HIT_MARK_FLASH,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.HIT_MARK_DUST, 
+            {ParticleTypes.HIT_MARK_DUST,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.HIT_MARK_BURST, 
+            {ParticleTypes.HIT_MARK_BURST,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.HIT_MARK_SPARK, 
+            {ParticleTypes.HIT_MARK_SPARK,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.LIGHT_POINT, 
+            {ParticleTypes.LIGHT_POINT,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.LIGHTPOINT_COLOR} },
-            {ParticleTypes.SCORE, 
+            {ParticleTypes.SCORE,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.SCORE_AMOUNT} },
-            {ParticleTypes.DODONGO_FIRE, 
+            {ParticleTypes.DODONGO_FIRE,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.ACCELERATION,
@@ -186,12 +188,12 @@ namespace NPC_Maker
                                                 ParticleSubOptions.OPACITY,
                                                 ParticleSubOptions.FADE_DELAY,
                                                 ParticleSubOptions.DURATION} },
-            {ParticleTypes.FREEZARD_SMOKE, 
+            {ParticleTypes.FREEZARD_SMOKE,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.ACCELERATION,
                                                 ParticleSubOptions.SCALE} },
-            {ParticleTypes.LIGHTNING, 
+            {ParticleTypes.LIGHTNING,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.COLOR1,
                                                 ParticleSubOptions.COLOR2,
@@ -199,14 +201,14 @@ namespace NPC_Maker
                                                 ParticleSubOptions.YAW,
                                                 ParticleSubOptions.COUNT,
                                                 ParticleSubOptions.DURATION} },
-            {ParticleTypes.DISPLAY_LIST, 
+            {ParticleTypes.DISPLAY_LIST,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.SCALE,
                                                 ParticleSubOptions.SCALE_UPDATE,
                                                 ParticleSubOptions.COUNT,
                                                 ParticleSubOptions.DURATION,
                                                 ParticleSubOptions.DLIST} },
-            {ParticleTypes.SEARCH_EFFECT, 
+            {ParticleTypes.SEARCH_EFFECT,
                 new List<ParticleSubOptions>() {ParticleSubOptions.POSITION,
                                                 ParticleSubOptions.VELOCITY,
                                                 ParticleSubOptions.ACCELERATION,
@@ -242,43 +244,56 @@ namespace NPC_Maker
             ReloadDict(DictType.MsgTagOverride, true);
         }
 
-        public static void ReloadMsgTagOverrides(string Language)
+        public static void ReloadMsgTagOverrides(List<string> Languages)
         {
-            try
+            if (MsgTagOverride == null)
+                MsgTagOverride = new Dictionary<string, Dictionary<string, string>>();
+
+            MsgTagOverride.Clear();
+
+            List<string> LanguagesAndDefault = new List<string>() { Dicts.DefaultLanguage };
+            LanguagesAndDefault.AddRange(Languages);
+
+            foreach (string Language in LanguagesAndDefault)
             {
-                string FileCheck = "";
-                string FolderDef = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
-                string Folder = FolderDef;
-                string DictFile = $"Dicts/{Language}.csv";
-
-                FileCheck = Path.Combine(Folder, DictFile);
-
-                if (!File.Exists(FileCheck))
-                    Folder = Program.ExecPath;
-
-                FileCheck = Path.Combine(Folder, DictFile);
-
-                if (!File.Exists(FileCheck))
+                try
                 {
-                    DictFile = DictFilenames[Lists.DictType.MsgTagOverride];
-                    Folder = FolderDef;
+                    string FileCheck = "";
+                    string FolderDef = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
+                    string Folder = FolderDef;
+                    string DictFile = $"Dicts/{Language}.csv";
+
+                    FileCheck = Path.Combine(Folder, DictFile);
+
+                    if (!File.Exists(FileCheck))
+                        Folder = Program.ExecPath;
+
+                    FileCheck = Path.Combine(Folder, DictFile);
+
+                    if (!File.Exists(FileCheck))
+                    {
+                        DictFile = DictFilenames[Lists.DictType.MsgTagOverride];
+                        Folder = FolderDef;
+                    }
+
+                    FileCheck = Path.Combine(Folder, DictFile);
+
+                    if (!File.Exists(FileCheck))
+                        Folder = Program.ExecPath;
+
+                    MsgTagOverride.Add(Language, FileOps.GetDictionaryStringString(Path.Combine(Folder, DictFile), true));
                 }
-
-                FileCheck = Path.Combine(Folder, DictFile);
-
-                if (!File.Exists(FileCheck))
-                    Folder = Program.ExecPath;
-
-                MsgTagOverride = FileOps.GetDictionaryStringString(Path.Combine(Folder, DictFile), true);
-                CurLang = Language;
-            }
-            catch (Exception)
-            {
+                catch (Exception)
+                {
+                }
             }
         }
 
         public static void ReloadDict(Lists.DictType Type, bool allowFail = false)
         {
+            if (Type == DictType.MsgTagOverride)
+                return;
+
             try
             {
                 string FileCheck = "";
@@ -291,7 +306,6 @@ namespace NPC_Maker
                     case Lists.DictType.Music: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Music]); break;
                     case Lists.DictType.Objects: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Objects]); break;
                     case Lists.DictType.LinkAnims: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims]); break;
-                    case Lists.DictType.MsgTagOverride: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.MsgTagOverride]); break;
                     default: break;
                 }
 
@@ -305,7 +319,6 @@ namespace NPC_Maker
                     case Lists.DictType.Music: Music = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Music]), allowFail); break;
                     case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Objects]), allowFail); break;
                     case Lists.DictType.LinkAnims: LinkAnims = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims]), allowFail); break;
-                    case Lists.DictType.MsgTagOverride: MsgTagOverride = FileOps.GetDictionaryStringString(Path.Combine(Folder, DictFilenames[Lists.DictType.MsgTagOverride]), allowFail); break;
                     default: break;
                 }
             }
