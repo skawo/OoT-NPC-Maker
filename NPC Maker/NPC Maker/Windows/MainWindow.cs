@@ -3059,10 +3059,11 @@ namespace NPC_Maker
                 Entry2.MessageText = MsgTextDefault.Text;
 
                 Bitmap bmp2 = GetMessagePreviewImage(Entry2, Dicts.DefaultLanguage, SelectedEntry.NPCName, ref lastPreviewImageOrig, ref lastPreviewBoxesOrig);
-                bmp2 = bmp2.ResizeImageKeepAspectRatio(Math.Min(this.PreviewSplitContainer.Panel1.Width - 35, bmp2.Width), bmp2.Height);
 
                 if (bmp2 != null)
                 {
+                    bmp2 = bmp2.ResizeImageKeepAspectRatio(Math.Min(this.PreviewSplitContainer.Panel1.Width - 35, bmp2.Width), bmp2.Height);
+
                     MsgPreviewOrig.Size = new Size(bmp2.Width, bmp2.Height);
                     MsgPreviewOrig.Location = new Point((this.PreviewSplitContainer.Panel1.Width - MsgPreviewOrig.Width) / 2, 0 - PreviewSplitContainer.Panel1.VerticalScroll.Value);
                     MsgPreviewOrig.Image = bmp2;
@@ -3091,11 +3092,11 @@ namespace NPC_Maker
 
             Bitmap bmp = GetMessagePreviewImage(Entry, Combo_Language.Text, SelectedEntry.NPCName, ref lastPreviewImage, ref lastPreviewBoxes);
 
-            if (Program.Settings.OrigPreview && Combo_Language.SelectedIndex != 0)
-                bmp = bmp.ResizeImageKeepAspectRatio(Math.Min(this.PreviewSplitContainer.Panel2.Width - 35, bmp.Width), bmp.Height);
-
             if (bmp != null)
             {
+                if (Program.Settings.OrigPreview && Combo_Language.SelectedIndex != 0)
+                    bmp = bmp.ResizeImageKeepAspectRatio(Math.Min(this.PreviewSplitContainer.Panel2.Width - 35, bmp.Width), bmp.Height);
+
                 MsgPreview.Size = new Size(bmp.Width, bmp.Height);
                 MsgPreview.Location = new Point((this.PreviewSplitContainer.Panel2.Width - MsgPreview.Width) / 2, 0 - PreviewSplitContainer.Panel2.VerticalScroll.Value);
                 MsgPreview.Image = bmp;
