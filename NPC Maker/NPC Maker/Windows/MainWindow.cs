@@ -36,10 +36,8 @@ namespace NPC_Maker
         private Timer autoBackupTimer = new Timer();
         string LastBackup = "";
 
-        private Image lastPreviewImage;
-        private Image lastPreviewImageOrig;
-        private List<List<byte>> lastPreviewBoxes;
-        private List<List<byte>> lastPreviewBoxesOrig;
+        private Common.SavedMsgPreviewData lastPreviewData;
+        private Common.SavedMsgPreviewData lastPreviewDataOrig;
 
         private List<float[]> fontsWidths = new List<float[]>();
         private List<byte[]> fonts = new List<byte[]>();
@@ -2878,10 +2876,12 @@ namespace NPC_Maker
 
         private void SetMsgBackground(int Type)
         {
+            Panel p = Combo_Language.SelectedIndex == 0 ? PreviewSplitContainer.Panel2 : PreviewSplitContainer.Panel1;
+
             if (Type == (int)ZeldaMessage.Data.BoxType.None_White)
-                PanelMsgPreview.BackColor = Color.Black;
+                p.BackColor = Color.Black;
             else
-                PanelMsgPreview.BackColor = Color.White;
+                p.BackColor = Color.White;
         }
 
         private void MessagesGrid_SelectionChanged(object sender, EventArgs e)
@@ -2989,7 +2989,7 @@ namespace NPC_Maker
             PerformSpellCheck();
         }
 
-        private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Image savedPreview, ref List<List<byte>> boxData)
+        private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Common.SavedMsgPreviewData savedPreviewData)
         {
             List<byte> Data = Entry.ConvertTextData(NPCName, Language, false);
 
@@ -3013,9 +3013,12 @@ namespace NPC_Maker
 
             Bitmap bmp;
 
-            if (boxData != null && mp.Message.Count == boxData.Count)
+            if (savedPreviewData != null && 
+                savedPreviewData.MessageArrays != null && 
+                mp.Message.Count == savedPreviewData.MessageArrays.Count && 
+                Entry.Type == savedPreviewData.Type)
             {
-                bmp = (Bitmap)savedPreview;
+                bmp = (Bitmap)savedPreviewData.previewImage;
             }
             else
             {
@@ -3027,7 +3030,11 @@ namespace NPC_Maker
             {
                 for (int i = 0; i < mp.MessageCount; i++)
                 {
-                    if (boxData == null || mp.Message.Count != boxData.Count || !mp.Message[i].SequenceEqual(boxData[i]))
+                    if (savedPreviewData == null ||
+                        savedPreviewData.MessageArrays == null ||
+                        mp.Message.Count != savedPreviewData.MessageArrays.Count ||
+                        Entry.Type != savedPreviewData.Type ||
+                        !mp.Message[i].SequenceEqual(savedPreviewData.MessageArrays[i]))
                     {
                         grfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
                         Bitmap box = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
@@ -3036,8 +3043,11 @@ namespace NPC_Maker
                 }
             }
 
-            savedPreview = bmp;
-            boxData = mp.Message;
+            savedPreviewData = new Common.SavedMsgPreviewData();
+            savedPreviewData.MessageArrays = mp.Message;
+            savedPreviewData.previewImage = bmp;
+            savedPreviewData.Type = Entry.Type;
+            savedPreviewData.Position = Entry.Position;
 
             return bmp;
         }
@@ -3058,7 +3068,7 @@ namespace NPC_Maker
                 MessageEntry Entry2 = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
                 Entry2.MessageText = MsgTextDefault.Text;
 
-                Bitmap bmp2 = GetMessagePreviewImage(Entry2, Dicts.DefaultLanguage, SelectedEntry.NPCName, ref lastPreviewImageOrig, ref lastPreviewBoxesOrig);
+                Bitmap bmp2 = GetMessagePreviewImage(Entry2, Dicts.DefaultLanguage, SelectedEntry.NPCName, ref lastPreviewDataOrig);
 
                 if (bmp2 != null)
                 {
@@ -3070,9 +3080,9 @@ namespace NPC_Maker
                 }
                 else
                 {
-                    if (lastPreviewImageOrig != null)
+                    if (lastPreviewDataOrig != null && lastPreviewDataOrig.previewImage != null)
                     {
-                        Bitmap b = new Bitmap(lastPreviewImageOrig);
+                        Bitmap b = new Bitmap(lastPreviewDataOrig.previewImage);
                         MsgPreviewOrig.Image = b.SetAlpha(170);
                     }
                 }
@@ -3090,7 +3100,7 @@ namespace NPC_Maker
             MessageEntry Entry = MessageList[MessagesGrid.SelectedRows[0].Index];
             Entry.MessageText = MsgText.Text;
 
-            Bitmap bmp = GetMessagePreviewImage(Entry, Combo_Language.Text, SelectedEntry.NPCName, ref lastPreviewImage, ref lastPreviewBoxes);
+            Bitmap bmp = GetMessagePreviewImage(Entry, Combo_Language.Text, SelectedEntry.NPCName, ref lastPreviewData);
 
             if (bmp != null)
             {
@@ -3103,9 +3113,9 @@ namespace NPC_Maker
             }
             else
             {
-                if (lastPreviewImage != null)
+                if (lastPreviewData != null && lastPreviewData.previewImage != null)
                 {
-                    Bitmap b = new Bitmap(lastPreviewImage);
+                    Bitmap b = new Bitmap(lastPreviewData.previewImage);
                     MsgPreview.Image = b.SetAlpha(170);
                 }
             }
@@ -3123,7 +3133,7 @@ namespace NPC_Maker
             if (MessagesGrid.SelectedRows.Count == 0)
                 return;
 
-            MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+            MessageEntry Entry = Combo_Language.SelectedIndex == 0 ? SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index] : SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages[MessagesGrid.SelectedRows[0].Index];
             Entry.Position = Combo_MsgPos.SelectedIndex;
         }
 
@@ -3132,7 +3142,7 @@ namespace NPC_Maker
             if (MessagesGrid.SelectedRows.Count == 0)
                 return;
 
-            MessageEntry Entry = SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+            MessageEntry Entry = Combo_Language.SelectedIndex == 0 ? SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index] : SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages[MessagesGrid.SelectedRows[0].Index];
             Entry.Type = Combo_MsgType.SelectedIndex;
 
             MsgText.TextChanged -= MsgText_TextChanged;
