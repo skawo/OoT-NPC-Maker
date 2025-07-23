@@ -239,6 +239,9 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
 
 bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 {
+    static u32 buf[4]; // has to be static, or Wii VC explodes
+    bzero(&buf, 16);
+    
     u16 settingsObjectId = en->actor.params;
 
     #if LOGGING > 0
@@ -264,13 +267,11 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     }
     
     en->npcId = en->actor.shape.rot.z;  
-   
-    u32 buf[4];
-
+    
     // Load number of entries from ROM...
     Rom_LoadDataFromObject(playState, settingsObjectId, &buf, 0, 4, en->getSettingsFromRAMObject);
     u32 numEntries = buf[0];
-
+    
     // If the selected entry id is bigger than the number of entries, exit.
     if (en->npcId >= numEntries)
     {
@@ -281,13 +282,19 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         Actor_Kill(&en->actor);
         return false;
     }
-
+    
+    bzero(&buf, 16);
+    
     // Load the entry offset...
     Rom_LoadDataFromObject(playState, settingsObjectId, &buf, 4 + (12 * en->npcId), 16, en->getSettingsFromRAMObject);
-    u32 entryAddress = buf[0];
 
+    u32 entryAddress = buf[0];
+    u32 entrySizeCompr = buf[1];
+    u32 entrySize = buf[2];
+    u8* buffer;
+    
     // If the entry offset is 0, the actor was nulled.
-    if (entryAddress == 0)
+    if (entryAddress == 0 || entrySize == 0)
     {
         #if LOGGING > 0
             is64Printf("_NPC Entry %2d is null.\n", en->npcId);
@@ -296,11 +303,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         Actor_Kill(&en->actor);
         return false;
     }
-
-    u32 entrySizeCompr = buf[1];
-    u32 entrySize = buf[2];
-    u8* buffer;
-
+    
     // If compressed size is 0, then the actor is not compressed.
     if (entrySizeCompr)
     {
