@@ -688,7 +688,9 @@ namespace NPC_Maker.Scripts
 
             foreach (var entry in npc.Entries)
             {
-                sb.Append($"#{Lists.Keyword_Define} NPCID_{entry.NPCName.Replace(" ", "_")} {id}{Environment.NewLine}");
+                if (!entry.IsNull)
+                    sb.Append($"#{Lists.Keyword_Define} NPCID_{entry.NPCName.Replace(" ", "_")} {id}{Environment.NewLine}");
+                
                 id++;
             }
 

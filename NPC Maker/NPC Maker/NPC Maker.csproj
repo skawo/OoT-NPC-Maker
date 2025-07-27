@@ -256,6 +256,12 @@
     <Compile Include="Controls\DropDownScrollWheelFix.cs" />
     <Compile Include="Common\SyntaxHighlighter.cs" />
     <Compile Include="Common\FileOps.cs" />
+    <Compile Include="Windows\YesNoAllBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\YesNoAllBox.Designer.cs">
+      <DependentUpon>YesNoAllBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ComboPicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -320,6 +326,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\About.resx">
       <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\YesNoAllBox.resx">
+      <DependentUpon>YesNoAllBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\ComboPicker.resx">
       <DependentUpon>ComboPicker.cs</DependentUpon>

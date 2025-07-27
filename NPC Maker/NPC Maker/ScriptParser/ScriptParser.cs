@@ -93,7 +93,7 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceDefines(defineLines, Lines, ref outScript);
             Lines = ReplaceSwitches(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
-            //Lines = RefactorComplexIfs(Lines, ref outScript);
+            Lines = RefactorComplexIfs(Lines, ref outScript);
             Lines = ReplaceOrs(Lines, ref outScript);
             Lines = ReplaceAnds(Lines, ref outScript);
             Lines = ReplaceScriptStartHeres(Lines, ref outScript);

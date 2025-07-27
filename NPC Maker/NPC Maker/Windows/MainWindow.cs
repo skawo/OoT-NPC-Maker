@@ -1171,6 +1171,7 @@ namespace NPC_Maker
                                 }
                             }
 
+                            DialogResult y2aRes = DialogResult.None;
 
                             foreach (NPCEntry entry in EditedFile.Entries)
                             {
@@ -1192,16 +1193,55 @@ namespace NPC_Maker
                                 {
                                     int importMsgIndex = messageList.FindIndex(x => x.Name == msg.Name);
 
+                                    int curlocMsgIndex = -1;
+
+                                    if (SelectedLangIndex != 0)
+                                        curlocMsgIndex = entry.Localization[IndexInCur].Messages.FindIndex(x => x.Name == msg.Name);
+
                                     if (importMsgIndex != -1)
                                     {
-                                        MessageEntry import = messageList[importMsgIndex];
-                                        newLocalization.Messages.Add(import);
+                                        if (curlocMsgIndex != -1)
+                                        {
+                                            string textDefault = entry.Messages[curlocMsgIndex].MessageText;
+                                            string text = entry.Localization[IndexInCur].Messages[curlocMsgIndex].MessageText;
+                                            string textNew = messageList[importMsgIndex].MessageText;
+
+                                            if (textDefault != textNew && text != textNew)
+                                            {
+                                                if (y2aRes != DialogResult.OK && y2aRes != DialogResult.Ignore)
+                                                {
+                                                    var w = new Windows.YesNoAllBox($"Localization of textbox {msg.Name} is already different. Update it with the one from the file?", "Textbox already translated");
+                                                    y2aRes = w.ShowDialog();
+                                                }
+
+                                                if (y2aRes == DialogResult.Yes || y2aRes == DialogResult.OK)
+                                                {
+                                                    MessageEntry import = messageList[importMsgIndex];
+                                                    newLocalization.Messages.Add(import);
+                                                }
+                                                else
+                                                {
+                                                    newLocalization.Messages.Add(entry.Localization[IndexInCur].Messages[curlocMsgIndex]);
+                                                }
+                                            }
+                                            else if (textDefault != text && textDefault == textNew)
+                                            {
+                                                newLocalization.Messages.Add(entry.Localization[IndexInCur].Messages[curlocMsgIndex]);
+                                            }
+                                            else
+                                            {
+                                                MessageEntry import = messageList[importMsgIndex];
+                                                newLocalization.Messages.Add(import);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            MessageEntry import = messageList[importMsgIndex];
+                                            newLocalization.Messages.Add(import);
+                                        }
                                     }
                                     else
                                     {
-                                        if (msg == null)
-                                            ;
-
                                         newLocalization.Messages.Add(Helpers.Clone<MessageEntry>(msg));
                                     }
                                 }
@@ -3013,9 +3053,9 @@ namespace NPC_Maker
 
             Bitmap bmp;
 
-            if (savedPreviewData != null && 
-                savedPreviewData.MessageArrays != null && 
-                mp.Message.Count == savedPreviewData.MessageArrays.Count && 
+            if (savedPreviewData != null &&
+                savedPreviewData.MessageArrays != null &&
+                mp.Message.Count == savedPreviewData.MessageArrays.Count &&
                 Entry.Type == savedPreviewData.Type)
             {
                 bmp = (Bitmap)savedPreviewData.previewImage;
