@@ -765,6 +765,7 @@ namespace NPC_Maker
 
             EditedFile = new NPCFile();
             EditedFile.GlobalHeaders.AddRange(new List<ScriptEntry>() { Defaults.DefaultDefines, Defaults.DefaultMacros });
+            SelectedEntry = null;
 
             Panel_Editor.Enabled = true;
 
@@ -3096,7 +3097,7 @@ namespace NPC_Maker
         {
             MsgPreviewTimer.Stop();
 
-            if (MessagesGrid.SelectedRows.Count == 0)
+            if (MessagesGrid.SelectedRows.Count == 0 || SelectedEntry == null)
                 return;
 
             if (Program.Settings.OrigPreview && Combo_Language.SelectedIndex != 0)
@@ -3889,6 +3890,67 @@ namespace NPC_Maker
                 }
 
                 e.Handled = true;
+            }
+        }
+
+
+        private void NPCGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            DataGridView dgv = sender as DataGridView;
+
+            if (e.ColumnIndex == -1 && e.RowIndex >= 0)
+            {
+                var headerStyle = dgv.RowHeadersDefaultCellStyle;
+                using (SolidBrush backBrush = new SolidBrush(headerStyle.BackColor))
+                {
+                    e.Graphics.FillRectangle(backBrush, e.CellBounds);
+                }
+
+                ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
+
+                string rowNumber = e.RowIndex.ToString();
+
+                using (SolidBrush textBrush = new SolidBrush(headerStyle.ForeColor))
+                {
+                    StringFormat sf = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
+
+                    e.Graphics.DrawString(rowNumber, headerStyle.Font, textBrush, e.CellBounds, sf);
+                }
+
+                e.Handled = true;
+            }
+
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+            {
+                if (EditedFile != null)
+                {
+                    NPCEntry entry = EditedFile.Entries[e.RowIndex];
+
+                    if (entry.IsNull)
+                    {
+                        var headerStyle = dgv.RowHeadersDefaultCellStyle;
+
+                        Color c = headerStyle.BackColor;
+
+                        if (dgv.SelectedRows.Count != 0 && dgv.SelectedRows[0].Index == e.RowIndex)
+                            c = headerStyle.SelectionBackColor;
+
+                        using (SolidBrush backBrush = new SolidBrush(c))
+                        {
+                            e.Graphics.FillRectangle(backBrush, e.CellBounds);
+                        }
+
+                        ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
+
+                        e.Handled = true;
+                    }
+
+                }
+
             }
         }
     }

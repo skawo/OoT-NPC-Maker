@@ -41,6 +41,8 @@
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
             this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
@@ -350,8 +352,6 @@
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
-            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
@@ -591,8 +591,24 @@
             this.DataGrid_NPCs.Size = new System.Drawing.Size(295, 545);
             this.DataGrid_NPCs.TabIndex = 1;
             this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
-            this.DataGrid_NPCs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.MessagesGrid_CellPainting);
+            this.DataGrid_NPCs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.NPCGrid_CellPainting);
             this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
+            // 
+            // Col_ID
+            // 
+            this.Col_ID.FillWeight = 20F;
+            this.Col_ID.HeaderText = "ID";
+            this.Col_ID.Name = "Col_ID";
+            this.Col_ID.ReadOnly = true;
+            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Col_ID.Visible = false;
+            // 
+            // Col_Name
+            // 
+            this.Col_Name.HeaderText = "NPC Name";
+            this.Col_Name.Name = "Col_Name";
+            this.Col_Name.ReadOnly = true;
+            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Panel_NPCData
             // 
@@ -4438,22 +4454,6 @@
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
-            // 
-            // Col_ID
-            // 
-            this.Col_ID.FillWeight = 20F;
-            this.Col_ID.HeaderText = "ID";
-            this.Col_ID.Name = "Col_ID";
-            this.Col_ID.ReadOnly = true;
-            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Col_ID.Visible = false;
-            // 
-            // Col_Name
-            // 
-            this.Col_Name.HeaderText = "NPC Name";
-            this.Col_Name.Name = "Col_Name";
-            this.Col_Name.ReadOnly = true;
-            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // MainWindow
             // 
