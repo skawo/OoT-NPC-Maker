@@ -41,8 +41,6 @@
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
             this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
@@ -352,6 +350,8 @@
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
+            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
@@ -586,27 +586,13 @@
             this.DataGrid_NPCs.MultiSelect = false;
             this.DataGrid_NPCs.Name = "DataGrid_NPCs";
             this.DataGrid_NPCs.ReadOnly = true;
-            this.DataGrid_NPCs.RowHeadersVisible = false;
+            this.DataGrid_NPCs.RowHeadersWidth = 25;
             this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DataGrid_NPCs.Size = new System.Drawing.Size(295, 545);
             this.DataGrid_NPCs.TabIndex = 1;
             this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
+            this.DataGrid_NPCs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.MessagesGrid_CellPainting);
             this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
-            // 
-            // Col_ID
-            // 
-            this.Col_ID.FillWeight = 20F;
-            this.Col_ID.HeaderText = "ID";
-            this.Col_ID.Name = "Col_ID";
-            this.Col_ID.ReadOnly = true;
-            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Name
-            // 
-            this.Col_Name.HeaderText = "NPC Name";
-            this.Col_Name.Name = "Col_Name";
-            this.Col_Name.ReadOnly = true;
-            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Panel_NPCData
             // 
@@ -3481,9 +3467,9 @@
             "None (White text)",
             "None (Black text)",
             "Credits"});
-            this.Combo_Language.Location = new System.Drawing.Point(292, 27);
+            this.Combo_Language.Location = new System.Drawing.Point(256, 27);
             this.Combo_Language.Name = "Combo_Language";
-            this.Combo_Language.Size = new System.Drawing.Size(129, 21);
+            this.Combo_Language.Size = new System.Drawing.Size(165, 21);
             this.Combo_Language.TabIndex = 88;
             this.Combo_Language.Tag = "LANGUAGE";
             this.Combo_Language.SelectedIndexChanged += new System.EventHandler(this.Combo_Language_SelectedIndexChanged);
@@ -3491,7 +3477,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(228, 30);
+            this.label4.Location = new System.Drawing.Point(200, 30);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(58, 13);
             this.label4.TabIndex = 87;
@@ -3713,10 +3699,11 @@
             this.MessagesGrid.MultiSelect = false;
             this.MessagesGrid.Name = "MessagesGrid";
             this.MessagesGrid.ReadOnly = true;
-            this.MessagesGrid.RowHeadersVisible = false;
+            this.MessagesGrid.RowHeadersWidth = 25;
             this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.MessagesGrid.Size = new System.Drawing.Size(189, 520);
             this.MessagesGrid.TabIndex = 3;
+            this.MessagesGrid.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.MessagesGrid_CellPainting);
             // 
             // dataGridViewTextBoxColumn2
             // 
@@ -4452,6 +4439,22 @@
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
             // 
+            // Col_ID
+            // 
+            this.Col_ID.FillWeight = 20F;
+            this.Col_ID.HeaderText = "ID";
+            this.Col_ID.Name = "Col_ID";
+            this.Col_ID.ReadOnly = true;
+            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Col_ID.Visible = false;
+            // 
+            // Col_Name
+            // 
+            this.Col_Name.HeaderText = "NPC Name";
+            this.Col_Name.Name = "Col_Name";
+            this.Col_Name.ReadOnly = true;
+            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4886,8 +4889,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private Windows.ProgressWithLabel progressL;
         private System.Windows.Forms.SplitContainer SplitPanel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Name;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Btn_RemoveLanguage;
         private System.Windows.Forms.Button Btn_AddNewLanguage;
@@ -4903,6 +4904,8 @@
         private System.Windows.Forms.SplitContainer PreviewSplitContainer;
         private System.Windows.Forms.PictureBox MsgPreviewOrig;
         private System.Windows.Forms.CheckBox chkBox_ShowDefaultLanguagePreview;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Name;
     }
 }
 

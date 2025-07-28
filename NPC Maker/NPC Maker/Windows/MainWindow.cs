@@ -3860,5 +3860,36 @@ namespace NPC_Maker
 
         #endregion
 
+        private void MessagesGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+
+            if (e.ColumnIndex == -1 && e.RowIndex >= 0)
+            {
+                DataGridView dgv = sender as DataGridView;
+
+                var headerStyle = dgv.RowHeadersDefaultCellStyle;
+                using (SolidBrush backBrush = new SolidBrush(headerStyle.BackColor))
+                {
+                    e.Graphics.FillRectangle(backBrush, e.CellBounds);
+                }
+
+                ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
+
+                string rowNumber = e.RowIndex.ToString();
+
+                using (SolidBrush textBrush = new SolidBrush(headerStyle.ForeColor))
+                {
+                    StringFormat sf = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
+
+                    e.Graphics.DrawString(rowNumber, headerStyle.Font, textBrush, e.CellBounds, sf);
+                }
+
+                e.Handled = true;
+            }
+        }
     }
 }
