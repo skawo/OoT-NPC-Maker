@@ -103,13 +103,25 @@ namespace NPC_Maker
             if (FilePath != "")
                 OpenFile(FilePath);
 
+            if (Program.IsRunningUnderMono)
+            {
+                Btn_MsgMoveUp.Text = "Up";
+                Btn_MsgMoveDown.Text = "Dn";
+            }
+
             splitContainer1_Panel1_SizeChanged(null, null);
+
         }
 
         private void splitContainer1_Panel1_SizeChanged(object sender, EventArgs e)
         {
-            int btnX = (SplitPanel.Panel1.Width - 12) / 3;
-            int btnXRow2 = (SplitPanel.Panel1.Width - 12) / 2;
+            int width = SplitPanel.Panel1.Width;
+
+            if (SplitPanel.Panel1.Width == 0)
+                width = SplitPanel.SplitterDistance;
+
+            int btnX = (width - 12) / 3;
+            int btnXRow2 = (width - 12) / 2;
 
             Button_Add.Width = btnX;
             Button_Duplicate.Width = btnX;
@@ -119,11 +131,11 @@ namespace NPC_Maker
             Button_Import.Width = btnXRow2;
 
             Button_Add.Location = new Point(2, Button_Add.Location.Y);
-            Button_Duplicate.Location = new Point(SplitPanel.Panel1.Width / 2 - btnX / 2, Button_Duplicate.Location.Y);
-            Button_Delete.Location = new Point(SplitPanel.Panel1.Width - btnX, Button_Delete.Location.Y);
+            Button_Duplicate.Location = new Point(width / 2 - btnX / 2, Button_Duplicate.Location.Y);
+            Button_Delete.Location = new Point(width - btnX, Button_Delete.Location.Y);
 
             Button_Export.Location = new Point(2, Button_Export.Location.Y);
-            Button_Import.Location = new Point(SplitPanel.Panel1.Width - btnXRow2, Button_Import.Location.Y);
+            Button_Import.Location = new Point(width - btnXRow2, Button_Import.Location.Y);
 
         }
 
@@ -3951,6 +3963,15 @@ namespace NPC_Maker
 
                 }
 
+            }
+        }
+
+        private void SplitMsgContainer_SizeChanged(object sender, EventArgs e)
+        {
+            if (Program.IsRunningUnderMono)
+            {
+                SplitMsgContainer.Width = PanelMsgPreview.Width;
+                SplitMsgContainer.Height = PanelMsgPreview.Location.Y - SplitMsgContainer.Location.Y - 10;
             }
         }
     }

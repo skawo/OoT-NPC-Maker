@@ -3372,6 +3372,7 @@
             this.SplitMsgContainer.Size = new System.Drawing.Size(558, 216);
             this.SplitMsgContainer.SplitterDistance = 25;
             this.SplitMsgContainer.TabIndex = 91;
+            this.SplitMsgContainer.SizeChanged += new System.EventHandler(this.SplitMsgContainer_SizeChanged);
             // 
             // MsgTextDefault
             // 
@@ -3525,7 +3526,7 @@
             this.Btn_MsgMoveDown.Name = "Btn_MsgMoveDown";
             this.Btn_MsgMoveDown.Size = new System.Drawing.Size(31, 31);
             this.Btn_MsgMoveDown.TabIndex = 75;
-            this.Btn_MsgMoveDown.Text = "↓";
+            this.Btn_MsgMoveDown.Text = "▼";
             this.Btn_MsgMoveDown.UseVisualStyleBackColor = true;
             this.Btn_MsgMoveDown.Click += new System.EventHandler(this.Btn_MsgMoveDown_Click);
             // 
@@ -3536,7 +3537,7 @@
             this.Btn_MsgMoveUp.Name = "Btn_MsgMoveUp";
             this.Btn_MsgMoveUp.Size = new System.Drawing.Size(31, 31);
             this.Btn_MsgMoveUp.TabIndex = 74;
-            this.Btn_MsgMoveUp.Text = "↑";
+            this.Btn_MsgMoveUp.Text = "▲";
             this.Btn_MsgMoveUp.UseVisualStyleBackColor = true;
             this.Btn_MsgMoveUp.Click += new System.EventHandler(this.Btn_MsgMoveUp_Click);
             // 
