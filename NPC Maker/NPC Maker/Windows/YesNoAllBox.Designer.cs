@@ -39,10 +39,9 @@ namespace NPC_Maker.Windows
             // 
             // LblExplanation
             // 
-            this.LblExplanation.AutoSize = true;
             this.LblExplanation.Location = new System.Drawing.Point(13, 13);
             this.LblExplanation.Name = "LblExplanation";
-            this.LblExplanation.Size = new System.Drawing.Size(35, 13);
+            this.LblExplanation.Size = new System.Drawing.Size(393, 40);
             this.LblExplanation.TabIndex = 0;
             this.LblExplanation.Text = "label1";
             // 
@@ -112,7 +111,6 @@ namespace NPC_Maker.Windows
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "YesNoAllBox";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

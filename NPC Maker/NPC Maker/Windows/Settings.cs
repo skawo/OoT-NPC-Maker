@@ -40,6 +40,7 @@ namespace NPC_Maker.Windows
             checkBox_CompileInParallel.Checked = EditedSettings.CompileInParallel;
             chkBox_Spellcheck.Checked = EditedSettings.Spellcheck;
             chkBox_Compress.Checked = EditedSettings.CompressIndividually;
+            Txt_ProjectPath.Text = EditedSettings.ProjectPath;
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)
@@ -99,6 +100,14 @@ namespace NPC_Maker.Windows
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void Btn_Browse_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fB = new FolderBrowserDialog();
+
+            if (fB.ShowDialog() == DialogResult.OK)
+                Txt_ProjectPath.Text = fB.SelectedPath;
         }
     }
 }

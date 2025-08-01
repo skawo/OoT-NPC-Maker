@@ -249,6 +249,7 @@ namespace NPC_Maker
                 $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include" }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
                 $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
+                $"{(String.IsNullOrEmpty(Program.Settings.ProjectPath) ? String.Empty : "-I " + Program.Settings.ProjectPath + " ")}" +
                 Program.Settings.GCCFlags + " " + $"-B {Path.Combine(new string[] { "..", "mips64", "binmono" })} " +
                 $"{Path.Combine("..", "..", gcompileFolderName, folder, $"{compileFileName}.c").AppendQuotation()}",
             };
@@ -367,6 +368,7 @@ namespace NPC_Maker
                 $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include").AppendQuotation()} " +
                 $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()).AppendQuotation()} " +
                 $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include").AppendQuotation()} " +
+                $"{(String.IsNullOrEmpty(Program.Settings.ProjectPath) ? String.Empty : "-I " + Program.Settings.ProjectPath + " ")}" +
                 Program.Settings.GCCFlags + " " +
                 $@"{Path.Combine(compileFolderPath, $"{compileFileName}.c").AppendQuotation()}",
             };
@@ -474,7 +476,18 @@ namespace NPC_Maker
                 string vscodeFolder = Path.Combine(gtempFolderPath, ".vscode");
 
                 Directory.CreateDirectory(vscodeFolder);
-                File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), Properties.Resources.c_cpp_properties);
+
+                string cprops = Properties.Resources.c_cpp_properties;
+
+                if (!String.IsNullOrEmpty(Program.Settings.ProjectPath))
+                {
+                    string uriPath = new Uri(Program.Settings.ProjectPath).AbsolutePath;
+                    cprops = cprops.Replace("{PROJECTPATH}", uriPath);
+                }
+                else
+                    cprops = cprops.Replace("{PROJECTPATH}", "");
+
+                File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), cprops);
                 File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
 
                 if (!HeaderOnly)

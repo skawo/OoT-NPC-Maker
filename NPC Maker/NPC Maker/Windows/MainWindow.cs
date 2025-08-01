@@ -1219,7 +1219,7 @@ namespace NPC_Maker
                                             string text = entry.Localization[IndexInCur].Messages[curlocMsgIndex].MessageText;
                                             string textNew = messageList[importMsgIndex].MessageText;
 
-                                            if (textDefault != textNew && text != textNew)
+                                            if (textDefault != textNew && textDefault != text && text != textNew)
                                             {
                                                 if (y2aRes != DialogResult.OK && y2aRes != DialogResult.Ignore)
                                                 {
@@ -3386,9 +3386,9 @@ namespace NPC_Maker
 
                                 DataGrid_NPCs.Rows[RowIndex].Selected = true;
 
-                                DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
+                                DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[RowIndex].Cells[1];
                                 DataGrid_NPCs.FirstDisplayedScrollingRowIndex = RowIndex;
-                                DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[RowIndex].Cells[0];
+                                DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[RowIndex].Cells[1];
                                 TabControl.SelectedTab = Tab4_Messages;
 
                                 MessagesGrid.Rows[MsgRowIndex].Selected = true;

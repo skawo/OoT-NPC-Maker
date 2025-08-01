@@ -55,6 +55,8 @@ namespace NPC_Maker
 
         public bool OrigPreview { get; set; }
 
+        public string ProjectPath { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -81,6 +83,7 @@ namespace NPC_Maker
             Spellcheck = false;
             CompressIndividually = false;
             OrigPreview = false;
+            ProjectPath = "";
         }
 
         public enum Members
@@ -107,6 +110,7 @@ namespace NPC_Maker
             SPELLCHECK,
             COMPRESS,
             ORIGPREVIEW,
+            PROJPATH,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -154,6 +158,7 @@ namespace NPC_Maker
                 case Members.SPELLCHECK: Spellcheck = (bool)Value; break;
                 case Members.COMPRESS: CompressIndividually = (bool)Value; break;
                 case Members.ORIGPREVIEW: OrigPreview = (bool)Value; break;
+                case Members.PROJPATH: ProjectPath = (string)Value; break;
                 default: break;
             }
         }

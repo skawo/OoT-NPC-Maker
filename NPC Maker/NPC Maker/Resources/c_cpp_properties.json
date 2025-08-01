@@ -6,7 +6,8 @@
         "${workspaceFolder}/**",
         "../gcc/mips64/include/z64hdr/**",
         "../gcc/mips64/include",
-        "../gcc/mips64/include/npcmaker"
+        "../gcc/mips64/include/npcmaker",
+        "{PROJECTPATH}"
       ],
       "defines": [
         "_DEBUG",
