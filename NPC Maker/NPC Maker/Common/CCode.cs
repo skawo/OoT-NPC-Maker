@@ -125,7 +125,8 @@ namespace NPC_Maker
                 string name = match.Groups[1].Value;
                 string value = match.Groups[2].Value.Trim();
 
-                outD.Add(name, value);
+                if (!outD.ContainsKey(name))
+                    outD.Add(name, value);
             }
 
             return outD;

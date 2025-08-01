@@ -1712,6 +1712,12 @@ namespace NPC_Maker
                 vis = false;
             }
 
+            if (vis)
+                NumUpDown_Hierarchy.Width = numUpFileStart.Width / 2;
+            else
+                NumUpDown_Hierarchy.Width = numUpFileStart.Width;
+
+            Tx_SkeletonName.Visible = vis;
             Col_HDefine.Visible = vis;
             ExtraDlists_HeaderDefinition.Visible = vis;
 

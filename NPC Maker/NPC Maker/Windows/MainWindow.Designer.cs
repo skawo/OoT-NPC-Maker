@@ -40,9 +40,6 @@
             this.Button_Duplicate = new System.Windows.Forms.Button();
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
-            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
@@ -60,9 +57,6 @@
             this.Txb_ObjectID = new System.Windows.Forms.TextBox();
             this.Checkbox_EnvColor = new System.Windows.Forms.CheckBox();
             this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
-            this.ColorsDataGridView = new NPC_Maker.CustomDataGridView(this.components);
-            this.StartLimbColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColorColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_NPCName = new System.Windows.Forms.Label();
             this.Textbox_NPCName = new System.Windows.Forms.TextBox();
             this.Label_ObjectID = new System.Windows.Forms.Label();
@@ -70,15 +64,6 @@
             this.Label_Hierarchy = new System.Windows.Forms.Label();
             this.NumUpDown_Hierarchy = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_YModelOffs = new System.Windows.Forms.NumericUpDown();
-            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_HDefine = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Filestart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_StartFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_EndFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_AnimDefs = new System.Windows.Forms.Label();
             this.NumUpDown_XModelOffs = new System.Windows.Forms.NumericUpDown();
             this.ComboBox_HierarchyType = new System.Windows.Forms.ComboBox();
@@ -110,18 +95,6 @@
             this.Textbox_BlinkPattern = new System.Windows.Forms.TextBox();
             this.Textbox_TalkingPattern = new System.Windows.Forms.TextBox();
             this.NumUpDown_BlinkSpeed = new System.Windows.Forms.NumericUpDown();
-            this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
-            this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_HeaderDefinition = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Color = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_FileStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDLists_Scale = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
             this.Checkbox_Omitted = new System.Windows.Forms.CheckBox();
             this.NumUpDown_AnimInterpFrames = new System.Windows.Forms.NumericUpDown();
@@ -258,8 +231,6 @@
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
             this.chkBox_ShowDefaultLanguagePreview = new System.Windows.Forms.CheckBox();
             this.SplitMsgContainer = new System.Windows.Forms.SplitContainer();
-            this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
-            this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
             this.Btn_RemoveLanguage = new System.Windows.Forms.Button();
             this.Btn_AddNewLanguage = new System.Windows.Forms.Button();
             this.Combo_Language = new System.Windows.Forms.ComboBox();
@@ -280,8 +251,6 @@
             this.Lbl_MsgType = new System.Windows.Forms.Label();
             this.Btn_DeleteMsg = new System.Windows.Forms.Button();
             this.Btn_AddMsg = new System.Windows.Forms.Button();
-            this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tab5_Scripts = new System.Windows.Forms.TabPage();
             this.TabControl_Scripts = new System.Windows.Forms.TabControl();
             this.Tab6_EmbeddedOverlay = new System.Windows.Forms.TabPage();
@@ -359,23 +328,51 @@
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
+            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColorsDataGridView = new NPC_Maker.CustomDataGridView(this.components);
+            this.StartLimbColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColorColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_HDefine = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Filestart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_StartFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_EndFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
+            this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_HeaderDefinition = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Color = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_FileStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDLists_Scale = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
+            this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
+            this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
             this.SplitPanel.SuspendLayout();
             this.Panel_NPCList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.Tab1_Data.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpFileStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpAlpha)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).BeginInit();
             this.Tab2_ExtraData.SuspendLayout();
@@ -384,7 +381,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSegment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
             this.Tab3_BehaviorData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AnimInterpFrames)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncullScale)).BeginInit();
@@ -437,8 +433,6 @@
             this.SplitMsgContainer.Panel1.SuspendLayout();
             this.SplitMsgContainer.Panel2.SuspendLayout();
             this.SplitMsgContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
             this.PanelMsgPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewSplitContainer)).BeginInit();
             this.PreviewSplitContainer.Panel1.SuspendLayout();
@@ -446,11 +440,17 @@
             this.PreviewSplitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreviewOrig)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.Tab5_Scripts.SuspendLayout();
             this.Tab6_EmbeddedOverlay.SuspendLayout();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -574,49 +574,6 @@
             this.Button_Add.UseVisualStyleBackColor = true;
             this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
             // 
-            // DataGrid_NPCs
-            // 
-            this.DataGrid_NPCs.AllowUserToAddRows = false;
-            this.DataGrid_NPCs.AllowUserToDeleteRows = false;
-            this.DataGrid_NPCs.AllowUserToResizeColumns = false;
-            this.DataGrid_NPCs.AllowUserToResizeRows = false;
-            this.DataGrid_NPCs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGrid_NPCs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGrid_NPCs.BackgroundColor = System.Drawing.Color.White;
-            this.DataGrid_NPCs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid_NPCs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_ID,
-            this.Col_Name});
-            this.DataGrid_NPCs.Location = new System.Drawing.Point(3, 0);
-            this.DataGrid_NPCs.MultiSelect = false;
-            this.DataGrid_NPCs.Name = "DataGrid_NPCs";
-            this.DataGrid_NPCs.ReadOnly = true;
-            this.DataGrid_NPCs.RowHeadersWidth = 25;
-            this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid_NPCs.Size = new System.Drawing.Size(318, 545);
-            this.DataGrid_NPCs.TabIndex = 1;
-            this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
-            this.DataGrid_NPCs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.NPCGrid_CellPainting);
-            this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
-            // 
-            // Col_ID
-            // 
-            this.Col_ID.FillWeight = 20F;
-            this.Col_ID.HeaderText = "ID";
-            this.Col_ID.Name = "Col_ID";
-            this.Col_ID.ReadOnly = true;
-            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Col_ID.Visible = false;
-            // 
-            // Col_Name
-            // 
-            this.Col_Name.HeaderText = "NPC Name";
-            this.Col_Name.Name = "Col_Name";
-            this.Col_Name.ReadOnly = true;
-            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // Panel_NPCData
             // 
             this.Panel_NPCData.Controls.Add(this.TabControl);
@@ -687,12 +644,13 @@
             // 
             // Tx_SkeletonName
             // 
-            this.Tx_SkeletonName.Location = new System.Drawing.Point(275, 111);
+            this.Tx_SkeletonName.Location = new System.Drawing.Point(287, 111);
             this.Tx_SkeletonName.MaxLength = 32;
             this.Tx_SkeletonName.Name = "Tx_SkeletonName";
-            this.Tx_SkeletonName.Size = new System.Drawing.Size(141, 20);
+            this.Tx_SkeletonName.Size = new System.Drawing.Size(129, 20);
             this.Tx_SkeletonName.TabIndex = 83;
             this.Tx_SkeletonName.Tag = "SKELETONNAME";
+            this.Tx_SkeletonName.Visible = false;
             this.Tx_SkeletonName.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             this.Tx_SkeletonName.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Tx_SkeletonName_MouseDoubleClick);
             // 
@@ -840,42 +798,6 @@
             this.Button_EnvironmentColorPreview.UseVisualStyleBackColor = false;
             this.Button_EnvironmentColorPreview.Click += new System.EventHandler(this.Button_EnvironmentColorPreview_Click);
             // 
-            // ColorsDataGridView
-            // 
-            this.ColorsDataGridView.AllowUserToResizeColumns = false;
-            this.ColorsDataGridView.AllowUserToResizeRows = false;
-            this.ColorsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ColorsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.ColorsDataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.ColorsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.StartLimbColumn,
-            this.ColorColumn});
-            this.ColorsDataGridView.Location = new System.Drawing.Point(769, 233);
-            this.ColorsDataGridView.MultiSelect = false;
-            this.ColorsDataGridView.Name = "ColorsDataGridView";
-            this.ColorsDataGridView.RowHeadersVisible = false;
-            this.ColorsDataGridView.Size = new System.Drawing.Size(71, 394);
-            this.ColorsDataGridView.TabIndex = 75;
-            this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
-            this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
-            this.ColorsDataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorsDataGridView_KeyUp);
-            // 
-            // StartLimbColumn
-            // 
-            this.StartLimbColumn.FillWeight = 60F;
-            this.StartLimbColumn.HeaderText = "Start limb";
-            this.StartLimbColumn.Name = "StartLimbColumn";
-            this.StartLimbColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ColorColumn
-            // 
-            this.ColorColumn.FillWeight = 60F;
-            this.ColorColumn.HeaderText = "Color";
-            this.ColorColumn.Name = "ColorColumn";
-            this.ColorColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // Label_NPCName
             // 
             this.Label_NPCName.AutoSize = true;
@@ -943,7 +865,7 @@
             0,
             0});
             this.NumUpDown_Hierarchy.Name = "NumUpDown_Hierarchy";
-            this.NumUpDown_Hierarchy.Size = new System.Drawing.Size(135, 20);
+            this.NumUpDown_Hierarchy.Size = new System.Drawing.Size(282, 20);
             this.NumUpDown_Hierarchy.TabIndex = 8;
             this.NumUpDown_Hierarchy.Tag = "HIERARCHY";
             this.NumUpDown_Hierarchy.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
@@ -966,90 +888,6 @@
             this.NumUpDown_YModelOffs.TabIndex = 37;
             this.NumUpDown_YModelOffs.Tag = "YMODELOFFS";
             this.NumUpDown_YModelOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // DataGrid_Animations
-            // 
-            this.DataGrid_Animations.AllowUserToResizeColumns = false;
-            this.DataGrid_Animations.AllowUserToResizeRows = false;
-            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
-            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_AnimName,
-            this.Col_HDefine,
-            this.Col_Filestart,
-            this.Col_Anim,
-            this.Col_StartFrame,
-            this.Col_EndFrame,
-            this.Col_Speed,
-            this.Col_OBJ});
-            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 233);
-            this.DataGrid_Animations.MultiSelect = false;
-            this.DataGrid_Animations.Name = "DataGrid_Animations";
-            this.DataGrid_Animations.RowHeadersVisible = false;
-            this.DataGrid_Animations.Size = new System.Drawing.Size(749, 394);
-            this.DataGrid_Animations.TabIndex = 9;
-            this.DataGrid_Animations.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGrid_Animations_CellMouseDoubleClick);
-            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
-            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
-            // 
-            // Col_AnimName
-            // 
-            this.Col_AnimName.FillWeight = 90F;
-            this.Col_AnimName.HeaderText = "Purpose";
-            this.Col_AnimName.Name = "Col_AnimName";
-            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_HDefine
-            // 
-            this.Col_HDefine.FillWeight = 80F;
-            this.Col_HDefine.HeaderText = "Header Definition";
-            this.Col_HDefine.Name = "Col_HDefine";
-            this.Col_HDefine.Visible = false;
-            // 
-            // Col_Filestart
-            // 
-            this.Col_Filestart.FillWeight = 50F;
-            this.Col_Filestart.HeaderText = "File start";
-            this.Col_Filestart.Name = "Col_Filestart";
-            // 
-            // Col_Anim
-            // 
-            this.Col_Anim.FillWeight = 50F;
-            this.Col_Anim.HeaderText = "Offset";
-            this.Col_Anim.Name = "Col_Anim";
-            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_StartFrame
-            // 
-            this.Col_StartFrame.FillWeight = 45F;
-            this.Col_StartFrame.HeaderText = "Start frame";
-            this.Col_StartFrame.Name = "Col_StartFrame";
-            this.Col_StartFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_EndFrame
-            // 
-            this.Col_EndFrame.FillWeight = 45F;
-            this.Col_EndFrame.HeaderText = "End frame";
-            this.Col_EndFrame.Name = "Col_EndFrame";
-            this.Col_EndFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Speed
-            // 
-            this.Col_Speed.FillWeight = 30F;
-            this.Col_Speed.HeaderText = "Speed";
-            this.Col_Speed.Name = "Col_Speed";
-            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_OBJ
-            // 
-            this.Col_OBJ.FillWeight = 60F;
-            this.Col_OBJ.HeaderText = "Object";
-            this.Col_OBJ.Name = "Col_OBJ";
-            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Label_AnimDefs
             // 
@@ -1455,122 +1293,6 @@
             this.NumUpDown_BlinkSpeed.TabIndex = 54;
             this.NumUpDown_BlinkSpeed.Tag = "BLINKSPE";
             this.NumUpDown_BlinkSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
-            // 
-            // DataGridView_ExtraDLists
-            // 
-            this.DataGridView_ExtraDLists.AllowUserToResizeColumns = false;
-            this.DataGridView_ExtraDLists.AllowUserToResizeRows = false;
-            this.DataGridView_ExtraDLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGridView_ExtraDLists.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGridView_ExtraDLists.BackgroundColor = System.Drawing.Color.White;
-            this.DataGridView_ExtraDLists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridView_ExtraDLists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ExtraDlists_Purpose,
-            this.ExtraDlists_HeaderDefinition,
-            this.ExtraDlists_Color,
-            this.ExtraDlists_FileStart,
-            this.ExtraDlists_Offset,
-            this.ExtraDlists_Translation,
-            this.ExtraDlists_Rotation,
-            this.ExtraDLists_Scale,
-            this.ExtraDlists_Limb,
-            this.ExtraDlists_ObjectID,
-            this.ExtraDlists_ShowType});
-            this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(9, 19);
-            this.DataGridView_ExtraDLists.MultiSelect = false;
-            this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
-            this.DataGridView_ExtraDLists.RowHeadersVisible = false;
-            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(831, 276);
-            this.DataGridView_ExtraDLists.TabIndex = 51;
-            this.DataGridView_ExtraDLists.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_ExtraDLists_CellMouseDoubleClick);
-            this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
-            this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
-            // 
-            // ExtraDlists_Purpose
-            // 
-            this.ExtraDlists_Purpose.FillWeight = 70F;
-            this.ExtraDlists_Purpose.HeaderText = "Purpose";
-            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
-            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_HeaderDefinition
-            // 
-            this.ExtraDlists_HeaderDefinition.FillWeight = 80F;
-            this.ExtraDlists_HeaderDefinition.HeaderText = "Header Definition";
-            this.ExtraDlists_HeaderDefinition.Name = "ExtraDlists_HeaderDefinition";
-            this.ExtraDlists_HeaderDefinition.Visible = false;
-            // 
-            // ExtraDlists_Color
-            // 
-            this.ExtraDlists_Color.FillWeight = 30F;
-            this.ExtraDlists_Color.HeaderText = "Color";
-            this.ExtraDlists_Color.Name = "ExtraDlists_Color";
-            this.ExtraDlists_Color.ReadOnly = true;
-            this.ExtraDlists_Color.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_FileStart
-            // 
-            this.ExtraDlists_FileStart.FillWeight = 50F;
-            this.ExtraDlists_FileStart.HeaderText = "File start";
-            this.ExtraDlists_FileStart.Name = "ExtraDlists_FileStart";
-            this.ExtraDlists_FileStart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Offset
-            // 
-            this.ExtraDlists_Offset.FillWeight = 50F;
-            this.ExtraDlists_Offset.HeaderText = "Offset";
-            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
-            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Translation
-            // 
-            this.ExtraDlists_Translation.FillWeight = 60F;
-            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
-            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
-            this.ExtraDlists_Translation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Rotation
-            // 
-            this.ExtraDlists_Rotation.FillWeight = 60F;
-            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
-            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
-            this.ExtraDlists_Rotation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDLists_Scale
-            // 
-            this.ExtraDLists_Scale.FillWeight = 40F;
-            this.ExtraDLists_Scale.HeaderText = "Scale";
-            this.ExtraDLists_Scale.Name = "ExtraDLists_Scale";
-            this.ExtraDLists_Scale.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Limb
-            // 
-            this.ExtraDlists_Limb.FillWeight = 35F;
-            this.ExtraDlists_Limb.HeaderText = "Limb";
-            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
-            this.ExtraDlists_Limb.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_ObjectID
-            // 
-            this.ExtraDlists_ObjectID.FillWeight = 60F;
-            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
-            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
-            this.ExtraDlists_ObjectID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_ShowType
-            // 
-            this.ExtraDlists_ShowType.FillWeight = 80F;
-            this.ExtraDlists_ShowType.HeaderText = "Show type";
-            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
-            "Not visible",
-            "With limb",
-            "Replaces limb",
-            "In Skeleton",
-            "Control existing"});
-            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
-            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // Tab3_BehaviorData
             // 
@@ -3440,84 +3162,6 @@
             this.SplitMsgContainer.TabIndex = 91;
             this.SplitMsgContainer.SizeChanged += new System.EventHandler(this.SplitMsgContainer_SizeChanged);
             // 
-            // MsgTextDefault
-            // 
-            this.MsgTextDefault.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.MsgTextDefault.AutoIndent = false;
-            this.MsgTextDefault.AutoIndentChars = false;
-            this.MsgTextDefault.AutoScrollMinSize = new System.Drawing.Size(2, 12);
-            this.MsgTextDefault.BackBrush = null;
-            this.MsgTextDefault.BackColor = System.Drawing.Color.Gainsboro;
-            this.MsgTextDefault.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MsgTextDefault.CharHeight = 12;
-            this.MsgTextDefault.CharWidth = 6;
-            this.MsgTextDefault.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.MsgTextDefault.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgTextDefault.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MsgTextDefault.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
-            this.MsgTextDefault.IsReplaceMode = false;
-            this.MsgTextDefault.Location = new System.Drawing.Point(0, 0);
-            this.MsgTextDefault.Name = "MsgTextDefault";
-            this.MsgTextDefault.Paddings = new System.Windows.Forms.Padding(0);
-            this.MsgTextDefault.ReadOnly = true;
-            this.MsgTextDefault.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.MsgTextDefault.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgTextDefault.ServiceColors")));
-            this.MsgTextDefault.ShowLineNumbers = false;
-            this.MsgTextDefault.Size = new System.Drawing.Size(25, 100);
-            this.MsgTextDefault.TabIndex = 69;
-            this.MsgTextDefault.Tag = "0";
-            this.MsgTextDefault.WordWrapAutoIndent = false;
-            this.MsgTextDefault.Zoom = 100;
-            // 
-            // MsgText
-            // 
-            this.MsgText.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.MsgText.AutoIndent = false;
-            this.MsgText.AutoIndentChars = false;
-            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 12);
-            this.MsgText.BackBrush = null;
-            this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MsgText.CharHeight = 12;
-            this.MsgText.CharWidth = 6;
-            this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
-            this.MsgText.IsReplaceMode = false;
-            this.MsgText.Location = new System.Drawing.Point(0, 0);
-            this.MsgText.Name = "MsgText";
-            this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
-            this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
-            this.MsgText.ShowLineNumbers = false;
-            this.MsgText.Size = new System.Drawing.Size(638, 216);
-            this.MsgText.TabIndex = 68;
-            this.MsgText.Tag = "0";
-            this.MsgText.WordWrapAutoIndent = false;
-            this.MsgText.Zoom = 100;
-            this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
-            this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
-            // 
             // Btn_RemoveLanguage
             // 
             this.Btn_RemoveLanguage.Location = new System.Drawing.Point(506, 26);
@@ -3763,39 +3407,6 @@
             this.Btn_AddMsg.Text = "Add";
             this.Btn_AddMsg.UseVisualStyleBackColor = true;
             this.Btn_AddMsg.Click += new System.EventHandler(this.Btn_AddMsg_Click);
-            // 
-            // MessagesGrid
-            // 
-            this.MessagesGrid.AllowUserToAddRows = false;
-            this.MessagesGrid.AllowUserToDeleteRows = false;
-            this.MessagesGrid.AllowUserToResizeColumns = false;
-            this.MessagesGrid.AllowUserToResizeRows = false;
-            this.MessagesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.MessagesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.MessagesGrid.BackgroundColor = System.Drawing.Color.White;
-            this.MessagesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.MessagesGrid.ColumnHeadersVisible = false;
-            this.MessagesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn2});
-            this.MessagesGrid.Location = new System.Drawing.Point(3, 3);
-            this.MessagesGrid.MultiSelect = false;
-            this.MessagesGrid.Name = "MessagesGrid";
-            this.MessagesGrid.ReadOnly = true;
-            this.MessagesGrid.RowHeadersWidth = 25;
-            this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MessagesGrid.Size = new System.Drawing.Size(189, 520);
-            this.MessagesGrid.TabIndex = 3;
-            this.MessagesGrid.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.MessagesGrid_CellPainting);
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Message title";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Tab5_Scripts
             // 
@@ -4530,6 +4141,396 @@
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
             // 
+            // DataGrid_NPCs
+            // 
+            this.DataGrid_NPCs.AllowUserToAddRows = false;
+            this.DataGrid_NPCs.AllowUserToDeleteRows = false;
+            this.DataGrid_NPCs.AllowUserToResizeColumns = false;
+            this.DataGrid_NPCs.AllowUserToResizeRows = false;
+            this.DataGrid_NPCs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGrid_NPCs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGrid_NPCs.BackgroundColor = System.Drawing.Color.White;
+            this.DataGrid_NPCs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGrid_NPCs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col_ID,
+            this.Col_Name});
+            this.DataGrid_NPCs.Location = new System.Drawing.Point(3, 0);
+            this.DataGrid_NPCs.MultiSelect = false;
+            this.DataGrid_NPCs.Name = "DataGrid_NPCs";
+            this.DataGrid_NPCs.ReadOnly = true;
+            this.DataGrid_NPCs.RowHeadersWidth = 25;
+            this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DataGrid_NPCs.Size = new System.Drawing.Size(318, 545);
+            this.DataGrid_NPCs.TabIndex = 1;
+            this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
+            this.DataGrid_NPCs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.NPCGrid_CellPainting);
+            this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
+            // 
+            // Col_ID
+            // 
+            this.Col_ID.FillWeight = 20F;
+            this.Col_ID.HeaderText = "ID";
+            this.Col_ID.Name = "Col_ID";
+            this.Col_ID.ReadOnly = true;
+            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Col_ID.Visible = false;
+            // 
+            // Col_Name
+            // 
+            this.Col_Name.HeaderText = "NPC Name";
+            this.Col_Name.Name = "Col_Name";
+            this.Col_Name.ReadOnly = true;
+            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ColorsDataGridView
+            // 
+            this.ColorsDataGridView.AllowUserToResizeColumns = false;
+            this.ColorsDataGridView.AllowUserToResizeRows = false;
+            this.ColorsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ColorsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ColorsDataGridView.BackgroundColor = System.Drawing.Color.White;
+            this.ColorsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.StartLimbColumn,
+            this.ColorColumn});
+            this.ColorsDataGridView.Location = new System.Drawing.Point(769, 233);
+            this.ColorsDataGridView.MultiSelect = false;
+            this.ColorsDataGridView.Name = "ColorsDataGridView";
+            this.ColorsDataGridView.RowHeadersVisible = false;
+            this.ColorsDataGridView.Size = new System.Drawing.Size(71, 394);
+            this.ColorsDataGridView.TabIndex = 75;
+            this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
+            this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
+            this.ColorsDataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorsDataGridView_KeyUp);
+            // 
+            // StartLimbColumn
+            // 
+            this.StartLimbColumn.FillWeight = 60F;
+            this.StartLimbColumn.HeaderText = "Start limb";
+            this.StartLimbColumn.Name = "StartLimbColumn";
+            this.StartLimbColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ColorColumn
+            // 
+            this.ColorColumn.FillWeight = 60F;
+            this.ColorColumn.HeaderText = "Color";
+            this.ColorColumn.Name = "ColorColumn";
+            this.ColorColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // DataGrid_Animations
+            // 
+            this.DataGrid_Animations.AllowUserToResizeColumns = false;
+            this.DataGrid_Animations.AllowUserToResizeRows = false;
+            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
+            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col_AnimName,
+            this.Col_HDefine,
+            this.Col_Filestart,
+            this.Col_Anim,
+            this.Col_StartFrame,
+            this.Col_EndFrame,
+            this.Col_Speed,
+            this.Col_OBJ});
+            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 233);
+            this.DataGrid_Animations.MultiSelect = false;
+            this.DataGrid_Animations.Name = "DataGrid_Animations";
+            this.DataGrid_Animations.RowHeadersVisible = false;
+            this.DataGrid_Animations.Size = new System.Drawing.Size(749, 394);
+            this.DataGrid_Animations.TabIndex = 9;
+            this.DataGrid_Animations.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGrid_Animations_CellMouseDoubleClick);
+            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
+            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
+            // 
+            // Col_AnimName
+            // 
+            this.Col_AnimName.FillWeight = 90F;
+            this.Col_AnimName.HeaderText = "Purpose";
+            this.Col_AnimName.Name = "Col_AnimName";
+            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_HDefine
+            // 
+            this.Col_HDefine.FillWeight = 80F;
+            this.Col_HDefine.HeaderText = "Header Definition";
+            this.Col_HDefine.Name = "Col_HDefine";
+            this.Col_HDefine.Visible = false;
+            // 
+            // Col_Filestart
+            // 
+            this.Col_Filestart.FillWeight = 50F;
+            this.Col_Filestart.HeaderText = "File start";
+            this.Col_Filestart.Name = "Col_Filestart";
+            // 
+            // Col_Anim
+            // 
+            this.Col_Anim.FillWeight = 50F;
+            this.Col_Anim.HeaderText = "Offset";
+            this.Col_Anim.Name = "Col_Anim";
+            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_StartFrame
+            // 
+            this.Col_StartFrame.FillWeight = 45F;
+            this.Col_StartFrame.HeaderText = "Start frame";
+            this.Col_StartFrame.Name = "Col_StartFrame";
+            this.Col_StartFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_EndFrame
+            // 
+            this.Col_EndFrame.FillWeight = 45F;
+            this.Col_EndFrame.HeaderText = "End frame";
+            this.Col_EndFrame.Name = "Col_EndFrame";
+            this.Col_EndFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Speed
+            // 
+            this.Col_Speed.FillWeight = 30F;
+            this.Col_Speed.HeaderText = "Speed";
+            this.Col_Speed.Name = "Col_Speed";
+            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_OBJ
+            // 
+            this.Col_OBJ.FillWeight = 60F;
+            this.Col_OBJ.HeaderText = "Object";
+            this.Col_OBJ.Name = "Col_OBJ";
+            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // DataGridView_ExtraDLists
+            // 
+            this.DataGridView_ExtraDLists.AllowUserToResizeColumns = false;
+            this.DataGridView_ExtraDLists.AllowUserToResizeRows = false;
+            this.DataGridView_ExtraDLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGridView_ExtraDLists.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGridView_ExtraDLists.BackgroundColor = System.Drawing.Color.White;
+            this.DataGridView_ExtraDLists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridView_ExtraDLists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ExtraDlists_Purpose,
+            this.ExtraDlists_HeaderDefinition,
+            this.ExtraDlists_Color,
+            this.ExtraDlists_FileStart,
+            this.ExtraDlists_Offset,
+            this.ExtraDlists_Translation,
+            this.ExtraDlists_Rotation,
+            this.ExtraDLists_Scale,
+            this.ExtraDlists_Limb,
+            this.ExtraDlists_ObjectID,
+            this.ExtraDlists_ShowType});
+            this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(9, 19);
+            this.DataGridView_ExtraDLists.MultiSelect = false;
+            this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
+            this.DataGridView_ExtraDLists.RowHeadersVisible = false;
+            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(831, 276);
+            this.DataGridView_ExtraDLists.TabIndex = 51;
+            this.DataGridView_ExtraDLists.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_ExtraDLists_CellMouseDoubleClick);
+            this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
+            this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
+            // 
+            // ExtraDlists_Purpose
+            // 
+            this.ExtraDlists_Purpose.FillWeight = 70F;
+            this.ExtraDlists_Purpose.HeaderText = "Purpose";
+            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
+            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_HeaderDefinition
+            // 
+            this.ExtraDlists_HeaderDefinition.FillWeight = 80F;
+            this.ExtraDlists_HeaderDefinition.HeaderText = "Header Definition";
+            this.ExtraDlists_HeaderDefinition.Name = "ExtraDlists_HeaderDefinition";
+            this.ExtraDlists_HeaderDefinition.Visible = false;
+            // 
+            // ExtraDlists_Color
+            // 
+            this.ExtraDlists_Color.FillWeight = 30F;
+            this.ExtraDlists_Color.HeaderText = "Color";
+            this.ExtraDlists_Color.Name = "ExtraDlists_Color";
+            this.ExtraDlists_Color.ReadOnly = true;
+            this.ExtraDlists_Color.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_FileStart
+            // 
+            this.ExtraDlists_FileStart.FillWeight = 50F;
+            this.ExtraDlists_FileStart.HeaderText = "File start";
+            this.ExtraDlists_FileStart.Name = "ExtraDlists_FileStart";
+            this.ExtraDlists_FileStart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Offset
+            // 
+            this.ExtraDlists_Offset.FillWeight = 50F;
+            this.ExtraDlists_Offset.HeaderText = "Offset";
+            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
+            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Translation
+            // 
+            this.ExtraDlists_Translation.FillWeight = 60F;
+            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
+            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
+            this.ExtraDlists_Translation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Rotation
+            // 
+            this.ExtraDlists_Rotation.FillWeight = 60F;
+            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
+            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
+            this.ExtraDlists_Rotation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDLists_Scale
+            // 
+            this.ExtraDLists_Scale.FillWeight = 40F;
+            this.ExtraDLists_Scale.HeaderText = "Scale";
+            this.ExtraDLists_Scale.Name = "ExtraDLists_Scale";
+            this.ExtraDLists_Scale.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Limb
+            // 
+            this.ExtraDlists_Limb.FillWeight = 35F;
+            this.ExtraDlists_Limb.HeaderText = "Limb";
+            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
+            this.ExtraDlists_Limb.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_ObjectID
+            // 
+            this.ExtraDlists_ObjectID.FillWeight = 60F;
+            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
+            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
+            this.ExtraDlists_ObjectID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_ShowType
+            // 
+            this.ExtraDlists_ShowType.FillWeight = 80F;
+            this.ExtraDlists_ShowType.HeaderText = "Show type";
+            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
+            "Not visible",
+            "With limb",
+            "Replaces limb",
+            "In Skeleton",
+            "Control existing"});
+            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
+            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // MsgTextDefault
+            // 
+            this.MsgTextDefault.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgTextDefault.AutoIndent = false;
+            this.MsgTextDefault.AutoIndentChars = false;
+            this.MsgTextDefault.AutoScrollMinSize = new System.Drawing.Size(2, 12);
+            this.MsgTextDefault.BackBrush = null;
+            this.MsgTextDefault.BackColor = System.Drawing.Color.Gainsboro;
+            this.MsgTextDefault.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgTextDefault.CharHeight = 12;
+            this.MsgTextDefault.CharWidth = 6;
+            this.MsgTextDefault.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgTextDefault.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgTextDefault.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgTextDefault.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgTextDefault.IsReplaceMode = false;
+            this.MsgTextDefault.Location = new System.Drawing.Point(0, 0);
+            this.MsgTextDefault.Name = "MsgTextDefault";
+            this.MsgTextDefault.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgTextDefault.ReadOnly = true;
+            this.MsgTextDefault.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgTextDefault.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgTextDefault.ServiceColors")));
+            this.MsgTextDefault.ShowLineNumbers = false;
+            this.MsgTextDefault.Size = new System.Drawing.Size(25, 100);
+            this.MsgTextDefault.TabIndex = 69;
+            this.MsgTextDefault.Tag = "0";
+            this.MsgTextDefault.WordWrapAutoIndent = false;
+            this.MsgTextDefault.Zoom = 100;
+            // 
+            // MsgText
+            // 
+            this.MsgText.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgText.AutoIndent = false;
+            this.MsgText.AutoIndentChars = false;
+            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 12);
+            this.MsgText.BackBrush = null;
+            this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgText.CharHeight = 12;
+            this.MsgText.CharWidth = 6;
+            this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgText.IsReplaceMode = false;
+            this.MsgText.Location = new System.Drawing.Point(0, 0);
+            this.MsgText.Name = "MsgText";
+            this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
+            this.MsgText.ShowLineNumbers = false;
+            this.MsgText.Size = new System.Drawing.Size(638, 216);
+            this.MsgText.TabIndex = 68;
+            this.MsgText.Tag = "0";
+            this.MsgText.WordWrapAutoIndent = false;
+            this.MsgText.Zoom = 100;
+            this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
+            this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
+            // 
+            // MessagesGrid
+            // 
+            this.MessagesGrid.AllowUserToAddRows = false;
+            this.MessagesGrid.AllowUserToDeleteRows = false;
+            this.MessagesGrid.AllowUserToResizeColumns = false;
+            this.MessagesGrid.AllowUserToResizeRows = false;
+            this.MessagesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.MessagesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.MessagesGrid.BackgroundColor = System.Drawing.Color.White;
+            this.MessagesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MessagesGrid.ColumnHeadersVisible = false;
+            this.MessagesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn2});
+            this.MessagesGrid.Location = new System.Drawing.Point(3, 3);
+            this.MessagesGrid.MultiSelect = false;
+            this.MessagesGrid.Name = "MessagesGrid";
+            this.MessagesGrid.ReadOnly = true;
+            this.MessagesGrid.RowHeadersWidth = 25;
+            this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.MessagesGrid.Size = new System.Drawing.Size(189, 520);
+            this.MessagesGrid.TabIndex = 3;
+            this.MessagesGrid.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.MessagesGrid_CellPainting);
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Message title";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4554,18 +4555,15 @@
             this.SplitPanel.ResumeLayout(false);
             this.Panel_NPCList.ResumeLayout(false);
             this.Panel_NPCList.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.Panel_NPCData.ResumeLayout(false);
             this.TabControl.ResumeLayout(false);
             this.Tab1_Data.ResumeLayout(false);
             this.Tab1_Data.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpFileStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpAlpha)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).EndInit();
             this.Tab2_ExtraData.ResumeLayout(false);
@@ -4575,7 +4573,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSegment)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             this.Tab3_BehaviorData.ResumeLayout(false);
             this.Tab3_BehaviorData.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AnimInterpFrames)).EndInit();
@@ -4637,8 +4634,6 @@
             this.SplitMsgContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SplitMsgContainer)).EndInit();
             this.SplitMsgContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
             this.PanelMsgPreview.ResumeLayout(false);
             this.PreviewSplitContainer.Panel1.ResumeLayout(false);
             this.PreviewSplitContainer.Panel2.ResumeLayout(false);
@@ -4646,13 +4641,19 @@
             this.PreviewSplitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreviewOrig)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.Tab5_Scripts.ResumeLayout(false);
             this.Tab6_EmbeddedOverlay.ResumeLayout(false);
             this.Tab6_EmbeddedOverlay.PerformLayout();
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
