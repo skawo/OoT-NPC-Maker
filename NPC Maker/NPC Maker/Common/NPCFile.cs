@@ -159,6 +159,8 @@ namespace NPC_Maker
 
         public bool Omitted { get; set; }
 
+        public string HeaderPath { get; set; }
+        public string SkeletonName { get; set; }
         public NPCEntry()
         {
             NPCName = "";
@@ -270,6 +272,8 @@ namespace NPC_Maker
             EmbeddedOverlayCode = new CCodeEntry();
 
             Omitted = false;
+            HeaderPath = "";
+            SkeletonName = "";
         }
 
         public List<OutputColorEntry> ParseColorEntries()
@@ -381,6 +385,8 @@ namespace NPC_Maker
             CULLSCALE,
             ANIMINTERPFRAMES,
             OMIT,
+            HEADERPATH,
+            SKELETONNAME,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -516,7 +522,8 @@ namespace NPC_Maker
                 case Members.ANIMINTERPFRAMES: AnimInterpFrames = Convert.ToByte(Value); break;
 
                 case Members.OMIT: Omitted = Convert.ToBoolean(Value); break;
-
+                case Members.HEADERPATH: HeaderPath = (string)Value; break;
+                case Members.SKELETONNAME: SkeletonName = (string)Value; break;
                 default: break;
             }
         }

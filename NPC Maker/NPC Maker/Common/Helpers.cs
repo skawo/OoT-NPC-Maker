@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -15,6 +16,87 @@ namespace NPC_Maker
         public static string GetBase64Hash(SHA1 hasher, string s)
         {
             return Convert.ToBase64String(hasher.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+        }
+
+        public static string ReplacePathWithToken(string basePath, string fullPath, string token)
+        {
+            try
+            {
+                string normalizedBasePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                string normalizedFullPath = Path.GetFullPath(fullPath);
+
+                StringComparison comparison = Environment.OSVersion.Platform == PlatformID.Unix ?
+                    StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+                if (string.Equals(normalizedBasePath, normalizedFullPath, comparison))
+                    return token;
+
+                string basePathWithSeparator = normalizedBasePath + Path.DirectorySeparatorChar;
+
+                if (normalizedFullPath.StartsWith(basePathWithSeparator, comparison))
+                {
+                    string relativePortion = normalizedFullPath.Substring(basePathWithSeparator.Length);
+                    return token + "/" + relativePortion.Replace(Path.DirectorySeparatorChar, '/');
+                }
+
+                return fullPath;
+            }
+            catch (Exception)
+            {
+                return fullPath;
+            }
+        }
+
+        public static string ReplaceTokenWithPath(string basePath, string tokenizedPath, string token)
+        {
+            try
+            {
+                string normalizedBasePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+                if (string.Equals(tokenizedPath, token, StringComparison.Ordinal))
+                    return normalizedBasePath;
+
+                string tokenWithSeparator = token + "/";
+                if (tokenizedPath.StartsWith(tokenWithSeparator, StringComparison.Ordinal))
+                {
+                    string relativePortion = tokenizedPath.Substring(tokenWithSeparator.Length);
+                    string normalizedRelativePortion = relativePortion.Replace('/', Path.DirectorySeparatorChar);
+                    return Path.Combine(normalizedBasePath, normalizedRelativePortion);
+                }
+
+                return tokenizedPath;
+            }
+            catch (Exception)
+            {
+                return tokenizedPath;
+            }
+        }
+
+        public static Dictionary<string, string> GetDefinesFromH(string Path)
+        {
+            Dictionary<string, string> defines = new Dictionary<string, string>();
+
+            try
+            {
+                if (!String.IsNullOrEmpty(Path))
+                    defines = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Path, "{PROJECTPATH}"));
+            }
+            catch (Exception)
+            {
+            }
+
+            return defines;
+        }
+
+        public static Common.HDefine GetDefineFromName(string name, Dictionary<string, string> defines)
+        {
+            if (defines.ContainsKey(name))
+            {
+                Common.HDefine h = new Common.HDefine(name, defines[name]);
+                return h;
+            }
+            else
+                return null;
         }
 
         public static Color TryGetColorWithName(Color color)

@@ -201,6 +201,28 @@ namespace NPC_Maker
                     }
                 }
 
+                foreach (NPCEntry e in Deserialized.Entries)
+                {
+                    if (!String.IsNullOrEmpty(e.HeaderPath))
+                    {
+                        Dictionary<string, string> hDict = Helpers.GetDefinesFromH(e.HeaderPath);
+
+                        e.Hierarchy = ResolveHeaderDefineForField(e.SkeletonName, hDict, e.Hierarchy);
+
+                        foreach (var a in e.Animations)
+                            a.Address = ResolveHeaderDefineForField(a.Name, hDict, a.Address);
+
+                        foreach (var d in e.ExtraDisplayLists)
+                            d.Address = ResolveHeaderDefineForField(d.Name, hDict, d.Address);
+
+                        foreach (var s in e.Segments)
+                        {
+                            foreach (var se in s)
+                                se.Address = ResolveHeaderDefineForField(se.Name, hDict, se.Address);
+                        }
+                    }
+                }
+
                 Deserialized.Version = 7;
                 Version = 7;
 
@@ -211,6 +233,21 @@ namespace NPC_Maker
                 System.Windows.Forms.MessageBox.Show($"Failed to read JSON: {ex.Message}");
                 return null;
             }
+        }
+
+        private static UInt32 ResolveHeaderDefineForField(string Name, Dictionary<string, string> defines, UInt32 field)
+        {
+            if (!String.IsNullOrEmpty(Name))
+            {
+                Common.HDefine h = Helpers.GetDefineFromName(Name, defines);
+
+                if (h != null && h.Value != null)
+                    return (UInt32)h.Value;
+                else
+                    return field;
+            }
+            else
+                return field;
         }
 
         public static void SaveNPCJSON(string Path, NPCFile Data)
@@ -542,6 +579,29 @@ namespace NPC_Maker
             });
         }
 
+        private static UInt32 TryGetFromH(bool CLIMode, string NPCName, uint defaultV, Dictionary<string, string> defines, string name)
+        {
+            try
+            {
+                Common.HDefine h = Helpers.GetDefineFromName(name, defines);
+
+                if (h == null)
+                    throw new Exception();
+                else
+                {
+                    if (h.Value != null)
+                        return (UInt32)h.Value;
+                    else
+                        throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                FileOps.ShowMsg(CLIMode, $"{NPCName}: Error parsing define \"{name}\"!");
+                return defaultV;
+            }
+        }
+
         public static void SaveBinaryFile(string Path, NPCFile Data, IProgress<Common.ProgressReport> progress, string baseDefines, bool cacheInvalid, bool CcacheInvalid, bool CLIMode = false)
         {
             if (Data.Entries.Count() == 0)
@@ -574,6 +634,11 @@ namespace NPC_Maker
                     if (Entry.IsNull == false && !Entry.Omitted)
                     {
                         Console.Write($"Processing entry {EntriesDone}: {Entry.NPCName}... ");
+
+                        Dictionary<string, string> defines = new Dictionary<string, string>();
+
+                        if (!String.IsNullOrEmpty(Entry.HeaderPath))
+                            defines = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Entry.HeaderPath, "{PROJECTPATH}"));
 
                         List<byte> EntryBytes = new List<byte>();
 
@@ -677,7 +742,7 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.MovementSpeed);
                         EntryBytes.AddRangeBigEndian(Entry.GravityForce);
                         EntryBytes.AddRangeBigEndian(Entry.SmoothingConstant);
-                        EntryBytes.AddRangeBigEndian(Entry.Hierarchy);
+                        EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Entry.Hierarchy, defines, Entry.SkeletonName));
                         EntryBytes.AddRangeBigEndian(Entry.FileStart);
                         EntryBytes.AddRangeBigEndian(Entry.CullForward);
                         EntryBytes.AddRangeBigEndian(Entry.CullDown);
@@ -823,7 +888,7 @@ namespace NPC_Maker
 
                         foreach (AnimationEntry Anim in Entry.Animations)
                         {
-                            EntryBytes.AddRangeBigEndian((UInt32)Anim.Address);
+                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, Anim.Name));
                             EntryBytes.AddRangeBigEndian((UInt32)Anim.FileStart);
                             EntryBytes.AddRangeBigEndian((float)Anim.Speed);
                             EntryBytes.AddRangeBigEndian((UInt16)Anim.ObjID);
@@ -848,7 +913,7 @@ namespace NPC_Maker
 
                         foreach (DListEntry Dlist in Entry.ExtraDisplayLists)
                         {
-                            EntryBytes.AddRangeBigEndian(Dlist.Address);
+                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, Dlist.Name));
                             EntryBytes.AddRangeBigEndian(Dlist.FileStart);
                             EntryBytes.AddRangeBigEndian(Dlist.TransX);
                             EntryBytes.AddRangeBigEndian(Dlist.TransY);
@@ -917,7 +982,7 @@ namespace NPC_Maker
 
                             foreach (SegmentEntry TexEntry in Segment)
                             {
-                                ExtraSegDataEntries.AddRangeBigEndian(TexEntry.Address);
+                                ExtraSegDataEntries.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, TexEntry.Address, defines, TexEntry.Name));
                                 ExtraSegDataEntries.AddRangeBigEndian(TexEntry.FileStart);
                                 ExtraSegDataEntries.AddRangeBigEndian(TexEntry.ObjectID);
                                 Helpers.Ensure4ByteAlign(ExtraSegDataEntries);

@@ -39,6 +39,7 @@ namespace NPC_Maker
         public const string Keyword_DefaultCase = "DEFAULT:";
         
 
+
         /*
         public const string Keyword_ScriptVar = "VAR";
         public const string Keyword_ScriptVarF = "VARF";

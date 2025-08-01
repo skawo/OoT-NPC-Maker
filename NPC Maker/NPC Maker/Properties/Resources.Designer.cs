@@ -69,7 +69,8 @@ namespace NPC_Maker.Properties {
         ///        &quot;${workspaceFolder}/**&quot;,
         ///        &quot;../gcc/mips64/include/z64hdr/**&quot;,
         ///        &quot;../gcc/mips64/include&quot;,
-        ///        &quot;../gcc/mips64/include/npcmaker&quot;
+        ///        &quot;../gcc/mips64/include/npcmaker&quot;,
+        ///        &quot;{PROJECTPATH}&quot;
         ///      ],
         ///      &quot;defines&quot;: [
         ///        &quot;_DEBUG&quot;,

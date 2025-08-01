@@ -112,6 +112,25 @@ namespace NPC_Maker
             Helpers.DeleteFileStartingWith(System.IO.Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlayNPCCOMPILE");
         }
 
+        public static Dictionary<string, string> GetDefinesFromH(string hPath)
+        {
+            string headerContent = File.ReadAllText(hPath);
+
+            string pattern = @"^\s*#define\s+(\w+)(?:\s+(.+?))?(?:\s*//.*)?$";
+            Dictionary<string, string> outD = new Dictionary<string, string>();
+
+
+            foreach (Match match in Regex.Matches(headerContent, pattern, RegexOptions.Multiline))
+            {
+                string name = match.Groups[1].Value;
+                string value = match.Groups[2].Value.Trim();
+
+                outD.Add(name, value);
+            }
+
+            return outD;
+        }
+
         public static List<FunctionEntry> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
         {
             string Out;

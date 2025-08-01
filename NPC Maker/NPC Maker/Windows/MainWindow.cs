@@ -376,6 +376,8 @@ namespace NPC_Maker
             #region Basic data
 
             Textbox_NPCName.Text = SelectedEntry.NPCName;
+            Tx_HeaderPath.Text = SelectedEntry.HeaderPath;
+            Tx_SkeletonName.Text = SelectedEntry.SkeletonName;
 
             Txb_ObjectID.Text = SelectedEntry.ObjectID.ToString();
             Txb_ObjectID_Leave(null, null);
@@ -1778,6 +1780,22 @@ namespace NPC_Maker
                     DataGrid_Animations.RefreshEdit();
                 }
             }
+            else if (e.ColumnIndex == (int)AnimGridColumns.Name && SelectedEntry.AnimationType == 0)
+            {
+                Common.HDefine hD = SelectNameFromH();
+
+                if (hD != null)
+                {
+                    if (!ShowHDefineError(hD))
+                    {
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.Name;
+                        DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.Name, e.GetType(), null));
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.Address].Value = hD.ValueString;
+                        DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)AnimGridColumns.Address, hD.ValueString, e.GetType(), null));
+                        DataGrid_Animations.RefreshEdit();
+                    }
+                }
+            }
         }
 
         private void AddBlankAnim(int SkipIndex, int Index, string Name = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte StartFrame = 0, byte EndFrame = 0xFF, Int32? FileStart = null)
@@ -2111,6 +2129,22 @@ namespace NPC_Maker
                     DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, "", e.GetType(), null));
                     DataGridView_ExtraDLists.Update();
 
+                }
+            }
+            else if (e.ColumnIndex == (int)EDlistsColumns.Purpose)
+            {
+                Common.HDefine hD = SelectNameFromH();
+
+                if (hD != null)
+                {
+                    if (!ShowHDefineError(hD))
+                    {
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.Name;
+                        DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.Name, e.GetType(), null));
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[(int)EDlistsColumns.Offset].Value = hD.ValueString;
+                        DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.Offset, hD.ValueString, e.GetType(), null));
+                        DataGridView_ExtraDLists.Update();
+                    }
                 }
             }
         }
@@ -2470,6 +2504,22 @@ namespace NPC_Maker
                     (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
                     DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
                     (sender as DataGridView).Update();
+                }
+            }
+            else if (e.ColumnIndex == (int)SegmentsColumns.Name)
+            {
+                Common.HDefine hD = SelectNameFromH();
+
+                if (hD != null)
+                {
+                    if (!ShowHDefineError(hD))
+                    {
+                        (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.Name;
+                        DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.Name, e.GetType(), null));
+                        (sender as DataGridView).Rows[e.RowIndex].Cells[(int)SegmentsColumns.Address].Value = hD.ValueString;
+                        DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)SegmentsColumns.Address, hD.ValueString, e.GetType(), null));
+                        (sender as DataGridView).Update();
+                    }
                 }
             }
         }
@@ -3972,6 +4022,61 @@ namespace NPC_Maker
             {
                 SplitMsgContainer.Width = PanelMsgPreview.Width;
                 SplitMsgContainer.Height = PanelMsgPreview.Location.Y - SplitMsgContainer.Location.Y - 10;
+            }
+        }
+
+        private void Btn_HeaderBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog of = new OpenFileDialog();
+            of.Filter = "Header files (*.h)|*.h|All files (*.*)|*.*";
+            of.InitialDirectory = Program.Settings.ProjectPath;
+
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                if (String.IsNullOrEmpty(Program.Settings.ProjectPath))
+                    Tx_HeaderPath.Text = of.FileName;
+                else
+                    Tx_HeaderPath.Text = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, "{PROJECTPATH}");
+            }
+        }
+
+        private Common.HDefine SelectNameFromH()
+        {
+            if (SelectedEntry == null || String.IsNullOrEmpty(SelectedEntry.HeaderPath))
+                return null;
+
+            Dictionary<string, string> hDict = Helpers.GetDefinesFromH(SelectedEntry.HeaderPath);
+
+            Windows.ComboPicker com = new Windows.ComboPicker(hDict.Keys.ToList(), "Select symbol from header...", "Selection", true);
+
+            if (com.ShowDialog() == DialogResult.OK)
+                return new Common.HDefine(com.SelectedOption, hDict[com.SelectedOption]);
+            else
+                return null;
+        }
+
+        private bool ShowHDefineError(Common.HDefine hD)
+        { 
+            if (hD.Value == null)
+            {
+                MessageBox.Show("Error parsing defined value");
+                return true;
+            }
+
+            return false;
+        }
+
+        private void Tx_SkeletonName_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Common.HDefine hD = SelectNameFromH();
+
+            if (hD != null)
+            {
+                if (!ShowHDefineError(hD))
+                {
+                    Tx_SkeletonName.Text = hD.Name;
+                    NumUpDown_Hierarchy.Value = (decimal)hD.Value;
+                }
             }
         }
     }

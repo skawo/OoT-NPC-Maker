@@ -17,6 +17,32 @@ namespace NPC_Maker.Common
         }
     }
 
+    public class HDefine
+    {
+        public string Name;
+        public string ValueString;
+        public UInt32? Value;
+
+        public HDefine(string _Name, string _ValueString)
+        {
+            Name = _Name;
+            ValueString = _ValueString;
+
+            try
+            {
+                if (Scripts.ScriptHelpers.IsHex(_ValueString))
+                    Value = Convert.ToUInt32(_ValueString.Substring(2), 16);
+                else
+                    Value = Convert.ToUInt32(_ValueString);
+            }
+            catch (Exception)
+            {
+                Value = null;
+            }
+
+        }
+    }
+
     public class SavedMsgPreviewData
     {
         public System.Drawing.Image previewImage;
