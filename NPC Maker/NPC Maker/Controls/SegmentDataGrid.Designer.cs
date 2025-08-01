@@ -32,6 +32,7 @@ namespace NPC_Maker.Controls
             this.components = new System.ComponentModel.Container();
             this.Grid = new NPC_Maker.CustomDataGridView(this.components);
             this.Seg_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HeaderDefinition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SegmentsFileStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_Offs = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Seg_ObjId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,6 +48,7 @@ namespace NPC_Maker.Controls
             this.Grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Seg_Name,
+            this.HeaderDefinition,
             this.SegmentsFileStart,
             this.Seg_Offs,
             this.Seg_ObjId});
@@ -64,6 +66,12 @@ namespace NPC_Maker.Controls
             this.Seg_Name.HeaderText = "Name";
             this.Seg_Name.Name = "Seg_Name";
             this.Seg_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // HeaderDefinition
+            // 
+            this.HeaderDefinition.HeaderText = "Header Definition";
+            this.HeaderDefinition.Name = "HeaderDefinition";
+            this.HeaderDefinition.Visible = false;
             // 
             // SegmentsFileStart
             // 
@@ -100,6 +108,7 @@ namespace NPC_Maker.Controls
 
         public CustomDataGridView Grid;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HeaderDefinition;
         private System.Windows.Forms.DataGridViewTextBoxColumn SegmentsFileStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_Offs;
         private System.Windows.Forms.DataGridViewTextBoxColumn Seg_ObjId;

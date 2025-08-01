@@ -51,6 +51,9 @@ namespace NPC_Maker
         {
             try
             {
+                if (String.IsNullOrEmpty(basePath))
+                    basePath = Program.ExecPath;
+
                 string normalizedBasePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
                 if (string.Equals(tokenizedPath, token, StringComparison.Ordinal))
@@ -90,7 +93,7 @@ namespace NPC_Maker
 
         public static Common.HDefine GetDefineFromName(string name, Dictionary<string, string> defines)
         {
-            if (defines.ContainsKey(name))
+            if (name != null && defines.ContainsKey(name))
             {
                 Common.HDefine h = new Common.HDefine(name, defines[name]);
                 return h;

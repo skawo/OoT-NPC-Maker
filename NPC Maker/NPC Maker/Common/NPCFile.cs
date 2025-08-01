@@ -160,10 +160,12 @@ namespace NPC_Maker
         public bool Omitted { get; set; }
 
         public string HeaderPath { get; set; }
-        public string SkeletonName { get; set; }
+        public string SkeletonHeaderDefinition { get; set; }
         public NPCEntry()
         {
             NPCName = "";
+            SkeletonHeaderDefinition = "";
+
             IsNull = false;
 
             ObjectID = 0;
@@ -273,7 +275,7 @@ namespace NPC_Maker
 
             Omitted = false;
             HeaderPath = "";
-            SkeletonName = "";
+            SkeletonHeaderDefinition = "";
         }
 
         public List<OutputColorEntry> ParseColorEntries()
@@ -523,7 +525,7 @@ namespace NPC_Maker
 
                 case Members.OMIT: Omitted = Convert.ToBoolean(Value); break;
                 case Members.HEADERPATH: HeaderPath = (string)Value; break;
-                case Members.SKELETONNAME: SkeletonName = (string)Value; break;
+                case Members.SKELETONNAME: SkeletonHeaderDefinition = (string)Value; break;
                 default: break;
             }
         }
@@ -551,6 +553,7 @@ namespace NPC_Maker
     public class AnimationEntry
     {
         public string Name { get; set; }
+        public string HeaderDefinition { get; set; }
         public UInt32 Address { get; set; }
         public Int16 ObjID { get; set; }
         public float Speed { get; set; }
@@ -562,6 +565,7 @@ namespace NPC_Maker
         public AnimationEntry()
         {
             Name = "";
+            HeaderDefinition = "";
             Address = 0;
             Speed = 1.0f;
             ObjID = -1;
@@ -569,9 +573,10 @@ namespace NPC_Maker
             EndFrame = 0xFF;
             FileStart = -1;
         }
-        public AnimationEntry(string _Name, UInt32 _Address, float _Speed, Int16 _ObjectID, byte _StartFrame, byte _EndFrame, Int32 _FileStart)
+        public AnimationEntry(string _Name, string _HeaderName, UInt32 _Address, float _Speed, Int16 _ObjectID, byte _StartFrame, byte _EndFrame, Int32 _FileStart)
         {
             Name = _Name;
+            HeaderDefinition = _HeaderName;
             Address = _Address;
             Speed = _Speed;
             ObjID = _ObjectID;
@@ -584,6 +589,8 @@ namespace NPC_Maker
     public class SegmentEntry
     {
         public string Name { get; set; }
+
+        public string HeaderDefinition { get; set; }
         public UInt32 Address { get; set; }
         public Int16 ObjectID { get; set; }
 
@@ -592,13 +599,15 @@ namespace NPC_Maker
         public SegmentEntry()
         {
             Name = "";
+            HeaderDefinition = "";
             Address = 0;
             ObjectID = -1;
             FileStart = -1;
         }
-        public SegmentEntry(string _Name, UInt32 _Address, Int16 _ObjectID, Int32 _FileStart)
+        public SegmentEntry(string _Name, string _HeaderDefinition, UInt32 _Address, Int16 _ObjectID, Int32 _FileStart)
         {
             Name = _Name;
+            HeaderDefinition = _HeaderDefinition;
             Address = _Address;
             ObjectID = _ObjectID;
             FileStart = _FileStart;
@@ -949,6 +958,9 @@ namespace NPC_Maker
     public class DListEntry
     {
         public string Name { get; set; }
+
+        public string HeaderDefinition { get; set; }
+       
         public UInt32 Address { get; set; }
         public float TransX { get; set; }
         public float TransY { get; set; }
@@ -967,6 +979,7 @@ namespace NPC_Maker
         public DListEntry()
         {
             Name = "";
+            HeaderDefinition = "";
             Address = 0;
             TransX = 0;
             TransY = 0;
@@ -981,10 +994,11 @@ namespace NPC_Maker
             Color = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             FileStart = -1;
         }
-        public DListEntry(string _Name, UInt32 _Address, float _TransX, float _TransY, float _TransZ, System.Drawing.Color _Color,
+        public DListEntry(string _Name, string _HeaderDefinition, UInt32 _Address, float _TransX, float _TransY, float _TransZ, System.Drawing.Color _Color,
                           Int16 _RotX, Int16 _RotY, Int16 _RotZ, float _Scale, Int16 _Limb, int _ShowType, Int16 _ObjectID, Int32 _FileStart)
         {
             Name = _Name;
+            HeaderDefinition = _HeaderDefinition;
             Address = _Address;
             TransX = _TransX;
             TransY = _TransY;

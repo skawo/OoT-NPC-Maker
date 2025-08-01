@@ -207,18 +207,18 @@ namespace NPC_Maker
                     {
                         Dictionary<string, string> hDict = Helpers.GetDefinesFromH(e.HeaderPath);
 
-                        e.Hierarchy = ResolveHeaderDefineForField(e.SkeletonName, hDict, e.Hierarchy);
+                        e.Hierarchy = ResolveHeaderDefineForField(e.SkeletonHeaderDefinition, hDict, e.Hierarchy);
 
                         foreach (var a in e.Animations)
-                            a.Address = ResolveHeaderDefineForField(a.Name, hDict, a.Address);
+                            a.Address = ResolveHeaderDefineForField(a.HeaderDefinition, hDict, a.Address);
 
                         foreach (var d in e.ExtraDisplayLists)
-                            d.Address = ResolveHeaderDefineForField(d.Name, hDict, d.Address);
+                            d.Address = ResolveHeaderDefineForField(d.HeaderDefinition, hDict, d.Address);
 
                         foreach (var s in e.Segments)
                         {
                             foreach (var se in s)
-                                se.Address = ResolveHeaderDefineForField(se.Name, hDict, se.Address);
+                                se.Address = ResolveHeaderDefineForField(se.HeaderDefinition, hDict, se.Address);
                         }
                     }
                 }
@@ -230,12 +230,12 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"Failed to read JSON: {ex.Message}");
+                MessageBox.Show($"Failed to read JSON: {ex.Message}");
                 return null;
             }
         }
 
-        private static UInt32 ResolveHeaderDefineForField(string Name, Dictionary<string, string> defines, UInt32 field)
+        public static UInt32 ResolveHeaderDefineForField(string Name, Dictionary<string, string> defines, UInt32 field)
         {
             if (!String.IsNullOrEmpty(Name))
             {
@@ -248,6 +248,29 @@ namespace NPC_Maker
             }
             else
                 return field;
+        }
+
+        public static UInt32 ResolveHeaderDefineForFieldOrFail(string NpcName, string Name, Dictionary<string, string> defines, UInt32 field)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(Name))
+                {
+                    Common.HDefine h = Helpers.GetDefineFromName(Name, defines);
+
+                    if (h != null && h.Value != null)
+                        return (UInt32)h.Value;
+                    else
+                        throw new Exception();
+                }
+                else
+                    return field;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show($"Entry {NpcName}, Definition {Name} is invalid or cannot be resolved.");
+                return field;
+            }
         }
 
         public static void SaveNPCJSON(string Path, NPCFile Data)
@@ -583,16 +606,19 @@ namespace NPC_Maker
         {
             try
             {
+                if (defines.Count == 0)
+                    return defaultV;
+
                 Common.HDefine h = Helpers.GetDefineFromName(name, defines);
 
                 if (h == null)
-                    throw new Exception();
+                    return defaultV;
                 else
                 {
                     if (h.Value != null)
                         return (UInt32)h.Value;
                     else
-                        throw new Exception();
+                        return defaultV;
                 }
             }
             catch (Exception)
@@ -742,7 +768,7 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.MovementSpeed);
                         EntryBytes.AddRangeBigEndian(Entry.GravityForce);
                         EntryBytes.AddRangeBigEndian(Entry.SmoothingConstant);
-                        EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Entry.Hierarchy, defines, Entry.SkeletonName));
+                        EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Entry.Hierarchy, defines, Entry.SkeletonHeaderDefinition));
                         EntryBytes.AddRangeBigEndian(Entry.FileStart);
                         EntryBytes.AddRangeBigEndian(Entry.CullForward);
                         EntryBytes.AddRangeBigEndian(Entry.CullDown);
@@ -888,7 +914,7 @@ namespace NPC_Maker
 
                         foreach (AnimationEntry Anim in Entry.Animations)
                         {
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, Anim.Name));
+                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, Anim.HeaderDefinition));
                             EntryBytes.AddRangeBigEndian((UInt32)Anim.FileStart);
                             EntryBytes.AddRangeBigEndian((float)Anim.Speed);
                             EntryBytes.AddRangeBigEndian((UInt16)Anim.ObjID);
@@ -913,7 +939,7 @@ namespace NPC_Maker
 
                         foreach (DListEntry Dlist in Entry.ExtraDisplayLists)
                         {
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, Dlist.Name));
+                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, Dlist.HeaderDefinition));
                             EntryBytes.AddRangeBigEndian(Dlist.FileStart);
                             EntryBytes.AddRangeBigEndian(Dlist.TransX);
                             EntryBytes.AddRangeBigEndian(Dlist.TransY);
@@ -982,7 +1008,7 @@ namespace NPC_Maker
 
                             foreach (SegmentEntry TexEntry in Segment)
                             {
-                                ExtraSegDataEntries.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, TexEntry.Address, defines, TexEntry.Name));
+                                ExtraSegDataEntries.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, TexEntry.Address, defines, TexEntry.HeaderDefinition));
                                 ExtraSegDataEntries.AddRangeBigEndian(TexEntry.FileStart);
                                 ExtraSegDataEntries.AddRangeBigEndian(TexEntry.ObjectID);
                                 Helpers.Ensure4ByteAlign(ExtraSegDataEntries);

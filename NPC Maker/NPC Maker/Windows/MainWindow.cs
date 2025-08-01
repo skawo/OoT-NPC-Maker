@@ -377,7 +377,7 @@ namespace NPC_Maker
 
             Textbox_NPCName.Text = SelectedEntry.NPCName;
             Tx_HeaderPath.Text = SelectedEntry.HeaderPath;
-            Tx_SkeletonName.Text = SelectedEntry.SkeletonName;
+            Tx_SkeletonName.Text = SelectedEntry.SkeletonHeaderDefinition;
 
             Txb_ObjectID.Text = SelectedEntry.ObjectID.ToString();
             Txb_ObjectID_Leave(null, null);
@@ -558,7 +558,7 @@ namespace NPC_Maker
                 if (SelectedEntry.AnimationType == 1)
                     DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
                 else
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
             }
 
             #endregion
@@ -572,7 +572,7 @@ namespace NPC_Maker
                 Grid.Rows.Clear();
 
                 foreach (SegmentEntry Entry in SelectedEntry.Segments[j])
-                    Grid.Rows.Add(Entry.Name, Entry.FileStart < 0 ? "Same as main" : Entry.FileStart.ToString("X"), Entry.Address.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Entry.ObjectID));
+                    Grid.Rows.Add(Entry.Name, Entry.HeaderDefinition, Entry.FileStart < 0 ? "Same as main" : Entry.FileStart.ToString("X"), Entry.Address.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Entry.ObjectID));
             }
 
             #endregion
@@ -586,6 +586,7 @@ namespace NPC_Maker
                 string SelCombo = ExtraDlists_ShowType.Items[(int)Dlist.ShowType].ToString();
 
                 int Row = DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
+                                                                           Dlist.HeaderDefinition,
                                                                            "",
                                                                            Dlist.FileStart < 0 ? "Same as main" : Dlist.FileStart.ToString("X"),
                                                                            Dlist.Address.ToString("X"),
@@ -604,6 +605,8 @@ namespace NPC_Maker
             TabControl.SelectedIndex = Math.Min(TabControl.TabPages.Count - 1, SelectedTabIndex);
 
             #endregion
+
+            Tx_HeaderPath_TextChanged(null, null);
 
             #region Messages
 
@@ -1131,6 +1134,37 @@ namespace NPC_Maker
 
         #region Tools
 
+        private void checkDefinitionValidityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditedFile == null)
+                return;
+
+            foreach (NPCEntry entry in EditedFile.Entries)
+            {
+                if (!String.IsNullOrEmpty(entry.HeaderPath))
+                {
+                    Dictionary<string, string> hDict = Helpers.GetDefinesFromH(entry.HeaderPath);
+
+                    entry.Hierarchy = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, entry.SkeletonHeaderDefinition, hDict, entry.Hierarchy);
+
+                    foreach (var a in entry.Animations)
+                        a.Address = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, a.HeaderDefinition, hDict, a.Address);
+
+                    foreach (var d in entry.ExtraDisplayLists)
+                        d.Address = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, d.HeaderDefinition, hDict, d.Address);
+
+                    foreach (var s in entry.Segments)
+                    {
+                        foreach (var se in s)
+                            se.Address = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, se.HeaderDefinition, hDict, se.Address);
+                    }
+                }
+            }
+
+            MessageBox.Show("Check complete. All valid fields have been updated.");
+            InsertDataToEditor();
+        }
+
         private void importLocalizationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EditedFile != null)
@@ -1313,6 +1347,65 @@ namespace NPC_Maker
 
         #region NPCList
 
+        private void NPCGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            DataGridView dgv = sender as DataGridView;
+
+            if (e.ColumnIndex == -1 && e.RowIndex >= 0)
+            {
+                var headerStyle = dgv.RowHeadersDefaultCellStyle;
+                using (SolidBrush backBrush = new SolidBrush(headerStyle.BackColor))
+                {
+                    e.Graphics.FillRectangle(backBrush, e.CellBounds);
+                }
+
+                ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
+
+                string rowNumber = e.RowIndex.ToString();
+
+                using (SolidBrush textBrush = new SolidBrush(headerStyle.ForeColor))
+                {
+                    StringFormat sf = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
+
+                    e.Graphics.DrawString(rowNumber, headerStyle.Font, textBrush, e.CellBounds, sf);
+                }
+
+                e.Handled = true;
+            }
+
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+            {
+                if (EditedFile != null)
+                {
+                    NPCEntry entry = EditedFile.Entries[e.RowIndex];
+
+                    if (entry.IsNull)
+                    {
+                        var headerStyle = dgv.RowHeadersDefaultCellStyle;
+
+                        Color c = headerStyle.BackColor;
+
+                        if (dgv.SelectedRows.Count != 0 && dgv.SelectedRows[0].Index == e.RowIndex)
+                            c = headerStyle.SelectionBackColor;
+
+                        using (SolidBrush backBrush = new SolidBrush(c))
+                        {
+                            e.Graphics.FillRectangle(backBrush, e.CellBounds);
+                        }
+
+                        ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
+
+                        e.Handled = true;
+                    }
+
+                }
+
+            }
+        }
         private void Button_Export_Click(object sender, EventArgs e)
         {
             if (SelectedEntry != null)
@@ -1438,9 +1531,9 @@ namespace NPC_Maker
         private NPCEntry GetNewNPCEntry()
         {
             NPCEntry Entry = new NPCEntry();
-            Entry.Animations.Add(new AnimationEntry("Idle", 0, 1.0f, -1, 0, 255, -1));
-            Entry.Animations.Add(new AnimationEntry("Walking", 0, 1.0f, -1, 0, 255, -1));
-            Entry.Animations.Add(new AnimationEntry("Attacked", 0, 1.0f, -1, 0, 255, -1));
+            Entry.Animations.Add(new AnimationEntry("Idle", "", 0, 1.0f, -1, 0, 255, -1));
+            Entry.Animations.Add(new AnimationEntry("Walking", "", 0, 1.0f, -1, 0, 255, -1));
+            Entry.Animations.Add(new AnimationEntry("Attacked", "", 0, 1.0f, -1, 0, 255, -1));
 
             for (int i = 0; i < 8; i++)
                 Entry.Segments.Add(new List<SegmentEntry>());
@@ -1548,6 +1641,84 @@ namespace NPC_Maker
         #endregion
 
         #region Field changes
+
+        private void Btn_HeaderBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog of = new OpenFileDialog();
+            of.Filter = "Header files (*.h)|*.h|All files (*.*)|*.*";
+            of.InitialDirectory = Program.Settings.ProjectPath;
+
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                if (String.IsNullOrEmpty(Program.Settings.ProjectPath))
+                    Tx_HeaderPath.Text = of.FileName;
+                else
+                    Tx_HeaderPath.Text = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, "{PROJECTPATH}");
+            }
+        }
+
+        private Common.HDefine SelectNameFromH()
+        {
+            if (SelectedEntry == null || String.IsNullOrEmpty(SelectedEntry.HeaderPath))
+                return null;
+
+            Dictionary<string, string> hDict = Helpers.GetDefinesFromH(SelectedEntry.HeaderPath);
+
+            Windows.ComboPicker com = new Windows.ComboPicker(hDict.Keys.ToList(), "Select symbol from header...", "Selection", true);
+
+            if (com.ShowDialog() == DialogResult.OK)
+                return new Common.HDefine(com.SelectedOption, hDict[com.SelectedOption]);
+            else
+                return null;
+        }
+
+        private bool ShowHDefineError(Common.HDefine hD)
+        {
+            if (hD.Value == null)
+            {
+                MessageBox.Show("Error parsing defined value");
+                return true;
+            }
+
+            return false;
+        }
+
+        private void Tx_SkeletonName_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Common.HDefine hD = SelectNameFromH();
+
+            if (hD != null)
+            {
+                if (!ShowHDefineError(hD))
+                {
+                    Tx_SkeletonName.Text = hD.Name;
+                    NumUpDown_Hierarchy.Value = (decimal)hD.Value;
+                }
+            }
+        }
+
+        private void Tx_HeaderPath_TextChanged(object sender, EventArgs e)
+        {
+            if (sender != null)
+                TextBox_TextChanged(sender, e);
+
+            bool vis = true;
+
+            if (String.IsNullOrEmpty(Tx_HeaderPath.Text))
+            {
+                vis = false;
+            }
+
+            Col_HDefine.Visible = vis;
+            ExtraDlists_HeaderDefinition.Visible = vis;
+
+            for (int j = 0; j < TabControl_Segments.TabPages.Count; j++)
+            {
+                DataGridView Grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
+                Grid.Columns[(int)SegmentsColumns.HeaderDefinition].Visible = vis;
+            }
+        }
+
 
         private void Txb_ReactIfAtt_KeyUp(object sender, KeyEventArgs e)
         {
@@ -1667,7 +1838,8 @@ namespace NPC_Maker
         {
             ComboBox_ValueChanged(sender, e);
             Col_OBJ.Visible = (ComboBox_AnimType.SelectedIndex == 0);
-            FileStart.Visible = (ComboBox_AnimType.SelectedIndex == 0);
+            Col_Filestart.Visible = (ComboBox_AnimType.SelectedIndex == 0);
+            Col_HDefine.Visible = (ComboBox_AnimType.SelectedIndex == 0);
             InsertDataToEditor();
         }
 
@@ -1746,12 +1918,13 @@ namespace NPC_Maker
         private enum AnimGridColumns
         {
             Name = 0,
-            FileStart = 1,
-            Address = 2,
-            StartFrame = 3,
-            EndFrame = 4,
-            Speed = 5,
-            Object = 6,
+            HeaderDefinition = 1,
+            FileStart = 2,
+            Address = 3,
+            StartFrame = 4,
+            EndFrame = 5,
+            Speed = 6,
+            Object = 7,
         }
 
         private void DataGrid_Animations_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -1780,7 +1953,7 @@ namespace NPC_Maker
                     DataGrid_Animations.RefreshEdit();
                 }
             }
-            else if (e.ColumnIndex == (int)AnimGridColumns.Name && SelectedEntry.AnimationType == 0)
+            else if (e.ColumnIndex == (int)AnimGridColumns.HeaderDefinition && SelectedEntry.AnimationType == 0)
             {
                 Common.HDefine hD = SelectNameFromH();
 
@@ -1798,18 +1971,22 @@ namespace NPC_Maker
             }
         }
 
-        private void AddBlankAnim(int SkipIndex, int Index, string Name = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte StartFrame = 0, byte EndFrame = 0xFF, Int32? FileStart = null)
+        private void AddBlankAnim(int SkipIndex, int Index, string Name = null, string HeaderName = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte StartFrame = 0, byte EndFrame = 0xFF, Int32? FileStart = null)
         {
             Name = Name ?? "Animation_" + Index.ToString();
+            HeaderName = HeaderName ?? "";
             Address = Address ?? 0;
             Speed = Speed ?? 1;
             ObjectID = ObjectID ?? -1;
             FileStart = FileStart ?? -1;
 
-            SelectedEntry.Animations.Add(new AnimationEntry(Name, (uint)Address, (float)Speed, (short)ObjectID, StartFrame, EndFrame, (int)FileStart));
+            SelectedEntry.Animations.Add(new AnimationEntry(Name, HeaderName, (uint)Address, (float)Speed, (short)ObjectID, StartFrame, EndFrame, (int)FileStart));
 
             if (SkipIndex != (int)AnimGridColumns.Name)
                 DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Name].Value = Name;
+
+            if (SkipIndex != (int)AnimGridColumns.HeaderDefinition)
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.HeaderDefinition].Value = HeaderName;
 
             if (SkipIndex != (int)AnimGridColumns.Address)
                 if (SelectedEntry.AnimationType == 1)
@@ -1874,6 +2051,32 @@ namespace NPC_Maker
                         DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         return;
                     }
+                case (int)AnimGridColumns.HeaderDefinition:
+                    {
+                        string Name = e.Value.ToString();
+                        e.Value = Name;
+
+                        if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                            AddBlankAnim(e.ColumnIndex, e.RowIndex, null, e.Value.ToString());
+                        else
+                            SelectedEntry.Animations[e.RowIndex].HeaderDefinition = e.Value.ToString();
+
+                        if (Name != "")
+                        {
+                            Dictionary<string, string> hDict = Helpers.GetDefinesFromH(SelectedEntry.HeaderPath);
+                            Common.HDefine hD = Helpers.GetDefineFromName(Name, hDict);
+
+                            if (hD != null && hD.Value != null)
+                            {
+                                SelectedEntry.Animations[e.RowIndex].Address = (UInt32)hD.Value;
+                                DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.Address].Value = hD.ValueString;
+                            }
+                        }
+
+                        e.ParsingApplied = true;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                        return;
+                    }
                 case (int)AnimGridColumns.Address:
                     {
 
@@ -1887,7 +2090,7 @@ namespace NPC_Maker
                                 DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                                 if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, (UInt32)LinkAnim);
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, (UInt32)LinkAnim);
                                 else
                                     SelectedEntry.Animations[e.RowIndex].Address = (UInt32)LinkAnim;
 
@@ -1907,11 +2110,9 @@ namespace NPC_Maker
                             try
                             {
                                 if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, Convert.ToUInt32(e.Value.ToString(), 16));
                                 else
                                     SelectedEntry.Animations[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
-
-                                e.ParsingApplied = true;
                             }
                             catch (Exception)
                             {
@@ -1920,6 +2121,9 @@ namespace NPC_Maker
 
                                 e.Value = Convert.ToInt32("0", 16);
                                 DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                            }
+                            finally
+                            {
                                 e.ParsingApplied = true;
                             }
                         }
@@ -1974,7 +2178,7 @@ namespace NPC_Maker
                         try
                         {
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, (float)Convert.ToDecimal(e.Value));
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (float)Convert.ToDecimal(e.Value));
                             else
                                 SelectedEntry.Animations[e.RowIndex].Speed = (float)Convert.ToDecimal(e.Value);
 
@@ -2035,7 +2239,7 @@ namespace NPC_Maker
                             }
 
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, 0, 255, Value);
+                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, null, 0, 255, Value);
                             else
                                 SelectedEntry.Animations[e.RowIndex].FileStart = Value;
 
@@ -2083,15 +2287,16 @@ namespace NPC_Maker
         private enum EDlistsColumns
         {
             Purpose = 0,
-            Color = 1,
-            FileStart = 2,
-            Offset = 3,
-            Translation = 4,
-            Rotation = 5,
-            Scale = 6,
-            Limb = 7,
-            Object = 8,
-            ShowType = 9,
+            HeaderDefinition = 1,
+            Color = 2,
+            FileStart = 3,
+            Offset = 4,
+            Translation = 5,
+            Rotation = 6,
+            Scale = 7,
+            Limb = 8,
+            Object = 9,
+            ShowType = 10,
         }
 
         private void DataGridView_ExtraDLists_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -2131,7 +2336,7 @@ namespace NPC_Maker
 
                 }
             }
-            else if (e.ColumnIndex == (int)EDlistsColumns.Purpose)
+            else if (e.ColumnIndex == (int)EDlistsColumns.HeaderDefinition)
             {
                 Common.HDefine hD = SelectNameFromH();
 
@@ -2139,23 +2344,24 @@ namespace NPC_Maker
                 {
                     if (!ShowHDefineError(hD))
                     {
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.Name;
+                        DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.Name;
                         DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.Name, e.GetType(), null));
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[(int)EDlistsColumns.Offset].Value = hD.ValueString;
+                        DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[(int)EDlistsColumns.Offset].Value = hD.ValueString;
                         DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.Offset, hD.ValueString, e.GetType(), null));
-                        DataGridView_ExtraDLists.Update();
+                        DataGridView_ExtraDLists.RefreshEdit();
                     }
                 }
             }
         }
 
-        private void AddBlankDList(int SkipIndex, int Index, string Name = null, uint? Address = null, float? TransX = null, float? TransY = null, float? TransZ = null,
+        private void AddBlankDList(int SkipIndex, int Index, string Name = null, string HeaderDefinition = null, uint? Address = null, float? TransX = null, float? TransY = null, float? TransZ = null,
                                    short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, short? Limb = null, int? ShowType = null, short? ObjectID = null, Color? EnvColor = null, int? FileStart = null)
         {
             if (Name == null)
                 Name = "DList_" + Index;
 
             Name = Name ?? "DList_" + Index;
+            HeaderDefinition = HeaderDefinition ?? "";
             Address = Address ?? 0;
             TransX = TransX ?? 0;
             TransY = TransY ?? 0;
@@ -2170,11 +2376,14 @@ namespace NPC_Maker
             EnvColor = EnvColor ?? Color.FromArgb(255, 255, 255, 255);
             FileStart = FileStart ?? -1;
 
-            SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, (uint)Address, (float)TransX, (float)TransY, (float)TransZ, (Color)EnvColor,
+            SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, HeaderDefinition, (uint)Address, (float)TransX, (float)TransY, (float)TransZ, (Color)EnvColor,
                                                     (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (short)Limb, (int)ShowType, (short)ObjectID, (int)FileStart));
 
             if (SkipIndex != (int)EDlistsColumns.Purpose)
                 DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Purpose].Value = Name;
+
+            if (SkipIndex != (int)EDlistsColumns.HeaderDefinition)
+                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.HeaderDefinition].Value = Name;
 
             if (SkipIndex != (int)EDlistsColumns.Color)
                 DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Color].Style.BackColor = (Color)EnvColor;
@@ -2281,10 +2490,23 @@ namespace NPC_Maker
                         e.ParsingApplied = true;
                         return;
                     }
+                case (int)EDlistsColumns.HeaderDefinition:
+                    {
+                        string Name = e.Value.ToString();
+                        e.Value = Name;
+
+                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, e.Value.ToString());
+                        else
+                            SelectedEntry.ExtraDisplayLists[e.RowIndex].HeaderDefinition = e.Value.ToString();
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
                 case (int)EDlistsColumns.Color:
                     {
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor);
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, null, (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor);
                         else
                             SelectedEntry.ExtraDisplayLists[e.RowIndex].Color = (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
 
@@ -2296,7 +2518,7 @@ namespace NPC_Maker
                         try
                         {
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, Convert.ToUInt32(e.Value.ToString(), 16));
                             else
                                 SelectedEntry.ExtraDisplayLists[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
                         }
@@ -2319,7 +2541,7 @@ namespace NPC_Maker
                         DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, Transl[0], Transl[1], Transl[2]);
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, Transl[0], Transl[1], Transl[2]);
                         else
                         {
                             SelectedEntry.ExtraDisplayLists[e.RowIndex].TransX = Transl[0];
@@ -2337,7 +2559,7 @@ namespace NPC_Maker
                         DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, Rot[0], Rot[1], Rot[2]);
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, Rot[0], Rot[1], Rot[2]);
                         else
                         {
                             SelectedEntry.ExtraDisplayLists[e.RowIndex].RotX = Rot[0];
@@ -2353,7 +2575,7 @@ namespace NPC_Maker
                         try
                         {
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, (float)Convert.ToDecimal(e.Value));
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, (float)Convert.ToDecimal(e.Value));
                             else
                                 SelectedEntry.ExtraDisplayLists[e.RowIndex].Scale = (float)Convert.ToDecimal(e.Value);
                         }
@@ -2374,7 +2596,7 @@ namespace NPC_Maker
                         try
                         {
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, Convert.ToInt16(e.Value));
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, Convert.ToInt16(e.Value));
                             else
                                 SelectedEntry.ExtraDisplayLists[e.RowIndex].Limb = Convert.ToInt16(e.Value);
                         }
@@ -2400,7 +2622,7 @@ namespace NPC_Maker
                             DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, ObjectId);
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, ObjectId);
                             else
                                 SelectedEntry.ExtraDisplayLists[e.RowIndex].ObjectID = ObjectId;
                         }
@@ -2421,7 +2643,7 @@ namespace NPC_Maker
                         int ShowType = Dicts.GetIntFromStringIntDict(Dicts.LimbShowSubTypes, e.Value.ToString(), 0);
 
                         if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, ShowType);
+                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, ShowType);
                         else
                             SelectedEntry.ExtraDisplayLists[e.RowIndex].ShowType = ShowType;
 
@@ -2441,7 +2663,7 @@ namespace NPC_Maker
                             }
 
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, null, Value);
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, null, null, Value);
                             else
                                 SelectedEntry.ExtraDisplayLists[e.RowIndex].FileStart = Convert.ToInt32(e.Value.ToString(), 16);
                         }
@@ -2484,9 +2706,10 @@ namespace NPC_Maker
         private enum SegmentsColumns
         {
             Name = 0,
-            FileStart = 1,
-            Address = 2,
-            Object = 3,
+            HeaderDefinition = 1,
+            FileStart = 2,
+            Address = 3,
+            Object = 4,
         }
 
         private void Segments_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -2506,7 +2729,7 @@ namespace NPC_Maker
                     (sender as DataGridView).Update();
                 }
             }
-            else if (e.ColumnIndex == (int)SegmentsColumns.Name)
+            else if (e.ColumnIndex == (int)SegmentsColumns.HeaderDefinition)
             {
                 Common.HDefine hD = SelectNameFromH();
 
@@ -2524,19 +2747,23 @@ namespace NPC_Maker
             }
         }
 
-        private void AddBlankSeg(int SkipIndex, int Index, int Segment, string Name = null, uint? Address = null, short? ObjectID = null, int? FileStart = null)
+        private void AddBlankSeg(int SkipIndex, int Index, int Segment, string Name = null, string HeaderDefinition = null, uint? Address = null, short? ObjectID = null, int? FileStart = null)
         {
             Name = Name ?? "Texture_" + Index.ToString();
+            HeaderDefinition = HeaderDefinition ?? "";
             Address = Address ?? 0;
             ObjectID = ObjectID ?? -1;
             FileStart = FileStart ?? -1;
 
-            SelectedEntry.Segments[Segment].Add(new SegmentEntry(Name, (uint)Address, (short)ObjectID, (int)FileStart));
+            SelectedEntry.Segments[Segment].Add(new SegmentEntry(Name, HeaderDefinition, (uint)Address, (short)ObjectID, (int)FileStart));
 
             DataGridView dgv = (TabControl_Segments.TabPages[Segment].Controls[0] as Controls.SegmentDataGrid).Grid;
 
             if (SkipIndex != (int)SegmentsColumns.Name)
                 dgv.Rows[Index].Cells[(int)SegmentsColumns.Name].Value = Name;
+
+            if (SkipIndex != (int)SegmentsColumns.HeaderDefinition)
+                dgv.Rows[Index].Cells[(int)SegmentsColumns.HeaderDefinition].Value = Name;
 
             if (SkipIndex != (int)SegmentsColumns.Address)
                 dgv.Rows[Index].Cells[(int)SegmentsColumns.Address].Value = Address;
@@ -2589,12 +2816,25 @@ namespace NPC_Maker
                         e.ParsingApplied = true;
                         return;
                     }
+                case (int)SegmentsColumns.HeaderDefinition:
+                    {
+                        string Name = e.Value.ToString();
+                        e.Value = Name;
+
+                        if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
+                            AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, e.Value.ToString());
+                        else
+                            SelectedEntry.Segments[DataGridIndex][e.RowIndex].HeaderDefinition = e.Value.ToString();
+
+                        e.ParsingApplied = true;
+                        return;
+                    }
                 case (int)SegmentsColumns.Address:
                     {
                         try
                         {
                             if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, Convert.ToUInt32(e.Value.ToString(), 16));
+                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, Convert.ToUInt32(e.Value.ToString(), 16));
                             else
                                 SelectedEntry.Segments[DataGridIndex][e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
                         }
@@ -2620,7 +2860,7 @@ namespace NPC_Maker
                             (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                             if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, ObjectId);
+                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, null, ObjectId);
                             else
                                 SelectedEntry.Segments[DataGridIndex][e.RowIndex].ObjectID = ObjectId;
                         }
@@ -2649,7 +2889,7 @@ namespace NPC_Maker
                             }
 
                             if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, null, Value);
+                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, null, null, Value);
                             else
                                 SelectedEntry.Segments[DataGridIndex][e.RowIndex].FileStart = Convert.ToInt32(e.Value.ToString(), 16);
                         }
@@ -2791,6 +3031,47 @@ namespace NPC_Maker
         #endregion
 
         #region Messages
+
+        private void SplitMsgContainer_SizeChanged(object sender, EventArgs e)
+        {
+            if (Program.IsRunningUnderMono)
+            {
+                SplitMsgContainer.Width = PanelMsgPreview.Width;
+                SplitMsgContainer.Height = PanelMsgPreview.Location.Y - SplitMsgContainer.Location.Y - 10;
+            }
+        }
+
+        private void MessagesGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+
+            if (e.ColumnIndex == -1 && e.RowIndex >= 0)
+            {
+                DataGridView dgv = sender as DataGridView;
+
+                var headerStyle = dgv.RowHeadersDefaultCellStyle;
+                using (SolidBrush backBrush = new SolidBrush(headerStyle.BackColor))
+                {
+                    e.Graphics.FillRectangle(backBrush, e.CellBounds);
+                }
+
+                ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
+
+                string rowNumber = e.RowIndex.ToString();
+
+                using (SolidBrush textBrush = new SolidBrush(headerStyle.ForeColor))
+                {
+                    StringFormat sf = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
+
+                    e.Graphics.DrawString(rowNumber, headerStyle.Font, textBrush, e.CellBounds, sf);
+                }
+
+                e.Handled = true;
+            }
+        }
 
         private void Btn_AddNewLanguage_Click(object sender, EventArgs e)
         {
@@ -3923,161 +4204,5 @@ namespace NPC_Maker
 
         #endregion
 
-        private void MessagesGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-
-            if (e.ColumnIndex == -1 && e.RowIndex >= 0)
-            {
-                DataGridView dgv = sender as DataGridView;
-
-                var headerStyle = dgv.RowHeadersDefaultCellStyle;
-                using (SolidBrush backBrush = new SolidBrush(headerStyle.BackColor))
-                {
-                    e.Graphics.FillRectangle(backBrush, e.CellBounds);
-                }
-
-                ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
-
-                string rowNumber = e.RowIndex.ToString();
-
-                using (SolidBrush textBrush = new SolidBrush(headerStyle.ForeColor))
-                {
-                    StringFormat sf = new StringFormat
-                    {
-                        Alignment = StringAlignment.Center,
-                        LineAlignment = StringAlignment.Center
-                    };
-
-                    e.Graphics.DrawString(rowNumber, headerStyle.Font, textBrush, e.CellBounds, sf);
-                }
-
-                e.Handled = true;
-            }
-        }
-
-
-        private void NPCGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-            DataGridView dgv = sender as DataGridView;
-
-            if (e.ColumnIndex == -1 && e.RowIndex >= 0)
-            {
-                var headerStyle = dgv.RowHeadersDefaultCellStyle;
-                using (SolidBrush backBrush = new SolidBrush(headerStyle.BackColor))
-                {
-                    e.Graphics.FillRectangle(backBrush, e.CellBounds);
-                }
-
-                ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
-
-                string rowNumber = e.RowIndex.ToString();
-
-                using (SolidBrush textBrush = new SolidBrush(headerStyle.ForeColor))
-                {
-                    StringFormat sf = new StringFormat
-                    {
-                        Alignment = StringAlignment.Center,
-                        LineAlignment = StringAlignment.Center
-                    };
-
-                    e.Graphics.DrawString(rowNumber, headerStyle.Font, textBrush, e.CellBounds, sf);
-                }
-
-                e.Handled = true;
-            }
-
-            if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
-            {
-                if (EditedFile != null)
-                {
-                    NPCEntry entry = EditedFile.Entries[e.RowIndex];
-
-                    if (entry.IsNull)
-                    {
-                        var headerStyle = dgv.RowHeadersDefaultCellStyle;
-
-                        Color c = headerStyle.BackColor;
-
-                        if (dgv.SelectedRows.Count != 0 && dgv.SelectedRows[0].Index == e.RowIndex)
-                            c = headerStyle.SelectionBackColor;
-
-                        using (SolidBrush backBrush = new SolidBrush(c))
-                        {
-                            e.Graphics.FillRectangle(backBrush, e.CellBounds);
-                        }
-
-                        ControlPaint.DrawBorder3D(e.Graphics, e.CellBounds, Border3DStyle.RaisedInner);
-
-                        e.Handled = true;
-                    }
-
-                }
-
-            }
-        }
-
-        private void SplitMsgContainer_SizeChanged(object sender, EventArgs e)
-        {
-            if (Program.IsRunningUnderMono)
-            {
-                SplitMsgContainer.Width = PanelMsgPreview.Width;
-                SplitMsgContainer.Height = PanelMsgPreview.Location.Y - SplitMsgContainer.Location.Y - 10;
-            }
-        }
-
-        private void Btn_HeaderBrowse_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog of = new OpenFileDialog();
-            of.Filter = "Header files (*.h)|*.h|All files (*.*)|*.*";
-            of.InitialDirectory = Program.Settings.ProjectPath;
-
-            if (of.ShowDialog() == DialogResult.OK)
-            {
-                if (String.IsNullOrEmpty(Program.Settings.ProjectPath))
-                    Tx_HeaderPath.Text = of.FileName;
-                else
-                    Tx_HeaderPath.Text = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, "{PROJECTPATH}");
-            }
-        }
-
-        private Common.HDefine SelectNameFromH()
-        {
-            if (SelectedEntry == null || String.IsNullOrEmpty(SelectedEntry.HeaderPath))
-                return null;
-
-            Dictionary<string, string> hDict = Helpers.GetDefinesFromH(SelectedEntry.HeaderPath);
-
-            Windows.ComboPicker com = new Windows.ComboPicker(hDict.Keys.ToList(), "Select symbol from header...", "Selection", true);
-
-            if (com.ShowDialog() == DialogResult.OK)
-                return new Common.HDefine(com.SelectedOption, hDict[com.SelectedOption]);
-            else
-                return null;
-        }
-
-        private bool ShowHDefineError(Common.HDefine hD)
-        { 
-            if (hD.Value == null)
-            {
-                MessageBox.Show("Error parsing defined value");
-                return true;
-            }
-
-            return false;
-        }
-
-        private void Tx_SkeletonName_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            Common.HDefine hD = SelectNameFromH();
-
-            if (hD != null)
-            {
-                if (!ShowHDefineError(hD))
-                {
-                    Tx_SkeletonName.Text = hD.Name;
-                    NumUpDown_Hierarchy.Value = (decimal)hD.Value;
-                }
-            }
-        }
     }
 }

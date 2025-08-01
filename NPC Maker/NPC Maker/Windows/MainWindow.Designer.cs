@@ -311,6 +311,7 @@
             this.editGlobalHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importLocalizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkDefinitionValidityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -335,7 +336,8 @@
             this.ColorColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
             this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FileStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_HDefine = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Filestart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_StartFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_EndFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -343,8 +345,9 @@
             this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
             this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_HeaderDefinition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Color = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExDlistFileStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_FileStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -459,7 +462,7 @@
             this.Panel_Editor.Enabled = false;
             this.Panel_Editor.Location = new System.Drawing.Point(0, 24);
             this.Panel_Editor.Name = "Panel_Editor";
-            this.Panel_Editor.Size = new System.Drawing.Size(1095, 659);
+            this.Panel_Editor.Size = new System.Drawing.Size(1184, 659);
             this.Panel_Editor.TabIndex = 5;
             // 
             // SplitPanel
@@ -476,8 +479,8 @@
             // SplitPanel.Panel2
             // 
             this.SplitPanel.Panel2.Controls.Add(this.Panel_NPCData);
-            this.SplitPanel.Size = new System.Drawing.Size(1095, 659);
-            this.SplitPanel.SplitterDistance = 300;
+            this.SplitPanel.Size = new System.Drawing.Size(1184, 659);
+            this.SplitPanel.SplitterDistance = 324;
             this.SplitPanel.TabIndex = 9;
             // 
             // Panel_NPCList
@@ -493,7 +496,7 @@
             this.Panel_NPCList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel_NPCList.Location = new System.Drawing.Point(0, 0);
             this.Panel_NPCList.Name = "Panel_NPCList";
-            this.Panel_NPCList.Size = new System.Drawing.Size(300, 659);
+            this.Panel_NPCList.Size = new System.Drawing.Size(324, 659);
             this.Panel_NPCList.TabIndex = 5;
             // 
             // Button_Import
@@ -534,7 +537,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NpcsFilter.Location = new System.Drawing.Point(42, 549);
             this.NpcsFilter.Name = "NpcsFilter";
-            this.NpcsFilter.Size = new System.Drawing.Size(255, 20);
+            this.NpcsFilter.Size = new System.Drawing.Size(279, 20);
             this.NpcsFilter.TabIndex = 2;
             this.NpcsFilter.TextChanged += new System.EventHandler(this.NpcsFilter_TextChanged);
             // 
@@ -578,7 +581,7 @@
             this.Panel_NPCData.Enabled = false;
             this.Panel_NPCData.Location = new System.Drawing.Point(0, 0);
             this.Panel_NPCData.Name = "Panel_NPCData";
-            this.Panel_NPCData.Size = new System.Drawing.Size(791, 659);
+            this.Panel_NPCData.Size = new System.Drawing.Size(856, 659);
             this.Panel_NPCData.TabIndex = 6;
             // 
             // TabControl
@@ -593,7 +596,7 @@
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
             this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(791, 659);
+            this.TabControl.Size = new System.Drawing.Size(856, 659);
             this.TabControl.TabIndex = 41;
             // 
             // Tab1_Data
@@ -635,7 +638,7 @@
             this.Tab1_Data.Location = new System.Drawing.Point(4, 22);
             this.Tab1_Data.Name = "Tab1_Data";
             this.Tab1_Data.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab1_Data.Size = new System.Drawing.Size(783, 633);
+            this.Tab1_Data.Size = new System.Drawing.Size(848, 633);
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
             // 
@@ -663,12 +666,12 @@
             // Tx_HeaderPath
             // 
             this.Tx_HeaderPath.Location = new System.Drawing.Point(134, 32);
-            this.Tx_HeaderPath.MaxLength = 32;
+            this.Tx_HeaderPath.MaxLength = 99999;
             this.Tx_HeaderPath.Name = "Tx_HeaderPath";
             this.Tx_HeaderPath.Size = new System.Drawing.Size(211, 20);
             this.Tx_HeaderPath.TabIndex = 81;
             this.Tx_HeaderPath.Tag = "HEADERPATH";
-            this.Tx_HeaderPath.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
+            this.Tx_HeaderPath.TextChanged += new System.EventHandler(this.Tx_HeaderPath_TextChanged);
             // 
             // Label_Header
             // 
@@ -718,15 +721,15 @@
             this.Lbl_LimbColors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Lbl_LimbColors.AutoSize = true;
-            this.Lbl_LimbColors.Location = new System.Drawing.Point(643, 217);
+            this.Lbl_LimbColors.Location = new System.Drawing.Point(708, 8);
             this.Lbl_LimbColors.Name = "Lbl_LimbColors";
-            this.Lbl_LimbColors.Size = new System.Drawing.Size(63, 13);
+            this.Lbl_LimbColors.Size = new System.Drawing.Size(91, 13);
             this.Lbl_LimbColors.TabIndex = 76;
-            this.Lbl_LimbColors.Text = "Limb colors:";
+            this.Lbl_LimbColors.Text = "Model limb colors:";
             // 
             // NumUpAlpha
             // 
-            this.NumUpAlpha.Location = new System.Drawing.Point(596, 136);
+            this.NumUpAlpha.Location = new System.Drawing.Point(545, 67);
             this.NumUpAlpha.Maximum = new decimal(new int[] {
             255,
             0,
@@ -746,7 +749,7 @@
             // LblAlpha
             // 
             this.LblAlpha.AutoSize = true;
-            this.LblAlpha.Location = new System.Drawing.Point(593, 120);
+            this.LblAlpha.Location = new System.Drawing.Point(542, 51);
             this.LblAlpha.Name = "LblAlpha";
             this.LblAlpha.Size = new System.Drawing.Size(46, 13);
             this.LblAlpha.TabIndex = 53;
@@ -777,7 +780,7 @@
             // Checkbox_EnvColor
             // 
             this.Checkbox_EnvColor.AutoSize = true;
-            this.Checkbox_EnvColor.Location = new System.Drawing.Point(476, 167);
+            this.Checkbox_EnvColor.Location = new System.Drawing.Point(425, 98);
             this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
             this.Checkbox_EnvColor.Size = new System.Drawing.Size(146, 17);
             this.Checkbox_EnvColor.TabIndex = 50;
@@ -788,7 +791,7 @@
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
-            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(626, 163);
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(575, 94);
             this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
             this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(42, 23);
             this.Button_EnvironmentColorPreview.TabIndex = 49;
@@ -826,7 +829,7 @@
             // 
             // NumUpDown_ZModelOffs
             // 
-            this.NumUpDown_ZModelOffs.Location = new System.Drawing.Point(596, 97);
+            this.NumUpDown_ZModelOffs.Location = new System.Drawing.Point(545, 28);
             this.NumUpDown_ZModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -869,7 +872,7 @@
             // 
             // NumUpDown_YModelOffs
             // 
-            this.NumUpDown_YModelOffs.Location = new System.Drawing.Point(536, 97);
+            this.NumUpDown_YModelOffs.Location = new System.Drawing.Point(485, 28);
             this.NumUpDown_YModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -897,7 +900,7 @@
             // 
             // NumUpDown_XModelOffs
             // 
-            this.NumUpDown_XModelOffs.Location = new System.Drawing.Point(476, 97);
+            this.NumUpDown_XModelOffs.Location = new System.Drawing.Point(425, 28);
             this.NumUpDown_XModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -934,7 +937,7 @@
             // Label_ModelDrawOffs
             // 
             this.Label_ModelDrawOffs.AutoSize = true;
-            this.Label_ModelDrawOffs.Location = new System.Drawing.Point(473, 77);
+            this.Label_ModelDrawOffs.Location = new System.Drawing.Point(422, 8);
             this.Label_ModelDrawOffs.Name = "Label_ModelDrawOffs";
             this.Label_ModelDrawOffs.Size = new System.Drawing.Size(94, 13);
             this.Label_ModelDrawOffs.TabIndex = 35;
@@ -975,7 +978,7 @@
             // Label_Scale
             // 
             this.Label_Scale.AutoSize = true;
-            this.Label_Scale.Location = new System.Drawing.Point(473, 120);
+            this.Label_Scale.Location = new System.Drawing.Point(422, 51);
             this.Label_Scale.Name = "Label_Scale";
             this.Label_Scale.Size = new System.Drawing.Size(37, 13);
             this.Label_Scale.TabIndex = 16;
@@ -989,7 +992,7 @@
             0,
             0,
             131072});
-            this.NumUpDown_Scale.Location = new System.Drawing.Point(476, 136);
+            this.NumUpDown_Scale.Location = new System.Drawing.Point(425, 67);
             this.NumUpDown_Scale.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1028,7 +1031,7 @@
             this.Tab2_ExtraData.Location = new System.Drawing.Point(4, 22);
             this.Tab2_ExtraData.Name = "Tab2_ExtraData";
             this.Tab2_ExtraData.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab2_ExtraData.Size = new System.Drawing.Size(783, 633);
+            this.Tab2_ExtraData.Size = new System.Drawing.Size(848, 633);
             this.Tab2_ExtraData.TabIndex = 2;
             this.Tab2_ExtraData.Text = "Extra data";
             // 
@@ -1036,7 +1039,7 @@
             // 
             this.Label_TalkingFramesBetween.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_TalkingFramesBetween.AutoSize = true;
-            this.Label_TalkingFramesBetween.Location = new System.Drawing.Point(263, 605);
+            this.Label_TalkingFramesBetween.Location = new System.Drawing.Point(328, 605);
             this.Label_TalkingFramesBetween.Name = "Label_TalkingFramesBetween";
             this.Label_TalkingFramesBetween.Size = new System.Drawing.Size(123, 13);
             this.Label_TalkingFramesBetween.TabIndex = 65;
@@ -1046,7 +1049,7 @@
             // 
             this.Label_BlinkingFramesBetween.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_BlinkingFramesBetween.AutoSize = true;
-            this.Label_BlinkingFramesBetween.Location = new System.Drawing.Point(263, 580);
+            this.Label_BlinkingFramesBetween.Location = new System.Drawing.Point(328, 580);
             this.Label_BlinkingFramesBetween.Name = "Label_BlinkingFramesBetween";
             this.Label_BlinkingFramesBetween.Size = new System.Drawing.Size(125, 13);
             this.Label_BlinkingFramesBetween.TabIndex = 63;
@@ -1056,7 +1059,7 @@
             // 
             this.Label_TalkingSegment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_TalkingSegment.AutoSize = true;
-            this.Label_TalkingSegment.Location = new System.Drawing.Point(90, 603);
+            this.Label_TalkingSegment.Location = new System.Drawing.Point(155, 603);
             this.Label_TalkingSegment.Name = "Label_TalkingSegment";
             this.Label_TalkingSegment.Size = new System.Drawing.Size(88, 13);
             this.Label_TalkingSegment.TabIndex = 58;
@@ -1066,7 +1069,7 @@
             // 
             this.Label_TalkingPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_TalkingPattern.AutoSize = true;
-            this.Label_TalkingPattern.Location = new System.Drawing.Point(472, 603);
+            this.Label_TalkingPattern.Location = new System.Drawing.Point(537, 603);
             this.Label_TalkingPattern.Name = "Label_TalkingPattern";
             this.Label_TalkingPattern.Size = new System.Drawing.Size(81, 13);
             this.Label_TalkingPattern.TabIndex = 61;
@@ -1076,7 +1079,7 @@
             // 
             this.Label_BlinkingPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_BlinkingPattern.AutoSize = true;
-            this.Label_BlinkingPattern.Location = new System.Drawing.Point(470, 580);
+            this.Label_BlinkingPattern.Location = new System.Drawing.Point(535, 580);
             this.Label_BlinkingPattern.Name = "Label_BlinkingPattern";
             this.Label_BlinkingPattern.Size = new System.Drawing.Size(83, 13);
             this.Label_BlinkingPattern.TabIndex = 55;
@@ -1086,7 +1089,7 @@
             // 
             this.Label_BlinkingSegment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_BlinkingSegment.AutoSize = true;
-            this.Label_BlinkingSegment.Location = new System.Drawing.Point(90, 580);
+            this.Label_BlinkingSegment.Location = new System.Drawing.Point(155, 580);
             this.Label_BlinkingSegment.Name = "Label_BlinkingSegment";
             this.Label_BlinkingSegment.Size = new System.Drawing.Size(90, 13);
             this.Label_BlinkingSegment.TabIndex = 56;
@@ -1126,7 +1129,7 @@
             this.TabControl_Segments.Location = new System.Drawing.Point(9, 314);
             this.TabControl_Segments.Name = "TabControl_Segments";
             this.TabControl_Segments.SelectedIndex = 0;
-            this.TabControl_Segments.Size = new System.Drawing.Size(756, 255);
+            this.TabControl_Segments.Size = new System.Drawing.Size(831, 255);
             this.TabControl_Segments.TabIndex = 41;
             // 
             // TabPage_Segment_8
@@ -1134,7 +1137,7 @@
             this.TabPage_Segment_8.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_8.Name = "TabPage_Segment_8";
             this.TabPage_Segment_8.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_8.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_8.Size = new System.Drawing.Size(823, 229);
             this.TabPage_Segment_8.TabIndex = 0;
             this.TabPage_Segment_8.Text = "Segment 8";
             this.TabPage_Segment_8.UseVisualStyleBackColor = true;
@@ -1144,7 +1147,7 @@
             this.TabPage_Segment_9.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_9.Name = "TabPage_Segment_9";
             this.TabPage_Segment_9.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_9.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_9.Size = new System.Drawing.Size(823, 229);
             this.TabPage_Segment_9.TabIndex = 1;
             this.TabPage_Segment_9.Text = "Segment 9";
             this.TabPage_Segment_9.UseVisualStyleBackColor = true;
@@ -1154,7 +1157,7 @@
             this.TabPage_Segment_A.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_A.Name = "TabPage_Segment_A";
             this.TabPage_Segment_A.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_A.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_A.Size = new System.Drawing.Size(823, 229);
             this.TabPage_Segment_A.TabIndex = 2;
             this.TabPage_Segment_A.Text = "Segment A";
             this.TabPage_Segment_A.UseVisualStyleBackColor = true;
@@ -1164,7 +1167,7 @@
             this.TabPage_Segment_B.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_B.Name = "TabPage_Segment_B";
             this.TabPage_Segment_B.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_B.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_B.Size = new System.Drawing.Size(823, 229);
             this.TabPage_Segment_B.TabIndex = 3;
             this.TabPage_Segment_B.Text = "Segment B";
             this.TabPage_Segment_B.UseVisualStyleBackColor = true;
@@ -1174,7 +1177,7 @@
             this.TabPage_Segment_C.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_C.Name = "TabPage_Segment_C";
             this.TabPage_Segment_C.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_C.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_C.Size = new System.Drawing.Size(823, 229);
             this.TabPage_Segment_C.TabIndex = 4;
             this.TabPage_Segment_C.Text = "Segment C";
             this.TabPage_Segment_C.UseVisualStyleBackColor = true;
@@ -1184,7 +1187,7 @@
             this.TabPage_Segment_D.Location = new System.Drawing.Point(4, 22);
             this.TabPage_Segment_D.Name = "TabPage_Segment_D";
             this.TabPage_Segment_D.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Segment_D.Size = new System.Drawing.Size(748, 229);
+            this.TabPage_Segment_D.Size = new System.Drawing.Size(823, 229);
             this.TabPage_Segment_D.TabIndex = 5;
             this.TabPage_Segment_D.Text = "Segment D";
             this.TabPage_Segment_D.UseVisualStyleBackColor = true;
@@ -1193,7 +1196,7 @@
             // 
             this.NumUpDown_TalkSegment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.NumUpDown_TalkSegment.Hexadecimal = true;
-            this.NumUpDown_TalkSegment.Location = new System.Drawing.Point(186, 601);
+            this.NumUpDown_TalkSegment.Location = new System.Drawing.Point(251, 601);
             this.NumUpDown_TalkSegment.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1219,7 +1222,7 @@
             // 
             this.NumUpDown_BlinkSegment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.NumUpDown_BlinkSegment.Hexadecimal = true;
-            this.NumUpDown_BlinkSegment.Location = new System.Drawing.Point(186, 576);
+            this.NumUpDown_BlinkSegment.Location = new System.Drawing.Point(251, 576);
             this.NumUpDown_BlinkSegment.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1244,7 +1247,7 @@
             // NumUpDown_TalkSpeed
             // 
             this.NumUpDown_TalkSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NumUpDown_TalkSpeed.Location = new System.Drawing.Point(394, 602);
+            this.NumUpDown_TalkSpeed.Location = new System.Drawing.Point(459, 602);
             this.NumUpDown_TalkSpeed.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1259,7 +1262,7 @@
             // Textbox_BlinkPattern
             // 
             this.Textbox_BlinkPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_BlinkPattern.Location = new System.Drawing.Point(559, 577);
+            this.Textbox_BlinkPattern.Location = new System.Drawing.Point(624, 577);
             this.Textbox_BlinkPattern.Name = "Textbox_BlinkPattern";
             this.Textbox_BlinkPattern.Size = new System.Drawing.Size(206, 20);
             this.Textbox_BlinkPattern.TabIndex = 60;
@@ -1269,7 +1272,7 @@
             // Textbox_TalkingPattern
             // 
             this.Textbox_TalkingPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_TalkingPattern.Location = new System.Drawing.Point(559, 601);
+            this.Textbox_TalkingPattern.Location = new System.Drawing.Point(624, 601);
             this.Textbox_TalkingPattern.Name = "Textbox_TalkingPattern";
             this.Textbox_TalkingPattern.Size = new System.Drawing.Size(206, 20);
             this.Textbox_TalkingPattern.TabIndex = 59;
@@ -1279,7 +1282,7 @@
             // NumUpDown_BlinkSpeed
             // 
             this.NumUpDown_BlinkSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NumUpDown_BlinkSpeed.Location = new System.Drawing.Point(394, 578);
+            this.NumUpDown_BlinkSpeed.Location = new System.Drawing.Point(459, 578);
             this.NumUpDown_BlinkSpeed.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1335,7 +1338,7 @@
             this.Tab3_BehaviorData.Location = new System.Drawing.Point(4, 22);
             this.Tab3_BehaviorData.Name = "Tab3_BehaviorData";
             this.Tab3_BehaviorData.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab3_BehaviorData.Size = new System.Drawing.Size(783, 633);
+            this.Tab3_BehaviorData.Size = new System.Drawing.Size(848, 633);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
             // 
@@ -3118,7 +3121,7 @@
             this.Tab4_Messages.Location = new System.Drawing.Point(4, 22);
             this.Tab4_Messages.Name = "Tab4_Messages";
             this.Tab4_Messages.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab4_Messages.Size = new System.Drawing.Size(783, 633);
+            this.Tab4_Messages.Size = new System.Drawing.Size(848, 633);
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
@@ -3154,7 +3157,7 @@
             // 
             this.SplitMsgContainer.Panel2.Controls.Add(this.MsgText);
             this.SplitMsgContainer.Panel2MinSize = 0;
-            this.SplitMsgContainer.Size = new System.Drawing.Size(558, 216);
+            this.SplitMsgContainer.Size = new System.Drawing.Size(638, 216);
             this.SplitMsgContainer.SplitterDistance = 25;
             this.SplitMsgContainer.TabIndex = 91;
             this.SplitMsgContainer.SizeChanged += new System.EventHandler(this.SplitMsgContainer_SizeChanged);
@@ -3272,7 +3275,7 @@
             this.PanelMsgPreview.Location = new System.Drawing.Point(202, 269);
             this.PanelMsgPreview.Margin = new System.Windows.Forms.Padding(0);
             this.PanelMsgPreview.Name = "PanelMsgPreview";
-            this.PanelMsgPreview.Size = new System.Drawing.Size(558, 352);
+            this.PanelMsgPreview.Size = new System.Drawing.Size(638, 352);
             this.PanelMsgPreview.TabIndex = 72;
             this.PanelMsgPreview.Resize += new System.EventHandler(this.PanelMsgPreview_Resize);
             // 
@@ -3293,7 +3296,7 @@
             // 
             this.PreviewSplitContainer.Panel2.AutoScroll = true;
             this.PreviewSplitContainer.Panel2.Controls.Add(this.MsgPreview);
-            this.PreviewSplitContainer.Size = new System.Drawing.Size(556, 350);
+            this.PreviewSplitContainer.Size = new System.Drawing.Size(636, 350);
             this.PreviewSplitContainer.SplitterDistance = 185;
             this.PreviewSplitContainer.TabIndex = 70;
             // 
@@ -3411,7 +3414,7 @@
             this.Tab5_Scripts.Location = new System.Drawing.Point(4, 22);
             this.Tab5_Scripts.Name = "Tab5_Scripts";
             this.Tab5_Scripts.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab5_Scripts.Size = new System.Drawing.Size(783, 633);
+            this.Tab5_Scripts.Size = new System.Drawing.Size(848, 633);
             this.Tab5_Scripts.TabIndex = 7;
             this.Tab5_Scripts.Text = "Scripts";
             this.Tab5_Scripts.UseVisualStyleBackColor = true;
@@ -3422,7 +3425,7 @@
             this.TabControl_Scripts.Location = new System.Drawing.Point(3, 3);
             this.TabControl_Scripts.Name = "TabControl_Scripts";
             this.TabControl_Scripts.SelectedIndex = 0;
-            this.TabControl_Scripts.Size = new System.Drawing.Size(777, 627);
+            this.TabControl_Scripts.Size = new System.Drawing.Size(842, 627);
             this.TabControl_Scripts.TabIndex = 0;
             this.TabControl_Scripts.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TabControlScripts_MouseUp);
             // 
@@ -3459,7 +3462,7 @@
             this.Tab6_EmbeddedOverlay.Location = new System.Drawing.Point(4, 22);
             this.Tab6_EmbeddedOverlay.Name = "Tab6_EmbeddedOverlay";
             this.Tab6_EmbeddedOverlay.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab6_EmbeddedOverlay.Size = new System.Drawing.Size(783, 633);
+            this.Tab6_EmbeddedOverlay.Size = new System.Drawing.Size(848, 633);
             this.Tab6_EmbeddedOverlay.TabIndex = 6;
             this.Tab6_EmbeddedOverlay.Text = "C Code";
             this.Tab6_EmbeddedOverlay.UseVisualStyleBackColor = true;
@@ -3490,7 +3493,7 @@
             // 
             this.Button_UpdateCompile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Button_UpdateCompile.Enabled = false;
-            this.Button_UpdateCompile.Location = new System.Drawing.Point(586, 483);
+            this.Button_UpdateCompile.Location = new System.Drawing.Point(666, 483);
             this.Button_UpdateCompile.Name = "Button_UpdateCompile";
             this.Button_UpdateCompile.Size = new System.Drawing.Size(174, 38);
             this.Button_UpdateCompile.TabIndex = 28;
@@ -3501,7 +3504,7 @@
             // Button_CDelete
             // 
             this.Button_CDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_CDelete.Location = new System.Drawing.Point(588, 597);
+            this.Button_CDelete.Location = new System.Drawing.Point(666, 597);
             this.Button_CDelete.Name = "Button_CDelete";
             this.Button_CDelete.Size = new System.Drawing.Size(174, 21);
             this.Button_CDelete.TabIndex = 27;
@@ -3512,7 +3515,7 @@
             // Button_CCompile
             // 
             this.Button_CCompile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_CCompile.Location = new System.Drawing.Point(586, 439);
+            this.Button_CCompile.Location = new System.Drawing.Point(666, 439);
             this.Button_CCompile.Name = "Button_CCompile";
             this.Button_CCompile.Size = new System.Drawing.Size(174, 38);
             this.Button_CCompile.TabIndex = 26;
@@ -3536,7 +3539,7 @@
             this.Textbox_CodeEditorArgs.Enabled = false;
             this.Textbox_CodeEditorArgs.Location = new System.Drawing.Point(436, 73);
             this.Textbox_CodeEditorArgs.Name = "Textbox_CodeEditorArgs";
-            this.Textbox_CodeEditorArgs.Size = new System.Drawing.Size(324, 20);
+            this.Textbox_CodeEditorArgs.Size = new System.Drawing.Size(404, 20);
             this.Textbox_CodeEditorArgs.TabIndex = 24;
             this.Textbox_CodeEditorArgs.TextChanged += new System.EventHandler(this.Textbox_CodeEditorArgs_TextChanged);
             // 
@@ -3547,7 +3550,7 @@
             this.TextBox_CodeEditorPath.Enabled = false;
             this.TextBox_CodeEditorPath.Location = new System.Drawing.Point(373, 48);
             this.TextBox_CodeEditorPath.Name = "TextBox_CodeEditorPath";
-            this.TextBox_CodeEditorPath.Size = new System.Drawing.Size(387, 20);
+            this.TextBox_CodeEditorPath.Size = new System.Drawing.Size(467, 20);
             this.TextBox_CodeEditorPath.TabIndex = 23;
             this.TextBox_CodeEditorPath.TextChanged += new System.EventHandler(this.TextBox_CodeEditorPath_TextChanged);
             // 
@@ -3597,7 +3600,7 @@
             this.TextBox_CompileMsg.Name = "TextBox_CompileMsg";
             this.TextBox_CompileMsg.ReadOnly = true;
             this.TextBox_CompileMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TextBox_CompileMsg.Size = new System.Drawing.Size(751, 327);
+            this.TextBox_CompileMsg.Size = new System.Drawing.Size(831, 327);
             this.TextBox_CompileMsg.TabIndex = 19;
             // 
             // LblCompilerMsg
@@ -3776,7 +3779,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Button_OpenCCode.Location = new System.Drawing.Point(6, 6);
             this.Button_OpenCCode.Name = "Button_OpenCCode";
-            this.Button_OpenCCode.Size = new System.Drawing.Size(756, 38);
+            this.Button_OpenCCode.Size = new System.Drawing.Size(836, 38);
             this.Button_OpenCCode.TabIndex = 0;
             this.Button_OpenCCode.Text = "Open C code...";
             this.Button_OpenCCode.UseVisualStyleBackColor = true;
@@ -3980,7 +3983,8 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.importLocalizationToolStripMenuItem});
+            this.importLocalizationToolStripMenuItem,
+            this.checkDefinitionValidityToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.optionsToolStripMenuItem.Text = "Tools";
@@ -3988,9 +3992,16 @@
             // importLocalizationToolStripMenuItem
             // 
             this.importLocalizationToolStripMenuItem.Name = "importLocalizationToolStripMenuItem";
-            this.importLocalizationToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.importLocalizationToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.importLocalizationToolStripMenuItem.Text = "Import localization";
             this.importLocalizationToolStripMenuItem.Click += new System.EventHandler(this.importLocalizationToolStripMenuItem_Click);
+            // 
+            // checkDefinitionValidityToolStripMenuItem
+            // 
+            this.checkDefinitionValidityToolStripMenuItem.Name = "checkDefinitionValidityToolStripMenuItem";
+            this.checkDefinitionValidityToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.checkDefinitionValidityToolStripMenuItem.Text = "Check definition validity";
+            this.checkDefinitionValidityToolStripMenuItem.Click += new System.EventHandler(this.checkDefinitionValidityToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -4028,7 +4039,7 @@
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.MaximumSize = new System.Drawing.Size(2000, 0);
             this.MenuStrip.Name = "MenuStrip";
-            this.MenuStrip.Size = new System.Drawing.Size(1095, 24);
+            this.MenuStrip.Size = new System.Drawing.Size(1184, 24);
             this.MenuStrip.TabIndex = 1;
             this.MenuStrip.Text = "menuStrip1";
             // 
@@ -4104,7 +4115,7 @@
             // txBox_Search
             // 
             this.txBox_Search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txBox_Search.Location = new System.Drawing.Point(884, 2);
+            this.txBox_Search.Location = new System.Drawing.Point(973, 2);
             this.txBox_Search.Name = "txBox_Search";
             this.txBox_Search.Size = new System.Drawing.Size(207, 20);
             this.txBox_Search.TabIndex = 6;
@@ -4113,7 +4124,7 @@
             // btn_FindMsg
             // 
             this.btn_FindMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_FindMsg.Location = new System.Drawing.Point(796, 2);
+            this.btn_FindMsg.Location = new System.Drawing.Point(885, 2);
             this.btn_FindMsg.Name = "btn_FindMsg";
             this.btn_FindMsg.Size = new System.Drawing.Size(82, 21);
             this.btn_FindMsg.TabIndex = 7;
@@ -4124,7 +4135,7 @@
             // progressL
             // 
             this.progressL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressL.Location = new System.Drawing.Point(414, 2);
+            this.progressL.Location = new System.Drawing.Point(503, 2);
             this.progressL.Name = "progressL";
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
@@ -4151,7 +4162,7 @@
             this.DataGrid_NPCs.ReadOnly = true;
             this.DataGrid_NPCs.RowHeadersWidth = 25;
             this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid_NPCs.Size = new System.Drawing.Size(294, 545);
+            this.DataGrid_NPCs.Size = new System.Drawing.Size(318, 545);
             this.DataGrid_NPCs.TabIndex = 1;
             this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
             this.DataGrid_NPCs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.NPCGrid_CellPainting);
@@ -4185,11 +4196,11 @@
             this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.StartLimbColumn,
             this.ColorColumn});
-            this.ColorsDataGridView.Location = new System.Drawing.Point(646, 233);
+            this.ColorsDataGridView.Location = new System.Drawing.Point(711, 28);
             this.ColorsDataGridView.MultiSelect = false;
             this.ColorsDataGridView.Name = "ColorsDataGridView";
             this.ColorsDataGridView.RowHeadersVisible = false;
-            this.ColorsDataGridView.Size = new System.Drawing.Size(129, 394);
+            this.ColorsDataGridView.Size = new System.Drawing.Size(129, 199);
             this.ColorsDataGridView.TabIndex = 75;
             this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
             this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
@@ -4221,7 +4232,8 @@
             this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col_AnimName,
-            this.FileStart,
+            this.Col_HDefine,
+            this.Col_Filestart,
             this.Col_Anim,
             this.Col_StartFrame,
             this.Col_EndFrame,
@@ -4231,7 +4243,7 @@
             this.DataGrid_Animations.MultiSelect = false;
             this.DataGrid_Animations.Name = "DataGrid_Animations";
             this.DataGrid_Animations.RowHeadersVisible = false;
-            this.DataGrid_Animations.Size = new System.Drawing.Size(629, 394);
+            this.DataGrid_Animations.Size = new System.Drawing.Size(826, 394);
             this.DataGrid_Animations.TabIndex = 9;
             this.DataGrid_Animations.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGrid_Animations_CellMouseDoubleClick);
             this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
@@ -4244,11 +4256,18 @@
             this.Col_AnimName.Name = "Col_AnimName";
             this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // FileStart
+            // Col_HDefine
             // 
-            this.FileStart.FillWeight = 50F;
-            this.FileStart.HeaderText = "File start";
-            this.FileStart.Name = "FileStart";
+            this.Col_HDefine.FillWeight = 80F;
+            this.Col_HDefine.HeaderText = "Header Definition";
+            this.Col_HDefine.Name = "Col_HDefine";
+            this.Col_HDefine.Visible = false;
+            // 
+            // Col_Filestart
+            // 
+            this.Col_Filestart.FillWeight = 50F;
+            this.Col_Filestart.HeaderText = "File start";
+            this.Col_Filestart.Name = "Col_Filestart";
             // 
             // Col_Anim
             // 
@@ -4297,8 +4316,9 @@
             this.DataGridView_ExtraDLists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridView_ExtraDLists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ExtraDlists_Purpose,
+            this.ExtraDlists_HeaderDefinition,
             this.ExtraDlists_Color,
-            this.ExDlistFileStart,
+            this.ExtraDlists_FileStart,
             this.ExtraDlists_Offset,
             this.ExtraDlists_Translation,
             this.ExtraDlists_Rotation,
@@ -4310,7 +4330,7 @@
             this.DataGridView_ExtraDLists.MultiSelect = false;
             this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
             this.DataGridView_ExtraDLists.RowHeadersVisible = false;
-            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(749, 276);
+            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(831, 276);
             this.DataGridView_ExtraDLists.TabIndex = 51;
             this.DataGridView_ExtraDLists.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_ExtraDLists_CellMouseDoubleClick);
             this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
@@ -4323,6 +4343,13 @@
             this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
             this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // ExtraDlists_HeaderDefinition
+            // 
+            this.ExtraDlists_HeaderDefinition.FillWeight = 80F;
+            this.ExtraDlists_HeaderDefinition.HeaderText = "Header Definition";
+            this.ExtraDlists_HeaderDefinition.Name = "ExtraDlists_HeaderDefinition";
+            this.ExtraDlists_HeaderDefinition.Visible = false;
+            // 
             // ExtraDlists_Color
             // 
             this.ExtraDlists_Color.FillWeight = 30F;
@@ -4331,12 +4358,12 @@
             this.ExtraDlists_Color.ReadOnly = true;
             this.ExtraDlists_Color.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // ExDlistFileStart
+            // ExtraDlists_FileStart
             // 
-            this.ExDlistFileStart.FillWeight = 50F;
-            this.ExDlistFileStart.HeaderText = "File start";
-            this.ExDlistFileStart.Name = "ExDlistFileStart";
-            this.ExDlistFileStart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ExtraDlists_FileStart.FillWeight = 50F;
+            this.ExtraDlists_FileStart.HeaderText = "File start";
+            this.ExtraDlists_FileStart.Name = "ExtraDlists_FileStart";
+            this.ExtraDlists_FileStart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // ExtraDlists_Offset
             // 
@@ -4463,7 +4490,7 @@
             this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
             this.MsgText.ShowLineNumbers = false;
-            this.MsgText.Size = new System.Drawing.Size(558, 216);
+            this.MsgText.Size = new System.Drawing.Size(638, 216);
             this.MsgText.TabIndex = 68;
             this.MsgText.Tag = "0";
             this.MsgText.WordWrapAutoIndent = false;
@@ -4509,7 +4536,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1095, 683);
+            this.ClientSize = new System.Drawing.Size(1184, 683);
             this.Controls.Add(this.progressL);
             this.Controls.Add(this.btn_FindMsg);
             this.Controls.Add(this.txBox_Search);
@@ -4856,13 +4883,6 @@
         private System.Windows.Forms.CheckBox ChkBox_ExistInAll;
         private System.Windows.Forms.NumericUpDown numUpFileStart;
         private System.Windows.Forms.Label Lbl_ObjectOffset;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_AnimName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FileStart;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Anim;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_StartFrame;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_EndFrame;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Speed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col_OBJ;
         private System.Windows.Forms.TabPage Tab6_EmbeddedOverlay;
         private System.Windows.Forms.TextBox TextBox_CompileMsg;
         private System.Windows.Forms.Label LblCompilerMsg;
@@ -4926,16 +4946,6 @@
         private System.Windows.Forms.Label Label_AnimInterpFrames;
         private System.Windows.Forms.Label LblPostLimb;
         private System.Windows.Forms.ComboBox Combo_postLimb;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Purpose;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Color;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExDlistFileStart;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Offset;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Translation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Rotation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDLists_Scale;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Limb;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private Windows.ProgressWithLabel progressL;
         private System.Windows.Forms.SplitContainer SplitPanel;
         private System.Windows.Forms.Label label4;
@@ -4959,6 +4969,26 @@
         private System.Windows.Forms.Button Btn_HeaderBrowse;
         private System.Windows.Forms.TextBox Tx_HeaderPath;
         private System.Windows.Forms.Label Label_Header;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_AnimName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_HDefine;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Filestart;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Anim;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_StartFrame;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_EndFrame;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_Speed;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col_OBJ;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Purpose;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_HeaderDefinition;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Color;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_FileStart;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Offset;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Translation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Rotation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDLists_Scale;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Limb;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
+        private System.Windows.Forms.ToolStripMenuItem checkDefinitionValidityToolStripMenuItem;
     }
 }
 
