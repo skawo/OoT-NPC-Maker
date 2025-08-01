@@ -1664,6 +1664,9 @@ namespace NPC_Maker
 
             Dictionary<string, string> hDict = Helpers.GetDefinesFromH(SelectedEntry.HeaderPath);
 
+            if (hDict.Count == 0)
+                return null;
+
             Windows.ComboPicker com = new Windows.ComboPicker(hDict.Keys.ToList(), "Select symbol from header...", "Selection", true);
 
             if (com.ShowDialog() == DialogResult.OK)
