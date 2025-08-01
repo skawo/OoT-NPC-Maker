@@ -39,8 +39,8 @@ namespace NPC_Maker
         private Common.SavedMsgPreviewData lastPreviewData;
         private Common.SavedMsgPreviewData lastPreviewDataOrig;
 
-        private List<float[]> fontsWidths = new List<float[]>();
-        private List<byte[]> fonts = new List<byte[]>();
+        private Dictionary<string,float[]> fontsWidths = new Dictionary<string, float[]>();
+        private Dictionary<string, byte[]> fonts = new Dictionary<string, byte[]>();
 
         public MainWindow(string FilePath = "")
         {
@@ -158,7 +158,7 @@ namespace NPC_Maker
 
             if (File.Exists(fontfP) && File.Exists(fontfWP))
             {
-                fonts.Add(File.ReadAllBytes(fontfP));
+                fonts.Add(FontName, File.ReadAllBytes(fontfP));
                 List<float> fontWidths = new List<float>();
 
                 byte[] widths = System.IO.File.ReadAllBytes(fontfWP);
@@ -169,11 +169,11 @@ namespace NPC_Maker
                     fontWidths.Add(BitConverter.ToSingle(width, 0));
                 }
 
-                fontsWidths.Add(fontWidths.ToArray());
+                fontsWidths.Add(FontName, fontWidths.ToArray());
             }
             else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef))
             {
-                fonts.Add(File.ReadAllBytes(fontfPDef));
+                fonts.Add(Dicts.DefaultLanguage, File.ReadAllBytes(fontfPDef));
                 List<float> fontWidths = new List<float>();
 
                 byte[] widths = System.IO.File.ReadAllBytes(fontfWPDef);
@@ -184,12 +184,7 @@ namespace NPC_Maker
                     fontWidths.Add(BitConverter.ToSingle(width, 0));
                 }
 
-                fontsWidths.Add(fontWidths.ToArray());
-            }
-            else
-            {
-                fonts.Add(new byte[0]);
-                fontsWidths.Add(new float[0]);
+                fontsWidths.Add(Dicts.DefaultLanguage, fontWidths.ToArray());
             }
         }
 
@@ -197,7 +192,7 @@ namespace NPC_Maker
         {
             fonts.Clear();
             fontsWidths.Clear();
-            LoadAddFontByName("font");
+            LoadAddFontByName(Dicts.DefaultLanguage);
 
             foreach (string lan in EditedFile.Languages)
                 LoadAddFontByName(lan);
@@ -3145,6 +3140,10 @@ namespace NPC_Maker
         {
             int curSelMsg = 0;
 
+            lastPreviewData = null;
+            lastPreviewDataOrig = null;
+
+
             if (MessagesGrid.SelectedRows.Count != 0)
                 curSelMsg = MessagesGrid.SelectedRows[0].Index;
 
@@ -3398,10 +3397,24 @@ namespace NPC_Maker
 
             bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;
 
+            float[] fontWidths = null;
+            byte[] font = null;
+
+            if (fontsWidths.ContainsKey(Language) && fonts.ContainsKey(Language))
+            {
+                fontWidths = fontsWidths[Language];
+                font = fonts[Language];
+            }
+            else if (fontsWidths.ContainsKey(Dicts.DefaultLanguage) && fonts.ContainsKey(Dicts.DefaultLanguage))
+            {
+                fontWidths = fontsWidths[Dicts.DefaultLanguage];
+                font = fonts[Dicts.DefaultLanguage];
+            }
+
             ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type,
                                                                               Data.ToArray(),
-                                                                              fontsWidths[Combo_Language.SelectedIndex].Length == 0 ? null : fontsWidths[Combo_Language.SelectedIndex],
-                                                                              fonts[Combo_Language.SelectedIndex].Length == 0 ? null : fonts[Combo_Language.SelectedIndex],
+                                                                              fontWidths,
+                                                                              font,
                                                                               EditedFile.SpaceFromFont);
 
             Bitmap bmp;
@@ -4212,6 +4225,5 @@ namespace NPC_Maker
 
 
         #endregion
-
     }
 }
