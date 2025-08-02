@@ -171,7 +171,7 @@ namespace NPC_Maker
 
                 fontsWidths.Add(FontName, fontWidths.ToArray());
             }
-            else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef))
+            else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef) && !fonts.ContainsKey(Dicts.DefaultLanguage))
             {
                 fonts.Add(Dicts.DefaultLanguage, File.ReadAllBytes(fontfPDef));
                 List<float> fontWidths = new List<float>();
