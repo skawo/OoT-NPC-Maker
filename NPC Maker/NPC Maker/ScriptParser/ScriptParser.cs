@@ -55,6 +55,45 @@ namespace NPC_Maker.Scripts
             //defines.AddRange(Dicts.Actors.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Actor}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
         }
 
+        private List<string> CalculateExpressions(List<string> Lines, ref BScript outScript, bool allowFail)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                int idx = Lines.FindIndex(x => x.StartsWith("\"") && x.EndsWith("\""));
+
+                while (idx != -1)
+                {
+                    try
+                    {
+                        Lines[idx] = dt.Compute(Lines[idx].Substring(1, Lines[idx].Length - 2), null).ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!allowFail)
+                            throw new Exception(ex.Message);
+                    }
+
+                    if (String.IsNullOrWhiteSpace(Lines[idx]))
+                        Lines.RemoveAt(idx);
+
+                    idx = Lines.FindIndex(x => x.StartsWith("\"") && x.EndsWith("\""));
+                }
+            }
+            catch (ParseException pEx)
+            {
+                if (!allowFail)
+                    outScript.ParseErrors.Add(pEx);
+            }
+            catch (Exception ex)
+            {
+                if (!allowFail)
+                    outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing expression " + ex.Message));
+            }
+
+            return Lines;
+        }
+
         public BScript ParseScript(string ScrName, bool GetBytes)
         {
             outScript = new BScript();
@@ -87,10 +126,13 @@ namespace NPC_Maker.Scripts
 
             GetDefines(ref defineLines);
 
+            Lines = CalculateExpressions(Lines, ref outScript, true);
+
             // "Preprocessor"
             Lines = ReplaceTernary(Lines, ref outScript);
             Lines = GetAndReplaceProcedures(Lines, defineLines, ref outScript);
             Lines = ReplaceDefines(defineLines, Lines, ref outScript);
+
             Lines = ReplaceSwitches(Lines, ref outScript);
             Lines = ReplaceElifs(Lines, ref outScript);
             Lines = RefactorComplexIfs(Lines, ref outScript);
@@ -99,9 +141,7 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceScriptStartHeres(Lines, ref outScript);
             CheckLabels(Lines);
 
-            Lines = Lines
-                .Select(s => s.Replace("(", "").Replace(")", ""))
-                .ToList();
+            Lines = CalculateExpressions(Lines, ref outScript, false);
 
             List<Instruction> Instructions = GetInstructions(Lines);
 
@@ -172,7 +212,7 @@ namespace NPC_Maker.Scripts
 
             ScriptText = Regex.Replace(ScriptText, @"\\\s*\r?\n", "", RegexOptions.Compiled);                                                          // Override line carriage return if preceded by \
 
-            ScriptText = Regex.Replace(ScriptText, @"[,{}\t]", " ", RegexOptions.Compiled);
+            ScriptText = Regex.Replace(ScriptText, @"[(){},\t](?=(?:[^""]*""[^""]*"")*[^""]*$)", " ", RegexOptions.Compiled);
             // ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                                                 // Change ;s into linebreaks
             ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty, RegexOptions.Compiled);                                        // Remove comment blocks
