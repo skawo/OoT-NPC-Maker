@@ -55,43 +55,21 @@ namespace NPC_Maker.Scripts
             //defines.AddRange(Dicts.Actors.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Actor}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
         }
 
-        public static List<string> RemoveCharactersExceptInQuotes(List<string> lines)
-        {
-            string delimiter = Environment.NewLine;
-            string concatenated = string.Join(delimiter, lines);
-
-            string pattern = @"[(),](?=(?:[^""]*""[^""]*"")*[^""]*$)";
-            string processed = Regex.Replace(concatenated, pattern, "");
-
-            return String.IsNullOrWhiteSpace(processed) ? new List<string>() : processed.Split(new[] { delimiter }, StringSplitOptions.None).ToList();
-        }
-
-
-        public static List<string> RemoveCharactersFromList(List<string> lines, string pattern)
-        {
-            string delimiter = Environment.NewLine;
-            string concatenated = string.Join(delimiter, lines);
-            string processed = Regex.Replace(concatenated, pattern, "");
-
-            return String.IsNullOrWhiteSpace(processed) ? new List<string>() : processed.Split(new[] { delimiter }, StringSplitOptions.None).ToList();
-        }
-
         public BScript ParseScript(string ScrName, bool GetBytes)
         {
             outScript = new BScript();
             outScript.Name = ScrName;
 
-            List<string> Lines = SplitLines(ScriptText);
-            Lines = CalculateExpressions(Lines, ref outScript);
-            string postExpr = string.Join(Environment.NewLine, Lines);
+            RegexText(ref ScriptText);
 
-            RegexText(ref postExpr);
-
-            if (String.IsNullOrWhiteSpace(postExpr))
+            if (String.IsNullOrWhiteSpace(ScriptText))
                 return outScript;
 
             RandomLabels = new List<string>();
-            Lines = SplitLines(postExpr);
+            List<string> Lines = SplitLines(ScriptText);
+
+            // Split text into lines
+            Lines = SplitLines(ScriptText);
 
             // Remove all definitions
             List<string> defineLines = new List<string>();
@@ -121,8 +99,9 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceScriptStartHeres(Lines, ref outScript);
             CheckLabels(Lines);
 
-
-            Lines = RemoveCharactersExceptInQuotes(Lines);
+            Lines = Lines
+                .Select(s => s.Replace("(", "").Replace(")", ""))
+                .ToList();
 
             List<Instruction> Instructions = GetInstructions(Lines);
 
@@ -193,7 +172,7 @@ namespace NPC_Maker.Scripts
 
             ScriptText = Regex.Replace(ScriptText, @"\\\s*\r?\n", "", RegexOptions.Compiled);                                                          // Override line carriage return if preceded by \
 
-            ScriptText = Regex.Replace(ScriptText, @"[{}\t]", " ", RegexOptions.Compiled);
+            ScriptText = Regex.Replace(ScriptText, @"[,{}\t]", " ", RegexOptions.Compiled);
             // ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
             ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                                                 // Change ;s into linebreaks
             ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty, RegexOptions.Compiled);                                        // Remove comment blocks
@@ -913,35 +892,6 @@ namespace NPC_Maker.Scripts
             catch (Exception ex)
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing ELIF " + ex.Message));
-            }
-
-            return Lines;
-        }
-
-        private List<string> CalculateExpressions(List<string> Lines, ref BScript outScript)
-        {
-            try
-            {
-                DataTable dt = new DataTable();
-                int idx = Lines.FindIndex(x => x.StartsWith("\"") && x.EndsWith("\""));
-
-                while (idx != -1)
-                {
-                    Lines[idx] = dt.Compute(Lines[idx].Substring(1, Lines[idx].Length - 2), null).ToString();
-
-                    if (String.IsNullOrWhiteSpace(Lines[idx]))
-                        Lines.RemoveAt(idx);
-
-                    idx = Lines.FindIndex(x => x.StartsWith("\"") && x.EndsWith("\""));
-                }
-            }
-            catch (ParseException pEx)
-            {
-                outScript.ParseErrors.Add(pEx);
-            }
-            catch (Exception ex)
-            {
-                outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing expression " + ex.Message));
             }
 
             return Lines;

@@ -1078,4 +1078,3 @@ namespace NPC_Maker
     }
 
 }
- 
