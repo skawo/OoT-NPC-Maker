@@ -3278,6 +3278,9 @@ namespace NPC_Maker
 
         private void MessagesGrid_SelectionChanged(object sender, EventArgs e)
         {
+            if (SelectedEntry == null)
+                return;
+
             if (MessagesGrid.SelectedRows.Count == 0)
             {
                 MsgText.Enabled = false;
