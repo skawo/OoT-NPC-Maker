@@ -126,7 +126,7 @@ namespace NPC_Maker.Scripts
 
             GetDefines(ref defineLines);
 
-            Lines = CalculateExpressions(Lines, ref outScript, true);
+            //Lines = CalculateExpressions(Lines, ref outScript, true);
 
             // "Preprocessor"
             Lines = ReplaceTernary(Lines, ref outScript);
@@ -141,7 +141,7 @@ namespace NPC_Maker.Scripts
             Lines = ReplaceScriptStartHeres(Lines, ref outScript);
             CheckLabels(Lines);
 
-            Lines = CalculateExpressions(Lines, ref outScript, false);
+            //Lines = CalculateExpressions(Lines, ref outScript, false);
 
             List<Instruction> Instructions = GetInstructions(Lines);
 
