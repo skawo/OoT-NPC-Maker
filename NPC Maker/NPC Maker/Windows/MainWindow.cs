@@ -3524,8 +3524,12 @@ namespace NPC_Maker
             {
                 if (lastPreviewData != null && lastPreviewData.previewImage != null)
                 {
-                    Bitmap b = new Bitmap(lastPreviewData.previewImage);
-                    MsgPreview.Image = b.SetAlpha(170);
+                    bmp = new Bitmap(lastPreviewData.previewImage);
+
+                    if (Program.Settings.OrigPreview && Combo_Language.SelectedIndex != 0)
+                        bmp = bmp.ResizeImageKeepAspectRatio(Math.Min(this.PreviewSplitContainer.Panel2.Width - 35, bmp.Width), bmp.Height);
+
+                    MsgPreview.Image = bmp.SetAlpha(170);
                 }
             }
         }
