@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -1209,31 +1210,7 @@ namespace NPC_Maker
 
                         #endregion
 
-
-                        List<byte> outCompressed = null;
-
-                        if (Program.Settings.CompressIndividually)
-                        { 
-                            outCompressed = PeepsCompress.YAZ0.Compress(EntryBytes.ToArray(), 0).ToList();
-                            Helpers.Ensure4ByteAlign(outCompressed);
-                        }
-
-                        EntryAddresses.AddRangeBigEndian(Offset);
-
-                        if (!Program.Settings.CompressIndividually || outCompressed.Count >= EntryBytes.Count)
-                        {
-                            EntryData.Add(EntryBytes);
-                            EntryAddresses.AddRangeBigEndian(0);
-                            EntryAddresses.AddRangeBigEndian(EntryBytes.Count);
-                            Offset += EntryBytes.Count();
-                        }
-                        else
-                        {
-                            EntryData.Add(outCompressed);
-                            EntryAddresses.AddRangeBigEndian(outCompressed.Count);
-                            EntryAddresses.AddRangeBigEndian(EntryBytes.Count);
-                            Offset += outCompressed.Count();
-                        }
+                        EntryData.Add(EntryBytes);
 
                         if (ParseErrors.Count == 0)
                             Console.Write($"OK{Environment.NewLine}");
@@ -1242,9 +1219,7 @@ namespace NPC_Maker
                     }
                     else
                     {
-                        EntryAddresses.AddRangeBigEndian((UInt32)0);
-                        EntryAddresses.AddRangeBigEndian((UInt32)0);
-                        EntryAddresses.AddRangeBigEndian((UInt32)0);
+                        EntryData.Add(null);
                         Console.WriteLine($"Entry {EntriesDone} is blank or omitted.");
 
                     }
@@ -1256,16 +1231,66 @@ namespace NPC_Maker
                         progress.Report(new Common.ProgressReport($"Saving {EntriesDone}/{Data.Entries.Count}", CurProgress));
                 }
 
-                if (progress != null)
-                    progress.Report(new Common.ProgressReport($"Done!", 100));
-
                 List<byte> Output = new List<byte>();
 
                 Output.AddRangeBigEndian((UInt32)Data.Entries.Count());
+
+                List<Common.CompilationEntryData> CompilationData = new List<Common.CompilationEntryData>();
+
+                for (int i = 0; i < EntryData.Count; i++)
+                    CompilationData.Add(new Common.CompilationEntryData(EntryData[i]));
+
+                if (progress != null && Program.Settings.CompressIndividually)
+                    progress.Report(new Common.ProgressReport($"Compressing...", 100));
+
+                Parallel.ForEach(CompilationData, Entry =>
+                {
+                    List<byte> outCompressed = null;
+
+                    if (Entry.data == null)
+                        return;
+
+                    if (Program.Settings.CompressIndividually)
+                    {
+                        outCompressed = PeepsCompress.YAZ0.Compress(Entry.data.ToArray(), 0).ToList();
+                        Helpers.Ensure4ByteAlign(outCompressed);
+                    }
+
+                    if (!Program.Settings.CompressIndividually || outCompressed.Count >= Entry.data.Count)
+                    {
+                        Entry.compressedSize = 0;
+                        Entry.decompressedSize = Entry.data.Count;
+                    }
+                    else
+                    {
+                        Entry.compressedSize = outCompressed.Count;
+                        Entry.decompressedSize = Entry.data.Count;
+                        Entry.data = outCompressed;
+                    }
+                });
+
+                foreach (Common.CompilationEntryData entry in CompilationData)
+                {
+                    EntryAddresses.AddRangeBigEndian(Offset);
+                    EntryAddresses.AddRangeBigEndian(entry.compressedSize);
+                    EntryAddresses.AddRangeBigEndian(entry.decompressedSize);
+
+                    if (entry.compressedSize != 0)
+                        Offset += entry.compressedSize;
+                    else
+                        Offset += entry.decompressedSize;
+                }
+
                 Output.AddRange(EntryAddresses);
 
-                foreach (List<byte> Entry in EntryData)
-                    Output.AddRange(Entry);
+                foreach (Common.CompilationEntryData entry in CompilationData)
+                {
+                    if (entry.data != null)
+                        Output.AddRange(entry.data);
+                }
+
+                if (progress != null)
+                    progress.Report(new Common.ProgressReport($"Done!", 100));
 
                 if (ParseErrors.Count != 0)
                 {

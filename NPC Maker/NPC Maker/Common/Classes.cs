@@ -17,6 +17,19 @@ namespace NPC_Maker.Common
         }
     }
 
+    public class CompilationEntryData
+    {
+        public int offset = 0;
+        public int compressedSize = 0;
+        public int decompressedSize = 0;
+        public List<byte> data;
+
+        public CompilationEntryData(List<byte> _data)
+        {
+            data = _data;
+        }
+    }
+
     public class HDefine
     {
         public string Name;
