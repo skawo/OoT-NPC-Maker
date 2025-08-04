@@ -1160,6 +1160,58 @@ namespace NPC_Maker
             InsertDataToEditor();
         }
 
+        private void checkLocalizationConsistencyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EditedFile.Languages.Count == 0)
+            {
+                MessageBox.Show("There are no localizations.");
+                return;
+            }
+
+            Windows.ComboPicker pick = new Windows.ComboPicker(EditedFile.Languages, "Which language?", "Language selection");
+
+            string report = "";
+
+            try
+            {
+
+                if (pick.ShowDialog() == DialogResult.OK)
+                {
+                    string SelectedLanguage = pick.SelectedOption;
+                    int SelectedLangIndex = pick.SelectedIndex;
+
+                    foreach (NPCEntry ent in EditedFile.Entries)
+                    {
+                        for (int i = 0; i < ent.Messages.Count; i++)
+                        {
+                            byte[] msgData = ent.Messages[i].ConvertTextData(ent.NPCName, Dicts.DefaultLanguage, false).ToArray();
+                            ZeldaMessage.MessagePreview pp = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgData);
+
+
+                            byte[] msgDataLoc = ent.Localization[SelectedLangIndex].Messages[i].ConvertTextData(ent.NPCName, SelectedLanguage, false).ToArray();
+                            ZeldaMessage.MessagePreview pp2 = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgDataLoc);
+
+                            if (pp.MessageCount != pp2.MessageCount)
+                                report += $"{ent.NPCName}, {ent.Messages[i].Name} {pp.MessageCount} vs {pp2.MessageCount}" + Environment.NewLine;
+                        }
+                    }
+                }
+
+                SaveFileDialog sf = new SaveFileDialog();
+                sf.FileName = "report.txt";
+
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllText(sf.FileName, report);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+
+        }
+
         private void importLocalizationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EditedFile != null)

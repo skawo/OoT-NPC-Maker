@@ -343,6 +343,7 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importLocalizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkDefinitionValidityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkLocalizationConsistencyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -4374,7 +4375,8 @@
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importLocalizationToolStripMenuItem,
-            this.checkDefinitionValidityToolStripMenuItem});
+            this.checkDefinitionValidityToolStripMenuItem,
+            this.checkLocalizationConsistencyToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.optionsToolStripMenuItem.Text = "Tools";
@@ -4382,16 +4384,23 @@
             // importLocalizationToolStripMenuItem
             // 
             this.importLocalizationToolStripMenuItem.Name = "importLocalizationToolStripMenuItem";
-            this.importLocalizationToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.importLocalizationToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.importLocalizationToolStripMenuItem.Text = "Import localization";
             this.importLocalizationToolStripMenuItem.Click += new System.EventHandler(this.importLocalizationToolStripMenuItem_Click);
             // 
             // checkDefinitionValidityToolStripMenuItem
             // 
             this.checkDefinitionValidityToolStripMenuItem.Name = "checkDefinitionValidityToolStripMenuItem";
-            this.checkDefinitionValidityToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.checkDefinitionValidityToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.checkDefinitionValidityToolStripMenuItem.Text = "Check definition validity";
             this.checkDefinitionValidityToolStripMenuItem.Click += new System.EventHandler(this.checkDefinitionValidityToolStripMenuItem_Click);
+            // 
+            // checkLocalizationConsistencyToolStripMenuItem
+            // 
+            this.checkLocalizationConsistencyToolStripMenuItem.Name = "checkLocalizationConsistencyToolStripMenuItem";
+            this.checkLocalizationConsistencyToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.checkLocalizationConsistencyToolStripMenuItem.Text = "Verify localization textbox count";
+            this.checkLocalizationConsistencyToolStripMenuItem.Click += new System.EventHandler(this.checkLocalizationConsistencyToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -4989,6 +4998,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_ObjectID;
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private System.Windows.Forms.ToolStripMenuItem checkDefinitionValidityToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkLocalizationConsistencyToolStripMenuItem;
     }
 }
 

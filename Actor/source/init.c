@@ -134,7 +134,7 @@ u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset
         if (en->getSettingsFromRAMObject & noCopy)
         {
             void* ptr = Rom_GetObjectDataPtr(en->actor.params, playState);
-            *allocDest = (u32)AADDR(ptr, 4 + entryAddress + offset);
+            *allocDest = (u32)AADDR(ptr, entryAddress + offset);
         }
         else
         {
@@ -340,8 +340,11 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 
     if (en->getSettingsFromRAMObject)
     {
-        en->messagesDataOffset = AVAL(buffer, u32, offset + 4);
-        offset += AVAL(buffer, u32, offset);
+        u32 len = AVAL(buffer, u32, offset);
+        en->messagesDataOffset = entryAddress + offset + 16;
+        en->numLanguages = AVAL(buffer, u32, offset + 8); 
+        en->numMessages = AVAL(buffer, u32, offset + 12);         
+        offset += len;
     }
     else
     {

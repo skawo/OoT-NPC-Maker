@@ -893,7 +893,7 @@ namespace NPC_Maker
                         }
 
                         EntryBytes.AddRangeBigEndian(16 + Header.Count + MsgData.Count);
-                        EntryBytes.AddRangeBigEndian(Offset + EntryBytes.Count + 8);
+                        EntryBytes.AddRangeBigEndian(0);
                         EntryBytes.AddRangeBigEndian(Entry.Localization.Count + 1);
                         EntryBytes.AddRangeBigEndian(Entry.Messages.Count);
                         EntryBytes.AddRange(Header);
