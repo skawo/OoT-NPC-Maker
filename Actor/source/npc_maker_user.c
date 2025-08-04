@@ -1,5 +1,4 @@
 #include "../include/npc_maker_user.h"
-#include "../../common.h"
 
 int NpcM_GetLanguage() 
 {
