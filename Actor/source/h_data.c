@@ -26,7 +26,7 @@ InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int I
     InternalMsgEntry* entries = (InternalMsgEntry*)en->messagesDataOffset;
 
     if (en->getSettingsFromRAMObject)
-        Rom_LoadDataFromObject(playState, en->actor.params, &msgData, &entries[ID], sizeof(InternalMsgEntry), en->getSettingsFromRAMObject);
+        Rom_LoadDataFromObject(playState, en->actor.params, &msgData, (u32)&entries[ID], sizeof(InternalMsgEntry), en->getSettingsFromRAMObject);
     else
         bcopy(&entries[ID], &msgData, sizeof(InternalMsgEntry));
 
