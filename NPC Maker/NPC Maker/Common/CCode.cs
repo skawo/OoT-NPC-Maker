@@ -359,6 +359,9 @@ namespace NPC_Maker
 
             CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFileMono, true);
 
+            File.Delete(oFileMono);
+            File.Delete(elfFileMono);
+
             return File.ReadAllBytes(ovlFileMono);
             #endregion
 
@@ -471,6 +474,10 @@ namespace NPC_Maker
                 CompileMsgs += "Compilation successful!";
 
             CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFilePath, ovlFilePath, false);
+
+            File.Delete(oFilePath);
+            File.Delete(elfFilePath);
+
 
             return File.ReadAllBytes(ovlFilePath);
             #endregion

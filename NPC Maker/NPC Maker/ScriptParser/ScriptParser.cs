@@ -324,7 +324,7 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Add(pEx);
                 return Lines;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 outScript.ParseErrors.Add(ParseException.DefineError());
                 return Lines;

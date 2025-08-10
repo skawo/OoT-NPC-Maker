@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace NPC_Maker
@@ -133,7 +134,22 @@ namespace NPC_Maker
 
             return resizedImage;
         }
+
+
+        public static string FilenameFromPath(this string path)
+        {
+            // Create hash for uniqueness
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(path));
+                path = BitConverter.ToString(hashBytes).Replace("-", "").Substring(0, 8);
+            }
+
+            return path;
+        }
+
     }
+
 }
 public class JsonTextWriterEx : JsonTextWriter
 {
