@@ -12,10 +12,16 @@ InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int I
 {
     InternalMsgEntry msgData;
 
-    int language = NpcM_GetLanguage();
+    if (!en->messagesDataOffset)
+        return msgData;    
 
-    if (language <= en->numLanguages - 1)
-        ID += (language * en->numMessages);
+    if (en->getSettingsFromRAMObject)
+    {
+        int language = NpcM_GetLanguage();
+
+        if (language <= en->numLanguages - 1)
+            ID += (language * en->numMessages);
+    }
 
     if (en->getSettingsFromRAMObject)
         Rom_LoadDataFromObject(playState, en->actor.params, &msgData, en->messagesDataOffset + (ID * sizeof(InternalMsgEntry)), sizeof(InternalMsgEntry), en->getSettingsFromRAMObject);

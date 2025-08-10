@@ -6,6 +6,7 @@
 #include "../include/h_scene.h"
 #include "../include/h_scripts.h"
 #include "../include/update.h"
+#include "../include/npc_maker_user.h"
 
 static ColliderCylinderInit npcMakerCollision =
 {
@@ -348,15 +349,61 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     }
     else
     {
-        u32 len = AVAL(buffer, u32, offset);
-        u8* msgBuf = ZeldaArena_Malloc(len - 8);
-        bcopy(buffer + offset + 16, msgBuf, len - 16);
-
-        en->messagesDataOffset = (u32)msgBuf;
+        u8* msgBuf = NULL;
+        u32 sectionLen = AVAL(buffer, u32, offset);
         en->numLanguages = AVAL(buffer, u32, offset + 8); 
-        en->numMessages = AVAL(buffer, u32, offset + 12);         
+        en->numMessages = AVAL(buffer, u32, offset + 12); 
 
-        offset += len;
+        u8* dataStart = buffer + offset + 16;
+
+        if (en->numMessages != 0)
+        {
+            int currentLang = NpcM_GetLanguage();
+            
+            if (currentLang >= en->numLanguages)
+                currentLang = 0;
+
+            if (en->numLanguages == 1)
+            {
+                // Single language: copy all data as-is
+                u32 dataSize = sectionLen - 16;
+                msgBuf = ZeldaArena_Malloc(dataSize);
+                bcopy(dataStart, msgBuf, dataSize);
+            }
+            else
+            {
+                // Multiple languages: copy only the data for that language
+                u32 headerSize = en->numMessages * sizeof(InternalMsgEntry);
+                u32 langDataOffset = currentLang * headerSize;                
+
+                InternalMsgEntry* langHeaders = (InternalMsgEntry*)(dataStart + langDataOffset);
+                InternalMsgEntry* firstMsg = &langHeaders[0];
+                InternalMsgEntry* lastMsg = &langHeaders[en->numMessages - 1];
+                
+                u32 msgDataSize = (lastMsg->offset + lastMsg->msgLen) - firstMsg->offset;
+                u32 allocLen = headerSize + msgDataSize;
+
+                msgBuf = ZeldaArena_Malloc(allocLen);
+
+                // Copy headers
+                bcopy(langHeaders, msgBuf, headerSize);
+
+                // Copy message data
+                u8* srcMsgData = dataStart + firstMsg->offset;
+                bcopy(srcMsgData, msgBuf + headerSize, msgDataSize);
+
+                // Adjust header offsets to account for new layout
+                u32 offsetAdjustment = firstMsg->offset - headerSize;
+                InternalMsgEntry* newHeaders = (InternalMsgEntry*)msgBuf;
+
+                for (int i = 0; i < en->numMessages; i++)
+                    newHeaders[i].offset -= offsetAdjustment;
+            }
+            
+            en->messagesDataOffset = (u32)msgBuf;    
+        }      
+
+        offset += sectionLen;
     }
 
     SectionLoad sLoadList[] = 

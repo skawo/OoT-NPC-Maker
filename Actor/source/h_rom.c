@@ -188,6 +188,9 @@ void Message_Overwrite(NpcMaker* en, PlayState* playState, s16 msgId)
 
 void Message_Get(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer)
 {
+    if (!en->messagesDataOffset)
+        return;
+
     InternalMsgEntry msgdata = Data_GetCustomMessage(en, playState, msgId);
 
     if (en->getSettingsFromRAMObject)
@@ -198,6 +201,9 @@ void Message_Get(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer)
 
 void* Message_GetMessageRAMAddr(NpcMaker* en, PlayState* playState, s16 msgId)
 {
+    if (!en->messagesDataOffset)
+        return NULL;
+
     InternalMsgEntry msgdata = Data_GetCustomMessage(en, playState, msgId);
     void* ptr = 0;
     
