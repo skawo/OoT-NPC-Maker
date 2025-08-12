@@ -950,7 +950,7 @@ namespace NPC_Maker
                             foreach (NPCEntry entry in EditedFile.Entries)
                                 entry.Localization.RemoveAll(x => x.Language == pick.SelectedOption);
 
-                            Combo_Language.Items.RemoveAt(Combo_Language.SelectedIndex);
+                            Combo_Language.Items.Remove(pick.SelectedOption);
 
                             ReloadAllFonts();
                             Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
