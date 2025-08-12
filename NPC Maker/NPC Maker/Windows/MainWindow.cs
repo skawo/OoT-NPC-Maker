@@ -39,7 +39,7 @@ namespace NPC_Maker
         private Common.SavedMsgPreviewData lastPreviewData;
         private Common.SavedMsgPreviewData lastPreviewDataOrig;
 
-        private Dictionary<string,float[]> fontsWidths = new Dictionary<string, float[]>();
+        private Dictionary<string, float[]> fontsWidths = new Dictionary<string, float[]>();
         private Dictionary<string, byte[]> fonts = new Dictionary<string, byte[]>();
 
         public MainWindow(string FilePath = "")
@@ -605,19 +605,24 @@ namespace NPC_Maker
 
             #region Messages
 
+            Combo_Language.SelectedIndexChanged -= Combo_Language_SelectedIndexChanged;
             MessagesGrid.SelectionChanged -= MessagesGrid_SelectionChanged;
             MessagesGrid.Rows.Clear();
 
             List<MessageEntry> MessageList = SelectedEntry.Messages;
+            int LocalizationIndex = SelectedEntry.Localization.FindIndex(x => x.Language == Combo_Language.Text);
 
-            if (Combo_Language.SelectedIndex != 0)
-                MessageList = SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages;
+            if (Combo_Language.SelectedIndex != 0 && LocalizationIndex != -1)
+                MessageList = SelectedEntry.Localization[LocalizationIndex].Messages;
+            else
+                Combo_Language.SelectedIndex = 0;
 
             foreach (MessageEntry Entry in MessageList)
                 MessagesGrid.Rows.Add(new object[] { Entry.Name });
 
             MessagesGrid_SelectionChanged(MessagesGrid, null);
             MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
+            Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
 
             #endregion
 
@@ -873,6 +878,91 @@ namespace NPC_Maker
             }
 
             //InsertDataToEditor();
+        }
+
+        private void addNewLocalizationToolClick(object sender, EventArgs e)
+        {
+            if (EditedFile != null)
+            {
+                string Language = "";
+                DialogResult DR = InputBox.ShowInputDialog("Language name?", ref Language);
+
+                if (DR != DialogResult.OK)
+                    return;
+
+                if (EditedFile.Languages.Contains(Language) || Language == Dicts.DefaultLanguage)
+                {
+                    MessageBox.Show("Language already exists.");
+                    return;
+                }
+
+                EditedFile.Languages.Add(Language);
+                Combo_Language.Items.Add(Language);
+
+                DialogResult Res = MessageBox.Show("Fill all actors with copies of the messages?", "Filling", MessageBoxButtons.YesNo);
+
+                if (Res == DialogResult.Yes)
+                {
+                    foreach (NPCEntry entry in EditedFile.Entries)
+                    {
+                        LocalizationEntry newEntry = new LocalizationEntry();
+                        newEntry.Language = Language;
+
+                        foreach (MessageEntry me in entry.Messages)
+                            newEntry.Messages.Add(Helpers.Clone<MessageEntry>(me));
+
+                        entry.Localization.Add(newEntry);
+                    }
+                }
+
+                ReloadAllFonts();
+                Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
+
+            }
+        }
+
+        private void removeLocalizationToolClick(object sender, EventArgs e)
+        {
+            if (EditedFile == null)
+                return;
+
+            if (EditedFile.Languages.Count == 0)
+            {
+                MessageBox.Show("There are no localizations.");
+                return;
+            }
+
+            Windows.ComboPicker pick = new Windows.ComboPicker(EditedFile.Languages, "Which language?", "Language selection");
+
+            try
+            {
+                if (pick.ShowDialog() == DialogResult.OK)
+                {
+
+                    if (EditedFile != null)
+                    {
+                        DialogResult Res = MessageBox.Show("Are you sure? All messages of that language will be removed.", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+                        if (Res == DialogResult.Yes)
+                        {
+                            EditedFile.Languages.Remove(pick.SelectedOption);
+
+                            foreach (NPCEntry entry in EditedFile.Entries)
+                                entry.Localization.RemoveAll(x => x.Language == pick.SelectedOption);
+
+                            Combo_Language.Items.RemoveAt(Combo_Language.SelectedIndex);
+
+                            ReloadAllFonts();
+                            Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
+                            Combo_Language.SelectedIndex = 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         private void FileMenu_Exit_Click(object sender, EventArgs e)
@@ -1182,18 +1272,22 @@ namespace NPC_Maker
 
                     foreach (NPCEntry ent in EditedFile.Entries)
                     {
-                        for (int i = 0; i < ent.Messages.Count; i++)
+                        if (ent.Localization.FindIndex(x => x.Language == SelectedLanguage) != -1)
                         {
-                            byte[] msgData = ent.Messages[i].ConvertTextData(ent.NPCName, Dicts.DefaultLanguage, false).ToArray();
-                            ZeldaMessage.MessagePreview pp = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgData);
+                            for (int i = 0; i < ent.Messages.Count; i++)
+                            {
+                                byte[] msgData = ent.Messages[i].ConvertTextData(ent.NPCName, Dicts.DefaultLanguage, false).ToArray();
+                                ZeldaMessage.MessagePreview pp = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgData);
 
+                                byte[] msgDataLoc = ent.Localization[SelectedLangIndex].Messages[i].ConvertTextData(ent.NPCName, SelectedLanguage, false).ToArray();
+                                ZeldaMessage.MessagePreview pp2 = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgDataLoc);
 
-                            byte[] msgDataLoc = ent.Localization[SelectedLangIndex].Messages[i].ConvertTextData(ent.NPCName, SelectedLanguage, false).ToArray();
-                            ZeldaMessage.MessagePreview pp2 = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgDataLoc);
-
-                            if (pp.MessageCount != pp2.MessageCount)
-                                report += $"{ent.NPCName}, {ent.Messages[i].Name} {pp.MessageCount} vs {pp2.MessageCount}" + Environment.NewLine;
+                                if (pp.MessageCount != pp2.MessageCount)
+                                    report += $"{ent.NPCName}, {ent.Messages[i].Name} {pp.MessageCount} vs {pp2.MessageCount}{Environment.NewLine}";
+                            }
                         }
+                        else
+                            report += $"{ent.NPCName} does not contain this language.{Environment.NewLine}";
                     }
                 }
 
@@ -1253,18 +1347,6 @@ namespace NPC_Maker
                             else
                             {
                                 EditedFile.Languages.Add(SelectedLanguage);
-
-                                foreach (NPCEntry entry in EditedFile.Entries)
-                                {
-                                    LocalizationEntry newlocEntry = new LocalizationEntry();
-                                    newlocEntry.Language = SelectedLanguage;
-
-                                    foreach (var msg in entry.Messages)
-                                        newlocEntry.Messages.Add(Helpers.Clone<MessageEntry>(msg));
-
-                                    entry.Localization.Add(newlocEntry);
-                                    IndexInCur = EditedFile.Languages.Count - 1;
-                                }
                             }
 
                             DialogResult y2aRes = DialogResult.None;
@@ -1277,6 +1359,26 @@ namespace NPC_Maker
                                     continue;
 
                                 NPCEntry ImportedEntry = LocalizationFile.Entries[importIndex];
+
+                                if (ImportedEntry.Localization.FindIndex(x => x.Language == SelectedLanguage) == -1)
+                                    continue;
+                                else if (SelectedLanguage != Dicts.DefaultLanguage)
+                                {
+                                    IndexInCur = entry.Localization.FindIndex(x => x.Language == SelectedLanguage);
+
+                                    if (IndexInCur == -1)
+                                    {
+                                        LocalizationEntry newlocEntry = new LocalizationEntry();
+                                        newlocEntry.Language = SelectedLanguage;
+
+                                        foreach (var msg in entry.Messages)
+                                            newlocEntry.Messages.Add(Helpers.Clone<MessageEntry>(msg));
+
+                                        entry.Localization.Add(newlocEntry);
+                                        IndexInCur = entry.Localization.Count - 1;
+                                    }
+                                }
+
                                 LocalizationEntry newLocalization = new LocalizationEntry();
                                 newLocalization.Language = SelectedLanguage;
 
@@ -3129,60 +3231,15 @@ namespace NPC_Maker
             }
         }
 
-        private void Btn_AddNewLanguage_Click(object sender, EventArgs e)
-        {
-            if (EditedFile != null)
-            {
-                string Language = "";
-                DialogResult DR = InputBox.ShowInputDialog("Language name?", ref Language);
-
-                if (DR != DialogResult.OK)
-                    return;
-
-                if (EditedFile.Languages.Contains(Language) || Language == Dicts.DefaultLanguage)
-                {
-                    MessageBox.Show("Language already exists.");
-                    return;
-                }
-
-                EditedFile.Languages.Add(Language);
-                Combo_Language.Items.Add(Language);
-
-                foreach (NPCEntry entry in EditedFile.Entries)
-                {
-                    LocalizationEntry newEntry = new LocalizationEntry();
-                    newEntry.Language = Language;
-
-                    foreach (MessageEntry me in entry.Messages)
-                        newEntry.Messages.Add(Helpers.Clone<MessageEntry>(me));
-
-                    entry.Localization.Add(newEntry);
-                }
-
-                ReloadAllFonts();
-                Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
-            }
-        }
-
         private void Btn_RemoveLanguage_Click(object sender, EventArgs e)
         {
-            if (EditedFile != null && Combo_Language.SelectedIndex != 0)
+            if (SelectedEntry != null && Combo_Language.SelectedIndex != 0)
             {
-                DialogResult Res = MessageBox.Show("Are you sure? All messages of that language will be removed.", "Confirmation", MessageBoxButtons.YesNoCancel);
+                DialogResult Res = MessageBox.Show("Are you sure? All messages of that language within this actor will be removed.", "Confirmation", MessageBoxButtons.YesNo);
 
                 if (Res == DialogResult.Yes)
                 {
-                    EditedFile.Languages.Remove(Combo_Language.Text);
-
-                    foreach (NPCEntry entry in EditedFile.Entries)
-                    {
-                        entry.Localization.RemoveAll(x => x.Language == Combo_Language.Text);
-                    }
-
-                    Combo_Language.Items.RemoveAt(Combo_Language.SelectedIndex);
-
-                    ReloadAllFonts();
-                    Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
+                    SelectedEntry.Localization.RemoveAll(x => x.Language == Combo_Language.Text);
                     Combo_Language.SelectedIndex = 0;
                 }
             }
@@ -3190,11 +3247,41 @@ namespace NPC_Maker
 
         private void Combo_Language_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (SelectedEntry != null)
+            {
+                string SelLang = Combo_Language.Text;
+
+                if (SelLang != Dicts.DefaultLanguage)
+                {
+                    if (SelectedEntry.Localization.FindIndex(x => x.Language == SelLang) == -1)
+                    {
+                        DialogResult Res = MessageBox.Show("This actor doesn't contain this language. Create it?", "Confirmation", MessageBoxButtons.YesNo);
+
+                        if (Res == DialogResult.Yes)
+                        {
+                            LocalizationEntry newEntry = new LocalizationEntry();
+                            newEntry.Language = SelLang;
+
+                            foreach (MessageEntry me in SelectedEntry.Messages)
+                                newEntry.Messages.Add(Helpers.Clone<MessageEntry>(me));
+
+                            SelectedEntry.Localization.Add(newEntry);
+                        }
+                        else
+                        {
+                            Combo_Language.SelectedIndex = 0;
+                            return;
+                        }
+                    }
+                }
+            }
+            else
+                return;
+
             int curSelMsg = 0;
 
             lastPreviewData = null;
             lastPreviewDataOrig = null;
-
 
             if (MessagesGrid.SelectedRows.Count != 0)
                 curSelMsg = MessagesGrid.SelectedRows[0].Index;
@@ -3328,6 +3415,21 @@ namespace NPC_Maker
                 p.BackColor = Color.White;
         }
 
+        private List<MessageEntry> GetLanguageMessageList(NPCEntry entry, string Language)
+        {
+            List<MessageEntry> MessageList = entry.Messages;
+
+            if (Language != Dicts.DefaultLanguage)
+            {
+                int LocalizationIndex = entry.Localization.FindIndex(x => x.Language == Language);
+
+                if (LocalizationIndex != -1)
+                    MessageList = entry.Localization[LocalizationIndex].Messages;
+            }
+
+            return MessageList;
+        }
+
         private void MessagesGrid_SelectionChanged(object sender, EventArgs e)
         {
             if (SelectedEntry == null)
@@ -3357,11 +3459,7 @@ namespace NPC_Maker
                 if (index >= MessagesGrid.RowCount)
                     index = MessagesGrid.RowCount - 1;
 
-
-                List<MessageEntry> MessageList = SelectedEntry.Messages;
-
-                if (Combo_Language.SelectedIndex != 0)
-                    MessageList = SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages;
+                List<MessageEntry> MessageList = GetLanguageMessageList(SelectedEntry, Combo_Language.Text);
 
                 MessageEntry Entry = MessageList[index];
 
@@ -3553,10 +3651,7 @@ namespace NPC_Maker
                 PreviewSplitContainer.Panel1Collapsed = true;
             }
 
-            List<MessageEntry> MessageList = SelectedEntry.Messages;
-
-            if (Combo_Language.SelectedIndex != 0)
-                MessageList = SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages;
+            List<MessageEntry> MessageList = GetLanguageMessageList(SelectedEntry, Combo_Language.Text);
 
             MessageEntry Entry = MessageList[MessagesGrid.SelectedRows[0].Index];
             Entry.MessageText = MsgText.Text;
@@ -3771,10 +3866,7 @@ namespace NPC_Maker
             {
                 int MsgRowIndex = 0;
 
-                List<MessageEntry> messageList = n.Messages;
-
-                if (Combo_Language.SelectedIndex != 0)
-                    messageList = n.Localization[Combo_Language.SelectedIndex - 1].Messages;
+                List<MessageEntry> messageList = GetLanguageMessageList(n, Combo_Language.Text);
 
                 foreach (MessageEntry msg in messageList)
                 {
@@ -4279,9 +4371,6 @@ namespace NPC_Maker
                 Button_CCompile_Click(null, null);
             }
         }
-
-
-
 
         #endregion
     }

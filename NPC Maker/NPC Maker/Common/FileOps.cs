@@ -832,22 +832,35 @@ namespace NPC_Maker
                         #region Messages
 
                         List<byte> Header = new List<byte>();
+                        List<byte> DefaultHeader = new List<byte>();
                         List<byte> MsgData = new List<byte>();
 
                         LocalizationEntry def = new LocalizationEntry() { Language = Dicts.DefaultLanguage, Messages = Entry.Messages };
-
                         List<LocalizationEntry> locales = new List<LocalizationEntry>() { def };
-                        locales.AddRange(Entry.Localization);
 
-                        int Count = 0;
+                        foreach (string language in Data.Languages)
+                        {
+                            int LanguageIndex = Entry.Localization.FindIndex(x => x.Language == language);
 
-                        foreach (var l in locales)
-                            Count += l.Messages.Count;
+                            if (LanguageIndex != -1)
+                                locales.Add(new LocalizationEntry() { Language = language, Messages = Entry.Localization[LanguageIndex].Messages });
+                            else
+                                locales.Add(new LocalizationEntry() { Language = language, Messages = null });
+                        }
 
+                        int Count = Entry.Messages.Count * locales.Count;
                         int MsgOffset = 8 * Count;
 
                         foreach (LocalizationEntry loc in locales)
                         {
+                            bool isDefault = (loc.Language == Dicts.DefaultLanguage);
+                            
+                            if (loc.Messages == null)
+                            {
+                                Header = Header.Concat(DefaultHeader).ToList();
+                                continue;
+                            }
+
                             foreach (MessageEntry Msg in loc.Messages)
                             {
                                 List<byte> Message = Msg.ConvertTextData(Entry.NPCName, loc.Language, !CLIMode);
@@ -872,6 +885,14 @@ namespace NPC_Maker
                                         ParseErrors.Add(Entry.NPCName);
                                 }
 
+                                if (isDefault)
+                                {
+                                    DefaultHeader.AddRangeBigEndian(MsgOffset);
+                                    DefaultHeader.Add(Msg.GetMessageTypePos());
+                                    Helpers.Ensure2ByteAlign(DefaultHeader);
+                                    DefaultHeader.AddRangeBigEndian((UInt16)Message.Count);
+                                }    
+
                                 Header.AddRangeBigEndian(MsgOffset);
                                 Header.Add(Msg.GetMessageTypePos());
                                 Helpers.Ensure2ByteAlign(Header);
@@ -883,7 +904,7 @@ namespace NPC_Maker
 
                         EntryBytes.AddRangeBigEndian(16 + Header.Count + MsgData.Count);
                         EntryBytes.AddRangeBigEndian(0);
-                        EntryBytes.AddRangeBigEndian(Entry.Localization.Count + 1);
+                        EntryBytes.AddRangeBigEndian(Data.Languages.Count + 1);
                         EntryBytes.AddRangeBigEndian(Entry.Messages.Count);
                         EntryBytes.AddRange(Header);
                         EntryBytes.AddRange(MsgData);

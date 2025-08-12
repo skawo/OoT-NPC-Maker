@@ -261,7 +261,6 @@
             this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
             this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
             this.Btn_RemoveLanguage = new System.Windows.Forms.Button();
-            this.Btn_AddNewLanguage = new System.Windows.Forms.Button();
             this.Combo_Language = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -340,6 +339,9 @@
             this.renameCurrentScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.globalCHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editGlobalHeaderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.languagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importLocalizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkDefinitionValidityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -3381,7 +3383,6 @@
             this.Tab4_Messages.Controls.Add(this.chkBox_ShowDefaultLanguagePreview);
             this.Tab4_Messages.Controls.Add(this.SplitMsgContainer);
             this.Tab4_Messages.Controls.Add(this.Btn_RemoveLanguage);
-            this.Tab4_Messages.Controls.Add(this.Btn_AddNewLanguage);
             this.Tab4_Messages.Controls.Add(this.Combo_Language);
             this.Tab4_Messages.Controls.Add(this.label4);
             this.Tab4_Messages.Controls.Add(this.label6);
@@ -3411,12 +3412,12 @@
             this.chkBox_ShowDefaultLanguagePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkBox_ShowDefaultLanguagePreview.AutoSize = true;
-            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(584, 29);
+            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(539, 29);
             this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
-            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(175, 17);
+            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(183, 17);
             this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
             this.chkBox_ShowDefaultLanguagePreview.Tag = "";
-            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default language preview";
+            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default localization preview";
             this.chkBox_ShowDefaultLanguagePreview.UseVisualStyleBackColor = true;
             this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.chkBox_ShowDefaultLanguagePreview_CheckedChanged);
             // 
@@ -3522,23 +3523,13 @@
             // 
             // Btn_RemoveLanguage
             // 
-            this.Btn_RemoveLanguage.Location = new System.Drawing.Point(506, 26);
+            this.Btn_RemoveLanguage.Location = new System.Drawing.Point(460, 26);
             this.Btn_RemoveLanguage.Name = "Btn_RemoveLanguage";
             this.Btn_RemoveLanguage.Size = new System.Drawing.Size(73, 21);
             this.Btn_RemoveLanguage.TabIndex = 90;
             this.Btn_RemoveLanguage.Text = "Remove";
             this.Btn_RemoveLanguage.UseVisualStyleBackColor = true;
             this.Btn_RemoveLanguage.Click += new System.EventHandler(this.Btn_RemoveLanguage_Click);
-            // 
-            // Btn_AddNewLanguage
-            // 
-            this.Btn_AddNewLanguage.Location = new System.Drawing.Point(427, 26);
-            this.Btn_AddNewLanguage.Name = "Btn_AddNewLanguage";
-            this.Btn_AddNewLanguage.Size = new System.Drawing.Size(73, 21);
-            this.Btn_AddNewLanguage.TabIndex = 89;
-            this.Btn_AddNewLanguage.Text = "Add new";
-            this.Btn_AddNewLanguage.UseVisualStyleBackColor = true;
-            this.Btn_AddNewLanguage.Click += new System.EventHandler(this.Btn_AddNewLanguage_Click);
             // 
             // Combo_Language
             // 
@@ -3552,9 +3543,9 @@
             "None (White text)",
             "None (Black text)",
             "Credits"});
-            this.Combo_Language.Location = new System.Drawing.Point(256, 27);
+            this.Combo_Language.Location = new System.Drawing.Point(272, 27);
             this.Combo_Language.Name = "Combo_Language";
-            this.Combo_Language.Size = new System.Drawing.Size(165, 21);
+            this.Combo_Language.Size = new System.Drawing.Size(182, 21);
             this.Combo_Language.TabIndex = 88;
             this.Combo_Language.Tag = "LANGUAGE";
             this.Combo_Language.SelectedIndexChanged += new System.EventHandler(this.Combo_Language_SelectedIndexChanged);
@@ -3564,9 +3555,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(200, 30);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(58, 13);
+            this.label4.Size = new System.Drawing.Size(66, 13);
             this.label4.TabIndex = 87;
-            this.label4.Text = "Language:";
+            this.label4.Text = "Localization:";
             // 
             // label6
             // 
@@ -4331,10 +4322,11 @@
             this.deleteCurrentScriptToolStripMenuItem,
             this.renameCurrentScriptToolStripMenuItem,
             this.globalCHeaderToolStripMenuItem,
-            this.editGlobalHeaderToolStripMenuItem});
+            this.editGlobalHeaderToolStripMenuItem,
+            this.languagesToolStripMenuItem});
             this.scriptsToolStripMenuItem.Name = "scriptsToolStripMenuItem";
-            this.scriptsToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.scriptsToolStripMenuItem.Text = "Scripts";
+            this.scriptsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.scriptsToolStripMenuItem.Text = "Project";
             // 
             // addNewScriptToolStripMenuItem
             // 
@@ -4370,6 +4362,29 @@
             this.editGlobalHeaderToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.editGlobalHeaderToolStripMenuItem.Text = "Global headers";
             this.editGlobalHeaderToolStripMenuItem.Click += new System.EventHandler(this.EditGlobalHeaderToolStripMenuItem_Click);
+            // 
+            // languagesToolStripMenuItem
+            // 
+            this.languagesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addNewToolStripMenuItem,
+            this.removeToolStripMenuItem});
+            this.languagesToolStripMenuItem.Name = "languagesToolStripMenuItem";
+            this.languagesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.languagesToolStripMenuItem.Text = "Localizations";
+            // 
+            // addNewToolStripMenuItem
+            // 
+            this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addNewToolStripMenuItem.Text = "Add new";
+            this.addNewToolStripMenuItem.Click += new System.EventHandler(this.addNewLocalizationToolClick);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeLocalizationToolClick);
             // 
             // optionsToolStripMenuItem
             // 
@@ -4959,7 +4974,6 @@
         private System.Windows.Forms.SplitContainer SplitPanel;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Btn_RemoveLanguage;
-        private System.Windows.Forms.Button Btn_AddNewLanguage;
         private System.Windows.Forms.ComboBox Combo_Language;
         private System.Windows.Forms.SplitContainer SplitMsgContainer;
         private FCTB_Mono MsgTextDefault;
@@ -4999,6 +5013,9 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn ExtraDlists_ShowType;
         private System.Windows.Forms.ToolStripMenuItem checkDefinitionValidityToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkLocalizationConsistencyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem languagesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addNewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
     }
 }
 
