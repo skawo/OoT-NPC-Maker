@@ -3740,8 +3740,13 @@ namespace NPC_Maker
 
             SelectedEntry.Messages.Insert(RowToInsert, new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
 
-            for (int i = 0; i < EditedFile.Languages.Count(); i++)
-                SelectedEntry.Localization[i].Messages.Insert(RowToInsert, new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
+            foreach (string language in EditedFile.Languages)
+            {
+                int locIndex = SelectedEntry.Localization.FindIndex(x => x.Language == language);
+
+                if (locIndex != -1)
+                    SelectedEntry.Localization[locIndex].Messages.Insert(RowToInsert, new MessageEntry() { Name = Title, MessageText = "", Position = 0, Type = 0 });
+            }
 
             MessagesGrid.Rows.Insert(RowToInsert, new object[] { Title });
 
@@ -3761,6 +3766,10 @@ namespace NPC_Maker
 
             MessagesGrid.Rows.RemoveAt(index);
             SelectedEntry.Messages.RemoveAll(x => x.Name == Name);
+
+            foreach (var loc in SelectedEntry.Localization)
+                loc.Messages.RemoveAll(x => x.Name == Name);
+
         }
 
         private void Btn_MsgRename_Click(object sender, EventArgs e)
