@@ -89,6 +89,23 @@ namespace NPC_Maker
             return bmpOut;
         }
 
+        public static void DrawImageSourceCopySafe(this Bitmap targetBmp, Bitmap source, int x, int y)
+        {
+            int width = Math.Min(source.Width, targetBmp.Width - x);
+            int height = Math.Min(source.Height, targetBmp.Height - y);
+
+            if (width <= 0 || height <= 0) return;
+
+            for (int row = 0; row < height; row++)
+            {
+                for (int col = 0; col < width; col++)
+                {
+                    Color sourcePixel = source.GetPixel(col, row);
+                    targetBmp.SetPixel(x + col, y + row, sourcePixel);
+                }
+            }
+        }
+
         public static Bitmap ResizeImageKeepAspectRatio(this Bitmap originalImage, int maxWidth, int maxHeight)
         {
             if (maxWidth == originalImage.Width && maxHeight == originalImage.Height)

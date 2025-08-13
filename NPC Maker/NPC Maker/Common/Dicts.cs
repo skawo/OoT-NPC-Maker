@@ -289,6 +289,22 @@ namespace NPC_Maker
             }
         }
 
+        public static void ReoadSpellcheckDicts(List<string> Languages)
+        {
+            Program.dictionary = new Dictionary<string, WeCantSpell.Hunspell.WordList>();
+
+            if (File.Exists("dict.dic"))
+                Program.dictionary.Add(Dicts.DefaultLanguage, WeCantSpell.Hunspell.WordList.CreateFromFiles("dict.dic"));
+            else if (File.Exists("Default.dic"))
+                Program.dictionary.Add(Dicts.DefaultLanguage, WeCantSpell.Hunspell.WordList.CreateFromFiles("Default.dic"));
+
+            foreach (string Lang in Languages)
+            {
+                if (File.Exists($"{Lang}.dic"))
+                    Program.dictionary.Add(Lang, WeCantSpell.Hunspell.WordList.CreateFromFiles($"{Lang}.dic"));
+            }
+        }
+
         public static void ReloadDict(Lists.DictType Type, bool allowFail = false)
         {
             if (Type == DictType.MsgTagOverride)

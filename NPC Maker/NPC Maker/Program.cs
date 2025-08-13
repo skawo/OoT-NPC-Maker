@@ -33,7 +33,7 @@ namespace NPC_Maker
         public static string CompileMonoErrors = "";
         public static DateTime CompileStartTime;
 
-        public static WeCantSpell.Hunspell.WordList dictionary;
+        public static Dictionary<string, WeCantSpell.Hunspell.WordList> dictionary;
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
@@ -74,12 +74,6 @@ namespace NPC_Maker
 
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
 
-            if (File.Exists("dict.dic"))
-                dictionary = WeCantSpell.Hunspell.WordList.CreateFromFiles("dict.dic");
-            else
-                dictionary = WeCantSpell.Hunspell.WordList.CreateFromWords(new List<string>() { });
-
-
             CCode.CreateCTempDirectory("", "", false);
 
             if (!Directory.Exists(ScriptCachePath))
@@ -89,6 +83,7 @@ namespace NPC_Maker
                 Directory.CreateDirectory(CCachePath);
 
             Dicts.LoadDicts();
+            Dicts.ReoadSpellcheckDicts(new List<string>());
 
 
             if (args.Length == 0)

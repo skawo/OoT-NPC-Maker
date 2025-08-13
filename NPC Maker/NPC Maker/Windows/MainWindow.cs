@@ -210,6 +210,7 @@ namespace NPC_Maker
 
             ReloadAllFonts();
             Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
+            Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
 
             Combo_Language.SelectedIndex = 0;
             Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
@@ -917,6 +918,7 @@ namespace NPC_Maker
 
                 ReloadAllFonts();
                 Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
+                Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
 
             }
         }
@@ -954,6 +956,7 @@ namespace NPC_Maker
 
                             ReloadAllFonts();
                             Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
+                            Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
                             Combo_Language.SelectedIndex = 0;
                         }
                     }
@@ -3491,13 +3494,17 @@ namespace NPC_Maker
             box.ToolTip.RemoveAll();
 
             string hoverWord = box.SelectedText;
+            string Language = Combo_Language.Text;
 
-            if (!Program.dictionary.Check(hoverWord))
+            if (Program.dictionary.ContainsKey(Language))
             {
-                List<string> sugg = Program.dictionary.Suggest(hoverWord).ToList();
+                if (!Program.dictionary[Language].Check(hoverWord))
+                {
+                    List<string> sugg = Program.dictionary[Language].Suggest(hoverWord).ToList();
 
-                box.ToolTip.SetToolTip(box, String.Join(Environment.NewLine, sugg));
+                    box.ToolTip.SetToolTip(box, String.Join(Environment.NewLine, sugg));
 
+                }
             }
         }
 
@@ -3517,8 +3524,13 @@ namespace NPC_Maker
             {
                 try
                 {
-                    if (!Program.dictionary.Check(s))
-                        r.SetStyle(SyntaxHighlighter.UnderlineStyle, @"\b" + s + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                    string Language = Combo_Language.Text;
+
+                    if (Program.dictionary.ContainsKey(Language))
+                    {
+                        if (!Program.dictionary[Language].Check(s))
+                            r.SetStyle(SyntaxHighlighter.UnderlineStyle, @"\b" + s + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                    }
                 }
                 catch (Exception)
                 {
@@ -3595,9 +3607,15 @@ namespace NPC_Maker
                         Entry.Type != savedPreviewData.Type ||
                         !mp.Message[i].SequenceEqual(savedPreviewData.MessageArrays[i]))
                     {
-                        grfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
                         Bitmap box = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
-                        grfx.DrawImage(box, 0, box.Height * i);
+
+                        if (Program.IsRunningUnderMono)
+                            bmp.DrawImageSourceCopySafe(box, 0, box.Height * i);
+                        else
+                        {
+                            grfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                            grfx.DrawImage(box, 0, box.Height * i);
+                        }
                     }
                 }
             }
