@@ -407,7 +407,19 @@ namespace NPC_Maker
         public static bool[] GetCacheStatus(NPCFile Data, bool CLIMode = false)
         {
             string JsonFileName = Program.JsonPath.FilenameFromPath();
-            string gh = String.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text));
+
+            string extHeaderPath = "";
+
+            try
+            {
+                extHeaderPath = Data.GetExtHeader();
+            }
+            catch (Exception)
+            {
+
+            }
+
+            string gh = String.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text)) + Environment.NewLine + extHeaderPath;
             string dicts = String.Join(
                                          JsonConvert.SerializeObject(Dicts.Actors),
                                          JsonConvert.SerializeObject(Dicts.ObjectIDs),
@@ -502,7 +514,6 @@ namespace NPC_Maker
                             CodeString = CCode.ReplaceGameVersionInclude(CodeString);
                             string hash = Helpers.GetBase64Hash(s, CodeString);
 
-
                             string cachedAddrsFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntryID}_funcsaddrs_" + hash);
                             string cachedcodeFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntryID}_code_" + hash);
 
@@ -540,7 +551,7 @@ namespace NPC_Maker
 
                             foreach (ScriptEntry Scr in NonEmptyEntries)
                             {
-                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, BaseDefines, Data.GlobalHeaders);
+                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, BaseDefines);
 
                                 hash = Helpers.GetBase64Hash(s, Scr.Text);
                                 string cachedFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntryID}_script{scriptNum}_" + hash);
@@ -1165,7 +1176,7 @@ namespace NPC_Maker
 
                             foreach (ScriptEntry Scr in NonEmptyEntries)
                             {
-                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, baseDefines, Data.GlobalHeaders);
+                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, baseDefines);
 
                                 string hash = Helpers.GetBase64Hash(s, Scr.Text);
                                 string cachedFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script{scriptNum}_" + hash);

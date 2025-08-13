@@ -4,24 +4,25 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace NPC_Maker.Scripts
 {
     public partial class ScriptParser
     {
         private readonly NPCEntry Entry;
-        private readonly NPCFile File;
+        private readonly NPCFile EditedFile;
         private string ScriptText = "";
         public List<string> RandomLabels { get; set; }
         private BScript outScript;
 
-        public ScriptParser(NPCFile _File, NPCEntry _Entry, string _ScriptText, string baseDefines, List<ScriptEntry> _GlobalHeader)
+        public ScriptParser(NPCFile _File, NPCEntry _Entry, string _ScriptText, string baseDefines)
         {
-            ScriptText = String.Join(Environment.NewLine, _GlobalHeader.Select(x => x.Text).ToArray()) + Environment.NewLine + baseDefines + _ScriptText;
             Entry = _Entry;
-            File = _File;
+            EditedFile = _File;
             RandomLabels = new List<string>();
-            outScript = new BScript();
+            ScriptText = string.Join(Environment.NewLine, 
+                                     EditedFile.GlobalHeaders.Select(x => x.Text).Concat(new[] { baseDefines, _ScriptText }));
         }
 
         public void GetDefines(ref List<string> defines)
@@ -49,133 +50,104 @@ namespace NPC_Maker.Scripts
 
             id = 0;
             defines.AddRange(Entry.Scripts.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Script}{x.Name.Replace(' ', '_')} {id++}").ToList());
-
-            //defines.AddRange(Dicts.Music.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Music}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
-            //defines.AddRange(Dicts.SFXes.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Sfx}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
-            //defines.AddRange(Dicts.Actors.Select(x => $"#{Lists.Keyword_Define} {Lists.Keyword_Actor}{x.Key.Replace(' ', '_')} {x.Value}").ToList());
         }
 
-        private List<string> CalculateExpressions(List<string> Lines, ref BScript outScript, bool allowFail)
+        public BScript ParseScript(string scriptName, bool getBytes)
         {
+            outScript = new BScript { Name = scriptName };
+
+            // Load external header
+            string extHeader = string.Empty;
             try
             {
-                DataTable dt = new DataTable();
-                int idx = Lines.FindIndex(x => x.StartsWith("\"") && x.EndsWith("\""));
-
-                while (idx != -1)
-                {
-                    try
-                    {
-                        Lines[idx] = dt.Compute(Lines[idx].Substring(1, Lines[idx].Length - 2), null).ToString();
-                    }
-                    catch (Exception ex)
-                    {
-                        if (!allowFail)
-                            throw new Exception(ex.Message);
-                    }
-
-                    if (String.IsNullOrWhiteSpace(Lines[idx]))
-                        Lines.RemoveAt(idx);
-
-                    idx = Lines.FindIndex(x => x.StartsWith("\"") && x.EndsWith("\""));
-                }
+                extHeader = EditedFile.GetExtHeader();
             }
-            catch (ParseException pEx)
+            catch (Exception)
             {
-                if (!allowFail)
-                    outScript.ParseErrors.Add(pEx);
-            }
-            catch (Exception ex)
-            {
-                if (!allowFail)
-                    outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing expression " + ex.Message));
+                outScript.ParseErrors.Add(new ParseException("Could not load external header:",
+                    Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, EditedFile.ExtScriptHeaderPath, "{PROJECTPATH}")));
             }
 
-            return Lines;
-        }
-
-        public BScript ParseScript(string ScrName, bool GetBytes)
-        {
-            outScript = new BScript();
-            outScript.Name = ScrName;
-
+            ScriptText += Environment.NewLine + extHeader;
             RegexText(ref ScriptText);
 
-            if (String.IsNullOrWhiteSpace(ScriptText))
+            if (string.IsNullOrWhiteSpace(ScriptText))
                 return outScript;
 
             RandomLabels = new List<string>();
-            List<string> Lines = SplitLines(ScriptText);
 
-            // Split text into lines
-            Lines = SplitLines(ScriptText);
+            // Split text into lines and separate defines
+            List<string> lines = SplitLines(ScriptText);
+            var defineLines = new List<string>();
+            var codeLines = new List<string>();
 
-            // Remove all definitions
-            List<string> defineLines = new List<string>();
-            List<string> newLines = new List<string>();
-
-            foreach (string line in Lines)
+            foreach (string line in lines)
             {
                 if (line.ToUpper().StartsWith($"#{Lists.Keyword_Define}"))
                     defineLines.Add(line);
                 else
-                    newLines.Add(line);
+                    codeLines.Add(line);
             }
 
-            Lines = newLines;
-
+            lines = codeLines;
             GetDefines(ref defineLines);
 
-            //Lines = CalculateExpressions(Lines, ref outScript, true);
+            // Preprocessing pipeline
+            lines = ReplaceTernary(lines, ref outScript);
+            lines = GetAndReplaceProcedures(lines, defineLines, ref outScript);
+            lines = ReplaceDefines(defineLines, lines, ref outScript);
+            lines = ReplaceSwitches(lines, ref outScript);
+            lines = ReplaceElifs(lines, ref outScript);
+            lines = RefactorComplexIfs(lines, ref outScript);
+            lines = ReplaceOrs(lines, ref outScript);
+            lines = ReplaceAnds(lines, ref outScript);
+            lines = ReplaceScriptStartHeres(lines, ref outScript);
 
-            // "Preprocessor"
-            Lines = ReplaceTernary(Lines, ref outScript);
-            Lines = GetAndReplaceProcedures(Lines, defineLines, ref outScript);
-            Lines = ReplaceDefines(defineLines, Lines, ref outScript);
+            CheckLabels(lines);
 
-            Lines = ReplaceSwitches(Lines, ref outScript);
-            Lines = ReplaceElifs(Lines, ref outScript);
-            Lines = RefactorComplexIfs(Lines, ref outScript);
-            Lines = ReplaceOrs(Lines, ref outScript);
-            Lines = ReplaceAnds(Lines, ref outScript);
-            Lines = ReplaceScriptStartHeres(Lines, ref outScript);
-            CheckLabels(Lines);
+            // Parse instructions
+            List<Instruction> instructions = GetInstructions(lines);
 
-            //Lines = CalculateExpressions(Lines, ref outScript, false);
-
-            List<Instruction> Instructions = GetInstructions(Lines);
-
-            // Add a return instruction at the end if one doesn't exist.
-            if (Instructions.Count == 0 ||
-                !(Instructions[Instructions.Count - 1] is InstructionGoto) ||
-                ((Instructions[Instructions.Count - 1] as InstructionGoto).GotoInstr.Name != Lists.Keyword_Label_Return))
+            // Ensure script ends with return instruction
+            if (instructions.Count == 0)
             {
-                Instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
+                instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
+            }
+            else
+            {
+                var lastInstruction = instructions[instructions.Count - 1] as InstructionGoto;
+                if (lastInstruction == null || lastInstruction.GotoInstr.Name != Lists.Keyword_Label_Return)
+                {
+                    instructions.Add(new InstructionGoto(Lists.Keyword_Label_Return));
+                }
             }
 
-#if DEBUG
-            outScript.ScriptDebug = GetOutString(Instructions);
-#endif
+            #if DEBUG
+                outScript.ScriptDebug = GetOutString(instructions);
+            #endif
 
-            List<InstructionLabel> Labels = GetLabelsAndRemove(ref outScript, ref Instructions);
+            List<InstructionLabel> labels = GetLabelsAndRemove(ref outScript, ref instructions);
 
-            // If everything was successful up 'till now, try parsing.
-#if DEBUG
-            if (outScript.ParseErrors.Count == 0)
-#else
-            if (outScript.ParseErrors.Count == 0 && GetBytes == true)
-#endif
+            // Convert to bytes if no errors and requested
+            #if DEBUG
+                        bool shouldConvertToBytes = outScript.ParseErrors.Count == 0;
+            #else
+            bool shouldConvertToBytes = outScript.ParseErrors.Count == 0 && getBytes;
+            #endif
+
+            if (shouldConvertToBytes)
             {
-                outScript.Script = ConvertScriptToBytes(Labels, ref outScript, ref Instructions);
+                outScript.Script = ConvertScriptToBytes(labels, ref outScript, ref instructions);
 
-#if DEBUG
-                //outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
-                //System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
-#endif
+                #if DEBUG
+                        //outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
+                        //System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
+                #endif
             }
 
             return outScript;
         }
+
 
         public static List<string> GetLabels(string ScriptText)
         {
@@ -202,24 +174,18 @@ namespace NPC_Maker.Scripts
 
         private static void RegexText(ref string ScriptText)
         {
-
-            ScriptText = Regex.Replace(ScriptText, @"(\+=|-=|/=|\*=|!=|==|=\+|=-|=/|=!|>=|<=)", m => $" {m.Groups[1].Value} ", RegexOptions.Compiled);    // Separate operators
-
-            ScriptText = Regex.Replace(ScriptText, @"([^><=\-+/*!])(=)([^=\-+/*!><])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled); // Separate single =s
-            ScriptText = Regex.Replace(ScriptText, @"([^=])(<)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled); // Separate single <s
-            ScriptText = Regex.Replace(ScriptText, @"([^=-])(>)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled); // Separate singe >s
-
-
-            ScriptText = Regex.Replace(ScriptText, @"\\\s*\r?\n", "", RegexOptions.Compiled);                                                          // Override line carriage return if preceded by \
-
-            ScriptText = Regex.Replace(ScriptText, @"[(){},\t](?=(?:[^""]*""[^""]*"")*[^""]*$)", " ", RegexOptions.Compiled);
-            // ScriptText = ScriptText.Replace(",", " ").Replace("{", " ").Replace("}", " ").Replace("(", " ").Replace(")", " ");  // Remove ignored characters
-            ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                                                 // Change ;s into linebreaks
-            ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty, RegexOptions.Compiled);                                        // Remove comment blocks
-            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty, RegexOptions.Compiled);                                                       // Remove inline comments
-            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline | RegexOptions.Compiled).TrimEnd();             // Remove empty lines
-            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ", RegexOptions.Compiled);                                                            // Remove double spaces
-            ScriptText = Regex.Replace(ScriptText, $@"{Lists.Keyword_Else} {Lists.Instructions.IF}", $"{Lists.Keyword_Elif}", RegexOptions.Compiled | RegexOptions.IgnoreCase);                                                            // Remove double spaces
+            ScriptText = Regex.Replace(ScriptText, @"(\+=|-=|/=|\*=|!=|==|=\+|=-|=/|=!|>=|<=)", m => $" {m.Groups[1].Value} ", RegexOptions.Compiled);                                  // Separate operators
+            ScriptText = Regex.Replace(ScriptText, @"([^><=\-+/*!])(=)([^=\-+/*!><])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled);     // Separate single =s
+            ScriptText = Regex.Replace(ScriptText, @"([^=])(<)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled);                     // Separate single <s
+            ScriptText = Regex.Replace(ScriptText, @"([^=-])(>)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled);                    // Separate singe >s
+            ScriptText = Regex.Replace(ScriptText, @"\\\s*\r?\n", "", RegexOptions.Compiled);                                                                                           // Override line carriage return if preceded by \
+            ScriptText = Regex.Replace(ScriptText, @"[(){},\t](?=(?:[^""]*""[^""]*"")*[^""]*$)", " ", RegexOptions.Compiled);                                                           // Remove ignored characters
+            ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                                                                                  // Change ;s into linebreaks
+            ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty, RegexOptions.Compiled);                                                                         // Remove comment blocks
+            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty, RegexOptions.Compiled);                                                                                        // Remove inline comments
+            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline | RegexOptions.Compiled).TrimEnd();                                              // Remove empty lines
+            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ", RegexOptions.Compiled);                                                                                             // Remove double spaces
+            ScriptText = Regex.Replace(ScriptText, $@"{Lists.Keyword_Else} {Lists.Instructions.IF}", $"{Lists.Keyword_Elif}", RegexOptions.Compiled | RegexOptions.IgnoreCase);         // Remove double spaces
 
         }
 
@@ -710,32 +676,56 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing AND"));
             }
 
-
             return Lines;
         }
 
         private List<string> ReplaceScriptStartHeres(List<string> Lines, ref BScript outScript)
         {
-            List<string> outputLines = new List<string>();
+            if (Lines == null || Lines.Count == 0)
+                return new List<string>();
+
+            var outputLines = new List<string>(Lines.Count + Lines.Count / 4); // Pre-allocate with estimated capacity
+
+            // Pre-compile patterns for better performance
+            var scriptStartPattern1 = $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE}";
+            var scriptStartPattern2 = $"{Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE}";
+            var labelToVarPattern = $"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VAR} {Lists.Keyword_Label_HERE} ";
+            var labelToVarfPattern = $"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VARF} {Lists.Keyword_Label_HERE} ";
 
             foreach (string line in Lines)
             {
-                string[] splitLine = line.Split(' ');
-                string lineUpper = line.ToUpper().Trim();
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    outputLines.Add(line);
+                    continue;
+                }
 
-                if (lineUpper == $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE}" ||
-                    lineUpper == $"{Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE}")
+                string lineUpperTrimmed = line.ToUpperInvariant().Trim();
+
+                // Handle script start patterns
+                if (lineUpperTrimmed == scriptStartPattern1 || lineUpperTrimmed == scriptStartPattern2)
                 {
                     string newLabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
                     outputLines.Add($"{newLabel}:");
                     outputLines.Add($"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {newLabel}");
                 }
-                else if (splitLine.Length >= 4 && (lineUpper.StartsWith($"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VAR} {Lists.Keyword_Label_HERE} ") ||
-                         lineUpper.StartsWith($"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VARF} {Lists.Keyword_Label_HERE} ")))
+                // Handle label to variable patterns
+                else if (lineUpperTrimmed.StartsWith(labelToVarPattern, StringComparison.Ordinal) ||
+                         lineUpperTrimmed.StartsWith(labelToVarfPattern, StringComparison.Ordinal))
                 {
-                    string newLabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
-                    outputLines.Add($"{newLabel}:");
-                    outputLines.Add($"{Lists.Instructions.SET} {splitLine[1]} {newLabel} {splitLine[3]}");
+                    var splitLine = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (splitLine.Length >= 4)
+                    {
+                        string newLabel = ScriptDataHelpers.GetRandomLabelString(this, 7);
+                        outputLines.Add($"{newLabel}:");
+                        outputLines.Add($"{Lists.Instructions.SET} {splitLine[1]} {newLabel} {splitLine[3]}");
+                    }
+                    else
+                    {
+                        // Malformed line, keep original
+                        outputLines.Add(line);
+                    }
                 }
                 else
                 {
@@ -745,6 +735,7 @@ namespace NPC_Maker.Scripts
 
             return outputLines;
         }
+
 
         // Change Switch Cases into If...Elif...Endif
         private List<string> ReplaceSwitches(List<string> Lines, ref BScript outScript)
@@ -1022,98 +1013,196 @@ namespace NPC_Maker.Scripts
                         .ToArray();
         }
 
-        private List<Instruction> GetInstructions(List<string> Lines)
+        private List<Instruction> GetInstructions(List<string> lines)
         {
-            List<Instruction> Instructions = new List<Instruction>();
+            var instructions = new List<Instruction>();
 
-            int j = Lines.Count();
-
-            for (int i = 0; i < j; i++)
+            for (int i = 0; i < lines.Count; i++)
             {
                 try
                 {
-                    string[] SplitLine = SplitWithQuotes(Lines[i].Trim());
+                    string[] splitLine = SplitWithQuotes(lines[i].Trim());
 
-                    if (SplitLine.Count() == 1 && SplitLine[0].EndsWith(":"))
+                    // Handle labels
+                    if (splitLine.Length == 1 && splitLine[0].EndsWith(":"))
                     {
-                        Instructions.Add(new InstructionLabel(SplitLine[0].TrimEnd(new char[] { ':' })));
+                        instructions.Add(new InstructionLabel(splitLine[0].TrimEnd(':')));
                         continue;
                     }
 
-                    int InstructionID = -1;
-
-                    string instructionUpperCase = SplitLine[0].ToUpper();
+                    // Get instruction type
+                    string instructionUpperCase = splitLine[0].ToUpper();
+                    Lists.Instructions? instructionType = null;
 
                     if (Enum.IsDefined(typeof(Lists.Instructions), instructionUpperCase))
-                        InstructionID = (int)System.Enum.Parse(typeof(Lists.Instructions), instructionUpperCase);
+                        instructionType = (Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), instructionUpperCase);
 
-                    switch (InstructionID)
+                    // Parse instruction based on type
+                    if (instructionType.HasValue)
                     {
-                        case (int)Lists.Instructions.IF:
-                        case (int)Lists.Instructions.WHILE:
-                            Instructions.AddRange(ParseIfWhileInstruction(InstructionID, Entry.EmbeddedOverlayCode, Lines, SplitLine, ref i)); break;
-                        case (int)Lists.Instructions.OCARINA:
-                            Instructions.AddRange(ParseOcarinaInstruction(Lines, SplitLine, ref i)); break;
-                        case (int)Lists.Instructions.TALK:
-                            Instructions.AddRange(ParseTalkInstruction(Lines, SplitLine, ref i)); break;
-                        case (int)Lists.Instructions.FORCE_TALK:
-                            Instructions.AddRange(ParseForceTalkInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.TRADE: Instructions.Add(ParseTradeInstruction(Lines, SplitLine, ref i)); break;
-                        case (int)Lists.Instructions.NOP: Instructions.Add(ParseNopInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.SET: Instructions.Add(ParseSetInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.AWAIT: Instructions.Add(ParseAwaitInstruction(Entry.EmbeddedOverlayCode, SplitLine)); break;
-                        case (int)Lists.Instructions.SHOW_TEXTBOX: Instructions.Add(ParseShowTextboxInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.SHOW_TEXTBOX_SP: Instructions.Add(ParseShowTextboxSPInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.ENABLE_TALKING: Instructions.Add(ParseEnableTalkingInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.CLOSE_TEXTBOX: Instructions.Add(ParseCloseTextboxInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.PLAY: Instructions.Add(ParsePlayInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.SCRIPT: Instructions.Add(ParseScriptInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.GOTO: Instructions.Add(ParseGotoInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.WARP: Instructions.Add(ParseWarpInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.FACE: Instructions.Add(ParseFaceInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.KILL: Instructions.Add(ParseKillInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.SPAWN: Instructions.Add(ParseSpawnInstruction(Lines, SplitLine, ref i)); break;
-                        case (int)Lists.Instructions.PARTICLE: Instructions.Add(ParseParticleInstruction(Lines, SplitLine, ref i)); break;
-                        case (int)Lists.Instructions.ROTATION: Instructions.Add(ParseRotationInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.POSITION: Instructions.Add(ParsePositionInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.SCALE: Instructions.Add(ParseScaleInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.ITEM: Instructions.Add(ParseItemInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.PICKUP: Instructions.Add(ParsePickupInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.RETURN: Instructions.Add(ParseReturnInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.SAVE: Instructions.Add(ParseSaveInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.FADEIN:
-                        case (int)Lists.Instructions.FADEOUT: Instructions.Add(ParseFadeInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.QUAKE: Instructions.Add(ParseQuakeInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.CCALL: Instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, SplitLine)); break;
-                        case (int)Lists.Instructions.GET: Instructions.Add(ParseGetInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.GOTO_VAR: Instructions.Add(ParseGotoVarInstruction(SplitLine)); break;
-                        case (int)Lists.Instructions.STOP: Instructions.Add(ParseStopInstruction(SplitLine)); break;
-                        default:
-                            {
-                                byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(SplitLine[0]);
+                        switch (instructionType.Value)
+                        {
+                            case Lists.Instructions.IF:
+                            case Lists.Instructions.WHILE:
+                                instructions.AddRange(ParseIfWhileInstruction((int)instructionType.Value, Entry.EmbeddedOverlayCode, lines, splitLine, ref i));
+                                break;
 
-                                if (matchesSetRAM != null || Enum.IsDefined(typeof(Lists.SetSubTypes), instructionUpperCase))
-                                {
-                                    List<string> sp = SplitLine.ToList();
-                                    sp.Insert(0, Lists.Instructions.SET.ToString());
-                                    Instructions.Add(ParseSetInstruction(sp.ToArray())); break;
-                                }
-                                else
-                                    outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(SplitLine)); break;
-                            }
+                            case Lists.Instructions.OCARINA:
+                                instructions.AddRange(ParseOcarinaInstruction(lines, splitLine, ref i));
+                                break;
+
+                            case Lists.Instructions.TALK:
+                                instructions.AddRange(ParseTalkInstruction(lines, splitLine, ref i));
+                                break;
+
+                            case Lists.Instructions.FORCE_TALK:
+                                instructions.AddRange(ParseForceTalkInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.TRADE:
+                                instructions.Add(ParseTradeInstruction(lines, splitLine, ref i));
+                                break;
+
+                            case Lists.Instructions.NOP:
+                                instructions.Add(ParseNopInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.SET:
+                                instructions.Add(ParseSetInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.AWAIT:
+                                instructions.Add(ParseAwaitInstruction(Entry.EmbeddedOverlayCode, splitLine));
+                                break;
+
+                            case Lists.Instructions.SHOW_TEXTBOX:
+                                instructions.Add(ParseShowTextboxInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.SHOW_TEXTBOX_SP:
+                                instructions.Add(ParseShowTextboxSPInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.ENABLE_TALKING:
+                                instructions.Add(ParseEnableTalkingInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.CLOSE_TEXTBOX:
+                                instructions.Add(ParseCloseTextboxInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.PLAY:
+                                instructions.Add(ParsePlayInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.SCRIPT:
+                                instructions.Add(ParseScriptInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.GOTO:
+                                instructions.Add(ParseGotoInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.WARP:
+                                instructions.Add(ParseWarpInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.FACE:
+                                instructions.Add(ParseFaceInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.KILL:
+                                instructions.Add(ParseKillInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.SPAWN:
+                                instructions.Add(ParseSpawnInstruction(lines, splitLine, ref i));
+                                break;
+
+                            case Lists.Instructions.PARTICLE:
+                                instructions.Add(ParseParticleInstruction(lines, splitLine, ref i));
+                                break;
+
+                            case Lists.Instructions.ROTATION:
+                                instructions.Add(ParseRotationInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.POSITION:
+                                instructions.Add(ParsePositionInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.SCALE:
+                                instructions.Add(ParseScaleInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.ITEM:
+                                instructions.Add(ParseItemInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.PICKUP:
+                                instructions.Add(ParsePickupInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.RETURN:
+                                instructions.Add(ParseReturnInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.SAVE:
+                                instructions.Add(ParseSaveInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.FADEIN:
+                            case Lists.Instructions.FADEOUT:
+                                instructions.Add(ParseFadeInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.QUAKE:
+                                instructions.Add(ParseQuakeInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.CCALL:
+                                instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, splitLine));
+                                break;
+
+                            case Lists.Instructions.GET:
+                                instructions.Add(ParseGetInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.GOTO_VAR:
+                                instructions.Add(ParseGotoVarInstruction(splitLine));
+                                break;
+
+                            case Lists.Instructions.STOP:
+                                instructions.Add(ParseStopInstruction(splitLine));
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        // Handle unknown instructions - check if it's a SET variant
+                        byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(splitLine[0]);
+
+                        if (matchesSetRAM.HasValue || Enum.IsDefined(typeof(Lists.SetSubTypes), instructionUpperCase))
+                        {
+                            var modifiedSplitLine = new List<string> { Lists.Instructions.SET.ToString() };
+                            modifiedSplitLine.AddRange(splitLine);
+                            instructions.Add(ParseSetInstruction(modifiedSplitLine.ToArray()));
+                        }
+                        else
+                        {
+                            outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(splitLine));
+                        }
                     }
                 }
                 catch (Exception)
                 {
-                    outScript.ParseErrors.Add(ParseException.GeneralError(Lines[i]));
-                    continue;
+                    outScript.ParseErrors.Add(ParseException.GeneralError(lines[i]));
                 }
-
-                j = Lines.Count();
             }
 
-            return Instructions;
+            return instructions;
         }
+
 
         private static List<InstructionLabel> GetLabelsAndRemove(ref BScript outScript, ref List<Instruction> Instructions)
         {

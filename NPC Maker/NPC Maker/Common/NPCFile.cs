@@ -14,6 +14,8 @@ namespace NPC_Maker
         public int Version { get; set; }
         public List<NPCEntry> Entries { get; set; }
         public List<ScriptEntry> GlobalHeaders { get; set; }
+
+        public string ExtScriptHeaderPath { get; set; }
         public bool SpaceFromFont { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
@@ -32,9 +34,21 @@ namespace NPC_Maker
             GlobalHeaders = new List<ScriptEntry>();
             SpaceFromFont = false;
             CHeader = "";
+            ExtScriptHeaderPath = "";
             CHeaderLines = new List<string>();
             GameVersion = Program.Settings.GameVersion;
             Languages = new List<string>();
+        }
+
+        public string GetExtHeader()
+        {
+            string extHeader = "";
+            string extHeaderPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, ExtScriptHeaderPath, "{PROJECTPATH}");
+
+            if (!String.IsNullOrWhiteSpace(extHeaderPath))
+                extHeader = File.ReadAllText(extHeaderPath);
+
+            return extHeader;
         }
     }
 
