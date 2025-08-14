@@ -587,6 +587,7 @@ namespace NPC_Maker
             EndFrame = 0xFF;
             FileStart = -1;
         }
+
         public AnimationEntry(string _Name, string _HeaderName, UInt32 _Address, float _Speed, Int16 _ObjectID, byte _StartFrame, byte _EndFrame, Int32 _FileStart)
         {
             Name = _Name;
@@ -597,6 +598,21 @@ namespace NPC_Maker
             StartFrame = _StartFrame;
             EndFrame = _EndFrame;
             FileStart = _FileStart;
+        }
+
+        public List<byte> ToBytes()
+        {
+            List<byte> outBytes = new List<byte>();
+
+            outBytes.AddRangeBigEndian((UInt32)Address);
+            outBytes.AddRangeBigEndian((UInt32)FileStart);
+            outBytes.AddRangeBigEndian((float)Speed);
+            outBytes.AddRangeBigEndian((UInt16)ObjID);
+            outBytes.Add(StartFrame);
+            outBytes.Add(EndFrame);
+            Helpers.Ensure4ByteAlign(outBytes);
+
+            return outBytes;
         }
     }
 
@@ -626,6 +642,16 @@ namespace NPC_Maker
             ObjectID = _ObjectID;
             FileStart = _FileStart;
         }
+
+        public List<byte> ToBytes()
+        {
+            List<byte> outBytes = new List<byte>();
+            outBytes.AddRangeBigEndian(Address);
+            outBytes.AddRangeBigEndian(FileStart);
+            outBytes.AddRangeBigEndian(ObjectID);
+            Helpers.Ensure4ByteAlign(outBytes);
+            return outBytes;
+        }
     }
 
     public class OutputColorEntry
@@ -648,6 +674,18 @@ namespace NPC_Maker
             R = _R;
             G = _G;
             B = _B;
+        }
+
+        public List<byte> ToBytes()
+        {
+            List<byte> outBytes = new List<byte>();
+
+            outBytes.Add(LimbID);
+            outBytes.Add(R);
+            outBytes.Add(G);
+            outBytes.Add(B);
+            Helpers.Ensure4ByteAlign(outBytes);
+            return outBytes;
         }
     }
 
@@ -705,11 +743,8 @@ namespace NPC_Maker
             return (byte)(Out | Position);
         }
 
-        public List<byte> ConvertTextData(string NPCName, string Language, bool ShowErrors = true)
+        public string ReplaceTags(string Language)
         {
-            List<byte> data = new List<byte>();
-            List<string> errors = new List<string>();
-
             string wMessageText = MessageText;
 
             var tagDict = Dicts.MsgTagOverride[Dicts.DefaultLanguage];
@@ -719,6 +754,16 @@ namespace NPC_Maker
 
             foreach (var s in tagDict)
                 wMessageText = wMessageText.Replace(s.Key, s.Value);
+
+            return wMessageText;
+        }
+
+        public List<byte> ConvertTextData(string NPCName, string Language, bool ShowErrors = true)
+        {
+            List<byte> data = new List<byte>();
+            List<string> errors = new List<string>();
+
+            string wMessageText = ReplaceTags(Language);
 
             for (int i = 0; i < wMessageText.Length; i++)
             {
@@ -1026,6 +1071,30 @@ namespace NPC_Maker
             Color = _Color;
             ObjectID = _ObjectID;
             FileStart = _FileStart;
+        }
+
+        public List<byte> ToBytes()
+        {
+            List<byte> outBytes = new List<byte>();
+
+            outBytes.AddRangeBigEndian(Address);
+            outBytes.AddRangeBigEndian(FileStart);
+            outBytes.AddRangeBigEndian(TransX);
+            outBytes.AddRangeBigEndian(TransY);
+            outBytes.AddRangeBigEndian(TransZ);
+            outBytes.AddRangeBigEndian(Scale);
+            outBytes.AddRangeBigEndian(ObjectID);
+            outBytes.AddRangeBigEndian(RotX);
+            outBytes.AddRangeBigEndian(RotY);
+            outBytes.AddRangeBigEndian(RotZ);
+            outBytes.AddRangeBigEndian(Limb);
+            outBytes.Add((byte)ShowType);
+            outBytes.Add(Color.R);
+            outBytes.Add(Color.G);
+            outBytes.Add(Color.B);
+            Helpers.Ensure4ByteAlign(outBytes);
+
+            return outBytes;
         }
     }
 
