@@ -761,7 +761,7 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     Draw_Setup(en, playState, dT);
 
     // Reset the file location to account for the file start offset.
-    if (1)
+    if (en->settings.objectId > 0)
     {
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
         gSPSegment(POLY_XLU.p++, 0x06, playState->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
