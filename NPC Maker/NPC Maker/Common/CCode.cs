@@ -7,11 +7,22 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Text;
 
 namespace NPC_Maker
 {
     public static class CCode
     {
+        public static string gtempFolderName = "temp";
+        public static string gcompileFolderName = "compile";
+        public static string gtempFolderPath = Path.Combine(Program.ExecPath, gtempFolderName);
+        public static string gcompileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName);
+        public static string gcodeFileNameBase = "EmbeddedOverlay";
+        public static string gheaderFileName = "npc_maker_header.h";
+        public static string geditCodeFilePath = $"{Path.Combine(gtempFolderPath, $"{gcodeFileNameBase}.c")}";
+        public static string geditHeaderFilePath = $"{Path.Combine(gtempFolderPath, gheaderFileName)}";
+        public static UInt32 gBaseAddr = 0x80800000;
+
         public enum CodeEditorEnum
         {
             VSCode,
@@ -33,63 +44,117 @@ namespace NPC_Maker
             CodeEditorEnum.Other.ToString()
         };
 
-
-        public static string gtempFolderName = "temp";
-        public static string gcompileFolderName = "compile";
-        public static string gtempFolderPath = Path.Combine(Program.ExecPath, gtempFolderName);
-        public static string gcompileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName);
-        public static string gcodeFileNameBase = "EmbeddedOverlay";
-        public static string gheaderFileName = "npc_maker_header.h";
-        public static string geditCodeFilePath = $"{Path.Combine(gtempFolderPath, $"{gcodeFileNameBase}.c")}";
-        public static string geditHeaderFilePath = $"{Path.Combine(gtempFolderPath, gheaderFileName)}";
-
-        public static UInt32 gBaseAddr = 0x80800000;
-
-
-        public static void GetOutput(Process p, string Section, ref string CompileErrors)
+        private class CompilationConfig
         {
-            CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
+            public bool IsMonoEnvironment { get; set; }
+            public string Folder { get; set; }
+            public string BinDirectory { get; set; }
+            public string GccExecutable { get; set; }
+            public string LdExecutable { get; set; }
+            public string NovlExecutable { get; set; }
+            public string NovlWorkingDirectory { get; set; }
+        }
+
+        private class CompilationPaths
+        {
+            public string CompileFileName { get; }
+            public string WorkingDirectory { get; }
+            public string ObjectFile { get; }
+            public string ElfFile { get; }
+            public string OvlFile { get; }
+            public string SourceFile { get; }
+
+            public CompilationPaths(CompilationConfig config)
+            {
+                CompileFileName = $"{gcodeFileNameBase}{config.Folder}";
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory);
+                ObjectFile = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, $"{CompileFileName}.o");
+                ElfFile = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, $"{CompileFileName}.elf");
+
+                var compileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName, config.Folder);
+                OvlFile = config.IsMonoEnvironment
+                    ? Path.Combine(compileFolderPath, $"{CompileFileName}.ovl")
+                    : Path.Combine(compileFolderPath, $"{CompileFileName}.ovl");
+
+                SourceFile = config.IsMonoEnvironment
+                    ? Path.Combine("..", "..", gcompileFolderName, config.Folder, $"{CompileFileName}.c")
+                    : Path.Combine(compileFolderPath, $"{CompileFileName}.c");
+            }
+        }
+
+        private static void GetProcessOutput(Process process, string section, ref string compileErrors, bool isMonoEnvironment)
+        {
+            compileErrors += $"+==============+ {section} +==============+{Environment.NewLine}";
 
             string outputResult = "";
             string errorResult = "";
+            bool processCompleted = true;
 
-            Thread r = new Thread(() => { outputResult = p.StandardOutput.ReadToEnd(); });
-            r.Start();
-            Thread r2 = new Thread(() => { errorResult = p.StandardError.ReadToEnd(); });
-            r2.Start();
+            try
+            {
+                if (isMonoEnvironment)
+                {
+                    outputResult = process.StandardOutput.ReadToEnd();
+                    errorResult = process.StandardError.ReadToEnd();
+                }
+                else
+                {
+                    // Windows: Use async reading with timeout
+                    var outputTask = TaskEx.Run(() => process.StandardOutput.ReadToEnd());
+                    var errorTask = TaskEx.Run(() => process.StandardError.ReadToEnd());
 
-            p.WaitForExit((int)Program.Settings.CompileTimeout);
+                    processCompleted = process.WaitForExit((int)Program.Settings.CompileTimeout);
 
-            if (!p.HasExited)
-                p.Kill();
+                    if (!processCompleted)
+                    {
+                        process.Kill();
+                        compileErrors += $"{Environment.NewLine}Process timed out and was terminated.{Environment.NewLine}";
+                    }
 
-            r.Join();
-            r2.Join();
+                    // Wait for output reading to complete
+                    try
+                    {
+                        outputResult = outputTask.Result;
+                        errorResult = errorTask.Result;
+                    }
+                    catch (AggregateException ex)
+                    {
+                        compileErrors += $"{Environment.NewLine}Error reading process output: {ex.InnerException?.Message}{Environment.NewLine}";
+                    }
+                }
 
-            string Out = $"{Environment.NewLine}{outputResult.Replace("\n", Environment.NewLine)}{Environment.NewLine}{errorResult.Replace("\n", Environment.NewLine)}";
+                string combinedOutput = FormatProcessOutput(outputResult, errorResult);
 
-            Out = Regex.Replace(Out, @"\x1B\[[^@-~]*[@-~]", "");
+                if (!string.IsNullOrWhiteSpace(combinedOutput))
+                    compileErrors += combinedOutput;
 
-            if (!String.IsNullOrWhiteSpace(Out))
-                CompileErrors += Out;
-
-            if (p.ExitCode == 0)
-                CompileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
+                if (processCompleted && process.ExitCode == 0)
+                    compileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
+                else if (processCompleted)
+                    compileErrors += $"{Environment.NewLine}Process exited with code: {process.ExitCode}{Environment.NewLine}";
+            }
+            catch (Exception ex)
+            {
+                compileErrors += $"{Environment.NewLine}Exception while reading process output: {ex.Message}{Environment.NewLine}";
+            }
         }
 
-        public static void GetOutputMono(Process p, string Section, ref string CompileErrors)
+        private static string FormatProcessOutput(string standardOutput, string standardError)
         {
-            CompileErrors += $"+==============+ {Section} +==============+ {Environment.NewLine}";
+            var output = new StringBuilder();
 
-            string Out = $"{Environment.NewLine}{p.StandardOutput.ReadToEnd().Replace("\n", Environment.NewLine)}{Environment.NewLine}{p.StandardError.ReadToEnd().Replace("\n", Environment.NewLine)}";
+            output.AppendLine();
 
-            Out = Regex.Replace(Out, @"\x1B\[[^@-~]*[@-~]", "");
+            if (!string.IsNullOrEmpty(standardOutput))
+                output.AppendLine(standardOutput.Replace("\n", Environment.NewLine));
 
-            if (!String.IsNullOrWhiteSpace(Out))
-                CompileErrors += Out;
+            if (!string.IsNullOrEmpty(standardError))
+                output.AppendLine(standardError.Replace("\n", Environment.NewLine));
 
-            if (p.ExitCode == 0)
-                CompileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
+            string result = output.ToString();
+
+            // Remove ANSI escape sequences
+            return Regex.Replace(result, @"\x1B\[[^@-~]*[@-~]", "");
         }
 
         public static void Clean(string[] Files)
@@ -132,80 +197,6 @@ namespace NPC_Maker
             return outD;
         }
 
-        public static List<FunctionEntry> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
-        {
-            string Out;
-
-            if (!mono)
-            {
-                ProcessStartInfo objDump = new ProcessStartInfo
-                {
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                    FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-objdump.exe"),
-                    Arguments =
-                    $"-t {elfPath.AppendQuotation()}"
-                };
-
-                Process p = Process.Start(objDump);
-                Out = p.StandardOutput.ReadToEnd();
-            }
-            else
-            {
-                ProcessStartInfo objDump = new ProcessStartInfo
-                {
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "binmono"),
-                    FileName = Path.Combine(Program.ExecPath, "gcc", "binmono", "mips64-elf-objdump"),
-                    Arguments =
-                    $"-t {elfPath.AppendQuotation()}"
-                };
-
-                Process p = Process.Start(objDump);
-                Out = p.StandardOutput.ReadToEnd();
-            }
-
-            Out = Out.Replace("\t", " ");
-            Out = Regex.Replace(Out, "[ ]{2,}", " ", RegexOptions.Compiled);
-            List<string> Lines = Out.Split(new[] { '\n' }).ToList();
-
-            byte[] ovl = File.ReadAllBytes(ovlPath);
-            UInt32 sectionOffs = Program.BEConverter.ToUInt32(ovl, ovl.Length - 4);
-
-            // Calculate section offsets once
-            Dictionary<string, UInt32> sectionOffsets = new Dictionary<string, UInt32>
-            {
-                { ".text", 0 },
-                { ".data", Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - sectionOffs)) },
-                { ".rodata", Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - sectionOffs + 4)) },
-                { ".bss", Program.BEConverter.ToUInt32(ovl, (int)(ovl.Length - sectionOffs + 8)) }
-            };
-
-            sectionOffsets[".data"] += sectionOffsets[".text"];
-            sectionOffsets[".rodata"] += sectionOffsets[".data"];
-            sectionOffsets[".bss"] += sectionOffsets[".rodata"];
-
-            List<FunctionEntry> functions = new List<FunctionEntry>();
-            foreach (string Line in Lines)
-            {
-                string[] words = Line.Split(' ');
-
-                if (words.Length != 6 || words[2] != "F" || !words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
-                    continue;
-
-                if (UInt32.TryParse(words[0], System.Globalization.NumberStyles.HexNumber, null, out UInt32 address) && sectionOffsets.TryGetValue(words[3], out UInt32 sectionOffset))
-                    functions.Add(new FunctionEntry(words[5], address - gBaseAddr + sectionOffset));
-            }
-
-            return functions.OrderBy(x => x.FuncName).ToList();
-        }
-
         public static byte[] Compile(string Header, CCodeEntry CodeEntry, ref string CompileMsgs, string folder = "default")
         {
             try
@@ -244,244 +235,214 @@ namespace NPC_Maker
             Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{CompilationMsgs}{Environment.NewLine}{Environment.NewLine}");
         }
 
-        public static byte[] CompileUnderMono(string folder, CCodeEntry CodeEntry, ref string CompileMsgs)
+        public static byte[] CompileUnderMono(string folder, CCodeEntry codeEntry, ref string compileMsgs)
         {
-
-            string compileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName, folder);
-            string compileFileName = $"{gcodeFileNameBase}{folder}";
-            string oFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", $"{compileFileName}.o");
-            string elfFileMono = Path.Combine(Program.ExecPath, "gcc", "binmono", $"{compileFileName}.elf");
-            string ovlFileMono = Path.Combine(Program.ExecPath, compileFolderPath, $"{compileFileName}.ovl");
-
-            Clean(new string[] { oFileMono, elfFileMono, ovlFileMono });
-
-            #region GCC
-
-            ProcessStartInfo gccInfo = new ProcessStartInfo
+            var config = new CompilationConfig
             {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "binmono"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "binmono", "mips64-elf-gcc"),
-                Arguments =
-                $"-I {Path.Combine(new string[] { Program.ExecPath, "gcc", "mips64", "include" }).AppendQuotation()} " +
-                $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
-                $"-I {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "include" }).AppendQuotation()} " +
-                $"{(String.IsNullOrEmpty(Program.Settings.ProjectPath) ? String.Empty : "-I " + Program.Settings.ProjectPath + " ")}" +
-                Program.Settings.GCCFlags + " " + $"-B {Path.Combine(new string[] { "..", "mips64", "binmono" })} " +
-                $"{Path.Combine("..", "..", gcompileFolderName, folder, $"{compileFileName}.c").AppendQuotation()}",
+                IsMonoEnvironment = true,
+                Folder = folder,
+                BinDirectory = "binmono",
+                GccExecutable = "mips64-elf-gcc",
+                LdExecutable = "mips64-elf-ld",
+                NovlExecutable = "nOVL",
+                NovlWorkingDirectory = "nOVL"
             };
 
-            if (Program.Settings.Verbose)
-                CompileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
-
-            Process p = Process.Start(gccInfo);
-            p.WaitForExit();
-
-            GetOutputMono(p, "Mono GCC", ref CompileMsgs);
-
-            #endregion
-
-            #region LD
-
-            if (!File.Exists(oFileMono))
-            {
-                CompileMsgs += "Compilation failed.";
-                ConsoleWriteCompileFail(CompileMsgs);
-                return null;
-            }
-
-            ProcessStartInfo ldInfo = new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "binmono"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "binmono", "mips64-elf-ld"),
-                Arguments =
-                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
-                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString() }).AppendQuotation()} " +
-                    $"-L {Path.Combine(new string[] { "..", "mips64", "include", "z64hdr", "common" }).AppendQuotation()} " +
-                    $"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
-                    $"-o {elfFileMono.AppendQuotation()} {oFileMono.AppendQuotation()}"
-            };
-
-            if (Program.Settings.Verbose)
-                CompileMsgs += $"{ldInfo.FileName} {ldInfo.Arguments}{Environment.NewLine}";
-
-            p = Process.Start(ldInfo);
-            p.WaitForExit();
-            GetOutputMono(p, "Mono LINKER", ref CompileMsgs);
-
-
-            if (!File.Exists(elfFileMono))
-            {
-                CompileMsgs += "Compilation failed.";
-                ConsoleWriteCompileFail(CompileMsgs);
-                return null;
-            }
-
-            #endregion
-
-            #region NOVL
-
-            ProcessStartInfo nOVLInfo = new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "nOVL"),
-                FileName = Path.Combine(Program.ExecPath, "nOVL", "nOVL"),
-                Arguments =
-                $"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{gBaseAddr:X} -o {ovlFileMono.AppendQuotation()} {elfFileMono.AppendQuotation()}",
-            };
-
-            if (Program.Settings.Verbose)
-                CompileMsgs += $"{nOVLInfo.FileName} {nOVLInfo.Arguments}{Environment.NewLine}";
-
-
-            p = Process.Start(nOVLInfo);
-            p.WaitForExit();
-            GetOutputMono(p, "Mono NOVL", ref CompileMsgs);
-
-            if (!File.Exists(ovlFileMono))
-            {
-                CompileMsgs += "Compilation failed.";
-                ConsoleWriteCompileFail(CompileMsgs);
-                return new byte[0];
-            }
-            else
-                CompileMsgs += "Compilation successful!";
-
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFileMono, ovlFileMono, true);
-
-            File.Delete(oFileMono);
-            File.Delete(elfFileMono);
-
-            return File.ReadAllBytes(ovlFileMono);
-            #endregion
-
+            return CompileInternal(config, codeEntry, ref compileMsgs);
         }
 
-        public static byte[] CompileUnderWindows(string folder,  CCodeEntry CodeEntry, ref string CompileMsgs)
+        public static byte[] CompileUnderWindows(string folder, CCodeEntry codeEntry, ref string compileMsgs)
         {
-            string compileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName, folder);
-            string compileFileName = $"{gcodeFileNameBase}{folder}";
-            string oFilePath = Path.Combine(Program.ExecPath, "gcc", "bin", $"{compileFileName}.o");
-            string elfFilePath = Path.Combine(Program.ExecPath, "gcc", "bin", $"{compileFileName}.elf");
-            string ovlFilePath = Path.Combine(compileFolderPath, $"{compileFileName}.ovl");
+            var config = new CompilationConfig
+            {
+                IsMonoEnvironment = false,
+                Folder = folder,
+                BinDirectory = "bin",
+                GccExecutable = "mips64-gcc.exe",
+                LdExecutable = "mips64-ld.exe",
+                NovlExecutable = "novl.exe",
+                NovlWorkingDirectory = Path.Combine("nOVL")
+            };
 
-            #region GCC
+            return CompileInternal(config, codeEntry, ref compileMsgs);
+        }
 
-            Clean(new string[] { oFilePath, elfFilePath, ovlFilePath });
+        private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs)
+        {
+            var paths = new CompilationPaths(config);
+            string compilationFailedString = "Compilation failed.";
 
-            ProcessStartInfo gccInfo = new ProcessStartInfo
+            Clean(new[] { paths.ObjectFile, paths.ElfFile, paths.OvlFile });
+
+            if (!RunGccCompilation(config, paths, ref compileMsgs))
+                return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
+
+            if (!RunLinkerPhase(config, paths, ref compileMsgs))
+                return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
+
+            if (!RunNovlPhase(config, paths, ref compileMsgs))
+                return HandleCompilationFailure(compilationFailedString, ref compileMsgs, true);
+
+            compileMsgs += "Compilation successful!";
+            codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
+
+            CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile);
+            return File.ReadAllBytes(paths.OvlFile);
+        }
+
+        private static bool RunGccCompilation(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
+        {
+            var gccInfo = CreateGccProcessInfo(config, paths);
+
+            if (Program.Settings.Verbose)
+                compileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
+
+            using (var process = Process.Start(gccInfo))
+            {
+                var sectionName = config.IsMonoEnvironment ? "Mono GCC" : "GCC";
+                GetProcessOutput(process, sectionName, ref compileMsgs, config.IsMonoEnvironment);
+            }
+
+            return File.Exists(paths.ObjectFile);
+        }
+
+        private static bool RunLinkerPhase(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
+        {
+            var ldInfo = CreateLinkerProcessInfo(config, paths);
+
+            if (Program.Settings.Verbose)
+                compileMsgs += $"{ldInfo.FileName} {ldInfo.Arguments}{Environment.NewLine}";
+
+            using (var process = Process.Start(ldInfo))
+            {
+                var sectionName = config.IsMonoEnvironment ? "Mono LINKER" : "LINKER";
+                GetProcessOutput(process, sectionName, ref compileMsgs, config.IsMonoEnvironment);
+            }
+
+            return File.Exists(paths.ElfFile);
+        }
+
+        private static bool RunNovlPhase(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
+        {
+            var novlInfo = CreateNovlProcessInfo(config, paths);
+
+            if (Program.Settings.Verbose)
+                compileMsgs += $"{novlInfo.FileName} {novlInfo.Arguments}{Environment.NewLine}";
+
+            using (var process = Process.Start(novlInfo))
+            {
+                var sectionName = config.IsMonoEnvironment ? "Mono NOVL" : "NOVL";
+                GetProcessOutput(process, sectionName, ref compileMsgs, config.IsMonoEnvironment);
+            }
+
+            return File.Exists(paths.OvlFile);
+        }
+
+
+        private static ProcessStartInfo CreateGccProcessInfo(CompilationConfig config, CompilationPaths paths)
+        {
+            var includeFlags = BuildIncludeFlags(config);
+            var projectFlag = string.IsNullOrEmpty(Program.Settings.ProjectPath)
+                ? string.Empty
+                : $"-I {Program.Settings.ProjectPath} ";
+
+            var arguments = config.IsMonoEnvironment
+                ? $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} -B {Path.Combine("..", "mips64", "binmono")} {paths.SourceFile.AppendQuotation()}"
+                : $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {paths.SourceFile.AppendQuotation()}";
+
+            return new ProcessStartInfo
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-gcc.exe"),
-                Arguments =
-                $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include").AppendQuotation()} " +
-                $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()).AppendQuotation()} " +
-                $@"-I {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "include").AppendQuotation()} " +
-                $"{(String.IsNullOrEmpty(Program.Settings.ProjectPath) ? String.Empty : "-I " + Program.Settings.ProjectPath + " ")}" +
-                Program.Settings.GCCFlags + " " +
-                $@"{Path.Combine(compileFolderPath, $"{compileFileName}.c").AppendQuotation()}",
+                WorkingDirectory = paths.WorkingDirectory,
+                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.GccExecutable),
+                Arguments = arguments
             };
+        }
 
-            if (Program.Settings.Verbose)
-                CompileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
+        private static ProcessStartInfo CreateLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
+        {
+            var libraryFlags = BuildLibraryFlags(config);
+            var arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld --emit-relocs -o {paths.ElfFile.AppendQuotation()} {paths.ObjectFile.AppendQuotation()}";
 
-            Process p = Process.Start(gccInfo);
-
-            GetOutput(p, "GCC", ref CompileMsgs);
-
-            #endregion
-
-            #region LD
-
-            if (!File.Exists(oFilePath))
-            {
-                CompileMsgs += "Compilation failed.";
-                ConsoleWriteCompileFail(CompileMsgs);
-                return null;
-            }
-
-            ProcessStartInfo ldInfo = new ProcessStartInfo
+            return new ProcessStartInfo
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", "bin"),
-                FileName = Path.Combine(Program.ExecPath, "gcc", "bin", "mips64-ld.exe"),
-                Arguments =
-                $@"-L {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString()).AppendQuotation()} " +
-                $@"-L {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()).AppendQuotation()} " +
-                $@"-L {Path.Combine(Program.ExecPath, "gcc", "mips64", "include", "z64hdr", "common").AppendQuotation()} " +
-                $@"-T syms.ld -T z64hdr_actor.ld --emit-relocs " +
-                $@"-o {elfFilePath.AppendQuotation()} {oFilePath.AppendQuotation()}"
+                WorkingDirectory = paths.WorkingDirectory,
+                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
+                Arguments = arguments
             };
+        }
 
-            if (Program.Settings.Verbose)
-                CompileMsgs += $"{ldInfo.FileName} {ldInfo.Arguments}{Environment.NewLine}";
+        private static ProcessStartInfo CreateNovlProcessInfo(CompilationConfig config, CompilationPaths paths)
+        {
+            var workingDir = config.IsMonoEnvironment
+                ? Path.Combine(Program.ExecPath, "nOVL")
+                : paths.WorkingDirectory;
 
-            p = Process.Start(ldInfo);
+            var fileName = config.IsMonoEnvironment
+                ? Path.Combine(Program.ExecPath, "nOVL", "nOVL")
+                : Path.Combine(Program.ExecPath, "nOVL", "novl.exe");
 
-            GetOutput(p, "LINKER", ref CompileMsgs);
+            var verboseFlag = Program.Settings.Verbose ? "-vv" : "";
+            var arguments = $"-c {verboseFlag} -A 0x{gBaseAddr:X} -o {paths.OvlFile.AppendQuotation()} {paths.ElfFile.AppendQuotation()}";
 
-            if (!File.Exists(elfFilePath))
-            {
-                CompileMsgs += "Compilation failed.";
-                ConsoleWriteCompileFail(CompileMsgs);
-                return null;
-            }
-
-            #endregion
-
-            #region NOVL
-
-            ProcessStartInfo nOVLInfo = new ProcessStartInfo
+            return new ProcessStartInfo
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                FileName = Path.Combine(Program.ExecPath, "nOVL", "novl.exe"),
-                Arguments =
-                $@"-c {(Program.Settings.Verbose ? "-vv" : "")} -A 0x{gBaseAddr:X} -o {ovlFilePath.AppendQuotation()} {elfFilePath.AppendQuotation()}",
+                WorkingDirectory = workingDir,
+                FileName = fileName,
+                Arguments = arguments
+            };
+        }
+
+        private static string BuildIncludeFlags(CompilationConfig config)
+        {
+            var basePath = config.IsMonoEnvironment ? ".." : Program.ExecPath;
+            var includes = new[]
+            {
+                Path.Combine(basePath, "gcc", "mips64", "include"),
+                Path.Combine(basePath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
+                Path.Combine(basePath, "gcc", "mips64", "include", "z64hdr", "include")
             };
 
-            if (Program.Settings.Verbose)
-                CompileMsgs += $"{nOVLInfo.FileName} {nOVLInfo.Arguments}{Environment.NewLine}";
+            return string.Join(" ", includes.Select(path => $"-I {path.AppendQuotation()}"));
+        }
 
-            p = Process.Start(nOVLInfo);
-            GetOutput(p, "NOVL", ref CompileMsgs);
-
-            if (!File.Exists(ovlFilePath))
+        private static string BuildLibraryFlags(CompilationConfig config)
+        {
+            var basePath = config.IsMonoEnvironment ? ".." : Program.ExecPath;
+            var libraries = new[]
             {
-                CompileMsgs += "Compilation failed.";
-                ConsoleWriteCompileFail(CompileMsgs);
+                Path.Combine(basePath, "gcc", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString()),
+                Path.Combine(basePath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
+                Path.Combine(basePath, "gcc", "mips64", "include", "z64hdr", "common")
+            };
+
+            return string.Join(" ", libraries.Select(path => $"-L {path.AppendQuotation()}"));
+        }
+
+        private static byte[] HandleCompilationFailure(string message, ref string compileMsgs, bool returnEmptyArray = false)
+        {
+            compileMsgs += message;
+            ConsoleWriteCompileFail(compileMsgs);
+            return returnEmptyArray ? new byte[0] : null;
+        }
+
+        private static void CleanupIntermediateFiles(params string[] files)
+        {
+            foreach (var file in files.Where(File.Exists))
+            {
+                File.Delete(file);
             }
-            else
-                CompileMsgs += "Compilation successful!";
-
-            CodeEntry.Functions = GetNpcMakerFunctionsFromO(elfFilePath, ovlFilePath, false);
-
-            File.Delete(oFilePath);
-            File.Delete(elfFilePath);
-
-
-            return File.ReadAllBytes(ovlFilePath);
-            #endregion
-
         }
 
         public static string ReplaceGameVersionInclude(string Code)
@@ -490,6 +451,92 @@ namespace NPC_Maker
             Code = Code.Replace("#include <z64hdr/oot_mq_debug/z64hdr.h>", $"#include <z64hdr/{Program.Settings.GameVersion}/z64hdr.h>");
             return Code;
         }
+
+        public static List<FunctionEntry> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
+        {
+            // Execute objdump process
+            var objDumpOutput = ExecuteObjDump(elfPath, mono);
+
+            // Parse objdump output
+            var normalizedOutput = Regex.Replace(objDumpOutput.Replace("\t", " "), @"\s{2,}", " ", RegexOptions.Compiled);
+            var lines = normalizedOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Load overlay file and calculate section offsets
+            var ovlData = File.ReadAllBytes(ovlPath);
+            var sectionOffsets = CalculateSectionOffsets(ovlData);
+
+            // Extract NPC Maker functions
+            var functions = lines
+                .Select(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                .Where(IsValidNpcMakerFunction)
+                .Select(words => CreateFunctionEntry(words, sectionOffsets))
+                .Where(entry => entry != null)
+                .OrderBy(entry => entry.FuncName)
+                .ToList();
+
+            return functions;
+        }
+
+        private static string ExecuteObjDump(string elfPath, bool mono)
+        {
+            var binDirectory = mono ? "binmono" : "bin";
+            var executable = mono ? "mips64-elf-objdump" : "mips64-objdump.exe";
+
+            var processInfo = new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", binDirectory),
+                FileName = Path.Combine(Program.ExecPath, "gcc", binDirectory, executable),
+                Arguments = string.Format("-t {0}", elfPath.AppendQuotation())
+            };
+
+            var process = Process.Start(processInfo);
+            var output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            process.Dispose();
+
+            return output;
+        }
+
+        private static Dictionary<string, uint> CalculateSectionOffsets(byte[] ovlData)
+        {
+            var sectionOffs = Program.BEConverter.ToUInt32(ovlData, ovlData.Length - 4);
+            var baseOffset = ovlData.Length - (int)sectionOffs;
+
+            var offsets = new Dictionary<string, uint>
+            {
+                [".text"] = 0,
+                [".data"] = Program.BEConverter.ToUInt32(ovlData, baseOffset),
+                [".rodata"] = Program.BEConverter.ToUInt32(ovlData, baseOffset + 4),
+                [".bss"] = Program.BEConverter.ToUInt32(ovlData, baseOffset + 8)
+            };
+
+            offsets[".data"] += offsets[".text"];
+            offsets[".rodata"] += offsets[".data"];
+            offsets[".bss"] += offsets[".rodata"];
+
+            return offsets;
+        }
+
+        private static bool IsValidNpcMakerFunction(string[] words)
+        {
+            return words.Length == 6 &&
+                   words[2] == "F" &&
+                   words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static FunctionEntry CreateFunctionEntry(string[] words, Dictionary<string, uint> sectionOffsets)
+        {
+            if (!uint.TryParse(words[0], System.Globalization.NumberStyles.HexNumber, null, out uint address) ||
+                !sectionOffsets.TryGetValue(words[3], out uint sectionOffset))
+                return null;
+
+            return new FunctionEntry(words[5], address - gBaseAddr + sectionOffset);
+        }
+
 
         public static bool CreateCTempDirectory(string Code, string Header, bool ErrorMsg = true, bool HeaderOnly = false)
         {

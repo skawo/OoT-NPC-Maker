@@ -233,46 +233,58 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                List<string[]> Defines = DefineLines.Select(x => SplitWithQuotes(x)).ToList();
-                List<string[]> ParamCountWrong = Defines.FindAll(x => x.Length != 3).ToList();
+                var defines = new string[DefineLines.Count][];
+                var validDefines = new List<string[]>(DefineLines.Count);
+                var defineNames = new HashSet<string>();
 
-                foreach (string[] dd in ParamCountWrong)
-                    outScript.ParseErrors.Add(ParseException.DefineIncorrect(dd));
+                // Single pass: parse, validate, and dedupe
+                for (int i = 0; i < DefineLines.Count; i++)
+                {
+                    defines[i] = SplitWithQuotes(DefineLines[i]);
 
-                Defines = Defines.Except(ParamCountWrong).ToList();
+                    if (defines[i].Length != 3)
+                    {
+                        outScript.ParseErrors.Add(ParseException.DefineIncorrect(defines[i]));
+                        continue;
+                    }
 
-                List<string> Repeats = Defines.GroupBy(x => x[1]).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+                    if (!defineNames.Add(defines[i][1]))
+                    {
+                        outScript.ParseErrors.Add(ParseException.RepeatDefine(defines[i][1]));
+                        continue;
+                    }
 
-                foreach (string dd in Repeats)
-                    outScript.ParseErrors.Add(ParseException.RepeatDefine(dd));
+                    validDefines.Add(defines[i]);
+                }
 
-                // If none found, there's nothing to do.
-                if (Defines.Count == 0)
+                if (validDefines.Count == 0)
                     return Lines;
 
                 string s = String.Join(Environment.NewLine, Lines);
-
                 DataTable dt = new DataTable();
 
-                foreach (string[] def in Defines.Where(d => s.Contains(d[1])))
+                // Only process defines that exist in the content
+                foreach (var def in validDefines)
                 {
+                    if (!s.Contains(def[1])) continue;
+
                     string[] f = def[2].Trim().Split(' ');
                     string result;
 
                     if (f.Length == 1)
                     {
-                        result = FullyResolveDefine(Defines, def)[2];
+                        result = FullyResolveDefine(validDefines, def)[2];
                     }
                     else
                     {
-                        f = f.Select((term, i) =>
-                            FullyResolveDefine(Defines, new[] { def[0], def[1], term })[2]).ToArray();
+                        for (int i = 0; i < f.Length; i++)
+                            f[i] = FullyResolveDefine(validDefines, new[] { def[0], def[1], f[i] })[2];
 
                         try
                         {
-                            result = dt.Compute(string.Join(" ", f), null)?.ToString() ?? $"{string.Join(" ", f)}";
+                            result = dt.Compute(string.Join(" ", f), null)?.ToString() ?? string.Join(" ", f);
                         }
-                        catch (Exception)
+                        catch
                         {
                             result = string.Join(" ", f);
                         }
@@ -281,9 +293,7 @@ namespace NPC_Maker.Scripts
                     s = ScriptHelpers.ReplaceExpr(s, def[1], result);
                 }
 
-                Lines = s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                return Lines;
+                return s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
             }
             catch (ParseException pEx)
             {
@@ -296,6 +306,7 @@ namespace NPC_Maker.Scripts
                 return Lines;
             }
         }
+
 
         private List<string> GetAndReplaceProcedures(List<string> Lines, List<string> DefineLines, ref BScript outScript)
         {
