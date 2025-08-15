@@ -278,12 +278,16 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
     #endif 
 
     s32 object = R_OBJECT(en, dList->objectId);
-    u32 dListOffset = object == OBJECT_RAM ? dList->offset : OFFSET_ADDRESS(6, dList->offset);
+    u32 dListOffset = OFFSET_ADDRESS(6, dList->offset);
 	
     switch (object)
     {
         case OBJECT_NONE: return;
-        case OBJECT_RAM: break;
+        case OBJECT_RAM:
+        {
+            gSPSegment((*gfxP)++, 6, dList->fileStart);
+            break;
+        }
         default:
         {
             // Setting segment 6 if object is different to the currently loaded object...
