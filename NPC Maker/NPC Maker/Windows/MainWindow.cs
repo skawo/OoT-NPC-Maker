@@ -1363,37 +1363,36 @@ namespace NPC_Maker
 
                                 NPCEntry ImportedEntry = LocalizationFile.Entries[importIndex];
 
-                                if (ImportedEntry.Localization.FindIndex(x => x.Language == SelectedLanguage) == -1)
-                                    continue;
-                                else if (SelectedLanguage != Dicts.DefaultLanguage)
+                                // Make a copy of all the default language textboxes if the language doesn't exist in an actor
+                                if (ImportedEntry.Localization.FindIndex(x => x.Language == SelectedLanguage) != -1)
                                 {
-                                    IndexInCur = entry.Localization.FindIndex(x => x.Language == SelectedLanguage);
-
-                                    if (IndexInCur == -1)
+                                    if (SelectedLanguage != Dicts.DefaultLanguage)
                                     {
-                                        LocalizationEntry newlocEntry = new LocalizationEntry();
-                                        newlocEntry.Language = SelectedLanguage;
+                                        IndexInCur = entry.Localization.FindIndex(x => x.Language == SelectedLanguage);
 
-                                        foreach (var msg in entry.Messages)
-                                            newlocEntry.Messages.Add(Helpers.Clone<MessageEntry>(msg));
+                                        if (IndexInCur == -1)
+                                        {
+                                            LocalizationEntry newlocEntry = new LocalizationEntry();
+                                            newlocEntry.Language = SelectedLanguage;
 
-                                        entry.Localization.Add(newlocEntry);
-                                        IndexInCur = entry.Localization.Count - 1;
+                                            foreach (var msg in entry.Messages)
+                                                newlocEntry.Messages.Add(Helpers.Clone<MessageEntry>(msg));
+
+                                            entry.Localization.Add(newlocEntry);
+                                            IndexInCur = entry.Localization.Count - 1;
+                                        }
                                     }
                                 }
 
                                 LocalizationEntry newLocalization = new LocalizationEntry();
                                 newLocalization.Language = SelectedLanguage;
 
-                                List<MessageEntry> messageList = ImportedEntry.Messages;
-
-                                if (SelectedLangIndex != 0)
-                                    messageList = ImportedEntry.Localization[SelectedLangIndex - 1].Messages;
+                                List<MessageEntry> messageList = GetLanguageMessageList(ImportedEntry, SelectedLanguage);
 
                                 foreach (MessageEntry msg in entry.Messages)
                                 {
+                                    int textDefaultIndex = entry.Messages.FindIndex(x => x.Name == msg.Name);
                                     int importMsgIndex = messageList.FindIndex(x => x.Name == msg.Name);
-
                                     int curlocMsgIndex = -1;
 
                                     if (SelectedLangIndex != 0)
@@ -1403,7 +1402,7 @@ namespace NPC_Maker
                                     {
                                         if (curlocMsgIndex != -1)
                                         {
-                                            string textDefault = entry.Messages[curlocMsgIndex].MessageText;
+                                            string textDefault = entry.Messages[textDefaultIndex].MessageText;
                                             string text = entry.Localization[IndexInCur].Messages[curlocMsgIndex].MessageText;
                                             string textNew = messageList[importMsgIndex].MessageText;
 
@@ -1411,7 +1410,7 @@ namespace NPC_Maker
                                             {
                                                 if (y2aRes != DialogResult.OK && y2aRes != DialogResult.Ignore)
                                                 {
-                                                    var w = new Windows.YesNoAllBox($"Localization of textbox {msg.Name} is already different. Update it with the one from the file?", "Textbox already translated");
+                                                    var w = new Windows.YesNoAllBox($"Localization of textbox {msg.Name} is already different. Update it with the one from the file?", "Message conflict");
                                                     y2aRes = w.ShowDialog();
                                                 }
 
@@ -1454,12 +1453,14 @@ namespace NPC_Maker
 
                                 List<MessageEntry> diff = messageList.Where(item2 => !entry.Messages.Any(item1 => item1.Name == item2.Name)).ToList();
 
+                                // Add messages which exist in the new language, but don't in the default 
                                 foreach (MessageEntry msg in diff)
                                 {
                                     int msgIndex = messageList.IndexOf(msg);
 
                                     MessageEntry msgN = Helpers.Clone<MessageEntry>(msg);
 
+                                    // If importing a non-default language, blank the text for the new entry in the default language.
                                     if (SelectedLangIndex != 0)
                                     {
                                         msgN.MessageText = "";
@@ -1468,17 +1469,19 @@ namespace NPC_Maker
 
                                     entry.Messages.Insert(msgIndex, msgN);
 
+                                    // Add to each localized language too
                                     foreach (var loc in entry.Localization)
                                     {
-                                        msgN = Helpers.Clone<MessageEntry>(msg);
+                                        MessageEntry msgNLoc = Helpers.Clone<MessageEntry>(msg);
 
+                                        // Blank if adding to a language which we're not importing to
                                         if (loc.Language != SelectedLanguage)
                                         {
-                                            msgN.MessageText = "";
-                                            msgN.MessageTextLines.Clear();
+                                            msgNLoc.MessageText = "";
+                                            msgNLoc.MessageTextLines.Clear();
                                         }
 
-                                        loc.Messages.Insert(msgIndex, Helpers.Clone<MessageEntry>(msgN));
+                                        loc.Messages.Insert(msgIndex, msgNLoc);
                                     }
                                 }
                             }
