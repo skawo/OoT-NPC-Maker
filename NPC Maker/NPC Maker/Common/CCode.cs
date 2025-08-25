@@ -92,14 +92,15 @@ namespace NPC_Maker
 
             try
             {
-                if (isMonoEnvironment)
+                if (false)
                 {
+                    // Old Mono code
+                    process.DoubleWaitForExit();
                     outputResult = process.StandardOutput.ReadToEnd();
                     errorResult = process.StandardError.ReadToEnd();
                 }
                 else
                 {
-                    // Windows: Use async reading with timeout
                     var outputTask = TaskEx.Run(() => process.StandardOutput.ReadToEnd());
                     var errorTask = TaskEx.Run(() => process.StandardError.ReadToEnd());
 
@@ -406,12 +407,12 @@ namespace NPC_Maker
 
         private static string BuildIncludeFlags(CompilationConfig config)
         {
-            var basePath = config.IsMonoEnvironment ? ".." : Program.ExecPath;
+            var basePath = config.IsMonoEnvironment ? ".." : Path.Combine(Program.ExecPath, "gcc");
             var includes = new[]
             {
-                Path.Combine(basePath, "gcc", "mips64", "include"),
-                Path.Combine(basePath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
-                Path.Combine(basePath, "gcc", "mips64", "include", "z64hdr", "include")
+                Path.Combine(basePath, "mips64", "include"),
+                Path.Combine(basePath, "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
+                Path.Combine(basePath, "mips64", "include", "z64hdr", "include")
             };
 
             return string.Join(" ", includes.Select(path => $"-I {path.AppendQuotation()}"));
@@ -419,12 +420,12 @@ namespace NPC_Maker
 
         private static string BuildLibraryFlags(CompilationConfig config)
         {
-            var basePath = config.IsMonoEnvironment ? ".." : Program.ExecPath;
+            var basePath = config.IsMonoEnvironment ? ".." : Path.Combine(Program.ExecPath, "gcc");
             var libraries = new[]
             {
-                Path.Combine(basePath, "gcc", "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString()),
-                Path.Combine(basePath, "gcc", "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
-                Path.Combine(basePath, "gcc", "mips64", "include", "z64hdr", "common")
+                Path.Combine(basePath, "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString()),
+                Path.Combine(basePath, "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
+                Path.Combine(basePath, "mips64", "include", "z64hdr", "common")
             };
 
             return string.Join(" ", libraries.Select(path => $"-L {path.AppendQuotation()}"));
