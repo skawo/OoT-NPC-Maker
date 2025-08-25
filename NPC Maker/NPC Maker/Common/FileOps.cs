@@ -874,7 +874,8 @@ namespace NPC_Maker
 
                             foreach (MessageEntry Msg in loc.Messages)
                             {
-                                List<byte> Message = Msg.ConvertTextData(Entry.NPCName, loc.Language, !CLIMode);
+                                int numBoxes = 0;
+                                List<byte> Message = Msg.ConvertTextData(Entry.NPCName, loc.Language, out numBoxes, !CLIMode);
 
                                 if (Message == null)
                                 {

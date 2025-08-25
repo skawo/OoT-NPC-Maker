@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Data;
 using FastColoredTextBoxNS;
 using System.Drawing.Drawing2D;
+using System.Collections.Concurrent;
 
 namespace NPC_Maker
 {
@@ -1263,51 +1264,65 @@ namespace NPC_Maker
 
             Windows.ComboPicker pick = new Windows.ComboPicker(EditedFile.Languages, "Which language?", "Language selection");
 
-            string report = "";
-
             try
             {
-
                 if (pick.ShowDialog() == DialogResult.OK)
                 {
-                    string SelectedLanguage = pick.SelectedOption;
-                    int SelectedLangIndex = pick.SelectedIndex;
+                    string selectedLanguage = pick.SelectedOption;
+                    int selectedLangIndex = pick.SelectedIndex;
 
-                    foreach (NPCEntry ent in EditedFile.Entries)
+                    ConcurrentBag<string> reportItems = new ConcurrentBag<string>();
+
+                    Parallel.ForEach(EditedFile.Entries, ent =>
                     {
-                        if (ent.Localization.FindIndex(x => x.Language == SelectedLanguage) != -1)
+                        if (ent.Localization.FindIndex(x => x.Language == selectedLanguage) != -1)
                         {
                             for (int i = 0; i < ent.Messages.Count; i++)
                             {
-                                byte[] msgData = ent.Messages[i].ConvertTextData(ent.NPCName, Dicts.DefaultLanguage, false).ToArray();
-                                ZeldaMessage.MessagePreview pp = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgData);
+                                int numBoxesOg = 0;
+                                byte[] msgData = ent.Messages[i].ConvertTextData(ent.NPCName, Dicts.DefaultLanguage, out numBoxesOg, false).ToArray();
 
-                                byte[] msgDataLoc = ent.Localization[SelectedLangIndex].Messages[i].ConvertTextData(ent.NPCName, SelectedLanguage, false).ToArray();
-                                ZeldaMessage.MessagePreview pp2 = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgDataLoc);
+                                int locIndex = ent.Localization[selectedLangIndex].Messages.FindIndex(x => x.Name == ent.Messages[i].Name);
 
-                                if (pp.MessageCount != pp2.MessageCount)
-                                    report += $"{ent.NPCName}, {ent.Messages[i].Name} {pp.MessageCount} vs {pp2.MessageCount}{Environment.NewLine}";
+                                if (locIndex == -1)
+                                {
+                                    reportItems.Add($"{ent.NPCName}, {ent.Messages[i].Name} Fatal error, message missing?");
+                                    continue;
+                                }
+
+                                int numBoxesLoc = 0;
+                                byte[] msgDataLoc = ent.Localization[selectedLangIndex].Messages[locIndex].ConvertTextData(ent.NPCName, selectedLanguage, out numBoxesLoc, false).ToArray();
+
+                                if (numBoxesOg != numBoxesLoc)
+                                    reportItems.Add($"{ent.NPCName}, {ent.Messages[i].Name} {numBoxesOg} vs {numBoxesLoc}");
                             }
                         }
                         else
-                            report += $"{ent.NPCName} does not contain this language.{Environment.NewLine}";
+                        {
+                            reportItems.Add($"{ent.NPCName} does not contain this language.");
+                        }
+                    });
+
+                    StringBuilder report = new StringBuilder();
+                    foreach (string item in reportItems)
+                    {
+                        report.AppendLine(item);
                     }
-                }
 
-                SaveFileDialog sf = new SaveFileDialog();
-                sf.FileName = "report.txt";
+                    SaveFileDialog sf = new SaveFileDialog { FileName = "report.txt" };
 
-                if (sf.ShowDialog() == DialogResult.OK)
-                {
-                    File.WriteAllText(sf.FileName, report);
+                    if (sf.ShowDialog() == DialogResult.OK)
+                    {
+                        File.WriteAllText(sf.FileName, report.ToString());
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
-
         }
+
 
         private void importLocalizationToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -3551,7 +3566,8 @@ namespace NPC_Maker
 
         private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Common.SavedMsgPreviewData savedPreviewData)
         {
-            List<byte> Data = Entry.ConvertTextData(NPCName, Language, false);
+            int numBoxes = 0;
+            List<byte> Data = Entry.ConvertTextData(NPCName, Language, out numBoxes, false);
 
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return null;
@@ -3560,7 +3576,7 @@ namespace NPC_Maker
             {
                 Entry = new MessageEntry();
                 Entry.MessageText = "Error: Over 1280 bytes.";
-                Data = Entry.ConvertTextData(NPCName, Language, false);
+                Data = Entry.ConvertTextData(NPCName, Language, out numBoxes, false);
             }
 
             bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;

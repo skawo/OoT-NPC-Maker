@@ -758,10 +758,12 @@ namespace NPC_Maker
             return wMessageText;
         }
 
-        public List<byte> ConvertTextData(string NPCName, string Language, bool ShowErrors = true)
+        public List<byte> ConvertTextData(string NPCName, string Language, out int numBoxes, bool ShowErrors = true)
         {
             List<byte> data = new List<byte>();
             List<string> errors = new List<string>();
+
+            numBoxes = 1;
 
             string wMessageText = ReplaceTags(Language);
 
@@ -811,6 +813,8 @@ namespace NPC_Maker
 
                     if (parsedFixed == Lists.MsgControlCode.NEW_BOX.ToString() || parsedFixed == Lists.MsgControlCode.DELAY.ToString())
                     {
+                        numBoxes++;
+
                         if (data.Count != 0)
                             if (data[data.Count - 1] == 0x01)
                                 data.RemoveAt(data.Count - 1);

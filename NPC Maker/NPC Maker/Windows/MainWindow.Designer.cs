@@ -4390,8 +4390,8 @@
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importLocalizationToolStripMenuItem,
-            this.checkDefinitionValidityToolStripMenuItem,
-            this.checkLocalizationConsistencyToolStripMenuItem});
+            this.checkLocalizationConsistencyToolStripMenuItem,
+            this.checkDefinitionValidityToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.optionsToolStripMenuItem.Text = "Tools";

@@ -95,9 +95,9 @@ namespace NPC_Maker
                 if (false)
                 {
                     // Old Mono code
-                    process.DoubleWaitForExit();
-                    outputResult = process.StandardOutput.ReadToEnd();
-                    errorResult = process.StandardError.ReadToEnd();
+                    //process.DoubleWaitForExit();
+                    //outputResult = process.StandardOutput.ReadToEnd();
+                    //errorResult = process.StandardError.ReadToEnd();
                 }
                 else
                 {
