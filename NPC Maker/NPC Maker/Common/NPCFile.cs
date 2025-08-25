@@ -829,9 +829,7 @@ namespace NPC_Maker
                                 s = String.Concat(wMessageText[i + 1]);
 
                             if (s == Environment.NewLine)
-                            {
                                 i += Environment.NewLine.Length; // Skips next linebreak
-                            }
                         }
                     }
 
