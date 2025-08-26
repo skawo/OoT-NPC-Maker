@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.Panel_Editor = new System.Windows.Forms.Panel();
-            this.SplitPanel = new System.Windows.Forms.SplitContainer();
+            this.MainSplitPanel = new System.Windows.Forms.SplitContainer();
             this.Panel_NPCList = new System.Windows.Forms.Panel();
             this.Button_Import = new System.Windows.Forms.Button();
             this.Button_Export = new System.Windows.Forms.Button();
@@ -256,12 +256,17 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
-            this.chkBox_ShowDefaultLanguagePreview = new System.Windows.Forms.CheckBox();
+            this.MsgTabSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgEntrySplitContainer = new System.Windows.Forms.SplitContainer();
             this.pictureBox_Comment = new System.Windows.Forms.PictureBox();
             this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
             this.pictureBox_Comment_Loc = new System.Windows.Forms.PictureBox();
             this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
+            this.PanelMsgPreview = new System.Windows.Forms.Panel();
+            this.PreviewSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.MsgPreviewOrig = new System.Windows.Forms.PictureBox();
+            this.MsgPreview = new System.Windows.Forms.PictureBox();
+            this.chkBox_ShowDefaultLanguagePreview = new System.Windows.Forms.CheckBox();
             this.Btn_RemoveLanguage = new System.Windows.Forms.Button();
             this.Combo_Language = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -270,10 +275,6 @@
             this.Btn_MsgMoveDown = new System.Windows.Forms.Button();
             this.Btn_MsgMoveUp = new System.Windows.Forms.Button();
             this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
-            this.PanelMsgPreview = new System.Windows.Forms.Panel();
-            this.PreviewSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.MsgPreviewOrig = new System.Windows.Forms.PictureBox();
-            this.MsgPreview = new System.Windows.Forms.PictureBox();
             this.Btn_MsgRename = new System.Windows.Forms.Button();
             this.Combo_MsgPos = new System.Windows.Forms.ComboBox();
             this.Lbl_MsgPos = new System.Windows.Forms.Label();
@@ -366,12 +367,11 @@
             this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
-            this.MsgTabSplitContainer = new System.Windows.Forms.SplitContainer();
             this.Panel_Editor.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
-            this.SplitPanel.Panel1.SuspendLayout();
-            this.SplitPanel.Panel2.SuspendLayout();
-            this.SplitPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
+            this.MainSplitPanel.Panel1.SuspendLayout();
+            this.MainSplitPanel.Panel2.SuspendLayout();
+            this.MainSplitPanel.SuspendLayout();
             this.Panel_NPCList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_NPCData.SuspendLayout();
@@ -441,6 +441,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
             this.Tab4_Messages.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTabSplitContainer)).BeginInit();
+            this.MsgTabSplitContainer.Panel1.SuspendLayout();
+            this.MsgTabSplitContainer.Panel2.SuspendLayout();
+            this.MsgTabSplitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MsgEntrySplitContainer)).BeginInit();
             this.MsgEntrySplitContainer.Panel1.SuspendLayout();
             this.MsgEntrySplitContainer.Panel2.SuspendLayout();
@@ -461,17 +465,13 @@
             this.Tab6_EmbeddedOverlay.SuspendLayout();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgTabSplitContainer)).BeginInit();
-            this.MsgTabSplitContainer.Panel1.SuspendLayout();
-            this.MsgTabSplitContainer.Panel2.SuspendLayout();
-            this.MsgTabSplitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // Panel_Editor
             // 
             this.Panel_Editor.AutoScroll = true;
             this.Panel_Editor.AutoScrollMinSize = new System.Drawing.Size(936, 647);
-            this.Panel_Editor.Controls.Add(this.SplitPanel);
+            this.Panel_Editor.Controls.Add(this.MainSplitPanel);
             this.Panel_Editor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel_Editor.Enabled = false;
             this.Panel_Editor.Location = new System.Drawing.Point(0, 24);
@@ -479,23 +479,23 @@
             this.Panel_Editor.Size = new System.Drawing.Size(1184, 659);
             this.Panel_Editor.TabIndex = 5;
             // 
-            // SplitPanel
+            // MainSplitPanel
             // 
-            this.SplitPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SplitPanel.Location = new System.Drawing.Point(0, 0);
-            this.SplitPanel.Name = "SplitPanel";
+            this.MainSplitPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainSplitPanel.Location = new System.Drawing.Point(0, 0);
+            this.MainSplitPanel.Name = "MainSplitPanel";
             // 
-            // SplitPanel.Panel1
+            // MainSplitPanel.Panel1
             // 
-            this.SplitPanel.Panel1.Controls.Add(this.Panel_NPCList);
-            this.SplitPanel.Panel1.SizeChanged += new System.EventHandler(this.splitContainer1_Panel1_SizeChanged);
+            this.MainSplitPanel.Panel1.Controls.Add(this.Panel_NPCList);
+            this.MainSplitPanel.Panel1.SizeChanged += new System.EventHandler(this.splitContainer1_Panel1_SizeChanged);
             // 
-            // SplitPanel.Panel2
+            // MainSplitPanel.Panel2
             // 
-            this.SplitPanel.Panel2.Controls.Add(this.Panel_NPCData);
-            this.SplitPanel.Size = new System.Drawing.Size(1184, 659);
-            this.SplitPanel.SplitterDistance = 324;
-            this.SplitPanel.TabIndex = 9;
+            this.MainSplitPanel.Panel2.Controls.Add(this.Panel_NPCData);
+            this.MainSplitPanel.Size = new System.Drawing.Size(1184, 659);
+            this.MainSplitPanel.SplitterDistance = 324;
+            this.MainSplitPanel.TabIndex = 9;
             // 
             // Panel_NPCList
             // 
@@ -3417,19 +3417,26 @@
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
             // 
-            // chkBox_ShowDefaultLanguagePreview
+            // MsgTabSplitContainer
             // 
-            this.chkBox_ShowDefaultLanguagePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.MsgTabSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkBox_ShowDefaultLanguagePreview.AutoSize = true;
-            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(539, 29);
-            this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
-            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(183, 17);
-            this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
-            this.chkBox_ShowDefaultLanguagePreview.Tag = "";
-            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default localization preview";
-            this.chkBox_ShowDefaultLanguagePreview.UseVisualStyleBackColor = true;
-            this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.chkBox_ShowDefaultLanguagePreview_CheckedChanged);
+            this.MsgTabSplitContainer.Location = new System.Drawing.Point(202, 54);
+            this.MsgTabSplitContainer.Name = "MsgTabSplitContainer";
+            this.MsgTabSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // MsgTabSplitContainer.Panel1
+            // 
+            this.MsgTabSplitContainer.Panel1.Controls.Add(this.MsgEntrySplitContainer);
+            // 
+            // MsgTabSplitContainer.Panel2
+            // 
+            this.MsgTabSplitContainer.Panel2.Controls.Add(this.PanelMsgPreview);
+            this.MsgTabSplitContainer.Size = new System.Drawing.Size(640, 567);
+            this.MsgTabSplitContainer.SplitterDistance = 220;
+            this.MsgTabSplitContainer.TabIndex = 93;
+            this.MsgTabSplitContainer.SizeChanged += new System.EventHandler(this.MsgTabSplitContainer_SizeChanged);
             // 
             // MsgEntrySplitContainer
             // 
@@ -3452,7 +3459,6 @@
             this.MsgEntrySplitContainer.Size = new System.Drawing.Size(640, 220);
             this.MsgEntrySplitContainer.SplitterDistance = 25;
             this.MsgEntrySplitContainer.TabIndex = 91;
-            this.MsgEntrySplitContainer.SizeChanged += new System.EventHandler(this.SplitMsgContainer_SizeChanged);
             this.MsgEntrySplitContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.SplitMsgContainer_Paint);
             // 
             // pictureBox_Comment
@@ -3557,6 +3563,78 @@
             this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
             this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
             // 
+            // PanelMsgPreview
+            // 
+            this.PanelMsgPreview.AutoScroll = true;
+            this.PanelMsgPreview.BackColor = System.Drawing.Color.White;
+            this.PanelMsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelMsgPreview.Controls.Add(this.PreviewSplitContainer);
+            this.PanelMsgPreview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelMsgPreview.Location = new System.Drawing.Point(0, 0);
+            this.PanelMsgPreview.Margin = new System.Windows.Forms.Padding(0);
+            this.PanelMsgPreview.Name = "PanelMsgPreview";
+            this.PanelMsgPreview.Size = new System.Drawing.Size(640, 343);
+            this.PanelMsgPreview.TabIndex = 72;
+            this.PanelMsgPreview.Resize += new System.EventHandler(this.PanelMsgPreview_Resize);
+            // 
+            // PreviewSplitContainer
+            // 
+            this.PreviewSplitContainer.BackColor = System.Drawing.Color.Transparent;
+            this.PreviewSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PreviewSplitContainer.IsSplitterFixed = true;
+            this.PreviewSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.PreviewSplitContainer.Name = "PreviewSplitContainer";
+            // 
+            // PreviewSplitContainer.Panel1
+            // 
+            this.PreviewSplitContainer.Panel1.AutoScroll = true;
+            this.PreviewSplitContainer.Panel1.Controls.Add(this.MsgPreviewOrig);
+            this.PreviewSplitContainer.Panel1Collapsed = true;
+            // 
+            // PreviewSplitContainer.Panel2
+            // 
+            this.PreviewSplitContainer.Panel2.AutoScroll = true;
+            this.PreviewSplitContainer.Panel2.Controls.Add(this.MsgPreview);
+            this.PreviewSplitContainer.Size = new System.Drawing.Size(638, 341);
+            this.PreviewSplitContainer.SplitterDistance = 185;
+            this.PreviewSplitContainer.TabIndex = 70;
+            // 
+            // MsgPreviewOrig
+            // 
+            this.MsgPreviewOrig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MsgPreviewOrig.Location = new System.Drawing.Point(-145, -87);
+            this.MsgPreviewOrig.Margin = new System.Windows.Forms.Padding(0);
+            this.MsgPreviewOrig.Name = "MsgPreviewOrig";
+            this.MsgPreviewOrig.Size = new System.Drawing.Size(474, 275);
+            this.MsgPreviewOrig.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.MsgPreviewOrig.TabIndex = 70;
+            this.MsgPreviewOrig.TabStop = false;
+            // 
+            // MsgPreview
+            // 
+            this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.MsgPreview.Location = new System.Drawing.Point(82, 2);
+            this.MsgPreview.Margin = new System.Windows.Forms.Padding(0);
+            this.MsgPreview.Name = "MsgPreview";
+            this.MsgPreview.Size = new System.Drawing.Size(474, 275);
+            this.MsgPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.MsgPreview.TabIndex = 69;
+            this.MsgPreview.TabStop = false;
+            // 
+            // chkBox_ShowDefaultLanguagePreview
+            // 
+            this.chkBox_ShowDefaultLanguagePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBox_ShowDefaultLanguagePreview.AutoSize = true;
+            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(539, 29);
+            this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
+            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(183, 17);
+            this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
+            this.chkBox_ShowDefaultLanguagePreview.Tag = "";
+            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default localization preview";
+            this.chkBox_ShowDefaultLanguagePreview.UseVisualStyleBackColor = true;
+            this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.chkBox_ShowDefaultLanguagePreview_CheckedChanged);
+            // 
             // Btn_RemoveLanguage
             // 
             this.Btn_RemoveLanguage.Location = new System.Drawing.Point(460, 26);
@@ -3617,22 +3695,24 @@
             // Btn_MsgMoveDown
             // 
             this.Btn_MsgMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_MsgMoveDown.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Btn_MsgMoveDown.BackgroundImage")));
+            this.Btn_MsgMoveDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn_MsgMoveDown.Location = new System.Drawing.Point(161, 590);
             this.Btn_MsgMoveDown.Name = "Btn_MsgMoveDown";
             this.Btn_MsgMoveDown.Size = new System.Drawing.Size(31, 31);
             this.Btn_MsgMoveDown.TabIndex = 75;
-            this.Btn_MsgMoveDown.Text = "▼";
             this.Btn_MsgMoveDown.UseVisualStyleBackColor = true;
             this.Btn_MsgMoveDown.Click += new System.EventHandler(this.Btn_MsgMoveDown_Click);
             // 
             // Btn_MsgMoveUp
             // 
             this.Btn_MsgMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Btn_MsgMoveUp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Btn_MsgMoveUp.BackgroundImage")));
+            this.Btn_MsgMoveUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Btn_MsgMoveUp.Location = new System.Drawing.Point(161, 553);
             this.Btn_MsgMoveUp.Name = "Btn_MsgMoveUp";
             this.Btn_MsgMoveUp.Size = new System.Drawing.Size(31, 31);
             this.Btn_MsgMoveUp.TabIndex = 74;
-            this.Btn_MsgMoveUp.Text = "▲";
             this.Btn_MsgMoveUp.UseVisualStyleBackColor = true;
             this.Btn_MsgMoveUp.Click += new System.EventHandler(this.Btn_MsgMoveUp_Click);
             // 
@@ -3648,68 +3728,10 @@
             this.ChkBox_UseSpaceFont.UseVisualStyleBackColor = true;
             this.ChkBox_UseSpaceFont.CheckedChanged += new System.EventHandler(this.ChkBox_UseSpaceFont_CheckedChanged);
             // 
-            // PanelMsgPreview
-            // 
-            this.PanelMsgPreview.AutoScroll = true;
-            this.PanelMsgPreview.BackColor = System.Drawing.Color.White;
-            this.PanelMsgPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelMsgPreview.Controls.Add(this.PreviewSplitContainer);
-            this.PanelMsgPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PanelMsgPreview.Location = new System.Drawing.Point(0, 0);
-            this.PanelMsgPreview.Margin = new System.Windows.Forms.Padding(0);
-            this.PanelMsgPreview.Name = "PanelMsgPreview";
-            this.PanelMsgPreview.Size = new System.Drawing.Size(640, 343);
-            this.PanelMsgPreview.TabIndex = 72;
-            this.PanelMsgPreview.Resize += new System.EventHandler(this.PanelMsgPreview_Resize);
-            // 
-            // PreviewSplitContainer
-            // 
-            this.PreviewSplitContainer.BackColor = System.Drawing.Color.Transparent;
-            this.PreviewSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PreviewSplitContainer.IsSplitterFixed = true;
-            this.PreviewSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this.PreviewSplitContainer.Name = "PreviewSplitContainer";
-            // 
-            // PreviewSplitContainer.Panel1
-            // 
-            this.PreviewSplitContainer.Panel1.AutoScroll = true;
-            this.PreviewSplitContainer.Panel1.Controls.Add(this.MsgPreviewOrig);
-            this.PreviewSplitContainer.Panel1Collapsed = true;
-            // 
-            // PreviewSplitContainer.Panel2
-            // 
-            this.PreviewSplitContainer.Panel2.AutoScroll = true;
-            this.PreviewSplitContainer.Panel2.Controls.Add(this.MsgPreview);
-            this.PreviewSplitContainer.Size = new System.Drawing.Size(638, 341);
-            this.PreviewSplitContainer.SplitterDistance = 185;
-            this.PreviewSplitContainer.TabIndex = 70;
-            // 
-            // MsgPreviewOrig
-            // 
-            this.MsgPreviewOrig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MsgPreviewOrig.Location = new System.Drawing.Point(-145, -87);
-            this.MsgPreviewOrig.Margin = new System.Windows.Forms.Padding(0);
-            this.MsgPreviewOrig.Name = "MsgPreviewOrig";
-            this.MsgPreviewOrig.Size = new System.Drawing.Size(474, 275);
-            this.MsgPreviewOrig.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.MsgPreviewOrig.TabIndex = 70;
-            this.MsgPreviewOrig.TabStop = false;
-            // 
-            // MsgPreview
-            // 
-            this.MsgPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.MsgPreview.Location = new System.Drawing.Point(82, 2);
-            this.MsgPreview.Margin = new System.Windows.Forms.Padding(0);
-            this.MsgPreview.Name = "MsgPreview";
-            this.MsgPreview.Size = new System.Drawing.Size(474, 275);
-            this.MsgPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.MsgPreview.TabIndex = 69;
-            this.MsgPreview.TabStop = false;
-            // 
             // Btn_MsgRename
             // 
             this.Btn_MsgRename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_MsgRename.Location = new System.Drawing.Point(82, 553);
+            this.Btn_MsgRename.Location = new System.Drawing.Point(85, 590);
             this.Btn_MsgRename.Name = "Btn_MsgRename";
             this.Btn_MsgRename.Size = new System.Drawing.Size(73, 31);
             this.Btn_MsgRename.TabIndex = 67;
@@ -3773,7 +3795,7 @@
             // Btn_DeleteMsg
             // 
             this.Btn_DeleteMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_DeleteMsg.Location = new System.Drawing.Point(3, 553);
+            this.Btn_DeleteMsg.Location = new System.Drawing.Point(6, 589);
             this.Btn_DeleteMsg.Name = "Btn_DeleteMsg";
             this.Btn_DeleteMsg.Size = new System.Drawing.Size(73, 31);
             this.Btn_DeleteMsg.TabIndex = 8;
@@ -3784,7 +3806,7 @@
             // Btn_AddMsg
             // 
             this.Btn_AddMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Btn_AddMsg.Location = new System.Drawing.Point(3, 590);
+            this.Btn_AddMsg.Location = new System.Drawing.Point(6, 553);
             this.Btn_AddMsg.Name = "Btn_AddMsg";
             this.Btn_AddMsg.Size = new System.Drawing.Size(152, 31);
             this.Btn_AddMsg.TabIndex = 8;
@@ -4600,26 +4622,6 @@
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
             // 
-            // MsgTabSplitContainer
-            // 
-            this.MsgTabSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.MsgTabSplitContainer.Location = new System.Drawing.Point(202, 54);
-            this.MsgTabSplitContainer.Name = "MsgTabSplitContainer";
-            this.MsgTabSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // MsgTabSplitContainer.Panel1
-            // 
-            this.MsgTabSplitContainer.Panel1.Controls.Add(this.MsgEntrySplitContainer);
-            // 
-            // MsgTabSplitContainer.Panel2
-            // 
-            this.MsgTabSplitContainer.Panel2.Controls.Add(this.PanelMsgPreview);
-            this.MsgTabSplitContainer.Size = new System.Drawing.Size(640, 567);
-            this.MsgTabSplitContainer.SplitterDistance = 220;
-            this.MsgTabSplitContainer.TabIndex = 93;
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4638,10 +4640,10 @@
             this.Text = "OoT NPC Maker";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Panel_Editor.ResumeLayout(false);
-            this.SplitPanel.Panel1.ResumeLayout(false);
-            this.SplitPanel.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).EndInit();
-            this.SplitPanel.ResumeLayout(false);
+            this.MainSplitPanel.Panel1.ResumeLayout(false);
+            this.MainSplitPanel.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).EndInit();
+            this.MainSplitPanel.ResumeLayout(false);
             this.Panel_NPCList.ResumeLayout(false);
             this.Panel_NPCList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
@@ -4723,6 +4725,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
             this.Tab4_Messages.ResumeLayout(false);
             this.Tab4_Messages.PerformLayout();
+            this.MsgTabSplitContainer.Panel1.ResumeLayout(false);
+            this.MsgTabSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTabSplitContainer)).EndInit();
+            this.MsgTabSplitContainer.ResumeLayout(false);
             this.MsgEntrySplitContainer.Panel1.ResumeLayout(false);
             this.MsgEntrySplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MsgEntrySplitContainer)).EndInit();
@@ -4745,10 +4751,6 @@
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
-            this.MsgTabSplitContainer.Panel1.ResumeLayout(false);
-            this.MsgTabSplitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.MsgTabSplitContainer)).EndInit();
-            this.MsgTabSplitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5042,7 +5044,7 @@
         private System.Windows.Forms.Label LblPostLimb;
         private System.Windows.Forms.ComboBox Combo_postLimb;
         private Windows.ProgressWithLabel progressL;
-        private System.Windows.Forms.SplitContainer SplitPanel;
+        private System.Windows.Forms.SplitContainer MainSplitPanel;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Btn_RemoveLanguage;
         private System.Windows.Forms.ComboBox Combo_Language;

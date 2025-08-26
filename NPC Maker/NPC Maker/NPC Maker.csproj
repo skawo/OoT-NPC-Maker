@@ -421,6 +421,8 @@
     <None Include="Resources\Untitled.png" />
     <None Include="Resources\commentNo.png" />
     <None Include="Resources\comment.png" />
+    <None Include="Resources\up.png" />
+    <None Include="Resources\dn.png" />
     <Content Include="System.Runtime.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

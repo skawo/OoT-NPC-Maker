@@ -104,22 +104,29 @@ namespace NPC_Maker
             if (FilePath != "")
                 OpenFile(FilePath);
 
+            splitContainer1_Panel1_SizeChanged(null, null);
+            MsgTabSplitContainer_SizeChanged(null, null);
+        }
+
+        private void MsgTabSplitContainer_SizeChanged(object sender, EventArgs e)
+        {
             if (Program.IsRunningUnderMono)
             {
-                Btn_MsgMoveUp.Text = "Up";
-                Btn_MsgMoveDown.Text = "Dn";
+                int width = Tab4_Messages.Width - MessagesGrid.Width - 20;
+                int height = Btn_MsgMoveDown.Location.Y + Btn_MsgMoveDown.Height - Lbl_MsgType.Location.Y;
+
+                MsgTabSplitContainer.Size = new Size(width, height);
+                MsgEntrySplitContainer.Size = new Size(width, MsgTabSplitContainer.SplitterDistance);
+                PanelMsgPreview.Size = new Size(width, MsgTabSplitContainer.SplitterDistance);
             }
-
-            splitContainer1_Panel1_SizeChanged(null, null);
-
         }
 
         private void splitContainer1_Panel1_SizeChanged(object sender, EventArgs e)
         {
-            int width = SplitPanel.Panel1.Width;
+            int width = MainSplitPanel.Panel1.Width;
 
-            if (SplitPanel.Panel1.Width == 0)
-                width = SplitPanel.SplitterDistance;
+            if (MainSplitPanel.Panel1.Width == 0)
+                width = MainSplitPanel.SplitterDistance;
 
             int btnX = (width - 12) / 3;
             int btnXRow2 = (width - 12) / 2;
@@ -3213,15 +3220,6 @@ namespace NPC_Maker
 
         #region Messages
 
-        private void SplitMsgContainer_SizeChanged(object sender, EventArgs e)
-        {
-            if (Program.IsRunningUnderMono)
-            {
-                MsgEntrySplitContainer.Width = PanelMsgPreview.Width;
-                MsgEntrySplitContainer.Height = PanelMsgPreview.Location.Y - MsgEntrySplitContainer.Location.Y - 10;
-            }
-        }
-
         private void MessagesGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
 
@@ -4499,8 +4497,8 @@ namespace NPC_Maker
             }
         }
 
-        #endregion
 
+        #endregion
 
     }
 }
