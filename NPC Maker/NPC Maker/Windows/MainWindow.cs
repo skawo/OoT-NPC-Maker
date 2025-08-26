@@ -3217,8 +3217,8 @@ namespace NPC_Maker
         {
             if (Program.IsRunningUnderMono)
             {
-                SplitMsgContainer.Width = PanelMsgPreview.Width;
-                SplitMsgContainer.Height = PanelMsgPreview.Location.Y - SplitMsgContainer.Location.Y - 10;
+                MsgEntrySplitContainer.Width = PanelMsgPreview.Width;
+                MsgEntrySplitContainer.Height = PanelMsgPreview.Location.Y - MsgEntrySplitContainer.Location.Y - 10;
             }
         }
 
@@ -3311,19 +3311,19 @@ namespace NPC_Maker
 
             if (Combo_Language.SelectedIndex != 0)
             {
-                SplitMsgContainer.Panel1Collapsed = false;
-                SplitMsgContainer.Panel1MinSize = 25;
-                SplitMsgContainer.Panel2MinSize = 25;
-                SplitMsgContainer.SplitterDistance = SplitMsgContainer.Width / 2;
-                SplitMsgContainer.IsSplitterFixed = false;
+                MsgEntrySplitContainer.Panel1Collapsed = false;
+                MsgEntrySplitContainer.Panel1MinSize = 25;
+                MsgEntrySplitContainer.Panel2MinSize = 25;
+                MsgEntrySplitContainer.SplitterDistance = MsgEntrySplitContainer.Width / 2;
+                MsgEntrySplitContainer.IsSplitterFixed = false;
             }
             else
             {
-                SplitMsgContainer.Panel1Collapsed = true;
-                SplitMsgContainer.Panel1MinSize = 0;
-                SplitMsgContainer.Panel2MinSize = 0;
-                SplitMsgContainer.SplitterDistance = 0;
-                SplitMsgContainer.IsSplitterFixed = true;
+                MsgEntrySplitContainer.Panel1Collapsed = true;
+                MsgEntrySplitContainer.Panel1MinSize = 0;
+                MsgEntrySplitContainer.Panel2MinSize = 0;
+                MsgEntrySplitContainer.SplitterDistance = 0;
+                MsgEntrySplitContainer.IsSplitterFixed = true;
             }
 
             InsertDataToEditor();
