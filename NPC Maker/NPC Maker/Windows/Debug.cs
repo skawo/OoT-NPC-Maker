@@ -7,6 +7,8 @@ namespace NPC_Maker
         public Debug(string Text)
         {
             InitializeComponent();
+            Helpers.MakeNotResizableMonoSafe(this);
+
             fastColoredTextBox1.Text = Text;
         }
     }

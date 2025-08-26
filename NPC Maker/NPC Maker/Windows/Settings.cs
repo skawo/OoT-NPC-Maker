@@ -20,6 +20,8 @@ namespace NPC_Maker.Windows
         {
             InitializeComponent();
 
+            Helpers.MakeNotResizableMonoSafe(this);
+
             string JSON = JsonConvert.SerializeObject(Program.Settings);
             EditedSettings = JsonConvert.DeserializeObject<NPCMakerSettings>(JSON);
 

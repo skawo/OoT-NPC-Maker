@@ -19,6 +19,8 @@ namespace NPC_Maker
         {
             InitializeComponent();
 
+            Helpers.MakeNotResizableMonoSafe(this);
+
             SkipEntries = _SkipEntries;
 
             if (SkipEntries == null)

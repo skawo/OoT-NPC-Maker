@@ -3522,7 +3522,7 @@ namespace NPC_Maker
         {
             tip.SetToolTip(box, comment);
 
-            if (String.IsNullOrEmpty(comment))
+            if (String.IsNullOrWhiteSpace(comment))
                 box.Image = Properties.Resources.commentNo;
             else
                 box.Image = Properties.Resources.comment;

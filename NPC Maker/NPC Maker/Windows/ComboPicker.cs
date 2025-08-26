@@ -18,6 +18,8 @@ namespace NPC_Maker.Windows
         {
             InitializeComponent();
 
+            Helpers.MakeNotResizableMonoSafe(this);
+
             foreach (string o in Options)
                 Combo.Items.Add(o);
 

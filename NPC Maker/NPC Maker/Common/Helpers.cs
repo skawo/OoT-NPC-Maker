@@ -13,6 +13,15 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
+
+        public static void MakeNotResizableMonoSafe(System.Windows.Forms.Form f)
+        {
+            f.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            f.MaximizeBox = false;
+            f.MinimizeBox = false;
+            f.ShowInTaskbar = false;
+        }
+
         public static string GetBase64Hash(SHA1 hasher, string s)
         {
             return Convert.ToBase64String(hasher.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("+", "_").Replace("/", "-").Replace("=", "");

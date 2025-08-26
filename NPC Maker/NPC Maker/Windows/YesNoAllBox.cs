@@ -15,6 +15,9 @@ namespace NPC_Maker.Windows
         {
             InitializeComponent();
 
+            Helpers.MakeNotResizableMonoSafe(this);
+
+
             LblExplanation.Text = Explanation;
             this.Text = Title;
 

@@ -13,6 +13,8 @@ namespace NPC_Maker
         {
             InitializeComponent();
 
+            Helpers.MakeNotResizableMonoSafe(this);
+
             Txb_Desc.Text = Desc;
             Txb_Name.Text = Name;
             NumUp_ID.Value = ID;

@@ -9,6 +9,9 @@ namespace NPC_Maker
         public About()
         {
             InitializeComponent();
+
+            Helpers.MakeNotResizableMonoSafe(this);
+
             LblVersion.Text = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
         }
     }

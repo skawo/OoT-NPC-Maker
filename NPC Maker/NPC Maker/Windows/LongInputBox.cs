@@ -16,12 +16,12 @@ namespace NPC_Maker.Windows
         public LongInputBox(string title, string command, string text)
         {
             InitializeComponent();
+            Helpers.MakeNotResizableMonoSafe(this);
 
-            this.Text = title;
-            this.label1.Text = command;
-            this.textBox1.Text = text;
-            this.DialogResult = DialogResult.Cancel;
             inputText = text;
+            this.Text = title;
+            textBox1.Text = text;
+            label1.Text = command;
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -31,6 +31,9 @@ namespace NPC_Maker.Windows
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrWhiteSpace(inputText))
+                inputText = String.Empty;
+
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
