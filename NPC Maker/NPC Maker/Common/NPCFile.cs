@@ -722,6 +722,8 @@ namespace NPC_Maker
     {
         public string Name { get; set; }
 
+        public string Comment { get; set; }
+
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public string MessageText { get; set; }
 

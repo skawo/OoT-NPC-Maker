@@ -1480,6 +1480,7 @@ namespace NPC_Maker
                                     {
                                         msgN.MessageText = "";
                                         msgN.MessageTextLines.Clear();
+                                        msgN.Comment = "";
                                     }
 
                                     entry.Messages.Insert(msgIndex, msgN);
@@ -1494,6 +1495,7 @@ namespace NPC_Maker
                                         {
                                             msgNLoc.MessageText = "";
                                             msgNLoc.MessageTextLines.Clear();
+                                            msgNLoc.Comment = "";
                                         }
 
                                         loc.Messages.Insert(msgIndex, msgNLoc);
@@ -3451,6 +3453,83 @@ namespace NPC_Maker
             return MessageList;
         }
 
+        private void SplitMsgContainer_Paint(object sender, PaintEventArgs e)
+        {
+            const int msgCommentSize = 18;
+            int xoffs = 0;
+            int yoffs = 0;
+
+            pictureBox_Comment.Location = new Point(MsgTextDefault.Location.X + MsgTextDefault.Width - msgCommentSize - xoffs,
+                                                    MsgTextDefault.Location.Y + MsgTextDefault.Height - msgCommentSize - yoffs);
+            pictureBox_Comment.Size = new Size(msgCommentSize, msgCommentSize);
+
+            MsgText.VerticalScroll.Visible = true;
+            MsgText.HorizontalScroll.Visible = true;
+
+            pictureBox_Comment_Loc.Location = new Point(MsgText.Location.X + MsgText.Width - msgCommentSize - xoffs,
+                                                    MsgText.Location.Y + MsgText.Height - msgCommentSize - yoffs);
+            pictureBox_Comment_Loc.Size = new Size(msgCommentSize, msgCommentSize);
+        }
+
+        private string CommentInput(string startComment)
+        {
+            Windows.LongInputBox lib = new Windows.LongInputBox("Comment input", "Message comment:", startComment);
+            
+            DialogResult dr = lib.ShowDialog();
+
+            if (dr == DialogResult.OK)
+                return lib.inputText;
+            else
+                return startComment;
+        }
+
+        private MessageEntry GetCurMsgEntry(string Language)
+        {
+            if (SelectedEntry == null)
+                return null;
+
+            int index = MessagesGrid.SelectedRows[0].Index;
+
+            if (index >= MessagesGrid.RowCount)
+                index = MessagesGrid.RowCount - 1;
+
+            List<MessageEntry> messageList = GetLanguageMessageList(SelectedEntry, Language);
+            MessageEntry entry = messageList[index];
+            return entry;
+        }
+
+        private void pictureBox_Comment_DoubleClick(object sender, EventArgs e)
+        {
+            MessageEntry entry = GetCurMsgEntry(Dicts.DefaultLanguage);
+
+            if (entry != null)
+            {
+                entry.Comment = CommentInput(entry.Comment);
+                SetPictureBoxCommentImageToolTip(pictureBox_Comment, msgCommentTooltip, entry.Comment);
+            }
+        }
+
+        private void pictureBox_Comment_Loc_DoubleClick(object sender, EventArgs e)
+        {
+            MessageEntry entry = GetCurMsgEntry(Combo_Language.Text);
+
+            if (entry != null)
+            {
+                entry.Comment = CommentInput(entry.Comment);
+                SetPictureBoxCommentImageToolTip(pictureBox_Comment_Loc, msgCommentTooltipLoc, entry.Comment);
+            }
+        }
+
+        private void SetPictureBoxCommentImageToolTip(PictureBox box, ToolTip tip, string comment)
+        {
+            tip.SetToolTip(box, comment);
+
+            if (String.IsNullOrEmpty(comment))
+                box.Image = Properties.Resources.commentNo;
+            else
+                box.Image = Properties.Resources.comment;
+        }
+
         private void MessagesGrid_SelectionChanged(object sender, EventArgs e)
         {
             if (SelectedEntry == null)
@@ -3483,14 +3562,16 @@ namespace NPC_Maker
                 List<MessageEntry> MessageList = GetLanguageMessageList(SelectedEntry, Combo_Language.Text);
 
                 MessageEntry Entry = MessageList[index];
-
                 MsgText.Text = Entry.MessageText;
                 MsgText.ClearUndo();
+
+                SetPictureBoxCommentImageToolTip(pictureBox_Comment_Loc, msgCommentTooltipLoc, Entry.Comment);
 
                 MessageEntry DefaultEntry = SelectedEntry.Messages[index];
                 MsgTextDefault.Text = DefaultEntry.MessageText;
                 MsgTextDefault.ClearUndo();
 
+                SetPictureBoxCommentImageToolTip(pictureBox_Comment, msgCommentTooltip, DefaultEntry.Comment);
 
                 Combo_MsgType.SelectedIndex = Entry.Type;
                 Combo_MsgPos.SelectedIndex = Entry.Position;
@@ -4419,5 +4500,7 @@ namespace NPC_Maker
         }
 
         #endregion
+
+
     }
 }

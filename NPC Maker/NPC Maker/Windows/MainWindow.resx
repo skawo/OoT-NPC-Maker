@@ -186,6 +186,16 @@
   <metadata name="ExtraDlists_ShowType.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="pictureBox_Comment.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAJhJREFUSEu1zz0KAjEUAOE9jXfxVJ7CC9jYegEbawtLO8FKUdjCP1aWfZJAZHUQ
+        m9kH03xJSFJVs0MMGsAOYAewA9gB7AB2ADuAHcAOYPcN890j7m0XaVbH5u3r8zNbWptub9lGi1Psr232
+        uulivKz/X1AOlCnen7Qn2WRz+fD+g35eMPgP9AB2ADuAHcAOYAewA9gB7AByL9Ga4umhJCQXAAAAAElF
+        TkSuQmCC
+</value>
+  </data>
   <data name="MsgTextDefault.ServiceColors" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdGYXN0Q29sb3JlZFRleHRCb3gsIFZlcnNpb249Mi4xNi4xMS4w
@@ -202,6 +212,15 @@
         YXdpbmcuQ29sb3IEAAAABG5hbWUFdmFsdWUKa25vd25Db2xvcgVzdGF0ZQEAAAAJBwcDAAAACgAAAAAA
         AAAAlgABAAH7/////P///woAAAAAAAAAAKQAAQAB+v////z///8KAAAAAAAAAACWAAEAAfn////8////
         CgAAAAAAAAAAjQABAAH4/////P///woAAAAAAAAAAKQAAQAB9/////z///8KAAAAAAAAAACWAAEACw==
+</value>
+  </data>
+  <data name="pictureBox_Comment_Loc.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAJhJREFUSEu1zz0KAjEUAOE9jXfxVJ7CC9jYegEbawtLO8FKUdjCP1aWfZJAZHUQ
+        m9kH03xJSFJVs0MMGsAOYAewA9gB7AB2ADuAHcAOYPcN890j7m0XaVbH5u3r8zNbWptub9lGi1Psr232
+        uulivKz/X1AOlCnen7Qn2WRz+fD+g35eMPgP9AB2ADuAHcAOYAewA9gB7AByL9Ga4umhJCQXAAAAAElF
+        TkSuQmCC
 </value>
   </data>
   <data name="MsgText.ServiceColors" mimetype="application/x-microsoft.net.object.binary.base64">
@@ -237,10 +256,15 @@
   <metadata name="CodeParamsTooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>510, 1</value>
   </metadata>
+  <metadata name="msgCommentTooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>397, 3</value>
+  </metadata>
+  <metadata name="msgCommentTooltipLoc.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>397, 3</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>25</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAAAAAAAEAIAAogAAAZgAAAICAAAABACAAKAgBAI6AAABAQAAAAQAgAChCAAC2iAEAMDAAAAEA
