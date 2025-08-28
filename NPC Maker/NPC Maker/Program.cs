@@ -44,6 +44,16 @@ namespace NPC_Maker
         [STAThread]
         static void Main(string[] args)
         {
+            if (args.Length != 0)
+            {
+                if (!IsRunningUnderMono)
+                    AttachConsole(-1);
+
+                var version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+                Console.WriteLine();
+                Console.WriteLine($"Zelda Ocarina of Time NPC Creation Tool v.{version}");
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -88,84 +98,80 @@ namespace NPC_Maker
 
             if (args.Length == 0)
             {
-                string fileToOpen = "";
-
-                if (File.Exists("backup"))
-                {
-                    if (MessageBox.Show("NPCMaker was not closed properly the last time it was run. Load auto-saved backup?", "Autosaved backup exists", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                        fileToOpen = "backup";
-                }
+                var fileToOpen = File.Exists("backup") &&
+                                MessageBox.Show("NPCMaker was not closed properly the last time it was run. Load auto-saved backup?",
+                                              "Autosaved backup exists", MessageBoxButtons.YesNo) == DialogResult.Yes
+                                ? "backup" : "";
 
                 mw = new MainWindow(fileToOpen);
                 Application.Run(mw);
-
                 FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
             }
             else
             {
-                if (!IsRunningUnderMono)
-                    AttachConsole(-1);
+                var isValidCompileCommand = args.Length >= 4 && args[0].ToUpper() == "-C" && args.Length <= 5;
+                var isValidConvertCommand = args.Length == 2;
 
-                Console.WriteLine();
-
-                if (args[0].ToUpper() == "/?" || args[0].ToUpper() == "-HELP" || args.Length != 2)
+                if (isValidCompileCommand)
                 {
-                    Console.WriteLine($"Zelda Ocarina of Time NPC Creation Tool v.{FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}");
-                    Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj]");
+                    Console.WriteLine($"Compiling \"{Path.GetFileName(args[1])}\" to {args[3]}...");
+                    var compileFlags = args.Length == 5 ? args[4].Trim('"') : "";
+                    string compileMsgs = "";
+                    CCode.Compile(args[1], args[2], args[3], compileFlags, ref compileMsgs);
                     Console.WriteLine("Press ENTER to exit...");
+                    return;
                 }
-                else if (args.Length == 2)
+                else if (isValidConvertCommand)
                 {
-                    NPCFile InFile = null;
+                    NPCFile inFile = null;
 
                     try
                     {
-                        InFile = FileOps.ParseNPCJsonFile(args[0]);
+                        inFile = FileOps.ParseNPCJsonFile(args[0]);
                         Program.JsonPath = args[0];
                         Dicts.LoadDicts();
-                        Dicts.ReloadMsgTagOverrides(InFile.Languages);
-                        Program.Settings.GameVersion = InFile.GameVersion;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error reading input JSON:" + ex.Message);
-                    }
+                        Dicts.ReloadMsgTagOverrides(inFile.Languages);
+                        Program.Settings.GameVersion = inFile.GameVersion;
 
-                    try
-                    {
-                        Console.WriteLine($"NPC Maker: Saving \"{Path.GetFileName(args[0])}\" to binary...");
+                        Console.WriteLine($"Saving \"{Path.GetFileName(args[0])}\" to binary...");
 
                         if (Program.Settings.CompileInParallel)
                         {
                             Program.CompileInProgress = true;
+                            FileOps.PreprocessCodeAndScripts(args[1], inFile, null);
 
-                            FileOps.PreprocessCodeAndScripts(args[1], InFile, null);
-
-                            while (Program.CompileInProgress)
-                            {
-                                ;
-                            }
+                            while (Program.CompileInProgress) { /* Wait for completion */ }
                         }
                         else
                         {
-                            bool[] cacheStatus = FileOps.GetCacheStatus(InFile, true);
-
+                            var cacheStatus = FileOps.GetCacheStatus(inFile, true);
                             if (cacheStatus != null)
                             {
-                                string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(InFile);
-                                FileOps.SaveBinaryFile(args[1], InFile, null, baseDefines, cacheStatus[0], cacheStatus[1], true);
-                                CCode.CleanupCompileArtifacts();
+                                var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
+                                FileOps.SaveBinaryFile(args[1], inFile, null, baseDefines, cacheStatus[0], cacheStatus[1], true);
+                                CCode.CleanupStandardCompilationArtifacts();
                             }
                         }
                     }
+                    catch (Exception ex) when (inFile == null)
+                    {
+                        Console.WriteLine($"Error reading input JSON: {ex.Message}");
+                    }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Error writing output:" + ex.Message);
+                        Console.WriteLine($"Error writing output: {ex.Message}");
                     }
 
                     Console.WriteLine("Press ENTER to exit...");
                 }
+                else
+                {
+                    Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj]");
+                    Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c [InputCFile] [InputLinkerFile] [OutputZovl] [\"COMPILEFLAGS\"]");
+                    Console.WriteLine("Press ENTER to exit...");
+                }
             }
+
 
         }
     }

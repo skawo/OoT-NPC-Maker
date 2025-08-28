@@ -21,7 +21,10 @@ namespace NPC_Maker
             f.MinimizeBox = false;
             f.ShowInTaskbar = false;
         }
-
+        public static string GenerateTemporaryFolderName()
+        {
+            return $"temp_{DateTime.Now.Ticks}_{System.Diagnostics.Process.GetCurrentProcess().Id}";
+        }
         public static string GetBase64Hash(SHA1 hasher, string s)
         {
             return Convert.ToBase64String(hasher.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("+", "_").Replace("/", "-").Replace("=", "");

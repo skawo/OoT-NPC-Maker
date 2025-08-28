@@ -879,7 +879,7 @@ namespace NPC_Maker
                         bool[] caches = FileOps.GetCacheStatus(EditedFile);
                         string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
                         FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, caches[0], caches[1]);
-                        CCode.CleanupCompileArtifacts();
+                        CCode.CleanupStandardCompilationArtifacts();
                     });
                 }
 
@@ -1229,6 +1229,49 @@ namespace NPC_Maker
         #endregion
 
         #region Tools
+
+        private void compileActorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog of = new OpenFileDialog();
+            of.Title = "Select the source file...";
+            of.Filter = "C Files (*.c)|*.c|All files (*.*)|*.*";
+
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                string cFile = of.FileName;
+
+                of.Title = "Select the linker file...";
+                of.Filter = "Linker files (*.ld)|*.ld|All files (*.*)|*.*";
+
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    Windows.LongInputBox flg = new Windows.LongInputBox("Compile flags", "Add compile flags:", "");
+                    flg.ShowDialog();
+                   
+                    SaveFileDialog sf = new SaveFileDialog();
+                    sf.Title = "Select output ZOVL...";
+                    sf.Filter = "ZOVL files (*.zovl)|*.zovl|All files (*.*)|*.*";
+
+                    if (sf.ShowDialog() == DialogResult.OK)
+                    {
+                        string CompileMsgs = "";
+
+                        try
+                        {
+                            CCode.Compile(cFile, of.FileName, sf.FileName, flg.inputText, ref CompileMsgs);
+                        }
+                        catch (Exception ex)
+                        {
+                            CompileMsgs += $"{Environment.NewLine}{ex.Message}";
+                        }
+
+                        Windows.LongInputBox li = new Windows.LongInputBox("Results", "Compilation result:", CompileMsgs);
+                        li.ShowDialog();
+                        return;
+                    }
+                }
+            }
+        }
 
         private void checkDefinitionValidityToolStripMenuItem_Click(object sender, EventArgs e)
         {

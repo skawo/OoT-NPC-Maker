@@ -367,6 +367,7 @@
             this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
+            this.compileActorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -4448,7 +4449,8 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importLocalizationToolStripMenuItem,
             this.checkLocalizationConsistencyToolStripMenuItem,
-            this.checkDefinitionValidityToolStripMenuItem});
+            this.checkDefinitionValidityToolStripMenuItem,
+            this.compileActorToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.optionsToolStripMenuItem.Text = "Tools";
@@ -4621,6 +4623,13 @@
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
+            // 
+            // compileActorToolStripMenuItem
+            // 
+            this.compileActorToolStripMenuItem.Name = "compileActorToolStripMenuItem";
+            this.compileActorToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.compileActorToolStripMenuItem.Text = "Compile actor...";
+            this.compileActorToolStripMenuItem.Click += new System.EventHandler(this.compileActorToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -5094,6 +5103,7 @@
         private System.Windows.Forms.ToolTip msgCommentTooltip;
         private System.Windows.Forms.ToolTip msgCommentTooltipLoc;
         private System.Windows.Forms.SplitContainer MsgTabSplitContainer;
+        private System.Windows.Forms.ToolStripMenuItem compileActorToolStripMenuItem;
     }
 }
 

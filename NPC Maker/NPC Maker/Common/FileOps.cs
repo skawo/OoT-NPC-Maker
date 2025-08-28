@@ -596,7 +596,7 @@ namespace NPC_Maker
                 Console.WriteLine("\nPre-processing done!");
 
                 SaveBinaryFile(outPath, Data, progress, BaseDefines, false, false, CLIMode);
-                CCode.CleanupCompileArtifacts();
+                CCode.CleanupStandardCompilationArtifacts();
                 Program.CompileInProgress = false;
             });
         }

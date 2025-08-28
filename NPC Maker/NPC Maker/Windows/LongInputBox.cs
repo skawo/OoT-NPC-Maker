@@ -16,7 +16,6 @@ namespace NPC_Maker.Windows
         public LongInputBox(string title, string command, string text)
         {
             InitializeComponent();
-            Helpers.MakeNotResizableMonoSafe(this);
 
             inputText = text;
             this.Text = title;
