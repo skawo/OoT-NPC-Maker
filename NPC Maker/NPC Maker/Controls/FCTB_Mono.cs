@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastColoredTextBoxNS;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -26,6 +27,9 @@ namespace NPC_Maker
         private bool lastVerticalState = true;
         private bool lastHorizontalState = true;
 
+        private bool wordSelectMode = false;
+        private Place wordSelectModeStart;
+
         public FCTB_Mono()
         {
             isWsl = Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
@@ -41,6 +45,66 @@ namespace NPC_Maker
                 cp.Style |= 0x100000;  // WS_HSCROLL
                 return cp;
             }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (e.Clicks == 2 && e.Button == MouseButtons.Left)
+            {
+                wordSelectMode = true;
+                wordSelectModeStart = GetWordStart(PointToPlace(e.Location));
+            }
+            else
+                wordSelectMode = false;
+
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (wordSelectMode && e.Button == MouseButtons.Left)
+            {
+                Place mousePos = PointToPlace(e.Location);
+                Place wordStart = GetWordStart(mousePos);
+                Place wordEnd = GetWordEnd(mousePos);
+
+                if (mousePos < wordSelectModeStart)
+                    Selection = new Range(this, wordStart, Selection.End);
+                else
+                    Selection = new Range(this, wordSelectModeStart, wordEnd);
+            }
+            else
+            {
+                base.OnMouseMove(e);
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            wordSelectMode = false;
+            base.OnMouseUp(e);
+        }
+
+        private Place GetWordStart(Place pos)
+        {
+            string line = this[pos.iLine].Text;
+            int i = Math.Min(pos.iChar, line.Length - 1);
+
+            while (i > 0 && char.IsLetterOrDigit(line[i - 1]))
+                i--;
+
+            return new Place(i, pos.iLine);
+        }
+
+        private Place GetWordEnd(Place pos)
+        {
+            string line = this[pos.iLine].Text;
+            int i = pos.iChar;
+
+            while (i < line.Length && char.IsLetterOrDigit(line[i]))
+                i++;
+
+            return new Place(i, pos.iLine);
         }
 
         protected override void OnPaint(PaintEventArgs pe)
