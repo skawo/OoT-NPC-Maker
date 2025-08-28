@@ -21,3 +21,4 @@
 #include "source/h_rom.c"
 #include "source/h_scene.c"
 #include "source/h_scripts.c"
+#include "source/npc_maker_user.c"
