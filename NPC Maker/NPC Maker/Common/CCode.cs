@@ -345,7 +345,7 @@ namespace NPC_Maker
             var includeFlags = BuildIncludeFlags(config);
             var projectFlag = string.IsNullOrEmpty(Program.Settings.ProjectPath)
                 ? string.Empty
-                : $"-I {Program.Settings.ProjectPath} ";
+                : $"-I {Program.Settings.ProjectPath.AppendQuotation()} ";
 
             var arguments = config.IsMonoEnvironment
                 ? $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} -B {Path.Combine("..", "mips64", "binmono")} {paths.SourceFile.AppendQuotation()}"
