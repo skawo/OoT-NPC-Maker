@@ -349,6 +349,7 @@
             this.importLocalizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkLocalizationConsistencyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkDefinitionValidityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compileActorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -367,7 +368,6 @@
             this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
-            this.compileActorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -4476,6 +4476,13 @@
             this.checkDefinitionValidityToolStripMenuItem.Text = "Check definition validity";
             this.checkDefinitionValidityToolStripMenuItem.Click += new System.EventHandler(this.checkDefinitionValidityToolStripMenuItem_Click);
             // 
+            // compileActorToolStripMenuItem
+            // 
+            this.compileActorToolStripMenuItem.Name = "compileActorToolStripMenuItem";
+            this.compileActorToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.compileActorToolStripMenuItem.Text = "Compile actor...";
+            this.compileActorToolStripMenuItem.Click += new System.EventHandler(this.compileActorToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -4608,7 +4615,10 @@
             // msgCommentTooltip
             // 
             this.msgCommentTooltip.AutomaticDelay = 200;
+            this.msgCommentTooltip.AutoPopDelay = 32000;
+            this.msgCommentTooltip.InitialDelay = 200;
             this.msgCommentTooltip.IsBalloon = true;
+            this.msgCommentTooltip.ReshowDelay = 40;
             // 
             // msgCommentTooltipLoc
             // 
@@ -4623,13 +4633,6 @@
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
-            // 
-            // compileActorToolStripMenuItem
-            // 
-            this.compileActorToolStripMenuItem.Name = "compileActorToolStripMenuItem";
-            this.compileActorToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.compileActorToolStripMenuItem.Text = "Compile actor...";
-            this.compileActorToolStripMenuItem.Click += new System.EventHandler(this.compileActorToolStripMenuItem_Click);
             // 
             // MainWindow
             // 

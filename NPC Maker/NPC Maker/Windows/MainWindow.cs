@@ -3563,7 +3563,10 @@ namespace NPC_Maker
 
         private void SetPictureBoxCommentImageToolTip(PictureBox box, ToolTip tip, string comment)
         {
-            tip.SetToolTip(box, comment);
+            if (comment != null)
+                tip.SetToolTip(box, comment.Length > 1000 ? $"{comment.Substring(0, 1000)}..." : comment);
+            else
+                tip.RemoveAll();
 
             if (String.IsNullOrWhiteSpace(comment))
                 box.Image = Properties.Resources.commentNo;

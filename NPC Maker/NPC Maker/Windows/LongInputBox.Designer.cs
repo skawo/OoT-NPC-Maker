@@ -74,6 +74,7 @@ namespace NPC_Maker.Windows
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
+            this.MinimumSize = new System.Drawing.Size(223, 143);
             this.Name = "LongInputBox";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "LongInputBox";
