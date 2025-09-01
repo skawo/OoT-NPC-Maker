@@ -642,7 +642,7 @@ namespace NPC_Maker
             // Mono doesn't reset the scroll bar when switching between actors
             if (Program.IsRunningUnderMono)
                 Helpers.ResetVerticalScrollbar(MessagesGrid);
-            
+
             #endregion
 
             #region CCode
@@ -827,7 +827,7 @@ namespace NPC_Maker
             if (DR == DialogResult.OK)
             {
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                RunSave();
+                RunSave(SFD.FileName);
 
                 Program.Settings.LastOpenPath = SFD.FileName;
             }
@@ -843,11 +843,11 @@ namespace NPC_Maker
             else
             {
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                RunSave();
+                RunSave(OpenedPath);
             }
         }
 
-        private async void RunSave()
+        private async void RunSave(string Path)
         {
             IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
             progress.Report(new Common.ProgressReport("Saving...", 0));
@@ -856,7 +856,7 @@ namespace NPC_Maker
 
             await TaskEx.Run(() =>
             {
-                FileOps.SaveNPCJSON(OpenedPath, EditedFile, progress);
+                FileOps.SaveNPCJSON(Path, EditedFile, progress);
                 progress.Report(new Common.ProgressReport("Saved!", 100));
                 Program.SaveInProgress = false;
             });
@@ -1543,37 +1543,48 @@ namespace NPC_Maker
 
                                 List<MessageEntry> diff = messageList.Where(item2 => !entry.Messages.Any(item1 => item1.Name == item2.Name)).ToList();
 
+                                y2aRes = DialogResult.None;
+
                                 // Add messages which exist in the new language, but don't in the default 
                                 foreach (MessageEntry msg in diff)
                                 {
-                                    int msgIndex = messageList.IndexOf(msg);
-
-                                    MessageEntry msgN = Helpers.Clone<MessageEntry>(msg);
-
-                                    // If importing a non-default language, blank the text for the new entry in the default language.
-                                    if (SelectedLangIndex != 0)
+                                    if (y2aRes != DialogResult.OK && y2aRes != DialogResult.Ignore)
                                     {
-                                        msgN.MessageText = "";
-                                        msgN.MessageTextLines.Clear();
-                                        msgN.Comment = "";
+                                        var w = new Windows.YesNoAllBox($"Message {msg.Name} doesn't exist in the default language. Add it?", "New messages");
+                                        y2aRes = w.ShowDialog();
                                     }
 
-                                    entry.Messages.Insert(msgIndex, msgN);
-
-                                    // Add to each localized language too
-                                    foreach (var loc in entry.Localization)
+                                    if (y2aRes == DialogResult.Yes || y2aRes == DialogResult.OK)
                                     {
-                                        MessageEntry msgNLoc = Helpers.Clone<MessageEntry>(msg);
+                                        int msgIndex = messageList.IndexOf(msg);
 
-                                        // Blank if adding to a language which we're not importing to
-                                        if (loc.Language != SelectedLanguage)
+                                        MessageEntry msgN = Helpers.Clone<MessageEntry>(msg);
+
+                                        // If importing a non-default language, blank the text for the new entry in the default language.
+                                        if (SelectedLangIndex != 0)
                                         {
-                                            msgNLoc.MessageText = "";
-                                            msgNLoc.MessageTextLines.Clear();
-                                            msgNLoc.Comment = "";
+                                            msgN.MessageText = "";
+                                            msgN.MessageTextLines.Clear();
+                                            msgN.Comment = "";
                                         }
 
-                                        loc.Messages.Insert(msgIndex, msgNLoc);
+                                        entry.Messages.Insert(msgIndex, msgN);
+
+                                        // Add to each localized language too
+                                        foreach (var loc in entry.Localization)
+                                        {
+                                            MessageEntry msgNLoc = Helpers.Clone<MessageEntry>(msg);
+
+                                            // Blank if adding to a language which we're not importing to
+                                            if (loc.Language != SelectedLanguage)
+                                            {
+                                                msgNLoc.MessageText = "";
+                                                msgNLoc.MessageTextLines.Clear();
+                                                msgNLoc.Comment = "";
+                                            }
+
+                                            loc.Messages.Insert(msgIndex, msgNLoc);
+                                        }
                                     }
                                 }
                             }
@@ -3609,9 +3620,9 @@ namespace NPC_Maker
         private void DelayedSetToolTip(PictureBox box, ToolTip tip, string comment)
         {
             var timer = new Timer();
-            timer.Interval = 50; 
+            timer.Interval = 50;
 
-            timer.Tick += (s, e) => 
+            timer.Tick += (s, e) =>
             {
                 timer.Stop();
                 timer.Dispose();
