@@ -8,11 +8,35 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static void ResetVerticalScrollbar(Control c)
+        {
+            foreach (Control control in c.Controls)
+            {
+                if (control is VScrollBar vScrollBar)
+                {
+                    vScrollBar.Value = 0;
+                    break;
+                }
+            }
+        }
+
+        public static void ResetHorizScrollbar(Control c)
+        {
+            foreach (Control control in c.Controls)
+            {
+                if (control is HScrollBar hScrollBar)
+                {
+                    hScrollBar.Value = 0;
+                    break;
+                }
+            }
+        }
 
         public static void MakeNotResizableMonoSafe(System.Windows.Forms.Form f)
         {

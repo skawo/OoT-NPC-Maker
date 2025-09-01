@@ -639,19 +639,10 @@ namespace NPC_Maker
             MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
             Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
 
+            // Mono doesn't reset the scroll bar when switching between actors
             if (Program.IsRunningUnderMono)
-            {
-                foreach (Control control in MessagesGrid.Controls)
-                {
-                    if (control is VScrollBar vScrollBar)
-                    {
-                        vScrollBar.Value = 0;
-                        break;
-                    }
-                }
-            }
-
-
+                Helpers.ResetVerticalScrollbar(MessagesGrid);
+            
             #endregion
 
             #region CCode
