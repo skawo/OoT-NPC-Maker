@@ -32,6 +32,42 @@ namespace NPC_Maker
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
 
+        public static string LimitToCharNum(this string text, int maxLength)
+        {
+            if (text.Length > maxLength)
+                return $"{text.Substring(0, maxLength)}...";
+            else
+                return text;
+        }
+
+        public static string WrapToLength(this string text, int maxLineLength)
+        {
+            if (string.IsNullOrEmpty(text) || text.Length <= maxLineLength)
+                return text;
+
+            var words = text.Split(' ');
+            var lines = new List<string>();
+            var currentLine = "";
+
+            foreach (var word in words)
+            {
+                if ((currentLine + word).Length > maxLineLength)
+                {
+                    if (!string.IsNullOrEmpty(currentLine))
+                    {
+                        lines.Add(currentLine.Trim());
+                        currentLine = "";
+                    }
+                }
+                currentLine += word + " ";
+            }
+
+            if (!string.IsNullOrEmpty(currentLine))
+                lines.Add(currentLine.Trim());
+
+            return string.Join("\n", lines);
+        }
+
         public static string AppendQuotation(this string text)
         {
             return "\"" + text + "\"";

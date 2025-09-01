@@ -3637,7 +3637,7 @@ namespace NPC_Maker
         private void SetToolTipDirect(PictureBox box, ToolTip tip, string comment)
         {
             if (comment != null)
-                tip.SetToolTip(box, comment.Length > 1000 ? $"{comment.Substring(0, 1000)}..." : comment);
+                tip.SetToolTip(box, comment.LimitToCharNum(1000).WrapToLength(80));
             else
                 tip.SetToolTip(box, null);
         }
