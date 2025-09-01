@@ -274,60 +274,83 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveNPCJSON(string Path, NPCFile Data)
+        public static void SaveNPCJSON(string Path, NPCFile Data, IProgress<Common.ProgressReport> progress = null)
         {
             try
             {
                 NPCFile outD = (NPCFile)Helpers.Clone<NPCFile>(Data);
 
-                foreach (NPCEntry e in outD.Entries)
+                var newlineRegex = new Regex("\r?\n", RegexOptions.Compiled);
+                var environmentNewlineRegex = new Regex(Regex.Escape(Environment.NewLine), RegexOptions.Compiled);
+
+                float ProgressPer = 100f / outD.Entries.Count;
+                int processedCount = 0;
+
+                Parallel.ForEach(outD.Entries, entry =>
                 {
-                    foreach (ScriptEntry s in e.Scripts)
+                    Parallel.ForEach(entry.Scripts, script =>
                     {
-                        s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
-                        s.TextLines.ForEach(x => x.TrimEnd());
-                        s.Text = null;
-                    }
+                        var lines = newlineRegex.Split(script.Text);
+                        script.TextLines = lines.Select(x => x.TrimEnd()).ToList();
+                        script.Text = null;
+                    });
 
-                    foreach (MessageEntry entry in e.Messages)
+                    Parallel.ForEach(entry.Messages, message =>
                     {
-                        entry.MessageText = Regex.Replace(entry.MessageText, Environment.NewLine, "\n");
-                        entry.MessageTextLines = Regex.Split(entry.MessageText, "\r?\n").ToList();
-                        entry.MessageText = null;
-                    }
+                        message.MessageText = environmentNewlineRegex.Replace(message.MessageText, "\n");
+                        message.MessageTextLines = newlineRegex.Split(message.MessageText).ToList();
+                        message.MessageText = null;
+                    });
 
-                    foreach (LocalizationEntry loc in e.Localization)
+                    Parallel.ForEach(entry.Localization, loc =>
                     {
-                        foreach (MessageEntry entry in loc.Messages)
+                        Parallel.ForEach(loc.Messages, message =>
                         {
-                            entry.MessageText = Regex.Replace(entry.MessageText, Environment.NewLine, "\n");
-                            entry.MessageTextLines = Regex.Split(entry.MessageText, "\r?\n").ToList();
-                            entry.MessageText = null;
-                        }
+                            message.MessageText = environmentNewlineRegex.Replace(message.MessageText, "\n");
+                            message.MessageTextLines = newlineRegex.Split(message.MessageText).ToList();
+                            message.MessageText = null;
+                        });
+                    });
+
+                    entry.EmbeddedOverlayCode.CodeLines = newlineRegex.Split(entry.EmbeddedOverlayCode.Code).ToList();
+                    entry.EmbeddedOverlayCode.Code = null;
+
+                    if (progress != null)
+                    {
+                        int currentProcessed = Interlocked.Increment(ref processedCount);
+                        float currentProgress = currentProcessed * ProgressPer;
+                        progress.Report(new Common.ProgressReport($"Saving {currentProgress:0}%", currentProgress));
                     }
+                });
 
-                    e.EmbeddedOverlayCode.CodeLines = Regex.Split(e.EmbeddedOverlayCode.Code, "\r?\n").ToList();
-                    e.EmbeddedOverlayCode.Code = null;
-                }
-
-                foreach (ScriptEntry s in outD.GlobalHeaders)
+                Parallel.ForEach(outD.GlobalHeaders, script =>
                 {
-                    s.TextLines = Regex.Split(s.Text, "\r?\n").ToList();
-                    s.TextLines.ForEach(x => x.TrimEnd());
-                    s.Text = null;
-                }
+                    var lines = newlineRegex.Split(script.Text);
+                    script.TextLines = lines.Select(x => x.TrimEnd()).ToList();
+                    script.Text = null;
+                });
 
-                outD.CHeaderLines = Regex.Split(outD.CHeader, "\r?\n").ToList();
-                outD.CHeaderLines.ForEach(x => x.TrimEnd());
+                var headerLines = newlineRegex.Split(outD.CHeader);
+                outD.CHeaderLines = headerLines.Select(x => x.TrimEnd()).ToList();
                 outD.CHeader = null;
 
-                File.WriteAllText(Path, JsonConvert.SerializeObject(outD, Formatting.Indented).Replace(Environment.NewLine, "\n"));
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+
+                string json = JsonConvert.SerializeObject(outD, jsonSettings);
+                json = environmentNewlineRegex.Replace(json, "\n");
+
+                File.WriteAllText(Path, json);
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"Failed to write JSON: {ex.Message}");
+                MessageBox.Show($"Failed to write JSON: {ex.Message}");
             }
         }
+
 
         public static Dictionary<string, int> GetDictionary(string Filename, bool allowFail = false)
         {

@@ -27,7 +27,8 @@ namespace NPC_Maker
         public static string ScriptCachePath = "";
         public static string CCachePath = "";
         public static string JsonPath = "";
-
+         
+        public static bool SaveInProgress = false;
         public static bool CompileInProgress = false;
         public static bool CompileThereWereErrors = false;
         public static string CompileMonoErrors = "";

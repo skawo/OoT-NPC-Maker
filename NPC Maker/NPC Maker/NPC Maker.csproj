@@ -415,10 +415,6 @@
     <Content Include="nUhhuh.ico" />
     <None Include="Resources\EmbeddedOverlay.c" />
     <None Include="Resources\EmbeddedOverlay1.c" />
-    <None Include="Resources\images.png" />
-    <None Include="Resources\msgComment.png" />
-    <None Include="Resources\Image1.bmp" />
-    <None Include="Resources\Untitled.png" />
     <None Include="Resources\commentNo.png" />
     <None Include="Resources\comment.png" />
     <None Include="Resources\up.png" />

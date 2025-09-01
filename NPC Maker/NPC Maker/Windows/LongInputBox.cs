@@ -23,11 +23,6 @@ namespace NPC_Maker.Windows
             label1.Text = command;
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            inputText = textBox1.Text;
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(inputText))
@@ -35,6 +30,11 @@ namespace NPC_Maker.Windows
 
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void textBox1_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+        {
+            inputText = textBox1.Text;
         }
     }
 }

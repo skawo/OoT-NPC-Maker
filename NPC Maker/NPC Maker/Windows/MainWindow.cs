@@ -308,6 +308,12 @@ namespace NPC_Maker
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (Program.SaveInProgress)
+            {
+                e.Cancel = true;
+                return;
+            }
+
             if (EditedFile != null)
             {
                 string CurrentFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
@@ -633,6 +639,19 @@ namespace NPC_Maker
             MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
             Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
 
+            if (Program.IsRunningUnderMono)
+            {
+                foreach (Control control in MessagesGrid.Controls)
+                {
+                    if (control is VScrollBar vScrollBar)
+                    {
+                        vScrollBar.Value = 0;
+                        break;
+                    }
+                }
+            }
+
+
             #endregion
 
             #region CCode
@@ -817,7 +836,7 @@ namespace NPC_Maker
             if (DR == DialogResult.OK)
             {
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                FileOps.SaveNPCJSON(SFD.FileName, EditedFile);
+                RunSave();
 
                 Program.Settings.LastOpenPath = SFD.FileName;
             }
@@ -833,8 +852,23 @@ namespace NPC_Maker
             else
             {
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                FileOps.SaveNPCJSON(OpenedPath, EditedFile);
+                RunSave();
             }
+        }
+
+        private async void RunSave()
+        {
+            IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
+            progress.Report(new Common.ProgressReport("Saving...", 0));
+            this.progressL.Visible = true;
+            Program.SaveInProgress = true;
+
+            await TaskEx.Run(() =>
+            {
+                FileOps.SaveNPCJSON(OpenedPath, EditedFile, progress);
+                progress.Report(new Common.ProgressReport("Saved!", 100));
+                Program.SaveInProgress = false;
+            });
         }
 
         private async void FileMenu_SaveBinary_Click(object sender, EventArgs e)
@@ -1247,7 +1281,7 @@ namespace NPC_Maker
                 {
                     Windows.LongInputBox flg = new Windows.LongInputBox("Compile flags", "Add compile flags:", "");
                     flg.ShowDialog();
-                   
+
                     SaveFileDialog sf = new SaveFileDialog();
                     sf.Title = "Select output ZOVL...";
                     sf.Filter = "ZOVL files (*.zovl)|*.zovl|All files (*.*)|*.*";
@@ -3515,7 +3549,7 @@ namespace NPC_Maker
         private string CommentInput(string startComment)
         {
             Windows.LongInputBox lib = new Windows.LongInputBox("Comment input", "Message comment:", startComment);
-            
+
             DialogResult dr = lib.ShowDialog();
 
             if (dr == DialogResult.OK)
@@ -3563,15 +3597,47 @@ namespace NPC_Maker
 
         private void SetPictureBoxCommentImageToolTip(PictureBox box, ToolTip tip, string comment)
         {
+            if (box != null && !box.IsDisposed)
+            {
+                if (String.IsNullOrWhiteSpace(comment))
+                    box.Image = Properties.Resources.commentNo;
+                else
+                    box.Image = Properties.Resources.comment;
+            }
+
+            if (box == null || box.IsDisposed || !box.IsHandleCreated)
+                return;
+
+            // On Mono, delay tooltip operations to avoid X11 timing issues
+            if (Program.IsRunningUnderMono)
+                DelayedSetToolTip(box, tip, comment);
+            else
+                SetToolTipDirect(box, tip, comment);
+        }
+
+        private void DelayedSetToolTip(PictureBox box, ToolTip tip, string comment)
+        {
+            var timer = new Timer();
+            timer.Interval = 50; 
+
+            timer.Tick += (s, e) => 
+            {
+                timer.Stop();
+                timer.Dispose();
+
+                if (box != null && !box.IsDisposed && box.IsHandleCreated)
+                    SetToolTipDirect(box, tip, comment);
+            };
+
+            timer.Start();
+        }
+
+        private void SetToolTipDirect(PictureBox box, ToolTip tip, string comment)
+        {
             if (comment != null)
                 tip.SetToolTip(box, comment.Length > 1000 ? $"{comment.Substring(0, 1000)}..." : comment);
             else
-                tip.RemoveAll();
-
-            if (String.IsNullOrWhiteSpace(comment))
-                box.Image = Properties.Resources.commentNo;
-            else
-                box.Image = Properties.Resources.comment;
+                tip.SetToolTip(box, null);
         }
 
         private void MessagesGrid_SelectionChanged(object sender, EventArgs e)

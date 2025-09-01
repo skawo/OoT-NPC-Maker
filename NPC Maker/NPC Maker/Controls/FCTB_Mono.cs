@@ -26,14 +26,16 @@ namespace NPC_Maker
         private const int ESB_ENABLE_BOTH = 0x0;
         private bool lastVerticalState = true;
         private bool lastHorizontalState = true;
+        private bool setScrollbarsVisible = false;
 
         private bool wordSelectMode = false;
         private Place wordSelectModeStart;
 
-        public FCTB_Mono()
+        public FCTB_Mono(bool scrollbarsVisible = true)
         {
             isWsl = Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
             this.DoubleBuffered = true;
+            setScrollbarsVisible = scrollbarsVisible;
         }
 
         protected override CreateParams CreateParams
@@ -41,8 +43,13 @@ namespace NPC_Maker
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= 0x200000;  // WS_VSCROLL
-                cp.Style |= 0x100000;  // WS_HSCROLL
+
+                if (setScrollbarsVisible)
+                {
+                    cp.Style |= 0x200000;  // WS_VSCROLL
+                    cp.Style |= 0x100000;  // WS_HSCROLL
+                }
+
                 return cp;
             }
         }

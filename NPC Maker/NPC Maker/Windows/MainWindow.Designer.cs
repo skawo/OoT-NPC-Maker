@@ -259,9 +259,9 @@
             this.MsgTabSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgEntrySplitContainer = new System.Windows.Forms.SplitContainer();
             this.pictureBox_Comment = new System.Windows.Forms.PictureBox();
-            this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
+            this.MsgTextDefault = new NPC_Maker.FCTB_Mono(true);
             this.pictureBox_Comment_Loc = new System.Windows.Forms.PictureBox();
-            this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
+            this.MsgText = new NPC_Maker.FCTB_Mono(true);
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.PreviewSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgPreviewOrig = new System.Windows.Forms.PictureBox();

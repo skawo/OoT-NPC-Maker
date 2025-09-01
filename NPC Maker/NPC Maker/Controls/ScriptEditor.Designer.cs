@@ -31,7 +31,7 @@ namespace NPC_Maker
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScriptEditor));
-            this.Textbox_Script = new FCTB_Mono();
+            this.Textbox_Script = new FCTB_Mono(false);
             this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
             this.Button_TryParse = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);

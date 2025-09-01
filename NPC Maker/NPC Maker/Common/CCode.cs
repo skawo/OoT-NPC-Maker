@@ -564,21 +564,28 @@ namespace NPC_Maker
 
                 Directory.CreateDirectory(gtempFolderPath);
 
-                string vscodeFolder = Path.Combine(gtempFolderPath, ".vscode");
-                Directory.CreateDirectory(vscodeFolder);
-
-                string cprops = Properties.Resources.c_cpp_properties;
-
-                if (!string.IsNullOrEmpty(Program.Settings.ProjectPath))
+                try
                 {
-                    string uriPath = new Uri(Program.Settings.ProjectPath).AbsolutePath;
-                    cprops = cprops.Replace("{PROJECTPATH}", uriPath);
-                }
-                else
-                    cprops = cprops.Replace("{PROJECTPATH}", "");
+                    string vscodeFolder = Path.Combine(gtempFolderPath, ".vscode");
+                    Directory.CreateDirectory(vscodeFolder);
 
-                File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), cprops);
-                File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
+                    string cprops = Properties.Resources.c_cpp_properties;
+
+                    if (!string.IsNullOrEmpty(Program.Settings.ProjectPath))
+                    {
+                        string uriPath = new Uri(Program.Settings.ProjectPath).AbsolutePath;
+                        cprops = cprops.Replace("{PROJECTPATH}", uriPath);
+                    }
+                    else
+                        cprops = cprops.Replace("{PROJECTPATH}", "");
+
+                    File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), cprops);
+                    File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to create .vscode folder {ex.Message}");
+                }
 
                 if (!HeaderOnly)
                     File.WriteAllText(Path.Combine(gtempFolderPath, $"{gcodeFileNameBase}.c"), Code);
