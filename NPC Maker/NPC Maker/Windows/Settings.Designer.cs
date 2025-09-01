@@ -29,6 +29,7 @@ namespace NPC_Maker.Windows
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.Cb_ImproveTextReadability = new System.Windows.Forms.CheckBox();
             this.Cb_ColorizeScripts = new System.Windows.Forms.CheckBox();
             this.Cb_CheckSyntax = new System.Windows.Forms.CheckBox();
@@ -359,6 +360,7 @@ namespace NPC_Maker.Windows
             this.Controls.Add(this.Cb_ColorizeScripts);
             this.Controls.Add(this.Cb_ImproveTextReadability);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Settings";
             this.Text = "Settings";
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).EndInit();

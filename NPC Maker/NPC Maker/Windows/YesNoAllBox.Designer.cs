@@ -29,6 +29,7 @@ namespace NPC_Maker.Windows
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(YesNoAllBox));
             this.LblExplanation = new System.Windows.Forms.Label();
             this.Btn_Y2A = new System.Windows.Forms.Button();
             this.Btn_Y = new System.Windows.Forms.Button();
@@ -107,6 +108,7 @@ namespace NPC_Maker.Windows
             this.Controls.Add(this.Btn_Y2A);
             this.Controls.Add(this.LblExplanation);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "YesNoAllBox";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "YesNoAllBox";

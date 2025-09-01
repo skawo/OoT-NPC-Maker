@@ -59,6 +59,9 @@ namespace NPC_Maker.Windows
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.AutoCompleteBracketsList = new char[] {
         '(',
         ')',
@@ -97,6 +100,7 @@ namespace NPC_Maker.Windows
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(223, 143);
             this.Name = "LongInputBox";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

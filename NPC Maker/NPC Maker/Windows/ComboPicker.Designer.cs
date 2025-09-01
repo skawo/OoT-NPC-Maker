@@ -29,6 +29,7 @@ namespace NPC_Maker.Windows
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ComboPicker));
             this.LblExplanation = new System.Windows.Forms.Label();
             this.Combo = new System.Windows.Forms.ComboBox();
             this.Btn_OK = new System.Windows.Forms.Button();
@@ -83,6 +84,7 @@ namespace NPC_Maker.Windows
             this.Controls.Add(this.Combo);
             this.Controls.Add(this.LblExplanation);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ComboPicker";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ComboPicker";
