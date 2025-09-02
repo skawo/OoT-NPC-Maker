@@ -3555,7 +3555,7 @@ namespace NPC_Maker
             DialogResult dr = lib.ShowDialog();
 
             if (dr == DialogResult.OK)
-                return lib.inputText;
+                return String.IsNullOrWhiteSpace(lib.inputText) ? null : lib.inputText;
             else
                 return startComment;
         }
@@ -3563,6 +3563,9 @@ namespace NPC_Maker
         private MessageEntry GetCurMsgEntry(string Language)
         {
             if (SelectedEntry == null)
+                return null;
+
+            if (MessagesGrid.SelectedRows.Count == 0)
                 return null;
 
             int index = MessagesGrid.SelectedRows[0].Index;
@@ -4613,6 +4616,5 @@ namespace NPC_Maker
 
 
         #endregion
-
     }
 }
