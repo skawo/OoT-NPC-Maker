@@ -3509,7 +3509,7 @@
             this.MsgTextDefault.ShowLineNumbers = false;
             this.MsgTextDefault.Size = new System.Drawing.Size(25, 100);
             this.MsgTextDefault.TabIndex = 69;
-            this.MsgTextDefault.Tag = "0";
+            this.MsgTextDefault.Tag = "Default";
             this.MsgTextDefault.WordWrapAutoIndent = false;
             this.MsgTextDefault.Zoom = 100;
             // 
@@ -3558,10 +3558,11 @@
             this.MsgText.ShowLineNumbers = false;
             this.MsgText.Size = new System.Drawing.Size(640, 220);
             this.MsgText.TabIndex = 68;
-            this.MsgText.Tag = "0";
+            this.MsgText.Tag = "Default";
             this.MsgText.WordWrapAutoIndent = false;
             this.MsgText.Zoom = 100;
             this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
+            this.MsgText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
             this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
             // 
             // PanelMsgPreview

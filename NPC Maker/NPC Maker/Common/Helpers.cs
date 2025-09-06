@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,44 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static string RunBash(string commandLine)
+        {
+            StringBuilder errorBuilder = new StringBuilder();
+            StringBuilder outputBuilder = new StringBuilder();
+            var arguments = $"-c \"{commandLine}\"";
+
+            Process process = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "bash",
+                    Arguments = arguments,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = false,
+                }
+            };
+
+            process.Start();
+            process.OutputDataReceived += (_, args) => { outputBuilder.AppendLine(args.Data); };
+            process.BeginOutputReadLine();
+            process.ErrorDataReceived += (_, args) => { errorBuilder.AppendLine(args.Data); };
+            process.BeginErrorReadLine();
+            if (!process.DoubleWaitForExit())
+            {
+                var timeoutError = $@"Process timed out. Command line: bash {arguments}.Output: {outputBuilder}Error: {errorBuilder}";
+                throw new Exception(timeoutError);
+            }
+            if (process.ExitCode == 0)
+            {
+                return outputBuilder.ToString();
+            }
+
+            var error = $@"Could not execute process. Command line: bash {arguments}.Output: {outputBuilder} Error: {errorBuilder}";
+            throw new Exception(error);
+        }
+
         public static void ResetVerticalScrollbar(Control c)
         {
             foreach (Control control in c.Controls)

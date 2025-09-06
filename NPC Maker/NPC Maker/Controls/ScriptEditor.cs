@@ -190,6 +190,15 @@ namespace NPC_Maker
                 ScriptContextMenu.SetTextBox(sender as FCTB_Mono);
                 ScriptContextMenu.ContextMenuStrip.Show(sender as Control, e.Location);
             }
+            else if (e.Button == MouseButtons.Left && Program.IsRunningUnderMono)
+            {
+                if (ScriptContextMenu.ContextMenuStrip != null)
+                {
+                    ScriptContextMenu.ContextMenuStrip.Hide();
+                    ScriptContextMenu.ContextMenuStrip.Dispose();
+                    ScriptContextMenu.ContextMenuStrip = null;
+                }
+            }
         }
 
         private void Textbox_Script_KeyPressed(object sender, KeyPressEventArgs e)

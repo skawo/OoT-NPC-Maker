@@ -16,6 +16,7 @@ namespace NPC_Maker
         public static MiscUtil.Conversion.BigEndianBitConverter BEConverter = new MiscUtil.Conversion.BigEndianBitConverter();
         public static string ExecPath = "";
         public static bool IsRunningUnderMono = false;
+        public static bool IsWSL = false;
 
         //public static FileSystemWatcher Watcher;
         public static Process CodeEditorProcess;
@@ -27,7 +28,7 @@ namespace NPC_Maker
         public static string ScriptCachePath = "";
         public static string CCachePath = "";
         public static string JsonPath = "";
-         
+
         public static bool SaveInProgress = false;
         public static bool CompileInProgress = false;
         public static bool CompileThereWereErrors = false;
@@ -45,6 +46,14 @@ namespace NPC_Maker
         [STAThread]
         static void Main(string[] args)
         {
+            Type t = Type.GetType("Mono.Runtime");
+
+            if (t != null)
+            {
+                IsRunningUnderMono = true;
+                IsWSL = Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
+            }
+
             if (args.Length != 0)
             {
                 if (!IsRunningUnderMono)
@@ -68,11 +77,6 @@ namespace NPC_Maker
 
             // To create this in memory quicker
             TaskEx.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
-
-            Type t = Type.GetType("Mono.Runtime");
-
-            if (t != null)
-                IsRunningUnderMono = true;
 
             try
             {

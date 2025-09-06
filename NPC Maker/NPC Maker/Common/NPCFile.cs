@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace NPC_Maker
 {
@@ -760,6 +761,107 @@ namespace NPC_Maker
             return wMessageText;
         }
 
+        private string GetXString(byte Character)
+        {
+            return $"\\x{Character.ToString("X2")}\"\"";
+        }
+
+        public string ToCString(string Language)
+        {
+            string outS = "\"";
+            List<string> errors = new List<string>();
+
+            string wMessageText = ReplaceTags(Language);
+
+            for (int i = 0; i < wMessageText.Length; i++)
+            {
+                // Not a control code, copy char to output buffer
+                if (wMessageText[i] != '<' && wMessageText[i] != '>')
+                {
+                    if (Enum.IsDefined(typeof(Lists.MsgControlCode), wMessageText[i].ToString()))
+                    {
+                        _ = Enum.TryParse(wMessageText[i].ToString(), out Lists.MsgControlCode Result);
+                        outS += (char)Result;
+                    }
+                    else if (wMessageText[i] == '"')
+                    {
+                        outS += GetXString((byte)'"');
+                    }
+                    else if (wMessageText[i] == '\n')
+                        outS += GetXString((byte)Lists.MsgControlCode.LINE_BREAK);
+                    else if (wMessageText[i] == '\r')
+                    {
+                        // Do nothing
+                    }
+                    else
+                        outS += (char)wMessageText[i];
+
+                    continue;
+                }
+                // Control code end tag. This should never be encountered on its own.
+                else if (wMessageText[i] == '>')
+                    errors.Add($"Message formatting is not valid: found stray >");
+                // We've got a control code
+                else
+                {
+                    // Buffer for the control code
+                    List<char> controlCode = new List<char>();
+
+                    while (wMessageText[i] != '>' && i < wMessageText.Length - 1)
+                    {
+                        // Add code chars to the buffer
+                        controlCode.Add(wMessageText[i]);
+                        // Increase i so we can skip the code when we're done parsing
+                        i++;
+                    }
+
+                    if (controlCode.Count == 0)
+                        continue;
+
+                    // Remove the < chevron from the beginning of the code
+                    controlCode.RemoveAt(0);
+
+                    string parsedCode = new string(controlCode.ToArray());
+                    string parsedFixed = parsedCode.Split(':')[0].Replace(" ", "_").ToUpper();
+
+                    if (parsedFixed == Lists.MsgControlCode.NEW_BOX.ToString() || parsedFixed == Lists.MsgControlCode.DELAY.ToString())
+                    {
+                        outS = outS.Remove(outS.LastIndexOf(GetXString((byte)Lists.MsgControlCode.LINE_BREAK)));
+
+                        if (wMessageText.Length > i + Environment.NewLine.Length)
+                        {
+                            string s;
+
+                            if (Environment.NewLine.Length == 2)
+                                s = String.Concat(wMessageText[i + 1], wMessageText[i + 2]);
+                            else
+                                s = String.Concat(wMessageText[i + 1]);
+
+                            if (s == Environment.NewLine) // Skips next linebreak
+                                i += Environment.NewLine.Length;
+                        }
+                    }
+
+                    List<byte> data = GetControlCode(parsedCode.Split(':'), ref errors);
+
+                    foreach (byte b in data)
+                    {
+                        outS += GetXString(b);
+                    }
+                }
+            }
+
+            outS += GetXString((byte)Lists.MsgControlCode.END);
+
+            if (errors.Count != 0)
+                System.Windows.Forms.MessageBox.Show($"Errors parsing message: " + Environment.NewLine + String.Join(Environment.NewLine, errors.ToArray()));
+
+            if (errors.Count == 0)
+                return outS.TrimEnd('\"') + "\"";
+            else
+                return "";
+        }
+
         public List<byte> ConvertTextData(string NPCName, string Language, out int numBoxes, bool ShowErrors = true)
         {
             List<byte> data = new List<byte>();
@@ -1023,7 +1125,7 @@ namespace NPC_Maker
         public string Name { get; set; }
 
         public string HeaderDefinition { get; set; }
-       
+
         public UInt32 Address { get; set; }
         public float TransX { get; set; }
         public float TransY { get; set; }
@@ -1159,7 +1261,7 @@ namespace NPC_Maker
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);
-            property.Ignored = false; 
+            property.Ignored = false;
             return property;
         }
     }

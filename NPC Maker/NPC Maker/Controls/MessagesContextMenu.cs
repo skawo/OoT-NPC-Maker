@@ -1,6 +1,7 @@
 ﻿using FastColoredTextBoxNS;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace NPC_Maker
@@ -11,6 +12,7 @@ namespace NPC_Maker
 
         private static FastColoredTextBox Owner;
 
+        private static ToolStripMenuItem toc;
         private static ToolStripMenuItem colors;
         private static ToolStripMenuItem sounds;
         private static ToolStripMenuItem highscore;
@@ -34,6 +36,7 @@ namespace NPC_Maker
         {
             MenuStrip = new ContextMenuStrip();
 
+            toc = new ToolStripMenuItem();
             colors = new ToolStripMenuItem();
             sounds = new ToolStripMenuItem();
             highscore = new ToolStripMenuItem();
@@ -54,6 +57,7 @@ namespace NPC_Maker
             buttons = new ToolStripMenuItem();
 
             MenuStrip.Items.AddRange(new ToolStripItem[] {
+                                                                    toc,
                                                                     colors,
                                                                     highscore,
                                                                     icon,
@@ -76,6 +80,11 @@ namespace NPC_Maker
             MenuStrip.Name = "ContextMenuStrip";
             MenuStrip.Size = new System.Drawing.Size(157, 268);
             MenuStrip.Text = "Items";
+
+
+            toc.Size = new System.Drawing.Size(156, 22);
+            toc.Text = "Copy as C String";
+            toc.Click += Toc_Click;
 
             //
             // buttons
@@ -251,6 +260,49 @@ namespace NPC_Maker
                     SubItem.Click += SubItem_Click;
             }
 
+        }
+
+        private static void Toc_Click(object sender, EventArgs e)
+        {
+            if (Owner == null)
+                return;
+
+            FCTB_Mono fb = (FCTB_Mono)Owner;
+            string text = fb.SelectedText;
+
+            if (String.IsNullOrWhiteSpace(text))
+                text = fb.Text;
+
+            MessageEntry me = new MessageEntry();
+            me.MessageText = text;
+
+            string outS = me.ToCString((string)fb.Tag);
+
+            if (Program.IsRunningUnderMono)
+            {
+                try
+                {
+                    var tempFileName = Path.GetTempFileName();
+                    File.WriteAllText(tempFileName, outS);
+                    try
+                    {
+                        if (Program.IsWSL)
+                            Helpers.RunBash($"cat {tempFileName} | clip.exe ");
+
+                        Helpers.RunBash($"cat {tempFileName} | xsel -i --clipboard ");
+                    }
+                    finally
+                    {
+                        File.Delete(tempFileName);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            else
+                Clipboard.SetText(outS);
         }
 
         private static void Sounds_Click(object sender, EventArgs e)

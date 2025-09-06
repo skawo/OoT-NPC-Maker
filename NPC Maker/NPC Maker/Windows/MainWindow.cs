@@ -79,10 +79,6 @@ namespace NPC_Maker
             MsgPreviewTimer.Tick += MsgPreviewTimer_Tick;
             MsgPreviewTimer.Stop();
 
-            MessagesContextMenu.MakeContextMenu();
-            MsgText.ContextMenuStrip = MessagesContextMenu.MenuStrip;
-            MessagesContextMenu.SetTextBox(MsgText);
-
             chkBox_ShowDefaultLanguagePreview.Checked = Program.Settings.OrigPreview;
 
             FunctionComboBoxes = new List<KeyValuePair<ComboBox, ComboBox>>()
@@ -3299,6 +3295,31 @@ namespace NPC_Maker
 
         #region Messages
 
+        private void MsgText_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (MessagesContextMenu.MenuStrip == null)
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                    MessagesContextMenu.MakeContextMenu();
+                    Cursor.Current = Cursors.Default;
+                }
+
+                MessagesContextMenu.SetTextBox(sender as FCTB_Mono);
+                MessagesContextMenu.MenuStrip.Show(sender as Control, e.Location);
+            }
+            else if (e.Button == MouseButtons.Left && Program.IsRunningUnderMono)
+            {
+                if (MessagesContextMenu.MenuStrip != null)
+                {
+                    MessagesContextMenu.MenuStrip.Hide();
+                    MessagesContextMenu.MenuStrip.Dispose();
+                    MessagesContextMenu.MenuStrip = null;
+                }
+            }
+        }
+
         private void MessagesGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
 
@@ -3377,6 +3398,9 @@ namespace NPC_Maker
             }
             else
                 return;
+
+            MsgTextDefault.Tag = Dicts.DefaultLanguage;
+            MsgText.Tag = Combo_Language.Text;
 
             int curSelMsg = 0;
 
