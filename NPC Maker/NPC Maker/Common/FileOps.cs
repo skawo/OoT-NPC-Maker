@@ -488,7 +488,8 @@ namespace NPC_Maker
             return new bool[2] { cacheInvalid, CcacheInvalid };
         }
 
-        public static string GetIncludesText(List<string> includeList)
+        // Load all the includes text so that it can be appended to the string being hashed for cache
+        private static string GetIncludesText(List<string> includeList)
         {
             var codeBuilder = new StringBuilder();
 
@@ -512,6 +513,7 @@ namespace NPC_Maker
                     }
                     catch
                     {
+                        // Add random string. This way the cache always will be invalidated.
                         Console.WriteLine($"Warning: Couldn't resolve path {hPath} for cache use.");
                         content = Helpers.GenerateTemporaryFolderName();
                     }
