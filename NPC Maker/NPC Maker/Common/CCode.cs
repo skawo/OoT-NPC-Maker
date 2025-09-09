@@ -279,6 +279,20 @@ namespace NPC_Maker
             return CompileInternal(config, codeEntry, ref compileMsgs, compileFile);
         }
 
+        public static bool IsFullyQualified(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            // Check if it's a Unix absolute path
+            if (Program.IsRunningUnderMono && path.StartsWith("/", StringComparison.Ordinal))
+                return true;
+
+            return Path.IsPathRooted(path) &&
+                   !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(),
+                                                 StringComparison.Ordinal);
+        }
+
         public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath, string[] excludedPaths)
         {
             string content = File.ReadAllText(dFilePath);
@@ -303,6 +317,9 @@ namespace NPC_Maker
                 string path = match.Value;
                 // Unescape spaces
                 path = path.Replace(@"\ ", " ");
+
+                if (!IsFullyQualified(path))
+                    path = Path.Combine(Program.ExecPath, path.TrimStart('/', '\\'));
 
                 if (!string.IsNullOrEmpty(path) &&
                     !path.Contains(folderPath) &&
