@@ -44,7 +44,7 @@ namespace NPC_Maker
         public string GetExtHeader()
         {
             string extHeader = "";
-            string extHeaderPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, ExtScriptHeaderPath, "{PROJECTPATH}");
+            string extHeaderPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, ExtScriptHeaderPath, Dicts.ProjectPathToken);
 
             if (!String.IsNullOrWhiteSpace(extHeaderPath))
                 extHeader = File.ReadAllText(extHeaderPath);
@@ -1216,10 +1216,13 @@ namespace NPC_Maker
 
         public string[] SetFuncNames { get; set; }
 
+        public List<string> HeaderPaths { get; set; }
+
         public CCodeEntry(string _Code = "", List<FunctionEntry> _Funcs = null, int[,] _FuncsRunWhen = null)
         {
             Code = _Code;
             CodeLines = new List<string>();
+            HeaderPaths = new List<string>();
             Functions = _Funcs;
 
             if (Functions == null)

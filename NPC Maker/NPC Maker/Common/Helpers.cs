@@ -157,7 +157,7 @@ namespace NPC_Maker
             try
             {
                 if (!String.IsNullOrEmpty(Path))
-                    defines = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Path, "{PROJECTPATH}"));
+                    defines = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Path, Dicts.ProjectPathToken));
             }
             catch (Exception)
             {

@@ -28,6 +28,7 @@ namespace NPC_Maker
         };
 
         public static string DefaultLanguage = "Default";
+        public static string ProjectPathToken = "{PROJECTPATH}";
 
         public static Dictionary<string, Dictionary<string, string>> MsgTagOverride;
 

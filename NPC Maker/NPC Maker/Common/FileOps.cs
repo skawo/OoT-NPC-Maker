@@ -488,6 +488,42 @@ namespace NPC_Maker
             return new bool[2] { cacheInvalid, CcacheInvalid };
         }
 
+        public static string GetIncludesText(List<string> includeList)
+        {
+            var codeBuilder = new StringBuilder();
+
+            foreach (string hPath in includeList)
+            {
+                string cleanPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, hPath, Dicts.ProjectPathToken);
+                string content = null;
+
+                // Try original path first
+                try
+                {
+                    content = File.ReadAllText(hPath);
+                }
+                catch
+                {
+                    // Try cleaned path as fallback
+                    try
+                    {
+                        cleanPath = cleanPath.TrimStart('/', '\\');
+                        content = File.ReadAllText(cleanPath);
+                    }
+                    catch
+                    {
+                        Console.WriteLine($"Warning: Couldn't resolve path {hPath} for cache use.");
+                        content = Helpers.GenerateTemporaryFolderName();
+                    }
+                }
+
+                codeBuilder.Append(content);
+            }
+
+            return codeBuilder.ToString();
+        }
+
+
         public async static void PreprocessCodeAndScripts(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress, bool CLIMode = false)
         {
             float ProgressPer = (float)((float)100 / (float)Data.Entries.Count);
@@ -535,6 +571,8 @@ namespace NPC_Maker
                         {
                             string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
                             CodeString = CCode.ReplaceGameVersionInclude(CodeString);
+                            CodeString += GetIncludesText(Entry.EmbeddedOverlayCode.HeaderPaths);
+
                             string hash = Helpers.GetBase64Hash(s, CodeString);
 
                             string cachedAddrsFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntryID}_funcsaddrs_" + hash);
@@ -551,7 +589,6 @@ namespace NPC_Maker
                                 if (Overlay != null)
                                 {
                                     Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntryID}_script");
-                                    CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
                                     string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
 
                                     File.WriteAllText(cachedAddrsFile, CodeAddrsString);
@@ -687,7 +724,7 @@ namespace NPC_Maker
                         Dictionary<string, string> defines = new Dictionary<string, string>();
 
                         if (!String.IsNullOrEmpty(Entry.HeaderPath))
-                            defines = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Entry.HeaderPath, "{PROJECTPATH}"));
+                            defines = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Entry.HeaderPath, Dicts.ProjectPathToken));
 
                         List<byte> EntryBytes = new List<byte>();
 
@@ -888,7 +925,7 @@ namespace NPC_Maker
                         foreach (LocalizationEntry loc in locales)
                         {
                             bool isDefault = (loc.Language == Dicts.DefaultLanguage);
-                            
+
                             if (loc.Messages == null)
                             {
                                 Header = Header.Concat(DefaultHeader).ToList();
@@ -926,7 +963,7 @@ namespace NPC_Maker
                                     DefaultHeader.Add(Msg.GetMessageTypePos());
                                     Helpers.Ensure2ByteAlign(DefaultHeader);
                                     DefaultHeader.AddRangeBigEndian((UInt16)Message.Count);
-                                }    
+                                }
 
                                 Header.AddRangeBigEndian(MsgOffset);
                                 Header.Add(Msg.GetMessageTypePos());
@@ -1083,6 +1120,8 @@ namespace NPC_Maker
                             {
                                 string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
                                 CodeString = CCode.ReplaceGameVersionInclude(CodeString);
+                                CodeString += GetIncludesText(Entry.EmbeddedOverlayCode.HeaderPaths);
+
                                 string hash = Helpers.GetBase64Hash(s, CodeString);
                                 string cachedAddrsFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_funcsaddrs_" + hash);
                                 string cachedcodeFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_code_" + hash);
@@ -1102,7 +1141,6 @@ namespace NPC_Maker
 
                                     if (Overlay != null)
                                     {
-                                        CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
                                         string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
 
                                         File.WriteAllText(cachedAddrsFile, CodeAddrsString);

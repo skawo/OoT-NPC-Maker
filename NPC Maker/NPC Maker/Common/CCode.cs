@@ -64,6 +64,7 @@ namespace NPC_Maker
             public string ObjectFile { get; }
             public string ElfFile { get; }
             public string OvlFile { get; }
+            public string dFile { get; }
             public string SourceFile { get; }
 
             public CompilationPaths(CompilationConfig config, string sourceFile, string additionalLinkerFile = "")
@@ -74,6 +75,7 @@ namespace NPC_Maker
                 OvlFile = config.OutPath;
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory);
                 ObjectFile = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, $"{CompileFileName}.o");
+                dFile = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, $"{CompileFileName}.d");
                 ElfFile = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, $"{CompileFileName}.elf");
             }
         }
@@ -275,6 +277,37 @@ namespace NPC_Maker
             return CompileInternal(config, codeEntry, ref compileMsgs, compileFile);
         }
 
+        public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath)
+        {
+            string content = File.ReadAllText(dFilePath);
+
+            // Remove everything before and including the first colon
+            int colonIndex = content.IndexOf(':');
+            if (colonIndex == -1) return new List<string>();
+
+            string dependencies = content.Substring(colonIndex + 1);
+
+            // Handle line continuations (backslash + newline)
+            dependencies = Regex.Replace(dependencies, @"\\\s*\r?\n\s*", " ");
+
+            // Split by whitespace and filter out empty entries
+            string[] parts = dependencies.Split(new char[] { ' ', '\t', '\n', '\r' },
+                                               StringSplitOptions.RemoveEmptyEntries);
+
+            var headerPaths = new List<string>();
+            string baseDirectory = Path.GetDirectoryName(Path.GetFullPath(dFilePath));
+
+            foreach (string part in parts)
+            {
+                string path = part.Trim().Replace(@"\ ", " "); // Unescape spaces
+
+                if (!string.IsNullOrEmpty(path) && !path.Contains(folderPath))
+                    headerPaths.Add(Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken));
+            }
+
+            return headerPaths;
+        }
+
         private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, string compileFile = "")
         {
             var paths = new CompilationPaths(config, compileFile);
@@ -290,6 +323,9 @@ namespace NPC_Maker
 
             if (!RunNovlPhase(config, paths, ref compileMsgs))
                 return HandleCompilationFailure(compilationFailedString, ref compileMsgs, true);
+
+            if (codeEntry != null)
+                codeEntry.HeaderPaths = ExtractHeaderPaths(paths.dFile, config.Folder);
 
             compileMsgs += "Done!";
 
@@ -365,8 +401,8 @@ namespace NPC_Maker
                 : $"-I {Program.Settings.ProjectPath.AppendQuotation()} ";
 
             var arguments = config.IsMonoEnvironment
-                ? $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -B {Path.Combine("..", "mips64", "binmono")} {paths.SourceFile.AppendQuotation()}"
-                : $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} {paths.SourceFile.AppendQuotation()}";
+                ? $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -MMD -B {Path.Combine("..", "mips64", "binmono")} {paths.SourceFile.AppendQuotation()}"
+                : $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -MMD {paths.SourceFile.AppendQuotation()}";
 
             return new ProcessStartInfo
             {
@@ -574,10 +610,10 @@ namespace NPC_Maker
                     if (!string.IsNullOrEmpty(Program.Settings.ProjectPath))
                     {
                         string uriPath = new Uri(Program.Settings.ProjectPath).AbsolutePath;
-                        cprops = cprops.Replace("{PROJECTPATH}", uriPath);
+                        cprops = cprops.Replace(Dicts.ProjectPathToken, uriPath);
                     }
                     else
-                        cprops = cprops.Replace("{PROJECTPATH}", "");
+                        cprops = cprops.Replace(Dicts.ProjectPathToken, "");
 
                     File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), cprops);
                     File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);

@@ -150,7 +150,7 @@ namespace NPC_Maker.Windows
                 if (String.IsNullOrEmpty(Program.Settings.ProjectPath))
                     Tx_HeaderPath.Text = of.FileName;
                 else
-                    Tx_HeaderPath.Text = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, "{PROJECTPATH}");
+                    Tx_HeaderPath.Text = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, Dicts.ProjectPathToken);
             }
         }
 
