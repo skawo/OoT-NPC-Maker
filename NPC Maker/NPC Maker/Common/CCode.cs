@@ -689,7 +689,7 @@ namespace NPC_Maker
             }
         }
 
-        public static Process OpenCodeEditor(CodeEditorEnum SelectedCodeEditor, string Path, string Args)
+        public static Process OpenCodeEditor(CodeEditorEnum SelectedCodeEditor, string Path, string Args, bool justHeader)
         {
             try
             {
@@ -725,7 +725,12 @@ namespace NPC_Maker
                     case CodeEditorEnum.NotepadPlusPlus:
                         {
                             startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Notepad++\notepad++.exe";
-                            startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()} {geditCodeFilePath.AppendQuotation()} -multiInst";
+
+                            if (justHeader)
+                                startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()} -multiInst";
+                            else
+                                startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()} {geditCodeFilePath.AppendQuotation()} -multiInst";
+
                             break;
                         }
                     case CodeEditorEnum.Sublime:
@@ -751,7 +756,12 @@ namespace NPC_Maker
                     case CodeEditorEnum.Kate:
                         {
                             startInfo.FileName = "kate";
-                            startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()} {geditCodeFilePath.AppendQuotation()}";
+
+                            if (justHeader)
+                                startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()}";
+                            else
+                                startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()} {geditCodeFilePath.AppendQuotation()}";
+
                             break;
                         }
                     default:

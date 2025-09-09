@@ -1231,7 +1231,8 @@ namespace NPC_Maker
             Program.CodeEditorProcess = CCode.OpenCodeEditor(
                                                                 (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
                                                                 TextBox_CodeEditorPath.Text,
-                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.geditHeaderFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.gtempFolderPath.AppendQuotation())
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.geditHeaderFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.gtempFolderPath.AppendQuotation()),
+                                                                true
                                                             );
 
             if (Program.CodeEditorProcess == null)
@@ -4318,43 +4319,19 @@ namespace NPC_Maker
                 autoSaveTimer.Tick += AutoSaveTimer_Tick;
                 autoSaveTimer.Start();
             }
-            /*
-            else if (Program.Settings.AutoComp_Save)
-            {
-
-                if (Program.IsRunningUnderMono)
-                    Environment.SetEnvironmentVariable("MONO_MANAGED_WATCHER", "1");
-
-                if (Program.Watcher != null)
-                    Program.Watcher.Dispose();
-
-                WatchedEntry = EditedEntry;
-
-                Program.Watcher = new FileSystemWatcher(CCode.tempFolderPath);
-                Program.Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-                Program.Watcher.Changed += Watcher_Changed;
-                Program.Watcher.IncludeSubdirectories = true;
-                Program.Watcher.EnableRaisingEvents = true;
-                Program.Watcher.Filter = "*.*";
-            }
-            */
             else
             {
                 WatchedEntry = EditedEntry;
             }
 
-            //Process.HasExited doesn't work under mono...
-
             var t = Task.Factory.StartNew(() =>
             {
+                //Process.HasExited doesn't work under mono...
                 Program.CodeEditorProcess.WaitForExit();
 
                 try
                 {
                     Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
-
-                    //if (Program.Watcher != null)
-                    //    Program.Watcher.Dispose();
                 }
                 catch (Exception)
                 {
@@ -4549,7 +4526,8 @@ namespace NPC_Maker
             Program.CodeEditorProcess = CCode.OpenCodeEditor(
                                                                 (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
                                                                 TextBox_CodeEditorPath.Text,
-                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.geditCodeFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.gtempFolderPath.AppendQuotation()).Replace("$CODEHEADER", CCode.geditHeaderFilePath.AppendQuotation())
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.geditCodeFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.gtempFolderPath.AppendQuotation()).Replace("$CODEHEADER", CCode.geditHeaderFilePath.AppendQuotation()),
+                                                                false
                                                             );
 
             if (Program.CodeEditorProcess == null)
