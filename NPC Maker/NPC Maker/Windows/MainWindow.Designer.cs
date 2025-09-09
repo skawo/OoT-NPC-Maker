@@ -489,7 +489,7 @@
             // MainSplitPanel.Panel1
             // 
             this.MainSplitPanel.Panel1.Controls.Add(this.Panel_NPCList);
-            this.MainSplitPanel.Panel1.SizeChanged += new System.EventHandler(this.splitContainer1_Panel1_SizeChanged);
+            this.MainSplitPanel.Panel1.SizeChanged += new System.EventHandler(this.SplitContainer1_Panel1_SizeChanged);
             // 
             // MainSplitPanel.Panel2
             // 
@@ -3472,7 +3472,7 @@
             this.pictureBox_Comment.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_Comment.TabIndex = 70;
             this.pictureBox_Comment.TabStop = false;
-            this.pictureBox_Comment.DoubleClick += new System.EventHandler(this.pictureBox_Comment_DoubleClick);
+            this.pictureBox_Comment.DoubleClick += new System.EventHandler(this.PictureBox_Comment_DoubleClick);
             // 
             // MsgTextDefault
             // 
@@ -3523,7 +3523,7 @@
             this.pictureBox_Comment_Loc.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_Comment_Loc.TabIndex = 69;
             this.pictureBox_Comment_Loc.TabStop = false;
-            this.pictureBox_Comment_Loc.DoubleClick += new System.EventHandler(this.pictureBox_Comment_Loc_DoubleClick);
+            this.pictureBox_Comment_Loc.DoubleClick += new System.EventHandler(this.PictureBox_Comment_Loc_DoubleClick);
             // 
             // MsgText
             // 
@@ -3635,7 +3635,7 @@
             this.chkBox_ShowDefaultLanguagePreview.Tag = "";
             this.chkBox_ShowDefaultLanguagePreview.Text = "Show default localization preview";
             this.chkBox_ShowDefaultLanguagePreview.UseVisualStyleBackColor = true;
-            this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.chkBox_ShowDefaultLanguagePreview_CheckedChanged);
+            this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.ChkBox_ShowDefaultLanguagePreview_CheckedChanged);
             // 
             // Btn_RemoveLanguage
             // 
@@ -4436,14 +4436,14 @@
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
             this.addNewToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.addNewToolStripMenuItem.Text = "Add new";
-            this.addNewToolStripMenuItem.Click += new System.EventHandler(this.addNewLocalizationToolClick);
+            this.addNewToolStripMenuItem.Click += new System.EventHandler(this.AddNewLocalizationToolClick);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
             this.removeToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.removeToolStripMenuItem.Text = "Remove";
-            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeLocalizationToolClick);
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveLocalizationToolClick);
             // 
             // optionsToolStripMenuItem
             // 
@@ -4461,28 +4461,28 @@
             this.importLocalizationToolStripMenuItem.Name = "importLocalizationToolStripMenuItem";
             this.importLocalizationToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.importLocalizationToolStripMenuItem.Text = "Import localization";
-            this.importLocalizationToolStripMenuItem.Click += new System.EventHandler(this.importLocalizationToolStripMenuItem_Click);
+            this.importLocalizationToolStripMenuItem.Click += new System.EventHandler(this.ImportLocalizationToolStripMenuItem_Click);
             // 
             // checkLocalizationConsistencyToolStripMenuItem
             // 
             this.checkLocalizationConsistencyToolStripMenuItem.Name = "checkLocalizationConsistencyToolStripMenuItem";
             this.checkLocalizationConsistencyToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.checkLocalizationConsistencyToolStripMenuItem.Text = "Verify localization textbox count";
-            this.checkLocalizationConsistencyToolStripMenuItem.Click += new System.EventHandler(this.checkLocalizationConsistencyToolStripMenuItem_Click);
+            this.checkLocalizationConsistencyToolStripMenuItem.Click += new System.EventHandler(this.CheckLocalizationConsistencyToolStripMenuItem_Click);
             // 
             // checkDefinitionValidityToolStripMenuItem
             // 
             this.checkDefinitionValidityToolStripMenuItem.Name = "checkDefinitionValidityToolStripMenuItem";
             this.checkDefinitionValidityToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.checkDefinitionValidityToolStripMenuItem.Text = "Check definition validity";
-            this.checkDefinitionValidityToolStripMenuItem.Click += new System.EventHandler(this.checkDefinitionValidityToolStripMenuItem_Click);
+            this.checkDefinitionValidityToolStripMenuItem.Click += new System.EventHandler(this.CheckDefinitionValidityToolStripMenuItem_Click);
             // 
             // compileActorToolStripMenuItem
             // 
             this.compileActorToolStripMenuItem.Name = "compileActorToolStripMenuItem";
             this.compileActorToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.compileActorToolStripMenuItem.Text = "Compile actor...";
-            this.compileActorToolStripMenuItem.Click += new System.EventHandler(this.compileActorToolStripMenuItem_Click);
+            this.compileActorToolStripMenuItem.Click += new System.EventHandler(this.CompileActorToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 

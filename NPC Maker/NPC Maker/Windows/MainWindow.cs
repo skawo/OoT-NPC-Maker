@@ -100,7 +100,7 @@ namespace NPC_Maker
             if (FilePath != "")
                 OpenFile(FilePath);
 
-            splitContainer1_Panel1_SizeChanged(null, null);
+            SplitContainer1_Panel1_SizeChanged(null, null);
             MsgTabSplitContainer_SizeChanged(null, null);
         }
 
@@ -117,7 +117,7 @@ namespace NPC_Maker
             }
         }
 
-        private void splitContainer1_Panel1_SizeChanged(object sender, EventArgs e)
+        private void SplitContainer1_Panel1_SizeChanged(object sender, EventArgs e)
         {
             int width = MainSplitPanel.Panel1.Width;
 
@@ -910,7 +910,7 @@ namespace NPC_Maker
             //InsertDataToEditor();
         }
 
-        private void addNewLocalizationToolClick(object sender, EventArgs e)
+        private void AddNewLocalizationToolClick(object sender, EventArgs e)
         {
             if (EditedFile != null)
             {
@@ -952,7 +952,7 @@ namespace NPC_Maker
             }
         }
 
-        private void removeLocalizationToolClick(object sender, EventArgs e)
+        private void RemoveLocalizationToolClick(object sender, EventArgs e)
         {
             if (EditedFile == null)
                 return;
@@ -1252,7 +1252,7 @@ namespace NPC_Maker
 
         #region Tools
 
-        private void compileActorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CompileActorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog of = new OpenFileDialog();
             of.Title = "Select the source file...";
@@ -1295,7 +1295,7 @@ namespace NPC_Maker
             }
         }
 
-        private void checkDefinitionValidityToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CheckDefinitionValidityToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EditedFile == null)
                 return;
@@ -1326,7 +1326,7 @@ namespace NPC_Maker
             InsertDataToEditor();
         }
 
-        private void checkLocalizationConsistencyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CheckLocalizationConsistencyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EditedFile.Languages.Count == 0)
             {
@@ -1351,8 +1351,7 @@ namespace NPC_Maker
                         {
                             for (int i = 0; i < ent.Messages.Count; i++)
                             {
-                                int numBoxesOg = 0;
-                                byte[] msgData = ent.Messages[i].ConvertTextData(ent.NPCName, Dicts.DefaultLanguage, out numBoxesOg, false).ToArray();
+                                byte[] msgData = ent.Messages[i].ConvertTextData(ent.NPCName, Dicts.DefaultLanguage, out int numBoxesOg, false).ToArray();
 
                                 int locIndex = ent.Localization[selectedLangIndex].Messages.FindIndex(x => x.Name == ent.Messages[i].Name);
 
@@ -1362,8 +1361,7 @@ namespace NPC_Maker
                                     continue;
                                 }
 
-                                int numBoxesLoc = 0;
-                                byte[] msgDataLoc = ent.Localization[selectedLangIndex].Messages[locIndex].ConvertTextData(ent.NPCName, selectedLanguage, out numBoxesLoc, false).ToArray();
+                                byte[] msgDataLoc = ent.Localization[selectedLangIndex].Messages[locIndex].ConvertTextData(ent.NPCName, selectedLanguage, out int numBoxesLoc, false).ToArray();
 
                                 if (numBoxesOg != numBoxesLoc)
                                     reportItems.Add($"{ent.NPCName}, {ent.Messages[i].Name} {numBoxesOg} vs {numBoxesLoc}");
@@ -1396,7 +1394,7 @@ namespace NPC_Maker
         }
 
 
-        private void importLocalizationToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ImportLocalizationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EditedFile != null)
             {
@@ -3603,7 +3601,7 @@ namespace NPC_Maker
             return entry;
         }
 
-        private void pictureBox_Comment_DoubleClick(object sender, EventArgs e)
+        private void PictureBox_Comment_DoubleClick(object sender, EventArgs e)
         {
             MessageEntry entry = GetCurMsgEntry(Dicts.DefaultLanguage);
 
@@ -3614,7 +3612,7 @@ namespace NPC_Maker
             }
         }
 
-        private void pictureBox_Comment_Loc_DoubleClick(object sender, EventArgs e)
+        private void PictureBox_Comment_Loc_DoubleClick(object sender, EventArgs e)
         {
             MessageEntry entry = GetCurMsgEntry(Combo_Language.Text);
 
@@ -3787,8 +3785,7 @@ namespace NPC_Maker
 
         private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Common.SavedMsgPreviewData savedPreviewData)
         {
-            int numBoxes = 0;
-            List<byte> Data = Entry.ConvertTextData(NPCName, Language, out numBoxes, false);
+            List<byte> Data = Entry.ConvertTextData(NPCName, Language, out _, false);
 
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return null;
@@ -3797,7 +3794,7 @@ namespace NPC_Maker
             {
                 Entry = new MessageEntry();
                 Entry.MessageText = "Error: Over 1280 bytes.";
-                Data = Entry.ConvertTextData(NPCName, Language, out numBoxes, false);
+                Data = Entry.ConvertTextData(NPCName, Language, out _, false);
             }
 
             bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;
@@ -4102,7 +4099,7 @@ namespace NPC_Maker
             MsgPreviewTimer.Stop();
             MsgPreviewTimer.Start();
         }
-        private void chkBox_ShowDefaultLanguagePreview_CheckedChanged(object sender, EventArgs e)
+        private void ChkBox_ShowDefaultLanguagePreview_CheckedChanged(object sender, EventArgs e)
         {
             Program.Settings.OrigPreview = chkBox_ShowDefaultLanguagePreview.Checked;
             MsgPreviewTimer.Stop();
@@ -4324,7 +4321,7 @@ namespace NPC_Maker
                 WatchedEntry = EditedEntry;
             }
 
-            var t = Task.Factory.StartNew(() =>
+            TaskEx.Run(() =>
             {
                 //Process.HasExited doesn't work under mono...
                 Program.CodeEditorProcess.WaitForExit();
@@ -4333,7 +4330,7 @@ namespace NPC_Maker
                 {
                     Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
                 }
-                catch (Exception)
+                catch
                 {
 
                 }
