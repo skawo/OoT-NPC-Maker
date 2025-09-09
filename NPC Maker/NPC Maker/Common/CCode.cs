@@ -161,6 +161,8 @@ namespace NPC_Maker
         {
             Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "bin"), "EmbeddedOverlayNPCCOMPILE");
             Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlayNPCCOMPILE");
+            Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "bin"), "EmbeddedOverlaytemp");
+            Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlaytemp");
         }
 
         public static Dictionary<string, string> GetDefinesFromH(string hPath)
@@ -277,7 +279,7 @@ namespace NPC_Maker
             return CompileInternal(config, codeEntry, ref compileMsgs, compileFile);
         }
 
-        public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath)
+        public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath, string[] excludedPaths)
         {
             string content = File.ReadAllText(dFilePath);
 
@@ -290,23 +292,65 @@ namespace NPC_Maker
             // Handle line continuations (backslash + newline)
             dependencies = Regex.Replace(dependencies, @"\\\s*\r?\n\s*", " ");
 
-            // Split by whitespace and filter out empty entries
-            string[] parts = dependencies.Split(new char[] { ' ', '\t', '\n', '\r' },
-                                               StringSplitOptions.RemoveEmptyEntries);
+            // Match paths, handling escaped spaces
+            // This regex matches sequences of non-whitespace characters and escaped spaces
+            var matches = Regex.Matches(dependencies, @"(?:[^\s\\]|\\.)+");
 
             var headerPaths = new List<string>();
-            string baseDirectory = Path.GetDirectoryName(Path.GetFullPath(dFilePath));
 
-            foreach (string part in parts)
+            foreach (Match match in matches)
             {
-                string path = part.Trim().Replace(@"\ ", " "); // Unescape spaces
+                string path = match.Value;
+                // Unescape spaces
+                path = path.Replace(@"\ ", " ");
 
-                if (!string.IsNullOrEmpty(path) && !path.Contains(folderPath))
+                if (!string.IsNullOrEmpty(path) &&
+                    !path.Contains(folderPath) &&
+                    !IsPathExcluded(path, excludedPaths))
+                {
                     headerPaths.Add(Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken));
+                }
             }
 
             return headerPaths;
         }
+
+        private static bool IsPathExcluded(string path, string[] excludedPaths)
+        {
+            if (excludedPaths == null || excludedPaths.Length == 0)
+                return false;
+
+            // Normalize the path for comparison
+            string normalizedPath = Path.GetFullPath(path);
+
+            foreach (string excludedPath in excludedPaths)
+            {
+                if (string.IsNullOrEmpty(excludedPath))
+                    continue;
+
+                try
+                {
+                    string normalizedExcludedPath = Path.GetFullPath(excludedPath);
+
+                    // Check if the path starts with the excluded path (is contained within)
+                    if (normalizedPath.StartsWith(normalizedExcludedPath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception)
+                {
+                    // If path normalization fails, fall back to simple string comparison
+                    if (path.StartsWith(excludedPath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
 
         private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, string compileFile = "")
         {
@@ -325,7 +369,10 @@ namespace NPC_Maker
                 return HandleCompilationFailure(compilationFailedString, ref compileMsgs, true);
 
             if (codeEntry != null)
-                codeEntry.HeaderPaths = ExtractHeaderPaths(paths.dFile, config.Folder);
+            {
+                string[] excludedHeaderPaths = GetIncludePaths(config);
+                codeEntry.HeaderPaths = ExtractHeaderPaths(paths.dFile, config.Folder, excludedHeaderPaths);
+            }
 
             compileMsgs += "Done!";
 
@@ -463,16 +510,20 @@ namespace NPC_Maker
             };
         }
 
-        private static string BuildIncludeFlags(CompilationConfig config)
+        private static string[] GetIncludePaths(CompilationConfig config)
         {
             var basePath = config.IsMonoEnvironment ? ".." : Path.Combine(Program.ExecPath, "gcc");
-            var includes = new[]
+            return new[]
             {
                 Path.Combine(basePath, "mips64", "include"),
                 Path.Combine(basePath, "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
                 Path.Combine(basePath, "mips64", "include", "z64hdr", "include")
             };
+        }
 
+        private static string BuildIncludeFlags(CompilationConfig config)
+        {
+            var includes = GetIncludePaths(config);
             return string.Join(" ", includes.Select(path => $"-I {path.AppendQuotation()}"));
         }
 

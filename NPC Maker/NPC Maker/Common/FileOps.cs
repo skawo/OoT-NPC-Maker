@@ -500,7 +500,7 @@ namespace NPC_Maker
                 // Try original path first
                 try
                 {
-                    content = File.ReadAllText(hPath);
+                    content = File.ReadAllText(cleanPath);
                 }
                 catch
                 {

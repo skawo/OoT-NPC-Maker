@@ -71,7 +71,20 @@ namespace NPC_Maker
             Application.CurrentCulture = ci;
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
-            SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
+
+            string settingsWindows = Path.Combine(ExecPath, "Settings.json");
+            string settingsMono = Path.Combine(ExecPath, "SettingsMono.json");
+
+            if (Program.IsRunningUnderMono)
+            {
+                if (!File.Exists(settingsMono) && File.Exists(settingsWindows))
+                    File.Copy(settingsWindows, settingsMono);
+
+                SettingsFilePath = settingsMono;
+            }
+            else
+                SettingsFilePath = settingsWindows;
+
             ScriptCachePath = Path.Combine(ExecPath, "cache", "s_cache");
             CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
 
