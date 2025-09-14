@@ -321,17 +321,28 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
     NpcAnimationEntry anim = en->animations[en->currentAnimId];
     s32 realObjId = R_OBJECT(en, anim.objectId);
 
-    if (realObjId != en->settings.objectId || anim.fileStart != OBJECT_CURRENT)
+    if (anim.fileStart != USER_ANIMLOAD)
     {
-        if (!Rom_SetObjectToActor(&en->actor, playState, realObjId, (R_FILESTART(en, anim.fileStart))))
+        if (realObjId != en->settings.objectId || anim.fileStart != OBJECT_CURRENT)
         {
-            #if LOGGING > 0
-                is64Printf("_%2d: Animation had object %04x set, but it wasn't loaded, so the animation will not play.\n", en->npcId, realObjId);
-            #endif       
+            if (!Rom_SetObjectToActor(&en->actor, playState, realObjId, (R_FILESTART(en, anim.fileStart))))
+            {
+                #if LOGGING > 0
+                    is64Printf("_%2d: Animation had object %04x set, but it wasn't loaded, so the animation will not play.\n", en->npcId, realObjId);
+                #endif       
 
-            en->animationFinished = true;       
-            return;
+                en->animationFinished = true;       
+                return;
+            }
         }
+    }
+    else
+    {
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(en->curAnimAddr);
+
+        #if LOGGING > 2
+            is64Printf("_User loaded animation at animation at %x\n", gSegments[6]);
+        #endif
     }
 
     switch (en->settings.animationType)
@@ -354,7 +365,6 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
         }
     }
 
-    
     if (realObjId != en->settings.objectId || anim.fileStart != OBJECT_CURRENT)
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
 

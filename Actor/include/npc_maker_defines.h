@@ -47,6 +47,7 @@
 #define FADE_OUT_FADE_IN_SPEED_MIN 1
 #define FADE_OUT_FADE_IN_SCALE 2
 
+#define USER_ANIMLOAD -2
 #define OBJECT_CURRENT -1
 #define OBJECT_RAM -2 
 #define OBJECT_NONE -3
@@ -62,6 +63,8 @@
 
 #define SEG_OFFSET(seg) (0x01000000 * seg)
 #define OFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset : offset + SEG_OFFSET(segment)
+#define UNOFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset - SEG_OFFSET(segment) : offset
+
 
 #define STOPPED_NODE -2
 #define INVALID_NODE -1

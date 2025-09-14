@@ -495,7 +495,10 @@ bool Setup_Objects(NpcMaker* en, PlayState* playState)
     }
 
     for (int i = 0; i < en->numAnims; i++)
-        Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
+    {
+        if (en->animations[i].fileStart != USER_ANIMLOAD)
+            Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
+    }
 
     for (int i = 0; i < en->numExDLists; i++)
         Rom_LoadObjectIfUnloaded(playState, en->extraDLists[i].objectId);
@@ -772,11 +775,31 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
         #endif
 
         NpcAnimationEntry anim = en->animations[animId];
+
+        if (en->curAnimAddr != NULL)
+        {
+            ZeldaArena_Free(en->curAnimAddr);
+            en->curAnimAddr = NULL;
+
+            #if LOGGING > 0
+                is64Printf("_%2d: Freed user-loaded animation.\n", en->npcId);
+            #endif            
+        }
+
+        if (anim.fileStart == USER_ANIMLOAD)
+        {
+            en->curAnimAddr = NpcM_LoadAnimation(anim.offset, R_OBJECT(en, anim.objectId));
+            gSegments[6] = VIRTUAL_TO_PHYSICAL(en->curAnimAddr);
+
+            #if LOGGING > 0
+                is64Printf("_%2d: User loaded animation ID %d has been loaded at %x\n", en->npcId, anim.offset, en->curAnimAddr);
+            #endif
+        }
         
         bool was_set = Setup_AnimationImpl(&en->actor, 
                                              playState, 
                                              &en->skin.skelAnime, 
-                                             anim.offset, 
+                                             en->curAnimAddr == NULL ? anim.offset : 0, 
                                              en->settings.animationType, 
                                              R_OBJECT(en, anim.objectId),
                                              anim.fileStart,
@@ -799,8 +822,9 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
     }
 }
 
-bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int rFileStart, int actorObject, int actorObjectFileStart,
-                           int animStart, int animEnd, float speed, int interpolateFrames, bool interpolate, bool playOnce, bool external)
+bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int rFileStart, 
+                           int actorObject, int actorObjectFileStart, int animStart, int animEnd, float speed, int interpolateFrames, bool interpolate, 
+                           bool playOnce, bool external)
 {
 #pragma region AnimMode
         /*
@@ -861,10 +885,13 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                 animAddr = OFFSET_ADDRESS(6, animAddr);
 
                 #if LOGGING > 1
-                    is64Printf("_Normal animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
+                    if (fileStart == USER_ANIMLOAD)
+                        s64Printf("_Normal userload animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
+                    else
+                        is64Printf("_Normal animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
                 #endif
 
-                if (external || (actorObject != object && object > 0) || (fileStart != OBJECT_CURRENT))
+                if (fileStart != USER_ANIMLOAD && (external || (actorObject != object && object > 0) || (fileStart != OBJECT_CURRENT)))
                 {
                     if (!Rom_SetObjectToActor(actor, playState, object, rFileStart))
                     {

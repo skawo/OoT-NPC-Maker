@@ -562,6 +562,7 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
 
             u32 pointer = 0;
             s32 r_obj = R_OBJECT(en, data->objectId);
+            u32 offset = data->offset;
 
             switch (r_obj)
             {
@@ -572,6 +573,7 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
                 default:
                 {
                     pointer = (u32)Rom_GetObjectDataPtr(r_obj, playState);
+                    offset = UNOFFSET_ADDRESS(6, offset);
 
                     if (pointer == 0)
                     {
@@ -584,8 +586,8 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
                 }
             }
 
-            gSPSegment(POLY_XLU.p++, i + 8, pointer + data->offset + (R_FILESTART(en, data->fileStart)));
-            gSPSegment(POLY_OPA.p++, i + 8, pointer + data->offset + (R_FILESTART(en, data->fileStart)));
+            gSPSegment(POLY_XLU.p++, i + 8, pointer + offset + (R_FILESTART(en, data->fileStart)));
+            gSPSegment(POLY_OPA.p++, i + 8, pointer + offset + (R_FILESTART(en, data->fileStart)));
         }
     }
 

@@ -330,6 +330,7 @@ typedef struct NpcMaker
     
     u32 numLanguages;
     u32 numMessages;    
+    void* curAnimAddr;
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

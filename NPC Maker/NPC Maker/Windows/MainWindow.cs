@@ -561,10 +561,12 @@ namespace NPC_Maker
 
             foreach (AnimationEntry Animation in SelectedEntry.Animations)
             {
+                string cValue = GetAnimationFilestartString(Animation.FileStart);
+
                 if (SelectedEntry.AnimationType == 1)
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, cValue, Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
                 else
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, Animation.FileStart < 0 ? "Same as main" : Animation.FileStart.ToString("X"), Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
             }
 
             #endregion
@@ -2233,6 +2235,22 @@ namespace NPC_Maker
             }
         }
 
+        private string GetAnimationFilestartString(Int32? FileStart)
+        {
+            string cValue = "";
+
+            FileStart = FileStart ?? -1;
+
+            if (FileStart == -2)
+                cValue = "Loaded by user method";
+            else if (FileStart < 0)
+                cValue = "Same as main";
+            else
+                cValue = ((int)FileStart).ToString("X");
+
+            return cValue;
+        }
+
         private void AddBlankAnim(int SkipIndex, int Index, string Name = null, string HeaderName = null, uint? Address = null, float? Speed = null, short? ObjectID = null, byte StartFrame = 0, byte EndFrame = 0xFF, Int32? FileStart = null)
         {
             Name = Name ?? "Animation_" + Index.ToString();
@@ -2261,7 +2279,7 @@ namespace NPC_Maker
                 DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.StartFrame].Value = 0;
 
             if (SkipIndex != (int)AnimGridColumns.FileStart)
-                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.FileStart].Value = FileStart == -1 ? "Same as main" : ((int)FileStart).ToString("X");
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.FileStart].Value = GetAnimationFilestartString(FileStart);
 
             if (SkipIndex != (int)AnimGridColumns.EndFrame)
                 DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.EndFrame].Value = 255;
@@ -2492,18 +2510,27 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            Int32 Value = Convert.ToInt32(e.Value.ToString(), 16);
+                            Int32 Value = 0;
 
-                            if (Value < 0)
+                            if (e.Value.ToString() == "-2")
                             {
-                                e.Value = -1;
-                                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "Same as main";
-                            }
+                                e.Value = "Loaded by user method";
 
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, null, 0, 255, Value);
+                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, null, 0, 255, -2);
+                                else
+                                    SelectedEntry.Animations[e.RowIndex].FileStart = -2;
+
+                            }
                             else
-                                SelectedEntry.Animations[e.RowIndex].FileStart = Value;
+                            {
+                                Value = Convert.ToInt32(e.Value.ToString(), 16);
+
+                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
+                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, null, 0, 255, Value);
+                                else
+                                    SelectedEntry.Animations[e.RowIndex].FileStart = Value;
+                            }
 
                             e.ParsingApplied = true;
                         }
