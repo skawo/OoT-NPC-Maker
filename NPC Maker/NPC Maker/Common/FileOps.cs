@@ -725,8 +725,7 @@ namespace NPC_Maker
 
                         Dictionary<string, string> defines = new Dictionary<string, string>();
 
-                        if (!String.IsNullOrEmpty(Entry.HeaderPath))
-                            defines = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Entry.HeaderPath, Dicts.ProjectPathToken));
+                        defines = Helpers.GetDefinesFromH(Entry.HeaderPath);
 
                         List<byte> EntryBytes = new List<byte>();
 

@@ -48,7 +48,6 @@
             this.Tab1_Data = new System.Windows.Forms.TabPage();
             this.Tx_SkeletonName = new System.Windows.Forms.TextBox();
             this.Btn_HeaderBrowse = new System.Windows.Forms.Button();
-            this.Tx_HeaderPath = new System.Windows.Forms.TextBox();
             this.Label_Header = new System.Windows.Forms.Label();
             this.Button_NPCRename = new System.Windows.Forms.Button();
             this.numUpFileStart = new System.Windows.Forms.NumericUpDown();
@@ -663,7 +662,6 @@
             this.Tab1_Data.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Tab1_Data.Controls.Add(this.Tx_SkeletonName);
             this.Tab1_Data.Controls.Add(this.Btn_HeaderBrowse);
-            this.Tab1_Data.Controls.Add(this.Tx_HeaderPath);
             this.Tab1_Data.Controls.Add(this.Label_Header);
             this.Tab1_Data.Controls.Add(this.Button_NPCRename);
             this.Tab1_Data.Controls.Add(this.numUpFileStart);
@@ -702,7 +700,7 @@
             // 
             // Tx_SkeletonName
             // 
-            this.Tx_SkeletonName.Location = new System.Drawing.Point(287, 111);
+            this.Tx_SkeletonName.Location = new System.Drawing.Point(287, 85);
             this.Tx_SkeletonName.MaxLength = 32;
             this.Tx_SkeletonName.Name = "Tx_SkeletonName";
             this.Tx_SkeletonName.Size = new System.Drawing.Size(129, 20);
@@ -714,28 +712,18 @@
             // 
             // Btn_HeaderBrowse
             // 
-            this.Btn_HeaderBrowse.Location = new System.Drawing.Point(351, 31);
+            this.Btn_HeaderBrowse.Location = new System.Drawing.Point(351, 166);
             this.Btn_HeaderBrowse.Name = "Btn_HeaderBrowse";
             this.Btn_HeaderBrowse.Size = new System.Drawing.Size(65, 20);
             this.Btn_HeaderBrowse.TabIndex = 82;
-            this.Btn_HeaderBrowse.Text = "Browse";
+            this.Btn_HeaderBrowse.Text = "Define...";
             this.Btn_HeaderBrowse.UseVisualStyleBackColor = true;
             this.Btn_HeaderBrowse.Click += new System.EventHandler(this.Btn_HeaderBrowse_Click);
-            // 
-            // Tx_HeaderPath
-            // 
-            this.Tx_HeaderPath.Location = new System.Drawing.Point(134, 32);
-            this.Tx_HeaderPath.MaxLength = 99999;
-            this.Tx_HeaderPath.Name = "Tx_HeaderPath";
-            this.Tx_HeaderPath.Size = new System.Drawing.Size(211, 20);
-            this.Tx_HeaderPath.TabIndex = 81;
-            this.Tx_HeaderPath.Tag = "HEADERPATH";
-            this.Tx_HeaderPath.TextChanged += new System.EventHandler(this.Tx_HeaderPath_TextChanged);
             // 
             // Label_Header
             // 
             this.Label_Header.AutoSize = true;
-            this.Label_Header.Location = new System.Drawing.Point(14, 35);
+            this.Label_Header.Location = new System.Drawing.Point(300, 170);
             this.Label_Header.Name = "Label_Header";
             this.Label_Header.Size = new System.Drawing.Size(45, 13);
             this.Label_Header.TabIndex = 80;
@@ -754,7 +742,7 @@
             // numUpFileStart
             // 
             this.numUpFileStart.Hexadecimal = true;
-            this.numUpFileStart.Location = new System.Drawing.Point(134, 86);
+            this.numUpFileStart.Location = new System.Drawing.Point(134, 60);
             this.numUpFileStart.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -769,7 +757,7 @@
             // Lbl_ObjectOffset
             // 
             this.Lbl_ObjectOffset.AutoSize = true;
-            this.Lbl_ObjectOffset.Location = new System.Drawing.Point(14, 89);
+            this.Lbl_ObjectOffset.Location = new System.Drawing.Point(14, 63);
             this.Lbl_ObjectOffset.Name = "Lbl_ObjectOffset";
             this.Lbl_ObjectOffset.Size = new System.Drawing.Size(49, 13);
             this.Lbl_ObjectOffset.TabIndex = 77;
@@ -815,7 +803,7 @@
             // 
             // Btn_SelectObject
             // 
-            this.Btn_SelectObject.Location = new System.Drawing.Point(351, 58);
+            this.Btn_SelectObject.Location = new System.Drawing.Point(351, 32);
             this.Btn_SelectObject.Name = "Btn_SelectObject";
             this.Btn_SelectObject.Size = new System.Drawing.Size(65, 20);
             this.Btn_SelectObject.TabIndex = 52;
@@ -825,7 +813,7 @@
             // 
             // Txb_ObjectID
             // 
-            this.Txb_ObjectID.Location = new System.Drawing.Point(134, 59);
+            this.Txb_ObjectID.Location = new System.Drawing.Point(134, 33);
             this.Txb_ObjectID.MaxLength = 32;
             this.Txb_ObjectID.Multiline = true;
             this.Txb_ObjectID.Name = "Txb_ObjectID";
@@ -915,7 +903,7 @@
             // Label_ObjectID
             // 
             this.Label_ObjectID.AutoSize = true;
-            this.Label_ObjectID.Location = new System.Drawing.Point(14, 62);
+            this.Label_ObjectID.Location = new System.Drawing.Point(14, 36);
             this.Label_ObjectID.Name = "Label_ObjectID";
             this.Label_ObjectID.Size = new System.Drawing.Size(55, 13);
             this.Label_ObjectID.TabIndex = 6;
@@ -943,7 +931,7 @@
             // Label_Hierarchy
             // 
             this.Label_Hierarchy.AutoSize = true;
-            this.Label_Hierarchy.Location = new System.Drawing.Point(14, 114);
+            this.Label_Hierarchy.Location = new System.Drawing.Point(14, 88);
             this.Label_Hierarchy.Name = "Label_Hierarchy";
             this.Label_Hierarchy.Size = new System.Drawing.Size(108, 13);
             this.Label_Hierarchy.TabIndex = 7;
@@ -952,7 +940,7 @@
             // NumUpDown_Hierarchy
             // 
             this.NumUpDown_Hierarchy.Hexadecimal = true;
-            this.NumUpDown_Hierarchy.Location = new System.Drawing.Point(134, 112);
+            this.NumUpDown_Hierarchy.Location = new System.Drawing.Point(134, 86);
             this.NumUpDown_Hierarchy.Maximum = new decimal(new int[] {
             -1,
             0,
@@ -1105,7 +1093,7 @@
             "Non-matrix, full opacity",
             "Non-matrix, transparency-enabled",
             "Skin, full opacity (Horses)"});
-            this.ComboBox_HierarchyType.Location = new System.Drawing.Point(134, 138);
+            this.ComboBox_HierarchyType.Location = new System.Drawing.Point(134, 112);
             this.ComboBox_HierarchyType.Name = "ComboBox_HierarchyType";
             this.ComboBox_HierarchyType.Size = new System.Drawing.Size(282, 21);
             this.ComboBox_HierarchyType.TabIndex = 11;
@@ -1124,7 +1112,7 @@
             // Label_HierarchyType
             // 
             this.Label_HierarchyType.AutoSize = true;
-            this.Label_HierarchyType.Location = new System.Drawing.Point(14, 142);
+            this.Label_HierarchyType.Location = new System.Drawing.Point(14, 116);
             this.Label_HierarchyType.Name = "Label_HierarchyType";
             this.Label_HierarchyType.Size = new System.Drawing.Size(58, 13);
             this.Label_HierarchyType.TabIndex = 12;
@@ -1137,7 +1125,7 @@
             this.ComboBox_AnimType.Items.AddRange(new object[] {
             "Standard",
             "Link"});
-            this.ComboBox_AnimType.Location = new System.Drawing.Point(134, 165);
+            this.ComboBox_AnimType.Location = new System.Drawing.Point(134, 139);
             this.ComboBox_AnimType.Name = "ComboBox_AnimType";
             this.ComboBox_AnimType.Size = new System.Drawing.Size(282, 21);
             this.ComboBox_AnimType.TabIndex = 13;
@@ -1147,7 +1135,7 @@
             // Label_AnimType
             // 
             this.Label_AnimType.AutoSize = true;
-            this.Label_AnimType.Location = new System.Drawing.Point(14, 168);
+            this.Label_AnimType.Location = new System.Drawing.Point(14, 142);
             this.Label_AnimType.Name = "Label_AnimType";
             this.Label_AnimType.Size = new System.Drawing.Size(79, 13);
             this.Label_AnimType.TabIndex = 14;
@@ -5079,7 +5067,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Name;
         private System.Windows.Forms.TextBox Tx_SkeletonName;
         private System.Windows.Forms.Button Btn_HeaderBrowse;
-        private System.Windows.Forms.TextBox Tx_HeaderPath;
         private System.Windows.Forms.Label Label_Header;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_AnimName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_HDefine;

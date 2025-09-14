@@ -38,8 +38,6 @@ namespace NPC_Maker.Windows
 
                 Tab.TabPages.Add(Page);
             }
-
-            Tx_HeaderPath.Text = File.ExtScriptHeaderPath;
         }
 
         private string GetName(string Current = "")
@@ -141,22 +139,13 @@ namespace NPC_Maker.Windows
 
         private void Btn_HeaderBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog of = new OpenFileDialog();
-            of.Filter = "Header files (*.h)|*.h|All files (*.*)|*.*";
-            of.InitialDirectory = Program.Settings.ProjectPath;
+            Windows.LongInputBox liB = new Windows.LongInputBox("Header definition", "Add header paths:", EditedFile.ExtScriptHeaderPath, true, "Header files (*.h)|*.h|All files (*.*)|*.*");
 
-            if (of.ShowDialog() == DialogResult.OK)
+            if (liB.ShowDialog() == DialogResult.OK)
             {
-                if (String.IsNullOrEmpty(Program.Settings.ProjectPath))
-                    Tx_HeaderPath.Text = of.FileName;
-                else
-                    Tx_HeaderPath.Text = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, Dicts.ProjectPathToken);
-            }
-        }
+                EditedFile.ExtScriptHeaderPath = liB.inputText;
 
-        private void Tx_HeaderPath_TextChanged(object sender, EventArgs e)
-        {
-            EditedFile.ExtScriptHeaderPath = Tx_HeaderPath.Text;
+            }
         }
     }
 }

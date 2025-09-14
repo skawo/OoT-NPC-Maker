@@ -12,8 +12,9 @@ namespace NPC_Maker.Windows
     public partial class LongInputBox : Form
     {
         public string inputText;
+        private string bFilter;
 
-        public LongInputBox(string title, string command, string text)
+        public LongInputBox(string title, string command, string text, bool BrowseButton = false, string browseFilter = "")
         {
             InitializeComponent();
 
@@ -21,6 +22,11 @@ namespace NPC_Maker.Windows
             this.Text = title;
             textBox1.Text = text;
             label1.Text = command;
+
+            bFilter = browseFilter;
+
+            if (!BrowseButton)
+                button2.Visible = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -35,6 +41,21 @@ namespace NPC_Maker.Windows
         private void textBox1_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             inputText = textBox1.Text;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog of = new OpenFileDialog();
+            of.Filter = bFilter;
+
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                if (!String.IsNullOrEmpty(textBox1.Text))
+                    textBox1.Text += ";";
+               
+                textBox1.Text += Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, Dicts.ProjectPathToken);
+            }
+
         }
     }
 }

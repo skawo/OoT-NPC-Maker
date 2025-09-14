@@ -97,6 +97,9 @@ namespace NPC_Maker
         {
             try
             {
+                if (String.IsNullOrEmpty(basePath))
+                    return fullPath;
+
                 string normalizedBasePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
                 string normalizedFullPath = Path.GetFullPath(fullPath);
 
@@ -150,14 +153,32 @@ namespace NPC_Maker
             }
         }
 
-        public static Dictionary<string, string> GetDefinesFromH(string Path)
+        public static Dictionary<string, string> GetDefinesFromH(string PathString)
         {
+            string[] Paths = PathString.Split(';');
             Dictionary<string, string> defines = new Dictionary<string, string>();
 
             try
             {
-                if (!String.IsNullOrEmpty(Path))
-                    defines = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Path, Dicts.ProjectPathToken));
+                foreach (string p in Paths)
+                {
+                    if (!String.IsNullOrEmpty(p))
+                    {
+                        Dictionary<string, string> found = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, p, Dicts.ProjectPathToken));
+
+                        foreach (var f in found)
+                        {
+                            string key = f.Key;
+                            string val = f.Value;
+
+                            while (defines.ContainsKey(key))
+                                key += "_";
+
+                            defines.Add(key, val);
+                        }
+                    }
+
+                }
             }
             catch (Exception)
             {

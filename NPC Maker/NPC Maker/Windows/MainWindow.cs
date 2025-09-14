@@ -382,7 +382,6 @@ namespace NPC_Maker
             #region Basic data
 
             Textbox_NPCName.Text = SelectedEntry.NPCName;
-            Tx_HeaderPath.Text = SelectedEntry.HeaderPath;
             Tx_SkeletonName.Text = SelectedEntry.SkeletonHeaderDefinition;
 
             Txb_ObjectID.Text = SelectedEntry.ObjectID.ToString();
@@ -614,7 +613,7 @@ namespace NPC_Maker
 
             #endregion
 
-            Tx_HeaderPath_TextChanged(null, null);
+            HeaderPathChanged();
 
             #region Messages
 
@@ -1899,16 +1898,15 @@ namespace NPC_Maker
 
         private void Btn_HeaderBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog of = new OpenFileDialog();
-            of.Filter = "Header files (*.h)|*.h|All files (*.*)|*.*";
-            of.InitialDirectory = Program.Settings.ProjectPath;
+            if (SelectedEntry == null)
+                return;
 
-            if (of.ShowDialog() == DialogResult.OK)
+            Windows.LongInputBox liB = new Windows.LongInputBox("Header definition", "Add header paths:", SelectedEntry.HeaderPath, true, "Header files (*.h)|*.h|All files (*.*)|*.*");
+
+            if (liB.ShowDialog() == DialogResult.OK)
             {
-                if (String.IsNullOrEmpty(Program.Settings.ProjectPath))
-                    Tx_HeaderPath.Text = of.FileName;
-                else
-                    Tx_HeaderPath.Text = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, "{PROJECTPATH}");
+                SelectedEntry.HeaderPath = liB.inputText;
+                HeaderPathChanged();
             }
         }
 
@@ -1955,17 +1953,12 @@ namespace NPC_Maker
             }
         }
 
-        private void Tx_HeaderPath_TextChanged(object sender, EventArgs e)
+        private void HeaderPathChanged()
         {
-            if (sender != null)
-                TextBox_TextChanged(sender, e);
-
             bool vis = true;
 
-            if (String.IsNullOrEmpty(Tx_HeaderPath.Text))
-            {
+            if (String.IsNullOrEmpty(SelectedEntry.HeaderPath))
                 vis = false;
-            }
 
             if (vis)
                 NumUpDown_Hierarchy.Width = numUpFileStart.Width / 2;

@@ -37,7 +37,6 @@ namespace NPC_Maker.Windows
             this.Rename = new System.Windows.Forms.ToolStripMenuItem();
             this.Tab = new System.Windows.Forms.TabControl();
             this.Btn_HeaderBrowse = new System.Windows.Forms.Button();
-            this.Tx_HeaderPath = new System.Windows.Forms.TextBox();
             this.Label_Header = new System.Windows.Forms.Label();
             this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -104,26 +103,15 @@ namespace NPC_Maker.Windows
             this.Btn_HeaderBrowse.Name = "Btn_HeaderBrowse";
             this.Btn_HeaderBrowse.Size = new System.Drawing.Size(65, 20);
             this.Btn_HeaderBrowse.TabIndex = 84;
-            this.Btn_HeaderBrowse.Text = "Browse";
+            this.Btn_HeaderBrowse.Text = "Define...";
             this.Btn_HeaderBrowse.UseVisualStyleBackColor = true;
             this.Btn_HeaderBrowse.Click += new System.EventHandler(this.Btn_HeaderBrowse_Click);
-            // 
-            // Tx_HeaderPath
-            // 
-            this.Tx_HeaderPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Tx_HeaderPath.Location = new System.Drawing.Point(330, 497);
-            this.Tx_HeaderPath.MaxLength = 99999;
-            this.Tx_HeaderPath.Name = "Tx_HeaderPath";
-            this.Tx_HeaderPath.Size = new System.Drawing.Size(433, 20);
-            this.Tx_HeaderPath.TabIndex = 83;
-            this.Tx_HeaderPath.Tag = "HEADERPATH";
-            this.Tx_HeaderPath.TextChanged += new System.EventHandler(this.Tx_HeaderPath_TextChanged);
             // 
             // Label_Header
             // 
             this.Label_Header.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_Header.AutoSize = true;
-            this.Label_Header.Location = new System.Drawing.Point(240, 501);
+            this.Label_Header.Location = new System.Drawing.Point(679, 501);
             this.Label_Header.Name = "Label_Header";
             this.Label_Header.Size = new System.Drawing.Size(84, 13);
             this.Label_Header.TabIndex = 85;
@@ -136,7 +124,6 @@ namespace NPC_Maker.Windows
             this.ClientSize = new System.Drawing.Size(834, 526);
             this.Controls.Add(this.Label_Header);
             this.Controls.Add(this.Btn_HeaderBrowse);
-            this.Controls.Add(this.Tx_HeaderPath);
             this.Controls.Add(this.Tab);
             this.Controls.Add(this.MenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -158,7 +145,6 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.ToolStripMenuItem Rename;
         private System.Windows.Forms.TabControl Tab;
         private System.Windows.Forms.Button Btn_HeaderBrowse;
-        private System.Windows.Forms.TextBox Tx_HeaderPath;
         private System.Windows.Forms.Label Label_Header;
     }
 }
