@@ -733,7 +733,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         is64Printf("_%2d: Setting default animation.\n", en->npcId);
     #endif
 
-    if (en->animations[ANIM_IDLE].offset != 0)
+    if (en->animations[ANIM_IDLE].offset != 0 || en->animations[ANIM_IDLE].fileStart == USER_ANIMLOAD)
     {
         Setup_Animation(en, playState, ANIM_IDLE, false, false, true, false, false);
         Update_Animations(en, playState);
