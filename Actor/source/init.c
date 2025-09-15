@@ -494,12 +494,33 @@ bool Setup_Objects(NpcMaker* en, PlayState* playState)
             return false;
     }
 
+    int largestUserAnim = 0;
+
     for (int i = 0; i < en->numAnims; i++)
     {
         if (en->animations[i].fileStart != USER_ANIMLOAD)
             Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
+        else
+        {
+            int animS = NpcM_GetAnimationSize(en, en->animations[i].offset, en->animations[i].objectId);
+            largestUserAnim = MAX(largestUserAnim, animS);
+
+            #if LOGGING > 1
+                is64Printf("_%2d: Checking for largest animation... %d bytes.\n", en->npcId, largestUserAnim);
+            #endif 
+        }
     }
 
+    if (largestUserAnim != 0)
+    {
+        en->curAnimAddr = ZeldaArena_Malloc(largestUserAnim);
+
+        #if LOGGING > 0
+            if (en->curAnimAddr == NULL)
+                is64Printf("_%2d: Could not allocate animations...\n", en->npcId);
+        #endif 
+    }
+    
     for (int i = 0; i < en->numExDLists; i++)
         Rom_LoadObjectIfUnloaded(playState, en->extraDLists[i].objectId);
 
@@ -776,20 +797,22 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
 
         NpcAnimationEntry anim = en->animations[animId];
 
-        if (en->curAnimAddr != NULL)
-        {
-            ZeldaArena_Free(en->curAnimAddr);
-            en->curAnimAddr = NULL;
-
-            #if LOGGING > 0
-                is64Printf("_%2d: Freed user-loaded animation.\n", en->npcId);
-            #endif            
-        }
+        int animOffset = anim.offset;
 
         if (anim.fileStart == USER_ANIMLOAD)
         {
-            en->curAnimAddr = NpcM_LoadAnimation(anim.offset, R_OBJECT(en, anim.objectId));
+            if (en->curAnimAddr == NULL)
+            {
+                #if LOGGING > 0
+                    is64Printf("_%2d: User-loaded animations could not be allocated, so animation won't play...\n", en->npcId);
+                #endif      
+
+                return;
+            }
+
+            NpcM_LoadAnimation(en, anim.offset, R_OBJECT(en, anim.objectId));
             gSegments[6] = VIRTUAL_TO_PHYSICAL(en->curAnimAddr);
+            animOffset = 0;
 
             #if LOGGING > 0
                 is64Printf("_%2d: User loaded animation ID %d has been loaded at %x\n", en->npcId, anim.offset, en->curAnimAddr);
@@ -799,7 +822,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
         bool was_set = Setup_AnimationImpl(&en->actor, 
                                              playState, 
                                              &en->skin.skelAnime, 
-                                             en->curAnimAddr == NULL ? anim.offset : 0, 
+                                             animOffset, 
                                              en->settings.animationType, 
                                              R_OBJECT(en, anim.objectId),
                                              anim.fileStart,
