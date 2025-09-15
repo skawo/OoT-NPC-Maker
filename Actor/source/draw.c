@@ -568,8 +568,8 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
             {
                 case OBJECT_NONE:           continue;
                 case OBJECT_RAM:            pointer = 0; break;
-                case OBJECT_XLUDLIST:       pointer = 0; data->fileStart = 0; data->offset = (u32)&transparencyDList; break;
-                case OBJECT_ENDDLIST:       pointer = 0; data->fileStart = 0; data->offset = (u32)&endDList; break;
+                case OBJECT_XLUDLIST:       pointer = 0; data->fileStart = 0; offset = (u32)&transparencyDList; break;
+                case OBJECT_ENDDLIST:       pointer = 0; data->fileStart = 0; offset = (u32)&endDList; break;
                 default:
                 {
                     pointer = (u32)Rom_GetObjectDataPtr(r_obj, playState);
