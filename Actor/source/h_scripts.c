@@ -336,25 +336,27 @@ void Scripts_SetAnimation(NpcMaker* en, PlayState* playState, void* instruction)
 
     int animId = Scripts_GetVarval(en, playState, instr->varType1, instr->value1, false);
     int destAddrsOffset = instr->subId - SET_ANIMATION_OBJECT;
-    void* destAddr = AADDR(&en->animations[animId], setAnimsOffsets[destAddrsOffset]);
+    u32* destAddr = AADDR(&en->animations[animId], setAnimsOffsets[destAddrsOffset]);
+    DataType dt = UINT32;
 
     switch (instr->subId)
-    {
-        case SET_ANIMATION_OBJECT:          
-        case SET_ANIMATION_OFFSET:          
+    {      
+        case SET_ANIMATION_OFFSET:          dt = UINT32; break;
+        case SET_ANIMATION_OBJECT:          dt = UINT16; break; 
         case SET_ANIMATION_STARTFRAME:      
-        case SET_ANIMATION_ENDFRAME:        
-        {
-            u32 property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, false); 
-            Scripts_MathOperation(destAddr, property, instr->operator, UINT32); 
-            break; 
-        }
-        case SET_ANIMATION_SPEED:           
-        {
-            float property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, true);
-            Scripts_MathOperation(destAddr, property, instr->operator, FLOAT); 
-            break; 
-        }
+        case SET_ANIMATION_ENDFRAME:        dt = UINT8; break;
+        case SET_ANIMATION_SPEED:           dt = FLOAT; break; 
+    }
+
+    if (instr->subId == SET_ANIMATION_SPEED)
+    {
+        float property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, true);
+        Scripts_MathOperation(destAddr, property, instr->operator, dt); 
+    }
+    else
+    {
+        u32 property = Scripts_GetVarval(en, playState, instr->varType2, instr->value2, false); 
+        Scripts_MathOperation(destAddr, property, instr->operator, dt);        
     }
 }
 

@@ -252,8 +252,8 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
 	
     SkelAnime_Free(&en->skin.skelAnime, playState);	
 
-    if (en->curAnimAddr != NULL)
-        ZeldaArena_Free(en->curAnimAddr );
+    if (en->userLoadAnimBuf != NULL)
+        ZeldaArena_Free(en->userLoadAnimBuf );
 
     #if LOGGING > 1
         is64Printf("_%2d: Destroying actor complete.\n", en->npcId);

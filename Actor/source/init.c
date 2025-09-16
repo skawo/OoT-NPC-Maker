@@ -513,10 +513,10 @@ bool Setup_Objects(NpcMaker* en, PlayState* playState)
 
     if (largestUserAnim != 0)
     {
-        en->curAnimAddr = ZeldaArena_Malloc(largestUserAnim);
+        en->userLoadAnimBuf = ZeldaArena_Malloc(largestUserAnim);
 
         #if LOGGING > 0
-            if (en->curAnimAddr == NULL)
+            if (en->userLoadAnimBuf == NULL)
                 is64Printf("_%2d: Could not allocate animations...\n", en->npcId);
         #endif 
     }
@@ -801,7 +801,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
 
         if (anim.fileStart == USER_ANIMLOAD)
         {
-            if (en->curAnimAddr == NULL)
+            if (en->userLoadAnimBuf == NULL)
             {
                 #if LOGGING > 0
                     is64Printf("_%2d: User-loaded animations could not be allocated, so animation won't play...\n", en->npcId);
@@ -811,11 +811,11 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
             }
 
             NpcM_LoadAnimation(en, anim.offset, R_OBJECT(en, anim.objectId));
-            gSegments[6] = VIRTUAL_TO_PHYSICAL(en->curAnimAddr);
+            gSegments[6] = VIRTUAL_TO_PHYSICAL(en->userLoadAnimBuf);
             animOffset = 0;
 
             #if LOGGING > 0
-                is64Printf("_%2d: User loaded animation ID %d has been loaded at %x\n", en->npcId, anim.offset, en->curAnimAddr);
+                is64Printf("_%2d: User loaded animation ID %d has been loaded at %x\n", en->npcId, anim.offset, en->userLoadAnimBuf);
             #endif
         }
         

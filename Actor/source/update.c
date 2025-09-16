@@ -338,7 +338,7 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
     }
     else
     {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(en->curAnimAddr);
+        gSegments[6] = VIRTUAL_TO_PHYSICAL(en->userLoadAnimBuf);
 
         #if LOGGING > 2
             is64Printf("_User loaded animation at animation at %x\n", gSegments[6]);
