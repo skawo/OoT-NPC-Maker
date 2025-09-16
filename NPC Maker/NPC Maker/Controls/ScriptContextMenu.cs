@@ -34,10 +34,15 @@ namespace NPC_Maker
         private static ToolStripMenuItem quakeTypesStripMenuItem;
         private static ToolStripMenuItem messagesStripMenuItem;
         private static ToolStripMenuItem transitionTypesStripMenuItem;
+        private static ToolStripMenuItem definesStripMenuItem;
+        private static NPCEntry curEntry;
+
         public static void MakeContextMenu(NPCEntry Entry)
         {
             if (ContextMenuStrip != null)
                 ContextMenuStrip.Dispose();
+
+            curEntry = Entry;
 
             ContextMenuStrip = new ContextMenuStrip();
 
@@ -62,6 +67,7 @@ namespace NPC_Maker
             quakeTypesStripMenuItem = new ToolStripMenuItem();
             transitionTypesStripMenuItem = new ToolStripMenuItem();
             messagesStripMenuItem = new ToolStripMenuItem();
+            definesStripMenuItem = new ToolStripMenuItem();
 
             ContextMenuStrip.Items.AddRange(new ToolStripItem[] {
                                                                     functionsToolStripMenuItem,
@@ -85,6 +91,7 @@ namespace NPC_Maker
                                                                     linkAnimsStripMenuItem,
                                                                     cFunctionsStripMenuItem,
                                                                     messagesStripMenuItem,
+                                                                    definesStripMenuItem
                                                                 });
 
             ContextMenuStrip.Size = new System.Drawing.Size(157, 268);
@@ -107,6 +114,9 @@ namespace NPC_Maker
             transitionTypesStripMenuItem.Text = "Transition types";
             cFunctionsStripMenuItem.Text = "C Functions";
             messagesStripMenuItem.Text = "Messages";
+
+            definesStripMenuItem.Text = "Header defines";
+            definesStripMenuItem.Click += DefinesStripMenuItem_Click;
 
             soundEffectsToolStripMenuItem.Text = "Sound effects";
             soundEffectsToolStripMenuItem.Click += SoundEffectsToolStripMenuItem_Click;
@@ -196,6 +206,14 @@ namespace NPC_Maker
             }
 
             AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), messagesStripMenuItem, MessageToolTips.ToArray());
+        }
+
+        private static void DefinesStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Common.HDefine h = Helpers.SelectNameFromH(curEntry);
+
+            if (h != null)
+                InsertTxtToScript($"H_{h.Name}");
         }
 
         private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem, string[] ToolTips = null)

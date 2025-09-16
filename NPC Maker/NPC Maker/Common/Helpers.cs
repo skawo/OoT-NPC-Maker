@@ -15,6 +15,30 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static string GetDefinesStringFromH(string HeaderPath)
+        {
+            Dictionary<string, string> hDefines = Helpers.GetDefinesFromH(HeaderPath);
+            return string.Join(Environment.NewLine, hDefines.Select(kvp => $"#define H_{kvp.Key} {kvp.Value}"));
+        }
+
+        public static Common.HDefine SelectNameFromH(NPCEntry entry)
+        {
+            if (entry == null || String.IsNullOrEmpty(entry.HeaderPath))
+                return null;
+
+            Dictionary<string, string> hDict = Helpers.GetDefinesFromH(entry.HeaderPath);
+
+            if (hDict.Count == 0)
+                return null;
+
+            Windows.ComboPicker com = new Windows.ComboPicker(hDict.Keys.ToList(), "Select symbol from header...", "Selection", true);
+
+            if (com.ShowDialog() == DialogResult.OK)
+                return new Common.HDefine(com.SelectedOption, hDict[com.SelectedOption]);
+            else
+                return null;
+        }
+
         public static string RunBash(string commandLine)
         {
             StringBuilder errorBuilder = new StringBuilder();

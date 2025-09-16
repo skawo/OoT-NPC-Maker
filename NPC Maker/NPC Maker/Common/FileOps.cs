@@ -607,7 +607,12 @@ namespace NPC_Maker
                             int scriptNum = 0;
                             List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
 
-                            string extData = JsonConvert.SerializeObject(Entry.Messages) + JsonConvert.SerializeObject(Entry.ExtraDisplayLists) + JsonConvert.SerializeObject(Entry.Segments) + JsonConvert.SerializeObject(Entry.Animations);
+                            string extData = JsonConvert.SerializeObject(Entry.Messages) +
+                                             JsonConvert.SerializeObject(Entry.ExtraDisplayLists) +
+                                             JsonConvert.SerializeObject(Entry.Segments) +
+                                             JsonConvert.SerializeObject(Entry.Animations) +
+                                             Helpers.GetDefinesStringFromH(Entry.HeaderPath);
+
                             string extDataHash = Helpers.GetBase64Hash(s, extData);
                             string extDataFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntryID}_exdata_" + extDataHash);
 
@@ -1233,7 +1238,12 @@ namespace NPC_Maker
 
                         using (SHA1 s = SHA1.Create())
                         {
-                            string extData = JsonConvert.SerializeObject(Entry.Messages) + JsonConvert.SerializeObject(Entry.ExtraDisplayLists) + JsonConvert.SerializeObject(Entry.Segments) + JsonConvert.SerializeObject(Entry.Animations);
+                            string extData = JsonConvert.SerializeObject(Entry.Messages) +
+                                             JsonConvert.SerializeObject(Entry.ExtraDisplayLists) +
+                                             JsonConvert.SerializeObject(Entry.Segments) +
+                                             JsonConvert.SerializeObject(Entry.Animations) +
+                                             Helpers.GetDefinesStringFromH(Entry.HeaderPath);
+
                             string extDataHash = Helpers.GetBase64Hash(s, extData);
                             string cachedExtDataFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_exdata_" + extDataHash);
 

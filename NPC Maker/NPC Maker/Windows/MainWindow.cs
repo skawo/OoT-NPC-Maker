@@ -1910,24 +1910,6 @@ namespace NPC_Maker
             }
         }
 
-        private Common.HDefine SelectNameFromH()
-        {
-            if (SelectedEntry == null || String.IsNullOrEmpty(SelectedEntry.HeaderPath))
-                return null;
-
-            Dictionary<string, string> hDict = Helpers.GetDefinesFromH(SelectedEntry.HeaderPath);
-
-            if (hDict.Count == 0)
-                return null;
-
-            Windows.ComboPicker com = new Windows.ComboPicker(hDict.Keys.ToList(), "Select symbol from header...", "Selection", true);
-
-            if (com.ShowDialog() == DialogResult.OK)
-                return new Common.HDefine(com.SelectedOption, hDict[com.SelectedOption]);
-            else
-                return null;
-        }
-
         private bool ShowHDefineError(Common.HDefine hD)
         {
             if (hD.Value == null)
@@ -1941,7 +1923,7 @@ namespace NPC_Maker
 
         private void Tx_SkeletonName_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Common.HDefine hD = SelectNameFromH();
+            Common.HDefine hD = Helpers.SelectNameFromH(SelectedEntry);
 
             if (hD != null)
             {
@@ -2212,7 +2194,7 @@ namespace NPC_Maker
             }
             else if (e.ColumnIndex == (int)AnimGridColumns.HeaderDefinition && SelectedEntry.AnimationType == 0)
             {
-                Common.HDefine hD = SelectNameFromH();
+                Common.HDefine hD = Helpers.SelectNameFromH(SelectedEntry);
 
                 if (hD != null)
                 {
@@ -2620,7 +2602,7 @@ namespace NPC_Maker
             }
             else if (e.ColumnIndex == (int)EDlistsColumns.HeaderDefinition)
             {
-                Common.HDefine hD = SelectNameFromH();
+                Common.HDefine hD = Helpers.SelectNameFromH(SelectedEntry);
 
                 if (hD != null)
                 {
@@ -3013,7 +2995,7 @@ namespace NPC_Maker
             }
             else if (e.ColumnIndex == (int)SegmentsColumns.HeaderDefinition)
             {
-                Common.HDefine hD = SelectNameFromH();
+                Common.HDefine hD = Helpers.SelectNameFromH(SelectedEntry);
 
                 if (hD != null)
                 {

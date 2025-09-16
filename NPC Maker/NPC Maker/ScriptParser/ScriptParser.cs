@@ -21,6 +21,9 @@ namespace NPC_Maker.Scripts
             Entry = _Entry;
             EditedFile = _File;
             RandomLabels = new List<string>();
+
+            baseDefines += Environment.NewLine + Helpers.GetDefinesStringFromH(Entry.HeaderPath);
+
             ScriptText = string.Join(Environment.NewLine, 
                                      EditedFile.GlobalHeaders.Select(x => x.Text).Concat(new[] { baseDefines, _ScriptText }));
         }
