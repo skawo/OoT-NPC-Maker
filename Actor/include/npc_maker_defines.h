@@ -8,10 +8,6 @@
 #define GlobalContext PlayState
 #define PSkinAwb Skin
 
-#define ROT16(R16A0) (182.044444 * (R16A0))
-#define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
-#define AADDR(a,o)  ((void*)((u8*)(a)+(o)))
-
 #define IS_MASK(item) item >= ITEM_MASK_BUNNY && item <= ITEM_MASK_TRUTH
 #define IS_BOTTLE_ITEM(item) item >= ITEM_POTION_RED && item <= ITEM_POE
 
@@ -141,7 +137,12 @@
 
 extern void is64Printf(const char* fmt, ...);
     #if GAME_VERSION == 0
-        asm("is64Printf = osSyncPrintf");
+		#ifdef NPCM_Z64ROM
+			#include <uLib_vector.h>
+			asm("is64Printf = osLibPrintf");
+		#else
+        	asm("is64Printf = osSyncPrintf");
+		#endif
     #else
         //is64Printf does not really work in 1.0. Substitute your own!          
     #endif	
@@ -153,6 +154,16 @@ extern void is64Printf(const char* fmt, ...);
         #define CIRCLE_SHADOW 0x0404E740
     #endif
 #endif
+
+
+#undef ROT16
+#undef AVAL
+#undef AADDR
+
+#define ROT16(R16A0) (182.044444 * (R16A0))
+#define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
+#define AADDR(a,o)  ((void*)((u8*)(a)+(o)))
+
    
 
 typedef enum item_award_upgrades

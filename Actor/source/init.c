@@ -113,7 +113,8 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
 }
 
 u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 entryAddress,
-                      u32* allocDest, u16* entriesNumberOut,  u32 entrySize, u32 nullSize, bool noCopy, s32 blockSize)
+                      u32* allocDest, u16* entriesNumberOut,  u32 entrySize, u32 nullSize, bool noCopy, 
+                      bool compressedIndividually, s32 blockSize)
 {
     #if LOGGING > 0
         is64Printf("_Loading a section.\n");
@@ -132,7 +133,7 @@ u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset
     if (blockSize > nullSize)
     {
         // If we're loading from a RAM object, and the data is static, we might as well just use the RAM object data as is, without making a copy.
-        if (en->getSettingsFromRAMObject & noCopy)
+        if (en->getSettingsFromRAMObject && noCopy && !compressedIndividually)
         {
             void* ptr = Rom_GetObjectDataPtr(en->actor.params, playState);
             *allocDest = (u32)AADDR(ptr, entryAddress + offset);
@@ -308,6 +309,11 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     // If compressed size is 0, then the actor is not compressed.
     if (entrySizeCompr)
     {
+        #if LOGGING > 0
+            if (en->getSettingsFromRAMObject)
+                is64Printf("_%2d: Entry is compressed, but also loaded from RAM...? This is a waste of RAM.\n", en->npcId);
+        #endif
+
         Yaz0Header* bufferCompr = (Yaz0Header*)ZeldaArena_Malloc(entrySizeCompr);
 
         #if LOGGING > 0
@@ -318,7 +324,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         entrySize = bufferCompr->decSize;
 
         #if LOGGING > 0
-            is64Printf("_%2d: Decompressed entry size: 0x%08x\n", en->npcId, entrySize);
+            is64Printf("_%2d: Decompressed entry size: 0x%08x\n", en->npcId, bufferCompr->decSize);
         #endif
 
         buffer = ZeldaArena_Malloc(entrySize);
@@ -346,6 +352,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         en->numLanguages = AVAL(buffer, u32, offset + 8); 
         en->numMessages = AVAL(buffer, u32, offset + 12);         
         offset += len;
+
     }
     else
     {
@@ -469,7 +476,8 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
                                    sLoadList[i].entriesNumberOut, 
                                    sLoadList[i].entrySize, 
                                    sLoadList[i].nullBlockSize, 
-                                   sLoadList[i].noCopy, 
+                                   sLoadList[i].noCopy,
+                                   entrySizeCompr,
                                    size);
     }
 
@@ -499,7 +507,9 @@ bool Setup_Objects(NpcMaker* en, PlayState* playState)
     for (int i = 0; i < en->numAnims; i++)
     {
         if (en->animations[i].fileStart != USER_ANIMLOAD)
+        {
             Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
+        }
         else
         {
             int animS = NpcM_GetAnimationSize(en, en->animations[i].offset, en->animations[i].objectId);
@@ -909,7 +919,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
 
                 #if LOGGING > 1
                     if (fileStart == USER_ANIMLOAD)
-                        s64Printf("_Normal userload animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
+                        is64Printf("_Normal userload animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
                     else
                         is64Printf("_Normal animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
                 #endif

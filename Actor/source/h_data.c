@@ -10,7 +10,7 @@ ExSegDataEntry* Data_GetExtraSegmentData(NpcMaker* en, int segmentId, int entry)
 
 InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int ID)
 {
-    InternalMsgEntry msgData;
+    InternalMsgEntry msgData = {};
 
     if (!en->messagesDataOffset)
         return msgData;    
