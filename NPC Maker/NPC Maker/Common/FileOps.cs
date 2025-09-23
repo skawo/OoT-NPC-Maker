@@ -559,6 +559,8 @@ namespace NPC_Maker
                 string BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(Data);
                 string JsonFileName = Program.JsonPath.FilenameFromPath();
 
+                ConcurrentBag<Common.PreprocessedEntry> cb = new ConcurrentBag<Common.PreprocessedEntry>();
+
                 Parallel.ForEach(dict, dictEntry =>
                 {
                     try
@@ -595,6 +597,9 @@ namespace NPC_Maker
 
                                     File.WriteAllText(cachedAddrsFile, CodeAddrsString);
                                     File.WriteAllBytes(cachedcodeFile, Overlay);
+
+                                    cb.Add(new Common.PreprocessedEntry(cachedAddrsFile, Entry.EmbeddedOverlayCode));
+                                    cb.Add(new Common.PreprocessedEntry(cachedcodeFile, Overlay));
                                 }
                             }
                             else
@@ -602,6 +607,9 @@ namespace NPC_Maker
                                 // Need to load the overlay in so that the function addresses for the scripts are present.
                                 Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
                                 Overlay = File.ReadAllBytes(cachedcodeFile);
+
+                                cb.Add(new Common.PreprocessedEntry(cachedAddrsFile, Entry.EmbeddedOverlayCode));
+                                cb.Add(new Common.PreprocessedEntry(cachedcodeFile, Overlay));
                             }
 
                             int scriptNum = 0;
@@ -630,7 +638,10 @@ namespace NPC_Maker
                                     Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
 
                                     if (scr.ParseErrors.Count == 0)
+                                    {
                                         File.WriteAllBytes(cachedFile, scr.Script);
+                                        cb.Add(new Common.PreprocessedEntry(cachedFile, scr.Script));
+                                    }
                                 }
 
                                 scriptNum++;
@@ -662,7 +673,7 @@ namespace NPC_Maker
 
                 Console.WriteLine("\nPre-processing done!");
 
-                SaveBinaryFile(outPath, Data, progress, BaseDefines, false, false, CLIMode);
+                SaveBinaryFile(outPath, Data, progress, BaseDefines, false, false, cb.ToList(), CLIMode);
                 CCode.CleanupStandardCompilationArtifacts();
                 Program.CompileInProgress = false;
             });
@@ -694,7 +705,8 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveBinaryFile(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress, string baseDefines, bool cacheInvalid, bool CcacheInvalid, bool CLIMode = false)
+        public static void SaveBinaryFile(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress, 
+                                          string baseDefines, bool cacheInvalid, bool CcacheInvalid, List<Common.PreprocessedEntry> preProcessedFiles, bool CLIMode = false)
         {
             if (Data.Entries.Count() == 0)
             {
@@ -1132,7 +1144,21 @@ namespace NPC_Maker
                                 string cachedAddrsFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_funcsaddrs_" + hash);
                                 string cachedcodeFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_code_" + hash);
 
-                                if (!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
+                                int addrsPreProc = -1;
+                                int codePreProc = -1;
+
+                                if (preProcessedFiles != null)
+                                {
+                                    addrsPreProc = preProcessedFiles.FindIndex(x => x.identifier == cachedAddrsFile);
+                                    codePreProc = preProcessedFiles.FindIndex(x => x.identifier == cachedcodeFile);
+                                }
+
+                                if (addrsPreProc != -1 && codePreProc != -1)
+                                {
+                                    Entry.EmbeddedOverlayCode = (CCodeEntry)preProcessedFiles[addrsPreProc].data;
+                                    Overlay = (byte[])preProcessedFiles[codePreProc].data;
+                                }
+                                else if(!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
                                 {
                                     Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
                                     Overlay = File.ReadAllBytes(cachedcodeFile);
@@ -1254,7 +1280,14 @@ namespace NPC_Maker
                                 string hash = Helpers.GetBase64Hash(s, Scr.Text);
                                 string cachedFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script{scriptNum}_" + hash);
 
-                                if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedExtDataFile))
+                                int cachedScriptId = -1;
+
+                                if (preProcessedFiles != null)
+                                    cachedScriptId = preProcessedFiles.FindIndex(x => x.identifier == cachedFile);
+
+                                if (cachedScriptId != -1)
+                                    ParsedScripts.Add(new Scripts.BScript() { Script = (byte[])preProcessedFiles[cachedScriptId].data, ParseErrors = new List<Scripts.ParseException>() });
+                                else if(!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedExtDataFile))
                                     ParsedScripts.Add(new Scripts.BScript() { Script = File.ReadAllBytes(cachedFile), ParseErrors = new List<Scripts.ParseException>() });
                                 else
                                 {
@@ -1333,10 +1366,15 @@ namespace NPC_Maker
                 for (int i = 0; i < EntryData.Count; i++)
                     CompilationData.Add(new Common.CompilationEntryData(EntryData[i]));
 
-                if (progress != null && Program.Settings.CompressIndividually)
-                    progress.Report(new Common.ProgressReport($"Compressing...", 100));
+                if (Program.Settings.CompressIndividually)
+                {
+                    Console.WriteLine($"Compressing...");
 
-                Parallel.ForEach(CompilationData, Entry =>
+                    if (progress != null)
+                        progress.Report(new Common.ProgressReport($"Compressing...", 100));
+                }
+
+                foreach (var Entry in CompilationData)
                 {
                     List<byte> outCompressed = null;
 
@@ -1360,19 +1398,17 @@ namespace NPC_Maker
                         Entry.decompressedSize = Entry.data.Count;
                         Entry.data = outCompressed;
                     }
-                });
 
-                foreach (Common.CompilationEntryData entry in CompilationData)
-                {
                     EntryAddresses.AddRangeBigEndian(Offset);
-                    EntryAddresses.AddRangeBigEndian(entry.compressedSize);
-                    EntryAddresses.AddRangeBigEndian(entry.decompressedSize);
+                    EntryAddresses.AddRangeBigEndian(Entry.compressedSize);
+                    EntryAddresses.AddRangeBigEndian(Entry.decompressedSize);
 
-                    if (entry.compressedSize != 0)
-                        Offset += entry.compressedSize;
+                    if (Entry.compressedSize != 0)
+                        Offset += Entry.compressedSize;
                     else
-                        Offset += entry.decompressedSize;
+                        Offset += Entry.decompressedSize;
                 }
+
 
                 Output.AddRange(EntryAddresses);
 
@@ -1381,6 +1417,9 @@ namespace NPC_Maker
                     if (entry.data != null)
                         Output.AddRange(entry.data);
                 }
+
+                Console.WriteLine("");
+                Console.WriteLine("Done!");
 
                 if (progress != null)
                     progress.Report(new Common.ProgressReport($"Done!", 100));

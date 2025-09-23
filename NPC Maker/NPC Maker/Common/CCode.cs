@@ -218,7 +218,6 @@ namespace NPC_Maker
                 File.WriteAllText(compileFilePath, Code);
                 File.WriteAllText(compileHeaderPath, _Header);
 
-
                 byte[] outf = Program.IsRunningUnderMono
                     ? CompileUnderMono(folder, CodeEntry, ref CompileMsgs, compileFilePath, outFilePath)
                     : CompileUnderWindows(folder, CodeEntry, ref CompileMsgs, compileFilePath, outFilePath);
@@ -318,7 +317,7 @@ namespace NPC_Maker
                 // Unescape spaces
                 path = path.Replace(@"\ ", " ");
 
-                if (!IsFullyQualified(path))
+                if (!IsFullyQualified(path) && !(Program.IsRunningUnderMono && path.StartsWith("..")))
                     path = Path.Combine(Program.ExecPath, path.TrimStart('/', '\\'));
 
                 if (!string.IsNullOrEmpty(path) &&
@@ -347,13 +346,14 @@ namespace NPC_Maker
 
                 try
                 {
+                    if (path.StartsWith(excludedPath, StringComparison.OrdinalIgnoreCase))
+                        return true;
+
                     string normalizedExcludedPath = Path.GetFullPath(excludedPath);
 
                     // Check if the path starts with the excluded path (is contained within)
                     if (normalizedPath.StartsWith(normalizedExcludedPath, StringComparison.OrdinalIgnoreCase))
-                    {
                         return true;
-                    }
                 }
                 catch (Exception)
                 {
@@ -404,6 +404,7 @@ namespace NPC_Maker
         {
             var gccInfo = CreateGccProcessInfo(config, paths);
 
+
             if (Program.Settings.Verbose)
                 compileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
 
@@ -446,6 +447,8 @@ namespace NPC_Maker
                 compileMsgs += $"{novlInfo.FileName} {novlInfo.Arguments}{Environment.NewLine}";
 
             int result = -1;
+
+            if (File.Exists(novlInfo.FileName))
 
             using (var process = Process.Start(novlInfo))
             {
@@ -510,7 +513,7 @@ namespace NPC_Maker
 
             var fileName = config.IsMonoEnvironment
                 ? Path.Combine(Program.ExecPath, "nOVL", "nOVL")
-                : Path.Combine(Program.ExecPath, "nOVL", "novl.exe");
+                : Path.Combine(Program.ExecPath, "nOVL", "nOVL.exe");
 
             var verboseFlag = Program.Settings.Verbose ? "-vv" : "";
             var arguments = $"-c {verboseFlag} -A 0x{gBaseAddr:X} -o {paths.OvlFile.AppendQuotation()} {paths.ElfFile.AppendQuotation()}";

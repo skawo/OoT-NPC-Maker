@@ -30,6 +30,18 @@ namespace NPC_Maker.Common
         }
     }
 
+    public class PreprocessedEntry
+    {
+        public string identifier;
+        public object data;
+
+        public PreprocessedEntry(string st, object dt)
+        {
+            identifier = st;
+            data = dt;
+        }
+    }
+
     public class HDefine
     {
         public string Name;

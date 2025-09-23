@@ -900,7 +900,7 @@ namespace NPC_Maker
                     {
                         bool[] caches = FileOps.GetCacheStatus(EditedFile);
                         string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
-                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, caches[0], caches[1]);
+                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, caches[0], caches[1], null);
                         CCode.CleanupStandardCompilationArtifacts();
                     });
                 }

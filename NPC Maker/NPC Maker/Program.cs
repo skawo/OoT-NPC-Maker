@@ -166,7 +166,7 @@ namespace NPC_Maker
                             if (cacheStatus != null)
                             {
                                 var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
-                                FileOps.SaveBinaryFile(args[1], inFile, null, baseDefines, cacheStatus[0], cacheStatus[1], true);
+                                FileOps.SaveBinaryFile(args[1], inFile, null, baseDefines, cacheStatus[0], cacheStatus[1], null, true);
                                 CCode.CleanupStandardCompilationArtifacts();
                             }
                         }
