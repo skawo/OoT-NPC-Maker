@@ -705,7 +705,7 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveBinaryFile(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress, 
+        public static void SaveBinaryFile(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress,
                                           string baseDefines, bool cacheInvalid, bool CcacheInvalid, List<Common.PreprocessedEntry> preProcessedFiles, bool CLIMode = false)
         {
             if (Data.Entries.Count() == 0)
@@ -732,6 +732,8 @@ namespace NPC_Maker
 
                 if (progress != null)
                     progress.Report(new Common.ProgressReport($"Saving...", 0));
+
+                List<Common.CompilationEntryData> CompilationData = new List<Common.CompilationEntryData>();
 
                 foreach (NPCEntry Entry in Data.Entries)
                 {
@@ -1158,7 +1160,7 @@ namespace NPC_Maker
                                     Entry.EmbeddedOverlayCode = (CCodeEntry)preProcessedFiles[addrsPreProc].data;
                                     Overlay = (byte[])preProcessedFiles[codePreProc].data;
                                 }
-                                else if(!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
+                                else if (!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
                                 {
                                     Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
                                     Overlay = File.ReadAllBytes(cachedcodeFile);
@@ -1287,7 +1289,7 @@ namespace NPC_Maker
 
                                 if (cachedScriptId != -1)
                                     ParsedScripts.Add(new Scripts.BScript() { Script = (byte[])preProcessedFiles[cachedScriptId].data, ParseErrors = new List<Scripts.ParseException>() });
-                                else if(!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedExtDataFile))
+                                else if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedExtDataFile))
                                     ParsedScripts.Add(new Scripts.BScript() { Script = File.ReadAllBytes(cachedFile), ParseErrors = new List<Scripts.ParseException>() });
                                 else
                                 {
@@ -1336,7 +1338,7 @@ namespace NPC_Maker
 
                         #endregion
 
-                        EntryData.Add(EntryBytes);
+                        CompilationData.Add(new Common.CompilationEntryData(EntryBytes));
 
                         if (ParseErrors.Count == 0)
                             Console.Write($"OK{Environment.NewLine}");
@@ -1345,7 +1347,8 @@ namespace NPC_Maker
                     }
                     else
                     {
-                        EntryData.Add(null);
+                        CompilationData.Add(new Common.CompilationEntryData(null));
+
                         Console.WriteLine($"Entry {EntriesDone} is blank or omitted.");
 
                     }
@@ -1361,11 +1364,6 @@ namespace NPC_Maker
 
                 Output.AddRangeBigEndian((UInt32)Data.Entries.Count());
 
-                List<Common.CompilationEntryData> CompilationData = new List<Common.CompilationEntryData>();
-
-                for (int i = 0; i < EntryData.Count; i++)
-                    CompilationData.Add(new Common.CompilationEntryData(EntryData[i]));
-
                 if (Program.Settings.CompressIndividually)
                 {
                     Console.WriteLine($"Compressing...");
@@ -1374,7 +1372,7 @@ namespace NPC_Maker
                         progress.Report(new Common.ProgressReport($"Compressing...", 100));
                 }
 
-                foreach (var Entry in CompilationData)
+                Parallel.ForEach(CompilationData, Entry =>
                 {
                     List<byte> outCompressed = null;
 
@@ -1398,7 +1396,10 @@ namespace NPC_Maker
                         Entry.decompressedSize = Entry.data.Count;
                         Entry.data = outCompressed;
                     }
+                });
 
+                foreach (var Entry in CompilationData)
+                {
                     EntryAddresses.AddRangeBigEndian(Offset);
                     EntryAddresses.AddRangeBigEndian(Entry.compressedSize);
                     EntryAddresses.AddRangeBigEndian(Entry.decompressedSize);
@@ -1409,13 +1410,12 @@ namespace NPC_Maker
                         Offset += Entry.decompressedSize;
                 }
 
-
                 Output.AddRange(EntryAddresses);
 
-                foreach (Common.CompilationEntryData entry in CompilationData)
+                foreach (var Entry in CompilationData)
                 {
-                    if (entry.data != null)
-                        Output.AddRange(entry.data);
+                    if (Entry.data != null)
+                        Output.AddRange(Entry.data);
                 }
 
                 Console.WriteLine("");

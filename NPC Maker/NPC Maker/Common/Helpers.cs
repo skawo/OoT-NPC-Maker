@@ -117,6 +117,11 @@ namespace NPC_Maker
             return Convert.ToBase64String(hasher.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("+", "_").Replace("/", "-").Replace("=", "");
         }
 
+        public static string GetBase64Hash(SHA1 hasher, byte[] b)
+        {
+            return Convert.ToBase64String(hasher.ComputeHash(b)).Replace("+", "_").Replace("/", "-").Replace("=", "");
+        }
+
         public static string ReplacePathWithToken(string basePath, string fullPath, string token)
         {
             try
