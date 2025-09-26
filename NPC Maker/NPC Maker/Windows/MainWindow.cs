@@ -261,8 +261,13 @@ namespace NPC_Maker
 
             if (CurrentBackup != LastBackup)
             {
-                FileOps.SaveNPCJSON("backup", EditedFile);
-                LastBackup = CurrentBackup;
+                try
+                {
+                    FileOps.SaveNPCJSON("backup", EditedFile);
+                    LastBackup = CurrentBackup;
+                }
+                catch
+                { }
             }
 
             autoBackupTimer.Start();
