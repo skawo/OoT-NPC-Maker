@@ -257,18 +257,19 @@ namespace NPC_Maker
         {
             autoBackupTimer.Stop();
 
-            string CurrentBackup = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-
-            if (CurrentBackup != LastBackup)
+            try
             {
-                try
+                string CurrentBackup = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+
+                if (CurrentBackup != LastBackup)
                 {
+
                     FileOps.SaveNPCJSON("backup", EditedFile);
                     LastBackup = CurrentBackup;
                 }
-                catch
-                { }
             }
+            catch
+            { }
 
             autoBackupTimer.Start();
         }
@@ -1356,7 +1357,7 @@ namespace NPC_Maker
 
         private void CheckLocalizationConsistencyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
             if (EditedFile.Languages.Count == 0)
             {
                 MessageBox.Show("There are no localizations.");
@@ -1442,7 +1443,7 @@ namespace NPC_Maker
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
-            
+
         }
 
 

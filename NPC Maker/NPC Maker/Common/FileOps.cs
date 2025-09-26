@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace NPC_Maker
 {
-    public static class FileOps
+    public partial class FileOps
     {
         public static NPCMakerSettings ParseSettingsJSON(string FileName)
         {
@@ -41,198 +41,89 @@ namespace NPC_Maker
             }
         }
 
-        public static NPCFile ParseNPCJsonFile(string FileName)
+        public static NPCFile ParseNPCJsonFile(string fileName)
         {
             try
             {
-                string Text = File.ReadAllText(FileName);
+                string jsonText = File.ReadAllText(fileName);
+                var jsonObject = JObject.Parse(jsonText);
+                var version = jsonObject.SelectToken("Version");
 
-                var Version = JObject.Parse(Text).SelectToken("Version");
+                NPCFile npcFile = JsonConvert.DeserializeObject<NPCFile>(jsonText);
+                int currentVersion = version?.Value<int>() ?? 1;
 
-                NPCFile Deserialized = JsonConvert.DeserializeObject<NPCFile>(Text);
+                // Apply version migrations in sequence
+                currentVersion = MigrateToVersion2(npcFile, jsonObject, currentVersion);
+                currentVersion = MigrateToVersion3(npcFile, currentVersion);
 
+                if (currentVersion > 3)
+                    ProcessTextLinesForVersion4Plus(npcFile);
 
-                if (Version == null || (int)Version < 2)
-                {
-                    Deserialized.Version = 2;
-                    Version = 2;
+                if (currentVersion > 4)
+                    ProcessMessageLinesForVersion5Plus(npcFile);
 
-                    for (int i = 0; i < Deserialized.Entries.Count; i++)
-                    {
-                        ScriptEntry Sc = new ScriptEntry()
-                        {
-                            Text = (string)JObject.Parse(Text).SelectToken($"Entries[{i}].Script"),
-                            Name = "Script 1"
-                        };
+                currentVersion = MigrateToVersion6(npcFile, currentVersion);
+                currentVersion = MigrateToVersion7(npcFile, currentVersion);
 
-                        ScriptEntry Sc2 = new ScriptEntry()
-                        {
-                            Text = (string)JObject.Parse(Text).SelectToken($"Entries[{i}].Script2"),
-                            Name = "Script 2"
-                        };
+                if (currentVersion >= 6)
+                    ProcessCHeader(npcFile);
 
-                        Deserialized.Entries[i].Scripts.Add(Sc);
-                        Deserialized.Entries[i].Scripts.Add(Sc2);
-                    }
-                }
+                NormalizeLineBreaks(npcFile);
+                ResolveHeaderDefines(npcFile);
 
-                if ((int)Version < 3)
-                {
-                    Deserialized.Version = 3;
-                    Version = 3;
-
-                    for (int i = 0; i < Deserialized.Entries.Count; i++)
-                    {
-                        Deserialized.Entries[i].FileStart = 0;
-
-                        foreach (var anim in Deserialized.Entries[i].Animations)
-                            anim.FileStart = -1;
-
-                        foreach (var dlist in Deserialized.Entries[i].ExtraDisplayLists)
-                            dlist.FileStart = -1;
-
-                        foreach (var seg in Deserialized.Entries[i].Segments)
-                            foreach (var entry in seg)
-                                entry.FileStart = -1;
-
-
-                    }
-                }
-
-                if ((int)Version > 3)
-                {
-                    foreach (NPCEntry e in Deserialized.Entries)
-                    {
-                        foreach (ScriptEntry s in e.Scripts)
-                            s.Text = String.Join(Environment.NewLine, s.TextLines.Select(x => x.TrimEnd()).ToList());
-
-                        e.EmbeddedOverlayCode.Code = String.Join(Environment.NewLine, e.EmbeddedOverlayCode.CodeLines);
-                    }
-
-                    foreach (ScriptEntry s in Deserialized.GlobalHeaders)
-                        s.Text = String.Join(Environment.NewLine, s.TextLines.Select(x => x.TrimEnd()).ToList());
-                }
-
-                if ((int)Version > 4)
-                {
-                    foreach (NPCEntry e in Deserialized.Entries)
-                    {
-                        foreach (MessageEntry s in e.Messages)
-                            s.MessageText = String.Join(Environment.NewLine, s.MessageTextLines);
-
-                        foreach (LocalizationEntry loc in e.Localization)
-                        {
-                            foreach (MessageEntry entry in loc.Messages)
-                            {
-                                entry.MessageText = String.Join(Environment.NewLine, entry.MessageTextLines);
-                            }
-                        }
-
-                    }
-                }
-
-                if ((int)Version < 6)
-                {
-                    foreach (NPCEntry e in Deserialized.Entries)
-                    {
-                        for (int i = 0; i < 5; i++)
-                        {
-                            int idx = e.EmbeddedOverlayCode.FuncsRunWhen[i, 0];
-
-                            if (idx >= 0)
-                            {
-                                if (e.EmbeddedOverlayCode.Functions.Count > idx)
-                                    e.EmbeddedOverlayCode.SetFuncNames[i] = e.EmbeddedOverlayCode.Functions[idx].FuncName;
-                                else
-                                    e.EmbeddedOverlayCode.SetFuncNames[i] = "Not found?";
-                            }
-                        }
-                    }
-
-                    Version = 6;
-                }
-
-                if ((int)Version < 7)
-                {
-                    foreach (NPCEntry e in Deserialized.Entries)
-                    {
-                        List<string> s = e.EmbeddedOverlayCode.SetFuncNames.ToList();
-                        s.Add("");
-                        e.EmbeddedOverlayCode.SetFuncNames = s.ToArray();
-
-                        int[,] FuncsRunWhen = new int[6, 2]
-                        {
-                            {-1, -1},
-                            {-1, -1},
-                            {-1, -1},
-                            {-1, -1},
-                            {-1, -1},
-                            {-1, -1},
-                        };
-
-                        for (int i = 0; i < 5; i++)
-                        {
-                            FuncsRunWhen[i, 0] = e.EmbeddedOverlayCode.FuncsRunWhen[i, 0];
-                            FuncsRunWhen[i, 1] = e.EmbeddedOverlayCode.FuncsRunWhen[i, 1];
-                        }
-
-                        e.EmbeddedOverlayCode.FuncsRunWhen = FuncsRunWhen;
-                    }
-
-                    Version = 7;
-                }
-
-                if ((int)Version >= 6)
-                    Deserialized.CHeader = String.Join(Environment.NewLine, Deserialized.CHeaderLines.Select(x => x.TrimEnd()).ToList());
-
-                // For cross-compatibility with Linux, update all messages converting linebreaks into native system linebreaks.
-                foreach (NPCEntry e in Deserialized.Entries)
-                {
-                    foreach (MessageEntry entry in e.Messages)
-                    {
-                        entry.MessageText = Regex.Replace(entry.MessageText, @"\r?\n", Environment.NewLine);
-                    }
-
-                    foreach (LocalizationEntry loc in e.Localization)
-                    {
-                        foreach (MessageEntry entry in loc.Messages)
-                        {
-                            entry.MessageText = Regex.Replace(entry.MessageText, @"\r?\n", Environment.NewLine);
-                        }
-                    }
-                }
-
-                foreach (NPCEntry e in Deserialized.Entries)
-                {
-                    if (!String.IsNullOrEmpty(e.HeaderPath))
-                    {
-                        Dictionary<string, string> hDict = Helpers.GetDefinesFromH(e.HeaderPath);
-
-                        e.Hierarchy = ResolveHeaderDefineForField(e.SkeletonHeaderDefinition, hDict, e.Hierarchy);
-
-                        foreach (var a in e.Animations)
-                            a.Address = ResolveHeaderDefineForField(a.HeaderDefinition, hDict, a.Address);
-
-                        foreach (var d in e.ExtraDisplayLists)
-                            d.Address = ResolveHeaderDefineForField(d.HeaderDefinition, hDict, d.Address);
-
-                        foreach (var s in e.Segments)
-                        {
-                            foreach (var se in s)
-                                se.Address = ResolveHeaderDefineForField(se.HeaderDefinition, hDict, se.Address);
-                        }
-                    }
-                }
-
-                Deserialized.Version = 7;
-                Version = 7;
-
-                return Deserialized;
+                npcFile.Version = 7;
+                return npcFile;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to read JSON: {ex.Message}");
                 return null;
+            }
+        }
+
+        private static void ProcessCHeader(NPCFile npcFile)
+        {
+            npcFile.CHeader = string.Join(Environment.NewLine, npcFile.CHeaderLines.Select(x => x.TrimEnd()));
+        }
+
+        private static void NormalizeLineBreaks(NPCFile npcFile)
+        {
+            var lineBreakRegex = new Regex(@"\r?\n");
+
+            foreach (var entry in npcFile.Entries)
+            {
+                NormalizeMessageLineBreaks(entry.Messages, lineBreakRegex);
+
+                foreach (var localization in entry.Localization)
+                    NormalizeMessageLineBreaks(localization.Messages, lineBreakRegex);
+            }
+        }
+
+        private static void NormalizeMessageLineBreaks(IEnumerable<MessageEntry> messages, Regex lineBreakRegex)
+        {
+            foreach (var message in messages)
+                message.MessageText = lineBreakRegex.Replace(message.MessageText, Environment.NewLine);
+        }
+
+        private static void ResolveHeaderDefines(NPCFile npcFile)
+        {
+            foreach (var entry in npcFile.Entries.Where(e => !string.IsNullOrEmpty(e.HeaderPath)))
+            {
+                var headerDefines = Helpers.GetDefinesFromH(entry.HeaderPath);
+
+                entry.Hierarchy = ResolveHeaderDefineForField(entry.SkeletonHeaderDefinition, headerDefines, entry.Hierarchy);
+
+                foreach (var animation in entry.Animations)
+                    animation.Address = ResolveHeaderDefineForField(animation.HeaderDefinition, headerDefines, animation.Address);
+
+                foreach (var displayList in entry.ExtraDisplayLists)
+                    displayList.Address = ResolveHeaderDefineForField(displayList.HeaderDefinition, headerDefines, displayList.Address);
+
+                foreach (var segment in entry.Segments)
+                {
+                    foreach (var segmentEntry in segment)
+                        segmentEntry.Address = ResolveHeaderDefineForField(segmentEntry.HeaderDefinition, headerDefines, segmentEntry.Address);
+                }
             }
         }
 
@@ -351,7 +242,6 @@ namespace NPC_Maker
             }
         }
 
-
         public static Dictionary<string, int> GetDictionary(string Filename, bool allowFail = false)
         {
             Dictionary<string, int> Dict = new Dictionary<string, int>();
@@ -416,12 +306,13 @@ namespace NPC_Maker
         {
             Program.CompileThereWereErrors = true;
 
-            if (CLIMode)
+            if (Program.IsRunningUnderMono || CLIMode)
                 Console.WriteLine(Msg);
+
             // Occasionally crashes showing messagebox on another thread.
-            else if (Program.IsRunningUnderMono)
+            if (Program.IsRunningUnderMono)
                 Program.CompileMonoErrors = Msg;
-            else
+            else if (!CLIMode)
                 MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
 
             return;
@@ -643,6 +534,10 @@ namespace NPC_Maker
                                         cb.Add(new Common.PreprocessedEntry(cachedFile, scr.Script));
                                     }
                                 }
+                                else
+                                {
+                                    cb.Add(new Common.PreprocessedEntry(cachedFile, File.ReadAllBytes(cachedFile)));
+                                }
 
                                 scriptNum++;
                             }
@@ -737,7 +632,6 @@ namespace NPC_Maker
 
                 foreach (NPCEntry Entry in Data.Entries)
                 {
-
                     if (Entry.IsNull == false && !Entry.Omitted)
                     {
                         Console.Write($"Processing entry {EntriesDone}: {Entry.NPCName}... ");
@@ -970,20 +864,19 @@ namespace NPC_Maker
                             List<string> errorList = errors.ToList();
 
                             if (errorList.Any())
-                                ShowMsg(Program.IsRunningUnderMono ? true : CLIMode, errorList[0]);
+                            {
+                                ShowMsg(CLIMode, errorList[0]);
+
+                                if (!ParseErrors.Contains(Entry.NPCName))
+                                    ParseErrors.Add(Entry.NPCName);
+
+                                break;
+                            }
 
                             foreach (MessageEntry Msg in loc.Messages)
                             {
                                 List<byte> Message = Msg.tempBytes;
                                 Msg.tempBytes = null;
-
-                                if (Message == null)
-                                {
-                                    Message = new List<byte>();
-
-                                    if (!ParseErrors.Contains(Entry.NPCName))
-                                        ParseErrors.Add(Entry.NPCName);
-                                }
 
                                 Helpers.Ensure4ByteAlign(Message);
                                 MsgData.AddRange(Message);

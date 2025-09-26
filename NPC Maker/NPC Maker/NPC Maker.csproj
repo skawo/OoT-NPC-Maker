@@ -159,6 +159,7 @@
     <Compile Include="Common\Defaults.cs" />
     <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Common\JsonRevision.cs" />
     <Compile Include="Common\Message.cs" />
     <Compile Include="Common\NPCMakerSettings.cs" />
     <Compile Include="Common\ScriptsUsages.cs" />

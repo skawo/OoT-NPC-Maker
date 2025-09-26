@@ -186,6 +186,7 @@ namespace NPC_Maker
 
         public string HeaderPath { get; set; }
         public string SkeletonHeaderDefinition { get; set; }
+
         public NPCEntry()
         {
             NPCName = "";
