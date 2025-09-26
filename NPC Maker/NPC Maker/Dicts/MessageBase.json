@@ -107,7 +107,8 @@
       "Token": "<DELAY>",
       "Value": "0x0C",
       "Description": "",
-      "ContextName": "Delay"
+      "ContextName": "Delay",
+      "NewBoxSpecialHandling": true
     },
     {
       "Token": "<AWAIT_BUTTON>",
