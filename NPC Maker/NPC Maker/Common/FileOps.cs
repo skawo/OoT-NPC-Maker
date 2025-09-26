@@ -1380,70 +1380,6 @@ namespace NPC_Maker
                         progress.Report(new Common.ProgressReport($"Saving {EntriesDone}/{Data.Entries.Count}", CurProgress));
                 }
 
-                List<byte> Output = new List<byte>();
-
-                Output.AddRangeBigEndian((UInt32)Data.Entries.Count());
-
-                if (Program.Settings.CompressIndividually)
-                {
-                    Console.WriteLine($"Compressing...");
-
-                    if (progress != null)
-                        progress.Report(new Common.ProgressReport($"Compressing...", 100));
-                }
-
-                Parallel.ForEach(CompilationData, Entry =>
-                {
-                    List<byte> outCompressed = null;
-
-                    if (Entry.data == null)
-                        return;
-
-                    if (Program.Settings.CompressIndividually)
-                    {
-                        outCompressed = PeepsCompress.YAZ0.Compress(Entry.data.ToArray(), 0).ToList();
-                        Helpers.Ensure4ByteAlign(outCompressed);
-                    }
-
-                    if (!Program.Settings.CompressIndividually || outCompressed.Count >= Entry.data.Count)
-                    {
-                        Entry.compressedSize = 0;
-                        Entry.decompressedSize = Entry.data.Count;
-                    }
-                    else
-                    {
-                        Entry.compressedSize = outCompressed.Count;
-                        Entry.decompressedSize = Entry.data.Count;
-                        Entry.data = outCompressed;
-                    }
-                });
-
-                foreach (var Entry in CompilationData)
-                {
-                    EntryAddresses.AddRangeBigEndian(Offset);
-                    EntryAddresses.AddRangeBigEndian(Entry.compressedSize);
-                    EntryAddresses.AddRangeBigEndian(Entry.decompressedSize);
-
-                    if (Entry.compressedSize != 0)
-                        Offset += Entry.compressedSize;
-                    else
-                        Offset += Entry.decompressedSize;
-                }
-
-                Output.AddRange(EntryAddresses);
-
-                foreach (var Entry in CompilationData)
-                {
-                    if (Entry.data != null)
-                        Output.AddRange(Entry.data);
-                }
-
-                Console.WriteLine("");
-                Console.WriteLine("Done!");
-
-                if (progress != null)
-                    progress.Report(new Common.ProgressReport($"Done!", 100));
-
                 if (ParseErrors.Count != 0)
                 {
                     ShowMsg(CLIMode,
@@ -1451,9 +1387,77 @@ namespace NPC_Maker
                             $"" + Environment.NewLine + Environment.NewLine +
                             $"There are errors in NPC: {String.Join(",", ParseErrors)}");
 
+                    if (progress != null)
+                        progress.Report(new Common.ProgressReport($"Done!", 100));
                 }
                 else
+                {
+                    List<byte> Output = new List<byte>();
+
+                    Output.AddRangeBigEndian((UInt32)Data.Entries.Count());
+
+                    if (Program.Settings.CompressIndividually)
+                    {
+                        Console.WriteLine($"Compressing...");
+
+                        if (progress != null)
+                            progress.Report(new Common.ProgressReport($"Compressing...", 100));
+                    }
+
+                    Parallel.ForEach(CompilationData, Entry =>
+                    {
+                        List<byte> outCompressed = null;
+
+                        if (Entry.data == null)
+                            return;
+
+                        if (Program.Settings.CompressIndividually)
+                        {
+                            outCompressed = PeepsCompress.YAZ0.Compress(Entry.data.ToArray(), 0).ToList();
+                            Helpers.Ensure4ByteAlign(outCompressed);
+                        }
+
+                        if (!Program.Settings.CompressIndividually || outCompressed.Count >= Entry.data.Count)
+                        {
+                            Entry.compressedSize = 0;
+                            Entry.decompressedSize = Entry.data.Count;
+                        }
+                        else
+                        {
+                            Entry.compressedSize = outCompressed.Count;
+                            Entry.decompressedSize = Entry.data.Count;
+                            Entry.data = outCompressed;
+                        }
+                    });
+
+                    foreach (var Entry in CompilationData)
+                    {
+                        EntryAddresses.AddRangeBigEndian(Offset);
+                        EntryAddresses.AddRangeBigEndian(Entry.compressedSize);
+                        EntryAddresses.AddRangeBigEndian(Entry.decompressedSize);
+
+                        if (Entry.compressedSize != 0)
+                            Offset += Entry.compressedSize;
+                        else
+                            Offset += Entry.decompressedSize;
+                    }
+
+                    Output.AddRange(EntryAddresses);
+
+                    foreach (var Entry in CompilationData)
+                    {
+                        if (Entry.data != null)
+                            Output.AddRange(Entry.data);
+                    }
+
+                    Console.WriteLine("");
+                    Console.WriteLine("Done!");
+
+                    if (progress != null)
+                        progress.Report(new Common.ProgressReport($"Done!", 100));
+
                     File.WriteAllBytes(outPath, Output.ToArray());
+                }
             }
             catch (Exception ex)
             {
