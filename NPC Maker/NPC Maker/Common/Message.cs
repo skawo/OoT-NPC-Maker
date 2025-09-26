@@ -10,6 +10,15 @@ using System.Globalization;
 
 namespace NPC_Maker
 {
+    public enum MsgValueTypes
+    {
+        x,  // 1 byte
+        h,  // 2 bytes
+        t,  // 3 bytes
+        w,  // 4 bytes
+        d,  // definition
+    }
+
     public class MessageConfig
     {
         public List<Tag> Entries { get; set; }
@@ -23,10 +32,10 @@ namespace NPC_Maker
 
         public MessageConfig()
         {
-            EndMessage = 2;
-            NewLine = 1;
-            EndMessageType = "x";
-            NewLineType = "x";
+            EndMessage = (int)ZeldaMessage.Data.MsgControlCode.END;
+            NewLine = (int)ZeldaMessage.Data.MsgControlCode.LINE_BREAK;
+            EndMessageType = MsgValueTypes.x.ToString();
+            NewLineType = MsgValueTypes.x.ToString();
             Entries = new List<Tag>();
         }
 
@@ -57,55 +66,61 @@ namespace NPC_Maker
     {
         public UInt32? Value { get; set; }
 
-        public string typeToken { get; set; }
+        public string TypeToken { get; set; }
 
-        public int varNum { get; set; }
+        public int VarNum { get; set; }
 
-        public string defaultValue { get; set; }
+        public string DefaultValue { get; set; }
 
-        public TagValueEntry(UInt32? v, string tt, string dfVal = "", int vn = -1)
+        public TagValueEntry(uint? value, string typeToken, string defaultValue = "", int varNum = -1)
         {
-            Value = v;
-            typeToken = tt;
-            varNum = vn;
-            defaultValue = dfVal;
+            Value = value;
+            TypeToken = typeToken;
+            VarNum = varNum;
+            DefaultValue = defaultValue;
         }
 
-        public ValueTypes GetValueType()
+        public MsgValueTypes GetValueType()
         {
-            switch (typeToken)
+            switch (TypeToken)
             {
-                case "x": return ValueTypes.x;
-                case "h": return ValueTypes.h;
-                case "t": return ValueTypes.t;
-                case "w": return ValueTypes.w;
-                default: return ValueTypes.d;
+                case "x": return MsgValueTypes.x;
+                case "h": return MsgValueTypes.h;
+                case "t": return MsgValueTypes.t;
+                case "w": return MsgValueTypes.w;
+                default: return MsgValueTypes.d;
             }
         }
 
         public byte[] ToBytes()
         {
-            if (Value == null)
+            if (!Value.HasValue)
                 return new byte[0];
-            else
-            {
-                ValueTypes type = GetValueType();
 
-                switch (type)
-                {
-                    case ValueTypes.x: return new byte[1] { (byte)Value };
-                    case ValueTypes.h: return Program.BEConverter.GetBytes((short)Value);
-                    case ValueTypes.t:
-                        {
-                            byte[] vals = Program.BEConverter.GetBytes((int)Value);
-                            return vals.Skip(1).ToArray();
-                        }
-                    case ValueTypes.w: return Program.BEConverter.GetBytes((int)Value);
-                    default: throw new Exception($"The definition {typeToken} could not be resolved.");
-                }
+            uint val = Value.Value;
+            MsgValueTypes type = GetValueType();
+
+            switch (type)
+            {
+                case MsgValueTypes.x:
+                    return new byte[] { (byte)val };
+                case MsgValueTypes.h:
+                    return Program.BEConverter.GetBytes((short)val);
+                case MsgValueTypes.t:
+                    {
+                        byte[] vals = Program.BEConverter.GetBytes((int)val);
+                        byte[] result = new byte[vals.Length - 1];
+                        Array.Copy(vals, 1, result, 0, result.Length);
+                        return result;
+                    }
+                case MsgValueTypes.w:
+                    return Program.BEConverter.GetBytes((int)val);
+                default:
+                    throw new Exception($"The definition {TypeToken} could not be resolved.");
             }
         }
     }
+
 
     public class TagEntry
     {
@@ -213,7 +228,7 @@ namespace NPC_Maker
                     throw new Exception(string.Format("Could not convert {0} to byte", trimmedValue));
             }
 
-            Values.Add(new TagValueEntry(value, ValueTypes.x.ToString()));
+            Values.Add(new TagValueEntry(value, MsgValueTypes.x.ToString()));
         }
     }
 
@@ -257,15 +272,6 @@ namespace NPC_Maker
             ProcessTag();
         }
 
-    }
-
-    public enum ValueTypes
-    {
-        x,  // 1 byte
-        h,  // 2 bytes
-        t,  // 3 bytes
-        w,  // 4 bytes
-        d,  // definition
     }
 
     public class LocalizationEntry
@@ -342,81 +348,78 @@ namespace NPC_Maker
 
         public List<byte> ToBytes(string Language)
         {
-            List<byte> data = new List<byte>();
-
-            var tagDict = Dicts.LanguageDefs[Dicts.DefaultLanguage];
-            if (Dicts.LanguageDefs.ContainsKey(Language))
-                tagDict = Dicts.LanguageDefs[Language];
+            var data = new List<byte>();
+            var tagDict = Dicts.LanguageDefs.TryGetValue(Language, out var dict)
+                ? dict
+                : Dicts.LanguageDefs[Dicts.DefaultLanguage];
 
             var tokens = Tokenize();
-            bool IgnoreNextLinebreak = false;
+            bool ignoreNextLinebreak = false;
 
             for (int i = 0; i < tokens.Count; i++)
             {
-                var t = tokens[i];
+                var token = tokens[i];
 
-                if (t == "\n")
+                if (token == "\n")
                 {
-                    if (IgnoreNextLinebreak)
+                    if (ignoreNextLinebreak)
                     {
-                        IgnoreNextLinebreak = false;
+                        ignoreNextLinebreak = false;
                         continue;
                     }
 
-                    if (tokens.Count() > i + 1)
+                    // Skip this linebreak if the next tag makes a new tag
+                    // (This is so that this looks nicer in the editor)
+                    if (i + 1 < tokens.Count &&
+                        GetTagIndex(tagDict, tokens[i + 1], out _) is int nextTagIndex &&
+                        nextTagIndex != -1 &&
+                        tagDict.Entries[nextTagIndex].NewBoxSpecialHandling)
                     {
-                        int nextTagIndex = GetTagIndex(tagDict, tokens[i + 1], out _);
-
-                        if (nextTagIndex != -1 && tagDict.Entries[nextTagIndex].NewBoxSpecialHandling)
-                            continue;
+                        continue;
                     }
 
-                    TagValueEntry nL = new TagValueEntry((UInt32)tagDict.NewLine, tagDict.NewLineType);
-                    data.AddRange(nL.ToBytes());
+                    data.AddRange(new TagValueEntry((uint)tagDict.NewLine, tagDict.NewLineType).ToBytes());
                     continue;
                 }
 
-                IgnoreNextLinebreak = false;
-                int tagIndex = GetTagIndex(tagDict, t, out string normalized);
+                ignoreNextLinebreak = false;
+                int tagIndex = GetTagIndex(tagDict, token, out string normalized);
 
                 if (tagIndex == -1)
                 {
-                    if (t.Length != 1)
-                        throw new Exception($"Could not convert tag: {t}");
-                    else
-                    {
-                        char curChar = t[0];
-                        data.Add((byte)curChar);
-                    }
+                    if (token.Length != 1)
+                        throw new Exception($"Could not convert tag: {token}");
+
+                    data.Add((byte)token[0]);
                 }
                 else
                 {
-                    foreach (var val in tagDict.Entries[tagIndex].Entry.Values)
+                    var entry = tagDict.Entries[tagIndex];
+
+                    foreach (var val in entry.Entry.Values)
                     {
                         var workCopy = Helpers.Clone<TagValueEntry>(val);
                         ProcessTagValue(workCopy, normalized);
-
-                        if (tagDict.Entries[tagIndex].NewBoxSpecialHandling)
-                            IgnoreNextLinebreak = true;
-
                         data.AddRange(workCopy.ToBytes());
                     }
+
+                    if (entry.NewBoxSpecialHandling)
+                        ignoreNextLinebreak = true;
                 }
             }
 
-            TagValueEntry tg = new TagValueEntry((UInt32)tagDict.EndMessage, tagDict.EndMessageType);
-            data.AddRange(tg.ToBytes());
-
+            data.AddRange(new TagValueEntry((uint)tagDict.EndMessage, tagDict.EndMessageType).ToBytes());
             return data;
         }
 
+
         private void ProcessTagValue(TagValueEntry workCopy, string normalized)
         {
-            ValueTypes vt = workCopy.GetValueType();
+            MsgValueTypes vt = workCopy.GetValueType();
 
-            if (vt == ValueTypes.d)
+            if (vt == MsgValueTypes.d)
                 ProcessDictionaryValue(workCopy, normalized);
-            else if (workCopy.varNum != -1)
+            else if (workCopy.VarNum != -1)
                 ProcessVariableValue(workCopy, normalized);
         }
 
@@ -441,26 +444,26 @@ namespace NPC_Maker
         {
             string[] subTokens = normalized.Split(':');
 
-            if (workCopy.varNum + 1 > subTokens.Length)
+            if (workCopy.VarNum + 1 > subTokens.Length)
                 throw new Exception($"Malformed tag: {normalized}");
 
-            string chosenSubToken = subTokens[workCopy.varNum + 1];
+            string chosenSubToken = subTokens[workCopy.VarNum + 1];
 
-            if (workCopy.typeToken == Lists.SoundsDictType)
+            if (workCopy.TypeToken == Lists.SoundsDictType)
             {
-                workCopy.typeToken = ValueTypes.h.ToString();
+                workCopy.TypeToken = MsgValueTypes.h.ToString();
                 workCopy.Value = GetValueFromDictOrConvert(Dicts.SFXes, normalized, chosenSubToken);
             }
             else
             {
-                int defIdx = Dicts.MsgDefinitions.FindIndex(x => x.Identifier == workCopy.typeToken);
+                int defIdx = Dicts.MsgDefinitions.FindIndex(x => x.Identifier == workCopy.TypeToken);
 
                 if (defIdx == -1)
-                    throw new Exception($"Couldn't find dictionary {workCopy.typeToken}");
+                    throw new Exception($"Couldn't find dictionary {workCopy.TypeToken}");
                 else
                 {
                     var dict = Dicts.MsgDefinitions[defIdx];
-                    workCopy.typeToken = dict.ValueType;
+                    workCopy.TypeToken = dict.ValueType;
                     workCopy.Value = GetValueFromDictOrConvert(dict.Entries, normalized, chosenSubToken);
                 }
             }
@@ -471,15 +474,15 @@ namespace NPC_Maker
             string[] subTokens = normalized.Split(':');
             string chosenSubToken;
 
-            if (workCopy.varNum + 1 >= subTokens.Length)
+            if (workCopy.VarNum + 1 >= subTokens.Length)
             {
-                if (String.IsNullOrWhiteSpace(workCopy.defaultValue))
+                if (String.IsNullOrWhiteSpace(workCopy.DefaultValue))
                     throw new Exception($"Malformed tag: {normalized}");
                 else
-                    chosenSubToken = workCopy.defaultValue;
+                    chosenSubToken = workCopy.DefaultValue;
             }
             else
-                chosenSubToken = subTokens[workCopy.varNum + 1];
+                chosenSubToken = subTokens[workCopy.VarNum + 1];
 
             try
             {
