@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,13 +25,13 @@ namespace NPC_Maker
             { Lists.DictType.Actors, $"Dicts/Actors.csv" },
             { Lists.DictType.Objects, $"Dicts/Objects.csv" },
             { Lists.DictType.LinkAnims, $"Dicts/LinkAnims.csv" },
-            { Lists.DictType.MsgTagOverride, $"Dicts/MsgTagOverrides.csv" },
         };
 
         public static string DefaultLanguage = "Default";
         public static string ProjectPathToken = "{PROJECTPATH}";
 
-        public static Dictionary<string, Dictionary<string, string>> MsgTagOverride;
+        public static Dictionary<string, MessageConfig> LanguageDefs;
+        public static List<MessageDefinition> MsgDefinitions;
 
         public static Dictionary<string, int> ObjectIDs;
         public static Dictionary<string, int> SFXes;
@@ -233,8 +234,6 @@ namespace NPC_Maker
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.SCALE),  Enum.GetNames(typeof(Lists.ScaleSubTypes)) },
         };
 
-        public static Dictionary<Lists.MsgControlCode, string> MessageControlCodes = PopulateCodeDictionary();
-
         public static void LoadDicts()
         {
             ReloadDict(DictType.Objects);
@@ -242,52 +241,123 @@ namespace NPC_Maker
             ReloadDict(DictType.Actors);
             ReloadDict(DictType.Music);
             ReloadDict(DictType.SFX);
-            ReloadDict(DictType.MsgTagOverride, true);
         }
 
-        public static void ReloadMsgTagOverrides(List<string> Languages)
+        private static T TryLoadLauguageDict<T>(string Language)
         {
-            if (MsgTagOverride == null)
-                MsgTagOverride = new Dictionary<string, Dictionary<string, string>>();
+            try
+            {
+                string FileCheck = "";
+                string FolderDef = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
+                string Folder = FolderDef;
+                string DictFile = $"Dicts/{Language}.json";
 
-            MsgTagOverride.Clear();
+                FileCheck = Path.Combine(Folder, DictFile);
+
+                if (!File.Exists(FileCheck))
+                    Folder = Program.ExecPath;
+
+                FileCheck = Path.Combine(Folder, DictFile);
+
+                string langDefText = File.ReadAllText(FileCheck);
+
+                var errors = new List<string>();
+
+                var settings = new JsonSerializerSettings
+                {
+                    Error = (sender, args) =>
+                    {
+                        if (args.ErrorContext.Error.InnerException != null)
+                            errors.Add($"{args.ErrorContext.Error.InnerException.Message}");
+                        else
+                            errors.Add($"{args.ErrorContext.Error.Message}");
+
+                        args.ErrorContext.Handled = true; // Continue processing
+                    }
+                };
+
+                T res = JsonConvert.DeserializeObject<T>(langDefText, settings);
+
+                if (errors.Any())
+                    throw new JsonException(errors[0]);
+
+                return res;
+
+            }
+            catch (JsonException ex)
+            {
+                throw new Exception($"Error loading language definition for {Language}:\n{ex.Message}");
+            }
+            catch
+            {
+                return default;
+            }
+
+        }
+
+        private static void ReplaceAndAddTags(MessageConfig first, MessageConfig second)
+        {
+            var secondTagsDict = second.Entries.ToDictionary(tag => tag.Token, tag => tag);
+            var firstTokens = new HashSet<string>();
+
+            // Replace matching tags and track first config tokens
+            for (int i = 0; i < first.Entries.Count; i++)
+            {
+                string token = first.Entries[i].Token;
+                firstTokens.Add(token);
+
+                if (secondTagsDict.TryGetValue(token, out Tag matchingTag))
+                {
+                    first.Entries[i] = matchingTag;
+                }
+            }
+
+            // Add unique tags from second config
+            var uniqueTags = second.Entries.Where(tag => !firstTokens.Contains(tag.Token));
+            first.Entries.AddRange(uniqueTags);
+        }
+
+        public static void ReloadLanguages(List<string> Languages)
+        {
+            if (LanguageDefs == null)
+                LanguageDefs = new Dictionary<string, MessageConfig>();
+
+            LanguageDefs.Clear();
 
             List<string> LanguagesAndDefault = new List<string>() { Dicts.DefaultLanguage };
             LanguagesAndDefault.AddRange(Languages);
 
-            foreach (string Language in LanguagesAndDefault)
+            MessageConfig defaultSet = TryLoadLauguageDict<MessageConfig>("MessageBase");
+
+            if (defaultSet != default(MessageConfig))
             {
-                try
+                foreach (string Language in LanguagesAndDefault)
                 {
-                    string FileCheck = "";
-                    string FolderDef = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
-                    string Folder = FolderDef;
-                    string DictFile = $"Dicts/{Language}.csv";
+                    var langSet = TryLoadLauguageDict<MessageConfig>(Language);
 
-                    FileCheck = Path.Combine(Folder, DictFile);
-
-                    if (!File.Exists(FileCheck))
-                        Folder = Program.ExecPath;
-
-                    FileCheck = Path.Combine(Folder, DictFile);
-
-                    if (!File.Exists(FileCheck))
+                    if (langSet != default(MessageConfig))
                     {
-                        DictFile = DictFilenames[Lists.DictType.MsgTagOverride];
-                        Folder = FolderDef;
+                        var newSet = Helpers.Clone<MessageConfig>(defaultSet);
+                        ReplaceAndAddTags(newSet, langSet);
+
+                        if (langSet.EndMessage != -1)
+                            newSet.EndMessage = langSet.EndMessage;
+                        if (langSet.NewLine != -1)
+                            newSet.NewLine = langSet.NewLine;
+                        if (String.IsNullOrWhiteSpace(langSet.EndMessageType))
+                            newSet.EndMessageType = langSet.EndMessageType;
+                        if (String.IsNullOrWhiteSpace(langSet.NewLineType))
+                            newSet.NewLineType = langSet.NewLineType;
+
+                        LanguageDefs.Add(Language, newSet);
                     }
-
-                    FileCheck = Path.Combine(Folder, DictFile);
-
-                    if (!File.Exists(FileCheck))
-                        Folder = Program.ExecPath;
-
-                    MsgTagOverride.Add(Language, FileOps.GetDictionaryStringString(Path.Combine(Folder, DictFile), true));
                 }
-                catch (Exception)
-                {
-                }
+
+                MsgDefinitions = TryLoadLauguageDict<List<MessageDefinition>>("MsgDefs");
             }
+
+            if (LanguageDefs.Count == 0)
+                throw new Exception("Could not load any language definitions...");
         }
 
         public static void ReoadSpellcheckDicts(List<string> Languages)
@@ -308,9 +378,6 @@ namespace NPC_Maker
 
         public static void ReloadDict(Lists.DictType Type, bool allowFail = false)
         {
-            if (Type == DictType.MsgTagOverride)
-                return;
-
             try
             {
                 string FileCheck = "";
@@ -367,17 +434,6 @@ namespace NPC_Maker
                 return Value.IsNumeric() ? Convert.ToInt32(Value) : -1;
             else
                 return (int)Default;
-        }
-
-
-        private static Dictionary<Lists.MsgControlCode, string> PopulateCodeDictionary()
-        {
-            Dictionary<Lists.MsgControlCode, string> output = new Dictionary<Lists.MsgControlCode, string>();
-
-            foreach (Lists.MsgControlCode code in Enum.GetValues(typeof(Lists.MsgControlCode)))
-                output.Add(code, code.ToString().Replace("_", " "));
-
-            return output;
         }
     }
 }

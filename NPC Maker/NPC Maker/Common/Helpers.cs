@@ -15,6 +15,54 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static UInt32 HexConvertToUInt32(string value)
+        {
+            if (Scripts.ScriptHelpers.IsHex(value))
+                return Convert.ToUInt32(value, 16);
+            else
+                return Convert.ToUInt32(value);
+        }
+
+        public static UInt16 HexConvertToUInt16(string value)
+        {
+            if (Scripts.ScriptHelpers.IsHex(value))
+                return Convert.ToUInt16(value, 16);
+            else
+                return Convert.ToUInt16(value);
+        }
+
+        public static byte HexConvertToByte(string value)
+        {
+            if (Scripts.ScriptHelpers.IsHex(value))
+                return Convert.ToByte(value, 16);
+            else
+                return Convert.ToByte(value);
+        }
+
+        public static Int32 HexConvertToInt32(string value)
+        {
+            if (Scripts.ScriptHelpers.IsHex(value))
+                return Convert.ToInt32(value, 16);
+            else
+                return Convert.ToInt32(value);
+        }
+
+        public static Int16 HexConvertToInt16(string value)
+        {
+            if (Scripts.ScriptHelpers.IsHex(value))
+                return Convert.ToInt16(value, 16);
+            else
+                return Convert.ToInt16(value);
+        }
+
+        public static sbyte HexConvertToSByte(string value)
+        {
+            if (Scripts.ScriptHelpers.IsHex(value))
+                return Convert.ToSByte(value, 16);
+            else
+                return Convert.ToSByte(value);
+        }
+
         public static string GetDefinesStringFromH(string HeaderPath)
         {
             Dictionary<string, string> hDefines = Helpers.GetDefinesFromH(HeaderPath);

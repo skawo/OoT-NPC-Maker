@@ -1,0 +1,539 @@
+{
+  "EndMessage": 2,
+  "EndMessageType": "x",
+  "NewLine": 1,
+  "NewLineType": "x",
+  "Entries": [
+    {
+      "Token": "<NEW_BOX>",
+      "Value": "0x04",
+      "Description": "",
+      "ContextName": "New Box",
+      "NewBoxSpecialHandling": true
+    },     
+    {
+      "Token": "<W>",
+      "Value": "0x05;0x40",
+      "Description": "",
+      "ContextGroup": "Colors",
+      "ContextName": "White"
+    },
+    {
+      "Token": "<R>",
+      "Value": "0x05;0x41",
+      "Description": "",
+      "ContextGroup": "Colors",
+      "ContextName": "Red"
+    },
+    {
+      "Token": "<G>",
+      "Value": "0x05;0x42",
+      "Description": "",
+      "ContextGroup": "Colors",
+      "ContextName": "Green"
+    },
+    {
+      "Token": "<B>",
+      "Value": "0x05;0x43",
+      "Description": "",
+      "ContextGroup": "Colors",
+      "ContextName": "Blue"
+    },
+    {
+      "Token": "<C>",
+      "Value": "0x05;0x44",
+      "Description": "",
+      "ContextGroup": "Colors",
+      "ContextName": "Cyan"
+    },
+    {
+      "Token": "<M>",
+      "Value": "0x05;0x45",
+      "Description": "",
+      "ContextGroup": "Colors",
+      "ContextName": "Magenta"
+    },
+    {
+      "Token": "<Y>",
+      "Value": "0x05;0x46",
+      "Description": "",
+      "ContextGroup": "Colors",
+      "ContextName": "Yellow"
+    },
+    {
+      "Token": "<BLK>",
+      "Value": "0x05;0x47",
+      "Description": "",
+      "ContextGroup": "Colors",
+      "ContextName": "Black"
+    },
+    {
+      "Token": "<SHIFT:x>",
+      "Value": "0x06;$1",
+      "Description": "",
+      "ContextName": "Shift pixels"
+    },
+    {
+      "Token": "<JUMP:h>",
+      "Value": "0x07;$1",
+      "Description": "",
+      "ContextName": "Jump to Message"
+    },
+    {
+      "Token": "<DI>",
+      "Value": "0x08",
+      "Description": "",
+      "ContextName": "Draw Instantly"
+    },
+    {
+      "Token": "<DC>",
+      "Value": "0x09",
+      "Description": "",
+      "ContextName": "Draw Per-Character"
+    },
+    {
+      "Token": "<PERSISTENT>",
+      "Value": "0x0A",
+      "Description": "",
+      "ContextName": "Persistent"
+    },
+    {
+      "Token": "<EVENT>",
+      "Value": "0x0B",
+      "Description": "",
+      "ContextName": "Event"
+    },
+    {
+      "Token": "<DELAY>",
+      "Value": "0x0C",
+      "Description": "",
+      "ContextName": "Delay"
+    },
+    {
+      "Token": "<AWAIT_BUTTON>",
+      "Value": "0x0D",
+      "Description": "",
+      "ContextName": "Await input"
+    },
+    {
+      "Token": "<FADE:x>",
+      "Value": "0x0E;$1",
+      "Description": "",
+      "ContextName": "Fade"
+    },
+    {
+      "Token": "<PLAYER>",
+      "Value": "0x0F",
+      "Description": "",
+      "ContextName": "Player's name"
+    },
+    {
+      "Token": "<OCARINA>",
+      "Value": "0x10",
+      "Description": "",
+      "ContextName": "Ocarina"
+    },
+    {
+      "Token": "<FADE2:h>",
+      "Value": "0x11;$1",
+      "Description": "",
+      "ContextName": "Long fade"
+    },
+    {
+      "Token": "<SOUND:Sounds>",
+      "Value": "0x12;$1",
+      "Description": "",
+      "ContextDict": "Sounds",
+      "ContextName": "Sound effect..."
+    },
+    {
+      "Token": "<ICON:Icons>",
+      "Value": "0x13;$1",
+      "Description": "",
+      "ContextDict": "Icons",
+      "ContextName": "Icons..."
+    },
+    {
+      "Token": "<SPEED:x>",
+      "Value": "0x14;$1",
+      "Description": "",
+      "ContextName": "Text speed"
+    },
+    {
+      "Token": "<BACKGROUND:w>",
+      "Value": "0x15;$1",
+      "Description": "",
+      "ContextName": "Background"
+    },
+    {
+      "Token": "<MARATHON_TIME>",
+      "Value": "0x16",
+      "Description": "",
+      "ContextName": "Current marathon time",
+      "ContextGroup": "Scores"
+    },
+    {
+      "Token": "<RACE_TIME>",
+      "Value": "0x17",
+      "Description": "",
+      "ContextName": "Current race time",
+      "ContextGroup": "Scores"
+    },
+    {
+      "Token": "<POINTS>",
+      "Value": "0x18",
+      "Description": "",
+      "ContextName": "Current points",
+      "ContextGroup": "Scores"
+    },
+    {
+      "Token": "<GOLD_SKULLTULAS>",
+      "Value": "0x19",
+      "Description": "",
+      "ContextName": "Golden skulltula count",
+      "ContextGroup": "Scores"
+    },
+    {
+      "Token": "<NS>",
+      "Value": "0x1A",
+      "Description": "",
+      "ContextName": "No-skip"
+    },
+    {
+      "Token": "<TWO_CHOICES>",
+      "Value": "0x1B",
+      "Description": "",
+      "ContextName": "Two choices"
+    },
+    {
+      "Token": "<THREE_CHOICES>",
+      "Value": "0x1C",
+      "Description": "",
+      "ContextName": "Three choices"
+    },
+    {
+      "Token": "<FISH_WEIGHT>",
+      "Value": "0x1D",
+      "Description": "",
+      "ContextName": "Fish weight"
+    },
+    {
+      "Token": "<HIGH_SCORE:ARCHERY>",
+      "Value": "0x1E;0x00",
+      "Description": "",
+      "ContextGroup": "Scores",
+      "ContextName": "Archery"
+    },
+    {
+      "Token": "<HIGH_SCORE:POE_POINTS>",
+      "Value": "0x1E;0x01",
+      "Description": "",
+      "ContextGroup": "Scores",
+      "ContextName": "Poe Points"
+    },
+    {
+      "Token": "<HIGH_SCORE:FISHING>",
+      "Value": "0x1E;0x02",
+      "Description": "",
+      "ContextGroup": "Scores",
+      "ContextName": "Fishing"
+    },
+    {
+      "Token": "<HIGH_SCORE:HORSE_RACE>",
+      "Value": "0x1E;0x03",
+      "Description": "",
+      "ContextGroup": "Scores",
+      "ContextName": "Horse race"
+    },
+    {
+      "Token": "<HIGH_SCORE:MARATHON>",
+      "Value": "0x1E;0x04",
+      "Description": "",
+      "ContextGroup": "Scores",
+      "ContextName": "Marathon"
+    },
+    {
+      "Token": "<HIGH_SCORE:DAMPE_RACE>",
+      "Value": "0x1E;0x05",
+      "Description": "",
+      "ContextGroup": "Scores",
+      "ContextName": "Dampe Race"
+    },
+    {
+      "Token": "<TIME>",
+      "Value": "0x1F",
+      "Description": "",
+      "ContextName": "Time",
+      "ContextGroup": "Scores"
+    },
+    {
+      "Token": "<LCHEVRON>",
+      "Value": "0x3C",
+      "Description": ""
+    },
+    {
+      "Token": "<RCHEVRON>",
+      "Value": "0x3E",
+      "Description": ""
+    },
+    {
+      "Token": "<DASH>",
+      "Value": "0x7F",
+      "Description": ""
+    },
+    {
+      "Token": "<A_BUTTON>",
+      "Value": "0x9F",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "A Button"
+    },
+    {
+      "Token": "<B_BUTTON>",
+      "Value": "0xA0",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "B Button"
+    },
+    {
+      "Token": "<C_BUTTON>",
+      "Value": "0xA1",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "C Button"
+    },
+    {
+      "Token": "<L_BUTTON>",
+      "Value": "0xA2",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "L Button"
+    },
+    {
+      "Token": "<R_BUTTON>",
+      "Value": "0xA3",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "R Button"
+    },
+    {
+      "Token": "<Z_BUTTON>",
+      "Value": "0xA4",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "Z Button"
+    },
+    {
+      "Token": "<C_UP>",
+      "Value": "0xA5",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "C-Up Button"
+    },
+    {
+      "Token": "<C_DOWN>",
+      "Value": "0xA6",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "C-Down Button"
+    },
+    {
+      "Token": "<C_LEFT>",
+      "Value": "0xA7",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "C-Left Button"
+    },
+    {
+      "Token": "<C_RIGHT>",
+      "Value": "0xA8",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "C-Right Button"
+    },
+    {
+      "Token": "<TRIANGLE>",
+      "Value": "0xA9",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "Triangle"
+    },
+    {
+      "Token": "<CONTROL_STICK>",
+      "Value": "0xAA",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "Control Stick"
+    },
+    {
+      "Token": "<D_PAD>",
+      "Value": "0xAB",
+      "Description": "",
+      "ContextGroup": "Buttons",
+      "ContextName": "D-Pad"
+    },
+    {
+      "Token": "<PAUSE:x>",
+      "Value": "0x14;$1;0x9;0x9;0x9;0x14;0x0",
+      "DefaultValues": "0x1",
+      "Description": "",
+      "ContextName": "Pause"
+    },     
+    {
+      "Token": "À",
+      "Value": "0x80",
+      "Description": "",
+      "ContextGroup": ""
+    },
+    {
+      "Token": "Î",
+      "Value": "0x81",
+      "Description": ""
+    },
+    {
+      "Token": "Â",
+      "Value": "0x82",
+      "Description": ""
+    },
+    {
+      "Token": "Ä",
+      "Value": "0x83",
+      "Description": ""
+    },
+    {
+      "Token": "Ç",
+      "Value": "0x84",
+      "Description": ""
+    },
+    {
+      "Token": "È",
+      "Value": "0x85",
+      "Description": ""
+    },
+    {
+      "Token": "É",
+      "Value": "0x86",
+      "Description": ""
+    },
+    {
+      "Token": "Ê",
+      "Value": "0x87",
+      "Description": ""
+    },
+    {
+      "Token": "Ë",
+      "Value": "0x88",
+      "Description": ""
+    },
+    {
+      "Token": "Ï",
+      "Value": "0x89",
+      "Description": ""
+    },
+    {
+      "Token": "Ô",
+      "Value": "0x8A",
+      "Description": ""
+    },
+    {
+      "Token": "Ö",
+      "Value": "0x8B",
+      "Description": ""
+    },
+    {
+      "Token": "Ù",
+      "Value": "0x8C",
+      "Description": ""
+    },
+    {
+      "Token": "Û",
+      "Value": "0x8D",
+      "Description": ""
+    },
+    {
+      "Token": "Ü",
+      "Value": "0x8E",
+      "Description": ""
+    },
+    {
+      "Token": "ß",
+      "Value": "0x8F",
+      "Description": ""
+    },
+    {
+      "Token": "à",
+      "Value": "0x90",
+      "Description": ""
+    },
+    {
+      "Token": "á",
+      "Value": "0x91",
+      "Description": ""
+    },
+    {
+      "Token": "â",
+      "Value": "0x92",
+      "Description": ""
+    },
+    {
+      "Token": "ä",
+      "Value": "0x93",
+      "Description": ""
+    },
+    {
+      "Token": "ç",
+      "Value": "0x94",
+      "Description": ""
+    },
+    {
+      "Token": "è",
+      "Value": "0x95",
+      "Description": ""
+    },
+    {
+      "Token": "é",
+      "Value": "0x96",
+      "Description": ""
+    },
+    {
+      "Token": "ê",
+      "Value": "0x97",
+      "Description": ""
+    },
+    {
+      "Token": "ë",
+      "Value": "0x98",
+      "Description": ""
+    },
+    {
+      "Token": "ï",
+      "Value": "0x99",
+      "Description": ""
+    },
+    {
+      "Token": "ô",
+      "Value": "0x9A",
+      "Description": ""
+    },
+    {
+      "Token": "ö",
+      "Value": "0x9B",
+      "Description": ""
+    },
+    {
+      "Token": "ù",
+      "Value": "0x9C",
+      "Description": ""
+    },
+    {
+      "Token": "û",
+      "Value": "0x9D",
+      "Description": ""
+    },
+    {
+      "Token": "ü",
+      "Value": "0x9E",
+      "Description": ""
+    }
+  ]
+}

@@ -952,10 +952,30 @@ namespace NPC_Maker
                                 continue;
                             }
 
+                            var errors = new ConcurrentBag<string>();
+
+                            Parallel.ForEach(loc.Messages, msg =>
+                            {
+                                try
+                                {
+                                    msg.tempBytes = msg.ToBytes(loc.Language);
+                                }
+                                catch (Exception ex)
+                                {
+                                    msg.tempBytes = null;
+                                    errors.Add($"{Entry.NPCName}:\nThere is an error in message {msg.Name}:\n{ex.Message}");
+                                }
+                            });
+
+                            List<string> errorList = errors.ToList();
+
+                            if (errorList.Any())
+                                ShowMsg(Program.IsRunningUnderMono ? true : CLIMode, errorList[0]);
+
                             foreach (MessageEntry Msg in loc.Messages)
                             {
-                                int numBoxes = 0;
-                                List<byte> Message = Msg.ConvertTextData(Entry.NPCName, loc.Language, out numBoxes, !CLIMode);
+                                List<byte> Message = Msg.tempBytes;
+                                Msg.tempBytes = null;
 
                                 if (Message == null)
                                 {

@@ -55,10 +55,7 @@ namespace NPC_Maker.Common
 
             try
             {
-                if (Scripts.ScriptHelpers.IsHex(_ValueString))
-                    Value = Convert.ToUInt32(_ValueString.Substring(2), 16);
-                else
-                    Value = Convert.ToUInt32(_ValueString);
+                Value = Helpers.HexConvertToUInt32(_ValueString);
             }
             catch (Exception)
             {

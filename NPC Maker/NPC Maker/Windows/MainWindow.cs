@@ -212,9 +212,16 @@ namespace NPC_Maker
             foreach (string lan in EditedFile.Languages)
                 Combo_Language.Items.Add(lan);
 
-            ReloadAllFonts();
-            Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
-            Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+            try
+            {
+                ReloadAllFonts();
+                Dicts.ReloadLanguages(EditedFile.Languages);
+                Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             Combo_Language.SelectedIndex = 0;
             Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
@@ -946,9 +953,16 @@ namespace NPC_Maker
                     }
                 }
 
-                ReloadAllFonts();
-                Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
-                Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+                try
+                {
+                    ReloadAllFonts();
+                    Dicts.ReloadLanguages(EditedFile.Languages);
+                    Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
 
             }
         }
@@ -984,9 +998,17 @@ namespace NPC_Maker
 
                             Combo_Language.Items.Remove(pick.SelectedOption);
 
-                            ReloadAllFonts();
-                            Dicts.ReloadMsgTagOverrides(EditedFile.Languages);
-                            Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+                            try
+                            {
+                                ReloadAllFonts();
+                                Dicts.ReloadLanguages(EditedFile.Languages);
+                                Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+
                             Combo_Language.SelectedIndex = 0;
                         }
                     }
@@ -1329,6 +1351,7 @@ namespace NPC_Maker
 
         private void CheckLocalizationConsistencyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
             if (EditedFile.Languages.Count == 0)
             {
                 MessageBox.Show("There are no localizations.");
@@ -1352,7 +1375,18 @@ namespace NPC_Maker
                         {
                             for (int i = 0; i < ent.Messages.Count; i++)
                             {
-                                byte[] msgData = ent.Messages[i].ConvertTextData(ent.NPCName, Dicts.DefaultLanguage, out int numBoxesOg, false).ToArray();
+                                int numBoxesOg = 0;
+
+                                try
+                                {
+                                    byte[] msgData = ent.Messages[i].ToBytes(Dicts.DefaultLanguage).ToArray();
+                                    ZeldaMessage.MessagePreview zm = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgData);
+                                    numBoxesOg = zm.MessageCount;
+                                }
+                                catch
+                                {
+                                    numBoxesOg = -1;
+                                }
 
                                 int locIndex = ent.Localization[selectedLangIndex].Messages.FindIndex(x => x.Name == ent.Messages[i].Name);
 
@@ -1362,7 +1396,18 @@ namespace NPC_Maker
                                     continue;
                                 }
 
-                                byte[] msgDataLoc = ent.Localization[selectedLangIndex].Messages[locIndex].ConvertTextData(ent.NPCName, selectedLanguage, out int numBoxesLoc, false).ToArray();
+                                int numBoxesLoc = 0;
+
+                                try
+                                {
+                                    byte[] msgData = ent.Localization[selectedLangIndex].Messages[locIndex].ToBytes(Dicts.DefaultLanguage).ToArray();
+                                    ZeldaMessage.MessagePreview zm = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgData);
+                                    numBoxesOg = zm.MessageCount;
+                                }
+                                catch
+                                {
+                                    numBoxesLoc = -2;
+                                }
 
                                 if (numBoxesOg != numBoxesLoc)
                                     reportItems.Add($"{ent.NPCName}, {ent.Messages[i].Name} {numBoxesOg} vs {numBoxesLoc}");
@@ -1392,6 +1437,7 @@ namespace NPC_Maker
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
+            
         }
 
 
@@ -3303,7 +3349,7 @@ namespace NPC_Maker
                 if (MessagesContextMenu.MenuStrip == null)
                 {
                     Cursor.Current = Cursors.WaitCursor;
-                    MessagesContextMenu.MakeContextMenu();
+                    MessagesContextMenu.MakeContextMenu(Combo_Language.Text);
                     Cursor.Current = Cursors.Default;
                 }
 
@@ -3787,7 +3833,14 @@ namespace NPC_Maker
 
         private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Common.SavedMsgPreviewData savedPreviewData)
         {
-            List<byte> Data = Entry.ConvertTextData(NPCName, Language, out _, false);
+            List<byte> Data = null;
+
+            try
+            {
+                Data = Entry.ToBytes(Language);
+            }
+            catch
+            { }
 
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return null;
@@ -3796,7 +3849,13 @@ namespace NPC_Maker
             {
                 Entry = new MessageEntry();
                 Entry.MessageText = "Error: Over 1280 bytes.";
-                Data = Entry.ConvertTextData(NPCName, Language, out _, false);
+
+                try
+                {
+                    Data = Entry.ToBytes(Language);
+                }
+                catch
+                { }
             }
 
             bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;

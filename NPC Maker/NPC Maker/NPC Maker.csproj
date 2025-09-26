@@ -159,6 +159,7 @@
     <Compile Include="Common\Defaults.cs" />
     <Compile Include="Common\Dicts.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Common\Message.cs" />
     <Compile Include="Common\NPCMakerSettings.cs" />
     <Compile Include="Common\ScriptsUsages.cs" />
     <Compile Include="Common\Yaz0Compress.cs" />
@@ -383,7 +384,16 @@
     <None Include="Dicts\Actors.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Dicts\Default.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Dicts\LinkAnims.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dicts\MessageBase.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dicts\MsgDefs.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Dicts\Music.csv">

@@ -72,6 +72,7 @@ namespace NPC_Maker
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
 
+
             string settingsWindows = Path.Combine(ExecPath, "Settings.json");
             string settingsMono = Path.Combine(ExecPath, "SettingsMono.json");
 
@@ -148,7 +149,7 @@ namespace NPC_Maker
                         inFile = FileOps.ParseNPCJsonFile(args[0]);
                         Program.JsonPath = args[0];
                         Dicts.LoadDicts();
-                        Dicts.ReloadMsgTagOverrides(inFile.Languages);
+                        Dicts.ReloadLanguages(inFile.Languages);
                         Program.Settings.GameVersion = inFile.GameVersion;
 
                         Console.WriteLine($"Saving \"{Path.GetFileName(args[0])}\" to binary...");
