@@ -104,8 +104,8 @@
       "ContextName": "Event"
     },
     {
-      "Token": "<DELAY>",
-      "Value": "0x0C",
+      "Token": "<DELAY:x>",
+      "Value": "0x0C;$1",
       "Description": "",
       "ContextName": "Delay",
       "NewBoxSpecialHandling": true
@@ -171,28 +171,28 @@
       "Value": "0x16",
       "Description": "",
       "ContextName": "Current marathon time",
-      "ContextGroup": "Scores"
+      "ContextGroup": "Scores",
     },
     {
       "Token": "<RACE_TIME>",
       "Value": "0x17",
       "Description": "",
       "ContextName": "Current race time",
-      "ContextGroup": "Scores"
+      "ContextGroup": "Scores",
     },
     {
       "Token": "<POINTS>",
       "Value": "0x18",
       "Description": "",
       "ContextName": "Current points",
-      "ContextGroup": "Scores"
+      "ContextGroup": "Scores",
     },
     {
       "Token": "<GOLD_SKULLTULAS>",
       "Value": "0x19",
       "Description": "",
       "ContextName": "Golden skulltula count",
-      "ContextGroup": "Scores"
+      "ContextGroup": "Scores",
     },
     {
       "Token": "<NS>",
@@ -216,7 +216,8 @@
       "Token": "<FISH_WEIGHT>",
       "Value": "0x1D",
       "Description": "",
-      "ContextName": "Fish weight"
+      "ContextName": "Fish weight",
+      "ContextGroup": "Scores",
     },
     {
       "Token": "<HIGH_SCORE:ARCHERY>",
@@ -265,7 +266,7 @@
       "Value": "0x1F",
       "Description": "",
       "ContextName": "Time",
-      "ContextGroup": "Scores"
+      "ContextGroup": "Scores",
     },
     {
       "Token": "<LCHEVRON>",
@@ -535,6 +536,6 @@
       "Token": "ü",
       "Value": "0x9E",
       "Description": ""
-    }
-  ]
+    },     
+  ],
 }
