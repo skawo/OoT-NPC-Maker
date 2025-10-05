@@ -277,6 +277,7 @@ namespace NPC_Maker
         public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath, string[] excludedPaths)
         {
             string content = File.ReadAllText(dFilePath);
+            List<string> excluded = excludedPaths.ToList();
 
             // Remove everything before and including the first colon
             int colonIndex = content.IndexOf(':');
@@ -296,6 +297,7 @@ namespace NPC_Maker
             foreach (Match match in matches)
             {
                 string path = match.Value;
+
                 // Unescape spaces
                 path = path.Replace(@"\ ", " ");
 
@@ -304,18 +306,20 @@ namespace NPC_Maker
 
                 if (!string.IsNullOrEmpty(path) &&
                     !path.Contains(folderPath) &&
-                    !IsPathExcluded(path, excludedPaths))
+                    !IsPathExcluded(path, excluded))
                 {
+                    path = Helpers.FixCygdrivePath(path);
                     headerPaths.Add(Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken));
+                    excluded.Add(path);
                 }
             }
 
             return headerPaths;
         }
 
-        private static bool IsPathExcluded(string path, string[] excludedPaths)
+        private static bool IsPathExcluded(string path, List<string> excludedPaths)
         {
-            if (excludedPaths == null || excludedPaths.Length == 0)
+            if (excludedPaths == null || excludedPaths.Count == 0)
                 return false;
 
             // Normalize the path for comparison

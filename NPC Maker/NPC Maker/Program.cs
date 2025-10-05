@@ -181,6 +181,7 @@ namespace NPC_Maker
                         Console.WriteLine($"Error writing output: {ex.Message}");
                     }
 
+                    FileOps.SaveNPCJSON(args[0], inFile);
                     Console.WriteLine("Press ENTER to exit...");
                 }
                 else

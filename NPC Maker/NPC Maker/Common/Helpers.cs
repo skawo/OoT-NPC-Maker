@@ -347,6 +347,48 @@ namespace NPC_Maker
                 return null;
         }
 
+        public static string FixCygdrivePath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return path;
+
+            // Split the path into segments
+            string[] segments = path.Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Find where cygdrive starts
+            int cygdriveIndex = -1;
+            for (int i = 0; i < segments.Length; i++)
+            {
+                if (segments[i].Equals("cygdrive", StringComparison.OrdinalIgnoreCase))
+                {
+                    cygdriveIndex = i;
+                    break;
+                }
+            }
+
+            // If cygdrive is found, take everything from cygdrive onwards
+            if (cygdriveIndex >= 0)
+            {
+                var relevantSegments = segments.Skip(cygdriveIndex).ToArray();
+
+                // Convert cygdrive path to Windows path
+                if (relevantSegments.Length >= 3 &&
+                    relevantSegments[0].Equals("cygdrive", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Replace cygdrive/d with D:
+                    string driveLetter = relevantSegments[1].ToUpper() + ":";
+                    var pathSegments = new string[] { driveLetter }
+                        .Concat(relevantSegments.Skip(2))
+                        .ToArray();
+
+                    return string.Join("\\", pathSegments);
+                }
+            }
+
+            // If no cygdrive found, return original path
+            return path;
+        }
+
         public static Color TryGetColorWithName(Color color)
         {
             var colorLookup = typeof(Color)

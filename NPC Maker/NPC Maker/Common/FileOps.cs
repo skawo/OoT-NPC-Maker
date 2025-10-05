@@ -384,6 +384,8 @@ namespace NPC_Maker
         {
             var codeBuilder = new StringBuilder();
 
+            List<string> alreadyIncluded = new List<string>();
+
             foreach (string hPath in includeList)
             {
                 string cleanPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, hPath, Dicts.ProjectPathToken);
@@ -392,15 +394,23 @@ namespace NPC_Maker
                 // Try original path first
                 try
                 {
-                    content = File.ReadAllText(cleanPath);
+                    if (!alreadyIncluded.Contains(cleanPath))
+                    {
+                        content = File.ReadAllText(cleanPath);
+                        alreadyIncluded.Add(cleanPath);
+                    }
                 }
                 catch
                 {
                     // Try cleaned path as fallback
                     try
                     {
-                        cleanPath = cleanPath.TrimStart('/', '\\');
-                        content = File.ReadAllText(cleanPath);
+                        if (!alreadyIncluded.Contains(cleanPath))
+                        {
+                            cleanPath = cleanPath.TrimStart('/', '\\');
+                            content = File.ReadAllText(cleanPath);
+                            alreadyIncluded.Add(cleanPath);
+                        }
                     }
                     catch
                     {
