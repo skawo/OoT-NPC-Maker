@@ -109,7 +109,7 @@ namespace NPC_Maker
         {
             foreach (var entry in npcFile.Entries.Where(e => !string.IsNullOrEmpty(e.HeaderPath)))
             {
-                var headerDefines = Helpers.GetDefinesFromH(entry.HeaderPath);
+                var headerDefines = Helpers.GetDefinesFromHeaders(entry.HeaderPath);
 
                 entry.Hierarchy = ResolveHeaderDefineForField(entry.SkeletonHeaderDefinition, headerDefines, entry.Hierarchy);
 
@@ -638,7 +638,7 @@ namespace NPC_Maker
 
                         Dictionary<string, string> defines = new Dictionary<string, string>();
 
-                        defines = Helpers.GetDefinesFromH(Entry.HeaderPath);
+                        defines = Helpers.GetDefinesFromHeaders(Entry.HeaderPath);
 
                         List<byte> EntryBytes = new List<byte>();
 

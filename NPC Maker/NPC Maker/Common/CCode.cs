@@ -165,24 +165,6 @@ namespace NPC_Maker
             Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlaytemp");
         }
 
-        public static Dictionary<string, string> GetDefinesFromH(string hPath)
-        {
-            string headerContent = File.ReadAllText(hPath);
-            string pattern = @"^\s*#define\s+(\w+)(?:\s+(.+?))?(?:\s*//.*)?$";
-            Dictionary<string, string> outD = new Dictionary<string, string>();
-
-            foreach (Match match in Regex.Matches(headerContent, pattern, RegexOptions.Multiline))
-            {
-                string name = match.Groups[1].Value;
-                string value = match.Groups[2].Value.Trim();
-
-                if (!outD.ContainsKey(name))
-                    outD.Add(name, value);
-            }
-
-            return outD;
-        }
-
         public static void Compile(string cFilePath, string linkerFile, string outFilePath, string compileFlags, ref string CompileMsgs)
         {
             string folder = Helpers.GenerateTemporaryFolderName();

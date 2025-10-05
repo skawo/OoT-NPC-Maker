@@ -1333,7 +1333,7 @@ namespace NPC_Maker
             {
                 if (!String.IsNullOrEmpty(entry.HeaderPath))
                 {
-                    Dictionary<string, string> hDict = Helpers.GetDefinesFromH(entry.HeaderPath);
+                    Dictionary<string, string> hDict = Helpers.GetDefinesFromHeaders(entry.HeaderPath);
 
                     entry.Hierarchy = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, entry.SkeletonHeaderDefinition, hDict, entry.Hierarchy);
 
@@ -1953,7 +1953,7 @@ namespace NPC_Maker
             if (SelectedEntry == null)
                 return;
 
-            Windows.LongInputBox liB = new Windows.LongInputBox("Header definition", "Add header paths:", SelectedEntry.HeaderPath, true, "Header files (*.h)|*.h|All files (*.*)|*.*");
+            Windows.LongInputBox liB = new Windows.LongInputBox("Header definition", "Add header paths:", SelectedEntry.HeaderPath, true, "Header files (*.h;*.xml)|*.h;*.xml|All files (*.*)|*.*");
 
             if (liB.ShowDialog() == DialogResult.OK)
             {
@@ -2370,7 +2370,7 @@ namespace NPC_Maker
 
                         if (Name != "")
                         {
-                            Dictionary<string, string> hDict = Helpers.GetDefinesFromH(SelectedEntry.HeaderPath);
+                            Dictionary<string, string> hDict = Helpers.GetDefinesFromHeaders(SelectedEntry.HeaderPath);
                             Common.HDefine hD = Helpers.GetDefineFromName(Name, hDict);
 
                             if (hD != null && hD.Value != null)

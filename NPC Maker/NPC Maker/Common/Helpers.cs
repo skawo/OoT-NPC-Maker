@@ -8,8 +8,11 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace NPC_Maker
 {
@@ -65,7 +68,7 @@ namespace NPC_Maker
 
         public static string GetDefinesStringFromH(string HeaderPath)
         {
-            Dictionary<string, string> hDefines = Helpers.GetDefinesFromH(HeaderPath);
+            Dictionary<string, string> hDefines = Helpers.GetDefinesFromHeaders(HeaderPath);
             return string.Join(Environment.NewLine, hDefines.Select(kvp => $"#define H_{kvp.Key} {kvp.Value}"));
         }
 
@@ -74,7 +77,7 @@ namespace NPC_Maker
             if (entry == null || String.IsNullOrEmpty(entry.HeaderPath))
                 return null;
 
-            Dictionary<string, string> hDict = Helpers.GetDefinesFromH(entry.HeaderPath);
+            Dictionary<string, string> hDict = Helpers.GetDefinesFromHeaders(entry.HeaderPath);
 
             if (hDict.Count == 0)
                 return null;
@@ -230,7 +233,7 @@ namespace NPC_Maker
             }
         }
 
-        public static Dictionary<string, string> GetDefinesFromH(string PathString)
+        public static Dictionary<string, string> GetDefinesFromHeaders(string PathString)
         {
             string[] Paths = PathString.Split(';');
             Dictionary<string, string> defines = new Dictionary<string, string>();
@@ -241,9 +244,15 @@ namespace NPC_Maker
                 {
                     if (!String.IsNullOrEmpty(p))
                     {
-                        Dictionary<string, string> found = CCode.GetDefinesFromH(Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, p, Dicts.ProjectPathToken));
+                        Dictionary<string, string> dict;
+                        string realPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, p, Dicts.ProjectPathToken);
 
-                        foreach (var f in found)
+                        if (Path.GetExtension(realPath) == ".xml")
+                            dict = ParseDefinesXML(realPath);
+                        else
+                            dict = ParseDefinesH(realPath);
+
+                        foreach (var f in dict)
                         {
                             string key = f.Key;
                             string val = f.Value;
@@ -251,7 +260,7 @@ namespace NPC_Maker
                             while (defines.ContainsKey(key))
                                 key += "_";
 
-                            defines.Add(key, val);
+                            defines[key] = val;
                         }
                     }
 
@@ -262,6 +271,69 @@ namespace NPC_Maker
             }
 
             return defines;
+        }
+
+        private static Dictionary<string, string> ParseDefinesH(string hPath)
+        {
+            string headerContent = File.ReadAllText(hPath);
+            string pattern = @"^\s*#define\s+(\w+)(?:\s+(.+?))?(?:\s*//.*)?$";
+            var result = new Dictionary<string, string>();
+
+            foreach (Match match in Regex.Matches(headerContent, pattern, RegexOptions.Multiline))
+            {
+                string name = match.Groups[1].Value;
+                string offset = match.Groups[2].Value.Trim();
+
+                // Handle duplicate names
+                string key = name;
+                int counter = 1;
+                while (result.ContainsKey(key))
+                {
+                    key = $"{name}_{counter}";
+                    counter++;
+                }
+
+                result[key] = offset;
+            }
+
+            return result;
+        }
+
+        private static Dictionary<string, string> ParseDefinesXML(string xmlPath)
+        {
+            string xmlContent = File.ReadAllText(xmlPath);
+            var result = new Dictionary<string, string>();
+
+            try
+            {
+                var doc = XDocument.Parse(xmlContent);
+
+                var elementsWithNameAndOffset = doc.Descendants()
+                    .Where(e => e.Attribute("Name") != null && e.Attribute("Offset") != null);
+
+                foreach (var element in elementsWithNameAndOffset)
+                {
+                    string name = element.Attribute("Name").Value;
+                    string offset = element.Attribute("Offset").Value;
+
+                    // Handle duplicate names
+                    string key = name;
+                    int counter = 1;
+                    while (result.ContainsKey(key))
+                    {
+                        key = $"{name}_{counter}";
+                        counter++;
+                    }
+
+                    result[key] = offset;
+                }
+            }
+            catch (XmlException ex)
+            {
+                Console.WriteLine($"Error parsing XML: {ex.Message}");
+            }
+
+            return result;
         }
 
         public static Common.HDefine GetDefineFromName(string name, Dictionary<string, string> defines)
