@@ -1,4 +1,5 @@
 #include "../include/h_doors.h"
+#include <z64hdr/include/overlays/actors/ovl_En_Door/z_en_door.h>
 
 void Doors_UpdateDummy(Actor* door, PlayState* playState)
 {
@@ -25,7 +26,7 @@ void Doors_Close(Actor* npc, Actor* door, PlayState* playState)
         {
             case ACTOR_EN_DOOR:
             {
-                SkelAnime* door_skelanime = AADDR(door, 0x14C);
+                SkelAnime* door_skelanime = &((EnDoor*)door)->skelAnime;
                 Math_ApproachS(&door_skelanime->jointTable[4].z, 0, 1, DOOR_OPEN_SHUT_SPEED);
 
                 if (door_skelanime->jointTable[4].z == 0)
@@ -72,7 +73,7 @@ void Doors_Open(Actor* npc, Actor* door, PlayState* playState)
     {
         case ACTOR_EN_DOOR:
         {
-            SkelAnime* door_skelanime = AADDR(door, sizeof(Actor));
+            SkelAnime* door_skelanime = &((EnDoor*)door)->skelAnime;
 
             if (door->update != (void*)&Doors_UpdateDummy)
             {

@@ -67,9 +67,11 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
             {
                 #if LOGGING > 0
                     is64Printf("_%2d: Attempted read from script var out of range.\n");
-                #endif       
+                #endif   
+                   
                 return 0;
             }
+            
             return en->scriptVars[value.ui32 - 1]; 
 
         case SCRIPT_VARF:       
@@ -77,9 +79,11 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
             {
                 #if LOGGING > 0
                     is64Printf("_%2d: Attempted read from float script var out of range.\n");
-                #endif       
+                #endif   
+
                 return 0;
             }
+
             return en->scriptFVars[value.ui32 - 1]; 
     }
 }

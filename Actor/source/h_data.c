@@ -5,7 +5,7 @@
 ExSegDataEntry* Data_GetExtraSegmentData(NpcMaker* en, int segmentId, int entry)
 {
     ExSegDataEntry* segmentAddr = (ExSegDataEntry*)AADDR(en->exSegData, 4 + en->exSegData[segmentId]);
-    return AADDR(segmentAddr, entry * sizeof(ExSegDataEntry));
+    return &segmentAddr[entry];
 }
 
 InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int ID)
@@ -18,7 +18,7 @@ InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int I
     if (en->getSettingsFromRAMObject)
     {
         int language = NpcM_GetLanguage();
-
+ 
         if (language <= en->numLanguages - 1)
             ID += (language * en->numMessages);
     }

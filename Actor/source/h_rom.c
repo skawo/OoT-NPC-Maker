@@ -172,7 +172,7 @@ MessageEntry* Rom_GetMessageEntry(s16 msgId)
 {
     for (int i = 0; i < 65535; i++)
     {
-        MessageEntry* MsgE = AADDR(messageTable, i * sizeof(MessageEntry));
+        MessageEntry* MsgE = (MessageEntry*)&messageTable[i];
 
         if (MsgE->msg_id == msgId)
             return MsgE;
