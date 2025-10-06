@@ -119,26 +119,16 @@ NpcMaker* Scene_GetNpcMakerByID(NpcMaker* en, PlayState* playState, u16 ID)
         return en;
     
     NpcMaker* npc = (NpcMaker*)playState->actorCtx.actorLists[ACTORCAT_NPC].head;
-    bool found = false;
 
     while (npc)
     {
-        if (npc->actor.id == en->actor.id)
-        {
-            if (npc->npcId == ID)
-            {
-                found = true;
-                break;
-            }
-        }
+        if (npc->actor.id == en->actor.id && npc->npcId == ID)
+            return npc;
 
         npc = (NpcMaker*)npc->actor.next;
     }
 
-    if (!found)
-        return NULL;
-    else
-        return npc;
+    return NULL;
 }
 
 Actor* Scene_GetActorByID(int ID, PlayState* playState, Actor* closestTo, Actor* skip)
@@ -152,19 +142,16 @@ Actor* Scene_GetActorByID(int ID, PlayState* playState, Actor* closestTo, Actor*
 
         while (act)
         {
-            if (act->id == ID)
+            if (act->id == ID && act != closestTo && (skip == NULL || skip != act))
             {
                 if (closestTo == NULL)
                     return act;
-                else
-                {
-                    float distToActor = Math_Vec3f_DistXYZ(&closestTo->world.pos, &act->world.pos);
 
-                    if ((distToActor < dist && act != closestTo) && (skip == NULL || skip != act))
-                    {
-                        dist = distToActor;
-                        out = act;
-                    }
+                float distToActor = Math_Vec3f_DistXYZ(&closestTo->world.pos, &act->world.pos);
+                if (distToActor < dist)
+                {
+                    dist = distToActor;
+                    out = act;
                 }
             }
 

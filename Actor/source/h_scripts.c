@@ -21,16 +21,13 @@ bool Scripts_GetBool(NpcMaker* en, PlayState* playState, void* instruction)
 
 float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, ScriptVarval value, bool signedVal)
 {
-    float out = 0;
-
     switch (type)
     {
-        default:                out = value.flo; break;
+        default:                return value.flo;
         case RANDOM:            
         {
             s16* minMax = (s16*)&value;
-            out = Math_RandGetBetween(minMax[1], minMax[0] + 1);
-            break;
+            return Math_RandGetBetween(minMax[1], minMax[0] + 1);
         }
         case GLOBAL8:           
         case GLOBAL16:          
@@ -56,48 +53,37 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
 
             switch (varType)
             {
-                case 0:     out = AVAL(addr, u8, value.ui32); break;
-                case 1:     out = AVAL(addr, u16, value.ui32); break;
-                case 2:     out = AVAL(addr, u32, value.ui32); break;
-                case 4:     out = AVAL(addr, s8, value.ui32); break;
-                case 5:     out = AVAL(addr, s16, value.ui32); break;
-                case 6:     out = AVAL(addr, s32, value.ui32); break;
-                default:    out = AVAL(addr, float, value.ui32); break;
+                case 0:     return AVAL(addr, u8, value.ui32);
+                case 1:     return AVAL(addr, u16, value.ui32);
+                case 2:     return AVAL(addr, u32, value.ui32);
+                case 4:     return AVAL(addr, s8, value.ui32);
+                case 5:     return AVAL(addr, s16, value.ui32);
+                case 6:     return AVAL(addr, s32, value.ui32);
+                default:    return AVAL(addr, float, value.ui32);
             }
-
-            break;
         }
         case SCRIPT_VAR:        
-        {
             if (en->scriptVars == NULL || en->settings.numVars < value.ui32)
             {
                 #if LOGGING > 0
                     is64Printf("_%2d: Attempted read from script var out of range.\n");
                 #endif       
+                return 0;
             }
-            else
-                out = en->scriptVars[value.ui32 - 1]; 
+            return en->scriptVars[value.ui32 - 1]; 
 
-            break;
-        }
         case SCRIPT_VARF:       
-        {
             if (en->scriptFVars == NULL || en->settings.numFVars < value.ui32)
             {
-                out = 0;
-
                 #if LOGGING > 0
                     is64Printf("_%2d: Attempted read from float script var out of range.\n");
                 #endif       
+                return 0;
             }
-            else
-                out = en->scriptFVars[value.ui32 - 1]; 
-
-            break;
-        } 
+            return en->scriptFVars[value.ui32 - 1]; 
     }
-    return out;
 }
+
 
 Vec3f Scripts_GetVarvalVec3f(NpcMaker* en, PlayState* playState, Vartype xyzType[], ScriptVarval values[], float divider)
 {
