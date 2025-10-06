@@ -218,7 +218,12 @@ typedef struct SectionLoad
 
 typedef struct NpcMaker
 {
-    Actor actor;
+    union 
+    {
+        Actor actor;
+        DynaPolyActor dyna;
+    };
+    
     NpcSettings settings;
 
     u16 npcId;
