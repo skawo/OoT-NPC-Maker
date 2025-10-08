@@ -157,7 +157,7 @@ namespace NPC_Maker
                         if (Program.Settings.CompileInParallel)
                         {
                             Program.CompileInProgress = true;
-                            FileOps.PreprocessCodeAndScripts(args[1], inFile, null);
+                            FileOps.PreprocessCodeAndScripts(args[1], inFile, null, true);
 
                             while (Program.CompileInProgress) { /* Wait for completion */ }
                         }

@@ -427,7 +427,7 @@ namespace NPC_Maker
         }
 
 
-        public async static void PreprocessCodeAndScripts(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress, bool CLIMode = false)
+        public async static void PreprocessCodeAndScripts(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress, bool CLIMode)
         {
             float ProgressPer = (float)((float)100 / (float)Data.Entries.Count);
             float CurProgress = 0;
@@ -594,7 +594,12 @@ namespace NPC_Maker
                 Common.HDefine h = Helpers.GetDefineFromName(name, defines);
 
                 if (h == null)
+                {
+                    if (!String.IsNullOrWhiteSpace(name))
+                        FileOps.ShowMsg(CLIMode, $"{NPCName}: Warning: Could not find define {name}!");
+                    
                     return defaultV;
+                }
                 else
                 {
                     if (h.Value != null)
@@ -611,8 +616,10 @@ namespace NPC_Maker
         }
 
         public static void SaveBinaryFile(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress,
-                                          string baseDefines, bool cacheInvalid, bool CcacheInvalid, List<Common.PreprocessedEntry> preProcessedFiles, bool CLIMode = false)
+                                          string baseDefines, bool cacheInvalid, bool CcacheInvalid, List<Common.PreprocessedEntry> preProcessedFiles, bool CLIMode)
         {
+            Console.WriteLine(CLIMode);
+
             if (Data.Entries.Count() == 0)
             {
                 ShowMsg(CLIMode, "Nothing to save.");

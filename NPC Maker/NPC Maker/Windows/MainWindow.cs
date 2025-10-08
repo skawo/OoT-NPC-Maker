@@ -905,7 +905,7 @@ namespace NPC_Maker
 
                 if (Program.Settings.CompileInParallel)
                 {
-                    await TaskEx.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress); });
+                    await TaskEx.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress, false); });
                 }
                 else
                 {
@@ -913,7 +913,7 @@ namespace NPC_Maker
                     {
                         bool[] caches = FileOps.GetCacheStatus(EditedFile);
                         string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
-                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, caches[0], caches[1], null);
+                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, caches[0], caches[1], null, false);
                         CCode.CleanupStandardCompilationArtifacts();
                     });
                 }
