@@ -19,6 +19,8 @@ namespace NPC_Maker.Scripts
                 int Else = 0;
                 int InsertIdx = 0;
 
+                bool isStaticIf = CheckIfStaticIf(ID, SplitLine, out bool StaticIfResult);
+
                 #region Setup
 
                 switch (ID)
@@ -35,18 +37,41 @@ namespace NPC_Maker.Scripts
                                 Else = EndIf;
 
                             #region true
-                            Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
-                            Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
-                            Instructions.Add(new InstructionGoto("__IFEND__" + LabelR));
+
+                            if (isStaticIf && StaticIfResult)
+                            {
+                                Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
+                                LineNo = EndIf;
+                                return Instructions;
+                            }
+                            else if (!isStaticIf)
+                            {
+                                Instructions.Add(new InstructionLabel("__IFTRUE__" + LabelR));
+                                Instructions.AddRange(GetInstructions(Lines.Skip(LineNo + 1).Take(Else - LineNo - 1).ToList()));
+                                Instructions.Add(new InstructionGoto("__IFEND__" + LabelR));
+                            }
                             #endregion
 
                             #region false
-                            Instructions.Add(new InstructionLabel("__IFFALSE__" + LabelR));
 
-                            if (Else != EndIf)
-                                Instructions.AddRange(GetInstructions(Lines.Skip(Else + 1).Take(EndIf - Else - 1).ToList()));
+                            if (isStaticIf && !StaticIfResult)
+                            {
+                                if (Else != EndIf)
+                                    Instructions.AddRange(GetInstructions(Lines.Skip(Else + 1).Take(EndIf - Else - 1).ToList()));
 
-                            Instructions.Add(new InstructionLabel("__IFEND__" + LabelR));
+                                LineNo = EndIf;
+                                return Instructions;
+                            }
+                            else if (!isStaticIf)
+                            {
+                                Instructions.Add(new InstructionLabel("__IFFALSE__" + LabelR));
+
+                                if (Else != EndIf)
+                                    Instructions.AddRange(GetInstructions(Lines.Skip(Else + 1).Take(EndIf - Else - 1).ToList()));
+
+                                Instructions.Add(new InstructionLabel("__IFEND__" + LabelR));
+                            }
+
                             #endregion
 
                             break;
@@ -432,6 +457,57 @@ namespace NPC_Maker.Scripts
             else
                 return null;
         }
+
+        private bool CheckIfStaticIf(int ID, string[] SplitLine, out bool Result)
+        {
+            Result = false;
+
+            if (ID != (int)Lists.Instructions.IF || SplitLine.Length < 2)
+                return false;
+
+            // Check simple boolean literals
+            string condition = SplitLine[1].Trim().ToUpper();
+            if (condition == "0" || condition == Lists.Keyword_False)
+                return true;
+            if (condition == "1" || condition == Lists.Keyword_True)
+            {
+                Result = true;
+                return true;
+            }
+
+            // Evaluate static comparisons
+            try
+            {
+                byte? SubID = ScriptHelpers.GetSubIDForRamType(SplitLine[1]);
+                if (SubID == null)
+                    return false;
+
+                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+
+                var Value1 = ScriptHelpers.GetScriptVarVal(SplitLine, 1, float.MinValue, float.MaxValue);
+                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, float.MinValue, float.MaxValue);
+
+                if (Value1.Vartype != Value2.Vartype)
+                    return false;
+
+                int val1 = Convert.ToInt32(Value1.Value);
+                int val2 = Convert.ToInt32(Value2.Value);
+
+                if (val1 == val2)
+                {
+                    Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                    Result = (Condition == Lists.ConditionTypes.EQUALTO);
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
         private Instruction H_IfWhileBoolEnum(int ID, int SubID, string[] SplitLine, Type Enumtype, int EndIf, int Else, string LabelR, ParseException Throw)
         {

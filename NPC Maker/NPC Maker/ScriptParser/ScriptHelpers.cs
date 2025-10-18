@@ -219,13 +219,38 @@ namespace NPC_Maker.Scripts
 
         public static ScriptVarVal GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max)
         {
-            var outv = new ScriptVarVal();
+            string value = SplitLine[Index].Trim().ToUpper();
 
-            outv.Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
-            outv.Value = ScriptHelpers.GetValueByType(SplitLine, Index, outv.Vartype, Min, Max);
+            // Handle boolean keywords
+            if (value == Lists.Keyword_False)
+            {
+                return new ScriptVarVal
+                {
+                    Vartype = (byte)Lists.VarTypes.NORMAL,
+                    Value = (float)0
+                };
+            }
 
-            return outv;
+            if (value == Lists.Keyword_True)
+            {
+                return new ScriptVarVal
+                {
+                    Vartype = (byte)Lists.VarTypes.NORMAL,
+                    Value = (float)1
+                };
+            }
+
+            // Handle regular variable types
+            var varType = ScriptHelpers.GetVarType(SplitLine, Index);
+            var varValue = ScriptHelpers.GetValueByType(SplitLine, Index, varType, Min, Max);
+
+            return new ScriptVarVal
+            {
+                Vartype = varType,
+                Value = varValue
+            };
         }
+
 
         public static ScriptVarVal GetScriptExtVarVal(string[] SplitLine, int Index, float Min, float Max)
         {

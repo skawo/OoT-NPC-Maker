@@ -127,6 +127,7 @@ namespace NPC_Maker.Scripts
 
             #if DEBUG
                 outScript.ScriptDebug = GetOutString(instructions);
+                System.IO.File.WriteAllLines("DEBUGOUT_SCRIPT", outScript.ScriptDebug);
             #endif
 
             List<InstructionLabel> labels = GetLabelsAndRemove(ref outScript, ref instructions);
