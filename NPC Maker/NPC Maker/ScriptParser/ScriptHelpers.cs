@@ -105,7 +105,7 @@ namespace NPC_Maker.Scripts
 
             try
             {
-                if (IsHex(Splitstring[Index]))
+                if (Splitstring[Index].IsHex())
                 {
                     string str = Splitstring[Index];
 
@@ -140,7 +140,7 @@ namespace NPC_Maker.Scripts
 
             try
             {
-                if (IsHex(Splitstring[Index]))
+                if (Splitstring[Index].IsHex())
                 {
                     string str = Splitstring[Index];
                     bool neg = false;
@@ -430,11 +430,25 @@ namespace NPC_Maker.Scripts
 
         public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
         {
-            switch (SplitLine[IndexOfCondition].ToUpper())
+            string cond = SplitLine[IndexOfCondition].ToUpper();
+
+            switch (cond)
             {
                 case Lists.Keyword_True: return Lists.ConditionTypes.TRUE;
                 case Lists.Keyword_False: return Lists.ConditionTypes.FALSE;
-                default: throw ParseException.UnrecognizedCondition(SplitLine);
+                default:
+                    {
+                        try
+                        {
+                            float v = GetNormalVar(SplitLine, IndexOfCondition, float.MinValue, float.MaxValue);
+                            return v == 0 ? Lists.ConditionTypes.FALSE : Lists.ConditionTypes.TRUE;
+                        }
+                        catch
+                        {
+                            throw ParseException.UnrecognizedCondition(SplitLine);
+                        }
+
+                    } 
             }
         }
 
@@ -484,12 +498,6 @@ namespace NPC_Maker.Scripts
                 return (byte)(int)Enum.Parse(typeof(Lists.VarTypes), Type);
             else
                 return (byte)Lists.VarTypes.NORMAL;
-        }
-
-        public static bool IsHex(string Number)
-        {
-            string nU = Number.ToUpper();
-            return (Number.Length >= 3 && nU.StartsWith("0X") || Number.Length >= 4 && nU.StartsWith("-0X"));
         }
 
         public static bool OnlyHexInString(string test)

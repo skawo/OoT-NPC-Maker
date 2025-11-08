@@ -217,7 +217,7 @@ namespace NPC_Maker
         {
             byte value;
 
-            if (Scripts.ScriptHelpers.IsHex(trimmedValue))
+            if (trimmedValue.IsHex())
             {
                 if (!byte.TryParse(trimmedValue.Substring(2), NumberStyles.HexNumber, null, out value))
                     throw new Exception(string.Format("Could not convert hex value {0} to byte", trimmedValue));

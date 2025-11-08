@@ -20,7 +20,7 @@ namespace NPC_Maker
     {
         public static UInt32 HexConvertToUInt32(string value)
         {
-            if (Scripts.ScriptHelpers.IsHex(value))
+            if (value.IsHex())
                 return Convert.ToUInt32(value, 16);
             else
                 return Convert.ToUInt32(value);
@@ -28,7 +28,7 @@ namespace NPC_Maker
 
         public static UInt16 HexConvertToUInt16(string value)
         {
-            if (Scripts.ScriptHelpers.IsHex(value))
+            if (value.IsHex())
                 return Convert.ToUInt16(value, 16);
             else
                 return Convert.ToUInt16(value);
@@ -36,7 +36,7 @@ namespace NPC_Maker
 
         public static byte HexConvertToByte(string value)
         {
-            if (Scripts.ScriptHelpers.IsHex(value))
+            if (value.IsHex())
                 return Convert.ToByte(value, 16);
             else
                 return Convert.ToByte(value);
@@ -44,7 +44,7 @@ namespace NPC_Maker
 
         public static Int32 HexConvertToInt32(string value)
         {
-            if (Scripts.ScriptHelpers.IsHex(value))
+            if (value.IsHex())
                 return Convert.ToInt32(value, 16);
             else
                 return Convert.ToInt32(value);
@@ -52,7 +52,7 @@ namespace NPC_Maker
 
         public static Int16 HexConvertToInt16(string value)
         {
-            if (Scripts.ScriptHelpers.IsHex(value))
+            if (value.IsHex())
                 return Convert.ToInt16(value, 16);
             else
                 return Convert.ToInt16(value);
@@ -60,7 +60,7 @@ namespace NPC_Maker
 
         public static sbyte HexConvertToSByte(string value)
         {
-            if (Scripts.ScriptHelpers.IsHex(value))
+            if (value.IsHex())
                 return Convert.ToSByte(value, 16);
             else
                 return Convert.ToSByte(value);
@@ -271,6 +271,17 @@ namespace NPC_Maker
             }
 
             return defines;
+        }
+
+        public static string GetOnlyDefinesFromH(string hPath)
+        {
+            string headerContent = File.ReadAllText(hPath);
+            string pattern = @"^\s*#define\s+(\w+)(?:\s+(.+?))?(?:\s*//.*)?$";
+
+            return string.Join(Environment.NewLine,
+                Regex.Matches(headerContent, pattern, RegexOptions.Multiline)
+                     .Cast<Match>()
+                     .Select(m => m.Value));
         }
 
         private static Dictionary<string, string> ParseDefinesH(string hPath)

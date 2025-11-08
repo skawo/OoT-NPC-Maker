@@ -43,24 +43,27 @@ namespace NPC_Maker
 
         public string GetExtHeader()
         {
-            string extHeader = "";
             string extHeaderPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, ExtScriptHeaderPath, Dicts.ProjectPathToken);
 
-            if (!String.IsNullOrWhiteSpace(extHeaderPath))
+            if (string.IsNullOrWhiteSpace(extHeaderPath))
+                return string.Empty;
+
+            var extHeader = new StringBuilder();
+            string[] paths = extHeaderPath.Split(';');
+
+            foreach (string p in paths)
             {
-                string[] paths = extHeaderPath.Split(';');
+                if (Path.GetExtension(p) != ".npcm")
+                    extHeader.Append(Helpers.GetOnlyDefinesFromH(p));
+                else
+                    extHeader.Append(File.ReadAllText(p));
 
-                foreach (string p in paths)
-                {
-                    if (!String.IsNullOrWhiteSpace(p))
-                        extHeader += File.ReadAllText(p);
-
-                    extHeaderPath += Environment.NewLine;
-                }
+                extHeader.AppendLine();
             }
 
-            return extHeader;
+            return extHeader.ToString();
         }
+
     }
 
     public class NPCEntry

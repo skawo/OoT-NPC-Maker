@@ -445,12 +445,20 @@ namespace NPC_Maker.Scripts
 
             if (SubID != null)
             {
-                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 2);
 
-                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
 
-                var Value1 = ScriptHelpers.GetScriptVarVal(SplitLine, 1, float.MinValue, float.MaxValue);
-                var Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, float.MinValue, float.MaxValue);
+                ScriptVarVal Value1 = ScriptHelpers.GetScriptVarVal(SplitLine, 1, float.MinValue, float.MaxValue);
+                ScriptVarVal Value2 = new ScriptVarVal(0, 0);
+
+                Lists.ConditionTypes Condition = Lists.ConditionTypes.NOTEQUAL;
+
+                if (SplitLine.Length > 2)
+                {
+                    ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
+                    Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                    Value2 = ScriptHelpers.GetScriptVarVal(SplitLine, 3, float.MinValue, float.MaxValue);
+                }
 
                 return new InstructionIfWhileWithSecondValue((byte)ID, (byte)SubID, Value1, Value2, Condition, EndIf, Else, LabelR);
             }

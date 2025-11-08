@@ -209,7 +209,7 @@ namespace NPC_Maker.Scripts
                     string labelN = Line.Substring(0, Line.Length - 1);
 
                     if (Lists.AllKeywords.Contains(labelN) || Line.StartsWith("__") || labelN.IsNumeric() ||
-                        ScriptHelpers.IsHex(labelN) || ScriptHelpers.OnlyHexInString(labelN) ||
+                        labelN.IsHex() || ScriptHelpers.OnlyHexInString(labelN) ||
                         labelN.Equals(Lists.Keyword_Label_HERE, StringComparison.OrdinalIgnoreCase))
                     {
                         outScript.ParseErrors.Add(ParseException.LabelNameCannotBe(labelN));

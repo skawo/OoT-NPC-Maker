@@ -14,6 +14,12 @@ namespace NPC_Maker
     {
         public static bool IsNumeric(this string text) => double.TryParse(text, out _);
 
+        public static bool IsHex(this string text)
+        {
+            string nU = text.ToUpper();
+            return (text.Length >= 3 && nU.StartsWith("0X") || text.Length >= 4 && nU.StartsWith("-0X"));
+        }
+
         public static void AddRangeBigEndian(this List<byte> list, UInt16 item) => list.AddRange(Program.BEConverter.GetBytes(item));
         public static void AddRangeBigEndian(this List<byte> list, UInt32 item) => list.AddRange(Program.BEConverter.GetBytes(item));
         public static void AddRangeBigEndian(this List<byte> list, Int16 item) => list.AddRange(Program.BEConverter.GetBytes(item));
