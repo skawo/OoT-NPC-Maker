@@ -576,7 +576,7 @@ namespace NPC_Maker
                 string cValue = GetAnimationFilestartString(Animation.FileStart);
 
                 if (SelectedEntry.AnimationType == 1)
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, cValue, Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
                 else
                     DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
             }
