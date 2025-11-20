@@ -797,9 +797,9 @@
             this.LblAlpha.AutoSize = true;
             this.LblAlpha.Location = new System.Drawing.Point(427, 89);
             this.LblAlpha.Name = "LblAlpha";
-            this.LblAlpha.Size = new System.Drawing.Size(46, 13);
+            this.LblAlpha.Size = new System.Drawing.Size(37, 13);
             this.LblAlpha.TabIndex = 53;
-            this.LblAlpha.Text = "Opacity:";
+            this.LblAlpha.Text = "Alpha:";
             // 
             // Btn_SelectObject
             // 
@@ -1088,11 +1088,11 @@
             this.ComboBox_HierarchyType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBox_HierarchyType.FormattingEnabled = true;
             this.ComboBox_HierarchyType.Items.AddRange(new object[] {
-            "Matrix, full opacity",
-            "Matrix, transparency-enabled",
-            "Non-matrix, full opacity",
-            "Non-matrix, transparency-enabled",
-            "Skin, full opacity (Horses)"});
+            "Matrix/Flex, OPA",
+            "Matrix/Flex, XLU",
+            "Normal, OPA",
+            "Normal, XLU",
+            "Horse/Skin, OPA"});
             this.ComboBox_HierarchyType.Location = new System.Drawing.Point(134, 112);
             this.ComboBox_HierarchyType.Name = "ComboBox_HierarchyType";
             this.ComboBox_HierarchyType.Size = new System.Drawing.Size(282, 21);
@@ -1144,7 +1144,7 @@
             // Label_Scale
             // 
             this.Label_Scale.AutoSize = true;
-            this.Label_Scale.Location = new System.Drawing.Point(422, 62);
+            this.Label_Scale.Location = new System.Drawing.Point(427, 63);
             this.Label_Scale.Name = "Label_Scale";
             this.Label_Scale.Size = new System.Drawing.Size(37, 13);
             this.Label_Scale.TabIndex = 16;
