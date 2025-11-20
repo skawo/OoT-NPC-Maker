@@ -2343,7 +2343,7 @@ bool Scripts_InstructionItem(NpcMaker* en, PlayState* playState, ScriptInstance*
                     {
                         //z_actor_give_item
                         func_8002F434(&en->actor, playState, item, __UINT32_MAX__, __UINT32_MAX__);
-                        script->waitTimer = 2;
+                        script->waitTimer = 25;
                         script->tempValues[2] = 1;
                         return SCRIPT_STOP;
                     }

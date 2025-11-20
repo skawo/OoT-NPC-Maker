@@ -314,6 +314,8 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
                 is64Printf("_%2d: Entry is compressed, but also loaded from RAM...? This is a waste of RAM.\n", en->npcId);
         #endif
 
+        en->getSettingsFromRAMObject = false;
+
         Yaz0Header* bufferCompr = (Yaz0Header*)ZeldaArena_Malloc(entrySizeCompr);
 
         #if LOGGING > 0
