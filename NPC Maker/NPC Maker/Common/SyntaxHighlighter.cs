@@ -44,8 +44,8 @@ namespace NPC_Maker
             {Dicts.SFXes.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
             {Dicts.Music.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
             {Dicts.Actors.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
-            {Dicts.ObjectIDs.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
-            {Dicts.LinkAnims.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            //{Dicts.ObjectIDs.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            //{Dicts.LinkAnims.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
         };
 
         public static Dictionary<string, Style> RegexDict = new Dictionary<string, Style>()
@@ -64,17 +64,12 @@ namespace NPC_Maker
             if (String.IsNullOrEmpty(txb.Text))
                 return;
 
-            TextSelectionRange r = new TextSelectionRange(txb, 0, 0, txb.Text.Length - 1, txb.LinesCount - 1);
+            TextSelectionRange r = new TextSelectionRange(txb, 0, 0, txb.Text.Length, txb.LinesCount - 1);
 
             txb.ClearAllStyles();
 
             if (!SyntaxHighlightingOn)
                 return;
-
-            //List<string[]> Defines = Scripts.ScriptParser.GetDefines(txb.Text, File, Entry);
-
-            //foreach (string[] def in Defines)
-            //    r.SetStyle(SyntaxHighlighter.DefineStyle, @"\b" + def[1] + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
             // Color in regexed values
             foreach (KeyValuePair<string, Style> regex in RegexDict)
@@ -88,28 +83,47 @@ namespace NPC_Maker
             foreach (string Item in Enum.GetNames(typeof(Lists.Instructions)))
             {
                 if (Dicts.FunctionSubtypes.ContainsKey(Item))
-                    H_SetStyle(Dicts.FunctionSubtypes[Item].ToList(), SyntaxHighlighter.GrayStyle, r);
+                    H_SetStyleCheck(txb.Text, Dicts.FunctionSubtypes[Item].ToList(), SyntaxHighlighter.GrayStyle, r);
             }
 
             // Color in keywords
             foreach (KeyValuePair<List<string>, Style> entry in StyleDict)
-                H_SetStyle(entry.Key, entry.Value, r);
+                H_SetStyleCheck(txb.Text, entry.Key, entry.Value, r);
 
             r.SetStyle(SyntaxHighlighter.RedStyle, @"\b" + Lists.Keyword_Label_HERE + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
         }
 
+        private static readonly Regex CCALL_REGEX = new Regex(@"\bCCALL\b", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+        private static readonly Regex SET_REGEX = new Regex(@"\bSET\b", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+
         private static void H_SetStyle(List<string> List, Style s, TextSelectionRange r)
         {
             foreach (string KWord in List)
+                H_SetStyleImpl(KWord, s, r);
+        }
+        private static void H_SetStyleCheck(string text, List<string> List, Style s, TextSelectionRange r)
+        {
+            text = text.ToUpper();
+
+            foreach (string KWord in List)
             {
-                if (KWord == "CCALL")
-                    r.SetStyle(SyntaxHighlighter.RedStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-                else if (KWord == "SET")
-                    r.SetStyle(SyntaxHighlighter.PurpleStyle, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-                else
-                    r.SetStyle(s, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+                if (!text.Contains(KWord.ToUpper()))
+                    continue;
+
+                H_SetStyleImpl(KWord, s, r);
             }
         }
+
+        private static void H_SetStyleImpl(string KWord, Style s, TextSelectionRange r)
+        {
+            if (KWord == "CCALL")
+                r.SetStyle(SyntaxHighlighter.RedStyle, CCALL_REGEX);
+            else if (KWord == "SET")
+                r.SetStyle(SyntaxHighlighter.PurpleStyle, SET_REGEX);
+            else
+                r.SetStyle(s, @"\b" + KWord + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        }
+
 
     }
 }

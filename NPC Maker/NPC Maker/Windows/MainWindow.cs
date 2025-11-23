@@ -156,7 +156,15 @@ namespace NPC_Maker
 
         private void numUpDownFont_ValueChanged(object sender, EventArgs e)
         {
+            try
+            {
+                MsgTextDefault.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
+                MsgText.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
 
+                Program.Settings.MessageEditorFontSize = (int)numUpDownFont.Value;
+            }
+            catch
+            { }
         }
 
         private void MsgTabSplitContainer_SizeChanged(object sender, EventArgs e)

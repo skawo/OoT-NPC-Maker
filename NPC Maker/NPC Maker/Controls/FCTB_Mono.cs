@@ -33,7 +33,7 @@ namespace NPC_Maker
 
         public FCTB_Mono(bool scrollbarsVisible = true)
         {
-            this.DoubleBuffered = true;
+            //this.DoubleBuffered = true;
             setScrollbarsVisible = scrollbarsVisible;
         }
 
