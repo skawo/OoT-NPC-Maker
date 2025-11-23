@@ -12,6 +12,25 @@ namespace NPC_Maker
 {
     public static class ExtensionMethods
     {
+        public static bool IsMonospaced(this FontFamily fontFamily)
+        {
+            try
+            {
+                using (Font font = new Font(fontFamily, 12))
+                using (Bitmap bmp = new Bitmap(1, 1))
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    SizeF sizeI = g.MeasureString("i", font);
+                    SizeF sizeW = g.MeasureString("W", font);
+                    return Math.Abs(sizeI.Width - sizeW.Width) < 0.01f;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static bool IsNumeric(this string text) => double.TryParse(text, out _);
 
         public static bool IsHex(this string text)

@@ -99,29 +99,35 @@ namespace NPC_Maker
 
             CodeParamsTooltip.SetToolTip(Textbox_CodeEditorArgs, "Available constants: $CODEFILE, $CODEHEADER, $CODEFOLDER");
 
+            SetupFonts();
+
+            // ============================================================
+
             if (FilePath != "")
                 OpenFile(FilePath);
 
             SplitContainer1_Panel1_SizeChanged(null, null);
             MsgTabSplitContainer_SizeChanged(null, null);
+        }
 
+        private void SetupFonts()
+        {
             InstalledFontCollection fontsCollection = new InstalledFontCollection();
             var fonts = fontsCollection.Families;
+
             foreach (FontFamily fontFamily in fonts)
             {
-                // Check if font is monospaced
-                if (IsMonospaced(fontFamily))
-                {
+                if (fontFamily.IsMonospaced())
                     comboFont.Items.Add(fontFamily.Name);
-                }
             }
 
-            comboFont.SelectedIndexChanged -= comboBox1_SelectedIndexChanged;
+            comboFont.SelectedIndexChanged -= comboFont_SelectedChanged;
             numUpDownFont.ValueChanged -= numUpDownFont_ValueChanged;
             comboFont.Text = MsgText.Font.Name;
             numUpDownFont.Value = (int)MsgText.Font.Size;
-            comboFont.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            comboFont.SelectedIndexChanged += comboFont_SelectedChanged;
             numUpDownFont.ValueChanged += numUpDownFont_ValueChanged;
+
             try
             {
                 if (!String.IsNullOrWhiteSpace(Program.Settings.MessageEditorFont))
@@ -133,32 +139,9 @@ namespace NPC_Maker
             catch
             {
             }
-
         }
 
-        private bool IsMonospaced(FontFamily fontFamily)
-        {
-            try
-            {
-                // Create a font to measure
-                using (Font font = new Font(fontFamily, 12))
-                using (Bitmap bmp = new Bitmap(1, 1))
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    SizeF sizeI = g.MeasureString("i", font);
-                    SizeF sizeW = g.MeasureString("W", font);
-
-                    // If width of "i" equals width of "W", it's monospaced
-                    return Math.Abs(sizeI.Width - sizeW.Width) < 0.01f;
-                }
-            }
-            catch
-            {
-                return false; // Some fonts may fail to create
-            }
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboFont_SelectedChanged(object sender, EventArgs e)
         {
             try
             {
@@ -173,14 +156,7 @@ namespace NPC_Maker
 
         private void numUpDownFont_ValueChanged(object sender, EventArgs e)
         {
-            try
-            {
-                MsgTextDefault.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
-                MsgText.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
 
-                Program.Settings.MessageEditorFontSize = (int)numUpDownFont.Value;
-            }
-            catch { }
         }
 
         private void MsgTabSplitContainer_SizeChanged(object sender, EventArgs e)

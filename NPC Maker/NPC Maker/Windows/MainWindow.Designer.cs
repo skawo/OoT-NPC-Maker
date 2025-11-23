@@ -255,6 +255,8 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.numUpDownFont = new System.Windows.Forms.NumericUpDown();
+            this.labelEditorFont = new System.Windows.Forms.Label();
             this.comboFont = new System.Windows.Forms.ComboBox();
             this.MsgTabSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgEntrySplitContainer = new System.Windows.Forms.SplitContainer();
@@ -368,8 +370,6 @@
             this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
-            this.labelEditorFont = new System.Windows.Forms.Label();
-            this.numUpDownFont = new System.Windows.Forms.NumericUpDown();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -444,6 +444,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_MovDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).BeginInit();
             this.Tab4_Messages.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownFont)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgTabSplitContainer)).BeginInit();
             this.MsgTabSplitContainer.Panel1.SuspendLayout();
             this.MsgTabSplitContainer.Panel2.SuspendLayout();
@@ -468,7 +469,6 @@
             this.Tab6_EmbeddedOverlay.SuspendLayout();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numUpDownFont)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -3413,6 +3413,22 @@
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
             // 
+            // numUpDownFont
+            // 
+            this.numUpDownFont.Location = new System.Drawing.Point(800, 4);
+            this.numUpDownFont.Name = "numUpDownFont";
+            this.numUpDownFont.Size = new System.Drawing.Size(42, 20);
+            this.numUpDownFont.TabIndex = 96;
+            // 
+            // labelEditorFont
+            // 
+            this.labelEditorFont.AutoSize = true;
+            this.labelEditorFont.Location = new System.Drawing.Point(577, 6);
+            this.labelEditorFont.Name = "labelEditorFont";
+            this.labelEditorFont.Size = new System.Drawing.Size(58, 13);
+            this.labelEditorFont.TabIndex = 95;
+            this.labelEditorFont.Text = "Editor font:";
+            // 
             // comboFont
             // 
             this.comboFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -3421,7 +3437,6 @@
             this.comboFont.Name = "comboFont";
             this.comboFont.Size = new System.Drawing.Size(156, 21);
             this.comboFont.TabIndex = 94;
-            this.comboFont.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // MsgTabSplitContainer
             // 
@@ -3481,6 +3496,9 @@
             // 
             // MsgTextDefault
             // 
+            this.MsgTextDefault.AccessibleDescription = "Textbox control";
+            this.MsgTextDefault.AccessibleName = "Fast Colored Text Box";
+            this.MsgTextDefault.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
             this.MsgTextDefault.AutoCompleteBracketsList = new char[] {
         '(',
         ')',
@@ -3494,27 +3512,39 @@
         '\''};
             this.MsgTextDefault.AutoIndent = false;
             this.MsgTextDefault.AutoIndentChars = false;
+            this.MsgTextDefault.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
             this.MsgTextDefault.AutoScrollMinSize = new System.Drawing.Size(2, 12);
             this.MsgTextDefault.BackBrush = null;
             this.MsgTextDefault.BackColor = System.Drawing.Color.Gainsboro;
             this.MsgTextDefault.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgTextDefault.CharCnWidth = 12;
             this.MsgTextDefault.CharHeight = 12;
             this.MsgTextDefault.CharWidth = 6;
             this.MsgTextDefault.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgTextDefault.DefaultMarkerSize = 8;
             this.MsgTextDefault.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.MsgTextDefault.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgTextDefault.FindForm = null;
+            this.MsgTextDefault.FoldingHighlightColor = System.Drawing.Color.LightGray;
+            this.MsgTextDefault.FoldingHighlightEnabled = false;
             this.MsgTextDefault.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgTextDefault.GoToForm = null;
+            this.MsgTextDefault.Hotkeys = resources.GetString("MsgTextDefault.Hotkeys");
             this.MsgTextDefault.IsReplaceMode = false;
             this.MsgTextDefault.Location = new System.Drawing.Point(0, 0);
             this.MsgTextDefault.Name = "MsgTextDefault";
             this.MsgTextDefault.Paddings = new System.Windows.Forms.Padding(0);
             this.MsgTextDefault.ReadOnly = true;
+            this.MsgTextDefault.ReplaceForm = null;
             this.MsgTextDefault.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.MsgTextDefault.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgTextDefault.ServiceColors")));
             this.MsgTextDefault.ShowLineNumbers = false;
             this.MsgTextDefault.Size = new System.Drawing.Size(25, 100);
             this.MsgTextDefault.TabIndex = 69;
             this.MsgTextDefault.Tag = "Default";
+            this.MsgTextDefault.ToolTipDelay = 100;
+            this.MsgTextDefault.UseCJK = FastColoredTextBoxNS.CJKMode.Hanzi;
             this.MsgTextDefault.WordWrapAutoIndent = false;
             this.MsgTextDefault.Zoom = 100;
             // 
@@ -3532,6 +3562,9 @@
             // 
             // MsgText
             // 
+            this.MsgText.AccessibleDescription = "Textbox control";
+            this.MsgText.AccessibleName = "Fast Colored Text Box";
+            this.MsgText.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
             this.MsgText.AutoCompleteBracketsList = new char[] {
         '(',
         ')',
@@ -3545,25 +3578,37 @@
         '\''};
             this.MsgText.AutoIndent = false;
             this.MsgText.AutoIndentChars = false;
+            this.MsgText.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
             this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 12);
             this.MsgText.BackBrush = null;
             this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgText.CharCnWidth = 12;
             this.MsgText.CharHeight = 12;
             this.MsgText.CharWidth = 6;
             this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgText.DefaultMarkerSize = 8;
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.MsgText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgText.FindForm = null;
+            this.MsgText.FoldingHighlightColor = System.Drawing.Color.LightGray;
+            this.MsgText.FoldingHighlightEnabled = false;
             this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgText.GoToForm = null;
+            this.MsgText.Hotkeys = resources.GetString("MsgText.Hotkeys");
             this.MsgText.IsReplaceMode = false;
             this.MsgText.Location = new System.Drawing.Point(0, 0);
             this.MsgText.Name = "MsgText";
             this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgText.ReplaceForm = null;
             this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
             this.MsgText.ShowLineNumbers = false;
             this.MsgText.Size = new System.Drawing.Size(640, 220);
             this.MsgText.TabIndex = 68;
             this.MsgText.Tag = "Default";
+            this.MsgText.ToolTipDelay = 100;
+            this.MsgText.UseCJK = FastColoredTextBoxNS.CJKMode.Hanzi;
             this.MsgText.WordWrapAutoIndent = false;
             this.MsgText.Zoom = 100;
             this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
@@ -4643,23 +4688,6 @@
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
             // 
-            // labelEditorFont
-            // 
-            this.labelEditorFont.AutoSize = true;
-            this.labelEditorFont.Location = new System.Drawing.Point(577, 6);
-            this.labelEditorFont.Name = "labelEditorFont";
-            this.labelEditorFont.Size = new System.Drawing.Size(58, 13);
-            this.labelEditorFont.TabIndex = 95;
-            this.labelEditorFont.Text = "Editor font:";
-            // 
-            // numUpDownFont
-            // 
-            this.numUpDownFont.Location = new System.Drawing.Point(800, 4);
-            this.numUpDownFont.Name = "numUpDownFont";
-            this.numUpDownFont.Size = new System.Drawing.Size(42, 20);
-            this.numUpDownFont.TabIndex = 96;
-            this.numUpDownFont.ValueChanged += new System.EventHandler(this.numUpDownFont_ValueChanged);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4763,6 +4791,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_CutsceneSlot)).EndInit();
             this.Tab4_Messages.ResumeLayout(false);
             this.Tab4_Messages.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownFont)).EndInit();
             this.MsgTabSplitContainer.Panel1.ResumeLayout(false);
             this.MsgTabSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MsgTabSplitContainer)).EndInit();
@@ -4789,7 +4818,6 @@
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numUpDownFont)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
