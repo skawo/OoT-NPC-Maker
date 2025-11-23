@@ -255,6 +255,7 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.comboFont = new System.Windows.Forms.ComboBox();
             this.MsgTabSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgEntrySplitContainer = new System.Windows.Forms.SplitContainer();
             this.pictureBox_Comment = new System.Windows.Forms.PictureBox();
@@ -367,6 +368,8 @@
             this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
+            this.labelEditorFont = new System.Windows.Forms.Label();
+            this.numUpDownFont = new System.Windows.Forms.NumericUpDown();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -465,6 +468,7 @@
             this.Tab6_EmbeddedOverlay.SuspendLayout();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownFont)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -3380,6 +3384,9 @@
             // 
             // Tab4_Messages
             // 
+            this.Tab4_Messages.Controls.Add(this.numUpDownFont);
+            this.Tab4_Messages.Controls.Add(this.labelEditorFont);
+            this.Tab4_Messages.Controls.Add(this.comboFont);
             this.Tab4_Messages.Controls.Add(this.MsgTabSplitContainer);
             this.Tab4_Messages.Controls.Add(this.chkBox_ShowDefaultLanguagePreview);
             this.Tab4_Messages.Controls.Add(this.Btn_RemoveLanguage);
@@ -3405,6 +3412,16 @@
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
+            // 
+            // comboFont
+            // 
+            this.comboFont.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboFont.FormattingEnabled = true;
+            this.comboFont.Location = new System.Drawing.Point(641, 3);
+            this.comboFont.Name = "comboFont";
+            this.comboFont.Size = new System.Drawing.Size(156, 21);
+            this.comboFont.TabIndex = 94;
+            this.comboFont.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // MsgTabSplitContainer
             // 
@@ -3616,18 +3633,18 @@
             this.chkBox_ShowDefaultLanguagePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkBox_ShowDefaultLanguagePreview.AutoSize = true;
-            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(539, 29);
+            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(470, 30);
             this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
-            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(183, 17);
+            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(145, 17);
             this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
             this.chkBox_ShowDefaultLanguagePreview.Tag = "";
-            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default localization preview";
+            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default loc preview";
             this.chkBox_ShowDefaultLanguagePreview.UseVisualStyleBackColor = true;
             this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.ChkBox_ShowDefaultLanguagePreview_CheckedChanged);
             // 
             // Btn_RemoveLanguage
             // 
-            this.Btn_RemoveLanguage.Location = new System.Drawing.Point(460, 26);
+            this.Btn_RemoveLanguage.Location = new System.Drawing.Point(391, 27);
             this.Btn_RemoveLanguage.Name = "Btn_RemoveLanguage";
             this.Btn_RemoveLanguage.Size = new System.Drawing.Size(73, 21);
             this.Btn_RemoveLanguage.TabIndex = 90;
@@ -3649,7 +3666,7 @@
             "Credits"});
             this.Combo_Language.Location = new System.Drawing.Point(272, 27);
             this.Combo_Language.Name = "Combo_Language";
-            this.Combo_Language.Size = new System.Drawing.Size(182, 21);
+            this.Combo_Language.Size = new System.Drawing.Size(113, 21);
             this.Combo_Language.TabIndex = 88;
             this.Combo_Language.Tag = "LANGUAGE";
             this.Combo_Language.SelectedIndexChanged += new System.EventHandler(this.Combo_Language_SelectedIndexChanged);
@@ -3709,7 +3726,7 @@
             // ChkBox_UseSpaceFont
             // 
             this.ChkBox_UseSpaceFont.AutoSize = true;
-            this.ChkBox_UseSpaceFont.Location = new System.Drawing.Point(631, 5);
+            this.ChkBox_UseSpaceFont.Location = new System.Drawing.Point(621, 30);
             this.ChkBox_UseSpaceFont.Name = "ChkBox_UseSpaceFont";
             this.ChkBox_UseSpaceFont.Size = new System.Drawing.Size(129, 17);
             this.ChkBox_UseSpaceFont.TabIndex = 73;
@@ -3740,7 +3757,7 @@
             "Bottom"});
             this.Combo_MsgPos.Location = new System.Drawing.Point(444, 3);
             this.Combo_MsgPos.Name = "Combo_MsgPos";
-            this.Combo_MsgPos.Size = new System.Drawing.Size(181, 21);
+            this.Combo_MsgPos.Size = new System.Drawing.Size(126, 21);
             this.Combo_MsgPos.TabIndex = 65;
             this.Combo_MsgPos.Tag = "MOVEMENT";
             this.Combo_MsgPos.SelectedIndexChanged += new System.EventHandler(this.Combo_MsgPos_SelectedIndexChanged);
@@ -4626,6 +4643,23 @@
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
             // 
+            // labelEditorFont
+            // 
+            this.labelEditorFont.AutoSize = true;
+            this.labelEditorFont.Location = new System.Drawing.Point(577, 6);
+            this.labelEditorFont.Name = "labelEditorFont";
+            this.labelEditorFont.Size = new System.Drawing.Size(58, 13);
+            this.labelEditorFont.TabIndex = 95;
+            this.labelEditorFont.Text = "Editor font:";
+            // 
+            // numUpDownFont
+            // 
+            this.numUpDownFont.Location = new System.Drawing.Point(800, 4);
+            this.numUpDownFont.Name = "numUpDownFont";
+            this.numUpDownFont.Size = new System.Drawing.Size(42, 20);
+            this.numUpDownFont.TabIndex = 96;
+            this.numUpDownFont.ValueChanged += new System.EventHandler(this.numUpDownFont_ValueChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4755,6 +4789,7 @@
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownFont)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5098,6 +5133,9 @@
         private System.Windows.Forms.ToolTip msgCommentTooltipLoc;
         private System.Windows.Forms.SplitContainer MsgTabSplitContainer;
         private System.Windows.Forms.ToolStripMenuItem compileActorToolStripMenuItem;
+        private System.Windows.Forms.ComboBox comboFont;
+        private System.Windows.Forms.NumericUpDown numUpDownFont;
+        private System.Windows.Forms.Label labelEditorFont;
     }
 }
 

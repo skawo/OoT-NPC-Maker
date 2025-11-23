@@ -57,6 +57,10 @@ namespace NPC_Maker
 
         public string ProjectPath { get; set; }
 
+        public string MessageEditorFont { get; set; }
+
+        public float MessageEditorFontSize { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -84,6 +88,8 @@ namespace NPC_Maker
             CompressIndividually = false;
             OrigPreview = false;
             ProjectPath = "";
+            MessageEditorFont = "";
+            MessageEditorFontSize = 0;
         }
 
         public enum Members
