@@ -17,6 +17,7 @@ using FastColoredTextBoxNS;
 using System.Drawing.Drawing2D;
 using System.Collections.Concurrent;
 using System.Drawing.Text;
+using FastColoredTextBoxNS.Types;
 
 namespace NPC_Maker
 {
@@ -3879,7 +3880,7 @@ namespace NPC_Maker
 
         private void PerformSpellCheck()
         {
-            MsgText.ClearStyle(FastColoredTextBoxNS.StyleIndex.All);
+            MsgText.ClearAllStyles();
 
             if (MsgText.Text.Length == 0 || !Program.Settings.Spellcheck)
                 return;
@@ -3887,7 +3888,7 @@ namespace NPC_Maker
             string tagLess = Regex.Replace(MsgText.Text.ToUpper().Replace(Environment.NewLine, " "), @"<([\s\S]*?)>", string.Empty, RegexOptions.Compiled);
             string[] strings = tagLess.StripPunctuation().Split(' ');
 
-            Range r = new Range(MsgText, 0, 0, MsgText.Text.Length - 1, MsgText.LinesCount - 1);
+            TextSelectionRange r = new TextSelectionRange(MsgText, 0, 0, MsgText.Text.Length - 1, MsgText.LinesCount - 1);
 
             foreach (string s in strings)
             {

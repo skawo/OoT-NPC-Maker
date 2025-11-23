@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading;
+using FastColoredTextBoxNS.Types;
 
 namespace NPC_Maker
 {
@@ -118,7 +119,7 @@ namespace NPC_Maker
         public void SetSyntaxHighlighting(bool Value)
         {
             SyntaxHighlighting = Value;
-            Textbox_Script_TextChanged(Textbox_Script, new TextChangedEventArgs(new Range(Textbox_Script)));
+            Textbox_Script_TextChanged(Textbox_Script, new TextChangedEventArgs(new TextSelectionRange(Textbox_Script)));
         }
 
         public void SetAutoParsing(bool Value)

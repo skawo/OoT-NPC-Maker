@@ -1,4 +1,5 @@
 ﻿using FastColoredTextBoxNS;
+using FastColoredTextBoxNS.Types;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -74,9 +75,9 @@ namespace NPC_Maker
                 Place wordEnd = GetWordEnd(mousePos);
 
                 if (mousePos < wordSelectModeStart)
-                    Selection = new Range(this, wordStart, Selection.End);
+                    Selection = new TextSelectionRange(this, wordStart, Selection.End);
                 else
-                    Selection = new Range(this, wordSelectModeStart, wordEnd);
+                    Selection = new TextSelectionRange(this, wordSelectModeStart, wordEnd);
             }
             else
             {

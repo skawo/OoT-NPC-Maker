@@ -1,4 +1,5 @@
 ﻿using FastColoredTextBoxNS;
+using FastColoredTextBoxNS.Types;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -63,9 +64,9 @@ namespace NPC_Maker
             if (String.IsNullOrEmpty(txb.Text))
                 return;
 
-            Range r = new Range(txb, 0, 0, txb.Text.Length - 1, txb.LinesCount - 1);
+            TextSelectionRange r = new TextSelectionRange(txb, 0, 0, txb.Text.Length - 1, txb.LinesCount - 1);
 
-            txb.ClearStyle(StyleIndex.All);
+            txb.ClearAllStyles();
 
             if (!SyntaxHighlightingOn)
                 return;
@@ -97,7 +98,7 @@ namespace NPC_Maker
             r.SetStyle(SyntaxHighlighter.RedStyle, @"\b" + Lists.Keyword_Label_HERE + @"\b", RegexOptions.IgnoreCase | RegexOptions.Multiline);
         }
 
-        private static void H_SetStyle(List<string> List, Style s, Range r)
+        private static void H_SetStyle(List<string> List, Style s, TextSelectionRange r)
         {
             foreach (string KWord in List)
             {
