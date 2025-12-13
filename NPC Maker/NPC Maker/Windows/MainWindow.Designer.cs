@@ -3579,7 +3579,7 @@
             this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.MsgText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);;
+            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
             this.MsgText.IsReplaceMode = false;
             this.MsgText.Location = new System.Drawing.Point(0, 0);
             this.MsgText.Name = "MsgText";
