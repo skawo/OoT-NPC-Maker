@@ -33,8 +33,8 @@ namespace NPC_Maker.Windows
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LongInputBox));
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new NPC_Maker.FCTB_Mono(this.components);
             this.button2 = new System.Windows.Forms.Button();
+            this.textBox1 = new NPC_Maker.FCTB_Mono(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.textBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,7 +50,7 @@ namespace NPC_Maker.Windows
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(244, 325);
+            this.button1.Location = new System.Drawing.Point(410, 325);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -58,8 +58,22 @@ namespace NPC_Maker.Windows
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(329, 325);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "Browse";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // textBox1
             // 
+            this.textBox1.AccessibleDescription = "Textbox control";
+            this.textBox1.AccessibleName = "Fast Colored Text Box";
+            this.textBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -74,41 +88,42 @@ namespace NPC_Maker.Windows
         '\"',
         '\'',
         '\''};
+            this.textBox1.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
             this.textBox1.AutoScrollMinSize = new System.Drawing.Size(0, 14);
             this.textBox1.BackBrush = null;
+            this.textBox1.CharCnWidth = 15;
             this.textBox1.CharHeight = 14;
             this.textBox1.CharWidth = 8;
             this.textBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textBox1.DefaultMarkerSize = 8;
             this.textBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.textBox1.FindForm = null;
+            this.textBox1.FoldingHighlightColor = System.Drawing.Color.LightGray;
+            this.textBox1.FoldingHighlightEnabled = false;
+            this.textBox1.GoToForm = null;
+            this.textBox1.Hotkeys = resources.GetString("textBox1.Hotkeys");
             this.textBox1.IsReplaceMode = false;
             this.textBox1.Location = new System.Drawing.Point(12, 25);
             this.textBox1.Name = "textBox1";
             this.textBox1.Paddings = new System.Windows.Forms.Padding(0);
+            this.textBox1.ReplaceForm = null;
             this.textBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.textBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("textBox1.ServiceColors")));
             this.textBox1.ShowLineNumbers = false;
-            this.textBox1.Size = new System.Drawing.Size(307, 294);
+            this.textBox1.Size = new System.Drawing.Size(473, 294);
             this.textBox1.TabIndex = 3;
+            this.textBox1.ToolTipDelay = 100;
+            this.textBox1.UseCJK = FastColoredTextBoxNS.CJKMode.Hanzi;
             this.textBox1.WordWrap = true;
             this.textBox1.Zoom = 100;
             this.textBox1.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.textBox1_TextChanged);
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(163, 325);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Browse";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // LongInputBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 358);
+            this.ClientSize = new System.Drawing.Size(497, 358);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
