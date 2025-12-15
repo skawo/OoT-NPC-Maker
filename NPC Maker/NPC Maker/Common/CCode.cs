@@ -309,7 +309,11 @@ namespace NPC_Maker
                     !IsPathExcluded(path, excluded))
                 {
                     path = Helpers.FixCygdrivePath(path);
-                    headerPaths.Add(Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken));
+                    string pathProjPathReplaced = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
+
+                    if (!headerPaths.Contains(pathProjPathReplaced))
+                        headerPaths.Add(Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken));
+
                     excluded.Add(path);
                 }
             }

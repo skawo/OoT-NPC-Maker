@@ -1323,7 +1323,8 @@ namespace NPC_Maker
 
                         if (Program.Settings.CompressIndividually)
                         {
-                            outCompressed = PeepsCompress.YAZ0.Compress(Entry.data.ToArray(), 0).ToList();
+                            outCompressed = RLibrii.Szs.Yaz0.CompressYaz(Entry.data.ToArray(), 9).ToList();
+       
                             Helpers.Ensure4ByteAlign(outCompressed);
                         }
 
