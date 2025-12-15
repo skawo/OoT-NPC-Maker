@@ -316,7 +316,7 @@ namespace NPC_Maker
             }
         }
 
-        private void AutoBackupTimer_Tick(object sender, EventArgs e)
+        private async void AutoBackupTimer_Tick(object sender, EventArgs e)
         {
             autoBackupTimer.Stop();
 
@@ -326,9 +326,11 @@ namespace NPC_Maker
 
                 if (CurrentBackup != LastBackup)
                 {
-
-                    FileOps.SaveNPCJSON("backup", EditedFile);
-                    LastBackup = CurrentBackup;
+                    await TaskEx.Run(() =>
+                    {
+                        FileOps.SaveNPCJSON("backup", EditedFile, null);
+                        LastBackup = CurrentBackup;
+                    });
                 }
             }
             catch
@@ -396,7 +398,7 @@ namespace NPC_Maker
 
                     if (Res == DialogResult.Yes)
                     {
-                        FileMenu_Save_Click(this, null);
+                        Save_Sync(this, null);
                     }
                     else if (Res == DialogResult.Cancel)
                     {
@@ -831,7 +833,7 @@ namespace NPC_Maker
 
                     if (DR == DialogResult.Yes)
                     {
-                        FileMenu_SaveAs_Click(this, null);
+                        SaveAs_Sync(this, null);
                         return true;
                     }
                     else if (DR == DialogResult.No)
@@ -882,7 +884,7 @@ namespace NPC_Maker
             InsertDataIntoActorListGrid();
         }
 
-        private void FileMenu_SaveAs_Click(object sender, EventArgs e)
+        private async void FileMenu_SaveAs_Click(object sender, EventArgs e)
         {
             if (EditedFile == null)
                 return;
@@ -900,13 +902,13 @@ namespace NPC_Maker
             if (DR == DialogResult.OK)
             {
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                RunSave(SFD.FileName);
+                await RunSave(SFD.FileName);
 
                 Program.Settings.LastOpenPath = SFD.FileName;
             }
         }
 
-        private void FileMenu_Save_Click(object sender, EventArgs e)
+        private async void FileMenu_Save_Click(object sender, EventArgs e)
         {
             if (EditedFile == null)
                 return;
@@ -916,23 +918,75 @@ namespace NPC_Maker
             else
             {
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
-                RunSave(OpenedPath);
+                await RunSave(OpenedPath);
             }
         }
 
-        private async void RunSave(string Path)
+        private void SaveAs_Sync(object sender, EventArgs e)
+        {
+            if (EditedFile == null)
+                return;
+
+            SaveFileDialog SFD = new SaveFileDialog
+            {
+                InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
+                RestoreDirectory = true,
+                FileName = "ActorData.json",
+                Filter = "Json Files | *.json"
+            };
+
+            DialogResult DR = SFD.ShowDialog();
+
+            if (DR == DialogResult.OK)
+            {
+                NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+                RunSaveSync(SFD.FileName);
+                Program.Settings.LastOpenPath = SFD.FileName;
+            }
+        }
+
+        private async void Save_Sync(object sender, EventArgs e)
+        {
+            if (EditedFile == null)
+                return;
+
+            if (OpenedPath == "")
+                SaveAs_Sync(this, null);
+            else
+            {
+                NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+                RunSaveSync(OpenedPath);
+            }
+        }
+
+        private async Task RunSave(string path)
         {
             IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
-            progress.Report(new Common.ProgressReport("Saving...", 0));
-            this.progressL.Visible = true;
+
+            progressL.Visible = true;
             Program.SaveInProgress = true;
 
-            await TaskEx.Run(() =>
+            try
             {
-                FileOps.SaveNPCJSON(Path, EditedFile, progress);
+                progress.Report(new Common.ProgressReport("Saving...", 0));
+
+                await TaskEx.Run(() =>
+                {
+                    FileOps.SaveNPCJSON(path, EditedFile, progress);
+                });
+
                 progress.Report(new Common.ProgressReport("Saved!", 100));
+            }
+            finally
+            {
                 Program.SaveInProgress = false;
-            });
+            }
+        }
+
+
+        private void RunSaveSync(string Path)
+        {
+            FileOps.SaveNPCJSON(Path, EditedFile, null);
         }
 
         private async void FileMenu_SaveBinary_Click(object sender, EventArgs e)
