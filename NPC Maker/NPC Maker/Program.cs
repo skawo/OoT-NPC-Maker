@@ -39,8 +39,6 @@ namespace NPC_Maker
         public static DateTime CompileStartTime;
 
         public static Dictionary<string, WeCantSpell.Hunspell.WordList> dictionary;
-        public static List<string> monoFonts;
-        public static bool monoFontsLoaded = false;
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
@@ -77,27 +75,6 @@ namespace NPC_Maker
 
             // To create this in memory quicker
             TaskEx.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
-            TaskEx.Run(() =>
-            {
-                InstalledFontCollection fontsCollection = new InstalledFontCollection();
-                var fonts = fontsCollection.Families;
-
-                monoFonts = new List<string>();
-
-                using (var bmp = new Bitmap(1, 1))
-                {
-                    using (var g = Graphics.FromImage(bmp))
-                    {
-                        foreach (FontFamily fontFamily in fonts)
-                        {
-                            if (fontFamily.IsMonospaced(g))
-                                monoFonts.Add(fontFamily.Name);
-                        }
-                    }
-                }
-
-                monoFontsLoaded = true;
-            });
 
             Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
             ScriptCachePath = Path.Combine(ExecPath, "cache", "s_cache");

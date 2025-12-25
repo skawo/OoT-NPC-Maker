@@ -112,10 +112,20 @@ namespace NPC_Maker
 
         private void SetupFonts()
         {
-            while (Program.monoFontsLoaded) ;
+            InstalledFontCollection fontsCollection = new InstalledFontCollection();
+            var fonts = fontsCollection.Families;
 
-            foreach (string font in Program.monoFonts)
-                comboFont.Items.Add(font);
+            using (var bmp = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(bmp))
+                {
+                    foreach (FontFamily fontFamily in fonts)
+                    {
+                        if (fontFamily.IsMonospaced(g))
+                            comboFont.Items.Add(fontFamily.Name);
+                    }
+                }
+            }
 
             comboFont.SelectedIndexChanged -= comboFont_SelectedChanged;
             numUpDownFont.ValueChanged -= numUpDownFont_ValueChanged;
@@ -157,6 +167,7 @@ namespace NPC_Maker
             {
                 MsgTextDefault.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
                 MsgText.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
+                MsgTextCJK.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
 
                 Program.Settings.MessageEditorFontSize = (int)numUpDownFont.Value;
             }
@@ -3624,7 +3635,6 @@ namespace NPC_Maker
                 MsgEntrySplitContainer.Panel2MinSize = 25;
                 MsgEntrySplitContainer.SplitterDistance = MsgEntrySplitContainer.Width / 2;
                 MsgEntrySplitContainer.IsSplitterFixed = false;
-                ChkBox_UseCJK.Visible = true;
             }
             else
             {
@@ -3633,7 +3643,6 @@ namespace NPC_Maker
                 MsgEntrySplitContainer.Panel2MinSize = 0;
                 MsgEntrySplitContainer.SplitterDistance = 0;
                 MsgEntrySplitContainer.IsSplitterFixed = true;
-                ChkBox_UseCJK.Visible = false;
             }
 
             InsertDataToEditor();
@@ -3775,10 +3784,21 @@ namespace NPC_Maker
 
             MsgText.VerticalScroll.Visible = true;
             MsgText.HorizontalScroll.Visible = true;
+            MsgTextCJK.VerticalScroll.Visible = true;
+            MsgTextCJK.HorizontalScroll.Visible = true;
 
-            pictureBox_Comment_Loc.Location = new Point(MsgText.Location.X + MsgText.Width - msgCommentSize - xoffs,
-                                                    MsgText.Location.Y + MsgText.Height - msgCommentSize - yoffs);
-            pictureBox_Comment_Loc.Size = new Size(msgCommentSize, msgCommentSize);
+            if (ChkBox_UseCJK.Checked)
+            {
+                pictureBox_Comment_Loc.Location = new Point(MsgTextCJK.Location.X + MsgTextCJK.Width - msgCommentSize - xoffs,
+                                                        MsgTextCJK.Location.Y + MsgTextCJK.Height - msgCommentSize - yoffs);
+                pictureBox_Comment_Loc.Size = new Size(msgCommentSize, msgCommentSize);
+            }
+            else
+            {
+                pictureBox_Comment_Loc.Location = new Point(MsgText.Location.X + MsgText.Width - msgCommentSize - xoffs,
+                                                        MsgText.Location.Y + MsgText.Height - msgCommentSize - yoffs);
+                pictureBox_Comment_Loc.Size = new Size(msgCommentSize, msgCommentSize);
+            }
         }
 
         private string CommentInput(string startComment)
@@ -4872,6 +4892,8 @@ namespace NPC_Maker
             MsgTextCJK.TextChanged += MsgTextCJK_TextChanged;
 
             Program.Settings.UseCJK = ChkBox_UseCJK.Checked;
+            SplitMsgContainer_Paint(null, null);
+
 
         }
     }

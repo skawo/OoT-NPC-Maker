@@ -3427,7 +3427,6 @@
             this.ChkBox_UseCJK.Tag = "USECJK";
             this.ChkBox_UseCJK.Text = "CJK";
             this.ChkBox_UseCJK.UseVisualStyleBackColor = true;
-            this.ChkBox_UseCJK.Visible = false;
             this.ChkBox_UseCJK.CheckedChanged += new System.EventHandler(this.ChkBox_UseCJK_CheckedChanged);
             // 
             // numUpDownFont

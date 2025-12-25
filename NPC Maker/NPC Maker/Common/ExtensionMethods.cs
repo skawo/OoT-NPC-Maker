@@ -13,16 +13,22 @@ namespace NPC_Maker
 {
     public static class ExtensionMethods
     {
-        public static bool IsMonospaced(this FontFamily family, Graphics g)
+        public static bool IsMonospaced(this FontFamily fontFamily, Graphics g)
         {
-            if (!family.IsStyleAvailable(FontStyle.Regular))
-                return false;
-
-            using (var font = new Font(family, 12, FontStyle.Regular))
+            try
             {
-                var sizeI = TextRenderer.MeasureText(g, "i", font, Size.Empty, TextFormatFlags.NoPadding);
-                var sizeW = TextRenderer.MeasureText(g, "W", font, Size.Empty, TextFormatFlags.NoPadding);
-                return sizeI.Width == sizeW.Width;
+                using (Font font = new Font(fontFamily, 12))
+                using (Bitmap bmp = new Bitmap(1, 1))
+                {
+                    SizeF sizeI = g.MeasureString("i", font);
+                    SizeF sizeW = g.MeasureString("W", font);
+
+                    return Math.Abs(sizeI.Width - sizeW.Width) < 0.01f;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 
