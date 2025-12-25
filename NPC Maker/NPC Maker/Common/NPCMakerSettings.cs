@@ -61,6 +61,8 @@ namespace NPC_Maker
 
         public float MessageEditorFontSize { get; set; }
 
+        public bool UseCJK { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -90,6 +92,7 @@ namespace NPC_Maker
             ProjectPath = "";
             MessageEditorFont = "";
             MessageEditorFontSize = 0;
+            UseCJK = false;
         }
 
         public enum Members

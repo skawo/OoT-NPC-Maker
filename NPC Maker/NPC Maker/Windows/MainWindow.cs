@@ -17,7 +17,6 @@ using FastColoredTextBoxNS;
 using System.Drawing.Drawing2D;
 using System.Collections.Concurrent;
 using System.Drawing.Text;
-using FastColoredTextBoxNS.Types;
 
 namespace NPC_Maker
 {
@@ -82,6 +81,7 @@ namespace NPC_Maker
             MsgPreviewTimer.Stop();
 
             chkBox_ShowDefaultLanguagePreview.Checked = Program.Settings.OrigPreview;
+            ChkBox_UseCJK.Checked = Program.Settings.UseCJK;
 
             FunctionComboBoxes = new List<KeyValuePair<ComboBox, ComboBox>>()
                         {
@@ -316,7 +316,7 @@ namespace NPC_Maker
             }
         }
 
-        private async void AutoBackupTimer_Tick(object sender, EventArgs e)
+        private void AutoBackupTimer_Tick(object sender, EventArgs e)
         {
             autoBackupTimer.Stop();
 
@@ -326,17 +326,49 @@ namespace NPC_Maker
 
                 if (CurrentBackup != LastBackup)
                 {
-                    await TaskEx.Run(() =>
+                    string json = FileOps.ProcessNPCJSON(EditedFile, null);
+
+                    FileOps.SaveNPCJSON("backup", null, null, json);
+
+                    try
                     {
-                        FileOps.SaveNPCJSON("backup", EditedFile, null);
-                        LastBackup = CurrentBackup;
-                    });
+                        if (!Directory.Exists(Program.AutoSavePath))
+                            Directory.CreateDirectory(Program.AutoSavePath);
+
+                        FileOps.SaveNPCJSON(Path.Combine(Program.AutoSavePath, $"autosave_{DateTime.Now.Ticks}.json"), null, null, json);
+                        PruneOldAutosaves(Program.AutoSavePath, 30);
+                    }
+                    catch { }
+
+                    LastBackup = CurrentBackup;
                 }
             }
             catch
             { }
 
             autoBackupTimer.Start();
+        }
+
+        private void PruneOldAutosaves(string folderPath, int maxAutosaves)
+        {
+            if (!Directory.Exists(folderPath))
+                return;
+
+            var autosaveFiles = new DirectoryInfo(folderPath)
+                .GetFiles("autosave_*")
+                .OrderByDescending(f => f.CreationTimeUtc)
+                .Skip(maxAutosaves);
+
+            foreach (var file in autosaveFiles)
+            {
+                try
+                {
+                    file.Delete();
+                }
+                catch
+                {
+                }
+            }
         }
 
         private void CompileTimer_Tick(object sender, EventArgs e)
@@ -3476,7 +3508,11 @@ namespace NPC_Maker
                     Cursor.Current = Cursors.Default;
                 }
 
-                MessagesContextMenu.SetTextBox(sender as FCTB_Mono);
+                if (ChkBox_UseCJK.Checked)
+                    MessagesContextMenu.SetTextBox(sender as FCTB_MonoCJK);
+                else
+                    MessagesContextMenu.SetTextBox(sender as FCTB_Mono);
+
                 MessagesContextMenu.MenuStrip.Show(sender as Control, e.Location);
             }
             else if (e.Button == MouseButtons.Left && Program.IsRunningUnderMono)
@@ -3587,6 +3623,7 @@ namespace NPC_Maker
                 MsgEntrySplitContainer.Panel2MinSize = 25;
                 MsgEntrySplitContainer.SplitterDistance = MsgEntrySplitContainer.Width / 2;
                 MsgEntrySplitContainer.IsSplitterFixed = false;
+                ChkBox_UseCJK.Visible = true;
             }
             else
             {
@@ -3595,6 +3632,7 @@ namespace NPC_Maker
                 MsgEntrySplitContainer.Panel2MinSize = 0;
                 MsgEntrySplitContainer.SplitterDistance = 0;
                 MsgEntrySplitContainer.IsSplitterFixed = true;
+                ChkBox_UseCJK.Visible = false;
             }
 
             InsertDataToEditor();
@@ -3872,6 +3910,9 @@ namespace NPC_Maker
 
                 MessageEntry Entry = MessageList[index];
                 MsgText.Text = Entry.MessageText;
+                MsgTextCJK.Text = Entry.MessageText;
+
+                MsgTextCJK.ClearUndo();
                 MsgText.ClearUndo();
 
                 SetPictureBoxCommentImageToolTip(pictureBox_Comment_Loc, msgCommentTooltipLoc, Entry.Comment);
@@ -3918,7 +3959,7 @@ namespace NPC_Maker
 
         private void PerformSpellCheck()
         {
-            MsgText.ClearAllStyles();
+            MsgText.Range.SetStyle(StyleIndex.None);
 
             if (MsgText.Text.Length == 0 || !Program.Settings.Spellcheck)
                 return;
@@ -3926,7 +3967,7 @@ namespace NPC_Maker
             string tagLess = Regex.Replace(MsgText.Text.ToUpper().Replace(Environment.NewLine, " "), @"<([\s\S]*?)>", string.Empty, RegexOptions.Compiled);
             string[] strings = tagLess.StripPunctuation().Split(' ');
 
-            TextSelectionRange r = new TextSelectionRange(MsgText, 0, 0, MsgText.Text.Length - 1, MsgText.LinesCount - 1);
+            Range r = new Range(MsgText, 0, 0, MsgText.Text.Length - 1, MsgText.LinesCount - 1);
 
             foreach (string s in strings)
             {
@@ -3952,6 +3993,11 @@ namespace NPC_Maker
             MsgPreviewTimer.Start();
 
             PerformSpellCheck();
+        }
+
+        private void MsgTextCJK_TextChanged(object sender, FastColoredTextBoxCJK.TextChangedEventArgs e)
+        {
+            MsgText.Text = MsgTextCJK.Text;
         }
 
         private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Common.SavedMsgPreviewData savedPreviewData)
@@ -4800,5 +4846,32 @@ namespace NPC_Maker
 
         #endregion
 
+        private void ChkBox_UseCJK_CheckedChanged(object sender, EventArgs e)
+        {
+            MsgText.TextChanged -= MsgText_TextChanged;
+            MsgTextCJK.TextChanged -= MsgTextCJK_TextChanged;
+
+
+            if (ChkBox_UseCJK.Checked)
+            {
+                MsgText.Visible = false;
+                MsgTextCJK.Visible = true;
+
+                MsgTextCJK.Text = MsgText.Text;
+            }
+            else
+            {
+                MsgText.Visible = true;
+                MsgTextCJK.Visible = false;
+
+                MsgText.Text = MsgTextCJK.Text;
+            }
+
+            MsgText.TextChanged += MsgText_TextChanged;
+            MsgTextCJK.TextChanged += MsgTextCJK_TextChanged;
+
+            Program.Settings.UseCJK = ChkBox_UseCJK.Checked;
+
+        }
     }
 }

@@ -10,10 +10,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FastColoredTextBoxCJK.Types;
 
 namespace NPC_Maker
 {
-    public class FCTB_Mono : FastColoredTextBoxNS.FastColoredTextBox
+    public class FCTB_MonoCJK : FastColoredTextBoxCJK.FastColoredTextBox
     {
         [DllImport("user32.dll")]
         private static extern int EnableScrollBar(IntPtr hWnd, int wSBflags, int wArrows);
@@ -28,9 +29,9 @@ namespace NPC_Maker
         private bool setScrollbarsVisible = false;
 
         private bool wordSelectMode = false;
-        private Place wordSelectModeStart;
+        private FastColoredTextBoxCJK.Types.Place wordSelectModeStart;
 
-        public FCTB_Mono(bool scrollbarsVisible = true)
+        public FCTB_MonoCJK(bool scrollbarsVisible = true)
         {
             //this.DoubleBuffered = true;
             setScrollbarsVisible = scrollbarsVisible;
@@ -69,14 +70,14 @@ namespace NPC_Maker
         {
             if (wordSelectMode && e.Button == MouseButtons.Left)
             {
-                Place mousePos = PointToPlace(e.Location);
-                Place wordStart = GetWordStart(mousePos);
-                Place wordEnd = GetWordEnd(mousePos);
+                FastColoredTextBoxCJK.Types.Place mousePos = PointToPlace(e.Location);
+                FastColoredTextBoxCJK.Types.Place wordStart = GetWordStart(mousePos);
+                FastColoredTextBoxCJK.Types.Place wordEnd = GetWordEnd(mousePos);
 
                 if (mousePos < wordSelectModeStart)
-                    Selection = new Range(this, wordStart, Selection.End);
+                    Selection = new FastColoredTextBoxCJK.Types.TextSelectionRange(this, wordStart, Selection.End);
                 else
-                    Selection = new Range(this, wordSelectModeStart, wordEnd);
+                    Selection = new FastColoredTextBoxCJK.Types.TextSelectionRange(this, wordSelectModeStart, wordEnd);
             }
             else
             {
@@ -90,7 +91,7 @@ namespace NPC_Maker
             base.OnMouseUp(e);
         }
 
-        private Place GetWordStart(Place pos)
+        private FastColoredTextBoxCJK.Types.Place GetWordStart(FastColoredTextBoxCJK.Types.Place pos)
         {
             string line = this[pos.iLine].Text;
             int i = Math.Min(pos.iChar, line.Length - 1);
@@ -98,10 +99,10 @@ namespace NPC_Maker
             while (i > 0 && char.IsLetterOrDigit(line[i - 1]))
                 i--;
 
-            return new Place(i, pos.iLine);
+            return new FastColoredTextBoxCJK.Types.Place(i, pos.iLine);
         }
 
-        private Place GetWordEnd(Place pos)
+        private FastColoredTextBoxCJK.Types.Place GetWordEnd(FastColoredTextBoxCJK.Types.Place pos)
         {
             string line = this[pos.iLine].Text;
             int i = pos.iChar;
@@ -109,7 +110,7 @@ namespace NPC_Maker
             while (i < line.Length && char.IsLetterOrDigit(line[i]))
                 i++;
 
-            return new Place(i, pos.iLine);
+            return new FastColoredTextBoxCJK.Types.Place(i, pos.iLine);
         }
 
         protected override void OnPaint(PaintEventArgs pe)
@@ -207,7 +208,7 @@ namespace NPC_Maker
                 base.Copy();
         }
 
-        public FCTB_Mono(IContainer container)
+        public FCTB_MonoCJK(IContainer container)
         {
             container.Add(this);
         }

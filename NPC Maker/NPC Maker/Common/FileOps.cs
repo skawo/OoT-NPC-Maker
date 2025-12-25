@@ -165,7 +165,23 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveNPCJSON(string Path, NPCFile Data, IProgress<Common.ProgressReport> progress = null)
+        public static void SaveNPCJSON(string Path, NPCFile Data, IProgress<Common.ProgressReport> progress = null, string json = null)
+        {
+            try
+            {
+                if (json == null)
+                    json = ProcessNPCJSON(Data, progress);
+
+                if (json != null)   
+                    File.WriteAllText(Path, json);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save JSON: {ex.Message}");
+            }
+        }
+
+        public static string ProcessNPCJSON(NPCFile Data, IProgress<Common.ProgressReport> progress = null)
         {
             try
             {
@@ -234,11 +250,12 @@ namespace NPC_Maker
                 string json = JsonConvert.SerializeObject(outD, jsonSettings);
                 json = environmentNewlineRegex.Replace(json, "\n");
 
-                File.WriteAllText(Path, json);
+                return json;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to write JSON: {ex.Message}");
+                MessageBox.Show($"Failed to process JSON: {ex.Message}");
+                return null;
             }
         }
 

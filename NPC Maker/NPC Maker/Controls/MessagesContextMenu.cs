@@ -12,6 +12,7 @@ namespace NPC_Maker
         public static ContextMenuStrip MenuStrip;
 
         private static FastColoredTextBox Owner;
+        private static FastColoredTextBoxCJK.FastColoredTextBox OwnerCJK;
 
         public static ToolStripMenuItem CreateDictionaryItem(Tag t)
         {
@@ -194,22 +195,44 @@ namespace NPC_Maker
             Owner = Box;
         }
 
+        public static void SetTextBox(FastColoredTextBoxCJK.FastColoredTextBox Box)
+        {
+            OwnerCJK = Box;
+        }
+
         private static void InsertTxtToScript(string Text)
         {
-            if (Owner == null)
+            if (Owner == null && OwnerCJK == null)
                 return;
 
-            Point Scroll = Owner.AutoScrollOffset;
-            int start = Owner.SelectionStart;
-            string newTxt = Owner.Text;
+            if (Owner != null)
+            {
+                Point Scroll = Owner.AutoScrollOffset;
+                int start = Owner.SelectionStart;
+                string newTxt = Owner.Text;
 
-            newTxt = newTxt.Remove(Owner.SelectionStart, Owner.SelectionLength);
-            newTxt = newTxt.Insert(Owner.SelectionStart, Text);
+                newTxt = newTxt.Remove(Owner.SelectionStart, Owner.SelectionLength);
+                newTxt = newTxt.Insert(Owner.SelectionStart, Text);
 
-            Owner.Text = newTxt;
-            Owner.SelectionStart = start + Text.Length;
-            Owner.AutoScrollOffset = Scroll;
-            Owner.UpdateScrollbars();
+                Owner.Text = newTxt;
+                Owner.SelectionStart = start + Text.Length;
+                Owner.AutoScrollOffset = Scroll;
+                Owner.UpdateScrollbars();
+            }
+            else
+            {
+                Point Scroll = OwnerCJK.AutoScrollOffset;
+                int start = OwnerCJK.SelectionStart;
+                string newTxt = OwnerCJK.Text;
+
+                newTxt = newTxt.Remove(OwnerCJK.SelectionStart, OwnerCJK.SelectionLength);
+                newTxt = newTxt.Insert(OwnerCJK.SelectionStart, Text);
+
+                OwnerCJK.Text = newTxt;
+                OwnerCJK.SelectionStart = start + Text.Length;
+                OwnerCJK.AutoScrollOffset = Scroll;
+                OwnerCJK.UpdateScrollbars();
+            }
         }
 
         private static void Tsmi_DoubleClick(object sender, EventArgs e)

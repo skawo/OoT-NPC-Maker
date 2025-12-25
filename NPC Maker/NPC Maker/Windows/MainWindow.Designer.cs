@@ -255,6 +255,7 @@
             this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
             this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.ChkBox_UseCJK = new System.Windows.Forms.CheckBox();
             this.numUpDownFont = new System.Windows.Forms.NumericUpDown();
             this.labelEditorFont = new System.Windows.Forms.Label();
             this.comboFont = new System.Windows.Forms.ComboBox();
@@ -264,6 +265,7 @@
             this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
             this.pictureBox_Comment_Loc = new System.Windows.Forms.PictureBox();
             this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
+            this.MsgTextCJK = new NPC_Maker.FCTB_MonoCJK(this.components);
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.PreviewSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgPreviewOrig = new System.Windows.Forms.PictureBox();
@@ -457,6 +459,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Comment_Loc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextCJK)).BeginInit();
             this.PanelMsgPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewSplitContainer)).BeginInit();
             this.PreviewSplitContainer.Panel1.SuspendLayout();
@@ -3384,6 +3387,7 @@
             // 
             // Tab4_Messages
             // 
+            this.Tab4_Messages.Controls.Add(this.ChkBox_UseCJK);
             this.Tab4_Messages.Controls.Add(this.numUpDownFont);
             this.Tab4_Messages.Controls.Add(this.labelEditorFont);
             this.Tab4_Messages.Controls.Add(this.comboFont);
@@ -3412,6 +3416,19 @@
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
             this.Tab4_Messages.UseVisualStyleBackColor = true;
+            // 
+            // ChkBox_UseCJK
+            // 
+            this.ChkBox_UseCJK.AutoSize = true;
+            this.ChkBox_UseCJK.Location = new System.Drawing.Point(756, 29);
+            this.ChkBox_UseCJK.Name = "ChkBox_UseCJK";
+            this.ChkBox_UseCJK.Size = new System.Drawing.Size(45, 17);
+            this.ChkBox_UseCJK.TabIndex = 97;
+            this.ChkBox_UseCJK.Tag = "USECJK";
+            this.ChkBox_UseCJK.Text = "CJK";
+            this.ChkBox_UseCJK.UseVisualStyleBackColor = true;
+            this.ChkBox_UseCJK.Visible = false;
+            this.ChkBox_UseCJK.CheckedChanged += new System.EventHandler(this.ChkBox_UseCJK_CheckedChanged);
             // 
             // numUpDownFont
             // 
@@ -3476,6 +3493,7 @@
             // 
             this.MsgEntrySplitContainer.Panel2.Controls.Add(this.pictureBox_Comment_Loc);
             this.MsgEntrySplitContainer.Panel2.Controls.Add(this.MsgText);
+            this.MsgEntrySplitContainer.Panel2.Controls.Add(this.MsgTextCJK);
             this.MsgEntrySplitContainer.Panel2MinSize = 0;
             this.MsgEntrySplitContainer.Size = new System.Drawing.Size(640, 220);
             this.MsgEntrySplitContainer.SplitterDistance = 25;
@@ -3596,6 +3614,62 @@
             this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
             this.MsgText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
             this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
+            // 
+            // MsgTextCJK
+            // 
+            this.MsgTextCJK.AccessibleDescription = "Textbox control";
+            this.MsgTextCJK.AccessibleName = "Fast Colored Text Box";
+            this.MsgTextCJK.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
+            this.MsgTextCJK.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgTextCJK.AutoIndent = false;
+            this.MsgTextCJK.AutoIndentChars = false;
+            this.MsgTextCJK.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
+            this.MsgTextCJK.AutoScrollMinSize = new System.Drawing.Size(2, 12);
+            this.MsgTextCJK.BackBrush = null;
+            this.MsgTextCJK.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgTextCJK.CharCnWidth = 12;
+            this.MsgTextCJK.CharHeight = 12;
+            this.MsgTextCJK.CharWidth = 6;
+            this.MsgTextCJK.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgTextCJK.DefaultMarkerSize = 8;
+            this.MsgTextCJK.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgTextCJK.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgTextCJK.FindForm = null;
+            this.MsgTextCJK.FoldingHighlightColor = System.Drawing.Color.LightGray;
+            this.MsgTextCJK.FoldingHighlightEnabled = false;
+            this.MsgTextCJK.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgTextCJK.GoToForm = null;
+            this.MsgTextCJK.Hotkeys = resources.GetString("MsgTextCJK.Hotkeys");
+            this.MsgTextCJK.IsReplaceMode = false;
+            this.MsgTextCJK.Location = new System.Drawing.Point(0, 0);
+            this.MsgTextCJK.Name = "MsgTextCJK";
+            this.MsgTextCJK.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgTextCJK.ReplaceForm = null;
+            this.MsgTextCJK.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgTextCJK.ServiceColors = ((FastColoredTextBoxCJK.ServiceColors)(resources.GetObject("MsgTextCJK.ServiceColors")));
+            this.MsgTextCJK.ShowLineNumbers = false;
+            this.MsgTextCJK.Size = new System.Drawing.Size(640, 220);
+            this.MsgTextCJK.TabIndex = 70;
+            this.MsgTextCJK.Tag = "Default";
+            this.MsgTextCJK.ToolTipDelay = 100;
+            this.MsgTextCJK.UseCJK = FastColoredTextBoxCJK.CJKMode.Hanzi;
+            this.MsgTextCJK.Visible = false;
+            this.MsgTextCJK.WordWrapAutoIndent = false;
+            this.MsgTextCJK.Zoom = 100;
+            this.MsgTextCJK.TextChanged += new System.EventHandler<FastColoredTextBoxCJK.TextChangedEventArgs>(this.MsgTextCJK_TextChanged);
+            this.MsgTextCJK.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
+            this.MsgTextCJK.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
             // 
             // PanelMsgPreview
             // 
@@ -4786,6 +4860,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Comment_Loc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextCJK)).EndInit();
             this.PanelMsgPreview.ResumeLayout(false);
             this.PreviewSplitContainer.Panel1.ResumeLayout(false);
             this.PreviewSplitContainer.Panel2.ResumeLayout(false);
@@ -5146,6 +5221,8 @@
         private System.Windows.Forms.ComboBox comboFont;
         private System.Windows.Forms.NumericUpDown numUpDownFont;
         private System.Windows.Forms.Label labelEditorFont;
+        private System.Windows.Forms.CheckBox ChkBox_UseCJK;
+        private FCTB_MonoCJK MsgTextCJK;
     }
 }
 

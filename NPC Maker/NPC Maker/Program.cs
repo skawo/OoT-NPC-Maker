@@ -28,6 +28,7 @@ namespace NPC_Maker
         public static string ScriptCachePath = "";
         public static string CCachePath = "";
         public static string JsonPath = "";
+        public static string AutoSavePath = "";
 
         public static bool SaveInProgress = false;
         public static bool CompileInProgress = false;
@@ -88,6 +89,7 @@ namespace NPC_Maker
 
             ScriptCachePath = Path.Combine(ExecPath, "cache", "s_cache");
             CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
+            AutoSavePath = Path.Combine(ExecPath, "autosave");
 
             // To create this in memory quicker
             TaskEx.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });

@@ -1,5 +1,4 @@
 ﻿using FastColoredTextBoxNS;
-using FastColoredTextBoxNS.Types;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -64,9 +63,9 @@ namespace NPC_Maker
             if (String.IsNullOrEmpty(txb.Text))
                 return;
 
-            TextSelectionRange r = new TextSelectionRange(txb, 0, 0, txb.Text.Length, txb.LinesCount - 1);
+            Range r = new Range(txb, 0, 0, txb.Text.Length, txb.LinesCount - 1);
 
-            txb.ClearAllStyles();
+            r.SetStyle(StyleIndex.None);
 
             if (!SyntaxHighlightingOn)
                 return;
@@ -96,12 +95,12 @@ namespace NPC_Maker
         private static readonly Regex CCALL_REGEX = new Regex(@"\bCCALL\b", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
         private static readonly Regex SET_REGEX = new Regex(@"\bSET\b", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
 
-        private static void H_SetStyle(List<string> List, Style s, TextSelectionRange r)
+        private static void H_SetStyle(List<string> List, Style s, Range r)
         {
             foreach (string KWord in List)
                 H_SetStyleImpl(KWord, s, r);
         }
-        private static void H_SetStyleCheck(string text, List<string> List, Style s, TextSelectionRange r)
+        private static void H_SetStyleCheck(string text, List<string> List, Style s, Range r)
         {
             text = text.ToUpper();
 
@@ -114,7 +113,7 @@ namespace NPC_Maker
             }
         }
 
-        private static void H_SetStyleImpl(string KWord, Style s, TextSelectionRange r)
+        private static void H_SetStyleImpl(string KWord, Style s, Range r)
         {
             if (KWord == "CCALL")
                 r.SetStyle(SyntaxHighlighter.RedStyle, CCALL_REGEX);
