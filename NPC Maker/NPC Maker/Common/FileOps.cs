@@ -20,13 +20,21 @@ namespace NPC_Maker
     {
         public static NPCMakerSettings ParseSettingsJSON(string FileName)
         {
-            if (!File.Exists(FileName))
+            try
+            {
+                if (!File.Exists(FileName))
+                    return new NPCMakerSettings();
+
+                string Text = File.ReadAllText(FileName);
+                NPCMakerSettings Deserialized = JsonConvert.DeserializeObject<NPCMakerSettings>(Text);
+
+                return Deserialized;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show($"Failed to read settings: {ex.Message}");
                 return new NPCMakerSettings();
-
-            string Text = File.ReadAllText(FileName);
-            NPCMakerSettings Deserialized = JsonConvert.DeserializeObject<NPCMakerSettings>(Text);
-
-            return Deserialized;
+            }
         }
 
         public static void SaveSettingsJSON(string Path, NPCMakerSettings Data)

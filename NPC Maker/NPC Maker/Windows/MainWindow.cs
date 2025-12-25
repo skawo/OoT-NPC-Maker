@@ -112,14 +112,10 @@ namespace NPC_Maker
 
         private void SetupFonts()
         {
-            InstalledFontCollection fontsCollection = new InstalledFontCollection();
-            var fonts = fontsCollection.Families;
+            while (Program.monoFontsLoaded) ;
 
-            foreach (FontFamily fontFamily in fonts)
-            {
-                if (fontFamily.IsMonospaced())
-                    comboFont.Items.Add(fontFamily.Name);
-            }
+            foreach (string font in Program.monoFonts)
+                comboFont.Items.Add(font);
 
             comboFont.SelectedIndexChanged -= comboFont_SelectedChanged;
             numUpDownFont.ValueChanged -= numUpDownFont_ValueChanged;
@@ -147,6 +143,7 @@ namespace NPC_Maker
             {
                 MsgTextDefault.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
                 MsgText.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
+                MsgTextCJK.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
 
                 Program.Settings.MessageEditorFont = comboFont.Text;
             }
@@ -279,7 +276,7 @@ namespace NPC_Maker
             {
                 ReloadAllFonts();
                 Dicts.ReloadLanguages(EditedFile.Languages);
-                Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+                Dicts.ReloadSpellcheckDicts(EditedFile.Languages);
             }
             catch (Exception ex)
             {
@@ -677,9 +674,9 @@ namespace NPC_Maker
                 string cValue = GetAnimationFilestartString(Animation.FileStart);
 
                 if (SelectedEntry.AnimationType == 1)
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Dicts.GetStringFromBiDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Animation.ObjID) });
                 else
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Animation.ObjID) });
+                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Animation.ObjID) });
             }
 
             #endregion
@@ -693,7 +690,7 @@ namespace NPC_Maker
                 Grid.Rows.Clear();
 
                 foreach (SegmentEntry Entry in SelectedEntry.Segments[j])
-                    Grid.Rows.Add(Entry.Name, Entry.HeaderDefinition, Entry.FileStart < 0 ? "Same as main" : Entry.FileStart.ToString("X"), Entry.Address.ToString("X"), Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Entry.ObjectID));
+                    Grid.Rows.Add(Entry.Name, Entry.HeaderDefinition, Entry.FileStart < 0 ? "Same as main" : Entry.FileStart.ToString("X"), Entry.Address.ToString("X"), Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Entry.ObjectID));
             }
 
             #endregion
@@ -715,7 +712,7 @@ namespace NPC_Maker
                                                                            Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
                                                                            Dlist.Scale.ToString(),
                                                                            Dlist.Limb.ToString(),
-                                                                           Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, Dlist.ObjectID),
+                                                                           Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Dlist.ObjectID),
                                                                            SelCombo
                                                                           });
 
@@ -1116,7 +1113,7 @@ namespace NPC_Maker
                 {
                     ReloadAllFonts();
                     Dicts.ReloadLanguages(EditedFile.Languages);
-                    Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+                    Dicts.ReloadSpellcheckDicts(EditedFile.Languages);
                 }
                 catch (Exception ex)
                 {
@@ -1161,7 +1158,7 @@ namespace NPC_Maker
                             {
                                 ReloadAllFonts();
                                 Dicts.ReloadLanguages(EditedFile.Languages);
-                                Dicts.ReoadSpellcheckDicts(EditedFile.Languages);
+                                Dicts.ReloadSpellcheckDicts(EditedFile.Languages);
                             }
                             catch (Exception ex)
                             {
@@ -2183,12 +2180,12 @@ namespace NPC_Maker
 
         private void Txtbox_ReactIfAtt_Leave(object sender, EventArgs e)
         {
-            short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.SFXes, Txtbox_ReactIfAtt.Text);
+            short ObjectId = (short)Dicts.GetIntFromBiDict(Dicts.SFXes, Txtbox_ReactIfAtt.Text);
 
             if (ObjectId < -1)
                 ObjectId = -1;
 
-            Txtbox_ReactIfAtt.Text = Dicts.GetStringFromStringIntDict(Dicts.SFXes, ObjectId);
+            Txtbox_ReactIfAtt.Text = Dicts.GetStringFromBiDict(Dicts.SFXes, ObjectId);
             SelectedEntry.SfxIfAttacked = ObjectId;
         }
 
@@ -2223,12 +2220,12 @@ namespace NPC_Maker
 
         private void Txb_ObjectID_Leave(object sender, EventArgs e)
         {
-            short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, Txb_ObjectID.Text);
+            short ObjectId = (short)Dicts.GetIntFromBiDict(Dicts.ObjectIDs, Txb_ObjectID.Text);
 
             if (ObjectId < 0)
                 ObjectId = (short)SelectedEntry.ObjectID;
 
-            Txb_ObjectID.Text = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
+            Txb_ObjectID.Text = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, ObjectId);
 
             SelectedEntry.ObjectID = (ushort)ObjectId;
         }
@@ -2452,7 +2449,7 @@ namespace NPC_Maker
                 if (SelectedEntry.AnimationType == 1)
                     DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Address;
                 else
-                    DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, (int)Address);
+                    DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Address].Value = Dicts.GetStringFromBiDict(Dicts.LinkAnims, (int)Address);
 
 
             if (SkipIndex != (int)AnimGridColumns.StartFrame)
@@ -2468,7 +2465,7 @@ namespace NPC_Maker
                 DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Speed].Value = 1.0;
 
             if (SkipIndex != (int)AnimGridColumns.Object)
-                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Object].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
+                DataGrid_Animations.Rows[Index].Cells[(int)AnimGridColumns.Object].Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, (int)ObjectID);
         }
 
         private void DataGridViewAnimations_CellParse(object sender, DataGridViewCellParsingEventArgs e)
@@ -2544,9 +2541,9 @@ namespace NPC_Maker
                         {
                             try
                             {
-                                int LinkAnim = Dicts.GetIntFromStringIntDict(Dicts.LinkAnims, e.Value.ToString());
+                                int LinkAnim = Dicts.GetIntFromBiDict(Dicts.LinkAnims, e.Value.ToString());
 
-                                e.Value = Dicts.GetStringFromStringIntDict(Dicts.LinkAnims, LinkAnim);
+                                e.Value = Dicts.GetStringFromBiDict(Dicts.LinkAnims, LinkAnim);
                                 DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                                 if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
@@ -2561,7 +2558,7 @@ namespace NPC_Maker
                                 if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                                     AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
-                                e.Value = Dicts.LinkAnims.First().Key;
+                                e.Value = Dicts.LinkAnims.Forward.First().Key;
                                 DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                             }
                         }
@@ -2659,12 +2656,12 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            int ObjectId = Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
+                            int ObjectId = Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
 
                             if (ObjectId < -1)
                                 ObjectId = 0;
 
-                            e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
+                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, ObjectId);
                             DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
@@ -2679,7 +2676,7 @@ namespace NPC_Maker
                             if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
                                 AddBlankAnim(e.ColumnIndex, e.RowIndex);
 
-                            e.Value = Dicts.ObjectIDs.First().Key;
+                            e.Value = Dicts.ObjectIDs.Forward.First().Key;
                             DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
@@ -3085,9 +3082,9 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
+                            short ObjectId = (short)Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
 
-                            e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
+                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, ObjectId);
                             DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
@@ -3100,7 +3097,7 @@ namespace NPC_Maker
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
                                 AddBlankDList(e.ColumnIndex, e.RowIndex);
 
-                            e.Value = Dicts.ObjectIDs.First();
+                            e.Value = Dicts.ObjectIDs.Forward.First();
                             DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
@@ -3238,7 +3235,7 @@ namespace NPC_Maker
                 dgv.Rows[Index].Cells[(int)SegmentsColumns.Address].Value = Address;
 
             if (SkipIndex != (int)SegmentsColumns.Object)
-                dgv.Rows[Index].Cells[(int)SegmentsColumns.Object].Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, (int)ObjectID);
+                dgv.Rows[Index].Cells[(int)SegmentsColumns.Object].Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, (int)ObjectID);
 
             if (SkipIndex != (int)SegmentsColumns.FileStart)
                 dgv.Rows[Index].Cells[(int)SegmentsColumns.FileStart].Value = (FileStart == -1 ? "Same as main" : ((int)FileStart).ToString("X"));
@@ -3323,9 +3320,9 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            short ObjectId = (short)Dicts.GetIntFromStringIntDict(Dicts.ObjectIDs, e.Value.ToString());
+                            short ObjectId = (short)Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
 
-                            e.Value = Dicts.GetStringFromStringIntDict(Dicts.ObjectIDs, ObjectId);
+                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, ObjectId);
                             (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
 
                             if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
@@ -3338,7 +3335,7 @@ namespace NPC_Maker
                             if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
                                 AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
 
-                            e.Value = Dicts.ObjectIDs.First();
+                            e.Value = Dicts.ObjectIDs.Forward.First();
                             (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 

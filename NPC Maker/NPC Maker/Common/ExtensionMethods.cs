@@ -7,27 +7,22 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
     public static class ExtensionMethods
     {
-        public static bool IsMonospaced(this FontFamily fontFamily)
+        public static bool IsMonospaced(this FontFamily family, Graphics g)
         {
-            try
-            {
-                using (Font font = new Font(fontFamily, 12))
-                using (Bitmap bmp = new Bitmap(1, 1))
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    SizeF sizeI = g.MeasureString("i", font);
-                    SizeF sizeW = g.MeasureString("W", font);
-                    return Math.Abs(sizeI.Width - sizeW.Width) < 0.01f;
-                }
-            }
-            catch
-            {
+            if (!family.IsStyleAvailable(FontStyle.Regular))
                 return false;
+
+            using (var font = new Font(family, 12, FontStyle.Regular))
+            {
+                var sizeI = TextRenderer.MeasureText(g, "i", font, Size.Empty, TextFormatFlags.NoPadding);
+                var sizeW = TextRenderer.MeasureText(g, "W", font, Size.Empty, TextFormatFlags.NoPadding);
+                return sizeI.Width == sizeW.Width;
             }
         }
 

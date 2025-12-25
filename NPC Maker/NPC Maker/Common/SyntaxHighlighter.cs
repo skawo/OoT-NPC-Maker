@@ -40,9 +40,9 @@ namespace NPC_Maker
             {Lists.KeywordsPurple,  SyntaxHighlighter.PurpleStyle},
             {Lists.KeywordsMPurple,  SyntaxHighlighter.MPurpleStyle},
             {Lists.KeywordsMPurpleBold,  SyntaxHighlighter.MPurpleBoldStyle},
-            {Dicts.SFXes.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
-            {Dicts.Music.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
-            {Dicts.Actors.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            {Dicts.SFXes.Forward.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            {Dicts.Music.Forward.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
+            {Dicts.Actors.Forward.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
             //{Dicts.ObjectIDs.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
             //{Dicts.LinkAnims.Keys.ToList(),  SyntaxHighlighter.CyanStyle},
         };

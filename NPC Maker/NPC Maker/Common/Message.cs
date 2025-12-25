@@ -452,7 +452,7 @@ namespace NPC_Maker
             if (workCopy.TypeToken == Lists.SoundsDictType)
             {
                 workCopy.TypeToken = MsgValueTypes.h.ToString();
-                workCopy.Value = GetValueFromDictOrConvert(Dicts.SFXes, normalized, chosenSubToken);
+                workCopy.Value = GetValueFromDictOrConvert(Dicts.SFXes.Forward, normalized, chosenSubToken);
             }
             else
             {

@@ -325,15 +325,15 @@ namespace NPC_Maker.Scripts
                 }
                 else if (varString.StartsWith(Lists.Keyword_Music))
                 {
-                    return (float)Dicts.Music[varString.Replace(Lists.Keyword_Music, "")];
+                    return (float)Dicts.Music.Forward[varString.Replace(Lists.Keyword_Music, "")];
                 }
                 else if (varString.StartsWith(Lists.Keyword_Actor))
                 {
-                    return (float)Dicts.Actors[varString.Replace(Lists.Keyword_Actor, "")];
+                    return (float)Dicts.Actors.Forward[varString.Replace(Lists.Keyword_Actor, "")];
                 }
                 else if (varString.StartsWith(Lists.Keyword_Sfx))
                 {
-                    return (float)Dicts.SFXes[varString.Replace(Lists.Keyword_Sfx, "")];
+                    return (float)Dicts.SFXes.Forward[varString.Replace(Lists.Keyword_Sfx, "")];
                 }
                 else
                 {
@@ -630,22 +630,22 @@ namespace NPC_Maker.Scripts
 
         public static ScriptVarVal Helper_GetActorId(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, 0, UInt16.MaxValue, Dicts.Actors, ParseException.UnrecognizedActor(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, 0, UInt16.MaxValue, Dicts.Actors.Forward, ParseException.UnrecognizedActor(SplitLine));
         }
 
         public static ScriptVarVal Helper_GetSFXId(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, -1, Int16.MaxValue, Dicts.SFXes, ParseException.UnrecognizedSFX(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, -1, Int16.MaxValue, Dicts.SFXes.Forward, ParseException.UnrecognizedSFX(SplitLine));
         }
 
         public static ScriptVarVal Helper_GetMusicId(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, -1, UInt16.MaxValue, Dicts.Music, ParseException.UnrecognizedBGM(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, -1, UInt16.MaxValue, Dicts.Music.Forward, ParseException.UnrecognizedBGM(SplitLine));
         }
 
         public static ScriptVarVal Helper_GetLinkAnimation(string[] SplitLine, int Index)
         {
-            return Helper_GetValFromDict(SplitLine, Index, 0, Int16.MaxValue, Dicts.LinkAnims, ParseException.UnrecognizedLinkAnim(SplitLine));
+            return Helper_GetValFromDict(SplitLine, Index, 0, Int16.MaxValue, Dicts.LinkAnims.Forward, ParseException.UnrecognizedLinkAnim(SplitLine));
         }
 
         private static ScriptVarVal Helper_GetFromStringList(string[] SplitLine, int Index, List<string> SList, int RangeMin, int RangeMax, ParseException ToThrow, int? VarTypeOverride = null)

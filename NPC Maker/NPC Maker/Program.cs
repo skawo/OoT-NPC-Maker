@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.Drawing.Text;
+using System.Drawing;
 
 namespace NPC_Maker
 {
@@ -37,6 +39,8 @@ namespace NPC_Maker
         public static DateTime CompileStartTime;
 
         public static Dictionary<string, WeCantSpell.Hunspell.WordList> dictionary;
+        public static List<string> monoFonts;
+        public static bool monoFontsLoaded = false;
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
@@ -71,8 +75,46 @@ namespace NPC_Maker
             CultureInfo ci = CultureInfo.GetCultureInfo("en-US");
             Application.CurrentCulture = ci;
 
-            Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+            // To create this in memory quicker
+            TaskEx.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
+            TaskEx.Run(() =>
+            {
+                InstalledFontCollection fontsCollection = new InstalledFontCollection();
+                var fonts = fontsCollection.Families;
 
+                monoFonts = new List<string>();
+
+                using (var bmp = new Bitmap(1, 1))
+                {
+                    using (var g = Graphics.FromImage(bmp))
+                    {
+                        foreach (FontFamily fontFamily in fonts)
+                        {
+                            if (fontFamily.IsMonospaced(g))
+                                monoFonts.Add(fontFamily.Name);
+                        }
+                    }
+                }
+
+                monoFontsLoaded = true;
+            });
+
+            Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+            ScriptCachePath = Path.Combine(ExecPath, "cache", "s_cache");
+            CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
+            AutoSavePath = Path.Combine(ExecPath, "autosave");
+
+            if (!Directory.Exists(ScriptCachePath))
+                Directory.CreateDirectory(ScriptCachePath);
+
+            if (!Directory.Exists(CCachePath))
+                Directory.CreateDirectory(CCachePath);
+
+            try
+            {
+                DropDownMenuScrollWheelHandler.Enable(true);
+            }
+            catch { }
 
             string settingsWindows = Path.Combine(ExecPath, "Settings.json");
             string settingsMono = Path.Combine(ExecPath, "SettingsMono.json");
@@ -87,42 +129,18 @@ namespace NPC_Maker
             else
                 SettingsFilePath = settingsWindows;
 
-            ScriptCachePath = Path.Combine(ExecPath, "cache", "s_cache");
-            CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
-            AutoSavePath = Path.Combine(ExecPath, "autosave");
-
-            // To create this in memory quicker
-            TaskEx.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
-
-            try
-            {
-                DropDownMenuScrollWheelHandler.Enable(true);
-            }
-            catch (Exception)
-            {
-
-            }
-
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
 
             CCode.CreateCTempDirectory("", "", false);
 
-            if (!Directory.Exists(ScriptCachePath))
-                Directory.CreateDirectory(ScriptCachePath);
-
-            if (!Directory.Exists(CCachePath))
-                Directory.CreateDirectory(CCachePath);
-
             Dicts.LoadDicts();
-            Dicts.ReoadSpellcheckDicts(new List<string>());
-
 
             if (args.Length == 0)
             {
                 var fileToOpen = File.Exists("backup") &&
                                 MessageBox.Show("NPCMaker was not closed properly the last time it was run. Load auto-saved backup?",
-                                              "Autosaved backup exists", MessageBoxButtons.YesNo) == DialogResult.Yes
-                                ? "backup" : "";
+                                                "Autosaved backup exists", MessageBoxButtons.YesNo) == DialogResult.Yes
+                                                ? "backup" : "";
 
                 mw = new MainWindow(fileToOpen);
                 Application.Run(mw);

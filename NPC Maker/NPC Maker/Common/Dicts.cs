@@ -3,10 +3,32 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using static NPC_Maker.Lists;
 
 namespace NPC_Maker
 {
+    public class BiDictionary
+    {
+        public Dictionary<string, int> Forward { get; private set; }
+        public Dictionary<int, string> Reverse { get; private set; }
+
+        public BiDictionary(Dictionary<string, int> forward)
+        {
+            Forward = new Dictionary<string, int>(forward);
+            Reverse = new Dictionary<int, string>();
+
+            foreach (var pair in forward)
+                Reverse[pair.Value] = pair.Key;
+        }
+
+        public void Add(string key, int value)
+        {
+            Forward[key] = value;
+            Reverse[value] = key;
+        }
+    }
+
     public static class Dicts
     {
         public static Dictionary<string, int> LimbShowSubTypes = new Dictionary<string, int>()
@@ -33,11 +55,12 @@ namespace NPC_Maker
         public static Dictionary<string, MessageConfig> LanguageDefs;
         public static List<MessageDefinition> MsgDefinitions;
 
-        public static Dictionary<string, int> ObjectIDs;
-        public static Dictionary<string, int> SFXes;
-        public static Dictionary<string, int> Music;
-        public static Dictionary<string, int> Actors;
-        public static Dictionary<string, int> LinkAnims;
+        public static BiDictionary ObjectIDs;
+        public static BiDictionary SFXes;
+        public static BiDictionary Music;
+        public static BiDictionary Actors;
+        public static BiDictionary LinkAnims;
+
 
         public static Dictionary<Lists.ParticleTypes, List<ParticleSubOptions>> UsableParticleSubOptions = new Dictionary<ParticleTypes, List<ParticleSubOptions>>()
         {
@@ -317,123 +340,166 @@ namespace NPC_Maker
             first.Entries.AddRange(uniqueTags);
         }
 
-        public static void ReloadLanguages(List<string> Languages)
+        public static void ReloadLanguages(List<string> languages)
         {
             if (LanguageDefs == null)
                 LanguageDefs = new Dictionary<string, MessageConfig>();
+            else
+                LanguageDefs.Clear();
 
-            LanguageDefs.Clear();
+            if (languages == null)
+                languages = new List<string>();
 
-            List<string> LanguagesAndDefault = new List<string>() { Dicts.DefaultLanguage };
-            LanguagesAndDefault.AddRange(Languages);
+            var allLanguages = new List<string>();
+            allLanguages.Add(Dicts.DefaultLanguage);
+            allLanguages.AddRange(languages);
 
-            MessageConfig defaultSet = TryLoadLauguageDict<MessageConfig>("MessageBase");
+            MessageConfig baseConfig =
+                TryLoadLauguageDict<MessageConfig>("MessageBase") ?? throw new Exception("Could not load base language definitions.");
 
-            if (defaultSet != default(MessageConfig))
+            foreach (string language in allLanguages)
             {
-                foreach (string Language in LanguagesAndDefault)
-                {
-                    var langSet = TryLoadLauguageDict<MessageConfig>(Language);
+                MessageConfig langConfig =
+                    TryLoadLauguageDict<MessageConfig>(language);
 
-                    if (langSet != default(MessageConfig))
-                    {
-                        var newSet = Helpers.Clone<MessageConfig>(defaultSet);
-                        ReplaceAndAddTags(newSet, langSet);
+                if (langConfig == null)
+                    continue;
 
-                        if (langSet.EndMessage != -1)
-                            newSet.EndMessage = langSet.EndMessage;
-                        if (langSet.NewLine != -1)
-                            newSet.NewLine = langSet.NewLine;
-                        if (String.IsNullOrWhiteSpace(langSet.EndMessageType))
-                            newSet.EndMessageType = langSet.EndMessageType;
-                        if (String.IsNullOrWhiteSpace(langSet.NewLineType))
-                            newSet.NewLineType = langSet.NewLineType;
+                MessageConfig merged = Helpers.Clone<MessageConfig>(baseConfig);
+                ReplaceAndAddTags(merged, langConfig);
+                ApplyLanguageOverrides(merged, langConfig);
 
-                        LanguageDefs.Add(Language, newSet);
-                    }
-                }
-
-                MsgDefinitions = TryLoadLauguageDict<List<MessageDefinition>>("MsgDefs");
+                // overwrite instead of throwing
+                LanguageDefs[language] = merged;
             }
+
+            MsgDefinitions =
+                TryLoadLauguageDict<List<MessageDefinition>>("MsgDefs");
 
             if (LanguageDefs.Count == 0)
                 throw new Exception("Could not load any language definitions...");
         }
 
-        public static void ReoadSpellcheckDicts(List<string> Languages)
+        private static void ApplyLanguageOverrides(MessageConfig target, MessageConfig source)
         {
-            Program.dictionary = new Dictionary<string, WeCantSpell.Hunspell.WordList>();
+            if (source.EndMessage != -1)
+                target.EndMessage = source.EndMessage;
 
-            if (File.Exists("dict.dic"))
-                Program.dictionary.Add(Dicts.DefaultLanguage, WeCantSpell.Hunspell.WordList.CreateFromFiles("dict.dic"));
-            else if (File.Exists("Default.dic"))
-                Program.dictionary.Add(Dicts.DefaultLanguage, WeCantSpell.Hunspell.WordList.CreateFromFiles("Default.dic"));
+            if (source.NewLine != -1)
+                target.NewLine = source.NewLine;
 
-            foreach (string Lang in Languages)
+            if (!string.IsNullOrWhiteSpace(source.EndMessageType))
+                target.EndMessageType = source.EndMessageType;
+
+            if (!string.IsNullOrWhiteSpace(source.NewLineType))
+                target.NewLineType = source.NewLineType;
+        }
+
+        public static void ReloadSpellcheckDicts(List<string> languages)
+        {
+            Program.dictionary =
+                new Dictionary<string, WeCantSpell.Hunspell.WordList>();
+
+            LoadSpellcheckDictIfExists(Dicts.DefaultLanguage, "dict.dic");
+            LoadSpellcheckDictIfExists(Dicts.DefaultLanguage, "Default.dic");
+
+            if (languages == null)
+                return;
+
+            foreach (string lang in languages)
             {
-                if (File.Exists($"{Lang}.dic"))
-                    Program.dictionary.Add(Lang, WeCantSpell.Hunspell.WordList.CreateFromFiles($"{Lang}.dic"));
+                string file = lang + ".dic";
+                LoadSpellcheckDictIfExists(lang, file);
             }
         }
 
-        public static void ReloadDict(Lists.DictType Type, bool allowFail = false)
+        private static void LoadSpellcheckDictIfExists(string key, string file)
+        {
+            if (!File.Exists(file))
+                return;
+
+            Program.dictionary[key] =
+                WeCantSpell.Hunspell.WordList.CreateFromFiles(file);
+        }
+
+        public static void ReloadDict(Lists.DictType type, bool allowFail = false)
         {
             try
             {
-                string FileCheck = "";
-                string Folder = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
+                string basePath = string.IsNullOrEmpty(Program.JsonPath)
+                    ? Program.ExecPath
+                    : Program.JsonPath;
 
-                switch (Type)
+                string folder = Path.GetDirectoryName(basePath);
+                string filename = DictFilenames[type];
+
+                string path = Path.Combine(folder, filename);
+                if (!File.Exists(path))
+                    path = Path.Combine(Program.ExecPath, filename);
+
+                var dict = FileOps.GetDictionary(path, allowFail);
+                BiDictionary dbi = new BiDictionary(dict);
+
+                switch (type)
                 {
-                    case Lists.DictType.Actors: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Actors]); break;
-                    case Lists.DictType.SFX: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.SFX]); break;
-                    case Lists.DictType.Music: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Music]); break;
-                    case Lists.DictType.Objects: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.Objects]); break;
-                    case Lists.DictType.LinkAnims: FileCheck = Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims]); break;
-                    default: break;
-                }
-
-                if (!File.Exists(FileCheck))
-                    Folder = Program.ExecPath;
-
-                switch (Type)
-                {
-                    case Lists.DictType.Actors: Actors = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Actors]), allowFail); break;
-                    case Lists.DictType.SFX: SFXes = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.SFX]), allowFail); break;
-                    case Lists.DictType.Music: Music = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Music]), allowFail); break;
-                    case Lists.DictType.Objects: ObjectIDs = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.Objects]), allowFail); break;
-                    case Lists.DictType.LinkAnims: LinkAnims = FileOps.GetDictionary(Path.Combine(Folder, DictFilenames[Lists.DictType.LinkAnims]), allowFail); break;
-                    default: break;
+                    case Lists.DictType.Actors: Actors = dbi; break;
+                    case Lists.DictType.SFX: SFXes = dbi; break;
+                    case Lists.DictType.Music: Music = dbi; break;
+                    case Lists.DictType.Objects: ObjectIDs = dbi; break;
+                    case Lists.DictType.LinkAnims: LinkAnims = dbi; break;
                 }
             }
             catch (Exception ex)
             {
                 if (!allowFail)
-                {
-                    System.Windows.Forms.MessageBox.Show($"Error loading the {Type} dict: {ex.Message}");
-                    return;
-                }
+                    MessageBox.Show(
+                        "Error loading the " + type + " dict: " + ex.Message);
             }
         }
 
-        public static string GetStringFromStringIntDict(Dictionary<string, int> Dict, int Value, string Default = null)
+        public static string GetStringFromBiDict(BiDictionary dict, int value, string defaultValue = null)
         {
-            if (Dict.ContainsValue(Value))
-                return Dict.FirstOrDefault(x => x.Value == Value).Key;
-            else if (Default == null)
-                return Value.ToString();
-            else
-                return Default;
+            if (dict.Reverse.TryGetValue(value, out string result))
+                return result;
+
+            if (defaultValue != null)
+                return defaultValue;
+
+            return value.ToString();
+        }
+        public static int GetIntFromBiDict(BiDictionary dict, string value, int? defaultValue = null)
+        {
+            return GetIntFromStringIntDict(dict.Forward, value, defaultValue);
         }
 
-        public static int GetIntFromStringIntDict(Dictionary<string, int> Dict, string Value, int? Default = null)
+        public static string GetStringFromStringIntDict(Dictionary<string, int> dict, int value, string defaultValue = null)
         {
-            if (Dict.ContainsKey(Value))
-                return Dict[Value];
-            else if (Default == null)
-                return Value.IsNumeric() ? Convert.ToInt32(Value) : -1;
-            else
-                return (int)Default;
+            foreach (var pair in dict)
+            {
+                if (pair.Value == value)
+                    return pair.Key;
+            }
+
+            if (defaultValue != null)
+                return defaultValue;
+
+            return value.ToString();
         }
+
+
+        public static int GetIntFromStringIntDict(Dictionary<string, int> dict, string value, int? defaultValue = null)
+        {
+            if (dict.TryGetValue(value, out int result))
+                return result;
+
+            if (defaultValue.HasValue)
+                return defaultValue.Value;
+
+            if (Int32.TryParse(value, out int parsed))
+                return parsed;
+
+            return -1;
+        }
+
     }
 }
