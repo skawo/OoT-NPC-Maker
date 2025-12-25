@@ -328,19 +328,23 @@ namespace NPC_Maker
                 {
                     string json = FileOps.ProcessNPCJSON(EditedFile, null);
 
-                    FileOps.SaveNPCJSON("backup", null, null, json);
-
-                    try
+                    if (json != null)
                     {
-                        if (!Directory.Exists(Program.AutoSavePath))
-                            Directory.CreateDirectory(Program.AutoSavePath);
 
-                        FileOps.SaveNPCJSON(Path.Combine(Program.AutoSavePath, $"autosave_{DateTime.Now.Ticks}.json"), null, null, json);
-                        PruneOldAutosaves(Program.AutoSavePath, 30);
+                        FileOps.SaveNPCJSON("backup", null, null, json);
+
+                        try
+                        {
+                            if (!Directory.Exists(Program.AutoSavePath))
+                                Directory.CreateDirectory(Program.AutoSavePath);
+
+                            FileOps.SaveNPCJSON(Path.Combine(Program.AutoSavePath, $"autosave_{DateTime.Now.Ticks}.json"), null, null, json);
+                            PruneOldAutosaves(Program.AutoSavePath, 30);
+                        }
+                        catch { }
+
+                        LastBackup = CurrentBackup;
                     }
-                    catch { }
-
-                    LastBackup = CurrentBackup;
                 }
             }
             catch
@@ -977,7 +981,7 @@ namespace NPC_Maker
             }
         }
 
-        private async void Save_Sync(object sender, EventArgs e)
+        private void Save_Sync(object sender, EventArgs e)
         {
             if (EditedFile == null)
                 return;
