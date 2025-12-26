@@ -65,7 +65,7 @@ namespace NPC_Maker
 
             Range r = new Range(txb, 0, 0, txb.Text.Length, txb.LinesCount - 1);
 
-            r.SetStyle(StyleIndex.None);
+            txb.ClearStyle(StyleIndex.All);
 
             if (!SyntaxHighlightingOn)
                 return;

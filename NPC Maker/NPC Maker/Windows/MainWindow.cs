@@ -3980,7 +3980,7 @@ namespace NPC_Maker
 
         private void PerformSpellCheck()
         {
-            MsgText.Range.SetStyle(StyleIndex.None);
+            MsgText.ClearStyle(StyleIndex.All);
 
             if (MsgText.Text.Length == 0 || !Program.Settings.Spellcheck)
                 return;

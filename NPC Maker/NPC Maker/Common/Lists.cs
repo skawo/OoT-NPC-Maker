@@ -15,6 +15,7 @@ namespace NPC_Maker
         public const string Keyword_CallProcedure = "::";
         public const string Keyword_EndProcedure = "ENDPROC";
         public const string Keyword_End = "END";
+        public const string Keyword_EndAsync = "ENDASYNC";
         public const string Keyword_EndIf = "ENDIF";
         public const string Keyword_EndWhile = "ENDWHILE";
         public const string Keyword_EndSpawn = "ENDSPAWN";
@@ -292,6 +293,7 @@ namespace NPC_Maker
             GET,
             GOTO_VAR,
             STOP,
+            ASYNC,
             NOP,
         }
 
@@ -346,6 +348,13 @@ namespace NPC_Maker
 
         public static string lnBr = Environment.NewLine + Environment.NewLine; 
         
+        public enum AsyncTypes
+        {
+            ONCE,
+            LOOP,
+            EXIT
+        }
+
         public enum IfSubTypes
         {
             FLAG_INF,

@@ -1062,6 +1062,10 @@ namespace NPC_Maker.Scripts
                                 instructions.AddRange(ParseIfWhileInstruction((int)instructionType.Value, Entry.EmbeddedOverlayCode, lines, splitLine, ref i));
                                 break;
 
+                            case Lists.Instructions.ASYNC:
+                                instructions.AddRange(ParseAsyncInstruction(lines, splitLine, ref i));
+                                break;
+
                             case Lists.Instructions.OCARINA:
                                 instructions.AddRange(ParseOcarinaInstruction(lines, splitLine, ref i));
                                 break;
