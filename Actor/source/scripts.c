@@ -472,13 +472,28 @@ bool Scripts_InstructionForceTalk(NpcMaker* en, PlayState* playState, ScriptInst
     return SCRIPT_CONTINUE;
 }
 
+#define GET_VEC3(name, scale) \
+    Scripts_GetVarvalVec3f( \
+        en, playState, \
+        (Vartype[]){ in->name##XType, in->name##YType, in->name##ZType }, \
+        (ScriptVarval[]){ in->name##X, in->name##Y, in->name##Z }, \
+        scale \
+    )
+
+#define GET_COLOR(name) \
+    Scripts_GetVarvalRGBA( \
+        en, playState, \
+        (Vartype[]){ in->name##RType, in->name##GType, in->name##BType, in->name##AType }, \
+        (ScriptVarval[]){ in->name##R, in->name##G, in->name##B, in->name##A } \
+    )
+
 bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrParticle* in)
 {
     #if LOGGING > 3
         is64Printf("_[%2d, %1d]: PARTICLE\n", en->npcId, en->curScriptNum);
     #endif
 
-    Vec3f pos = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->posXType, in->posYType, in->posZType}, (ScriptVarval[]){in->posX, in->posY, in->posZ}, 1);
+    Vec3f pos = GET_VEC3(pos, 1);
 
     Actor* subject = &en->actor;
 
@@ -487,7 +502,7 @@ bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInsta
 
     if (in->posType)
     {
-        if (in->posType % 2)
+        if (in->posType & 1)
         {
             if (in->type != PARTICLE_FIRE_TAIL)
                 Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
@@ -499,11 +514,11 @@ bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInsta
         }
     }
 
+    Vec3f accel = GET_VEC3(accel, 100);
+    Vec3f vel = GET_VEC3(vel, 100);
+    Color_RGBA8 prim = GET_COLOR(prim);
+    Color_RGBA8 env = GET_COLOR(env);
 
-    Vec3f accel = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->accelXType, in->accelYType, in->accelZType}, (ScriptVarval[]){in->accelX, in->accelY, in->accelZ}, 100);
-    Vec3f vel = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->velXType, in->velYType, in->velZType}, (ScriptVarval[]){in->velX, in->velY, in->velZ}, 100);
-    Color_RGBA8 prim = Scripts_GetVarvalRGBA(en, playState, (Vartype[]){in->primRType, in->primGType, in->primBType, in->primAType}, (ScriptVarval[]){in->primR, in->primG, in->primB, in->primA});
-    Color_RGBA8 env = Scripts_GetVarvalRGBA(en, playState, (Vartype[]){in->envRType, in->envGType, in->envBType, in->envAType}, (ScriptVarval[]){in->envR, in->envG, in->envB, in->envA});
     float scale = Scripts_GetVarval(en, playState, in->scaleType, in->scale, true);
     float scaleUpd = Scripts_GetVarval(en, playState, in->scaleUpdType, in->scaleUpdate, true);
     float life = Scripts_GetVarval(en, playState, in->lifeType, in->life, true);
@@ -1233,26 +1248,14 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_LIGHT_RADIUS:
         case SET_NPC_ID:                            Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, UINT16); break;
         case SET_CUTSCENE_FRAME:                    
-        {
-            void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
-            
-            extern void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
-                #if GAME_VERSION == 0
-                    asm("Cutscene_Execute = 0x80068ECC");
-                #elif GAME_VERSION == 1
-                    asm("Cutscene_Execute = 0x80056A94");
-                #endif          
-            
-            
+        {            
             playState->csCtx.state = 0;
             Cutscene_SetSegment(playState, playState->csCtx.segment);
             Cutscene_Execute(playState, &playState->csCtx);
             Scripts_Set(en, playState, AADDR(playState, basic_set_offsets[in->subId]), in, UINT16); 
             Cutscene_Execute(playState, &playState->csCtx);
-
             break;
         }
-
         case SET_COLLISION_RADIUS:                 
         case SET_COLLISION_HEIGHT:                  
         case SET_MOVEMENT_LOOP_START:               

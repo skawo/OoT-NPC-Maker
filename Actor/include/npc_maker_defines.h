@@ -135,6 +135,15 @@
     #define MIN(a, b)               ((a) < (b) ? (a) : (b))
 #endif
 
+void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
+
+extern void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
+	#if GAME_VERSION == 0
+		asm("Cutscene_Execute = 0x80068ECC");
+	#elif GAME_VERSION == 1
+		asm("Cutscene_Execute = 0x80056A94");
+	#endif  
+
 extern void is64Printf(const char* fmt, ...);
     #if GAME_VERSION == 0
 		#ifdef NPCM_Z64ROM
