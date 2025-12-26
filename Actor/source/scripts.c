@@ -212,15 +212,15 @@ bool Scripts_InstructionAsync(NpcMaker* en, PlayState* playState, ScriptInstance
         {
             AsyncContext* newCtx = ZeldaArena_MallocR(sizeof(AsyncContext));
 
-            //#if LOGGING > 3
+            #if LOGGING > 3
                 is64Printf("_[%2d, %1d]: NEW ASYNC CTX at %x From: %d To: %d\n", en->npcId, en->curScriptNum, newCtx, script->curInstrNum, in->endInstrNum);
-            //#endif 
+            #endif 
 
             if (newCtx == NULL)
             {
-                //#if LOGGING > 1
+                #if LOGGING > 1
                     is64Printf("_[%2d, %1d]: Could not allocate async ctx! %d  %d\n", en->npcId, en->curScriptNum);
-                //#endif
+                #endif
 
                 script->curInstrNum = in->endInstrNum;
                 return SCRIPT_CONTINUE;
