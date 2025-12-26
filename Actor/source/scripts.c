@@ -25,6 +25,38 @@ inline ScrInstr* Scripts_GetInstrPtr(ScriptInstance* script, u32 instruction_num
     return (ScrInstr*)AADDR(script->scriptPtr, curOffs * 4);
 }
 
+void RunScriptInstance(NpcMaker* en, PlayState* playState, ScriptInstance* script)
+{
+    if (script->scriptPtr != NULL)
+    {
+        if (script->active)
+        {
+            // Player responding to a textbox may desync from the script (especially if the player mashes the button), 
+            // so we need to check for this before executing anything.
+            Scripts_ResponseInstruction(en, playState, script);
+
+            // Player getting spotted due to a search particle.
+            if (script->spotted && script->jumpToWhenSpottedInstrNum >= 0)
+            {
+                script->curInstrNum = script->jumpToWhenSpottedInstrNum;
+                script->spotted = 0;
+                script->jumpToWhenSpottedInstrNum = -1;
+            }
+
+            if (script->waitTimer != 0)
+            {
+                #if LOGGING > 3
+                    is64Printf("_[%2d, %1d]: WAITING for %02d more frames.\n", en->npcId, en->curScriptNum, script->waitTimer);
+                #endif
+
+                script->waitTimer--;
+            }
+            else
+                while(Scripts_Execute(en, playState, script));
+        }
+    } 
+}
+
 void Scripts_Main(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
@@ -37,36 +69,42 @@ void Scripts_Main(NpcMaker* en, PlayState* playState)
             en->curScriptNum = i;
         #endif
 
-        ScriptInstance* script = &en->scriptInstances[i];
+        RunScriptInstance(en, playState, &en->scriptInstances[i]); 
+    }
 
-        if (script->scriptPtr != NULL)
+    AsyncContext* head = en->asyncCtxs;
+    int j = 127;
+
+    while (head)
+    {
+        #if LOGGING > 3
+            en->curScriptNum = j;
+            is64Printf("_[%2d, %1d]: Async Script\n", en->npcId, en->curScriptNum);
+        #endif
+
+        ScriptInstance* instance = &head->instance;
+        head = head->next;
+        RunScriptInstance(en, playState, instance);
+
+        if (instance->completed)
         {
-            if (script->active)
+            if (instance->ctx->prev)
+                instance->ctx->prev->next = instance->ctx->next;
+            else
             {
-                // Player responding to a textbox may desync from the script (especially if the player mashes the button), 
-                // so we need to check for this before executing anything.
-                Scripts_ResponseInstruction(en, playState, script);
-
-                // Player getting spotted due to a search particle.
-                if (script->spotted && script->jumpToWhenSpottedInstrNum >= 0)
-                {
-                    script->curInstrNum = script->jumpToWhenSpottedInstrNum;
-                    script->spotted = 0;
-                    script->jumpToWhenSpottedInstrNum = -1;
-                }
-
-                if (script->waitTimer != 0)
-                {
-                    #if LOGGING > 3
-                        is64Printf("_[%2d, %1d]: WAITING for %02d more frames.\n", en->npcId, en->curScriptNum, script->waitTimer);
-                    #endif
-
-                    script->waitTimer--;
-                }
-                else
-                    while(Scripts_Execute(en, playState, script));
+                en->asyncCtxs = instance->ctx->next;         
+                
+                if (en->asyncCtxs)
+                    en->asyncCtxs->prev = NULL;  
             }
-        }   
+
+            if (instance->ctx->next)
+                instance->ctx->next->prev = instance->ctx->prev;    
+                
+            ZeldaArena_Free(instance->ctx);
+        }
+
+        j++;
     }
 
     #if LOGGING > 2
@@ -136,6 +174,7 @@ void* ScriptFuncs[] =
     &Scripts_InstructionGet,                // GET
     &Scripts_InstructionGotoVar,            // GOTOVAR
     &Scripts_InstructionStop,               // STOP
+    &Scripts_InstructionAsync,              // ASYNC
     &Scripts_InstructionNop,                // NOP
 };
 
@@ -146,6 +185,85 @@ bool Scripts_Execute(NpcMaker* en, PlayState* playState, ScriptInstance* script)
     typedef bool ScriptFunc(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in);
     ScriptFunc* f = (ScriptFunc*)ScriptFuncs[instruction->id];
     return f(en, playState, script, instruction);
+}
+
+bool Scripts_InstructionAsync(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrAsync* in)
+{
+    switch (in->subid)
+    {
+        case ASYNC_EXIT:
+        {
+            #if LOGGING > 3
+                is64Printf("_[%2d, %1d]: ASYNC EXIT\n", en->npcId, en->curScriptNum);
+            #endif 
+
+            if (script->ctx)
+            {
+                script->ctx->instance.completed = true;
+                return SCRIPT_STOP;
+            }     
+            else
+            {
+                script->curInstrNum++; 
+                return SCRIPT_CONTINUE;     
+            }
+        }
+        default:
+        {
+            AsyncContext* newCtx = ZeldaArena_MallocR(sizeof(AsyncContext));
+
+            //#if LOGGING > 3
+                is64Printf("_[%2d, %1d]: NEW ASYNC CTX at %x From: %d To: %d\n", en->npcId, en->curScriptNum, newCtx, script->curInstrNum, in->endInstrNum);
+            //#endif 
+
+            if (newCtx == NULL)
+            {
+                //#if LOGGING > 1
+                    is64Printf("_[%2d, %1d]: Could not allocate async ctx! %d  %d\n", en->npcId, en->curScriptNum);
+                //#endif
+
+                script->curInstrNum = in->endInstrNum;
+                return SCRIPT_CONTINUE;
+            }
+
+            newCtx->next = NULL;
+            newCtx->prev = NULL;
+
+            newCtx->instance.ctx = newCtx;
+            newCtx->instance.curInstrNum = script->curInstrNum + 1;
+            newCtx->instance.startInstrNum = script->curInstrNum + 1;
+
+            newCtx->instance.scriptPtr = script->scriptPtr;
+            newCtx->instance.waitTimer = 0;
+            newCtx->instance.responsesInstrNum = -1;
+            newCtx->instance.jumpToWhenReponded = -1;
+            newCtx->instance.spotted = 0;
+            newCtx->instance.jumpToWhenSpottedInstrNum = -1;
+            newCtx->instance.active = 1;
+            newCtx->instance.completed = 0;
+            
+            Scripts_FreeTemp(&newCtx->instance);
+
+            if (en->asyncCtxs)
+            {
+                AsyncContext* head = en->asyncCtxs;
+
+                while (head->next)
+                    head = head->next;
+
+                head->next = newCtx;
+                newCtx->prev = head;
+            }
+            else
+                en->asyncCtxs = newCtx;
+
+            script->curInstrNum = in->endInstrNum;
+            return SCRIPT_CONTINUE; 
+        }
+    }
+
+    script->curInstrNum++; 
+    return SCRIPT_CONTINUE;  
 }
 
 bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstr* in)

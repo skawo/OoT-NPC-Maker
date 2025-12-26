@@ -4,6 +4,9 @@
 #include "npc_maker_types.h"
 #include "scripts_defines.h"
 
+typedef struct AsyncContext AsyncContext;
+typedef struct ScriptInstance ScriptInstance;
+
 typedef struct ScriptsHeader
 {
     u32 numScripts;
@@ -27,9 +30,18 @@ typedef struct ScriptInstance
     u16 curInstrNum;
     u16 startInstrNum;
     u8 active;
-    u8 pad;
+
+    u8 completed;
+    AsyncContext* ctx;
     
 } ScriptInstance;
+
+typedef struct AsyncContext
+{
+    ScriptInstance instance;
+    AsyncContext* prev;
+    AsyncContext* next;
+} AsyncContext;
 
 typedef struct ScrInstr
 {
@@ -763,6 +775,17 @@ typedef struct ScrInstrGetExtVar
     ScriptVarval DestVar;
 } ScrInstrGetExtVar;
 
+
+#pragma endregion
+
+#pragma region async
+
+typedef struct ScrInstrAsync
+{
+    u8 id;
+    u8 subid;
+    u16 endInstrNum;
+} ScrInstrAsync;
 
 #pragma endregion
 

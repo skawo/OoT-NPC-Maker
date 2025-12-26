@@ -644,6 +644,7 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
             en->scriptInstances[i].spotted = 0;
             en->scriptInstances[i].jumpToWhenSpottedInstrNum = -1;
             en->scriptInstances[i].active = 1;
+            en->scriptInstances[i].completed = 0;
             
             Scripts_FreeTemp(&en->scriptInstances[i]);
         }

@@ -46,6 +46,7 @@ typedef enum InstructionId
     GET,
     GOTO_VAR,
     STOP,
+    ASYNC,
     NOP,
 } InstructionId;
 
@@ -117,6 +118,13 @@ typedef enum CommonSubId
     SUBT_VAR = 254,
     SUBT_VARF = 255,
 } CommonSubId;
+
+typedef enum AsyncSubId
+{
+    ASYNC_ONCE,
+    ASYNC_LOOP,
+    ASYNC_EXIT,
+} AsyncSubId;
 
 typedef enum SetSubId
 {

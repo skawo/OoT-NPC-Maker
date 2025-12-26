@@ -9,7 +9,7 @@
 
 typedef struct NpcMaker NpcMaker;
 typedef struct InternalMsgEntry InternalMsgEntry;
- 
+
  #ifndef GetNPCMakerFunc
 	typedef NpcMaker* GetNPCMakerFunc(NpcMaker* en, PlayState*playState, u16 ID);
 #endif
@@ -336,6 +336,7 @@ typedef struct NpcMaker
     u32 numLanguages;
     u32 numMessages;    
     void* userLoadAnimBuf;
+    AsyncContext* asyncCtxs;
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

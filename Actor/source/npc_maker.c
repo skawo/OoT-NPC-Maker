@@ -245,6 +245,23 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
             ZeldaArena_Free(frees[i]);
     }
 
+    AsyncContext* head = en->asyncCtxs;
+
+    while (1)
+    {
+        if (head && head->next)
+            head = head->next;
+        else
+            break;
+    }
+
+    while (head)
+    {
+        AsyncContext* toFree = head;
+        head = head->prev;
+        ZeldaArena_Free(toFree);
+    }
+
     NpcMaker_RunCFunc(en, playState, en->CFuncs[4], NULL);
 	
     if (en->embeddedOverlay != 0)
