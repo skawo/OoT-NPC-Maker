@@ -266,7 +266,7 @@ namespace NPC_Maker
             ReloadDict(DictType.SFX);
         }
 
-        private static T TryLoadLauguageDict<T>(string Language)
+        private static T TryLoadLanguageDict<T>(string Language)
         {
             try
             {
@@ -323,6 +323,12 @@ namespace NPC_Maker
             var secondTagsDict = second.Entries.ToDictionary(tag => tag.Token, tag => tag);
             var firstTokens = new HashSet<string>();
 
+            first.ExtraFont = second.ExtraFont;
+            first.EndMessage = second.EndMessage;
+            first.NewLine = second.NewLine;
+            first.EndMessageType = second.EndMessageType;
+            first.NewLineType = second.NewLineType;
+            
             // Replace matching tags and track first config tokens
             for (int i = 0; i < first.Entries.Count; i++)
             {
@@ -355,12 +361,12 @@ namespace NPC_Maker
             allLanguages.AddRange(languages);
 
             MessageConfig baseConfig =
-                TryLoadLauguageDict<MessageConfig>("MessageBase") ?? throw new Exception("Could not load base language definitions.");
+                TryLoadLanguageDict<MessageConfig>("MessageBase") ?? throw new Exception("Could not load base language definitions.");
 
             foreach (string language in allLanguages)
             {
                 MessageConfig langConfig =
-                    TryLoadLauguageDict<MessageConfig>(language);
+                    TryLoadLanguageDict<MessageConfig>(language);
 
                 if (langConfig == null)
                     continue;
@@ -374,7 +380,7 @@ namespace NPC_Maker
             }
 
             MsgDefinitions =
-                TryLoadLauguageDict<List<MessageDefinition>>("MsgDefs");
+                TryLoadLanguageDict<List<MessageDefinition>>("MsgDefs");
 
             if (LanguageDefs.Count == 0)
                 throw new Exception("Could not load any language definitions...");

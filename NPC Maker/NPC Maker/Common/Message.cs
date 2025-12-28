@@ -30,12 +30,15 @@ namespace NPC_Maker
 
         public string NewLineType { get; set; }
 
+        public string ExtraFont { get; set; }
+
         public MessageConfig()
         {
             EndMessage = (int)ZeldaMessage.Data.MsgControlCode.END;
             NewLine = (int)ZeldaMessage.Data.MsgControlCode.LINE_BREAK;
             EndMessageType = MsgValueTypes.x.ToString();
             NewLineType = MsgValueTypes.x.ToString();
+            ExtraFont = "";
             Entries = new List<Tag>();
         }
 

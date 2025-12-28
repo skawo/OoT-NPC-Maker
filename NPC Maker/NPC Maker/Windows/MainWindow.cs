@@ -44,6 +44,9 @@ namespace NPC_Maker
         private Dictionary<string, float[]> fontsWidths = new Dictionary<string, float[]>();
         private Dictionary<string, byte[]> fonts = new Dictionary<string, byte[]>();
 
+        private Dictionary<string, float[]> exfontsWidths = new Dictionary<string, float[]>();
+        private Dictionary<string, byte[]> exfonts = new Dictionary<string, byte[]>();
+
         public MainWindow(string FilePath = "")
         {
             InitializeComponent();
@@ -214,7 +217,7 @@ namespace NPC_Maker
 
         }
 
-        private void LoadAddFontByName(string FontName)
+        private void LoadAddFontByName(string FontName, ref Dictionary<string, byte[]> fontDict, ref Dictionary<string, float[]> widthsDict)
         {
             string fontf = $"{FontName}.font_static";
             string fontfW = $"{FontName}.width_table";
@@ -233,7 +236,7 @@ namespace NPC_Maker
 
             if (File.Exists(fontfP) && File.Exists(fontfWP))
             {
-                fonts.Add(FontName, File.ReadAllBytes(fontfP));
+                fontDict.Add(FontName, File.ReadAllBytes(fontfP));
                 List<float> fontWidths = new List<float>();
 
                 byte[] widths = System.IO.File.ReadAllBytes(fontfWP);
@@ -244,11 +247,11 @@ namespace NPC_Maker
                     fontWidths.Add(BitConverter.ToSingle(width, 0));
                 }
 
-                fontsWidths.Add(FontName, fontWidths.ToArray());
+                widthsDict.Add(FontName, fontWidths.ToArray());
             }
-            else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef) && !fonts.ContainsKey(Dicts.DefaultLanguage))
+            else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef) && !fontDict.ContainsKey(Dicts.DefaultLanguage))
             {
-                fonts.Add(Dicts.DefaultLanguage, File.ReadAllBytes(fontfPDef));
+                fontDict.Add(Dicts.DefaultLanguage, File.ReadAllBytes(fontfPDef));
                 List<float> fontWidths = new List<float>();
 
                 byte[] widths = System.IO.File.ReadAllBytes(fontfWPDef);
@@ -259,7 +262,7 @@ namespace NPC_Maker
                     fontWidths.Add(BitConverter.ToSingle(width, 0));
                 }
 
-                fontsWidths.Add(Dicts.DefaultLanguage, fontWidths.ToArray());
+                widthsDict.Add(Dicts.DefaultLanguage, fontWidths.ToArray());
             }
         }
 
@@ -267,10 +270,19 @@ namespace NPC_Maker
         {
             fonts.Clear();
             fontsWidths.Clear();
-            LoadAddFontByName(Dicts.DefaultLanguage);
+            exfonts.Clear();
+            exfontsWidths.Clear();
+
+            LoadAddFontByName(Dicts.DefaultLanguage, ref fonts, ref fontsWidths);
 
             foreach (string lan in EditedFile.Languages)
-                LoadAddFontByName(lan);
+            {
+                LoadAddFontByName(lan, ref fonts, ref fontsWidths);
+
+                if (Dicts.LanguageDefs.ContainsKey(lan) && !String.IsNullOrWhiteSpace(Dicts.LanguageDefs[lan].ExtraFont))
+                    LoadAddFontByName(Dicts.LanguageDefs[lan].ExtraFont, ref exfonts, ref exfontsWidths);
+
+            }
         }
 
         private void SetupLanguageCombo()
@@ -285,8 +297,8 @@ namespace NPC_Maker
 
             try
             {
-                ReloadAllFonts();
                 Dicts.ReloadLanguages(EditedFile.Languages);
+                ReloadAllFonts();
                 Dicts.ReloadSpellcheckDicts(EditedFile.Languages);
             }
             catch (Exception ex)
@@ -1122,8 +1134,8 @@ namespace NPC_Maker
 
                 try
                 {
-                    ReloadAllFonts();
                     Dicts.ReloadLanguages(EditedFile.Languages);
+                    ReloadAllFonts();
                     Dicts.ReloadSpellcheckDicts(EditedFile.Languages);
                 }
                 catch (Exception ex)
@@ -1167,8 +1179,8 @@ namespace NPC_Maker
 
                             try
                             {
-                                ReloadAllFonts();
                                 Dicts.ReloadLanguages(EditedFile.Languages);
+                                ReloadAllFonts();
                                 Dicts.ReloadSpellcheckDicts(EditedFile.Languages);
                             }
                             catch (Exception ex)
@@ -4052,6 +4064,8 @@ namespace NPC_Maker
 
             float[] fontWidths = null;
             byte[] font = null;
+            float[] fontWidthsEx = null;
+            byte[] fontEx = null;
 
             if (fontsWidths.ContainsKey(Language) && fonts.ContainsKey(Language))
             {
@@ -4064,13 +4078,24 @@ namespace NPC_Maker
                 font = fonts[Dicts.DefaultLanguage];
             }
 
+            if (Dicts.LanguageDefs.ContainsKey(Language) && !String.IsNullOrWhiteSpace(Dicts.LanguageDefs[Language].ExtraFont))
+            {
+                string exFontName = Dicts.LanguageDefs[Language].ExtraFont;
+
+                if (exfontsWidths.ContainsKey(exFontName))
+                    fontWidthsEx = exfontsWidths[exFontName];
+
+                if (exfonts.ContainsKey(exFontName))
+                    fontEx = exfonts[exFontName];
+            }
+
             ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type,
                                                                               Data.ToArray(),
                                                                               fontWidths,
                                                                               font,
                                                                               EditedFile.SpaceFromFont,
-                                                                              null,
-                                                                              null,
+                                                                              fontWidthsEx,
+                                                                              fontEx,
                                                                               Language);
 
             Bitmap bmp;
