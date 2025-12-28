@@ -4068,7 +4068,10 @@ namespace NPC_Maker
                                                                               Data.ToArray(),
                                                                               fontWidths,
                                                                               font,
-                                                                              EditedFile.SpaceFromFont);
+                                                                              EditedFile.SpaceFromFont,
+                                                                              null,
+                                                                              null,
+                                                                              Language);
 
             Bitmap bmp;
 
