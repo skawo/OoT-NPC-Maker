@@ -4097,8 +4097,7 @@ namespace NPC_Maker
                                                                               fontWidthsEx,
                                                                               fontEx,
                                                                               Language);
-
-            Bitmap bmp;
+            Bitmap bmp = null;
 
             if (savedPreviewData != null &&
                 savedPreviewData.MessageArrays != null &&
@@ -4107,34 +4106,41 @@ namespace NPC_Maker
             {
                 bmp = (Bitmap)savedPreviewData.previewImage;
             }
-            else
-            {
-                bmp = new Bitmap((CreditsTxBox ? 480 : 384), mp.MessageCount * (CreditsTxBox ? 360 : 108));
-                bmp.MakeTransparent();
-            }
 
-            using (Graphics grfx = Graphics.FromImage(bmp))
+            Graphics grfx = null;
+
+            for (int i = 0; i < mp.MessageCount; i++)
             {
-                for (int i = 0; i < mp.MessageCount; i++)
+                if (savedPreviewData == null ||
+                    savedPreviewData.MessageArrays == null ||
+                    mp.Message.Count != savedPreviewData.MessageArrays.Count ||
+                    Entry.Type != savedPreviewData.Type ||
+                    !mp.Message[i].SequenceEqual(savedPreviewData.MessageArrays[i]))
                 {
-                    if (savedPreviewData == null ||
-                        savedPreviewData.MessageArrays == null ||
-                        mp.Message.Count != savedPreviewData.MessageArrays.Count ||
-                        Entry.Type != savedPreviewData.Type ||
-                        !mp.Message[i].SequenceEqual(savedPreviewData.MessageArrays[i]))
-                    {
-                        Bitmap box = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
+                    Bitmap box = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
 
-                        if (Program.IsRunningUnderMono)
-                            bmp.DrawImageSourceCopySafe(box, 0, box.Height * i);
-                        else
-                        {
-                            grfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-                            grfx.DrawImage(box, 0, box.Height * i);
-                        }
+                    if (bmp == null)
+                    {
+                        bmp = new Bitmap(box.Width, mp.MessageCount * box.Height);
+                        bmp.MakeTransparent();
+
+                    }
+
+                    if (grfx == null)
+                        grfx = Graphics.FromImage(bmp);
+
+                    if (Program.IsRunningUnderMono)
+                        bmp.DrawImageSourceCopySafe(box, 0, box.Height * i);
+                    else
+                    {
+                        grfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                        grfx.DrawImage(box, 0, box.Height * i);
                     }
                 }
             }
+
+            if (grfx != null)
+                grfx.Dispose();
 
             savedPreviewData = new Common.SavedMsgPreviewData();
             savedPreviewData.MessageArrays = mp.Message;
