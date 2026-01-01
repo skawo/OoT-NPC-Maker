@@ -49,6 +49,7 @@ static ColliderCylinderInit npcMakerCollision =
 
 void Setup_Defaults(NpcMaker* en, PlayState* playState)
 {
+    en->npcId = UINT16_MAX;
     en->exSegData = NULL;
     en->animations = NULL;
     en->extraDLists = NULL;
@@ -62,7 +63,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->canMove = true;
     en->isMoving = false;
     en->stopped = true;
-    en->currentDistToNextPos = 0xFFFFFFFF;
+    en->currentDistToNextPos = UINT32_MAX;
     en->distanceTotal = 0;
     en->traversedDistance = 0;
     en->lastTraversedDistance = 0;
