@@ -68,6 +68,42 @@ namespace NPC_Maker
             }
         }
 
+        public PickableList(Dictionary<string, int> Dict, List<int> _SkipEntries = null)
+        {
+            InitializeComponent();
+
+            Helpers.MakeNotResizableMonoSafe(this);
+
+            SkipEntries = _SkipEntries;
+            FileName = null;
+
+            if (SkipEntries == null)
+                SkipEntries = new List<int>();
+
+            try
+            {
+                Data = new List<ListEntry>();
+
+                foreach (var entry in Dict)
+                {
+                    Data.Add(new ListEntry((short)entry.Value, entry.Key, ""));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+
+            SetListView(SkipEntries);
+
+            this.ActiveControl = Btn_Search;
+
+            this.Btn_AddEntry.Visible = false;
+            this.Btn_EditEntry.Visible = false;
+            this.Btn_DelEntry.Visible = false;
+        }
+
         private void SetListView(List<int> SkipEntries)
         {
             listView1.BeginUpdate();
@@ -249,6 +285,9 @@ namespace NPC_Maker
 
         private void PickableList_FormClosed(object sender, FormClosedEventArgs e)
         {
+            if (FileName == null)
+                return;
+
             try
             {
                 string Out = "";

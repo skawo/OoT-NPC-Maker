@@ -41,7 +41,6 @@ namespace NPC_Maker.Controls
             // 
             // Grid
             // 
-            this.Grid.AllowUserToResizeColumns = false;
             this.Grid.AllowUserToResizeRows = false;
             this.Grid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.Grid.BackgroundColor = System.Drawing.Color.White;
@@ -71,6 +70,7 @@ namespace NPC_Maker.Controls
             // 
             this.HeaderDefinition.HeaderText = "Header Definition";
             this.HeaderDefinition.Name = "HeaderDefinition";
+            this.HeaderDefinition.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.HeaderDefinition.Visible = false;
             // 
             // SegmentsFileStart
@@ -78,6 +78,7 @@ namespace NPC_Maker.Controls
             this.SegmentsFileStart.FillWeight = 80F;
             this.SegmentsFileStart.HeaderText = "File Start";
             this.SegmentsFileStart.Name = "SegmentsFileStart";
+            this.SegmentsFileStart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Seg_Offs
             // 

@@ -36,8 +36,18 @@ namespace NPC_Maker
             { "Not visible", 0 },
             { "With limb", 1 },
             { "Replaces limb", 2 },
-            { "In Skeleton", 3 },
+            { "In skeleton", 3 },
             { "Control existing", 4 },
+        };
+
+        public static Dictionary<string, int> LimbIndexSubTypes = new Dictionary<string, int>()
+        {
+            { "Relative Position", -1 },
+            { "Absolute Position", -2 },
+            { "At Camera", -3 },
+            { "At Display", -4 },
+            { "Orthographic", -5 },
+            { "Orthographic Wide", -6 },
         };
 
         public static Dictionary<Lists.DictType, string> DictFilenames = new Dictionary<Lists.DictType, string>()

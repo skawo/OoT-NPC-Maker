@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Skawo")]
 [assembly: AssemblyProduct("NPC Maker")]
-[assembly: AssemblyCopyright("Copyright © 2022 - 2025")]
+[assembly: AssemblyCopyright("Copyright © 2022 - 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.746")]
-[assembly: AssemblyFileVersion("3.746")]
+[assembly: AssemblyVersion("3.747")]
+[assembly: AssemblyFileVersion("3.747")]

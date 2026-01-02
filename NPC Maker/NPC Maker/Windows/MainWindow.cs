@@ -725,6 +725,7 @@ namespace NPC_Maker
             foreach (DListEntry Dlist in SelectedEntry.ExtraDisplayLists)
             {
                 string SelCombo = ExtraDlists_ShowType.Items[(int)Dlist.ShowType].ToString();
+                string PositionType = Dicts.GetStringFromStringIntDict(Dicts.LimbIndexSubTypes, Dlist.Limb, null);
 
                 int Row = DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
                                                                            Dlist.HeaderDefinition,
@@ -734,7 +735,7 @@ namespace NPC_Maker
                                                                            Dlist.TransX.ToString() + "," + Dlist.TransY.ToString() + "," + Dlist.TransZ.ToString(),
                                                                            Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
                                                                            Dlist.Scale.ToString(),
-                                                                           Dlist.Limb.ToString(),
+                                                                           PositionType == null ? Dlist.Limb.ToString() : PositionType,
                                                                            Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Dlist.ObjectID),
                                                                            SelCombo
                                                                           });
@@ -2843,65 +2844,86 @@ namespace NPC_Maker
             if (e.RowIndex < 0)
                 return;
 
-            if (e.ColumnIndex == (int)EDlistsColumns.Object)
+            switch (e.ColumnIndex)
             {
-                PickableList Objects = new PickableList(Lists.DictType.Objects, true);
-                DialogResult DR = Objects.ShowDialog();
-
-                if (DR == DialogResult.OK)
-                {
-                    DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
-                    DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
-                    DataGridView_ExtraDLists.Update();
-                }
-            }
-            else if (e.ColumnIndex == (int)EDlistsColumns.Color)
-            {
-                ColorDialog.Color = DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
-
-                if (ColorDialog.ShowDialog() == DialogResult.OK)
-                {
-                    DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
-                        new DataGridViewCellStyle()
-                        {
-                            SelectionForeColor = ColorDialog.Color,
-                            BackColor = ColorDialog.Color,
-                            SelectionBackColor = ColorDialog.Color
-
-                        };
-
-                    DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, "", e.GetType(), null));
-                    DataGridView_ExtraDLists.Update();
-
-                }
-            }
-            else if (e.ColumnIndex == (int)EDlistsColumns.HeaderDefinition)
-            {
-                var curr = Helpers.SplitHeaderDefsString((string)(sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
-                Common.HDefine hD = Helpers.SelectOffsetFileStartFromH(SelectedEntry, curr[1], curr[0]);
-
-                if (hD != null)
-                {
-                    if (!ShowHDefineError(hD))
+                case (int)EDlistsColumns.Object:
                     {
-                        DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
-                        DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
+                        PickableList Objects = new PickableList(Lists.DictType.Objects, true);
+                        DialogResult DR = Objects.ShowDialog();
 
-                        if (hD.Value1 != null)
+                        if (DR == DialogResult.OK)
                         {
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[(int)EDlistsColumns.Offset].Value = hD.Value1String;
-                            DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.Offset, hD.Value1String, e.GetType(), null));
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
+                            DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
+                            DataGridView_ExtraDLists.Update();
                         }
 
-                        if (hD.Value2 != null)
-                        {
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[(int)EDlistsColumns.FileStart].Value = hD.Value2String;
-                            DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.FileStart, hD.Value2String, e.GetType(), null));
-                        }
-
-                        DataGridView_ExtraDLists.RefreshEdit();
+                        break;
                     }
-                }
+                case (int)EDlistsColumns.Limb:
+                    {
+                        PickableList SubTypes = new PickableList(Dicts.LimbIndexSubTypes);
+                        DialogResult DR = SubTypes.ShowDialog();
+
+                        if (DR == DialogResult.OK)
+                        {
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = SubTypes.Chosen.ID.ToString();
+                            DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, SubTypes.Chosen.ID.ToString(), e.GetType(), null));
+                            DataGridView_ExtraDLists.Update();
+                        }
+
+                        break;
+                    }
+                case (int)EDlistsColumns.Color:
+                    {
+                        ColorDialog.Color = DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
+
+                        if (ColorDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
+                                new DataGridViewCellStyle()
+                                {
+                                    SelectionForeColor = ColorDialog.Color,
+                                    BackColor = ColorDialog.Color,
+                                    SelectionBackColor = ColorDialog.Color
+
+                                };
+
+                            DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, "", e.GetType(), null));
+                            DataGridView_ExtraDLists.Update();
+
+                        }
+                        break;
+                    }
+                case (int)EDlistsColumns.HeaderDefinition:
+                    {
+                        var curr = Helpers.SplitHeaderDefsString((string)(sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                        Common.HDefine hD = Helpers.SelectOffsetFileStartFromH(SelectedEntry, curr[1], curr[0]);
+
+                        if (hD != null)
+                        {
+                            if (!ShowHDefineError(hD))
+                            {
+                                DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
+                                DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
+
+                                if (hD.Value1 != null)
+                                {
+                                    DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[(int)EDlistsColumns.Offset].Value = hD.Value1String;
+                                    DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.Offset, hD.Value1String, e.GetType(), null));
+                                }
+
+                                if (hD.Value2 != null)
+                                {
+                                    DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[(int)EDlistsColumns.FileStart].Value = hD.Value2String;
+                                    DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.FileStart, hD.Value2String, e.GetType(), null));
+                                }
+
+                                DataGridView_ExtraDLists.RefreshEdit();
+                            }
+                        }
+                        break;
+                    }
             }
         }
 
@@ -3146,10 +3168,18 @@ namespace NPC_Maker
                     {
                         try
                         {
+                            short Value = Convert.ToInt16(e.Value);
+                            string PositionType = Dicts.GetStringFromStringIntDict(Dicts.LimbIndexSubTypes, Value, null);
+
+                            if (PositionType != null)
+                                e.Value = PositionType;
+
+                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+
                             if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, Convert.ToInt16(e.Value));
+                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, Value);
                             else
-                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Limb = Convert.ToInt16(e.Value);
+                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Limb = Value;
                         }
                         catch (Exception)
                         {
@@ -3303,7 +3333,7 @@ namespace NPC_Maker
                             (sender as DataGridView).Rows[e.RowIndex].Cells[(int)SegmentsColumns.FileStart].Value = hD.Value2String;
                             DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)SegmentsColumns.FileStart, hD.Value2String, e.GetType(), null));
                         }
-                        
+
                         (sender as DataGridView).Update();
                     }
                 }

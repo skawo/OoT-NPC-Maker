@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="Col_ID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Col_Name.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="StartLimbColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -151,6 +145,24 @@
     <value>True</value>
   </metadata>
   <metadata name="Col_OBJ.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Col_ID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Col_Name.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Col_ID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Col_Name.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="StartLimbColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ColorColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="ExtraDlists_Purpose.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -271,7 +283,7 @@
         lQyVeIY4rKga5QtZlxXOW5zVSo217slfGMhrK2mu0xxBHEtIIAkRMmooowILEVo1UkykaD/WxR9y/Ely
         yeQqg5FjAVWokBw/+B/87tYsTE+5SYEY0Pti2x+jgG8XaNZt+/vYtpsngPcZuNLa/moDmPskvd7WwkfA
         wDZwcd3W5D3gcgcYftIlQ3IkL02hUADez+ibcsDQLdC35vbW2sfpA5ChrpZvgINDYKxI2etd3u3v7O3P
-        M63+fgAWtXLoTuAQ4AAAAAlwSFlzAAAbwQAAG8EBl5q5HwAAAAd0SU1FB+kIGhEyJ6fVNI0AAAFaSURB
+        M63+fgAWtXLoTuAQ4AAAAAlwSFlzAAAbvwAAG78BFw6B1gAAAAd0SU1FB+kIGhEyJ6fVNI0AAAFaSURB
         VHhe5dDLbcNAEARRJuSwDOUfgQ1eqyxxf7Ok0Yd3KVjcHh9fr+8jmUIahTQKaRTSKKRRSKOQRiGNQhqF
         NAppFNIopFFIo5BG4ZPjOH7+C25/R+EKH3oq7n5HoQUfexru/UShBR98Em69otCKDz8Fd15R6MHH78Z9
         LRR6cMCduK2VQi8OuQt3tVIYwTG7cU8PhVEctQt39FIYxWG7cEcvhRkcV43vj1CYxZFV+O4ohVkcWoXv
@@ -290,13 +302,16 @@
         lQyVeIY4rKga5QtZlxXOW5zVSo217slfGMhrK2mu0xxBHEtIIAkRMmooowILEVo1UkykaD/WxR9y/Ely
         yeQqg5FjAVWokBw/+B/87tYsTE+5SYEY0Pti2x+jgG8XaNZt+/vYtpsngPcZuNLa/moDmPskvd7WwkfA
         wDZwcd3W5D3gcgcYftIlQ3IkL02hUADez+ibcsDQLdC35vbW2sfpA5ChrpZvgINDYKxI2etd3u3v7O3P
-        M63+fgAWtXLoTuAQ4AAAAAlwSFlzAAAbwQAAG8EBl5q5HwAAAAd0SU1FB+kIGhEyOV3aCe4AAACwSURB
+        M63+fgAWtXLoTuAQ4AAAAAlwSFlzAAAbvwAAG78BFw6B1gAAAAd0SU1FB+kIGhEyOV3aCe4AAACwSURB
         VHhe7dBBDsIwDAXR3v/SsIHNqIhSEttx5kmzzneOQ5IkSZIkSeEer7b0Pn7bT9j6A3j8Vp/Ao1lrPPas
         1njsp1rikd9qhcddqRUed7UWeNSvLY3H3GlpPOZuS+IR/7YUjh/VMjh8VEvg6NGVxrGzKotDZ1USR86u
         FI6LqgwOi6oEjoouFcdklYIjMkvBEdmF4uNVCsFHKxWCj1ZrKj5WtSn4SOUkSZIkSZJOPQF3yrljjJeo
         IQAAAABJRU5ErkJggg==
 </value>
   </data>
+  <metadata name="dataGridViewTextBoxColumn2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="dataGridViewTextBoxColumn2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -317,6 +332,39 @@
   </metadata>
   <metadata name="msgCommentTooltipLoc.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>397, 3</value>
+  </metadata>
+  <metadata name="ExtraDlists_Purpose.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_HeaderDefinition.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_Color.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_FileStart.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_Offset.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_Translation.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_Rotation.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDLists_Scale.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_Limb.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_ObjectID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ExtraDlists_ShowType.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>69</value>

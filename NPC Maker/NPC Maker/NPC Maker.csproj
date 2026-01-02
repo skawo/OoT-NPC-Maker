@@ -151,7 +151,7 @@
     <Reference Include="WeCantSpell.Hunspell, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WeCantSpell.Hunspell.2.1.0\lib\net35\WeCantSpell.Hunspell.dll</HintPath>
     </Reference>
-    <Reference Include="ZeldaMessage, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ZeldaMessage, Version=1.23.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ZeldaMessagePreview\ZeldaMessagePreview\bin\Release\ZeldaMessage.dll</HintPath>
     </Reference>
