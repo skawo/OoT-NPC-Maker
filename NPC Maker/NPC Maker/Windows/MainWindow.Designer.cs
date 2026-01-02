@@ -46,6 +46,7 @@
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
+            this.Tx_FileStartName = new System.Windows.Forms.TextBox();
             this.Tx_SkeletonName = new System.Windows.Forms.TextBox();
             this.Btn_HeaderBrowse = new System.Windows.Forms.Button();
             this.Label_Header = new System.Windows.Forms.Label();
@@ -667,6 +668,7 @@
             // 
             this.Tab1_Data.BackColor = System.Drawing.Color.White;
             this.Tab1_Data.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Tab1_Data.Controls.Add(this.Tx_FileStartName);
             this.Tab1_Data.Controls.Add(this.Tx_SkeletonName);
             this.Tab1_Data.Controls.Add(this.Btn_HeaderBrowse);
             this.Tab1_Data.Controls.Add(this.Label_Header);
@@ -705,9 +707,21 @@
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
             // 
+            // Tx_FileStartName
+            // 
+            this.Tx_FileStartName.Location = new System.Drawing.Point(287, 60);
+            this.Tx_FileStartName.MaxLength = 32;
+            this.Tx_FileStartName.Name = "Tx_FileStartName";
+            this.Tx_FileStartName.Size = new System.Drawing.Size(129, 20);
+            this.Tx_FileStartName.TabIndex = 84;
+            this.Tx_FileStartName.Tag = "SKELETONNAME";
+            this.Tx_FileStartName.Visible = false;
+            this.Tx_FileStartName.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
+            this.Tx_FileStartName.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Tx_FileStart_MouseDoubleClick);
+            // 
             // Tx_SkeletonName
             // 
-            this.Tx_SkeletonName.Location = new System.Drawing.Point(287, 85);
+            this.Tx_SkeletonName.Location = new System.Drawing.Point(287, 86);
             this.Tx_SkeletonName.MaxLength = 32;
             this.Tx_SkeletonName.Name = "Tx_SkeletonName";
             this.Tx_SkeletonName.Size = new System.Drawing.Size(129, 20);
@@ -5222,6 +5236,7 @@
         private System.Windows.Forms.Label labelEditorFont;
         private System.Windows.Forms.CheckBox ChkBox_UseCJK;
         private FCTB_MonoCJK MsgTextCJK;
+        private System.Windows.Forms.TextBox Tx_FileStartName;
     }
 }
 

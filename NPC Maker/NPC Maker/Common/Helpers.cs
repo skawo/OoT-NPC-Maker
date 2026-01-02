@@ -69,10 +69,61 @@ namespace NPC_Maker
         public static string GetDefinesStringFromH(string HeaderPath)
         {
             Dictionary<string, string> hDefines = Helpers.GetDefinesFromHeaders(HeaderPath);
-            return string.Join(Environment.NewLine, hDefines.Select(kvp => $"#define H_{kvp.Key} {kvp.Value}"));
+
+            return string.Join(
+                Environment.NewLine,
+                hDefines
+                    .Where(kvp => HasReplacement(kvp.Value))
+                    .Select(kvp => $"#define H_{kvp.Key} {kvp.Value}")
+            );
         }
 
-        public static Common.HDefine SelectNameFromH(NPCEntry entry)
+        private static bool HasReplacement(string value)
+        {
+            return !string.IsNullOrWhiteSpace(value);
+        }
+
+
+        public static List<string> SplitHeaderDefsString(string headerDefinitionString)
+        {
+            if (string.IsNullOrEmpty(headerDefinitionString))
+                return new List<string> { "", "" };
+
+            var parts = headerDefinitionString.Split(new[] { ';' }, 2);
+
+            if (parts.Length == 1)
+                return new List<string> { "", parts[0] };
+
+            return new List<string> { parts[0], parts[1] };
+        }
+
+        public static Common.HDefine SelectOffsetFileStartFromH(NPCEntry entry, string CurOffs, string CurFileSt)
+        {
+            if (entry == null || String.IsNullOrEmpty(entry.HeaderPath))
+                return null;
+
+            Dictionary<string, string> hDict = Helpers.GetDefinesFromHeaders(entry.HeaderPath);
+
+            if (hDict.Count == 0)
+                return null;
+
+            Windows.OffsetFileStartPicker com = new Windows.OffsetFileStartPicker(hDict.Keys.ToList(), CurOffs, CurFileSt);
+
+            if (com.ShowDialog() == DialogResult.OK)
+            {
+                string Offset = com.SelectedIndexOffset == 0 ? "" : com.SelectedOptionOffset;
+                string FileStart = com.SelectedIndexFileStart == 0 ? "" : com.SelectedOptionFileStart;
+
+                string OffsetVal = com.SelectedIndexOffset == 0 ? "" : hDict[com.SelectedOptionOffset];
+                string FileStartVal = com.SelectedIndexFileStart == 0 ? "" : hDict[com.SelectedOptionFileStart];
+
+                return new Common.HDefine(Offset, OffsetVal, FileStart, FileStartVal);
+            }
+            else
+                return null;
+        }
+
+        public static Common.HDefine SelectSingleFromH(NPCEntry entry)
         {
             if (entry == null || String.IsNullOrEmpty(entry.HeaderPath))
                 return null;
@@ -85,7 +136,7 @@ namespace NPC_Maker
             Windows.ComboPicker com = new Windows.ComboPicker(hDict.Keys.ToList(), "Select symbol from header...", "Selection", true);
 
             if (com.ShowDialog() == DialogResult.OK)
-                return new Common.HDefine(com.SelectedOption, hDict[com.SelectedOption]);
+                return new Common.HDefine(com.SelectedOption, hDict[com.SelectedOption], "", "");
             else
                 return null;
         }
@@ -275,40 +326,53 @@ namespace NPC_Maker
 
         public static string GetOnlyDefinesFromH(string hPath)
         {
-            string headerContent = File.ReadAllText(hPath);
-            string pattern = @"^\s*#define\s+(\w+)(?:\s+(.+?))?(?:\s*//.*)?$";
+            var lines = File.ReadLines(hPath)
+                            .Select(l => l.Trim())
+                            .Where(l => l.StartsWith("#define "))
+                            .Select(l =>
+                            {
+                                int commentIndex = l.IndexOf("//");
+                                return commentIndex >= 0 ? l.Substring(0, commentIndex).TrimEnd() : l;
+                            })
+                            .ToList();
 
-            return string.Join(Environment.NewLine,
-                Regex.Matches(headerContent, pattern, RegexOptions.Multiline)
-                     .Cast<Match>()
-                     .Select(m => m.Value));
+            return string.Join(Environment.NewLine, lines);
         }
 
         private static Dictionary<string, string> ParseDefinesH(string hPath)
         {
-            string headerContent = File.ReadAllText(hPath);
-            string pattern = @"^\s*#define\s+(\w+)(?:\s+(.+?))?(?:\s*//.*)?$";
             var result = new Dictionary<string, string>();
 
-            foreach (Match match in Regex.Matches(headerContent, pattern, RegexOptions.Multiline))
+            foreach (var rawLine in File.ReadLines(hPath))
             {
-                string name = match.Groups[1].Value;
-                string offset = match.Groups[2].Value.Trim();
+                var line = rawLine.Trim();
 
-                // Handle duplicate names
+                if (!line.StartsWith("#define "))
+                    continue;
+
+                var remainder = line.Substring(8).Trim();
+
+                var parts = remainder.Split(
+                    new[] { ' ', '\t' },
+                    2,
+                    StringSplitOptions.RemoveEmptyEntries
+                );
+
+                string name = parts[0];
+                string value = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+
+                // Handle duplicates
                 string key = name;
                 int counter = 1;
                 while (result.ContainsKey(key))
-                {
-                    key = $"{name}_{counter}";
-                    counter++;
-                }
+                    key = $"{name}_{counter++}";
 
-                result[key] = offset;
+                result[key] = value;
             }
 
             return result;
         }
+
 
         private static Dictionary<string, string> ParseDefinesXML(string xmlPath)
         {
@@ -347,7 +411,7 @@ namespace NPC_Maker
             return result;
         }
 
-        public static Common.HDefine GetDefineFromName(string name, Dictionary<string, string> defines)
+        public static Common.HDefine GetHDefineFromName(string name, Dictionary<string, string> defines)
         {
             if (name != null && defines.ContainsKey(name))
             {

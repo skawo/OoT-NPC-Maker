@@ -189,6 +189,7 @@ namespace NPC_Maker
 
         public string HeaderPath { get; set; }
         public string SkeletonHeaderDefinition { get; set; }
+        public string FileStartHeaderDefinition { get; set; }
 
         public NPCEntry()
         {
@@ -305,6 +306,7 @@ namespace NPC_Maker
             Omitted = false;
             HeaderPath = "";
             SkeletonHeaderDefinition = "";
+            FileStartHeaderDefinition = "";
         }
 
         public List<OutputColorEntry> ParseColorEntries()
@@ -418,6 +420,7 @@ namespace NPC_Maker
             OMIT,
             HEADERPATH,
             SKELETONNAME,
+            FILESTARTNAME,
         }
 
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
@@ -555,6 +558,7 @@ namespace NPC_Maker
                 case Members.OMIT: Omitted = Convert.ToBoolean(Value); break;
                 case Members.HEADERPATH: HeaderPath = (string)Value; break;
                 case Members.SKELETONNAME: SkeletonHeaderDefinition = (string)Value; break;
+                case Members.FILESTARTNAME: FileStartHeaderDefinition = (string)Value; break;
                 default: break;
             }
         }

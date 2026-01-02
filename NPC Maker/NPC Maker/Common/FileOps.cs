@@ -120,17 +120,33 @@ namespace NPC_Maker
                 var headerDefines = Helpers.GetDefinesFromHeaders(entry.HeaderPath);
 
                 entry.Hierarchy = ResolveHeaderDefineForField(entry.SkeletonHeaderDefinition, headerDefines, entry.Hierarchy);
+                entry.FileStart = (int)ResolveHeaderDefineForField(entry.FileStartHeaderDefinition, headerDefines, (uint)entry.FileStart);
 
                 foreach (var animation in entry.Animations)
-                    animation.Address = ResolveHeaderDefineForField(animation.HeaderDefinition, headerDefines, animation.Address);
+                {
+                    var anm = Helpers.SplitHeaderDefsString(animation.HeaderDefinition);
+
+                    animation.Address = ResolveHeaderDefineForField(anm[1], headerDefines, animation.Address);
+                    animation.FileStart = (int)ResolveHeaderDefineForField(anm[0], headerDefines, (uint)animation.FileStart);
+                }
 
                 foreach (var displayList in entry.ExtraDisplayLists)
-                    displayList.Address = ResolveHeaderDefineForField(displayList.HeaderDefinition, headerDefines, displayList.Address);
+                {
+                    var dl = Helpers.SplitHeaderDefsString(displayList.HeaderDefinition);
+
+                    displayList.Address = ResolveHeaderDefineForField(dl[1], headerDefines, displayList.Address);
+                    displayList.FileStart = (int)ResolveHeaderDefineForField(dl[0], headerDefines, (uint)displayList.FileStart);
+                }
 
                 foreach (var segment in entry.Segments)
                 {
                     foreach (var segmentEntry in segment)
-                        segmentEntry.Address = ResolveHeaderDefineForField(segmentEntry.HeaderDefinition, headerDefines, segmentEntry.Address);
+                    {
+                        var seg = Helpers.SplitHeaderDefsString(segmentEntry.HeaderDefinition);
+
+                        segmentEntry.Address = ResolveHeaderDefineForField(seg[1], headerDefines, segmentEntry.Address);
+                        segmentEntry.FileStart = (int)ResolveHeaderDefineForField(seg[0], headerDefines, (uint)segmentEntry.FileStart);
+                    }
                 }
             }
         }
@@ -139,10 +155,10 @@ namespace NPC_Maker
         {
             if (!String.IsNullOrEmpty(Name))
             {
-                Common.HDefine h = Helpers.GetDefineFromName(Name, defines);
+                Common.HDefine h = Helpers.GetHDefineFromName(Name, defines);
 
-                if (h != null && h.Value != null)
-                    return (UInt32)h.Value;
+                if (h != null && h.Value1 != null)
+                    return (UInt32)h.Value1;
                 else
                     return field;
             }
@@ -156,10 +172,10 @@ namespace NPC_Maker
             {
                 if (!String.IsNullOrEmpty(Name))
                 {
-                    Common.HDefine h = Helpers.GetDefineFromName(Name, defines);
+                    Common.HDefine h = Helpers.GetHDefineFromName(Name, defines);
 
-                    if (h != null && h.Value != null)
-                        return (UInt32)h.Value;
+                    if (h != null && h.Value1 != null)
+                        return (UInt32)h.Value1;
                     else
                         throw new Exception();
                 }
@@ -616,7 +632,7 @@ namespace NPC_Maker
                 if (defines.Count == 0)
                     return defaultV;
 
-                Common.HDefine h = Helpers.GetDefineFromName(name, defines);
+                Common.HDefine h = Helpers.GetHDefineFromName(name, defines);
 
                 if (h == null)
                 {
@@ -627,8 +643,8 @@ namespace NPC_Maker
                 }
                 else
                 {
-                    if (h.Value != null)
-                        return (UInt32)h.Value;
+                    if (h.Value1 != null)
+                        return (UInt32)h.Value1;
                     else
                         return defaultV;
                 }
@@ -785,7 +801,7 @@ namespace NPC_Maker
                         EntryBytes.AddRangeBigEndian(Entry.GravityForce);
                         EntryBytes.AddRangeBigEndian(Entry.SmoothingConstant);
                         EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Entry.Hierarchy, defines, Entry.SkeletonHeaderDefinition));
-                        EntryBytes.AddRangeBigEndian(Entry.FileStart);
+                        EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (uint)Entry.FileStart, defines, Entry.FileStartHeaderDefinition));
                         EntryBytes.AddRangeBigEndian(Entry.CullForward);
                         EntryBytes.AddRangeBigEndian(Entry.CullDown);
                         EntryBytes.AddRangeBigEndian(Entry.CullScale);
@@ -971,8 +987,10 @@ namespace NPC_Maker
 
                         foreach (AnimationEntry Anim in Entry.Animations)
                         {
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, Anim.HeaderDefinition));
-                            EntryBytes.AddRangeBigEndian((UInt32)Anim.FileStart);
+                            var anm = Helpers.SplitHeaderDefsString(Anim.HeaderDefinition);
+
+                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, anm[1]));
+                            EntryBytes.AddRangeBigEndian((UInt32)TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.FileStart, defines, anm[0]));
                             EntryBytes.AddRangeBigEndian((float)Anim.Speed);
                             EntryBytes.AddRangeBigEndian((UInt16)Anim.ObjID);
                             EntryBytes.Add(Anim.StartFrame);
@@ -996,8 +1014,11 @@ namespace NPC_Maker
 
                         foreach (DListEntry Dlist in Entry.ExtraDisplayLists)
                         {
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, Dlist.HeaderDefinition));
-                            EntryBytes.AddRangeBigEndian(Dlist.FileStart);
+                            var dl = Helpers.SplitHeaderDefsString(Dlist.HeaderDefinition);
+
+                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, dl[1]));
+                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (uint)Dlist.FileStart, defines, dl[0]));
+
                             EntryBytes.AddRangeBigEndian(Dlist.TransX);
                             EntryBytes.AddRangeBigEndian(Dlist.TransY);
                             EntryBytes.AddRangeBigEndian(Dlist.TransZ);
@@ -1063,11 +1084,14 @@ namespace NPC_Maker
                             SegOffset += SegBytes;
                             CurLen += (int)SegBytes;
 
-                            foreach (SegmentEntry TexEntry in Segment)
+                            foreach (SegmentEntry SegEntry in Segment)
                             {
-                                ExtraSegDataEntries.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, TexEntry.Address, defines, TexEntry.HeaderDefinition));
-                                ExtraSegDataEntries.AddRangeBigEndian(TexEntry.FileStart);
-                                ExtraSegDataEntries.AddRangeBigEndian(TexEntry.ObjectID);
+                                var seg = Helpers.SplitHeaderDefsString(SegEntry.HeaderDefinition);
+
+                                ExtraSegDataEntries.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, SegEntry.Address, defines, seg[1]));
+                                ExtraSegDataEntries.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (uint)SegEntry.FileStart, defines, seg[0]));
+
+                                ExtraSegDataEntries.AddRangeBigEndian(SegEntry.ObjectID);
                                 Helpers.Ensure4ByteAlign(ExtraSegDataEntries);
                             }
                         }

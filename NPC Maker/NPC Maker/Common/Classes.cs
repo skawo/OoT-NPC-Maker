@@ -44,24 +44,50 @@ namespace NPC_Maker.Common
 
     public class HDefine
     {
-        public string Name;
-        public string ValueString;
-        public UInt32? Value;
+        public string Name1;
+        public string Value1String;
+        public UInt32? Value1;
+        public string Name2;
+        public string Value2String;
+        public UInt32? Value2;
 
-        public HDefine(string _Name, string _ValueString)
+        public HDefine(string _Name1, string _Value1Str, string _Name2 = "", string _Value2Str = "")
         {
-            Name = _Name;
-            ValueString = _ValueString;
+            Name1 = _Name1;
+            Value1String = _Value1Str;
+            Name2 = _Name2;
+            Value2String = _Value2Str;
 
             try
             {
-                Value = Helpers.HexConvertToUInt32(_ValueString);
+                if (_Value1Str == "")
+                    Value1 = null;
+                else
+                    Value1 = Helpers.HexConvertToUInt32(_Value1Str);
+
+                if (_Value2Str == "")
+                    Value2 = null;
+                else
+                    Value2 = Helpers.HexConvertToUInt32(_Value2Str);
             }
             catch (Exception)
             {
-                Value = null;
+                Value1 = null;
+                Value2 = null;
             }
 
+        }
+
+        public override string ToString()
+        {
+            if ((Value2 == null) && (Value1 == null))
+                return "";
+            else if (Value2 == null)
+                return $"{Name1}";
+            else if (Value1 == null)
+                return $"{Name2};";
+            else
+                return $"{Name2};{Name1}";
         }
     }
 

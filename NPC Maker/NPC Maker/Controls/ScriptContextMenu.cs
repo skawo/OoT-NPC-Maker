@@ -210,10 +210,10 @@ namespace NPC_Maker
 
         private static void DefinesStripMenuItem_Click(object sender, EventArgs e)
         {
-            Common.HDefine h = Helpers.SelectNameFromH(curEntry);
+            Common.HDefine h = Helpers.SelectSingleFromH(curEntry);
 
             if (h != null)
-                InsertTxtToScript($"H_{h.Name}");
+                InsertTxtToScript($"H_{h.Name1}");
         }
 
         private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem, string[] ToolTips = null)
