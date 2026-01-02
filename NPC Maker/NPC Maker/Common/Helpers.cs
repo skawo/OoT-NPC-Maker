@@ -327,17 +327,26 @@ namespace NPC_Maker
         public static string GetOnlyDefinesFromH(string hPath)
         {
             var lines = File.ReadLines(hPath)
-                            .Select(l => l.Trim())
-                            .Where(l => l.StartsWith("#define "))
-                            .Select(l =>
-                            {
-                                int commentIndex = l.IndexOf("//");
-                                return commentIndex >= 0 ? l.Substring(0, commentIndex).TrimEnd() : l;
-                            })
-                            .ToList();
+                .Select(l => l.Trim())
+                .Where(l => l.StartsWith("#define "))
+                .Select(l =>
+                {
+                    int commentIndex = l.IndexOf("//");
+                    return commentIndex >= 0
+                        ? l.Substring(0, commentIndex).TrimEnd()
+                        : l;
+                })
+                // skip defines without a value
+                .Where(l =>
+                {
+                    var parts = l.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                    return parts.Length >= 3; // #define NAME VALUE
+                })
+                .ToList();
 
             return string.Join(Environment.NewLine, lines);
         }
+
 
         private static Dictionary<string, string> ParseDefinesH(string hPath)
         {
@@ -477,6 +486,7 @@ namespace NPC_Maker
             else
                 return color;
         }
+
         public static bool DgCheckAddSanity(object entry, object[] current, int entrycount, int rowindex)
         {
             if (entry != null && rowindex < entrycount && entry != current[rowindex])
@@ -487,15 +497,15 @@ namespace NPC_Maker
                 return false;
         }
 
-
-        public static void DeleteFileStartingWith(string Path, string Prefix)
+        public static void DeleteFileStartingWith(string path, string prefix)
         {
-            string[] f = System.IO.Directory.GetFiles(Path);
-
-            List<string> s = f.Where(x => System.IO.Path.GetFileName(x).StartsWith(Prefix)).ToList();
-
-            foreach (string p in s)
-                System.IO.File.Delete(p);
+            foreach (var file in Directory.EnumerateFiles(path))
+            {
+                if (Path.GetFileName(file).StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Delete(file);
+                }
+            }
         }
 
         public static UInt16 GetOcarinaTime(string MilitaryTimeString)
@@ -537,16 +547,17 @@ namespace NPC_Maker
             return Out;
         }
 
-        public static void Ensure2ByteAlign(List<byte> ByteList)
+        public static void Ensure2ByteAlign(List<byte> bytes)
         {
-            while (ByteList.Count % 2 != 0)
-                ByteList.Add(0);
+            if ((bytes.Count & 1) != 0)
+                bytes.Add(0);
         }
 
-        public static void Ensure4ByteAlign(List<byte> ByteList)
+        public static void Ensure4ByteAlign(List<byte> bytes)
         {
-            while (ByteList.Count % 4 != 0)
-                ByteList.Add(0);
+            int pad = (-bytes.Count) & 3; // number of bytes to add (0–3)
+            if (pad > 0)
+                bytes.AddRange(new byte[pad]);
         }
 
         public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
@@ -575,29 +586,46 @@ namespace NPC_Maker
 
         public static void AddObjectToByteList(object value, List<byte> byteList)
         {
-            if (value.GetType() == typeof(byte) || value.GetType() == typeof(sbyte))
+            switch (value)
             {
-                byteList.Add((byte)value);
-            }
-            else
-            {
-                if (value.GetType() == typeof(UInt16) || value.GetType() == typeof(Int16))
-                {
+                case byte b:
+                    byteList.Add(b);
+                    break;
+
+                case sbyte sb:
+                    byteList.Add((byte)sb);
+                    break;
+
+                case ushort us:
                     Ensure2ByteAlign(byteList);
-                    byteList.AddRange(Program.BEConverter.GetBytes((dynamic)value));
-                }
-                else if (value.GetType() == typeof(UInt32) || value.GetType() == typeof(Int32) || value.GetType() == typeof(float))
-                {
+                    byteList.AddRange(Program.BEConverter.GetBytes(us));
+                    break;
+
+                case short s:
+                    Ensure2ByteAlign(byteList);
+                    byteList.AddRange(Program.BEConverter.GetBytes(s));
+                    break;
+
+                case uint ui:
                     Ensure4ByteAlign(byteList);
-                    byteList.AddRange(Program.BEConverter.GetBytes((dynamic)value));
-                }
-                else
-                {
-                    System.Windows.Forms.MessageBox.Show(value.GetType().ToString());
-                    throw new Exception();
-                }
+                    byteList.AddRange(Program.BEConverter.GetBytes(ui));
+                    break;
+
+                case int i:
+                    Ensure4ByteAlign(byteList);
+                    byteList.AddRange(Program.BEConverter.GetBytes(i));
+                    break;
+
+                case float f:
+                    Ensure4ByteAlign(byteList);
+                    byteList.AddRange(Program.BEConverter.GetBytes(f));
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Unsupported type: {value?.GetType()}");
             }
         }
+
 
         public static byte MakeByte(bool a = false, bool b = false, bool c = false, bool d = false, bool e = false, bool f = false, bool g = false, bool h = false)
         {

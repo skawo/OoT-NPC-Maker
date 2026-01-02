@@ -325,6 +325,45 @@ namespace NPC_Maker
             return Out;
         }
 
+        private byte[] GetPatternBytes(string pattern, int segmentOffset, string patternType)
+        {
+            string[] entries = string.IsNullOrEmpty(pattern) ? new string[0] : pattern.Split(',');
+
+            if (entries.Length > 4)
+                throw new Exception($"{NPCName}: {patternType} patterns may only be 4 entries long!");
+
+            byte[] outBytes = new byte[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (i < entries.Length && (segmentOffset - 8) >= 0)
+                {
+                    int index = Segments[segmentOffset - 8].FindIndex(x => x.Name.Equals(entries[i], StringComparison.OrdinalIgnoreCase));
+
+                    if (index == -1)
+                        throw new InvalidOperationException($"{NPCName}: Couldn't find one of the {patternType} pattern textures: {entries[i]}");
+
+                    outBytes[i] = (byte)index;
+                }
+                else
+                {
+                    outBytes[i] = 0xFF;
+                }
+            }
+
+            return outBytes;
+        }
+
+        public byte[] GetBlinkPatternBytes()
+        {
+            return GetPatternBytes(BlinkPattern, BlinkSegment, "Blink");
+        }
+
+        public byte[] GetTalkPatternBytes()
+        {
+            return GetPatternBytes(TalkPattern, TalkSegment, "Talk");
+        }
+
         public enum Members
         {
             NOMEMBER,

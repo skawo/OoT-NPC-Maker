@@ -196,7 +196,7 @@ namespace NPC_Maker
                 if (json == null)
                     json = ProcessNPCJSON(Data, progress);
 
-                if (json != null)   
+                if (json != null)
                     File.WriteAllText(Path, json);
             }
             catch (Exception ex)
@@ -361,63 +361,63 @@ namespace NPC_Maker
 
         public static bool[] GetCacheStatus(NPCFile Data, bool CLIMode = false)
         {
-            string JsonFileName = Program.JsonPath.FilenameFromPath();
-
+            string jsonFileName = Program.JsonPath.FilenameFromPath();
             string extHeaderPath = "";
 
             try
             {
                 extHeaderPath = Data.GetExtHeader();
             }
-            catch (Exception)
+            catch
             {
-
+                // ignore
             }
 
-            string gh = String.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text)) + Environment.NewLine + extHeaderPath;
-            string dicts = String.Join(
-                                         JsonConvert.SerializeObject(Dicts.Actors),
-                                         JsonConvert.SerializeObject(Dicts.ObjectIDs),
-                                         JsonConvert.SerializeObject(Dicts.SFXes),
-                                         JsonConvert.SerializeObject(Dicts.LinkAnims),
-                                         JsonConvert.SerializeObject(Dicts.Music)
-                                      );
+            // Combine global headers and ext header
+            string gh = string.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text)) + Environment.NewLine + extHeaderPath;
 
+            string dicts = JsonConvert.SerializeObject(new
+            {
+                Dicts.Actors,
+                Dicts.ObjectIDs,
+                Dicts.SFXes,
+                Dicts.LinkAnims,
+                Dicts.Music
+            });
 
             bool cacheInvalid = false;
-            bool CcacheInvalid = false;
-            string Ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+            bool cCacheInvalid = false;
+            string ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
 
-            // Check if the Global Headers changed - if they have, we need to redo everything.
-            using (SHA1 s = SHA1.Create())
+            Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
+
+            using (SHA1 sha1 = SHA1.Create())
             {
-                string hashGlobalHeaders = Helpers.GetBase64Hash(s, gh);
-                string hashDicts = Helpers.GetBase64Hash(s, dicts);
-                Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
-                string hashCHeader = Helpers.GetBase64Hash(s, Data.CHeader);
+                string hashGlobalHeaders = Helpers.GetBase64Hash(sha1, gh);
+                string hashDicts = Helpers.GetBase64Hash(sha1, dicts);
+                string hashCHeader = Helpers.GetBase64Hash(sha1, Data.CHeader);
 
-                string cachedHeaders = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_gh_{Ver}" + hashGlobalHeaders);
-                string cachedDicts = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_dicts_{Ver}" + hashDicts);
-                string cachedHeader = Path.Combine(Program.CCachePath, $"{JsonFileName}_ch_{Ver}" + hashCHeader);
+                string cachedHeaders = Path.Combine(Program.ScriptCachePath, $"{jsonFileName}_gh_{ver}_{hashGlobalHeaders}");
+                string cachedDicts = Path.Combine(Program.ScriptCachePath, $"{jsonFileName}_dicts_{ver}_{hashDicts}");
+                string cachedHeader = Path.Combine(Program.CCachePath, $"{jsonFileName}_ch_{ver}_{hashCHeader}");
 
-                if ((!File.Exists(cachedHeaders)) || (!File.Exists(cachedDicts)))
+                if (!File.Exists(cachedHeaders) || !File.Exists(cachedDicts))
                 {
                     cacheInvalid = true;
-                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_");
-                    File.Create(cachedHeaders).Dispose();
-                    File.Create(cachedDicts).Dispose();
-
+                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{jsonFileName}_");
+                    File.WriteAllText(cachedHeaders, "");
+                    File.WriteAllText(cachedDicts, "");
                 }
 
                 if (!File.Exists(cachedHeader))
                 {
-                    CcacheInvalid = true;
-                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_");
-                    File.Create(cachedHeader).Dispose();
+                    cCacheInvalid = true;
+                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{jsonFileName}_");
+                    File.WriteAllText(cachedHeader, "");
                 }
             }
 
-            return new bool[2] { cacheInvalid, CcacheInvalid };
+            return new bool[] { cacheInvalid, cCacheInvalid };
         }
 
         // Load all the includes text so that it can be appended to the string being hashed for cache
@@ -466,7 +466,6 @@ namespace NPC_Maker
 
             return codeBuilder.ToString();
         }
-
 
         public async static void PreprocessCodeAndScripts(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress, bool CLIMode)
         {
@@ -638,16 +637,11 @@ namespace NPC_Maker
                 {
                     if (!String.IsNullOrWhiteSpace(name))
                         FileOps.ShowMsg(CLIMode, $"{NPCName}: Warning: Could not find define {name}!");
-                    
+
                     return defaultV;
                 }
                 else
-                {
-                    if (h.Value1 != null)
-                        return (UInt32)h.Value1;
-                    else
-                        return defaultV;
-                }
+                    return h.Value1 != null ? (UInt32)h.Value1 : defaultV;
             }
             catch (Exception)
             {
@@ -693,72 +687,71 @@ namespace NPC_Maker
                     if (Entry.IsNull == false && !Entry.Omitted)
                     {
                         Console.Write($"Processing entry {EntriesDone}: {Entry.NPCName}... ");
-
-                        Dictionary<string, string> defines = new Dictionary<string, string>();
-
-                        defines = Helpers.GetDefinesFromHeaders(Entry.HeaderPath);
-
-                        List<byte> EntryBytes = new List<byte>();
+                        Dictionary<string, string> defines = Helpers.GetDefinesFromHeaders(Entry.HeaderPath);
 
                         int CurLen = 0;
 
-                        EntryBytes.Add(Entry.CutsceneID);
-                        EntryBytes.Add(Entry.HeadLimb);
-                        EntryBytes.Add(Entry.WaistLimb);
-                        EntryBytes.Add(Entry.TargetLimb);
-                        EntryBytes.Add(Entry.PathID);
-                        EntryBytes.Add(Entry.BlinkSpeed);
-                        EntryBytes.Add(Entry.TalkSpeed);
-                        EntryBytes.Add(Entry.HierarchyType);
-                        EntryBytes.Add(Entry.TalkSegment);
-                        EntryBytes.Add(Entry.BlinkSegment);
-                        EntryBytes.Add(Entry.AnimationType);
-                        EntryBytes.Add(Entry.MovementType);
-                        EntryBytes.Add(Entry.WaistHorizAxis);
-                        EntryBytes.Add(Entry.WaistVertAxis);
-                        EntryBytes.Add(Entry.HeadHorizAxis);
-                        EntryBytes.Add(Entry.HeadVertAxis);
-                        EntryBytes.Add(Entry.LookAtType);
-                        EntryBytes.Add(Entry.TargetDistance);
-                        EntryBytes.Add(Entry.EffectIfAttacked);
-                        EntryBytes.Add(Entry.Mass);
-                        EntryBytes.Add(Entry.Alpha);
-                        EntryBytes.Add(Entry.LightLimb);
-                        EntryBytes.Add(Entry.EnvironmentColor.R);
-                        EntryBytes.Add(Entry.EnvironmentColor.G);
-                        EntryBytes.Add(Entry.EnvironmentColor.B);
-                        EntryBytes.Add(Entry.LightColor.R);
-                        EntryBytes.Add(Entry.LightColor.G);
-                        EntryBytes.Add(Entry.LightColor.B);
-                        EntryBytes.Add(Entry.AnimInterpFrames);
-                        EntryBytes.Add(0);
-                        EntryBytes.Add(0);
-                        EntryBytes.Add(0);
+                        var EntryBytes = new List<byte>
+                        {
+                            Entry.CutsceneID,
+                            Entry.HeadLimb,
+                            Entry.WaistLimb,
+                            Entry.TargetLimb,
+                            Entry.PathID,
+                            Entry.BlinkSpeed,
+                            Entry.TalkSpeed,
+                            Entry.HierarchyType,
+                            Entry.TalkSegment,
+                            Entry.BlinkSegment,
+                            Entry.AnimationType,
+                            Entry.MovementType,
+                            Entry.WaistHorizAxis,
+                            Entry.WaistVertAxis,
+                            Entry.HeadHorizAxis,
+                            Entry.HeadVertAxis,
+                            Entry.LookAtType,
+                            Entry.TargetDistance,
+                            Entry.EffectIfAttacked,
+                            Entry.Mass,
+                            Entry.Alpha,
+                            Entry.LightLimb,
+                            Entry.EnvironmentColor.R,
+                            Entry.EnvironmentColor.G,
+                            Entry.EnvironmentColor.B,
+                            Entry.LightColor.R,
+                            Entry.LightColor.G,
+                            Entry.LightColor.B,
+                            Entry.AnimInterpFrames,
+                            0, 0, 0
+                        };
 
-                        EntryBytes.Add(Convert.ToByte(Entry.HasCollision));
-                        EntryBytes.Add(Convert.ToByte(Entry.PushesSwitches));
-                        EntryBytes.Add(Convert.ToByte(Entry.IgnoreYAxis));
-                        EntryBytes.Add(Convert.ToByte(Entry.IsAlwaysActive));
-                        EntryBytes.Add(Convert.ToByte(Entry.IsAlwaysDrawn));
-                        EntryBytes.Add(Convert.ToByte(Entry.ExecuteJustScript));
-                        EntryBytes.Add(Convert.ToByte(Entry.ReactsIfAttacked));
-                        EntryBytes.Add(Convert.ToByte(Entry.OpensDoors));
-                        EntryBytes.Add(Convert.ToByte(Entry.CastsShadow));
-                        EntryBytes.Add(Convert.ToByte(Entry.IsTargettable));
-                        EntryBytes.Add(Convert.ToByte(Entry.LoopPath));
-                        EntryBytes.Add(Convert.ToByte(Entry.EnvironmentColor.A > 0));
-                        EntryBytes.Add(Convert.ToByte(Entry.FadeOut));
-                        EntryBytes.Add(Convert.ToByte(Entry.GenLight));
-                        EntryBytes.Add(Convert.ToByte(Entry.Glow));
-                        EntryBytes.Add(Convert.ToByte(Entry.DEBUGShowCols));
-                        EntryBytes.Add(Convert.ToByte(Entry.VisibleUnderLensOfTruth));
-                        EntryBytes.Add(Convert.ToByte(Entry.Invisible));
-                        EntryBytes.Add(Convert.ToByte(Entry.ExistInAllRooms));
-                        EntryBytes.Add(Convert.ToByte(Entry.NumVars));
-                        EntryBytes.Add(Convert.ToByte(Entry.NumFVars));
-                        EntryBytes.Add(Convert.ToByte(Entry.DEBUGExDlistEditor));
-                        EntryBytes.Add(Convert.ToByte(Entry.DEBUGLookAtEditor));
-                        EntryBytes.Add(Convert.ToByte(Entry.DEBUGPrintToScreen));
+                        EntryBytes.AddRange(new byte[]
+                        {
+                            Convert.ToByte(Entry.HasCollision),
+                            Convert.ToByte(Entry.PushesSwitches),
+                            Convert.ToByte(Entry.IgnoreYAxis),
+                            Convert.ToByte(Entry.IsAlwaysActive),
+                            Convert.ToByte(Entry.IsAlwaysDrawn),
+                            Convert.ToByte(Entry.ExecuteJustScript),
+                            Convert.ToByte(Entry.ReactsIfAttacked),
+                            Convert.ToByte(Entry.OpensDoors),
+                            Convert.ToByte(Entry.CastsShadow),
+                            Convert.ToByte(Entry.IsTargettable),
+                            Convert.ToByte(Entry.LoopPath),
+                            Convert.ToByte(Entry.EnvironmentColor.A > 0),
+                            Convert.ToByte(Entry.FadeOut),
+                            Convert.ToByte(Entry.GenLight),
+                            Convert.ToByte(Entry.Glow),
+                            Convert.ToByte(Entry.DEBUGShowCols),
+                            Convert.ToByte(Entry.VisibleUnderLensOfTruth),
+                            Convert.ToByte(Entry.Invisible),
+                            Convert.ToByte(Entry.ExistInAllRooms),
+                            Convert.ToByte(Entry.NumVars),
+                            Convert.ToByte(Entry.NumFVars),
+                            Convert.ToByte(Entry.DEBUGExDlistEditor),
+                            Convert.ToByte(Entry.DEBUGLookAtEditor),
+                            Convert.ToByte(Entry.DEBUGPrintToScreen)
+                        });
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
                         CurLen += 56;
@@ -815,56 +808,8 @@ namespace NPC_Maker
 
                         #region Blink and talk patterns
 
-                        string[] BlinkPat = new string[0];
-                        string[] TalkPat = new string[0];
-
-                        if (Entry.BlinkPattern != "")
-                            BlinkPat = Entry.BlinkPattern.Split(',');
-
-                        if (Entry.TalkPattern != "")
-                            TalkPat = Entry.TalkPattern.Split(',');
-
-                        if (BlinkPat.Length > 4 || TalkPat.Length > 4)
-                        {
-                            ShowMsg(CLIMode, $"{Entry.NPCName}: Talking and blinking patterns may only be 4 entries long!");
-                            return;
-                        }
-
-                        for (int i = 0; i < 4; i++)
-                        {
-                            if (BlinkPat.Length > i && (Entry.BlinkSegment - 8) >= 0)
-                            {
-                                int Index = Entry.Segments[Entry.BlinkSegment - 8].FindIndex(x => x.Name.ToLower() == BlinkPat[i].ToLower());
-
-                                if (Index == -1)
-                                {
-                                    ShowMsg(CLIMode, $"{Entry.NPCName}: Couldn't find one of the blink pattern textures: " + BlinkPat[i]);
-                                    return;
-                                }
-                                else
-                                    EntryBytes.Add((byte)Index);
-                            }
-                            else
-                                EntryBytes.Add((byte)0xFF);
-                        }
-
-                        for (int i = 0; i < 4; i++)
-                        {
-                            if (TalkPat.Length > i && (Entry.TalkSegment - 8) >= 0)
-                            {
-                                int Index = Entry.Segments[Entry.TalkSegment - 8].FindIndex(x => x.Name.ToLower() == TalkPat[i].ToLower());
-
-                                if (Index == -1)
-                                {
-                                    ShowMsg(CLIMode, $"{Entry.NPCName}: Couldn't find one of the talk pattern textures: " + TalkPat[i]);
-                                    return;
-                                }
-                                else
-                                    EntryBytes.Add((byte)Index);
-                            }
-                            else
-                                EntryBytes.Add((byte)0xFF);
-                        }
+                        EntryBytes.AddRange(Entry.GetBlinkPatternBytes());
+                        EntryBytes.AddRange(Entry.GetTalkPatternBytes());
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
                         CurLen += 8;
@@ -874,38 +819,41 @@ namespace NPC_Maker
 
                         #region Messages
 
-                        List<byte> Header = new List<byte>();
-                        List<byte> DefaultHeader = new List<byte>();
-                        List<byte> MsgData = new List<byte>();
+                        var header = new List<byte>();
+                        var defaultHeader = new List<byte>();
+                        var msgData = new List<byte>();
 
-                        LocalizationEntry def = new LocalizationEntry() { Language = Dicts.DefaultLanguage, Messages = Entry.Messages };
-                        List<LocalizationEntry> locales = new List<LocalizationEntry>() { def };
-
-                        foreach (string language in Data.Languages)
+                        var locales = new List<LocalizationEntry>
                         {
-                            int LanguageIndex = Entry.Localization.FindIndex(x => x.Language == language);
+                            new LocalizationEntry { Language = Dicts.DefaultLanguage, Messages = Entry.Messages }
+                        };
 
-                            if (LanguageIndex != -1)
-                                locales.Add(new LocalizationEntry() { Language = language, Messages = Entry.Localization[LanguageIndex].Messages });
-                            else
-                                locales.Add(new LocalizationEntry() { Language = language, Messages = null });
-                        }
-
-                        int Count = Entry.Messages.Count * locales.Count;
-                        int MsgOffset = 8 * Count;
-
-                        foreach (LocalizationEntry loc in locales)
+                        locales.AddRange(Data.Languages.Select(lang =>
                         {
-                            bool isDefault = (loc.Language == Dicts.DefaultLanguage);
+                            var loc = Entry.Localization.FirstOrDefault(x => x.Language == lang);
+                            return new LocalizationEntry
+                            {
+                                Language = lang,
+                                Messages = loc?.Messages
+                            };
+                        }));
+
+                        int totalMessages = Entry.Messages.Count * locales.Count;
+                        int msgOffset = 8 * totalMessages;
+
+                        foreach (var loc in locales)
+                        {
+                            bool isDefault = loc.Language == Dicts.DefaultLanguage;
 
                             if (loc.Messages == null)
                             {
-                                Header = Header.Concat(DefaultHeader).ToList();
+                                header.AddRange(defaultHeader);
                                 continue;
                             }
 
                             var errors = new ConcurrentBag<string>();
 
+                            // Convert messages to bytes in parallel
                             Parallel.ForEach(loc.Messages, msg =>
                             {
                                 try
@@ -915,64 +863,55 @@ namespace NPC_Maker
                                 catch (Exception ex)
                                 {
                                     msg.tempBytes = null;
-                                    errors.Add($"{Entry.NPCName}:\nThere is an error in message {msg.Name}:\n{ex.Message}");
+                                    errors.Add($"{Entry.NPCName}:\nError in message {msg.Name}:\n{ex.Message}");
                                 }
                             });
 
-                            List<string> errorList = errors.ToList();
-
-                            if (errorList.Any())
+                            if (errors.Any())
                             {
-                                ShowMsg(CLIMode, errorList[0]);
-
-                                if (!ParseErrors.Contains(Entry.NPCName))
-                                    ParseErrors.Add(Entry.NPCName);
-
+                                ShowMsg(CLIMode, errors.First());
+                                if (!ParseErrors.Contains(Entry.NPCName)) ParseErrors.Add(Entry.NPCName);
                                 break;
                             }
 
-                            foreach (MessageEntry Msg in loc.Messages)
+                            foreach (var msg in loc.Messages)
                             {
-                                List<byte> Message = Msg.tempBytes;
-                                Msg.tempBytes = null;
+                                var messageBytes = msg.tempBytes ?? new List<byte>();
+                                msg.tempBytes = null;
 
-                                Helpers.Ensure4ByteAlign(Message);
-                                MsgData.AddRange(Message);
+                                Helpers.Ensure4ByteAlign(messageBytes);
+                                msgData.AddRange(messageBytes);
 
-                                if (Message.Count > 1280)
+                                if (messageBytes.Count > 1280)
                                 {
-                                    ShowMsg(CLIMode, $"{Entry.NPCName}: One of the messages ({Msg.Name}) has exceeded 1280 bytes (the maximum allowed), and could not be saved.");
-                                    Message = new List<byte>();
-
-                                    if (!ParseErrors.Contains(Entry.NPCName))
-                                        ParseErrors.Add(Entry.NPCName);
+                                    ShowMsg(CLIMode, $"{Entry.NPCName}: Message '{msg.Name}' exceeded 1280 bytes and could not be saved.");
+                                    if (!ParseErrors.Contains(Entry.NPCName)) ParseErrors.Add(Entry.NPCName);
+                                    messageBytes.Clear();
                                 }
 
-                                if (isDefault)
+                                void AddToHeader(List<byte> targetHeader)
                                 {
-                                    DefaultHeader.AddRangeBigEndian(MsgOffset);
-                                    DefaultHeader.Add(Msg.GetMessageTypePos());
-                                    Helpers.Ensure2ByteAlign(DefaultHeader);
-                                    DefaultHeader.AddRangeBigEndian((UInt16)Message.Count);
+                                    targetHeader.AddRangeBigEndian(msgOffset);
+                                    targetHeader.Add(msg.GetMessageTypePos());
+                                    Helpers.Ensure2ByteAlign(targetHeader);
+                                    targetHeader.AddRangeBigEndian((UInt16)messageBytes.Count);
                                 }
 
-                                Header.AddRangeBigEndian(MsgOffset);
-                                Header.Add(Msg.GetMessageTypePos());
-                                Helpers.Ensure2ByteAlign(Header);
-                                Header.AddRangeBigEndian((UInt16)Message.Count);
+                                if (isDefault) AddToHeader(defaultHeader);
+                                AddToHeader(header);
 
-                                MsgOffset += Message.Count();
+                                msgOffset += messageBytes.Count;
                             }
                         }
 
-                        EntryBytes.AddRangeBigEndian(16 + Header.Count + MsgData.Count);
+                        EntryBytes.AddRangeBigEndian(16 + header.Count + msgData.Count);
                         EntryBytes.AddRangeBigEndian(0);
                         EntryBytes.AddRangeBigEndian(Data.Languages.Count + 1);
                         EntryBytes.AddRangeBigEndian(Entry.Messages.Count);
-                        EntryBytes.AddRange(Header);
-                        EntryBytes.AddRange(MsgData);
+                        EntryBytes.AddRange(header);
+                        EntryBytes.AddRange(msgData);
 
-                        CurLen += 16 + Header.Count + MsgData.Count;
+                        CurLen += 16 + header.Count + msgData.Count;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion
@@ -988,14 +927,9 @@ namespace NPC_Maker
                         foreach (AnimationEntry Anim in Entry.Animations)
                         {
                             var anm = Helpers.SplitHeaderDefsString(Anim.HeaderDefinition);
-
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, anm[1]));
-                            EntryBytes.AddRangeBigEndian((UInt32)TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.FileStart, defines, anm[0]));
-                            EntryBytes.AddRangeBigEndian((float)Anim.Speed);
-                            EntryBytes.AddRangeBigEndian((UInt16)Anim.ObjID);
-                            EntryBytes.Add(Anim.StartFrame);
-                            EntryBytes.Add(Anim.EndFrame);
-                            Helpers.Ensure4ByteAlign(EntryBytes);
+                            Anim.Address = TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, anm[1]);
+                            Anim.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.FileStart, defines, anm[0]);
+                            EntryBytes.AddRange(Anim.ToBytes());
                         }
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
@@ -1015,24 +949,9 @@ namespace NPC_Maker
                         foreach (DListEntry Dlist in Entry.ExtraDisplayLists)
                         {
                             var dl = Helpers.SplitHeaderDefsString(Dlist.HeaderDefinition);
-
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, dl[1]));
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (uint)Dlist.FileStart, defines, dl[0]));
-
-                            EntryBytes.AddRangeBigEndian(Dlist.TransX);
-                            EntryBytes.AddRangeBigEndian(Dlist.TransY);
-                            EntryBytes.AddRangeBigEndian(Dlist.TransZ);
-                            EntryBytes.AddRangeBigEndian(Dlist.Scale);
-                            EntryBytes.AddRangeBigEndian(Dlist.ObjectID);
-                            EntryBytes.AddRangeBigEndian(Dlist.RotX);
-                            EntryBytes.AddRangeBigEndian(Dlist.RotY);
-                            EntryBytes.AddRangeBigEndian(Dlist.RotZ);
-                            EntryBytes.AddRangeBigEndian(Dlist.Limb);
-                            EntryBytes.Add((byte)Dlist.ShowType);
-                            EntryBytes.Add(Dlist.Color.R);
-                            EntryBytes.Add(Dlist.Color.G);
-                            EntryBytes.Add(Dlist.Color.B);
-                            Helpers.Ensure4ByteAlign(EntryBytes);
+                            Dlist.Address = TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, dl[1]);
+                            Dlist.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (uint)Dlist.FileStart, defines, dl[0]);
+                            EntryBytes.AddRange(Dlist.ToBytes());
                         }
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
@@ -1043,63 +962,53 @@ namespace NPC_Maker
 
                         #region Colors
 
-                        List<OutputColorEntry> ParsedColors = Entry.ParseColorEntries().OrderBy(x => x.LimbID).ToList();
-                        EntryBytes.AddRangeBigEndian((UInt32)ParsedColors.Count());
+                        var parsedColors = Entry.ParseColorEntries().OrderBy(c => c.LimbID).ToList();
+                        EntryBytes.AddRangeBigEndian((UInt32)parsedColors.Count);
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
                         CurLen += 4;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
-                        foreach (OutputColorEntry Col in ParsedColors)
-                        {
-                            EntryBytes.Add(Col.LimbID);
-                            EntryBytes.Add(Col.R);
-                            EntryBytes.Add(Col.G);
-                            EntryBytes.Add(Col.B);
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                        }
+                        foreach (var color in parsedColors)
+                            EntryBytes.AddRange(color.ToBytes());
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
-                        CurLen += 4 * ParsedColors.Count;
+                        CurLen += 4 * parsedColors.Count;
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
 
                         #endregion
 
                         #region Extra segment data
 
-                        List<byte> ExtraSegDataOffsets = new List<byte>();
-                        List<byte> ExtraSegDataEntries = new List<byte>();
-                        UInt32 SegOffset = 7 * 4;
-                        CurLen += (int)SegOffset + 4;
+                        var extraSegDataOffsets = new List<byte>();
+                        var extraSegDataEntries = new List<byte>();
+                        uint segOffset = 7 * 4;
+                        CurLen += (int)segOffset + 4;
 
-                        foreach (List<SegmentEntry> Segment in Entry.Segments)
+                        foreach (var segmentList in Entry.Segments)
                         {
-                            UInt32 SegBytes = (UInt32)(12 * Segment.Count);
+                            uint segBytes = (uint)(12 * segmentList.Count);
 
-                            if (SegBytes != 0)
-                                ExtraSegDataOffsets.AddRangeBigEndian(SegOffset);
-                            else
-                                ExtraSegDataOffsets.AddRangeBigEndian((UInt32)0);
+                            extraSegDataOffsets.AddRangeBigEndian(segBytes != 0 ? segOffset : 0);
+                            segOffset += segBytes;
+                            CurLen += (int)segBytes;
 
-                            SegOffset += SegBytes;
-                            CurLen += (int)SegBytes;
-
-                            foreach (SegmentEntry SegEntry in Segment)
+                            foreach (var segEntry in segmentList)
                             {
-                                var seg = Helpers.SplitHeaderDefsString(SegEntry.HeaderDefinition);
+                                var segDefs = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
 
-                                ExtraSegDataEntries.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, SegEntry.Address, defines, seg[1]));
-                                ExtraSegDataEntries.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (uint)SegEntry.FileStart, defines, seg[0]));
+                                segEntry.Address = TryGetFromH(CLIMode, Entry.NPCName, segEntry.Address, defines, segDefs[1]);
+                                segEntry.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (uint)segEntry.FileStart, defines, segDefs[0]);
 
-                                ExtraSegDataEntries.AddRangeBigEndian(SegEntry.ObjectID);
-                                Helpers.Ensure4ByteAlign(ExtraSegDataEntries);
+                                extraSegDataEntries.AddRange(segEntry.ToBytes());
                             }
                         }
 
-                        EntryBytes.AddRangeBigEndian((UInt32)(ExtraSegDataOffsets.Count + ExtraSegDataEntries.Count));
+                        EntryBytes.AddRangeBigEndian((uint)(extraSegDataOffsets.Count + extraSegDataEntries.Count));
                         CurLen += 4;
-                        EntryBytes.AddRange(ExtraSegDataOffsets.ToArray());
-                        EntryBytes.AddRange(ExtraSegDataEntries.ToArray());
+
+                        EntryBytes.AddRange(extraSegDataOffsets);
+                        EntryBytes.AddRange(extraSegDataEntries);
 
                         Helpers.Ensure4ByteAlign(EntryBytes);
                         Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
@@ -1373,7 +1282,7 @@ namespace NPC_Maker
                         if (Program.Settings.CompressIndividually)
                         {
                             outCompressed = RLibrii.Szs.Yaz0.CompressYaz(Entry.data.ToArray(), 9).ToList();
-       
+
                             Helpers.Ensure4ByteAlign(outCompressed);
                         }
 
