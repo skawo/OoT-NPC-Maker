@@ -380,7 +380,19 @@
       "DefaultValues": "0x1",
       "Description": "",
       "ContextName": "Pause"
-    },     
+    },  
+    {
+      "Token": "¥",
+      "Value": "0x5C",
+      "Description": "",
+      "ContextGroup": ""
+    },
+    {
+      "Token": "\\\\",
+      "Value": "0x5D",
+      "Description": "",
+      "ContextGroup": ""
+    },   
     {
       "Token": "À",
       "Value": "0x80",
