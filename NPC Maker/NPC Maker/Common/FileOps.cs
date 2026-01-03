@@ -853,6 +853,7 @@ namespace NPC_Maker
                                 {
                                     bool isDefault = loc.Language == Dicts.DefaultLanguage;
 
+                                    // If messages aren't there, add the default header again, so that the default messages will be displayed in game
                                     if (loc.Messages == null)
                                     {
                                         header.AddRange(defaultHeader);
@@ -910,6 +911,7 @@ namespace NPC_Maker
                                             targetHeader.AddRangeBigEndian((UInt16)messageBytes.Count);
                                         }
 
+                                        // Create a default header in case any localizations are blank
                                         if (isDefault)
                                             AddToHeader(defaultHeader);
 
