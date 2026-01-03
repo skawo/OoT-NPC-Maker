@@ -811,7 +811,7 @@ namespace NPC_Maker
 
                             #region Messages
 
-                            string msgDataS = JsonConvert.SerializeObject(new { Entry.Messages, Entry.Localization });
+                            string msgDataS = JsonConvert.SerializeObject(new { Entry.Messages, Entry.Localization, Dicts.LanguageDefs });
                             string msgDataHash = Helpers.GetBase64Hash(s, msgDataS);
                             string cachedMsgFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_msg_" + msgDataHash);
 
