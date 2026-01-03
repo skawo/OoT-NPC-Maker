@@ -99,39 +99,32 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        public static object GetValueAndCheckRangeInt(string[] Splitstring, int Index, UInt32 Min, UInt32 Max)
+        public static uint GetValueAndCheckRangeInt(string[] splitString, int index, uint min, uint max)
         {
-            UInt32? Value;
+            if (index < 0 || index >= splitString.Length)
+                throw ParseException.ParamOutOfRange(splitString);
 
+            string token = splitString[index];
+
+            if (token.StartsWith("-"))
+                throw ParseException.ParamOutOfRange(splitString);
+
+            uint value;
             try
             {
-                if (Splitstring[Index].IsHex())
-                {
-                    string str = Splitstring[Index];
-
-                    if (str.StartsWith("-"))
-                    {
-                        str = str.Substring(1);
-                        throw ParseException.ParamOutOfRange(Splitstring);
-                    }
-
-                    Value = (UInt32?)Convert.ToInt32(str, 16);
-                }
-                else
-                    Value = (UInt32?)Convert.ToInt32(Splitstring[Index]);
-
-                if (Value == null)
-                    throw ParseException.ParamConversionError(Splitstring);
-
-                if (Value < Min || Value > Max)
-                    throw ParseException.ParamOutOfRange(Splitstring);
-
-                return Value;
+                value = token.IsHex()
+                    ? Convert.ToUInt32(token, 16)
+                    : Convert.ToUInt32(token);
             }
-            catch (Exception)
+            catch
             {
-                throw ParseException.ParamConversionError(Splitstring);
+                throw ParseException.ParamConversionError(splitString);
             }
+
+            if (value < min || value > max)
+                throw ParseException.ParamOutOfRange(splitString);
+
+            return value;
         }
 
         public static object GetValueAndCheckRange(string[] Splitstring, int Index, float Min, float Max)
@@ -256,12 +249,12 @@ namespace NPC_Maker.Scripts
         {
             var outv = new ScriptVarVal();
 
-            byte Vartype = ScriptHelpers.GetVarType(SplitLine, Index);
+            byte Vartype = GetVarType(SplitLine, Index);
 
             if (Vartype > (byte)Lists.VarTypes.NORMAL && Vartype < (byte)Lists.VarTypes.VAR)
                 throw ParseException.ParamOutOfRange(SplitLine);
 
-            outv.Value = Convert.ToByte(ScriptHelpers.GetValueByType(SplitLine, Index, Vartype, Min, Max));
+            outv.Value = Convert.ToByte(GetValueByType(SplitLine, Index, Vartype, Min, Max));
 
             if ((byte)outv.Value < 1 || (byte)outv.Value > Lists.Num_User_Vars)
                 throw ParseException.ParamOutOfRange(SplitLine);
@@ -350,9 +343,7 @@ namespace NPC_Maker.Scripts
 
                     }
 
-                    
                     return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
-
                 }
             }
             catch (ParseException ex)

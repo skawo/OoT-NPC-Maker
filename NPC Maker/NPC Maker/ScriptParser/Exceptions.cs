@@ -333,6 +333,11 @@ namespace NPC_Maker.Scripts
             return new ParseException("This WHILE does not have a corresponding ENDWHILE: ", _Line);
         }
 
+        public static ParseException AsyncNotClosed(string _Line)
+        {
+            return new ParseException("This ASYNC does not have a corresponding ENDASYNC: ", _Line);
+        }
+
         public static ParseException WhileNotClosed(string[] _Line)
         {
             return WhileNotClosed(String.Join(" ", _Line));

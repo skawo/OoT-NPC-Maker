@@ -24,7 +24,7 @@ namespace NPC_Maker.Scripts
 
             baseDefines += Environment.NewLine + Helpers.GetDefinesStringFromH(Entry.HeaderPath);
 
-            ScriptText = string.Join(Environment.NewLine, 
+            ScriptText = string.Join(Environment.NewLine,
                                      EditedFile.GlobalHeaders.Select(x => x.Text).Concat(new[] { baseDefines, _ScriptText }));
         }
 
@@ -84,9 +84,11 @@ namespace NPC_Maker.Scripts
             var defineLines = new List<string>();
             var codeLines = new List<string>();
 
+            string defineKw = $"#{Lists.Keyword_Define}";
+
             foreach (string line in lines)
             {
-                if (line.ToUpper().StartsWith($"#{Lists.Keyword_Define}"))
+                if (line.StartsWith(defineKw, StringComparison.OrdinalIgnoreCase))
                     defineLines.Add(line);
                 else
                     codeLines.Add(line);
@@ -125,28 +127,26 @@ namespace NPC_Maker.Scripts
                 }
             }
 
-            #if DEBUG
-                outScript.ScriptDebug = GetOutString(instructions);
-                System.IO.File.WriteAllLines("DEBUGOUT_SCRIPT", outScript.ScriptDebug);
-            #endif
+#if DEBUG
+            outScript.ScriptDebug = GetOutString(instructions);
+            System.IO.File.WriteAllLines("DEBUGOUT_SCRIPT", outScript.ScriptDebug);
+#endif
 
             List<InstructionLabel> labels = GetLabelsAndRemove(ref outScript, ref instructions);
 
             // Convert to bytes if no errors and requested
-            #if DEBUG
-                        bool shouldConvertToBytes = outScript.ParseErrors.Count == 0;
-            #else
+#if DEBUG
+            bool shouldConvertToBytes = outScript.ParseErrors.Count == 0;
+#else
             bool shouldConvertToBytes = outScript.ParseErrors.Count == 0 && getBytes;
-            #endif
-
+#endif
             if (shouldConvertToBytes)
             {
                 outScript.Script = ConvertScriptToBytes(labels, ref outScript, ref instructions);
-
-                #if DEBUG
-                        //outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
-                        //System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
-                #endif
+#if DEBUG
+                //outScript.ScriptDebug.Insert(0, $"-----SCRIPT SIZE: {outScript.Script.Length} bytes-----" + Environment.NewLine);
+                //System.IO.File.WriteAllBytes("DEBUGOUT", outScript.Script);
+#endif
             }
 
             return outScript;
@@ -161,20 +161,32 @@ namespace NPC_Maker.Scripts
             return GetLabels(Lines);
         }
 
-        public static List<string> GetLabels(List<string> Lines)
+        public static List<string> GetLabels(List<string> lines)
         {
-            List<string> Labels = new List<string>();
+            var labels = new List<string>();
 
-            foreach (string line in Lines)
+            if (lines == null || lines.Count == 0)
+                return labels;
+
+            string defaultCase = Lists.Keyword_DefaultCase;
+            string caseKeyword = Lists.Keyword_Case;
+
+            foreach (string line in lines)
             {
-                string lineUpper = line.ToUpper();
+                if (string.IsNullOrEmpty(line))
+                    continue;
 
-                if (line.EndsWith(":") && lineUpper != $"{Lists.Keyword_DefaultCase}" && !lineUpper.StartsWith($"{Lists.Keyword_Case} "))
-                    Labels.Add(line.Substring(0, line.Length - 1));
+                if (line.EndsWith(":") &&
+                    !line.Equals(defaultCase, StringComparison.OrdinalIgnoreCase) &&
+                    !line.StartsWith(caseKeyword + " ", StringComparison.OrdinalIgnoreCase))
+                {
+                    labels.Add(line.Substring(0, line.Length - 1)); // remove the colon
+                }
             }
 
-            return Labels;
+            return labels;
         }
+
 
         private static void RegexText(ref string ScriptText)
         {
@@ -386,7 +398,7 @@ namespace NPC_Maker.Scripts
                                 // Unescape the quotes in the captured value
                                 string unescapedArg = match.Groups["arg"].Value.Replace("\\\"", "\"");
                                 Args.Add(unescapedArg);
-                                argIndex += Regex.Split(match.Value, @"\s+").Length; 
+                                argIndex += Regex.Split(match.Value, @"\s+").Length;
                             }
                             else
                             {
@@ -564,7 +576,7 @@ namespace NPC_Maker.Scripts
                 while (lIndex != -1)
                 {
                     string Line = Lines[lIndex].ToUpper();
-                    
+
                     int End = GetCorrespondingEndIf(Lines, lIndex);
                     int Else = GetCorrespondingElse(Lines, lIndex, End);
 
@@ -699,9 +711,8 @@ namespace NPC_Maker.Scripts
             if (Lines == null || Lines.Count == 0)
                 return new List<string>();
 
-            var outputLines = new List<string>(Lines.Count + Lines.Count / 4); // Pre-allocate with estimated capacity
+            var outputLines = new List<string>(Lines.Count + Lines.Count / 4);
 
-            // Pre-compile patterns for better performance
             var scriptStartPattern1 = $"{Lists.Instructions.SET} {Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE}";
             var scriptStartPattern2 = $"{Lists.SetSubTypes.SCRIPT_START} {Lists.Keyword_Label_HERE}";
             var labelToVarPattern = $"{Lists.Instructions.SET} {Lists.SetSubTypes.LABEL_TO_VAR} {Lists.Keyword_Label_HERE} ";
@@ -752,147 +763,136 @@ namespace NPC_Maker.Scripts
         }
 
 
-        // Change Switch Cases into If...Elif...Endif
-        private List<string> ReplaceSwitches(List<string> Lines, ref BScript outScript)
+        // Convert SWITCH...CASE...DEFAULT into IF...ELIF...ELSE...ENDIF
+        private List<string> ReplaceSwitches(List<string> lines, ref BScript outScript)
         {
             try
             {
-                int SwitchLineIndex = Lines.FindIndex(x => x.ToUpper().StartsWith($"{Lists.Keyword_Switch} "));
+                int switchLineIndex = lines.FindIndex(x => x.ToUpper().StartsWith($"{Lists.Keyword_Switch} "));
 
-                while (SwitchLineIndex != -1)
+                while (switchLineIndex != -1)
                 {
-                    string[] splitL = Lines[SwitchLineIndex].ToUpper().Trim().Split(' ');
+                    string[] splitSwitch = lines[switchLineIndex].Trim().ToUpper().Split(' ');
+                    if (splitSwitch.Length != 2)
+                    {
+                        outScript.ParseErrors.Add(ParseException.ParamCountWrong(splitSwitch));
+                        break;
+                    }
 
-                    if (splitL.Length != 2)
-                        outScript.ParseErrors.Add(ParseException.ParamCountWrong(splitL));
+                    string swVar = splitSwitch[1];
 
-                    string swVar = splitL[1];
-
-                    int end = ScriptHelpers.GetCorresponding(Lines, SwitchLineIndex, Lists.Keyword_Switch, Lists.Keyword_EndSwitch);
-
+                    int end = ScriptHelpers.GetCorresponding(lines, switchLineIndex, Lists.Keyword_Switch, Lists.Keyword_EndSwitch);
                     if (end < 0)
-                        throw ParseException.SwitchNotClosed(Lines[SwitchLineIndex]);
+                        throw ParseException.SwitchNotClosed(lines[switchLineIndex]);
 
-                    bool InCase = false;
+                    bool inCase = false;
                     bool firstCase = true;
                     bool hasDefault = false;
-                    int switchInner = 0;
+                    int nestedSwitch = 0;
 
-                    Lines[SwitchLineIndex] = "";
-                    Lines[end] = $"{Lists.Keyword_EndIf}";
+                    lines[switchLineIndex] = "";
+                    lines[end] = $"{Lists.Keyword_EndIf}";
 
-                    for (int i = SwitchLineIndex + 1; i < end; i++)
+                    for (int i = switchLineIndex + 1; i < end; i++)
                     {
-                        string[] splitLl = Lines[i].ToUpper().Trim().Split(' ');
+                        string[] splitLine = lines[i].Trim().ToUpper().Split(' ');
+                        if (splitLine.Length == 0) continue;
 
-                        string st = splitLl[0];
+                        string keyword = splitLine[0];
 
-                        if (st == Lists.Keyword_Switch)
+                        // Track nested switches
+                        if (keyword == Lists.Keyword_Switch) { nestedSwitch++; continue; }
+                        if (keyword == Lists.Keyword_EndSwitch) { nestedSwitch--; continue; }
+                        if (nestedSwitch > 0) continue;
+
+                        if (!inCase)
                         {
-                            switchInner++;
-                            continue;
-                        }
-
-                        if (st == Lists.Keyword_EndSwitch)
-                        {
-                            switchInner--;
-                            continue;
-                        }
-
-                        if (switchInner > 0)
-                            continue;
-
-                        if (!InCase)
-                        {
-                            if (st == Lists.Keyword_Case)
+                            switch (keyword)
                             {
-                                if (hasDefault)
-                                    throw ParseException.DefaultStatementMustBeLast(splitL);
+                                case Lists.Keyword_Case:
+                                    if (hasDefault) throw ParseException.DefaultStatementMustBeLast(splitSwitch);
+                                    if (splitLine.Length != 2 || !splitLine[1].EndsWith(":"))
+                                        throw ParseException.CaseFormatError(splitLine);
 
-                                if (splitLl.Length != 2 || !splitLl[1].EndsWith(":"))
-                                    throw ParseException.CaseFormatError(splitLl);
+                                    string caseVal = splitLine[1].TrimEnd(':');
+                                    lines[i] = firstCase
+                                        ? $"{Lists.Instructions.IF} {swVar} == {caseVal}"
+                                        : $"{Lists.Keyword_Elif} {swVar} == {caseVal}";
 
-                                string swVarL = splitLl[1].TrimEnd(':');
-
-                                if (firstCase)
-                                    Lines[i] = $"{Lists.Instructions.IF} {swVar} == {swVarL}";
-                                else
-                                    Lines[i] = $"{Lists.Keyword_Elif} {swVar} == {swVarL}";
-
-                                InCase = true;
-                                firstCase = false;
-                            }
-                            else if (st == Lists.Keyword_DefaultCase)
-                            {
-                                if (hasDefault)
-                                    throw ParseException.MultipleDefaultsError(splitL);
-
-                                hasDefault = true;
-                                InCase = true;
-
-                                if (firstCase)
-                                {
-                                    Lines[i] = "";
-                                    Lines[end] = "";
+                                    inCase = true;
                                     firstCase = false;
-                                }
-                                else
-                                    Lines[i] = $"{Lists.Keyword_Else}";
+                                    break;
+
+                                case Lists.Keyword_DefaultCase:
+                                    if (hasDefault) throw ParseException.MultipleDefaultsError(splitSwitch);
+                                    hasDefault = true;
+                                    inCase = true;
+
+                                    if (firstCase)
+                                    {
+                                        lines[i] = "";
+                                        lines[end] = "";
+                                        firstCase = false;
+                                    }
+                                    else
+                                    {
+                                        lines[i] = $"{Lists.Keyword_Else}";
+                                    }
+                                    break;
+
+                                default:
+                                    throw ParseException.StatementOutsideCaseError(splitLine);
                             }
-                            else
-                                throw ParseException.StatementOutsideCaseError(splitLl);
                         }
-                        else
+                        else // inside a case block
                         {
-                            if (st == Lists.Keyword_EndCase)
+                            switch (keyword)
                             {
-                                Lines[i] = "";
-                                InCase = false;
-                                continue;
+                                case Lists.Keyword_EndCase:
+                                    lines[i] = "";
+                                    inCase = false;
+                                    break;
+
+                                case Lists.Keyword_Case:
+                                case Lists.Keyword_DefaultCase:
+                                    // Create GOTO to skip to next block
+                                    string label = ScriptDataHelpers.GetRandomLabelString(this);
+                                    lines.Insert(i, $"{Lists.Instructions.GOTO} {label}");
+                                    i++;
+                                    end++;
+
+                                    if (keyword == Lists.Keyword_Case)
+                                    {
+                                        if (hasDefault) throw ParseException.DefaultStatementMustBeLast(splitSwitch);
+
+                                        if (splitLine.Length != 2) throw ParseException.CaseFormatError(splitLine);
+                                        string caseVal = splitLine[1].TrimEnd(':');
+
+                                        lines[i] = $"{Lists.Keyword_Elif} {swVar} == {caseVal}";
+                                        lines.Insert(i + 1, $"{label}:");
+                                    }
+                                    else // DefaultCase
+                                    {
+                                        if (hasDefault) throw ParseException.MultipleDefaultsError(splitSwitch);
+                                        hasDefault = true;
+
+                                        lines[i] = $"{Lists.Keyword_Else}";
+                                        lines.Insert(i + 1, $"{label}:");
+                                    }
+
+                                    i++;
+                                    end++;
+                                    break;
+
+                                default:
+                                    // Normal lines inside case, leave as-is
+                                    break;
                             }
-                            else if (st == Lists.Keyword_Case)
-                            {
-                                if (hasDefault)
-                                    throw ParseException.DefaultStatementMustBeLast(splitL);
-
-                                string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
-                                Lines.Insert(i, $"{Lists.Instructions.GOTO} {LabelR}");
-                                i++;
-                                end++;
-
-                                if (splitLl.Length != 2)
-                                    throw ParseException.CaseFormatError(splitLl);
-
-                                string swVarL = splitLl[1].TrimEnd(':');
-
-                                Lines[i] = $"{Lists.Keyword_Elif} {swVar} == {swVarL}";
-                                Lines.Insert(i + 1, $"{LabelR}:");
-                                i++;
-                                end++;
-                            }
-                            else if (st == Lists.Keyword_DefaultCase)
-                            {
-                                if (hasDefault)
-                                    throw ParseException.MultipleDefaultsError(splitL);
-
-                                hasDefault = true;
-
-                                string LabelR = ScriptDataHelpers.GetRandomLabelString(this);
-                                Lines.Insert(i, $"{Lists.Instructions.GOTO} {LabelR}");
-                                i++;
-                                end++;
-
-                                Lines[i] = $"{Lists.Keyword_Else}";
-                                Lines.Insert(i + 1, $"{LabelR}:");
-                                i++;
-                                end++;
-                            }
-                            else
-                                continue;
                         }
                     }
 
-                    SwitchLineIndex = Lines.FindIndex(SwitchLineIndex, x => x.ToUpper().StartsWith($"{Lists.Keyword_Switch} "));
+                    // Find next switch
+                    switchLineIndex = lines.FindIndex(switchLineIndex + 1, x => x.ToUpper().StartsWith($"{Lists.Keyword_Switch} "));
                 }
             }
             catch (ParseException pEx)
@@ -904,7 +904,7 @@ namespace NPC_Maker.Scripts
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error during parsing SWITCH " + ex.Message));
             }
 
-            return Lines.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            return lines.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
         }
 
         private List<string> ReplaceTernary(List<string> Lines, ref BScript outScript)
@@ -1019,6 +1019,7 @@ namespace NPC_Maker.Scripts
             else
                 return outIndex;
         }
+
         static string[] SplitWithQuotes(string input)
         {
             return input.Split('"')
@@ -1260,43 +1261,45 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                List<byte> Out = new List<byte>();
-                List<UInt16> Offsets = new List<UInt16>();
-                List<byte> InstructionBytes = new List<byte>();
+                // Estimate total size: rough guess to reduce resizing
+                int estimatedSize = Instructions.Sum(i => i.ToBytes(Labels).Length) + Instructions.Count * 2 * 2 + 4;
+                var Out = new List<byte>(estimatedSize);
 
-                UInt32 HeaderOffs = 0;
+                int headerOffs = 0;
+                var offsets = new List<ushort>(Instructions.Count);
 
-                foreach (Instruction Inst in Instructions)
+                // First pass: generate instruction bytes and offsets
+                var instructionBytes = new List<byte>(estimatedSize);
+                foreach (Instruction inst in Instructions)
                 {
-                    byte[] Data = Inst.ToBytes(Labels);
+                    byte[] data = inst.ToBytes(Labels);
 
-                    if (HeaderOffs % 4 != 0)
+                    if (headerOffs % 4 != 0)
                         throw ParseException.AlignmentError();
 
-                    Offsets.Add((UInt16)(HeaderOffs / 4));
-                    InstructionBytes.AddRange(Data);
-                    HeaderOffs += (UInt16)Data.Length;
+                    offsets.Add((ushort)(headerOffs / 4));
+                    instructionBytes.AddRange(data);
+                    headerOffs += data.Length;
                 }
 
-                // Add the size of the header to the offsets
-                UInt16 OffsetsOffset = (UInt16)((Offsets.Count * 2 + ((Offsets.Count % 2 != 0) ? 2 : 0)) / 4);
+                // Add header offset
+                ushort offsetsOffset = (ushort)((offsets.Count * 2 + (offsets.Count % 2 != 0 ? 2 : 0)) / 4);
 
-                // Add the size of the header to the offsets
-                for (int i = 0; i < Offsets.Count; i++)
-                    Offsets[i] += OffsetsOffset;
+                for (int i = 0; i < offsets.Count; i++)
+                    offsets[i] += offsetsOffset;
 
-                // Ensure there's an even amount of offsets so everything is 4-aligned
-                if (Offsets.Count % 2 != 0)
-                    Offsets.Add(0);
+                // Make offsets 4-byte aligned
+                if (offsets.Count % 2 != 0)
+                    offsets.Add(0);
 
-                foreach (UInt16 Offset in Offsets)
-                    Out.AddRange(Program.BEConverter.GetBytes(Offset));
+                foreach (ushort offset in offsets)
+                    Out.AddRange(Program.BEConverter.GetBytes(offset));
 
-                Out.AddRange(InstructionBytes);
+                Out.AddRange(instructionBytes);
                 Helpers.Ensure4ByteAlign(Out);
 
-                // If we exceed 16 bit range of addresses, the script is deemed too big (So, max script size is about 240KB. Plenty enough.)
-                if ((Out.Count / 4) > UInt16.MaxValue)
+                // Check max script size (16-bit addresses)
+                if ((Out.Count / 4) > ushort.MaxValue)
                     throw ParseException.ScriptTooBigError();
 
                 return Out.ToArray();
@@ -1308,28 +1311,10 @@ namespace NPC_Maker.Scripts
             }
             catch (Exception ex)
             {
-                outScript.ParseErrors.Add(ParseException.GeneralError("Unknown error converting to bytes" + ex.Message));
+                outScript.ParseErrors.Add(ParseException.GeneralError("Unknown error converting to bytes: " + ex.Message));
             }
 
             return new byte[0];
         }
-
-#if DEBUG
-        private List<string> GetOutString(List<Instruction> Instructions)
-        {
-            List<string> Out = new List<string>();
-
-            foreach (Instruction Int in Instructions)
-            {
-                if (Int is InstructionLabel p)
-                    Out.Add(p.ToMarkingString());
-                else
-                    Out.Add(Int.ToString());
-            }
-
-            return Out;
-        }
-#endif
-
     }
 }

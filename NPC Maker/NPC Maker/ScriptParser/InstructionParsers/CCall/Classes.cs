@@ -23,39 +23,39 @@ namespace NPC_Maker.Scripts
 
         public override byte[] ToBytes(List<InstructionLabel> Labels)
         {
-            List<byte> Data = new List<byte>();
+            var data = new List<byte>();
 
-            Helpers.AddObjectToByteList(ID, Data);
-            Helpers.AddObjectToByteList(NumArgs, Data);
-            Helpers.AddObjectToByteList(Destination.Vartype, Data);
-            Helpers.Ensure4ByteAlign(Data);
+            // Header
+            Helpers.AddObjectToByteList(ID, data);
+            Helpers.AddObjectToByteList(NumArgs, data);
+            Helpers.AddObjectToByteList(Destination.Vartype, data);
+            Helpers.Ensure4ByteAlign(data);
 
-            Helpers.AddObjectToByteList(FuncAddr, Data);
-            Helpers.AddObjectToByteList(Destination.Value, Data);
+            Helpers.AddObjectToByteList(FuncAddr, data);
+            Helpers.AddObjectToByteList(Destination.Value, data);
 
-            if (NumArgs != 0)
+            if (NumArgs > 0)
             {
                 for (int i = 0; i < 8; i += 2)
                 {
-                    if (NumArgs > i + 1)
-                        Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Params[i].Vartype, Params[i + 1].Vartype, 4), Data);
-                    else if (NumArgs > i)
-                        Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(Params[i].Vartype, (byte)0, 4), Data);
-                    else
-                        Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether((byte)0, (byte)0, 4), Data);
+                    byte first = (i < NumArgs) ? Params[i].Vartype : (byte)0;
+                    byte second = (i + 1 < NumArgs) ? Params[i + 1].Vartype : (byte)0;
+
+                    Helpers.AddObjectToByteList(Helpers.PutTwoValuesTogether(first, second, 4), data);
                 }
 
-                Helpers.Ensure4ByteAlign(Data);
+                Helpers.Ensure4ByteAlign(data);
             }
 
             for (int i = 0; i < NumArgs; i++)
-                Helpers.AddObjectToByteList(Params[i].Value, Data);
+                Helpers.AddObjectToByteList(Params[i].Value, data);
 
-            Helpers.Ensure4ByteAlign(Data);
+            Helpers.Ensure4ByteAlign(data);
 
-            ScriptDataHelpers.ErrorIfExpectedLenWrong(Data, 12 + (NumArgs != 0 ? 4 : 0) + (NumArgs * 4));
-            return Data.ToArray();
+            ScriptDataHelpers.ErrorIfExpectedLenWrong(data, 12 + (NumArgs != 0 ? 4 : 0) + (NumArgs * 4));
+            return data.ToArray();
         }
+
     }
 }
 

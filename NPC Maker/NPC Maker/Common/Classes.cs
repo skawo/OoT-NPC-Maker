@@ -80,15 +80,16 @@ namespace NPC_Maker.Common
 
         public override string ToString()
         {
-            if ((Value2 == null) && (Value1 == null))
-                return "";
+            if (Value1 == null && Value2 == null)
+                return string.Empty;
             else if (Value2 == null)
-                return $"{Name1}";
+                return Name1;
             else if (Value1 == null)
                 return $"{Name2};";
-            else
-                return $"{Name2};{Name1}";
+
+            return $"{Name2};{Name1}";
         }
+
     }
 
     public class SavedMsgPreviewData

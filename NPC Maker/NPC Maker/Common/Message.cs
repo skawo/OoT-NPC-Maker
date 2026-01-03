@@ -310,9 +310,6 @@ namespace NPC_Maker
         {
         }
 
-        // Below taken and edited from 
-        // https://github.com/Sage-of-Mirrors/Ocarina-Text-Editor
-
         public byte GetMessageTypePos()
         {
             byte Out = (byte)(Type << 4);
@@ -337,15 +334,15 @@ namespace NPC_Maker
         public int GetTagIndex(MessageConfig tagDict, string t, out string normalized)
         {
             bool isTag = IsTag(t);
-            string workTag = isTag ? t.ToUpper().Replace(' ', '_').TrimStart('<').TrimEnd('>') : t;
-            int tagIndex = -1;
 
-            if (isTag)
-                tagIndex = tagDict.Entries.FindIndex(x => x.Entry.TagName == workTag.Split(':')[0] && x.Entry.isTag);
-            else
-                tagIndex = tagDict.Entries.FindIndex(x => x.Entry.TagName == workTag && !x.Entry.isTag);
+            // Normalize tag if it is a "tag", else keep as is
+            normalized = isTag ? t.Trim().TrimStart('<').TrimEnd('>').ToUpper().Replace(' ', '_') : t;
 
-            normalized = workTag;
+            // If tag contains a colon, only consider the part before it
+            string searchTag = isTag ? normalized.Split(':')[0] : normalized;
+
+            int tagIndex = tagDict.Entries.FindIndex(x => x.Entry.TagName == searchTag && x.Entry.isTag == isTag);
+
             return tagIndex;
         }
 

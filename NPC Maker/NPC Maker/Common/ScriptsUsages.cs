@@ -104,6 +104,13 @@ namespace NPC_Maker
                     { Lists.IfWhileAwaitSetRamSubTypes.VARF,                $".varnum operator value" },
                 }
             },
+            { Lists.Instructions.ASYNC,  new Dictionary<object, string>()
+                {
+                    { Lists.AsyncTypes.LOOP,                                $" " },
+                    { Lists.AsyncTypes.ONCE,                                $" " },
+                    { Lists.AsyncTypes.EXIT,                                $" " },
+                }
+            },
             { Lists.Instructions.ITEM,  new Dictionary<object, string>()
                 {
                     { Lists.ItemSubTypes.AWARD,                             $" *award_item_name*" },
@@ -507,7 +514,33 @@ namespace NPC_Maker
                                             $"END{Instruction}";
                                 }
                             }
-                        } 
+                        }
+                    case Lists.Instructions.ASYNC:
+                        {
+                            if (SubType.ToUpper() == Lists.AsyncTypes.EXIT.ToString())
+                            {
+                                return Environment.NewLine + $"{Instruction} *subtype*" + Environment.NewLine;
+                            }
+
+                            bool res = Enum.TryParse<Lists.AsyncTypes>(SubType, out Lists.AsyncTypes oSubType);
+
+                            if (res)
+                            {
+                                return Environment.NewLine + $"{Instruction} {oSubType}{Usages[Lists.Instructions.ASYNC][oSubType]}" + Environment.NewLine +
+                                                             $"   ~instructions~ " + Environment.NewLine +
+                                                             $"END{Instruction}" + Environment.NewLine + Environment.NewLine +
+                                                             " or " + Environment.NewLine +
+                                                             $"{Instruction} {oSubType}{Usages[Lists.Instructions.ASYNC][oSubType]} *instruction*" + Environment.NewLine;
+                            }
+                            else
+                            {
+                                return Environment.NewLine + $"{Instruction} *subtype*" + Environment.NewLine +
+                                        $"   ~instructions~ " + Environment.NewLine +
+                                        $"END{Instruction}" + Environment.NewLine + Environment.NewLine +
+                                        " or " + Environment.NewLine + Environment.NewLine +
+                                        $"{Instruction} *subtype* *instruction*" + Environment.NewLine;
+                            }
+                        }
                     case Lists.Instructions.FACE:
                         {
                             return $"{Lists.Instructions.FACE} {TargetActorUsage} " +

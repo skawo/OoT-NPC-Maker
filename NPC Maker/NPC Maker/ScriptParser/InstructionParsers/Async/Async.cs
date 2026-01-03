@@ -34,6 +34,10 @@ namespace NPC_Maker.Scripts
                 {
                     int start = LineNo;
                     int end = GetCorrespondingEndAsync(Lines, LineNo);
+
+                    if (end < 0)
+                        throw ParseException.AsyncNotClosed(Lines[LineNo]);
+
                     LineNo = end;
 
                     body = GetInstructions(Lines.Skip(start + 1).Take(end - start - 1).ToList());

@@ -563,7 +563,7 @@ namespace NPC_Maker
         public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
         {
             if (Len != ByteList.Count)
-                System.Windows.Forms.MessageBox.Show($"Critical error: Got wrong amount of bytes.");
+                MessageBox.Show($"Critical error: Got wrong amount of bytes.");
         }
 
         public static byte PutTwoValuesTogether(byte a, byte b, int offset)
@@ -574,14 +574,9 @@ namespace NPC_Maker
             return o |= b;
         }
 
-        public static UInt32 TwoInt16ToWord(Int16 a, Int16 b)
+        public static uint TwoInt16ToWord(short a, short b)
         {
-            List<byte> Bytes = new List<byte>();
-
-            Bytes.AddRange(BitConverter.GetBytes(a));
-            Bytes.AddRange(BitConverter.GetBytes(b));
-
-            return BitConverter.ToUInt32(Bytes.ToArray(), 0);
+            return (uint)((ushort)a | ((uint)(ushort)b << 16));
         }
 
         public static void AddObjectToByteList(object value, List<byte> byteList)
