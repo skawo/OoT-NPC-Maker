@@ -4094,6 +4094,26 @@ namespace NPC_Maker
             }
         }
 
+        private void MsgTextCJK_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            FastColoredTextBoxCJK.FastColoredTextBox box = (FastColoredTextBoxCJK.FastColoredTextBox)sender;
+            box.ToolTip.RemoveAll();
+
+            string hoverWord = box.SelectedText;
+            string Language = Combo_Language.Text;
+
+            if (Program.dictionary.ContainsKey(Language))
+            {
+                if (!Program.dictionary[Language].Check(hoverWord))
+                {
+                    List<string> sugg = Program.dictionary[Language].Suggest(hoverWord).ToList();
+
+                    box.ToolTip.SetToolTip(box, String.Join(Environment.NewLine, sugg));
+
+                }
+            }
+        }
+
         private void PerformSpellCheck()
         {
             MsgText.ClearStyle(StyleIndex.All);
