@@ -284,6 +284,10 @@ typedef enum SetSubId
 
     SET_DEBUG_VAR,
     SET_DEBUG_VARF,
+
+    SET_ANIMID_IDLE,
+    SET_ANIMID_WALK,
+    SET_ANIMID_ATTACKED,
 } SetSubId;
 
 typedef enum GetSubId

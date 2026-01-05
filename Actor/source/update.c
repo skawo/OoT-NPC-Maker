@@ -505,7 +505,7 @@ void Update_HitsReaction(NpcMaker* en, PlayState* playState)
                 func_8002F7DC(&en->actor, en->settings.sfxIfAttacked);
 
             // Play the attacked animation and setup info that we've been hit.
-            Setup_Animation(en, playState, ANIM_ATTACKED, true, true, false, !en->autoAnims, false);
+            Setup_Animation(en, playState, en->animIdAtk, true, true, false, !en->autoAnims, false);
             en->wasHitTimer = en->skin.skelAnime.endFrame + WAS_HIT_DELAY_BEFORE_RETURNING_TO_NORMAL;
             en->wasHit = true;
         }
@@ -531,7 +531,7 @@ void Update_HitsReaction(NpcMaker* en, PlayState* playState)
                 en->collider.base.acFlags |= AC_ON;
 
             // We can go back to moving.
-            Setup_Animation(en, playState, ANIM_IDLE, true, false, false, false, false);
+            Setup_Animation(en, playState, en->animIdIdle, true, false, false, false, false);
         }
     }
 

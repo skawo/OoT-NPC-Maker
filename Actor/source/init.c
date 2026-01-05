@@ -83,6 +83,10 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
     en->refActor = &en->actor;
     en->hasStaticExDlists = false;
 
+    en->animIdIdle = ANIM_IDLE;
+    en->animIdWalk = ANIM_WALK;
+    en->animIdAtk = ANIM_ATTACKED;
+
     en->FindNPCMakerFunction = &Scene_GetNpcMakerByID;
     en->FindActorFunction = &Scene_GetActorByID;
     en->FindCutscenePtrFunction = &Scene_GetCutscenePtr;
@@ -747,9 +751,9 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
         is64Printf("_%2d: Setting default animation.\n", en->npcId);
     #endif
 
-    if (en->animations[ANIM_IDLE].offset != 0 || en->animations[ANIM_IDLE].fileStart == USER_ANIMLOAD)
+    if (en->animations[en->animIdIdle].offset != 0 || en->animations[en->animIdIdle].fileStart == USER_ANIMLOAD)
     {
-        Setup_Animation(en, playState, ANIM_IDLE, false, false, true, false, false);
+        Setup_Animation(en, playState, en->animIdIdle, false, false, true, false, false);
         Update_Animations(en, playState);
     }
 

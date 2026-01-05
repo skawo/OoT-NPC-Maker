@@ -76,6 +76,13 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, settings.animInterpFrames),
 };
 
+u16 setAnimsIdsOffsets[] = 
+{
+    offsetof(NpcMaker, animIdIdle),
+    offsetof(NpcMaker, animIdWalk),
+    offsetof(NpcMaker, animIdAtk),
+};
+
 u8 setAnimsOffsets[] = 
 {
     offsetof(NpcAnimationEntry, objectId),

@@ -1280,6 +1280,10 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         case SET_TIMED_PATH_START_TIME:             
         case SET_TIMED_PATH_END_TIME:               Scripts_Set(en, playState, AADDR(en, basic_set_offsets[in->subId]), in, INT16); break;
 
+        case SET_ANIMID_IDLE:
+        case SET_ANIMID_WALK:
+        case SET_ANIMID_ATTACKED:                   Scripts_Set(en, playState, AADDR(en, setAnimsIdsOffsets[in->subId - SET_ANIMID_IDLE]), in, INT8); break;
+        
         case SET_MOVEMENT_SPEED:                    
         case SET_TALK_RADIUS:                       
         case SET_SMOOTHING_CONSTANT:                
@@ -2053,7 +2057,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInsta
         NPCACTOR->stopped = false;
         NPCACTOR->settings.movementType = MOVEMENT_MISC;
 
-        Setup_Animation(NPCACTOR, playState, ANIM_WALK, true, false, false, !NPCACTOR->autoAnims, true);
+        Setup_Animation(NPCACTOR, playState, NPCACTOR->animIdWalk, true, false, false, !NPCACTOR->autoAnims, true);
     }
 
     // Caculate movement vector, add it to the position and rotate towards the goal.
@@ -2104,7 +2108,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInsta
             NPCACTOR->stopped = true;
             NPCACTOR->settings.movementType = script->tempValues[1];
 
-            Setup_Animation(NPCACTOR, playState, ANIM_IDLE, true, false, false, !NPCACTOR->autoAnims, true);
+            Setup_Animation(NPCACTOR, playState, NPCACTOR->animIdIdle, true, false, false, !NPCACTOR->autoAnims, true);
         }
 
         return Scripts_FreeAndContinue(script);

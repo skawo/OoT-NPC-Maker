@@ -2418,10 +2418,10 @@
             this.Checkbox_DrawShadow.AutoSize = true;
             this.Checkbox_DrawShadow.Location = new System.Drawing.Point(9, 3);
             this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
-            this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 17);
+            this.Checkbox_DrawShadow.Size = new System.Drawing.Size(92, 17);
             this.Checkbox_DrawShadow.TabIndex = 22;
             this.Checkbox_DrawShadow.Tag = "SHADOW";
-            this.Checkbox_DrawShadow.Text = "Draws shadow";
+            this.Checkbox_DrawShadow.Text = "Casts shadow";
             this.Checkbox_DrawShadow.UseVisualStyleBackColor = true;
             this.Checkbox_DrawShadow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 

@@ -51,6 +51,9 @@ namespace NPC_Maker.Scripts
                         case (int)Lists.SetSubTypes.LIGHT_RADIUS:
                         case (int)Lists.SetSubTypes.SHADOW_RADIUS:
                         case (int)Lists.SetSubTypes.RIDDEN_NPC:
+                        case (int)Lists.SetSubTypes.ANIMID_IDLE:
+                        case (int)Lists.SetSubTypes.ANIMID_WALKING:
+                        case (int)Lists.SetSubTypes.ANIMID_ATTACKED:
                             return H_SimpleSet(SubID, SplitLine, Int16.MinValue, Int16.MaxValue);
                         // case u32:
                         //return H_SimpleSet(SubID, SplitLine, 0, 0, typeof(UInt32));

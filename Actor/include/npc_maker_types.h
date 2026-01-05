@@ -337,6 +337,9 @@ typedef struct NpcMaker
     u32 numMessages;    
     void* userLoadAnimBuf;
     AsyncContext* asyncCtxs;
+    u8 animIdIdle;
+    u8 animIdWalk;
+    u8 animIdAtk;
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

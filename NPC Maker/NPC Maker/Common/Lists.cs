@@ -613,6 +613,10 @@ namespace NPC_Maker
             LABEL_TO_VARF,
             DEBUG_VAR,
             DEBUG_VARF,
+
+            ANIMID_IDLE,
+            ANIMID_WALKING,
+            ANIMID_ATTACKED,
         }
 
         public enum AwaitSubTypes
