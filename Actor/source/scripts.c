@@ -895,6 +895,21 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
             branch = (actor != NULL) ? in->trueInstrNum : in->falseInstrNum;
             break;
         }
+        case IF_CUTSCENE_CUE:
+        {
+            ScrInstrDoubleIf* instr = (ScrInstrDoubleIf*)in;
+            int slot = Scripts_GetVarval(en, playState, instr->varType1, instr->value1, false);
+            CsCmdActorAction* curActionPtr = NULL;
+
+            if (slot != 0)
+                curActionPtr = playState->csCtx.npcActions[slot - 1];
+
+            if (curActionPtr == NULL)
+                branch = in->falseInstrNum;
+            else
+                branch = Scripts_IfValueCommon(en, playState, curActionPtr->action, UINT16, instr->condition, instr->varType2, instr->value2, instr->trueInstrNum, instr->falseInstrNum); 
+            break;
+        }
         case SUBT_GLOBAL8:
         case SUBT_GLOBAL16:
         case SUBT_GLOBAL32:
@@ -1142,6 +1157,22 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
             conditionMet = (actor != NULL);
             break;
         }
+        case AWAIT_CUTSCENE_CUE:
+        {
+            ScrInstrDoubleAwait* instr = (ScrInstrDoubleAwait*)in;
+            int slot = Scripts_GetVarval(en, playState, instr->varType, instr->value, false);
+            CsCmdActorAction* curActionPtr = NULL;
+
+            if (slot != 0)
+                curActionPtr = playState->csCtx.npcActions[slot - 1];
+
+            if (curActionPtr == NULL)
+                conditionMet = false;
+            else
+                conditionMet = Scripts_AwaitValue(en, playState, curActionPtr->action, UINT16, instr->condition, instr->varType2, instr->value2);
+
+            break;
+        }        
         case SUBT_GLOBAL8:
         case SUBT_GLOBAL16:
         case SUBT_GLOBAL32:

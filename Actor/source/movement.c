@@ -527,7 +527,8 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                 if (curActionPtr->startFrame + 1 == curFrame)
                 {
                     // Set the animation based on the current action.
-                    Setup_Animation(en, playState, curActionPtr->action - 1, true, false, false, false, false);
+                    if (curActionPtr->action != 0)
+                        Setup_Animation(en, playState, curActionPtr->action - 1, true, false, false, false, false);
                     
                     if (en->settings.smoothingConstant < 0)
                     {
