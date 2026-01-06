@@ -67,11 +67,11 @@ namespace NPC_Maker
                     { Lists.IfSubTypes.STICK_X,                             $" operator value" },
                     { Lists.IfSubTypes.STICK_Y,                             $" operator value" },
 
-                    { Lists.IfSubTypes.ITEM_BEING_TRADED,                   $" *trade_item_name*" },
+                    { Lists.IfSubTypes.ITEM_BEING_TRADED,                   $" [operator] *trade_item_name*" },
                     { Lists.IfSubTypes.TRADE_STATUS,                        $" {GetListFromEnum(typeof(Lists.TradeStatuses))}" },
-                    { Lists.IfSubTypes.PLAYER_MASK,                         $" {GetListFromEnum(typeof(Lists.PlayerMasks))}" },
+                    { Lists.IfSubTypes.PLAYER_MASK,                         $" [operator] {GetListFromEnum(typeof(Lists.PlayerMasks))}" },
                     { Lists.IfSubTypes.TIME_OF_DAY,                         $" operator HH:mm" },
-                    { Lists.IfSubTypes.ANIMATION,                           $" *animation_name*" },
+                    { Lists.IfSubTypes.ANIMATION,                           $" [operator] *animation_name*" },
                     { Lists.IfSubTypes.PLAYER_HAS_INVENTORY_ITEM,           $" *inventory_item_name*" },
                     { Lists.IfSubTypes.PLAYER_HAS_QUEST_ITEM,               $" *quest_item_name*" },
                     { Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM,             $" *dungeon_item_name*" },
@@ -85,7 +85,7 @@ namespace NPC_Maker
                     { Lists.IfSubTypes.DAMAGED_BY,                          $" {GetListFromEnum(typeof(Lists.DamageTypes))}" },
                     { Lists.IfSubTypes.ROOM_ID,                             $" operator value" },
 
-                    { Lists.IfSubTypes.CURRENT_STATE,                       $" {GetListFromEnum(typeof(Lists.StateTypes))}" },
+                    { Lists.IfSubTypes.CURRENT_STATE,                       $" [operator] {GetListFromEnum(typeof(Lists.StateTypes))}" },
                     { Lists.IfSubTypes.CCALL,                               $" c_function_name [0-8 arguments] [operator] [value]" },
                     { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,              $".min_range->max_range operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
@@ -376,6 +376,10 @@ namespace NPC_Maker
 
                     {Lists.SetSubTypes.DEBUG_VAR,                           $" operator value" },
                     {Lists.SetSubTypes.DEBUG_VARF,                          $" operator value" },
+
+                    {Lists.SetSubTypes.ANIMID_IDLE,                         $" operator value" },
+                    {Lists.SetSubTypes.ANIMID_WALKING,                      $" operator value" },
+                    {Lists.SetSubTypes.ANIMID_ATTACKED,                     $" operator value" },
 
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },

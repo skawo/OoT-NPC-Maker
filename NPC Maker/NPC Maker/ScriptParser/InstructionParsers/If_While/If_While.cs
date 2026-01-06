@@ -295,10 +295,21 @@ namespace NPC_Maker.Scripts
                             }
                         case (int)Lists.IfSubTypes.ANIMATION:
                             {
-                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-                                var AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine, 2, Entry.Animations);
+                                ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
 
-                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), AnimationID, Lists.ConditionTypes.EQUALTO, EndIf, Else, LabelR));
+                                Lists.ConditionTypes Condition = Lists.ConditionTypes.EQUALTO;
+                                bool skipCond = true;
+
+                                try
+                                {
+                                    Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                                    skipCond = false;
+                                }
+                                catch { }
+
+                                var AnimationID = ScriptHelpers.Helper_GetAnimationID(SplitLine, skipCond ? 2 : 3, Entry.Animations);
+
+                                Instructions.Insert(InsertIdx, new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), AnimationID, Condition, EndIf, Else, LabelR));
                                 return Instructions;
                             }
                         case (int)Lists.IfSubTypes.PLAYER_HAS_DUNGEON_ITEM:
@@ -533,10 +544,21 @@ namespace NPC_Maker.Scripts
 
         private Instruction H_IfWhileEnum(int ID, int SubID, string[] SplitLine, Type Enumtype, int EndIf, int Else, string LabelR, ParseException Throw)
         {
-            ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 3);
-            var Value = ScriptHelpers.GetScriptVarVal(SplitLine, 2, Enumtype, Throw);
+            ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 4);
 
-            return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Lists.ConditionTypes.EQUALTO, EndIf, Else, LabelR);
+            Lists.ConditionTypes Condition = Lists.ConditionTypes.EQUALTO;
+            bool skipCond = true;
+
+            try
+            {
+                Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
+                skipCond = false;
+            }
+            catch { }
+
+            var Value = ScriptHelpers.GetScriptVarVal(SplitLine, skipCond ? 2 : 3, Enumtype, Throw);
+
+            return new InstructionIfWhile((byte)ID, Convert.ToByte(SubID), Value, Condition, EndIf, Else, LabelR);
         }
 
         public int GetCorrespondingElse(List<string> Lines, int LineSt, int LineEnd)
