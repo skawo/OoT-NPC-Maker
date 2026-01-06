@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using static NPC_Maker.Lists;
 
 namespace NPC_Maker.Scripts
 {
@@ -198,7 +201,7 @@ namespace NPC_Maker.Scripts
 
                                 return new InstructionAwaitCCall((byte)SubID, Value, Func.Addr, Condition, Args, (byte)(IsBool ? 1 : 0));
                             }
-                        case (int)Lists.IfSubTypes.ACTOR_EXISTS:
+                        case (int)Lists.AwaitSubTypes.ACTOR_EXISTS:
                             {
                                 ScriptHelpers.ErrorIfNumParamsSmaller(SplitLine, 3);
                                 ScriptVarVal ActorNum = new ScriptVarVal();
@@ -213,6 +216,16 @@ namespace NPC_Maker.Scripts
                                 }
 
                                 return new InstructionAwaitActorExists((byte)SubID, ActorNum, (byte)subType);
+                            }
+                        case (int)Lists.AwaitSubTypes.CUTSCENE_CUE:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+
+                                var Slot = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, byte.MaxValue);
+                                var Cue = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, UInt16.MaxValue);
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
+
+                                return new InstructionAwaitWithSecondValue((byte)SubID, Slot, Cue, Condition);
                             }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);

@@ -87,6 +87,12 @@ namespace NPC_Maker
 
                     { Lists.IfSubTypes.CURRENT_STATE,                       $" [operator] {GetListFromEnum(typeof(Lists.StateTypes))}" },
                     { Lists.IfSubTypes.CCALL,                               $" c_function_name [0-8 arguments] [operator] [value]" },
+
+                    { Lists.IfSubTypes.DEBUG_VAR,                           $" operator value" },
+                    { Lists.IfSubTypes.DEBUG_VARF,                          $" operator value" },
+                    { Lists.IfSubTypes.ACTOR_EXISTS,                        $" {TargetActorUsage}" },
+                    { Lists.IfSubTypes.CUTSCENE_CUE,                        $" cutscene_slot operator value" },
+
                     { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,              $".min_range->max_range operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },
@@ -197,6 +203,8 @@ namespace NPC_Maker
                     { Lists.AwaitSubTypes.EXT_VARF,                         $" npc_id variable_num operator value" },
                     { Lists.AwaitSubTypes.CURRENT_STATE,                    $" {GetListFromEnum(typeof(Lists.StateTypes))}" },
                     { Lists.AwaitSubTypes.CCALL,                            $" c_function_name [0-8 arguments] [operator] [value]" },
+                    { Lists.AwaitSubTypes.ACTOR_EXISTS,                     $" {TargetActorUsage}" },
+                    { Lists.AwaitSubTypes.CUTSCENE_CUE,                     $" cutscene_slot operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.RANDOM,              $".min_range->max_range operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8,             $".0xoffset operator value" },
                     { Lists.IfWhileAwaitSetRamSubTypes.GLOBAL16,            $".0xoffset operator value" },

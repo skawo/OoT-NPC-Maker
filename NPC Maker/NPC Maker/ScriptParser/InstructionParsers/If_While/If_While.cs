@@ -426,6 +426,17 @@ namespace NPC_Maker.Scripts
 
                                 return Instructions;
                             }
+                        case (int)Lists.IfSubTypes.CUTSCENE_CUE:
+                            {
+                                ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 5);
+
+                                var Slot = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, byte.MaxValue);
+                                var Cue = ScriptHelpers.GetScriptVarVal(SplitLine, 4, 0, UInt16.MaxValue);
+                                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 3);
+
+                                Instructions.Insert(InsertIdx, new InstructionIfWhileWithSecondValue((byte)ID, Convert.ToByte(SubID), Slot, Cue, Condition, EndIf, Else, LabelR));
+                                return Instructions;
+                            }
                         default:
                             throw ParseException.UnrecognizedFunctionSubtype(SplitLine);
                     }
