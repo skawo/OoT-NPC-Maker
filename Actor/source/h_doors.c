@@ -1,5 +1,5 @@
 #include "../include/h_doors.h"
-#include <z64hdr/include/overlays/actors/ovl_En_Door/z_en_door.h>
+#include <overlays/actors/ovl_En_Door/z_en_door.h>
 
 void Doors_UpdateDummy(Actor* door, PlayState* playState)
 {
