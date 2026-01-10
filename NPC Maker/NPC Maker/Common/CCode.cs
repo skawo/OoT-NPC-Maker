@@ -231,8 +231,8 @@ namespace NPC_Maker
                 OutPath = outFilePath,
                 CompileFlags = compileFlags,
                 BinDirectory = "binmono",
-                GccExecutable = "mips64-elf-gcc",
-                LdExecutable = "mips64-elf-ld",
+                GccExecutable = "mips64-gcc",
+                LdExecutable = "mips64-ld",
                 NovlExecutable = "nOVL",
                 NovlWorkingDirectory = "nOVL"
             };
@@ -309,12 +309,16 @@ namespace NPC_Maker
                     !IsPathExcluded(path, excluded))
                 {
                     path = Helpers.FixCygdrivePath(path);
-                    string pathProjPathReplaced = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
 
-                    if (!headerPaths.Contains(pathProjPathReplaced))
-                        headerPaths.Add(Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken));
+                    if (File.Exists(path))
+                    {
+                        string pathProjPathReplaced = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
 
-                    excluded.Add(path);
+                        if (!headerPaths.Contains(pathProjPathReplaced))
+                            headerPaths.Add(Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken));
+
+                        excluded.Add(path);
+                    }
                 }
             }
 
@@ -386,7 +390,7 @@ namespace NPC_Maker
             if (codeEntry != null)
                 codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
 
-            CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile);
+            CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.dFile);
             return File.ReadAllBytes(paths.OvlFile);
         }
 
@@ -457,9 +461,8 @@ namespace NPC_Maker
                 ? string.Empty
                 : $"-I {Program.Settings.ProjectPath.AppendQuotation()} ";
 
-            var arguments = config.IsMonoEnvironment
-                ? $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -MMD -B {Path.Combine("..", "mips64", "binmono")} {paths.SourceFile.AppendQuotation()}"
-                : $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -MMD {paths.SourceFile.AppendQuotation()}";
+            var arguments = $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -MMD -B {paths.WorkingDirectory.AppendQuotation()} {paths.SourceFile.AppendQuotation()}";
+
 
             return new ProcessStartInfo
             {
@@ -502,8 +505,8 @@ namespace NPC_Maker
                 : paths.WorkingDirectory;
 
             var fileName = config.IsMonoEnvironment
-                ? Path.Combine(Program.ExecPath, "nOVL", "nOVL")
-                : Path.Combine(Program.ExecPath, "nOVL", "nOVL.exe");
+                ? Path.Combine(paths.WorkingDirectory, "nOVL")
+                : Path.Combine(paths.WorkingDirectory, "nOVL.exe");
 
             var verboseFlag = Program.Settings.Verbose ? "-vv" : "";
             var arguments = $"-c {verboseFlag} -A 0x{gBaseAddr:X} -o {paths.OvlFile.AppendQuotation()} {paths.ElfFile.AppendQuotation()}";
