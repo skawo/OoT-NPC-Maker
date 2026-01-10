@@ -443,12 +443,13 @@ namespace NPC_Maker
             int result = -1;
 
             if (File.Exists(novlInfo.FileName))
-
-            using (var process = Process.Start(novlInfo))
             {
-                var sectionName = config.IsMonoEnvironment ? "Mono NOVL" : "NOVL";
-                GetProcessOutput(process, sectionName, ref compileMsgs, config.IsMonoEnvironment);
-                result = process.ExitCode;
+                using (var process = Process.Start(novlInfo))
+                {
+                    var sectionName = config.IsMonoEnvironment ? "Mono NOVL" : "NOVL";
+                    GetProcessOutput(process, sectionName, ref compileMsgs, config.IsMonoEnvironment);
+                    result = process.ExitCode;
+                }
             }
 
             return File.Exists(paths.ObjectFile) && (result == 0);
@@ -500,9 +501,7 @@ namespace NPC_Maker
 
         private static ProcessStartInfo CreateNovlProcessInfo(CompilationConfig config, CompilationPaths paths)
         {
-            var workingDir = config.IsMonoEnvironment
-                ? Path.Combine(Program.ExecPath, "nOVL")
-                : paths.WorkingDirectory;
+            var workingDir = paths.WorkingDirectory;
 
             var fileName = config.IsMonoEnvironment
                 ? Path.Combine(paths.WorkingDirectory, "nOVL")
@@ -598,7 +597,7 @@ namespace NPC_Maker
         private static string ExecuteObjDump(string elfPath, bool mono)
         {
             var binDirectory = mono ? "binmono" : "bin";
-            var executable = mono ? "mips64-elf-objdump" : "mips64-objdump.exe";
+            var executable = mono ? "mips64-objdump" : "mips64-objdump.exe";
 
             var processInfo = new ProcessStartInfo
             {
