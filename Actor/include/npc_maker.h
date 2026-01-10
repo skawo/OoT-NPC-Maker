@@ -2,7 +2,7 @@
 #define NPC_MAKER_H
 
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 645
+#define MINOR_VERSION 646
 
 #ifndef GAME_VERSION
     #define GAME_VERSION 0
@@ -18,7 +18,7 @@
     #ifndef LOG_VERSION
         #define LOG_VERSION 1
     #endif
-    #include <z64hdr/oot_mq_debug/z64hdr.h>
+    #include <z64hdr.h>
 #endif
 
 #if GAME_VERSION == 1
@@ -31,7 +31,7 @@
     #ifndef LOG_VERSION
         #define LOG_VERSION 0
     #endif    
-    #include <z64hdr/oot_u10/z64hdr.h>
+    #include <z64hdr.h>
 #endif
 
 #ifndef COLLISION_VIEWER
