@@ -321,7 +321,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 
         en->getSettingsFromRAMObject = false;
 
-        Yaz0Header* bufferCompr = (Yaz0Header*)ZeldaArena_Malloc(entrySizeCompr);
+        Yaz0Header* bufferCompr = (Yaz0Header*)ZeldaArena_MallocR(entrySizeCompr);
 
         #if LOGGING > 0
             is64Printf("_%2d: Loading compressed entry, size bytes: 0x%08x\n", en->npcId, entrySizeCompr);
@@ -334,7 +334,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             is64Printf("_%2d: Decompressed entry size: 0x%08x\n", en->npcId, bufferCompr->decSize);
         #endif
 
-        buffer = ZeldaArena_Malloc(entrySize);
+        buffer = ZeldaArena_MallocR(entrySize);
         Yaz0_DecompressImpl(bufferCompr, buffer);
         ZeldaArena_Free(bufferCompr);
     }
@@ -344,7 +344,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             is64Printf("_%2d: Loading entry size bytes: 0x%08x\n", en->npcId, entrySize);
         #endif
 
-        buffer = ZeldaArena_Malloc(entrySize);
+        buffer = ZeldaArena_MallocR(entrySize);
         Rom_LoadDataFromObject(playState, settingsObjectId, buffer, entryAddress, entrySize, en->getSettingsFromRAMObject);
     }
 
