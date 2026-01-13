@@ -463,10 +463,13 @@ void Scripts_SetFlag(NpcMaker* en, PlayState* playState, void* instruction)
         }
         case SET_FLAG_INTERNAL: 
         {
+            u32 index = flag / 32;  
+            u32 bit   = flag % 32;
+
             if (set)
-                en->flags_internal |= 1UL << flag;
+                en->flags_internal[index] |=  (1U << bit);
             else
-                en->flags_internal &= ~(1UL << flag); 
+                en->flags_internal[index] &= ~(1U << bit);
             
             break;
         }
@@ -531,7 +534,14 @@ u16 Scripts_IfFlag(NpcMaker* en, PlayState* playState, void* instruction)
         case IF_FLAG_EVENT:                ret = Flags_GetEventChkInf(flag); break;
         case IF_FLAG_TREASURE:             ret = Flags_GetTreasure(playState, flag); break;
         case IF_FLAG_SCENE_COLLECT:        ret = Flags_GetCollectible(playState, flag); break;
-        case IF_FLAG_INTERNAL:             ret = en->flags_internal & (1 << flag); break;
+        case IF_FLAG_INTERNAL:             
+        {
+            u32 index = flag / 32;
+            u32 bit   = flag % 32;
+
+            ret = (en->flags_internal[index] & (1U << bit)) != 0;        
+            break;
+        }
         default:                           ret = false; break;
     }
 

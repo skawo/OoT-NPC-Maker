@@ -307,7 +307,10 @@ typedef struct NpcMaker
     ScriptInstance* scriptInstances;
     u32 messagesDataOffset;
     s32 customMsgId;
-    u32 flags_internal;
+    u8 animIdIdle;
+    u8 animIdWalk;
+    u8 animIdAtk;
+    u8 pad;
 
     NpcMaker* riddenNpc;
     Actor* refActor;
@@ -317,7 +320,7 @@ typedef struct NpcMaker
     u32 CFuncs[6];
     u8 CFuncsWhen[8];    
     u8* embeddedOverlay;
-    u8 spawnTimer;
+    u8 pad2;
 
     float scriptVolTemp;
     float scriptPitchTemp;
@@ -337,9 +340,7 @@ typedef struct NpcMaker
     u32 numMessages;    
     void* userLoadAnimBuf;
     AsyncContext* asyncCtxs;
-    u8 animIdIdle;
-    u8 animIdWalk;
-    u8 animIdAtk;
+    u32 flags_internal[8];
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

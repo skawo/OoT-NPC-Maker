@@ -36,7 +36,7 @@ namespace NPC_Maker.Scripts
                                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                                 Lists.ConditionTypes Condition = ScriptHelpers.GetBoolConditionID(SplitLine, 3);
-                                int MaxFlagId = (SubID == (int)Lists.AwaitSubTypes.FLAG_INTERNAL ? 31 : UInt16.MaxValue);
+                                int MaxFlagId = (SubID == (int)Lists.AwaitSubTypes.FLAG_INTERNAL ? 255 : UInt16.MaxValue);
                                 var Val = ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, MaxFlagId);
 
                                 return new InstructionAwait((byte)SubID, Val, Condition);
