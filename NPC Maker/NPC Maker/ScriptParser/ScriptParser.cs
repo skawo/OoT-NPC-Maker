@@ -773,13 +773,13 @@ namespace NPC_Maker.Scripts
                 while (switchLineIndex != -1)
                 {
                     string[] splitSwitch = lines[switchLineIndex].Trim().ToUpper().Split(' ');
-                    if (splitSwitch.Length != 2)
+                    if (splitSwitch.Length < 2)
                     {
                         outScript.ParseErrors.Add(ParseException.ParamCountWrong(splitSwitch));
                         break;
                     }
 
-                    string swVar = splitSwitch[1];
+                    string swVar = lines[switchLineIndex].Substring(Lists.Keyword_Switch.Length).Trim();
 
                     int end = ScriptHelpers.GetCorresponding(lines, switchLineIndex, Lists.Keyword_Switch, Lists.Keyword_EndSwitch);
                     if (end < 0)
