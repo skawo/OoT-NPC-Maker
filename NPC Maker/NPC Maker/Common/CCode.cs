@@ -485,7 +485,7 @@ namespace NPC_Maker
             if (!string.IsNullOrWhiteSpace(config.LinkerFile))
                 extraLinkerFile = $"-T {config.LinkerFile.AppendQuotation()}";
 
-            var arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs -o {paths.ElfFile.AppendQuotation()} {paths.ObjectFile.AppendQuotation()}";
+            var arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs -o {paths.ElfFile.AppendQuotation()} {paths.ObjectFile.AppendQuotation()} {Path.Combine(paths.WorkingDirectory, "libgcc.a")}";
 
             return new ProcessStartInfo
             {
