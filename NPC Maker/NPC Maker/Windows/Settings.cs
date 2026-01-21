@@ -111,5 +111,13 @@ namespace NPC_Maker.Windows
             if (fB.ShowDialog() == DialogResult.OK)
                 Txt_ProjectPath.Text = fB.SelectedPath;
         }
+
+        private void Btn_LinkerFiles_Click(object sender, EventArgs e)
+        {
+            Windows.LongInputBox liB = new Windows.LongInputBox("Additional linker files", "Add linker paths:", Program.Settings.LinkerPaths, true, "Linker files (*.ld)|*.ld|All files (*.*)|*.*");
+
+            if (liB.ShowDialog() == DialogResult.OK)
+                EditedSettings.LinkerPaths = liB.inputText;
+        }
     }
 }

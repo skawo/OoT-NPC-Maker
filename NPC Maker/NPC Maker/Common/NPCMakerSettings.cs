@@ -63,6 +63,7 @@ namespace NPC_Maker
 
         public bool UseCJK { get; set; }
 
+        public string LinkerPaths { get; set; }
         public NPCMakerSettings()
         {
             Version = 3;
@@ -93,6 +94,7 @@ namespace NPC_Maker
             MessageEditorFont = "";
             MessageEditorFontSize = 0;
             UseCJK = false;
+            LinkerPaths = "";
         }
 
         public enum Members
@@ -120,6 +122,7 @@ namespace NPC_Maker
             COMPRESS,
             ORIGPREVIEW,
             PROJPATH,
+            LINKERPATHS,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {

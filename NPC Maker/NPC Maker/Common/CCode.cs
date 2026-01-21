@@ -53,7 +53,7 @@ namespace NPC_Maker
             public string NovlExecutable { get; set; }
             public string NovlWorkingDirectory { get; set; }
             public string OutPath { get; set; }
-            public string LinkerFile { get; set; }
+            public string[] LinkerFiles { get; set; }
             public string CompileFlags { get; set; }
         }
 
@@ -67,7 +67,7 @@ namespace NPC_Maker
             public string dFile { get; }
             public string SourceFile { get; }
 
-            public CompilationPaths(CompilationConfig config, string sourceFile, string additionalLinkerFile = "")
+            public CompilationPaths(CompilationConfig config, string sourceFile)
             {
                 CompileFileName = Path.GetFileNameWithoutExtension(sourceFile);
 
@@ -165,17 +165,17 @@ namespace NPC_Maker
             Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlaytemp");
         }
 
-        public static void Compile(string cFilePath, string linkerFile, string outFilePath, string compileFlags, ref string CompileMsgs)
+        public static void Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string CompileMsgs)
         {
             string folder = Helpers.GenerateTemporaryFolderName();
 
             if (Program.IsRunningUnderMono)
-                CompileUnderMono(folder, null, ref CompileMsgs, cFilePath, outFilePath, linkerFile, compileFlags);
+                CompileUnderMono(folder, null, ref CompileMsgs, cFilePath, outFilePath, linkerFiles, compileFlags);
             else
-                CompileUnderWindows(folder, null, ref CompileMsgs, cFilePath, outFilePath, linkerFile, compileFlags);
+                CompileUnderWindows(folder, null, ref CompileMsgs, cFilePath, outFilePath, linkerFiles, compileFlags);
         }
 
-        public static byte[] Compile(string Header, CCodeEntry CodeEntry, ref string CompileMsgs, string folder = "")
+        public static byte[] Compile(string Header, string linkerFiles, CCodeEntry CodeEntry, ref string CompileMsgs, string folder = "")
         {
             try
             {
@@ -201,8 +201,8 @@ namespace NPC_Maker
                 File.WriteAllText(compileHeaderPath, _Header);
 
                 byte[] outf = Program.IsRunningUnderMono
-                    ? CompileUnderMono(folder, CodeEntry, ref CompileMsgs, compileFilePath, outFilePath)
-                    : CompileUnderWindows(folder, CodeEntry, ref CompileMsgs, compileFilePath, outFilePath);
+                    ? CompileUnderMono(folder, CodeEntry, ref CompileMsgs, compileFilePath, outFilePath, linkerFiles)
+                    : CompileUnderWindows(folder, CodeEntry, ref CompileMsgs, compileFilePath, outFilePath, linkerFiles);
 
                 Directory.Delete(compileFolderPath, true);
 
@@ -220,14 +220,29 @@ namespace NPC_Maker
             Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{CompilationMsgs}{Environment.NewLine}{Environment.NewLine}");
         }
 
+        public static string[] ResolveLinkerPaths(string LinkerPaths)
+        {
+            string[] Paths = LinkerPaths.Split(';');
+
+            for (int i = 0; i < Paths.Length; i++)
+            {
+                if (!String.IsNullOrEmpty(Paths[i]))
+                {
+                    Paths[i] = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Paths[i], Dicts.ProjectPathToken);
+                }
+            }
+
+            return Paths;
+        }
+
         public static byte[] CompileUnderMono(string folder, CCodeEntry codeEntry, ref string compileMsgs,
-                                              string compileFile, string outFilePath, string linkerFile = "", string compileFlags = "")
+                                              string compileFile, string outFilePath, string linkerFiles = "", string compileFlags = "")
         {
             var config = new CompilationConfig
             {
                 IsMonoEnvironment = true,
                 Folder = folder,
-                LinkerFile = linkerFile,
+                LinkerFiles = ResolveLinkerPaths(linkerFiles),
                 OutPath = outFilePath,
                 CompileFlags = compileFlags,
                 BinDirectory = "binmono",
@@ -241,13 +256,13 @@ namespace NPC_Maker
         }
 
         public static byte[] CompileUnderWindows(string folder, CCodeEntry codeEntry, ref string compileMsgs,
-                                                 string compileFile = "", string outFilePath = "", string linkerFile = "", string compileFlags = "")
+                                                 string compileFile = "", string outFilePath = "", string linkerFiles = "", string compileFlags = "")
         {
             var config = new CompilationConfig
             {
                 IsMonoEnvironment = false,
                 Folder = folder,
-                LinkerFile = linkerFile,
+                LinkerFiles = ResolveLinkerPaths(linkerFiles),
                 OutPath = outFilePath,
                 CompileFlags = compileFlags,
                 BinDirectory = "bin",
@@ -482,8 +497,11 @@ namespace NPC_Maker
             var libraryFlags = BuildLibraryFlags(config);
             var extraLinkerFile = "";
 
-            if (!string.IsNullOrWhiteSpace(config.LinkerFile))
-                extraLinkerFile = $"-T {config.LinkerFile.AppendQuotation()}";
+            foreach (string lf in config.LinkerFiles)
+            {
+                if (!string.IsNullOrWhiteSpace(lf))
+                    extraLinkerFile = $"-T {lf.AppendQuotation()}";
+            }
 
             var arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs -o {paths.ElfFile.AppendQuotation()} {paths.ObjectFile.AppendQuotation()} {Path.Combine(paths.WorkingDirectory, "libgcc.a")}";
 

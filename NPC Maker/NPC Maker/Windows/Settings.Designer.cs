@@ -52,6 +52,8 @@ namespace NPC_Maker.Windows
             this.Lbl_ProjectPath = new System.Windows.Forms.Label();
             this.Txt_ProjectPath = new System.Windows.Forms.TextBox();
             this.Btn_Browse = new System.Windows.Forms.Button();
+            this.Btn_LinkerFiles = new System.Windows.Forms.Button();
+            this.Lbl_LinkerFiles = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AutoSaveCTime)).BeginInit();
@@ -145,7 +147,7 @@ namespace NPC_Maker.Windows
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(341, 371);
+            this.BtnSave.Location = new System.Drawing.Point(341, 398);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(120, 29);
             this.BtnSave.TabIndex = 8;
@@ -260,7 +262,7 @@ namespace NPC_Maker.Windows
             // 
             // Btn_ResetCache
             // 
-            this.Btn_ResetCache.Location = new System.Drawing.Point(11, 371);
+            this.Btn_ResetCache.Location = new System.Drawing.Point(11, 398);
             this.Btn_ResetCache.Name = "Btn_ResetCache";
             this.Btn_ResetCache.Size = new System.Drawing.Size(120, 29);
             this.Btn_ResetCache.TabIndex = 17;
@@ -332,11 +334,32 @@ namespace NPC_Maker.Windows
             this.Btn_Browse.UseVisualStyleBackColor = true;
             this.Btn_Browse.Click += new System.EventHandler(this.Btn_Browse_Click);
             // 
+            // Btn_LinkerFiles
+            // 
+            this.Btn_LinkerFiles.Location = new System.Drawing.Point(397, 371);
+            this.Btn_LinkerFiles.Name = "Btn_LinkerFiles";
+            this.Btn_LinkerFiles.Size = new System.Drawing.Size(64, 21);
+            this.Btn_LinkerFiles.TabIndex = 24;
+            this.Btn_LinkerFiles.Text = "Browse";
+            this.Btn_LinkerFiles.UseVisualStyleBackColor = true;
+            this.Btn_LinkerFiles.Click += new System.EventHandler(this.Btn_LinkerFiles_Click);
+            // 
+            // Lbl_LinkerFiles
+            // 
+            this.Lbl_LinkerFiles.AutoSize = true;
+            this.Lbl_LinkerFiles.Location = new System.Drawing.Point(331, 375);
+            this.Lbl_LinkerFiles.Name = "Lbl_LinkerFiles";
+            this.Lbl_LinkerFiles.Size = new System.Drawing.Size(60, 13);
+            this.Lbl_LinkerFiles.TabIndex = 25;
+            this.Lbl_LinkerFiles.Text = "Linker files:";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 417);
+            this.ClientSize = new System.Drawing.Size(475, 437);
+            this.Controls.Add(this.Lbl_LinkerFiles);
+            this.Controls.Add(this.Btn_LinkerFiles);
             this.Controls.Add(this.Btn_Browse);
             this.Controls.Add(this.Txt_ProjectPath);
             this.Controls.Add(this.Lbl_ProjectPath);
@@ -395,5 +418,7 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.Label Lbl_ProjectPath;
         private System.Windows.Forms.TextBox Txt_ProjectPath;
         private System.Windows.Forms.Button Btn_Browse;
+        private System.Windows.Forms.Button Btn_LinkerFiles;
+        private System.Windows.Forms.Label Lbl_LinkerFiles;
     }
 }

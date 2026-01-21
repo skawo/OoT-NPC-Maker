@@ -545,7 +545,7 @@ namespace NPC_Maker
                                 Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_{EntryID}_code_");
 
                                 if (Entry.EmbeddedOverlayCode.Code != "")
-                                    Overlay = CCode.Compile(Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors, $"NPCCOMPILE{EntryID}");
+                                    Overlay = CCode.Compile(Data.CHeader, Program.Settings.LinkerPaths, Entry.EmbeddedOverlayCode, ref CompErrors, $"NPCCOMPILE{EntryID}");
 
                                 if (Overlay != null)
                                 {
@@ -1100,7 +1100,7 @@ namespace NPC_Maker
                                     Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_code_");
                                     Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script");
 
-                                    Overlay = CCode.Compile(Data.CHeader, Entry.EmbeddedOverlayCode, ref CompErrors);
+                                    Overlay = CCode.Compile(Data.CHeader, Program.Settings.LinkerPaths, Entry.EmbeddedOverlayCode, ref CompErrors);
 
                                     if (Overlay != null)
                                     {

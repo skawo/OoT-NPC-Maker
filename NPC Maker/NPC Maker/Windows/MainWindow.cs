@@ -782,7 +782,7 @@ namespace NPC_Maker
             if (SelectedEntry.EmbeddedOverlayCode.Code != "" && Program.Settings.AutoComp_ActorSwitch)
             {
                 string CompileErrors = "";
-                CCode.Compile(EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
+                CCode.Compile(EditedFile.CHeader, Program.Settings.LinkerPaths, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
                 TextBox_CompileMsg.Text = CompileErrors;
             }
             else if (SelectedEntry.EmbeddedOverlayCode.Code != "")
@@ -4792,7 +4792,7 @@ namespace NPC_Maker
         {
 
             string CompileMsgs = "";
-            CCode.Compile(EditedFile.CHeader, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
+            CCode.Compile(EditedFile.CHeader, Program.Settings.LinkerPaths, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
 
             this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
             {
