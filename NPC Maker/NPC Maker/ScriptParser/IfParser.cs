@@ -108,16 +108,16 @@ namespace NPC_Maker.ScriptParser
             if (pos >= expression.Length)
                 throw new Scripts.ParseException("Unexpected end of expression:", expression);
 
-            if (expression[pos] == '(')
+            if (expression[pos] == '[')
             {
-                pos++; // skip '('
+                pos++; // skip '['
                 var node = ParseLogicalOr(expression, ref pos);
                 SkipWhitespace(expression, ref pos);
 
-                if (pos >= expression.Length || expression[pos] != ')')
-                    throw new Scripts.ParseException("Missing closing parenthesis:", expression);
+                if (pos >= expression.Length || expression[pos] != ']')
+                    throw new Scripts.ParseException("Missing closing bracket:", expression);
 
-                pos++; // skip ')'
+                pos++; // skip ']'
                 return node;
             }
 
@@ -127,13 +127,13 @@ namespace NPC_Maker.ScriptParser
 
             while (pos < expression.Length)
             {
-                if (expression[pos] == '(')
+                if (expression[pos] == '[')
                 {
                     nestedParens++;
                     pos++;
                     continue;
                 }
-                else if (expression[pos] == ')')
+                else if (expression[pos] == ']')
                 {
                     if (nestedParens > 0)
                     {

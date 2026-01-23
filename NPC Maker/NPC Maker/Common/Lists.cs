@@ -80,6 +80,8 @@ namespace NPC_Maker
         public const string EndTagString = "END";
         public const string SoundsDictType = "Sounds";
 
+        public const string InternalElseLabelKw = "IEL__";
+
         public const int Num_User_Vars = 255;
 
         public static List<string> AllKeywords = new List<string>()
@@ -294,7 +296,7 @@ namespace NPC_Maker
             GOTO_VAR,
             STOP,
             ASYNC,
-            NOP,
+            NOP
         }
 
         public static List<string> KeyValues = GetKeyValues();

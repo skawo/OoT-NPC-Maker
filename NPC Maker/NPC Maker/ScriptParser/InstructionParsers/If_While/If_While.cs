@@ -19,8 +19,6 @@ namespace NPC_Maker.Scripts
                 int Else = 0;
                 int InsertIdx = 0;
 
-                bool isStaticIf = CheckIfStaticIf(ID, SplitLine, out bool StaticIfResult);
-
                 #region Setup
 
                 switch (ID)
@@ -29,6 +27,23 @@ namespace NPC_Maker.Scripts
                         {
                             EndIf = GetCorrespondingEndIf(Lines, LineNo);
                             Else = GetCorrespondingElse(Lines, LineNo, EndIf);
+
+                            bool isStaticIf = CheckIfStaticIf(ID, SplitLine, out bool StaticIfResult);
+
+                            if (isStaticIf)
+                            {
+                                if (Lines.Skip(LineNo + 1).Take(EndIf - LineNo - 1).Any(x => x.Contains(Lists.InternalElseLabelKw)))
+                                {
+                                    isStaticIf = false;
+                                    SplitLine = new string[] 
+                                    { 
+                                        Lists.Instructions.IF.ToString(), 
+                                        $"{Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8}.0x0", 
+                                        StaticIfResult ? "==" : "!=", 
+                                        $"{Lists.IfWhileAwaitSetRamSubTypes.GLOBAL8}.0x0" 
+                                    };
+                                }
+                            }
 
                             if (EndIf < 0)
                                 throw ParseException.IfNotClosed(SplitLine);

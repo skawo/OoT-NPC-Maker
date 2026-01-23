@@ -88,7 +88,7 @@ namespace NPC_Maker.Scripts
         }
         public static ParseException MixedAndOr(string _Line)
         {
-            return new ParseException("And and Or statements should not be mixed on a single line: ", _Line);
+            return new ParseException("Should use square brackets for mixed and/or lines: ", _Line);
         }
 
         public static ParseException ScriptTooBigError()

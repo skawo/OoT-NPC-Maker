@@ -128,8 +128,8 @@ namespace NPC_Maker.Scripts
             }
 
 #if DEBUG
-            outScript.ScriptDebug = GetOutString(instructions);
-            System.IO.File.WriteAllLines("DEBUGOUT_SCRIPT", outScript.ScriptDebug);
+            //outScript.ScriptDebug = GetOutString(instructions);
+            //System.IO.File.WriteAllLines("DEBUGOUT_SCRIPT", outScript.ScriptDebug);
 #endif
 
             List<InstructionLabel> labels = GetLabelsAndRemove(ref outScript, ref instructions);
@@ -561,7 +561,7 @@ namespace NPC_Maker.Scripts
             int lIndex = Lines.FindIndex(x =>
                 x.ToUpper().StartsWith(Lists.Instructions.IF.ToString()) &&
                 (x.ToUpper().Contains(AndKeyword) || x.ToUpper().Contains(OrKeyword)) &&
-                (x.Contains("(") && x.Contains(")"))
+                (x.Contains("[") && x.Contains("]"))
             );
 
             return lIndex;
@@ -684,9 +684,9 @@ namespace NPC_Maker.Scripts
                             {
                                 string JumpElseLabel = ScriptDataHelpers.GetRandomLabelString(this, 5);
 
-                                Lines.Insert(Else + 2, $"ANDELSE_{JumpElseLabel}:");
+                                Lines.Insert(Else + 2, $"{Lists.InternalElseLabelKw}{JumpElseLabel}:");
                                 Lines.Insert(End + 3, Lists.Keyword_Else);
-                                Lines.Insert(End + 4, $"{Lists.Instructions.GOTO} ANDELSE_{JumpElseLabel}");
+                                Lines.Insert(End + 4, $"{Lists.Instructions.GOTO} {Lists.InternalElseLabelKw}{JumpElseLabel}");
                             }
                         }
                     }
