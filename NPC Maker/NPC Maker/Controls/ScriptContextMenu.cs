@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace NPC_Maker
 {
@@ -134,8 +135,7 @@ namespace NPC_Maker
             linkAnimsStripMenuItem.Click += LinkAnimsStripMenuItem_Click;
 
 
-            List<string> TalkInstructions = new List<string>() { Lists.Instructions.TALK.ToString(), 
-                                                                 Lists.Instructions.FORCE_TALK.ToString(), 
+            List<string> TalkInstructions = new List<string>() { Lists.Instructions.FORCE_TALK.ToString(), 
                                                                  Lists.Instructions.SHOW_TEXTBOX.ToString(), 
                                                                  Lists.Instructions.SHOW_TEXTBOX_SP.ToString() };
 
@@ -147,7 +147,7 @@ namespace NPC_Maker
                 {
                     Tsmi.DoubleClickEnabled = true;
                     Tsmi.DoubleClick += Tsmi_DoubleClick;
-                    AddItemCollectionToToolStripMenuItem(Dicts.FunctionSubtypes[Item], Tsmi);
+                    AddItemCollectionToToolStripMenuItem(Dicts.FunctionSubtypes[Item], Tsmi, SubItem_Click);
                 }
                 else if (TalkInstructions.Contains(Item))
                 {
@@ -155,7 +155,7 @@ namespace NPC_Maker
                     { 
                         Tsmi.DoubleClickEnabled = true;
                         Tsmi.DoubleClick += Tsmi_DoubleClick;
-                        AddItemCollectionToToolStripMenuItem(Entry.Messages.Select(x => x.Name).ToArray(), Tsmi);
+                        AddItemCollectionToToolStripMenuItem(Entry.Messages.Select(x => x.Name).ToArray(), Tsmi, MsgSubItem_Click);
                     }
                     else
                         Tsmi.Click += Tsmi_Click;
@@ -165,7 +165,7 @@ namespace NPC_Maker
                 {
                     Tsmi.DoubleClickEnabled = true;
                     Tsmi.DoubleClick += Tsmi_DoubleClick;
-                    AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), Tsmi);
+                    AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), Tsmi, SubItem_Click);
                 }
                 else
                     Tsmi.Click += Tsmi_Click;
@@ -173,27 +173,27 @@ namespace NPC_Maker
                 functionsToolStripMenuItem.DropDownItems.Add(Tsmi);
             }
 
-            AddItemCollectionToToolStripMenuItem(Lists.KeyValues.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Lists.AllKeywords.ToArray(), keywordsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.DamageTypes)), damageTypesStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.AwardItems)), itemsgiveToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.DungeonItems)), itemsdungeonToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.Items)), itemsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuestItems)), questItemsToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.PlayerMasks)), playerMasksToolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.OcarinaSongs)), ocarinaSongstoolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), particlestoolStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.StateTypes)), stateTypesStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuakeTypes)), quakeTypesStripMenuItem);
-            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TransitionTypes)), transitionTypesStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(Lists.KeyValues.ToArray(), keywordsToolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Lists.AllKeywords.ToArray(), keywordsToolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.DamageTypes)), damageTypesStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.AwardItems)), itemsgiveToolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TradeItems)), itemstradeToolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.DungeonItems)), itemsdungeonToolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.Items)), itemsToolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuestItems)), questItemsToolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.PlayerMasks)), playerMasksToolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.OcarinaSongs)), ocarinaSongstoolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.ParticleTypes)), particlestoolStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.StateTypes)), stateTypesStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.QuakeTypes)), quakeTypesStripMenuItem, SubItem_Click);
+            AddItemCollectionToToolStripMenuItem(Enum.GetNames(typeof(Lists.TransitionTypes)), transitionTypesStripMenuItem, SubItem_Click);
 
             List<string> FunctionNames = new List<string>();
 
             foreach (var kvp in Entry.EmbeddedOverlayCode.Functions)
                 FunctionNames.Add(kvp.FuncName);
 
-            AddItemCollectionToToolStripMenuItem(FunctionNames.ToArray(), cFunctionsStripMenuItem);
+            AddItemCollectionToToolStripMenuItem(FunctionNames.ToArray(), cFunctionsStripMenuItem, SubItem_Click);
 
             List<string> MessageNames = new List<string>();
             List<string> MessageToolTips = new List<string>();
@@ -205,7 +205,7 @@ namespace NPC_Maker
 
             }
 
-            AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), messagesStripMenuItem, MessageToolTips.ToArray());
+            AddItemCollectionToToolStripMenuItem(MessageNames.ToArray(), messagesStripMenuItem, SubItem_Click, MessageToolTips.ToArray());
         }
 
         private static void DefinesStripMenuItem_Click(object sender, EventArgs e)
@@ -216,7 +216,7 @@ namespace NPC_Maker
                 InsertTxtToScript($"H_{h.Name1}");
         }
 
-        private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem, string[] ToolTips = null)
+        private static void AddItemCollectionToToolStripMenuItem(string[] Collection, ToolStripMenuItem MenuItem, EventHandler Handler, string[] ToolTips = null)
         {
             MenuItem.DropDown.MaximumSize = new Size(300, 700);
 
@@ -232,7 +232,7 @@ namespace NPC_Maker
                     SubItem.AutoToolTip = true;
                 }
 
-                SubItem.Click += SubItem_Click;
+                SubItem.Click += Handler;
                 Items[i] = SubItem;
             }
 
@@ -288,6 +288,12 @@ namespace NPC_Maker
             }
             else
                 InsertTxtToScript(s.Text);
+        }
+
+        private static void MsgSubItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem s = (sender as ToolStripMenuItem);
+            InsertTxtToScript(s.OwnerItem.Text + " " + s.Text);
         }
 
         private static void SoundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
