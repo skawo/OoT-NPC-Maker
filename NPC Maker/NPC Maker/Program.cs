@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Drawing.Text;
 using System.Drawing;
+using System.Linq;
 
 namespace NPC_Maker
 {
@@ -40,6 +41,8 @@ namespace NPC_Maker
 
         public static Dictionary<string, WeCantSpell.Hunspell.WordList> dictionary;
 
+        public static bool consoleSilent = false;
+
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
 
@@ -59,12 +62,15 @@ namespace NPC_Maker
 
             if (args.Length != 0)
             {
+                if (args.Contains("--silent"))
+                    consoleSilent = true;
+
                 if (!IsRunningUnderMono)
                     AttachConsole(-1);
 
                 var version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-                Console.WriteLine();
-                Console.WriteLine($"Zelda Ocarina of Time NPC Creation Tool v.{version}");
+                ConsoleWriteLineS();
+                ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.{version}");
             }
 
             Application.EnableVisualStyles();
@@ -126,15 +132,15 @@ namespace NPC_Maker
             else
             {
                 var isValidCompileCommand = args.Length >= 4 && args[0].ToUpper() == "-C" && args.Length <= 5;
-                var isValidConvertCommand = args.Length == 2;
+                var isValidConvertCommand = args.Length >= 2;
 
                 if (isValidCompileCommand)
                 {
-                    Console.WriteLine($"Compiling \"{Path.GetFileName(args[1])}\" to {args[3]}...");
+                    ConsoleWriteLineS($"Compiling \"{Path.GetFileName(args[1])}\" to {args[3]}...");
                     var compileFlags = args.Length == 5 ? args[4].Trim('"') : "";
                     string compileMsgs = "";
                     CCode.Compile(args[1], args[2], args[3], compileFlags, ref compileMsgs);
-                    Console.WriteLine("Press ENTER to exit...");
+                    ConsoleWriteLineS("Press ENTER to exit...");
                     return;
                 }
                 else if (isValidConvertCommand)
@@ -149,7 +155,7 @@ namespace NPC_Maker
                         Dicts.ReloadLanguages(inFile.Languages);
                         Program.Settings.GameVersion = inFile.GameVersion;
 
-                        Console.WriteLine($"Saving \"{Path.GetFileName(args[0])}\" to binary...");
+                        ConsoleWriteLineS($"Saving \"{Path.GetFileName(args[0])}\" to binary...");
 
                         if (Program.Settings.CompileInParallel)
                         {
@@ -160,11 +166,12 @@ namespace NPC_Maker
                         }
                         else
                         {
-                            var cacheStatus = FileOps.GetCacheStatus(inFile, true);
+                            var cacheStatus = FileOps.GetCacheStatus(inFile);
+
                             if (cacheStatus != null)
                             {
                                 var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
-                                FileOps.SaveBinaryFile(args[1], inFile, null, baseDefines, cacheStatus[0], cacheStatus[1], null, true);
+                                FileOps.SaveBinaryFile(args[1], inFile, null, baseDefines, cacheStatus, null, true);
                                 CCode.CleanupStandardCompilationArtifacts();
                             }
                         }
@@ -179,7 +186,7 @@ namespace NPC_Maker
                     }
 
                     FileOps.SaveNPCJSON(args[0], inFile);
-                    Console.WriteLine("Press ENTER to exit...");
+                    Program.ConsoleWriteLineS("Press ENTER to exit...");
                 }
                 else
                 {
@@ -190,6 +197,18 @@ namespace NPC_Maker
             }
 
 
+        }
+
+        public static void ConsoleWriteLineS(string s = "")
+        {
+            if (!consoleSilent)
+                Console.WriteLine(s);
+        }
+
+        public static void ConsoleWriteS(string s = "")
+        {
+            if (!consoleSilent) 
+                Console.Write(s);
         }
     }
 }

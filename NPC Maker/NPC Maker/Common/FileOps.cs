@@ -375,22 +375,21 @@ namespace NPC_Maker
             return;
         }
 
-        public static bool[] GetCacheStatus(NPCFile Data, bool CLIMode = false)
+        public static bool[] GetCacheStatus(NPCFile data)
         {
             string jsonFileName = Program.JsonPath.FilenameFromPath();
             string extHeaderPath = "";
 
-            try
-            {
-                extHeaderPath = Data.GetExtHeader();
-            }
-            catch
-            {
-                // ignore
-            }
+            try { extHeaderPath = data.GetExtHeader(); }
+            catch { }
 
-            // Combine global headers and ext header
-            string gh = string.Join(Environment.NewLine, Data.GlobalHeaders.Select(x => x.Text)) + Environment.NewLine + extHeaderPath;
+            // Build global + ext headers efficiently
+            var ghBuilder = new StringBuilder();
+            foreach (var h in data.GlobalHeaders)
+                ghBuilder.AppendLine(h.Text);
+
+            ghBuilder.Append(extHeaderPath);
+            string gh = ghBuilder.ToString();
 
             string dicts = JsonConvert.SerializeObject(new
             {
@@ -403,19 +402,37 @@ namespace NPC_Maker
 
             bool cacheInvalid = false;
             bool cCacheInvalid = false;
-            string ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
 
-            Data.CHeader = CCode.ReplaceGameVersionInclude(Data.CHeader);
+            string ver = FileVersionInfo
+                .GetVersionInfo(Assembly.GetExecutingAssembly().Location)
+                .ProductVersion;
 
-            using (SHA1 sha1 = SHA1.Create())
+            // Prepare C header + linkers
+            data.CHeader = CCode.ReplaceGameVersionInclude(data.CHeader);
+
+            var cHeaderBuilder = new StringBuilder(data.CHeader);
+            foreach (var linkerPath in CCode.ResolveLinkerPaths(Program.Settings.LinkerPaths))
             {
+                if (File.Exists(linkerPath))
+                    cHeaderBuilder.Append(File.ReadAllText(linkerPath));
+            }
+
+            using (var sha1 = SHA1.Create())
+            {
+
                 string hashGlobalHeaders = Helpers.GetBase64Hash(sha1, gh);
                 string hashDicts = Helpers.GetBase64Hash(sha1, dicts);
-                string hashCHeader = Helpers.GetBase64Hash(sha1, Data.CHeader);
+                string hashCHeader = Helpers.GetBase64Hash(sha1, cHeaderBuilder.ToString());
 
-                string cachedHeaders = Path.Combine(Program.ScriptCachePath, $"{jsonFileName}_gh_{ver}_{hashGlobalHeaders}");
-                string cachedDicts = Path.Combine(Program.ScriptCachePath, $"{jsonFileName}_dicts_{ver}_{hashDicts}");
-                string cachedHeader = Path.Combine(Program.CCachePath, $"{jsonFileName}_ch_{ver}_{hashCHeader}");
+                string cachedHeaders = Path.Combine(
+                    Program.ScriptCachePath, $"{jsonFileName}_gh_{ver}_{hashGlobalHeaders}");
+
+                string cachedDicts = Path.Combine(
+                    Program.ScriptCachePath, $"{jsonFileName}_dicts_{ver}_{hashDicts}");
+
+                string cachedHeader = Path.Combine(
+                    Program.CCachePath, $"{jsonFileName}_ch_{ver}_{hashCHeader}");
+
 
                 if (!File.Exists(cachedHeaders) || !File.Exists(cachedDicts))
                 {
@@ -433,8 +450,9 @@ namespace NPC_Maker
                 }
             }
 
-            return new bool[] { cacheInvalid, cCacheInvalid };
+            return new[] { cacheInvalid, cCacheInvalid };
         }
+
 
         // Load all the includes text so that it can be appended to the string being hashed for cache
         private static string GetIncludesText(List<string> includeList)
@@ -472,7 +490,7 @@ namespace NPC_Maker
                     catch
                     {
                         // Add random string. This way the cache always will be invalidated.
-                        Console.WriteLine($"Warning: Couldn't resolve path {hPath} for cache use.");
+                        Program.ConsoleWriteLineS($"Warning: Couldn't resolve path {hPath} for cache use.");
                         content = Helpers.GenerateTemporaryFolderName();
                     }
                 }
@@ -490,7 +508,7 @@ namespace NPC_Maker
 
             await TaskEx.Run(() =>
             {
-                bool[] cacheStatus = GetCacheStatus(Data, CLIMode);
+                var cacheStatus = GetCacheStatus(Data);
 
                 if (cacheStatus == null)
                 {
@@ -511,7 +529,7 @@ namespace NPC_Maker
                     id++;
                 }
 
-                Console.Write($"Compiling...");
+                Program.ConsoleWriteS($"Compiling...");
 
                 string BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(Data);
                 string JsonFileName = Program.JsonPath.FilenameFromPath();
@@ -627,7 +645,7 @@ namespace NPC_Maker
                         else
                         {
                             Helpers.AddInterlocked(ref CurProgress, ProgressPer);
-                            Console.Write($"\rCompiling {String.Format("{0:0.##}", CurProgress)}%    ");
+                            Program.ConsoleWriteS($"\rCompiling {String.Format("{0:0.##}", CurProgress)}%    ");
                         }
                     }
                     catch (Exception)
@@ -636,9 +654,9 @@ namespace NPC_Maker
                     }
                 });
 
-                Console.WriteLine("\nPre-processing done!");
+                Program.ConsoleWriteLineS("\nPre-processing done!");
 
-                SaveBinaryFile(outPath, Data, progress, BaseDefines, false, false, cb.ToList(), CLIMode);
+                SaveBinaryFile(outPath, Data, progress, BaseDefines, new bool[] { false, false }, cb.ToList(), CLIMode);
                 CCode.CleanupStandardCompilationArtifacts();
                 Program.CompileInProgress = false;
             });
@@ -671,7 +689,7 @@ namespace NPC_Maker
         }
 
         public static void SaveBinaryFile(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress,
-                                          string baseDefines, bool cacheInvalid, bool CcacheInvalid, List<Common.PreprocessedEntry> preProcessedFiles, bool CLIMode)
+                                          string baseDefines, bool[] cacheStatus, List<Common.PreprocessedEntry> preProcessedFiles, bool CLIMode)
         {
             if (Data.Entries.Count() == 0)
             {
@@ -682,6 +700,9 @@ namespace NPC_Maker
 
             try
             {
+                bool cacheInvalid = cacheStatus[0];
+                bool CcacheInvalid = cacheStatus[1];
+
                 int Offset = Data.Entries.Count() * 12 + 4;
                 string JsonFileName = Program.JsonPath.FilenameFromPath();
 
@@ -706,7 +727,7 @@ namespace NPC_Maker
                     {
                         if (Entry.IsNull == false && !Entry.Omitted)
                         {
-                            Console.Write($"Processing entry {EntriesDone}: {Entry.NPCName}... ");
+                            Program.ConsoleWriteS($"Processing entry {EntriesDone}: {Entry.NPCName}... ");
                             Dictionary<string, string> defines = Helpers.GetDefinesFromHeaders(Entry.HeaderPath);
 
                             int CurLen = 0;
@@ -1272,7 +1293,7 @@ namespace NPC_Maker
                             CompilationData.Add(new Common.CompilationEntryData(EntryBytes));
 
                             if (ParseErrors.Count == 0)
-                                Console.Write($"OK{Environment.NewLine}");
+                                Program.ConsoleWriteS($"OK{Environment.NewLine}");
                             else
                                 break;
                         }
@@ -1280,7 +1301,7 @@ namespace NPC_Maker
                         else
                         {
                             CompilationData.Add(new Common.CompilationEntryData(null));
-                            Console.WriteLine($"Entry {EntriesDone} is blank or omitted.");
+                            Program.ConsoleWriteLineS($"Entry {EntriesDone} is blank or omitted.");
                         }
 
                         EntriesDone += 1;
@@ -1309,7 +1330,7 @@ namespace NPC_Maker
 
                     if (Program.Settings.CompressIndividually)
                     {
-                        Console.WriteLine($"Compressing...");
+                        Program.ConsoleWriteLineS($"Compressing...");
 
                         if (progress != null)
                             progress.Report(new Common.ProgressReport($"Compressing...", 100));
@@ -1362,7 +1383,7 @@ namespace NPC_Maker
                             Output.AddRange(Entry.data);
                     }
 
-                    Console.WriteLine("\nDone!");
+                    Program.ConsoleWriteLineS("\nDone!");
 
                     if (progress != null)
                         progress.Report(new Common.ProgressReport($"Done!", 100));

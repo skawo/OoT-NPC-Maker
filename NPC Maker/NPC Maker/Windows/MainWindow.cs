@@ -1,22 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using FastColoredTextBoxCJK;
+using FastColoredTextBoxNS;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using System.IO;
+using System.Data;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Text;
+using System.IO;
+using System.Linq;
 using System.Media;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Data;
-using FastColoredTextBoxNS;
-using System.Drawing.Drawing2D;
-using System.Collections.Concurrent;
-using System.Drawing.Text;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using ZeldaMessage;
 
 namespace NPC_Maker
 {
@@ -1085,9 +1087,10 @@ namespace NPC_Maker
                 {
                     await TaskEx.Run(() =>
                     {
-                        bool[] caches = FileOps.GetCacheStatus(EditedFile);
+                        var cacheStatus = FileOps.GetCacheStatus(EditedFile);
+
                         string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
-                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, caches[0], caches[1], null, false);
+                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, cacheStatus, null, false);
                         CCode.CleanupStandardCompilationArtifacts();
                     });
                 }
@@ -4076,7 +4079,7 @@ namespace NPC_Maker
 
         private void MsgText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            FastColoredTextBox box = (FastColoredTextBox)sender;
+            FastColoredTextBoxNS.FastColoredTextBox box = (FastColoredTextBoxNS.FastColoredTextBox)sender;
             box.ToolTip.RemoveAll();
 
             string hoverWord = box.SelectedText;
