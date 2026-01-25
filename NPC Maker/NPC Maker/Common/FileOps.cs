@@ -987,7 +987,7 @@ namespace NPC_Maker
 
                                 var errors = new ConcurrentBag<string>();
 
-                                Parallel.ForEach(loc.Messages, msg =>
+                                foreach (var msg in loc.Messages)
                                 {
                                     try
                                     {
@@ -995,20 +995,10 @@ namespace NPC_Maker
                                     }
                                     catch (Exception ex)
                                     {
-                                        msg.tempBytes = null;
-                                        errors.Add($"{Entry.NPCName}:\nError in message {msg.Name}:\n{ex.Message}");
+                                        ShowMsg(CLIMode, $"{Entry.NPCName}:\nError in message {msg.Name}:\n{ex.Message}");
+                                        break;
                                     }
-                                });
-
-                                if (errors.Any())
-                                {
-                                    ShowMsg(CLIMode, errors.First());
-
-                                    if (!ParseErrors.Contains(Entry.NPCName))
-                                        ParseErrors.Add(Entry.NPCName);
-
-                                    break;
-                                }
+                                };
 
                                 foreach (var msg in loc.Messages)
                                 {
