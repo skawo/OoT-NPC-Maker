@@ -420,9 +420,9 @@ namespace NPC_Maker
             using (var sha1 = SHA1.Create())
             {
 
-                string hashGlobalHeaders = Helpers.GetBase64Hash(sha1, gh);
-                string hashDicts = Helpers.GetBase64Hash(sha1, dicts);
-                string hashCHeader = Helpers.GetBase64Hash(sha1, cHeaderBuilder.ToString());
+                string hashGlobalHeaders = Helpers.GetBase64Hash(gh);
+                string hashDicts = Helpers.GetBase64Hash(dicts);
+                string hashCHeader = Helpers.GetBase64Hash(cHeaderBuilder.ToString());
 
                 string cachedHeaders = Path.Combine(
                     Program.ScriptCachePath, $"{jsonFileName}_gh_{ver}_{hashGlobalHeaders}");
@@ -501,15 +501,18 @@ namespace NPC_Maker
             return codeBuilder.ToString();
         }
 
-        public async static void PreprocessCodeAndScripts(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress, bool CLIMode)
+        public static async Task PreprocessCodeAndScripts(
+            string outPath,
+            NPCFile Data,
+            IProgress<Common.ProgressReport> progress,
+            bool CLIMode)
         {
-            float ProgressPer = (float)((float)100 / (float)Data.Entries.Count);
-            float CurProgress = 0;
+            float progressPer = 100f / Data.Entries.Count;
+            float curProgress = 0f;
 
             await TaskEx.Run(() =>
             {
                 var cacheStatus = GetCacheStatus(Data);
-
                 if (cacheStatus == null)
                 {
                     Program.CompileInProgress = false;
@@ -517,150 +520,234 @@ namespace NPC_Maker
                 }
 
                 bool cacheInvalid = cacheStatus[0];
-                bool CcacheInvalid = cacheStatus[1];
+                bool cCacheInvalid = cacheStatus[1];
 
-                Dictionary<int, NPCEntry> dict = new Dictionary<int, NPCEntry>();
+                Program.ConsoleWriteS("Compiling...");
 
-                int id = 0;
+                string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(Data);
+                string jsonFileName = Program.JsonPath.FilenameFromPath();
 
-                foreach (NPCEntry Entry in Data.Entries)
-                {
-                    dict.Add(id, Entry);
-                    id++;
-                }
+                var results = new ConcurrentBag<Common.PreprocessedEntry>();
 
-                Program.ConsoleWriteS($"Compiling...");
+                int lastReported = 0;
 
-                string BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(Data);
-                string JsonFileName = Program.JsonPath.FilenameFromPath();
-
-                ConcurrentBag<Common.PreprocessedEntry> cb = new ConcurrentBag<Common.PreprocessedEntry>();
-
-                Parallel.ForEach(dict, dictEntry =>
-                {
-                    try
+                Parallel.For(
+                    0,
+                    Data.Entries.Count,
+                    new ParallelOptions
                     {
-                        NPCEntry Entry = dictEntry.Value;
-                        int EntryID = dictEntry.Key;
-
-                        string CompErrors = "";
-                        byte[] Overlay = null;
-
-                        using (SHA1 s = SHA1.Create())
+                        MaxDegreeOfParallelism = Environment.ProcessorCount
+                    },
+                    entryID =>
+                    {
+                        try
                         {
-                            string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
-                            CodeString = CCode.ReplaceGameVersionInclude(CodeString);
-                            CodeString += GetIncludesText(Entry.EmbeddedOverlayCode.HeaderPaths);
+                            NPCEntry entry = Data.Entries[entryID];
+                            string jsonEntryPrefix = jsonFileName + "_" + entryID + "_";
 
-                            string hash = Helpers.GetBase64Hash(s, CodeString);
+                            /* ---------------- C CODE ---------------- */
 
-                            string cachedAddrsFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntryID}_funcsaddrs_" + hash);
-                            string cachedcodeFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntryID}_code_" + hash);
+                            byte[] overlay = null;
+                            string compErrors = "";
 
-                            if (CcacheInvalid || !File.Exists(cachedcodeFile) || !File.Exists(cachedAddrsFile))
+                            string codeString =
+                                JsonConvert.SerializeObject(entry.EmbeddedOverlayCode) +
+                                CCode.ReplaceGameVersionInclude("") +
+                                GetIncludesText(entry.EmbeddedOverlayCode.HeaderPaths);
+
+                            string codeHash = Helpers.GetBase64Hash(codeString);
+
+                            string funcsAddrsName = jsonEntryPrefix + "funcsaddrs_" + codeHash;
+                            string codeName = jsonEntryPrefix + "code_" + codeHash;
+
+                            string cachedAddrsFile = Path.Combine(Program.CCachePath, funcsAddrsName);
+                            string cachedCodeFile = Path.Combine(Program.CCachePath, codeName);
+
+                            bool cCacheHit =
+                                !cCacheInvalid &&
+                                File.Exists(cachedAddrsFile) &&
+                                File.Exists(cachedCodeFile);
+
+                            if (!cCacheHit)
                             {
-                                Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_{EntryID}_funcsaddrs_");
-                                Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_{EntryID}_code_");
+                                Helpers.DeleteFileStartingWith(Program.CCachePath, funcsAddrsName);
+                                Helpers.DeleteFileStartingWith(Program.CCachePath, codeName);
 
-                                if (Entry.EmbeddedOverlayCode.Code != "")
-                                    Overlay = CCode.Compile(Data.CHeader, Program.Settings.LinkerPaths, Entry.EmbeddedOverlayCode, ref CompErrors, $"NPCCOMPILE{EntryID}");
-
-                                if (Overlay != null)
+                                if (!string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
                                 {
-                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntryID}_script");
-                                    string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
+                                    overlay = CCode.Compile(
+                                        Data.CHeader,
+                                        Program.Settings.LinkerPaths,
+                                        entry.EmbeddedOverlayCode,
+                                        ref compErrors,
+                                        "NPCCOMPILE" + entryID);
+                                }
 
-                                    File.WriteAllText(cachedAddrsFile, CodeAddrsString);
-                                    File.WriteAllBytes(cachedcodeFile, Overlay);
+                                if (overlay != null)
+                                {
+                                    Helpers.DeleteFileStartingWith(
+                                        Program.ScriptCachePath,
+                                        jsonEntryPrefix + "script");
 
-                                    cb.Add(new Common.PreprocessedEntry(cachedAddrsFile, Entry.EmbeddedOverlayCode));
-                                    cb.Add(new Common.PreprocessedEntry(cachedcodeFile, Overlay));
+                                    string addrJson = JsonConvert.SerializeObject(
+                                        entry.EmbeddedOverlayCode,
+                                        new JsonSerializerSettings
+                                        {
+                                            ContractResolver =
+                                                new JsonIgnoreAttributeIgnorerContractResolver()
+                                        });
+
+                                    File.WriteAllText(cachedAddrsFile, addrJson);
+                                    File.WriteAllBytes(cachedCodeFile, overlay);
                                 }
                             }
                             else
                             {
-                                // Need to load the overlay in so that the function addresses for the scripts are present.
-                                Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
-                                Overlay = File.ReadAllBytes(cachedcodeFile);
+                                entry.EmbeddedOverlayCode =
+                                    JsonConvert.DeserializeObject<CCodeEntry>(
+                                        File.ReadAllText(cachedAddrsFile),
+                                        new JsonSerializerSettings
+                                        {
+                                            ContractResolver =
+                                                new JsonIgnoreAttributeIgnorerContractResolver()
+                                        });
 
-                                cb.Add(new Common.PreprocessedEntry(cachedAddrsFile, Entry.EmbeddedOverlayCode));
-                                cb.Add(new Common.PreprocessedEntry(cachedcodeFile, Overlay));
+                                overlay = File.ReadAllBytes(cachedCodeFile);
                             }
 
-                            int scriptNum = 0;
-                            List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
-
-                            string extData = JsonConvert.SerializeObject(new
+                            if (overlay != null)
                             {
-                                Entry.Messages,
-                                Entry.ExtraDisplayLists,
-                                Entry.Segments,
-                                Entry.Animations,
-                            });
+                                results.Add(new Common.PreprocessedEntry(
+                                    cachedAddrsFile, entry.EmbeddedOverlayCode));
+                                results.Add(new Common.PreprocessedEntry(
+                                    cachedCodeFile, overlay));
+                            }
 
-                            extData += Helpers.GetDefinesStringFromH(Entry.HeaderPath);
+                            /* ---------------- EXT DATA ---------------- */
 
-                            string extDataHash = Helpers.GetBase64Hash(s, extData);
-                            string extDataFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntryID}_exdata_" + extDataHash);
-
-                            foreach (ScriptEntry Scr in NonEmptyEntries)
-                            {
-                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, BaseDefines);
-
-                                hash = Helpers.GetBase64Hash(s, Scr.Text);
-                                string cachedFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntryID}_script{scriptNum}_" + hash);
-
-                                if (cacheInvalid || !File.Exists(cachedFile) || !File.Exists(extDataFile))
+                            string extData =
+                                JsonConvert.SerializeObject(new
                                 {
-                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntryID}_script{scriptNum}_");
+                                    entry.Messages,
+                                    entry.ExtraDisplayLists,
+                                    entry.Segments,
+                                    entry.Animations
+                                }) +
+                                Helpers.GetDefinesStringFromH(entry.HeaderPath);
 
-                                    Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
+                            string extDataHash = Helpers.GetBase64Hash(extData);
+                            string extDataFile = Path.Combine(
+                                Program.ScriptCachePath,
+                                jsonEntryPrefix + "exdata_" + extDataHash);
 
-                                    if (scr.ParseErrors.Count == 0)
+                            bool extDataExists = File.Exists(extDataFile);
+
+                            /* ---------------- SCRIPTS ---------------- */
+
+                            int scriptNum = 0;
+
+                            foreach (var scrEntry in entry.Scripts)
+                            {
+                                if (string.IsNullOrEmpty(scrEntry.Text))
+                                {
+                                    scriptNum++;
+                                    continue;
+                                }
+
+                                string scriptHash = Helpers.GetBase64Hash(scrEntry.Text);
+                                string cachedScriptFile = Path.Combine(
+                                    Program.ScriptCachePath,
+                                    jsonEntryPrefix + "script" + scriptNum + "_" + scriptHash);
+
+                                bool scriptCacheHit =
+                                    !cacheInvalid &&
+                                    extDataExists &&
+                                    File.Exists(cachedScriptFile);
+
+                                if (!scriptCacheHit)
+                                {
+                                    Helpers.DeleteFileStartingWith(
+                                        Program.ScriptCachePath,
+                                        jsonEntryPrefix + "script" + scriptNum + "_");
+
+                                    var parser = new Scripts.ScriptParser(
+                                        Data,
+                                        entry,
+                                        scrEntry.Text,
+                                        baseDefines);
+
+                                    var script = parser.ParseScript(scrEntry.Name, true);
+
+                                    if (script.ParseErrors.Count == 0)
                                     {
-                                        File.WriteAllBytes(cachedFile, scr.Script);
-                                        cb.Add(new Common.PreprocessedEntry(cachedFile, scr.Script));
+                                        File.WriteAllBytes(cachedScriptFile, script.Script);
+                                        results.Add(new Common.PreprocessedEntry(
+                                            cachedScriptFile, script.Script));
                                     }
                                 }
                                 else
                                 {
-                                    cb.Add(new Common.PreprocessedEntry(cachedFile, File.ReadAllBytes(cachedFile)));
+                                    results.Add(new Common.PreprocessedEntry(
+                                        cachedScriptFile,
+                                        File.ReadAllBytes(cachedScriptFile)));
                                 }
 
                                 scriptNum++;
                             }
 
-                            if (!File.Exists(extDataFile))
+                            if (!extDataExists)
                             {
-                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntryID}_exdata_");
+                                Helpers.DeleteFileStartingWith(
+                                    Program.ScriptCachePath,
+                                    jsonEntryPrefix + "exdata_");
+
                                 File.Create(extDataFile).Dispose();
                             }
-                        }
 
-                        if (progress != null)
-                        {
-                            Helpers.AddInterlocked(ref CurProgress, ProgressPer);
-                            progress.Report(new Common.ProgressReport($"Compiling {String.Format("{0:0.##}", CurProgress)}%", CurProgress));
-                        }
-                        else
-                        {
-                            Helpers.AddInterlocked(ref CurProgress, ProgressPer);
-                            Program.ConsoleWriteS($"\rCompiling {String.Format("{0:0.##}", CurProgress)}%    ");
-                        }
-                    }
-                    catch (Exception)
-                    {
+                            /* ---------------- PROGRESS ---------------- */
 
-                    }
-                });
+                            Helpers.AddInterlocked(ref curProgress, progressPer);
+                            int percent = (int)curProgress;
+
+                            if (percent != lastReported)
+                            {
+                                lastReported = percent;
+
+                                if (progress != null)
+                                {
+                                    progress.Report(new Common.ProgressReport(
+                                        $"Compiling {percent}%",
+                                        curProgress));
+                                }
+                                else
+                                {
+                                    Program.ConsoleWriteS(
+                                        $"\rCompiling {percent}%    ");
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            // Intentionally swallowed (existing behavior)
+                        }
+                    });
 
                 Program.ConsoleWriteLineS("\nPre-processing done!");
 
-                SaveBinaryFile(outPath, Data, progress, BaseDefines, new bool[] { false, false }, cb.ToList(), CLIMode);
+                SaveBinaryFile(
+                    outPath,
+                    Data,
+                    progress,
+                    baseDefines,
+                    new[] { false, false },
+                    results.ToList(),
+                    CLIMode);
+
                 CCode.CleanupStandardCompilationArtifacts();
                 Program.CompileInProgress = false;
             });
         }
+
 
         private static UInt32 TryGetFromH(bool CLIMode, string NPCName, uint defaultV, Dictionary<string, string> defines, string name)
         {
@@ -721,18 +808,17 @@ namespace NPC_Maker
 
                 List<Common.CompilationEntryData> CompilationData = new List<Common.CompilationEntryData>();
 
-                using (SHA1 s = SHA1.Create())
+
+                foreach (NPCEntry Entry in Data.Entries)
                 {
-                    foreach (NPCEntry Entry in Data.Entries)
+                    if (Entry.IsNull == false && !Entry.Omitted)
                     {
-                        if (Entry.IsNull == false && !Entry.Omitted)
-                        {
-                            Program.ConsoleWriteS($"Processing entry {EntriesDone}: {Entry.NPCName}... ");
-                            Dictionary<string, string> defines = Helpers.GetDefinesFromHeaders(Entry.HeaderPath);
+                        Program.ConsoleWriteS($"Processing entry {EntriesDone}: {Entry.NPCName}... ");
+                        Dictionary<string, string> defines = Helpers.GetDefinesFromHeaders(Entry.HeaderPath);
 
-                            int CurLen = 0;
+                        int CurLen = 0;
 
-                            var EntryBytes = new List<byte>(56)
+                        var EntryBytes = new List<byte>(56)
                             {
                                 Entry.CutsceneID,
                                 Entry.HeadLimb,
@@ -792,525 +878,525 @@ namespace NPC_Maker
                                 Convert.ToByte(Entry.DEBUGPrintToScreen)
                             };
 
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 56;
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 56;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        EntryBytes.AddRangeBigEndian(Entry.ObjectID);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtDegreesVertical);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtDegreesHorizontal);
+                        EntryBytes.AddRangeBigEndian(Entry.CollisionRadius);
+                        EntryBytes.AddRangeBigEndian(Entry.CollisionHeight);
+                        EntryBytes.AddRangeBigEndian(Entry.CollisionYShift);
+                        EntryBytes.AddRangeBigEndian(Entry.ShadowRadius);
+                        EntryBytes.AddRangeBigEndian(Entry.MovementDistance);
+                        EntryBytes.AddRangeBigEndian(Entry.MaxDistRoam);
+                        EntryBytes.AddRangeBigEndian(Entry.PathStartNodeID);
+                        EntryBytes.AddRangeBigEndian(Entry.PathEndNodeID);
+                        EntryBytes.AddRangeBigEndian(Entry.MovementDelayTime);
+                        EntryBytes.AddRangeBigEndian(Entry.TimedPathStart);
+                        EntryBytes.AddRangeBigEndian(Entry.TimedPathEnd);
+                        EntryBytes.AddRangeBigEndian(Entry.SfxIfAttacked);
+                        EntryBytes.AddRangeBigEndian(Entry.NPCToRide);
+                        EntryBytes.AddRangeBigEndian(Entry.LightRadius);
+                        EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets);
+                        EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets);
+                        EntryBytes.AddRangeBigEndian(Entry.LightPositionOffsets);
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 52;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        EntryBytes.AddRangeBigEndian(Entry.ModelScale);
+                        EntryBytes.AddRangeBigEndian(Entry.TalkRadius);
+                        EntryBytes.AddRangeBigEndian(Entry.MovementSpeed);
+                        EntryBytes.AddRangeBigEndian(Entry.GravityForce);
+                        EntryBytes.AddRangeBigEndian(Entry.SmoothingConstant);
+                        EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Entry.Hierarchy, defines, Entry.SkeletonHeaderDefinition));
+                        EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (uint)Entry.FileStart, defines, Entry.FileStartHeaderDefinition));
+                        EntryBytes.AddRangeBigEndian(Entry.CullForward);
+                        EntryBytes.AddRangeBigEndian(Entry.CullDown);
+                        EntryBytes.AddRangeBigEndian(Entry.CullScale);
+                        EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets);
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 52;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #region Blink and talk patterns
+
+                        EntryBytes.AddRange(Entry.GetBlinkPatternBytes());
+                        EntryBytes.AddRange(Entry.GetTalkPatternBytes());
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 8;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #endregion
+
+                        #region Messages
+
+                        string msgDataS = JsonConvert.SerializeObject(new { Entry.Messages, Entry.Localization });
+                        string msgDataHash = Helpers.GetBase64Hash(msgDataS);
+                        string cachedMsgFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_msg_" + msgDataHash);
+
+                        if (File.Exists(cachedMsgFile))
+                        {
+                            var cachedMsgBytes = File.ReadAllBytes(cachedMsgFile);
+                            EntryBytes.AddRange(cachedMsgBytes);
+
+                            CurLen += cachedMsgBytes.Length;
                             Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+                        }
+                        else
+                        {
+                            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_msg_");
 
-                            EntryBytes.AddRangeBigEndian(Entry.ObjectID);
-                            EntryBytes.AddRangeBigEndian(Entry.LookAtDegreesVertical);
-                            EntryBytes.AddRangeBigEndian(Entry.LookAtDegreesHorizontal);
-                            EntryBytes.AddRangeBigEndian(Entry.CollisionRadius);
-                            EntryBytes.AddRangeBigEndian(Entry.CollisionHeight);
-                            EntryBytes.AddRangeBigEndian(Entry.CollisionYShift);
-                            EntryBytes.AddRangeBigEndian(Entry.ShadowRadius);
-                            EntryBytes.AddRangeBigEndian(Entry.MovementDistance);
-                            EntryBytes.AddRangeBigEndian(Entry.MaxDistRoam);
-                            EntryBytes.AddRangeBigEndian(Entry.PathStartNodeID);
-                            EntryBytes.AddRangeBigEndian(Entry.PathEndNodeID);
-                            EntryBytes.AddRangeBigEndian(Entry.MovementDelayTime);
-                            EntryBytes.AddRangeBigEndian(Entry.TimedPathStart);
-                            EntryBytes.AddRangeBigEndian(Entry.TimedPathEnd);
-                            EntryBytes.AddRangeBigEndian(Entry.SfxIfAttacked);
-                            EntryBytes.AddRangeBigEndian(Entry.NPCToRide);
-                            EntryBytes.AddRangeBigEndian(Entry.LightRadius);
-                            EntryBytes.AddRangeBigEndian(Entry.TargetPositionOffsets);
-                            EntryBytes.AddRangeBigEndian(Entry.ModelPositionOffsets);
-                            EntryBytes.AddRangeBigEndian(Entry.LightPositionOffsets);
+                            var header = new List<byte>();
+                            var defaultHeader = new List<byte>();
+                            var msgData = new List<byte>();
 
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 52;
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            EntryBytes.AddRangeBigEndian(Entry.ModelScale);
-                            EntryBytes.AddRangeBigEndian(Entry.TalkRadius);
-                            EntryBytes.AddRangeBigEndian(Entry.MovementSpeed);
-                            EntryBytes.AddRangeBigEndian(Entry.GravityForce);
-                            EntryBytes.AddRangeBigEndian(Entry.SmoothingConstant);
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, Entry.Hierarchy, defines, Entry.SkeletonHeaderDefinition));
-                            EntryBytes.AddRangeBigEndian(TryGetFromH(CLIMode, Entry.NPCName, (uint)Entry.FileStart, defines, Entry.FileStartHeaderDefinition));
-                            EntryBytes.AddRangeBigEndian(Entry.CullForward);
-                            EntryBytes.AddRangeBigEndian(Entry.CullDown);
-                            EntryBytes.AddRangeBigEndian(Entry.CullScale);
-                            EntryBytes.AddRangeBigEndian(Entry.LookAtPositionOffsets);
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 52;
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            #region Blink and talk patterns
-
-                            EntryBytes.AddRange(Entry.GetBlinkPatternBytes());
-                            EntryBytes.AddRange(Entry.GetTalkPatternBytes());
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 8;
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            #endregion
-
-                            #region Messages
-
-                            string msgDataS = JsonConvert.SerializeObject(new { Entry.Messages, Entry.Localization });
-                            string msgDataHash = Helpers.GetBase64Hash(s, msgDataS);
-                            string cachedMsgFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_msg_" + msgDataHash);
-
-                            if (File.Exists(cachedMsgFile))
-                            {
-                                var cachedMsgBytes = File.ReadAllBytes(cachedMsgFile);
-                                EntryBytes.AddRange(cachedMsgBytes);
-
-                                CurLen += cachedMsgBytes.Length;
-                                Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-                            }
-                            else
-                            {
-                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_msg_");
-
-                                var header = new List<byte>();
-                                var defaultHeader = new List<byte>();
-                                var msgData = new List<byte>();
-
-                                var locales = new List<LocalizationEntry>
+                            var locales = new List<LocalizationEntry>
                                 {
                                     new LocalizationEntry { Language = Dicts.DefaultLanguage, Messages = Entry.Messages }
                                 };
 
-                                locales.AddRange(Data.Languages.Select(lang =>
+                            locales.AddRange(Data.Languages.Select(lang =>
+                            {
+                                var loc = Entry.Localization.FirstOrDefault(x => x.Language == lang);
+                                return new LocalizationEntry
                                 {
-                                    var loc = Entry.Localization.FirstOrDefault(x => x.Language == lang);
-                                    return new LocalizationEntry
-                                    {
-                                        Language = lang,
-                                        Messages = loc?.Messages
-                                    };
-                                }));
+                                    Language = lang,
+                                    Messages = loc?.Messages
+                                };
+                            }));
 
-                                int totalMessages = Entry.Messages.Count * locales.Count;
-                                int msgOffset = 8 * totalMessages;
+                            int totalMessages = Entry.Messages.Count * locales.Count;
+                            int msgOffset = 8 * totalMessages;
 
-                                foreach (var loc in locales)
+                            foreach (var loc in locales)
+                            {
+                                bool isDefault = loc.Language == Dicts.DefaultLanguage;
+
+                                // If messages aren't there, add the default header again, so that the default messages will be displayed in game
+                                if (loc.Messages == null)
                                 {
-                                    bool isDefault = loc.Language == Dicts.DefaultLanguage;
+                                    header.AddRange(defaultHeader);
+                                    continue;
+                                }
 
-                                    // If messages aren't there, add the default header again, so that the default messages will be displayed in game
-                                    if (loc.Messages == null)
+                                var errors = new ConcurrentBag<string>();
+
+                                Parallel.ForEach(loc.Messages, msg =>
+                                {
+                                    try
                                     {
-                                        header.AddRange(defaultHeader);
-                                        continue;
+                                        msg.tempBytes = msg.ToBytes(loc.Language);
                                     }
-
-                                    var errors = new ConcurrentBag<string>();
-
-                                    Parallel.ForEach(loc.Messages, msg =>
+                                    catch (Exception ex)
                                     {
-                                        try
-                                        {
-                                            msg.tempBytes = msg.ToBytes(loc.Language);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            msg.tempBytes = null;
-                                            errors.Add($"{Entry.NPCName}:\nError in message {msg.Name}:\n{ex.Message}");
-                                        }
-                                    });
-
-                                    if (errors.Any())
-                                    {
-                                        ShowMsg(CLIMode, errors.First());
-
-                                        if (!ParseErrors.Contains(Entry.NPCName))
-                                            ParseErrors.Add(Entry.NPCName);
-
-                                        break;
-                                    }
-
-                                    foreach (var msg in loc.Messages)
-                                    {
-                                        var messageBytes = msg.tempBytes ?? new List<byte>();
                                         msg.tempBytes = null;
-
-                                        Helpers.Ensure4ByteAlign(messageBytes);
-                                        msgData.AddRange(messageBytes);
-
-                                        if (messageBytes.Count > 1280)
-                                        {
-                                            ShowMsg(CLIMode, $"{Entry.NPCName}: Message '{msg.Name}' exceeded 1280 bytes and could not be saved.");
-
-                                            if (!ParseErrors.Contains(Entry.NPCName))
-                                                ParseErrors.Add(Entry.NPCName);
-
-                                            messageBytes.Clear();
-                                        }
-
-                                        void AddToHeader(List<byte> targetHeader)
-                                        {
-                                            targetHeader.AddRangeBigEndian(msgOffset);
-                                            targetHeader.Add(msg.GetMessageTypePos());
-                                            Helpers.Ensure2ByteAlign(targetHeader);
-                                            targetHeader.AddRangeBigEndian((UInt16)messageBytes.Count);
-                                        }
-
-                                        // Create a default header in case any localizations are blank
-                                        if (isDefault)
-                                            AddToHeader(defaultHeader);
-
-                                        AddToHeader(header);
-
-                                        msgOffset += messageBytes.Count;
+                                        errors.Add($"{Entry.NPCName}:\nError in message {msg.Name}:\n{ex.Message}");
                                     }
-                                }
+                                });
 
-                                List<byte> MsgBytes = new List<byte>();
-                                int len = 16 + header.Count + msgData.Count;
-
-                                MsgBytes.AddRangeBigEndian(len);
-                                MsgBytes.AddRangeBigEndian(0);
-                                MsgBytes.AddRangeBigEndian(Data.Languages.Count + 1);
-                                MsgBytes.AddRangeBigEndian(Entry.Messages.Count);
-                                MsgBytes.AddRange(header);
-                                MsgBytes.AddRange(msgData);
-
-                                EntryBytes.AddRange(MsgBytes);
-
-                                CurLen += len;
-                                Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-                                File.WriteAllBytes(cachedMsgFile, MsgBytes.ToArray());
-                            }
-
-                            #endregion
-
-                            #region Animations
-
-                            EntryBytes.AddRangeBigEndian((UInt32)Entry.Animations.Count());
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 4;
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            foreach (AnimationEntry Anim in Entry.Animations)
-                            {
-                                var anm = Helpers.SplitHeaderDefsString(Anim.HeaderDefinition);
-                                Anim.Address = TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, anm[1]);
-                                Anim.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.FileStart, defines, anm[0]);
-                                EntryBytes.AddRange(Anim.ToBytes());
-                            }
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += (16 * Entry.Animations.Count());
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            #endregion
-
-                            #region Extra display lists
-
-                            EntryBytes.AddRangeBigEndian((UInt32)Entry.ExtraDisplayLists.Count);
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 4;
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            foreach (DListEntry Dlist in Entry.ExtraDisplayLists)
-                            {
-                                var dl = Helpers.SplitHeaderDefsString(Dlist.HeaderDefinition);
-                                Dlist.Address = TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, dl[1]);
-                                Dlist.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (uint)Dlist.FileStart, defines, dl[0]);
-                                EntryBytes.AddRange(Dlist.ToBytes());
-                            }
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 40 * Entry.ExtraDisplayLists.Count;
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            #endregion
-
-                            #region Colors
-
-                            var parsedColors = Entry.ParseColorEntries().OrderBy(c => c.LimbID).ToList();
-                            EntryBytes.AddRangeBigEndian((UInt32)parsedColors.Count);
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 4;
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            foreach (var color in parsedColors)
-                                EntryBytes.AddRange(color.ToBytes());
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            CurLen += 4 * parsedColors.Count;
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            #endregion
-
-                            #region Extra segment data
-
-                            var extraSegDataOffsets = new List<byte>();
-                            var extraSegDataEntries = new List<byte>();
-                            uint segOffset = 7 * 4;
-                            CurLen += (int)segOffset + 4;
-
-                            foreach (var segmentList in Entry.Segments)
-                            {
-                                uint segBytes = (uint)(12 * segmentList.Count);
-
-                                extraSegDataOffsets.AddRangeBigEndian(segBytes != 0 ? segOffset : 0);
-                                segOffset += segBytes;
-                                CurLen += (int)segBytes;
-
-                                foreach (var segEntry in segmentList)
+                                if (errors.Any())
                                 {
-                                    var segDefs = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
+                                    ShowMsg(CLIMode, errors.First());
 
-                                    segEntry.Address = TryGetFromH(CLIMode, Entry.NPCName, segEntry.Address, defines, segDefs[1]);
-                                    segEntry.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (uint)segEntry.FileStart, defines, segDefs[0]);
-
-                                    extraSegDataEntries.AddRange(segEntry.ToBytes());
-                                }
-                            }
-
-                            EntryBytes.AddRangeBigEndian((uint)(extraSegDataOffsets.Count + extraSegDataEntries.Count));
-                            CurLen += 4;
-
-                            EntryBytes.AddRange(extraSegDataOffsets);
-                            EntryBytes.AddRange(extraSegDataEntries);
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            #endregion
-
-                            #region CCode
-
-                            if (Entry.EmbeddedOverlayCode.Code != "")
-                            {
-                                CompErrors = "";
-                                byte[] Overlay;
-
-                                //CCode.CreateCTempDirectory(Entry.EmbeddedOverlayCode.Code);
-
-
-                                string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
-                                CodeString = CCode.ReplaceGameVersionInclude(CodeString);
-                                CodeString += GetIncludesText(Entry.EmbeddedOverlayCode.HeaderPaths);
-
-                                string hash = Helpers.GetBase64Hash(s, CodeString);
-                                string cachedAddrsFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_funcsaddrs_" + hash);
-                                string cachedcodeFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_code_" + hash);
-
-                                int addrsPreProc = -1;
-                                int codePreProc = -1;
-
-                                if (preProcessedFiles != null)
-                                {
-                                    addrsPreProc = preProcessedFiles.FindIndex(x => x.identifier == cachedAddrsFile);
-                                    codePreProc = preProcessedFiles.FindIndex(x => x.identifier == cachedcodeFile);
-                                }
-
-                                if (addrsPreProc != -1 && codePreProc != -1)
-                                {
-                                    Entry.EmbeddedOverlayCode = (CCodeEntry)preProcessedFiles[addrsPreProc].data;
-                                    Overlay = (byte[])preProcessedFiles[codePreProc].data;
-                                }
-                                else if (!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
-                                {
-                                    Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
-                                    Overlay = File.ReadAllBytes(cachedcodeFile);
-                                }
-                                else
-                                {
-                                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_funcsaddrs_");
-                                    Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_code_");
-                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script");
-
-                                    Overlay = CCode.Compile(Data.CHeader, Program.Settings.LinkerPaths, Entry.EmbeddedOverlayCode, ref CompErrors);
-
-                                    if (Overlay != null)
-                                    {
-                                        string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
-
-                                        File.WriteAllText(cachedAddrsFile, CodeAddrsString);
-                                        File.WriteAllBytes(cachedcodeFile, Overlay);
-                                    }
-                                }
-
-
-                                if (Overlay == null)
-                                {
                                     if (!ParseErrors.Contains(Entry.NPCName))
                                         ParseErrors.Add(Entry.NPCName);
 
                                     break;
                                 }
-                                else
+
+                                foreach (var msg in loc.Messages)
                                 {
-                                    CurLen += 4;
+                                    var messageBytes = msg.tempBytes ?? new List<byte>();
+                                    msg.tempBytes = null;
 
-                                    if (Entry.EmbeddedOverlayCode.Functions.Count != 0)
+                                    Helpers.Ensure4ByteAlign(messageBytes);
+                                    msgData.AddRange(messageBytes);
+
+                                    if (messageBytes.Count > 1280)
                                     {
-                                        EntryBytes.AddRangeBigEndian(Overlay.Length);
+                                        ShowMsg(CLIMode, $"{Entry.NPCName}: Message '{msg.Name}' exceeded 1280 bytes and could not be saved.");
 
-                                        List<byte> FuncsList = new List<byte>();
-                                        List<byte> FuncsWhenList = new List<byte>();
+                                        if (!ParseErrors.Contains(Entry.NPCName))
+                                            ParseErrors.Add(Entry.NPCName);
 
-                                        for (int i = 0; i < Entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0); i++)
+                                        messageBytes.Clear();
+                                    }
+
+                                    void AddToHeader(List<byte> targetHeader)
+                                    {
+                                        targetHeader.AddRangeBigEndian(msgOffset);
+                                        targetHeader.Add(msg.GetMessageTypePos());
+                                        Helpers.Ensure2ByteAlign(targetHeader);
+                                        targetHeader.AddRangeBigEndian((UInt16)messageBytes.Count);
+                                    }
+
+                                    // Create a default header in case any localizations are blank
+                                    if (isDefault)
+                                        AddToHeader(defaultHeader);
+
+                                    AddToHeader(header);
+
+                                    msgOffset += messageBytes.Count;
+                                }
+                            }
+
+                            List<byte> MsgBytes = new List<byte>();
+                            int len = 16 + header.Count + msgData.Count;
+
+                            MsgBytes.AddRangeBigEndian(len);
+                            MsgBytes.AddRangeBigEndian(0);
+                            MsgBytes.AddRangeBigEndian(Data.Languages.Count + 1);
+                            MsgBytes.AddRangeBigEndian(Entry.Messages.Count);
+                            MsgBytes.AddRange(header);
+                            MsgBytes.AddRange(msgData);
+
+                            EntryBytes.AddRange(MsgBytes);
+
+                            CurLen += len;
+                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+                            File.WriteAllBytes(cachedMsgFile, MsgBytes.ToArray());
+                        }
+
+                        #endregion
+
+                        #region Animations
+
+                        EntryBytes.AddRangeBigEndian((UInt32)Entry.Animations.Count());
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 4;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        foreach (AnimationEntry Anim in Entry.Animations)
+                        {
+                            var anm = Helpers.SplitHeaderDefsString(Anim.HeaderDefinition);
+                            Anim.Address = TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.Address, defines, anm[1]);
+                            Anim.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (UInt32)Anim.FileStart, defines, anm[0]);
+                            EntryBytes.AddRange(Anim.ToBytes());
+                        }
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += (16 * Entry.Animations.Count());
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #endregion
+
+                        #region Extra display lists
+
+                        EntryBytes.AddRangeBigEndian((UInt32)Entry.ExtraDisplayLists.Count);
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 4;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        foreach (DListEntry Dlist in Entry.ExtraDisplayLists)
+                        {
+                            var dl = Helpers.SplitHeaderDefsString(Dlist.HeaderDefinition);
+                            Dlist.Address = TryGetFromH(CLIMode, Entry.NPCName, Dlist.Address, defines, dl[1]);
+                            Dlist.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (uint)Dlist.FileStart, defines, dl[0]);
+                            EntryBytes.AddRange(Dlist.ToBytes());
+                        }
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 40 * Entry.ExtraDisplayLists.Count;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #endregion
+
+                        #region Colors
+
+                        var parsedColors = Entry.ParseColorEntries().OrderBy(c => c.LimbID).ToList();
+                        EntryBytes.AddRangeBigEndian((UInt32)parsedColors.Count);
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 4;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        foreach (var color in parsedColors)
+                            EntryBytes.AddRange(color.ToBytes());
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        CurLen += 4 * parsedColors.Count;
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #endregion
+
+                        #region Extra segment data
+
+                        var extraSegDataOffsets = new List<byte>();
+                        var extraSegDataEntries = new List<byte>();
+                        uint segOffset = 7 * 4;
+                        CurLen += (int)segOffset + 4;
+
+                        foreach (var segmentList in Entry.Segments)
+                        {
+                            uint segBytes = (uint)(12 * segmentList.Count);
+
+                            extraSegDataOffsets.AddRangeBigEndian(segBytes != 0 ? segOffset : 0);
+                            segOffset += segBytes;
+                            CurLen += (int)segBytes;
+
+                            foreach (var segEntry in segmentList)
+                            {
+                                var segDefs = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
+
+                                segEntry.Address = TryGetFromH(CLIMode, Entry.NPCName, segEntry.Address, defines, segDefs[1]);
+                                segEntry.FileStart = (int)TryGetFromH(CLIMode, Entry.NPCName, (uint)segEntry.FileStart, defines, segDefs[0]);
+
+                                extraSegDataEntries.AddRange(segEntry.ToBytes());
+                            }
+                        }
+
+                        EntryBytes.AddRangeBigEndian((uint)(extraSegDataOffsets.Count + extraSegDataEntries.Count));
+                        CurLen += 4;
+
+                        EntryBytes.AddRange(extraSegDataOffsets);
+                        EntryBytes.AddRange(extraSegDataEntries);
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #endregion
+
+                        #region CCode
+
+                        if (Entry.EmbeddedOverlayCode.Code != "")
+                        {
+                            CompErrors = "";
+                            byte[] Overlay;
+
+                            //CCode.CreateCTempDirectory(Entry.EmbeddedOverlayCode.Code);
+
+
+                            string CodeString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode);
+                            CodeString = CCode.ReplaceGameVersionInclude(CodeString);
+                            CodeString += GetIncludesText(Entry.EmbeddedOverlayCode.HeaderPaths);
+
+                            string hash = Helpers.GetBase64Hash(CodeString);
+                            string cachedAddrsFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_funcsaddrs_" + hash);
+                            string cachedcodeFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_code_" + hash);
+
+                            int addrsPreProc = -1;
+                            int codePreProc = -1;
+
+                            if (preProcessedFiles != null)
+                            {
+                                addrsPreProc = preProcessedFiles.FindIndex(x => x.identifier == cachedAddrsFile);
+                                codePreProc = preProcessedFiles.FindIndex(x => x.identifier == cachedcodeFile);
+                            }
+
+                            if (addrsPreProc != -1 && codePreProc != -1)
+                            {
+                                Entry.EmbeddedOverlayCode = (CCodeEntry)preProcessedFiles[addrsPreProc].data;
+                                Overlay = (byte[])preProcessedFiles[codePreProc].data;
+                            }
+                            else if (!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
+                            {
+                                Entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(File.ReadAllText(cachedAddrsFile), new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
+                                Overlay = File.ReadAllBytes(cachedcodeFile);
+                            }
+                            else
+                            {
+                                Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_funcsaddrs_");
+                                Helpers.DeleteFileStartingWith(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_code_");
+                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script");
+
+                                Overlay = CCode.Compile(Data.CHeader, Program.Settings.LinkerPaths, Entry.EmbeddedOverlayCode, ref CompErrors);
+
+                                if (Overlay != null)
+                                {
+                                    string CodeAddrsString = JsonConvert.SerializeObject(Entry.EmbeddedOverlayCode, new JsonSerializerSettings() { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() });
+
+                                    File.WriteAllText(cachedAddrsFile, CodeAddrsString);
+                                    File.WriteAllBytes(cachedcodeFile, Overlay);
+                                }
+                            }
+
+
+                            if (Overlay == null)
+                            {
+                                if (!ParseErrors.Contains(Entry.NPCName))
+                                    ParseErrors.Add(Entry.NPCName);
+
+                                break;
+                            }
+                            else
+                            {
+                                CurLen += 4;
+
+                                if (Entry.EmbeddedOverlayCode.Functions.Count != 0)
+                                {
+                                    EntryBytes.AddRangeBigEndian(Overlay.Length);
+
+                                    List<byte> FuncsList = new List<byte>();
+                                    List<byte> FuncsWhenList = new List<byte>();
+
+                                    for (int i = 0; i < Entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0); i++)
+                                    {
+                                        string FName = Entry.EmbeddedOverlayCode.SetFuncNames[i];
+                                        int FuncIdx = Entry.EmbeddedOverlayCode.Functions.FindIndex(x => x.FuncName == FName);
+
+                                        if (FuncIdx == -1 && FName != null && FName != "")
                                         {
-                                            string FName = Entry.EmbeddedOverlayCode.SetFuncNames[i];
-                                            int FuncIdx = Entry.EmbeddedOverlayCode.Functions.FindIndex(x => x.FuncName == FName);
-
-                                            if (FuncIdx == -1 && FName != null && FName != "")
-                                            {
-                                                ShowMsg(CLIMode, $"{Entry.NPCName}: Function {FName} not found in the C Code!");
-                                                return;
-                                            }
-
-                                            UInt32 FuncAddr = UInt32.MaxValue;
-
-                                            if (FuncIdx >= 0)
-                                                FuncAddr = Entry.EmbeddedOverlayCode.Functions[FuncIdx].Addr;
-
-                                            FuncsList.AddRangeBigEndian((UInt32)FuncAddr);
-                                            FuncsWhenList.Add((byte)Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 1]);
+                                            ShowMsg(CLIMode, $"{Entry.NPCName}: Function {FName} not found in the C Code!");
+                                            return;
                                         }
 
-                                        EntryBytes.AddRange(FuncsList.ToArray());
-                                        EntryBytes.AddRange(FuncsWhenList.ToArray());
-                                        Helpers.Ensure4ByteAlign(EntryBytes);
+                                        UInt32 FuncAddr = UInt32.MaxValue;
 
-                                        CurLen += 24 + 8;
-                                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+                                        if (FuncIdx >= 0)
+                                            FuncAddr = Entry.EmbeddedOverlayCode.Functions[FuncIdx].Addr;
 
-                                        EntryBytes.AddRange(Overlay);
-                                        CurLen += Overlay.Length;
-                                        Helpers.Ensure4ByteAlign(EntryBytes);
-
-                                        if (Overlay.Length % 4 != 0)
-                                            CurLen += Overlay.Length % 4;
-
-                                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+                                        FuncsList.AddRangeBigEndian((UInt32)FuncAddr);
+                                        FuncsWhenList.Add((byte)Entry.EmbeddedOverlayCode.FuncsRunWhen[i, 1]);
                                     }
-                                    else
-                                        EntryBytes.AddRangeBigEndian(-1);
+
+                                    EntryBytes.AddRange(FuncsList.ToArray());
+                                    EntryBytes.AddRange(FuncsWhenList.ToArray());
+                                    Helpers.Ensure4ByteAlign(EntryBytes);
+
+                                    CurLen += 24 + 8;
+                                    Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                                    EntryBytes.AddRange(Overlay);
+                                    CurLen += Overlay.Length;
+                                    Helpers.Ensure4ByteAlign(EntryBytes);
+
+                                    if (Overlay.Length % 4 != 0)
+                                        CurLen += Overlay.Length % 4;
+
+                                    Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
                                 }
-                            }
-                            else
-                            {
-                                EntryBytes.AddRangeBigEndian(-1);
-                                CurLen += 4;
-                            }
-
-                            #endregion
-
-                            #region Scripts
-
-                            List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
-                            EntryBytes.AddRangeBigEndian((UInt32)NonEmptyEntries.Count);
-
-                            CurLen += 4;
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            int ScrOffset = 0;
-
-                            List<Scripts.BScript> ParsedScripts = new List<Scripts.BScript>();
-
-                            int scriptNum = 0;
-
-
-                            string extData = JsonConvert.SerializeObject(new
-                            {
-                                Entry.Messages,
-                                Entry.ExtraDisplayLists,
-                                Entry.Segments,
-                                Entry.Animations,
-                            });
-
-                            extData += Helpers.GetDefinesStringFromH(Entry.HeaderPath);
-
-                            string extDataHash = Helpers.GetBase64Hash(s, extData);
-                            string cachedExtDataFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_exdata_" + extDataHash);
-
-                            foreach (ScriptEntry Scr in NonEmptyEntries)
-                            {
-                                Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, baseDefines);
-
-                                string hash = Helpers.GetBase64Hash(s, Scr.Text);
-                                string cachedFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script{scriptNum}_" + hash);
-
-                                int cachedScriptId = -1;
-
-                                if (preProcessedFiles != null)
-                                    cachedScriptId = preProcessedFiles.FindIndex(x => x.identifier == cachedFile);
-
-                                if (cachedScriptId != -1)
-                                    ParsedScripts.Add(new Scripts.BScript() { Script = (byte[])preProcessedFiles[cachedScriptId].data, ParseErrors = new List<Scripts.ParseException>() });
-                                else if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedExtDataFile))
-                                    ParsedScripts.Add(new Scripts.BScript() { Script = File.ReadAllBytes(cachedFile), ParseErrors = new List<Scripts.ParseException>() });
                                 else
-                                {
-                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script{scriptNum}_");
-                                    Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
-                                    ParsedScripts.Add(scr);
-
-                                    if (scr.ParseErrors.Count == 0)
-                                        File.WriteAllBytes(cachedFile, scr.Script);
-                                }
-
-                                scriptNum++;
+                                    EntryBytes.AddRangeBigEndian(-1);
                             }
-
-                            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_exdata_");
-                            File.Create(cachedExtDataFile).Dispose();
-
-
-                            foreach (Scripts.BScript Scr in ParsedScripts)
-                            {
-                                EntryBytes.AddRangeBigEndian(ScrOffset);
-                                ScrOffset += Scr.Script.Length;
-
-                                CurLen += 4;
-                            }
-
-                            foreach (Scripts.BScript Scr in ParsedScripts)
-                            {
-                                EntryBytes.AddRange(Scr.Script);
-
-                                CurLen += Scr.Script.Length;
-
-                                if (Scr.ParseErrors.Count != 0)
-                                {
-                                    if (!ParseErrors.Contains(Entry.NPCName))
-                                        ParseErrors.Add(Entry.NPCName);
-
-                                    Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}Script \"{Scr.Name}\" had errors:{Environment.NewLine}");
-                                    Console.WriteLine(String.Join(Environment.NewLine, Scr.ParseErrors));
-                                }
-                            }
-
-                            Helpers.Ensure4ByteAlign(EntryBytes);
-                            Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
-
-                            #endregion
-
-                            CompilationData.Add(new Common.CompilationEntryData(EntryBytes));
-
-                            if (ParseErrors.Count == 0)
-                                Program.ConsoleWriteS($"OK{Environment.NewLine}");
-                            else
-                                break;
                         }
-
                         else
                         {
-                            CompilationData.Add(new Common.CompilationEntryData(null));
-                            Program.ConsoleWriteLineS($"Entry {EntriesDone} is blank or omitted.");
+                            EntryBytes.AddRangeBigEndian(-1);
+                            CurLen += 4;
                         }
 
-                        EntriesDone += 1;
-                        CurProgress += ProgressPer;
+                        #endregion
 
-                        if (progress != null)
-                            progress.Report(new Common.ProgressReport($"Saving {EntriesDone}/{Data.Entries.Count}", CurProgress));
+                        #region Scripts
+
+                        List<ScriptEntry> NonEmptyEntries = Entry.Scripts.FindAll(x => !String.IsNullOrEmpty(x.Text));
+                        EntryBytes.AddRangeBigEndian((UInt32)NonEmptyEntries.Count);
+
+                        CurLen += 4;
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        int ScrOffset = 0;
+
+                        List<Scripts.BScript> ParsedScripts = new List<Scripts.BScript>();
+
+                        int scriptNum = 0;
+
+
+                        string extData = JsonConvert.SerializeObject(new
+                        {
+                            Entry.Messages,
+                            Entry.ExtraDisplayLists,
+                            Entry.Segments,
+                            Entry.Animations,
+                        });
+
+                        extData += Helpers.GetDefinesStringFromH(Entry.HeaderPath);
+
+                        string extDataHash = Helpers.GetBase64Hash(extData);
+                        string cachedExtDataFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_exdata_" + extDataHash);
+
+                        foreach (ScriptEntry Scr in NonEmptyEntries)
+                        {
+                            Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, baseDefines);
+
+                            string hash = Helpers.GetBase64Hash(Scr.Text);
+                            string cachedFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script{scriptNum}_" + hash);
+
+                            int cachedScriptId = -1;
+
+                            if (preProcessedFiles != null)
+                                cachedScriptId = preProcessedFiles.FindIndex(x => x.identifier == cachedFile);
+
+                            if (cachedScriptId != -1)
+                                ParsedScripts.Add(new Scripts.BScript() { Script = (byte[])preProcessedFiles[cachedScriptId].data, ParseErrors = new List<Scripts.ParseException>() });
+                            else if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedExtDataFile))
+                                ParsedScripts.Add(new Scripts.BScript() { Script = File.ReadAllBytes(cachedFile), ParseErrors = new List<Scripts.ParseException>() });
+                            else
+                            {
+                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script{scriptNum}_");
+                                Scripts.BScript scr = Par.ParseScript(Scr.Name, true);
+                                ParsedScripts.Add(scr);
+
+                                if (scr.ParseErrors.Count == 0)
+                                    File.WriteAllBytes(cachedFile, scr.Script);
+                            }
+
+                            scriptNum++;
+                        }
+
+                        Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_exdata_");
+                        File.Create(cachedExtDataFile).Dispose();
+
+
+                        foreach (Scripts.BScript Scr in ParsedScripts)
+                        {
+                            EntryBytes.AddRangeBigEndian(ScrOffset);
+                            ScrOffset += Scr.Script.Length;
+
+                            CurLen += 4;
+                        }
+
+                        foreach (Scripts.BScript Scr in ParsedScripts)
+                        {
+                            EntryBytes.AddRange(Scr.Script);
+
+                            CurLen += Scr.Script.Length;
+
+                            if (Scr.ParseErrors.Count != 0)
+                            {
+                                if (!ParseErrors.Contains(Entry.NPCName))
+                                    ParseErrors.Add(Entry.NPCName);
+
+                                Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}Script \"{Scr.Name}\" had errors:{Environment.NewLine}");
+                                Console.WriteLine(String.Join(Environment.NewLine, Scr.ParseErrors));
+                            }
+                        }
+
+                        Helpers.Ensure4ByteAlign(EntryBytes);
+                        Helpers.ErrorIfExpectedLenWrong(EntryBytes, CurLen);
+
+                        #endregion
+
+                        CompilationData.Add(new Common.CompilationEntryData(EntryBytes));
+
+                        if (ParseErrors.Count == 0)
+                            Program.ConsoleWriteS($"OK{Environment.NewLine}");
+                        else
+                            break;
                     }
+
+                    else
+                    {
+                        CompilationData.Add(new Common.CompilationEntryData(null));
+                        Program.ConsoleWriteLineS($"Entry {EntriesDone} is blank or omitted.");
+                    }
+
+                    EntriesDone += 1;
+                    CurProgress += ProgressPer;
+
+                    if (progress != null)
+                        progress.Report(new Common.ProgressReport($"Saving {EntriesDone}/{Data.Entries.Count}", CurProgress));
                 }
+
 
                 if (ParseErrors.Count != 0)
                 {

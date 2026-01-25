@@ -1081,7 +1081,7 @@ namespace NPC_Maker
 
                 if (Program.Settings.CompileInParallel)
                 {
-                    await TaskEx.Run(() => { FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress, false); });
+                    FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress, false);
                 }
                 else
                 {

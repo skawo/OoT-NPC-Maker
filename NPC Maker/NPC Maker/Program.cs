@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Reflection;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.Drawing.Text;
-using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -42,6 +43,7 @@ namespace NPC_Maker
         public static Dictionary<string, WeCantSpell.Hunspell.WordList> dictionary;
 
         public static bool consoleSilent = false;
+        public static readonly Encoding Utf8 = Encoding.UTF8;
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);

@@ -251,7 +251,7 @@ namespace NPC_Maker
             // Create hash for uniqueness
             using (var sha256 = SHA256.Create())
             {
-                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(Path.GetFileName(path)));
+                byte[] hashBytes = sha256.ComputeHash(Program.Utf8.GetBytes(Path.GetFileName(path)));
                 path = BitConverter.ToString(hashBytes).Replace("-", "").Substring(0, 8);
             }
 

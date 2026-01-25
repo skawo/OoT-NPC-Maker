@@ -214,15 +214,37 @@ namespace NPC_Maker
         {
             return $"temp_{DateTime.Now.Ticks}_{System.Diagnostics.Process.GetCurrentProcess().Id}";
         }
-        public static string GetBase64Hash(SHA1 hasher, string s)
+
+        public static string GetBase64Hash(string s)
         {
-            return Convert.ToBase64String(hasher.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("+", "_").Replace("/", "-").Replace("=", "");
+            using (var sha1 = SHA1.Create())
+            {
+                byte[] bytes = Program.Utf8.GetBytes(s);
+                byte[] hash = sha1.ComputeHash(bytes);
+
+                // URL-safe Base64 without extra Replace allocations
+                return Convert.ToBase64String(hash)
+                    .TrimEnd('=')
+                    .Replace('+', '_')
+                    .Replace('/', '-');
+            }
         }
 
-        public static string GetBase64Hash(SHA1 hasher, byte[] b)
+
+        public static string GetBase64Hash(byte[] b)
         {
-            return Convert.ToBase64String(hasher.ComputeHash(b)).Replace("+", "_").Replace("/", "-").Replace("=", "");
+            using (var sha1 = SHA1.Create())
+            {
+                byte[] hash = sha1.ComputeHash(b);
+
+                // URL-safe Base64 without extra Replace allocations
+                return Convert.ToBase64String(hash)
+                    .TrimEnd('=')
+                    .Replace('+', '_')
+                    .Replace('/', '-');
+            }
         }
+
 
         public static string ReplacePathWithToken(string basePath, string fullPath, string token)
         {
