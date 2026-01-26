@@ -179,6 +179,9 @@ namespace NPC_Maker
         {
             try
             {
+                if (String.IsNullOrWhiteSpace(CodeEntry.Code))
+                    return new byte[0];
+
                 if (String.IsNullOrWhiteSpace(folder))
                     folder = Helpers.GenerateTemporaryFolderName();
 
@@ -267,7 +270,7 @@ namespace NPC_Maker
                 CompileFlags = compileFlags,
                 BinDirectory = "bin",
                 GccExecutable = "mips64-gcc.exe",
-                LdExecutable = "mips64-ld.exe",
+                LdExecutable = "zlinker.exe",
                 NovlExecutable = "novl.exe",
                 NovlWorkingDirectory = Path.Combine("nOVL")
             };
@@ -391,8 +394,8 @@ namespace NPC_Maker
             if (!RunLinkerPhase(config, paths, ref compileMsgs))
                 return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
 
-            if (!RunNovlPhase(config, paths, ref compileMsgs))
-                return HandleCompilationFailure(compilationFailedString, ref compileMsgs, true);
+            //if (!RunNovlPhase(config, paths, ref compileMsgs))
+            //    return HandleCompilationFailure(compilationFailedString, ref compileMsgs, true);
 
             if (codeEntry != null)
             {
@@ -403,9 +406,9 @@ namespace NPC_Maker
             compileMsgs += "Done!";
 
             if (codeEntry != null)
-                codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
+                codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ObjectFile, paths.OvlFile, config.IsMonoEnvironment);
 
-            CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.dFile);
+           //CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.dFile);
             return File.ReadAllBytes(paths.OvlFile);
         }
 
@@ -503,7 +506,7 @@ namespace NPC_Maker
                     extraLinkerFile = $"-T {lf.AppendQuotation()}";
             }
 
-            var arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs -o {paths.ElfFile.AppendQuotation()} {paths.ObjectFile.AppendQuotation()} {Path.Combine(paths.WorkingDirectory, "libgcc.a")}";
+            var arguments = $"symtable.ldb {paths.OvlFile.AppendQuotation()} 0x{gBaseAddr.ToString("X")} {paths.ObjectFile.AppendQuotation()}";
 
             return new ProcessStartInfo
             {
@@ -608,6 +611,9 @@ namespace NPC_Maker
                 .Where(entry => entry != null)
                 .OrderBy(entry => entry.FuncName)
                 .ToList();
+
+            foreach (var f in functions)
+                f.Addr += gBaseAddr;
 
             return functions;
         }
