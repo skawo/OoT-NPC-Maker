@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -50,8 +51,8 @@ namespace NPC_Maker
             public string BinDirectory { get; set; }
             public string GccExecutable { get; set; }
             public string LdExecutable { get; set; }
-            public string NovlExecutable { get; set; }
-            public string NovlWorkingDirectory { get; set; }
+            //public string NovlExecutable { get; set; }
+            //public string NovlWorkingDirectory { get; set; }
             public string OutPath { get; set; }
             public string[] LinkerFiles { get; set; }
             public string CompileFlags { get; set; }
@@ -80,7 +81,7 @@ namespace NPC_Maker
             }
         }
 
-        private static void GetProcessOutput(Process process, string section, ref string compileErrors, bool isMonoEnvironment)
+        private static string GetProcessOutput(Process process, string section, ref string compileErrors, bool isMonoEnvironment, bool errorsOnly = false)
         {
             compileErrors += $"+==============+ {section} +==============+{Environment.NewLine}";
 
@@ -111,7 +112,7 @@ namespace NPC_Maker
                     compileErrors += $"{Environment.NewLine}Error reading process output: {ex.InnerException?.Message}{Environment.NewLine}";
                 }
 
-                string combinedOutput = FormatProcessOutput(outputResult, errorResult);
+                string combinedOutput = FormatProcessOutput(errorsOnly ? "" : outputResult, errorResult);
 
                 if (!string.IsNullOrWhiteSpace(combinedOutput))
                     compileErrors += combinedOutput;
@@ -120,10 +121,13 @@ namespace NPC_Maker
                     compileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
                 else if (processCompleted)
                     compileErrors += $"{Environment.NewLine}Process exited with code: {process.ExitCode}{Environment.NewLine}";
+
+                return outputResult;
             }
             catch (Exception ex)
             {
                 compileErrors += $"{Environment.NewLine}Exception while reading process output: {ex.Message}{Environment.NewLine}";
+                return "";
             }
         }
 
@@ -250,9 +254,9 @@ namespace NPC_Maker
                 CompileFlags = compileFlags,
                 BinDirectory = "binmono",
                 GccExecutable = "mips64-gcc",
-                LdExecutable = "mips64-ld",
-                NovlExecutable = "nOVL",
-                NovlWorkingDirectory = "nOVL"
+                LdExecutable = "zlinker",
+                //NovlExecutable = "nOVL",
+                //NovlWorkingDirectory = "nOVL"
             };
 
             return CompileInternal(config, codeEntry, ref compileMsgs, compileFile);
@@ -271,8 +275,8 @@ namespace NPC_Maker
                 BinDirectory = "bin",
                 GccExecutable = "mips64-gcc.exe",
                 LdExecutable = "zlinker.exe",
-                NovlExecutable = "novl.exe",
-                NovlWorkingDirectory = Path.Combine("nOVL")
+                //NovlExecutable = "novl.exe",
+                //NovlWorkingDirectory = Path.Combine("nOVL")
             };
 
             return CompileInternal(config, codeEntry, ref compileMsgs, compileFile);
@@ -386,13 +390,20 @@ namespace NPC_Maker
             var paths = new CompilationPaths(config, compileFile);
             string compilationFailedString = "Compilation failed.";
 
+            codeEntry.HeaderPaths.Clear();
             Clean(new[] { paths.ObjectFile, paths.ElfFile, paths.OvlFile });
 
             if (!RunGccCompilation(config, paths, ref compileMsgs))
                 return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
 
-            if (!RunLinkerPhase(config, paths, ref compileMsgs))
+            if (!RunLinkerPhase(config, paths, codeEntry, ref compileMsgs))
                 return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
+
+            if (new FileInfo(paths.OvlFile).Length == 0)
+            {
+                compileMsgs += "Code file was empty...";
+                return new byte[0];
+            }
 
             //if (!RunNovlPhase(config, paths, ref compileMsgs))
             //    return HandleCompilationFailure(compilationFailedString, ref compileMsgs, true);
@@ -405,10 +416,28 @@ namespace NPC_Maker
 
             compileMsgs += "Done!";
 
-            if (codeEntry != null)
-                codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ObjectFile, paths.OvlFile, config.IsMonoEnvironment);
+#if DEBUG
+            var funcs = GetNpcMakerFunctionsFromO(paths.ObjectFile, paths.OvlFile, config.IsMonoEnvironment);
 
-           //CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.dFile);
+            foreach (var func in funcs)
+            {
+                var entry = codeEntry.Functions.Find(x => x.FuncName == func.FuncName);
+
+                if (entry == null)
+                {
+                    compileMsgs += $"{Environment.NewLine}{entry.FuncName} not found in the linked code...?";
+                    continue;
+                }
+
+                if (entry.Addr != func.Addr)
+                {
+                    compileMsgs += $"{Environment.NewLine}{entry.FuncName} does not match {entry.Addr} vs {func.Addr}";
+                    continue;
+                }
+            }
+#endif
+
+            CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.dFile);
             return File.ReadAllBytes(paths.OvlFile);
         }
 
@@ -432,7 +461,7 @@ namespace NPC_Maker
             return File.Exists(paths.ObjectFile) && (result == 0);
         }
 
-        private static bool RunLinkerPhase(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
+        private static bool RunLinkerPhase(CompilationConfig config, CompilationPaths paths, CCodeEntry codeEntry, ref string compileMsgs)
         {
             var ldInfo = CreateLinkerProcessInfo(config, paths);
 
@@ -444,13 +473,17 @@ namespace NPC_Maker
             using (var process = Process.Start(ldInfo))
             {
                 var sectionName = config.IsMonoEnvironment ? "Mono LINKER" : "LINKER";
-                GetProcessOutput(process, sectionName, ref compileMsgs, config.IsMonoEnvironment);
+                string symbolOutput = GetProcessOutput(process, sectionName, ref compileMsgs, config.IsMonoEnvironment, true);
                 result = process.ExitCode;
+
+                if (result == 0)
+                    codeEntry.Functions = GetNpcMFuncsFromZLinkerOutput(symbolOutput);
             }
 
             return File.Exists(paths.ObjectFile) && (result == 0);
         }
 
+        /*
         private static bool RunNovlPhase(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
         {
             var novlInfo = CreateNovlProcessInfo(config, paths);
@@ -472,6 +505,7 @@ namespace NPC_Maker
 
             return File.Exists(paths.ObjectFile) && (result == 0);
         }
+        */
 
         private static ProcessStartInfo CreateGccProcessInfo(CompilationConfig config, CompilationPaths paths)
         {
@@ -520,6 +554,7 @@ namespace NPC_Maker
             };
         }
 
+        /*
         private static ProcessStartInfo CreateNovlProcessInfo(CompilationConfig config, CompilationPaths paths)
         {
             var workingDir = paths.WorkingDirectory;
@@ -542,6 +577,7 @@ namespace NPC_Maker
                 Arguments = arguments
             };
         }
+        */
 
         private static string[] GetIncludePaths(CompilationConfig config)
         {
@@ -595,6 +631,23 @@ namespace NPC_Maker
             return Code;
         }
 
+        public static List<FunctionEntry> GetNpcMFuncsFromZLinkerOutput(string zLinkerOutput)
+        {
+            var lines = zLinkerOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            List<FunctionEntry> result = new List<FunctionEntry>();
+
+            foreach (var line in lines)
+            {
+                string[] components = line.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+
+                if (components[1].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
+                    result.Add(new FunctionEntry(components[1].Trim(), Convert.ToUInt32(components[0], 16) - gBaseAddr));
+            }
+
+            return result;
+        }
+
+/*
         public static List<FunctionEntry> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
         {
             var objDumpOutput = ExecuteObjDump(elfPath, mono);
@@ -612,12 +665,9 @@ namespace NPC_Maker
                 .OrderBy(entry => entry.FuncName)
                 .ToList();
 
-            foreach (var f in functions)
-                f.Addr += gBaseAddr;
-
             return functions;
         }
-
+       
         private static string ExecuteObjDump(string elfPath, bool mono)
         {
             var binDirectory = mono ? "binmono" : "bin";
@@ -677,6 +727,7 @@ namespace NPC_Maker
 
             return new FunctionEntry(words[5], address - gBaseAddr + sectionOffset);
         }
+*/
 
         public static bool CreateCTempDirectory(string Code, string Header, bool ErrorMsg = true, bool HeaderOnly = false)
         {
