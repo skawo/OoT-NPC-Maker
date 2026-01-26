@@ -179,6 +179,9 @@ namespace NPC_Maker
         {
             try
             {
+                if (String.IsNullOrWhiteSpace(CodeEntry.Code))
+                    return new byte[0];
+
                 if (String.IsNullOrWhiteSpace(folder))
                     folder = Helpers.GenerateTemporaryFolderName();
 
