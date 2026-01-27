@@ -506,7 +506,7 @@ namespace NPC_Maker
                     extraLinkerFile = $"-T {lf.AppendQuotation()}";
             }
 
-            var arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs -o {paths.ElfFile.AppendQuotation()} {paths.ObjectFile.AppendQuotation()} {Path.Combine(paths.WorkingDirectory, "libgcc.a")}";
+            var arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs -o {paths.ElfFile.AppendQuotation()} {paths.ObjectFile.AppendQuotation()} {Path.Combine(paths.WorkingDirectory, "libgcc.a").AppendQuotation()}";
 
             return new ProcessStartInfo
             {
@@ -515,7 +515,7 @@ namespace NPC_Maker
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 WorkingDirectory = paths.WorkingDirectory,
-                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
+                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable).AppendQuotation(),
                 Arguments = arguments
             };
         }

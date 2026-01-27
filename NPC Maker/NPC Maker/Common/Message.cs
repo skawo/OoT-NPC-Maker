@@ -412,7 +412,6 @@ namespace NPC_Maker
             return data;
         }
 
-
         private void ProcessTagValue(TagValueEntry workCopy, string normalized)
         {
             MsgValueTypes vt = workCopy.GetValueType();
