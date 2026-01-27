@@ -92,30 +92,43 @@ namespace NPC_Maker
 
         public static string WrapToLength(this string text, int maxLineLength)
         {
-            if (string.IsNullOrEmpty(text) || text.Length <= maxLineLength)
+            if (string.IsNullOrWhiteSpace(text))
                 return text;
 
-            var words = text.Split(' ');
-            var lines = new List<string>();
-            var currentLine = "";
+            var resultLines = new List<string>();
+            var originalLines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-            foreach (var word in words)
+            foreach (var line in originalLines)
             {
-                if ((currentLine + word).Length > maxLineLength)
+                if (line.Length <= maxLineLength)
                 {
-                    if (!string.IsNullOrEmpty(currentLine))
-                    {
-                        lines.Add(currentLine.Trim());
-                        currentLine = "";
-                    }
+                    resultLines.Add(line);
+                    continue;
                 }
-                currentLine += word + " ";
+
+                var words = line.Split(' ');
+                var currentLine = "";
+
+                foreach (var word in words)
+                {
+                    var next = string.IsNullOrEmpty(currentLine)
+                        ? word
+                        : currentLine + " " + word;
+
+                    if (next.Length > maxLineLength)
+                    {
+                        resultLines.Add(currentLine);
+                        currentLine = word;
+                    }
+                    else
+                        currentLine = next;
+                }
+
+                if (!string.IsNullOrEmpty(currentLine))
+                    resultLines.Add(currentLine);
             }
 
-            if (!string.IsNullOrEmpty(currentLine))
-                lines.Add(currentLine.Trim());
-
-            return string.Join(Environment.NewLine, lines);
+            return string.Join(Environment.NewLine, resultLines);
         }
 
         public static string AppendQuotation(this string text)
