@@ -1387,7 +1387,7 @@ namespace NPC_Maker
 
         private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NPC_Maker.Windows.Settings s = new Windows.Settings();
+            NPC_Maker.Windows.Settings s = new Windows.Settings(ref EditedFile);
             s.StartPosition = FormStartPosition.CenterParent;
             s.ShowDialog();
 
@@ -1404,6 +1404,7 @@ namespace NPC_Maker
                 EditedFile.GameVersion = Program.Settings.GameVersion;
 
             MsgText_TextChanged(null, null);
+            SplitMsgContainer_Paint(null, null);
         }
 
         private void DocumentationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3906,6 +3907,8 @@ namespace NPC_Maker
             MsgTextCJK.VerticalScroll.Visible = true;
             MsgTextCJK.HorizontalScroll.Visible = true;
 
+            pictureBox_Comment_Loc.Visible = IsDefaultLanguageSelected() || Program.Settings.AllowCommentsOnLoc;
+
             if (ChkBox_UseCJK.Checked)
             {
                 pictureBox_Comment_Loc.Location = new Point(MsgTextCJK.Location.X + MsgTextCJK.Width - msgCommentSize - xoffs,
@@ -3918,6 +3921,12 @@ namespace NPC_Maker
                                                         MsgText.Location.Y + MsgText.Height - msgCommentSize - yoffs);
                 pictureBox_Comment_Loc.Size = new Size(msgCommentSize, msgCommentSize);
             }
+        }
+
+        private bool IsDefaultLanguageSelected()
+        {
+            string SelLang = Combo_Language.Text;
+            return (SelLang == Dicts.DefaultLanguage);
         }
 
         private string CommentInput(string startComment)

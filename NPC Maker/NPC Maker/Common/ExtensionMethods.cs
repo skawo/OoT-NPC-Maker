@@ -115,7 +115,7 @@ namespace NPC_Maker
             if (!string.IsNullOrEmpty(currentLine))
                 lines.Add(currentLine.Trim());
 
-            return string.Join("\n", lines);
+            return string.Join(Environment.NewLine, lines);
         }
 
         public static string AppendQuotation(this string text)

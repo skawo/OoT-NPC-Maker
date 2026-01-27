@@ -64,6 +64,9 @@ namespace NPC_Maker
         public bool UseCJK { get; set; }
 
         public string LinkerPaths { get; set; }
+
+        public bool AllowCommentsOnLoc { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -95,6 +98,7 @@ namespace NPC_Maker
             MessageEditorFontSize = 0;
             UseCJK = false;
             LinkerPaths = "";
+            AllowCommentsOnLoc = true;
         }
 
         public enum Members
@@ -123,6 +127,7 @@ namespace NPC_Maker
             ORIGPREVIEW,
             PROJPATH,
             LINKERPATHS,
+            ALLOWCOMMENTSONLOC,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -171,6 +176,7 @@ namespace NPC_Maker
                 case Members.COMPRESS: CompressIndividually = (bool)Value; break;
                 case Members.ORIGPREVIEW: OrigPreview = (bool)Value; break;
                 case Members.PROJPATH: ProjectPath = (string)Value; break;
+                case Members.ALLOWCOMMENTSONLOC: AllowCommentsOnLoc = (bool)Value; break;
                 default: break;
             }
         }

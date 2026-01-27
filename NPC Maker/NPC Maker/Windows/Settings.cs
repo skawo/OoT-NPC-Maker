@@ -15,8 +15,9 @@ namespace NPC_Maker.Windows
     public partial class Settings : Form
     {
         public NPCMakerSettings EditedSettings;
-
-        public Settings()
+        public NPCFile EditedFile;
+         
+        public Settings(ref NPCFile _EditedFile)
         {
             InitializeComponent();
 
@@ -43,6 +44,9 @@ namespace NPC_Maker.Windows
             chkBox_Spellcheck.Checked = EditedSettings.Spellcheck;
             chkBox_Compress.Checked = EditedSettings.CompressIndividually;
             Txt_ProjectPath.Text = EditedSettings.ProjectPath;
+            Chk_AllowCommentsOnLoc.Checked = EditedSettings.AllowCommentsOnLoc;
+
+            EditedFile = _EditedFile;
         }
 
         private void Cb_CheckedChanged(object sender, EventArgs e)
@@ -69,8 +73,51 @@ namespace NPC_Maker.Windows
             EditedSettings.ChangeValueOfMember(Member, (sender as TextBox).Text);
         }
 
+        private bool CheckCommentDisable()
+        {
+            if (EditedSettings.AllowCommentsOnLoc == false && Program.Settings.AllowCommentsOnLoc && EditedFile != null)
+            {
+                StringBuilder sb = new StringBuilder();
+                int numLines = 0;
+
+                foreach (var Entry in EditedFile.Entries)
+                {
+                    foreach (var Loc in Entry.Localization)
+                    {
+                        foreach (var Msg in Loc.Messages)
+                        {
+                            if (Msg.Comment != null && numLines <= 20)
+                            {
+                                if (numLines == 20)
+                                    sb.Append("...and more.");
+                                else
+                                    sb.Append($"{Entry.NPCName}: {Msg.Name} ({Loc.Language}){Environment.NewLine}");
+
+                                numLines++;
+                            }
+                        }
+                    }
+                }
+
+                string HiddenMsgs = sb.ToString();
+
+                if (numLines != 0)
+                {
+                    DialogResult Res = MessageBox.Show("Are you sure? The following comments will be hidden:" + Environment.NewLine + HiddenMsgs, "Confirmation", MessageBoxButtons.YesNo);
+
+                    if (Res != DialogResult.Yes)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
         private void BtnSave_Click(object sender, EventArgs e)
         {
+            if (!CheckCommentDisable())
+                return;
+
             Program.Settings = EditedSettings;
 
             if (Program.Settings.UseWine)
