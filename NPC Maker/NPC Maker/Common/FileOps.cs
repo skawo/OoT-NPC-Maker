@@ -110,7 +110,12 @@ namespace NPC_Maker
         private static void NormalizeMessageLineBreaks(IEnumerable<MessageEntry> messages, Regex lineBreakRegex)
         {
             foreach (var message in messages)
+            {
                 message.MessageText = lineBreakRegex.Replace(message.MessageText, Environment.NewLine);
+
+                if (message.Comment != null)
+                    message.Comment = lineBreakRegex.Replace(message.Comment, Environment.NewLine);
+            }
         }
 
         private static void ResolveHeaderDefines(NPCFile npcFile)
@@ -234,6 +239,8 @@ namespace NPC_Maker
                         message.MessageText = message.MessageText?.Replace(envNewline, "\n");
                         message.MessageTextLines = message.MessageText?.Split(newlineSeparators, StringSplitOptions.None).ToList();
                         message.MessageText = null;
+
+                        message.Comment = message.Comment?.Replace(envNewline, "\n");
                     }
 
                     // Process Localization
@@ -244,6 +251,8 @@ namespace NPC_Maker
                             message.MessageText = message.MessageText?.Replace(envNewline, "\n");
                             message.MessageTextLines = message.MessageText?.Split(newlineSeparators, StringSplitOptions.None).ToList();
                             message.MessageText = null;
+
+                            message.Comment = message.Comment?.Replace(envNewline, "\n");
                         }
                     }
 
