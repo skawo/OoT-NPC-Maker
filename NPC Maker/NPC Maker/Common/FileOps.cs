@@ -743,14 +743,10 @@ namespace NPC_Maker
 
                 Program.ConsoleWriteLineS("\nPre-processing done!");
 
-                SaveBinaryFile(
-                    outPath,
-                    Data,
-                    progress,
-                    baseDefines,
-                    new[] { false, false },
-                    results.ToList(),
-                    CLIMode);
+
+                var dict = results.GroupBy(e => e.identifier).ToDictionary(g => g.Key, g => g.Last().data);
+
+                SaveBinaryFile(outPath, Data, progress, baseDefines, new[] { false, false }, dict, CLIMode);
 
                 CCode.CleanupStandardCompilationArtifacts();
                 Program.CompileInProgress = false;
@@ -785,7 +781,7 @@ namespace NPC_Maker
         }
 
         public static void SaveBinaryFile(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress,
-                                          string baseDefines, bool[] cacheStatus, List<Common.PreprocessedEntry> preProcessedFiles, bool CLIMode)
+                                          string baseDefines, bool[] cacheStatus, Dictionary<string, object> preProcessedFiles, bool CLIMode)
         {
             if (Data.Entries.Count() == 0)
             {
@@ -816,7 +812,6 @@ namespace NPC_Maker
                     progress.Report(new Common.ProgressReport($"Saving...", 0));
 
                 List<Common.CompilationEntryData> CompilationData = new List<Common.CompilationEntryData>();
-
 
                 foreach (NPCEntry Entry in Data.Entries)
                 {
@@ -1191,19 +1186,19 @@ namespace NPC_Maker
                             string cachedAddrsFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_funcsaddrs_" + hash);
                             string cachedcodeFile = Path.Combine(Program.CCachePath, $"{JsonFileName}_{EntriesDone}_code_" + hash);
 
-                            int addrsPreProc = -1;
-                            int codePreProc = -1;
+                            object addrsPreProcData = null;
+                            object codePreProcData = null;
 
                             if (preProcessedFiles != null)
                             {
-                                addrsPreProc = preProcessedFiles.FindIndex(x => x.identifier == cachedAddrsFile);
-                                codePreProc = preProcessedFiles.FindIndex(x => x.identifier == cachedcodeFile);
+                                preProcessedFiles.TryGetValue(cachedAddrsFile, out addrsPreProcData);
+                                preProcessedFiles.TryGetValue(cachedcodeFile, out codePreProcData);
                             }
 
-                            if (addrsPreProc != -1 && codePreProc != -1)
+                            if (addrsPreProcData != null && codePreProcData != null)
                             {
-                                Entry.EmbeddedOverlayCode = (CCodeEntry)preProcessedFiles[addrsPreProc].data;
-                                Overlay = (byte[])preProcessedFiles[codePreProc].data;
+                                Entry.EmbeddedOverlayCode = (CCodeEntry)addrsPreProcData;
+                                Overlay = (byte[])codePreProcData;
                             }
                             else if (!CcacheInvalid && File.Exists(cachedcodeFile) && File.Exists(cachedAddrsFile))
                             {
@@ -1330,13 +1325,13 @@ namespace NPC_Maker
                             string hash = Helpers.GetBase64Hash(Scr.Text);
                             string cachedFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script{scriptNum}_" + hash);
 
-                            int cachedScriptId = -1;
+                            object cachedScript = null;
 
                             if (preProcessedFiles != null)
-                                cachedScriptId = preProcessedFiles.FindIndex(x => x.identifier == cachedFile);
+                                preProcessedFiles.TryGetValue(cachedFile, out cachedScript);
 
-                            if (cachedScriptId != -1)
-                                ParsedScripts.Add(new Scripts.BScript() { Script = (byte[])preProcessedFiles[cachedScriptId].data, ParseErrors = new List<Scripts.ParseException>() });
+                            if (cachedScript != null)
+                                ParsedScripts.Add(new Scripts.BScript() { Script = (byte[])cachedScript, ParseErrors = new List<Scripts.ParseException>() });
                             else if (!cacheInvalid && File.Exists(cachedFile) && File.Exists(cachedExtDataFile))
                                 ParsedScripts.Add(new Scripts.BScript() { Script = File.ReadAllBytes(cachedFile), ParseErrors = new List<Scripts.ParseException>() });
                             else

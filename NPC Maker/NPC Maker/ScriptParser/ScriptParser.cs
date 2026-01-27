@@ -187,22 +187,33 @@ namespace NPC_Maker.Scripts
             return labels;
         }
 
+        private static readonly Regex LineContinuationRegex = new Regex(@"\\\s*\r?\n",RegexOptions.Compiled);
+
+        private static readonly Regex IgnoredCharsRegex = new Regex(@"[(){},\t](?=(?:[^""]*""[^""]*"")*[^""]*$)",RegexOptions.Compiled);
+
+        private static readonly Regex BlockCommentRegex = new Regex(@"/\*([\s\S]*?)\*/",RegexOptions.Compiled);
+
+        private static readonly Regex InlineCommentRegex = new Regex(@"//.+",RegexOptions.Compiled);
+
+        private static readonly Regex EmptyLinesRegex = new Regex(@"^\s*$\n|\r",RegexOptions.Multiline | RegexOptions.Compiled);
+
+        private static readonly Regex DoubleSpacesRegex = new Regex(@"[ ]{2,}",RegexOptions.Compiled);
+
+        private static readonly Regex ElseIfRegex = new Regex($@"{Lists.Keyword_Else} {Lists.Instructions.IF}",RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex OperatorsRegex = new Regex(@"(\+=|-=|/=|\*=|!=|==|=\+|=-|=/|=!|>=|<=|(?<=[^><=\-+/*!])=(?=[^=\-+/*!><])|(?<=[^=])<(?=[^=])|(?<=[^=-])>(?=[^=]))",RegexOptions.Compiled);
 
         private static void RegexText(ref string ScriptText)
         {
-            ScriptText = Regex.Replace(ScriptText, @"(\+=|-=|/=|\*=|!=|==|=\+|=-|=/|=!|>=|<=)", m => $" {m.Groups[1].Value} ", RegexOptions.Compiled);                                  // Separate operators
-            ScriptText = Regex.Replace(ScriptText, @"([^><=\-+/*!])(=)([^=\-+/*!><])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled);     // Separate single =s
-            ScriptText = Regex.Replace(ScriptText, @"([^=])(<)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled);                     // Separate single <s
-            ScriptText = Regex.Replace(ScriptText, @"([^=-])(>)([^=])", m => $"{m.Groups[1].Value} {m.Groups[2].Value} {m.Groups[3].Value}", RegexOptions.Compiled);                    // Separate singe >s
-            ScriptText = Regex.Replace(ScriptText, @"\\\s*\r?\n", "", RegexOptions.Compiled);                                                                                           // Override line carriage return if preceded by \
-            ScriptText = Regex.Replace(ScriptText, @"[(){},\t](?=(?:[^""]*""[^""]*"")*[^""]*$)", " ", RegexOptions.Compiled);                                                           // Remove ignored characters
-            ScriptText = ScriptText.Replace(";", Environment.NewLine);                                                                                                                  // Change ;s into linebreaks
-            ScriptText = Regex.Replace(ScriptText, @"\/\*([\s\S]*?)\*\/", string.Empty, RegexOptions.Compiled);                                                                         // Remove comment blocks
-            ScriptText = Regex.Replace(ScriptText, "//.+", string.Empty, RegexOptions.Compiled);                                                                                        // Remove inline comments
-            ScriptText = Regex.Replace(ScriptText, @"^\s*$\n|\r", string.Empty, RegexOptions.Multiline | RegexOptions.Compiled).TrimEnd();                                              // Remove empty lines
-            ScriptText = Regex.Replace(ScriptText, @"[ ]{2,}", " ", RegexOptions.Compiled);                                                                                             // Remove double spaces
-            ScriptText = Regex.Replace(ScriptText, $@"{Lists.Keyword_Else} {Lists.Instructions.IF}", $"{Lists.Keyword_Elif}", RegexOptions.Compiled | RegexOptions.IgnoreCase);         // Remove double spaces
-
+            ScriptText = OperatorsRegex.Replace(ScriptText, m => $" {m.Value} ");
+            ScriptText = LineContinuationRegex.Replace(ScriptText, "");
+            ScriptText = IgnoredCharsRegex.Replace(ScriptText, " ");
+            ScriptText = ScriptText.Replace(";", Environment.NewLine);
+            ScriptText = BlockCommentRegex.Replace(ScriptText, "");
+            ScriptText = InlineCommentRegex.Replace(ScriptText, "");
+            ScriptText = EmptyLinesRegex.Replace(ScriptText, "").TrimEnd();
+            ScriptText = DoubleSpacesRegex.Replace(ScriptText, " ");
+            ScriptText = ElseIfRegex.Replace(ScriptText, Lists.Keyword_Elif);
         }
 
         public static List<string> SplitLines(string ScriptText)
@@ -284,15 +295,16 @@ namespace NPC_Maker.Scripts
                 {
                     if (!s.Contains(def[1])) continue;
 
-                    string[] f = def[2].Trim().Split(' ');
                     string result;
 
-                    if (f.Length == 1)
+                    if (!def[2].Contains(' '))
                     {
                         result = FullyResolveDefine(validDefines, def)[2];
                     }
                     else
                     {
+                        string[] f = def[2].Trim().Split(' ');
+
                         for (int i = 0; i < f.Length; i++)
                             f[i] = FullyResolveDefine(validDefines, new[] { def[0], def[1], f[i] })[2];
 
@@ -322,7 +334,6 @@ namespace NPC_Maker.Scripts
                 return Lines;
             }
         }
-
 
         private List<string> GetAndReplaceProcedures(List<string> Lines, List<string> DefineLines, ref BScript outScript)
         {
