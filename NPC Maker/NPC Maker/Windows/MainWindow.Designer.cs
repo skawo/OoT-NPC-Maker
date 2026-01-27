@@ -274,8 +274,8 @@
             this.chkBox_ShowDefaultLanguagePreview = new System.Windows.Forms.CheckBox();
             this.Btn_RemoveLanguage = new System.Windows.Forms.Button();
             this.Combo_Language = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.Lbl_Localization = new System.Windows.Forms.Label();
+            this.Lbl_Filter = new System.Windows.Forms.Label();
             this.MessagesFilter = new System.Windows.Forms.TextBox();
             this.Btn_MsgMoveDown = new System.Windows.Forms.Button();
             this.Btn_MsgMoveUp = new System.Windows.Forms.Button();
@@ -3410,8 +3410,8 @@
             this.Tab4_Messages.Controls.Add(this.chkBox_ShowDefaultLanguagePreview);
             this.Tab4_Messages.Controls.Add(this.Btn_RemoveLanguage);
             this.Tab4_Messages.Controls.Add(this.Combo_Language);
-            this.Tab4_Messages.Controls.Add(this.label4);
-            this.Tab4_Messages.Controls.Add(this.label6);
+            this.Tab4_Messages.Controls.Add(this.Lbl_Localization);
+            this.Tab4_Messages.Controls.Add(this.Lbl_Filter);
             this.Tab4_Messages.Controls.Add(this.MessagesFilter);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgMoveDown);
             this.Tab4_Messages.Controls.Add(this.Btn_MsgMoveUp);
@@ -3786,24 +3786,24 @@
             this.Combo_Language.Tag = "LANGUAGE";
             this.Combo_Language.SelectedIndexChanged += new System.EventHandler(this.Combo_Language_SelectedIndexChanged);
             // 
-            // label4
+            // Lbl_Localization
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(200, 30);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 13);
-            this.label4.TabIndex = 87;
-            this.label4.Text = "Localization:";
+            this.Lbl_Localization.AutoSize = true;
+            this.Lbl_Localization.Location = new System.Drawing.Point(200, 30);
+            this.Lbl_Localization.Name = "Lbl_Localization";
+            this.Lbl_Localization.Size = new System.Drawing.Size(66, 13);
+            this.Lbl_Localization.TabIndex = 87;
+            this.Lbl_Localization.Text = "Localization:";
             // 
-            // label6
+            // Lbl_Filter
             // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 530);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(32, 13);
-            this.label6.TabIndex = 80;
-            this.label6.Text = "Filter:";
+            this.Lbl_Filter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Lbl_Filter.AutoSize = true;
+            this.Lbl_Filter.Location = new System.Drawing.Point(3, 530);
+            this.Lbl_Filter.Name = "Lbl_Filter";
+            this.Lbl_Filter.Size = new System.Drawing.Size(32, 13);
+            this.Lbl_Filter.TabIndex = 80;
+            this.Lbl_Filter.Text = "Filter:";
             // 
             // MessagesFilter
             // 
@@ -5175,7 +5175,7 @@
         private System.Windows.Forms.Button btn_FindMsg;
         private System.Windows.Forms.Label Label_NpcFilter;
         private System.Windows.Forms.TextBox NpcsFilter;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label Lbl_Filter;
         private System.Windows.Forms.TextBox MessagesFilter;
         private System.Windows.Forms.NumericUpDown NumUpDown_AnimInterpFrames;
         private System.Windows.Forms.Label Label_AnimInterpFrames;
@@ -5183,7 +5183,7 @@
         private System.Windows.Forms.ComboBox Combo_postLimb;
         private Windows.ProgressWithLabel progressL;
         private System.Windows.Forms.SplitContainer MainSplitPanel;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label Lbl_Localization;
         private System.Windows.Forms.Button Btn_RemoveLanguage;
         private System.Windows.Forms.ComboBox Combo_Language;
         private System.Windows.Forms.SplitContainer MsgEntrySplitContainer;

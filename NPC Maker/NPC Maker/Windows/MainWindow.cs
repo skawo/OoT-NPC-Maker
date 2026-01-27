@@ -185,7 +185,7 @@ namespace NPC_Maker
             if (Program.IsRunningUnderMono)
             {
                 int width = Tab4_Messages.Width - MessagesGrid.Width - 20;
-                int height = Btn_MsgMoveDown.Location.Y + Btn_MsgMoveDown.Height - Lbl_MsgType.Location.Y;
+                int height = Btn_MsgMoveDown.Location.Y + Btn_MsgMoveDown.Height - Lbl_Localization.Location.Y - Lbl_Localization.Height;
 
                 MsgTabSplitContainer.Size = new Size(width, height);
                 MsgEntrySplitContainer.Size = new Size(width, MsgTabSplitContainer.SplitterDistance);
