@@ -1,10 +1,11 @@
-﻿using System;
+﻿using NPC_Maker.Common;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.IO;
 
 namespace NPC_Maker.Scripts
 {
@@ -241,19 +242,23 @@ namespace NPC_Maker.Scripts
             }
         }
 
-        private string[] FullyResolveDefine(List<string[]> Defines, string[] Define)
+        private static string[] FullyResolveDefine(Dictionary<string, string> map, string[] define)
         {
-            int index = Defines.FindIndex(x => String.Equals(x[1], Define[2]));
+            string current = define[2];
 
-            if (index == -1)
-                return Define;
-            else
+            while (true)
             {
-                if (Define[1] == Defines[index][2])
-                    return Define;
-                else
-                    return FullyResolveDefine(Defines, new string[] { Define[0], Define[1], Defines[index][2] });
+                if (!map.TryGetValue(current, out var next))
+                    break;
+
+                if (define[1] == next)
+                    break;
+
+                current = next;
             }
+
+            define[2] = current;
+            return define;
         }
 
         private List<string> ReplaceDefines(List<string> DefineLines, List<string> Lines, ref BScript outScript)
@@ -287,26 +292,35 @@ namespace NPC_Maker.Scripts
                 if (validDefines.Count == 0)
                     return Lines;
 
-                string s = String.Join(Environment.NewLine, Lines);
+                var defineByName = new Dictionary<string, string>(validDefines.Count);
+
+                for (int i = 0; i < validDefines.Count; i++)
+                {
+                    var d = validDefines[i];
+                    defineByName[d[1]] = d[2];
+                }
+
+                string scriptText = String.Join(Environment.NewLine, Lines);
                 DataTable dt = new DataTable();
 
                 // Only process defines that exist in the content
                 foreach (var def in validDefines)
                 {
-                    if (!s.Contains(def[1])) continue;
+                    if (!scriptText.Contains(def[1])) 
+                        continue;
 
                     string result;
 
                     if (!def[2].Contains(' '))
                     {
-                        result = FullyResolveDefine(validDefines, def)[2];
+                        result = FullyResolveDefine(defineByName, def)[2];
                     }
                     else
                     {
                         string[] f = def[2].Trim().Split(' ');
 
                         for (int i = 0; i < f.Length; i++)
-                            f[i] = FullyResolveDefine(validDefines, new[] { def[0], def[1], f[i] })[2];
+                            f[i] = FullyResolveDefine(defineByName, new[] { def[0], def[1], f[i] })[2];
 
                         try
                         {
@@ -318,10 +332,10 @@ namespace NPC_Maker.Scripts
                         }
                     }
 
-                    s = ScriptHelpers.ReplaceExpr(s, def[1], result);
+                    scriptText = ScriptHelpers.ReplaceExpr(scriptText, def[1], result);
                 }
 
-                return s.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                return scriptText.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
             }
             catch (ParseException pEx)
             {
