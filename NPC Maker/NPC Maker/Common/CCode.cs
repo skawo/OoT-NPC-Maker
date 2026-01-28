@@ -441,6 +441,7 @@ namespace NPC_Maker
 
             int result = -1;
 
+
             using (var process = Process.Start(ldInfo))
             {
                 var sectionName = config.IsMonoEnvironment ? "Mono LINKER" : "LINKER";
@@ -515,7 +516,7 @@ namespace NPC_Maker
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 WorkingDirectory = paths.WorkingDirectory,
-                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable).AppendQuotation(),
+                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
                 Arguments = arguments
             };
         }
