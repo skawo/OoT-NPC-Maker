@@ -4,7 +4,16 @@ using System.Linq;
 using System.Text;
 
 namespace NPC_Maker.Common
-{ 
+{
+    public sealed class PreviewSnapshot
+    {
+        public MessageEntry Entry;
+        public MessageEntry OrigEntry;
+        public string Language;
+        public string NpcName;
+        public bool ShowOrig;
+    }
+
     public class ProgressReport
     {
         public string Status;
