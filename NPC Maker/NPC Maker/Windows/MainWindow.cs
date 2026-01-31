@@ -1714,9 +1714,9 @@ namespace NPC_Maker
 
                                 try
                                 {
-                                    byte[] msgData = ent.Localization[selectedLangIndex].Messages[locIndex].ToBytes(Dicts.DefaultLanguage).ToArray();
+                                    byte[] msgData = ent.Localization[selectedLangIndex].Messages[locIndex].ToBytes(selectedLanguage).ToArray();
                                     ZeldaMessage.MessagePreview zm = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgData);
-                                    numBoxesOg = zm.MessageCount;
+                                    numBoxesLoc = zm.MessageCount;
                                 }
                                 catch
                                 {
