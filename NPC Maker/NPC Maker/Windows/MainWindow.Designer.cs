@@ -714,7 +714,7 @@
             this.Tx_FileStartName.Name = "Tx_FileStartName";
             this.Tx_FileStartName.Size = new System.Drawing.Size(129, 20);
             this.Tx_FileStartName.TabIndex = 84;
-            this.Tx_FileStartName.Tag = "SKELETONNAME";
+            this.Tx_FileStartName.Tag = "FILESTARTNAME";
             this.Tx_FileStartName.Visible = false;
             this.Tx_FileStartName.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             this.Tx_FileStartName.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.Tx_FileStart_MouseDoubleClick);

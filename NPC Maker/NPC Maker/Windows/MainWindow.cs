@@ -630,6 +630,7 @@ namespace NPC_Maker
 
             Textbox_NPCName.Text = SelectedEntry.NPCName;
             Tx_SkeletonName.Text = SelectedEntry.SkeletonHeaderDefinition;
+            Tx_FileStartName.Text = SelectedEntry.FileStartHeaderDefinition;
 
             Txb_ObjectID.Text = SelectedEntry.ObjectID.ToString();
             Txb_ObjectID_Leave(null, null);
