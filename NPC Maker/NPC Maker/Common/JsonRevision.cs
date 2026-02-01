@@ -8,7 +8,7 @@ namespace NPC_Maker
 {
     public partial class FileOps
     {
-        private static int MigrateToVersion2(NPCFile npcFile, JObject jsonObject, int currentVersion)
+        private static int MigrateToVersion2(ref NPCFile npcFile, JObject jsonObject, int currentVersion)
         {
             if (currentVersion >= 2) 
                 return currentVersion;
@@ -30,7 +30,7 @@ namespace NPC_Maker
             return 2;
         }
 
-        private static int MigrateToVersion3(NPCFile npcFile, int currentVersion)
+        private static int MigrateToVersion3(ref NPCFile npcFile, int currentVersion)
         {
             if (currentVersion >= 3) 
                 return currentVersion;
@@ -51,7 +51,7 @@ namespace NPC_Maker
             return 3;
         }
 
-        private static void ProcessTextLinesForVersion4Plus(NPCFile npcFile)
+        private static void ProcessTextLinesForVersion4Plus(ref NPCFile npcFile)
         {
             foreach (var entry in npcFile.Entries)
             {
@@ -65,7 +65,7 @@ namespace NPC_Maker
                 globalHeader.Text = string.Join(Environment.NewLine, globalHeader.TextLines.Select(x => x.TrimEnd()));
         }
 
-        private static void ProcessMessageLinesForVersion5Plus(NPCFile npcFile)
+        private static void ProcessMessageLinesForVersion5Plus(ref NPCFile npcFile)
         {
             foreach (var entry in npcFile.Entries)
             {
@@ -82,7 +82,7 @@ namespace NPC_Maker
                 message.MessageText = string.Join(Environment.NewLine, message.MessageTextLines);
         }
 
-        private static int MigrateToVersion6(NPCFile npcFile, int currentVersion)
+        private static int MigrateToVersion6(ref NPCFile npcFile, int currentVersion)
         {
             if (currentVersion >= 6) 
                 return currentVersion;
@@ -104,7 +104,7 @@ namespace NPC_Maker
             return 6;
         }
 
-        private static int MigrateToVersion7(NPCFile npcFile, int currentVersion)
+        private static int MigrateToVersion7(ref NPCFile npcFile, int currentVersion)
         {
             if (currentVersion >= 7) 
                 return currentVersion;

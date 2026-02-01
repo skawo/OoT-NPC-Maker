@@ -149,7 +149,7 @@ namespace NPC_Maker
                 try
                 {
                     string BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(File);
-                    Scripts.ScriptParser Parser = new Scripts.ScriptParser(File, Entry, Script.Text, BaseDefines);
+                    Scripts.ScriptParser Parser = new Scripts.ScriptParser(ref File, Entry, Script.Text, BaseDefines);
                     Output = Parser.ParseScript(Script.Name, GetBytes);
                 }
                 catch (Exception)

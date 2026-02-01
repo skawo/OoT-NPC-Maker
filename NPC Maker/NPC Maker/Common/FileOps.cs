@@ -61,23 +61,23 @@ namespace NPC_Maker
                 int currentVersion = version?.Value<int>() ?? 1;
 
                 // Apply version migrations in sequence
-                currentVersion = MigrateToVersion2(npcFile, jsonObject, currentVersion);
-                currentVersion = MigrateToVersion3(npcFile, currentVersion);
+                currentVersion = MigrateToVersion2(ref npcFile, jsonObject, currentVersion);
+                currentVersion = MigrateToVersion3(ref npcFile, currentVersion);
 
                 if (currentVersion > 3)
-                    ProcessTextLinesForVersion4Plus(npcFile);
+                    ProcessTextLinesForVersion4Plus(ref npcFile);
 
                 if (currentVersion > 4)
-                    ProcessMessageLinesForVersion5Plus(npcFile);
+                    ProcessMessageLinesForVersion5Plus(ref npcFile);
 
-                currentVersion = MigrateToVersion6(npcFile, currentVersion);
-                currentVersion = MigrateToVersion7(npcFile, currentVersion);
+                currentVersion = MigrateToVersion6(ref npcFile, currentVersion);
+                currentVersion = MigrateToVersion7(ref npcFile, currentVersion);
 
                 if (currentVersion >= 6)
-                    ProcessCHeader(npcFile);
+                    ProcessCHeader(ref npcFile);
 
-                NormalizeLineBreaks(npcFile);
-                ResolveHeaderDefines(npcFile);
+                NormalizeLineBreaks(ref npcFile);
+                ResolveHeaderDefines(ref npcFile);
 
                 npcFile.Version = 7;
                 return npcFile;
@@ -89,12 +89,12 @@ namespace NPC_Maker
             }
         }
 
-        private static void ProcessCHeader(NPCFile npcFile)
+        private static void ProcessCHeader(ref NPCFile npcFile)
         {
             npcFile.CHeader = string.Join(Environment.NewLine, npcFile.CHeaderLines.Select(x => x.TrimEnd()));
         }
 
-        private static void NormalizeLineBreaks(NPCFile npcFile)
+        private static void NormalizeLineBreaks(ref NPCFile npcFile)
         {
             var lineBreakRegex = new Regex(@"\r?\n");
 
@@ -118,7 +118,7 @@ namespace NPC_Maker
             }
         }
 
-        private static void ResolveHeaderDefines(NPCFile npcFile)
+        private static void ResolveHeaderDefines(ref NPCFile npcFile)
         {
             foreach (var entry in npcFile.Entries.Where(e => !string.IsNullOrEmpty(e.HeaderPath)))
             {
@@ -199,7 +199,7 @@ namespace NPC_Maker
             try
             {
                 if (json == null)
-                    json = ProcessNPCJSON(Data, progress);
+                    json = ProcessNPCJSON(ref Data, progress);
 
                 if (json != null)
                     File.WriteAllText(Path, json);
@@ -210,7 +210,7 @@ namespace NPC_Maker
             }
         }
 
-        public static string ProcessNPCJSON(NPCFile Data, IProgress<Common.ProgressReport> progress = null)
+        public static string ProcessNPCJSON(ref NPCFile Data, IProgress<Common.ProgressReport> progress = null)
         {
             try
             {
@@ -389,7 +389,7 @@ namespace NPC_Maker
             return;
         }
 
-        public static bool[] GetCacheStatus(NPCFile data)
+        public static bool[] GetCacheStatus(ref NPCFile data)
         {
             string jsonFileName = Program.JsonPath.FilenameFromPath();
             string extHeaderPath = "";
@@ -522,7 +522,7 @@ namespace NPC_Maker
 
             await TaskEx.Run(() =>
             {
-                var cacheStatus = GetCacheStatus(Data);
+                var cacheStatus = GetCacheStatus(ref Data);
                 if (cacheStatus == null)
                 {
                     Program.CompileInProgress = false;
@@ -651,7 +651,7 @@ namespace NPC_Maker
                                 {
                                     Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_");
 
-                                    var parser = new Scripts.ScriptParser(Data, entry, scrEntry.Text, baseDefines);
+                                    var parser = new Scripts.ScriptParser(ref Data, entry, scrEntry.Text, baseDefines);
                                     var script = parser.ParseScript(scrEntry.Name, true);
 
                                     if (script.ParseErrors.Count == 0)
@@ -695,7 +695,7 @@ namespace NPC_Maker
                 Program.ConsoleWriteLineS("\nPre-processing done!");
 
                 var dict = results.GroupBy(e => e.identifier).ToDictionary(g => g.Key, g => g.Last().data);
-                SaveBinaryFile(outPath, Data, progress, baseDefines, new[] { false, false }, dict, CLIMode);
+                SaveBinaryFile(outPath, ref Data, progress, baseDefines, new[] { false, false }, dict, CLIMode);
 
                 CCode.CleanupStandardCompilationArtifacts();
                 Program.CompileInProgress = false;
@@ -729,7 +729,7 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveBinaryFile(string outPath, NPCFile Data, IProgress<Common.ProgressReport> progress,
+        public static void SaveBinaryFile(string outPath, ref NPCFile Data, IProgress<Common.ProgressReport> progress,
                                           string baseDefines, bool[] cacheStatus, Dictionary<string, object> preProcessedFiles, bool CLIMode)
         {
             if (Data.Entries.Count() == 0)
@@ -1268,7 +1268,7 @@ namespace NPC_Maker
 
                         foreach (ScriptEntry Scr in NonEmptyEntries)
                         {
-                            Scripts.ScriptParser Par = new Scripts.ScriptParser(Data, Entry, Scr.Text, baseDefines);
+                            Scripts.ScriptParser Par = new Scripts.ScriptParser(ref Data, Entry, Scr.Text, baseDefines);
 
                             string hash = Helpers.GetBase64Hash(Scr.Text);
                             string cachedFile = Path.Combine(Program.ScriptCachePath, $"{JsonFileName}_{EntriesDone}_script{scriptNum}_" + hash);

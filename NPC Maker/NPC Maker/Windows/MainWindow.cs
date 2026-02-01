@@ -1,19 +1,14 @@
-﻿using FastColoredTextBoxCJK;
-using FastColoredTextBoxNS;
+﻿using FastColoredTextBoxNS;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -463,7 +458,7 @@ namespace NPC_Maker
 
                     if (currentBackup != LastBackup)
                     {
-                        string json = FileOps.ProcessNPCJSON(EditedFile, null);
+                        string json = FileOps.ProcessNPCJSON(ref EditedFile, null);
 
                         if (json != null)
                         {
@@ -1199,10 +1194,10 @@ namespace NPC_Maker
                 {
                     await TaskEx.Run(() =>
                     {
-                        var cacheStatus = FileOps.GetCacheStatus(EditedFile);
+                        var cacheStatus = FileOps.GetCacheStatus(ref EditedFile);
 
                         string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
-                        FileOps.SaveBinaryFile(SFD.FileName, EditedFile, progress, baseDefines, cacheStatus, null, false);
+                        FileOps.SaveBinaryFile(SFD.FileName, ref EditedFile, progress, baseDefines, cacheStatus, null, false);
                         CCode.CleanupStandardCompilationArtifacts();
                     });
                 }
@@ -3879,7 +3874,7 @@ namespace NPC_Maker
                 MsgEntrySplitContainer.IsSplitterFixed = true;
             }
 
-            InsertDataToEditor();
+            MessagesGrid_SelectionChanged(MessagesGrid, null);
 
             if (MessagesGrid.Rows.Count > curSelMsg)
             {
@@ -4295,6 +4290,13 @@ namespace NPC_Maker
             PerformSpellCheck();
         }
 
+        private MessageEntry CreateErrorEntry()
+        {
+            MessageEntry Entry = new MessageEntry();
+            Entry.MessageText = "Error: Over maximum size.";
+            return Entry;
+        }
+
         private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Common.SavedMsgPreviewData savedPreviewData)
         {
             List<byte> Data = null;
@@ -4303,26 +4305,19 @@ namespace NPC_Maker
             {
                 Data = Entry.ToBytes(Language);
             }
-            catch
-            { }
+            catch { }
 
             if (Data == null || (Data.Count == 0 && !String.IsNullOrEmpty(Entry.MessageText)))
                 return null;
 
             if (Data.Count > 1280)
+                Entry = CreateErrorEntry();
+
+            try
             {
-                Entry = new MessageEntry();
-                Entry.MessageText = "Error: Over 1280 bytes.";
-
-                try
-                {
-                    Data = Entry.ToBytes(Language);
-                }
-                catch
-                { }
+                Data = Entry.ToBytes(Language);
             }
-
-            bool CreditsTxBox = (ZeldaMessage.Data.BoxType)Entry.Type > ZeldaMessage.Data.BoxType.None_Black;
+            catch { }
 
             float[] fontWidths = null;
             byte[] font = null;
@@ -4351,70 +4346,81 @@ namespace NPC_Maker
                     fontEx = exfonts[exFontName];
             }
 
-            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview((ZeldaMessage.Data.BoxType)Entry.Type,
-                                                                              Data.ToArray(),
-                                                                              fontWidths,
-                                                                              font,
-                                                                              EditedFile.SpaceFromFont,
-                                                                              fontWidthsEx,
-                                                                              fontEx,
-                                                                              Language);
+            ZeldaMessage.MessagePreview mp = new ZeldaMessage.MessagePreview(
+                                                                                (Data.BoxType)Entry.Type,
+                                                                                Data.ToArray(),
+                                                                                fontWidths,
+                                                                                font,
+                                                                                EditedFile.SpaceFromFont,
+                                                                                fontWidthsEx,
+                                                                                fontEx,
+                                                                                Language
+                                                                            );
+
             Bitmap bmp = null;
 
-            if (savedPreviewData != null &&
-                savedPreviewData.MessageArrays != null &&
-                mp.Message.Count == savedPreviewData.MessageArrays.Count &&
-                Entry.Type == savedPreviewData.Type)
+            Common.SavedMsgPreviewData localSaved = savedPreviewData;
+
+            bool canReuse =
+                localSaved != null &&
+                localSaved.MessageArrays != null &&
+                mp.Message.Count == localSaved.MessageArrays.Count &&
+                Entry.Type == localSaved.Type;
+
+            if (canReuse)
+                bmp = (Bitmap)localSaved.previewImage;
+
+            Bitmap[] previews = new Bitmap[mp.MessageCount];
+
+            Parallel.For(0, mp.MessageCount, i =>
             {
-                bmp = (Bitmap)savedPreviewData.previewImage;
-            }
+                if (!canReuse || !mp.Message[i].SequenceEqual(localSaved.MessageArrays[i]))
+                    previews[i] = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
+            });
 
             Graphics grfx = null;
 
-            for (int i = 0; i < mp.MessageCount; i++)
+            for (int i = 0; i < previews.Length; i++)
             {
-                if (savedPreviewData == null ||
-                    savedPreviewData.MessageArrays == null ||
-                    mp.Message.Count != savedPreviewData.MessageArrays.Count ||
-                    Entry.Type != savedPreviewData.Type ||
-                    !mp.Message[i].SequenceEqual(savedPreviewData.MessageArrays[i]))
+                Bitmap box = previews[i];
+                if (box == null)
+                    continue;
+
+                if (bmp == null)
                 {
-                    Bitmap box = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
-
-                    if (bmp == null)
-                    {
-                        bmp = new Bitmap(box.Width, mp.MessageCount * box.Height);
-                        bmp.MakeTransparent();
-
-                    }
-
-                    if (grfx == null)
-                        grfx = Graphics.FromImage(bmp);
-
-                    if (Program.IsRunningUnderMono)
-                        bmp.DrawImageSourceCopySafe(box, 0, box.Height * i);
-                    else
-                    {
-                        grfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-                        grfx.DrawImage(box, 0, box.Height * i);
-                    }
+                    bmp = new Bitmap(box.Width, mp.MessageCount * box.Height);
+                    bmp.MakeTransparent();
                 }
+
+                if (grfx == null)
+                    grfx = Graphics.FromImage(bmp);
+
+                if (Program.IsRunningUnderMono)
+                {
+                    bmp.DrawImageSourceCopySafe(box, 0, box.Height * i);
+                }
+                else
+                {
+                    grfx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                    grfx.DrawImage(box, 0, box.Height * i);
+                }
+
+                box.Dispose();
             }
 
             if (grfx != null)
                 grfx.Dispose();
 
-            savedPreviewData = new Common.SavedMsgPreviewData();
-            savedPreviewData.MessageArrays = mp.Message;
-            savedPreviewData.previewImage = bmp;
-            savedPreviewData.Type = Entry.Type;
-            savedPreviewData.Position = Entry.Position;
+            savedPreviewData = new Common.SavedMsgPreviewData
+            {
+                MessageArrays = mp.Message,
+                previewImage = bmp,
+                Type = Entry.Type,
+                Position = Entry.Position
+            };
 
             return bmp;
         }
-
-        
-
         private void PanelMsgPreview_Resize(object sender, EventArgs e)
         {
             MsgPreview.Left = (this.PanelMsgPreview.Width - MsgPreview.Width) / 2;

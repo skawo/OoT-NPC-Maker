@@ -17,7 +17,7 @@ namespace NPC_Maker.Scripts
         public List<string> RandomLabels { get; set; }
         private BScript outScript;
 
-        public ScriptParser(NPCFile _File, NPCEntry _Entry, string _ScriptText, string baseDefines)
+        public ScriptParser(ref NPCFile _File, NPCEntry _Entry, string _ScriptText, string baseDefines)
         {
             Entry = _Entry;
             EditedFile = _File;
