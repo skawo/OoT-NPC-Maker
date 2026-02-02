@@ -640,7 +640,7 @@ void Scripts_SetMessage(NpcMaker* en, PlayState* playState, int msgId, u16* fiel
             if (en->dummyMesEntry != NULL)
             {
                 InternalMsgEntry data = Data_GetCustomMessage(en, playState, en->customMsgId);
-                en->dummyMesEntry->settings = data.posType;
+                en->dummyMesEntry->typePos = data.posType;
             }
         }
 

@@ -5,7 +5,7 @@
 #include "scripts_types.h"
 #include "npc_maker_defines.h"
 #include "scripts_defines.h"
-
+#include "message_data_static.h"
 
 typedef struct NpcMaker NpcMaker;
 typedef struct InternalMsgEntry InternalMsgEntry;
@@ -136,21 +136,6 @@ typedef struct NpcSettings
     u8 talkPattern[4];
 
 } NpcSettings;    
-
-typedef struct RomSection
-{
-    u32 Start;
-    u32 End;
-} RomSection;
-
-typedef struct MessageEntry
-{
-    s16 msg_id;
-    u8 settings;
-    u8 pad;
-    u8 segment;
-    u32 offset : 24;
-} MessageEntry;
 
 typedef struct InternalMsgEntry
 {
@@ -314,7 +299,7 @@ typedef struct NpcMaker
 
     NpcMaker* riddenNpc;
     Actor* refActor;
-    MessageEntry* dummyMesEntry;
+    MessageTableEntry* dummyMesEntry;
     u16 curTextBuffPos;
 
     u32 CFuncs[6];

@@ -3,7 +3,7 @@
 bool Rom_IsObjectCompressed(int objId)
 {
     RomFile* rv = Rom_GetObjectVROMAddr(objId);
-    return Rom_GetPhysicalROMAddrFromVirtual(rv->vromStart).End != 0;
+    return Rom_GetPhysicalROMAddrFromVirtual(rv->vromStart).vromEnd != 0;
 }
 
 inline RomFile* Rom_GetObjectVROMAddr(int objId)
@@ -11,24 +11,17 @@ inline RomFile* Rom_GetObjectVROMAddr(int objId)
     return (RomFile*)&objectTable[objId];
 }
 
-RomSection Rom_GetPhysicalROMAddrFromVirtual(u32 virtual)
+RomFile Rom_GetPhysicalROMAddrFromVirtual(u32 virtual)
 {
-    struct 
-    {
-        u32 Vstart;
-        u32 Vend;
-        u32 Pstart;
-        u32 Pend;
-    } *dma;
+    DmaEntry* dma;
+    RomFile out = { .vromStart = 0xFFFFFFFF, .vromEnd = 0xFFFFFFFF };
 
-    RomSection out = { .Start = 0xFFFFFFFF, .End = 0xFFFFFFFF};
-    
-    for (dma = (void*)dmaData; ; ++dma)
+    for (dma = (DmaEntry*)dmaData; ; ++dma)
     {
-        if (dma->Vstart == virtual)
+        if (dma->vromStart == (uintptr_t)virtual)
         {
-            out.Start = dma->Pstart;
-            out.End = dma->Pend;
+            out.vromStart = dma->romStart;
+            out.vromEnd   = dma->romEnd;
             break;
         }
     }
@@ -168,13 +161,13 @@ void* Rom_GetObjectDataPtr(u16 objId, PlayState* playState)
     return playState->objectCtx.status[index].segment;
 }
 
-MessageEntry* Rom_GetMessageEntry(s16 msgId)
+MessageTableEntry* Rom_GetMessageEntry(s16 msgId)
 {
     for (int i = 0; i < 65535; i++)
     {
-        MessageEntry* MsgE = (MessageEntry*)&messageTable[i];
+        MessageTableEntry* MsgE = (MessageTableEntry*)&messageTable[i];
 
-        if (MsgE->msg_id == msgId)
+        if (MsgE->textId == msgId)
             return MsgE;
     }
 

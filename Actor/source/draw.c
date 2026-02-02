@@ -348,7 +348,7 @@ void Draw_CalcFocusPos(PlayState* playState, s32 limb, NpcMaker* en)
 
 void Draw_SetEnvColor(Gfx** destP, Color_RGB8 color, u8 alpha)
 {
-    gDPPipeSync((*destP)++);
+    //gDPLoadSync((*destP)++);
     gDPSetEnvColor((*destP)++, color.r, color.g, color.b, alpha);
 }
 
