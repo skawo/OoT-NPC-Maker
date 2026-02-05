@@ -37,7 +37,7 @@ void Rom_LoadObject(int objId, void *dest)
     #ifdef OOT_MQ_DEBUG_PAL
         DmaMgr_SendRequest1(dest, obj->vromStart, obj->vromEnd - obj->vromStart, "", __LINE__);
     #else
-        DmaMgr_SendRequest1(dest, obj->vromStart, obj->vromEnd - obj->vromStart);
+        DmaMgr_SendRequest0(dest, obj->vromStart, obj->vromEnd - obj->vromStart);
     #endif
 }
 
@@ -77,7 +77,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
     #ifdef OOT_MQ_DEBUG_PAL
         DmaMgr_SendRequest1(dest, start, sz, "", __LINE__);
     #else
-        DmaMgr_SendRequest1(dest, start, sz);
+        DmaMgr_SendRequest0(dest, start, sz);
     #endif
 
     if (size < 16)
