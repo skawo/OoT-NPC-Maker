@@ -548,132 +548,133 @@ namespace NPC_Maker
                         {
                             NPCEntry entry = Data.Entries[entryID];
 
-                            if (entry.IsNull || entry.Omitted)
-                                return;
-
-                            string jsonEntryPrefix = jsonFileName + "_" + entryID + "_";
-
-                            /* ---------------- C CODE ---------------- */
-
-                            byte[] overlay = null;
-                            string compErrors = "";
-
-                            string codeString =
-                                JsonConvert.SerializeObject(entry.EmbeddedOverlayCode) +
-                                CCode.ReplaceGameVersionInclude("") +
-                                GetIncludesText(entry.EmbeddedOverlayCode.HeaderPaths);
-
-                            string codeHash = Helpers.GetBase64Hash(codeString);
-
-                            string funcsAddrsName = jsonEntryPrefix + "funcsaddrs_" + codeHash;
-                            string codeName = jsonEntryPrefix + "code_" + codeHash;
-
-                            string cachedAddrsFile = Path.Combine(Program.CCachePath, funcsAddrsName);
-                            string cachedCodeFile = Path.Combine(Program.CCachePath, codeName);
-
-                            bool cCacheHit =
-                                !cCacheInvalid &&
-                                File.Exists(cachedAddrsFile) &&
-                                File.Exists(cachedCodeFile);
-
-                            if (!cCacheHit)
+                            if (!entry.IsNull && !entry.Omitted)
                             {
-                                Helpers.DeleteFileStartingWith(Program.CCachePath, funcsAddrsName);
-                                Helpers.DeleteFileStartingWith(Program.CCachePath, codeName);
 
-                                if (!string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
-                                    overlay = CCode.Compile(Data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, "NPCCOMPILE" + entryID);
+                                string jsonEntryPrefix = jsonFileName + "_" + entryID + "_";
 
-                                if (overlay != null)
+                                /* ---------------- C CODE ---------------- */
+
+                                byte[] overlay = null;
+                                string compErrors = "";
+
+                                string codeString =
+                                    JsonConvert.SerializeObject(entry.EmbeddedOverlayCode) +
+                                    CCode.ReplaceGameVersionInclude("") +
+                                    GetIncludesText(entry.EmbeddedOverlayCode.HeaderPaths);
+
+                                string codeHash = Helpers.GetBase64Hash(codeString);
+
+                                string funcsAddrsName = jsonEntryPrefix + "funcsaddrs_" + codeHash;
+                                string codeName = jsonEntryPrefix + "code_" + codeHash;
+
+                                string cachedAddrsFile = Path.Combine(Program.CCachePath, funcsAddrsName);
+                                string cachedCodeFile = Path.Combine(Program.CCachePath, codeName);
+
+                                bool cCacheHit =
+                                    !cCacheInvalid &&
+                                    File.Exists(cachedAddrsFile) &&
+                                    File.Exists(cachedCodeFile);
+
+                                if (!cCacheHit)
                                 {
-                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script");
+                                    Helpers.DeleteFileStartingWith(Program.CCachePath, funcsAddrsName);
+                                    Helpers.DeleteFileStartingWith(Program.CCachePath, codeName);
 
-                                    string addrJson = 
-                                        JsonConvert.SerializeObject
-                                        (
-                                            entry.EmbeddedOverlayCode, 
-                                            new JsonSerializerSettings { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver()}
-                                        );
+                                    if (!string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
+                                        overlay = CCode.Compile(Data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, "NPCCOMPILE" + entryID);
 
-                                    File.WriteAllText(cachedAddrsFile, addrJson);
-                                    File.WriteAllBytes(cachedCodeFile, overlay);
-                                }
-                            }
-                            else
-                            {
-                                entry.EmbeddedOverlayCode = 
-                                    JsonConvert.DeserializeObject<CCodeEntry>
-                                    (
-                                        File.ReadAllText(cachedAddrsFile), 
-                                        new JsonSerializerSettings { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() }
-                                    );
-
-                                overlay = File.ReadAllBytes(cachedCodeFile);
-                            }
-
-                            if (overlay != null)
-                            {
-                                results.Add(new Common.PreprocessedEntry(cachedAddrsFile, entry.EmbeddedOverlayCode));
-                                results.Add(new Common.PreprocessedEntry(cachedCodeFile, overlay));
-                            }
-
-                            /* ---------------- EXT DATA ---------------- */
-
-                            string extData =
-                                JsonConvert.SerializeObject(new
-                                {
-                                    entry.Messages,
-                                    entry.ExtraDisplayLists,
-                                    entry.Segments,
-                                    entry.Animations
-                                }) +
-                                Helpers.GetDefinesStringFromH(entry.HeaderPath);
-
-                            string extDataHash = Helpers.GetBase64Hash(extData);
-                            string extDataFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "exdata_" + extDataHash);
-
-                            bool extDataExists = File.Exists(extDataFile);
-
-                            /* ---------------- SCRIPTS ---------------- */
-
-                            int scriptNum = 0;
-
-                            foreach (var scrEntry in entry.Scripts)
-                            {
-                                if (string.IsNullOrEmpty(scrEntry.Text))
-                                {
-                                    scriptNum++;
-                                    continue;
-                                }
-
-                                string scriptHash = Helpers.GetBase64Hash(scrEntry.Text);
-                                string cachedScriptFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_" + scriptHash);
-
-                                bool scriptCacheHit = !cacheInvalid && extDataExists && File.Exists(cachedScriptFile);
-
-                                if (!scriptCacheHit)
-                                {
-                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_");
-
-                                    var parser = new Scripts.ScriptParser(ref Data, entry, scrEntry.Text, baseDefines);
-                                    var script = parser.ParseScript(scrEntry.Name, true);
-
-                                    if (script.ParseErrors.Count == 0)
+                                    if (overlay != null)
                                     {
-                                        File.WriteAllBytes(cachedScriptFile, script.Script);
-                                        results.Add(new Common.PreprocessedEntry(cachedScriptFile, script.Script));
+                                        Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script");
+
+                                        string addrJson =
+                                            JsonConvert.SerializeObject
+                                            (
+                                                entry.EmbeddedOverlayCode,
+                                                new JsonSerializerSettings { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() }
+                                            );
+
+                                        File.WriteAllText(cachedAddrsFile, addrJson);
+                                        File.WriteAllBytes(cachedCodeFile, overlay);
                                     }
                                 }
                                 else
-                                    results.Add(new Common.PreprocessedEntry(cachedScriptFile, File.ReadAllBytes(cachedScriptFile)));
+                                {
+                                    entry.EmbeddedOverlayCode =
+                                        JsonConvert.DeserializeObject<CCodeEntry>
+                                        (
+                                            File.ReadAllText(cachedAddrsFile),
+                                            new JsonSerializerSettings { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() }
+                                        );
 
-                                scriptNum++;
-                            }
+                                    overlay = File.ReadAllBytes(cachedCodeFile);
+                                }
 
-                            if (!extDataExists)
-                            {
-                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath,jsonEntryPrefix + "exdata_");
-                                File.Create(extDataFile).Dispose();
+                                if (overlay != null)
+                                {
+                                    results.Add(new Common.PreprocessedEntry(cachedAddrsFile, entry.EmbeddedOverlayCode));
+                                    results.Add(new Common.PreprocessedEntry(cachedCodeFile, overlay));
+                                }
+
+                                /* ---------------- EXT DATA ---------------- */
+
+                                string extData =
+                                    JsonConvert.SerializeObject(new
+                                    {
+                                        entry.Messages,
+                                        entry.ExtraDisplayLists,
+                                        entry.Segments,
+                                        entry.Animations
+                                    }) +
+                                    Helpers.GetDefinesStringFromH(entry.HeaderPath);
+
+                                string extDataHash = Helpers.GetBase64Hash(extData);
+                                string extDataFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "exdata_" + extDataHash);
+
+                                bool extDataExists = File.Exists(extDataFile);
+
+                                /* ---------------- SCRIPTS ---------------- */
+
+                                int scriptNum = 0;
+
+                                foreach (var scrEntry in entry.Scripts)
+                                {
+                                    if (string.IsNullOrEmpty(scrEntry.Text))
+                                    {
+                                        scriptNum++;
+                                        continue;
+                                    }
+
+                                    string scriptHash = Helpers.GetBase64Hash(scrEntry.Text);
+                                    string cachedScriptFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_" + scriptHash);
+
+                                    bool scriptCacheHit = !cacheInvalid && extDataExists && File.Exists(cachedScriptFile);
+
+                                    if (!scriptCacheHit)
+                                    {
+                                        Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_");
+
+                                        var parser = new Scripts.ScriptParser(ref Data, entry, scrEntry.Text, baseDefines);
+                                        var script = parser.ParseScript(scrEntry.Name, true);
+
+                                        if (script.ParseErrors.Count == 0)
+                                        {
+                                            File.WriteAllBytes(cachedScriptFile, script.Script);
+                                            results.Add(new Common.PreprocessedEntry(cachedScriptFile, script.Script));
+                                        }
+                                    }
+                                    else
+                                        results.Add(new Common.PreprocessedEntry(cachedScriptFile, File.ReadAllBytes(cachedScriptFile)));
+
+                                    scriptNum++;
+                                }
+
+                                if (!extDataExists)
+                                {
+                                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "exdata_");
+                                    File.Create(extDataFile).Dispose();
+                                }
                             }
 
                             /* ---------------- PROGRESS ---------------- */
