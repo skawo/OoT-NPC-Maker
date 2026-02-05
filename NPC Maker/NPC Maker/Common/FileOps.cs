@@ -547,6 +547,10 @@ namespace NPC_Maker
                         try
                         {
                             NPCEntry entry = Data.Entries[entryID];
+
+                            if (entry.IsNull || entry.Omitted)
+                                return;
+
                             string jsonEntryPrefix = jsonFileName + "_" + entryID + "_";
 
                             /* ---------------- C CODE ---------------- */
