@@ -116,8 +116,6 @@ namespace NPC_Maker
 
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
 
-            CCode.CreateCTempDirectory("", "", false);
-
             Dicts.LoadDicts();
 
             if (args.Length == 0)
