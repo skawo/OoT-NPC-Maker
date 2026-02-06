@@ -21,7 +21,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
             Matrix_SetTranslateRotateYXZ(en->actor.world.pos.x, en->actor.world.pos.y + en->collider.dim.yShift, en->actor.world.pos.z, &en->actor.shape.rot);
             Matrix_Scale(MAX(1, en->collider.dim.radius) / 128.0f, en->collider.dim.height / 204.0f, MAX(1, en->collider.dim.radius) / 128.0f, 1);
 
-            gSPMatrix(POLY_XLU.p++, Matrix_NewMtx(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPMatrix(POLY_XLU.p++, MATRIX_FINALIZE(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_XLU.p++, xluMaterial);
             gDPSetEnvColor(POLY_XLU.p++, 0xFF, 0x00, 0x00, 0x7F);
             gSPDisplayList(POLY_XLU.p++, dlCylinder);
@@ -41,7 +41,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
                 is64Printf("_%2d: LOOKAT editor is enabled.\n", en->npcId);
             #endif  
 
-            Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
+            Gfx* gfx = Gfx_Open(playState->state.gfxCtx->polyOpa.p);
             gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
             GfxPrint printer;
 
@@ -85,7 +85,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);
             gSPEndDisplayList(gfx++);
-            Graph_BranchDlist(playState->state.gfxCtx->polyOpa.p, gfx);
+            Gfx_Close(playState->state.gfxCtx->polyOpa.p, gfx);
             playState->state.gfxCtx->polyOpa.p = gfx;                     
         }
 
@@ -95,7 +95,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 
         if (en->settings.showDlistEditorDebugOn && en->numExDLists != 0)
         {
-            Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
+            Gfx* gfx = Gfx_Open(playState->state.gfxCtx->polyOpa.p);
             gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
             GfxPrint printer;
 
@@ -137,7 +137,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);
             gSPEndDisplayList(gfx++);
-            Graph_BranchDlist(playState->state.gfxCtx->polyOpa.p, gfx);
+            Gfx_Close(playState->state.gfxCtx->polyOpa.p, gfx);
             playState->state.gfxCtx->polyOpa.p = gfx;
         }
 
@@ -147,7 +147,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 
         if (en->settings.printToScreenDebugOn)
         {
-            Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
+            Gfx* gfx = Gfx_Open(playState->state.gfxCtx->polyOpa.p);
             gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
             GfxPrint printer;
 
@@ -162,7 +162,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);
             gSPEndDisplayList(gfx++);
-            Graph_BranchDlist(playState->state.gfxCtx->polyOpa.p, gfx);
+            Gfx_Close(playState->state.gfxCtx->polyOpa.p, gfx);
             playState->state.gfxCtx->polyOpa.p = gfx;
         }
 
@@ -313,7 +313,7 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
 
     Draw_SetEnvColor(gfxP, dList->envColor, en->curAlpha);
     gDPPipeSync((*gfxP)++);    
-    gSPMatrix((*gfxP)++, Matrix_NewMtx(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
+    gSPMatrix((*gfxP)++, MATRIX_FINALIZE(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
     gSPDisplayList((*gfxP)++, dListOffset);
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
@@ -654,7 +654,8 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
                             cam = Play_GetCamera(playState, playState->csCtx.subCamId);
 
                         // Get vector from cam
-                        OLib_Vec3fDistNormalize(&translation, &cam->eye, &cam->at);
+                        OLib_Vec3fDistNormalize(&translation, &cam->eye);
+                        // Huh? OLib_Vec3fDistNormalize(&translation, &cam->eye, &cam->at);
                         // Translation.z -> used as distance from the camera
                         Math_Vec3f_Scale(&translation, dlist.translation.z);
                         Math_Vec3f_Sum(&translation, &cam->eye, &translation);
@@ -705,7 +706,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
                 view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
 
                 Gfx* gfxRef = POLY_OPA_DISP;
-                Gfx* gfx = Graph_GfxPlusOne(gfxRef);
+                Gfx* gfx = Gfx_Open(gfxRef);
                 gSPDisplayList(OVERLAY_DISP++, gfx);                
 
                 SET_FULLSCREEN_VIEWPORT(&view);
@@ -745,7 +746,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
                 Draw_ExtDListInt(en, playState, &dlist, &gfx);
 
                 gSPEndDisplayList(gfx++);
-                Graph_BranchDlist(gfxRef, gfx);
+                Gfx_Close(gfxRef, gfx);
                 POLY_OPA_DISP = gfx;
                 
                 Matrix_Pop();
@@ -770,8 +771,8 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     if (en->settings.objectId > 0)
     {
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
-        gSPSegment(POLY_XLU.p++, 0x06, playState->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
-        gSPSegment(POLY_OPA.p++, 0x06, playState->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
+        gSPSegment(POLY_XLU.p++, 0x06, playState->objectCtx.slots[en->actor.objectSlot].segment + en->settings.fileStart);
+        gSPSegment(POLY_OPA.p++, 0x06, playState->objectCtx.slots[en->actor.objectSlot].segment + en->settings.fileStart);
     }    
 
     // Draw static exdlists (ones not attached to a limb)

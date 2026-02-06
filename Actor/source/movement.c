@@ -38,7 +38,7 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, PlayState* playState, float speed
          en->wasHit || 
          movementType == MOVEMENT_TIMED_PATH)
     {
-        en->actor.speedXZ = 0;
+        en->actor.speed = 0;
         Movement_Apply(&en->actor, NULL);
         return;
     }
@@ -85,12 +85,12 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, PlayState* playState, float speed
         // Otherwise, we calculate the vector to move by in this frame.
         if (ignoreY)
         {
-            en->actor.speedXZ = speed;
+            en->actor.speed = speed;
             Movement_Apply(&en->actor, NULL);
         }
         else
         {
-            en->actor.speedXZ = 0;
+            en->actor.speed = 0;
             Vec3f normalized = Movement_CalcVector(&en->actor.world.pos, &en->movementNextPos, speed);
             Movement_Apply(&en->actor, &normalized);
         }
@@ -115,7 +115,7 @@ bool Movement_RideActor(NpcMaker* en, PlayState* playState)
                 if (!en->wasHit)
                 {
                     if (en->settings.sfxIfAttacked >= 0)
-                        Audio_PlayActorSfx2(&en->actor, en->settings.sfxIfAttacked);
+                        Actor_PlaySfx(&en->actor, en->settings.sfxIfAttacked);
 
                     // Play the attacked animation and setup info that we've been hit.
                     Setup_Animation(en, playState, en->animIdAtk, true, true, false, !en->autoAnims, false);
@@ -206,7 +206,7 @@ bool Movement_PickUp(NpcMaker* en, PlayState* playState)
             else
             {
                 // Else, move in the thrown direction with speed calculated relative to mass.
-                en->actor.speedXZ = MIN(MAX_THROW_VELOCITY, MIN_THROW_VELOCITY + (255 - en->actor.colChkInfo.mass));
+                en->actor.speed = MIN(MAX_THROW_VELOCITY, MIN_THROW_VELOCITY + (255 - en->actor.colChkInfo.mass));
                 Movement_Apply(&en->actor, NULL);      
             }
 
@@ -329,7 +329,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
             // We don't do anything if the Path ID is 0 (we're using SharpOcarina's path IDs here, and path 0 doesn't exist) or if the path list address wasn't found.
             // EDIT: SharpOcarina has changed the path indexes, so this is now wrong, but it can't be changed, or it'll break all previously made actors.
             // Great!
-            if (en->settings.pathId == INVALID_PATH || playState->setupPathList == NULL || en->curPathNode < 0)
+            if (en->settings.pathId == INVALID_PATH || playState->pathList == NULL || en->curPathNode < 0)
                 break;
 
             // First, we get the total time the path takes, and how much time is left until the end time.
@@ -446,7 +446,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
         case MOVEMENT_PATH:
         {
             // We don't do anything if the Path ID is 0 (we're using SharpOcarina's path IDs here, and path 0 doesn't exist) or if the path list address wasn't found.
-            if (en->settings.pathId == INVALID_PATH || playState->setupPathList == NULL || en->curPathNode < 0)
+            if (en->settings.pathId == INVALID_PATH || playState->pathList == NULL || en->curPathNode < 0)
                 break;
 
             // If we're moving, we check if we've reached the destination or travelled far enough. If so, we stop moving, but we do not change
@@ -513,12 +513,12 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
         // to that.
         case MOVEMENT_CUTSCENE:
         {
-            CsCmdActorAction* curActionPtr = playState->csCtx.npcActions[CUTSCENE_ID(en)];
+            CsCmdActorCue* curActionPtr = playState->csCtx.actorCues[CUTSCENE_ID(en)];
             speed = en->cutsceneMovementSpeed;
 
             if (curActionPtr != NULL)
             {
-                int curFrame = playState->csCtx.frames;
+                int curFrame = playState->csCtx.curFrame;
                 int framesRemain = curActionPtr->endFrame + 2 - curFrame;
 
                 if (curActionPtr->startFrame < 2 && curFrame > 0)
@@ -527,8 +527,8 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                 if (curActionPtr->startFrame + 1 == curFrame)
                 {
                     // Set the animation based on the current action.
-                    if (curActionPtr->action != 0)
-                        Setup_Animation(en, playState, curActionPtr->action - 1, true, false, false, false, false);
+                    if (curActionPtr->id != 0)
+                        Setup_Animation(en, playState, curActionPtr->id - 1, true, false, false, false, false);
                     
                     if (en->settings.smoothingConstant < 0)
                     {
@@ -613,7 +613,7 @@ void Movement_StopMoving(NpcMaker* en, PlayState* playState, bool stopAnim)
 
     en->stopped = true;
     en->isMoving = false;
-    en->actor.speedXZ = 0;
+    en->actor.speed = 0;
     en->currentDistToNextPos = 0xFFFFFFFF; 
 }
 

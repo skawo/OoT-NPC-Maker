@@ -10,10 +10,10 @@ u32 Movement_GetTotalPathTime(NpcMaker* en, PlayState* playState)
 
 u32 Movement_GetRemainingPathTime(NpcMaker* en, PlayState* playState)
 {
-    if (en->settings.timedPathEnd > en->settings.timedPathStart || en->settings.timedPathEnd >= gSaveContext.dayTime)
-        return MAX(0, en->settings.timedPathEnd - gSaveContext.dayTime);
+    if (en->settings.timedPathEnd > en->settings.timedPathStart || en->settings.timedPathEnd >= gSaveContext.save.dayTime)
+        return MAX(0, en->settings.timedPathEnd - gSaveContext.save.dayTime);
     else
-        return (0xFFFF - gSaveContext.dayTime) + en->settings.timedPathEnd;
+        return (0xFFFF - gSaveContext.save.dayTime) + en->settings.timedPathEnd;
 }
 
 void Movement_Apply(Actor* act, Vec3f* movementVec)
@@ -22,7 +22,7 @@ void Movement_Apply(Actor* act, Vec3f* movementVec)
     if (movementVec != NULL)
         Math_Vec3f_Sum(&act->world.pos, movementVec, &act->world.pos);
 
-    Actor_MoveForward(act);    
+    Actor_MoveXZGravity(act);    
 }
 
 Vec3f Movement_CalcVector(Vec3f* start, Vec3f* end, float speed)

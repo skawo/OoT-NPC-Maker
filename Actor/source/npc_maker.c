@@ -114,7 +114,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 	
     if (en->pauseCutscene)
     {
-        playState->csCtx.frames--;
+        playState->csCtx.curFrame--;
         //playState->csCtx.unk_18 = 0xF000;
     }
 
@@ -195,7 +195,7 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
                                  en->actor.world.pos.z,
                                  MTXMODE_NEW);
                 Matrix_Scale((float)en->settings.shadowRadius / 90.0f, 1.0f, (float)en->settings.shadowRadius / 90.0f, MTXMODE_APPLY);
-                gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(__gfxCtx, __FILE__, __LINE__), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+                gSPMatrix(POLY_OPA_DISP++, MATRIX_FINALIZE(__gfxCtx, __FILE__, __LINE__), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, CIRCLE_SHADOW);
             }         
             // This shadow will respect the ground position
@@ -282,9 +282,7 @@ static void NpcMaker_None(NpcMaker* en, PlayState* playState)
 }
 
 /* .data */
-
-#ifdef NPCM_Z64ROM
-ActorInit sNpcMakerInit = 	
+ActorProfile sNpcMakerInit = 	
 {
     .id = 0x0003, // <-- Set this to whichever actor ID you're using.
     .category = ACTORCAT_NPC,
@@ -296,7 +294,7 @@ ActorInit sNpcMakerInit =
     .update = (ActorFunc)NpcMaker_PostInit,
     .draw = (ActorFunc)NpcMaker_None
 };
-#else
+
 ActorInitExplPad __attribute__((section(".data"))) sActorVars = 
 {
     .id = 0xDEAD, .padding = 0xBEEF, // <-- magic values, do not change
@@ -309,7 +307,3 @@ ActorInitExplPad __attribute__((section(".data"))) sActorVars =
     .update = (ActorFunc)NpcMaker_PostInit,
     .draw = (ActorFunc)NpcMaker_None
 };
-#endif
-
-
-

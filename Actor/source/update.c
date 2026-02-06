@@ -7,7 +7,7 @@
 
 void Update_Misc(NpcMaker* en, PlayState* playState)
 {
-    en->lastDayTime = gSaveContext.dayTime;
+    en->lastDayTime = gSaveContext.save.dayTime;
 
     if (en->stopPlayer)
     {
@@ -24,7 +24,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
             is64Printf("_%2d: Setting camera ID to %2d\n", en->npcId, en->cameraId - 1);
         #endif   
 
-        Camera_ChangeBgCamIndex(&playState->mainCamera, en->cameraId - 1);
+        Camera_RequestBgCam(&playState->mainCamera, en->cameraId - 1);
     }
 
     #define SET_FIELD(field, margin, marginmin, mul) if (field + 1 < margin) field += (1 * mul); else field = marginmin;
@@ -338,7 +338,7 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
     }
     else
     {
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(en->userLoadAnimBuf);
+        gSegments[6] = OS_K0_TO_PHYSICAL(en->userLoadAnimBuf);
 
         #if LOGGING > 2
             is64Printf("_User loaded animation at animation at %x\n", gSegments[6]);
@@ -401,7 +401,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     int talkState = Message_GetState(&playState->msgCtx);
 
     // Checking if the player has talked to the NPC.
-    if (Actor_ProcessTalkRequest(&en->actor, playState))
+    if (Actor_TalkOfferAccepted(&en->actor, playState))
     {
         #if LOGGING > 0
             is64Printf("_%2d: Started talking!\n", en->npcId);
@@ -500,9 +500,8 @@ void Update_HitsReaction(NpcMaker* en, PlayState* playState)
             Movement_StopMoving(en, playState, true);
 
             // If sfx is set, play it.
-            // z_actor_play_sfx
             if (en->settings.sfxIfAttacked >= 0)
-                func_8002F7DC(&en->actor, en->settings.sfxIfAttacked);
+                Actor_PlaySfx(&en->actor, en->settings.sfxIfAttacked);
 
             // Play the attacked animation and setup info that we've been hit.
             Setup_Animation(en, playState, en->animIdAtk, true, true, false, !en->autoAnims, false);

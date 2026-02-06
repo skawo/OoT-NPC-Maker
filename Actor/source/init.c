@@ -11,28 +11,28 @@
 static ColliderCylinderInit npcMakerCollision =
 {
     .base = {
-              .colType = COLTYPE_NONE,
+              .colMaterial = COL_MATERIAL_NONE,
               .atFlags = AT_NONE,
               .acFlags = AC_TYPE_ALL,
               .ocFlags1 = OC1_ON | OC1_TYPE_ALL,
               .ocFlags2 = OC1_TYPE_ALL,
               .shape = COLSHAPE_CYLINDER
             },
-    .info = {
-              .elemType = ELEMTYPE_UNK1,
-              .toucher = {
+    .elem = {
+              .elemMaterial = ELEM_MATERIAL_UNK1,
+              .atDmgInfo = {
                             .dmgFlags = 0x00000000,
-                            .effect = 0x00,
+                            .hitSpecialEffect = 0x00,
                             .damage = 0x00,
                          },
 
-              .bumper = {
+              .acDmgInfo = {
                           .dmgFlags = 0xFFCFFFFF,
-                          .effect = 0x00,
+                          .hitBacklash = 0x00,
                           .defense = 0x00,
                         },
-              .toucherFlags = TOUCH_ON,
-              .bumperFlags = BUMP_ON,
+              .atElemFlags = ATELEM_ON,
+              .acElemFlags = ACELEM_ON,
               .ocElemFlags = OCELEM_ON,
             },
     .dim =  {
@@ -587,9 +587,9 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
         en->lightNode = LightContext_InsertLight(playState, &playState->lightCtx, &en->light);
 
 
-    en->actor.uncullZoneForward = en->settings.UncullFwd;
-    en->actor.uncullZoneDownward = en->settings.UncullDwn;
-    en->actor.uncullZoneScale = en->settings.UncullScale;
+    en->actor.cullingVolumeDistance = en->settings.UncullFwd;
+    en->actor.cullingVolumeDownward = en->settings.UncullDwn;
+    en->actor.cullingVolumeScale = en->settings.UncullScale;
 
     #pragma region Actor flags
 
@@ -613,13 +613,13 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
 
         en->actor.flags |= NO_LIGHT_BIND;
 
-        en->actor.targetMode = en->settings.targetDistance;
+        en->actor.attentionRangeType = en->settings.targetDistance;
         // If the actor is meant to be pushable, we set its mass lower.
         en->actor.colChkInfo.mass = en->settings.mass;
 
         // Gravity is the inverse of what's set in the editor.
         en->actor.gravity = en->settings.hasCollision ? -en->settings.gravity : 0;
-        en->collider.base.colType = en->settings.effectIfAttacked;
+        en->collider.base.colMaterial = en->settings.effectIfAttacked;
         en->curAlpha = en->actor.xzDistToPlayer > FADE_OUT_DISTANCE ? 0 : en->settings.alpha;
 
         if (en->settings.reactsToAttacks)
@@ -829,7 +829,7 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
             }
 
             NpcM_LoadAnimation(en, anim.offset, R_OBJECT(en, anim.objectId));
-            gSegments[6] = VIRTUAL_TO_PHYSICAL(en->userLoadAnimBuf);
+            gSegments[6] = OS_K0_TO_PHYSICAL(en->userLoadAnimBuf);
             animOffset = 0;
 
             #if LOGGING > 0

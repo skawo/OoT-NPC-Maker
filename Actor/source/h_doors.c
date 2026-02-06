@@ -10,7 +10,7 @@ void Doors_UpdateDummy(Actor* door, PlayState* playState)
 
 void Doors_Close(Actor* npc, Actor* door, PlayState* playState)
 {
-    u32* savedUpdate = (u32*)&door->speedXZ;
+    u32* savedUpdate = (u32*)&door->speed;
 
     if (door->update == (void*)&Doors_UpdateDummy)
     {
@@ -33,14 +33,14 @@ void Doors_Close(Actor* npc, Actor* door, PlayState* playState)
                 {
                     door->update = (void*)*savedUpdate;
                     NPCID(door) = 0xFFFF;
-                    Audio_PlayActorSfx2(door, NA_SE_EV_DOOR_CLOSE);
+                    Actor_PlaySfx(door, NA_SE_EV_DOOR_CLOSE);
                 }
                 break;
             }
             case ACTOR_DOOR_SHUTTER:
             {
                 if (door->world.pos.y == (door->home.pos.y + SLIDE_DOOR_OPEN_DIST))
-                    Audio_PlayActorSfx2(door, NA_SE_EV_SLIDE_DOOR_CLOSE);
+                    Actor_PlaySfx(door, NA_SE_EV_SLIDE_DOOR_CLOSE);
 
                 if (door->world.pos.y < door->home.pos.y + 20)
                 {
@@ -54,7 +54,7 @@ void Doors_Close(Actor* npc, Actor* door, PlayState* playState)
                 {
                     door->update = (void*)*savedUpdate;
                     NPCID(door) = 0xFFFF;
-                    Audio_PlayActorSfx2(door, NA_SE_EV_STONE_BOUND);
+                    Actor_PlaySfx(door, NA_SE_EV_STONE_BOUND);
                 }
 
                 break;
@@ -67,7 +67,7 @@ void Doors_Close(Actor* npc, Actor* door, PlayState* playState)
 
 void Doors_Open(Actor* npc, Actor* door, PlayState* playState)
 {
-    u32* savedUpdate = (u32*)&door->speedXZ;
+    u32* savedUpdate = (u32*)&door->speed;
 
     switch (door->id)
     {
@@ -83,7 +83,7 @@ void Doors_Open(Actor* npc, Actor* door, PlayState* playState)
                 NPCID(door) = ((NpcMaker*)npc)->npcId;
                 ACTORID(door) = npc->id;
 
-                Audio_PlayActorSfx2(door, NA_SE_OC_DOOR_OPEN);
+                Actor_PlaySfx(door, NA_SE_OC_DOOR_OPEN);
             }
 
             Math_ApproachS(&door_skelanime->jointTable[4].z, door->shape.rot.y < 0 ? DOOR_OPEN_DEST_ROT : -DOOR_OPEN_DEST_ROT, 1, DOOR_OPEN_SHUT_SPEED);
@@ -100,7 +100,7 @@ void Doors_Open(Actor* npc, Actor* door, PlayState* playState)
                 NPCID(door) = ((NpcMaker*)npc)->npcId;
                 ACTORID(door) = npc->id;
 
-                Audio_PlayActorSfx2(door, NA_SE_EV_SLIDE_DOOR_OPEN);
+                Actor_PlaySfx(door, NA_SE_EV_SLIDE_DOOR_OPEN);
             }
 
             Math_ApproachF(&door->world.pos.y, door->home.pos.y + SLIDE_DOOR_OPEN_DIST, 1, SLIDE_DOOR_OPEN_SHUT_SPEED);

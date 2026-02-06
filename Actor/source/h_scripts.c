@@ -286,10 +286,10 @@ void Scripts_SetInventory(NpcMaker* en, PlayState* playState, u8 slotSettings[],
 
     switch (slotSettings[0])
     {
-        case ITEM_RUPEE_BLUE:               curVal = gSaveContext.rupees + gSaveContext.rupeeAccumulator; break;
-        case ITEM_RECOVERY_HEART:           curVal = gSaveContext.health + gSaveContext.healthAccumulator; break;
-        case ITEM_MAGIC_SMALL:              curVal = gSaveContext.magicTarget; break;
-        default:                            curVal = gSaveContext.inventory.ammo[slotSettings[1]]; break;
+        case ITEM_RUPEE_BLUE:               curVal = gSaveContext.save.info.playerData.rupees + gSaveContext.rupeeAccumulator; break;
+        case ITEM_RECOVERY_HEART:           curVal = gSaveContext.save.info.playerData.health + gSaveContext.healthAccumulator; break;
+        case ITEM_MAGIC_JAR_SMALL:          curVal = gSaveContext.magicTarget; break;
+        default:                            curVal = gSaveContext.save.info.inventory.ammo[slotSettings[1]]; break;
     }
     
     s32 chgVal = curVal;
@@ -306,7 +306,7 @@ void Scripts_SetInventory(NpcMaker* en, PlayState* playState, u8 slotSettings[],
     {
         case ITEM_RUPEE_BLUE:               Rupees_ChangeBy(difference); break;
         case ITEM_RECOVERY_HEART:           Health_ChangeBy(playState, difference); break;
-        case ITEM_MAGIC_SMALL:              
+        case ITEM_MAGIC_JAR_SMALL:              
         {
             if (gSaveContext.magicTarget + chgVal < 0)
                 difference = -gSaveContext.magicTarget;
@@ -422,7 +422,7 @@ void Scripts_SetFlag(NpcMaker* en, PlayState* playState, void* instruction)
             if (set)
                 Flags_SetInfTable(flag);
             else
-                gSaveContext.infTable[flag >> 4] &= ~(1 << (flag & 0xF));
+                gSaveContext.save.info.infTable[flag >> 4] &= ~(1 << (flag & 0xF));
             
             break;
         }
@@ -431,7 +431,7 @@ void Scripts_SetFlag(NpcMaker* en, PlayState* playState, void* instruction)
             if (set)
                 Flags_SetEventChkInf(flag);
             else
-                gSaveContext.eventChkInf[flag >> 4] &= ~(1 << (flag & 0xF)); 
+                gSaveContext.save.info.eventChkInf[flag >> 4] &= ~(1 << (flag & 0xF)); 
                     
             break;
         }

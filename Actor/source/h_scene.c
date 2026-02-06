@@ -52,15 +52,15 @@ inline u32* Scene_GetCurrentCutscenePtr(PlayState* playState)
 
 Path* Scene_GetPathPtr(PlayState* playState, s16 pathId)
 {
-    if (playState->setupPathList == NULL)
+    if (playState->pathList == NULL)
         return NULL;
 
-    return &playState->setupPathList[pathId];
+    return &playState->pathList[pathId];
 }
 
 u8 Scene_GetPathNodeCount(PlayState* playState, s16 pathId)
 {
-    if (playState->setupPathList == NULL)
+    if (playState->pathList == NULL)
         return 0;
 
     Path* pathPtr = Scene_GetPathPtr(playState, pathId);

@@ -1,5 +1,4 @@
 #ifndef SCRIPTS_DATA_H
-
 #define SCRIPTS_DATA_H
 
 #include "npc_maker_types.h"
@@ -26,7 +25,7 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, settings.sfxIfAttacked),
     offsetof(NpcMaker, settings.lightRadius),
     offsetof(NpcMaker, npcId),
-    offsetof(PlayState, csCtx.frames),
+    offsetof(PlayState, csCtx.curFrame),
 
     offsetof(NpcMaker, collider.dim.radius),
     offsetof(NpcMaker, collider.dim.height),
@@ -56,9 +55,9 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, settings.talkRadius),
     offsetof(NpcMaker, settings.smoothingConstant),
     offsetof(NpcMaker, settings.shadowRadius),
-    offsetof(NpcMaker, actor.uncullZoneForward),
-    offsetof(NpcMaker, actor.uncullZoneDownward),
-    offsetof(NpcMaker, actor.uncullZoneScale),
+    offsetof(NpcMaker, actor.cullingVolumeDistance),
+    offsetof(NpcMaker, actor.cullingVolumeDownward),
+    offsetof(NpcMaker, actor.cullingVolumeScale),
     
     offsetof(NpcMaker, settings.loopPath),
     offsetof(NpcMaker, settings.hasCollision),
@@ -120,13 +119,13 @@ u8 inventory_set_slots[][2] =
     {ITEM_BOMB, SLOT_BOMB},
     {ITEM_BOMBCHU, SLOT_BOMBCHU},
     {ITEM_BOW, SLOT_BOW},
-    {ITEM_NUT, SLOT_NUT},
-    {ITEM_STICK, SLOT_STICK},
-    {ITEM_BEAN, SLOT_BEAN},
-    {ITEM_SEEDS, SLOT_SLINGSHOT},
+    {ITEM_DEKU_NUT, SLOT_DEKU_NUT},
+    {ITEM_DEKU_STICK, SLOT_DEKU_STICK},
+    {ITEM_MAGIC_BEAN, SLOT_MAGIC_BEAN},
+    {ITEM_DEKU_SEEDS, SLOT_SLINGSHOT},
     {ITEM_RUPEE_BLUE, 0},
     {ITEM_RECOVERY_HEART, 0},
-    {ITEM_MAGIC_SMALL, 0},
+    {ITEM_MAGIC_JAR_SMALL, 0},
 };
 
 #endif

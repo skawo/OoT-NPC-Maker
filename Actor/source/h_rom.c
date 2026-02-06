@@ -18,7 +18,7 @@ RomFile Rom_GetPhysicalROMAddrFromVirtual(u32 virtual)
 
     for (dma = (DmaEntry*)dmaData; ; ++dma)
     {
-        if (dma->vromStart == (uintptr_t)virtual)
+        if (dma->romStart == (uintptr_t)virtual)
         {
             out.vromStart = dma->romStart;
             out.vromEnd   = dma->romEnd;
@@ -33,12 +33,7 @@ RomFile Rom_GetPhysicalROMAddrFromVirtual(u32 virtual)
 void Rom_LoadObject(int objId, void *dest)
 {
     RomFile* obj = Rom_GetObjectVROMAddr(objId);
-
-    #ifdef OOT_MQ_DEBUG_PAL
-        DmaMgr_SendRequest1(dest, obj->vromStart, obj->vromEnd - obj->vromStart, "", __LINE__);
-    #else
-        DmaMgr_SendRequest0(dest, obj->vromStart, obj->vromEnd - obj->vromStart);
-    #endif
+    DMA_REQUEST_SYNC(dest, obj->vromStart, obj->vromEnd - obj->vromStart, __FILE__, __LINE__);
 }
 
 // Loads data from given object directly from the cartridge (if it's not compressed!)
@@ -74,11 +69,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
         is64Printf("_Loading 0x%08x bytes from ROM at 0x%08x\n", size, start);
     #endif    
 
-    #ifdef OOT_MQ_DEBUG_PAL
-        DmaMgr_SendRequest1(dest, start, sz, "", __LINE__);
-    #else
-        DmaMgr_SendRequest0(dest, start, sz);
-    #endif
+    DMA_REQUEST_SYNC(dest, start, sz, __FILE__, __LINE__);
 
     if (size < 16)
         bcopy(buf, ram, size);
@@ -116,13 +107,13 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
         is64Printf("_Loading object %4d...\n", objId);
     #endif   
     
-    bankIndex = Object_GetIndex(&playState->objectCtx, objId);
+    bankIndex = Object_GetSlot(&playState->objectCtx, objId);
 
     if (bankIndex < 0)
     {
-        u32 numPersistent = playState->objectCtx.unk_09;
-        bankIndex = Object_Spawn(&playState->objectCtx, objId);
-        playState->objectCtx.unk_09 = numPersistent;
+        u32 numPersistent = playState->objectCtx.numPersistentEntries;
+        bankIndex = Object_SpawnPersistent(&playState->objectCtx, objId);
+        playState->objectCtx.numPersistentEntries = numPersistent;
     }
     else
     {
@@ -139,12 +130,12 @@ bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileS
     if (object == 0)
         return true;
     
-    int bankIndex = Object_GetIndex(&playState->objectCtx, object);
+    int bankIndex = Object_GetSlot(&playState->objectCtx, object);
 
     if (Object_IsLoaded(&playState->objectCtx, bankIndex))
     {
-        en->objBankIndex = bankIndex;
-        gSegments[6] = VIRTUAL_TO_PHYSICAL(playState->objectCtx.status[en->objBankIndex].segment) + fileStart;
+        en->objectSlot = bankIndex;
+        gSegments[6] = OS_K0_TO_PHYSICAL(playState->objectCtx.slots[en->objectSlot].segment) + fileStart;
         return true;
     }
     else
@@ -153,12 +144,12 @@ bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileS
 
 void* Rom_GetObjectDataPtr(u16 objId, PlayState* playState)
 {
-    int index = Object_GetIndex(&playState->objectCtx, objId);
+    int index = Object_GetSlot(&playState->objectCtx, objId);
 
     if (index < 0)
         return NULL;
 
-    return playState->objectCtx.status[index].segment;
+    return playState->objectCtx.slots[index].segment;
 }
 
 MessageTableEntry* Rom_GetMessageEntry(s16 msgId)
