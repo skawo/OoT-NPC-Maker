@@ -293,10 +293,15 @@ bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* 
             u32 actor_id = Scripts_GetVarval(en, playState, in->varTypeActorNum, in->ActorNum, false);
             float out = 0;
 
+            NpcMaker* exActor = Scene_GetNpcMakerByID(en, playState, actor_id);
+
+            if (exActor == NULL)
+                break;
+
             if (in->subid == GET_EXT_VAR)
-                out = Scene_GetNpcMakerByID(en, playState, actor_id)->scriptVars[in->extvarnum - 1];
+                out = exActor->scriptVars[in->extvarnum - 1];
             else
-                out = Scene_GetNpcMakerByID(en, playState, actor_id)->scriptFVars[in->extvarnum - 1];
+                out = exActor->scriptFVars[in->extvarnum - 1];
 
             u32 valt;
             void* addr = Scripts_RamSubIdSetup(en, playState, in->DestVar.ui32, SUBT_GLOBAL8 - 2 + in->varTypeDestVar, &valt);
@@ -506,101 +511,111 @@ bool Scripts_InstructionParticle(NpcMaker* en, PlayState* playState, ScriptInsta
     if (in->posType >= 3)
         subject = en->refActor;
 
-    if (in->posType)
+    if (subject == NULL)
     {
-        if (in->posType & 1)
+        #if LOGGING > 0
+            is64Printf("_%2d: Particle subject actor was NULL.\n");
+        #endif   
+    }
+    else
+    {       
+        if (in->posType)
         {
-            if (in->type != PARTICLE_FIRE_TAIL)
+            if (in->posType & 1)
+            {
+                if (in->type != PARTICLE_FIRE_TAIL)
+                    Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
+            } 
+            else 
+            {
+                Math_AffectMatrixByRot(subject->shape.rot.y, &pos, NULL);
                 Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
-        } 
-        else 
+            }
+        }
+
+        Vec3f accel = GET_VEC3(accel, 100);
+        Vec3f vel = GET_VEC3(vel, 100);
+        Color_RGBA8 prim = GET_COLOR(prim);
+        Color_RGBA8 env = GET_COLOR(env);
+
+        float scale = Scripts_GetVarval(en, playState, in->scaleType, in->scale, true);
+        float scaleUpd = Scripts_GetVarval(en, playState, in->scaleUpdType, in->scaleUpdate, true);
+        float life = Scripts_GetVarval(en, playState, in->lifeType, in->life, true);
+        float var = Scripts_GetVarval(en, playState, in->varType, in->var, false);
+
+        switch (in->type)
         {
-            Math_AffectMatrixByRot(subject->shape.rot.y, &pos, NULL);
-            Math_Vec3f_Sum(&pos, &subject->world.pos, &pos);
+            case PARTICLE_DUST:             EffectSsDust_Spawn(playState, 0, &pos, &vel, &accel, &prim, &env, scale, scaleUpd, life, 0); break;
+            case PARTICLE_EXPLOSION:        EffectSsBomb2_SpawnLayered(playState, &pos, &vel, &accel, scale, scaleUpd); break;
+            case PARTICLE_SPARK:            EffectSsGSpk_SpawnAccel(playState, &en->actor, &pos, &vel, &accel, &prim, &env, scale, scaleUpd); break;
+            case PARTICLE_BUBBLE:           EffectSsDtBubble_SpawnCustomColor(playState, &pos, &vel, &accel, &prim, &env, scale, life, var); break;
+            case PARTICLE_WATER_SPLASH:     EffectSsSibuki_SpawnBurst(playState, &pos); break;
+            case PARTICLE_SMOKE:            EffectSsSibuki2_Spawn(playState, &pos, &vel, &accel, scale); break;
+            case PARTICLE_ICE_CHUNK:        EffectSsEnIce_Spawn(playState, &pos, scale, &vel, &accel, &prim, &env, life); break;
+            case PARTICLE_ICE_BURST:        EffectSsIcePiece_SpawnBurst(playState, &pos, scale); break;
+            case PARTICLE_RED_FLAME:        EffectSsKFire_Spawn(playState, &pos, &vel, &accel, scale, 100); break;
+            case PARTICLE_BLUE_FLAME:       EffectSsKFire_Spawn(playState, &pos, &vel, &accel, scale, 0); break;
+            case PARTICLE_ELECTRICITY:      EffectSsFhgFlash_SpawnShock(playState, &en->actor, &pos, scale, 0); break;
+            case PARTICLE_FOCUSED_STAR:     EffectSsKiraKira_SpawnFocused(playState, &pos, &vel, &accel, &prim, &env, scale, life); break;
+            case PARTICLE_DISPERSED_STAR:   EffectSsKiraKira_SpawnDispersed(playState, &pos, &vel, &accel, &prim, &env, scale, life); break;
+            case PARTICLE_BURN_MARK:        EffectSsDeadDs_Spawn(playState, &pos, &vel, &accel, scale, scaleUpd, var, life); break;
+            case PARTICLE_RING:             EffectSsBlast_Spawn(playState, &pos, &vel, &accel, &prim, &env, scale, scaleUpd, var, life); break;
+            case PARTICLE_FLAME:            EffectSsDeadDb_Spawn(playState, &pos, &vel, &accel, scale, scaleUpd, prim.r, prim.g, prim.b, prim.a, env.r, env.g, env.b, env.a, life, 0); break;
+            case PARTICLE_FIRE_TAIL:        EffectSsFireTail_Spawn(playState, subject, &pos, scale, &vel, 0, &prim, &env, var, -1, life); break;
+            case PARTICLE_HIT_MARK_FLASH:     
+            case PARTICLE_HIT_MARK_DUST:  
+            case PARTICLE_HIT_MARK_BURST:  
+            case PARTICLE_HIT_MARK_SPARK:  
+                                            EffectSsHitMark_Spawn(playState, in->type - PARTICLE_HIT_MARK_FLASH, scale, &pos); break;
+                                            
+            // Requires OBJECT_FHG
+            case PARTICLE_LIGHT_POINT:      EffectSsFhgFlash_SpawnLightBall(playState, &pos, &vel, &accel, scale, var); break; 
+            // Requires OBJECT_YABUSAME_POINT
+            case PARTICLE_SCORE:            EffectSsExtra_Spawn(playState, &pos, &vel, &accel, scale, var); break;
+            // Requires OBJECT_DODONGO
+            case PARTICLE_DODONGO_FIRE:     EffectSsDFire_Spawn(playState, &pos, &vel, &accel, scale, scaleUpd, var, prim.r, life); break;
+            // Requires OBJECT_FZ
+            case PARTICLE_FREEZARD_SMOKE:   EffectSsIceSmoke_Spawn(playState, &pos, &vel, &accel, scale); break;
+
+            case PARTICLE_LIGHTNING:        
+            {
+                s16 yaw = Scripts_GetVarval(en, playState, in->yawType, in->yaw, true);
+                EffectSsLightning_Spawn(playState, &pos, &prim, &env, scale, yaw, life, var);
+                break;
+            }
+            case PARTICLE_DISPLAY_LIST: 
+            {
+                s16 exDlistIndex = Scripts_GetVarval(en, playState, in->dListType, in->dList, true);
+                ExDListEntry exDList;
+                Gfx* offset = NULL;
+
+                if (exDlistIndex < 0)
+                {
+                    // Hahen has a default object.
+                    exDList.objectId = -1;
+                    exDList.scale = 35.0f;
+                }
+                else
+                {
+                    exDList = en->extraDLists[(int)exDlistIndex];
+                    exDList.objectId = R_OBJECT(en, exDList.objectId);
+                    offset = (Gfx*)(OFFSET_ADDRESS(6, exDList.offset));
+                }
+
+                EffectSsHahen_SpawnBurst(playState, &pos, scale, 0, exDList.scale, scaleUpd, var, exDList.objectId, life, offset);
+                break;
+            }
+            case PARTICLE_SEARCH_EFFECT:
+            {
+                script->jumpToWhenSpottedInstrNum = in->foundInstrNum;  
+
+                Math_AffectMatrixByRot(en->actor.shape.rot.y + en->limbRotA, &vel, NULL);         
+                EffectSsSolderSrchBall_Spawn(playState, &pos, &vel, &accel, 0, &script->spotted);
+                break;
+            }
         }
     }
 
-    Vec3f accel = GET_VEC3(accel, 100);
-    Vec3f vel = GET_VEC3(vel, 100);
-    Color_RGBA8 prim = GET_COLOR(prim);
-    Color_RGBA8 env = GET_COLOR(env);
-
-    float scale = Scripts_GetVarval(en, playState, in->scaleType, in->scale, true);
-    float scaleUpd = Scripts_GetVarval(en, playState, in->scaleUpdType, in->scaleUpdate, true);
-    float life = Scripts_GetVarval(en, playState, in->lifeType, in->life, true);
-    float var = Scripts_GetVarval(en, playState, in->varType, in->var, false);
-
-    switch (in->type)
-    {
-        case PARTICLE_DUST:             EffectSsDust_Spawn(playState, 0, &pos, &vel, &accel, &prim, &env, scale, scaleUpd, life, 0); break;
-        case PARTICLE_EXPLOSION:        EffectSsBomb2_SpawnLayered(playState, &pos, &vel, &accel, scale, scaleUpd); break;
-        case PARTICLE_SPARK:            EffectSsGSpk_SpawnAccel(playState, &en->actor, &pos, &vel, &accel, &prim, &env, scale, scaleUpd); break;
-        case PARTICLE_BUBBLE:           EffectSsDtBubble_SpawnCustomColor(playState, &pos, &vel, &accel, &prim, &env, scale, life, var); break;
-        case PARTICLE_WATER_SPLASH:     EffectSsSibuki_SpawnBurst(playState, &pos); break;
-        case PARTICLE_SMOKE:            EffectSsSibuki2_Spawn(playState, &pos, &vel, &accel, scale); break;
-        case PARTICLE_ICE_CHUNK:        EffectSsEnIce_Spawn(playState, &pos, scale, &vel, &accel, &prim, &env, life); break;
-        case PARTICLE_ICE_BURST:        EffectSsIcePiece_SpawnBurst(playState, &pos, scale); break;
-        case PARTICLE_RED_FLAME:        EffectSsKFire_Spawn(playState, &pos, &vel, &accel, scale, 100); break;
-        case PARTICLE_BLUE_FLAME:       EffectSsKFire_Spawn(playState, &pos, &vel, &accel, scale, 0); break;
-        case PARTICLE_ELECTRICITY:      EffectSsFhgFlash_SpawnShock(playState, &en->actor, &pos, scale, 0); break;
-        case PARTICLE_FOCUSED_STAR:     EffectSsKiraKira_SpawnFocused(playState, &pos, &vel, &accel, &prim, &env, scale, life); break;
-        case PARTICLE_DISPERSED_STAR:   EffectSsKiraKira_SpawnDispersed(playState, &pos, &vel, &accel, &prim, &env, scale, life); break;
-        case PARTICLE_BURN_MARK:        EffectSsDeadDs_Spawn(playState, &pos, &vel, &accel, scale, scaleUpd, var, life); break;
-        case PARTICLE_RING:             EffectSsBlast_Spawn(playState, &pos, &vel, &accel, &prim, &env, scale, scaleUpd, var, life); break;
-        case PARTICLE_FLAME:            EffectSsDeadDb_Spawn(playState, &pos, &vel, &accel, scale, scaleUpd, prim.r, prim.g, prim.b, prim.a, env.r, env.g, env.b, env.a, life, 0); break;
-        case PARTICLE_FIRE_TAIL:        EffectSsFireTail_Spawn(playState, subject, &pos, scale, &vel, 0, &prim, &env, var, -1, life); break;
-        case PARTICLE_HIT_MARK_FLASH:     
-        case PARTICLE_HIT_MARK_DUST:  
-        case PARTICLE_HIT_MARK_BURST:  
-        case PARTICLE_HIT_MARK_SPARK:  
-                                        EffectSsHitMark_Spawn(playState, in->type - PARTICLE_HIT_MARK_FLASH, scale, &pos); break;
-                                        
-        // Requires OBJECT_FHG
-        case PARTICLE_LIGHT_POINT:      EffectSsFhgFlash_SpawnLightBall(playState, &pos, &vel, &accel, scale, var); break; 
-        // Requires OBJECT_YABUSAME_POINT
-        case PARTICLE_SCORE:            EffectSsExtra_Spawn(playState, &pos, &vel, &accel, scale, var); break;
-        // Requires OBJECT_DODONGO
-        case PARTICLE_DODONGO_FIRE:     EffectSsDFire_Spawn(playState, &pos, &vel, &accel, scale, scaleUpd, var, prim.r, life); break;
-        // Requires OBJECT_FZ
-        case PARTICLE_FREEZARD_SMOKE:   EffectSsIceSmoke_Spawn(playState, &pos, &vel, &accel, scale); break;
-
-        case PARTICLE_LIGHTNING:        
-        {
-            s16 yaw = Scripts_GetVarval(en, playState, in->yawType, in->yaw, true);
-            EffectSsLightning_Spawn(playState, &pos, &prim, &env, scale, yaw, life, var);
-            break;
-        }
-        case PARTICLE_DISPLAY_LIST: 
-        {
-            s16 exDlistIndex = Scripts_GetVarval(en, playState, in->dListType, in->dList, true);
-            ExDListEntry exDList;
-            Gfx* offset = NULL;
-
-            if (exDlistIndex < 0)
-            {
-                // Hahen has a default object.
-                exDList.objectId = -1;
-                exDList.scale = 35.0f;
-            }
-            else
-            {
-                exDList = en->extraDLists[(int)exDlistIndex];
-                exDList.objectId = R_OBJECT(en, exDList.objectId);
-                offset = (Gfx*)(OFFSET_ADDRESS(6, exDList.offset));
-            }
-
-            EffectSsHahen_SpawnBurst(playState, &pos, scale, 0, exDList.scale, scaleUpd, var, exDList.objectId, life, offset);
-            break;
-        }
-        case PARTICLE_SEARCH_EFFECT:
-        {
-            script->jumpToWhenSpottedInstrNum = in->foundInstrNum;  
-
-            Math_AffectMatrixByRot(en->actor.shape.rot.y + en->limbRotA, &vel, NULL);         
-            EffectSsSolderSrchBall_Spawn(playState, &pos, &vel, &accel, 0, &script->spotted);
-            break;
-        }
-    }
     script->curInstrNum++;
     return SCRIPT_CONTINUE;
 }
@@ -822,7 +837,21 @@ bool Scripts_InstructionIf(NpcMaker* en, PlayState* playState, ScriptInstance* s
         }
         case IF_TARGETTED:                  branch = Scripts_IfBool(en, playState, playState->actorCtx.attention.reticleActor == &en->actor, in); break;
         case IF_DISTANCE_FROM_PLAYER:       branch = Scripts_IfValue(en, playState, en->actor.xzDistToPlayer - GET_PLAYER(playState)->cylinder.dim.radius - en->settings.collisionRadius, in, FLOAT); break;
-        case IF_DISTANCE_FROM_REF_ACTOR:    branch = Scripts_IfValue(en, playState, Math_Vec3f_DistXZ(&en->actor.world.pos, &en->refActor->world.pos), in, FLOAT); break;     
+        case IF_DISTANCE_FROM_REF_ACTOR:    
+        {
+            if (en->refActor == NULL)
+            {
+                #if LOGGING > 0
+                    is64Printf("_%2d: Could not calculate distance from ref actor, because ref actor is NULL.\n");
+                #endif                 
+
+                branch = in->falseInstrNum;
+            }
+            else
+                branch = Scripts_IfValue(en, playState, Math_Vec3f_DistXZ(&en->actor.world.pos, &en->refActor->world.pos), in, FLOAT); 
+                
+            break;     
+        }
         case IF_EXT_VAR:
         {
             ScrInstrExtVarIf* instr = (ScrInstrExtVarIf*)in;
@@ -1129,10 +1158,15 @@ bool Scripts_InstructionAwait(NpcMaker* en, PlayState* playState, ScriptInstance
             u32 actor_id = Scripts_GetVarval(en, playState, instr->actorNumVarType, instr->actorNum, false);
             NpcMaker* exActor = Scene_GetNpcMakerByID(en, playState, actor_id);
 
-            if (in->subId == AWAIT_EXT_VAR)
-                conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptVars[instr->extVarNum - 1], INT32, instr->condition, instr->varType, instr->value);
+            if (exActor == NULL)
+                conditionMet = false;
             else
-                conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptFVars[instr->extVarNum - 1], FLOAT, instr->condition, instr->varType, instr->value);
+            {
+                if (in->subId == AWAIT_EXT_VAR)
+                    conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptVars[instr->extVarNum - 1], INT32, instr->condition, instr->varType, instr->value);
+                else
+                    conditionMet = Scripts_AwaitValue(en, playState, exActor->scriptFVars[instr->extVarNum - 1], FLOAT, instr->condition, instr->varType, instr->value);
+            }
 
             break;
         }
@@ -1893,18 +1927,21 @@ bool Scripts_InstructionFace(NpcMaker* en, PlayState* playState, ScriptInstance*
         Actor* subject = (Actor*)script->tempValues[2];
         Actor* target = (Actor*)script->tempValues[3];
 
-        script->tempValues[5] = 40;
-
-        switch (in->faceType)
+        if (subject != NULL && target != NULL)
         {
-            case FACE_TOWARDS:
-                script->tempValues[0] = Math_Vec3f_Yaw(&subject->world.pos, &target->world.pos);
-            case FACE_AWAY_FROM:     
-                script->tempValues[0] = target->world.rot.y;   
-            case FACE_AND: 
+            script->tempValues[5] = 40;
+
+            switch (in->faceType)
             {
-                script->tempValues[0] = Math_Vec3f_Yaw(&subject->world.pos, &target->world.pos);
-                script->tempValues[1] = Math_Vec3f_Yaw(&target->world.pos, &subject->world.pos);
+                case FACE_TOWARDS:
+                    script->tempValues[0] = Math_Vec3f_Yaw(&subject->world.pos, &target->world.pos);
+                case FACE_AWAY_FROM:     
+                    script->tempValues[0] = target->world.rot.y;   
+                case FACE_AND: 
+                {
+                    script->tempValues[0] = Math_Vec3f_Yaw(&subject->world.pos, &target->world.pos);
+                    script->tempValues[1] = Math_Vec3f_Yaw(&target->world.pos, &subject->world.pos);
+                }
             }
         }
     }
@@ -1917,7 +1954,13 @@ bool Scripts_InstructionFace(NpcMaker* en, PlayState* playState, ScriptInstance*
     Actor* target = (Actor*)script->tempValues[3];
 
     if (subject == NULL || target == NULL)
-        return Scripts_FreeAndContinue(script);   
+    {
+        #if LOGGING > 0
+            is64Printf("_[%2d, %1d]: Subject or target of the FACE instruction was NULL.\n", en->npcId, en->curScriptNum);
+        #endif  
+
+        return Scripts_FreeAndContinue(script);      
+    }
 
     bool done = (script->tempValues[5] == 0);
 
@@ -1972,15 +2015,24 @@ bool Scripts_InstructionRotation(NpcMaker* en, PlayState* playState, ScriptInsta
         // Actor
         script->tempValues[0] = (s32)Scripts_GetActorByType(en, playState, in->target, in->actorNumType, in->actorNum);
 
-        // Speed
-        TEMP_SPEED = Scripts_GetVarval(en, playState, in->speedType, in->speed, true);
+        if (ACTOR != NULL)
+        {
+            // Speed
+            SPEED = Scripts_GetVarval(en, playState, in->speedType, in->speed, true);
 
-        Vec3f rot = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->xType, in->yType, in->zType}, (ScriptVarval[]){in->x, in->y, in->z}, 1);
-        Math_Vec3f_Copy(TEMP_ROT, &rot);
+            Vec3f rot = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->xType, in->yType, in->zType}, (ScriptVarval[]){in->x, in->y, in->z}, 1);
+            Math_Vec3f_Copy(ROT, &rot);
+        }
     }
 
-    if (TEMP_ACTOR == NULL)
+    if (ACTOR == NULL)
+    {
+        #if LOGGING > 0
+            is64Printf("_[%2d, %1d]: Subject or target of the ROTATION instruction was NULL.\n", en->npcId, en->curScriptNum);
+        #endif  
+
         return Scripts_FreeAndContinue(script);
+    }
 
     s16 incomplete = 0;
 
@@ -2066,8 +2118,14 @@ bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInsta
         }
     }
 
-    if (TEMP_ACTOR == NULL)
+    if (ACTOR == NULL)
+    {
+        #if LOGGING > 0
+            is64Printf("_[%2d, %1d]: Subject or target of the POSITION instruction was NULL.\n", en->npcId, en->curScriptNum);
+        #endif  
+
         return Scripts_FreeAndContinue(script);  
+    }
 
     // If the actor's ID is the same as the actor's executing the script, then conclude they're an NPC Maker NPC.
     bool isNpcMaker = (TEMP_ACTOR->id == en->actor.id);
@@ -2175,12 +2233,21 @@ bool Scripts_InstructionScale(NpcMaker* en, PlayState* playState, ScriptInstance
         // Actor
         script->tempValues[0] = (s32)Scripts_GetActorByType(en, playState, in->target, in->actorNumType, in->actorNum);
 
-        TEMP_SPEED = Scripts_GetVarval(en, playState, in->speed_type, in->speed, true);
-        TEMP_SCALE = Scripts_GetVarval(en, playState, in->scale_type, in->scale, true);
+        if (ACTOR != NULL)
+        {
+            SPEED = Scripts_GetVarval(en, playState, in->speed_type, in->speed, true);
+            SCALE = Scripts_GetVarval(en, playState, in->scale_type, in->scale, true);
+        }
     }
 
-    if (TEMP_ACTOR == NULL)
+    if (ACTOR == NULL)
+    {
+        #if LOGGING > 0
+            is64Printf("_[%2d, %1d]: Subject or target of the SCALE instruction was NULL.\n", en->npcId, en->curScriptNum);
+        #endif  
+
         return Scripts_FreeAndContinue(script);
+    }
 
     float incomplete = 0;
 
@@ -2309,7 +2376,13 @@ bool Scripts_InstructionKill(NpcMaker* en, PlayState* playState, ScriptInstance*
     Actor* actor = Scripts_GetActorByType(en, playState, in->subId, in->actorNumType, in->actorNum);
 
     if (actor != NULL)
+    {
+        #if LOGGING > 0
+            is64Printf("_[%2d, %1d]: Actor to KILL was NULL.\n", en->npcId, en->curScriptNum);
+        #endif  
+
         Actor_Kill(actor);
+    }
 
     if (actor == &en->actor)
         return SCRIPT_STOP;
@@ -2431,21 +2504,30 @@ bool Scripts_InstructionSpawn(NpcMaker* en, PlayState* playState, ScriptInstance
     if (posType >= 3)
         subject = en->refActor;
 
-    if (posType)
+    if (subject == NULL)
     {
-        if (posType % 2)
-            Math_Vec3f_Sum(&position, &subject->world.pos, &position);
-        else 
+        #if LOGGING > 0
+            is64Printf("_[%2d, %1d]: Spawn subject actor was NULL.\n", en->npcId, en->curScriptNum);
+        #endif   
+    }        
+    else
+    {
+        if (posType)
         {
-            Math_AffectMatrixByRot(subject->shape.rot.y, &position, NULL);
-            Math_Vec3f_Sum(&position, &subject->world.pos, &position);
+            if (posType % 2)
+                Math_Vec3f_Sum(&position, &subject->world.pos, &position);
+            else 
+            {
+                Math_AffectMatrixByRot(subject->shape.rot.y, &position, NULL);
+                Math_Vec3f_Sum(&position, &subject->world.pos, &position);
+            }
         }
+
+        Actor* spawned = Actor_Spawn(&playState->actorCtx, playState, actorNum, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, actorParam);
+
+        if (setAsRef)
+            en->refActor = spawned;
     }
-
-    Actor* spawned = Actor_Spawn(&playState->actorCtx, playState, actorNum, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, actorParam);
-
-    if (setAsRef)
-        en->refActor = spawned;
 
     script->curInstrNum++;
     return SCRIPT_CONTINUE;  

@@ -49,6 +49,16 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
                            };
                            
             u32* addr = addrs[(type - GLOBAL8) / 4];
+
+            if (addr == NULL)
+            {
+                #if LOGGING > 0
+                    is64Printf("_%2d: Attempted GetVarVal from a NULL address (refActor is NULL?).\n");
+                #endif   
+                   
+                return 0;
+            }
+
             int varType = (signedVal * 4) + (type - GLOBAL8) % 4;
 
             switch (varType)
@@ -153,7 +163,14 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, PlayState* playState, u32 value, u32 s
         switch (id / 4)
         {
             case 0:    return AADDR(playState, value); break;
-            case 1:    return AADDR(en->refActor, value); break;
+            case 1:    
+            {
+                if (en->refActor == NULL)
+                    return NULL;
+
+                return AADDR(en->refActor, value); 
+                break;
+            }
             case 2:    return AADDR(&gSaveContext, value); break;
             default:   return NULL; break;
         }
