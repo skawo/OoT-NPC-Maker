@@ -16,12 +16,10 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
         if (en->settings.showColsDebugOn && en->settings.hasCollision)
         {
             Matrix_Push();
-
-            //z_matrix_translate_3f_800D1694
             Matrix_SetTranslateRotateYXZ(en->actor.world.pos.x, en->actor.world.pos.y + en->collider.dim.yShift, en->actor.world.pos.z, &en->actor.shape.rot);
             Matrix_Scale(MAX(1, en->collider.dim.radius) / 128.0f, en->collider.dim.height / 204.0f, MAX(1, en->collider.dim.radius) / 128.0f, 1);
 
-            gSPMatrix(POLY_XLU.p++, MATRIX_FINALIZE(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
+            gSPMatrix(POLY_XLU.p++, MATRIX_FINALIZE(playState->state.gfxCtx, __FILE__, __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
             gSPDisplayList(POLY_XLU.p++, xluMaterial);
             gDPSetEnvColor(POLY_XLU.p++, 0xFF, 0x00, 0x00, 0x7F);
             gSPDisplayList(POLY_XLU.p++, dlCylinder);
@@ -279,6 +277,7 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
 
     s32 object = R_OBJECT(en, dList->objectId);
     u32 dListOffset = OFFSET_ADDRESS(6, dList->offset);
+    u32 curSeg = gSegments[6];
 	
     switch (object)
     {
@@ -313,12 +312,12 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
 
     Draw_SetEnvColor(gfxP, dList->envColor, en->curAlpha);
     gDPPipeSync((*gfxP)++);    
-    gSPMatrix((*gfxP)++, MATRIX_FINALIZE(playState->state.gfxCtx, "", __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
+    gSPMatrix((*gfxP)++, MATRIX_FINALIZE(playState->state.gfxCtx, __FILE__, __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
     gSPDisplayList((*gfxP)++, dListOffset);
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
-    if ((en->settings.objectId > 0 && object != en->settings.objectId) || dList->fileStart != OBJECT_CURRENT)
-        gSPSegment((*gfxP)++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, playState), en->settings.fileStart));
+    if (gSegments[6] != curSeg)
+        gSPSegment((*gfxP)++, 6, curSeg);
 
     Draw_SetEnvColor(gfxP, en->curColor, en->curAlpha);
 
