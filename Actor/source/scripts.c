@@ -301,6 +301,9 @@ bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* 
             u32 valt;
             void* addr = Scripts_RamSubIdSetup(en, playState, in->DestVar.ui32, SUBT_GLOBAL8 - 2 + in->varTypeDestVar, &valt);
 
+            if (addr == NULL)
+                break;
+
             switch (valt)
             {
                 case INT8:      AVAL(addr, s8, 0) = out; break;
@@ -338,13 +341,16 @@ bool Scripts_InstructionCCall(NpcMaker* en, PlayState* playState, ScriptInstance
         u32 valt;
         void* addr = Scripts_RamSubIdSetup(en, playState, in->DestVar.ui32, SUBT_GLOBAL8 - 2 + in->varType, &valt);
 
-        switch (valt)
+        if (addr != NULL)
         {
-            case INT8:      AVAL(addr, s8, 0) = out; break;
-            case INT16:     AVAL(addr, s16, 0) = out; break;
-            case INT32:     AVAL(addr, s32, 0) = out; break;
-            case FLOAT:     AVAL(addr, float, 0) = out; break;
-            default: break;
+            switch (valt)
+            {
+                case INT8:      AVAL(addr, s8, 0) = out; break;
+                case INT16:     AVAL(addr, s16, 0) = out; break;
+                case INT32:     AVAL(addr, s32, 0) = out; break;
+                case FLOAT:     AVAL(addr, float, 0) = out; break;
+                default: break;
+            }
         }
     }
 
