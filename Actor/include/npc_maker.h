@@ -37,6 +37,8 @@
 #include "controller.h"
 #include "libc64/qrand.h"
 #include "save.h"
+#include "audio.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #if GAME_VERSION == 0
     #ifndef LOGGING

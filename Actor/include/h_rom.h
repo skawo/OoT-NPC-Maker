@@ -12,19 +12,10 @@
 #if ZZROMTOOL == 1
     #define objectTable (*(RomFile(*)[]) 0x801281C0)
 #else
-    #ifdef OOT_MQ_DEBUG_PAL
-        #define objectTable (*(RomFile(*)[]) gObjectTable) 
-    #else
-        #define objectTable (*(RomFile(*)[]) 0x800F8FF8)
-    #endif
+    #define objectTable (*(RomFile(*)[]) gObjectTable)
 #endif 
 
-#ifdef OOT_MQ_DEBUG_PAL
-    #define messageTable (*(MessageTableEntry(*)[]) 0x8014B320)
-#else
-    #define messageTable (*(MessageTableEntry(*)[]) 0x8010EA8C)
-#endif
-
+extern MessageTableEntry* sNesMessageEntryTablePtr;
 
 void Rom_LoadObject(int objId, void *dram_addr);
 void Rom_LoadDataFromObjectFromROM(int objId, void* dram_addr, u32 offset_into_file, size_t size);

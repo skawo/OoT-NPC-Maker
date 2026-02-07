@@ -135,15 +135,6 @@
     #define MIN(a, b)               ((a) < (b) ? (a) : (b))
 #endif
 
-void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
-
-extern void Cutscene_Execute(PlayState* play, CutsceneContext* csCtx);
-	#if GAME_VERSION == 0
-		asm("Cutscene_Execute = 0x80068ECC");
-	#elif GAME_VERSION == 1
-		asm("Cutscene_Execute = 0x80056A94");
-	#endif  
-
 extern void is64Printf(const char* fmt, ...);
     #if GAME_VERSION == 0
 		#ifdef NPCM_Z64ROM
@@ -156,15 +147,6 @@ extern void is64Printf(const char* fmt, ...);
         //is64Printf does not really work in 1.0. Substitute your own!          
     #endif	
 
-#ifndef CIRCLE_SHADOW
-    #if GAME_VERSION == 0
-        #define CIRCLE_SHADOW 0x04049210
-    #else
-        #define CIRCLE_SHADOW 0x0404E740
-    #endif
-#endif
-
-
 #undef ROT16
 #undef AVAL
 #undef AADDR
@@ -173,7 +155,6 @@ extern void is64Printf(const char* fmt, ...);
 #define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
 #define AADDR(a,o)  ((void*)((u8*)(a)+(o)))
 
-   
 
 typedef enum item_award_upgrades
 {
@@ -233,7 +214,7 @@ typedef enum picked_up_state
     STATE_LANDED = 3,
 } picked_up_state;
 
-// There are more, but their exact purpose is not known.
+// OcarinaMode in decomp, but the states are not documented...
 typedef enum song_status
 {
 	SONGSTATUS_NONE = 0, 

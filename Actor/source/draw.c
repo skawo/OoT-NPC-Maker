@@ -614,13 +614,6 @@ void Draw_SetGlobalEnvColor(NpcMaker* en, PlayState* playState)
     }
 }
 
-extern void __View_ApplyTo(View* view, s32 mask, Gfx** gfxP);
-#if GAME_VERSION == 0
-    asm("__View_ApplyTo = 0x800AB9EC");
-#elif GAME_VERSION == 1
-    asm("__View_ApplyTo = 0x80092A88");
-#endif	
-
 void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
@@ -711,7 +704,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 
                 SET_FULLSCREEN_VIEWPORT(&view);
 
-                __View_ApplyTo(&view, VIEW_ALL, &gfx);
+                View_ApplyTo(&view, VIEW_ALL, &gfx);
 
                 gDPPipeSync(gfx++);
                 gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);

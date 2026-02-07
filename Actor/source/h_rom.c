@@ -156,7 +156,7 @@ MessageTableEntry* Rom_GetMessageEntry(s16 msgId)
 {
     for (int i = 0; i < 65535; i++)
     {
-        MessageTableEntry* MsgE = (MessageTableEntry*)&messageTable[i];
+        MessageTableEntry* MsgE = &sNesMessageEntryTablePtr[i];
 
         if (MsgE->textId == msgId)
             return MsgE;

@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:\\msys64\\opt\\n64\\mips64\\include\\**",
-                "C:/msys64/opt/n64/mips64/include/z64hdr/include"
+                "C:/msys64/opt/n64/mips64/include/zocarina/include",
+                "C:/msys64/opt/n64/mips64/include/zocarina/version/ntsc-1.0"
             ],
             "defines": [
                 "_DEBUG",

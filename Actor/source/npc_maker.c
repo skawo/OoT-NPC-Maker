@@ -196,7 +196,7 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
                                  MTXMODE_NEW);
                 Matrix_Scale((float)en->settings.shadowRadius / 90.0f, 1.0f, (float)en->settings.shadowRadius / 90.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_OPA_DISP++, MATRIX_FINALIZE(__gfxCtx, __FILE__, __LINE__), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-                gSPDisplayList(POLY_OPA_DISP++, CIRCLE_SHADOW);
+                gSPDisplayList(POLY_OPA_DISP++, gCircleShadowDL);
             }         
             // This shadow will respect the ground position
             else

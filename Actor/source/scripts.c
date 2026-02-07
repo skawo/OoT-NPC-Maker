@@ -1322,9 +1322,9 @@ bool Scripts_InstructionSet(NpcMaker* en, PlayState* playState, ScriptInstance* 
         {            
             playState->csCtx.state = 0;
             Cutscene_SetScript(playState, playState->csCtx.script);
-            Cutscene_Execute(playState, &playState->csCtx);
+            Cutscene_SetupScripted(playState, &playState->csCtx);
             Scripts_Set(en, playState, AADDR(playState, basic_set_offsets[in->subId]), in, UINT16); 
-            Cutscene_Execute(playState, &playState->csCtx);
+            Cutscene_SetupScripted(playState, &playState->csCtx);
             break;
         }
         case SET_COLLISION_RADIUS:                 
@@ -2709,13 +2709,6 @@ bool Scripts_InstructionScript(NpcMaker* en, PlayState* playState, ScriptInstanc
     return SCRIPT_CONTINUE; 
 }
 
-extern void Audio_StopBGMAndFanfares(u16 FadeoutDur);
-    #if GAME_VERSION == 0
-        asm("Audio_StopBGMAndFanfares = 0x800F6AB0");
-    #elif GAME_VERSION == 1
-        asm("Audio_StopBGMAndFanfares = 0x800C77D0");
-    #endif  
-
 bool Scripts_InstructionStop(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrStop* in)
 {
     #if LOGGING > 3
@@ -2727,7 +2720,7 @@ bool Scripts_InstructionStop(NpcMaker* en, PlayState* playState, ScriptInstance*
     switch (in->subID)
     {
         case STOP_SFX:  Audio_StopSfxById(Val); break;
-        case STOP_BGM:  Audio_StopBGMAndFanfares(Val); break;
+        case STOP_BGM:  Audio_StopBgmAndFanfare(Val); break;
         default: break;
     }
 
