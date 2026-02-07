@@ -154,12 +154,17 @@ void* Rom_GetObjectDataPtr(u16 objId, PlayState* playState)
 
 MessageTableEntry* Rom_GetMessageEntry(s16 msgId)
 {
-    for (int i = 0; i < 65535; i++)
+    MessageTableEntry* MsgE = &sNesMessageEntryTablePtr[0];
+    int i = 0;
+
+    while (MsgE->textId != 0xFFFF)
     {
-        MessageTableEntry* MsgE = &sNesMessageEntryTablePtr[i];
+        MsgE = (MessageTableEntry*)&sNesMessageEntryTablePtr[0];
 
         if (MsgE->textId == msgId)
             return MsgE;
+
+        i++;
     }
 
     return NULL;
