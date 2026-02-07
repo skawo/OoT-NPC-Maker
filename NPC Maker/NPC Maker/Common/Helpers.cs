@@ -577,7 +577,14 @@ namespace NPC_Maker
 
         public static void Ensure4ByteAlign(List<byte> bytes)
         {
-            int pad = (-bytes.Count) & 3; // number of bytes to add (0–3)
+            int pad = (-bytes.Count) & 3; 
+            if (pad > 0)
+                bytes.AddRange(new byte[pad]);
+        }
+
+        public static void Ensure16ByteAlign(List<byte> bytes)
+        {
+            int pad = (-bytes.Count) & 15; 
             if (pad > 0)
                 bytes.AddRange(new byte[pad]);
         }

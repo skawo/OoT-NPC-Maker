@@ -373,6 +373,7 @@
             this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
+            this.exportCurrentActorMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -4571,7 +4572,8 @@
             this.importLocalizationToolStripMenuItem,
             this.checkLocalizationConsistencyToolStripMenuItem,
             this.checkDefinitionValidityToolStripMenuItem,
-            this.compileActorToolStripMenuItem});
+            this.compileActorToolStripMenuItem,
+            this.exportCurrentActorMessagesToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.optionsToolStripMenuItem.Text = "Tools";
@@ -4757,6 +4759,13 @@
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
+            // 
+            // exportCurrentActorMessagesToolStripMenuItem
+            // 
+            this.exportCurrentActorMessagesToolStripMenuItem.Name = "exportCurrentActorMessagesToolStripMenuItem";
+            this.exportCurrentActorMessagesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.exportCurrentActorMessagesToolStripMenuItem.Text = "Export current actor messages";
+            this.exportCurrentActorMessagesToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentActorMessagesToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -5238,6 +5247,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_EndFrame;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Speed;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_OBJ;
+        private System.Windows.Forms.ToolStripMenuItem exportCurrentActorMessagesToolStripMenuItem;
     }
 }
 

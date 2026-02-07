@@ -5132,5 +5132,107 @@ namespace NPC_Maker
 
 
         }
+
+        private void exportCurrentActorMessagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<byte> msgTable = new List<byte>();
+            List<byte> msgData = new List<byte>();
+
+            UInt16 id = 0;
+            int locOffset = 65532 / (EditedFile.Languages.Count + 1); 
+
+            try
+            {
+                foreach (MessageEntry mes in SelectedEntry.Messages)
+                {
+                    if (id >= locOffset)
+                        throw new Exception("Too many messages.");
+
+                    var bytes = mes.ToBytes(Dicts.DefaultLanguage);
+                    Helpers.Ensure4ByteAlign(bytes);
+                    msgData.AddRange(bytes);
+
+                    msgTable.AddRange(mes.MakeHeaderEntry(id, msgData.Count - bytes.Count));
+
+                    int locId = 1;
+
+                    foreach (string Localization in EditedFile.Languages)
+                    {
+                        LocalizationEntry loc = SelectedEntry.Localization.Find(x => x.Language == Localization);
+
+                        MessageEntry msg = null;
+
+                        if (loc != null)
+                            msg = loc.Messages.Find(x => x.Name == mes.Name);
+
+                        if (msg == null)
+                        {
+                            msg = new MessageEntry();
+                            msg.MessageText = $"NO MESSAGE ({loc.Language})";
+                        }
+
+                        var bytesLoc = msg.ToBytes(loc.Language);
+                        Helpers.Ensure4ByteAlign(bytesLoc);
+                        msgData.AddRange(bytesLoc);
+
+                        UInt16 localizedId = (UInt16)((locId * locOffset) + id);
+                        msgTable.AddRange(msg.MakeHeaderEntry(localizedId, msgData.Count - bytesLoc.Count));
+
+                        locId++;
+                    }
+
+                    id++;
+                }
+
+                // Add dummy NPC Maker message entry if it doesn't already exist
+                if (id < 0x11A)
+                {
+                    MessageEntry msg = new MessageEntry();
+                    msg.MessageText = "011a NPC MAKER DUMMY MSG";
+                    var bytesDummy = msg.ToBytes(Dicts.DefaultLanguage);
+                    Helpers.Ensure4ByteAlign(bytesDummy);
+
+                    msgData.AddRange(bytesDummy);
+                    msgTable.AddRange(msg.MakeHeaderEntry(0x11A, msgData.Count - bytesDummy.Count));
+                }
+
+                MessageEntry msgEnd = new MessageEntry();
+                msgEnd.MessageText = "End!";
+                var bytesEnd = msgEnd.ToBytes(Dicts.DefaultLanguage);
+                Helpers.Ensure4ByteAlign(bytesEnd);
+
+                msgData.AddRange(bytesEnd);
+                msgTable.AddRange(msgEnd.MakeHeaderEntry(UInt16.MaxValue - 2, msgData.Count - bytesEnd.Count));
+                msgTable.AddRange(msgEnd.MakeHeaderEntry(UInt16.MaxValue, 0));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error converting messages: " + ex.Message);
+            }
+
+            FolderBrowserDialog FBD = new FolderBrowserDialog();
+            DialogResult DR = FBD.ShowDialog();
+
+            Helpers.Ensure16ByteAlign(msgTable);
+            Helpers.Ensure16ByteAlign(msgData);
+
+            if (DR == DialogResult.OK)
+            {
+                try
+                {
+                    string Foldername = FBD.SelectedPath;
+                    string TableDataFn = Path.Combine(Foldername, "MessageTable.tbl");
+                    string StringDataFn = Path.Combine(Foldername, "StringData.bin");
+
+                    File.WriteAllBytes(TableDataFn, msgTable.ToArray());
+                    File.WriteAllBytes(StringDataFn, msgData.ToArray());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error saving data: " + ex.Message);
+                }
+            }
+
+        }
     }
 }

@@ -346,6 +346,23 @@ namespace NPC_Maker
             return tagIndex;
         }
 
+        public List<byte> MakeHeaderEntry(UInt16 msgId, int Offset)
+        {
+            var data = new List<byte>();
+
+            data.AddRangeBigEndian(msgId);
+
+            int settings = Type;
+            settings <<= 4;
+            settings |= Position;
+
+            data.Add((byte)settings);
+            data.Add((byte)0);
+            data.AddRangeBigEndian(Offset | 0x70000000);
+
+            return data;
+        }
+
         public List<byte> ToBytes(string Language)
         {
             var data = new List<byte>();
