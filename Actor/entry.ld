@@ -1,4 +1,4 @@
-ENTRY_POINT = 0x80800000
+ENTRY_POINT = 0x80800000;
 
 /* This script is for MIPS */
 OUTPUT_ARCH( mips )

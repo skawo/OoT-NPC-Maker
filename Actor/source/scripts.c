@@ -282,7 +282,7 @@ bool Scripts_InstructionSave(NpcMaker* en, PlayState* playState, ScriptInstance*
 bool Scripts_InstructionGet(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrGetExtVar* in)
 {
     #if LOGGING > 3
-        is64Printf("_[%2d, %1d], : GET\n", en->npcId, en->curScriptNum);
+        is64Printf("_[%2d, %1d]: GET\n", en->npcId, en->curScriptNum);
     #endif          
 
     switch (in->subid)
@@ -2015,17 +2015,17 @@ bool Scripts_InstructionRotation(NpcMaker* en, PlayState* playState, ScriptInsta
         // Actor
         script->tempValues[0] = (s32)Scripts_GetActorByType(en, playState, in->target, in->actorNumType, in->actorNum);
 
-        if (ACTOR != NULL)
+        if (TEMP_ACTOR != NULL)
         {
             // Speed
-            SPEED = Scripts_GetVarval(en, playState, in->speedType, in->speed, true);
+            TEMP_SPEED = Scripts_GetVarval(en, playState, in->speedType, in->speed, true);
 
             Vec3f rot = Scripts_GetVarvalVec3f(en, playState, (Vartype[]){in->xType, in->yType, in->zType}, (ScriptVarval[]){in->x, in->y, in->z}, 1);
-            Math_Vec3f_Copy(ROT, &rot);
+            Math_Vec3f_Copy(TEMP_ROT, &rot);
         }
     }
 
-    if (ACTOR == NULL)
+    if (TEMP_ACTOR == NULL)
     {
         #if LOGGING > 0
             is64Printf("_[%2d, %1d]: Subject or target of the ROTATION instruction was NULL.\n", en->npcId, en->curScriptNum);
@@ -2118,7 +2118,7 @@ bool Scripts_InstructionPosition(NpcMaker* en, PlayState* playState, ScriptInsta
         }
     }
 
-    if (ACTOR == NULL)
+    if (TEMP_ACTOR == NULL)
     {
         #if LOGGING > 0
             is64Printf("_[%2d, %1d]: Subject or target of the POSITION instruction was NULL.\n", en->npcId, en->curScriptNum);
@@ -2233,14 +2233,14 @@ bool Scripts_InstructionScale(NpcMaker* en, PlayState* playState, ScriptInstance
         // Actor
         script->tempValues[0] = (s32)Scripts_GetActorByType(en, playState, in->target, in->actorNumType, in->actorNum);
 
-        if (ACTOR != NULL)
+        if (TEMP_ACTOR != NULL)
         {
-            SPEED = Scripts_GetVarval(en, playState, in->speed_type, in->speed, true);
-            SCALE = Scripts_GetVarval(en, playState, in->scale_type, in->scale, true);
+            TEMP_SPEED = Scripts_GetVarval(en, playState, in->speed_type, in->speed, true);
+            TEMP_SCALE = Scripts_GetVarval(en, playState, in->scale_type, in->scale, true);
         }
     }
 
-    if (ACTOR == NULL)
+    if (TEMP_ACTOR == NULL)
     {
         #if LOGGING > 0
             is64Printf("_[%2d, %1d]: Subject or target of the SCALE instruction was NULL.\n", en->npcId, en->curScriptNum);
