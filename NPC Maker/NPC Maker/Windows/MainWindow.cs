@@ -5143,16 +5143,16 @@ namespace NPC_Maker
 
             try
             {
-                foreach (MessageEntry mes in SelectedEntry.Messages)
+                foreach (MessageEntry msg in SelectedEntry.Messages)
                 {
                     if (id >= locOffset)
                         throw new Exception("Too many messages.");
 
-                    var bytes = mes.ToBytes(Dicts.DefaultLanguage);
+                    var bytes = msg.ToBytes(Dicts.DefaultLanguage);
                     Helpers.Ensure4ByteAlign(bytes);
                     msgData.AddRange(bytes);
 
-                    msgTable.AddRange(mes.MakeHeaderEntry(id, msgData.Count - bytes.Count));
+                    msgTable.AddRange(msg.MakeHeaderEntry(id, msgData.Count - bytes.Count));
 
                     int locId = 1;
 
@@ -5160,50 +5160,50 @@ namespace NPC_Maker
                     {
                         LocalizationEntry loc = SelectedEntry.Localization.Find(x => x.Language == Localization);
 
-                        MessageEntry msg = null;
+                        MessageEntry msgLoc = null;
 
                         if (loc != null)
-                            msg = loc.Messages.Find(x => x.Name == mes.Name);
+                            msgLoc = loc.Messages.Find(x => x.Name == msg.Name);
 
-                        if (msg == null)
+                        if (msgLoc == null)
                         {
-                            msg = new MessageEntry();
-                            msg.MessageText = $"NO MESSAGE ({loc.Language})";
+                            msgLoc = new MessageEntry();
+                            msgLoc.MessageText = $"NO MESSAGE ({loc.Language})";
                         }
 
-                        var bytesLoc = msg.ToBytes(loc.Language);
+                        var bytesLoc = msgLoc.ToBytes(loc.Language);
                         Helpers.Ensure4ByteAlign(bytesLoc);
                         msgData.AddRange(bytesLoc);
 
                         UInt16 localizedId = (UInt16)((locId * locOffset) + id);
-                        msgTable.AddRange(msg.MakeHeaderEntry(localizedId, msgData.Count - bytesLoc.Count));
+                        msgTable.AddRange(msgLoc.MakeHeaderEntry(localizedId, msgData.Count - bytesLoc.Count));
 
                         locId++;
                     }
 
                     id++;
+
+                    // Skip message ID 11A, since it's used by NPC Maker...
+                    if (id == 0x11A)
+                        id++;
                 }
 
                 // Add dummy NPC Maker message entry if it doesn't already exist
-                if (id < 0x11A)
-                {
-                    MessageEntry msg = new MessageEntry();
-                    msg.MessageText = "011a NPC MAKER DUMMY MSG";
-                    var bytesDummy = msg.ToBytes(Dicts.DefaultLanguage);
-                    Helpers.Ensure4ByteAlign(bytesDummy);
+                MessageEntry msgDummy = new MessageEntry();
+                msgDummy.MessageText = "011a NPC MAKER DUMMY MSG";
+                var bytesDummy = msgDummy.ToBytes(Dicts.DefaultLanguage);
+                Helpers.Ensure4ByteAlign(bytesDummy);
 
-                    msgData.AddRange(bytesDummy);
-                    msgTable.AddRange(msg.MakeHeaderEntry(0x11A, msgData.Count - bytesDummy.Count));
-                }
+                msgData.AddRange(bytesDummy);
+                msgTable.AddRange(msgDummy.MakeHeaderEntry(0x11A, msgData.Count - bytesDummy.Count));
 
-                MessageEntry msgEnd = new MessageEntry();
-                msgEnd.MessageText = "End!";
-                var bytesEnd = msgEnd.ToBytes(Dicts.DefaultLanguage);
-                Helpers.Ensure4ByteAlign(bytesEnd);
+                msgDummy.MessageText = "End!";
+                bytesDummy = msgDummy.ToBytes(Dicts.DefaultLanguage);
+                Helpers.Ensure4ByteAlign(bytesDummy);
 
-                msgData.AddRange(bytesEnd);
-                msgTable.AddRange(msgEnd.MakeHeaderEntry(UInt16.MaxValue - 2, msgData.Count - bytesEnd.Count));
-                msgTable.AddRange(msgEnd.MakeHeaderEntry(UInt16.MaxValue, 0));
+                msgData.AddRange(bytesDummy);
+                msgTable.AddRange(msgDummy.MakeHeaderEntry(UInt16.MaxValue - 2, msgData.Count - bytesDummy.Count));
+                msgTable.AddRange(msgDummy.MakeHeaderEntry(UInt16.MaxValue, 0));
             }
             catch (Exception ex)
             {
