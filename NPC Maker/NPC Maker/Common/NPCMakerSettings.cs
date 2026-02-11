@@ -98,7 +98,7 @@ namespace NPC_Maker
             OrigPreview = false;
             ProjectPath = "";
             MessageEditorFont = "";
-            MessageEditorFontSize = 0;
+            MessageEditorFontSize = 8;
             UseCJK = false;
             LinkerPaths = "";
             AllowCommentsOnLoc = true;
