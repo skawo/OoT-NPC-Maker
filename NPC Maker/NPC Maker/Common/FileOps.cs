@@ -24,7 +24,7 @@ namespace NPC_Maker
             if (set == null)
                 return;
 
-            if (set.MessageEditorFontSize == 0)
+            if (set.MessageEditorFontSize <= 0)
                 set.MessageEditorFontSize = 8;
 
             if (set.AutoSaveTime < 100)
