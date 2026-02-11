@@ -24,7 +24,7 @@ namespace NPC_Maker
             if (set == null)
                 return;
 
-            if (set.GUIScale <= 0 || set.GUIScale >= 3)
+            if (set.GUIScale <= 0 || set.GUIScale > 3)
                 set.GUIScale = 1;
 
             if (set.MessageEditorFontSize <= 0)
