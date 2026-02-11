@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -121,13 +122,23 @@ namespace NPC_Maker
             if (args.Length == 0)
             {
                 var fileToOpen = File.Exists("backup") &&
-                                MessageBox.Show("NPCMaker was not closed properly the last time it was run. Load auto-saved backup?",
+                                BigMessageBox.Show("NPCMaker was not closed properly the last time it was run. Load auto-saved backup?",
                                                 "Autosaved backup exists", MessageBoxButtons.YesNo) == DialogResult.Yes
                                                 ? "backup" : "";
 
-                mw = new MainWindow(fileToOpen);
-                Application.Run(mw);
-                FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
+
+                while (true)
+                {
+                    mw = new MainWindow(fileToOpen);
+                    Application.Run(mw);
+
+                    FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
+
+                    if (mw.DialogResult != DialogResult.Retry)
+                        break;
+
+                    fileToOpen = mw.OpenedPath;
+                }
             }
             else
             {

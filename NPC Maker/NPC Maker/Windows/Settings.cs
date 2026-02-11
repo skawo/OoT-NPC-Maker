@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using NPC_Maker.Controls;
 
 namespace NPC_Maker.Windows
 {
@@ -20,6 +21,7 @@ namespace NPC_Maker.Windows
         public Settings(ref NPCFile _EditedFile)
         {
             InitializeComponent();
+            Helpers.AdjustFormScale(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 
@@ -45,6 +47,7 @@ namespace NPC_Maker.Windows
             chkBox_Compress.Checked = EditedSettings.CompressIndividually;
             Txt_ProjectPath.Text = EditedSettings.ProjectPath;
             Chk_AllowCommentsOnLoc.Checked = EditedSettings.AllowCommentsOnLoc;
+            guiScale.Value = (decimal)EditedSettings.GUIScale;
 
             EditedFile = _EditedFile;
         }
@@ -103,7 +106,7 @@ namespace NPC_Maker.Windows
 
                 if (numLines != 0)
                 {
-                    DialogResult Res = MessageBox.Show("Are you sure? The following comments will be hidden:" + Environment.NewLine + HiddenMsgs, "Confirmation", MessageBoxButtons.YesNo);
+                    DialogResult Res = BigMessageBox.Show("Are you sure? The following comments will be hidden:" + Environment.NewLine + HiddenMsgs, "Confirmation", MessageBoxButtons.YesNo);
 
                     if (Res != DialogResult.Yes)
                         return false;
@@ -147,7 +150,7 @@ namespace NPC_Maker.Windows
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                BigMessageBox.Show(ex.Message);
             }
         }
 

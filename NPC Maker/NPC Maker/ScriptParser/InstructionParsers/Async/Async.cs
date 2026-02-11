@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPC_Maker.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,7 +64,7 @@ namespace NPC_Maker.Scripts
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
+                BigMessageBox.Show(ex.Message);
                 outScript.ParseErrors.Add(
                     ParseException.GeneralError(SplitLine));
                 return new List<Instruction>();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPC_Maker.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace NPC_Maker.Scripts
         public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
         {
             if (Len != ByteList.Count)
-                System.Windows.Forms.MessageBox.Show($"Critical error: Got wrong amount of bytes: {(Lists.Instructions)ByteList[0]}, data: {BitConverter.ToString(ByteList.ToArray())}");
+                BigMessageBox.Show($"Critical error: Got wrong amount of bytes: {(Lists.Instructions)ByteList[0]}, data: {BitConverter.ToString(ByteList.ToArray())}");
         }
 
         public static string GetRandomLabelString(ScriptParser Prs, int length = 5)

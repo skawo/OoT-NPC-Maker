@@ -19,6 +19,7 @@ namespace NPC_Maker.Windows
         public OffsetFileStartPicker(List<string> Options, string CurrentOffset, string CurrentFileStart, string Explanation = "Offset:", string Title = "Select symbols from header...", string Explanation2 = "File start:", bool hasCancel = true)
         {
             InitializeComponent();
+            Helpers.AdjustFormScale(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 

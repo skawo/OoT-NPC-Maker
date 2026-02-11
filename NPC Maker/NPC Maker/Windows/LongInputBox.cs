@@ -17,6 +17,7 @@ namespace NPC_Maker.Windows
         public LongInputBox(string title, string command, string text, bool BrowseButton = false, string browseFilter = "")
         {
             InitializeComponent();
+            Helpers.AdjustFormScale(this);
 
             inputText = text;
             this.Text = title;

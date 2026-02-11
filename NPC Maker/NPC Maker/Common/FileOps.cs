@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NPC_Maker.Controls;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"Failed to read settings: {ex.Message}");
+                BigMessageBox.Show($"Failed to read settings: {ex.Message}");
                 return new NPCMakerSettings();
             }
         }
@@ -45,7 +46,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show($"Failed to write settings: {ex.Message}");
+                BigMessageBox.Show($"Failed to write settings: {ex.Message}");
             }
         }
 
@@ -84,7 +85,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read JSON: {ex.Message}");
+                BigMessageBox.Show($"Failed to read JSON: {ex.Message}");
                 return null;
             }
         }
@@ -189,7 +190,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                MessageBox.Show($"Entry {NpcName}, Definition {Name} is invalid or cannot be resolved.");
+                BigMessageBox.Show($"Entry {NpcName}, Definition {Name} is invalid or cannot be resolved.");
                 return field;
             }
         }
@@ -206,7 +207,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to save JSON: {ex.Message}");
+                BigMessageBox.Show($"Failed to save JSON: {ex.Message}");
             }
         }
 
@@ -310,7 +311,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to process JSON: {ex.Message}");
+                BigMessageBox.Show($"Failed to process JSON: {ex.Message}");
                 return null;
             }
         }
@@ -337,7 +338,7 @@ namespace NPC_Maker
             catch (Exception)
             {
                 if (!allowFail)
-                    MessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
+                    BigMessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
 
                 return Dict;
             }
@@ -366,7 +367,7 @@ namespace NPC_Maker
             {
                 if (!allowFail)
                 {
-                    System.Windows.Forms.MessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
+                    BigMessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
                 }
 
                 return Dict;
@@ -384,7 +385,7 @@ namespace NPC_Maker
             if (Program.IsRunningUnderMono)
                 Program.CompileMonoErrors = Msg;
             else if (!CLIMode)
-                MessageBox.Show(Msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                BigMessageBox.Show(Msg, "Error", MessageBoxButtons.OK);
 
             return;
         }

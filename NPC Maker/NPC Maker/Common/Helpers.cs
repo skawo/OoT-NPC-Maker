@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,6 +19,106 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static float GetScaleFontSize(float baseSize = 8.25f)
+        {
+            return (baseSize * Program.Settings.GUIScale);
+        }
+
+        public static void AdjustFormScale(Form f)
+        {
+            if (Program.Settings.GUIScale == 1.0f)
+                return;
+
+            float fontSize = Helpers.GetScaleFontSize();
+
+            f.Font = new Font(f.Font.FontFamily, fontSize);
+            Helpers.AdjustControlScale(f);
+        }
+
+        private static void AdjustControlForNeighbour(Control ctrl)
+        {
+            int newHeight = ctrl.Height;
+
+            if (ctrl.Parent != null)
+            {
+                if (ctrl.Parent is Panel par)
+                {
+                    int maxRight = par.ClientSize.Width - 5;
+
+                    foreach (Control sibling in par.Controls)
+                    {
+                        if (sibling == ctrl) continue;
+
+                        if (Math.Abs(sibling.Top - ctrl.Top) < 2) // 2 pixels tolerance
+                        {
+                            if (sibling.Left > ctrl.Left)
+                            {
+                                maxRight = Math.Min(maxRight, sibling.Left);
+                                newHeight = sibling.Height;
+                            }
+                        }
+                    }
+
+                    ctrl.Width = maxRight - ctrl.Left - 5;
+                }
+            }
+
+            ctrl.Height = newHeight;
+        }
+
+        public static void AdjustControlScale(Control ctr)
+        {
+            if (Program.Settings.GUIScale == 1.0f)
+                return;
+
+            float fontSize = GetScaleFontSize();
+
+            foreach (Control ctrl in ctr.Controls)
+            {
+                if (ctrl is ScriptEditor)
+                {
+                    (ctrl as ScriptEditor).SetupScale();
+                }
+                if (ctrl is DataGridView)
+                {
+                    ctrl.Font = new Font(ctr.Font.FontFamily, fontSize);
+                    (ctrl as DataGridView).DefaultCellStyle.Font = new Font(ctr.Font.FontFamily, fontSize);
+                    (ctrl as DataGridView).ColumnHeadersDefaultCellStyle.Font = new Font(ctr.Font.FontFamily, Math.Min(11, fontSize));
+                    (ctrl as DataGridView).RowHeadersDefaultCellStyle.Font = new Font(ctr.Font.FontFamily, fontSize);
+                }
+                else if (ctrl is SegmentDataGrid)
+                {
+                    ctrl.Font = new Font(ctr.Font.FontFamily, fontSize);
+                    (ctrl as SegmentDataGrid).Grid.DefaultCellStyle.Font = new Font(ctr.Font.FontFamily, fontSize);
+                    (ctrl as SegmentDataGrid).Grid.ColumnHeadersDefaultCellStyle.Font = new Font(ctr.Font.FontFamily, Math.Min(11, fontSize));
+                    (ctrl as SegmentDataGrid).Grid.RowHeadersDefaultCellStyle.Font = new Font(ctr.Font.FontFamily, fontSize);
+                }
+                else if (ctrl is FCTB_Mono)
+                {
+                    (ctrl as FCTB_Mono).Font = new Font(ctr.Font.FontFamily, fontSize);
+                }
+                else if (ctrl is DateTimePicker)
+                {
+                    if (Program.IsRunningUnderMono)
+                    {
+                        AdjustControlForNeighbour(ctrl);
+                        ctrl.Font = new Font(ctr.Font.FontFamily, Math.Max(8.25f, fontSize - 3));
+                    }
+                }
+                else if (ctrl is NumericUpDown)
+                {
+                    if (Program.IsRunningUnderMono)
+                    {
+                        AdjustControlForNeighbour(ctrl);
+                        ctrl.Font = new Font(ctr.Font.FontFamily, Math.Max(8.25f, fontSize - 2));
+                    }
+                }
+
+                if (ctrl.HasChildren)
+                    AdjustControlScale(ctrl);
+            }
+        }
+
         public static UInt32 HexConvertToUInt32(string value)
         {
             if (value.IsHex())
@@ -592,7 +693,7 @@ namespace NPC_Maker
         public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
         {
             if (Len != ByteList.Count)
-                MessageBox.Show($"Critical error: Got wrong amount of bytes.");
+                BigMessageBox.Show($"Critical error: Got wrong amount of bytes.");
         }
 
         public static byte PutTwoValuesTogether(byte a, byte b, int offset)

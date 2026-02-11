@@ -14,11 +14,13 @@ namespace NPC_Maker
         public CustomDataGridView()
         {
             this.DoubleBuffered = true;
+            this.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
         }
 
         public CustomDataGridView(IContainer container)
         {
             container.Add(this);
+            this.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
         }
     }
 }

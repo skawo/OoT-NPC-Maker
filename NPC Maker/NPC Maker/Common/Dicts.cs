@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -468,7 +469,7 @@ namespace NPC_Maker
             catch (Exception ex)
             {
                 if (!allowFail)
-                    MessageBox.Show(
+                    BigMessageBox.Show(
                         "Error loading the " + type + " dict: " + ex.Message);
             }
         }

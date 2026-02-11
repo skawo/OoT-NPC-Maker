@@ -1,10 +1,11 @@
 ﻿using FastColoredTextBoxNS;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -24,6 +25,7 @@ namespace NPC_Maker
         public ScriptEditor(ref NPCEntry _Entry, ref NPCFile _File, ScriptEntry _Script, bool _SyntaxHighlighting, bool _AutoParse)
         {
             InitializeComponent();
+            SetupScale();
 
             AutoParseTimer = new System.Windows.Forms.Timer
             {
@@ -72,6 +74,15 @@ namespace NPC_Maker
                 Textbox_ParseErrors.Text = "Parsed successfully!";
             else
                 Textbox_ParseErrors.Text = String.Join(Environment.NewLine, Script.ParseErrors);
+        }
+
+        public void SetupScale()
+        {
+            float fontSize = Helpers.GetScaleFontSize();
+
+            this.Textbox_ParseErrors.Font = new Font(this.Textbox_ParseErrors.Font.FontFamily, fontSize);
+            this.Textbox_Script.Font = new Font(this.Textbox_Script.Font.FontFamily, Helpers.GetScaleFontSize(9.75f), this.Textbox_Script.Font.Style);
+            this.Button_TryParse.Font = new Font(this.Button_TryParse.Font.FontFamily, fontSize);
         }
 
         private void AutoParseTimer_Tick(object sender, EventArgs e)

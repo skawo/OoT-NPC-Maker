@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPC_Maker.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,6 +39,17 @@ namespace NPC_Maker.Windows
 
                 Tab.TabPages.Add(Page);
             }
+
+            SetupScale();
+        }
+
+        private void SetupScale()
+        {
+            float scale = Program.Settings.GUIScale;
+            float fontSize = Helpers.GetScaleFontSize();
+
+            this.MenuStrip.Font = new Font(this.MenuStrip.Font.FontFamily, fontSize);
+            Helpers.AdjustFormScale(this);
         }
 
         private string GetName(string Current = "")
@@ -75,7 +87,7 @@ namespace NPC_Maker.Windows
             if (Tab.TabPages.Count == 0)
                 return;
 
-            DialogResult Res = MessageBox.Show("Are you sure you want to delete this global header? You cannot reverse this action!", "Removing a header", MessageBoxButtons.YesNoCancel);
+            DialogResult Res = BigMessageBox.Show("Are you sure you want to delete this global header? You cannot reverse this action!", "Removing a header", MessageBoxButtons.YesNoCancel);
 
             if (Res == DialogResult.Yes)
             {

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using NPC_Maker.Controls;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -717,7 +718,7 @@ namespace NPC_Maker
             catch (Exception ex)
             {
                 if (ErrorMsg)
-                    MessageBox.Show("Error creating temporary directory: " + ex.Message);
+                    BigMessageBox.Show("Error creating temporary directory: " + ex.Message);
 
                 return false;
             }
@@ -810,7 +811,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error running editor: " + ex.Message);
+                BigMessageBox.Show("Error running editor: " + ex.Message);
                 return null;
             }
         }

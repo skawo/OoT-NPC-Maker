@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -7,17 +8,19 @@ namespace NPC_Maker
         public static DialogResult ShowInputDialog(string Prompt, ref string input)
         {
             System.Drawing.Size size = new System.Drawing.Size(300, 70);
+
             Form inputBox = new Form
             {
                 StartPosition = FormStartPosition.CenterParent,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 ClientSize = size,
-                Text = Prompt
+                Text = Prompt,
+                Font = new System.Drawing.Font(SystemFonts.DefaultFont.FontFamily, Helpers.GetScaleFontSize())
             };
 
             TextBox textBox = new TextBox
             {
-                Size = new System.Drawing.Size(size.Width - 10, 23),
+                Size = new System.Drawing.Size(size.Width - 10, (int)(23 * Program.Settings.GUIScale)),
                 Location = new System.Drawing.Point(5, 5),
                 Text = input
             };
@@ -27,9 +30,9 @@ namespace NPC_Maker
             {
                 DialogResult = DialogResult.OK,
                 Name = "okButton",
-                Size = new System.Drawing.Size(75, 23),
+                AutoSize = true,
                 Text = "&OK",
-                Location = new System.Drawing.Point(size.Width - 80 - 80, 39)
+                Location = new System.Drawing.Point(size.Width - 80 - 80, textBox.Location.Y + textBox.Height + 8)
             };
             inputBox.Controls.Add(okButton);
 
@@ -37,11 +40,13 @@ namespace NPC_Maker
             {
                 DialogResult = DialogResult.Cancel,
                 Name = "cancelButton",
-                Size = new System.Drawing.Size(75, 23),
+                AutoSize = true,
                 Text = "&Cancel",
-                Location = new System.Drawing.Point(size.Width - 80, 39)
+                Location = new System.Drawing.Point(size.Width - 80, textBox.Location.Y + textBox.Height + 8)
             };
             inputBox.Controls.Add(cancelButton);
+
+            inputBox.ClientSize = new Size(inputBox.ClientSize.Width, cancelButton.Location.Y + cancelButton.Height + 5);
 
             inputBox.AcceptButton = okButton;
             inputBox.CancelButton = cancelButton;

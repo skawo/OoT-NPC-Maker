@@ -1,4 +1,6 @@
-﻿namespace NPC_Maker
+﻿using NPC_Maker.Controls;
+
+namespace NPC_Maker
 {
     partial class MainWindow
     {
@@ -58,7 +60,7 @@
             this.LblAlpha = new System.Windows.Forms.Label();
             this.Btn_SelectObject = new System.Windows.Forms.Button();
             this.Txb_ObjectID = new System.Windows.Forms.TextBox();
-            this.Checkbox_EnvColor = new System.Windows.Forms.CheckBox();
+            this.Checkbox_EnvColor = new NPC_Maker.Controls.BigCheckBox();
             this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
             this.ColorsDataGridView = new NPC_Maker.CustomDataGridView(this.components);
             this.StartLimbColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -123,7 +125,7 @@
             this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
-            this.Checkbox_Omitted = new System.Windows.Forms.CheckBox();
+            this.Checkbox_Omitted = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_AnimInterpFrames = new System.Windows.Forms.NumericUpDown();
             this.Label_AnimInterpFrames = new System.Windows.Forms.Label();
             this.Label_UncullZoneScale = new System.Windows.Forms.Label();
@@ -132,17 +134,17 @@
             this.UncullZLabel = new System.Windows.Forms.Label();
             this.UncullFwd = new System.Windows.Forms.NumericUpDown();
             this.Lbl_DBGOpts = new System.Windows.Forms.Label();
-            this.ChkBox_DBGLookAt = new System.Windows.Forms.CheckBox();
-            this.ChkBox_DBGPrint = new System.Windows.Forms.CheckBox();
-            this.ChkBox_DBGDlist = new System.Windows.Forms.CheckBox();
-            this.ChkBox_ExistInAll = new System.Windows.Forms.CheckBox();
+            this.ChkBox_DBGLookAt = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkBox_DBGPrint = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkBox_DBGDlist = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkBox_ExistInAll = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_ScriptsFVar = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ScriptsVar = new System.Windows.Forms.NumericUpDown();
             this.Lbl_ScriptsFVars = new System.Windows.Forms.Label();
             this.Lbl_ScriptsVars = new System.Windows.Forms.Label();
-            this.ChkInvisible = new System.Windows.Forms.CheckBox();
-            this.ChkOnlyWhenLens = new System.Windows.Forms.CheckBox();
-            this.ChkBox_DBGCol = new System.Windows.Forms.CheckBox();
+            this.ChkInvisible = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkOnlyWhenLens = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkBox_DBGCol = new NPC_Maker.Controls.BigCheckBox();
             this.Panel_Colors = new System.Windows.Forms.Panel();
             this.Lbl_Radius = new System.Windows.Forms.Label();
             this.NumUp_LightRadius = new System.Windows.Forms.NumericUpDown();
@@ -153,21 +155,21 @@
             this.NumUp_LightXOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_LightLimbOffset = new System.Windows.Forms.Label();
             this.Label_LightLimb = new System.Windows.Forms.Label();
-            this.ChkBox_Glow = new System.Windows.Forms.CheckBox();
+            this.ChkBox_Glow = new NPC_Maker.Controls.BigCheckBox();
             this.NumUp_LightLimb = new System.Windows.Forms.NumericUpDown();
-            this.ChkBox_GenLight = new System.Windows.Forms.CheckBox();
+            this.ChkBox_GenLight = new NPC_Maker.Controls.BigCheckBox();
             this.NumUp_RiddenBy = new System.Windows.Forms.NumericUpDown();
             this.Label_RiddenBy = new System.Windows.Forms.Label();
-            this.ChkB_FadeOut = new System.Windows.Forms.CheckBox();
+            this.ChkB_FadeOut = new NPC_Maker.Controls.BigCheckBox();
             this.Btn_ReactIfAtt = new System.Windows.Forms.Panel();
             this.Combo_EffIfAtt = new System.Windows.Forms.ComboBox();
             this.Label_EffIfAtt = new System.Windows.Forms.Label();
             this.Btn_ReactIfAttList = new System.Windows.Forms.Button();
             this.Txtbox_ReactIfAtt = new System.Windows.Forms.TextBox();
             this.Lbl_ReactIfAttSnd = new System.Windows.Forms.Label();
-            this.Chkb_ReactIfAtt = new System.Windows.Forms.CheckBox();
-            this.Chkb_Opendoors = new System.Windows.Forms.CheckBox();
-            this.ChkRunJustScript = new System.Windows.Forms.CheckBox();
+            this.Chkb_ReactIfAtt = new NPC_Maker.Controls.BigCheckBox();
+            this.Chkb_Opendoors = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkRunJustScript = new NPC_Maker.Controls.BigCheckBox();
             this.Lbl_Misc = new System.Windows.Forms.Label();
             this.Label_CutsceneSlot = new System.Windows.Forms.Label();
             this.Panel_Collision = new System.Windows.Forms.Panel();
@@ -179,11 +181,11 @@
             this.NumUpDown_ColHeight = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ColRadius = new System.Windows.Forms.NumericUpDown();
             this.Label_ColRadius = new System.Windows.Forms.Label();
-            this.Checkbox_HaveCollision = new System.Windows.Forms.CheckBox();
+            this.Checkbox_HaveCollision = new NPC_Maker.Controls.BigCheckBox();
             this.Panel_Shadow = new System.Windows.Forms.Panel();
             this.NumUpDown_ShRadius = new System.Windows.Forms.NumericUpDown();
             this.Label_ShRadius = new System.Windows.Forms.Label();
-            this.Checkbox_DrawShadow = new System.Windows.Forms.CheckBox();
+            this.Checkbox_DrawShadow = new NPC_Maker.Controls.BigCheckBox();
             this.Panel_HeadRot = new System.Windows.Forms.Panel();
             this.NumUpDown_LookAt_Z = new System.Windows.Forms.NumericUpDown();
             this.Label_WaistSep = new System.Windows.Forms.Label();
@@ -222,11 +224,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.NumUpDown_XTargetOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_TargetOffset = new System.Windows.Forms.Label();
-            this.Checkbox_Targettable = new System.Windows.Forms.CheckBox();
+            this.Checkbox_Targettable = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_TargetLimb = new System.Windows.Forms.NumericUpDown();
             this.Panel_Movement = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.Chkb_IgnoreY = new System.Windows.Forms.CheckBox();
+            this.Chkb_IgnoreY = new NPC_Maker.Controls.BigCheckBox();
             this.NumUp_MaxRoam = new System.Windows.Forms.NumericUpDown();
             this.SmoothingCnts = new System.Windows.Forms.Label();
             this.NumUp_Smoothing = new System.Windows.Forms.NumericUpDown();
@@ -237,7 +239,7 @@
             this.Lbl_GravityForce = new System.Windows.Forms.Label();
             this.Label_LoopDelay = new System.Windows.Forms.Label();
             this.Label_LoopStartNode = new System.Windows.Forms.Label();
-            this.Checkbox_Loop = new System.Windows.Forms.CheckBox();
+            this.Checkbox_Loop = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_LoopStartNode = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_GravityForce = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
@@ -251,12 +253,12 @@
             this.NumUpDown_MovDistance = new System.Windows.Forms.NumericUpDown();
             this.Label_Speed = new System.Windows.Forms.Label();
             this.Label_Distance = new System.Windows.Forms.Label();
-            this.Checkbox_AlwaysDraw = new System.Windows.Forms.CheckBox();
+            this.Checkbox_AlwaysDraw = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_CutsceneSlot = new System.Windows.Forms.NumericUpDown();
-            this.Checkbox_AlwaysActive = new System.Windows.Forms.CheckBox();
-            this.Checkbox_CanPressSwitches = new System.Windows.Forms.CheckBox();
+            this.Checkbox_AlwaysActive = new NPC_Maker.Controls.BigCheckBox();
+            this.Checkbox_CanPressSwitches = new NPC_Maker.Controls.BigCheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
-            this.ChkBox_UseCJK = new System.Windows.Forms.CheckBox();
+            this.ChkBox_UseCJK = new NPC_Maker.Controls.BigCheckBox();
             this.numUpDownFont = new System.Windows.Forms.NumericUpDown();
             this.labelEditorFont = new System.Windows.Forms.Label();
             this.comboFont = new System.Windows.Forms.ComboBox();
@@ -271,7 +273,7 @@
             this.PreviewSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgPreviewOrig = new System.Windows.Forms.PictureBox();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
-            this.chkBox_ShowDefaultLanguagePreview = new System.Windows.Forms.CheckBox();
+            this.chkBox_ShowDefaultLanguagePreview = new NPC_Maker.Controls.BigCheckBox();
             this.Btn_RemoveLanguage = new System.Windows.Forms.Button();
             this.Combo_Language = new System.Windows.Forms.ComboBox();
             this.Lbl_Localization = new System.Windows.Forms.Label();
@@ -279,7 +281,7 @@
             this.MessagesFilter = new System.Windows.Forms.TextBox();
             this.Btn_MsgMoveDown = new System.Windows.Forms.Button();
             this.Btn_MsgMoveUp = new System.Windows.Forms.Button();
-            this.ChkBox_UseSpaceFont = new System.Windows.Forms.CheckBox();
+            this.ChkBox_UseSpaceFont = new NPC_Maker.Controls.BigCheckBox();
             this.Btn_MsgRename = new System.Windows.Forms.Button();
             this.Combo_MsgPos = new System.Windows.Forms.ComboBox();
             this.Lbl_MsgPos = new System.Windows.Forms.Label();
@@ -355,6 +357,7 @@
             this.checkLocalizationConsistencyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkDefinitionValidityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compileActorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCurrentActorMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -373,7 +376,6 @@
             this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
-            this.exportCurrentActorMessagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -616,7 +618,7 @@
             this.DataGrid_NPCs.MultiSelect = false;
             this.DataGrid_NPCs.Name = "DataGrid_NPCs";
             this.DataGrid_NPCs.ReadOnly = true;
-            this.DataGrid_NPCs.RowHeadersWidth = 25;
+            this.DataGrid_NPCs.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DataGrid_NPCs.Size = new System.Drawing.Size(318, 545);
             this.DataGrid_NPCs.TabIndex = 1;
@@ -804,7 +806,7 @@
             0,
             0});
             this.NumUpAlpha.Name = "NumUpAlpha";
-            this.NumUpAlpha.Size = new System.Drawing.Size(114, 20);
+            this.NumUpAlpha.Size = new System.Drawing.Size(133, 20);
             this.NumUpAlpha.TabIndex = 54;
             this.NumUpAlpha.Tag = "ALPHA";
             this.NumUpAlpha.Value = new decimal(new int[] {
@@ -817,7 +819,7 @@
             // LblAlpha
             // 
             this.LblAlpha.AutoSize = true;
-            this.LblAlpha.Location = new System.Drawing.Point(427, 89);
+            this.LblAlpha.Location = new System.Drawing.Point(422, 89);
             this.LblAlpha.Name = "LblAlpha";
             this.LblAlpha.Size = new System.Drawing.Size(37, 13);
             this.LblAlpha.TabIndex = 53;
@@ -847,10 +849,10 @@
             // 
             // Checkbox_EnvColor
             // 
-            this.Checkbox_EnvColor.AutoSize = true;
+            this.Checkbox_EnvColor.BoxSize = 18;
             this.Checkbox_EnvColor.Location = new System.Drawing.Point(425, 118);
             this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
-            this.Checkbox_EnvColor.Size = new System.Drawing.Size(146, 17);
+            this.Checkbox_EnvColor.Size = new System.Drawing.Size(154, 22);
             this.Checkbox_EnvColor.TabIndex = 50;
             this.Checkbox_EnvColor.Text = "Global environment color:";
             this.Checkbox_EnvColor.UseVisualStyleBackColor = true;
@@ -859,7 +861,7 @@
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
-            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(577, 114);
+            this.Button_EnvironmentColorPreview.Location = new System.Drawing.Point(596, 116);
             this.Button_EnvironmentColorPreview.Name = "Button_EnvironmentColorPreview";
             this.Button_EnvironmentColorPreview.Size = new System.Drawing.Size(53, 23);
             this.Button_EnvironmentColorPreview.TabIndex = 49;
@@ -882,6 +884,7 @@
             this.ColorsDataGridView.MultiSelect = false;
             this.ColorsDataGridView.Name = "ColorsDataGridView";
             this.ColorsDataGridView.RowHeadersVisible = false;
+            this.ColorsDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.ColorsDataGridView.Size = new System.Drawing.Size(71, 394);
             this.ColorsDataGridView.TabIndex = 75;
             this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
@@ -933,7 +936,7 @@
             // 
             // NumUpDown_ZModelOffs
             // 
-            this.NumUpDown_ZModelOffs.Location = new System.Drawing.Point(576, 32);
+            this.NumUpDown_ZModelOffs.Location = new System.Drawing.Point(595, 32);
             this.NumUpDown_ZModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -976,7 +979,7 @@
             // 
             // NumUpDown_YModelOffs
             // 
-            this.NumUpDown_YModelOffs.Location = new System.Drawing.Point(516, 32);
+            this.NumUpDown_YModelOffs.Location = new System.Drawing.Point(535, 32);
             this.NumUpDown_YModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -1015,6 +1018,7 @@
             this.DataGrid_Animations.MultiSelect = false;
             this.DataGrid_Animations.Name = "DataGrid_Animations";
             this.DataGrid_Animations.RowHeadersVisible = false;
+            this.DataGrid_Animations.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.DataGrid_Animations.Size = new System.Drawing.Size(749, 394);
             this.DataGrid_Animations.TabIndex = 9;
             this.DataGrid_Animations.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGrid_Animations_CellMouseDoubleClick);
@@ -1089,7 +1093,7 @@
             // 
             // NumUpDown_XModelOffs
             // 
-            this.NumUpDown_XModelOffs.Location = new System.Drawing.Point(456, 32);
+            this.NumUpDown_XModelOffs.Location = new System.Drawing.Point(475, 32);
             this.NumUpDown_XModelOffs.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -1167,7 +1171,7 @@
             // Label_Scale
             // 
             this.Label_Scale.AutoSize = true;
-            this.Label_Scale.Location = new System.Drawing.Point(427, 63);
+            this.Label_Scale.Location = new System.Drawing.Point(422, 62);
             this.Label_Scale.Name = "Label_Scale";
             this.Label_Scale.Size = new System.Drawing.Size(37, 13);
             this.Label_Scale.TabIndex = 16;
@@ -1188,7 +1192,7 @@
             0,
             0});
             this.NumUpDown_Scale.Name = "NumUpDown_Scale";
-            this.NumUpDown_Scale.Size = new System.Drawing.Size(114, 20);
+            this.NumUpDown_Scale.Size = new System.Drawing.Size(133, 20);
             this.NumUpDown_Scale.TabIndex = 17;
             this.NumUpDown_Scale.Tag = "SCALE";
             this.NumUpDown_Scale.Value = new decimal(new int[] {
@@ -1248,7 +1252,7 @@
             // 
             this.Label_TalkingSegment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_TalkingSegment.AutoSize = true;
-            this.Label_TalkingSegment.Location = new System.Drawing.Point(155, 603);
+            this.Label_TalkingSegment.Location = new System.Drawing.Point(155, 605);
             this.Label_TalkingSegment.Name = "Label_TalkingSegment";
             this.Label_TalkingSegment.Size = new System.Drawing.Size(88, 13);
             this.Label_TalkingSegment.TabIndex = 58;
@@ -1258,7 +1262,7 @@
             // 
             this.Label_TalkingPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Label_TalkingPattern.AutoSize = true;
-            this.Label_TalkingPattern.Location = new System.Drawing.Point(537, 603);
+            this.Label_TalkingPattern.Location = new System.Drawing.Point(537, 605);
             this.Label_TalkingPattern.Name = "Label_TalkingPattern";
             this.Label_TalkingPattern.Size = new System.Drawing.Size(81, 13);
             this.Label_TalkingPattern.TabIndex = 61;
@@ -1385,7 +1389,7 @@
             // 
             this.NumUpDown_TalkSegment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.NumUpDown_TalkSegment.Hexadecimal = true;
-            this.NumUpDown_TalkSegment.Location = new System.Drawing.Point(251, 601);
+            this.NumUpDown_TalkSegment.Location = new System.Drawing.Point(251, 605);
             this.NumUpDown_TalkSegment.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1411,7 +1415,7 @@
             // 
             this.NumUpDown_BlinkSegment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.NumUpDown_BlinkSegment.Hexadecimal = true;
-            this.NumUpDown_BlinkSegment.Location = new System.Drawing.Point(251, 576);
+            this.NumUpDown_BlinkSegment.Location = new System.Drawing.Point(251, 580);
             this.NumUpDown_BlinkSegment.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1436,7 +1440,7 @@
             // NumUpDown_TalkSpeed
             // 
             this.NumUpDown_TalkSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NumUpDown_TalkSpeed.Location = new System.Drawing.Point(459, 602);
+            this.NumUpDown_TalkSpeed.Location = new System.Drawing.Point(459, 605);
             this.NumUpDown_TalkSpeed.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1451,7 +1455,7 @@
             // Textbox_BlinkPattern
             // 
             this.Textbox_BlinkPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_BlinkPattern.Location = new System.Drawing.Point(624, 577);
+            this.Textbox_BlinkPattern.Location = new System.Drawing.Point(624, 580);
             this.Textbox_BlinkPattern.Name = "Textbox_BlinkPattern";
             this.Textbox_BlinkPattern.Size = new System.Drawing.Size(206, 20);
             this.Textbox_BlinkPattern.TabIndex = 60;
@@ -1461,7 +1465,7 @@
             // Textbox_TalkingPattern
             // 
             this.Textbox_TalkingPattern.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Textbox_TalkingPattern.Location = new System.Drawing.Point(624, 601);
+            this.Textbox_TalkingPattern.Location = new System.Drawing.Point(624, 605);
             this.Textbox_TalkingPattern.Name = "Textbox_TalkingPattern";
             this.Textbox_TalkingPattern.Size = new System.Drawing.Size(206, 20);
             this.Textbox_TalkingPattern.TabIndex = 59;
@@ -1471,7 +1475,7 @@
             // NumUpDown_BlinkSpeed
             // 
             this.NumUpDown_BlinkSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.NumUpDown_BlinkSpeed.Location = new System.Drawing.Point(459, 578);
+            this.NumUpDown_BlinkSpeed.Location = new System.Drawing.Point(459, 580);
             this.NumUpDown_BlinkSpeed.Maximum = new decimal(new int[] {
             15,
             0,
@@ -1508,6 +1512,7 @@
             this.DataGridView_ExtraDLists.MultiSelect = false;
             this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
             this.DataGridView_ExtraDLists.RowHeadersVisible = false;
+            this.DataGridView_ExtraDLists.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(831, 276);
             this.DataGridView_ExtraDLists.TabIndex = 51;
             this.DataGridView_ExtraDLists.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_ExtraDLists_CellMouseDoubleClick);
@@ -1650,7 +1655,8 @@
             // Checkbox_Omitted
             // 
             this.Checkbox_Omitted.AutoSize = true;
-            this.Checkbox_Omitted.Location = new System.Drawing.Point(422, 590);
+            this.Checkbox_Omitted.BoxSize = 18;
+            this.Checkbox_Omitted.Location = new System.Drawing.Point(422, 602);
             this.Checkbox_Omitted.Name = "Checkbox_Omitted";
             this.Checkbox_Omitted.Size = new System.Drawing.Size(74, 17);
             this.Checkbox_Omitted.TabIndex = 98;
@@ -1719,7 +1725,7 @@
             0,
             0,
             131072});
-            this.UncullDown.Location = new System.Drawing.Point(671, 37);
+            this.UncullDown.Location = new System.Drawing.Point(676, 36);
             this.UncullDown.Maximum = new decimal(new int[] {
             1410065407,
             2,
@@ -1748,7 +1754,7 @@
             0,
             0,
             131072});
-            this.UncullFwd.Location = new System.Drawing.Point(594, 37);
+            this.UncullFwd.Location = new System.Drawing.Point(594, 36);
             this.UncullFwd.Maximum = new decimal(new int[] {
             1410065407,
             2,
@@ -1763,7 +1769,7 @@
             // Lbl_DBGOpts
             // 
             this.Lbl_DBGOpts.AutoSize = true;
-            this.Lbl_DBGOpts.Location = new System.Drawing.Point(419, 519);
+            this.Lbl_DBGOpts.Location = new System.Drawing.Point(419, 531);
             this.Lbl_DBGOpts.Name = "Lbl_DBGOpts";
             this.Lbl_DBGOpts.Size = new System.Drawing.Size(107, 13);
             this.Lbl_DBGOpts.TabIndex = 91;
@@ -1772,7 +1778,8 @@
             // ChkBox_DBGLookAt
             // 
             this.ChkBox_DBGLookAt.AutoSize = true;
-            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 569);
+            this.ChkBox_DBGLookAt.BoxSize = 18;
+            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 581);
             this.ChkBox_DBGLookAt.Name = "ChkBox_DBGLookAt";
             this.ChkBox_DBGLookAt.Size = new System.Drawing.Size(89, 17);
             this.ChkBox_DBGLookAt.TabIndex = 90;
@@ -1784,7 +1791,8 @@
             // ChkBox_DBGPrint
             // 
             this.ChkBox_DBGPrint.AutoSize = true;
-            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 549);
+            this.ChkBox_DBGPrint.BoxSize = 18;
+            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 561);
             this.ChkBox_DBGPrint.Name = "ChkBox_DBGPrint";
             this.ChkBox_DBGPrint.Size = new System.Drawing.Size(94, 17);
             this.ChkBox_DBGPrint.TabIndex = 89;
@@ -1796,7 +1804,8 @@
             // ChkBox_DBGDlist
             // 
             this.ChkBox_DBGDlist.AutoSize = true;
-            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 569);
+            this.ChkBox_DBGDlist.BoxSize = 18;
+            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 581);
             this.ChkBox_DBGDlist.Name = "ChkBox_DBGDlist";
             this.ChkBox_DBGDlist.Size = new System.Drawing.Size(80, 17);
             this.ChkBox_DBGDlist.TabIndex = 88;
@@ -1808,6 +1817,7 @@
             // ChkBox_ExistInAll
             // 
             this.ChkBox_ExistInAll.AutoSize = true;
+            this.ChkBox_ExistInAll.BoxSize = 18;
             this.ChkBox_ExistInAll.Location = new System.Drawing.Point(422, 261);
             this.ChkBox_ExistInAll.Name = "ChkBox_ExistInAll";
             this.ChkBox_ExistInAll.Size = new System.Drawing.Size(103, 17);
@@ -1866,6 +1876,7 @@
             // ChkInvisible
             // 
             this.ChkInvisible.AutoSize = true;
+            this.ChkInvisible.BoxSize = 18;
             this.ChkInvisible.Location = new System.Drawing.Point(584, 238);
             this.ChkInvisible.Name = "ChkInvisible";
             this.ChkInvisible.Size = new System.Drawing.Size(64, 17);
@@ -1878,6 +1889,7 @@
             // ChkOnlyWhenLens
             // 
             this.ChkOnlyWhenLens.AutoSize = true;
+            this.ChkOnlyWhenLens.BoxSize = 18;
             this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 238);
             this.ChkOnlyWhenLens.Name = "ChkOnlyWhenLens";
             this.ChkOnlyWhenLens.Size = new System.Drawing.Size(146, 17);
@@ -1890,7 +1902,8 @@
             // ChkBox_DBGCol
             // 
             this.ChkBox_DBGCol.AutoSize = true;
-            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 549);
+            this.ChkBox_DBGCol.BoxSize = 18;
+            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 561);
             this.ChkBox_DBGCol.Name = "ChkBox_DBGCol";
             this.ChkBox_DBGCol.Size = new System.Drawing.Size(91, 17);
             this.ChkBox_DBGCol.TabIndex = 80;
@@ -1914,7 +1927,7 @@
             this.Panel_Colors.Controls.Add(this.ChkBox_Glow);
             this.Panel_Colors.Controls.Add(this.NumUp_LightLimb);
             this.Panel_Colors.Controls.Add(this.ChkBox_GenLight);
-            this.Panel_Colors.Location = new System.Drawing.Point(419, 374);
+            this.Panel_Colors.Location = new System.Drawing.Point(419, 386);
             this.Panel_Colors.Name = "Panel_Colors";
             this.Panel_Colors.Size = new System.Drawing.Size(341, 134);
             this.Panel_Colors.TabIndex = 77;
@@ -2039,6 +2052,7 @@
             // ChkBox_Glow
             // 
             this.ChkBox_Glow.AutoSize = true;
+            this.ChkBox_Glow.BoxSize = 18;
             this.ChkBox_Glow.Location = new System.Drawing.Point(3, 30);
             this.ChkBox_Glow.Name = "ChkBox_Glow";
             this.ChkBox_Glow.Size = new System.Drawing.Size(50, 17);
@@ -2065,6 +2079,7 @@
             // ChkBox_GenLight
             // 
             this.ChkBox_GenLight.AutoSize = true;
+            this.ChkBox_GenLight.BoxSize = 18;
             this.ChkBox_GenLight.Location = new System.Drawing.Point(3, 5);
             this.ChkBox_GenLight.Name = "ChkBox_GenLight";
             this.ChkBox_GenLight.Size = new System.Drawing.Size(92, 17);
@@ -2110,6 +2125,7 @@
             // ChkB_FadeOut
             // 
             this.ChkB_FadeOut.AutoSize = true;
+            this.ChkB_FadeOut.BoxSize = 18;
             this.ChkB_FadeOut.Location = new System.Drawing.Point(584, 190);
             this.ChkB_FadeOut.Name = "ChkB_FadeOut";
             this.ChkB_FadeOut.Size = new System.Drawing.Size(150, 17);
@@ -2128,7 +2144,7 @@
             this.Btn_ReactIfAtt.Controls.Add(this.Txtbox_ReactIfAtt);
             this.Btn_ReactIfAtt.Controls.Add(this.Lbl_ReactIfAttSnd);
             this.Btn_ReactIfAtt.Controls.Add(this.Chkb_ReactIfAtt);
-            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 281);
+            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 293);
             this.Btn_ReactIfAtt.Name = "Btn_ReactIfAtt";
             this.Btn_ReactIfAtt.Size = new System.Drawing.Size(341, 87);
             this.Btn_ReactIfAtt.TabIndex = 76;
@@ -2202,6 +2218,7 @@
             // Chkb_ReactIfAtt
             // 
             this.Chkb_ReactIfAtt.AutoSize = true;
+            this.Chkb_ReactIfAtt.BoxSize = 18;
             this.Chkb_ReactIfAtt.Location = new System.Drawing.Point(3, 5);
             this.Chkb_ReactIfAtt.Name = "Chkb_ReactIfAtt";
             this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(108, 17);
@@ -2214,6 +2231,7 @@
             // Chkb_Opendoors
             // 
             this.Chkb_Opendoors.AutoSize = true;
+            this.Chkb_Opendoors.BoxSize = 18;
             this.Chkb_Opendoors.Location = new System.Drawing.Point(584, 168);
             this.Chkb_Opendoors.Name = "Chkb_Opendoors";
             this.Chkb_Opendoors.Size = new System.Drawing.Size(167, 17);
@@ -2226,6 +2244,7 @@
             // ChkRunJustScript
             // 
             this.ChkRunJustScript.AutoSize = true;
+            this.ChkRunJustScript.BoxSize = 18;
             this.ChkRunJustScript.Location = new System.Drawing.Point(584, 213);
             this.ChkRunJustScript.Name = "ChkRunJustScript";
             this.ChkRunJustScript.Size = new System.Drawing.Size(91, 17);
@@ -2371,13 +2390,15 @@
             // Checkbox_HaveCollision
             // 
             this.Checkbox_HaveCollision.AutoSize = true;
+            this.Checkbox_HaveCollision.BackColor = System.Drawing.Color.White;
+            this.Checkbox_HaveCollision.BoxSize = 18;
             this.Checkbox_HaveCollision.Location = new System.Drawing.Point(8, 5);
             this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
             this.Checkbox_HaveCollision.Size = new System.Drawing.Size(85, 17);
             this.Checkbox_HaveCollision.TabIndex = 21;
             this.Checkbox_HaveCollision.Tag = "COLLISION";
             this.Checkbox_HaveCollision.Text = "Has collision";
-            this.Checkbox_HaveCollision.UseVisualStyleBackColor = true;
+            this.Checkbox_HaveCollision.UseVisualStyleBackColor = false;
             this.Checkbox_HaveCollision.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Panel_Shadow
@@ -2417,6 +2438,7 @@
             // Checkbox_DrawShadow
             // 
             this.Checkbox_DrawShadow.AutoSize = true;
+            this.Checkbox_DrawShadow.BoxSize = 18;
             this.Checkbox_DrawShadow.Location = new System.Drawing.Point(9, 3);
             this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
             this.Checkbox_DrawShadow.Size = new System.Drawing.Size(92, 17);
@@ -2950,13 +2972,15 @@
             // Checkbox_Targettable
             // 
             this.Checkbox_Targettable.AutoSize = true;
+            this.Checkbox_Targettable.BackColor = System.Drawing.Color.White;
+            this.Checkbox_Targettable.BoxSize = 18;
             this.Checkbox_Targettable.Location = new System.Drawing.Point(7, 10);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
             this.Checkbox_Targettable.Size = new System.Drawing.Size(80, 17);
             this.Checkbox_Targettable.TabIndex = 39;
             this.Checkbox_Targettable.Tag = "TARGETTABLE";
             this.Checkbox_Targettable.Text = "Targettable";
-            this.Checkbox_Targettable.UseVisualStyleBackColor = true;
+            this.Checkbox_Targettable.UseVisualStyleBackColor = false;
             this.Checkbox_Targettable.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUpDown_TargetLimb
@@ -3020,13 +3044,15 @@
             // Chkb_IgnoreY
             // 
             this.Chkb_IgnoreY.AutoSize = true;
+            this.Chkb_IgnoreY.BackColor = System.Drawing.Color.White;
+            this.Chkb_IgnoreY.BoxSize = 18;
             this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 344);
             this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
             this.Chkb_IgnoreY.Size = new System.Drawing.Size(115, 17);
             this.Chkb_IgnoreY.TabIndex = 67;
             this.Chkb_IgnoreY.Tag = "IGNORENODEYAXIS";
             this.Chkb_IgnoreY.Text = "Ignore node Y Axis";
-            this.Chkb_IgnoreY.UseVisualStyleBackColor = true;
+            this.Chkb_IgnoreY.UseVisualStyleBackColor = false;
             this.Chkb_IgnoreY.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUp_MaxRoam
@@ -3114,7 +3140,7 @@
             this.tmpicker_timedPathEnd.Location = new System.Drawing.Point(124, 266);
             this.tmpicker_timedPathEnd.Name = "tmpicker_timedPathEnd";
             this.tmpicker_timedPathEnd.ShowUpDown = true;
-            this.tmpicker_timedPathEnd.Size = new System.Drawing.Size(65, 20);
+            this.tmpicker_timedPathEnd.Size = new System.Drawing.Size(66, 20);
             this.tmpicker_timedPathEnd.TabIndex = 65;
             this.tmpicker_timedPathEnd.Tag = "PATHENDTIME";
             this.tmpicker_timedPathEnd.ValueChanged += new System.EventHandler(this.DatePicker_ValueChanged);
@@ -3149,13 +3175,15 @@
             // Checkbox_Loop
             // 
             this.Checkbox_Loop.AutoSize = true;
+            this.Checkbox_Loop.BackColor = System.Drawing.Color.White;
+            this.Checkbox_Loop.BoxSize = 18;
             this.Checkbox_Loop.Location = new System.Drawing.Point(7, 344);
             this.Checkbox_Loop.Name = "Checkbox_Loop";
             this.Checkbox_Loop.Size = new System.Drawing.Size(50, 17);
             this.Checkbox_Loop.TabIndex = 41;
             this.Checkbox_Loop.Tag = "LOOP";
             this.Checkbox_Loop.Text = "Loop";
-            this.Checkbox_Loop.UseVisualStyleBackColor = true;
+            this.Checkbox_Loop.UseVisualStyleBackColor = false;
             this.Checkbox_Loop.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUpDown_LoopStartNode
@@ -3354,6 +3382,7 @@
             // Checkbox_AlwaysDraw
             // 
             this.Checkbox_AlwaysDraw.AutoSize = true;
+            this.Checkbox_AlwaysDraw.BoxSize = 18;
             this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(422, 192);
             this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
             this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(146, 17);
@@ -3380,6 +3409,7 @@
             // Checkbox_AlwaysActive
             // 
             this.Checkbox_AlwaysActive.AutoSize = true;
+            this.Checkbox_AlwaysActive.BoxSize = 18;
             this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(422, 169);
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
             this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(156, 17);
@@ -3392,6 +3422,7 @@
             // Checkbox_CanPressSwitches
             // 
             this.Checkbox_CanPressSwitches.AutoSize = true;
+            this.Checkbox_CanPressSwitches.BoxSize = 18;
             this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(422, 215);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
             this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
@@ -3435,10 +3466,10 @@
             // 
             // ChkBox_UseCJK
             // 
-            this.ChkBox_UseCJK.AutoSize = true;
+            this.ChkBox_UseCJK.BoxSize = 18;
             this.ChkBox_UseCJK.Location = new System.Drawing.Point(756, 29);
             this.ChkBox_UseCJK.Name = "ChkBox_UseCJK";
-            this.ChkBox_UseCJK.Size = new System.Drawing.Size(45, 17);
+            this.ChkBox_UseCJK.Size = new System.Drawing.Size(47, 22);
             this.ChkBox_UseCJK.TabIndex = 97;
             this.ChkBox_UseCJK.Tag = "USECJK";
             this.ChkBox_UseCJK.Text = "CJK";
@@ -3748,10 +3779,10 @@
             // 
             this.chkBox_ShowDefaultLanguagePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkBox_ShowDefaultLanguagePreview.AutoSize = true;
+            this.chkBox_ShowDefaultLanguagePreview.BoxSize = 18;
             this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(470, 30);
             this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
-            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(145, 17);
+            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(150, 22);
             this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
             this.chkBox_ShowDefaultLanguagePreview.Tag = "";
             this.chkBox_ShowDefaultLanguagePreview.Text = "Show default loc preview";
@@ -3841,10 +3872,10 @@
             // 
             // ChkBox_UseSpaceFont
             // 
-            this.ChkBox_UseSpaceFont.AutoSize = true;
+            this.ChkBox_UseSpaceFont.BoxSize = 18;
             this.ChkBox_UseSpaceFont.Location = new System.Drawing.Point(621, 30);
             this.ChkBox_UseSpaceFont.Name = "ChkBox_UseSpaceFont";
-            this.ChkBox_UseSpaceFont.Size = new System.Drawing.Size(129, 17);
+            this.ChkBox_UseSpaceFont.Size = new System.Drawing.Size(134, 22);
             this.ChkBox_UseSpaceFont.TabIndex = 73;
             this.ChkBox_UseSpaceFont.Tag = "USESPACEFONT";
             this.ChkBox_UseSpaceFont.Text = "Space width from font";
@@ -3955,7 +3986,7 @@
             this.MessagesGrid.MultiSelect = false;
             this.MessagesGrid.Name = "MessagesGrid";
             this.MessagesGrid.ReadOnly = true;
-            this.MessagesGrid.RowHeadersWidth = 25;
+            this.MessagesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.MessagesGrid.Size = new System.Drawing.Size(189, 520);
             this.MessagesGrid.TabIndex = 3;
@@ -4066,7 +4097,7 @@
             // Button_CDelete
             // 
             this.Button_CDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_CDelete.Location = new System.Drawing.Point(666, 597);
+            this.Button_CDelete.Location = new System.Drawing.Point(666, 602);
             this.Button_CDelete.Name = "Button_CDelete";
             this.Button_CDelete.Size = new System.Drawing.Size(174, 21);
             this.Button_CDelete.TabIndex = 27;
@@ -4606,6 +4637,13 @@
             this.compileActorToolStripMenuItem.Text = "Compile actor...";
             this.compileActorToolStripMenuItem.Click += new System.EventHandler(this.CompileActorToolStripMenuItem_Click);
             // 
+            // exportCurrentActorMessagesToolStripMenuItem
+            // 
+            this.exportCurrentActorMessagesToolStripMenuItem.Name = "exportCurrentActorMessagesToolStripMenuItem";
+            this.exportCurrentActorMessagesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.exportCurrentActorMessagesToolStripMenuItem.Text = "Export current actor messages";
+            this.exportCurrentActorMessagesToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentActorMessagesToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -4759,13 +4797,6 @@
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
-            // 
-            // exportCurrentActorMessagesToolStripMenuItem
-            // 
-            this.exportCurrentActorMessagesToolStripMenuItem.Name = "exportCurrentActorMessagesToolStripMenuItem";
-            this.exportCurrentActorMessagesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.exportCurrentActorMessagesToolStripMenuItem.Text = "Export current actor messages";
-            this.exportCurrentActorMessagesToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentActorMessagesToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -4927,7 +4958,7 @@
         private System.Windows.Forms.ToolStripMenuItem playerMasksToolStripMenuItem;
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage Tab1_Data;
-        private System.Windows.Forms.CheckBox Checkbox_EnvColor;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_EnvColor;
         private System.Windows.Forms.Button Button_EnvironmentColorPreview;
         private System.Windows.Forms.Label Label_NPCName;
         private System.Windows.Forms.TextBox Textbox_NPCName;
@@ -4963,11 +4994,11 @@
         private System.Windows.Forms.Label Label_ExtraDisplayLists;
         private CustomDataGridView DataGridView_ExtraDLists;
         private System.Windows.Forms.TabPage Tab3_BehaviorData;
-        private System.Windows.Forms.CheckBox Chkb_Opendoors;
-        private System.Windows.Forms.CheckBox ChkRunJustScript;
-        private System.Windows.Forms.CheckBox Chkb_ReactIfAtt;
+        private NPC_Maker.Controls.BigCheckBox Chkb_Opendoors;
+        private NPC_Maker.Controls.BigCheckBox ChkRunJustScript;
+        private NPC_Maker.Controls.BigCheckBox Chkb_ReactIfAtt;
         private System.Windows.Forms.Label Lbl_Misc;
-        private System.Windows.Forms.CheckBox Checkbox_AlwaysDraw;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_AlwaysDraw;
         private System.Windows.Forms.Label Label_CutsceneSlot;
         private System.Windows.Forms.NumericUpDown NumUpDown_CutsceneSlot;
         private System.Windows.Forms.Panel Panel_Collision;
@@ -4977,12 +5008,12 @@
         private System.Windows.Forms.NumericUpDown NumUpDown_ColHeight;
         private System.Windows.Forms.NumericUpDown NumUpDown_ColRadius;
         private System.Windows.Forms.Label Label_ColRadius;
-        private System.Windows.Forms.CheckBox Checkbox_HaveCollision;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_HaveCollision;
         private System.Windows.Forms.Panel Panel_Shadow;
         private System.Windows.Forms.NumericUpDown NumUpDown_ShRadius;
         private System.Windows.Forms.Label Label_ShRadius;
-        private System.Windows.Forms.CheckBox Checkbox_DrawShadow;
-        private System.Windows.Forms.CheckBox Checkbox_AlwaysActive;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_DrawShadow;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_AlwaysActive;
         private System.Windows.Forms.Panel Panel_HeadRot;
         private System.Windows.Forms.NumericUpDown NumUpDown_LookAt_Z;
         private System.Windows.Forms.Label Label_WaistSep;
@@ -5021,7 +5052,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown NumUpDown_XTargetOffs;
         private System.Windows.Forms.Label Label_TargetOffset;
-        private System.Windows.Forms.CheckBox Checkbox_Targettable;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_Targettable;
         private System.Windows.Forms.NumericUpDown NumUpDown_TargetLimb;
         private System.Windows.Forms.Panel Panel_Movement;
         private System.Windows.Forms.Label Lb_PathEnd;
@@ -5036,7 +5067,7 @@
         private System.Windows.Forms.NumericUpDown NumUpDown_LoopDelay;
         private System.Windows.Forms.Label Label_LoopEndNode;
         private System.Windows.Forms.NumericUpDown NumUpDown_LoopEndNode;
-        private System.Windows.Forms.CheckBox Checkbox_Loop;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_Loop;
         private System.Windows.Forms.Label Label_PathFollowID;
         private System.Windows.Forms.NumericUpDown NumUpDown_PathFollowID;
         private System.Windows.Forms.NumericUpDown NumUpDown_MovDistance;
@@ -5045,7 +5076,7 @@
         private System.Windows.Forms.NumericUpDown NumUpDown_MovSpeed;
         private System.Windows.Forms.Label Label_Distance;
         private System.Windows.Forms.Label Label_Speed;
-        private System.Windows.Forms.CheckBox Checkbox_CanPressSwitches;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_CanPressSwitches;
         private System.Windows.Forms.TextBox Txb_ObjectID;
         private System.Windows.Forms.Button Btn_SelectObject;
         private System.Windows.Forms.ToolStripMenuItem FileMenu;
@@ -5067,7 +5098,7 @@
         private System.Windows.Forms.ToolStripMenuItem actorsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem sFXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem musicToolStripMenuItem1;
-        private System.Windows.Forms.CheckBox Chkb_IgnoreY;
+        private NPC_Maker.Controls.BigCheckBox Chkb_IgnoreY;
         private System.Windows.Forms.Label SmoothingCnts;
         private System.Windows.Forms.NumericUpDown NumUp_Smoothing;
         private System.Windows.Forms.Panel Btn_ReactIfAtt;
@@ -5080,7 +5111,7 @@
         private System.Windows.Forms.Label Lbl_Mass;
         private System.Windows.Forms.NumericUpDown NumUpAlpha;
         private System.Windows.Forms.Label LblAlpha;
-        private System.Windows.Forms.CheckBox ChkB_FadeOut;
+        private NPC_Maker.Controls.BigCheckBox ChkB_FadeOut;
         private System.Windows.Forms.NumericUpDown NumUp_RiddenBy;
         private System.Windows.Forms.Label Label_RiddenBy;
         private System.Windows.Forms.Panel Panel_Colors;
@@ -5089,10 +5120,10 @@
         private System.Windows.Forms.NumericUpDown NumUp_LightXOffs;
         private System.Windows.Forms.Label Label_LightLimbOffset;
         private System.Windows.Forms.Label Label_LightLimb;
-        private System.Windows.Forms.CheckBox ChkBox_Glow;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_Glow;
         private System.Windows.Forms.NumericUpDown NumUp_LightLimb;
-        private System.Windows.Forms.CheckBox ChkBox_GenLight;
-        private System.Windows.Forms.CheckBox ChkBox_DBGCol;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_GenLight;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_DBGCol;
         private System.Windows.Forms.Label Lbl_LimbColors;
         private CustomDataGridView ColorsDataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn StartLimbColumn;
@@ -5101,8 +5132,8 @@
         private System.Windows.Forms.Button Btn_LightColor;
         private System.Windows.Forms.Label Lbl_Radius;
         private System.Windows.Forms.NumericUpDown NumUp_LightRadius;
-        private System.Windows.Forms.CheckBox ChkOnlyWhenLens;
-        private System.Windows.Forms.CheckBox ChkInvisible;
+        private NPC_Maker.Controls.BigCheckBox ChkOnlyWhenLens;
+        private NPC_Maker.Controls.BigCheckBox ChkInvisible;
         private System.Windows.Forms.TabPage Tab4_Messages;
         private System.Windows.Forms.ComboBox Combo_MsgType;
         private System.Windows.Forms.Label Lbl_MsgType;
@@ -5124,7 +5155,7 @@
         private System.Windows.Forms.ToolStripMenuItem colorPickerToolStripMenuItem;
         private System.Windows.Forms.PictureBox MsgPreview;
         private System.Windows.Forms.Panel PanelMsgPreview;
-        private System.Windows.Forms.CheckBox ChkBox_ExistInAll;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_ExistInAll;
         private System.Windows.Forms.NumericUpDown numUpFileStart;
         private System.Windows.Forms.Label Lbl_ObjectOffset;
         private System.Windows.Forms.TabPage Tab6_EmbeddedOverlay;
@@ -5155,9 +5186,9 @@
         private System.Windows.Forms.TabControl TabControl_Scripts;
         private System.Windows.Forms.Button Button_CCompile;
         private System.Windows.Forms.Label Lbl_DBGOpts;
-        private System.Windows.Forms.CheckBox ChkBox_DBGLookAt;
-        private System.Windows.Forms.CheckBox ChkBox_DBGPrint;
-        private System.Windows.Forms.CheckBox ChkBox_DBGDlist;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_DBGLookAt;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_DBGPrint;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_DBGDlist;
         private System.Windows.Forms.TabControl TabControl_Segments;
         private System.Windows.Forms.TabPage TabPage_Segment_8;
         private System.Windows.Forms.TabPage TabPage_Segment_9;
@@ -5170,7 +5201,7 @@
         private System.Windows.Forms.Button Button_CDelete;
         private System.Windows.Forms.ToolTip CodeParamsTooltip;
         private System.Windows.Forms.Button Button_UpdateCompile;
-        private System.Windows.Forms.CheckBox ChkBox_UseSpaceFont;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_UseSpaceFont;
         private System.Windows.Forms.Button Btn_MsgMoveDown;
         private System.Windows.Forms.Button Btn_MsgMoveUp;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
@@ -5202,10 +5233,10 @@
         private System.Windows.Forms.Button Button_Export;
         private System.Windows.Forms.Button Button_NPCRename;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem1;
-        private System.Windows.Forms.CheckBox Checkbox_Omitted;
+        private NPC_Maker.Controls.BigCheckBox Checkbox_Omitted;
         private System.Windows.Forms.SplitContainer PreviewSplitContainer;
         private System.Windows.Forms.PictureBox MsgPreviewOrig;
-        private System.Windows.Forms.CheckBox chkBox_ShowDefaultLanguagePreview;
+        private NPC_Maker.Controls.BigCheckBox chkBox_ShowDefaultLanguagePreview;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Name;
         private System.Windows.Forms.TextBox Tx_SkeletonName;
@@ -5225,7 +5256,7 @@
         private System.Windows.Forms.ComboBox comboFont;
         private System.Windows.Forms.NumericUpDown numUpDownFont;
         private System.Windows.Forms.Label labelEditorFont;
-        private System.Windows.Forms.CheckBox ChkBox_UseCJK;
+        private NPC_Maker.Controls.BigCheckBox ChkBox_UseCJK;
         private FCTB_MonoCJK MsgTextCJK;
         private System.Windows.Forms.TextBox Tx_FileStartName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExtraDlists_Purpose;

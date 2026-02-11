@@ -167,6 +167,10 @@
     <Compile Include="Common\NPCMakerSettings.cs" />
     <Compile Include="Common\ScriptsUsages.cs" />
     <Compile Include="Common\Yaz0Compress.cs" />
+    <Compile Include="Controls\BigCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\BigMessageBox.cs" />
     <Compile Include="Controls\FCTB_MonoCJK.cs">
       <SubType>UserControl</SubType>
     </Compile>

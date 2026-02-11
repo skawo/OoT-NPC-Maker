@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using NPC_Maker.Controls;
 
 namespace NPC_Maker
 {
@@ -18,6 +19,7 @@ namespace NPC_Maker
         public PickableList(Lists.DictType Dict, bool PickMode = false, List<int> _SkipEntries = null)
         {
             InitializeComponent();
+            Helpers.AdjustFormScale(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 
@@ -52,7 +54,7 @@ namespace NPC_Maker
             }
             catch (Exception)
             {
-                MessageBox.Show(FileName + " is missing or incorrect.");
+                BigMessageBox.Show(FileName + " is missing or incorrect.");
                 return;
             }
 
@@ -71,6 +73,7 @@ namespace NPC_Maker
         public PickableList(Dictionary<string, int> Dict, List<int> _SkipEntries = null)
         {
             InitializeComponent();
+            Helpers.AdjustFormScale(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 
@@ -91,7 +94,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                BigMessageBox.Show(ex.Message);
                 return;
             }
 
@@ -192,7 +195,7 @@ namespace NPC_Maker
 
             if (Sel.ID < 0)
             {
-                MessageBox.Show("Entries with negative IDs are treated as editor constants and cannot be edited.");
+                BigMessageBox.Show("Entries with negative IDs are treated as editor constants and cannot be edited.");
                 return;
             }
 
@@ -202,7 +205,7 @@ namespace NPC_Maker
             if (dr == DialogResult.OK)
             {
                 if (Sel.ID != pE.Out_EntryID && (Data.FindIndex(x => x.ID == pE.Out_EntryID) >= 0) &&
-                    MessageBox.Show("New entry ID already exists on the list. Replace?", "Replace ID?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    BigMessageBox.Show("New entry ID already exists on the list. Replace?", "Replace ID?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Data.Remove(Sel);
 
@@ -233,7 +236,7 @@ namespace NPC_Maker
 
                 if (NewEntry.ID < 0)
                 {
-                    MessageBox.Show("Entries with negative IDs are treated as editor constants and cannot be edited.");
+                    BigMessageBox.Show("Entries with negative IDs are treated as editor constants and cannot be edited.");
                     return;
                 }
 
@@ -241,7 +244,7 @@ namespace NPC_Maker
 
                 if (Sel != null)
                 {
-                    DialogResult Res = MessageBox.Show("New entry ID already exists on the list. Replace?", "Replace ID?", MessageBoxButtons.YesNo);
+                    DialogResult Res = BigMessageBox.Show("New entry ID already exists on the list. Replace?", "Replace ID?", MessageBoxButtons.YesNo);
 
                     if (Res == DialogResult.Yes)
                     {
@@ -269,11 +272,11 @@ namespace NPC_Maker
 
             if (Sel.ID < 0)
             {
-                MessageBox.Show("Entries with negative IDs are treated as editor constants and cannot be deleted.");
+                BigMessageBox.Show("Entries with negative IDs are treated as editor constants and cannot be deleted.");
                 return;
             }
 
-            DialogResult Res = MessageBox.Show("Definitely remove this entry?", "Remove ID?", MessageBoxButtons.YesNo);
+            DialogResult Res = BigMessageBox.Show("Definitely remove this entry?", "Remove ID?", MessageBoxButtons.YesNo);
 
             if (Res == DialogResult.Yes)
             {
@@ -300,7 +303,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error saving data." + ex.Message);
+                BigMessageBox.Show("Error saving data." + ex.Message);
                 return;
             }
         }

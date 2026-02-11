@@ -17,6 +17,7 @@ namespace NPC_Maker.Windows
         public ComboPicker(List<string> Options, string Explanation, string Title, bool hasCancel = true)
         {
             InitializeComponent();
+            Helpers.AdjustFormScale(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 

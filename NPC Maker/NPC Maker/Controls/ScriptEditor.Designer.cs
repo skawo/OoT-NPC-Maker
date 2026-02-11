@@ -31,7 +31,7 @@ namespace NPC_Maker
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScriptEditor));
-            this.Textbox_Script = new FCTB_Mono(false);
+            this.Textbox_Script = new NPC_Maker.FCTB_Mono(this.components);
             this.Textbox_ParseErrors = new System.Windows.Forms.TextBox();
             this.Button_TryParse = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
@@ -101,8 +101,7 @@ namespace NPC_Maker
             // 
             this.Button_TryParse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Button_TryParse.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.Button_TryParse.Location = new System.Drawing.Point(722, 0);
+            this.Button_TryParse.Location = new System.Drawing.Point(719, 0);
             this.Button_TryParse.Name = "Button_TryParse";
             this.Button_TryParse.Size = new System.Drawing.Size(80, 85);
             this.Button_TryParse.TabIndex = 6;
@@ -152,11 +151,10 @@ namespace NPC_Maker
         }
 
         #endregion
-
-        private FastColoredTextBoxNS.FastColoredTextBox Textbox_Script;
         private System.Windows.Forms.TextBox Textbox_ParseErrors;
         private System.Windows.Forms.Button Button_TryParse;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private FCTB_Mono Textbox_Script;
     }
 }

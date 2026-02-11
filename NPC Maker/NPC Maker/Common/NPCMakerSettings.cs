@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPC_Maker.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -67,6 +68,8 @@ namespace NPC_Maker
 
         public bool AllowCommentsOnLoc { get; set; }
 
+        public float GUIScale { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -99,6 +102,7 @@ namespace NPC_Maker
             UseCJK = false;
             LinkerPaths = "";
             AllowCommentsOnLoc = true;
+            GUIScale = 1.0f;
         }
 
         public enum Members
@@ -128,6 +132,7 @@ namespace NPC_Maker
             PROJPATH,
             LINKERPATHS,
             ALLOWCOMMENTSONLOC,
+            GUISCALE,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -145,7 +150,7 @@ namespace NPC_Maker
             catch (Exception)
             {
                 Member = Members.NOMEMBER;
-                System.Windows.Forms.MessageBox.Show($"Warning: {PassingObjectName} tag is incorrect!");
+                BigMessageBox.Show($"Warning: {PassingObjectName} tag is incorrect!");
             }
 
             return Member;
@@ -177,6 +182,7 @@ namespace NPC_Maker
                 case Members.ORIGPREVIEW: OrigPreview = (bool)Value; break;
                 case Members.PROJPATH: ProjectPath = (string)Value; break;
                 case Members.ALLOWCOMMENTSONLOC: AllowCommentsOnLoc = (bool)Value; break;
+                case Members.GUISCALE: GUIScale = Convert.ToSingle(Value); break;
                 default: break;
             }
         }

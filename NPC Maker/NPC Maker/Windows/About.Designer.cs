@@ -52,7 +52,6 @@
             // 
             this.Credits.AutoSize = true;
             this.Credits.BackColor = System.Drawing.Color.White;
-            this.Credits.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Credits.Location = new System.Drawing.Point(12, 199);
             this.Credits.Name = "Credits";
             this.Credits.Size = new System.Drawing.Size(416, 52);
@@ -74,7 +73,7 @@
             this.LblVersionX.AutoSize = true;
             this.LblVersionX.BackColor = System.Drawing.Color.White;
             this.LblVersionX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblVersionX.Location = new System.Drawing.Point(342, 161);
+            this.LblVersionX.Location = new System.Drawing.Point(361, 161);
             this.LblVersionX.Name = "LblVersionX";
             this.LblVersionX.Size = new System.Drawing.Size(57, 13);
             this.LblVersionX.TabIndex = 8;

@@ -1,5 +1,7 @@
 ﻿using FastColoredTextBoxNS;
+using MiscUtil.Collections.Extensions;
 using Newtonsoft.Json;
+using NPC_Maker.Controls;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -20,7 +22,7 @@ namespace NPC_Maker
 {
     public partial class MainWindow : Form
     {
-        string OpenedPath = "";
+        public string OpenedPath = "";
         NPCFile EditedFile = null;
         NPCEntry SelectedEntry = null;
         int SelectedIndex = -1;
@@ -48,6 +50,8 @@ namespace NPC_Maker
         private readonly object _previewLock = new object();
         private Common.PreviewSnapshot _pendingSnapshot;
         private Task _previewWorker;
+
+        private float lastScale = 0.0f;
 
         public MainWindow(string FilePath = "")
         {
@@ -111,6 +115,31 @@ namespace NPC_Maker
 
             SplitContainer1_Panel1_SizeChanged(null, null);
             MsgTabSplitContainer_SizeChanged(null, null);
+
+            SetupScale(this);
+        }
+
+        private void SetupScale(Control ctr)
+        {
+            float scale = Program.Settings.GUIScale;
+
+            if (scale != lastScale)
+            {
+                lastScale = scale;
+
+                float fontSize = Helpers.GetScaleFontSize();
+
+                this.Font = new Font(this.Font.FontFamily, fontSize);
+                this.MenuStrip.Font = new Font(this.MenuStrip.Font.FontFamily, fontSize);
+                this.Panel_Editor.AutoScrollMinSize = new Size((int)(936 * scale), (int)(647 * scale));
+                this.TextBox_CompileMsg.Font = new Font(this.TextBox_CompileMsg.Font.FontFamily, fontSize);
+                this.TextBox_CompileMsg.Height = LblFuncToRun.Location.Y - LblFuncToRun.Height - this.TextBox_CompileMsg.Location.Y - 12;
+
+                Helpers.AdjustControlScale(this);
+
+                this.MsgText.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
+                this.MsgTextCJK.Font = new Font(this.MsgTextCJK.Font.FontFamily, Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
+            }
         }
 
         private void SetupFonts()
@@ -264,9 +293,11 @@ namespace NPC_Maker
         {
             try
             {
-                MsgTextDefault.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
-                MsgText.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
-                MsgTextCJK.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
+                float size = Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize);
+
+                MsgTextDefault.Font = new Font(comboFont.Text, size);
+                MsgText.Font = new Font(comboFont.Text, size);
+                MsgTextCJK.Font = new Font(comboFont.Text, size);
 
                 Program.Settings.MessageEditorFont = comboFont.Text;
             }
@@ -278,11 +309,13 @@ namespace NPC_Maker
         {
             try
             {
-                MsgTextDefault.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
-                MsgText.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
-                MsgTextCJK.Font = new Font(comboFont.Text, (int)numUpDownFont.Value);
-
                 Program.Settings.MessageEditorFontSize = (int)numUpDownFont.Value;
+                float size = Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize);
+
+                MsgTextDefault.Font = new Font(comboFont.Text, size);
+                MsgText.Font = new Font(comboFont.Text, size);
+                MsgTextCJK.Font = new Font(comboFont.Text, size);
+
             }
             catch
             { }
@@ -413,7 +446,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                BigMessageBox.Show(ex.Message);
             }
 
             Combo_Language.SelectedIndex = 0;
@@ -518,7 +551,7 @@ namespace NPC_Maker
                     progressL.SetProgress(0, $"Compilation failed.");
 
                     if (Program.IsRunningUnderMono)
-                        MessageBox.Show(Program.CompileMonoErrors, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        BigMessageBox.Show(Program.CompileMonoErrors, "Error", MessageBoxButtons.OK);
                 }
                 else
                 {
@@ -558,7 +591,7 @@ namespace NPC_Maker
 
                 if (!String.Equals(CurrentFile, NPCSave))
                 {
-                    DialogResult Res = MessageBox.Show("Save changes before exiting?", "Save changes?", MessageBoxButtons.YesNoCancel);
+                    DialogResult Res = BigMessageBox.Show("Save changes before exiting?", "Save changes?", MessageBoxButtons.YesNoCancel);
 
                     if (Res == DialogResult.Yes)
                     {
@@ -995,7 +1028,7 @@ namespace NPC_Maker
 
                 if (!String.Equals(CurrentFile, NPCSave))
                 {
-                    DialogResult DR = MessageBox.Show("Save changes before opening a new file?", "Save changes?", MessageBoxButtons.YesNoCancel);
+                    DialogResult DR = BigMessageBox.Show("Save changes before opening a new file?", "Save changes?", MessageBoxButtons.YesNoCancel);
 
                     if (DR == DialogResult.Yes)
                     {
@@ -1220,14 +1253,14 @@ namespace NPC_Maker
 
                 if (EditedFile.Languages.Contains(Language) || Language == Dicts.DefaultLanguage)
                 {
-                    MessageBox.Show("Language already exists.");
+                    BigMessageBox.Show("Language already exists.");
                     return;
                 }
 
                 EditedFile.Languages.Add(Language);
                 Combo_Language.Items.Add(Language);
 
-                DialogResult Res = MessageBox.Show("Fill all actors with copies of the messages?", "Filling", MessageBoxButtons.YesNo);
+                DialogResult Res = BigMessageBox.Show("Fill all actors with copies of the messages?", "Filling", MessageBoxButtons.YesNo);
 
                 if (Res == DialogResult.Yes)
                 {
@@ -1251,7 +1284,7 @@ namespace NPC_Maker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    BigMessageBox.Show(ex.Message);
                 }
 
             }
@@ -1264,7 +1297,7 @@ namespace NPC_Maker
 
             if (EditedFile.Languages.Count == 0)
             {
-                MessageBox.Show("There are no localizations.");
+                BigMessageBox.Show("There are no localizations.");
                 return;
             }
 
@@ -1277,7 +1310,7 @@ namespace NPC_Maker
 
                     if (EditedFile != null)
                     {
-                        DialogResult Res = MessageBox.Show("Are you sure? All messages of that language will be removed.", "Confirmation", MessageBoxButtons.YesNoCancel);
+                        DialogResult Res = BigMessageBox.Show("Are you sure? All messages of that language will be removed.", "Confirmation", MessageBoxButtons.YesNoCancel);
 
                         if (Res == DialogResult.Yes)
                         {
@@ -1296,7 +1329,7 @@ namespace NPC_Maker
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message);
+                                BigMessageBox.Show(ex.Message);
                             }
 
                             Combo_Language.SelectedIndex = 0;
@@ -1390,7 +1423,7 @@ namespace NPC_Maker
         {
             if (SelectedEntry == null || SelectedEntry.IsNull)
             {
-                MessageBox.Show("No actor chosen, or actor is null.");
+                BigMessageBox.Show("No actor chosen, or actor is null.");
                 return false;
             }
 
@@ -1398,7 +1431,7 @@ namespace NPC_Maker
             {
                 if (TabControl.SelectedTab != Tab5_Scripts)
                 {
-                    MessageBox.Show("Select the script tab first.");
+                    BigMessageBox.Show("Select the script tab first.");
                     return false;
                 }
             }
@@ -1413,11 +1446,11 @@ namespace NPC_Maker
 
             string ScriptName = GetScriptName();
 
-            if (Name != "")
+            if (!String.IsNullOrWhiteSpace(ScriptName))
             {
                 if (SelectedEntry.Scripts.Count >= 255)
                 {
-                    MessageBox.Show("Cannot define more than 255 scripts.");
+                    BigMessageBox.Show("Cannot define more than 255 scripts.");
                     return;
                 }
 
@@ -1440,9 +1473,9 @@ namespace NPC_Maker
             if (!CheckScriptOpForValidity(true))
                 return;
 
-            string Name = GetScriptName(TabControl_Scripts.SelectedTab.Text);
+            string ScriptName = GetScriptName(TabControl_Scripts.SelectedTab.Text);
 
-            if (Name != "")
+            if (!String.IsNullOrWhiteSpace(ScriptName))
             {
                 (TabControl_Scripts.SelectedTab.Controls[0] as ScriptEditor).Script.Name = Name;
                 TabControl_Scripts.SelectedTab.Text = Name;
@@ -1454,7 +1487,7 @@ namespace NPC_Maker
             if (!CheckScriptOpForValidity(true))
                 return;
 
-            DialogResult Res = MessageBox.Show("Are you sure you want to delete this script? You cannot reverse this action!", "Removing a script", MessageBoxButtons.YesNoCancel);
+            DialogResult Res = BigMessageBox.Show("Are you sure you want to delete this script? You cannot reverse this action!", "Removing a script", MessageBoxButtons.YesNoCancel);
 
             if (Res == DialogResult.Yes)
             {
@@ -1495,6 +1528,7 @@ namespace NPC_Maker
 
         private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            float curScale = Program.Settings.GUIScale;
             NPC_Maker.Windows.Settings s = new Windows.Settings(ref EditedFile);
             s.StartPosition = FormStartPosition.CenterParent;
             s.ShowDialog();
@@ -1514,6 +1548,13 @@ namespace NPC_Maker
             MsgText_TextChanged(null, null);
             MsgTextCJK_TextChanged(null, null);
             SplitMsgContainer_Paint(null, null);
+
+            if (curScale != Program.Settings.GUIScale)
+            {
+                BigMessageBox.Show("The GUI Scale has changed, so the program will now restart.");
+                this.DialogResult = DialogResult.Retry;
+                this.Close();
+            }
         }
 
         private void DocumentationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1655,7 +1696,7 @@ namespace NPC_Maker
                 }
             }
 
-            MessageBox.Show("Check complete. All valid fields have been updated.");
+            BigMessageBox.Show("Check complete. All valid fields have been updated.", "Result");
             InsertDataToEditor();
         }
 
@@ -1664,7 +1705,7 @@ namespace NPC_Maker
 
             if (EditedFile.Languages.Count == 0)
             {
-                MessageBox.Show("There are no localizations.");
+                BigMessageBox.Show("There are no localizations.");
                 return;
             }
 
@@ -1745,7 +1786,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                BigMessageBox.Show($"Error: {ex.Message}");
             }
 
         }
@@ -1784,7 +1825,7 @@ namespace NPC_Maker
 
                             if (IndexInCur != -1 || SelectedLanguage == Dicts.DefaultLanguage)
                             {
-                                DialogResult Res = MessageBox.Show("This language already exists. Replace it?", "Confirmation", MessageBoxButtons.YesNoCancel);
+                                DialogResult Res = BigMessageBox.Show("This language already exists. Replace it?", "Confirmation", MessageBoxButtons.YesNoCancel);
 
                                 if (Res != DialogResult.Yes)
                                     return;
@@ -1947,7 +1988,7 @@ namespace NPC_Maker
                     }
                     catch (Exception ex)
                     {
-                        System.Windows.Forms.MessageBox.Show($"Failed to read JSON: {ex.Message}");
+                        BigMessageBox.Show($"Failed to read JSON: {ex.Message}");
                     }
                 }
             }
@@ -2078,7 +2119,7 @@ namespace NPC_Maker
 
                                 if (index != i)
                                 {
-                                    MessageBox.Show($"NPC is malformed: Localization does not match default messages.");
+                                    BigMessageBox.Show($"NPC is malformed: Localization does not match default messages.");
                                     break;
                                 }
                             }
@@ -2114,7 +2155,7 @@ namespace NPC_Maker
                     }
                     catch (Exception ex)
                     {
-                        System.Windows.Forms.MessageBox.Show($"Failed to read NPC Entry JSON: {ex.Message}");
+                        BigMessageBox.Show($"Failed to read NPC Entry JSON: {ex.Message}");
                     }
 
                 }
@@ -2170,7 +2211,7 @@ namespace NPC_Maker
 
             if (indexSame != -1)
             {
-                MessageBox.Show("NPC with that name already exists.");
+                BigMessageBox.Show("NPC with that name already exists.");
                 return;
             }
 
@@ -2270,7 +2311,7 @@ namespace NPC_Maker
         {
             if (hD.Value1 == null && hD.Value2 == null)
             {
-                MessageBox.Show("Error parsing defined value");
+                BigMessageBox.Show("Error parsing defined value");
                 return true;
             }
 
@@ -2434,7 +2475,7 @@ namespace NPC_Maker
 
             if (indexSame != -1 && indexSame != SelectedIndex)
             {
-                MessageBox.Show("NPC with that name already exists.");
+                BigMessageBox.Show("NPC with that name already exists.");
                 return;
             }
 
@@ -2462,7 +2503,7 @@ namespace NPC_Maker
         private void Button_EnvironmentColorPreview_Click(object sender, EventArgs e)
         {
             ColorDialog.Color = SelectedEntry.EnvironmentColor;
-
+            
             if (ColorDialog.ShowDialog() == DialogResult.OK)
             {
                 Button_EnvironmentColorPreview.BackColor = ColorDialog.Color;
@@ -2659,7 +2700,7 @@ namespace NPC_Maker
         {
             if (e.RowIndex > 255)
             {
-                MessageBox.Show("Cannot define more than 255 animations.");
+                BigMessageBox.Show("Cannot define more than 255 animations.");
                 (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
                 e.ParsingApplied = true;
                 return;
@@ -3141,7 +3182,7 @@ namespace NPC_Maker
         {
             if (e.RowIndex > 255)
             {
-                MessageBox.Show("Cannot define more than 255 extra display lists.");
+                BigMessageBox.Show("Cannot define more than 255 extra display lists.");
                 (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
                 e.ParsingApplied = true;
                 return;
@@ -3485,7 +3526,7 @@ namespace NPC_Maker
         {
             if (e.RowIndex > 31)
             {
-                MessageBox.Show("Cannot define more than 32 textures per segment.");
+                BigMessageBox.Show("Cannot define more than 32 textures per segment.");
                 (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
                 e.ParsingApplied = true;
                 return;
@@ -3803,7 +3844,7 @@ namespace NPC_Maker
         {
             if (SelectedEntry != null && Combo_Language.SelectedIndex != 0)
             {
-                DialogResult Res = MessageBox.Show("Are you sure? All messages of that language within this actor will be removed.", "Confirmation", MessageBoxButtons.YesNo);
+                DialogResult Res = BigMessageBox.Show("Are you sure? All messages of that language within this actor will be removed.", "Confirmation", MessageBoxButtons.YesNo);
 
                 if (Res == DialogResult.Yes)
                 {
@@ -3823,7 +3864,7 @@ namespace NPC_Maker
                 {
                     if (SelectedEntry.Localization.FindIndex(x => x.Language == SelLang) == -1)
                     {
-                        DialogResult Res = MessageBox.Show("This actor doesn't contain this language. Create it?", "Confirmation", MessageBoxButtons.YesNo);
+                        DialogResult Res = BigMessageBox.Show("This actor doesn't contain this language. Create it?", "Confirmation", MessageBoxButtons.YesNo);
 
                         if (Res == DialogResult.Yes)
                         {
@@ -3932,7 +3973,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                BigMessageBox.Show(ex.Message);
             }
         }
 
@@ -3972,7 +4013,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                BigMessageBox.Show(ex.Message);
             }
         }
 
@@ -4375,7 +4416,7 @@ namespace NPC_Maker
             Parallel.For(0, mp.MessageCount, i =>
             {
                 if (!canReuse || !mp.Message[i].SequenceEqual(localSaved.MessageArrays[i]))
-                    previews[i] = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f);
+                    previews[i] = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f * Program.Settings.GUIScale);
             });
 
             Graphics grfx = null;
@@ -4469,7 +4510,7 @@ namespace NPC_Maker
 
             if (SelectedEntry.Messages.Find(x => x.Name.ToUpper() == Title.ToUpper()) != null)
             {
-                MessageBox.Show("Message with that name already exists.");
+                BigMessageBox.Show("Message with that name already exists.");
                 return;
             }
 
@@ -4530,13 +4571,13 @@ namespace NPC_Maker
 
             if (same != null && same != Entry)
             {
-                MessageBox.Show("Message with that name already exists.");
+                BigMessageBox.Show("Message with that name already exists.");
                 return;
             }
 
             if (Title.IsNumeric())
             {
-                MessageBox.Show("Message name cannot be just a number.");
+                BigMessageBox.Show("Message name cannot be just a number.");
                 return;
             }
 
@@ -4554,7 +4595,7 @@ namespace NPC_Maker
         {
             if (String.IsNullOrWhiteSpace(Title))
             {
-                MessageBox.Show("Name cannot be empty.");
+                BigMessageBox.Show("Name cannot be empty.");
                 return false;
             }
 
@@ -4562,7 +4603,7 @@ namespace NPC_Maker
 
             if (Title.IsNumeric())
             {
-                MessageBox.Show("Name cannot be just a number.");
+                BigMessageBox.Show("Name cannot be just a number.");
                 return false;
             }
 
@@ -4570,7 +4611,7 @@ namespace NPC_Maker
             {
                 if (s.ToUpper() == Title.ToUpper() || (Title.ToUpper().StartsWith(s.ToUpper()) && Title.Contains(".")))
                 {
-                    MessageBox.Show("Name cannot be a script keyword.");
+                    BigMessageBox.Show("Name cannot be a script keyword.");
                     return false;
                 }
             }
@@ -4979,7 +5020,7 @@ namespace NPC_Maker
             catch (Exception)
             {
                 Console.WriteLine("Share error");
-                //MessageBox.Show("An error has occurred while attempting to update the embedded overlay: " + ex.Message);
+                //BigMessageBox.Show("An error has occurred while attempting to update the embedded overlay: " + ex.Message);
             }
         }
 
@@ -5061,7 +5102,7 @@ namespace NPC_Maker
 
         private void Button_CDelete_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure? This operation wipes the code completely and cannot be reversed.", "Code Removal", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+            if (BigMessageBox.Show("Are you sure? This operation wipes the code completely and cannot be reversed.", "Code Removal", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
             {
                 SelectedEntry.EmbeddedOverlayCode.Code = "";
                 SelectedEntry.EmbeddedOverlayCode.Functions = new List<FunctionEntry>();
@@ -5207,7 +5248,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error converting messages: " + ex.Message);
+                BigMessageBox.Show("Error converting messages: " + ex.Message);
             }
 
             FolderBrowserDialog FBD = new FolderBrowserDialog();
@@ -5229,7 +5270,7 @@ namespace NPC_Maker
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error saving data: " + ex.Message);
+                    BigMessageBox.Show("Error saving data: " + ex.Message);
                 }
             }
 
