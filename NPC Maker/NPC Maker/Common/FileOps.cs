@@ -19,6 +19,24 @@ namespace NPC_Maker
 {
     public partial class FileOps
     {
+        private static void EnsureSettingsSanity(NPCMakerSettings set)
+        {
+            if (set == null)
+                return;
+
+            if (set.MessageEditorFontSize == 0)
+                set.MessageEditorFontSize = 8;
+
+            if (set.AutoSaveTime < 100)
+                set.AutoSaveTime = 100;
+
+            if (set.ParseTime < 100)
+                set.ParseTime = 100;
+
+            if (set.CompileTimeout < 500)
+                set.CompileTimeout = 500;
+        }
+
         public static NPCMakerSettings ParseSettingsJSON(string FileName)
         {
             try
@@ -28,6 +46,8 @@ namespace NPC_Maker
 
                 string Text = File.ReadAllText(FileName);
                 NPCMakerSettings Deserialized = JsonConvert.DeserializeObject<NPCMakerSettings>(Text);
+
+                EnsureSettingsSanity(Deserialized);
 
                 return Deserialized;
             }
