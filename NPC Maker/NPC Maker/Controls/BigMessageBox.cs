@@ -9,7 +9,6 @@ namespace NPC_Maker.Controls
     using System.Drawing;
     using System.Windows.Forms;
 
-
     public static class BigMessageBox
     {
         public static DialogResult Show(string text, string caption = "",
@@ -29,6 +28,7 @@ namespace NPC_Maker.Controls
             f.Font = font;
             f.AutoSize = true;
             f.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            f.TopMost = true;
 
             TableLayoutPanel layout = new TableLayoutPanel();
             layout.RowCount = 2;
