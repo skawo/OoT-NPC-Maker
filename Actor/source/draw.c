@@ -613,6 +613,121 @@ void Draw_SetGlobalEnvColor(NpcMaker* en, PlayState* playState)
     }
 }
 
+static void Draw_WorldRelative(NpcMaker* en, PlayState* playState, ExDListEntry* dlist)
+{
+    Vec3f translation = {0};
+    Vec3s rotation = {0};
+
+    switch (dlist->limb)
+    {
+        case STATIC_EXDLIST_RELATIVE:
+        {
+            translation = en->actor.world.pos;
+            rotation = en->actor.world.rot;
+            break;
+        }
+        case STATIC_EXDLIST_AT_CAM:
+        {
+            Camera* cam = playState->cameraPtrs[playState->activeCamId];
+
+            if (playState->csCtx.state != 0)
+                cam = Play_GetCamera(playState, playState->csCtx.subCamId);
+
+            OLib_Vec3fDistNormalize(&translation, &cam->eye);
+            Math_Vec3f_Scale(&translation, dlist->translation.z);
+            Math_Vec3f_Sum(&translation, &cam->eye, &translation);
+
+            rotation = cam->camDir;
+            rotation.y += 0x8000;
+            break;
+        }
+    }
+
+    Math_Vec3f_Sum(&translation, &dlist->translation, &translation);
+    Math_Vec3s_Sum(&rotation, &dlist->rotation, &rotation);
+
+    if (dlist->limb == STATIC_EXDLIST_AT_CAM)
+        translation.z -= dlist->translation.z;
+
+    Matrix_Push();
+    Matrix_SetTranslateRotateYXZ(translation.x, translation.y, translation.z, &rotation);
+
+    float scale = dlist->scale * en->actor.scale.x;
+    Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
+
+    Draw_ExtDList(en, playState, dlist, false);
+    Matrix_Pop();
+}
+
+static void Draw_AtDisplay(NpcMaker* en, PlayState* playState, ExDListEntry* dlist)
+{
+    Matrix_Push();
+
+    Matrix_Translate(playState->view.eye.x, playState->view.eye.y, playState->view.eye.z, MTXMODE_NEW);
+    Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
+    Matrix_ReplaceRotation(&playState->billboardMtxF);
+
+    /*
+     * Z positioning logic:
+     * - dlist->translation.z controls distance scaling
+     * - scaled by inverse scale
+     * - adjusted by FOV to keep visual consistency
+     */
+    float zOffset = (1.0f / dlist->scale) * dlist->translation.z * (1000.0f / playState->view.fovy) - playState->view.fovy;
+
+    Matrix_Translate(dlist->translation.x, dlist->translation.y, zOffset, MTXMODE_APPLY);
+    Matrix_RotateZYX(dlist->rotation.x, dlist->rotation.y, dlist->rotation.z, MTXMODE_APPLY);
+    Draw_ExtDList(en, playState, dlist, false);
+    Matrix_Pop();
+}
+
+static void Draw_Orthographic(NpcMaker* en, PlayState* playState, ExDListEntry* dlist)
+{
+    View view;
+    View_Init(&view, playState->state.gfxCtx);
+    view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
+
+    Gfx* gfxRef = playState->state.gfxCtx->polyOpa.p;
+    Gfx* gfx = Gfx_Open(gfxRef);
+
+    gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
+
+    SET_FULLSCREEN_VIEWPORT(&view);
+    View_ApplyTo(&view, VIEW_PROJECTION_ORTHO, &gfx);
+
+    gDPPipeSync(gfx++);
+    gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
+    gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2);
+    gDPSetOtherMode(gfx++, G_AD_NOTPATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
+                        G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
+                    G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2);
+    gSPSetGeometryMode(gfx++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH);
+
+    Matrix_Push();
+    Matrix_Translate(dlist->translation.x,
+                     dlist->translation.y,
+                     dlist->translation.z - 200,
+                     MTXMODE_NEW);
+
+    float scale = dlist->scale;
+    float scaleX = scale * (dlist->limb == STATIC_EXDLIST_ORTHOGRAPHIC_WIDE ? 0.75f : 1.0f);
+    float sign = (scale < 0.0f) ? -1.0f : 1.0f;
+
+    Matrix_Scale(scaleX * sign, scale, scale, MTXMODE_APPLY);
+    Matrix_RotateZYX(dlist->rotation.x,
+                     dlist->rotation.y,
+                     dlist->rotation.z,
+                     MTXMODE_APPLY);
+
+    Draw_ExtDListInt(en, playState, dlist, &gfx);
+
+    gSPEndDisplayList(gfx++);
+    Gfx_Close(gfxRef, gfx);
+    playState->state.gfxCtx->polyOpa.p = gfx;
+
+    Matrix_Pop();
+}
+
 void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
@@ -623,133 +738,29 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
     {
         ExDListEntry dlist = en->extraDLists[i];
 
-        if (dlist.limb < 0)
+        if (dlist.limb >= 0 || dlist.showType == NOT_VISIBLE)
+            continue;
+
+        switch (dlist.limb)
         {
-            if (dlist.showType != NOT_VISIBLE && dlist.limb > STATIC_EXDLIST_AT_DISPLAY)
-            {
-                Vec3f translation = (Vec3f){0,0,0};
-                Vec3s rotation = (Vec3s){0,0,0};
-
-                switch (dlist.limb)
-                {
-                    case STATIC_EXDLIST_RELATIVE:
-                    {
-                        translation = en->actor.world.pos;
-                        rotation = en->actor.world.rot;         
-                        break;               
-                    }
-                    case STATIC_EXDLIST_AT_CAM:
-                    {
-                        Camera* cam = playState->cameraPtrs[playState->activeCamId];
-
-                        if (playState->csCtx.state != 0)
-                            cam = Play_GetCamera(playState, playState->csCtx.subCamId);
-
-                        // Get vector from cam
-                        OLib_Vec3fDistNormalize(&translation, &cam->eye);
-                        // Huh? OLib_Vec3fDistNormalize(&translation, &cam->eye, &cam->at);
-                        // Translation.z -> used as distance from the camera
-                        Math_Vec3f_Scale(&translation, dlist.translation.z);
-                        Math_Vec3f_Sum(&translation, &cam->eye, &translation);
-
-                        rotation = cam->camDir;
-                        rotation.y += 0x8000;  
-                        break;               
-                    }
-                    default: break;
-                }
-
-                Math_Vec3f_Sum(&translation, &dlist.translation, &translation);
-                Math_Vec3s_Sum(&rotation, &dlist.rotation, &rotation);
-
-                if (dlist.limb == STATIC_EXDLIST_AT_CAM)
-                    translation.z -= dlist.translation.z;
-
-                Matrix_Push();
-                Matrix_SetTranslateRotateYXZ(translation.x, translation.y, translation.z, &rotation);
-
-                float scale = dlist.scale *= en->actor.scale.x;
-
-                Matrix_Scale(scale, scale, scale, 1);
-                Draw_ExtDList(en, playState, &dlist, false);
-                Matrix_Pop();                
-            }
-            else if (dlist.showType != NOT_VISIBLE && dlist.limb == STATIC_EXDLIST_AT_DISPLAY)
-            {
-                Matrix_Push();
-
-                Matrix_Translate(playState->view.eye.x, playState->view.eye.y, playState->view.eye.z, MTXMODE_NEW);
-         
-                Matrix_Scale(0.01f, 0.01f, 0.01f, MTXMODE_APPLY);
-                Matrix_ReplaceRotation(&playState->billboardMtxF);
-                Matrix_Translate(dlist.translation.x, dlist.translation.y, (1 / dlist.scale) * dlist.translation.z * (1000 / playState->view.fovy) - playState->view.fovy, MTXMODE_APPLY); 
-                Matrix_RotateZYX(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, MTXMODE_APPLY);               
-
-                Draw_ExtDList(en, playState, &dlist, false);
-                
-                Matrix_Pop();
-            }
-            else if (dlist.showType != NOT_VISIBLE && (dlist.limb == STATIC_EXDLIST_ORTHOGRAPHIC || dlist.limb == STATIC_EXDLIST_ORTHOGRAPHIC_WIDE))
-            {
-                #define __gfxCtx playState->state.gfxCtx
-
-                View view;
-                View_Init(&view, playState->state.gfxCtx);
-                view.flags = VIEW_VIEWPORT | VIEW_PROJECTION_ORTHO;
-
-                Gfx* gfxRef = POLY_OPA_DISP;
-                Gfx* gfx = Gfx_Open(gfxRef);
-                gSPDisplayList(OVERLAY_DISP++, gfx);                
-
-                SET_FULLSCREEN_VIEWPORT(&view);
-
-                View_ApplyTo(&view, VIEW_ALL, &gfx);
-
-                gDPPipeSync(gfx++);
-                gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
-                gDPSetCombineMode(gfx++, G_CC_MODULATEIDECALA, G_CC_MODULATEIA_PRIM2);
-                gDPSetOtherMode(gfx++, G_AD_NOTPATTERN | G_CD_MAGICSQ | G_CK_NONE | G_TC_FILT | G_TF_BILERP | G_TT_NONE | G_TL_TILE |
-                                    G_TD_CLAMP | G_TP_PERSP | G_CYC_2CYCLE | G_PM_NPRIMITIVE,
-                                G_AC_NONE | G_ZS_PIXEL | G_RM_FOG_SHADE_A | G_RM_AA_ZB_OPA_SURF2);
-                gSPSetGeometryMode(gfx++, G_ZBUFFER | G_SHADE | G_CULL_BACK | G_FOG | G_LIGHTING | G_SHADING_SMOOTH);
-
-                Matrix_Push();
-
-                int z = dlist.translation.z - 200;
-                
-                Matrix_Translate(dlist.translation.x, dlist.translation.y, z, MTXMODE_NEW);
-                
-                // The emulator used for Zelda: OoT on Wii VC has the support for orthographic projection broken; all faces get drawn in the wrong order.
-                // This can be used to fix that; by setting the dlist's draw scale to a negative, the dlist gets drawn properly.
-                // (Note: the emulator used in the GCN Zelda Collector's Edition has this even more broken, and orthographic projection cannot be used there at all!)
-                
-                float scaleX = dlist.scale;
-                
-                if (dlist.limb == STATIC_EXDLIST_ORTHOGRAPHIC_WIDE)
-                    scaleX *= 0.75;
-
-                if (dlist.scale < 0)
-                    Matrix_Scale(-scaleX, -dlist.scale, dlist.scale, MTXMODE_APPLY);
-                else
-                    Matrix_Scale(scaleX, dlist.scale, dlist.scale, MTXMODE_APPLY);
-                       
-                Matrix_RotateZYX(dlist.rotation.x, dlist.rotation.y, dlist.rotation.z, MTXMODE_APPLY);   
-
-                Draw_ExtDListInt(en, playState, &dlist, &gfx);
-
-                gSPEndDisplayList(gfx++);
-                Gfx_Close(gfxRef, gfx);
-                POLY_OPA_DISP = gfx;
-                
-                Matrix_Pop();
-            }
+            case STATIC_EXDLIST_RELATIVE:
+            case STATIC_EXDLIST_ABSOLUTE:
+            case STATIC_EXDLIST_AT_CAM:
+                Draw_WorldRelative(en, playState, &dlist); break;            
+            case STATIC_EXDLIST_AT_DISPLAY:                 
+                Draw_AtDisplay(en, playState, &dlist); break;
+            case STATIC_EXDLIST_ORTHOGRAPHIC:
+            case STATIC_EXDLIST_ORTHOGRAPHIC_WIDE:          
+                Draw_Orthographic(en, playState, &dlist); break;
         }
-    }   
+    }
 
     #if LOGGING > 1
         is64Printf("_%2d: Drawing static ExDLists done.\n", en->npcId);
     #endif 
 }
+
+
 
 void Draw_Model(NpcMaker* en, PlayState* playState)
 {
