@@ -138,7 +138,6 @@
 extern void is64Printf(const char* fmt, ...);
     #if GAME_VERSION == 0
 		#ifdef NPCM_Z64ROM
-			#include <uLib_vector.h>
 			asm("is64Printf = osLibPrintf");
 		#else
         	asm("is64Printf = osSyncPrintf");
