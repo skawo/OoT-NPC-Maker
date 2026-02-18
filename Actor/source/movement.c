@@ -179,7 +179,7 @@ bool Movement_PickUp(NpcMaker* en, PlayState* playState)
                 en->pickedUpState = STATE_PICKED_UP;
                 en->hadCollision = en->settings.hasCollision;
                 en->settings.hasCollision = false;
-                en->actor.flags &= ~TARGETTABLE_MASK;      
+                en->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;      
             }
 
             break; 
@@ -193,7 +193,7 @@ bool Movement_PickUp(NpcMaker* en, PlayState* playState)
                 en->settings.hasCollision = en->hadCollision;
 
                 if (en->settings.isTargettable)
-                    en->actor.flags |= TARGETTABLE_MASK;   
+                    en->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;   
             }
 
             break; 

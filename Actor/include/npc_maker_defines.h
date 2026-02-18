@@ -5,21 +5,10 @@
 #define DUMMY_MESSAGE 0x011A
 #define NO_CUSTOM_MESSAGE -1 
 
-#define GlobalContext PlayState
-#define PSkinAwb Skin
-
 #define IS_MASK(item) item >= ITEM_MASK_BUNNY_HOOD && item <= ITEM_MASK_TRUTH
 #define IS_BOTTLE_ITEM(item) (((item >= ITEM_BOTTLE_POTION_RED) && (item <= ITEM_BOTTLE_POE)) || (item == ITEM_MILK))
 
-#define NUM_USER_VARIABLES 10
-
-#define PUSH_SWITCHES_MASK 0x04000000
-#define TARGETTABLE_MASK 0x00000001
-#define ALWAYS_ACTIVE_MASK 0x00000010
-#define ALWAYS_DRAWN_MASK 0x00000020
-#define DRAWN_WITH_LENS_MASK 0x00000080
-#define PLAYER_STOPPED_MASK 0x20000000
-#define NO_LIGHT_BIND (1 << 22)
+#define PLAYER_STOPPED_MASK (1 << 29)
 
 #define NULL_ANIM_BLOCK_SIZE 0
 #define NULL_EXDLIST_BLOCK_SIZE 0
@@ -60,7 +49,6 @@
 #define SEG_OFFSET(seg) (0x01000000 * seg)
 #define OFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset : offset + SEG_OFFSET(segment)
 #define UNOFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset - SEG_OFFSET(segment) : offset
-
 
 #define STOPPED_NODE -2
 #define INVALID_NODE -1
@@ -128,11 +116,11 @@
 #define MAX_THROW_VELOCITY 12
 
 #ifndef MAX
-    #define MAX(a, b)               ((a) > (b) ? (a) : (b))
+    #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #endif
 
 #ifndef MIN
-    #define MIN(a, b)               ((a) < (b) ? (a) : (b))
+    #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
 extern void is64Printf(const char* fmt, ...);
@@ -153,7 +141,6 @@ extern void is64Printf(const char* fmt, ...);
 #define ROT16(R16A0) (182.044444 * (R16A0))
 #define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
 #define AADDR(a,o)  ((void*)((u8*)(a)+(o)))
-
 
 typedef enum item_award_upgrades
 {

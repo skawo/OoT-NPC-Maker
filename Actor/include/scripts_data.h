@@ -107,11 +107,11 @@ u8 setDlistOffsets[] =
 
 u32 toggle_offsets[][2] =
 {
-    {offsetof(NpcMaker, settings.pushesSwitches), PUSH_SWITCHES_MASK},
-    {offsetof(NpcMaker, settings.isTargettable), TARGETTABLE_MASK},
-    {offsetof(NpcMaker, settings.visibleWithLens), DRAWN_WITH_LENS_MASK},
-    {offsetof(NpcMaker, settings.alwaysActive), ALWAYS_ACTIVE_MASK},
-    {offsetof(NpcMaker, settings.alwaysDrawn), ALWAYS_DRAWN_MASK},
+    {offsetof(NpcMaker, settings.pushesSwitches), ACTOR_FLAG_CAN_PRESS_SWITCHES},
+    {offsetof(NpcMaker, settings.isTargettable), ACTOR_FLAG_ATTENTION_ENABLED},
+    {offsetof(NpcMaker, settings.visibleWithLens), ACTOR_FLAG_REACT_TO_LENS},
+    {offsetof(NpcMaker, settings.alwaysActive), ACTOR_FLAG_UPDATE_CULLING_DISABLED},
+    {offsetof(NpcMaker, settings.alwaysDrawn), ACTOR_FLAG_DRAW_CULLING_DISABLED},
 };
 
 u8 inventory_set_slots[][2] =

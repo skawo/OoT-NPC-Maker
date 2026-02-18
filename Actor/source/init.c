@@ -594,24 +594,24 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
     #pragma region Actor flags
 
         if (!en->settings.alwaysActive)
-            en->actor.flags &= ~ALWAYS_ACTIVE_MASK;
+            en->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
 
         if (en->settings.isTargettable)
-            en->actor.flags |= TARGETTABLE_MASK;
+            en->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
 
         if (en->settings.pushesSwitches)
-            en->actor.flags |= PUSH_SWITCHES_MASK;
+            en->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCHES;
 
         if (en->settings.alwaysDrawn)
-            en->actor.flags |= ALWAYS_DRAWN_MASK;
+            en->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
 
         if (en->settings.visibleWithLens)
-            en->actor.flags |= DRAWN_WITH_LENS_MASK;
+            en->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
 
         if (en->settings.existsInAllRooms)
             en->actor.room = -1;
 
-        en->actor.flags |= NO_LIGHT_BIND;
+        en->actor.flags |= ACTOR_FLAG_IGNORE_POINT_LIGHTS;
 
         en->actor.attentionRangeType = en->settings.targetDistance;
         // If the actor is meant to be pushable, we set its mass lower.
