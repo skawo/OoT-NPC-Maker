@@ -9,7 +9,7 @@
 #define PSkinAwb Skin
 
 #define IS_MASK(item) item >= ITEM_MASK_BUNNY_HOOD && item <= ITEM_MASK_TRUTH
-#define IS_BOTTLE_ITEM(item) item >= ITEM_BOTTLE_POTION_RED && item <= ITEM_BOTTLE_POE
+#define IS_BOTTLE_ITEM(item) (((item >= ITEM_BOTTLE_POTION_RED) && (item <= ITEM_BOTTLE_POE)) || (item == ITEM_MILK))
 
 #define NUM_USER_VARIABLES 10
 
