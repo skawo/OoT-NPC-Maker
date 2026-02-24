@@ -449,7 +449,7 @@ namespace NPC_Maker
             data.CHeader = CCode.ReplaceGameVersionInclude(data.CHeader);
 
             var cHeaderBuilder = new StringBuilder(data.CHeader);
-            foreach (var linkerPath in CCode.ResolveLinkerPaths(Program.Settings.LinkerPaths))
+            foreach (var linkerPath in CCode.ResolveSemicolonPaths(Program.Settings.LinkerPaths))
             {
                 if (File.Exists(linkerPath))
                     cHeaderBuilder.Append(File.ReadAllText(linkerPath));
@@ -501,7 +501,7 @@ namespace NPC_Maker
 
             foreach (string hPath in includeList)
             {
-                string cleanPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, hPath, Dicts.ProjectPathToken);
+                string cleanPath = Helpers.DenormalizeExtPath(hPath);
                 string content = null;
 
                 // Try original path first

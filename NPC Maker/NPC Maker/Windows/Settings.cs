@@ -164,10 +164,18 @@ namespace NPC_Maker.Windows
 
         private void Btn_LinkerFiles_Click(object sender, EventArgs e)
         {
-            Windows.LongInputBox liB = new Windows.LongInputBox("Additional linker files", "Add linker paths:", Program.Settings.LinkerPaths, true, "Linker files (*.ld)|*.ld|All files (*.*)|*.*");
+            LongInputBox liB = new LongInputBox("Additional linker files", "Add linker paths:", Program.Settings.LinkerPaths, true, "Linker files (*.ld)|*.ld|All files (*.*)|*.*");
 
             if (liB.ShowDialog() == DialogResult.OK)
                 EditedSettings.LinkerPaths = liB.inputText;
+        }
+
+        private void Btn_IncludePaths_Click(object sender, EventArgs e)
+        {
+            LongInputBox liB = new LongInputBox("C include directories", "Add include directories:", Program.Settings.IncludePaths, true, "", true);
+
+            if (liB.ShowDialog() == DialogResult.OK)
+                EditedSettings.IncludePaths = liB.inputText;
         }
     }
 }

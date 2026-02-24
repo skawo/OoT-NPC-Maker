@@ -35,6 +35,23 @@ namespace NPC_Maker
             Helpers.AdjustControlScale(f);
         }
 
+        public static string NormalizeExtPath(string path)
+        {
+            path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
+            path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Dicts.ProgramPathToken);
+
+            return path;
+        }
+
+        public static string DenormalizeExtPath(string path)
+        {
+            path = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
+            path = Helpers.ReplaceTokenWithPath(Program.ExecPath, path, Dicts.ProgramPathToken);
+            path = path.Replace(Dicts.GameVersionPathToken, Program.Settings.GameVersion.ToString());
+
+            return path;
+        }
+
         private static void AdjustControlForNeighbour(Control ctrl)
         {
             int newHeight = ctrl.Height;

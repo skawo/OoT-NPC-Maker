@@ -68,8 +68,7 @@ namespace NPC_Maker.Scripts
             }
             catch (Exception)
             {
-                outScript.ParseErrors.Add(new ParseException("Could not load external header:",
-                    Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, EditedFile.ExtScriptHeaderPath, Dicts.ProjectPathToken)));
+                outScript.ParseErrors.Add(new ParseException("Could not load external header:", Helpers.DenormalizeExtPath(EditedFile.ExtScriptHeaderPath)));
             }
 
             ScriptText += Environment.NewLine + extHeader;

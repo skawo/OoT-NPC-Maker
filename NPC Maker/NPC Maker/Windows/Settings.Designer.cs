@@ -57,6 +57,8 @@ namespace NPC_Maker.Windows
             this.Chk_AllowCommentsOnLoc = new NPC_Maker.Controls.BigCheckBox();
             this.guiScale = new System.Windows.Forms.NumericUpDown();
             this.guiScaleLabel = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AutoSaveCTime)).BeginInit();
@@ -151,7 +153,7 @@ namespace NPC_Maker.Windows
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(343, 448);
+            this.BtnSave.Location = new System.Drawing.Point(343, 485);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(120, 29);
             this.BtnSave.TabIndex = 8;
@@ -266,7 +268,7 @@ namespace NPC_Maker.Windows
             // 
             // Btn_ResetCache
             // 
-            this.Btn_ResetCache.Location = new System.Drawing.Point(13, 448);
+            this.Btn_ResetCache.Location = new System.Drawing.Point(13, 485);
             this.Btn_ResetCache.Name = "Btn_ResetCache";
             this.Btn_ResetCache.Size = new System.Drawing.Size(120, 29);
             this.Btn_ResetCache.TabIndex = 17;
@@ -351,11 +353,11 @@ namespace NPC_Maker.Windows
             // Lbl_LinkerFiles
             // 
             this.Lbl_LinkerFiles.AutoSize = true;
-            this.Lbl_LinkerFiles.Location = new System.Drawing.Point(333, 425);
+            this.Lbl_LinkerFiles.Location = new System.Drawing.Point(309, 425);
             this.Lbl_LinkerFiles.Name = "Lbl_LinkerFiles";
-            this.Lbl_LinkerFiles.Size = new System.Drawing.Size(60, 13);
+            this.Lbl_LinkerFiles.Size = new System.Drawing.Size(70, 13);
             this.Lbl_LinkerFiles.TabIndex = 25;
-            this.Lbl_LinkerFiles.Text = "Linker files:";
+            this.Lbl_LinkerFiles.Text = "C Linker files:";
             // 
             // Chk_AllowCommentsOnLoc
             // 
@@ -408,11 +410,32 @@ namespace NPC_Maker.Windows
             this.guiScaleLabel.TabIndex = 28;
             this.guiScaleLabel.Text = "GUI Scale (Will require restart):";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(399, 448);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(64, 21);
+            this.button1.TabIndex = 29;
+            this.button1.Text = "Browse";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Btn_IncludePaths_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(309, 452);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(84, 13);
+            this.label1.TabIndex = 30;
+            this.label1.Text = "C Include paths:";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 488);
+            this.ClientSize = new System.Drawing.Size(475, 526);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.guiScaleLabel);
             this.Controls.Add(this.guiScale);
             this.Controls.Add(this.Chk_AllowCommentsOnLoc);
@@ -482,5 +505,7 @@ namespace NPC_Maker.Windows
         private NPC_Maker.Controls.BigCheckBox Chk_AllowCommentsOnLoc;
         private System.Windows.Forms.NumericUpDown guiScale;
         private System.Windows.Forms.Label guiScaleLabel;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label1;
     }
 }

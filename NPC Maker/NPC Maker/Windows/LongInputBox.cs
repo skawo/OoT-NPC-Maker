@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -13,8 +14,9 @@ namespace NPC_Maker.Windows
     {
         public string inputText;
         private string bFilter;
+        private bool folderExpl;
 
-        public LongInputBox(string title, string command, string text, bool BrowseButton = false, string browseFilter = "")
+        public LongInputBox(string title, string command, string text, bool BrowseButton = false, string browseFilter = "", bool folderExplorer = false)
         {
             InitializeComponent();
             Helpers.AdjustFormScale(this);
@@ -25,6 +27,7 @@ namespace NPC_Maker.Windows
             label1.Text = command;
 
             bFilter = browseFilter;
+            folderExpl = folderExplorer;
 
             if (!BrowseButton)
                 button2.Visible = false;
@@ -46,15 +49,30 @@ namespace NPC_Maker.Windows
 
         private void button2_Click(object sender, EventArgs e)
         {
-            OpenFileDialog of = new OpenFileDialog();
-            of.Filter = bFilter;
-
-            if (of.ShowDialog() == DialogResult.OK)
+            if (folderExpl)
             {
-                if (!String.IsNullOrEmpty(textBox1.Text))
-                    textBox1.Text += ";";
-               
-                textBox1.Text += Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, of.FileName, Dicts.ProjectPathToken);
+                FolderBrowserDialog fd = new FolderBrowserDialog();
+
+                if (fd.ShowDialog() == DialogResult.OK)
+                {
+                    if (!String.IsNullOrEmpty(textBox1.Text))
+                        textBox1.Text += ";";
+
+                    textBox1.Text += Helpers.NormalizeExtPath(fd.SelectedPath);
+                }
+            }
+            else
+            {
+                OpenFileDialog of = new OpenFileDialog();
+                of.Filter = bFilter;
+
+                if (of.ShowDialog() == DialogResult.OK)
+                {
+                    if (!String.IsNullOrEmpty(textBox1.Text))
+                        textBox1.Text += ";";
+
+                    textBox1.Text += Helpers.NormalizeExtPath(of.FileName);
+                }
             }
 
         }

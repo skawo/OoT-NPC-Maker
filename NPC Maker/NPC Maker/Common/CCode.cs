@@ -224,15 +224,15 @@ namespace NPC_Maker
             Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{CompilationMsgs}{Environment.NewLine}{Environment.NewLine}");
         }
 
-        public static string[] ResolveLinkerPaths(string LinkerPaths)
+        public static string[] ResolveSemicolonPaths(string PathsString)
         {
-            string[] Paths = LinkerPaths.Split(';');
+            string[] Paths = PathsString.Split(';');
 
             for (int i = 0; i < Paths.Length; i++)
             {
                 if (!String.IsNullOrEmpty(Paths[i]))
                 {
-                    Paths[i] = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, Paths[i], Dicts.ProjectPathToken);
+                    Paths[i] = Helpers.DenormalizeExtPath(Paths[i]);
                 }
             }
 
@@ -246,7 +246,7 @@ namespace NPC_Maker
             {
                 IsMonoEnvironment = true,
                 Folder = folder,
-                LinkerFiles = ResolveLinkerPaths(linkerFiles),
+                LinkerFiles = ResolveSemicolonPaths(linkerFiles),
                 OutPath = outFilePath,
                 CompileFlags = compileFlags,
                 BinDirectory = "binmono",
@@ -266,7 +266,7 @@ namespace NPC_Maker
             {
                 IsMonoEnvironment = false,
                 Folder = folder,
-                LinkerFiles = ResolveLinkerPaths(linkerFiles),
+                LinkerFiles = ResolveSemicolonPaths(linkerFiles),
                 OutPath = outFilePath,
                 CompileFlags = compileFlags,
                 BinDirectory = "bin",
@@ -334,7 +334,7 @@ namespace NPC_Maker
                         string pathProjPathReplaced = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
 
                         if (!headerPaths.Contains(pathProjPathReplaced))
-                            headerPaths.Add(Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken));
+                            headerPaths.Add(pathProjPathReplaced);
 
                         excluded.Add(path);
                     }
@@ -547,13 +547,7 @@ namespace NPC_Maker
 
         private static string[] GetIncludePaths(CompilationConfig config)
         {
-            var basePath = config.IsMonoEnvironment ? ".." : Path.Combine(Program.ExecPath, "gcc");
-            return new[]
-            {
-                Path.Combine(basePath, "mips64", "include"),
-                Path.Combine(basePath, "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
-                Path.Combine(basePath, "mips64", "include", "z64hdr", "include")
-            };
+            return ResolveSemicolonPaths(Program.Settings.IncludePaths);
         }
 
         private static string BuildIncludeFlags(CompilationConfig config)
@@ -565,12 +559,7 @@ namespace NPC_Maker
         private static string BuildLibraryFlags(CompilationConfig config)
         {
             var basePath = config.IsMonoEnvironment ? ".." : Path.Combine(Program.ExecPath, "gcc");
-            var libraries = new[]
-            {
-                Path.Combine(basePath, "mips64", "include", "npcmaker", Program.Settings.GameVersion.ToString()),
-                Path.Combine(basePath, "mips64", "include", "z64hdr", Program.Settings.GameVersion.ToString()),
-                Path.Combine(basePath, "mips64", "include", "z64hdr", "common")
-            };
+            var libraries = ResolveSemicolonPaths(Program.Settings.IncludePaths);
 
             return string.Join(" ", libraries.Select(path => $"-L {path.AppendQuotation()}"));
         }

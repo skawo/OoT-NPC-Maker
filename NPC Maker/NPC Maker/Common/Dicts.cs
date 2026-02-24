@@ -62,6 +62,8 @@ namespace NPC_Maker
 
         public static string DefaultLanguage = "Default";
         public static string ProjectPathToken = "{PROJECTPATH}";
+        public static string ProgramPathToken = "{PROGRAMPATH}";
+        public static string GameVersionPathToken = "{GAMEVERSION}";
 
         public static Dictionary<string, MessageConfig> LanguageDefs;
         public static List<MessageDefinition> MsgDefinitions;

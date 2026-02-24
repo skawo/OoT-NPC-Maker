@@ -66,6 +66,8 @@ namespace NPC_Maker
 
         public string LinkerPaths { get; set; }
 
+        public string IncludePaths { get; set; }
+
         public bool AllowCommentsOnLoc { get; set; }
 
         public float GUIScale { get; set; }
@@ -103,6 +105,7 @@ namespace NPC_Maker
             LinkerPaths = "";
             AllowCommentsOnLoc = true;
             GUIScale = 1.0f;
+            IncludePaths = "{PROGRAMPATH}/include;{PROGRAMPATH}/include/z64hdr/{GAMEVERSION};{PROGRAMPATH}/include/z64hdr/include;{PROGRAMPATH}/include/z64hdr/common";
         }
 
         public enum Members
@@ -133,6 +136,7 @@ namespace NPC_Maker
             LINKERPATHS,
             ALLOWCOMMENTSONLOC,
             GUISCALE,
+            INCLUDEPATHS,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {

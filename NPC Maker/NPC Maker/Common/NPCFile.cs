@@ -45,7 +45,7 @@ namespace NPC_Maker
 
         public string GetExtHeader()
         {
-            string extHeaderPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, ExtScriptHeaderPath, Dicts.ProjectPathToken);
+            string extHeaderPath = Helpers.DenormalizeExtPath(ExtScriptHeaderPath);
 
             if (string.IsNullOrWhiteSpace(extHeaderPath))
                 return string.Empty;
