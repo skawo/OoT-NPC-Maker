@@ -1,16 +1,9 @@
-﻿using FastColoredTextBoxNS;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using FastColoredTextBoxCJK.Types;
 
 namespace NPC_Maker
 {
@@ -175,7 +168,7 @@ namespace NPC_Maker
             else
                 base.OnScroll(se, true);
         }
-    
+
         public override void Copy()
         {
             if (Program.IsRunningUnderMono)
@@ -199,13 +192,52 @@ namespace NPC_Maker
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    Console.WriteLine("Error copying:" + ex.ToString());
                 }
             }
             else
                 base.Copy();
+        }
+
+        public override void Paste()
+        {
+            if (Program.IsRunningUnderMono)
+            {
+                string text = null;
+
+                var thread = new Thread(() =>
+                {
+                    try
+                    {
+                        IDataObject data = Clipboard.GetDataObject();
+
+                        if (data == null)
+                            return;
+
+                        if (data.GetDataPresent(DataFormats.UnicodeText))
+                            text = data.GetData(DataFormats.UnicodeText) as string;
+                        else if (data.GetDataPresent(DataFormats.Text))
+                            text = data.GetData(DataFormats.Text) as string;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error pasting:" + ex.ToString());
+                    }
+                });
+
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+
+                if (string.IsNullOrEmpty(text))
+                    return;
+
+                InsertText(text);
+            }
+            else
+                base.Paste();
         }
 
         public FCTB_MonoCJK(IContainer container)
