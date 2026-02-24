@@ -174,7 +174,7 @@ namespace NPC_Maker
             else
                 base.OnScroll(se, true);
         }
-    
+
         public override void Copy()
         {
             if (Program.IsRunningUnderMono)
@@ -198,13 +198,52 @@ namespace NPC_Maker
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
+                    Console.WriteLine("Error copying:" + ex.ToString());
                 }
             }
             else
                 base.Copy();
+        }
+
+        public override void Paste()
+        {
+            if (Program.IsRunningUnderMono)
+            {
+                string text = null;
+
+                var thread = new Thread(() =>
+                {
+                    try
+                    {
+                        IDataObject data = Clipboard.GetDataObject();
+
+                        if (data == null)
+                            return;
+
+                        if (data.GetDataPresent(DataFormats.UnicodeText))
+                            text = data.GetData(DataFormats.UnicodeText) as string;
+                        else if (data.GetDataPresent(DataFormats.Text))
+                            text = data.GetData(DataFormats.Text) as string;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error pasting:" + ex.ToString());
+                    }
+                });
+
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+
+                if (string.IsNullOrEmpty(text))
+                    return;
+
+                InsertText(text);
+            }
+            else
+                base.Paste();
         }
 
         public FCTB_Mono(IContainer container)
