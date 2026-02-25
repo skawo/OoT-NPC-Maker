@@ -200,7 +200,7 @@ namespace NPC_Maker
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error copying:" + ex.ToString());
+                    Console.WriteLine("Error copying. Is xsel installed?: " + ex.Message);
                 }
             }
             else
@@ -235,7 +235,7 @@ namespace NPC_Maker
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("Error pasting:" + ex.ToString());
+                            Console.WriteLine("Error pasting: " + ex.Message);
                         }
                     });
 
