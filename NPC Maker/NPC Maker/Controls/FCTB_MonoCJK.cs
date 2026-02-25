@@ -212,36 +212,43 @@ namespace NPC_Maker
         {
             if (Program.IsRunningUnderMono)
             {
-                string text = null;
-
-                var thread = new Thread(() =>
+                try
                 {
-                    try
+                    base.Paste();
+                }
+                catch
+                {
+                    string text = null;
+
+                    var thread = new Thread(() =>
                     {
-                        IDataObject data = Clipboard.GetDataObject();
+                        try
+                        {
+                            IDataObject data = Clipboard.GetDataObject();
 
-                        if (data == null)
-                            return;
+                            if (data == null)
+                                return;
 
-                        if (data.GetDataPresent(DataFormats.UnicodeText))
-                            text = data.GetData(DataFormats.UnicodeText) as string;
-                        else if (data.GetDataPresent(DataFormats.Text))
-                            text = data.GetData(DataFormats.Text) as string;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Error pasting:" + ex.ToString());
-                    }
-                });
+                            if (data.GetDataPresent(DataFormats.UnicodeText))
+                                text = data.GetData(DataFormats.UnicodeText) as string;
+                            else if (data.GetDataPresent(DataFormats.Text))
+                                text = data.GetData(DataFormats.Text) as string;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error pasting:" + ex.ToString());
+                        }
+                    });
 
-                thread.SetApartmentState(ApartmentState.STA);
-                thread.Start();
-                thread.Join();
+                    thread.SetApartmentState(ApartmentState.STA);
+                    thread.Start();
+                    thread.Join();
 
-                if (string.IsNullOrEmpty(text))
-                    return;
+                    if (string.IsNullOrEmpty(text))
+                        return;
 
-                InsertText(text);
+                    InsertText(text);
+                }
             }
             else
                 base.Paste();

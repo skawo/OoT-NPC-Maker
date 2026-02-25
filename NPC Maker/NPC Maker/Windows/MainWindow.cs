@@ -4017,14 +4017,17 @@ namespace NPC_Maker
             }
         }
 
-        private void SetMsgBackground(int Type)
+        private void SetMsgBackground(MessageEntry Loc, MessageEntry Default)
         {
-            Panel p = Combo_Language.SelectedIndex == 0 ? PreviewSplitContainer.Panel2 : PreviewSplitContainer.Panel1;
-
-            if (Type == (int)ZeldaMessage.Data.BoxType.None_White)
-                p.BackColor = Color.Black;
+            if (Loc.Type == (int)ZeldaMessage.Data.BoxType.None_White)
+                PreviewSplitContainer.Panel2.BackColor = Color.Black;
             else
-                p.BackColor = Color.White;
+                PreviewSplitContainer.Panel2.BackColor = Color.White;
+
+            if (Default.Type == (int)ZeldaMessage.Data.BoxType.None_White)
+                PreviewSplitContainer.Panel1.BackColor = Color.Black;
+            else
+                PreviewSplitContainer.Panel1.BackColor = Color.White;
         }
 
         private List<MessageEntry> GetLanguageMessageList(NPCEntry entry, string Language)
@@ -4226,7 +4229,7 @@ namespace NPC_Maker
                 Combo_MsgType.SelectedIndex = Entry.Type;
                 Combo_MsgPos.SelectedIndex = Entry.Position;
 
-                SetMsgBackground(Entry.Type);
+                SetMsgBackground(Entry, DefaultEntry);
                 RequestPreviewUpdate();
             }
 
@@ -4462,6 +4465,19 @@ namespace NPC_Maker
 
             return bmp;
         }
+
+        private MessageEntry GetCurLocMsgEntry()
+        { 
+            return Combo_Language.SelectedIndex == 0 ? 
+                SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index] : 
+                SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages[MessagesGrid.SelectedRows[0].Index];
+        }
+
+        private MessageEntry GetDefaultMsgEntry()
+        {
+            return SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index];
+        }
+
         private void PanelMsgPreview_Resize(object sender, EventArgs e)
         {
             MsgPreview.Left = (this.PanelMsgPreview.Width - MsgPreview.Width) / 2;
@@ -4471,9 +4487,9 @@ namespace NPC_Maker
         private void Combo_MsgPos_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (MessagesGrid.SelectedRows.Count == 0)
-                return;
+                return; 
 
-            MessageEntry Entry = Combo_Language.SelectedIndex == 0 ? SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index] : SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages[MessagesGrid.SelectedRows[0].Index];
+            MessageEntry Entry = GetCurLocMsgEntry();
             Entry.Position = Combo_MsgPos.SelectedIndex;
         }
 
@@ -4482,14 +4498,15 @@ namespace NPC_Maker
             if (MessagesGrid.SelectedRows.Count == 0)
                 return;
 
-            MessageEntry Entry = Combo_Language.SelectedIndex == 0 ? SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index] : SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages[MessagesGrid.SelectedRows[0].Index];
+            MessageEntry Entry = GetCurLocMsgEntry();
+            MessageEntry Default = GetDefaultMsgEntry();
             Entry.Type = Combo_MsgType.SelectedIndex;
 
             MsgText.TextChanged -= MsgText_TextChanged;
             MsgTextCJK.TextChanged -= MsgTextCJK_TextChanged;
             Combo_MsgType.SelectedIndexChanged -= Combo_MsgType_SelectedIndexChanged;
 
-            SetMsgBackground(Entry.Type);
+            SetMsgBackground(Entry, Default);
             RequestPreviewUpdate();
 
             MsgText.TextChanged += MsgText_TextChanged;
