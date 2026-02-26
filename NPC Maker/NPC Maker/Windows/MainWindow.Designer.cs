@@ -1816,11 +1816,10 @@ namespace NPC_Maker
             // 
             // ChkBox_ExistInAll
             // 
-            this.ChkBox_ExistInAll.AutoSize = true;
             this.ChkBox_ExistInAll.BoxSize = 18;
             this.ChkBox_ExistInAll.Location = new System.Drawing.Point(422, 261);
             this.ChkBox_ExistInAll.Name = "ChkBox_ExistInAll";
-            this.ChkBox_ExistInAll.Size = new System.Drawing.Size(103, 17);
+            this.ChkBox_ExistInAll.Size = new System.Drawing.Size(111, 22);
             this.ChkBox_ExistInAll.TabIndex = 87;
             this.ChkBox_ExistInAll.Tag = "EXISTALLROOMS";
             this.ChkBox_ExistInAll.Text = "Exist in all rooms";
@@ -1875,11 +1874,10 @@ namespace NPC_Maker
             // 
             // ChkInvisible
             // 
-            this.ChkInvisible.AutoSize = true;
             this.ChkInvisible.BoxSize = 18;
             this.ChkInvisible.Location = new System.Drawing.Point(584, 238);
             this.ChkInvisible.Name = "ChkInvisible";
-            this.ChkInvisible.Size = new System.Drawing.Size(64, 17);
+            this.ChkInvisible.Size = new System.Drawing.Size(66, 22);
             this.ChkInvisible.TabIndex = 82;
             this.ChkInvisible.Tag = "INVISIBLE";
             this.ChkInvisible.Text = "Invisible";
@@ -1888,11 +1886,10 @@ namespace NPC_Maker
             // 
             // ChkOnlyWhenLens
             // 
-            this.ChkOnlyWhenLens.AutoSize = true;
             this.ChkOnlyWhenLens.BoxSize = 18;
             this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 238);
             this.ChkOnlyWhenLens.Name = "ChkOnlyWhenLens";
-            this.ChkOnlyWhenLens.Size = new System.Drawing.Size(146, 17);
+            this.ChkOnlyWhenLens.Size = new System.Drawing.Size(151, 22);
             this.ChkOnlyWhenLens.TabIndex = 81;
             this.ChkOnlyWhenLens.Tag = "VISIBLEONLYLENS";
             this.ChkOnlyWhenLens.Text = "Affected by Lens of Truth";
@@ -2051,11 +2048,10 @@ namespace NPC_Maker
             // 
             // ChkBox_Glow
             // 
-            this.ChkBox_Glow.AutoSize = true;
             this.ChkBox_Glow.BoxSize = 18;
             this.ChkBox_Glow.Location = new System.Drawing.Point(3, 30);
             this.ChkBox_Glow.Name = "ChkBox_Glow";
-            this.ChkBox_Glow.Size = new System.Drawing.Size(50, 17);
+            this.ChkBox_Glow.Size = new System.Drawing.Size(51, 22);
             this.ChkBox_Glow.TabIndex = 76;
             this.ChkBox_Glow.Tag = "GLOW";
             this.ChkBox_Glow.Text = "Glow";
@@ -2078,11 +2074,10 @@ namespace NPC_Maker
             // 
             // ChkBox_GenLight
             // 
-            this.ChkBox_GenLight.AutoSize = true;
             this.ChkBox_GenLight.BoxSize = 18;
             this.ChkBox_GenLight.Location = new System.Drawing.Point(3, 5);
             this.ChkBox_GenLight.Name = "ChkBox_GenLight";
-            this.ChkBox_GenLight.Size = new System.Drawing.Size(92, 17);
+            this.ChkBox_GenLight.Size = new System.Drawing.Size(96, 22);
             this.ChkBox_GenLight.TabIndex = 72;
             this.ChkBox_GenLight.Tag = "LIGHT";
             this.ChkBox_GenLight.Text = "Generate light";
@@ -2124,11 +2119,10 @@ namespace NPC_Maker
             // 
             // ChkB_FadeOut
             // 
-            this.ChkB_FadeOut.AutoSize = true;
             this.ChkB_FadeOut.BoxSize = 18;
             this.ChkB_FadeOut.Location = new System.Drawing.Point(584, 190);
             this.ChkB_FadeOut.Name = "ChkB_FadeOut";
-            this.ChkB_FadeOut.Size = new System.Drawing.Size(150, 17);
+            this.ChkB_FadeOut.Size = new System.Drawing.Size(158, 22);
             this.ChkB_FadeOut.TabIndex = 77;
             this.ChkB_FadeOut.Tag = "FADEOUT";
             this.ChkB_FadeOut.Text = "Fade out if player far away";
@@ -2217,11 +2211,10 @@ namespace NPC_Maker
             // 
             // Chkb_ReactIfAtt
             // 
-            this.Chkb_ReactIfAtt.AutoSize = true;
             this.Chkb_ReactIfAtt.BoxSize = 18;
             this.Chkb_ReactIfAtt.Location = new System.Drawing.Point(3, 5);
             this.Chkb_ReactIfAtt.Name = "Chkb_ReactIfAtt";
-            this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(108, 17);
+            this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(109, 22);
             this.Chkb_ReactIfAtt.TabIndex = 72;
             this.Chkb_ReactIfAtt.Tag = "REACTATT";
             this.Chkb_ReactIfAtt.Text = "React if attacked";
@@ -2230,11 +2223,10 @@ namespace NPC_Maker
             // 
             // Chkb_Opendoors
             // 
-            this.Chkb_Opendoors.AutoSize = true;
             this.Chkb_Opendoors.BoxSize = 18;
             this.Chkb_Opendoors.Location = new System.Drawing.Point(584, 168);
             this.Chkb_Opendoors.Name = "Chkb_Opendoors";
-            this.Chkb_Opendoors.Size = new System.Drawing.Size(167, 17);
+            this.Chkb_Opendoors.Size = new System.Drawing.Size(176, 22);
             this.Chkb_Opendoors.TabIndex = 74;
             this.Chkb_Opendoors.Tag = "OPENDOORS";
             this.Chkb_Opendoors.Text = "Opens doors if they\'re on path";
@@ -2243,11 +2235,10 @@ namespace NPC_Maker
             // 
             // ChkRunJustScript
             // 
-            this.ChkRunJustScript.AutoSize = true;
             this.ChkRunJustScript.BoxSize = 18;
             this.ChkRunJustScript.Location = new System.Drawing.Point(584, 213);
             this.ChkRunJustScript.Name = "ChkRunJustScript";
-            this.ChkRunJustScript.Size = new System.Drawing.Size(91, 17);
+            this.ChkRunJustScript.Size = new System.Drawing.Size(95, 22);
             this.ChkRunJustScript.TabIndex = 73;
             this.ChkRunJustScript.Tag = "JUSTSCRIPT";
             this.ChkRunJustScript.Text = "Just run script";
@@ -2389,12 +2380,11 @@ namespace NPC_Maker
             // 
             // Checkbox_HaveCollision
             // 
-            this.Checkbox_HaveCollision.AutoSize = true;
             this.Checkbox_HaveCollision.BackColor = System.Drawing.Color.White;
             this.Checkbox_HaveCollision.BoxSize = 18;
             this.Checkbox_HaveCollision.Location = new System.Drawing.Point(8, 5);
             this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
-            this.Checkbox_HaveCollision.Size = new System.Drawing.Size(85, 17);
+            this.Checkbox_HaveCollision.Size = new System.Drawing.Size(89, 22);
             this.Checkbox_HaveCollision.TabIndex = 21;
             this.Checkbox_HaveCollision.Tag = "COLLISION";
             this.Checkbox_HaveCollision.Text = "Has collision";
@@ -2437,11 +2427,10 @@ namespace NPC_Maker
             // 
             // Checkbox_DrawShadow
             // 
-            this.Checkbox_DrawShadow.AutoSize = true;
             this.Checkbox_DrawShadow.BoxSize = 18;
             this.Checkbox_DrawShadow.Location = new System.Drawing.Point(9, 3);
             this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
-            this.Checkbox_DrawShadow.Size = new System.Drawing.Size(92, 17);
+            this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 22);
             this.Checkbox_DrawShadow.TabIndex = 22;
             this.Checkbox_DrawShadow.Tag = "SHADOW";
             this.Checkbox_DrawShadow.Text = "Casts shadow";
@@ -2971,12 +2960,11 @@ namespace NPC_Maker
             // 
             // Checkbox_Targettable
             // 
-            this.Checkbox_Targettable.AutoSize = true;
             this.Checkbox_Targettable.BackColor = System.Drawing.Color.White;
             this.Checkbox_Targettable.BoxSize = 18;
             this.Checkbox_Targettable.Location = new System.Drawing.Point(7, 10);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
-            this.Checkbox_Targettable.Size = new System.Drawing.Size(80, 17);
+            this.Checkbox_Targettable.Size = new System.Drawing.Size(83, 22);
             this.Checkbox_Targettable.TabIndex = 39;
             this.Checkbox_Targettable.Tag = "TARGETTABLE";
             this.Checkbox_Targettable.Text = "Targettable";
@@ -3043,12 +3031,11 @@ namespace NPC_Maker
             // 
             // Chkb_IgnoreY
             // 
-            this.Chkb_IgnoreY.AutoSize = true;
             this.Chkb_IgnoreY.BackColor = System.Drawing.Color.White;
             this.Chkb_IgnoreY.BoxSize = 18;
             this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 344);
             this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
-            this.Chkb_IgnoreY.Size = new System.Drawing.Size(115, 17);
+            this.Chkb_IgnoreY.Size = new System.Drawing.Size(121, 22);
             this.Chkb_IgnoreY.TabIndex = 67;
             this.Chkb_IgnoreY.Tag = "IGNORENODEYAXIS";
             this.Chkb_IgnoreY.Text = "Ignore node Y Axis";
@@ -3174,12 +3161,11 @@ namespace NPC_Maker
             // 
             // Checkbox_Loop
             // 
-            this.Checkbox_Loop.AutoSize = true;
             this.Checkbox_Loop.BackColor = System.Drawing.Color.White;
             this.Checkbox_Loop.BoxSize = 18;
             this.Checkbox_Loop.Location = new System.Drawing.Point(7, 344);
             this.Checkbox_Loop.Name = "Checkbox_Loop";
-            this.Checkbox_Loop.Size = new System.Drawing.Size(50, 17);
+            this.Checkbox_Loop.Size = new System.Drawing.Size(50, 22);
             this.Checkbox_Loop.TabIndex = 41;
             this.Checkbox_Loop.Tag = "LOOP";
             this.Checkbox_Loop.Text = "Loop";
@@ -3381,11 +3367,10 @@ namespace NPC_Maker
             // 
             // Checkbox_AlwaysDraw
             // 
-            this.Checkbox_AlwaysDraw.AutoSize = true;
             this.Checkbox_AlwaysDraw.BoxSize = 18;
             this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(422, 192);
             this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
-            this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(146, 17);
+            this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(151, 22);
             this.Checkbox_AlwaysDraw.TabIndex = 70;
             this.Checkbox_AlwaysDraw.Tag = "DRAWOUTOFCAM";
             this.Checkbox_AlwaysDraw.Text = "Draw even out of camera";
@@ -3408,11 +3393,10 @@ namespace NPC_Maker
             // 
             // Checkbox_AlwaysActive
             // 
-            this.Checkbox_AlwaysActive.AutoSize = true;
             this.Checkbox_AlwaysActive.BoxSize = 18;
             this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(422, 169);
             this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
-            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(156, 17);
+            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(161, 22);
             this.Checkbox_AlwaysActive.TabIndex = 68;
             this.Checkbox_AlwaysActive.Tag = "ACTIVE";
             this.Checkbox_AlwaysActive.Text = "Update even out of camera";
@@ -3421,11 +3405,10 @@ namespace NPC_Maker
             // 
             // Checkbox_CanPressSwitches
             // 
-            this.Checkbox_CanPressSwitches.AutoSize = true;
             this.Checkbox_CanPressSwitches.BoxSize = 18;
             this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(422, 215);
             this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
-            this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(107, 17);
+            this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(113, 22);
             this.Checkbox_CanPressSwitches.TabIndex = 58;
             this.Checkbox_CanPressSwitches.Tag = "SWITCHES";
             this.Checkbox_CanPressSwitches.Text = "Presses switches";
@@ -3763,6 +3746,7 @@ namespace NPC_Maker
             this.MsgPreviewOrig.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.MsgPreviewOrig.TabIndex = 70;
             this.MsgPreviewOrig.TabStop = false;
+            this.MsgPreviewOrig.DoubleClick += new System.EventHandler(this.MsgPreview_DoubleClick);
             // 
             // MsgPreview
             // 
@@ -3774,6 +3758,7 @@ namespace NPC_Maker
             this.MsgPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.MsgPreview.TabIndex = 69;
             this.MsgPreview.TabStop = false;
+            this.MsgPreview.DoubleClick += new System.EventHandler(this.MsgPreviewDefault_Click);
             // 
             // chkBox_ShowDefaultLanguagePreview
             // 

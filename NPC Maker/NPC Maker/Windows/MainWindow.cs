@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
@@ -4335,6 +4336,62 @@ namespace NPC_Maker
             MessageEntry Entry = new MessageEntry();
             Entry.MessageText = "Error: Over maximum size.";
             return Entry;
+        }
+
+        private void SaveMsgPreviewToImage(MessageEntry entry, string Language)
+        {
+            Bitmap original = GetMessagePreviewImage(entry, Language, "", ref lastPreviewData);
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter =
+                "All Supported Images (*.png;*.bmp;*.jpg;*.jpeg)|*.png;*.bmp;*.jpg;*.jpeg|" +
+                "PNG Files (*.png)|*.png|" +
+                "BMP Files (*.bmp)|*.bmp|" +
+                "JPEG Files (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+                "All files (*.*)|*.*";
+
+            sfd.FileName = "preview.png";
+
+            if (original != null && sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    string ext = Path.GetExtension(sfd.FileName).ToLower();
+
+                    if (ext == ".bmp" || ext == ".jpg")
+                    {
+                        using (Bitmap flattened = new Bitmap(original.Width, original.Height, PixelFormat.Format24bppRgb))
+                        using (Graphics g = Graphics.FromImage(flattened))
+                        {
+                            g.Clear(Color.White);
+                            g.DrawImage(original, 0, 0);
+
+                            if (ext == ".bmp")
+                                flattened.Save(sfd.FileName, ImageFormat.Bmp);
+                            else
+                                flattened.Save(sfd.FileName, ImageFormat.Jpeg);
+                        }
+                    }
+                    else
+                    {
+                        original.Save(sfd.FileName, ImageFormat.Png);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    BigMessageBox.Show("Error saving preview: " + ex.Message);
+                }
+            }
+        }
+
+        private void MsgPreviewDefault_Click(object sender, EventArgs e)
+        {
+            SaveMsgPreviewToImage(GetCurLocMsgEntry(), Combo_Language.Text);
+        }
+
+        private void MsgPreview_DoubleClick(object sender, EventArgs e)
+        {
+            SaveMsgPreviewToImage(GetDefaultMsgEntry(), Dicts.DefaultLanguage);
         }
 
         private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Common.SavedMsgPreviewData savedPreviewData)
