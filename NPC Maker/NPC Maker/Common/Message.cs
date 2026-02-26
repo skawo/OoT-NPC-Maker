@@ -129,7 +129,7 @@ namespace NPC_Maker
     {
         public string TagName { get; set; }
         public List<TagValueEntry> Values { get; set; }
-        public bool isTag { get; set; }
+        public bool IsTag { get; set; }
 
         public TagEntry(string token, string vals, string defaultValues = "")
         {
@@ -149,7 +149,7 @@ namespace NPC_Maker
         private void InitializeFromToken(string token, string vals, string defaultValues)
         {
             // Check if it's a tag
-            isTag = token.StartsWith("<") && token.EndsWith(">");
+            IsTag = token.StartsWith("<") && token.EndsWith(">");
 
             // Parse token parts
             var subTokens = token.Split(':');
@@ -200,8 +200,7 @@ namespace NPC_Maker
 
         private void ProcessTokenReference(string trimmedValue, string[] valueTokens, string[] defaultValueTokens)
         {
-            int tokenIndex;
-            if (!int.TryParse(trimmedValue.Substring(1), out tokenIndex))
+            if (!int.TryParse(trimmedValue.Substring(1), out int tokenIndex))
                 throw new Exception(string.Format("Invalid token reference: {0}", trimmedValue));
 
             tokenIndex--; // Convert to 0-based index
@@ -304,7 +303,7 @@ namespace NPC_Maker
         public int Position { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<byte> tempBytes { get; set; } // This is only temporarily used as a container during compile
+        public List<byte> TempBytes { get; set; } // This is only temporarily used as a container during compile
 
         public MessageEntry()
         {
@@ -318,7 +317,7 @@ namespace NPC_Maker
 
         private string GetXString(byte Character)
         {
-            return $"\\x{Character.ToString("X2")}\"\"";
+            return $"\\x{Character:X2}\"\"";
         }
 
         public string ToCString(string Language)
@@ -341,7 +340,7 @@ namespace NPC_Maker
             // If tag contains a colon, only consider the part before it
             string searchTag = isTag ? normalized.Split(':')[0] : normalized;
 
-            int tagIndex = tagDict.Entries.FindIndex(x => x.Entry.TagName == searchTag && x.Entry.isTag == isTag);
+            int tagIndex = tagDict.Entries.FindIndex(x => x.Entry.TagName == searchTag && x.Entry.IsTag == isTag);
 
             return tagIndex;
         }

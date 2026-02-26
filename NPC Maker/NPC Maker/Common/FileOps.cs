@@ -1035,10 +1035,10 @@ namespace NPC_Maker
 
                 Parallel.ForEach(loc.Messages, msg =>
                 {
-                    try { msg.tempBytes = msg.ToBytes(loc.Language); }
+                    try { msg.TempBytes = msg.ToBytes(loc.Language); }
                     catch (Exception ex)
                     {
-                        msg.tempBytes = null;
+                        msg.TempBytes = null;
                         errors.Add($"{entry.NPCName}:\nError in message {msg.Name}:\n{ex.Message}");
                     }
                 });
@@ -1052,8 +1052,8 @@ namespace NPC_Maker
 
                 foreach (var msg in loc.Messages)
                 {
-                    var messageBytes = msg.tempBytes ?? new List<byte>();
-                    msg.tempBytes = null;
+                    var messageBytes = msg.TempBytes ?? new List<byte>();
+                    msg.TempBytes = null;
 
                     Helpers.Ensure4ByteAlign(messageBytes);
                     msgData.AddRange(messageBytes);

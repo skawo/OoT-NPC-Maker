@@ -738,12 +738,13 @@ namespace NPC_Maker
 
         public List<byte> ToBytes()
         {
-            List<byte> outBytes = new List<byte>();
-
-            outBytes.Add(LimbID);
-            outBytes.Add(R);
-            outBytes.Add(G);
-            outBytes.Add(B);
+            List<byte> outBytes = new List<byte>
+            {
+                LimbID,
+                R,
+                G,
+                B
+            };
             Helpers.Ensure4ByteAlign(outBytes);
             return outBytes;
         }

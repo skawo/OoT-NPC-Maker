@@ -25,20 +25,24 @@ namespace NPC_Maker
     public partial class MainWindow : Form
     {
         public string OpenedPath = "";
-        NPCFile EditedFile = null;
-        NPCEntry SelectedEntry = null;
-        int SelectedIndex = -1;
-        string NPCSave = JsonConvert.SerializeObject(new NPCFile(), Formatting.Indented);
 
-        public static List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
-        readonly System.Windows.Forms.Timer compileTimer;
-        int LastSearchDepth = 0;
-        int LastMsgCount = 0;
-        string LastSearch = "";
-        int ScrollToMsg = 0;
-        readonly System.Windows.Forms.Timer messageSearchTimer = new System.Windows.Forms.Timer();
-        private System.Windows.Forms.Timer autoBackupTimer = new System.Windows.Forms.Timer();
-        string LastBackup = "";
+        private NPCFile EditedFile = null;
+        private NPCEntry SelectedEntry = null;
+        private int SelectedIndex = -1;
+        private string NPCSave = "";
+
+        private List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
+
+        private int LastSearchDepth = 0;
+        private int LastMsgCount = 0;
+        private string LastSearch = "";
+        private int ScrollToMsg = 0;
+
+        private readonly System.Windows.Forms.Timer compileTimer = new System.Windows.Forms.Timer();
+        private readonly System.Windows.Forms.Timer messageSearchTimer = new System.Windows.Forms.Timer();
+        private readonly System.Windows.Forms.Timer autoBackupTimer = new System.Windows.Forms.Timer();
+
+        private string LastBackup = "";
 
         private Common.SavedMsgPreviewData lastPreviewData;
         private Common.SavedMsgPreviewData lastPreviewDataOrig;
@@ -61,7 +65,7 @@ namespace NPC_Maker
 
             foreach (TabPage Page in TabControl_Segments.TabPages)
             {
-                Controls.SegmentDataGrid sg = new Controls.SegmentDataGrid();
+                SegmentDataGrid sg = new SegmentDataGrid();
                 sg.Grid.CellParsing += DataGridViewSegments_CellParse;
                 sg.Grid.CellMouseDoubleClick += Segments_CellMouseDoubleClick;
                 sg.Grid.KeyUp += DataGridViewSegments_KeyUp;
@@ -70,7 +74,6 @@ namespace NPC_Maker
                 Page.Controls.Add(sg);
             }
 
-            compileTimer = new System.Windows.Forms.Timer();
             compileTimer.Interval = 50;
             compileTimer.Tick += CompileTimer_Tick;
 
@@ -118,10 +121,10 @@ namespace NPC_Maker
             SplitContainer1_Panel1_SizeChanged(null, null);
             MsgTabSplitContainer_SizeChanged(null, null);
 
-            SetupScale(this);
+            SetupScale();
         }
 
-        private void SetupScale(Control ctr)
+        private void SetupScale()
         {
             float scale = Program.Settings.GUIScale;
 
@@ -161,12 +164,12 @@ namespace NPC_Maker
                 }
             }
 
-            comboFont.SelectedIndexChanged -= comboFont_SelectedChanged;
-            numUpDownFont.ValueChanged -= numUpDownFont_ValueChanged;
+            comboFont.SelectedIndexChanged -= ComboFont_SelectedChanged;
+            numUpDownFont.ValueChanged -= NumUpDownFont_ValueChanged;
             comboFont.Text = MsgText.Font.Name;
             numUpDownFont.Value = (int)MsgText.Font.Size;
-            comboFont.SelectedIndexChanged += comboFont_SelectedChanged;
-            numUpDownFont.ValueChanged += numUpDownFont_ValueChanged;
+            comboFont.SelectedIndexChanged += ComboFont_SelectedChanged;
+            numUpDownFont.ValueChanged += NumUpDownFont_ValueChanged;
 
             try
             {
@@ -192,12 +195,12 @@ namespace NPC_Maker
                     if (snap == null)
                         continue;
 
-                    Bitmap bmp = GetMessagePreviewImage(snap.Entry, snap.Language, snap.NpcName, ref lastPreviewData);
+                    Bitmap bmp = GetMessagePreviewImage(snap.Entry, snap.Language, ref lastPreviewData);
 
                     Bitmap bmpOrig = null;
 
                     if (snap.ShowOrig && snap.OrigEntry != null)
-                        bmpOrig = GetMessagePreviewImage(snap.OrigEntry, Dicts.DefaultLanguage, snap.NpcName, ref lastPreviewDataOrig);
+                        bmpOrig = GetMessagePreviewImage(snap.OrigEntry, Dicts.DefaultLanguage, ref lastPreviewDataOrig);
 
                     this.BeginInvoke((Action)(() =>
                     {
@@ -235,10 +238,10 @@ namespace NPC_Maker
                 PreviewSplitContainer.Panel1Collapsed = true;
             }
 
-            SetPreviewImage(MsgPreview, bmp, lastPreviewData, PreviewSplitContainer.Panel2, showOrig);
+            SetPreviewImage(MsgPreview, bmp, lastPreviewData, PreviewSplitContainer.Panel2);
         }
 
-        private void SetPreviewImage(PictureBox box, Bitmap bmp, dynamic lastData, Panel container, bool useOrigPreview = false)
+        private void SetPreviewImage(PictureBox box, Bitmap bmp, dynamic lastData, Panel container)
         {
             if (bmp == null && lastData?.previewImage != null)
             {
@@ -291,7 +294,7 @@ namespace NPC_Maker
             }
         }
 
-        private void comboFont_SelectedChanged(object sender, EventArgs e)
+        private void ComboFont_SelectedChanged(object sender, EventArgs e)
         {
             try
             {
@@ -307,7 +310,7 @@ namespace NPC_Maker
             { }
         }
 
-        private void numUpDownFont_ValueChanged(object sender, EventArgs e)
+        private void NumUpDownFont_ValueChanged(object sender, EventArgs e)
         {
             try
             {
@@ -603,8 +606,7 @@ namespace NPC_Maker
 
             try
             {
-                if (Program.CodeEditorProcess != null)
-                    Program.CodeEditorProcess.Kill();
+                Program.CodeEditorProcess?.Kill();
             }
             catch (Exception)
             {
@@ -874,7 +876,7 @@ namespace NPC_Maker
                                                                            Dlist.TransX.ToString() + "," + Dlist.TransY.ToString() + "," + Dlist.TransZ.ToString(),
                                                                            Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
                                                                            Dlist.Scale.ToString(),
-                                                                           PositionType == null ? Dlist.Limb.ToString() : PositionType,
+                                                                           PositionType ?? Dlist.Limb.ToString(),
                                                                            Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Dlist.ObjectID),
                                                                            SelCombo
                                                                           });
@@ -1526,7 +1528,7 @@ namespace NPC_Maker
         private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             float curScale = Program.Settings.GUIScale;
-            NPC_Maker.Windows.Settings s = new Windows.Settings(ref EditedFile);
+            Windows.Settings s = new Windows.Settings(ref EditedFile);
             s.StartPosition = FormStartPosition.CenterParent;
             s.ShowDialog();
 
@@ -1624,9 +1626,11 @@ namespace NPC_Maker
                     Windows.LongInputBox flg = new Windows.LongInputBox("Compile flags", "Add compile flags:", "");
                     flg.ShowDialog();
 
-                    SaveFileDialog sf = new SaveFileDialog();
-                    sf.Title = "Select output ZOVL...";
-                    sf.Filter = "ZOVL files (*.zovl)|*.zovl|All files (*.*)|*.*";
+                    SaveFileDialog sf = new SaveFileDialog
+                    {
+                        Title = "Select output ZOVL...",
+                        Filter = "ZOVL files (*.zovl)|*.zovl|All files (*.*)|*.*"
+                    };
 
                     if (sf.ShowDialog() == DialogResult.OK)
                     {
@@ -2639,9 +2643,9 @@ namespace NPC_Maker
 
         private string GetAnimationFilestartString(Int32? FileStart)
         {
-            string cValue = "";
-
             FileStart = FileStart ?? -1;
+
+            string cValue;
 
             if (FileStart == -2)
                 cValue = "Loaded by user method";
@@ -4340,7 +4344,7 @@ namespace NPC_Maker
 
         private void SaveMsgPreviewToImage(MessageEntry entry, string Language)
         {
-            Bitmap original = GetMessagePreviewImage(entry, Language, "", ref lastPreviewData);
+            Bitmap original = GetMessagePreviewImage(entry, Language, ref lastPreviewData);
 
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter =
@@ -4394,7 +4398,7 @@ namespace NPC_Maker
             SaveMsgPreviewToImage(GetDefaultMsgEntry(), Dicts.DefaultLanguage);
         }
 
-        private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, string NPCName, ref Common.SavedMsgPreviewData savedPreviewData)
+        private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, ref Common.SavedMsgPreviewData savedPreviewData)
         {
             List<byte> Data = null;
 
@@ -4505,8 +4509,7 @@ namespace NPC_Maker
                 box.Dispose();
             }
 
-            if (grfx != null)
-                grfx.Dispose();
+            grfx?.Dispose();
 
             savedPreviewData = new Common.SavedMsgPreviewData
             {
@@ -5244,7 +5247,7 @@ namespace NPC_Maker
 
         }
 
-        private void exportCurrentActorMessagesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportCurrentActorMessagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<byte> msgTable = new List<byte>();
             List<byte> msgData = new List<byte>();

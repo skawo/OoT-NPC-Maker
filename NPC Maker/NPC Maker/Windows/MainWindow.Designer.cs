@@ -4627,7 +4627,7 @@ namespace NPC_Maker
             this.exportCurrentActorMessagesToolStripMenuItem.Name = "exportCurrentActorMessagesToolStripMenuItem";
             this.exportCurrentActorMessagesToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
             this.exportCurrentActorMessagesToolStripMenuItem.Text = "Export current actor messages";
-            this.exportCurrentActorMessagesToolStripMenuItem.Click += new System.EventHandler(this.exportCurrentActorMessagesToolStripMenuItem_Click);
+            this.exportCurrentActorMessagesToolStripMenuItem.Click += new System.EventHandler(this.ExportCurrentActorMessagesToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 

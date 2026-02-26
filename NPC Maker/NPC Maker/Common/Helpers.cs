@@ -820,13 +820,14 @@ namespace NPC_Maker
 
         public static double AddInterlocked(ref float location1, float value)
         {
-            float newCurrentValue = location1; // non-volatile read, so may be stale
+            float newCurrentValue = location1;
+
             while (true)
             {
                 float currentValue = newCurrentValue;
                 float newValue = currentValue + value;
                 newCurrentValue = Interlocked.CompareExchange(ref location1, newValue, currentValue);
-                if (newCurrentValue.Equals(currentValue)) // see "Update" below
+                if (newCurrentValue.Equals(currentValue))
                     return newValue;
             }
         }
