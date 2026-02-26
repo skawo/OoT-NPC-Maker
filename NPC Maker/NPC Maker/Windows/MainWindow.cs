@@ -4358,7 +4358,7 @@ namespace NPC_Maker
                 {
                     string ext = Path.GetExtension(sfd.FileName).ToLower();
 
-                    if (ext == ".bmp" || ext == ".jpg")
+                    if (ext == ".bmp" || ext == ".jpg" || ext == ".jpeg")
                     {
                         using (Bitmap flattened = new Bitmap(original.Width, original.Height, PixelFormat.Format24bppRgb))
                         using (Graphics g = Graphics.FromImage(flattened))
