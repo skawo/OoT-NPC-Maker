@@ -4044,7 +4044,7 @@ namespace NPC_Maker
 
         private void SplitMsgContainer_Paint(object sender, PaintEventArgs e)
         {
-            const int msgCommentSize = 18;
+            int msgCommentSize = (int)(18 * Program.Settings.GUIScale);
             int xoffs = 0;
             int yoffs = 0;
 
