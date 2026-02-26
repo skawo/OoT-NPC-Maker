@@ -637,13 +637,16 @@ namespace NPC_Maker
                 return false;
         }
 
-        public static void DeleteFileStartingWith(string path, string prefix)
+        public static void DeleteFileStartingWith(string path, string prefix, HashSet<string> fileList = null)
         {
-            foreach (var file in Directory.EnumerateFiles(path))
+            var files = fileList ?? Directory.EnumerateFiles(path);
+
+            foreach (var file in files.ToList())
             {
                 if (Path.GetFileName(file).StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                 {
                     File.Delete(file);
+                    fileList?.Remove(file);
                 }
             }
         }

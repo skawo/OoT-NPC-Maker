@@ -543,6 +543,7 @@ namespace NPC_Maker
         {
             float progressPer = 100f / Data.Entries.Count;
             float curProgress = 0f;
+            int lastReported = 0;
 
             await TaskEx.Run(() =>
             {
@@ -561,11 +562,13 @@ namespace NPC_Maker
                 string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(Data);
                 string jsonFileName = Program.JsonPath.FilenameFromPath();
 
-                var results = new ConcurrentBag<Common.PreprocessedEntry>();
+                var scriptCacheFiles = new HashSet<string>(Directory.GetFiles(Program.ScriptCachePath));
+                var cCacheFiles = new HashSet<string>(Directory.GetFiles(Program.CCachePath));
 
-                int lastReported = 0;
+                var results = new ConcurrentDictionary<string, object>();
 
-                Parallel.For(0, Data.Entries.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount},
+                Parallel.For(0, Data.Entries.Count,
+                    new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },
                     entryID =>
                     {
                         try
@@ -574,125 +577,11 @@ namespace NPC_Maker
 
                             if (!entry.IsNull && !entry.Omitted)
                             {
-
                                 string jsonEntryPrefix = jsonFileName + "_" + entryID + "_";
 
-                                /* ---------------- C CODE ---------------- */
-
-                                byte[] overlay = null;
-                                string compErrors = "";
-
-                                string codeString =
-                                    JsonConvert.SerializeObject(entry.EmbeddedOverlayCode) +
-                                    CCode.ReplaceGameVersionInclude("") +
-                                    GetIncludesText(entry.EmbeddedOverlayCode.HeaderPaths);
-
-                                string codeHash = Helpers.GetBase64Hash(codeString);
-
-                                string funcsAddrsName = jsonEntryPrefix + "funcsaddrs_" + codeHash;
-                                string codeName = jsonEntryPrefix + "code_" + codeHash;
-
-                                string cachedAddrsFile = Path.Combine(Program.CCachePath, funcsAddrsName);
-                                string cachedCodeFile = Path.Combine(Program.CCachePath, codeName);
-
-                                bool cCacheHit =
-                                    !cCacheInvalid &&
-                                    File.Exists(cachedAddrsFile) &&
-                                    File.Exists(cachedCodeFile);
-
-                                if (!cCacheHit)
-                                {
-                                    Helpers.DeleteFileStartingWith(Program.CCachePath, funcsAddrsName);
-                                    Helpers.DeleteFileStartingWith(Program.CCachePath, codeName);
-
-                                    if (!string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
-                                        overlay = CCode.Compile(Data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, "NPCCOMPILE" + entryID);
-
-                                    if (overlay != null)
-                                    {
-                                        Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script");
-
-                                        string addrJson =
-                                            JsonConvert.SerializeObject
-                                            (
-                                                entry.EmbeddedOverlayCode,
-                                                new JsonSerializerSettings { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() }
-                                            );
-
-                                        File.WriteAllText(cachedAddrsFile, addrJson);
-                                        File.WriteAllBytes(cachedCodeFile, overlay);
-                                    }
-                                }
-                                else
-                                {
-                                    entry.EmbeddedOverlayCode =
-                                        JsonConvert.DeserializeObject<CCodeEntry>
-                                        (
-                                            File.ReadAllText(cachedAddrsFile),
-                                            new JsonSerializerSettings { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() }
-                                        );
-
-                                    overlay = File.ReadAllBytes(cachedCodeFile);
-                                }
-
-                                if (overlay != null)
-                                {
-                                    results.Add(new Common.PreprocessedEntry(cachedAddrsFile, entry.EmbeddedOverlayCode));
-                                    results.Add(new Common.PreprocessedEntry(cachedCodeFile, overlay));
-                                }
-
-                                /* ---------------- EXT DATA ---------------- */
-
-                                string extData =
-                                    JsonConvert.SerializeObject(new
-                                    {
-                                        entry.Messages,
-                                        entry.ExtraDisplayLists,
-                                        entry.Segments,
-                                        entry.Animations
-                                    }) +
-                                    Helpers.GetDefinesStringFromH(entry.HeaderPath);
-
-                                string extDataHash = Helpers.GetBase64Hash(extData);
-                                string extDataFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "exdata_" + extDataHash);
-
-                                bool extDataExists = File.Exists(extDataFile);
-
-                                /* ---------------- SCRIPTS ---------------- */
-
-                                int scriptNum = 0;
-
-                                foreach (var scrEntry in entry.Scripts)
-                                {
-                                    if (string.IsNullOrEmpty(scrEntry.Text))
-                                    {
-                                        scriptNum++;
-                                        continue;
-                                    }
-
-                                    string scriptHash = Helpers.GetBase64Hash(scrEntry.Text);
-                                    string cachedScriptFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_" + scriptHash);
-
-                                    bool scriptCacheHit = !cacheInvalid && extDataExists && File.Exists(cachedScriptFile);
-
-                                    if (!scriptCacheHit)
-                                    {
-                                        Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_");
-
-                                        var parser = new Scripts.ScriptParser(ref Data, entry, scrEntry.Text, baseDefines);
-                                        var script = parser.ParseScript(scrEntry.Name, true);
-
-                                        if (script.ParseErrors.Count == 0)
-                                        {
-                                            File.WriteAllBytes(cachedScriptFile, script.Script);
-                                            results.Add(new Common.PreprocessedEntry(cachedScriptFile, script.Script));
-                                        }
-                                    }
-                                    else
-                                        results.Add(new Common.PreprocessedEntry(cachedScriptFile, File.ReadAllBytes(cachedScriptFile)));
-
-                                    scriptNum++;
-                                }
+                                ProcessCCode(Data, entry, entryID, jsonEntryPrefix, cCacheInvalid, cCacheFiles, scriptCacheFiles, results, out string compErrors);
+                                bool extDataExists = CheckExtDataCache(entry, jsonEntryPrefix, scriptCacheFiles, out string extDataFile);
+                                ProcessScripts(Data, entry, jsonEntryPrefix, baseDefines, cacheInvalid, extDataExists, scriptCacheFiles, results);
 
                                 if (!extDataExists)
                                 {
@@ -700,58 +589,175 @@ namespace NPC_Maker
                                     File.Create(extDataFile).Dispose();
                                 }
                             }
-
-                            /* ---------------- PROGRESS ---------------- */
-
+                        }
+                        catch { }
+                        finally
+                        {
                             Helpers.AddInterlocked(ref curProgress, progressPer);
                             int percent = (int)curProgress;
 
-                            if (percent != lastReported)
+                            if (Interlocked.CompareExchange(ref lastReported, percent, percent - 1) == percent - 1)
                             {
-                                lastReported = percent;
-
                                 if (progress != null)
                                     progress.Report(new Common.ProgressReport($"Compiling {percent}%", curProgress));
                                 else
                                     Program.ConsoleWriteS($"\rCompiling {percent}%    ");
                             }
                         }
-                        catch
-                        {
-                        }
                     });
 
                 Program.ConsoleWriteLineS("\nPre-processing done!");
-
-                var dict = results.GroupBy(e => e.identifier).ToDictionary(g => g.Key, g => g.Last().data);
-                SaveBinaryFile(outPath, ref Data, progress, baseDefines, new[] { false, false }, dict, CLIMode);
+                SaveBinaryFile(outPath, ref Data, progress, baseDefines, new[] { false, false }, results, CLIMode);
 
                 CCode.CleanupStandardCompilationArtifacts();
                 Program.CompileInProgress = false;
             });
         }
 
-
-        private static UInt32 TryGetFromH(bool CLIMode, string NPCName, uint defaultV, Dictionary<string, string> defines, string name)
+        private static void ProcessCCode(NPCFile data, NPCEntry entry, int entryID, string jsonEntryPrefix, 
+                                         bool cCacheInvalid, HashSet<string> cCacheFiles, HashSet<string> scriptCacheFiles, 
+                                         ConcurrentDictionary<string, object> results, out string compErrors)
         {
+            compErrors = "";
+
+            string codeString =
+                JsonConvert.SerializeObject(entry.EmbeddedOverlayCode) +
+                CCode.ReplaceGameVersionInclude("") +
+                GetIncludesText(entry.EmbeddedOverlayCode.HeaderPaths);
+
+            string codeHash = Helpers.GetBase64Hash(codeString);
+            string funcsAddrsName = jsonEntryPrefix + "funcsaddrs_" + codeHash;
+            string codeName = jsonEntryPrefix + "code_" + codeHash;
+            string cachedAddrsFile = Path.Combine(Program.CCachePath, funcsAddrsName);
+            string cachedCodeFile = Path.Combine(Program.CCachePath, codeName);
+
+            bool cCacheHit =
+                !cCacheInvalid &&
+                cCacheFiles.Contains(cachedAddrsFile) &&
+                cCacheFiles.Contains(cachedCodeFile);
+
+            byte[] overlay;
+
+            if (!cCacheHit)
+            {
+                Helpers.DeleteFileStartingWith(Program.CCachePath, funcsAddrsName, cCacheFiles);
+                Helpers.DeleteFileStartingWith(Program.CCachePath, codeName, cCacheFiles);
+
+                overlay = null;
+
+                if (!string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
+                    overlay = CCode.Compile(data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, "NPCCOMPILE" + entryID);
+
+                if (overlay != null)
+                {
+                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script", scriptCacheFiles);
+
+                    string addrJson = JsonConvert.SerializeObject(
+                        entry.EmbeddedOverlayCode,
+                        new JsonSerializerSettings { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() }
+                    );
+
+                    File.WriteAllText(cachedAddrsFile, addrJson);
+                    File.WriteAllBytes(cachedCodeFile, overlay);
+                }
+            }
+            else
+            {
+                entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(
+                    File.ReadAllText(cachedAddrsFile),
+                    new JsonSerializerSettings { ContractResolver = new JsonIgnoreAttributeIgnorerContractResolver() }
+                );
+
+                overlay = File.ReadAllBytes(cachedCodeFile);
+            }
+
+            if (overlay != null)
+            {
+                results[cachedAddrsFile] = entry.EmbeddedOverlayCode;
+                results[cachedCodeFile] = overlay;
+            }
+        }
+
+        private static bool CheckExtDataCache(NPCEntry entry, string jsonEntryPrefix, HashSet<string> scriptCacheFiles, out string extDataFile)
+        {
+            string extData =
+                JsonConvert.SerializeObject(new
+                {
+                    entry.Messages,
+                    entry.ExtraDisplayLists,
+                    entry.Segments,
+                    entry.Animations
+                }) +
+                Helpers.GetDefinesStringFromH(entry.HeaderPath);
+
+            string extDataHash = Helpers.GetBase64Hash(extData);
+            extDataFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "exdata_" + extDataHash);
+
+            return scriptCacheFiles.Contains(extDataFile);
+        }
+
+        private static void ProcessScripts(NPCFile data, NPCEntry entry, string jsonEntryPrefix, string baseDefines,
+                                           bool cacheInvalid, bool extDataExists, HashSet<string> scriptCacheFiles,
+                                           ConcurrentDictionary<string, object> results)
+        {
+            int scriptNum = 0;
+
+            foreach (var scrEntry in entry.Scripts)
+            {
+                if (string.IsNullOrEmpty(scrEntry.Text))
+                {
+                    scriptNum++;
+                    continue;
+                }
+
+                string scriptHash = Helpers.GetBase64Hash(scrEntry.Text);
+                string cachedScriptFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_" + scriptHash);
+
+                bool scriptCacheHit = !cacheInvalid && extDataExists && scriptCacheFiles.Contains(cachedScriptFile);
+
+                if (!scriptCacheHit)
+                {
+                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_", scriptCacheFiles);
+
+                    var parser = new Scripts.ScriptParser(ref data, entry, scrEntry.Text, baseDefines);
+                    var script = parser.ParseScript(scrEntry.Name, true);
+
+                    if (script.ParseErrors.Count == 0)
+                    {
+                        File.WriteAllBytes(cachedScriptFile, script.Script);
+                        results[cachedScriptFile] = script.Script;
+                    }
+                }
+                else
+                {
+                    results[cachedScriptFile] = File.ReadAllBytes(cachedScriptFile);
+                }
+
+                scriptNum++;
+            }
+        }
+
+
+        private static uint TryGetFromH(bool CLIMode, string NPCName, uint defaultV, Dictionary<string, string> defines, string name)
+        {
+            if (defines.Count == 0)
+                return defaultV;
+
             try
             {
-                if (defines.Count == 0)
-                    return defaultV;
-
-                Common.HDefine h = Helpers.GetHDefineFromName(name, defines);
+                var h = Helpers.GetHDefineFromName(name, defines);
 
                 if (h == null)
                 {
-                    if (!String.IsNullOrWhiteSpace(name))
+                    if (!string.IsNullOrWhiteSpace(name))
                         FileOps.ShowMsg(CLIMode, $"{NPCName}: Warning: Could not find define {name}!");
 
                     return defaultV;
                 }
-                else
-                    return h.Value1 != null ? (UInt32)h.Value1 : defaultV;
+
+                return h.Value1 != null ? (uint)h.Value1 : defaultV;
             }
-            catch (Exception)
+            catch
             {
                 FileOps.ShowMsg(CLIMode, $"{NPCName}: Error parsing define \"{name}\"!");
                 return defaultV;
@@ -759,7 +765,7 @@ namespace NPC_Maker
         }
 
         public static void SaveBinaryFile(string outPath, ref NPCFile Data, IProgress<Common.ProgressReport> progress,
-                                          string baseDefines, bool[] cacheStatus, Dictionary<string, object> preProcessedFiles, bool CLIMode)
+                                          string baseDefines, bool[] cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles, bool CLIMode)
         {
             if (Data.Entries.Count() == 0)
             {

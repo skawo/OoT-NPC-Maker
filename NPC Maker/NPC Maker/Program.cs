@@ -24,7 +24,6 @@ namespace NPC_Maker
         public static bool IsRunningUnderMono = false;
         public static bool IsWSL = false;
 
-        //public static FileSystemWatcher Watcher;
         public static Process CodeEditorProcess;
 
         public static string SettingsFilePath;
@@ -52,63 +51,81 @@ namespace NPC_Maker
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
 
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main(string[] args)
         {
-            Type t = Type.GetType("Mono.Runtime");
+            DetectRuntime();
+            Application.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
-            if (t != null)
+            bool hasArgs = args.Length > 0;
+
+            if (hasArgs)
             {
-                IsRunningUnderMono = true;
-                IsWSL = Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
-            }
-
-            if (args.Length != 0)
-            {
-                if (args.Contains("--silent"))
-                    consoleSilent = true;
-
-                if (!IsRunningUnderMono)
-                    AttachConsole(-1);
-
-                var version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
-                ConsoleWriteLineS();
-                ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.{version}");
+                SetupConsole(args);
+                PrintBanner();
             }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            CultureInfo ci = CultureInfo.GetCultureInfo("en-US");
-            Application.CurrentCulture = ci;
+            InitializePaths();
+            EnsureDirectoriesExist();
+            LoadSettings();
+            Dicts.LoadDicts();
 
-            // To create this in memory quicker
-            TaskEx.Run(() => { ZeldaMessage.MessagePreview p = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]); });
+            // Create this in memory, so it gets cached.
+            TaskEx.Run(() => new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]));
 
-            Program.ExecPath = System.IO.Path.GetDirectoryName(Application.ExecutablePath);
+            try 
+            { 
+                DropDownMenuScrollWheelHandler.Enable(true); 
+            } catch { }
+
+            if (!hasArgs)
+                RunGUI();
+            else
+                RunCLI(args);
+        }
+
+        private static void DetectRuntime()
+        {
+            Type monoType = Type.GetType("Mono.Runtime");
+            if (monoType == null) return;
+
+            IsRunningUnderMono = true;
+            IsWSL = Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
+        }
+
+        private static void SetupConsole(string[] args)
+        {
+            if (args.Contains("--silent"))
+                consoleSilent = true;
+
+            if (!IsRunningUnderMono)
+                AttachConsole(-1);
+        }
+
+        private static void PrintBanner()
+        {
+            var version = FileVersionInfo
+                .GetVersionInfo(Assembly.GetExecutingAssembly().Location)
+                .ProductVersion;
+
+            ConsoleWriteLineS();
+            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v{version}");
+        }
+
+        private static void InitializePaths()
+        {
+            ExecPath = Path.GetDirectoryName(Application.ExecutablePath);
             ScriptCachePath = Path.Combine(ExecPath, "cache", "s_cache");
             CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
             AutoSavePath = Path.Combine(ExecPath, "autosave");
 
-            if (!Directory.Exists(ScriptCachePath))
-                Directory.CreateDirectory(ScriptCachePath);
-
-            if (!Directory.Exists(CCachePath))
-                Directory.CreateDirectory(CCachePath);
-
-            try
-            {
-                DropDownMenuScrollWheelHandler.Enable(true);
-            }
-            catch { }
-
             string settingsWindows = Path.Combine(ExecPath, "Settings.json");
             string settingsMono = Path.Combine(ExecPath, "SettingsMono.json");
 
-            if (Program.IsRunningUnderMono)
+            if (IsRunningUnderMono)
             {
                 if (!File.Exists(settingsMono) && File.Exists(settingsWindows))
                     File.Copy(settingsWindows, settingsMono);
@@ -116,113 +133,153 @@ namespace NPC_Maker
                 SettingsFilePath = settingsMono;
             }
             else
+            {
                 SettingsFilePath = settingsWindows;
+            }
+        }
 
+        private static void EnsureDirectoriesExist()
+        {
+            if (!Directory.Exists(ScriptCachePath)) 
+                Directory.CreateDirectory(ScriptCachePath);
+            if (!Directory.Exists(CCachePath)) 
+                Directory.CreateDirectory(CCachePath);
+        }
+
+        private static void LoadSettings()
+        {
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
+        }
 
-            Dicts.LoadDicts();
+        private static void RunGUI()
+        {
+            string fileToOpen = GetInitialFileToOpen();
 
-            if (args.Length == 0)
+            while (true)
             {
-                var fileToOpen = File.Exists("backup") &&
-                                BigMessageBox.Show("NPCMaker was not closed properly the last time it was run. Load auto-saved backup?",
-                                                "Autosaved backup exists", MessageBoxButtons.YesNo) == DialogResult.Yes
-                                                ? "backup" : "";
+                mw = new MainWindow(fileToOpen);
+                mw.Shown += (s, e) => 
+                { 
+                    mw.Activate(); 
+                    mw.BringToFront(); 
+                };
 
+                Application.Run(mw);
 
-                while (true)
-                {
-                    mw = new MainWindow(fileToOpen);
-                    Application.Run(mw);
+                FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
 
-                    FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
+                if (mw.DialogResult != DialogResult.Retry)
+                    break;
 
-                    if (mw.DialogResult != DialogResult.Retry)
-                        break;
-
-                    fileToOpen = mw.OpenedPath;
-                }
+                fileToOpen = mw.OpenedPath;
             }
+        }
+
+        private static string GetInitialFileToOpen()
+        {
+            bool hasBackup = File.Exists("backup");
+            if (!hasBackup) return "";
+
+            bool loadBackup = BigMessageBox.Show(
+                "NPCMaker was not closed properly the last time it was run. Load auto-saved backup?",
+                "Autosaved backup exists",
+                MessageBoxButtons.YesNo) == DialogResult.Yes;
+
+            return loadBackup ? "backup" : "";
+        }
+
+        private static void RunCLI(string[] args)
+        {
+            bool isCompileCommand = args.Length >= 4 && args.Length <= 5 && args[0].ToUpper() == "-C";
+            bool isConvertCommand = args.Length >= 2;
+
+            if (isCompileCommand)
+                RunCompileCommand(args);
+            else if (isConvertCommand)
+                RunConvertCommand(args);
             else
+                PrintUsage();
+        }
+
+        private static void RunCompileCommand(string[] args)
+        {
+            ConsoleWriteLineS($"Compiling \"{Path.GetFileName(args[1])}\" to {args[3]}...");
+
+            string compileFlags = args.Length == 5 ? args[4].Trim('"') : "";
+            string compileMsgs = "";
+
+            CCode.Compile(args[1], args[2], args[3], compileFlags, ref compileMsgs);
+            ConsoleWriteLineS("Press ENTER to exit...");
+        }
+
+        private static void RunConvertCommand(string[] args)
+        {
+            NPCFile inFile = null;
+
+            try
             {
-                var isValidCompileCommand = args.Length >= 4 && args[0].ToUpper() == "-C" && args.Length <= 5;
-                var isValidConvertCommand = args.Length >= 2;
+                inFile = FileOps.ParseNPCJsonFile(args[0]);
+                Program.JsonPath = args[0];
 
-                if (isValidCompileCommand)
-                {
-                    ConsoleWriteLineS($"Compiling \"{Path.GetFileName(args[1])}\" to {args[3]}...");
-                    var compileFlags = args.Length == 5 ? args[4].Trim('"') : "";
-                    string compileMsgs = "";
-                    CCode.Compile(args[1], args[2], args[3], compileFlags, ref compileMsgs);
-                    ConsoleWriteLineS("Press ENTER to exit...");
-                    return;
-                }
-                else if (isValidConvertCommand)
-                {
-                    NPCFile inFile = null;
+                Dicts.LoadDicts();
+                Dicts.ReloadLanguages(inFile.Languages);
+                Program.Settings.GameVersion = inFile.GameVersion;
 
-                    try
-                    {
-                        inFile = FileOps.ParseNPCJsonFile(args[0]);
-                        Program.JsonPath = args[0];
-                        Dicts.LoadDicts();
-                        Dicts.ReloadLanguages(inFile.Languages);
-                        Program.Settings.GameVersion = inFile.GameVersion;
+                ConsoleWriteLineS($"Saving \"{Path.GetFileName(args[0])}\" to binary...");
 
-                        ConsoleWriteLineS($"Saving \"{Path.GetFileName(args[0])}\" to binary...");
-
-                        if (Program.Settings.CompileInParallel)
-                        {
-                            Program.CompileInProgress = true;
-                            FileOps.PreprocessCodeAndScripts(args[1], inFile, null, true);
-
-                            while (Program.CompileInProgress) { /* Wait for completion */ }
-                        }
-                        else
-                        {
-                            var cacheStatus = FileOps.GetCacheStatus(ref inFile);
-
-                            if (cacheStatus != null)
-                            {
-                                var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
-                                FileOps.SaveBinaryFile(args[1], ref inFile, null, baseDefines, cacheStatus, null, true);
-                                CCode.CleanupStandardCompilationArtifacts();
-                            }
-                        }
-                    }
-                    catch (Exception ex) when (inFile == null)
-                    {
-                        Console.WriteLine($"Error reading input JSON: {ex.Message}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error writing output: {ex.Message}");
-                    }
-
-                    FileOps.SaveNPCJSON(args[0], inFile);
-                    Program.ConsoleWriteLineS("Press ENTER to exit...");
-                }
+                if (Program.Settings.CompileInParallel)
+                    RunParallelCompile(args[1], inFile);
                 else
-                {
-                    Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj]");
-                    Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c [InputCFile] [InputLinkerFile] [OutputZovl] [\"COMPILEFLAGS\"]");
-                    Console.WriteLine("Press ENTER to exit...");
-                }
+                    RunSequentialCompile(args[1], ref inFile);
+            }
+            catch (Exception ex) when (inFile == null)
+            {
+                Console.WriteLine($"Error reading input JSON: {ex.Message}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing output: {ex.Message}");
+                return;
             }
 
+            FileOps.SaveNPCJSON(args[0], inFile);
+            ConsoleWriteLineS("Press ENTER to exit...");
+        }
 
+        private static void RunParallelCompile(string outputPath, NPCFile inFile)
+        {
+            Program.CompileInProgress = true;
+            FileOps.PreprocessCodeAndScripts(outputPath, inFile, null, true);
+
+            while (Program.CompileInProgress) {}
+        }
+
+        private static void RunSequentialCompile(string outputPath, ref NPCFile inFile)
+        {
+            var cacheStatus = FileOps.GetCacheStatus(ref inFile);
+            if (cacheStatus == null) return;
+
+            var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
+            FileOps.SaveBinaryFile(outputPath, ref inFile, null, baseDefines, cacheStatus, null, true);
+            CCode.CleanupStandardCompilationArtifacts();
+        }
+
+        private static void PrintUsage()
+        {
+            Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj] [-silent]");
+            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c [InputCFile] [InputLinkerFile] [OutputZovl] [\"COMPILEFLAGS\"]");
+            Console.WriteLine("Press ENTER to exit...");
         }
 
         public static void ConsoleWriteLineS(string s = "")
         {
-            if (!consoleSilent)
-                Console.WriteLine(s);
+            if (!consoleSilent) Console.WriteLine(s);
         }
 
         public static void ConsoleWriteS(string s = "")
         {
-            if (!consoleSilent) 
-                Console.Write(s);
+            if (!consoleSilent) Console.Write(s);
         }
     }
 }
