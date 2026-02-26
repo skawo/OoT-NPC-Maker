@@ -84,6 +84,12 @@ namespace NPC_Maker
 
         public const int Num_User_Vars = 255;
 
+        public enum Linker
+        {
+            MipsLD = 0,
+            zlinker = 1,
+        }
+
         public static List<string> AllKeywords = new List<string>()
         {
             Keyword_True,

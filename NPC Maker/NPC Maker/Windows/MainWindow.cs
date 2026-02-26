@@ -488,32 +488,35 @@ namespace NPC_Maker
         {
             autoBackupTimer.Stop();
 
-            TaskEx.Run(() =>
+            if (!Program.CompileInProgress)
             {
-                try
+                TaskEx.Run(() =>
                 {
-                    string currentBackup = Helpers.GetBase64Hash(JsonConvert.SerializeObject(EditedFile, Formatting.Indented));
-
-                    if (currentBackup != LastBackup)
+                    try
                     {
-                        string json = FileOps.ProcessNPCJSON(ref EditedFile, null);
+                        string currentBackup = Helpers.GetBase64Hash(JsonConvert.SerializeObject(EditedFile, Formatting.Indented));
 
-                        if (json != null)
+                        if (currentBackup != LastBackup)
                         {
-                            FileOps.SaveNPCJSON("backup", null, null, json);
+                            string json = FileOps.ProcessNPCJSON(ref EditedFile, null);
 
-                            if (!Directory.Exists(Program.AutoSavePath))
-                                Directory.CreateDirectory(Program.AutoSavePath);
+                            if (json != null)
+                            {
+                                FileOps.SaveNPCJSON("backup", null, null, json);
 
-                            FileOps.SaveNPCJSON(Path.Combine(Program.AutoSavePath, $"autosave_{DateTime.Now.Ticks}.json"), null, null, json);
-                            PruneOldAutosaves(Program.AutoSavePath, 30);
+                                if (!Directory.Exists(Program.AutoSavePath))
+                                    Directory.CreateDirectory(Program.AutoSavePath);
 
-                            LastBackup = currentBackup;
+                                FileOps.SaveNPCJSON(Path.Combine(Program.AutoSavePath, $"autosave_{DateTime.Now.Ticks}.json"), null, null, json);
+                                PruneOldAutosaves(Program.AutoSavePath, 30);
+
+                                LastBackup = currentBackup;
+                            }
                         }
                     }
-                }
-                catch { }
-            });
+                    catch { }
+                });
+            }
 
             autoBackupTimer.Start();
         }

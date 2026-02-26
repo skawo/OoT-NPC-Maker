@@ -49,6 +49,10 @@ namespace NPC_Maker.Windows
             Chk_AllowCommentsOnLoc.Checked = EditedSettings.AllowCommentsOnLoc;
             guiScale.Value = (decimal)EditedSettings.GUIScale;
 
+            Combo_Linker.Items.Clear();
+            Combo_Linker.Items.AddRange(Enum.GetNames(typeof(Lists.Linker)));
+            Combo_Linker.Text = EditedSettings.Linker.ToString();
+
             EditedFile = _EditedFile;
         }
 
@@ -164,7 +168,17 @@ namespace NPC_Maker.Windows
 
         private void Btn_LinkerFiles_Click(object sender, EventArgs e)
         {
-            LongInputBox liB = new LongInputBox("Additional linker files", "Add linker paths:", Program.Settings.LinkerPaths, true, "Linker files (*.ld)|*.ld|All files (*.*)|*.*");
+            string filter =
+                "Linker files (*.ld;*.zsym)|*.ld;*.zsym|" +
+                "LD Files (*.ld)|*.ld|" +
+                "ZLINKER Symbols (*.zsym)|*.zsym|" +
+                "All files (*.*)|*.*";
+
+            LongInputBox liB = new LongInputBox("Additional linker files", 
+                                                "Add linker paths:", 
+                                                Program.Settings.LinkerPaths, 
+                                                true,
+                                                filter);
 
             if (liB.ShowDialog() == DialogResult.OK)
                 EditedSettings.LinkerPaths = liB.inputText;

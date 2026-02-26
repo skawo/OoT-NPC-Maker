@@ -72,6 +72,8 @@ namespace NPC_Maker
 
         public float GUIScale { get; set; }
 
+        public Lists.Linker Linker { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -105,6 +107,7 @@ namespace NPC_Maker
             LinkerPaths = "";
             AllowCommentsOnLoc = true;
             GUIScale = 1.0f;
+            Linker = Lists.Linker.MipsLD;
             IncludePaths = "{PROGRAMPATH}/include;{PROGRAMPATH}/include/z64hdr/{GAMEVERSION};{PROGRAMPATH}/include/z64hdr/include;{PROGRAMPATH}/include/z64hdr/common";
         }
 
@@ -137,6 +140,7 @@ namespace NPC_Maker
             ALLOWCOMMENTSONLOC,
             GUISCALE,
             INCLUDEPATHS,
+            LINKER,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -187,6 +191,7 @@ namespace NPC_Maker
                 case Members.PROJPATH: ProjectPath = (string)Value; break;
                 case Members.ALLOWCOMMENTSONLOC: AllowCommentsOnLoc = (bool)Value; break;
                 case Members.GUISCALE: GUIScale = Convert.ToSingle(Value); break;
+                case Members.LINKER: Linker = (Lists.Linker)Enum.Parse(typeof(Lists.Linker), (string)Value); break;
                 default: break;
             }
         }
