@@ -227,10 +227,12 @@ namespace NPC_Maker
 
                 ConsoleWriteLineS($"Saving \"{Path.GetFileName(args[0])}\" to binary...");
 
-                if (Program.Settings.CompileInParallel)
-                    RunParallelCompile(args[1], inFile);
+                var cacheStatus = FileOps.GetCacheStatus(ref inFile);
+
+                if (Program.Settings.CompileInParallel && (cacheStatus.CacheInvalid || cacheStatus.CCacheInvalid))
+                    RunParallelCompile(args[1], cacheStatus, inFile);
                 else
-                    RunSequentialCompile(args[1], ref inFile);
+                    RunSequentialCompile(args[1], cacheStatus, ref inFile);
             }
             catch (Exception ex) when (inFile == null)
             {
@@ -247,20 +249,18 @@ namespace NPC_Maker
             ConsoleWriteLineS("Press ENTER to exit...");
         }
 
-        private static void RunParallelCompile(string outputPath, NPCFile inFile)
+        private static void RunParallelCompile(string outputPath, Common.CacheStatus cacheStatus, NPCFile inFile)
         {
             Program.CompileInProgress = true;
-            FileOps.PreprocessCodeAndScripts(outputPath, inFile, null, true);
+            FileOps.PreprocessCodeAndScripts(outputPath, inFile, cacheStatus, null, true);
 
             while (Program.CompileInProgress) {}
         }
 
-        private static void RunSequentialCompile(string outputPath, ref NPCFile inFile)
+        private static void RunSequentialCompile(string outputPath, Common.CacheStatus cacheStatus, ref NPCFile inFile)
         {
-            var cacheStatus = FileOps.GetCacheStatus(ref inFile);
-            if (cacheStatus == null) return;
-
             var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
+
             FileOps.SaveBinaryFile(outputPath, ref inFile, null, baseDefines, cacheStatus, null, true);
             CCode.CleanupStandardCompilationArtifacts();
         }

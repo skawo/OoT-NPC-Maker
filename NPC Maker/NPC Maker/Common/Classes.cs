@@ -14,6 +14,12 @@ namespace NPC_Maker.Common
         public bool ShowOrig;
     }
 
+    public struct CacheStatus
+    {
+        public bool CCacheInvalid;
+        public bool CacheInvalid;
+    }
+
     public class ProgressReport
     {
         public string Status;

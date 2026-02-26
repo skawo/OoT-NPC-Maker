@@ -1216,16 +1216,16 @@ namespace NPC_Maker
 
                 compileTimer.Start();
 
-                if (Program.Settings.CompileInParallel)
+                var cacheStatus = FileOps.GetCacheStatus(ref EditedFile);
+
+                if (Program.Settings.CompileInParallel && (cacheStatus.CacheInvalid || cacheStatus.CCacheInvalid))
                 {
-                    FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, progress, false);
+                    FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, cacheStatus, progress, false);
                 }
                 else
                 {
                     await TaskEx.Run(() =>
                     {
-                        var cacheStatus = FileOps.GetCacheStatus(ref EditedFile);
-
                         string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
                         FileOps.SaveBinaryFile(SFD.FileName, ref EditedFile, progress, baseDefines, cacheStatus, null, false);
                         CCode.CleanupStandardCompilationArtifacts();
