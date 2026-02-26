@@ -24,7 +24,7 @@ namespace NPC_Maker.Scripts
             GotoFalse = new InstructionLabel("__IFFALSE__" + LabelStr);
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
 
             List<byte> Data = new List<byte>();
@@ -70,7 +70,7 @@ namespace NPC_Maker.Scripts
             GotoFalse = new InstructionLabel("__IFFALSE__" + LabelStr);
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
 
             List<byte> Data = new List<byte>();
@@ -118,7 +118,7 @@ namespace NPC_Maker.Scripts
             NumArgs = (byte)Params.Count;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
 
             List<byte> Data = new List<byte>();
@@ -179,7 +179,7 @@ namespace NPC_Maker.Scripts
             Value2 = _Value2;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
 
             List<byte> Data = new List<byte>();
@@ -216,7 +216,7 @@ namespace NPC_Maker.Scripts
             ExtVarNum = _ExtVarNum;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
 
             List<byte> Data = new List<byte>();

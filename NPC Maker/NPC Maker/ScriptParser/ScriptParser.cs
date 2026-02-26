@@ -14,14 +14,14 @@ namespace NPC_Maker.Scripts
         private readonly NPCEntry Entry;
         private readonly NPCFile EditedFile;
         private string ScriptText = "";
-        public List<string> RandomLabels { get; set; }
+        public HashSet<string> RandomLabels { get; set; }
         private BScript outScript;
 
         public ScriptParser(ref NPCFile _File, NPCEntry _Entry, string _ScriptText, string baseDefines)
         {
             Entry = _Entry;
             EditedFile = _File;
-            RandomLabels = new List<string>();
+            RandomLabels = new HashSet<string>();
 
             baseDefines += Environment.NewLine + Helpers.GetDefinesStringFromH(Entry.HeaderPath);
 
@@ -77,7 +77,7 @@ namespace NPC_Maker.Scripts
             if (string.IsNullOrWhiteSpace(ScriptText))
                 return outScript;
 
-            RandomLabels = new List<string>();
+            RandomLabels = new HashSet<string>();
 
             // Split text into lines and separate defines
             List<string> lines = SplitLines(ScriptText);
@@ -132,7 +132,7 @@ namespace NPC_Maker.Scripts
             //System.IO.File.WriteAllLines("DEBUGOUT_SCRIPT", outScript.ScriptDebug);
 #endif
 
-            List<InstructionLabel> labels = GetLabelsAndRemove(ref outScript, ref instructions);
+            var labels = GetLabelsAndRemove(ref outScript, ref instructions);
 
             // Convert to bytes if no errors and requested
 #if DEBUG
@@ -300,7 +300,6 @@ namespace NPC_Maker.Scripts
                 }
 
                 string scriptText = String.Join(Environment.NewLine, Lines);
-                DataTable dt = new DataTable();
 
                 // Only process defines that exist in the content
                 foreach (var def in validDefines)
@@ -323,7 +322,7 @@ namespace NPC_Maker.Scripts
 
                         try
                         {
-                            result = dt.Compute(string.Join(" ", f), null)?.ToString() ?? string.Join(" ", f);
+                            result = Program._sharedTable.Compute(string.Join(" ", f), null)?.ToString() ?? string.Join(" ", f);
                         }
                         catch
                         {
@@ -1247,24 +1246,20 @@ namespace NPC_Maker.Scripts
             return instructions;
         }
 
-
-        private static List<InstructionLabel> GetLabelsAndRemove(ref BScript outScript, ref List<Instruction> Instructions)
+        private static Dictionary<string, InstructionLabel> GetLabelsAndRemove(ref BScript outScript, ref List<Instruction> Instructions)
         {
-            List<InstructionLabel> OutList = new List<InstructionLabel>();
-
+            var outDict = new Dictionary<string, InstructionLabel>();
             try
             {
                 for (int i = 0; i < Instructions.Count; i++)
                 {
                     if (Instructions[i] is InstructionLabel lbl)
                     {
-                        Instructions.Remove(lbl);
-                        lbl.InstructionNumber = (UInt16)(i);
-
-                        if (OutList.Find(x => x.Name == lbl.Name) != null)
+                        Instructions.RemoveAt(i);
+                        lbl.InstructionNumber = (ushort)i;
+                        if (outDict.ContainsKey(lbl.Name))
                             throw ParseException.LabelAlreadyExists(lbl.Name);
-
-                        OutList.Add(lbl);
+                        outDict[lbl.Name] = lbl;
                         i--;
                     }
                 }
@@ -1277,11 +1272,10 @@ namespace NPC_Maker.Scripts
             {
                 outScript.ParseErrors.Add(ParseException.GeneralError("Error parsing labels: " + ex.Message));
             }
-
-            return OutList;
+            return outDict;
         }
 
-        private static byte[] ConvertScriptToBytes(List<InstructionLabel> Labels, ref BScript outScript, ref List<Instruction> Instructions)
+        private static byte[] ConvertScriptToBytes(Dictionary<string, InstructionLabel> Labels, ref BScript outScript, ref List<Instruction> Instructions)
         {
             try
             {

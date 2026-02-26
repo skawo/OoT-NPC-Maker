@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,21 +12,22 @@ namespace NPC_Maker.Scripts
     {
         static public int GetCorresponding(List<string> Lines, int LineNo, string Statement, string EndStatement)
         {
+            int depth = 0;
             for (int i = LineNo + 1; i < Lines.Count; i++)
             {
-                int spaceIndex = Lines[i].IndexOf(' ');
-                string firstWord = spaceIndex >= 0 ? Lines[i].Substring(0, spaceIndex) : Lines[i];
+                string line = Lines[i];
+                int spaceIndex = line.IndexOf(' ');
+                string firstWord = spaceIndex >= 0 ? line.Substring(0, spaceIndex) : line;
 
                 if (String.Equals(firstWord, Statement, StringComparison.OrdinalIgnoreCase))
-                {
-                    i = GetCorresponding(Lines, i, Statement, EndStatement);
-                    if (i < 0)
-                        throw ParseException.StatementNotClosed(Lines[LineNo]);
-                }
+                    depth++;
                 else if (String.Equals(firstWord, EndStatement, StringComparison.OrdinalIgnoreCase))
-                    return i;
+                {
+                    if (depth == 0)
+                        return i;
+                    depth--;
+                }
             }
-
             return -1;
         }
 
@@ -110,15 +112,18 @@ namespace NPC_Maker.Scripts
                 throw ParseException.ParamOutOfRange(splitString);
 
             uint value;
-            try
+            if (token.IsHex())
             {
-                value = token.IsHex()
-                    ? Convert.ToUInt32(token, 16)
-                    : Convert.ToUInt32(token);
+                string str = token;
+                if (str.StartsWith("0x") || str.StartsWith("0X"))
+                    str = str.Substring(2);
+                if (!uint.TryParse(str, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out value))
+                    throw ParseException.ParamConversionError(splitString);
             }
-            catch
+            else
             {
-                throw ParseException.ParamConversionError(splitString);
+                if (!uint.TryParse(token, NumberStyles.None, CultureInfo.InvariantCulture, out value))
+                    throw ParseException.ParamConversionError(splitString);
             }
 
             if (value < min || value > max)
@@ -129,46 +134,36 @@ namespace NPC_Maker.Scripts
 
         public static object GetValueAndCheckRange(string[] Splitstring, int Index, float Min, float Max)
         {
-            float? Value = null;
+            float value;
+            string token = Splitstring[Index];
 
-            try
+            bool neg = token.StartsWith("-");
+            string str = neg ? token.Substring(1) : token;
+
+            if (str.IsHex())
             {
-                if (Splitstring[Index].IsHex())
-                {
-                    string str = Splitstring[Index];
-                    bool neg = false;
-
-                    if (str.StartsWith("-"))
-                    {
-                        str = str.Substring(1);
-                        neg = true;
-                    }
-
-                    Value = (float?)Convert.ToDecimal(Convert.ToInt32(str, 16));
-
-                    if (neg)
-                        Value = -Value;
-
-                }
-                else
-                    Value = (float?)Convert.ToDecimal(Splitstring[Index]);
+                if (str.StartsWith("0x") || str.StartsWith("0X"))
+                    str = str.Substring(2);
+                int hexVal;
+                if (!int.TryParse(str, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out hexVal))
+                    throw ParseException.ParamConversionError(Splitstring);
+                value = neg ? -hexVal : hexVal;
             }
-            catch (Exception)
+            else
             {
+                if (!float.TryParse(token, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+                    throw ParseException.ParamConversionError(Splitstring);
             }
 
-            if (Value == null)
-                throw ParseException.ParamConversionError(Splitstring);
-
-            if (Value < Min || Value > Max)
+            if (value < Min || value > Max)
                 throw ParseException.ParamOutOfRange(Splitstring);
 
-            return Value;
+            return value;
         }
 
         public static byte GetOperator(string[] SplitLine, int Index)
         {
-            string operatorString = SplitLine[Index].ToUpper();
+            string operatorString = SplitLine[Index];
 
             switch (operatorString)
             {
@@ -212,56 +207,33 @@ namespace NPC_Maker.Scripts
 
         public static ScriptVarVal GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max)
         {
-            string value = SplitLine[Index].Trim().ToUpper();
+            string value = SplitLine[Index].Trim();
 
-            // Handle boolean keywords
-            if (value == Lists.Keyword_False)
-            {
-                return new ScriptVarVal
-                {
-                    Vartype = (byte)Lists.VarTypes.NORMAL,
-                    Value = (float)0
-                };
-            }
+            if (value.Equals(Lists.Keyword_False, StringComparison.OrdinalIgnoreCase))
+                return new ScriptVarVal { Vartype = (byte)Lists.VarTypes.NORMAL, Value = 0f };
 
-            if (value == Lists.Keyword_True)
-            {
-                return new ScriptVarVal
-                {
-                    Vartype = (byte)Lists.VarTypes.NORMAL,
-                    Value = (float)1
-                };
-            }
+            if (value.Equals(Lists.Keyword_True, StringComparison.OrdinalIgnoreCase))
+                return new ScriptVarVal { Vartype = (byte)Lists.VarTypes.NORMAL, Value = 1f };
 
-            // Handle regular variable types
             var varType = ScriptHelpers.GetVarType(SplitLine, Index);
-            var varValue = ScriptHelpers.GetValueByType(SplitLine, Index, varType, Min, Max);
-
             return new ScriptVarVal
             {
                 Vartype = varType,
-                Value = varValue
+                Value = ScriptHelpers.GetValueByType(SplitLine, Index, varType, Min, Max)
             };
         }
 
-
         public static ScriptVarVal GetScriptExtVarVal(string[] SplitLine, int Index, float Min, float Max)
         {
-            var outv = new ScriptVarVal();
-
-            byte Vartype = GetVarType(SplitLine, Index);
-
-            if (Vartype > (byte)Lists.VarTypes.NORMAL && Vartype < (byte)Lists.VarTypes.VAR)
+            byte vartype = GetVarType(SplitLine, Index);
+            if (vartype > (byte)Lists.VarTypes.NORMAL && vartype < (byte)Lists.VarTypes.VAR)
                 throw ParseException.ParamOutOfRange(SplitLine);
 
-            outv.Value = Convert.ToByte(GetValueByType(SplitLine, Index, Vartype, Min, Max));
-
-            if ((byte)outv.Value < 1 || (byte)outv.Value > Lists.Num_User_Vars)
+            byte value = Convert.ToByte(GetValueByType(SplitLine, Index, vartype, Min, Max));
+            if (value < 1 || value > Lists.Num_User_Vars)
                 throw ParseException.ParamOutOfRange(SplitLine);
 
-            outv.Vartype = Vartype;
-
-            return outv;
+            return new ScriptVarVal { Vartype = vartype, Value = value };
         }
 
         public static void GetScriptVarVal(string[] SplitLine, int Index, float Min, float Max, ref object Value, ref byte Type)
@@ -301,7 +273,6 @@ namespace NPC_Maker.Scripts
         public static float GetNormalVar(string[] SplitLine, int Index, float Min, float Max)
         {
             string varString = SplitLine[Index].ToUpper();
-
             try
             {
                 if (varString.StartsWith(Lists.Keyword_Degree))
@@ -309,46 +280,39 @@ namespace NPC_Maker.Scripts
                     string[] s = SplitLine[Index].Split('_');
                     float value = (float)ScriptHelpers.GetValueAndCheckRange(s, 1, Min, Max);
                     float degrees = (float)Rot2Deg(Convert.ToInt32(value));
-
                     if (degrees < Min || degrees > Max)
                         throw ParseException.ParamOutOfRange(SplitLine);
-
                     return degrees;
-
                 }
                 else if (varString.StartsWith(Lists.Keyword_Music))
                 {
-                    return (float)Dicts.Music.Forward[varString.Replace(Lists.Keyword_Music, "")];
+                    return (float)Dicts.Music.Forward[varString.Substring(Lists.Keyword_Music.Length)];
                 }
                 else if (varString.StartsWith(Lists.Keyword_Actor))
                 {
-                    return (float)Dicts.Actors.Forward[varString.Replace(Lists.Keyword_Actor, "")];
+                    return (float)Dicts.Actors.Forward[varString.Substring(Lists.Keyword_Actor.Length)];
                 }
                 else if (varString.StartsWith(Lists.Keyword_Sfx))
                 {
-                    return (float)Dicts.SFXes.Forward[varString.Replace(Lists.Keyword_Sfx, "")];
+                    return (float)Dicts.SFXes.Forward[varString.Substring(Lists.Keyword_Sfx.Length)];
                 }
                 else
                 {
                     try
                     {
-                        DataTable table = new DataTable();
-                        var res = table.Compute(SplitLine[Index], null).ToString();
-
+                        var res = Program._sharedTable.Compute(SplitLine[Index], null);
                         if (res != null)
-                            SplitLine[Index] = res;
+                            SplitLine[Index] = res.ToString();
                     }
                     catch (Exception)
                     {
-
                     }
-
                     return (float)ScriptHelpers.GetValueAndCheckRange(SplitLine, Index, Min, Max);
                 }
             }
-            catch (ParseException ex)
+            catch (ParseException)
             {
-                throw ex;
+                throw;
             }
             catch (Exception)
             {
@@ -419,29 +383,24 @@ namespace NPC_Maker.Scripts
                 return null;
         }
 
-        public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
-        {
-            string cond = SplitLine[IndexOfCondition].ToUpper();
+public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
+{
+    string cond = SplitLine[IndexOfCondition];
+    if (cond.Equals(Lists.Keyword_True, StringComparison.OrdinalIgnoreCase))
+        return Lists.ConditionTypes.TRUE;
+    if (cond.Equals(Lists.Keyword_False, StringComparison.OrdinalIgnoreCase))
+        return Lists.ConditionTypes.FALSE;
 
-            switch (cond)
-            {
-                case Lists.Keyword_True: return Lists.ConditionTypes.TRUE;
-                case Lists.Keyword_False: return Lists.ConditionTypes.FALSE;
-                default:
-                    {
-                        try
-                        {
-                            float v = GetNormalVar(SplitLine, IndexOfCondition, float.MinValue, float.MaxValue);
-                            return v == 0 ? Lists.ConditionTypes.FALSE : Lists.ConditionTypes.TRUE;
-                        }
-                        catch
-                        {
-                            throw ParseException.UnrecognizedCondition(SplitLine);
-                        }
-
-                    } 
-            }
-        }
+    try
+    {
+        float v = GetNormalVar(SplitLine, IndexOfCondition, float.MinValue, float.MaxValue);
+        return v == 0 ? Lists.ConditionTypes.FALSE : Lists.ConditionTypes.TRUE;
+    }
+    catch
+    {
+        throw ParseException.UnrecognizedCondition(SplitLine);
+    }
+}
 
         public static bool IsCondition(string[] SplitLine, int Index)
         {
@@ -548,74 +507,51 @@ namespace NPC_Maker.Scripts
 
         private static object GetNPCMakerEmbeddedTextID(string Name, List<MessageEntry> Messages)
         {
-            MessageEntry Mes = Messages.Find(x => x.Name == Name);
-
-            if (Mes == null)
-                return (float)-1;
-            else
-                return (float)(1 + Int16.MaxValue + Messages.IndexOf(Mes));
+            int index = Messages.FindIndex(x => x.Name == Name);
+            return index < 0 ? (float)-1 : (float)(1 + short.MaxValue + index);
         }
 
         public static void Helper_GetAdultChildTextIds(string[] SplitLine, ref ScriptVarVal TextID_Adult, ref ScriptVarVal TextID_Child, List<MessageEntry> Messages, int Index = 1)
         {
             ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 2, 3);
 
-            TextID_Adult = new ScriptVarVal
-            {
-                Value = GetNPCMakerEmbeddedTextID(SplitLine[Index], Messages),
-                Vartype = 0
-            };
-
+            TextID_Adult = new ScriptVarVal { Value = GetNPCMakerEmbeddedTextID(SplitLine[Index], Messages), Vartype = 0 };
             if ((float)TextID_Adult.Value < 0)
-            {
-                ScriptHelpers.GetScriptVarVal(SplitLine, 1, 0, UInt16.MaxValue, ref TextID_Adult);
-            }
+                ScriptHelpers.GetScriptVarVal(SplitLine, Index, 0, ushort.MaxValue, ref TextID_Adult);
 
             if (SplitLine.Length == 3)
             {
-                TextID_Child = new ScriptVarVal
-                {
-                    Value = GetNPCMakerEmbeddedTextID(SplitLine[2], Messages),
-                    Vartype = 0
-                };
-
+                TextID_Child = new ScriptVarVal { Value = GetNPCMakerEmbeddedTextID(SplitLine[2], Messages), Vartype = 0 };
                 if ((float)TextID_Child.Value < 0)
-                {
-                    ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, UInt16.MaxValue, ref TextID_Child);
-                }
+                    ScriptHelpers.GetScriptVarVal(SplitLine, 2, 0, ushort.MaxValue, ref TextID_Child);
             }
             else
             {
-                TextID_Child = new ScriptVarVal
-                {
-                    Value = TextID_Adult.Value,
-                    Vartype = TextID_Adult.Vartype
-                };
+                TextID_Child = new ScriptVarVal { Value = TextID_Adult.Value, Vartype = TextID_Adult.Vartype };
             }
         }
 
         private static ScriptVarVal Helper_GetValFromDict(string[] SplitLine, int Index, int RangeMin, int RangeMax,
-                                                   Dictionary<string, int> Dict, ParseException ToThrow)
+                                                           Dictionary<string, int> Dict, ParseException ToThrow)
         {
             var outV = new ScriptVarVal();
             outV.Vartype = GetVarType(SplitLine, Index);
 
+            int dictVal;
+            if (Dict.TryGetValue(SplitLine[Index].ToUpper(), out dictVal))
+            {
+                outV.Value = (float)dictVal;
+                return outV;
+            }
+
             try
             {
-                outV.Value = (float)Convert.ToDecimal(Dict[SplitLine[Index].ToUpper()]);
+                outV.Value = GetValueByType(SplitLine, Index, outV.Vartype, RangeMin, RangeMax);
                 return outV;
             }
             catch (Exception)
             {
-                try
-                {
-                    outV.Value = GetValueByType(SplitLine, Index, outV.Vartype, RangeMin, RangeMax);
-                    return outV;
-                }
-                catch (Exception)
-                {
-                    throw ToThrow;
-                }
+                throw ToThrow;
             }
         }
 
@@ -696,38 +632,36 @@ namespace NPC_Maker.Scripts
             return sb.ToString();
         }
 
+        private static readonly HashSet<char> _invalidChars = new HashSet<char> { '(', ')', '{', '}', ';', '\\' };
+
         public static string GetBaseDefines(NPCFile npc)
         {
             StringBuilder sb = new StringBuilder();
-
-            /*
-            sb.Append(AppendDictToBaseDefines(Dicts.Music, "MUSID_"));
-            sb.Append(AppendDictToBaseDefines(Dicts.SFXes, "SFXID_"));
-            sb.Append(AppendDictToBaseDefines(Dicts.Actors, "ACTORID_"));
-            sb.Append(AppendDictToBaseDefines(Dicts.LinkAnims, "LINKANIMID_"));
-            sb.Append(AppendDictToBaseDefines(Dicts.ObjectIDs, "OBJECTID_"));
-            */
-
             int id = 0;
-
             foreach (var entry in npc.Entries)
             {
                 if (!entry.IsNull)
-                    sb.Append($"#{Lists.Keyword_Define} NPCID_{entry.NPCName.Replace(" ", "_")} {id}{Environment.NewLine}");
-                
+                {
+                    string name = StripInvalidChars(entry.NPCName.Replace(" ", "_"));
+                    sb.Append('#').Append(Lists.Keyword_Define)
+                      .Append(' ').Append("NPCID_").Append(name)
+                      .Append(' ').Append(id)
+                      .Append(Environment.NewLine);
+                }
                 id++;
             }
+            return sb.ToString();
+        }
 
-            string s = sb.ToString();
-
-            s = s.Replace("(", "");
-            s = s.Replace(")", "");
-            s = s.Replace("{", "");
-            s = s.Replace("}", "");
-            s = s.Replace(";", "");
-            s = s.Replace("\\", "");
-
-            return s;
+        private static string StripInvalidChars(string s)
+        {
+            if (s.IndexOfAny(new[] { '(', ')', '{', '}', ';', '\\' }) < 0)
+                return s;
+            var sb = new StringBuilder(s.Length);
+            foreach (char c in s)
+                if (!_invalidChars.Contains(c))
+                    sb.Append(c);
+            return sb.ToString();
         }
     }
 }

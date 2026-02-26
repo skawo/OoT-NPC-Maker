@@ -19,7 +19,7 @@ namespace NPC_Maker.Scripts
             Speed = _Speed;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 

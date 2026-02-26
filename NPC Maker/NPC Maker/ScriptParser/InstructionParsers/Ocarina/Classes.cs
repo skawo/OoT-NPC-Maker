@@ -17,7 +17,7 @@ namespace NPC_Maker.Scripts
             GotoFalse = new InstructionLabel(LabelFalse);
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 

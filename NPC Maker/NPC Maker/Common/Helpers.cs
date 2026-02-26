@@ -695,16 +695,16 @@ namespace NPC_Maker
 
         public static void Ensure4ByteAlign(List<byte> bytes)
         {
-            int pad = (-bytes.Count) & 3; 
-            if (pad > 0)
-                bytes.AddRange(new byte[pad]);
+            int pad = (-bytes.Count) & 3;
+            for (int i = 0; i < pad; i++)
+                bytes.Add(0);
         }
 
         public static void Ensure16ByteAlign(List<byte> bytes)
         {
-            int pad = (-bytes.Count) & 15; 
-            if (pad > 0)
-                bytes.AddRange(new byte[pad]);
+            int pad = (-bytes.Count) & 15;
+            for (int i = 0; i < pad; i++)
+                bytes.Add(0);
         }
 
         public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
@@ -733,39 +733,57 @@ namespace NPC_Maker
                 case byte b:
                     byteList.Add(b);
                     break;
-
                 case sbyte sb:
                     byteList.Add((byte)sb);
                     break;
-
                 case ushort us:
                     Ensure2ByteAlign(byteList);
-                    byteList.AddRange(Program.BEConverter.GetBytes(us));
+                    AddUShort(byteList, us);
                     break;
-
                 case short s:
                     Ensure2ByteAlign(byteList);
-                    byteList.AddRange(Program.BEConverter.GetBytes(s));
+                    AddUShort(byteList, (ushort)s);
                     break;
-
                 case uint ui:
                     Ensure4ByteAlign(byteList);
-                    byteList.AddRange(Program.BEConverter.GetBytes(ui));
+                    AddUInt(byteList, ui);
                     break;
-
                 case int i:
                     Ensure4ByteAlign(byteList);
-                    byteList.AddRange(Program.BEConverter.GetBytes(i));
+                    AddUInt(byteList, (uint)i);
                     break;
-
                 case float f:
                     Ensure4ByteAlign(byteList);
-                    byteList.AddRange(Program.BEConverter.GetBytes(f));
+                    AddFloat(byteList, f);
                     break;
-
                 default:
-                    throw new NotSupportedException($"Unsupported type: {value?.GetType()}");
+                    throw new NotSupportedException(string.Format("Unsupported type: {0}", value != null ? value.GetType().ToString() : "null"));
             }
+        }
+
+        private static unsafe void AddFloat(List<byte> list, float value)
+        {
+            uint bits = *(uint*)&value;
+            list.Add((byte)(bits >> 24));
+            list.Add((byte)(bits >> 16));
+            list.Add((byte)(bits >> 8));
+            list.Add((byte)bits);
+        }
+
+        private static void AddUShort(List<byte> list, ushort value)
+        {
+            // Big-endian
+            list.Add((byte)(value >> 8));
+            list.Add((byte)value);
+        }
+
+        private static void AddUInt(List<byte> list, uint value)
+        {
+            // Big-endian
+            list.Add((byte)(value >> 24));
+            list.Add((byte)(value >> 16));
+            list.Add((byte)(value >> 8));
+            list.Add((byte)value);
         }
 
 

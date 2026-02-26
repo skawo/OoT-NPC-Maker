@@ -21,7 +21,7 @@ namespace NPC_Maker.Scripts
             NumArgs = (byte)Params.Count;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             var data = new List<byte>();
 

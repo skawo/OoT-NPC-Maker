@@ -29,6 +29,11 @@ namespace NPC_Maker.Controls
             f.AutoSize = true;
             f.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             f.TopMost = true;
+            f.Shown += (s, e) =>
+            {
+                f.Activate();
+                f.BringToFront();
+            };
 
             TableLayoutPanel layout = new TableLayoutPanel();
             layout.RowCount = 2;

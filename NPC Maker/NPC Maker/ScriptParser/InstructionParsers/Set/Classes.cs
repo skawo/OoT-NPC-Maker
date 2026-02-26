@@ -15,7 +15,7 @@ namespace NPC_Maker.Scripts
             Operator = _Operator;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
@@ -51,7 +51,7 @@ namespace NPC_Maker.Scripts
             Len = _Len;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
@@ -87,7 +87,7 @@ namespace NPC_Maker.Scripts
             LabelInstr = new InstructionLabel(Label);
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
@@ -124,7 +124,7 @@ namespace NPC_Maker.Scripts
             Operator = _Operator;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
@@ -162,7 +162,7 @@ namespace NPC_Maker.Scripts
             ExtVarNum = _ExtVarNum;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
@@ -204,7 +204,7 @@ namespace NPC_Maker.Scripts
             Once = _Once;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
@@ -249,7 +249,7 @@ namespace NPC_Maker.Scripts
             B = _B;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
@@ -289,7 +289,7 @@ namespace NPC_Maker.Scripts
             DlistID = _DlistId;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
@@ -328,7 +328,7 @@ namespace NPC_Maker.Scripts
             Resp3 = _Resp3;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
@@ -360,7 +360,7 @@ namespace NPC_Maker.Scripts
             Goto = _Goto;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
@@ -388,7 +388,7 @@ namespace NPC_Maker.Scripts
             Pattern = _Pattern;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
@@ -419,7 +419,7 @@ namespace NPC_Maker.Scripts
             Value = _Value;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);

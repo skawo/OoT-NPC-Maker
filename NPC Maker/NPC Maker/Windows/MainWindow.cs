@@ -6,6 +6,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
@@ -69,7 +70,7 @@ namespace NPC_Maker
             }
 
             compileTimer = new System.Windows.Forms.Timer();
-            compileTimer.Interval = 100;
+            compileTimer.Interval = 50;
             compileTimer.Tick += CompileTimer_Tick;
 
             autoBackupTimer.Interval = 2000;
@@ -538,33 +539,28 @@ namespace NPC_Maker
 
         private void CompileTimer_Tick(object sender, EventArgs e)
         {
+            if (Program.CompileInProgress)
+                return;
+
             compileTimer.Stop();
+            MenuStrip.Enabled = true;
+            Panel_Editor.Enabled = true;
+            btn_FindMsg.Enabled = true;
+            Program._stopWatch.Stop();
 
-            if (!Program.CompileInProgress)
+            if (Program.CompileThereWereErrors)
             {
-                MenuStrip.Enabled = true;
-                Panel_Editor.Enabled = true;
-                btn_FindMsg.Enabled = true;
-
-                if (Program.CompileThereWereErrors)
-                {
-                    progressL.SetProgress(0, $"Compilation failed.");
-
-                    if (Program.IsRunningUnderMono)
-                        BigMessageBox.Show(Program.CompileMonoErrors, "Error", MessageBoxButtons.OK);
-                }
-                else
-                {
-                    TimeSpan s = DateTime.Now - Program.CompileStartTime;
-
-                    if (s.Seconds == 0)
-                        progressL.SetProgress(100, $"Completed in {s.Milliseconds} ms.");
-                    else
-                        progressL.SetProgress(100, $"Completed in {s.Seconds} s {s.Milliseconds} ms.");
-                }
+                progressL.SetProgress(0, "Compilation failed.");
+                if (Program.IsRunningUnderMono)
+                    BigMessageBox.Show(Program.CompileMonoErrors, "Error", MessageBoxButtons.OK);
             }
             else
-                compileTimer.Start();
+            {
+                string time = Program._stopWatch.ElapsedMilliseconds < 1000
+                    ? string.Format("{0} ms", Program._stopWatch.ElapsedMilliseconds)
+                    : string.Format("{0} s {1} ms", Program._stopWatch.Elapsed.Seconds, Program._stopWatch.Elapsed.Milliseconds);
+                progressL.SetProgress(100, string.Format("Completed in {0}.", time));
+            }
         }
 
         private void Form1_ResizeEnd(object sender, EventArgs e)
@@ -1214,7 +1210,7 @@ namespace NPC_Maker
                 this.btn_FindMsg.Enabled = false;
                 this.progressL.Visible = true;
 
-                Program.CompileStartTime = DateTime.Now;
+                Program._stopWatch = Stopwatch.StartNew();
                 Program.CompileThereWereErrors = false;
 
                 compileTimer.Start();

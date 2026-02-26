@@ -2,6 +2,7 @@
 using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
@@ -39,12 +40,14 @@ namespace NPC_Maker
         public static bool CompileInProgress = false;
         public static bool CompileThereWereErrors = false;
         public static string CompileMonoErrors = "";
-        public static DateTime CompileStartTime;
 
         public static Dictionary<string, WeCantSpell.Hunspell.WordList> dictionary;
 
         public static bool consoleSilent = false;
         public static readonly Encoding Utf8 = Encoding.UTF8;
+        public static readonly DataTable _sharedTable = new DataTable();
+        public static Stopwatch _stopWatch;
+        public static readonly Random _random = new Random();
 
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);

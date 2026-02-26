@@ -13,7 +13,7 @@ namespace NPC_Maker.Scripts
             EndLabel = new InstructionLabel("__ASYNC_END__" + LabelR);
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 
@@ -39,7 +39,7 @@ namespace NPC_Maker.Scripts
         {
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
 

@@ -17,7 +17,7 @@ namespace NPC_Maker.Scripts
             throw ParseException.GeneralError("Used wrong function to convert to bytes.");
         }
 
-        public virtual byte[] ToBytes(List<InstructionLabel> Labels)
+        public virtual byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
@@ -41,7 +41,7 @@ namespace NPC_Maker.Scripts
             SubID = _SubID;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);
@@ -67,7 +67,7 @@ namespace NPC_Maker.Scripts
             Name = _Name;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             return new byte[0];
         }
@@ -93,7 +93,7 @@ namespace NPC_Maker.Scripts
             ValueType = _ValueType;
         }
 
-        public override byte[] ToBytes(List<InstructionLabel> Labels)
+        public override byte[] ToBytes(Dictionary<string, InstructionLabel> Labels)
         {
             List<byte> Data = new List<byte>();
             Helpers.AddObjectToByteList(ID, Data);

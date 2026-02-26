@@ -14,51 +14,50 @@ namespace NPC_Maker.Scripts
                 BigMessageBox.Show($"Critical error: Got wrong amount of bytes: {(Lists.Instructions)ByteList[0]}, data: {BitConverter.ToString(ByteList.ToArray())}");
         }
 
+        private static readonly char[] _labelChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
+
         public static string GetRandomLabelString(ScriptParser Prs, int length = 5)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            StringBuilder sb = new StringBuilder();
-            Random random = new Random();
+            char[] buffer = new char[4 + length];
+            buffer[0] = 'l';
+            buffer[1] = 'b';
+            buffer[2] = 'l';
+            buffer[3] = '_';
 
             while (true)
             {
-                sb.Clear();
-                sb.Append("lbl_");
-                sb.Append(new string(Enumerable.Range(0, length).Select(_ => chars[random.Next(chars.Length)]).ToArray()));
-                string randomLabel = sb.ToString();
+                for (int i = 0; i < length; i++)
+                    buffer[4 + i] = _labelChars[Program._random.Next(_labelChars.Length)];
 
-                if (!Prs.RandomLabels.Contains(randomLabel))
-                {
-                    Prs.RandomLabels.Add(randomLabel);
+                string randomLabel = new string(buffer);
+                if (Prs.RandomLabels.Add(randomLabel))
                     return randomLabel;
-                }
             }
         }
 
-        public static void FindLabelAndAddToByteList(List<InstructionLabel> Labels, InstructionLabel ToFind, ref List<byte> Data)
+        public static void FindLabelAndAddToByteList(Dictionary<string, InstructionLabel> Labels, InstructionLabel ToFind, ref List<byte> Data)
         {
             Helpers.AddObjectToByteList(FindLabel(Labels, ToFind), Data);
         }
 
-        public static ushort FindLabel(List<InstructionLabel> labels, InstructionLabel toFind)
+        public static ushort FindLabel(Dictionary<string, InstructionLabel> labels, InstructionLabel toFind)
         {
             if (toFind.Name == Lists.Keyword_Label_Return ||
                 toFind.Name == Lists.Keyword_Label_Null)
                 return ushort.MaxValue;
 
             #if DEBUG
-                bool skipCheck = labels.Any(l => l.Name == Lists.Keyword_Debug_Skip_Label_Check);
+                    bool skipCheck = labels.ContainsKey(Lists.Keyword_Debug_Skip_Label_Check);
             #else
-                bool skipCheck = false;
+                    bool skipCheck = false;
             #endif
 
-            var found = labels.FirstOrDefault(l => l.Name == toFind.Name);
+            InstructionLabel found;
 
-            if (found == null)
+            if (!labels.TryGetValue(toFind.Name, out found))
             {
                 if (!skipCheck)
                     throw ParseException.LabelNotFound(toFind.Name);
-
                 return ushort.MaxValue;
             }
 
