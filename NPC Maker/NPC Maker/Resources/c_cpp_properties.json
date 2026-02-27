@@ -4,9 +4,9 @@
       "name": "MIPS",
       "includePath": [
         "${workspaceFolder}/**",
-        "../gcc/mips64/include/z64hdr/**",
-        "../gcc/mips64/include",
-        "../gcc/mips64/include/npcmaker",
+        "../include/z64hdr/**",
+        "../include",
+        "../include/npcmaker",
         "{PROJECTPATH}"
       ],
       "defines": [
