@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NPC_Maker.Controls;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -269,6 +270,17 @@ namespace NPC_Maker
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.POSITION),  Enum.GetNames(typeof(Lists.PositionSubTypes)) },
             {Enum.GetName(typeof(Lists.Instructions), (int)Lists.Instructions.SCALE),  Enum.GetNames(typeof(Lists.ScaleSubTypes)) },
         };
+
+        public static readonly Dictionary<string, Lists.Instructions> InstructionMap =
+            Enum.GetValues(typeof(Lists.Instructions))
+                .Cast<Lists.Instructions>()
+                .ToDictionary(v => v.ToString(), v => v, StringComparer.OrdinalIgnoreCase);
+
+        public static readonly HashSet<string> SetSubTypeNames =
+            new HashSet<string>(Enum.GetNames(typeof(Lists.SetSubTypes)), StringComparer.OrdinalIgnoreCase);
+
+        public static readonly ConcurrentDictionary<Type, Dictionary<string, int>> SubTypeCache
+            = new ConcurrentDictionary<Type, Dictionary<string, int>>();
 
         public static void LoadDicts()
         {

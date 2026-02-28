@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -55,38 +56,36 @@ namespace NPC_Maker.Scripts
 
         public static void ErrorIfNumParamsNotEq(string[] Splitline, int Number)
         {
-            if (Splitline.Count() != Number)
+            if (Splitline.Length != Number)
                 throw ParseException.ParamCountWrong(Splitline);
         }
 
         public static void ErrorIfNumParamsSmaller(string[] Splitline, int Number)
         {
-            if (Splitline.Count() < Number)
+            if (Splitline.Length < Number)
                 throw ParseException.ParamCountWrong(Splitline);
         }
 
         public static void ErrorIfNumParamsBigger(string[] Splitline, int Number)
         {
-            if (Splitline.Count() > Number)
+            if (Splitline.Length > Number)
                 throw ParseException.ParamCountWrong(Splitline);
         }
 
-        public static void ErrorIfNumParamsNotBetween(string[] Splitline, int Min, int Max)
+        public static void ErrorIfNumParamsNotBetween(string[] splitLine, int min, int max)
         {
-            int count = Splitline.Count();
-
-            if (count < Min || count > Max)
-                throw ParseException.ParamCountWrong(Splitline);
+            if (splitLine.Length < min || splitLine.Length > max)
+                throw ParseException.ParamCountWrong(splitLine);
         }
 
-        public static int GetSubIDValue(string[] SplitLine, Type SubTypeEnum, int Index = 1)
+        public static int GetSubIDValue(string[] splitLine, Type subTypeEnum, int index = 1)
         {
-            string SubIdText = SplitLine[Index].ToUpper();
+            var map = Dicts.SubTypeCache.GetOrAdd(subTypeEnum, t =>
+                Enum.GetValues(t)
+                    .Cast<object>()
+                    .ToDictionary(v => v.ToString(), v => (int)v, StringComparer.OrdinalIgnoreCase));
 
-            if (Enum.IsDefined(SubTypeEnum, SubIdText))
-                return (int)Enum.Parse(SubTypeEnum, SubIdText);
-            else
-                return -1;
+            return map.TryGetValue(splitLine[index], out int value) ? value : -1;
         }
 
         public static UInt16 GetOcarinaTime(string[] SplitLine, int Index)
@@ -383,24 +382,23 @@ namespace NPC_Maker.Scripts
                 return null;
         }
 
-public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int IndexOfCondition)
-{
-    string cond = SplitLine[IndexOfCondition];
-    if (cond.Equals(Lists.Keyword_True, StringComparison.OrdinalIgnoreCase))
-        return Lists.ConditionTypes.TRUE;
-    if (cond.Equals(Lists.Keyword_False, StringComparison.OrdinalIgnoreCase))
-        return Lists.ConditionTypes.FALSE;
+        public static Lists.ConditionTypes GetBoolConditionID(string[] splitLine, int indexOfCondition)
+        {
+            string cond = splitLine[indexOfCondition];
 
-    try
-    {
-        float v = GetNormalVar(SplitLine, IndexOfCondition, float.MinValue, float.MaxValue);
-        return v == 0 ? Lists.ConditionTypes.FALSE : Lists.ConditionTypes.TRUE;
-    }
-    catch
-    {
-        throw ParseException.UnrecognizedCondition(SplitLine);
-    }
-}
+            if (cond.Equals(Lists.Keyword_True, StringComparison.OrdinalIgnoreCase)) return Lists.ConditionTypes.TRUE;
+            if (cond.Equals(Lists.Keyword_False, StringComparison.OrdinalIgnoreCase)) return Lists.ConditionTypes.FALSE;
+
+            try
+            {
+                float v = GetNormalVar(splitLine, indexOfCondition, float.MinValue, float.MaxValue);
+                return v == 0 ? Lists.ConditionTypes.FALSE : Lists.ConditionTypes.TRUE;
+            }
+            catch
+            {
+                throw ParseException.UnrecognizedCondition(splitLine);
+            }
+        }
 
         public static bool IsCondition(string[] SplitLine, int Index)
         {
@@ -421,20 +419,19 @@ public static Lists.ConditionTypes GetBoolConditionID(string[] SplitLine, int In
             }
         }
 
-        public static Lists.ConditionTypes GetConditionID(string[] SplitLine, int Index)
+        public static Lists.ConditionTypes GetConditionID(string[] splitLine, int index)
         {
-            switch (SplitLine[Index])
+            switch (splitLine[index])
             {
-                case "=": return Lists.ConditionTypes.EQUALTO;
+                case "=":
                 case "==": return Lists.ConditionTypes.EQUALTO;
+                case "!=":
+                case "<>": return Lists.ConditionTypes.NOTEQUAL;
                 case "<": return Lists.ConditionTypes.LESSTHAN;
                 case ">": return Lists.ConditionTypes.MORETHAN;
                 case "<=": return Lists.ConditionTypes.LESSOREQ;
                 case ">=": return Lists.ConditionTypes.MOREOREQ;
-                case "!=": return Lists.ConditionTypes.NOTEQUAL;
-                case "<>": return Lists.ConditionTypes.NOTEQUAL;
-
-                default: throw ParseException.UnrecognizedCondition(SplitLine);
+                default: throw ParseException.UnrecognizedCondition(splitLine);
             }
         }
 

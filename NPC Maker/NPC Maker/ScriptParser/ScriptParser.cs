@@ -1054,190 +1054,98 @@ namespace NPC_Maker.Scripts
 
         private List<Instruction> GetInstructions(List<string> lines)
         {
-            var instructions = new List<Instruction>();
+            var instructions = new List<Instruction>(lines.Count); // pre-size to avoid reallocations
 
             for (int i = 0; i < lines.Count; i++)
             {
                 try
                 {
                     string[] splitLine = SplitWithQuotes(lines[i].Trim());
+                    string first = splitLine[0];
 
-                    // Handle labels
-                    if (splitLine.Length == 1 && splitLine[0].EndsWith(":"))
+                    // Labels
+                    if (splitLine.Length == 1 && first.EndsWith(":"))
                     {
-                        instructions.Add(new InstructionLabel(splitLine[0].TrimEnd(':')));
+                        instructions.Add(new InstructionLabel(first.TrimEnd(':')));
                         continue;
                     }
 
-                    // Get instruction type
-                    string instructionUpperCase = splitLine[0].ToUpper();
-                    Lists.Instructions? instructionType = null;
-
-                    if (Enum.IsDefined(typeof(Lists.Instructions), instructionUpperCase))
-                        instructionType = (Lists.Instructions)Enum.Parse(typeof(Lists.Instructions), instructionUpperCase);
-
-                    // Parse instruction based on type
-                    if (instructionType.HasValue)
+                    // Known instruction
+                    if (Dicts.InstructionMap.TryGetValue(first, out var type))
                     {
-                        switch (instructionType.Value)
+                        switch (type)
                         {
                             case Lists.Instructions.IF:
                             case Lists.Instructions.WHILE:
-                                instructions.AddRange(ParseIfWhileInstruction((int)instructionType.Value, Entry.EmbeddedOverlayCode, lines, splitLine, ref i));
+                                instructions.AddRange(ParseIfWhileInstruction((int)type, Entry.EmbeddedOverlayCode, lines, splitLine, ref i));
                                 break;
-
                             case Lists.Instructions.ASYNC:
                                 instructions.AddRange(ParseAsyncInstruction(lines, splitLine, ref i));
                                 break;
-
                             case Lists.Instructions.OCARINA:
                                 instructions.AddRange(ParseOcarinaInstruction(lines, splitLine, ref i));
                                 break;
-
                             case Lists.Instructions.TALK:
                                 instructions.AddRange(ParseTalkInstruction(lines, splitLine, ref i));
                                 break;
-
                             case Lists.Instructions.FORCE_TALK:
                                 instructions.AddRange(ParseForceTalkInstruction(splitLine));
                                 break;
-
-                            case Lists.Instructions.TRADE:
-                                instructions.Add(ParseTradeInstruction(lines, splitLine, ref i));
-                                break;
-
-                            case Lists.Instructions.NOP:
-                                instructions.Add(ParseNopInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.SET:
-                                instructions.Add(ParseSetInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.AWAIT:
-                                instructions.Add(ParseAwaitInstruction(Entry.EmbeddedOverlayCode, splitLine));
-                                break;
-
-                            case Lists.Instructions.SHOW_TEXTBOX:
-                                instructions.Add(ParseShowTextboxInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.SHOW_TEXTBOX_SP:
-                                instructions.Add(ParseShowTextboxSPInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.ENABLE_TALKING:
-                                instructions.Add(ParseEnableTalkingInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.CLOSE_TEXTBOX:
-                                instructions.Add(ParseCloseTextboxInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.PLAY:
-                                instructions.Add(ParsePlayInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.SCRIPT:
-                                instructions.Add(ParseScriptInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.GOTO:
-                                instructions.Add(ParseGotoInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.WARP:
-                                instructions.Add(ParseWarpInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.FACE:
-                                instructions.Add(ParseFaceInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.KILL:
-                                instructions.Add(ParseKillInstruction(splitLine));
-                                break;
-
                             case Lists.Instructions.SPAWN:
                                 instructions.Add(ParseSpawnInstruction(lines, splitLine, ref i));
                                 break;
-
                             case Lists.Instructions.PARTICLE:
                                 instructions.Add(ParseParticleInstruction(lines, splitLine, ref i));
                                 break;
-
-                            case Lists.Instructions.ROTATION:
-                                instructions.Add(ParseRotationInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.POSITION:
-                                instructions.Add(ParsePositionInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.SCALE:
-                                instructions.Add(ParseScaleInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.ITEM:
-                                instructions.Add(ParseItemInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.PICKUP:
-                                instructions.Add(ParsePickupInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.RETURN:
-                                instructions.Add(ParseReturnInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.SAVE:
-                                instructions.Add(ParseSaveInstruction(splitLine));
-                                break;
-
+                            case Lists.Instructions.TRADE: instructions.Add(ParseTradeInstruction(lines, splitLine, ref i)); break;
+                            case Lists.Instructions.NOP: instructions.Add(ParseNopInstruction(splitLine)); break;
+                            case Lists.Instructions.SET: instructions.Add(ParseSetInstruction(splitLine)); break;
+                            case Lists.Instructions.AWAIT: instructions.Add(ParseAwaitInstruction(Entry.EmbeddedOverlayCode, splitLine)); break;
+                            case Lists.Instructions.SHOW_TEXTBOX: instructions.Add(ParseShowTextboxInstruction(splitLine)); break;
+                            case Lists.Instructions.SHOW_TEXTBOX_SP: instructions.Add(ParseShowTextboxSPInstruction(splitLine)); break;
+                            case Lists.Instructions.ENABLE_TALKING: instructions.Add(ParseEnableTalkingInstruction(splitLine)); break;
+                            case Lists.Instructions.CLOSE_TEXTBOX: instructions.Add(ParseCloseTextboxInstruction(splitLine)); break;
+                            case Lists.Instructions.PLAY: instructions.Add(ParsePlayInstruction(splitLine)); break;
+                            case Lists.Instructions.SCRIPT: instructions.Add(ParseScriptInstruction(splitLine)); break;
+                            case Lists.Instructions.GOTO: instructions.Add(ParseGotoInstruction(splitLine)); break;
+                            case Lists.Instructions.WARP: instructions.Add(ParseWarpInstruction(splitLine)); break;
+                            case Lists.Instructions.FACE: instructions.Add(ParseFaceInstruction(splitLine)); break;
+                            case Lists.Instructions.KILL: instructions.Add(ParseKillInstruction(splitLine)); break;
+                            case Lists.Instructions.ROTATION: instructions.Add(ParseRotationInstruction(splitLine)); break;
+                            case Lists.Instructions.POSITION: instructions.Add(ParsePositionInstruction(splitLine)); break;
+                            case Lists.Instructions.SCALE: instructions.Add(ParseScaleInstruction(splitLine)); break;
+                            case Lists.Instructions.ITEM: instructions.Add(ParseItemInstruction(splitLine)); break;
+                            case Lists.Instructions.PICKUP: instructions.Add(ParsePickupInstruction(splitLine)); break;
+                            case Lists.Instructions.RETURN: instructions.Add(ParseReturnInstruction(splitLine)); break;
+                            case Lists.Instructions.SAVE: instructions.Add(ParseSaveInstruction(splitLine)); break;
                             case Lists.Instructions.FADEIN:
-                            case Lists.Instructions.FADEOUT:
-                                instructions.Add(ParseFadeInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.QUAKE:
-                                instructions.Add(ParseQuakeInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.CCALL:
-                                instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, splitLine));
-                                break;
-
-                            case Lists.Instructions.GET:
-                                instructions.Add(ParseGetInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.GOTO_VAR:
-                                instructions.Add(ParseGotoVarInstruction(splitLine));
-                                break;
-
-                            case Lists.Instructions.STOP:
-                                instructions.Add(ParseStopInstruction(splitLine));
-                                break;
+                            case Lists.Instructions.FADEOUT: instructions.Add(ParseFadeInstruction(splitLine)); break;
+                            case Lists.Instructions.QUAKE: instructions.Add(ParseQuakeInstruction(splitLine)); break;
+                            case Lists.Instructions.CCALL: instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, splitLine)); break;
+                            case Lists.Instructions.GET: instructions.Add(ParseGetInstruction(splitLine)); break;
+                            case Lists.Instructions.GOTO_VAR: instructions.Add(ParseGotoVarInstruction(splitLine)); break;
+                            case Lists.Instructions.STOP: instructions.Add(ParseStopInstruction(splitLine)); break;
                         }
+
+                        continue;
+                    }
+
+                    // SET shorthand (e.g. SETRAM variants)
+                    byte? setRamSubID = ScriptHelpers.GetSubIDForRamType(first);
+
+                    if (setRamSubID.HasValue || Dicts.SetSubTypeNames.Contains(first))
+                    {
+                        var prefixed = new string[splitLine.Length + 1];
+                        prefixed[0] = Lists.Instructions.SET.ToString();
+                        splitLine.CopyTo(prefixed, 1);
+                        instructions.Add(ParseSetInstruction(prefixed));
                     }
                     else
                     {
-                        // Handle unknown instructions - check if it's a SET variant
-                        byte? matchesSetRAM = ScriptHelpers.GetSubIDForRamType(splitLine[0]);
-
-                        if (matchesSetRAM.HasValue || Enum.IsDefined(typeof(Lists.SetSubTypes), instructionUpperCase))
-                        {
-                            var modifiedSplitLine = new List<string> { Lists.Instructions.SET.ToString() };
-                            modifiedSplitLine.AddRange(splitLine);
-                            instructions.Add(ParseSetInstruction(modifiedSplitLine.ToArray()));
-                        }
-                        else
-                        {
-                            outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(splitLine));
-                        }
+                        outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(splitLine));
                     }
                 }
-                catch (Exception)
+                catch
                 {
                     outScript.ParseErrors.Add(ParseException.GeneralError(lines[i]));
                 }

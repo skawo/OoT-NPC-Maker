@@ -239,9 +239,9 @@ namespace NPC_Maker
         {
             try
             {
-                NPCFile outD = (NPCFile)Helpers.Clone<NPCFile>(Data);
+                NPCFile outD = Helpers.Clone<NPCFile>(Data);
 
-                string[] newlineSeparators = new[] { "\r\n", "\n" };
+                string[] newlineSeparators = { "\r\n", "\n" };
                 string envNewline = Environment.NewLine;
 
                 float progressPer = 100f / outD.Entries.Count;
@@ -249,84 +249,52 @@ namespace NPC_Maker
 
                 Parallel.ForEach(outD.Entries, entry =>
                 {
-                    // Process Scripts
                     foreach (var script in entry.Scripts)
                     {
-                        script.TextLines = script.Text?.Split(newlineSeparators, StringSplitOptions.None)
-                                                       .Select(x => x.TrimEnd())
-                                                       .ToList();
+                        script.TextLines = SplitLines(script.Text);
                         script.Text = null;
                     }
 
-                    // Process Messages
                     foreach (var message in entry.Messages)
-                    {
-                        message.MessageText = message.MessageText?.Replace(envNewline, "\n");
-                        message.MessageTextLines = message.MessageText?.Split(newlineSeparators, StringSplitOptions.None).ToList();
-                        message.MessageText = null;
+                        ProcessMessage(message, envNewline, newlineSeparators);
 
-                        message.Comment = message.Comment?.Replace(envNewline, "\n");
-                    }
-
-                    // Process Localization
                     foreach (var loc in entry.Localization)
-                    {
                         foreach (var message in loc.Messages)
-                        {
-                            message.MessageText = message.MessageText?.Replace(envNewline, "\n");
-                            message.MessageTextLines = message.MessageText?.Split(newlineSeparators, StringSplitOptions.None).ToList();
-                            message.MessageText = null;
+                            ProcessMessage(message, envNewline, newlineSeparators);
 
-                            message.Comment = message.Comment?.Replace(envNewline, "\n");
-                        }
-                    }
-
-                    // Process Embedded Overlay Code
                     if (entry.EmbeddedOverlayCode?.Code != null)
                     {
-                        entry.EmbeddedOverlayCode.CodeLines = entry.EmbeddedOverlayCode.Code
-                            .Split(newlineSeparators, StringSplitOptions.None)
-                            .ToList();
+                        entry.EmbeddedOverlayCode.CodeLines = SplitLines(entry.EmbeddedOverlayCode.Code);
                         entry.EmbeddedOverlayCode.Code = null;
                     }
 
-                    // Report progress
                     if (progress != null)
                     {
                         int current = Interlocked.Increment(ref processedCount);
-                        if (current % 10 == 0 || current == outD.Entries.Count) // reduce contention
+                        if (current % 10 == 0 || current == outD.Entries.Count)
                         {
-                            float currentProgress = current * progressPer;
-                            progress.Report(new Common.ProgressReport($"Saving {currentProgress:0}%", currentProgress));
+                            float pct = Math.Min(current * progressPer, 100f);
+                            progress.Report(new Common.ProgressReport($"Saving {pct:0}%", pct));
                         }
                     }
                 });
 
-                // Process GlobalHeaders sequentially (small array)
                 foreach (var script in outD.GlobalHeaders)
                 {
-                    script.TextLines = script.Text?.Split(newlineSeparators, StringSplitOptions.None)
-                                                   .Select(x => x.TrimEnd())
-                                                   .ToList();
+                    script.TextLines = SplitLines(script.Text);
                     script.Text = null;
                 }
 
-                // Process CHeader
-                outD.CHeaderLines = outD.CHeader?.Split(newlineSeparators, StringSplitOptions.None)
-                                                .Select(x => x.TrimEnd())
-                                                .ToList();
+                outD.CHeaderLines = SplitLines(outD.CHeader);
                 outD.CHeader = null;
 
-                var jsonSettings = new JsonSerializerSettings
+                string json = JsonConvert.SerializeObject(outD, new JsonSerializerSettings
                 {
                     Formatting = Formatting.Indented,
                     NullValueHandling = NullValueHandling.Ignore
-                };
+                });
 
-                string json = JsonConvert.SerializeObject(outD, jsonSettings);
-                json = json.Replace(envNewline, "\n");
-
-                return json;
+                return json.Replace(envNewline, "\n");
             }
             catch (ThreadAbortException)
             {
@@ -338,34 +306,42 @@ namespace NPC_Maker
                 BigMessageBox.Show($"Failed to process JSON: {ex.Message}");
                 return null;
             }
+
+            List<string> SplitLines(string text) =>
+                text?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
+                     .Select(x => x.TrimEnd())
+                     .ToList();
+
+            void ProcessMessage(MessageEntry message, string newline, string[] separators)
+            {
+                message.MessageText = message.MessageText?.Replace(newline, "\n");
+                message.MessageTextLines = message.MessageText?.Split(separators, StringSplitOptions.None).ToList();
+                message.MessageText = null;
+                message.Comment = message.Comment?.Replace(newline, "\n");
+            }
         }
 
-        public static Dictionary<string, int> GetDictionary(string Filename, bool allowFail = false)
+        public static Dictionary<string, int> GetDictionary(string filename, bool allowFail = false)
         {
-            Dictionary<string, int> Dict = new Dictionary<string, int>();
-
-            string OffendingRow = "";
+            var dict = new Dictionary<string, int>();
+            string offendingRow = "";
 
             try
             {
-                string[] RawData = File.ReadAllLines(Filename);
-
-                foreach (string Row in RawData)
+                foreach (string row in File.ReadAllLines(filename))
                 {
-                    OffendingRow = Row;
-                    string[] NameAndID = Row.Split(',');
-                    Dict.Add(NameAndID[1], Convert.ToInt32(NameAndID[0]));
+                    offendingRow = row;
+                    string[] parts = row.Split(',');
+                    dict.Add(parts[1], Convert.ToInt32(parts[0]));
                 }
-
-                return Dict;
             }
             catch (Exception)
             {
                 if (!allowFail)
-                    BigMessageBox.Show($"{Filename} is missing or incorrect. ({OffendingRow})");
-
-                return Dict;
+                    BigMessageBox.Show($"{filename} is missing or incorrect. ({offendingRow})");
             }
+
+            return dict;
         }
 
         public static Dictionary<string, string> GetDictionaryStringString(string Filename, bool allowFail = false)
@@ -541,7 +517,7 @@ namespace NPC_Maker
                 var results = new ConcurrentDictionary<string, object>();
 
                 Parallel.For(0, Data.Entries.Count,
-                    new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 2 },
+                    new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 3 },
                     entryID =>
                     {
                         try
