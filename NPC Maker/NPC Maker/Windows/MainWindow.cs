@@ -200,7 +200,7 @@ namespace NPC_Maker
                     Bitmap bmpOrig = null;
 
                     if (snap.ShowOrig && snap.OrigEntry != null)
-                        bmpOrig = GetMessagePreviewImage(snap.OrigEntry, Dicts.DefaultLanguage, ref lastPreviewDataOrig);
+                        bmpOrig = GetMessagePreviewImage(snap.OrigEntry, Lists.DefaultLanguage, ref lastPreviewDataOrig);
 
                     this.BeginInvoke((Action)(() =>
                     {
@@ -397,9 +397,9 @@ namespace NPC_Maker
 
                 widthsDict.Add(FontName, fontWidths.ToArray());
             }
-            else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef) && !fontDict.ContainsKey(Dicts.DefaultLanguage))
+            else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef) && !fontDict.ContainsKey(Lists.DefaultLanguage))
             {
-                fontDict.Add(Dicts.DefaultLanguage, File.ReadAllBytes(fontfPDef));
+                fontDict.Add(Lists.DefaultLanguage, File.ReadAllBytes(fontfPDef));
                 List<float> fontWidths = new List<float>();
 
                 byte[] widths = System.IO.File.ReadAllBytes(fontfWPDef);
@@ -410,7 +410,7 @@ namespace NPC_Maker
                     fontWidths.Add(BitConverter.ToSingle(width, 0));
                 }
 
-                widthsDict.Add(Dicts.DefaultLanguage, fontWidths.ToArray());
+                widthsDict.Add(Lists.DefaultLanguage, fontWidths.ToArray());
             }
         }
 
@@ -421,7 +421,7 @@ namespace NPC_Maker
             exfonts.Clear();
             exfontsWidths.Clear();
 
-            LoadAddFontByName(Dicts.DefaultLanguage, ref fonts, ref fontsWidths);
+            LoadAddFontByName(Lists.DefaultLanguage, ref fonts, ref fontsWidths);
 
             foreach (string lan in EditedFile.Languages)
             {
@@ -438,7 +438,7 @@ namespace NPC_Maker
             Combo_Language.SelectedIndexChanged -= Combo_Language_SelectedIndexChanged;
 
             Combo_Language.Items.Clear();
-            Combo_Language.Items.Add(Dicts.DefaultLanguage);
+            Combo_Language.Items.Add(Lists.DefaultLanguage);
 
             foreach (string lan in EditedFile.Languages)
                 Combo_Language.Items.Add(lan);
@@ -1225,7 +1225,7 @@ namespace NPC_Maker
 
                 if (Program.Settings.CompileInParallel && (cacheStatus.CacheInvalid || cacheStatus.CCacheInvalid))
                 {
-                    FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, cacheStatus, progress, false);
+                    await FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, cacheStatus, progress, false);
                 }
                 else
                 {
@@ -1253,7 +1253,7 @@ namespace NPC_Maker
                 if (DR != DialogResult.OK)
                     return;
 
-                if (EditedFile.Languages.Contains(Language) || Language == Dicts.DefaultLanguage)
+                if (EditedFile.Languages.Contains(Language) || Language == Lists.DefaultLanguage)
                 {
                     BigMessageBox.Show("Language already exists.");
                     return;
@@ -1734,7 +1734,7 @@ namespace NPC_Maker
 
                                 try
                                 {
-                                    byte[] msgData = ent.Messages[i].ToBytes(Dicts.DefaultLanguage).ToArray();
+                                    byte[] msgData = ent.Messages[i].ToBytes(Lists.DefaultLanguage).ToArray();
                                     ZeldaMessage.MessagePreview zm = new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, msgData);
                                     numBoxesOg = zm.MessageCount;
                                 }
@@ -1815,7 +1815,7 @@ namespace NPC_Maker
                     {
                         NPCFile LocalizationFile = FileOps.ParseNPCJsonFile(OFD.FileName);
 
-                        List<string> LanguagesWithDefault = new List<string>() { Dicts.DefaultLanguage };
+                        List<string> LanguagesWithDefault = new List<string>() { Lists.DefaultLanguage };
                         LanguagesWithDefault.AddRange(LocalizationFile.Languages);
 
                         Windows.ComboPicker pick = new Windows.ComboPicker(LanguagesWithDefault, "Import which language?", "Language selection");
@@ -1827,7 +1827,7 @@ namespace NPC_Maker
 
                             int IndexInCur = EditedFile.Languages.FindIndex(x => x == SelectedLanguage);
 
-                            if (IndexInCur != -1 || SelectedLanguage == Dicts.DefaultLanguage)
+                            if (IndexInCur != -1 || SelectedLanguage == Lists.DefaultLanguage)
                             {
                                 DialogResult Res = BigMessageBox.Show("This language already exists. Replace it?", "Confirmation", MessageBoxButtons.YesNoCancel);
 
@@ -1853,7 +1853,7 @@ namespace NPC_Maker
                                 // Make a copy of all the default language textboxes if the language doesn't exist in an actor
                                 if (ImportedEntry.Localization.FindIndex(x => x.Language == SelectedLanguage) != -1)
                                 {
-                                    if (SelectedLanguage != Dicts.DefaultLanguage)
+                                    if (SelectedLanguage != Lists.DefaultLanguage)
                                     {
                                         IndexInCur = entry.Localization.FindIndex(x => x.Language == SelectedLanguage);
 
@@ -3864,7 +3864,7 @@ namespace NPC_Maker
             {
                 string SelLang = Combo_Language.Text;
 
-                if (SelLang != Dicts.DefaultLanguage)
+                if (SelLang != Lists.DefaultLanguage)
                 {
                     if (SelectedEntry.Localization.FindIndex(x => x.Language == SelLang) == -1)
                     {
@@ -3891,7 +3891,7 @@ namespace NPC_Maker
             else
                 return;
 
-            MsgTextDefault.Tag = Dicts.DefaultLanguage;
+            MsgTextDefault.Tag = Lists.DefaultLanguage;
             MsgText.Tag = Combo_Language.Text;
 
             int curSelMsg = 0;
@@ -4038,7 +4038,7 @@ namespace NPC_Maker
         {
             List<MessageEntry> MessageList = entry.Messages;
 
-            if (Language != Dicts.DefaultLanguage)
+            if (Language != Lists.DefaultLanguage)
             {
                 int LocalizationIndex = entry.Localization.FindIndex(x => x.Language == Language);
 
@@ -4083,7 +4083,7 @@ namespace NPC_Maker
         private bool IsDefaultLanguageSelected()
         {
             string SelLang = Combo_Language.Text;
-            return (SelLang == Dicts.DefaultLanguage);
+            return (SelLang == Lists.DefaultLanguage);
         }
 
         private string CommentInput(string startComment)
@@ -4118,7 +4118,7 @@ namespace NPC_Maker
 
         private void PictureBox_Comment_DoubleClick(object sender, EventArgs e)
         {
-            MessageEntry entry = GetCurMsgEntry(Dicts.DefaultLanguage);
+            MessageEntry entry = GetCurMsgEntry(Lists.DefaultLanguage);
 
             if (entry != null)
             {
@@ -4398,7 +4398,7 @@ namespace NPC_Maker
 
         private void MsgPreview_DoubleClick(object sender, EventArgs e)
         {
-            SaveMsgPreviewToImage(GetDefaultMsgEntry(), Dicts.DefaultLanguage);
+            SaveMsgPreviewToImage(GetDefaultMsgEntry(), Lists.DefaultLanguage);
         }
 
         private Bitmap GetMessagePreviewImage(MessageEntry Entry, string Language, ref Common.SavedMsgPreviewData savedPreviewData)
@@ -4433,10 +4433,10 @@ namespace NPC_Maker
                 fontWidths = fontsWidths[Language];
                 font = fonts[Language];
             }
-            else if (fontsWidths.ContainsKey(Dicts.DefaultLanguage) && fonts.ContainsKey(Dicts.DefaultLanguage))
+            else if (fontsWidths.ContainsKey(Lists.DefaultLanguage) && fonts.ContainsKey(Lists.DefaultLanguage))
             {
-                fontWidths = fontsWidths[Dicts.DefaultLanguage];
-                font = fonts[Dicts.DefaultLanguage];
+                fontWidths = fontsWidths[Lists.DefaultLanguage];
+                font = fonts[Lists.DefaultLanguage];
             }
 
             if (Dicts.LanguageDefs.ContainsKey(Language) && !String.IsNullOrWhiteSpace(Dicts.LanguageDefs[Language].ExtraFont))
@@ -5265,7 +5265,7 @@ namespace NPC_Maker
                     if (id >= locOffset)
                         throw new Exception("Too many messages.");
 
-                    var bytes = msg.ToBytes(Dicts.DefaultLanguage);
+                    var bytes = msg.ToBytes(Lists.DefaultLanguage);
                     Helpers.Ensure4ByteAlign(bytes);
                     msgData.AddRange(bytes);
 
@@ -5308,14 +5308,14 @@ namespace NPC_Maker
                 // Add dummy NPC Maker message entry if it doesn't already exist
                 MessageEntry msgDummy = new MessageEntry();
                 msgDummy.MessageText = "011a NPC MAKER DUMMY MSG";
-                var bytesDummy = msgDummy.ToBytes(Dicts.DefaultLanguage);
+                var bytesDummy = msgDummy.ToBytes(Lists.DefaultLanguage);
                 Helpers.Ensure4ByteAlign(bytesDummy);
 
                 msgData.AddRange(bytesDummy);
                 msgTable.AddRange(msgDummy.MakeHeaderEntry(0x11A, msgData.Count - bytesDummy.Count));
 
                 msgDummy.MessageText = "End!";
-                bytesDummy = msgDummy.ToBytes(Dicts.DefaultLanguage);
+                bytesDummy = msgDummy.ToBytes(Lists.DefaultLanguage);
                 Helpers.Ensure4ByteAlign(bytesDummy);
 
                 msgData.AddRange(bytesDummy);

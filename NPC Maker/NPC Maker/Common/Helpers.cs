@@ -37,17 +37,17 @@ namespace NPC_Maker
 
         public static string NormalizeExtPath(string path)
         {
-            path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
-            path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Dicts.ProgramPathToken);
+            path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
+            path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Lists.ProgramPathToken);
 
             return path;
         }
 
         public static string DenormalizeExtPath(string path)
         {
-            path = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
-            path = Helpers.ReplaceTokenWithPath(Program.ExecPath, path, Dicts.ProgramPathToken);
-            path = path.Replace(Dicts.GameVersionPathToken, Program.Settings.GameVersion.ToString());
+            path = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
+            path = Helpers.ReplaceTokenWithPath(Program.ExecPath, path, Lists.ProgramPathToken);
+            path = path.Replace(Lists.GameVersionPathToken, Program.Settings.GameVersion.ToString());
 
             return path;
         }
@@ -436,7 +436,7 @@ namespace NPC_Maker
                     if (!String.IsNullOrEmpty(p))
                     {
                         Dictionary<string, string> dict;
-                        string realPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, p, Dicts.ProjectPathToken);
+                        string realPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, p, Lists.ProjectPathToken);
 
                         if (Path.GetExtension(realPath) == ".xml")
                             dict = ParseDefinesXML(realPath);

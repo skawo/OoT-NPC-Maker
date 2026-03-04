@@ -33,6 +33,11 @@ namespace NPC_Maker
 
     public static class Dicts
     {
+        static Dicts()
+        {
+            LoadDicts();
+        }
+
         public static Dictionary<string, int> LimbShowSubTypes = new Dictionary<string, int>()
         {
             { "Not visible", 0 },
@@ -61,11 +66,6 @@ namespace NPC_Maker
             { Lists.DictType.LinkAnims, $"Dicts/LinkAnims.csv" },
         };
 
-        public static string DefaultLanguage = "Default";
-        public static string ProjectPathToken = "{PROJECTPATH}";
-        public static string ProgramPathToken = "{PROGRAMPATH}";
-        public static string GameVersionPathToken = "{GAMEVERSION}";
-
         public static Dictionary<string, MessageConfig> LanguageDefs;
         public static List<MessageDefinition> MsgDefinitions;
 
@@ -74,7 +74,6 @@ namespace NPC_Maker
         public static BiDictionary Music;
         public static BiDictionary Actors;
         public static BiDictionary LinkAnims;
-
 
         public static Dictionary<Lists.ParticleTypes, List<ParticleSubOptions>> UsableParticleSubOptions = new Dictionary<ParticleTypes, List<ParticleSubOptions>>()
         {
@@ -382,7 +381,7 @@ namespace NPC_Maker
                 languages = new List<string>();
 
             var allLanguages = new List<string>();
-            allLanguages.Add(Dicts.DefaultLanguage);
+            allLanguages.Add(Lists.DefaultLanguage);
             allLanguages.AddRange(languages);
 
             MessageConfig baseConfig =
@@ -431,8 +430,8 @@ namespace NPC_Maker
             Program.dictionary =
                 new Dictionary<string, WeCantSpell.Hunspell.WordList>();
 
-            LoadSpellcheckDictIfExists(Dicts.DefaultLanguage, "dict.dic");
-            LoadSpellcheckDictIfExists(Dicts.DefaultLanguage, "Default.dic");
+            LoadSpellcheckDictIfExists(Lists.DefaultLanguage, "dict.dic");
+            LoadSpellcheckDictIfExists(Lists.DefaultLanguage, "Default.dic");
 
             if (languages == null)
                 return;
@@ -516,7 +515,6 @@ namespace NPC_Maker
 
             return value.ToString();
         }
-
 
         public static int GetIntFromStringIntDict(Dictionary<string, int> dict, string value, int? defaultValue = null)
         {

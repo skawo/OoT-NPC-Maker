@@ -983,7 +983,7 @@ namespace NPC_Maker
             { 
                 new LocalizationEntry 
                 { 
-                    Language = Dicts.DefaultLanguage, 
+                    Language = Lists.DefaultLanguage, 
                     Messages = entry.Messages 
                 } 
             };
@@ -999,7 +999,7 @@ namespace NPC_Maker
 
             foreach (var loc in locales)
             {
-                bool isDefault = loc.Language == Dicts.DefaultLanguage;
+                bool isDefault = loc.Language == Lists.DefaultLanguage;
 
                 if (loc.Messages == null)
                 {

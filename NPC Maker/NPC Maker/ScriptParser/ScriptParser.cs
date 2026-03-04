@@ -1187,15 +1187,13 @@ namespace NPC_Maker.Scripts
         {
             try
             {
-                // Estimate total size: rough guess to reduce resizing
-                int estimatedSize = Instructions.Sum(i => i.ToBytes(Labels).Length) + Instructions.Count * 2 * 2 + 4;
-                var Out = new List<byte>(estimatedSize);
+                var Out = new List<byte>();
 
                 int headerOffs = 0;
                 var offsets = new List<ushort>(Instructions.Count);
 
                 // First pass: generate instruction bytes and offsets
-                var instructionBytes = new List<byte>(estimatedSize);
+                var instructionBytes = new List<byte>();
                 foreach (Instruction inst in Instructions)
                 {
                     byte[] data = inst.ToBytes(Labels);

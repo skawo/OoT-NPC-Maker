@@ -332,7 +332,7 @@ namespace NPC_Maker
 
                     if (File.Exists(path))
                     {
-                        string pathProjPathReplaced = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Dicts.ProjectPathToken);
+                        string pathProjPathReplaced = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
 
                         if (!headerPaths.Contains(pathProjPathReplaced))
                             headerPaths.Add(pathProjPathReplaced);
@@ -763,10 +763,10 @@ namespace NPC_Maker
                     if (!string.IsNullOrEmpty(Program.Settings.ProjectPath))
                     {
                         string uriPath = new Uri(Program.Settings.ProjectPath).AbsolutePath;
-                        cprops = cprops.Replace(Dicts.ProjectPathToken, uriPath);
+                        cprops = cprops.Replace(Lists.ProjectPathToken, uriPath);
                     }
                     else
-                        cprops = cprops.Replace(Dicts.ProjectPathToken, "");
+                        cprops = cprops.Replace(Lists.ProjectPathToken, "");
 
                     File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), cprops);
                     File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);

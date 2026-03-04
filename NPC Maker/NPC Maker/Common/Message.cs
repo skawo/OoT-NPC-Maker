@@ -367,7 +367,7 @@ namespace NPC_Maker
             var data = new List<byte>();
             var tagDict = Dicts.LanguageDefs.TryGetValue(Language, out var dict)
                 ? dict
-                : Dicts.LanguageDefs[Dicts.DefaultLanguage];
+                : Dicts.LanguageDefs[Lists.DefaultLanguage];
 
             var tokens = Tokenize();
             bool ignoreNextLinebreak = false;

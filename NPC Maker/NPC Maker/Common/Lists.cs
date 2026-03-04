@@ -38,26 +38,6 @@ namespace NPC_Maker
         public const string Keyword_Case = "CASE";
         public const string Keyword_EndCase = "ENDCASE";
         public const string Keyword_DefaultCase = "DEFAULT:";
-        
-
-
-        /*
-        public const string Keyword_ScriptVar = "VAR";
-        public const string Keyword_ScriptVarF = "VARF";
-        public const string Keyword_RNG = "RANDOM";
-        public const string Keyword_GlobalF = "GLOBALF";
-        public const string Keyword_ActorF = "ACTORF";
-        public const string Keyword_Global8 = "GLOBAL8";
-        public const string Keyword_Global16 = "GLOBAL16";
-        public const string Keyword_Global32 = "GLOBAL32";
-        public const string Keyword_Actor8 = "ACTOR8";
-        public const string Keyword_Actor16 = "ACTOR16";
-        public const string Keyword_Actor32 = "ACTOR32";
-        public const string Keyword_Save8 = "SAVEF8";
-        public const string Keyword_Save16 = "SAVE16";
-        public const string Keyword_Save32 = "SAVE32";
-        public const string Keyword_SaveF = "SAVEF";
-        */
 
         public const string Keyword_Degree = "DEG_";
         public const string Keyword_Once = "ONCE";
@@ -81,6 +61,11 @@ namespace NPC_Maker
         public const string SoundsDictType = "Sounds";
 
         public const string InternalElseLabelKw = "IEL__";
+
+        public static string DefaultLanguage = "Default";
+        public static string ProjectPathToken = "{PROJECTPATH}";
+        public static string ProgramPathToken = "{PROGRAMPATH}";
+        public static string GameVersionPathToken = "{GAMEVERSION}";
 
         public const int Num_User_Vars = 255;
 

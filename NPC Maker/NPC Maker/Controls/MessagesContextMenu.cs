@@ -49,7 +49,7 @@ namespace NPC_Maker
             MenuStrip.Size = new System.Drawing.Size(157, 268);
             MenuStrip.Text = "Items";
 
-            var tagDict = Dicts.LanguageDefs[Dicts.DefaultLanguage];
+            var tagDict = Dicts.LanguageDefs[Lists.DefaultLanguage];
 
             if (Dicts.LanguageDefs.ContainsKey(Language))
                 tagDict = Dicts.LanguageDefs[Language];

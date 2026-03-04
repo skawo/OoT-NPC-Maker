@@ -71,7 +71,6 @@ namespace NPC_Maker
             InitializePaths();
             EnsureDirectoriesExist();
             LoadSettings();
-            Dicts.LoadDicts();
 
             // Create this in memory, so it gets cached.
             TaskEx.Run(() => new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]));
@@ -252,7 +251,9 @@ namespace NPC_Maker
         private static void RunParallelCompile(string outputPath, Common.CacheStatus cacheStatus, NPCFile inFile)
         {
             Program.CompileInProgress = true;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             FileOps.PreprocessCodeAndScripts(outputPath, inFile, cacheStatus, null, true);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             while (Program.CompileInProgress) {}
         }
