@@ -240,12 +240,6 @@ public abstract class NativeFileDialogBase
     }
 
     protected static string Escape(string s) => s.Replace("\"", "\\\"");
-
-    protected static bool IsLinux()
-    {
-        int p = (int)Environment.OSVersion.Platform;
-        return p == 4 || p == 128;
-    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
