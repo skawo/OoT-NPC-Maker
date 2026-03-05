@@ -640,16 +640,6 @@ namespace NPC_Maker
                 return color;
         }
 
-        public static bool DgCheckAddSanity(object entry, object[] current, int entrycount, int rowindex)
-        {
-            if (entry != null && rowindex < entrycount && entry != current[rowindex])
-                return false;
-            else if (entry != null && rowindex == entrycount)
-                return true;
-            else
-                return false;
-        }
-
         public static void DeleteFileStartingWith(string path, string prefix, HashSet<string> fileList = null)
         {
             var files = fileList ?? Directory.EnumerateFiles(path);

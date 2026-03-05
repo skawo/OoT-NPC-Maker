@@ -260,7 +260,6 @@ namespace NPC_Maker
             }
         }
 
-
         private void RequestPreviewUpdate()
         {
             if (MessagesGrid.SelectedRows.Count == 0 || SelectedEntry == null)
@@ -363,53 +362,44 @@ namespace NPC_Maker
 
         }
 
-        private void LoadAddFontByName(string FontName, ref Dictionary<string, byte[]> fontDict, ref Dictionary<string, float[]> widthsDict)
+        private void LoadAddFontByName(string fontName, ref Dictionary<string, byte[]> fontDict, ref Dictionary<string, float[]> widthsDict)
         {
-            string fontf = $"{FontName}.font_static";
-            string fontfW = $"{FontName}.width_table";
+            string basePath = Path.GetDirectoryName(string.IsNullOrEmpty(Program.JsonPath) ? Program.ExecPath : Program.JsonPath);
+            string fontDir = Path.Combine(basePath, "font");
 
-            string basePath = Path.GetDirectoryName(Program.JsonPath == "" ? Program.ExecPath : Program.JsonPath);
+            string fontPath = Path.Combine(fontDir, $"{fontName}.font_static");
+            string widthPath = Path.Combine(fontDir, $"{fontName}.width_table");
+            string fontPathDef = Path.Combine(fontDir, "font.font_static");
+            string widthPathDef = Path.Combine(fontDir, "font.width_table");
 
-            string fontfP = Path.Combine(basePath, "font", fontf);
-            string fontfWP = Path.Combine(basePath, "font", fontfW);
+            bool namedExists = File.Exists(fontPath) && File.Exists(widthPath);
+            bool defaultExists = File.Exists(fontPathDef) && File.Exists(widthPathDef)
+                                 && !fontDict.ContainsKey(Lists.DefaultLanguage);
 
-            string fontfDef = $"font.font_static";
-            string fontfWDef = $"font.width_table";
+            if (!namedExists && !defaultExists)
+                return;
 
-            string fontfPDef = Path.Combine(basePath, "font", fontfDef);
-            string fontfWPDef = Path.Combine(basePath, "font", fontfWDef);
+            string resolvedFontPath = namedExists ? fontPath : fontPathDef;
+            string resolvedWidthPath = namedExists ? widthPath : widthPathDef;
+            string resolvedKey = namedExists ? fontName : Lists.DefaultLanguage;
 
+            fontDict[resolvedKey] = File.ReadAllBytes(resolvedFontPath);
+            widthsDict[resolvedKey] = ParseWidthTable(resolvedWidthPath);
+        }
 
-            if (File.Exists(fontfP) && File.Exists(fontfWP))
+        private static float[] ParseWidthTable(string path)
+        {
+            byte[] raw = File.ReadAllBytes(path);
+            float[] widths = new float[raw.Length / 4];
+
+            for (int i = 0; i < widths.Length; i++)
             {
-                fontDict.Add(FontName, File.ReadAllBytes(fontfP));
-                List<float> fontWidths = new List<float>();
-
-                byte[] widths = System.IO.File.ReadAllBytes(fontfWP);
-
-                for (int i = 0; i < widths.Length; i += 4)
-                {
-                    byte[] width = widths.Skip(i).Take(4).Reverse().ToArray();
-                    fontWidths.Add(BitConverter.ToSingle(width, 0));
-                }
-
-                widthsDict.Add(FontName, fontWidths.ToArray());
+                // Reverse 4 bytes for endianness before converting
+                byte[] chunk = new byte[4] { raw[i * 4 + 3], raw[i * 4 + 2], raw[i * 4 + 1], raw[i * 4] };
+                widths[i] = BitConverter.ToSingle(chunk, 0);
             }
-            else if (File.Exists(fontfPDef) && File.Exists(fontfWPDef) && !fontDict.ContainsKey(Lists.DefaultLanguage))
-            {
-                fontDict.Add(Lists.DefaultLanguage, File.ReadAllBytes(fontfPDef));
-                List<float> fontWidths = new List<float>();
 
-                byte[] widths = System.IO.File.ReadAllBytes(fontfWPDef);
-
-                for (int i = 0; i < widths.Length; i += 4)
-                {
-                    byte[] width = widths.Skip(i).Take(4).Reverse().ToArray();
-                    fontWidths.Add(BitConverter.ToSingle(width, 0));
-                }
-
-                widthsDict.Add(Lists.DefaultLanguage, fontWidths.ToArray());
-            }
+            return widths;
         }
 
         private void ReloadAllFonts()
@@ -673,226 +663,237 @@ namespace NPC_Maker
 
         private void InsertDataIntoActorListGrid()
         {
-            this.SuspendLayout();
-
+            SuspendLayout();
             DataGrid_NPCs.SelectionChanged -= DataGrid_NPCs_SelectionChanged;
 
-            DataGrid_NPCs.Rows.Clear();
-
-            int i = 0;
-
-            foreach (NPCEntry Entry in EditedFile.Entries)
+            try
             {
-                DataGrid_NPCs.Rows.Add(new object[] { i.ToString(), Entry.IsNull ? "EMPTY" : Entry.NPCName });
-                i++;
+                DataGrid_NPCs.Rows.Clear();
+
+                var rows = EditedFile.Entries
+                    .Select((entry, index) => new object[] { index.ToString(), entry.IsNull ? "EMPTY" : entry.NPCName })
+                    .ToArray();
+
+                foreach (var row in rows)
+                    DataGrid_NPCs.Rows.Add(row);
             }
-
-            DataGrid_NPCs.SelectionChanged += DataGrid_NPCs_SelectionChanged;
-
-            DataGrid_NPCs_SelectionChanged(DataGrid_NPCs, null);
-
-            this.ResumeLayout();
-
+            finally
+            {
+                DataGrid_NPCs.SelectionChanged += DataGrid_NPCs_SelectionChanged;
+                DataGrid_NPCs_SelectionChanged(DataGrid_NPCs, EventArgs.Empty);
+                ResumeLayout();
+            }
         }
 
         private void InsertDataToEditor()
         {
-            TabControl.SuspendLayout();
-
-            int SelectedTabIndex = TabControl.SelectedIndex;
-
             if (SelectedEntry == null)
                 return;
 
-            // All the easy stuff first
+            TabControl.SuspendLayout();
+
+            var e = SelectedEntry;
+            int savedTabIndex = TabControl.SelectedIndex;
+
             #region Basic data
 
-            Textbox_NPCName.Text = SelectedEntry.NPCName;
-            Tx_SkeletonName.Text = SelectedEntry.SkeletonHeaderDefinition;
-            Tx_FileStartName.Text = SelectedEntry.FileStartHeaderDefinition;
+            Textbox_NPCName.Text = e.NPCName;
+            Tx_SkeletonName.Text = e.SkeletonHeaderDefinition;
+            Tx_FileStartName.Text = e.FileStartHeaderDefinition;
 
-            Txb_ObjectID.Text = SelectedEntry.ObjectID.ToString();
+            Txb_ObjectID.Text = e.ObjectID.ToString();
             Txb_ObjectID_Leave(null, null);
-            Txtbox_ReactIfAtt.Text = SelectedEntry.SfxIfAttacked.ToString();
+            Txtbox_ReactIfAtt.Text = e.SfxIfAttacked.ToString();
             Txtbox_ReactIfAtt_Leave(null, null);
 
-            numUpFileStart.Value = SelectedEntry.FileStart;
+            numUpFileStart.Value = e.FileStart;
+            Combo_EffIfAtt.SelectedIndex = e.EffectIfAttacked;
+            NumUpAlpha.Value = e.Alpha;
+            ChkB_FadeOut.Checked = e.FadeOut;
+            NumUp_RiddenBy.Value = e.NPCToRide;
+            ChkBox_Glow.Checked = e.Glow;
+            ChkBox_GenLight.Checked = e.GenLight;
+            NumUp_LightLimb.Value = e.LightLimb;
+            NumUp_LightXOffs.Value = e.LightPositionOffsets[0];
+            NumUp_LightYOffs.Value = e.LightPositionOffsets[1];
+            NumUp_LightZOffs.Value = e.LightPositionOffsets[2];
+            NumUp_LightRadius.Value = e.LightRadius;
+            ChkBox_DBGCol.Checked = e.DEBUGShowCols;
+            ChkBox_DBGLookAt.Checked = e.DEBUGLookAtEditor;
+            ChkBox_DBGDlist.Checked = e.DEBUGExDlistEditor;
+            ChkBox_DBGPrint.Checked = e.DEBUGPrintToScreen;
 
-            Combo_EffIfAtt.SelectedIndex = SelectedEntry.EffectIfAttacked;
-            NumUpAlpha.Value = SelectedEntry.Alpha;
-            ChkB_FadeOut.Checked = SelectedEntry.FadeOut;
-            NumUp_RiddenBy.Value = SelectedEntry.NPCToRide;
-            ChkBox_Glow.Checked = SelectedEntry.Glow;
-            ChkBox_GenLight.Checked = SelectedEntry.GenLight;
-            NumUp_LightLimb.Value = SelectedEntry.LightLimb;
-            NumUp_LightXOffs.Value = SelectedEntry.LightPositionOffsets[0];
-            NumUp_LightYOffs.Value = SelectedEntry.LightPositionOffsets[1];
-            NumUp_LightZOffs.Value = SelectedEntry.LightPositionOffsets[2];
-            ChkBox_DBGCol.Checked = SelectedEntry.DEBUGShowCols;
-            ChkBox_DBGLookAt.Checked = SelectedEntry.DEBUGLookAtEditor;
-            ChkBox_DBGDlist.Checked = SelectedEntry.DEBUGExDlistEditor;
-            ChkBox_DBGPrint.Checked = SelectedEntry.DEBUGPrintToScreen;
-            NumUp_LightRadius.Value = SelectedEntry.LightRadius;
+            ChkOnlyWhenLens.Checked = e.VisibleUnderLensOfTruth;
+            ChkInvisible.Checked = e.Invisible;
 
-            ChkOnlyWhenLens.Checked = SelectedEntry.VisibleUnderLensOfTruth;
-            ChkInvisible.Checked = SelectedEntry.Invisible;
+            NumUpDown_Hierarchy.Value = e.Hierarchy;
+            ComboBox_HierarchyType.SelectedIndex = e.HierarchyType;
+            NumUpDown_XModelOffs.Value = e.ModelPositionOffsets[0];
+            NumUpDown_YModelOffs.Value = e.ModelPositionOffsets[1];
+            NumUpDown_ZModelOffs.Value = e.ModelPositionOffsets[2];
+            NumUpDown_Scale.Value = (decimal)e.ModelScale;
+            NumUpDown_CutsceneSlot.Value = e.CutsceneID;
 
-            NumUpDown_Hierarchy.Value = SelectedEntry.Hierarchy;
-            ComboBox_HierarchyType.SelectedIndex = SelectedEntry.HierarchyType;
-            NumUpDown_XModelOffs.Value = SelectedEntry.ModelPositionOffsets[0];
-            NumUpDown_YModelOffs.Value = SelectedEntry.ModelPositionOffsets[1];
-            NumUpDown_ZModelOffs.Value = SelectedEntry.ModelPositionOffsets[2];
-            NumUpDown_Scale.Value = (decimal)SelectedEntry.ModelScale;
-            NumUpDown_CutsceneSlot.Value = SelectedEntry.CutsceneID;
+            ComboBox_LookAtType.SelectedIndex = e.LookAtType;
+            Combo_Head_Horiz.SelectedIndex = e.HeadHorizAxis;
+            Combo_Head_Vert.SelectedIndex = e.HeadVertAxis;
+            Combo_Waist_Horiz.SelectedIndex = e.WaistHorizAxis;
+            Combo_Waist_Vert.SelectedIndex = e.WaistVertAxis;
 
-            ComboBox_LookAtType.SelectedIndex = SelectedEntry.LookAtType;
+            ChkBox_ExistInAll.Checked = e.ExistInAllRooms;
+            NumUpDown_HeadLimb.Value = e.HeadLimb;
+            NumUpDown_WaistLimb.Value = e.WaistLimb;
+            NumUpDown_LookAt_X.Value = (decimal)e.LookAtPositionOffsets[0];
+            NumUpDown_LookAt_Y.Value = (decimal)e.LookAtPositionOffsets[1];
+            NumUpDown_LookAt_Z.Value = (decimal)e.LookAtPositionOffsets[2];
+            NumUpDown_DegVert.Value = e.LookAtDegreesVertical;
+            NumUpDown_DegHoz.Value = e.LookAtDegreesHorizontal;
 
-            Combo_Head_Horiz.SelectedIndex = SelectedEntry.HeadHorizAxis;
-            Combo_Head_Vert.SelectedIndex = SelectedEntry.HeadVertAxis;
-            Combo_Waist_Horiz.SelectedIndex = SelectedEntry.WaistHorizAxis;
-            Combo_Waist_Vert.SelectedIndex = SelectedEntry.WaistVertAxis;
+            Checkbox_DrawShadow.Checked = e.CastsShadow;
+            NumUpDown_ShRadius.Value = e.ShadowRadius;
 
-            ChkBox_ExistInAll.Checked = SelectedEntry.ExistInAllRooms;
+            Checkbox_HaveCollision.Checked = e.HasCollision;
+            Checkbox_CanPressSwitches.Checked = e.PushesSwitches;
+            NumUpDown_Mass.Value = e.Mass;
+            NumUpDown_ColRadius.Value = e.CollisionRadius;
+            NumUpDown_ColHeight.Value = e.CollisionHeight;
+            Checkbox_AlwaysActive.Checked = e.IsAlwaysActive;
+            Checkbox_AlwaysDraw.Checked = e.IsAlwaysDrawn;
+            Chkb_ReactIfAtt.Checked = e.ReactsIfAttacked;
+            ChkRunJustScript.Checked = e.ExecuteJustScript;
+            Chkb_Opendoors.Checked = e.OpensDoors;
+            NumUp_Smoothing.Value = (decimal)e.SmoothingConstant;
+            Chkb_IgnoreY.Checked = e.IgnoreYAxis;
+            NumUpDown_YColOffs.Value = e.CollisionYShift;
 
-            NumUpDown_HeadLimb.Value = SelectedEntry.HeadLimb;
-            NumUpDown_WaistLimb.Value = SelectedEntry.WaistLimb;
-            NumUpDown_LookAt_X.Value = (decimal)SelectedEntry.LookAtPositionOffsets[0];
-            NumUpDown_LookAt_Y.Value = (decimal)SelectedEntry.LookAtPositionOffsets[1];
-            NumUpDown_LookAt_Z.Value = (decimal)SelectedEntry.LookAtPositionOffsets[2];
-            NumUpDown_DegVert.Value = SelectedEntry.LookAtDegreesVertical;
-            NumUpDown_DegHoz.Value = SelectedEntry.LookAtDegreesHorizontal;
+            Checkbox_Targettable.Checked = e.IsTargettable;
+            ComboBox_TargetDist.SelectedIndex = e.TargetDistance <= 10 ? e.TargetDistance : 1;
+            NumUpDown_TargetLimb.Value = e.TargetLimb;
+            NumUpDown_XTargetOffs.Value = e.TargetPositionOffsets[0];
+            NumUpDown_YTargetOffs.Value = e.TargetPositionOffsets[1];
+            NumUpDown_ZTargetOffs.Value = e.TargetPositionOffsets[2];
+            NumUpDown_TalkRadi.Value = (decimal)e.TalkRadius;
 
-            Checkbox_DrawShadow.Checked = SelectedEntry.CastsShadow;
-            NumUpDown_ShRadius.Value = SelectedEntry.ShadowRadius;
+            UncullFwd.Value = (decimal)e.CullForward;
+            UncullDown.Value = (decimal)e.CullDown;
+            UncullScale.Value = (decimal)e.CullScale;
 
-            Checkbox_HaveCollision.Checked = SelectedEntry.HasCollision;
-            Checkbox_CanPressSwitches.Checked = SelectedEntry.PushesSwitches;
-            NumUpDown_Mass.Value = SelectedEntry.Mass;
-            NumUpDown_ColRadius.Value = SelectedEntry.CollisionRadius;
-            NumUpDown_ColHeight.Value = SelectedEntry.CollisionHeight;
-            Checkbox_AlwaysActive.Checked = SelectedEntry.IsAlwaysActive;
-            Checkbox_AlwaysDraw.Checked = SelectedEntry.IsAlwaysDrawn;
-            Chkb_ReactIfAtt.Checked = SelectedEntry.ReactsIfAttacked;
-            ChkRunJustScript.Checked = SelectedEntry.ExecuteJustScript;
-            Chkb_Opendoors.Checked = SelectedEntry.OpensDoors;
-            NumUp_Smoothing.Value = (decimal)SelectedEntry.SmoothingConstant;
-            Chkb_IgnoreY.Checked = SelectedEntry.IgnoreYAxis;
-            NumUpDown_YColOffs.Value = SelectedEntry.CollisionYShift;
+            Combo_MovementType.SelectedIndex = e.MovementType;
+            NumUpDown_MovDistance.Value = e.MovementDistance;
+            NumUp_MaxRoam.Value = e.MaxDistRoam;
+            NumUpDown_MovSpeed.Value = (decimal)e.MovementSpeed;
+            NumUpDown_GravityForce.Value = (decimal)e.GravityForce;
+            NumUpDown_LoopDelay.Value = e.MovementDelayTime;
+            NumUpDown_LoopEndNode.Value = e.PathEndNodeID;
+            NumUpDown_LoopStartNode.Value = e.PathStartNodeID;
+            Checkbox_Loop.Checked = e.LoopPath;
+            NumUpDown_PathFollowID.Value = e.PathID;
+            tmpicker_timedPathStart.Value = Helpers.GetTimeFromOcarinaTime(e.TimedPathStart);
+            tmpicker_timedPathEnd.Value = Helpers.GetTimeFromOcarinaTime(e.TimedPathEnd);
 
-            Checkbox_Targettable.Checked = SelectedEntry.IsTargettable;
-            ComboBox_TargetDist.SelectedIndex = SelectedEntry.TargetDistance <= 10 ? SelectedEntry.TargetDistance : 1;
-            NumUpDown_TargetLimb.Value = SelectedEntry.TargetLimb;
-            NumUpDown_XTargetOffs.Value = SelectedEntry.TargetPositionOffsets[0];
-            NumUpDown_YTargetOffs.Value = SelectedEntry.TargetPositionOffsets[1];
-            NumUpDown_ZTargetOffs.Value = SelectedEntry.TargetPositionOffsets[2];
-            NumUpDown_TalkRadi.Value = (decimal)SelectedEntry.TalkRadius;
+            ComboBox_AnimType.SelectedIndex = e.AnimationType;
 
-            UncullFwd.Value = (decimal)SelectedEntry.CullForward;
-            UncullDown.Value = (decimal)SelectedEntry.CullDown;
-            UncullScale.Value = (decimal)SelectedEntry.CullScale;
+            NumUpDown_ScriptsVar.Value = (int)e.NumVars;
+            NumUpDown_ScriptsFVar.Value = (int)e.NumFVars;
 
-            Combo_MovementType.SelectedIndex = SelectedEntry.MovementType;
-            NumUpDown_MovDistance.Value = SelectedEntry.MovementDistance;
-            NumUp_MaxRoam.Value = SelectedEntry.MaxDistRoam;
-            NumUpDown_MovSpeed.Value = (decimal)SelectedEntry.MovementSpeed;
-            NumUpDown_GravityForce.Value = (decimal)SelectedEntry.GravityForce;
-            NumUpDown_LoopDelay.Value = SelectedEntry.MovementDelayTime;
-            NumUpDown_LoopEndNode.Value = SelectedEntry.PathEndNodeID;
-            NumUpDown_LoopStartNode.Value = SelectedEntry.PathStartNodeID;
-            Checkbox_Loop.Checked = SelectedEntry.LoopPath;
-            NumUpDown_PathFollowID.Value = SelectedEntry.PathID;
-            tmpicker_timedPathStart.Value = Helpers.GetTimeFromOcarinaTime(SelectedEntry.TimedPathStart);
-            tmpicker_timedPathEnd.Value = Helpers.GetTimeFromOcarinaTime(SelectedEntry.TimedPathEnd);
+            Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, e.EnvironmentColor.R, e.EnvironmentColor.G, e.EnvironmentColor.B);
+            Btn_LightColor.BackColor = Color.FromArgb(255, e.LightColor.R, e.LightColor.G, e.LightColor.B);
+            Checkbox_EnvColor.Checked = e.EnvironmentColor.A != 0;
 
-            ComboBox_AnimType.SelectedIndex = SelectedEntry.AnimationType;
-            NumUpDown_Scale.Value = (decimal)SelectedEntry.ModelScale;
+            Textbox_BlinkPattern.Text = e.BlinkPattern;
+            Textbox_TalkingPattern.Text = e.TalkPattern;
+            NumUpDown_BlinkSegment.Value = e.BlinkSegment;
+            NumUpDown_BlinkSpeed.Value = e.BlinkSpeed;
+            NumUpDown_TalkSegment.Value = e.TalkSegment;
+            NumUpDown_TalkSpeed.Value = e.TalkSpeed;
 
-            NumUpDown_ScriptsVar.Value = (int)SelectedEntry.NumVars;
-            NumUpDown_ScriptsFVar.Value = (int)SelectedEntry.NumFVars;
-
-            Button_EnvironmentColorPreview.BackColor = Color.FromArgb(255, SelectedEntry.EnvironmentColor.R, SelectedEntry.EnvironmentColor.G, SelectedEntry.EnvironmentColor.B);
-            Btn_LightColor.BackColor = Color.FromArgb(255, SelectedEntry.LightColor.R, SelectedEntry.LightColor.G, SelectedEntry.LightColor.B);
-
-            if (SelectedEntry.EnvironmentColor.A == 0)
-                Checkbox_EnvColor.Checked = false;
-            else
-                Checkbox_EnvColor.Checked = true;
-
-            Textbox_BlinkPattern.Text = SelectedEntry.BlinkPattern;
-            Textbox_TalkingPattern.Text = SelectedEntry.TalkPattern;
-            NumUpDown_BlinkSegment.Value = SelectedEntry.BlinkSegment;
-            NumUpDown_BlinkSpeed.Value = SelectedEntry.BlinkSpeed;
-            NumUpDown_TalkSegment.Value = SelectedEntry.TalkSegment;
-            NumUpDown_TalkSpeed.Value = SelectedEntry.TalkSpeed;
-
-            NumUpDown_AnimInterpFrames.Value = SelectedEntry.AnimInterpFrames;
-
-            Checkbox_Omitted.Checked = SelectedEntry.Omitted;
+            NumUpDown_AnimInterpFrames.Value = e.AnimInterpFrames;
+            Checkbox_Omitted.Checked = e.Omitted;
 
             #endregion
-            // Create tab pages for the script, reusing ones that already existed prior to switching to this NPC.
+
             #region Script Tab Pages
-            List<TabPage> ReusableTabPages = new List<TabPage>();
 
-            foreach (TabPage Page in TabControl_Scripts.TabPages)
-                ReusableTabPages.Add(Page);
+            List<TabPage> reusablePages = new List<TabPage>();
 
-            foreach (ScriptEntry ScriptT in SelectedEntry.Scripts)
+            foreach (TabPage page in TabControl_Scripts.TabPages)
+                reusablePages.Add(page);
+
+            foreach (ScriptEntry script in e.Scripts)
             {
-                TabPage Page;
+                string pageName = script.Name == "" ? "Script" : script.Name;
 
-                string PageName = ScriptT.Name == "" ? "Script" : ScriptT.Name;
-
-                if (ReusableTabPages.Count != 0)
+                if (reusablePages.Count != 0)
                 {
-                    Page = ReusableTabPages.First();
-                    (Page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, ref EditedFile, ScriptT, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax);
-                    Page.Text = PageName;
-                    ReusableTabPages.Remove(Page);
+                    TabPage page = reusablePages.First();
+                    (page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, 
+                                                            ref EditedFile, 
+                                                            script, 
+                                                            Program.
+                                                            Settings.ColorizeScriptSyntax, 
+                                                            Program.Settings.CheckSyntax);
+                    page.Text = pageName;
+                    reusablePages.Remove(page);
                 }
                 else
                 {
-                    Page = new TabPage(PageName);
-                    TabControl_Scripts.TabPages.Add(Page);
-
-                    ScriptEditor Se = new ScriptEditor(ref SelectedEntry, ref EditedFile, ScriptT, Program.Settings.ColorizeScriptSyntax, Program.Settings.CheckSyntax) { Dock = DockStyle.Fill };
-                    Page.Controls.Add(Se);
+                    TabPage page = new TabPage(pageName);
+                    TabControl_Scripts.TabPages.Add(page);
+                    ScriptEditor se = new ScriptEditor(ref SelectedEntry,
+                                                       ref EditedFile,
+                                                       script, 
+                                                       Program.Settings.ColorizeScriptSyntax,
+                                                       Program.Settings.CheckSyntax) { Dock = DockStyle.Fill };
+                    page.Controls.Add(se);
                 }
             }
 
-            foreach (TabPage Page in ReusableTabPages)
-                TabControl_Scripts.TabPages.Remove(Page);
+            foreach (TabPage page in reusablePages)
+                TabControl_Scripts.TabPages.Remove(page);
 
             #endregion
 
             #region Colors grid
+
             ColorsDataGridView.Rows.Clear();
 
-            foreach (ColorEntry ColorE in SelectedEntry.DisplayListColors)
+            foreach (ColorEntry colorEntry in e.DisplayListColors)
             {
-                int RowIndex = ColorsDataGridView.Rows.Add(new object[] { ColorE.Limbs, "" });
+                int rowIndex = ColorsDataGridView.Rows.Add(new object[] { colorEntry.Limbs, "" });
 
-                ColorsDataGridView.Rows[RowIndex].Cells[1].Style = new DataGridViewCellStyle()
+                ColorsDataGridView.Rows[rowIndex].Cells[1].Style = new DataGridViewCellStyle()
                 {
-                    SelectionBackColor = ColorE.Color,
-                    SelectionForeColor = ColorE.Color,
-                    BackColor = ColorE.Color
+                    BackColor = colorEntry.Color,
+                    SelectionBackColor = colorEntry.Color,
+                    SelectionForeColor = colorEntry.Color
                 };
             }
 
             #endregion
 
             #region Animations grid
+
             DataGrid_Animations.Rows.Clear();
 
-            foreach (AnimationEntry Animation in SelectedEntry.Animations)
-            {
-                string cValue = GetAnimationFilestartString(Animation.FileStart);
+            bool isLinkAnim = e.AnimationType == 1;
 
-                if (SelectedEntry.AnimationType == 1)
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Dicts.GetStringFromBiDict(Dicts.LinkAnims, (int)Animation.Address), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Animation.ObjID) });
-                else
-                    DataGrid_Animations.Rows.Add(new object[] { Animation.Name, Animation.HeaderDefinition, cValue, Animation.Address.ToString("X"), Animation.StartFrame, Animation.EndFrame, Animation.Speed, Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Animation.ObjID) });
+            foreach (AnimationEntry anim in e.Animations)
+            {
+                string cValue = GetAnimationFilestartString(anim.FileStart);
+                string addrStr = isLinkAnim
+                    ? Dicts.GetStringFromBiDict(Dicts.LinkAnims, (int)anim.Address)
+                    : anim.Address.ToString("X");
+
+                DataGrid_Animations.Rows.Add(new object[] { 
+                                                            anim.Name, 
+                                                            anim.HeaderDefinition, 
+                                                            cValue, 
+                                                            addrStr, 
+                                                            anim.StartFrame, 
+                                                            anim.EndFrame, 
+                                                            anim.Speed, 
+                                                            Dicts.GetStringFromBiDict(Dicts.ObjectIDs, anim.ObjID) 
+                                                         });
             }
 
             #endregion
@@ -901,12 +902,15 @@ namespace NPC_Maker
 
             for (int j = 0; j < TabControl_Segments.TabPages.Count; j++)
             {
-                DataGridView Grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
+                DataGridView grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
+                grid.Rows.Clear();
 
-                Grid.Rows.Clear();
-
-                foreach (SegmentEntry Entry in SelectedEntry.Segments[j])
-                    Grid.Rows.Add(Entry.Name, Entry.HeaderDefinition, Entry.FileStart < 0 ? "Same as main" : Entry.FileStart.ToString("X"), Entry.Address.ToString("X"), Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Entry.ObjectID));
+                foreach (SegmentEntry seg in SelectedEntry.Segments[j])
+                    grid.Rows.Add(seg.Name, 
+                                  seg.HeaderDefinition,
+                                  seg.FileStart < 0 ? "Same as main" : seg.FileStart.ToString("X"), 
+                                  seg.Address.ToString("X"), 
+                                  Dicts.GetStringFromBiDict(Dicts.ObjectIDs, seg.ObjectID));
             }
 
             #endregion
@@ -915,29 +919,29 @@ namespace NPC_Maker
 
             DataGridView_ExtraDLists.Rows.Clear();
 
-            foreach (DListEntry Dlist in SelectedEntry.ExtraDisplayLists)
+            foreach (DListEntry dlist in e.ExtraDisplayLists)
             {
-                string SelCombo = ExtraDlists_ShowType.Items[(int)Dlist.ShowType].ToString();
-                string PositionType = Dicts.GetStringFromStringIntDict(Dicts.LimbIndexSubTypes, Dlist.Limb, null);
+                string selCombo = ExtraDlists_ShowType.Items[(int)dlist.ShowType].ToString();
+                string posType = Dicts.GetStringFromStringIntDict(Dicts.LimbIndexSubTypes, dlist.Limb, null);
 
-                int Row = DataGridView_ExtraDLists.Rows.Add(new object[] { Dlist.Name,
-                                                                           Dlist.HeaderDefinition,
-                                                                           "",
-                                                                           Dlist.FileStart < 0 ? "Same as main" : Dlist.FileStart.ToString("X"),
-                                                                           Dlist.Address.ToString("X"),
-                                                                           Dlist.TransX.ToString() + "," + Dlist.TransY.ToString() + "," + Dlist.TransZ.ToString(),
-                                                                           Dlist.RotX.ToString() + "," + Dlist.RotY.ToString() + "," + Dlist.RotZ.ToString(),
-                                                                           Dlist.Scale.ToString(),
-                                                                           PositionType ?? Dlist.Limb.ToString(),
-                                                                           Dicts.GetStringFromBiDict(Dicts.ObjectIDs, Dlist.ObjectID),
-                                                                           SelCombo
-                                                                          });
+                int row = DataGridView_ExtraDLists.Rows.Add(new object[] {
+                                                                            dlist.Name,
+                                                                            dlist.HeaderDefinition,
+                                                                            "",
+                                                                            dlist.FileStart < 0 ? "Same as main" : dlist.FileStart.ToString("X"),
+                                                                            dlist.Address.ToString("X"),
+                                                                            dlist.TransX + "," + dlist.TransY + "," + dlist.TransZ,
+                                                                            dlist.RotX   + "," + dlist.RotY   + "," + dlist.RotZ,
+                                                                            dlist.Scale.ToString(),
+                                                                            posType ?? dlist.Limb.ToString(),
+                                                                            Dicts.GetStringFromBiDict(Dicts.ObjectIDs, dlist.ObjectID),
+                                                                            selCombo
+                                                                        });
 
-                DataGridView_ExtraDLists.Rows[Row].Cells[(int)EDlistsColumns.Color].Style.BackColor = Dlist.Color;
-
+                DataGridView_ExtraDLists.Rows[row].Cells[(int)EDlistsColumns.Color].Style.BackColor = dlist.Color;
             }
 
-            TabControl.SelectedIndex = Math.Min(TabControl.TabPages.Count - 1, SelectedTabIndex);
+            TabControl.SelectedIndex = Math.Min(TabControl.TabPages.Count - 1, savedTabIndex);
 
             #endregion
 
@@ -949,22 +953,21 @@ namespace NPC_Maker
             MessagesGrid.SelectionChanged -= MessagesGrid_SelectionChanged;
             MessagesGrid.Rows.Clear();
 
-            List<MessageEntry> MessageList = SelectedEntry.Messages;
-            int LocalizationIndex = SelectedEntry.Localization.FindIndex(x => x.Language == Combo_Language.Text);
+            List<MessageEntry> messageList = e.Messages;
+            int locIndex = e.Localization.FindIndex(x => x.Language == Combo_Language.Text);
 
-            if (Combo_Language.SelectedIndex != 0 && LocalizationIndex != -1)
-                MessageList = SelectedEntry.Localization[LocalizationIndex].Messages;
+            if (Combo_Language.SelectedIndex != 0 && locIndex != -1)
+                messageList = e.Localization[locIndex].Messages;
             else
                 Combo_Language.SelectedIndex = 0;
 
-            foreach (MessageEntry Entry in MessageList)
-                MessagesGrid.Rows.Add(new object[] { Entry.Name });
+            foreach (MessageEntry msg in messageList)
+                MessagesGrid.Rows.Add(new object[] { msg.Name });
 
             MessagesGrid_SelectionChanged(MessagesGrid, null);
             MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
             Combo_Language.SelectedIndexChanged += Combo_Language_SelectedIndexChanged;
 
-            // Mono doesn't reset the scroll bar when switching between actors
             if (Program.IsRunningUnderMono)
                 Helpers.ResetVerticalScrollbar(MessagesGrid);
 
@@ -972,18 +975,28 @@ namespace NPC_Maker
 
             #region CCode
 
-            if (SelectedEntry.EmbeddedOverlayCode.Code != "" && Program.Settings.AutoComp_ActorSwitch)
-            {
-                string CompileErrors = "";
-                CCode.Compile(EditedFile.CHeader, Program.Settings.LinkerPaths, SelectedEntry.EmbeddedOverlayCode, ref CompileErrors);
-                TextBox_CompileMsg.Text = CompileErrors;
-            }
-            else if (SelectedEntry.EmbeddedOverlayCode.Code != "")
-                TextBox_CompileMsg.Text = "Click \"Compile\"!";
-            else
-                TextBox_CompileMsg.Text = "No code to compile.";
+            var code = e.EmbeddedOverlayCode;
 
-            int Index = 0;
+            if (code.Code != "")
+            {
+                if (Program.Settings.AutoComp_ActorSwitch)
+                {
+                    string compileErrors = "";
+                    CCode.Compile(EditedFile.CHeader, Program.Settings.LinkerPaths, code, ref compileErrors);
+                    TextBox_CompileMsg.Text = compileErrors;
+                }
+                else
+                {
+                    TextBox_CompileMsg.Text = "Click \"Compile\"!";
+                }
+            }
+            else
+            {
+                TextBox_CompileMsg.Text = "No code to compile.";
+            }
+
+            int index = 0;
+            bool hasFunctions = code.Functions != null && code.Functions.Count > 0;
 
             foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
             {
@@ -991,35 +1004,29 @@ namespace NPC_Maker
                 ComboBox w = kvp.Value;
 
                 c.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
+                if (w != null) w.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
 
-                if (w != null)
-                    w.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
-
-
-                if (SelectedEntry.EmbeddedOverlayCode.Functions == null || SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
+                if (!hasFunctions)
+                {
                     c.DataSource = null;
+                }
                 else
                 {
                     c.DisplayMember = "FuncName";
                     c.ValueMember = "Addr";
-                    c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions;
+                    c.DataSource = code.Functions;
                     c.SelectedIndex = -1;
                     c.BindingContext = new BindingContext();
-
-                    c.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.Functions.FindIndex(x => x.FuncName == SelectedEntry.EmbeddedOverlayCode.SetFuncNames[Index]);
+                    c.SelectedIndex = code.Functions.FindIndex(x => x.FuncName == code.SetFuncNames[index]);
 
                     if (w != null)
-                        w.SelectedIndex = SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[Index, 1];
+                        w.SelectedIndex = code.FuncsRunWhen[index, 1];
                 }
 
-                Index++;
-
+                index++;
                 c.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
-
-                if (w != null)
-                    w.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
+                if (w != null) w.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
             }
-
 
             #endregion
 
@@ -2401,22 +2408,11 @@ namespace NPC_Maker
 
         private void HeaderPathChanged()
         {
-            bool vis = true;
+            bool vis = !string.IsNullOrEmpty(SelectedEntry.HeaderPath);
+            int fullWidth = ComboBox_HierarchyType.Width;
 
-            if (String.IsNullOrEmpty(SelectedEntry.HeaderPath))
-                vis = false;
-
-            if (vis)
-                NumUpDown_Hierarchy.Width = ComboBox_HierarchyType.Width / 2;
-            else
-                NumUpDown_Hierarchy.Width = ComboBox_HierarchyType.Width;
-
-            if (vis)
-                numUpFileStart.Width = ComboBox_HierarchyType.Width / 2;
-            else
-                numUpFileStart.Width = ComboBox_HierarchyType.Width;
-
-
+            NumUpDown_Hierarchy.Width = vis ? fullWidth / 2 : fullWidth;
+            numUpFileStart.Width = vis ? fullWidth / 2 : fullWidth;
             Tx_SkeletonName.Visible = vis;
             Tx_FileStartName.Visible = vis;
             Col_HDefine.Visible = vis;
@@ -2424,11 +2420,10 @@ namespace NPC_Maker
 
             for (int j = 0; j < TabControl_Segments.TabPages.Count; j++)
             {
-                DataGridView Grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
-                Grid.Columns[(int)SegmentsColumns.HeaderDefinition].Visible = vis;
+                DataGridView grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
+                grid.Columns[(int)SegmentsColumns.HeaderDefinition].Visible = vis;
             }
         }
-
 
         private void Txb_ReactIfAtt_KeyUp(object sender, KeyEventArgs e)
         {
@@ -2639,61 +2634,60 @@ namespace NPC_Maker
 
         private void DataGrid_Animations_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            bool wasNewRow = e.RowIndex >= SelectedEntry.Animations.Count;
+
+            if (wasNewRow)
+            {
+                DataGrid_Animations.NotifyCurrentCellDirty(true);
+                DataGrid_Animations.EndEdit();
+            }
+
             if (e.ColumnIndex == (int)AnimGridColumns.Object)
             {
-                PickableList Objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -2, -3, -4, -5 });
-                DialogResult DR = Objects.ShowDialog();
+                PickableList objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -2, -3, -4, -5 });
+                if (objects.ShowDialog() != DialogResult.OK) return;
 
-                if (DR == DialogResult.OK)
-                {
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
-                    DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
-                    DataGrid_Animations.RefreshEdit();
-                }
+                string id = objects.Chosen.ID.ToString();
+                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = id;
+                DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                DataGrid_Animations.RefreshEdit();
             }
             else if (e.ColumnIndex == (int)AnimGridColumns.Address && SelectedEntry.AnimationType == 1)
             {
-                PickableList Anims = new PickableList(Lists.DictType.LinkAnims, true);
-                DialogResult DR = Anims.ShowDialog();
+                PickableList anims = new PickableList(Lists.DictType.LinkAnims, true);
+                if (anims.ShowDialog() != DialogResult.OK) return;
 
-                if (DR == DialogResult.OK)
-                {
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Anims.Chosen.ID.ToString("X");
-                    DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Anims.Chosen.ID.ToString(), e.GetType(), null));
-                    DataGrid_Animations.RefreshEdit();
-                }
+                string id = anims.Chosen.ID.ToString();
+                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = anims.Chosen.ID.ToString("X");
+                DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                DataGrid_Animations.RefreshEdit();
             }
             else if (e.ColumnIndex == (int)AnimGridColumns.HeaderDefinition && SelectedEntry.AnimationType == 0)
             {
-                var curr = Helpers.SplitHeaderDefsString((string)(sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                var curr = Helpers.SplitHeaderDefsString((string)DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
                 Common.HDefine hD = Helpers.SelectOffsetFileStartFromH(SelectedEntry, curr[1], curr[0]);
+                if (hD == null || ShowHDefineError(hD)) return;
 
-                if (hD != null)
+                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
+                DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
+
+                if (hD.Value1 != null)
                 {
-                    if (!ShowHDefineError(hD))
-                    {
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
-                        DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
-
-                        if (hD.Value1 != null)
-                        {
-                            DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.Address].Value = hD.Value1String;
-                            DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)AnimGridColumns.Address, hD.Value1String, e.GetType(), null));
-                        }
-
-                        if (hD.Value2 != null)
-                        {
-                            DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.FileStart].Value = hD.Value2String;
-                            DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)AnimGridColumns.FileStart, hD.Value2String, e.GetType(), null));
-                        }
-
-                        DataGrid_Animations.RefreshEdit();
-                    }
+                    DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.Address].Value = hD.Value1String;
+                    DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)AnimGridColumns.Address, hD.Value1String, e.GetType(), null));
                 }
+
+                if (hD.Value2 != null)
+                {
+                    DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.FileStart].Value = hD.Value2String;
+                    DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)AnimGridColumns.FileStart, hD.Value2String, e.GetType(), null));
+                }
+
+                DataGrid_Animations.RefreshEdit();
             }
         }
 
-        private string GetAnimationFilestartString(Int32? FileStart)
+        private static string GetAnimationFilestartString(Int32? FileStart)
         {
             FileStart = FileStart ?? -1;
 
@@ -2759,133 +2753,93 @@ namespace NPC_Maker
                 return;
             }
 
+            // Ensure the backing entry exists before any case runs
+            if (SelectedEntry.Animations.Count - 1 < e.RowIndex)
+                AddBlankAnim(e.ColumnIndex, e.RowIndex);
+
+            AnimationEntry anim = SelectedEntry.Animations[e.RowIndex];
+            e.ParsingApplied = true;
+
             switch (e.ColumnIndex)
             {
                 case (int)AnimGridColumns.Name:
                     {
-                        string Name = e.Value.ToString();
+                        string name = e.Value.ToString();
 
-                        if (!SanitizeName(ref Name))
-                            e.Value = "Animation_" + e.RowIndex;
-                        else
-                            e.Value = Name;
+                        if (!SanitizeName(ref name))
+                            name = "Animation_" + e.RowIndex;
 
-                        while (true)
-                        {
-                            var entry = SelectedEntry.Animations.Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
+                        while (SelectedEntry.Animations.Any(x => x != anim && x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                            name += "_";
 
-                            if (Helpers.DgCheckAddSanity(entry, SelectedEntry.Animations.ToArray(), SelectedEntry.Animations.Count, e.RowIndex))
-                                e.Value += "_";
-                            else
-                                break;
-                        }
-
-                        if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                            AddBlankAnim(e.ColumnIndex, e.RowIndex, e.Value.ToString());
-                        else
-                            SelectedEntry.Animations[e.RowIndex].Name = e.Value.ToString();
-
-                        e.ParsingApplied = true;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                        anim.Name = name;
+                        e.Value = name;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = name;
                         return;
                     }
                 case (int)AnimGridColumns.HeaderDefinition:
                     {
-                        string Name = e.Value.ToString();
-                        e.Value = Name;
+                        string name = e.Value.ToString();
+                        anim.HeaderDefinition = name;
+                        e.Value = name;
 
-                        if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                            AddBlankAnim(e.ColumnIndex, e.RowIndex, null, e.Value.ToString());
-                        else
-                            SelectedEntry.Animations[e.RowIndex].HeaderDefinition = e.Value.ToString();
-
-                        if (Name != "")
+                        if (name != "")
                         {
                             Dictionary<string, string> hDict = Helpers.GetDefinesFromHeaders(SelectedEntry.HeaderPath);
-                            Common.HDefine hD = Helpers.GetHDefineFromName(Name, hDict);
+                            Common.HDefine hD = Helpers.GetHDefineFromName(name, hDict);
 
-                            if (hD != null && hD.Value1 != null)
+                            if (hD?.Value1 != null)
                             {
-                                SelectedEntry.Animations[e.RowIndex].Address = (UInt32)hD.Value1;
+                                anim.Address = (uint)hD.Value1;
                                 DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.Address].Value = hD.Value1String;
                             }
                         }
 
-                        e.ParsingApplied = true;
-                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = name;
                         return;
                     }
                 case (int)AnimGridColumns.Address:
                     {
-
                         if (SelectedEntry.AnimationType == 1)
                         {
                             try
                             {
-                                int LinkAnim = Dicts.GetIntFromBiDict(Dicts.LinkAnims, e.Value.ToString());
-
-                                e.Value = Dicts.GetStringFromBiDict(Dicts.LinkAnims, LinkAnim);
-                                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-
-                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, (UInt32)LinkAnim);
-                                else
-                                    SelectedEntry.Animations[e.RowIndex].Address = (UInt32)LinkAnim;
-
-                                e.ParsingApplied = true;
+                                int linkAnim = Dicts.GetIntFromBiDict(Dicts.LinkAnims, e.Value.ToString());
+                                anim.Address = (uint)linkAnim;
+                                e.Value = Dicts.GetStringFromBiDict(Dicts.LinkAnims, linkAnim);
                             }
-                            catch (Exception)
+                            catch
                             {
-                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex);
-
                                 e.Value = Dicts.LinkAnims.Forward.First().Key;
-                                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                             }
                         }
                         else
                         {
                             try
                             {
-                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, Convert.ToUInt32(e.Value.ToString(), 16));
-                                else
-                                    SelectedEntry.Animations[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+                                anim.Address = Convert.ToUInt32(e.Value.ToString(), 16);
                             }
-                            catch (Exception)
+                            catch
                             {
-                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex);
-
-                                e.Value = Convert.ToInt32("0", 16);
-                                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-                            }
-                            finally
-                            {
-                                e.ParsingApplied = true;
+                                anim.Address = 0;
+                                e.Value = "0";
                             }
                         }
+
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         return;
                     }
                 case (int)AnimGridColumns.StartFrame:
                     {
                         try
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, Convert.ToByte(e.Value.ToString()));
-                            else
-                                SelectedEntry.Animations[e.RowIndex].StartFrame = Convert.ToByte(e.Value.ToString());
-
-                            e.ParsingApplied = true;
+                            anim.StartFrame = Convert.ToByte(e.Value.ToString());
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
-
+                            anim.StartFrame = 0;
                             e.Value = "";
                             DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-                            e.ParsingApplied = true;
                         }
                         return;
                     }
@@ -2893,21 +2847,13 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, 0, Convert.ToByte(e.Value.ToString()));
-                            else
-                                SelectedEntry.Animations[e.RowIndex].EndFrame = Convert.ToByte(e.Value.ToString());
-
-                            e.ParsingApplied = true;
+                            anim.EndFrame = Convert.ToByte(e.Value.ToString());
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
-
+                            anim.EndFrame = 0xFF;
                             e.Value = "";
                             DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-                            e.ParsingApplied = true;
                         }
                         return;
                     }
@@ -2915,21 +2861,13 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (float)Convert.ToDecimal(e.Value));
-                            else
-                                SelectedEntry.Animations[e.RowIndex].Speed = (float)Convert.ToDecimal(e.Value);
-
-                            e.ParsingApplied = true;
+                            anim.Speed = (float)Convert.ToDecimal(e.Value);
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
-
+                            anim.Speed = 1.0f;
                             e.Value = 1.0f;
                             DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-                            e.ParsingApplied = true;
                         }
                         return;
                     }
@@ -2937,71 +2875,40 @@ namespace NPC_Maker
                     {
                         try
                         {
-                            int ObjectId = Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
+                            int objectId = Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
+                            if (objectId < -1) objectId = 0;
 
-                            if (ObjectId < -1)
-                                ObjectId = 0;
-
-                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, ObjectId);
-                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, (short)ObjectId);
-                            else
-                                SelectedEntry.Animations[e.RowIndex].ObjID = (short)ObjectId;
-
-                            e.ParsingApplied = true;
+                            anim.ObjID = (short)objectId;
+                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, objectId);
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
-
                             e.Value = Dicts.ObjectIDs.Forward.First().Key;
-                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
 
-                        e.ParsingApplied = true;
+                        DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         return;
                     }
                 case (int)AnimGridColumns.FileStart:
                     {
                         try
                         {
-                            Int32 Value = 0;
-
                             if (e.Value.ToString() == "-2")
                             {
+                                anim.FileStart = -2;
                                 e.Value = "Loaded by user method";
-
-                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, null, 0, 255, -2);
-                                else
-                                    SelectedEntry.Animations[e.RowIndex].FileStart = -2;
-
                             }
                             else
                             {
-                                Value = Convert.ToInt32(e.Value.ToString(), 16);
-
-                                if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                    AddBlankAnim(e.ColumnIndex, e.RowIndex, null, null, null, null, null, 0, 255, Value);
-                                else
-                                    SelectedEntry.Animations[e.RowIndex].FileStart = Value;
+                                anim.FileStart = Convert.ToInt32(e.Value.ToString(), 16);
                             }
-
-                            e.ParsingApplied = true;
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.Animations.Count() - 1 < e.RowIndex)
-                                AddBlankAnim(e.ColumnIndex, e.RowIndex);
-
+                            anim.FileStart = -1;
                             e.Value = "Same as main";
-                            SelectedEntry.Animations[e.RowIndex].FileStart = -1;
+                            DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
             }
@@ -3051,146 +2958,140 @@ namespace NPC_Maker
             if (e.RowIndex < 0)
                 return;
 
+            var grid = sender as DataGridView;
+            bool wasNewRow = e.RowIndex >= SelectedEntry.ExtraDisplayLists.Count;
+
+            if (wasNewRow)
+            {
+                grid.NotifyCurrentCellDirty(true);
+                grid.EndEdit();
+            }
+
             switch (e.ColumnIndex)
             {
                 case (int)EDlistsColumns.Object:
                     {
-                        PickableList Objects = new PickableList(Lists.DictType.Objects, true);
-                        DialogResult DR = Objects.ShowDialog();
+                        PickableList objects = new PickableList(Lists.DictType.Objects, true);
+                        if (objects.ShowDialog() != DialogResult.OK) break;
 
-                        if (DR == DialogResult.OK)
-                        {
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
-                            DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
-                            DataGridView_ExtraDLists.Update();
-                        }
-
+                        string id = objects.Chosen.ID.ToString();
+                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = id;
+                        DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                        grid.Update();
                         break;
                     }
                 case (int)EDlistsColumns.Limb:
                     {
-                        PickableList SubTypes = new PickableList(Dicts.LimbIndexSubTypes);
-                        DialogResult DR = SubTypes.ShowDialog();
+                        PickableList subTypes = new PickableList(Dicts.LimbIndexSubTypes);
+                        if (subTypes.ShowDialog() != DialogResult.OK) break;
 
-                        if (DR == DialogResult.OK)
-                        {
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = SubTypes.Chosen.ID.ToString();
-                            DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, SubTypes.Chosen.ID.ToString(), e.GetType(), null));
-                            DataGridView_ExtraDLists.Update();
-                        }
-
+                        string id = subTypes.Chosen.ID.ToString();
+                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = id;
+                        DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                        grid.Update();
                         break;
                     }
                 case (int)EDlistsColumns.Color:
                     {
-                        ColorDialog.Color = DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
+                        ColorDialog.Color = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
+                        if (ColorDialog.ShowDialog() != DialogResult.OK) break;
 
-                        if (ColorDialog.ShowDialog() == DialogResult.OK)
+                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Style = new DataGridViewCellStyle()
                         {
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
-                                new DataGridViewCellStyle()
-                                {
-                                    SelectionForeColor = ColorDialog.Color,
-                                    BackColor = ColorDialog.Color,
-                                    SelectionBackColor = ColorDialog.Color
+                            BackColor = ColorDialog.Color,
+                            SelectionBackColor = ColorDialog.Color,
+                            SelectionForeColor = ColorDialog.Color
+                        };
 
-                                };
-
-                            DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, "", e.GetType(), null));
-                            DataGridView_ExtraDLists.Update();
-
-                        }
+                        DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, "", e.GetType(), null));
+                        grid.Update();
                         break;
                     }
                 case (int)EDlistsColumns.HeaderDefinition:
                     {
-                        var curr = Helpers.SplitHeaderDefsString((string)(sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                        var curr = Helpers.SplitHeaderDefsString((string)grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
                         Common.HDefine hD = Helpers.SelectOffsetFileStartFromH(SelectedEntry, curr[1], curr[0]);
+                        if (hD == null || ShowHDefineError(hD)) break;
 
-                        if (hD != null)
+                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
+                        DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
+
+                        if (hD.Value1 != null)
                         {
-                            if (!ShowHDefineError(hD))
-                            {
-                                DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
-                                DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
-
-                                if (hD.Value1 != null)
-                                {
-                                    DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[(int)EDlistsColumns.Offset].Value = hD.Value1String;
-                                    DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.Offset, hD.Value1String, e.GetType(), null));
-                                }
-
-                                if (hD.Value2 != null)
-                                {
-                                    DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[(int)EDlistsColumns.FileStart].Value = hD.Value2String;
-                                    DataGridView_ExtraDLists_CellParsing(DataGridView_ExtraDLists, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.FileStart, hD.Value2String, e.GetType(), null));
-                                }
-
-                                DataGridView_ExtraDLists.RefreshEdit();
-                            }
+                            grid.Rows[e.RowIndex].Cells[(int)EDlistsColumns.Offset].Value = hD.Value1String;
+                            DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.Offset, hD.Value1String, e.GetType(), null));
                         }
+
+                        if (hD.Value2 != null)
+                        {
+                            grid.Rows[e.RowIndex].Cells[(int)EDlistsColumns.FileStart].Value = hD.Value2String;
+                            DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.FileStart, hD.Value2String, e.GetType(), null));
+                        }
+
                         break;
                     }
             }
         }
 
-        private void AddBlankDList(int SkipIndex, int Index, string Name = null, string HeaderDefinition = null, uint? Address = null, float? TransX = null, float? TransY = null, float? TransZ = null,
-                                   short? RotX = null, short? RotY = null, short? RotZ = null, float? Scale = null, short? Limb = null, int? ShowType = null, short? ObjectID = null, Color? EnvColor = null, int? FileStart = null)
+        private void AddBlankDList(int skipIndex, int index, string name = null, string headerDefinition = null, uint? address = null,
+                                   float? transX = null, float? transY = null, float? transZ = null,
+                                   short? rotX = null, short? rotY = null, short? rotZ = null,
+                                   float? scale = null, short? limb = null, int? showType = null,
+                                   short? objectID = null, Color? envColor = null, int? fileStart = null)
         {
-            if (Name == null)
-                Name = "DList_" + Index;
+            name = name ?? "DList_" + index;
+            headerDefinition = headerDefinition ?? "";
+            address = address ?? 0;
+            transX = transX ?? 0;
+            transY = transY ?? 0;
+            transZ = transZ ?? 0;
+            rotX = rotX ?? 0;
+            rotY = rotY ?? 0;
+            rotZ = rotZ ?? 0;
+            scale = scale ?? 1f;
+            limb = limb ?? 0;
+            showType = showType ?? 0;
+            objectID = objectID ?? -1;
+            envColor = envColor ?? Color.FromArgb(255, 255, 255, 255);
+            fileStart = fileStart ?? -1;
 
-            Name = Name ?? "DList_" + Index;
-            HeaderDefinition = HeaderDefinition ?? "";
-            Address = Address ?? 0;
-            TransX = TransX ?? 0;
-            TransY = TransY ?? 0;
-            TransZ = TransZ ?? 0;
-            RotX = RotX ?? 0;
-            RotY = RotY ?? 0;
-            RotZ = RotZ ?? 0;
-            Scale = Scale ?? 1f;
-            Limb = Limb ?? 0;
-            ShowType = ShowType ?? 0;
-            ObjectID = ObjectID ?? -1;
-            EnvColor = EnvColor ?? Color.FromArgb(255, 255, 255, 255);
-            FileStart = FileStart ?? -1;
+            SelectedEntry.ExtraDisplayLists.Add(new DListEntry(name, headerDefinition, (uint)address, (float)transX, (float)transY, (float)transZ, (Color)envColor,
+                                                    (short)rotX, (short)rotY, (short)rotZ, (float)scale, (short)limb, (int)showType, (short)objectID, (int)fileStart));
 
-            SelectedEntry.ExtraDisplayLists.Add(new DListEntry(Name, HeaderDefinition, (uint)Address, (float)TransX, (float)TransY, (float)TransZ, (Color)EnvColor,
-                                                    (short)RotX, (short)RotY, (short)RotZ, (float)Scale, (short)Limb, (int)ShowType, (short)ObjectID, (int)FileStart));
+            var row = DataGridView_ExtraDLists.Rows[index].Cells;
 
-            if (SkipIndex != (int)EDlistsColumns.Purpose)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Purpose].Value = Name;
+            if (skipIndex != (int)EDlistsColumns.Purpose)
+                row[(int)EDlistsColumns.Purpose].Value = name;
 
-            if (SkipIndex != (int)EDlistsColumns.HeaderDefinition)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.HeaderDefinition].Value = Name;
+            if (skipIndex != (int)EDlistsColumns.HeaderDefinition)
+                row[(int)EDlistsColumns.HeaderDefinition].Value = headerDefinition;
 
-            if (SkipIndex != (int)EDlistsColumns.Color)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Color].Style.BackColor = (Color)EnvColor;
+            if (skipIndex != (int)EDlistsColumns.Color)
+                row[(int)EDlistsColumns.Color].Style.BackColor = (Color)envColor;
 
-            if (SkipIndex != (int)EDlistsColumns.Offset)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Offset].Value = Address;
+            if (skipIndex != (int)EDlistsColumns.Offset)
+                row[(int)EDlistsColumns.Offset].Value = address;
 
-            if (SkipIndex != (int)EDlistsColumns.Translation)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Translation].Value = $"{TransX},{TransY},{TransZ}";
+            if (skipIndex != (int)EDlistsColumns.Translation)
+                row[(int)EDlistsColumns.Translation].Value = $"{transX},{transY},{transZ}";
 
-            if (SkipIndex != (int)EDlistsColumns.Rotation)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Rotation].Value = $"{RotX},{RotY},{RotZ}";
+            if (skipIndex != (int)EDlistsColumns.Rotation)
+                row[(int)EDlistsColumns.Rotation].Value = $"{rotX},{rotY},{rotZ}";
 
-            if (SkipIndex != (int)EDlistsColumns.Scale)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Scale].Value = Scale;
+            if (skipIndex != (int)EDlistsColumns.Scale)
+                row[(int)EDlistsColumns.Scale].Value = scale;
 
-            if (SkipIndex != (int)EDlistsColumns.Limb)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Limb].Value = Limb;
+            if (skipIndex != (int)EDlistsColumns.Limb)
+                row[(int)EDlistsColumns.Limb].Value = limb;
 
-            if (SkipIndex != (int)EDlistsColumns.Object)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.Object].Value = ObjectID == -1 ? "---" : ObjectID.ToString();
+            if (skipIndex != (int)EDlistsColumns.Object)
+                row[(int)EDlistsColumns.Object].Value = objectID == -1 ? "---" : objectID.ToString();
 
-            if (SkipIndex != (int)EDlistsColumns.ShowType)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.ShowType].Value = ExtraDlists_ShowType.Items[(int)ShowType];
+            if (skipIndex != (int)EDlistsColumns.ShowType)
+                row[(int)EDlistsColumns.ShowType].Value = ExtraDlists_ShowType.Items[(int)showType];
 
-            if (SkipIndex != (int)EDlistsColumns.FileStart)
-                DataGridView_ExtraDLists.Rows[Index].Cells[(int)EDlistsColumns.FileStart].Value = (FileStart == -1 ? "Same as main" : FileStart.ToString());
+            if (skipIndex != (int)EDlistsColumns.FileStart)
+                row[(int)EDlistsColumns.FileStart].Value = fileStart == -1 ? "Same as main" : fileStart.ToString();
         }
 
         private float[] GetXYZTranslation(string Value)
@@ -3241,230 +3142,149 @@ namespace NPC_Maker
                 return;
             }
 
+            if (SelectedEntry.ExtraDisplayLists.Count - 1 < e.RowIndex)
+                AddBlankDList(e.ColumnIndex, e.RowIndex);
+
+            DListEntry dlist = SelectedEntry.ExtraDisplayLists[e.RowIndex];
+            var grid = sender as DataGridView;
+            e.ParsingApplied = true;
+
             switch (e.ColumnIndex)
             {
                 case (int)EDlistsColumns.Purpose:
                     {
-                        string Name = e.Value.ToString();
+                        string name = e.Value.ToString();
 
-                        if (!SanitizeName(ref Name))
-                            e.Value = "Dlist_" + e.RowIndex;
-                        else
-                            e.Value = Name;
+                        if (!SanitizeName(ref name))
+                            name = "Dlist_" + e.RowIndex;
 
-                        while (true)
-                        {
-                            var entry = SelectedEntry.ExtraDisplayLists.Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
+                        if (SelectedEntry.ExtraDisplayLists.Count == e.RowIndex)
+                            while (SelectedEntry.ExtraDisplayLists.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                                name += "_";
 
-                            if (Helpers.DgCheckAddSanity(entry, SelectedEntry.ExtraDisplayLists.ToArray(), SelectedEntry.ExtraDisplayLists.Count, e.RowIndex))
-                                e.Value += "_";
-                            else
-                                break;
-                        }
-
-                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, e.Value.ToString());
-                        else
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].Name = e.Value.ToString();
-
-                        e.ParsingApplied = true;
+                        dlist.Name = name;
+                        e.Value = name;
                         return;
                     }
                 case (int)EDlistsColumns.HeaderDefinition:
                     {
-                        string Name = e.Value.ToString();
-                        e.Value = Name;
-
-                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, e.Value.ToString());
-                        else
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].HeaderDefinition = e.Value.ToString();
-
-                        e.ParsingApplied = true;
+                        dlist.HeaderDefinition = e.Value.ToString();
                         return;
                     }
                 case (int)EDlistsColumns.Color:
                     {
-                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, null, (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor);
-                        else
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].Color = (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
-
-                        e.ParsingApplied = true;
+                        dlist.Color = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
                         return;
                     }
                 case (int)EDlistsColumns.Offset:
                     {
                         try
                         {
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, Convert.ToUInt32(e.Value.ToString(), 16));
-                            else
-                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+                            dlist.Address = Convert.ToUInt32(e.Value.ToString(), 16);
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex);
-
+                            dlist.Address = 0;
                             e.Value = 0;
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
                 case (int)EDlistsColumns.Translation:
                     {
-                        float[] Transl = GetXYZTranslation(e.Value.ToString());
-                        e.Value = $"{Transl[0]},{Transl[1]},{Transl[2]}";
-                        DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-
-                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, Transl[0], Transl[1], Transl[2]);
-                        else
-                        {
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].TransX = Transl[0];
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].TransY = Transl[1];
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].TransZ = Transl[2];
-                        }
-
-                        e.ParsingApplied = true;
+                        float[] transl = GetXYZTranslation(e.Value.ToString());
+                        dlist.TransX = transl[0];
+                        dlist.TransY = transl[1];
+                        dlist.TransZ = transl[2];
+                        e.Value = $"{transl[0]},{transl[1]},{transl[2]}";
+                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         return;
                     }
                 case (int)EDlistsColumns.Rotation:
                     {
-                        Int16[] Rot = GetXYZRotation(e.Value.ToString());
-                        e.Value = $"{Rot[0]},{Rot[1]},{Rot[2]}";
-                        DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-
-                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, Rot[0], Rot[1], Rot[2]);
-                        else
-                        {
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].RotX = Rot[0];
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].RotY = Rot[1];
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].RotZ = Rot[2];
-                        }
-
-                        e.ParsingApplied = true;
+                        short[] rot = GetXYZRotation(e.Value.ToString());
+                        dlist.RotX = rot[0];
+                        dlist.RotY = rot[1];
+                        dlist.RotZ = rot[2];
+                        e.Value = $"{rot[0]},{rot[1]},{rot[2]}";
+                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         return;
                     }
                 case (int)EDlistsColumns.Scale:
                     {
                         try
                         {
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, (float)Convert.ToDecimal(e.Value));
-                            else
-                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Scale = (float)Convert.ToDecimal(e.Value);
+                            dlist.Scale = (float)Convert.ToDecimal(e.Value);
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex);
-
+                            dlist.Scale = 1f;
                             e.Value = 0;
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
                 case (int)EDlistsColumns.Limb:
                     {
                         try
                         {
-                            short Value = Convert.ToInt16(e.Value);
-                            string PositionType = Dicts.GetStringFromStringIntDict(Dicts.LimbIndexSubTypes, Value, null);
-
-                            if (PositionType != null)
-                                e.Value = PositionType;
-
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, Value);
-                            else
-                                SelectedEntry.ExtraDisplayLists[e.RowIndex].Limb = Value;
+                            short value = Convert.ToInt16(e.Value);
+                            string positionType = Dicts.GetStringFromStringIntDict(Dicts.LimbIndexSubTypes, value, null);
+                            dlist.Limb = value;
+                            e.Value = positionType ?? e.Value;
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex);
-
+                            dlist.Limb = 0;
                             e.Value = 0;
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
                 case (int)EDlistsColumns.Object:
                     {
                         try
                         {
-                            short ObjectId = (short)Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
-
-                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, ObjectId);
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, ObjectId);
-                            else
-                                SelectedEntry.ExtraDisplayLists[e.RowIndex].ObjectID = ObjectId;
+                            short objectId = (short)Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
+                            dlist.ObjectID = objectId;
+                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, objectId);
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex);
-
+                            dlist.ObjectID = -1;
                             e.Value = Dicts.ObjectIDs.Forward.First();
-                            DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
                 case (int)EDlistsColumns.ShowType:
                     {
-                        int ShowType = Dicts.GetIntFromStringIntDict(Dicts.LimbShowSubTypes, e.Value.ToString(), 0);
-
-                        if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                            AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, ShowType);
-                        else
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].ShowType = ShowType;
-
-                        e.ParsingApplied = true;
+                        dlist.ShowType = Dicts.GetIntFromStringIntDict(Dicts.LimbShowSubTypes, e.Value.ToString(), 0);
                         return;
                     }
                 case (int)EDlistsColumns.FileStart:
                     {
                         try
                         {
-                            Int32 Value = Convert.ToInt32(e.Value.ToString(), 16);
+                            int value = Convert.ToInt32(e.Value.ToString(), 16);
 
-                            if (Value < 0)
+                            if (value < 0)
                             {
+                                value = -1;
                                 e.Value = -1;
-                                DataGridView_ExtraDLists.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "Same as main";
+                                grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "Same as main";
                             }
 
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex, null, null, null, null, null, null, null, null, null, null, null, null, null, null, Value);
-                            else
-                                SelectedEntry.ExtraDisplayLists[e.RowIndex].FileStart = Convert.ToInt32(e.Value.ToString(), 16);
+                            dlist.FileStart = value;
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.ExtraDisplayLists.Count() - 1 < e.RowIndex)
-                                AddBlankDList(e.ColumnIndex, e.RowIndex);
-
+                            dlist.FileStart = -1;
                             e.Value = "Same as main";
-                            SelectedEntry.ExtraDisplayLists[e.RowIndex].FileStart = -1;
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
             }
@@ -3505,74 +3325,78 @@ namespace NPC_Maker
             if (e.RowIndex < 0)
                 return;
 
+            var grid = sender as DataGridView;
+            int segIndex = TabControl_Segments.SelectedIndex;
+            bool wasNewRow = e.RowIndex >= SelectedEntry.Segments[segIndex].Count;
+
+            if (wasNewRow)
+            {
+                grid.NotifyCurrentCellDirty(true);
+                grid.EndEdit();
+            }
+
             if (e.ColumnIndex == (int)SegmentsColumns.Object)
             {
-                PickableList Objects = new PickableList(Lists.DictType.Objects, true);
-                DialogResult DR = Objects.ShowDialog();
+                PickableList objects = new PickableList(Lists.DictType.Objects, true);
+                if (objects.ShowDialog() != DialogResult.OK) return;
 
-                if (DR == DialogResult.OK)
-                {
-                    (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Objects.Chosen.ID.ToString();
-                    DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, Objects.Chosen.ID.ToString(), e.GetType(), null));
-                    (sender as DataGridView).Update();
-                }
+                string id = objects.Chosen.ID.ToString();
+                grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = id;
+                DataGridViewSegments_CellParse(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                grid.Update();
             }
             else if (e.ColumnIndex == (int)SegmentsColumns.HeaderDefinition)
             {
-                var curr = Helpers.SplitHeaderDefsString((string)(sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                var curr = Helpers.SplitHeaderDefsString((string)grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
                 Common.HDefine hD = Helpers.SelectOffsetFileStartFromH(SelectedEntry, curr[1], curr[0]);
+                if (hD == null || ShowHDefineError(hD)) return;
 
-                if (hD != null)
+                grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
+                DataGridViewSegments_CellParse(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
+
+                if (hD.Value1 != null)
                 {
-                    if (!ShowHDefineError(hD))
-                    {
-                        (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
-                        DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
-
-                        if (hD.Value1 != null)
-                        {
-                            (sender as DataGridView).Rows[e.RowIndex].Cells[(int)SegmentsColumns.Address].Value = hD.Value1String;
-                            DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)SegmentsColumns.Address, hD.Value1String, e.GetType(), null));
-                        }
-
-                        if (hD.Value2 != null)
-                        {
-                            (sender as DataGridView).Rows[e.RowIndex].Cells[(int)SegmentsColumns.FileStart].Value = hD.Value2String;
-                            DataGridViewSegments_CellParse(sender, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)SegmentsColumns.FileStart, hD.Value2String, e.GetType(), null));
-                        }
-
-                        (sender as DataGridView).Update();
-                    }
+                    grid.Rows[e.RowIndex].Cells[(int)SegmentsColumns.Address].Value = hD.Value1String;
+                    DataGridViewSegments_CellParse(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)SegmentsColumns.Address, hD.Value1String, e.GetType(), null));
                 }
+
+                if (hD.Value2 != null)
+                {
+                    grid.Rows[e.RowIndex].Cells[(int)SegmentsColumns.FileStart].Value = hD.Value2String;
+                    DataGridViewSegments_CellParse(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)SegmentsColumns.FileStart, hD.Value2String, e.GetType(), null));
+                }
+
+                grid.Update();
             }
         }
 
-        private void AddBlankSeg(int SkipIndex, int Index, int Segment, string Name = null, string HeaderDefinition = null, uint? Address = null, short? ObjectID = null, int? FileStart = null)
+        private void AddBlankSeg(int skipIndex, int index, int segment, string name = null, string headerDefinition = null, uint? address = null, short? objectID = null, int? fileStart = null)
         {
-            Name = Name ?? "Texture_" + Index.ToString();
-            HeaderDefinition = HeaderDefinition ?? "";
-            Address = Address ?? 0;
-            ObjectID = ObjectID ?? -1;
-            FileStart = FileStart ?? -1;
+            name = name ?? "Texture_" + index;
+            headerDefinition = headerDefinition ?? "";
+            address = address ?? 0;
+            objectID = objectID ?? -1;
+            fileStart = fileStart ?? -1;
 
-            SelectedEntry.Segments[Segment].Add(new SegmentEntry(Name, HeaderDefinition, (uint)Address, (short)ObjectID, (int)FileStart));
+            SelectedEntry.Segments[segment].Add(new SegmentEntry(name, headerDefinition, (uint)address, (short)objectID, (int)fileStart));
 
-            DataGridView dgv = (TabControl_Segments.TabPages[Segment].Controls[0] as Controls.SegmentDataGrid).Grid;
+            DataGridView dgv = (TabControl_Segments.TabPages[segment].Controls[0] as Controls.SegmentDataGrid).Grid;
+            var row = dgv.Rows[index].Cells;
 
-            if (SkipIndex != (int)SegmentsColumns.Name)
-                dgv.Rows[Index].Cells[(int)SegmentsColumns.Name].Value = Name;
+            if (skipIndex != (int)SegmentsColumns.Name)
+                row[(int)SegmentsColumns.Name].Value = name;
 
-            if (SkipIndex != (int)SegmentsColumns.HeaderDefinition)
-                dgv.Rows[Index].Cells[(int)SegmentsColumns.HeaderDefinition].Value = Name;
+            if (skipIndex != (int)SegmentsColumns.HeaderDefinition)
+                row[(int)SegmentsColumns.HeaderDefinition].Value = headerDefinition; // was: Name (bug)
 
-            if (SkipIndex != (int)SegmentsColumns.Address)
-                dgv.Rows[Index].Cells[(int)SegmentsColumns.Address].Value = Address;
+            if (skipIndex != (int)SegmentsColumns.Address)
+                row[(int)SegmentsColumns.Address].Value = address;
 
-            if (SkipIndex != (int)SegmentsColumns.Object)
-                dgv.Rows[Index].Cells[(int)SegmentsColumns.Object].Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, (int)ObjectID);
+            if (skipIndex != (int)SegmentsColumns.Object)
+                row[(int)SegmentsColumns.Object].Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, (int)objectID);
 
-            if (SkipIndex != (int)SegmentsColumns.FileStart)
-                dgv.Rows[Index].Cells[(int)SegmentsColumns.FileStart].Value = (FileStart == -1 ? "Same as main" : ((int)FileStart).ToString("X"));
+            if (skipIndex != (int)SegmentsColumns.FileStart)
+                row[(int)SegmentsColumns.FileStart].Value = fileStart == -1 ? "Same as main" : ((int)fileStart).ToString("X");
         }
 
         private void DataGridViewSegments_CellParse(object sender, DataGridViewCellParsingEventArgs e)
@@ -3585,123 +3409,90 @@ namespace NPC_Maker
                 return;
             }
 
-            int DataGridIndex = TabControl_Segments.SelectedIndex;
+            var grid = sender as DataGridView;
+            int segIndex = TabControl_Segments.SelectedIndex;
+            var segList = SelectedEntry.Segments[segIndex];
+
+            if (segList.Count - 1 < e.RowIndex)
+                AddBlankSeg(e.ColumnIndex, e.RowIndex, segIndex);
+
+            SegmentEntry seg = segList[e.RowIndex];
+            e.ParsingApplied = true;
 
             switch (e.ColumnIndex)
             {
                 case (int)SegmentsColumns.Name:
                     {
-                        string Name = e.Value.ToString();
+                        string name = e.Value.ToString();
 
-                        if (!SanitizeName(ref Name))
-                            e.Value = "Data_" + e.RowIndex;
-                        else
-                            e.Value = Name;
+                        if (!SanitizeName(ref name))
+                            name = "Data_" + e.RowIndex;
 
-                        while (true)
-                        {
-                            var entry = SelectedEntry.Segments[DataGridIndex].Find(x => x.Name.ToUpper() == e.Value.ToString().ToUpper());
+                        if (segList.Count == e.RowIndex)
+                            while (segList.Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                                name += "_";
 
-                            if (Helpers.DgCheckAddSanity(entry, SelectedEntry.Segments[DataGridIndex].ToArray(), SelectedEntry.Segments[DataGridIndex].Count, e.RowIndex))
-                                e.Value += "_";
-                            else
-                                break;
-                        }
-
-                        if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                            AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, e.Value.ToString());
-                        else
-                            SelectedEntry.Segments[DataGridIndex][e.RowIndex].Name = e.Value.ToString();
-
-                        e.ParsingApplied = true;
+                        seg.Name = name;
+                        e.Value = name;
                         return;
                     }
                 case (int)SegmentsColumns.HeaderDefinition:
                     {
-                        string Name = e.Value.ToString();
-                        e.Value = Name;
-
-                        if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                            AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, e.Value.ToString());
-                        else
-                            SelectedEntry.Segments[DataGridIndex][e.RowIndex].HeaderDefinition = e.Value.ToString();
-
-                        e.ParsingApplied = true;
+                        seg.HeaderDefinition = e.Value.ToString();
                         return;
                     }
                 case (int)SegmentsColumns.Address:
                     {
                         try
                         {
-                            if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, Convert.ToUInt32(e.Value.ToString(), 16));
-                            else
-                                SelectedEntry.Segments[DataGridIndex][e.RowIndex].Address = Convert.ToUInt32(e.Value.ToString(), 16);
+                            seg.Address = Convert.ToUInt32(e.Value.ToString(), 16);
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
-
-                            e.Value = Convert.ToInt32("0", 16);
-                            (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                            seg.Address = 0;
+                            e.Value = 0;
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
                 case (int)SegmentsColumns.Object:
                     {
                         try
                         {
-                            short ObjectId = (short)Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
-
-                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, ObjectId);
-                            (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
-
-                            if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, null, ObjectId);
-                            else
-                                SelectedEntry.Segments[DataGridIndex][e.RowIndex].ObjectID = ObjectId;
+                            short objectId = (short)Dicts.GetIntFromBiDict(Dicts.ObjectIDs, e.Value.ToString());
+                            seg.ObjectID = objectId;
+                            e.Value = Dicts.GetStringFromBiDict(Dicts.ObjectIDs, objectId);
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
-
+                            seg.ObjectID = -1;
                             e.Value = Dicts.ObjectIDs.Forward.First();
-                            (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
                 case (int)SegmentsColumns.FileStart:
                     {
                         try
                         {
-                            Int32 Value = Convert.ToInt32(e.Value.ToString(), 16);
+                            int value = Convert.ToInt32(e.Value.ToString(), 16);
 
-                            if (Value < 0)
+                            if (value < 0)
                             {
+                                value = -1;
                                 e.Value = -1;
-                                (sender as DataGridView).Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "Same as main";
+                                grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "Same as main";
                             }
 
-                            if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex, null, null, null, null, Value);
-                            else
-                                SelectedEntry.Segments[DataGridIndex][e.RowIndex].FileStart = Convert.ToInt32(e.Value.ToString(), 16);
+                            seg.FileStart = value;
                         }
-                        catch (Exception)
+                        catch
                         {
-                            if (SelectedEntry.Segments[DataGridIndex].Count() - 1 < e.RowIndex)
-                                AddBlankSeg(e.ColumnIndex, e.RowIndex, DataGridIndex);
-
+                            seg.FileStart = -1;
                             e.Value = "Same as main";
+                            grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = e.Value;
                         }
-
-                        e.ParsingApplied = true;
                         return;
                     }
             }
@@ -3750,81 +3541,64 @@ namespace NPC_Maker
 
         private void ColorsDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
+            if (e.RowIndex < 0 || e.ColumnIndex != 1)
                 return;
 
-            if (e.ColumnIndex == 1)
+            if (ColorDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            ColorsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Style = new DataGridViewCellStyle()
             {
-                if (ColorDialog.ShowDialog() == DialogResult.OK)
-                {
-                    ColorsDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Style =
-                        new DataGridViewCellStyle()
-                        {
-                            SelectionForeColor = ColorDialog.Color,
-                            BackColor = ColorDialog.Color,
-                            SelectionBackColor = ColorDialog.Color
+                BackColor = ColorDialog.Color,
+                SelectionBackColor = ColorDialog.Color,
+                SelectionForeColor = ColorDialog.Color
+            };
 
-                        };
-
-                    if (SelectedEntry.DisplayListColors.Count() - 1 < e.RowIndex)
-                    {
-                        SelectedEntry.DisplayListColors.Add(new ColorEntry("", ColorDialog.Color));
-                        ColorsDataGridView.Rows[e.RowIndex].Cells[0].Value = "";
-                    }
-                    else
-                    {
-                        SelectedEntry.DisplayListColors[e.RowIndex].Color = ColorDialog.Color;
-                    }
-                }
+            if (SelectedEntry.DisplayListColors.Count - 1 < e.RowIndex)
+            {
+                SelectedEntry.DisplayListColors.Add(new ColorEntry("", ColorDialog.Color));
+                ColorsDataGridView.Rows[e.RowIndex].Cells[0].Value = "";
+            }
+            else
+            {
+                SelectedEntry.DisplayListColors[e.RowIndex].Color = ColorDialog.Color;
             }
         }
 
         private void ColorsDataGridView_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
         {
-            if (e.ColumnIndex == 0)
-            {
-                if (SelectedEntry.DisplayListColors.Count() - 1 < e.RowIndex)
-                {
-                    Color White = System.Drawing.Color.FromArgb(0, 0, 0, 0);
-                    SelectedEntry.DisplayListColors.Add(new ColorEntry(e.Value.ToString(), White));
-
-                    try
-                    {
-                        SelectedEntry.ParseColorEntries();
-                    }
-                    catch
-                    {
-                        SelectedEntry.DisplayListColors[e.RowIndex].Limbs = "";
-                        e.Value = "";
-                    }
-
-                    ColorsDataGridView.Rows[e.RowIndex].Cells[1].Style =
-                        new DataGridViewCellStyle()
-                        {
-                            SelectionForeColor = White,
-                            BackColor = White,
-                            SelectionBackColor = White
-
-                        };
-                }
-                else
-                {
-                    SelectedEntry.DisplayListColors[e.RowIndex].Limbs = e.Value.ToString();
-
-                    try
-                    {
-                        SelectedEntry.ParseColorEntries();
-                    }
-                    catch
-                    {
-                        SelectedEntry.DisplayListColors[e.RowIndex].Limbs = "";
-                        e.Value = "";
-                    }
-                }
-
-                e.ParsingApplied = true;
+            if (e.ColumnIndex != 0)
                 return;
+
+            var colors = SelectedEntry.DisplayListColors;
+
+            if (colors.Count - 1 < e.RowIndex)
+            {
+                Color white = Color.FromArgb(0, 0, 0, 0);
+                colors.Add(new ColorEntry(e.Value.ToString(), white));
+                ColorsDataGridView.Rows[e.RowIndex].Cells[1].Style = new DataGridViewCellStyle()
+                {
+                    BackColor = white,
+                    SelectionBackColor = white,
+                    SelectionForeColor = white
+                };
             }
+            else
+            {
+                colors[e.RowIndex].Limbs = e.Value.ToString();
+            }
+
+            try
+            {
+                SelectedEntry.ParseColorEntries();
+            }
+            catch
+            {
+                colors[e.RowIndex].Limbs = "";
+                e.Value = "";
+            }
+
+            e.ParsingApplied = true;
         }
 
 

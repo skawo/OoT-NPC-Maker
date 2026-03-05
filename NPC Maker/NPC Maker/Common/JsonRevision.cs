@@ -50,19 +50,32 @@ namespace NPC_Maker
 
             return 3;
         }
-
         private static void ProcessTextLinesForVersion4Plus(ref NPCFile npcFile)
         {
             foreach (var entry in npcFile.Entries)
             {
                 foreach (var script in entry.Scripts)
-                    script.Text = string.Join(Environment.NewLine, script.TextLines.Select(x => x.TrimEnd()));
+                    script.Text = JoinTrimmed(script.TextLines);
 
                 entry.EmbeddedOverlayCode.Code = string.Join(Environment.NewLine, entry.EmbeddedOverlayCode.CodeLines);
             }
 
             foreach (var globalHeader in npcFile.GlobalHeaders)
-                globalHeader.Text = string.Join(Environment.NewLine, globalHeader.TextLines.Select(x => x.TrimEnd()));
+                globalHeader.Text = JoinTrimmed(globalHeader.TextLines);
+        }
+
+        private static string JoinTrimmed(IList<string> lines)
+        {
+            if (lines == null || lines.Count == 0)
+                return string.Empty;
+
+            var sb = new StringBuilder();
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (i > 0) sb.Append(Environment.NewLine);
+                sb.Append(lines[i].TrimEnd());
+            }
+            return sb.ToString();
         }
 
         private static void ProcessMessageLinesForVersion5Plus(ref NPCFile npcFile)

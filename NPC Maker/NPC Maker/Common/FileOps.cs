@@ -79,19 +79,14 @@ namespace NPC_Maker
             try
             {
                 string jsonText = File.ReadAllText(fileName);
-                var jsonObject = JObject.Parse(jsonText);
-                var version = jsonObject.SelectToken("Version");
-
                 NPCFile npcFile = JsonConvert.DeserializeObject<NPCFile>(jsonText);
-                int currentVersion = version?.Value<int>() ?? 1;
+                int currentVersion = npcFile.Version > 0 ? npcFile.Version : 1;
 
-                // Apply version migrations in sequence
-                currentVersion = MigrateToVersion2(ref npcFile, jsonObject, currentVersion);
+                currentVersion = MigrateToVersion2(ref npcFile, currentVersion > 1 ? null : JObject.Parse(jsonText), currentVersion);
                 currentVersion = MigrateToVersion3(ref npcFile, currentVersion);
 
                 if (currentVersion > 3)
                     ProcessTextLinesForVersion4Plus(ref npcFile);
-
                 if (currentVersion > 4)
                     ProcessMessageLinesForVersion5Plus(ref npcFile);
 
@@ -103,7 +98,6 @@ namespace NPC_Maker
 
                 NormalizeLineBreaks(ref npcFile);
                 ResolveHeaderDefines(ref npcFile);
-
                 npcFile.Version = 7;
                 return npcFile;
             }
