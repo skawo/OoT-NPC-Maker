@@ -339,6 +339,8 @@ namespace NPC_Maker
             this.FileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_New = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
+            this.openRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearThisListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_Save = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_SaveBinary = new System.Windows.Forms.ToolStripMenuItem();
@@ -376,6 +378,7 @@ namespace NPC_Maker
             this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -4460,6 +4463,7 @@ namespace NPC_Maker
             this.FileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenu_New,
             this.FileMenu_Open,
+            this.openRecentToolStripMenuItem,
             this.FileMenu_Save,
             this.FileMenu_SaveAs,
             this.FileMenu_SaveBinary,
@@ -4472,42 +4476,59 @@ namespace NPC_Maker
             // FileMenu_New
             // 
             this.FileMenu_New.Name = "FileMenu_New";
-            this.FileMenu_New.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_New.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_New.Text = "New";
             this.FileMenu_New.Click += new System.EventHandler(this.FileMenu_New_Click);
             // 
             // FileMenu_Open
             // 
             this.FileMenu_Open.Name = "FileMenu_Open";
-            this.FileMenu_Open.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_Open.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_Open.Text = "Open...";
             this.FileMenu_Open.Click += new System.EventHandler(this.FileMenu_Open_Click);
+            // 
+            // openRecentToolStripMenuItem
+            // 
+            this.openRecentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator1,
+            this.clearThisListToolStripMenuItem});
+            this.openRecentToolStripMenuItem.Name = "openRecentToolStripMenuItem";
+            this.openRecentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openRecentToolStripMenuItem.Text = "Open recent...";
+            // 
+            // clearThisListToolStripMenuItem
+            // 
+            this.clearThisListToolStripMenuItem.Name = "clearThisListToolStripMenuItem";
+            this.clearThisListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearThisListToolStripMenuItem.Tag = "CLEAR";
+            this.clearThisListToolStripMenuItem.Text = "Clear this list";
+            this.clearThisListToolStripMenuItem.Click += new System.EventHandler(this.clearThisListToolStripMenuItem_Click);
             // 
             // FileMenu_Save
             // 
             this.FileMenu_Save.Name = "FileMenu_Save";
-            this.FileMenu_Save.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_Save.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_Save.Text = "Save...";
             this.FileMenu_Save.Click += new System.EventHandler(this.FileMenu_Save_Click);
             // 
             // FileMenu_SaveAs
             // 
             this.FileMenu_SaveAs.Name = "FileMenu_SaveAs";
-            this.FileMenu_SaveAs.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_SaveAs.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_SaveAs.Text = "Save as...";
             this.FileMenu_SaveAs.Click += new System.EventHandler(this.FileMenu_SaveAs_Click);
             // 
             // FileMenu_SaveBinary
             // 
             this.FileMenu_SaveBinary.Name = "FileMenu_SaveBinary";
-            this.FileMenu_SaveBinary.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_SaveBinary.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_SaveBinary.Text = "Save binary...";
             this.FileMenu_SaveBinary.Click += new System.EventHandler(this.FileMenu_SaveBinary_Click);
             // 
             // FileMenu_Exit
             // 
             this.FileMenu_Exit.Name = "FileMenu_Exit";
-            this.FileMenu_Exit.Size = new System.Drawing.Size(143, 22);
+            this.FileMenu_Exit.Size = new System.Drawing.Size(180, 22);
             this.FileMenu_Exit.Text = "Exit";
             this.FileMenu_Exit.Click += new System.EventHandler(this.FileMenu_Exit_Click);
             // 
@@ -4782,6 +4803,11 @@ namespace NPC_Maker
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // MainWindow
             // 
@@ -5264,6 +5290,9 @@ namespace NPC_Maker
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_Speed;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col_OBJ;
         private System.Windows.Forms.ToolStripMenuItem exportCurrentActorMessagesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openRecentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearThisListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 

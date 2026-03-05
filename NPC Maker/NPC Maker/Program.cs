@@ -48,6 +48,8 @@ namespace NPC_Maker
         public static Stopwatch _stopWatch;
         public static readonly Random _random = new Random();
 
+        public static List<string> Monofonts = null;
+
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
 
@@ -68,20 +70,26 @@ namespace NPC_Maker
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            if (!hasArgs)
+                TaskEx.Run(() => GetMonospacedFonts());
+
             InitializePaths();
             EnsureDirectoriesExist();
             LoadSettings();
 
-            // Create this in memory, so it gets cached.
-            TaskEx.Run(() => new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]));
-
-            try 
-            { 
-                DropDownMenuScrollWheelHandler.Enable(true); 
-            } catch { }
-
             if (!hasArgs)
+            {
+                // Create this in memory, so it gets cached.
+                TaskEx.Run(() => new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]));
+
+                try
+                {
+                    DropDownMenuScrollWheelHandler.Enable(true);
+                }
+                catch { }
+
                 RunGUI();
+            }
             else
                 RunCLI(args);
         }
@@ -112,6 +120,27 @@ namespace NPC_Maker
 
             ConsoleWriteLineS();
             ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v{version}");
+        }
+
+        private static void GetMonospacedFonts()
+        {
+            InstalledFontCollection fontsCollection = new InstalledFontCollection();
+            var fonts = fontsCollection.Families;
+            List<string> fnts = new List<string>();
+
+            using (var bmp = new Bitmap(1, 1))
+            {
+                using (var g = Graphics.FromImage(bmp))
+                {
+                    foreach (FontFamily fontFamily in fonts)
+                    {
+                        if (fontFamily.IsMonospaced(g))
+                            fnts.Add(fontFamily.Name);
+                    }
+                }
+            }
+
+            Monofonts = fnts;
         }
 
         private static void InitializePaths()

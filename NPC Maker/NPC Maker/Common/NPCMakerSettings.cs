@@ -74,6 +74,8 @@ namespace NPC_Maker
 
         public Lists.Linker Linker { get; set; }
 
+        public List<string> LastPaths { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -108,6 +110,7 @@ namespace NPC_Maker
             AllowCommentsOnLoc = true;
             GUIScale = 1.0f;
             Linker = Lists.Linker.MipsLD;
+            LastPaths = new List<string>();
             IncludePaths = "{PROGRAMPATH}/include;{PROGRAMPATH}/include/z64hdr/{GAMEVERSION};{PROGRAMPATH}/include/z64hdr/include;{PROGRAMPATH}/include/z64hdr/common";
         }
 

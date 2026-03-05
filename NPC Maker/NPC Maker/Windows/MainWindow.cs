@@ -63,6 +63,9 @@ namespace NPC_Maker
         {
             InitializeComponent();
 
+            this.SuspendLayout();
+            TabControl_Segments.SuspendLayout();
+
             foreach (TabPage Page in TabControl_Segments.TabPages)
             {
                 SegmentDataGrid sg = new SegmentDataGrid();
@@ -73,6 +76,10 @@ namespace NPC_Maker
 
                 Page.Controls.Add(sg);
             }
+
+            TabControl_Segments.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
             compileTimer.Interval = 50;
             compileTimer.Tick += CompileTimer_Tick;
@@ -112,6 +119,7 @@ namespace NPC_Maker
             CodeParamsTooltip.SetToolTip(Textbox_CodeEditorArgs, "Available constants: $CODEFILE, $CODEHEADER, $CODEFOLDER");
 
             SetupFonts();
+            UpdateLastPathsList();
 
             // ============================================================
 
@@ -149,20 +157,10 @@ namespace NPC_Maker
 
         private void SetupFonts()
         {
-            InstalledFontCollection fontsCollection = new InstalledFontCollection();
-            var fonts = fontsCollection.Families;
+            while (Program.Monofonts == null) ;
 
-            using (var bmp = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(bmp))
-                {
-                    foreach (FontFamily fontFamily in fonts)
-                    {
-                        if (fontFamily.IsMonospaced(g))
-                            comboFont.Items.Add(fontFamily.Name);
-                    }
-                }
-            }
+            foreach (string font in Program.Monofonts)
+                comboFont.Items.Add(font);
 
             comboFont.SelectedIndexChanged -= ComboFont_SelectedChanged;
             numUpDownFont.ValueChanged -= NumUpDownFont_ValueChanged;
@@ -463,8 +461,22 @@ namespace NPC_Maker
         private void OpenFile(string FilePath)
         {
             autoBackupTimer.Stop();
+
+            if (string.IsNullOrWhiteSpace(FilePath))
+                return;
+
             EditedFile = FileOps.ParseNPCJsonFile(FilePath);
             NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
+
+            if (Program.Settings.LastPaths.Contains(FilePath))
+                Program.Settings.LastPaths.Remove(FilePath);
+
+            Program.Settings.LastPaths.Insert(0, FilePath);
+
+            if (Program.Settings.LastPaths.Count > 10)
+                Program.Settings.LastPaths.RemoveAt(10);
+
+            UpdateLastPathsList();
 
             if (EditedFile != null)
             {
@@ -482,6 +494,43 @@ namespace NPC_Maker
                 Program.Settings.GameVersion = EditedFile.GameVersion;
                 autoBackupTimer.Start();
             }
+        }
+
+        private void OpenLastFile(string FilePath)
+        {
+            if (string.IsNullOrWhiteSpace(FilePath) || !File.Exists(FilePath))
+            {
+                DialogResult Res = BigMessageBox.Show("File no longer exists. Remove from list?", "File not found.", MessageBoxButtons.YesNo);
+
+                if (Res == DialogResult.Yes)
+                {
+                    Program.Settings.LastPaths.Remove(FilePath);
+                    UpdateLastPathsList();
+                }
+            }
+            else
+                OpenFile(FilePath);
+        }
+
+        private void UpdateLastPathsList()
+        {
+            while (openRecentToolStripMenuItem.DropDownItems.Count > 2)
+                openRecentToolStripMenuItem.DropDownItems.RemoveAt(0);
+
+            var recentItems = Program.Settings.LastPaths
+                .Select(path => new ToolStripMenuItem(Helpers.TruncatePath(path)) { Tag = path })
+                .ToList();
+
+            recentItems.ForEach(item => item.Click += (s, e) => OpenLastFile((string)item.Tag));
+
+            for (int i = 0; i < recentItems.Count; i++)
+                openRecentToolStripMenuItem.DropDownItems.Insert(i, recentItems[i]);
+        }
+
+        private void clearThisListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Program.Settings.LastPaths = new List<string>();
+            UpdateLastPathsList();
         }
 
         private void AutoBackupTimer_Tick(object sender, EventArgs e)
@@ -2507,7 +2556,7 @@ namespace NPC_Maker
         private void Button_EnvironmentColorPreview_Click(object sender, EventArgs e)
         {
             ColorDialog.Color = SelectedEntry.EnvironmentColor;
-            
+
             if (ColorDialog.ShowDialog() == DialogResult.OK)
             {
                 Button_EnvironmentColorPreview.BackColor = ColorDialog.Color;
@@ -4324,11 +4373,11 @@ namespace NPC_Maker
 
             RequestPreviewUpdate();
             PerformSpellCheck();
-            
+
         }
 
         private void MsgTextCJK_TextChanged(object sender, FastColoredTextBoxCJK.TextChangedEventArgs e)
-        { 
+        {
             if (!MsgTextCJK.Visible)
                 return;
 
@@ -4526,9 +4575,9 @@ namespace NPC_Maker
         }
 
         private MessageEntry GetCurLocMsgEntry()
-        { 
-            return Combo_Language.SelectedIndex == 0 ? 
-                SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index] : 
+        {
+            return Combo_Language.SelectedIndex == 0 ?
+                SelectedEntry.Messages[MessagesGrid.SelectedRows[0].Index] :
                 SelectedEntry.Localization[Combo_Language.SelectedIndex - 1].Messages[MessagesGrid.SelectedRows[0].Index];
         }
 
@@ -4546,7 +4595,7 @@ namespace NPC_Maker
         private void Combo_MsgPos_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (MessagesGrid.SelectedRows.Count == 0)
-                return; 
+                return;
 
             MessageEntry Entry = GetCurLocMsgEntry();
             Entry.Position = Combo_MsgPos.SelectedIndex;
@@ -5256,7 +5305,7 @@ namespace NPC_Maker
             List<byte> msgData = new List<byte>();
 
             UInt16 id = 0;
-            int locOffset = 65532 / (EditedFile.Languages.Count + 1); 
+            int locOffset = 65532 / (EditedFile.Languages.Count + 1);
 
             try
             {

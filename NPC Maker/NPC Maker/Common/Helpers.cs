@@ -136,6 +136,19 @@ namespace NPC_Maker
             }
         }
 
+        public static string TruncatePath(string path, int maxLength = 60)
+        {
+            if (path.Length <= maxLength) return path;
+
+            string fileName = Path.GetFileName(path);
+            string ellipsis = "...";
+            int keepLength = maxLength - fileName.Length - ellipsis.Length;
+
+            if (keepLength <= 0) return ellipsis + fileName;
+
+            return path.Substring(0, keepLength) + ellipsis + fileName;
+        }
+
         public static UInt32 HexConvertToUInt32(string value)
         {
             if (value.IsHex())
