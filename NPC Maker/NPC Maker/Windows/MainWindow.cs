@@ -4817,7 +4817,7 @@ namespace NPC_Maker
 
             this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
             {
-                TextBox_CompileMsg.Text = CompileMsgs;
+                TextBox_CompileMsg.Text = Regex.Replace(CompileMsgs, @"\x1B\[[^@-~]*[@-~]", "");
             });
 
             foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)

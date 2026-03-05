@@ -141,7 +141,7 @@ namespace NPC_Maker
                 output.AppendLine(standardError.Replace("\n", Environment.NewLine));
 
             string result = output.ToString();
-            return Regex.Replace(result, @"\x1B\[[^@-~]*[@-~]", "");
+            return result;
         }
 
         public static void Clean(string[] Files)
