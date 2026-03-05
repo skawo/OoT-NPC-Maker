@@ -390,7 +390,9 @@ namespace NPC_Maker
 
             try
             {
-                codeEntry.HeaderPaths.Clear();
+                if (codeEntry != null)
+                    codeEntry.HeaderPaths.Clear();
+
                 Clean(new[] { paths.ObjectFile, paths.ElfFile, paths.OvlFile });
 
                 if (!RunGccCompilation(config, paths, ref compileMsgs))
