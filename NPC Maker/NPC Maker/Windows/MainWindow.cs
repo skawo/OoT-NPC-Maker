@@ -59,6 +59,8 @@ namespace NPC_Maker
 
         private float lastScale = 0.0f;
 
+        private NativeColorDialog ColorDialog = new NativeColorDialog();
+
         public MainWindow(string FilePath = "")
         {
             InitializeComponent();
@@ -1114,7 +1116,7 @@ namespace NPC_Maker
             if (SaveChangesAsPrompt() == false)
                 return;
 
-            OpenFileDialog OFD = new OpenFileDialog()
+            NativeOpenFileDialog OFD = new NativeOpenFileDialog()
             {
                 InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
                 RestoreDirectory = true,
@@ -1146,7 +1148,7 @@ namespace NPC_Maker
             if (EditedFile == null)
                 return;
 
-            SaveFileDialog SFD = new SaveFileDialog
+            NativeSaveFileDialog SFD = new NativeSaveFileDialog
             {
                 InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
                 RestoreDirectory = true,
@@ -1184,7 +1186,7 @@ namespace NPC_Maker
             if (EditedFile == null)
                 return;
 
-            SaveFileDialog SFD = new SaveFileDialog
+            NativeSaveFileDialog SFD = new NativeSaveFileDialog
             {
                 InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
                 RestoreDirectory = true,
@@ -1251,7 +1253,7 @@ namespace NPC_Maker
             if (EditedFile == null || Program.CompileInProgress)
                 return;
 
-            SaveFileDialog SFD = new SaveFileDialog
+            NativeSaveFileDialog SFD = new NativeSaveFileDialog
             {
                 InitialDirectory = Path.GetDirectoryName(Program.Settings.LastSaveBinaryPath),
                 RestoreDirectory = true,
@@ -1669,7 +1671,7 @@ namespace NPC_Maker
 
         private void CompileActorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog of = new OpenFileDialog();
+            NativeOpenFileDialog of = new NativeOpenFileDialog();
             of.Title = "Select the source file...";
             of.Filter = "C Files (*.c)|*.c|All files (*.*)|*.*";
 
@@ -1685,7 +1687,7 @@ namespace NPC_Maker
                     Windows.LongInputBox flg = new Windows.LongInputBox("Compile flags", "Add compile flags:", "");
                     flg.ShowDialog();
 
-                    SaveFileDialog sf = new SaveFileDialog
+                    NativeSaveFileDialog sf = new NativeSaveFileDialog
                     {
                         Title = "Select output ZOVL...",
                         Filter = "ZOVL files (*.zovl)|*.zovl|All files (*.*)|*.*"
@@ -1836,7 +1838,7 @@ namespace NPC_Maker
                         report.AppendLine(item);
                     }
 
-                    SaveFileDialog sf = new SaveFileDialog { FileName = "report.txt" };
+                    NativeSaveFileDialog sf = new NativeSaveFileDialog { FileName = "report.txt" };
 
                     if (sf.ShowDialog() == DialogResult.OK)
                     {
@@ -1857,7 +1859,7 @@ namespace NPC_Maker
             if (EditedFile != null)
             {
 
-                OpenFileDialog OFD = new OpenFileDialog()
+                NativeOpenFileDialog OFD = new NativeOpenFileDialog()
                 {
                     InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
                     RestoreDirectory = true,
@@ -2121,7 +2123,7 @@ namespace NPC_Maker
         {
             if (SelectedEntry != null)
             {
-                SaveFileDialog SFD = new SaveFileDialog
+                NativeSaveFileDialog SFD = new NativeSaveFileDialog
                 {
                     InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
                     RestoreDirectory = true,
@@ -2146,7 +2148,7 @@ namespace NPC_Maker
         {
             if (SelectedEntry != null)
             {
-                OpenFileDialog OFD = new OpenFileDialog()
+                NativeOpenFileDialog OFD = new NativeOpenFileDialog()
                 {
                     InitialDirectory = Path.GetDirectoryName(Program.Settings.LastOpenPath),
                     RestoreDirectory = true,
@@ -4172,7 +4174,7 @@ namespace NPC_Maker
         {
             Bitmap original = GetMessagePreviewImage(entry, Language, ref lastPreviewData);
 
-            SaveFileDialog sfd = new SaveFileDialog();
+            NativeSaveFileDialog sfd = new NativeSaveFileDialog();
             sfd.Filter =
                 "All Supported Images (*.png;*.bmp;*.jpg;*.jpeg)|*.png;*.bmp;*.jpg;*.jpeg|" +
                 "PNG Files (*.png)|*.png|" +
@@ -4638,10 +4640,15 @@ namespace NPC_Maker
 
         private void MessageSearchTimer_Tick(object sender, EventArgs e)
         {
-            messageSearchTimer.Stop();
-            MessagesGrid.CurrentCell = MessagesGrid.Rows[ScrollToMsg].Cells[0];
-            MessagesGrid.FirstDisplayedScrollingRowIndex = ScrollToMsg;
-            btn_FindMsg.Enabled = true;
+            try
+            {
+                messageSearchTimer.Stop();
+                MessagesGrid.CurrentCell = MessagesGrid.Rows[ScrollToMsg].Cells[0];
+                MessagesGrid.FirstDisplayedScrollingRowIndex = ScrollToMsg;
+                btn_FindMsg.Enabled = true;
+            }
+            catch
+            { }
         }
 
         private void TxBox_Search_KeyDown(object sender, KeyEventArgs e)
@@ -4964,7 +4971,7 @@ namespace NPC_Maker
 
         private void Button_FindCodeEditor_Click(object sender, EventArgs e)
         {
-            OpenFileDialog oF = new OpenFileDialog();
+            NativeOpenFileDialog oF = new NativeOpenFileDialog();
             var Res = oF.ShowDialog();
 
             if (Res == DialogResult.OK)

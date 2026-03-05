@@ -661,8 +661,8 @@ namespace NPC_Maker
 
         public static string ReplaceGameVersionInclude(string Code)
         {
-            Code = Code.Replace("#include <z64hdr/oot_u10/z64hdr.h>", $"#include <z64hdr/{Program.Settings.GameVersion}/z64hdr.h>");
-            Code = Code.Replace("#include <z64hdr/oot_mq_debug/z64hdr.h>", $"#include <z64hdr/{Program.Settings.GameVersion}/z64hdr.h>");
+            Code = Code.Replace("#include <z64hdr/oot_u10/z64hdr.h>", $"#include <z64hdr/{Lists.GameVersionStrings[Lists.Library.z64hdr][(int)Program.Settings.GameVersion]}/z64hdr.h>");
+            Code = Code.Replace("#include <z64hdr/oot_mq_debug/z64hdr.h>", $"#include <z64hdr/{Lists.GameVersionStrings[Lists.Library.z64hdr][(int)Program.Settings.GameVersion]}/z64hdr.h>");
             return Code;
         }
 
@@ -761,6 +761,9 @@ namespace NPC_Maker
                     Directory.CreateDirectory(vscodeFolder);
 
                     string cprops = Properties.Resources.c_cpp_properties;
+
+                    if (Program.Settings.Library == Lists.Library.zocarina)
+                        cprops = cprops.Replace("z64hdr", "zocarina");
 
                     if (!string.IsNullOrEmpty(Program.Settings.ProjectPath))
                     {

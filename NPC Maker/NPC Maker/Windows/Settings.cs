@@ -28,15 +28,15 @@ namespace NPC_Maker.Windows
             string JSON = JsonConvert.SerializeObject(Program.Settings);
             EditedSettings = JsonConvert.DeserializeObject<NPCMakerSettings>(JSON);
 
-            foreach (var v in Enum.GetNames(typeof(Lists.GameVersions)))
-                Combo_CompileFor.Items.Add(v.ToString());
+            Combo_CompileFor.Items.AddRange(Enum.GetNames(typeof(Lists.GameVersions)));
+            Combo_Library.Items.AddRange(Enum.GetNames(typeof(Lists.Library)));
+            Combo_Linker.Items.AddRange(Enum.GetNames(typeof(Lists.Linker)));
 
             Cb_CheckSyntax.Checked = EditedSettings.CheckSyntax;
             Cb_ColorizeScripts.Checked = EditedSettings.ColorizeScriptSyntax;
             Cb_ImproveTextReadability.Checked = EditedSettings.ImproveTextMsgReadability;
             Cb_Verbose.Checked = EditedSettings.Verbose;
             Txt_GCCArgs.Text = EditedSettings.GCCFlags;
-            Combo_CompileFor.Text = EditedSettings.GameVersion.ToString();
             Cb_AutoCompile.Checked = EditedSettings.AutoComp_ActorSwitch;
             NumUpCompileTimeout.Value = EditedSettings.CompileTimeout;
             NumUpParseTime.Value = EditedSettings.ParseTime;
@@ -49,9 +49,9 @@ namespace NPC_Maker.Windows
             Chk_AllowCommentsOnLoc.Checked = EditedSettings.AllowCommentsOnLoc;
             guiScale.Value = (decimal)EditedSettings.GUIScale;
 
-            Combo_Linker.Items.Clear();
-            Combo_Linker.Items.AddRange(Enum.GetNames(typeof(Lists.Linker)));
-            Combo_Linker.Text = EditedSettings.Linker.ToString();
+            Combo_Linker.SelectedIndex = (int)EditedSettings.Linker;
+            Combo_Library.SelectedIndex = (int)EditedSettings.Library;
+            Combo_CompileFor.SelectedIndex = (int)EditedSettings.GameVersion;
 
             EditedFile = _EditedFile;
         }
@@ -160,7 +160,7 @@ namespace NPC_Maker.Windows
 
         private void Btn_Browse_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fB = new FolderBrowserDialog();
+            NativeFolderBrowserDialog fB = new NativeFolderBrowserDialog();
 
             if (fB.ShowDialog() == DialogResult.OK)
                 Txt_ProjectPath.Text = fB.SelectedPath;
@@ -186,7 +186,7 @@ namespace NPC_Maker.Windows
 
         private void Btn_IncludePaths_Click(object sender, EventArgs e)
         {
-            LongInputBox liB = new LongInputBox("C include directories", "Add include directories:", Program.Settings.IncludePaths, true, "", true);
+            LongInputBox liB = new LongInputBox("C include directories", "Add include directories:", Program.Settings.IncludePaths, true, "", true, Lists.DefaultIncludePaths[EditedSettings.Library]);
 
             if (liB.ShowDialog() == DialogResult.OK)
                 EditedSettings.IncludePaths = liB.inputText;

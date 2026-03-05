@@ -35,6 +35,7 @@ namespace NPC_Maker.Windows
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.textBox1 = new NPC_Maker.FCTB_Mono(this.components);
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.textBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -96,11 +97,13 @@ namespace NPC_Maker.Windows
             this.textBox1.CharWidth = 8;
             this.textBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.textBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.textBox1.IsReplaceMode = false;
             this.textBox1.Location = new System.Drawing.Point(12, 25);
             this.textBox1.Name = "textBox1";
             this.textBox1.Paddings = new System.Windows.Forms.Padding(0);
             this.textBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.textBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("textBox1.ServiceColors")));
             this.textBox1.ShowLineNumbers = false;
             this.textBox1.Size = new System.Drawing.Size(326, 294);
             this.textBox1.TabIndex = 3;
@@ -109,11 +112,23 @@ namespace NPC_Maker.Windows
             this.textBox1.Zoom = 100;
             this.textBox1.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.textBox1_TextChanged);
             // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.Location = new System.Drawing.Point(12, 325);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 5;
+            this.button3.Text = "Reset";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // LongInputBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(350, 358);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
@@ -134,5 +149,6 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.Button button1;
         private FCTB_Mono textBox1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }

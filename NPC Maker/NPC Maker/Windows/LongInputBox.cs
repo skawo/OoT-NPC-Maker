@@ -15,8 +15,8 @@ namespace NPC_Maker.Windows
         public string inputText;
         private string bFilter;
         private bool folderExpl;
-
-        public LongInputBox(string title, string command, string text, bool BrowseButton = false, string browseFilter = "", bool folderExplorer = false)
+        private string resetStr;
+        public LongInputBox(string title, string command, string text, bool BrowseButton = false, string browseFilter = "", bool folderExplorer = false, string resetString = "")
         {
             InitializeComponent();
             Helpers.AdjustFormScale(this);
@@ -25,12 +25,16 @@ namespace NPC_Maker.Windows
             this.Text = title;
             textBox1.Text = text;
             label1.Text = command;
+            resetStr = resetString;
 
             bFilter = browseFilter;
             folderExpl = folderExplorer;
 
             if (!BrowseButton)
                 button2.Visible = false;
+
+            if (String.IsNullOrEmpty(resetStr))
+                button3.Visible = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -51,7 +55,7 @@ namespace NPC_Maker.Windows
         {
             if (folderExpl)
             {
-                FolderBrowserDialog fd = new FolderBrowserDialog();
+                NativeFolderBrowserDialog fd = new NativeFolderBrowserDialog();
 
                 if (fd.ShowDialog() == DialogResult.OK)
                 {
@@ -63,7 +67,7 @@ namespace NPC_Maker.Windows
             }
             else
             {
-                OpenFileDialog of = new OpenFileDialog();
+                NativeOpenFileDialog of = new NativeOpenFileDialog();
                 of.Filter = bFilter;
 
                 if (of.ShowDialog() == DialogResult.OK)
@@ -75,6 +79,11 @@ namespace NPC_Maker.Windows
                 }
             }
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = resetStr;
         }
     }
 }

@@ -67,6 +67,12 @@ namespace NPC_Maker
         public static string ProgramPathToken = "{PROGRAMPATH}";
         public static string GameVersionPathToken = "{GAMEVERSION}";
 
+        public static Dictionary<Library, string> DefaultIncludePaths = new Dictionary<Library, string>()
+        {
+            { Library.z64hdr, "{PROGRAMPATH}/include;{PROGRAMPATH}/include/z64hdr/{GAMEVERSION};{PROGRAMPATH}/include/z64hdr/include;{PROGRAMPATH}/include/z64hdr/common" },
+            { Library.zocarina, "{PROGRAMPATH}/include;{PROGRAMPATH}/include/zocarina/version/{GAMEVERSION};{PROGRAMPATH}/include/zocarina/include" }
+        };
+
         public const int Num_User_Vars = 255;
 
         public enum Linker
@@ -74,6 +80,23 @@ namespace NPC_Maker
             MipsLD = 0,
             zlinker = 1,
         }
+
+        public enum Library
+        {
+            z64hdr = 0,
+            zocarina = 1,
+        }
+        public enum GameVersions
+        {
+            Debug,
+            NTSC1_0,
+        }
+
+        public static Dictionary<Library, string[]> GameVersionStrings = new Dictionary<Library, string[]>()
+        {
+            {Library.z64hdr, new string[] { "oot_mq_debug", "oot_u10" } },
+            {Library.zocarina, new string[] { "gc-eu-mq-dbg", "ntsc-1.0" } }
+        };
 
         public static List<string> AllKeywords = new List<string>()
         {
@@ -222,12 +245,6 @@ namespace NPC_Maker
             VarTypes.VAR.ToString(),
             VarTypes.VARF.ToString(),
         };
-
-        public enum GameVersions
-        {
-            oot_mq_debug,
-            oot_u10,
-        }
 
         public enum VarTypes
         {

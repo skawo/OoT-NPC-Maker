@@ -30,10 +30,6 @@ namespace NPC_Maker.Windows
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
-            this.Cb_ImproveTextReadability = new NPC_Maker.Controls.BigCheckBox();
-            this.Cb_ColorizeScripts = new NPC_Maker.Controls.BigCheckBox();
-            this.Cb_CheckSyntax = new NPC_Maker.Controls.BigCheckBox();
-            this.Cb_Verbose = new NPC_Maker.Controls.BigCheckBox();
             this.Combo_CompileFor = new System.Windows.Forms.ComboBox();
             this.Lbl_CompileFor = new System.Windows.Forms.Label();
             this.Txt_GCCArgs = new System.Windows.Forms.TextBox();
@@ -42,78 +38,36 @@ namespace NPC_Maker.Windows
             this.Label_CompileTimeout = new System.Windows.Forms.Label();
             this.NumUpCompileTimeout = new System.Windows.Forms.NumericUpDown();
             this.NumUpParseTime = new System.Windows.Forms.NumericUpDown();
-            this.AutoSaveC = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_AutoSaveCTime = new System.Windows.Forms.NumericUpDown();
-            this.Cb_AutoCompile = new NPC_Maker.Controls.BigCheckBox();
             this.Btn_ResetCache = new System.Windows.Forms.Button();
-            this.checkBox_CompileInParallel = new NPC_Maker.Controls.BigCheckBox();
-            this.chkBox_Spellcheck = new NPC_Maker.Controls.BigCheckBox();
-            this.chkBox_Compress = new NPC_Maker.Controls.BigCheckBox();
             this.Lbl_ProjectPath = new System.Windows.Forms.Label();
             this.Txt_ProjectPath = new System.Windows.Forms.TextBox();
             this.Btn_Browse = new System.Windows.Forms.Button();
             this.Btn_LinkerFiles = new System.Windows.Forms.Button();
             this.Lbl_LinkerFiles = new System.Windows.Forms.Label();
-            this.Chk_AllowCommentsOnLoc = new NPC_Maker.Controls.BigCheckBox();
             this.guiScale = new System.Windows.Forms.NumericUpDown();
             this.guiScaleLabel = new System.Windows.Forms.Label();
             this.Btn_CIncludePaths = new System.Windows.Forms.Button();
             this.Lbl_IncludePaths = new System.Windows.Forms.Label();
             this.Combo_Linker = new System.Windows.Forms.ComboBox();
             this.Lbl_Linker = new System.Windows.Forms.Label();
+            this.Combo_Library = new System.Windows.Forms.ComboBox();
+            this.lbl_Library = new System.Windows.Forms.Label();
+            this.Chk_AllowCommentsOnLoc = new NPC_Maker.Controls.BigCheckBox();
+            this.chkBox_Compress = new NPC_Maker.Controls.BigCheckBox();
+            this.chkBox_Spellcheck = new NPC_Maker.Controls.BigCheckBox();
+            this.checkBox_CompileInParallel = new NPC_Maker.Controls.BigCheckBox();
+            this.Cb_AutoCompile = new NPC_Maker.Controls.BigCheckBox();
+            this.AutoSaveC = new NPC_Maker.Controls.BigCheckBox();
+            this.Cb_Verbose = new NPC_Maker.Controls.BigCheckBox();
+            this.Cb_CheckSyntax = new NPC_Maker.Controls.BigCheckBox();
+            this.Cb_ColorizeScripts = new NPC_Maker.Controls.BigCheckBox();
+            this.Cb_ImproveTextReadability = new NPC_Maker.Controls.BigCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AutoSaveCTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.guiScale)).BeginInit();
             this.SuspendLayout();
-            // 
-            // Cb_ImproveTextReadability
-            // 
-            this.Cb_ImproveTextReadability.BoxSize = 18;
-            this.Cb_ImproveTextReadability.Location = new System.Drawing.Point(15, 33);
-            this.Cb_ImproveTextReadability.Name = "Cb_ImproveTextReadability";
-            this.Cb_ImproveTextReadability.Size = new System.Drawing.Size(212, 22);
-            this.Cb_ImproveTextReadability.TabIndex = 0;
-            this.Cb_ImproveTextReadability.Tag = "IMPROVEMSGPRV";
-            this.Cb_ImproveTextReadability.Text = "Improve message preview readability";
-            this.Cb_ImproveTextReadability.UseVisualStyleBackColor = true;
-            this.Cb_ImproveTextReadability.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
-            // 
-            // Cb_ColorizeScripts
-            // 
-            this.Cb_ColorizeScripts.BoxSize = 18;
-            this.Cb_ColorizeScripts.Location = new System.Drawing.Point(15, 56);
-            this.Cb_ColorizeScripts.Name = "Cb_ColorizeScripts";
-            this.Cb_ColorizeScripts.Size = new System.Drawing.Size(133, 22);
-            this.Cb_ColorizeScripts.TabIndex = 1;
-            this.Cb_ColorizeScripts.Tag = "COLORIZESYNTAX";
-            this.Cb_ColorizeScripts.Text = "Colorize script syntax";
-            this.Cb_ColorizeScripts.UseVisualStyleBackColor = true;
-            this.Cb_ColorizeScripts.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
-            // 
-            // Cb_CheckSyntax
-            // 
-            this.Cb_CheckSyntax.BoxSize = 18;
-            this.Cb_CheckSyntax.Location = new System.Drawing.Point(15, 219);
-            this.Cb_CheckSyntax.Name = "Cb_CheckSyntax";
-            this.Cb_CheckSyntax.Size = new System.Drawing.Size(180, 22);
-            this.Cb_CheckSyntax.TabIndex = 2;
-            this.Cb_CheckSyntax.Tag = "CHECKSYNTAX";
-            this.Cb_CheckSyntax.Text = "Check script syntax every (ms)";
-            this.Cb_CheckSyntax.UseVisualStyleBackColor = true;
-            this.Cb_CheckSyntax.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
-            // 
-            // Cb_Verbose
-            // 
-            this.Cb_Verbose.BoxSize = 18;
-            this.Cb_Verbose.Location = new System.Drawing.Point(15, 81);
-            this.Cb_Verbose.Name = "Cb_Verbose";
-            this.Cb_Verbose.Size = new System.Drawing.Size(190, 22);
-            this.Cb_Verbose.TabIndex = 3;
-            this.Cb_Verbose.Tag = "VERBOSECODE";
-            this.Cb_Verbose.Text = "Verbose code compilation output";
-            this.Cb_Verbose.UseVisualStyleBackColor = true;
-            this.Cb_Verbose.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
             // Combo_CompileFor
             // 
@@ -137,7 +91,7 @@ namespace NPC_Maker.Windows
             // 
             // Txt_GCCArgs
             // 
-            this.Txt_GCCArgs.Location = new System.Drawing.Point(13, 419);
+            this.Txt_GCCArgs.Location = new System.Drawing.Point(13, 455);
             this.Txt_GCCArgs.Name = "Txt_GCCArgs";
             this.Txt_GCCArgs.Size = new System.Drawing.Size(450, 20);
             this.Txt_GCCArgs.TabIndex = 6;
@@ -147,7 +101,7 @@ namespace NPC_Maker.Windows
             // Lbl_GCCArgs
             // 
             this.Lbl_GCCArgs.AutoSize = true;
-            this.Lbl_GCCArgs.Location = new System.Drawing.Point(12, 403);
+            this.Lbl_GCCArgs.Location = new System.Drawing.Point(12, 439);
             this.Lbl_GCCArgs.Name = "Lbl_GCCArgs";
             this.Lbl_GCCArgs.Size = new System.Drawing.Size(85, 13);
             this.Lbl_GCCArgs.TabIndex = 7;
@@ -155,7 +109,7 @@ namespace NPC_Maker.Windows
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(343, 509);
+            this.BtnSave.Location = new System.Drawing.Point(343, 545);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(120, 29);
             this.BtnSave.TabIndex = 8;
@@ -220,18 +174,6 @@ namespace NPC_Maker.Windows
             0});
             this.NumUpParseTime.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
             // 
-            // AutoSaveC
-            // 
-            this.AutoSaveC.BoxSize = 18;
-            this.AutoSaveC.Location = new System.Drawing.Point(15, 245);
-            this.AutoSaveC.Name = "AutoSaveC";
-            this.AutoSaveC.Size = new System.Drawing.Size(172, 22);
-            this.AutoSaveC.TabIndex = 14;
-            this.AutoSaveC.Tag = "AUTOSAVE";
-            this.AutoSaveC.Text = "C Code Update Interval (ms):";
-            this.AutoSaveC.UseVisualStyleBackColor = true;
-            this.AutoSaveC.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
-            // 
             // NumUpDown_AutoSaveCTime
             // 
             this.NumUpDown_AutoSaveCTime.Location = new System.Drawing.Point(273, 244);
@@ -256,21 +198,9 @@ namespace NPC_Maker.Windows
             0});
             this.NumUpDown_AutoSaveCTime.ValueChanged += new System.EventHandler(this.NumUpSettingChanged);
             // 
-            // Cb_AutoCompile
-            // 
-            this.Cb_AutoCompile.BoxSize = 18;
-            this.Cb_AutoCompile.Location = new System.Drawing.Point(15, 104);
-            this.Cb_AutoCompile.Name = "Cb_AutoCompile";
-            this.Cb_AutoCompile.Size = new System.Drawing.Size(205, 22);
-            this.Cb_AutoCompile.TabIndex = 16;
-            this.Cb_AutoCompile.Tag = "AUTOSAVESWITCH";
-            this.Cb_AutoCompile.Text = "Auto Compile Code on Actor Switch";
-            this.Cb_AutoCompile.UseVisualStyleBackColor = true;
-            this.Cb_AutoCompile.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
-            // 
             // Btn_ResetCache
             // 
-            this.Btn_ResetCache.Location = new System.Drawing.Point(13, 509);
+            this.Btn_ResetCache.Location = new System.Drawing.Point(13, 545);
             this.Btn_ResetCache.Name = "Btn_ResetCache";
             this.Btn_ResetCache.Size = new System.Drawing.Size(120, 29);
             this.Btn_ResetCache.TabIndex = 17;
@@ -278,46 +208,10 @@ namespace NPC_Maker.Windows
             this.Btn_ResetCache.UseVisualStyleBackColor = true;
             this.Btn_ResetCache.Click += new System.EventHandler(this.ResetCache_Click);
             // 
-            // checkBox_CompileInParallel
-            // 
-            this.checkBox_CompileInParallel.BoxSize = 18;
-            this.checkBox_CompileInParallel.Location = new System.Drawing.Point(15, 127);
-            this.checkBox_CompileInParallel.Name = "checkBox_CompileInParallel";
-            this.checkBox_CompileInParallel.Size = new System.Drawing.Size(152, 22);
-            this.checkBox_CompileInParallel.TabIndex = 18;
-            this.checkBox_CompileInParallel.Tag = "PARALLEL";
-            this.checkBox_CompileInParallel.Text = "Compile binary in parallel";
-            this.checkBox_CompileInParallel.UseVisualStyleBackColor = true;
-            this.checkBox_CompileInParallel.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
-            // 
-            // chkBox_Spellcheck
-            // 
-            this.chkBox_Spellcheck.BoxSize = 18;
-            this.chkBox_Spellcheck.Location = new System.Drawing.Point(15, 173);
-            this.chkBox_Spellcheck.Name = "chkBox_Spellcheck";
-            this.chkBox_Spellcheck.Size = new System.Drawing.Size(80, 22);
-            this.chkBox_Spellcheck.TabIndex = 19;
-            this.chkBox_Spellcheck.Tag = "SPELLCHECK";
-            this.chkBox_Spellcheck.Text = "Spellcheck";
-            this.chkBox_Spellcheck.UseVisualStyleBackColor = true;
-            this.chkBox_Spellcheck.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
-            // 
-            // chkBox_Compress
-            // 
-            this.chkBox_Compress.BoxSize = 18;
-            this.chkBox_Compress.Location = new System.Drawing.Point(15, 150);
-            this.chkBox_Compress.Name = "chkBox_Compress";
-            this.chkBox_Compress.Size = new System.Drawing.Size(136, 22);
-            this.chkBox_Compress.TabIndex = 20;
-            this.chkBox_Compress.Tag = "COMPRESS";
-            this.chkBox_Compress.Text = "Compress individually";
-            this.chkBox_Compress.UseVisualStyleBackColor = true;
-            this.chkBox_Compress.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
-            // 
             // Lbl_ProjectPath
             // 
             this.Lbl_ProjectPath.AutoSize = true;
-            this.Lbl_ProjectPath.Location = new System.Drawing.Point(12, 353);
+            this.Lbl_ProjectPath.Location = new System.Drawing.Point(12, 389);
             this.Lbl_ProjectPath.Name = "Lbl_ProjectPath";
             this.Lbl_ProjectPath.Size = new System.Drawing.Size(67, 13);
             this.Lbl_ProjectPath.TabIndex = 21;
@@ -325,7 +219,7 @@ namespace NPC_Maker.Windows
             // 
             // Txt_ProjectPath
             // 
-            this.Txt_ProjectPath.Location = new System.Drawing.Point(13, 369);
+            this.Txt_ProjectPath.Location = new System.Drawing.Point(13, 405);
             this.Txt_ProjectPath.Name = "Txt_ProjectPath";
             this.Txt_ProjectPath.Size = new System.Drawing.Size(380, 20);
             this.Txt_ProjectPath.TabIndex = 22;
@@ -334,7 +228,7 @@ namespace NPC_Maker.Windows
             // 
             // Btn_Browse
             // 
-            this.Btn_Browse.Location = new System.Drawing.Point(399, 368);
+            this.Btn_Browse.Location = new System.Drawing.Point(399, 404);
             this.Btn_Browse.Name = "Btn_Browse";
             this.Btn_Browse.Size = new System.Drawing.Size(64, 21);
             this.Btn_Browse.TabIndex = 23;
@@ -344,7 +238,7 @@ namespace NPC_Maker.Windows
             // 
             // Btn_LinkerFiles
             // 
-            this.Btn_LinkerFiles.Location = new System.Drawing.Point(399, 445);
+            this.Btn_LinkerFiles.Location = new System.Drawing.Point(399, 481);
             this.Btn_LinkerFiles.Name = "Btn_LinkerFiles";
             this.Btn_LinkerFiles.Size = new System.Drawing.Size(64, 21);
             this.Btn_LinkerFiles.TabIndex = 24;
@@ -355,23 +249,11 @@ namespace NPC_Maker.Windows
             // Lbl_LinkerFiles
             // 
             this.Lbl_LinkerFiles.AutoSize = true;
-            this.Lbl_LinkerFiles.Location = new System.Drawing.Point(309, 449);
+            this.Lbl_LinkerFiles.Location = new System.Drawing.Point(309, 485);
             this.Lbl_LinkerFiles.Name = "Lbl_LinkerFiles";
             this.Lbl_LinkerFiles.Size = new System.Drawing.Size(70, 13);
             this.Lbl_LinkerFiles.TabIndex = 25;
             this.Lbl_LinkerFiles.Text = "C Linker files:";
-            // 
-            // Chk_AllowCommentsOnLoc
-            // 
-            this.Chk_AllowCommentsOnLoc.BoxSize = 18;
-            this.Chk_AllowCommentsOnLoc.Location = new System.Drawing.Point(15, 196);
-            this.Chk_AllowCommentsOnLoc.Name = "Chk_AllowCommentsOnLoc";
-            this.Chk_AllowCommentsOnLoc.Size = new System.Drawing.Size(237, 22);
-            this.Chk_AllowCommentsOnLoc.TabIndex = 26;
-            this.Chk_AllowCommentsOnLoc.Tag = "ALLOWCOMMENTSONLOC";
-            this.Chk_AllowCommentsOnLoc.Text = "Allow comments on localization messages";
-            this.Chk_AllowCommentsOnLoc.UseVisualStyleBackColor = true;
-            this.Chk_AllowCommentsOnLoc.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
             // guiScale
             // 
@@ -414,7 +296,7 @@ namespace NPC_Maker.Windows
             // 
             // Btn_CIncludePaths
             // 
-            this.Btn_CIncludePaths.Location = new System.Drawing.Point(399, 472);
+            this.Btn_CIncludePaths.Location = new System.Drawing.Point(399, 508);
             this.Btn_CIncludePaths.Name = "Btn_CIncludePaths";
             this.Btn_CIncludePaths.Size = new System.Drawing.Size(64, 21);
             this.Btn_CIncludePaths.TabIndex = 29;
@@ -425,7 +307,7 @@ namespace NPC_Maker.Windows
             // Lbl_IncludePaths
             // 
             this.Lbl_IncludePaths.AutoSize = true;
-            this.Lbl_IncludePaths.Location = new System.Drawing.Point(309, 476);
+            this.Lbl_IncludePaths.Location = new System.Drawing.Point(309, 512);
             this.Lbl_IncludePaths.Name = "Lbl_IncludePaths";
             this.Lbl_IncludePaths.Size = new System.Drawing.Size(84, 13);
             this.Lbl_IncludePaths.TabIndex = 30;
@@ -435,9 +317,6 @@ namespace NPC_Maker.Windows
             // 
             this.Combo_Linker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_Linker.FormattingEnabled = true;
-            this.Combo_Linker.Items.AddRange(new object[] {
-            "MIPS-LD + NOVL",
-            "zlinker"});
             this.Combo_Linker.Location = new System.Drawing.Point(273, 323);
             this.Combo_Linker.Name = "Combo_Linker";
             this.Combo_Linker.Size = new System.Drawing.Size(120, 21);
@@ -454,11 +333,153 @@ namespace NPC_Maker.Windows
             this.Lbl_Linker.TabIndex = 32;
             this.Lbl_Linker.Text = "Linker:";
             // 
+            // Combo_Library
+            // 
+            this.Combo_Library.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Combo_Library.FormattingEnabled = true;
+            this.Combo_Library.Location = new System.Drawing.Point(273, 350);
+            this.Combo_Library.Name = "Combo_Library";
+            this.Combo_Library.Size = new System.Drawing.Size(120, 21);
+            this.Combo_Library.TabIndex = 33;
+            this.Combo_Library.Tag = "LIBRARY";
+            this.Combo_Library.SelectedIndexChanged += new System.EventHandler(this.ComboSettingChanged);
+            // 
+            // lbl_Library
+            // 
+            this.lbl_Library.AutoSize = true;
+            this.lbl_Library.Location = new System.Drawing.Point(12, 353);
+            this.lbl_Library.Name = "lbl_Library";
+            this.lbl_Library.Size = new System.Drawing.Size(41, 13);
+            this.lbl_Library.TabIndex = 34;
+            this.lbl_Library.Text = "Library:";
+            // 
+            // Chk_AllowCommentsOnLoc
+            // 
+            this.Chk_AllowCommentsOnLoc.BoxSize = 18;
+            this.Chk_AllowCommentsOnLoc.Location = new System.Drawing.Point(15, 196);
+            this.Chk_AllowCommentsOnLoc.Name = "Chk_AllowCommentsOnLoc";
+            this.Chk_AllowCommentsOnLoc.Size = new System.Drawing.Size(237, 22);
+            this.Chk_AllowCommentsOnLoc.TabIndex = 26;
+            this.Chk_AllowCommentsOnLoc.Tag = "ALLOWCOMMENTSONLOC";
+            this.Chk_AllowCommentsOnLoc.Text = "Allow comments on localization messages";
+            this.Chk_AllowCommentsOnLoc.UseVisualStyleBackColor = true;
+            this.Chk_AllowCommentsOnLoc.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // chkBox_Compress
+            // 
+            this.chkBox_Compress.BoxSize = 18;
+            this.chkBox_Compress.Location = new System.Drawing.Point(15, 150);
+            this.chkBox_Compress.Name = "chkBox_Compress";
+            this.chkBox_Compress.Size = new System.Drawing.Size(136, 22);
+            this.chkBox_Compress.TabIndex = 20;
+            this.chkBox_Compress.Tag = "COMPRESS";
+            this.chkBox_Compress.Text = "Compress individually";
+            this.chkBox_Compress.UseVisualStyleBackColor = true;
+            this.chkBox_Compress.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // chkBox_Spellcheck
+            // 
+            this.chkBox_Spellcheck.BoxSize = 18;
+            this.chkBox_Spellcheck.Location = new System.Drawing.Point(15, 173);
+            this.chkBox_Spellcheck.Name = "chkBox_Spellcheck";
+            this.chkBox_Spellcheck.Size = new System.Drawing.Size(80, 22);
+            this.chkBox_Spellcheck.TabIndex = 19;
+            this.chkBox_Spellcheck.Tag = "SPELLCHECK";
+            this.chkBox_Spellcheck.Text = "Spellcheck";
+            this.chkBox_Spellcheck.UseVisualStyleBackColor = true;
+            this.chkBox_Spellcheck.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // checkBox_CompileInParallel
+            // 
+            this.checkBox_CompileInParallel.BoxSize = 18;
+            this.checkBox_CompileInParallel.Location = new System.Drawing.Point(15, 127);
+            this.checkBox_CompileInParallel.Name = "checkBox_CompileInParallel";
+            this.checkBox_CompileInParallel.Size = new System.Drawing.Size(152, 22);
+            this.checkBox_CompileInParallel.TabIndex = 18;
+            this.checkBox_CompileInParallel.Tag = "PARALLEL";
+            this.checkBox_CompileInParallel.Text = "Compile binary in parallel";
+            this.checkBox_CompileInParallel.UseVisualStyleBackColor = true;
+            this.checkBox_CompileInParallel.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // Cb_AutoCompile
+            // 
+            this.Cb_AutoCompile.BoxSize = 18;
+            this.Cb_AutoCompile.Location = new System.Drawing.Point(15, 104);
+            this.Cb_AutoCompile.Name = "Cb_AutoCompile";
+            this.Cb_AutoCompile.Size = new System.Drawing.Size(205, 22);
+            this.Cb_AutoCompile.TabIndex = 16;
+            this.Cb_AutoCompile.Tag = "AUTOSAVESWITCH";
+            this.Cb_AutoCompile.Text = "Auto Compile Code on Actor Switch";
+            this.Cb_AutoCompile.UseVisualStyleBackColor = true;
+            this.Cb_AutoCompile.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // AutoSaveC
+            // 
+            this.AutoSaveC.BoxSize = 18;
+            this.AutoSaveC.Location = new System.Drawing.Point(15, 245);
+            this.AutoSaveC.Name = "AutoSaveC";
+            this.AutoSaveC.Size = new System.Drawing.Size(172, 22);
+            this.AutoSaveC.TabIndex = 14;
+            this.AutoSaveC.Tag = "AUTOSAVE";
+            this.AutoSaveC.Text = "C Code Update Interval (ms):";
+            this.AutoSaveC.UseVisualStyleBackColor = true;
+            this.AutoSaveC.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // Cb_Verbose
+            // 
+            this.Cb_Verbose.BoxSize = 18;
+            this.Cb_Verbose.Location = new System.Drawing.Point(15, 81);
+            this.Cb_Verbose.Name = "Cb_Verbose";
+            this.Cb_Verbose.Size = new System.Drawing.Size(190, 22);
+            this.Cb_Verbose.TabIndex = 3;
+            this.Cb_Verbose.Tag = "VERBOSECODE";
+            this.Cb_Verbose.Text = "Verbose code compilation output";
+            this.Cb_Verbose.UseVisualStyleBackColor = true;
+            this.Cb_Verbose.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // Cb_CheckSyntax
+            // 
+            this.Cb_CheckSyntax.BoxSize = 18;
+            this.Cb_CheckSyntax.Location = new System.Drawing.Point(15, 219);
+            this.Cb_CheckSyntax.Name = "Cb_CheckSyntax";
+            this.Cb_CheckSyntax.Size = new System.Drawing.Size(180, 22);
+            this.Cb_CheckSyntax.TabIndex = 2;
+            this.Cb_CheckSyntax.Tag = "CHECKSYNTAX";
+            this.Cb_CheckSyntax.Text = "Check script syntax every (ms)";
+            this.Cb_CheckSyntax.UseVisualStyleBackColor = true;
+            this.Cb_CheckSyntax.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // Cb_ColorizeScripts
+            // 
+            this.Cb_ColorizeScripts.BoxSize = 18;
+            this.Cb_ColorizeScripts.Location = new System.Drawing.Point(15, 56);
+            this.Cb_ColorizeScripts.Name = "Cb_ColorizeScripts";
+            this.Cb_ColorizeScripts.Size = new System.Drawing.Size(133, 22);
+            this.Cb_ColorizeScripts.TabIndex = 1;
+            this.Cb_ColorizeScripts.Tag = "COLORIZESYNTAX";
+            this.Cb_ColorizeScripts.Text = "Colorize script syntax";
+            this.Cb_ColorizeScripts.UseVisualStyleBackColor = true;
+            this.Cb_ColorizeScripts.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // Cb_ImproveTextReadability
+            // 
+            this.Cb_ImproveTextReadability.BoxSize = 18;
+            this.Cb_ImproveTextReadability.Location = new System.Drawing.Point(15, 33);
+            this.Cb_ImproveTextReadability.Name = "Cb_ImproveTextReadability";
+            this.Cb_ImproveTextReadability.Size = new System.Drawing.Size(212, 22);
+            this.Cb_ImproveTextReadability.TabIndex = 0;
+            this.Cb_ImproveTextReadability.Tag = "IMPROVEMSGPRV";
+            this.Cb_ImproveTextReadability.Text = "Improve message preview readability";
+            this.Cb_ImproveTextReadability.UseVisualStyleBackColor = true;
+            this.Cb_ImproveTextReadability.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 549);
+            this.ClientSize = new System.Drawing.Size(475, 586);
+            this.Controls.Add(this.lbl_Library);
+            this.Controls.Add(this.Combo_Library);
             this.Controls.Add(this.Lbl_Linker);
             this.Controls.Add(this.Combo_Linker);
             this.Controls.Add(this.Lbl_IncludePaths);
@@ -536,5 +557,7 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.Label Lbl_IncludePaths;
         private System.Windows.Forms.ComboBox Combo_Linker;
         private System.Windows.Forms.Label Lbl_Linker;
+        private System.Windows.Forms.ComboBox Combo_Library;
+        private System.Windows.Forms.Label lbl_Library;
     }
 }

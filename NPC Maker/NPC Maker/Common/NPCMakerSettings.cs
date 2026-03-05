@@ -76,10 +76,12 @@ namespace NPC_Maker
 
         public List<string> LastPaths { get; set; }
 
+        public Lists.Library Library { get; set; } 
+
         public NPCMakerSettings()
         {
             Version = 3;
-            GameVersion = Lists.GameVersions.oot_mq_debug;
+            GameVersion = Lists.GameVersions.Debug;
             GCCFlags = "-G 0 -Os -fno-builtin -fno-reorder-blocks -std=gnu99 -mtune=vr4300 -march=vr4300 -mabi=32 -c -mips3 -mno-explicit-relocs -mno-memcpy -mno-check-zero-division -fno-optimize-sibling-calls";
             CodeEditor = CCode.CodeEditorEnum.VSCode;
             CustomCodeEditorPath = "";
@@ -111,7 +113,8 @@ namespace NPC_Maker
             GUIScale = 1.0f;
             Linker = Lists.Linker.MipsLD;
             LastPaths = new List<string>();
-            IncludePaths = "{PROGRAMPATH}/include;{PROGRAMPATH}/include/z64hdr/{GAMEVERSION};{PROGRAMPATH}/include/z64hdr/include;{PROGRAMPATH}/include/z64hdr/common";
+            Library = Lists.Library.z64hdr;
+            IncludePaths = Lists.DefaultIncludePaths[Lists.Library.z64hdr];
         }
 
         public enum Members
@@ -144,6 +147,7 @@ namespace NPC_Maker
             GUISCALE,
             INCLUDEPATHS,
             LINKER,
+            LIBRARY,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -195,6 +199,7 @@ namespace NPC_Maker
                 case Members.ALLOWCOMMENTSONLOC: AllowCommentsOnLoc = (bool)Value; break;
                 case Members.GUISCALE: GUIScale = Convert.ToSingle(Value); break;
                 case Members.LINKER: Linker = (Lists.Linker)Enum.Parse(typeof(Lists.Linker), (string)Value); break;
+                case Members.LIBRARY: Library = (Lists.Library)Enum.Parse(typeof(Lists.Library), (string)Value); break;
                 default: break;
             }
         }

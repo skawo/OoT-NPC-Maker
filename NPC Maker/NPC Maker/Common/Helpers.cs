@@ -37,17 +37,33 @@ namespace NPC_Maker
 
         public static string NormalizeExtPath(string path)
         {
-            path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
-            path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Lists.ProgramPathToken);
-
+            // Always replace the longer (more specific) path first
+            if (Program.Settings.ProjectPath.Length >= Program.ExecPath.Length)
+            {
+                path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
+                path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Lists.ProgramPathToken);
+            }
+            else
+            {
+                path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Lists.ProgramPathToken);
+                path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
+            }
             return path;
         }
 
         public static string DenormalizeExtPath(string path)
         {
-            path = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
-            path = Helpers.ReplaceTokenWithPath(Program.ExecPath, path, Lists.ProgramPathToken);
-            path = path.Replace(Lists.GameVersionPathToken, Program.Settings.GameVersion.ToString());
+            if (Program.Settings.ProjectPath.Length >= Program.ExecPath.Length)
+            {
+                path = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
+                path = Helpers.ReplaceTokenWithPath(Program.ExecPath, path, Lists.ProgramPathToken);
+            }
+            else
+            {
+                path = Helpers.ReplaceTokenWithPath(Program.ExecPath, path, Lists.ProgramPathToken);
+                path = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
+            }
+            path = path.Replace(Lists.GameVersionPathToken, Lists.GameVersionStrings[Program.Settings.Library][(int)Program.Settings.GameVersion]);
 
             return path;
         }
