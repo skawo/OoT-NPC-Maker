@@ -1015,7 +1015,7 @@ namespace NPC_Maker
                 }
                 else
                 {
-                    c.DisplayMember = "FuncName";
+                    c.DisplayMember = "Symbol";
                     c.ValueMember = "Addr";
                     c.DataSource = code.Functions;
                     c.SelectedIndex = -1;
@@ -4854,7 +4854,7 @@ namespace NPC_Maker
                         c.DataSource = null;
                     else
                     {
-                        c.DisplayMember = "FuncName";
+                        c.DisplayMember = "Symbol";
                         c.ValueMember = "Addr";
                         c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions;
                         c.SelectedIndex = -1;
