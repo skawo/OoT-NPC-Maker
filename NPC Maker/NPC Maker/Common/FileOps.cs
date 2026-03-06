@@ -415,6 +415,17 @@ namespace NPC_Maker
                     cHeaderBuilder.Append(File.ReadAllText(linkerPath));
             }
 
+            string cSettings = JsonConvert.SerializeObject(new
+            {
+                Program.Settings.Linker,
+                Program.Settings.LinkerPaths,
+                Program.Settings.Library,
+                Program.Settings.GCCFlags,
+                Program.Settings.IncludePaths
+            });
+
+            cHeaderBuilder.Append(cSettings);
+
             string ver = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
             string hashGH = Helpers.GetBase64Hash(ghBuilder.ToString());
             string hashDicts = Helpers.GetBase64Hash(dicts);
