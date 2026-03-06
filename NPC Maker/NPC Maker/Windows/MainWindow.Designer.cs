@@ -1656,11 +1656,10 @@ namespace NPC_Maker
             // 
             // Checkbox_Omitted
             // 
-            this.Checkbox_Omitted.AutoSize = true;
             this.Checkbox_Omitted.BoxSize = 18;
-            this.Checkbox_Omitted.Location = new System.Drawing.Point(422, 602);
+            this.Checkbox_Omitted.Location = new System.Drawing.Point(422, 598);
             this.Checkbox_Omitted.Name = "Checkbox_Omitted";
-            this.Checkbox_Omitted.Size = new System.Drawing.Size(74, 17);
+            this.Checkbox_Omitted.Size = new System.Drawing.Size(77, 22);
             this.Checkbox_Omitted.TabIndex = 98;
             this.Checkbox_Omitted.Tag = "OMIT";
             this.Checkbox_Omitted.Text = "Omit actor";
@@ -1771,7 +1770,7 @@ namespace NPC_Maker
             // Lbl_DBGOpts
             // 
             this.Lbl_DBGOpts.AutoSize = true;
-            this.Lbl_DBGOpts.Location = new System.Drawing.Point(419, 531);
+            this.Lbl_DBGOpts.Location = new System.Drawing.Point(419, 527);
             this.Lbl_DBGOpts.Name = "Lbl_DBGOpts";
             this.Lbl_DBGOpts.Size = new System.Drawing.Size(107, 13);
             this.Lbl_DBGOpts.TabIndex = 91;
@@ -1779,11 +1778,10 @@ namespace NPC_Maker
             // 
             // ChkBox_DBGLookAt
             // 
-            this.ChkBox_DBGLookAt.AutoSize = true;
             this.ChkBox_DBGLookAt.BoxSize = 18;
-            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 581);
+            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 577);
             this.ChkBox_DBGLookAt.Name = "ChkBox_DBGLookAt";
-            this.ChkBox_DBGLookAt.Size = new System.Drawing.Size(89, 17);
+            this.ChkBox_DBGLookAt.Size = new System.Drawing.Size(92, 22);
             this.ChkBox_DBGLookAt.TabIndex = 90;
             this.ChkBox_DBGLookAt.Tag = "DEBUGLOOKAT";
             this.ChkBox_DBGLookAt.Text = "Lookat Editor";
@@ -1792,11 +1790,10 @@ namespace NPC_Maker
             // 
             // ChkBox_DBGPrint
             // 
-            this.ChkBox_DBGPrint.AutoSize = true;
             this.ChkBox_DBGPrint.BoxSize = 18;
-            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 561);
+            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 557);
             this.ChkBox_DBGPrint.Name = "ChkBox_DBGPrint";
-            this.ChkBox_DBGPrint.Size = new System.Drawing.Size(94, 17);
+            this.ChkBox_DBGPrint.Size = new System.Drawing.Size(98, 22);
             this.ChkBox_DBGPrint.TabIndex = 89;
             this.ChkBox_DBGPrint.Tag = "DEBUGPRINTSCR";
             this.ChkBox_DBGPrint.Text = "Print to screen";
@@ -1805,11 +1802,10 @@ namespace NPC_Maker
             // 
             // ChkBox_DBGDlist
             // 
-            this.ChkBox_DBGDlist.AutoSize = true;
             this.ChkBox_DBGDlist.BoxSize = 18;
-            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 581);
+            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 577);
             this.ChkBox_DBGDlist.Name = "ChkBox_DBGDlist";
-            this.ChkBox_DBGDlist.Size = new System.Drawing.Size(80, 17);
+            this.ChkBox_DBGDlist.Size = new System.Drawing.Size(84, 22);
             this.ChkBox_DBGDlist.TabIndex = 88;
             this.ChkBox_DBGDlist.Tag = "DEBUGDLISTED";
             this.ChkBox_DBGDlist.Text = "DList Editor";
@@ -1900,11 +1896,10 @@ namespace NPC_Maker
             // 
             // ChkBox_DBGCol
             // 
-            this.ChkBox_DBGCol.AutoSize = true;
             this.ChkBox_DBGCol.BoxSize = 18;
-            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 561);
+            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 557);
             this.ChkBox_DBGCol.Name = "ChkBox_DBGCol";
-            this.ChkBox_DBGCol.Size = new System.Drawing.Size(91, 17);
+            this.ChkBox_DBGCol.Size = new System.Drawing.Size(95, 22);
             this.ChkBox_DBGCol.TabIndex = 80;
             this.ChkBox_DBGCol.Tag = "DEBUGSHOWCOLS";
             this.ChkBox_DBGCol.Text = "Draw collision";
@@ -1926,7 +1921,7 @@ namespace NPC_Maker
             this.Panel_Colors.Controls.Add(this.ChkBox_Glow);
             this.Panel_Colors.Controls.Add(this.NumUp_LightLimb);
             this.Panel_Colors.Controls.Add(this.ChkBox_GenLight);
-            this.Panel_Colors.Location = new System.Drawing.Point(419, 386);
+            this.Panel_Colors.Location = new System.Drawing.Point(419, 383);
             this.Panel_Colors.Name = "Panel_Colors";
             this.Panel_Colors.Size = new System.Drawing.Size(341, 134);
             this.Panel_Colors.TabIndex = 77;
@@ -2140,7 +2135,7 @@ namespace NPC_Maker
             this.Btn_ReactIfAtt.Controls.Add(this.Txtbox_ReactIfAtt);
             this.Btn_ReactIfAtt.Controls.Add(this.Lbl_ReactIfAttSnd);
             this.Btn_ReactIfAtt.Controls.Add(this.Chkb_ReactIfAtt);
-            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 293);
+            this.Btn_ReactIfAtt.Location = new System.Drawing.Point(419, 290);
             this.Btn_ReactIfAtt.Name = "Btn_ReactIfAtt";
             this.Btn_ReactIfAtt.Size = new System.Drawing.Size(341, 87);
             this.Btn_ReactIfAtt.TabIndex = 76;
