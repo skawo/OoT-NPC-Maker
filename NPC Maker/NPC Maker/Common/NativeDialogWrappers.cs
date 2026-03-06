@@ -615,6 +615,7 @@ public class NativeColorDialog
     private DialogResult ShowLinuxDialog()
     {
         ExitMenuMode();
+        Application.DoEvents();
 
         string[] output;
         PickerResult result;
