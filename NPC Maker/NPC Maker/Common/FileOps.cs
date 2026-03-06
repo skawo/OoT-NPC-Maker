@@ -589,7 +589,7 @@ namespace NPC_Maker
                 overlay = null;
 
                 if (!string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
-                    overlay = CCode.Compile(data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, "NPCCOMPILE" + entryID);
+                    overlay = CCode.Compile(data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, out _, "NPCCOMPILE" + entryID);
 
                 if (overlay != null)
                 {
@@ -1202,7 +1202,7 @@ namespace NPC_Maker
                 Helpers.DeleteFileStartingWith(Program.CCachePath, $"{jsonFileName}_{entriesDone}_code_");
                 Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{jsonFileName}_{entriesDone}_script");
 
-                overlay = CCode.Compile(data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, "NPCCOMPILE" + entriesDone);
+                overlay = CCode.Compile(data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, out _, "NPCCOMPILE" + entriesDone);
 
                 if (overlay != null)
                 {
@@ -1234,7 +1234,7 @@ namespace NPC_Maker
             for (int i = 0; i < entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0); i++)
             {
                 string fname = entry.EmbeddedOverlayCode.SetFuncNames[i];
-                int funcIdx = entry.EmbeddedOverlayCode.Functions.FindIndex(x => x.FuncName == fname);
+                int funcIdx = entry.EmbeddedOverlayCode.Functions.FindIndex(x => x.Symbol == fname);
 
                 if (funcIdx == -1 && !string.IsNullOrEmpty(fname))
                 {

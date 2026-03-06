@@ -167,18 +167,20 @@ namespace NPC_Maker
             Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlaytemp");
         }
 
-        public static void Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string CompileMsgs)
+        public static void Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string CompileMsgs, out List<CSymbol> symbols)
         {
             string folder = Helpers.GenerateTemporaryFolderName();
 
             if (Program.IsRunningUnderMono)
-                CompileUnderMono(folder, null, ref CompileMsgs, cFilePath, outFilePath, linkerFiles, compileFlags);
+                CompileUnderMono(folder, null, ref CompileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
             else
-                CompileUnderWindows(folder, null, ref CompileMsgs, cFilePath, outFilePath, linkerFiles, compileFlags);
+                CompileUnderWindows(folder, null, ref CompileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
         }
 
-        public static byte[] Compile(string Header, string linkerFiles, CCodeEntry CodeEntry, ref string CompileMsgs, string folder = "")
+        public static byte[] Compile(string Header, string linkerFiles, CCodeEntry CodeEntry, ref string CompileMsgs, out List<CSymbol> symbols, string folder = "")
         {
+            symbols = null;
+
             try
             {
                 if (String.IsNullOrWhiteSpace(CodeEntry.Code))
@@ -206,8 +208,8 @@ namespace NPC_Maker
                 File.WriteAllText(compileHeaderPath, _Header);
 
                 byte[] outf = Program.IsRunningUnderMono
-                    ? CompileUnderMono(folder, CodeEntry, ref CompileMsgs, compileFilePath, outFilePath, linkerFiles)
-                    : CompileUnderWindows(folder, CodeEntry, ref CompileMsgs, compileFilePath, outFilePath, linkerFiles);
+                    ? CompileUnderMono(folder, CodeEntry, ref CompileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles)
+                    : CompileUnderWindows(folder, CodeEntry, ref CompileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles);
 
                 Directory.Delete(compileFolderPath, true);
 
@@ -240,7 +242,7 @@ namespace NPC_Maker
             return Paths;
         }
 
-        public static byte[] CompileUnderMono(string folder, CCodeEntry codeEntry, ref string compileMsgs,
+        public static byte[] CompileUnderMono(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
                                               string compileFile, string outFilePath, string linkerFiles = "", string compileFlags = "")
         {
             var config = new CompilationConfig
@@ -257,10 +259,10 @@ namespace NPC_Maker
                 NovlWorkingDirectory = "nOVL"
             };
 
-            return CompileInternal(config, codeEntry, ref compileMsgs, compileFile);
+            return CompileInternal(config, codeEntry, ref compileMsgs, out outSymbols, compileFile);
         }
 
-        public static byte[] CompileUnderWindows(string folder, CCodeEntry codeEntry, ref string compileMsgs,
+        public static byte[] CompileUnderWindows(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
                                                  string compileFile = "", string outFilePath = "", string linkerFiles = "", string compileFlags = "")
         {
             var config = new CompilationConfig
@@ -277,7 +279,7 @@ namespace NPC_Maker
                 NovlWorkingDirectory = Path.Combine("nOVL")
             };
 
-            return CompileInternal(config, codeEntry, ref compileMsgs, compileFile);
+            return CompileInternal(config, codeEntry, ref compileMsgs, out outSymbols, compileFile);
         }
 
         public static bool IsFullyQualified(string path)
@@ -383,10 +385,11 @@ namespace NPC_Maker
         }
 
 
-        private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, string compileFile = "")
+        private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols, string compileFile = "")
         {
             var paths = new CompilationPaths(config, compileFile);
             string compilationFailedString = "Compilation failed.";
+            outSymbols = null;
 
             try
             {
@@ -398,7 +401,7 @@ namespace NPC_Maker
                 if (!RunGccCompilation(config, paths, ref compileMsgs))
                     return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
 
-                if (!RunLinkerPhase(config, paths, codeEntry, ref compileMsgs))
+                if (!RunLinkerPhase(config, paths, codeEntry, ref compileMsgs, out outSymbols))
                     return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
 
                 if (Program.Settings.Linker == Lists.Linker.MipsLD)
@@ -423,8 +426,16 @@ namespace NPC_Maker
 
                 compileMsgs += "Done!";
 
-                if (codeEntry != null && Program.Settings.Linker == Lists.Linker.MipsLD)
-                    codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
+                if (Program.Settings.Linker == Lists.Linker.MipsLD)
+                {
+                    if (codeEntry != null)
+                    {
+                        codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
+                        outSymbols = codeEntry.Functions;
+                    }
+                    else
+                        outSymbols = GetAllSymbolsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
+                }
 
                 CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.dFile);
                 return File.ReadAllBytes(paths.OvlFile);
@@ -456,25 +467,10 @@ namespace NPC_Maker
             return File.Exists(paths.ObjectFile) && (result == 0);
         }
 
-        public static List<FunctionEntry> GetNpcMFuncsFromZLinkerOutput(string zLinkerOutput)
-        {
-            var lines = zLinkerOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            List<FunctionEntry> result = new List<FunctionEntry>();
-
-            foreach (var line in lines)
-            {
-                string[] components = line.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (components[1].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase))
-                    result.Add(new FunctionEntry(components[1].Trim(), Convert.ToUInt32(components[0], 16) - gBaseAddr));
-            }
-
-            return result;
-        }
-
-        private static bool RunLinkerPhase(CompilationConfig config, CompilationPaths paths, CCodeEntry codeEntry, ref string compileMsgs)
+        private static bool RunLinkerPhase(CompilationConfig config, CompilationPaths paths, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols)
         {
             compileMsgs += $"+==============+ Linker +==============+{Environment.NewLine}";
+            symbols = null;
 
             var ldInfo = Program.Settings.Linker == Lists.Linker.zlinker ? CreateZLinkerProcessInfo(config, paths) : CreateMipsLDLinkerProcessInfo(config, paths);
 
@@ -490,8 +486,10 @@ namespace NPC_Maker
                     string symbolOutput = GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment, true);
                     result = process.ExitCode;
 
-                    if (result == 0)
+                    if (result == 0 && codeEntry != null)
                         codeEntry.Functions = GetNpcMFuncsFromZLinkerOutput(symbolOutput);
+                    else
+                        symbols = GetAllSymbolsFromZLinkerOutput(symbolOutput);
                 }
                 else
                 {
@@ -666,25 +664,52 @@ namespace NPC_Maker
             return Code;
         }
 
-        public static List<FunctionEntry> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
+        public static List<CSymbol> GetSymbolsFromO(string elfPath, string ovlPath, bool mono, bool addSection, Func<string[], bool> filter)
         {
             var objDumpOutput = ExecuteObjDump(elfPath, mono);
             var normalizedOutput = Regex.Replace(objDumpOutput.Replace("\t", " "), @"\s{2,}", " ", RegexOptions.Compiled);
             var lines = normalizedOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
             var ovlData = File.ReadAllBytes(ovlPath);
             var sectionOffsets = CalculateSectionOffsets(ovlData);
 
-            var functions = lines
+            return lines
                 .Select(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
-                .Where(IsValidNpcMakerFunction)
-                .Select(words => CreateFunctionEntry(words, sectionOffsets))
+                .Where(filter)
+                .Select(words => CreateSymbol(words, sectionOffsets, addSection))
                 .Where(entry => entry != null)
-                .OrderBy(entry => entry.FuncName)
+                .OrderBy(entry => entry.Symbol)
                 .ToList();
-
-            return functions;
         }
+
+        public static List<CSymbol> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
+            => GetSymbolsFromO(elfPath, ovlPath, mono, true, IsValidNpcMakerFunction);
+
+        public static List<CSymbol> GetAllSymbolsFromO(string elfPath, string ovlPath, bool mono)
+            => GetSymbolsFromO(elfPath, ovlPath, mono, false, AllSymbols);
+
+        public static List<CSymbol> GetSymbolsFromZLinkerOutput(string zLinkerOutput,
+            Func<string[], bool> filter)
+        {
+            var lines = zLinkerOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            var result = new List<CSymbol>();
+
+            foreach (var line in lines)
+            {
+                string[] components = line.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (filter(components))
+                    result.Add(new CSymbol(components[1].Trim(), Convert.ToUInt32(components[0], 16) - gBaseAddr));
+            }
+
+            return result;
+        }
+
+        public static List<CSymbol> GetNpcMFuncsFromZLinkerOutput(string zLinkerOutput)
+            => GetSymbolsFromZLinkerOutput(zLinkerOutput,
+                c => c[1].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase));
+
+        public static List<CSymbol> GetAllSymbolsFromZLinkerOutput(string zLinkerOutput)
+            => GetSymbolsFromZLinkerOutput(zLinkerOutput,
+                c => true);
 
         private static string ExecuteObjDump(string elfPath, bool mono)
         {
@@ -730,6 +755,11 @@ namespace NPC_Maker
             return offsets;
         }
 
+        private static bool AllSymbols(string[] words)
+        {
+            return true;
+        }
+
         private static bool IsValidNpcMakerFunction(string[] words)
         {
             return words.Length == 6 &&
@@ -737,13 +767,20 @@ namespace NPC_Maker
                    words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase);
         }
 
-        private static FunctionEntry CreateFunctionEntry(string[] words, Dictionary<string, uint> sectionOffsets)
+        private static CSymbol CreateSymbol(string[] words, Dictionary<string, uint> sectionOffsets, bool addSection)
         {
-            if (!uint.TryParse(words[0], System.Globalization.NumberStyles.HexNumber, null, out uint address) ||
-                !sectionOffsets.TryGetValue(words[3], out uint sectionOffset))
+            if (words.Length < 6)
                 return null;
 
-            return new FunctionEntry(words[5], address - gBaseAddr + sectionOffset);
+            if (!uint.TryParse(words[0], System.Globalization.NumberStyles.HexNumber, null, out uint address))
+                return null;
+
+            uint sectionOffset = 0;
+
+            if (addSection && !sectionOffsets.TryGetValue(words[3], out sectionOffset))
+                return null;
+
+            return new CSymbol(words[5], address - gBaseAddr + sectionOffset);
         }
 
         public static bool CreateCTempDirectory(string Code, string Header, bool ErrorMsg = true, bool HeaderOnly = false)

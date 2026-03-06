@@ -828,11 +828,11 @@ namespace NPC_Maker
                 if (reusablePages.Count != 0)
                 {
                     TabPage page = reusablePages.First();
-                    (page.Controls[0] as ScriptEditor).Init(ref SelectedEntry, 
-                                                            ref EditedFile, 
-                                                            script, 
+                    (page.Controls[0] as ScriptEditor).Init(ref SelectedEntry,
+                                                            ref EditedFile,
+                                                            script,
                                                             Program.
-                                                            Settings.ColorizeScriptSyntax, 
+                                                            Settings.ColorizeScriptSyntax,
                                                             Program.Settings.CheckSyntax);
                     page.Text = pageName;
                     reusablePages.Remove(page);
@@ -843,9 +843,10 @@ namespace NPC_Maker
                     TabControl_Scripts.TabPages.Add(page);
                     ScriptEditor se = new ScriptEditor(ref SelectedEntry,
                                                        ref EditedFile,
-                                                       script, 
+                                                       script,
                                                        Program.Settings.ColorizeScriptSyntax,
-                                                       Program.Settings.CheckSyntax) { Dock = DockStyle.Fill };
+                                                       Program.Settings.CheckSyntax)
+                    { Dock = DockStyle.Fill };
                     page.Controls.Add(se);
                 }
             }
@@ -886,15 +887,15 @@ namespace NPC_Maker
                     ? Dicts.GetStringFromBiDict(Dicts.LinkAnims, (int)anim.Address)
                     : anim.Address.ToString("X");
 
-                DataGrid_Animations.Rows.Add(new object[] { 
-                                                            anim.Name, 
-                                                            anim.HeaderDefinition, 
-                                                            cValue, 
-                                                            addrStr, 
-                                                            anim.StartFrame, 
-                                                            anim.EndFrame, 
-                                                            anim.Speed, 
-                                                            Dicts.GetStringFromBiDict(Dicts.ObjectIDs, anim.ObjID) 
+                DataGrid_Animations.Rows.Add(new object[] {
+                                                            anim.Name,
+                                                            anim.HeaderDefinition,
+                                                            cValue,
+                                                            addrStr,
+                                                            anim.StartFrame,
+                                                            anim.EndFrame,
+                                                            anim.Speed,
+                                                            Dicts.GetStringFromBiDict(Dicts.ObjectIDs, anim.ObjID)
                                                          });
             }
 
@@ -908,10 +909,10 @@ namespace NPC_Maker
                 grid.Rows.Clear();
 
                 foreach (SegmentEntry seg in SelectedEntry.Segments[j])
-                    grid.Rows.Add(seg.Name, 
+                    grid.Rows.Add(seg.Name,
                                   seg.HeaderDefinition,
-                                  seg.FileStart < 0 ? "Same as main" : seg.FileStart.ToString("X"), 
-                                  seg.Address.ToString("X"), 
+                                  seg.FileStart < 0 ? "Same as main" : seg.FileStart.ToString("X"),
+                                  seg.Address.ToString("X"),
                                   Dicts.GetStringFromBiDict(Dicts.ObjectIDs, seg.ObjectID));
             }
 
@@ -984,7 +985,7 @@ namespace NPC_Maker
                 if (Program.Settings.AutoComp_ActorSwitch)
                 {
                     string compileErrors = "";
-                    CCode.Compile(EditedFile.CHeader, Program.Settings.LinkerPaths, code, ref compileErrors);
+                    CCode.Compile(EditedFile.CHeader, Program.Settings.LinkerPaths, code, ref compileErrors, out _);
                     TextBox_CompileMsg.Text = compileErrors;
                 }
                 else
@@ -1019,7 +1020,7 @@ namespace NPC_Maker
                     c.DataSource = code.Functions;
                     c.SelectedIndex = -1;
                     c.BindingContext = new BindingContext();
-                    c.SelectedIndex = code.Functions.FindIndex(x => x.FuncName == code.SetFuncNames[index]);
+                    c.SelectedIndex = code.Functions.FindIndex(x => x.Symbol == code.SetFuncNames[index]);
 
                     if (w != null)
                         w.SelectedIndex = code.FuncsRunWhen[index, 1];
@@ -1680,37 +1681,58 @@ namespace NPC_Maker
                 string cFile = of.FileName;
 
                 of.Title = "Select the linker file...";
-                of.Filter = "Linker files (*.ld)|*.ld|All files (*.*)|*.*";
+                of.Filter = "Linker files (*.ld;*.zsym)|*.ld;*.zsym|" +
+                            "LD Files (*.ld)|*.ld|" +
+                            "ZLINKER Symbols (*.zsym)|*.zsym|" +
+                            "All files (*.*)|*.*";
 
-                if (of.ShowDialog() == DialogResult.OK)
+                DialogResult ofD = of.ShowDialog();
+
+                Windows.LongInputBox flg = new Windows.LongInputBox("Compile flags", "Add compile flags:", "");
+                flg.ShowDialog();
+
+                NativeSaveFileDialog sf = new NativeSaveFileDialog
                 {
-                    Windows.LongInputBox flg = new Windows.LongInputBox("Compile flags", "Add compile flags:", "");
-                    flg.ShowDialog();
+                    Title = "Select output ZOVL...",
+                    Filter = "ZOVL files (*.zovl)|*.zovl|All files (*.*)|*.*"
+                };
 
-                    NativeSaveFileDialog sf = new NativeSaveFileDialog
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    string CompileMsgs = "";
+
+                    try
                     {
-                        Title = "Select output ZOVL...",
-                        Filter = "ZOVL files (*.zovl)|*.zovl|All files (*.*)|*.*"
-                    };
+                        List<CSymbol> symbols = null;
+                        CCode.Compile(cFile, 
+                                      ofD == DialogResult.OK ? $"{Program.Settings.LinkerPaths};{of.FileName}" : Program.Settings.LinkerPaths, 
+                                      sf.FileName, 
+                                      flg.inputText, 
+                                      ref CompileMsgs, 
+                                      out symbols);
 
-                    if (sf.ShowDialog() == DialogResult.OK)
-                    {
-                        string CompileMsgs = "";
-
-                        try
+                        if (symbols != null)
                         {
-                            CCode.Compile(cFile, of.FileName, sf.FileName, flg.inputText, ref CompileMsgs);
-                        }
-                        catch (Exception ex)
-                        {
-                            CompileMsgs += $"{Environment.NewLine}{ex.Message}";
-                        }
+                            CSymbol c = symbols.FirstOrDefault(x => x.Symbol.Equals("sNpcMakerInit", StringComparison.InvariantCultureIgnoreCase))
+                                     ?? symbols.FirstOrDefault(x => x.Symbol.Equals("sActorVars", StringComparison.InvariantCultureIgnoreCase));
 
-                        Windows.LongInputBox li = new Windows.LongInputBox("Results", "Compilation result:", CompileMsgs);
-                        li.ShowDialog();
-                        return;
+                            if (c != null)
+                            {
+                                string config = $"alloc_type = 0\nvram_addr = 0x{CCode.gBaseAddr.ToString("X")}\ninit_vars = 0x{(CCode.gBaseAddr + c.Addr).ToString("X")}";
+                                File.WriteAllText(Path.Combine(Path.GetDirectoryName(sf.FileName), "config.toml"), config);
+                            }
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        CompileMsgs += $"{Environment.NewLine}{ex.Message}";
+                    }
+
+                    Windows.LongInputBox li = new Windows.LongInputBox("Results", "Compilation result:", Helpers.StripTerminalControlCodes(CompileMsgs));
+                    li.ShowDialog();
+                    return;
                 }
+
             }
         }
 
@@ -4813,11 +4835,11 @@ namespace NPC_Maker
         {
 
             string CompileMsgs = "";
-            CCode.Compile(EditedFile.CHeader, Program.Settings.LinkerPaths, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs);
+            CCode.Compile(EditedFile.CHeader, Program.Settings.LinkerPaths, SelectedEntry.EmbeddedOverlayCode, ref CompileMsgs, out _);
 
             this.TextBox_CompileMsg.Invoke((MethodInvoker)delegate
             {
-                TextBox_CompileMsg.Text = Regex.Replace(CompileMsgs, @"\x1B\[[^@-~]*[@-~]", "");
+                TextBox_CompileMsg.Text = Helpers.StripTerminalControlCodes(CompileMsgs);
             });
 
             foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
@@ -4838,7 +4860,7 @@ namespace NPC_Maker
                         c.SelectedIndex = -1;
                         c.BindingContext = new BindingContext();
 
-                        FunctionEntry Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.FuncName == CurrentSelection);
+                        CSymbol Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Symbol == CurrentSelection);
 
                         if (Function != null)
                             c.SelectedIndex = c.Items.IndexOf(Function);
@@ -5011,7 +5033,7 @@ namespace NPC_Maker
             if (BigMessageBox.Show("Are you sure? This operation wipes the code completely and cannot be reversed.", "Code Removal", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
             {
                 SelectedEntry.EmbeddedOverlayCode.Code = "";
-                SelectedEntry.EmbeddedOverlayCode.Functions = new List<FunctionEntry>();
+                SelectedEntry.EmbeddedOverlayCode.Functions = new List<CSymbol>();
                 SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen = new int[6, 2]
                 {
                     {-1, -1},
@@ -5082,6 +5104,9 @@ namespace NPC_Maker
 
         private void ExportCurrentActorMessagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (SelectedEntry == null)
+                return;
+
             List<byte> msgTable = new List<byte>();
             List<byte> msgData = new List<byte>();
 

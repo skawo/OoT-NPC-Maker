@@ -857,7 +857,7 @@ namespace NPC_Maker
         public string Code { get; set; }
 
         public List<string> CodeLines { get; set; }
-        public List<FunctionEntry> Functions { get; set; }
+        public List<CSymbol> Functions { get; set; }
 
         public int[,] FuncsRunWhen { get; set; }
 
@@ -865,7 +865,7 @@ namespace NPC_Maker
 
         public List<string> HeaderPaths { get; set; }
 
-        public CCodeEntry(string _Code = "", List<FunctionEntry> _Funcs = null, int[,] _FuncsRunWhen = null)
+        public CCodeEntry(string _Code = "", List<CSymbol> _Funcs = null, int[,] _FuncsRunWhen = null)
         {
             Code = _Code;
             CodeLines = new List<string>();
@@ -873,7 +873,7 @@ namespace NPC_Maker
             Functions = _Funcs;
 
             if (Functions == null)
-                Functions = new List<FunctionEntry>();
+                Functions = new List<CSymbol>();
 
             FuncsRunWhen = _FuncsRunWhen;
             SetFuncNames = new string[6];
@@ -892,16 +892,16 @@ namespace NPC_Maker
     }
 
 
-    public class FunctionEntry
+    public class CSymbol
     {
-        public string FuncName { get; set; }
+        public string Symbol { get; set; }
 
         [JsonIgnore]
         public UInt32 Addr { get; set; }
 
-        public FunctionEntry(string _Name = "", UInt32 _Addr = 0xFFFFFFFF)
+        public CSymbol(string _Name = "", UInt32 _Addr = 0xFFFFFFFF)
         {
-            FuncName = _Name;
+            Symbol = _Name;
             Addr = _Addr;
         }
     }

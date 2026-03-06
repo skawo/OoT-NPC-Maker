@@ -191,7 +191,7 @@ namespace NPC_Maker
             List<string> FunctionNames = new List<string>();
 
             foreach (var kvp in Entry.EmbeddedOverlayCode.Functions)
-                FunctionNames.Add(kvp.FuncName);
+                FunctionNames.Add(kvp.Symbol);
 
             AddItemCollectionToToolStripMenuItem(FunctionNames.ToArray(), cFunctionsStripMenuItem, SubItem_Click);
 

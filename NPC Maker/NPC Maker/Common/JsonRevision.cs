@@ -109,7 +109,7 @@ namespace NPC_Maker
                     int functionIndex = embeddedCode.FuncsRunWhen[i, 0];
 
                     embeddedCode.SetFuncNames[i] = functionIndex >= 0 && functionIndex < embeddedCode.Functions.Count
-                        ? embeddedCode.Functions[functionIndex].FuncName
+                        ? embeddedCode.Functions[functionIndex].Symbol
                         : "Not found?";
                 }
             }

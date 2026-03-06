@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -236,7 +237,26 @@ namespace NPC_Maker
             string compileFlags = args.Length == 5 ? args[4].Trim('"') : "";
             string compileMsgs = "";
 
-            CCode.Compile(args[1], args[2], args[3], compileFlags, ref compileMsgs);
+            List<CSymbol> symbols = null;
+            CCode.Compile(args[1],
+                          args[2].ToLower() == "none" ? $"{Program.Settings.LinkerPaths};{args[2]}" : Program.Settings.LinkerPaths,
+                          args[3], 
+                          compileFlags, 
+                          ref compileMsgs, 
+                          out symbols);
+
+            if (symbols != null)
+            {
+                CSymbol c = symbols.FirstOrDefault(x => x.Symbol.Equals("sNpcMakerInit", StringComparison.InvariantCultureIgnoreCase))
+                         ?? symbols.FirstOrDefault(x => x.Symbol.Equals("sActorVars", StringComparison.InvariantCultureIgnoreCase));
+
+                if (c != null)
+                {
+                    string config = $"alloc_type = 0\nvram_addr = 0x{CCode.gBaseAddr.ToString("X")}\ninit_vars = 0x{(CCode.gBaseAddr + c.Addr).ToString("X")}";
+                    System.IO.File.WriteAllText(Path.Combine(Path.GetDirectoryName(args[3]), "config.toml"), config);
+                }
+            }
+
             ConsoleWriteLineS("Press ENTER to exit...");
         }
 
@@ -298,7 +318,7 @@ namespace NPC_Maker
         private static void PrintUsage()
         {
             Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj] [-silent]");
-            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c [InputCFile] [InputLinkerFile] [OutputZovl] [\"COMPILEFLAGS\"]");
+            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c [InputCFile] [ExtraLinkerFiles|none] [OutputZovl] [\"COMPILEFLAGS\"]");
             Console.WriteLine("Press ENTER to exit...");
         }
 

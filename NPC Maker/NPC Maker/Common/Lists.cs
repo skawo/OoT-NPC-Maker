@@ -70,7 +70,7 @@ namespace NPC_Maker
         public static Dictionary<Library, string> DefaultIncludePaths = new Dictionary<Library, string>()
         {
             { Library.z64hdr, "{PROGRAMPATH}/include;{PROGRAMPATH}/include/z64hdr/{GAMEVERSION};{PROGRAMPATH}/include/z64hdr/include;{PROGRAMPATH}/include/z64hdr/common" },
-            { Library.zocarina, "{PROGRAMPATH}/include;{PROGRAMPATH}/include/zocarina/version/{GAMEVERSION};{PROGRAMPATH}/include/zocarina/include" }
+            { Library.zocarina, "{PROGRAMPATH}/include;{PROGRAMPATH}/include/zocarina/version/{GAMEVERSION};{PROGRAMPATH}/include/zocarina/include;{PROGRAMPATH}/include/zocarina/include/libc" }
         };
 
         public const int Num_User_Vars = 255;

@@ -19,6 +19,11 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static string StripTerminalControlCodes(string s)
+        {
+            return Regex.Replace(s, @"\x1B\[[^@-~]*[@-~]", "");
+        }
+
         public static float GetScaleFontSize(float baseSize = 8.25f)
         {
             return (baseSize * Program.Settings.GUIScale);

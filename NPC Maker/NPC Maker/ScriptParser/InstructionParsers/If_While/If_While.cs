@@ -391,7 +391,7 @@ namespace NPC_Maker.Scripts
                             {
                                 ScriptHelpers.ErrorIfNumParamsNotBetween(SplitLine, 3, 13);
 
-                                var Func = CodeEntry.Functions.Find(x => x.FuncName.ToUpper() == SplitLine[2].ToUpper());
+                                var Func = CodeEntry.Functions.Find(x => x.Symbol.ToUpper() == SplitLine[2].ToUpper());
 
                                 if (Func == null)
                                     throw ParseException.CFunctionNotFound(SplitLine);
