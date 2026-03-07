@@ -154,6 +154,10 @@ namespace NPC_Maker
 
                 this.MsgText.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
                 this.MsgTextCJK.Font = new Font(this.MsgTextCJK.Font.FontFamily, Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
+
+                msgCommentTooltip.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
+                msgCommentTooltipLoc.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
+                CodeParamsTooltip.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
             }
         }
 
@@ -166,21 +170,36 @@ namespace NPC_Maker
 
             comboFont.SelectedIndexChanged -= ComboFont_SelectedChanged;
             numUpDownFont.ValueChanged -= NumUpDownFont_ValueChanged;
+
             comboFont.Text = MsgText.Font.Name;
             numUpDownFont.Value = (int)MsgText.Font.Size;
-            comboFont.SelectedIndexChanged += ComboFont_SelectedChanged;
-            numUpDownFont.ValueChanged += NumUpDownFont_ValueChanged;
 
             try
             {
-                if (!String.IsNullOrWhiteSpace(Program.Settings.MessageEditorFont))
+                if (!string.IsNullOrWhiteSpace(Program.Settings.MessageEditorFont))
                 {
-                    comboFont.Text = Program.Settings.MessageEditorFont;
-                    numUpDownFont.Value = (int)Program.Settings.MessageEditorFontSize;
+                    string savedFont = Program.Settings.MessageEditorFont;
+
+                    if (comboFont.Items.Contains(savedFont))
+                    {
+                        comboFont.Text = savedFont;
+                        numUpDownFont.Value = (int)Program.Settings.MessageEditorFontSize;
+                    }
+                    else
+                    {
+                        // Saved font no longer available — fall back to default and update settings
+                        Program.Settings.MessageEditorFont = MsgText.Font.Name;
+                        Program.Settings.MessageEditorFontSize = MsgText.Font.Size;
+                    }
                 }
             }
             catch
             {
+            }
+            finally
+            {
+                comboFont.SelectedIndexChanged += ComboFont_SelectedChanged;
+                numUpDownFont.ValueChanged += NumUpDownFont_ValueChanged;
             }
         }
 
@@ -3985,7 +4004,7 @@ namespace NPC_Maker
             }
         }
 
-        private void SetPictureBoxCommentImageToolTip(PictureBox box, ToolTip tip, string comment)
+        private void SetPictureBoxCommentImageToolTip(PictureBox box, Controls.BigToolTip tip, string comment)
         {
             if (box != null && !box.IsDisposed)
             {
@@ -4005,7 +4024,7 @@ namespace NPC_Maker
                 SetToolTipDirect(box, tip, comment);
         }
 
-        private void DelayedSetToolTip(PictureBox box, ToolTip tip, string comment)
+        private void DelayedSetToolTip(PictureBox box, Controls.BigToolTip tip, string comment)
         {
             var timer = new System.Windows.Forms.Timer();
             timer.Interval = 50;
@@ -4022,7 +4041,7 @@ namespace NPC_Maker
             timer.Start();
         }
 
-        private void SetToolTipDirect(PictureBox box, ToolTip tip, string comment)
+        private void SetToolTipDirect(PictureBox box, Controls.BigToolTip tip, string comment)
         {
             if (comment != null)
                 tip.SetToolTip(box, comment.LimitToCharNum(1000).WrapToLength(80));

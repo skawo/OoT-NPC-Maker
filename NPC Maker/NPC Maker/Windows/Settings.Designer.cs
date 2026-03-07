@@ -73,7 +73,7 @@ namespace NPC_Maker.Windows
             // 
             this.Combo_CompileFor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_CompileFor.FormattingEnabled = true;
-            this.Combo_CompileFor.Location = new System.Drawing.Point(273, 296);
+            this.Combo_CompileFor.Location = new System.Drawing.Point(273, 301);
             this.Combo_CompileFor.Name = "Combo_CompileFor";
             this.Combo_CompileFor.Size = new System.Drawing.Size(120, 21);
             this.Combo_CompileFor.TabIndex = 4;
@@ -83,7 +83,7 @@ namespace NPC_Maker.Windows
             // Lbl_CompileFor
             // 
             this.Lbl_CompileFor.AutoSize = true;
-            this.Lbl_CompileFor.Location = new System.Drawing.Point(12, 299);
+            this.Lbl_CompileFor.Location = new System.Drawing.Point(12, 304);
             this.Lbl_CompileFor.Name = "Lbl_CompileFor";
             this.Lbl_CompileFor.Size = new System.Drawing.Size(75, 13);
             this.Lbl_CompileFor.TabIndex = 5;
@@ -91,9 +91,10 @@ namespace NPC_Maker.Windows
             // 
             // Txt_GCCArgs
             // 
-            this.Txt_GCCArgs.Location = new System.Drawing.Point(13, 455);
+            this.Txt_GCCArgs.Location = new System.Drawing.Point(412, 75);
+            this.Txt_GCCArgs.Multiline = true;
             this.Txt_GCCArgs.Name = "Txt_GCCArgs";
-            this.Txt_GCCArgs.Size = new System.Drawing.Size(450, 20);
+            this.Txt_GCCArgs.Size = new System.Drawing.Size(450, 120);
             this.Txt_GCCArgs.TabIndex = 6;
             this.Txt_GCCArgs.Tag = "GCCARGS";
             this.Txt_GCCArgs.TextChanged += new System.EventHandler(this.TextBoxChanged);
@@ -101,7 +102,7 @@ namespace NPC_Maker.Windows
             // Lbl_GCCArgs
             // 
             this.Lbl_GCCArgs.AutoSize = true;
-            this.Lbl_GCCArgs.Location = new System.Drawing.Point(12, 439);
+            this.Lbl_GCCArgs.Location = new System.Drawing.Point(411, 59);
             this.Lbl_GCCArgs.Name = "Lbl_GCCArgs";
             this.Lbl_GCCArgs.Size = new System.Drawing.Size(85, 13);
             this.Lbl_GCCArgs.TabIndex = 7;
@@ -109,9 +110,9 @@ namespace NPC_Maker.Windows
             // 
             // BtnSave
             // 
-            this.BtnSave.Location = new System.Drawing.Point(343, 545);
+            this.BtnSave.Location = new System.Drawing.Point(744, 304);
             this.BtnSave.Name = "BtnSave";
-            this.BtnSave.Size = new System.Drawing.Size(120, 29);
+            this.BtnSave.Size = new System.Drawing.Size(120, 72);
             this.BtnSave.TabIndex = 8;
             this.BtnSave.Text = "Save";
             this.BtnSave.UseVisualStyleBackColor = true;
@@ -120,7 +121,7 @@ namespace NPC_Maker.Windows
             // Label_CompileTimeout
             // 
             this.Label_CompileTimeout.AutoSize = true;
-            this.Label_CompileTimeout.Location = new System.Drawing.Point(12, 272);
+            this.Label_CompileTimeout.Location = new System.Drawing.Point(12, 277);
             this.Label_CompileTimeout.Name = "Label_CompileTimeout";
             this.Label_CompileTimeout.Size = new System.Drawing.Size(106, 13);
             this.Label_CompileTimeout.TabIndex = 10;
@@ -128,7 +129,7 @@ namespace NPC_Maker.Windows
             // 
             // NumUpCompileTimeout
             // 
-            this.NumUpCompileTimeout.Location = new System.Drawing.Point(273, 270);
+            this.NumUpCompileTimeout.Location = new System.Drawing.Point(273, 275);
             this.NumUpCompileTimeout.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -200,9 +201,9 @@ namespace NPC_Maker.Windows
             // 
             // Btn_ResetCache
             // 
-            this.Btn_ResetCache.Location = new System.Drawing.Point(13, 545);
+            this.Btn_ResetCache.Location = new System.Drawing.Point(618, 304);
             this.Btn_ResetCache.Name = "Btn_ResetCache";
-            this.Btn_ResetCache.Size = new System.Drawing.Size(120, 29);
+            this.Btn_ResetCache.Size = new System.Drawing.Size(120, 72);
             this.Btn_ResetCache.TabIndex = 17;
             this.Btn_ResetCache.Text = "Reset Cache";
             this.Btn_ResetCache.UseVisualStyleBackColor = true;
@@ -211,7 +212,7 @@ namespace NPC_Maker.Windows
             // Lbl_ProjectPath
             // 
             this.Lbl_ProjectPath.AutoSize = true;
-            this.Lbl_ProjectPath.Location = new System.Drawing.Point(12, 389);
+            this.Lbl_ProjectPath.Location = new System.Drawing.Point(411, 9);
             this.Lbl_ProjectPath.Name = "Lbl_ProjectPath";
             this.Lbl_ProjectPath.Size = new System.Drawing.Size(67, 13);
             this.Lbl_ProjectPath.TabIndex = 21;
@@ -219,7 +220,7 @@ namespace NPC_Maker.Windows
             // 
             // Txt_ProjectPath
             // 
-            this.Txt_ProjectPath.Location = new System.Drawing.Point(13, 405);
+            this.Txt_ProjectPath.Location = new System.Drawing.Point(412, 25);
             this.Txt_ProjectPath.Name = "Txt_ProjectPath";
             this.Txt_ProjectPath.Size = new System.Drawing.Size(380, 20);
             this.Txt_ProjectPath.TabIndex = 22;
@@ -228,7 +229,7 @@ namespace NPC_Maker.Windows
             // 
             // Btn_Browse
             // 
-            this.Btn_Browse.Location = new System.Drawing.Point(399, 404);
+            this.Btn_Browse.Location = new System.Drawing.Point(798, 24);
             this.Btn_Browse.Name = "Btn_Browse";
             this.Btn_Browse.Size = new System.Drawing.Size(64, 21);
             this.Btn_Browse.TabIndex = 23;
@@ -238,18 +239,18 @@ namespace NPC_Maker.Windows
             // 
             // Btn_LinkerFiles
             // 
-            this.Btn_LinkerFiles.Location = new System.Drawing.Point(399, 481);
+            this.Btn_LinkerFiles.Location = new System.Drawing.Point(798, 201);
             this.Btn_LinkerFiles.Name = "Btn_LinkerFiles";
             this.Btn_LinkerFiles.Size = new System.Drawing.Size(64, 21);
             this.Btn_LinkerFiles.TabIndex = 24;
-            this.Btn_LinkerFiles.Text = "Browse";
+            this.Btn_LinkerFiles.Text = "Set";
             this.Btn_LinkerFiles.UseVisualStyleBackColor = true;
             this.Btn_LinkerFiles.Click += new System.EventHandler(this.Btn_LinkerFiles_Click);
             // 
             // Lbl_LinkerFiles
             // 
             this.Lbl_LinkerFiles.AutoSize = true;
-            this.Lbl_LinkerFiles.Location = new System.Drawing.Point(309, 485);
+            this.Lbl_LinkerFiles.Location = new System.Drawing.Point(708, 205);
             this.Lbl_LinkerFiles.Name = "Lbl_LinkerFiles";
             this.Lbl_LinkerFiles.Size = new System.Drawing.Size(70, 13);
             this.Lbl_LinkerFiles.TabIndex = 25;
@@ -296,18 +297,18 @@ namespace NPC_Maker.Windows
             // 
             // Btn_CIncludePaths
             // 
-            this.Btn_CIncludePaths.Location = new System.Drawing.Point(399, 508);
+            this.Btn_CIncludePaths.Location = new System.Drawing.Point(798, 228);
             this.Btn_CIncludePaths.Name = "Btn_CIncludePaths";
             this.Btn_CIncludePaths.Size = new System.Drawing.Size(64, 21);
             this.Btn_CIncludePaths.TabIndex = 29;
-            this.Btn_CIncludePaths.Text = "Browse";
+            this.Btn_CIncludePaths.Text = "Set";
             this.Btn_CIncludePaths.UseVisualStyleBackColor = true;
             this.Btn_CIncludePaths.Click += new System.EventHandler(this.Btn_IncludePaths_Click);
             // 
             // Lbl_IncludePaths
             // 
             this.Lbl_IncludePaths.AutoSize = true;
-            this.Lbl_IncludePaths.Location = new System.Drawing.Point(309, 512);
+            this.Lbl_IncludePaths.Location = new System.Drawing.Point(708, 232);
             this.Lbl_IncludePaths.Name = "Lbl_IncludePaths";
             this.Lbl_IncludePaths.Size = new System.Drawing.Size(84, 13);
             this.Lbl_IncludePaths.TabIndex = 30;
@@ -317,7 +318,7 @@ namespace NPC_Maker.Windows
             // 
             this.Combo_Linker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_Linker.FormattingEnabled = true;
-            this.Combo_Linker.Location = new System.Drawing.Point(273, 323);
+            this.Combo_Linker.Location = new System.Drawing.Point(273, 328);
             this.Combo_Linker.Name = "Combo_Linker";
             this.Combo_Linker.Size = new System.Drawing.Size(120, 21);
             this.Combo_Linker.TabIndex = 31;
@@ -327,7 +328,7 @@ namespace NPC_Maker.Windows
             // Lbl_Linker
             // 
             this.Lbl_Linker.AutoSize = true;
-            this.Lbl_Linker.Location = new System.Drawing.Point(12, 326);
+            this.Lbl_Linker.Location = new System.Drawing.Point(12, 331);
             this.Lbl_Linker.Name = "Lbl_Linker";
             this.Lbl_Linker.Size = new System.Drawing.Size(39, 13);
             this.Lbl_Linker.TabIndex = 32;
@@ -337,7 +338,7 @@ namespace NPC_Maker.Windows
             // 
             this.Combo_Library.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_Library.FormattingEnabled = true;
-            this.Combo_Library.Location = new System.Drawing.Point(273, 350);
+            this.Combo_Library.Location = new System.Drawing.Point(273, 355);
             this.Combo_Library.Name = "Combo_Library";
             this.Combo_Library.Size = new System.Drawing.Size(120, 21);
             this.Combo_Library.TabIndex = 33;
@@ -347,7 +348,7 @@ namespace NPC_Maker.Windows
             // lbl_Library
             // 
             this.lbl_Library.AutoSize = true;
-            this.lbl_Library.Location = new System.Drawing.Point(12, 353);
+            this.lbl_Library.Location = new System.Drawing.Point(12, 358);
             this.lbl_Library.Name = "lbl_Library";
             this.lbl_Library.Size = new System.Drawing.Size(41, 13);
             this.lbl_Library.TabIndex = 34;
@@ -477,7 +478,7 @@ namespace NPC_Maker.Windows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 586);
+            this.ClientSize = new System.Drawing.Size(889, 390);
             this.Controls.Add(this.lbl_Library);
             this.Controls.Add(this.Combo_Library);
             this.Controls.Add(this.Lbl_Linker);

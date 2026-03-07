@@ -172,6 +172,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\BigMessageBox.cs" />
+    <Compile Include="Controls\BigTooltip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\FCTB_MonoCJK.cs">
       <SubType>UserControl</SubType>
     </Compile>

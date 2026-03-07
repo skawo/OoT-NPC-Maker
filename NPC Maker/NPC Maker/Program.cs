@@ -135,8 +135,12 @@ namespace NPC_Maker
                 {
                     foreach (FontFamily fontFamily in fonts)
                     {
-                        if (fontFamily.IsMonospaced(g))
-                            fnts.Add(fontFamily.Name);
+                        try
+                        {
+                            if (fontFamily.IsMonospaced(g))
+                                fnts.Add(fontFamily.Name);
+                        }
+                        catch { }
                     }
                 }
             }

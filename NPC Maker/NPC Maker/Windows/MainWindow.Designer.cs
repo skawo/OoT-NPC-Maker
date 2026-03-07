@@ -372,11 +372,11 @@ namespace NPC_Maker
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CodeParamsTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.CodeParamsTooltip = new NPC_Maker.Controls.BigToolTip();
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
-            this.msgCommentTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.msgCommentTooltipLoc = new System.Windows.Forms.ToolTip(this.components);
+            this.msgCommentTooltip = new NPC_Maker.Controls.BigToolTip();
+            this.msgCommentTooltipLoc = new NPC_Maker.Controls.BigToolTip();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
@@ -4754,6 +4754,7 @@ namespace NPC_Maker
             // CodeParamsTooltip
             // 
             this.CodeParamsTooltip.AutoPopDelay = 6000;
+            this.CodeParamsTooltip.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Italic);
             this.CodeParamsTooltip.InitialDelay = 100;
             this.CodeParamsTooltip.ReshowDelay = 100;
             this.CodeParamsTooltip.ShowAlways = true;
@@ -4781,16 +4782,16 @@ namespace NPC_Maker
             // msgCommentTooltip
             // 
             this.msgCommentTooltip.AutoPopDelay = 32000;
+            this.msgCommentTooltip.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Italic);
             this.msgCommentTooltip.InitialDelay = 200;
-            this.msgCommentTooltip.IsBalloon = true;
             this.msgCommentTooltip.ReshowDelay = 50;
             this.msgCommentTooltip.ShowAlways = true;
             // 
             // msgCommentTooltipLoc
             // 
             this.msgCommentTooltipLoc.AutoPopDelay = 32000;
+            this.msgCommentTooltipLoc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Italic);
             this.msgCommentTooltipLoc.InitialDelay = 200;
-            this.msgCommentTooltipLoc.IsBalloon = true;
             this.msgCommentTooltipLoc.ReshowDelay = 50;
             this.msgCommentTooltipLoc.ShowAlways = true;
             // 
@@ -5203,7 +5204,7 @@ namespace NPC_Maker
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
         private System.Windows.Forms.Button Button_CDelete;
-        private System.Windows.Forms.ToolTip CodeParamsTooltip;
+        private NPC_Maker.Controls.BigToolTip CodeParamsTooltip;
         private System.Windows.Forms.Button Button_UpdateCompile;
         private NPC_Maker.Controls.BigCheckBox ChkBox_UseSpaceFont;
         private System.Windows.Forms.Button Btn_MsgMoveDown;
@@ -5253,8 +5254,8 @@ namespace NPC_Maker
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox_Comment_Loc;
         private System.Windows.Forms.PictureBox pictureBox_Comment;
-        private System.Windows.Forms.ToolTip msgCommentTooltip;
-        private System.Windows.Forms.ToolTip msgCommentTooltipLoc;
+        private NPC_Maker.Controls.BigToolTip msgCommentTooltip;
+        private NPC_Maker.Controls.BigToolTip msgCommentTooltipLoc;
         private System.Windows.Forms.SplitContainer MsgTabSplitContainer;
         private System.Windows.Forms.ToolStripMenuItem compileActorToolStripMenuItem;
         private System.Windows.Forms.ComboBox comboFont;
