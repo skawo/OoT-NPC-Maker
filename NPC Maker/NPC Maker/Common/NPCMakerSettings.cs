@@ -76,6 +76,8 @@ namespace NPC_Maker
 
         public List<string> LastPaths { get; set; }
 
+        public List<string> LastSavePaths { get; set; }
+
         public Lists.Library Library { get; set; } 
 
         public NPCMakerSettings()
@@ -113,6 +115,7 @@ namespace NPC_Maker
             GUIScale = 1.0f;
             Linker = Lists.Linker.MipsLD;
             LastPaths = new List<string>();
+            LastSavePaths = new List<string>();
             Library = Lists.Library.z64hdr;
             IncludePaths = Lists.DefaultIncludePaths[Lists.Library.z64hdr];
         }

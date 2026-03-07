@@ -122,6 +122,7 @@ namespace NPC_Maker
 
             SetupFonts();
             UpdateLastPathsList();
+            UpdateSaveBinaryLastPathsList();
 
             // ============================================================
 
@@ -536,6 +537,21 @@ namespace NPC_Maker
 
             for (int i = 0; i < recentItems.Count; i++)
                 openRecentToolStripMenuItem.DropDownItems.Insert(i, recentItems[i]);
+        }
+
+        private void UpdateSaveBinaryLastPathsList()
+        {
+            while (saveBinaryToRecentToolStripMenuItem.DropDownItems.Count > 2)
+                saveBinaryToRecentToolStripMenuItem.DropDownItems.RemoveAt(0);
+
+            var recentItems = Program.Settings.LastSavePaths
+                .Select(path => new ToolStripMenuItem(Helpers.TruncatePath(path)) { Tag = path })
+                .ToList();
+
+            recentItems.ForEach(item => item.Click += (s, e) => RunSaveBinary((string)item.Tag));
+
+            for (int i = 0; i < recentItems.Count; i++)
+                saveBinaryToRecentToolStripMenuItem.DropDownItems.Insert(i, recentItems[i]);
         }
 
         private void clearThisListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1268,6 +1284,52 @@ namespace NPC_Maker
             FileOps.SaveNPCJSON(Path, EditedFile, null);
         }
 
+        private async void RunSaveBinary(string Path)
+        {
+            IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
+            progress.Report(new Common.ProgressReport("Starting...", 0));
+
+            Program.CompileInProgress = true;
+            this.MenuStrip.Enabled = false;
+            this.Panel_Editor.Enabled = false;
+            this.btn_FindMsg.Enabled = false;
+            this.progressL.Visible = true;
+
+            Program._stopWatch = Stopwatch.StartNew();
+            Program.CompileThereWereErrors = false;
+
+            compileTimer.Start();
+
+            var cacheStatus = FileOps.GetCacheStatus(ref EditedFile);
+
+            if (Program.Settings.CompileInParallel && (cacheStatus.CacheInvalid || cacheStatus.CCacheInvalid))
+            {
+                await FileOps.PreprocessCodeAndScripts(Path, EditedFile, cacheStatus, progress, false);
+            }
+            else
+            {
+                await TaskEx.Run(() =>
+                {
+                    string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
+                    FileOps.SaveBinaryFile(Path, ref EditedFile, progress, baseDefines, cacheStatus, null, false);
+                    CCode.CleanupStandardCompilationArtifacts();
+                });
+            }
+
+            Program.Settings.LastSaveBinaryPath = Path;
+
+            if (Program.Settings.LastSavePaths.Contains(Path))
+                Program.Settings.LastSavePaths.Remove(Path);
+
+            Program.Settings.LastSavePaths.Insert(0, Path);
+
+            if (Program.Settings.LastSavePaths.Count > 10)
+                Program.Settings.LastSavePaths.RemoveAt(10);
+
+            UpdateSaveBinaryLastPathsList();
+
+        }
+
         private async void FileMenu_SaveBinary_Click(object sender, EventArgs e)
         {
             if (EditedFile == null || Program.CompileInProgress)
@@ -1285,40 +1347,8 @@ namespace NPC_Maker
             if (DR == DialogResult.OK)
             {
 
-                IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
-                progress.Report(new Common.ProgressReport("Starting...", 0));
-
-                Program.CompileInProgress = true;
-                this.MenuStrip.Enabled = false;
-                this.Panel_Editor.Enabled = false;
-                this.btn_FindMsg.Enabled = false;
-                this.progressL.Visible = true;
-
-                Program._stopWatch = Stopwatch.StartNew();
-                Program.CompileThereWereErrors = false;
-
-                compileTimer.Start();
-
-                var cacheStatus = FileOps.GetCacheStatus(ref EditedFile);
-
-                if (Program.Settings.CompileInParallel && (cacheStatus.CacheInvalid || cacheStatus.CCacheInvalid))
-                {
-                    await FileOps.PreprocessCodeAndScripts(SFD.FileName, EditedFile, cacheStatus, progress, false);
-                }
-                else
-                {
-                    await TaskEx.Run(() =>
-                    {
-                        string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
-                        FileOps.SaveBinaryFile(SFD.FileName, ref EditedFile, progress, baseDefines, cacheStatus, null, false);
-                        CCode.CleanupStandardCompilationArtifacts();
-                    });
-                }
-
-                Program.Settings.LastSaveBinaryPath = SFD.FileName;
+                RunSaveBinary(SFD.FileName);
             }
-
-            //InsertDataToEditor();
         }
 
         private void AddNewLocalizationToolClick(object sender, EventArgs e)
@@ -5224,6 +5254,12 @@ namespace NPC_Maker
                 }
             }
 
+        }
+
+        private void clearThisListToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            Program.Settings.LastSavePaths = new List<string>();
+            UpdateSaveBinaryLastPathsList();
         }
     }
 }
