@@ -1130,6 +1130,7 @@ namespace NPC_Maker.Scripts
                         continue;
                     }
 
+                    // ccall assignment
                     if (splitLine.Length > 2
                             && splitLine[1] == "="
                             && splitLine[2].Equals(Lists.Instructions.CCALL.ToString(), StringComparison.OrdinalIgnoreCase))
