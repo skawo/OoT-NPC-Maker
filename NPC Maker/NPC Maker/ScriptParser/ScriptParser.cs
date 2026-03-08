@@ -1131,15 +1131,19 @@ namespace NPC_Maker.Scripts
                     }
 
                     // ccall assignment
-                    if (splitLine.Length > 2
-                            && splitLine[1] == "="
-                            && splitLine[2].Equals(Lists.Instructions.CCALL.ToString(), StringComparison.OrdinalIgnoreCase))
+                    if (splitLine.Length > 3
+                        && splitLine[1] == "="
+                        && string.Compare(splitLine[2], "CCALL", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        string assignTarget = splitLine[0];
-                        var reordered = new string[] { splitLine[2], splitLine[3], assignTarget }
-                            .Concat(splitLine.Skip(4))
-                            .ToArray();
+                        var reordered = new string[splitLine.Length - 1];
+                        reordered[0] = splitLine[2];
+                        reordered[1] = splitLine[3];
+                        reordered[2] = splitLine[0];
+                        for (int j = 4; j < splitLine.Length; j++)
+                            reordered[j - 1] = splitLine[j];
+
                         instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, reordered));
+                        continue;
                     }
                     else
                     {
