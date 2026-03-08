@@ -1140,6 +1140,16 @@ namespace NPC_Maker.Scripts
                         splitLine.CopyTo(prefixed, 1);
                         instructions.Add(ParseSetInstruction(prefixed));
                     }
+                    else if (splitLine.Length > 2
+                            && splitLine[1] == "="
+                            && splitLine.Any(s => s.Equals(Lists.Instructions.CCALL.ToString(), StringComparison.OrdinalIgnoreCase)))
+                    {
+                        string arg = splitLine[0];
+                        splitLine[0] = splitLine[1];
+                        splitLine[1] = splitLine[2];
+                        splitLine[2] = arg;
+                        instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, splitLine));
+                    }
                     else
                     {
                         outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(splitLine));
