@@ -1130,29 +1130,32 @@ namespace NPC_Maker.Scripts
                         continue;
                     }
 
-                    // SET shorthand (e.g. SETRAM variants)
-                    byte? setRamSubID = ScriptHelpers.GetSubIDForRamType(first);
-
-                    if (setRamSubID.HasValue || Dicts.SetSubTypeNames.Contains(first))
-                    {
-                        var prefixed = new string[splitLine.Length + 1];
-                        prefixed[0] = Lists.Instructions.SET.ToString();
-                        splitLine.CopyTo(prefixed, 1);
-                        instructions.Add(ParseSetInstruction(prefixed));
-                    }
-                    else if (splitLine.Length > 2
+                    if (splitLine.Length > 2
                             && splitLine[1] == "="
-                            && splitLine.Any(s => s.Equals(Lists.Instructions.CCALL.ToString(), StringComparison.OrdinalIgnoreCase)))
+                            && splitLine[2].Equals(Lists.Instructions.CCALL.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        string arg = splitLine[0];
-                        splitLine[0] = splitLine[1];
-                        splitLine[1] = splitLine[2];
-                        splitLine[2] = arg;
-                        instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, splitLine));
+                        string assignTarget = splitLine[0];
+                        var reordered = new string[] { splitLine[2], splitLine[3], assignTarget }
+                            .Concat(splitLine.Skip(4))
+                            .ToArray();
+                        instructions.Add(ParseCCallInstruction(Entry.EmbeddedOverlayCode, reordered));
                     }
                     else
                     {
-                        outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(splitLine));
+                        // SET shorthand (e.g. SETRAM variants)
+                        byte? setRamSubID = ScriptHelpers.GetSubIDForRamType(first);
+
+                        if (setRamSubID.HasValue || Dicts.SetSubTypeNames.Contains(first))
+                        {
+                            var prefixed = new string[splitLine.Length + 1];
+                            prefixed[0] = Lists.Instructions.SET.ToString();
+                            splitLine.CopyTo(prefixed, 1);
+                            instructions.Add(ParseSetInstruction(prefixed));
+                        }
+                        else
+                        {
+                            outScript.ParseErrors.Add(ParseException.UnrecognizedInstruction(splitLine));
+                        }
                     }
                 }
                 catch
