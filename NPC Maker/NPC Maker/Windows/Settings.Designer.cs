@@ -480,10 +480,10 @@ namespace NPC_Maker.Windows
             this.outputDFile.BoxSize = 18;
             this.outputDFile.Location = new System.Drawing.Point(15, 223);
             this.outputDFile.Name = "outputDFile";
-            this.outputDFile.Size = new System.Drawing.Size(150, 22);
+            this.outputDFile.Size = new System.Drawing.Size(217, 22);
             this.outputDFile.TabIndex = 35;
             this.outputDFile.Tag = "OUTPUTDEPS";
-            this.outputDFile.Text = "Output dependencies file";
+            this.outputDFile.Text = "Output dependencies file in GUI Mode";
             this.outputDFile.UseVisualStyleBackColor = true;
             this.outputDFile.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 

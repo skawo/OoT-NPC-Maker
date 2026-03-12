@@ -505,7 +505,7 @@ namespace NPC_Maker
             return codeBuilder.ToString();
         }
 
-        public static async Task PreprocessCodeAndScripts(string outPath, NPCFile Data, Common.CacheStatus cacheStatus, IProgress<Common.ProgressReport> progress, bool CLIMode)
+        public static async Task PreprocessCodeAndScripts(string outPath, string outputDepsPath, NPCFile Data, Common.CacheStatus cacheStatus, IProgress<Common.ProgressReport> progress, bool CLIMode)
         {
             float progressPer = 100f / Data.Entries.Count;
             float curProgress = 0f;
@@ -563,7 +563,7 @@ namespace NPC_Maker
                     });
 
                 Program.ConsoleWriteLineS("\nPre-processing done!");
-                SaveBinaryFile(outPath, ref Data, progress, baseDefines, new CacheStatus() { CCacheInvalid = false, CacheInvalid = false }, results, CLIMode);
+                SaveBinaryFile(outPath, outputDepsPath, ref Data, progress, baseDefines, new CacheStatus() { CCacheInvalid = false, CacheInvalid = false }, results, CLIMode);
 
                 CCode.CleanupStandardCompilationArtifacts();
                 Program.CompileInProgress = false;
@@ -696,8 +696,15 @@ namespace NPC_Maker
 
         private static uint TryGetFromH(bool CLIMode, string NPCName, uint defaultV, Dictionary<string, string> defines, string name)
         {
+            string Error = $"{NPCName}: Warning: Could not find define {name}!";
+
             if (defines.Count == 0)
+            {
+                if (!string.IsNullOrWhiteSpace(name))
+                    FileOps.ShowMsg(CLIMode, Error);
+    
                 return defaultV;
+            }
 
             try
             {
@@ -706,21 +713,21 @@ namespace NPC_Maker
                 if (h == null)
                 {
                     if (!string.IsNullOrWhiteSpace(name))
-                        FileOps.ShowMsg(CLIMode, $"{NPCName}: Warning: Could not find define {name}!");
+                        FileOps.ShowMsg(CLIMode, Error);
 
                     return defaultV;
                 }
 
                 return h.Value1 != null ? (uint)h.Value1 : defaultV;
             }
-            catch
+            catch (Exception ex)
             {
-                FileOps.ShowMsg(CLIMode, $"{NPCName}: Error parsing define \"{name}\"!");
+                FileOps.ShowMsg(CLIMode, $"{NPCName}: Error parsing define \"{name}\": {ex.Message}");
                 return defaultV;
             }
         }
 
-        public static void SaveBinaryFile(string outPath, ref NPCFile Data, IProgress<Common.ProgressReport> progress,
+        public static void SaveBinaryFile(string outPath, string outputDepsPath, ref NPCFile Data, IProgress<Common.ProgressReport> progress,
                                           string baseDefines, Common.CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles, bool CLIMode)
         {
             if (!Data.Entries.Any())
@@ -817,7 +824,7 @@ namespace NPC_Maker
                     return;
                 }
 
-                WriteOutput(outPath, Data, compilationData.ToList(), progress, CLIMode, ref offset);
+                WriteOutput(outPath, outputDepsPath, Data, compilationData.ToList(), progress, CLIMode, ref offset);
             }
             catch (Exception ex)
             {
@@ -1357,7 +1364,7 @@ namespace NPC_Maker
             Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
         }
 
-        private static void WriteOutput(string outPath, NPCFile data, List<Common.CompilationEntryData> compilationData, 
+        private static void WriteOutput(string outPath, string outputDepsPath, NPCFile data, List<Common.CompilationEntryData> compilationData, 
                                         IProgress<Common.ProgressReport> progress, bool CLIMode, ref int offset)
         {
             var output = new List<byte>();
@@ -1412,8 +1419,8 @@ namespace NPC_Maker
                 if (entry.data != null)
                     output.AddRange(entry.data);
             
-            if (Program.Settings.OutputDeps)
-                File.WriteAllText(outPath + ".d", CreateDepsFile(data, outPath));
+            if (!String.IsNullOrEmpty(outputDepsPath))
+                File.WriteAllText(outputDepsPath, CreateDepsFile(data, outPath));
 
             Program.ConsoleWriteLineS("\nDone!");
             progress?.Report(new Common.ProgressReport("Done!", 100));

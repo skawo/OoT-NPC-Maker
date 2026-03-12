@@ -57,6 +57,9 @@ namespace NPC_Maker
         [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int dwProcessId);
 
+        [DllImport("kernel32.dll")]
+        private static extern bool FreeConsole();
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -67,7 +70,7 @@ namespace NPC_Maker
 
             if (hasArgs)
             {
-                SetupConsole(args);
+                SetupConsole(ref args);
                 PrintBanner();
             }
 
@@ -107,10 +110,13 @@ namespace NPC_Maker
             IsWSL = Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
         }
 
-        private static void SetupConsole(string[] args)
+        private static void SetupConsole(ref string[] args)
         {
-            if (args.Contains("--silent"))
+            if (args.Any(a => a.Equals("--silent", StringComparison.OrdinalIgnoreCase)))
+            {
                 consoleSilent = true;
+                args = args.Where(a => !a.Equals("--silent", StringComparison.OrdinalIgnoreCase)).ToArray();
+            }
 
             if (!IsRunningUnderMono)
                 AttachConsole(-1);
@@ -241,13 +247,24 @@ namespace NPC_Maker
         {
             ConsoleWriteLineS($"Compiling \"{Path.GetFileName(args[1])}\" to {args[3]}...");
 
-            string compileFlags = args.Length == 5 ? args[4].Trim('"') : "";
             string compileMsgs = "";
 
+            string inCFile = args[1];
+            string outZovl = args[2];
+
+            string linkerFiles;
+
+            if (args.Length > 3 && !args[3].Equals("none", StringComparison.OrdinalIgnoreCase))
+                linkerFiles = $"{Program.Settings.LinkerPaths};{args[3]}";
+            else
+                linkerFiles = Program.Settings.LinkerPaths;
+
+            string compileFlags = args.Length > 4 ? args[4].Trim('"') : string.Empty;
+
             List<CSymbol> symbols = null;
-            CCode.Compile(args[1],
-                          args[2].ToLower() == "none" ? $"{Program.Settings.LinkerPaths};{args[2]}" : Program.Settings.LinkerPaths,
-                          args[3], 
+            CCode.Compile(inCFile,
+                          linkerFiles,
+                          outZovl, 
                           compileFlags, 
                           ref compileMsgs, 
                           out symbols);
@@ -264,7 +281,7 @@ namespace NPC_Maker
                 }
             }
 
-            ConsoleWriteLineS("Press ENTER to exit...");
+            Console.WriteLine("Press ENTER to exit...");
         }
 
         private static void RunConvertCommand(string[] args)
@@ -274,10 +291,12 @@ namespace NPC_Maker
 
             try
             {
-                jsonText = File.ReadAllText(args[0]);
-                inFile = FileOps.ParseNPCJsonFile("", jsonText);
+                JsonPath = args[0];
+                string outPath = args[1];
+                string outDeps = args.Length > 2 ? args[2] : null;
 
-                Program.JsonPath = args[0];
+                jsonText = File.ReadAllText(JsonPath);
+                inFile = FileOps.ParseNPCJsonFile("", jsonText);
 
                 Dicts.LoadDicts();
                 Dicts.ReloadLanguages(inFile.Languages);
@@ -288,9 +307,9 @@ namespace NPC_Maker
                 var cacheStatus = FileOps.GetCacheStatus(ref inFile);
 
                 if (Program.Settings.CompileInParallel && (cacheStatus.CacheInvalid || cacheStatus.CCacheInvalid))
-                    RunParallelCompile(args[1], cacheStatus, inFile);
+                    RunParallelCompile(outPath, outDeps, cacheStatus, inFile);
                 else
-                    RunSequentialCompile(args[1], cacheStatus, ref inFile);
+                    RunSequentialCompile(outPath, outDeps, cacheStatus, ref inFile);
             }
             catch (Exception ex) when (inFile == null)
             {
@@ -308,31 +327,31 @@ namespace NPC_Maker
             if (!String.Equals(jsonText, newJson)) 
                 FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
 
-            ConsoleWriteLineS("Press ENTER to exit...");
+            Console.WriteLine("Press ENTER to exit...");
         }
 
-        private static void RunParallelCompile(string outputPath, Common.CacheStatus cacheStatus, NPCFile inFile)
+        private static void RunParallelCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, NPCFile inFile)
         {
             Program.CompileInProgress = true;
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            FileOps.PreprocessCodeAndScripts(outputPath, inFile, cacheStatus, null, true);
+            FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, inFile, cacheStatus, null, true);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             while (Program.CompileInProgress) {}
         }
 
-        private static void RunSequentialCompile(string outputPath, Common.CacheStatus cacheStatus, ref NPCFile inFile)
+        private static void RunSequentialCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, ref NPCFile inFile)
         {
             var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
 
-            FileOps.SaveBinaryFile(outputPath, ref inFile, null, baseDefines, cacheStatus, null, true);
+            FileOps.SaveBinaryFile(outputPath, outputDepsPath, ref inFile, null, baseDefines, cacheStatus, null, true);
             CCode.CleanupStandardCompilationArtifacts();
         }
 
         private static void PrintUsage()
         {
-            Console.WriteLine("Usage: \"NPC Maker.exe\" [InputJson] [OutputZobj] [-silent]");
-            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c [InputCFile] [ExtraLinkerFiles|none] [OutputZovl] [\"COMPILEFLAGS\"]");
+            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps] [--silent]");
+            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c InputCFile OutputZovl [ExtraLinkerFiles|none] [\"COMPILEFLAGS\"] [--silent]");
             Console.WriteLine("Press ENTER to exit...");
         }
 
