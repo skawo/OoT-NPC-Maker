@@ -56,7 +56,19 @@ namespace NPC_Maker
             return path;
         }
 
-        public static string DenormalizeExtPath(string path)
+        public static string MakePathRelativeToProjectPath(string path)
+        {
+            string projectPath = Path.GetFullPath(Program.Settings.ProjectPath);
+            string fullPath = Path.GetFullPath(path);
+
+            Uri projectUri = new Uri(projectPath.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
+            Uri fileUri = new Uri(fullPath);
+            path = Uri.UnescapeDataString(projectUri.MakeRelativeUri(fileUri).ToString())
+                       .Replace('/', Path.DirectorySeparatorChar);
+            return path;
+        }
+
+        public static string DenormalizeExtPath(string path, bool relativeToProjectPath = false)
         {
             if (Program.Settings.ProjectPath.Length >= Program.ExecPath.Length)
             {
@@ -69,6 +81,9 @@ namespace NPC_Maker
                 path = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
             }
             path = path.Replace(Lists.GameVersionPathToken, Lists.GameVersionStrings[Program.Settings.Library][(int)Program.Settings.GameVersion]);
+
+            if (relativeToProjectPath)
+                path = MakePathRelativeToProjectPath(path);
 
             return path;
         }
@@ -443,6 +458,7 @@ namespace NPC_Maker
                     return normalizedBasePath;
 
                 string tokenWithSeparator = token + "/";
+
                 if (tokenizedPath.StartsWith(tokenWithSeparator, StringComparison.Ordinal))
                 {
                     string relativePortion = tokenizedPath.Substring(tokenWithSeparator.Length);
@@ -458,9 +474,24 @@ namespace NPC_Maker
             }
         }
 
+        public static string[] ResolveSemicolonPaths(string PathsString, bool relativeToProjectPath = false)
+        {
+            string[] Paths = PathsString.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < Paths.Length; i++)
+            {
+                if (!String.IsNullOrWhiteSpace(Paths[i]))
+                {
+                    Paths[i] = Helpers.DenormalizeExtPath(Paths[i], relativeToProjectPath);
+                }
+            }
+
+            return Paths;
+        }
+
         public static Dictionary<string, string> GetDefinesFromHeaders(string PathString)
         {
-            string[] Paths = PathString.Split(';');
+            string[] Paths = Helpers.ResolveSemicolonPaths(PathString);
             Dictionary<string, string> defines = new Dictionary<string, string>();
 
             try
@@ -470,12 +501,11 @@ namespace NPC_Maker
                     if (!String.IsNullOrEmpty(p))
                     {
                         Dictionary<string, string> dict;
-                        string realPath = Helpers.ReplaceTokenWithPath(Program.Settings.ProjectPath, p, Lists.ProjectPathToken);
 
-                        if (Path.GetExtension(realPath) == ".xml")
-                            dict = ParseDefinesXML(realPath);
+                        if (Path.GetExtension(p) == ".xml")
+                            dict = ParseDefinesXML(p);
                         else
-                            dict = ParseDefinesH(realPath);
+                            dict = ParseDefinesH(p);
 
                         foreach (var f in dict)
                         {

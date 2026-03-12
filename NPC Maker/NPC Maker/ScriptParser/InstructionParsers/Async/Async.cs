@@ -64,7 +64,7 @@ namespace NPC_Maker.Scripts
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show(ex.Message);
+                BigMessageBox.Show("(Async parser)" + ex.Message);
                 outScript.ParseErrors.Add(
                     ParseException.GeneralError(SplitLine));
                 return new List<Instruction>();

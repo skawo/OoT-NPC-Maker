@@ -47,6 +47,7 @@ namespace NPC_Maker.Windows
             chkBox_Compress.Checked = EditedSettings.CompressIndividually;
             Txt_ProjectPath.Text = EditedSettings.ProjectPath;
             Chk_AllowCommentsOnLoc.Checked = EditedSettings.AllowCommentsOnLoc;
+            outputDFile.Checked = EditedSettings.OutputDeps;
             guiScale.Value = (decimal)EditedSettings.GUIScale;
 
             Combo_Linker.SelectedIndex = (int)EditedSettings.Linker;
@@ -154,7 +155,7 @@ namespace NPC_Maker.Windows
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show(ex.Message);
+                BigMessageBox.Show("Error resetting cache: " + ex.Message);
             }
         }
 

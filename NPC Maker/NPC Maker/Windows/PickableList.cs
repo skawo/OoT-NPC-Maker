@@ -94,7 +94,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show(ex.Message);
+                BigMessageBox.Show("Pickable list error: " + ex.Message);
                 return;
             }
 

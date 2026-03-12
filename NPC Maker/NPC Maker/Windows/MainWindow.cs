@@ -461,7 +461,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show(ex.Message);
+                BigMessageBox.Show("Error setting up language combobox: " + ex.Message);
             }
 
             Combo_Language.SelectedIndex = 0;
@@ -1394,7 +1394,7 @@ namespace NPC_Maker
                 }
                 catch (Exception ex)
                 {
-                    BigMessageBox.Show(ex.Message);
+                    BigMessageBox.Show("Add localization error:" + ex.Message);
                 }
 
             }
@@ -1439,7 +1439,7 @@ namespace NPC_Maker
                             }
                             catch (Exception ex)
                             {
-                                BigMessageBox.Show(ex.Message);
+                                BigMessageBox.Show("Remove localization error:" + ex.Message);
                             }
 
                             Combo_Language.SelectedIndex = 0;
@@ -3873,7 +3873,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show(ex.Message);
+                BigMessageBox.Show("Error moving message up: " + ex.Message);
             }
         }
 
@@ -3913,7 +3913,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show(ex.Message);
+                BigMessageBox.Show("Error moving message down: " + ex.Message);
             }
         }
 

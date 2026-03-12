@@ -74,11 +74,13 @@ namespace NPC_Maker
             }
         }
 
-        public static NPCFile ParseNPCJsonFile(string fileName)
+        public static NPCFile ParseNPCJsonFile(string fileName, string jsonText = "")
         {
             try
             {
-                string jsonText = File.ReadAllText(fileName);
+                if (String.IsNullOrWhiteSpace(jsonText))
+                    jsonText = File.ReadAllText(fileName);
+
                 NPCFile npcFile = JsonConvert.DeserializeObject<NPCFile>(jsonText);
                 int currentVersion = npcFile.Version > 0 ? npcFile.Version : 1;
 
@@ -409,7 +411,7 @@ namespace NPC_Maker
             // C header + linker contents
             data.CHeader = CCode.ReplaceGameVersionInclude(data.CHeader);
             var cHeaderBuilder = new StringBuilder(data.CHeader);
-            foreach (var linkerPath in CCode.ResolveSemicolonPaths(Program.Settings.LinkerPaths))
+            foreach (var linkerPath in Helpers.ResolveSemicolonPaths(Program.Settings.LinkerPaths))
             {
                 if (File.Exists(linkerPath))
                     cHeaderBuilder.Append(File.ReadAllText(linkerPath));
@@ -1231,7 +1233,7 @@ namespace NPC_Maker
 
             curLen += 4;
 
-            if (entry.EmbeddedOverlayCode.Functions.Count == 0)
+            if (entry.EmbeddedOverlayCode.Functions == null || entry.EmbeddedOverlayCode.Functions.Count == 0)
             {
                 entryBytes.AddRangeBigEndian(-1);
                 return;
@@ -1409,11 +1411,56 @@ namespace NPC_Maker
             foreach (var entry in compilationData)
                 if (entry.data != null)
                     output.AddRange(entry.data);
+            
+            if (Program.Settings.OutputDeps)
+                File.WriteAllText(outPath + ".d", CreateDepsFile(data, outPath));
 
             Program.ConsoleWriteLineS("\nDone!");
             progress?.Report(new Common.ProgressReport("Done!", 100));
 
             File.WriteAllBytes(outPath, output.ToArray());
+        }
+        public static string CreateDepsFile(NPCFile data, string zobjFilename)
+        {
+            List<string> deps = new List<string>();
+            Action<string> addDep = (p) => {
+                string escaped = p.Replace(" ", "\\ ");
+                if (!deps.Contains(escaped))
+                    deps.Add(escaped);
+            };
+
+            string jsonFile = Helpers.MakePathRelativeToProjectPath(Program.JsonPath);
+            addDep(jsonFile);
+
+            foreach (var entry in data.Entries)
+            {
+                foreach (var header in entry.EmbeddedOverlayCode.HeaderPaths)
+                {
+                    addDep(Helpers.DenormalizeExtPath(header, true));
+                }
+                foreach (var p in Helpers.ResolveSemicolonPaths(entry.HeaderPath, true))
+                {
+                    addDep(p);
+                }
+                foreach (var p in Helpers.ResolveSemicolonPaths(data.ExtScriptHeaderPath, true))
+                {
+                    addDep(p);
+                }
+            }
+
+            zobjFilename = Helpers.MakePathRelativeToProjectPath(zobjFilename);
+            string escapedTarget = zobjFilename.Replace(" ", "\\ ");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(escapedTarget);
+            sb.Append(":");
+            for (int i = 0; i < deps.Count; i++)
+            {
+                sb.Append(" \\\n  ");
+                sb.Append(deps[i]);
+            }
+            sb.AppendLine();
+            return sb.ToString();
         }
     }
 }

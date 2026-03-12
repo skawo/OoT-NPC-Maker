@@ -227,20 +227,6 @@ namespace NPC_Maker
             Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{CompilationMsgs}{Environment.NewLine}{Environment.NewLine}");
         }
 
-        public static string[] ResolveSemicolonPaths(string PathsString)
-        {
-            string[] Paths = PathsString.Split(';');
-
-            for (int i = 0; i < Paths.Length; i++)
-            {
-                if (!String.IsNullOrEmpty(Paths[i]))
-                {
-                    Paths[i] = Helpers.DenormalizeExtPath(Paths[i]);
-                }
-            }
-
-            return Paths;
-        }
 
         public static byte[] CompileUnderMono(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
                                               string compileFile, string outFilePath, string linkerFiles = "", string compileFlags = "")
@@ -249,7 +235,7 @@ namespace NPC_Maker
             {
                 IsMonoEnvironment = true,
                 Folder = folder,
-                LinkerFiles = ResolveSemicolonPaths(linkerFiles),
+                LinkerFiles = Helpers.ResolveSemicolonPaths(linkerFiles),
                 OutPath = outFilePath,
                 CompileFlags = compileFlags,
                 BinDirectory = "binmono",
@@ -269,7 +255,7 @@ namespace NPC_Maker
             {
                 IsMonoEnvironment = false,
                 Folder = folder,
-                LinkerFiles = ResolveSemicolonPaths(linkerFiles),
+                LinkerFiles = Helpers.ResolveSemicolonPaths(linkerFiles),
                 OutPath = outFilePath,
                 CompileFlags = compileFlags,
                 BinDirectory = "bin",
@@ -625,7 +611,7 @@ namespace NPC_Maker
 
         private static string[] GetIncludePaths(CompilationConfig config)
         {
-            return ResolveSemicolonPaths(Program.Settings.IncludePaths);
+            return Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths);
         }
 
         private static string BuildIncludeFlags(CompilationConfig config)
@@ -637,7 +623,7 @@ namespace NPC_Maker
         private static string BuildLibraryFlags(CompilationConfig config)
         {
             var basePath = config.IsMonoEnvironment ? ".." : Path.Combine(Program.ExecPath, "gcc");
-            var libraries = ResolveSemicolonPaths(Program.Settings.IncludePaths);
+            var libraries = Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths);
 
             return string.Join(" ", libraries.Select(path => $"-L {path.AppendQuotation()}"));
         }

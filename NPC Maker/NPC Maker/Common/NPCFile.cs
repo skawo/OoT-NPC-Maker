@@ -45,13 +45,8 @@ namespace NPC_Maker
 
         public string GetExtHeader()
         {
-            string extHeaderPath = Helpers.DenormalizeExtPath(ExtScriptHeaderPath);
-
-            if (string.IsNullOrWhiteSpace(extHeaderPath))
-                return string.Empty;
-
             var extHeader = new StringBuilder();
-            string[] paths = extHeaderPath.Split(';');
+            string[] paths = Helpers.ResolveSemicolonPaths(ExtScriptHeaderPath);
 
             foreach (string p in paths)
             {

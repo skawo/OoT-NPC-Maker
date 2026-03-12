@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft;
+using Newtonsoft.Json;
 using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZeldaMessage;
 
 namespace NPC_Maker
 {
@@ -267,10 +270,13 @@ namespace NPC_Maker
         private static void RunConvertCommand(string[] args)
         {
             NPCFile inFile = null;
+            string jsonText = "";
 
             try
             {
-                inFile = FileOps.ParseNPCJsonFile(args[0]);
+                jsonText = File.ReadAllText(args[0]);
+                inFile = FileOps.ParseNPCJsonFile("", jsonText);
+
                 Program.JsonPath = args[0];
 
                 Dicts.LoadDicts();
@@ -297,7 +303,11 @@ namespace NPC_Maker
                 return;
             }
 
-            FileOps.SaveNPCJSON(args[0], inFile);
+            string newJson = FileOps.ProcessNPCJSON(ref inFile);
+
+            if (!String.Equals(jsonText, newJson)) 
+                FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
+
             ConsoleWriteLineS("Press ENTER to exit...");
         }
 
