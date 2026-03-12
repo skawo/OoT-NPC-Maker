@@ -1790,30 +1790,28 @@ namespace NPC_Maker
             if (EditedFile == null)
                 return;
 
+            var errors = new StringBuilder();
+
             foreach (NPCEntry entry in EditedFile.Entries)
             {
                 if (!String.IsNullOrEmpty(entry.HeaderPath))
                 {
                     Dictionary<string, string> hDict = Helpers.GetDefinesFromHeaders(entry.HeaderPath);
-
-                    entry.Hierarchy = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, entry.SkeletonHeaderDefinition, hDict, entry.Hierarchy);
-                    entry.FileStart = (int)FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, entry.FileStartHeaderDefinition, hDict, (uint)entry.FileStart);
-
+                    entry.Hierarchy = (uint)FileOps.ResolveHeaderDefineOrFail(entry.NPCName, entry.SkeletonHeaderDefinition, hDict, entry.Hierarchy, errors);
+                    entry.FileStart = (int)FileOps.ResolveHeaderDefineOrFail(entry.NPCName, entry.FileStartHeaderDefinition, hDict, (uint)entry.FileStart, errors);
 
                     foreach (var animation in entry.Animations)
                     {
                         var anm = Helpers.SplitHeaderDefsString(animation.HeaderDefinition);
-
-                        animation.Address = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, anm[1], hDict, animation.Address);
-                        animation.FileStart = (int)FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, anm[0], hDict, (uint)animation.FileStart);
+                        animation.Address = FileOps.ResolveHeaderDefineOrFail(entry.NPCName, anm[1], hDict, animation.Address, errors);
+                        animation.FileStart = (int)FileOps.ResolveHeaderDefineOrFail(entry.NPCName, anm[0], hDict, (uint)animation.FileStart, errors);
                     }
 
                     foreach (var displayList in entry.ExtraDisplayLists)
                     {
                         var dl = Helpers.SplitHeaderDefsString(displayList.HeaderDefinition);
-
-                        displayList.Address = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, dl[1], hDict, displayList.Address);
-                        displayList.FileStart = (int)FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, dl[0], hDict, (uint)displayList.FileStart);
+                        displayList.Address = FileOps.ResolveHeaderDefineOrFail(entry.NPCName, dl[1], hDict, displayList.Address, errors);
+                        displayList.FileStart = (int)FileOps.ResolveHeaderDefineOrFail(entry.NPCName, dl[0], hDict, (uint)displayList.FileStart, errors);
                     }
 
                     foreach (var segment in entry.Segments)
@@ -1821,15 +1819,27 @@ namespace NPC_Maker
                         foreach (var segmentEntry in segment)
                         {
                             var seg = Helpers.SplitHeaderDefsString(segmentEntry.HeaderDefinition);
-
-                            segmentEntry.Address = FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, seg[1], hDict, segmentEntry.Address);
-                            segmentEntry.FileStart = (int)FileOps.ResolveHeaderDefineForFieldOrFail(entry.NPCName, seg[0], hDict, (uint)segmentEntry.FileStart);
+                            segmentEntry.Address = FileOps.ResolveHeaderDefineOrFail(entry.NPCName, seg[1], hDict, segmentEntry.Address, errors);
+                            segmentEntry.FileStart = (int)FileOps.ResolveHeaderDefineOrFail(entry.NPCName, seg[0], hDict, (uint)segmentEntry.FileStart, errors);
                         }
                     }
                 }
             }
 
-            BigMessageBox.Show("Check complete. All valid fields have been updated.", "Result");
+            if (errors.Length > 0)
+            {
+                BigMessageBox.Show($"Check complete with errors. Saving report.", "Result");
+
+                NativeSaveFileDialog sf = new NativeSaveFileDialog { FileName = "report.txt" };
+
+                if (sf.ShowDialog() == DialogResult.OK)
+                    File.WriteAllText(sf.FileName, errors.ToString());
+            }
+            else
+            {
+                BigMessageBox.Show("Check complete. All valid fields have been updated.", "Result");
+            }
+
             InsertDataToEditor();
         }
 

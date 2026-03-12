@@ -192,25 +192,23 @@ namespace NPC_Maker
                 return field;
         }
 
-        public static UInt32 ResolveHeaderDefineForFieldOrFail(string NpcName, string Name, Dictionary<string, string> defines, UInt32 field)
+        public static uint ResolveHeaderDefineOrFail(string npcName, string name, Dictionary<string, string> defines, uint field, StringBuilder errors)
         {
+            if (String.IsNullOrEmpty(name))
+                return field;
+
             try
             {
-                if (!String.IsNullOrEmpty(Name))
-                {
-                    Common.HDefine h = Helpers.GetHDefineFromName(Name, defines);
+                Common.HDefine h = Helpers.GetHDefineFromName(name, defines);
+                if (h != null && h.Value1 != null)
+                    return (uint)h.Value1;
 
-                    if (h != null && h.Value1 != null)
-                        return (UInt32)h.Value1;
-                    else
-                        throw new Exception();
-                }
-                else
-                    return field;
+                errors.AppendLine($"Entry {npcName}, Definition \"{name}\": could not be resolved.");
+                return field;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                BigMessageBox.Show($"Entry {NpcName}, Definition {Name} is invalid or cannot be resolved.");
+                errors.AppendLine($"Entry {npcName}, Definition \"{name}\": {ex.Message}");
                 return field;
             }
         }
