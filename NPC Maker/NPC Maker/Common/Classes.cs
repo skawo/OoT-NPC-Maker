@@ -14,6 +14,25 @@ namespace NPC_Maker.Common
         public bool ShowOrig;
     }
 
+    public class CompilationStatus
+    {
+        public bool CCode;
+        public bool Scripts;
+        public bool Messages;
+
+        public override string ToString()
+        {
+            if (!CCode && !Scripts && !Messages)
+                return "(All cached)";
+
+            string cCode = CCode ? "(C Recompiled)" : "(C Cached)";
+            string scripts = Scripts ? "(Scripts Recompiled)" : "(Scripts Cached)";
+            string messages = Messages ? "(Messages Recompiled)" : "(Messages Cached)";
+
+            return $"{cCode} {scripts} {messages}";
+        }
+    }
+
     public struct CacheStatus
     {
         public bool CCacheInvalid;

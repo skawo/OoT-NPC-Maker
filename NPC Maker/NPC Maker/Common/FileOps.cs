@@ -409,6 +409,7 @@ namespace NPC_Maker
             // C header + linker contents
             data.CHeader = CCode.ReplaceGameVersionInclude(data.CHeader);
             var cHeaderBuilder = new StringBuilder(data.CHeader);
+
             foreach (var linkerPath in Helpers.ResolveSemicolonPaths(Program.Settings.LinkerPaths))
             {
                 if (File.Exists(linkerPath))
@@ -473,7 +474,7 @@ namespace NPC_Maker
                 {
                     if (!alreadyIncluded.Contains(cleanPath))
                     {
-                        content = File.ReadAllText(cleanPath);
+                        content = File.GetLastWriteTimeUtc(cleanPath).Ticks.ToString();
                         alreadyIncluded.Add(cleanPath);
                     }
                 }
@@ -485,7 +486,7 @@ namespace NPC_Maker
                         if (!alreadyIncluded.Contains(cleanPath))
                         {
                             cleanPath = cleanPath.TrimStart('/', '\\');
-                            content = File.ReadAllText(cleanPath);
+                            content = File.GetLastWriteTimeUtc(cleanPath).Ticks.ToString();
                             alreadyIncluded.Add(cleanPath);
                         }
                     }
@@ -533,9 +534,13 @@ namespace NPC_Maker
                             {
                                 string jsonEntryPrefix = jsonFileName + "_" + entryID + "_";
 
-                                ProcessCCode(Data, entry, entryID, jsonEntryPrefix, cacheStatus.CCacheInvalid, cCacheFiles, scriptCacheFiles, results, out string compErrors);
+                                CompilationStatus cs = new CompilationStatus();
+
+                                ProcessCCode(Data, entry, entryID, jsonEntryPrefix, cacheStatus.CCacheInvalid, cCacheFiles, scriptCacheFiles, results, ref cs, out string compErrors);
                                 bool extDataExists = CheckExtDataCache(entry, jsonEntryPrefix, scriptCacheFiles, out string extDataFile);
-                                ProcessScripts(Data, entry, jsonEntryPrefix, baseDefines, cacheStatus.CacheInvalid, extDataExists, scriptCacheFiles, results);
+                                ProcessScripts(Data, entry, jsonEntryPrefix, baseDefines, cacheStatus.CacheInvalid, extDataExists, scriptCacheFiles, results, ref cs);
+
+                                results[entryID.ToString()] = cs;
 
                                 if (!extDataExists)
                                 {
@@ -570,7 +575,7 @@ namespace NPC_Maker
 
         private static void ProcessCCode(NPCFile data, NPCEntry entry, int entryID, string jsonEntryPrefix,
                                          bool cCacheInvalid, HashSet<string> cCacheFiles, HashSet<string> scriptCacheFiles,
-                                         ConcurrentDictionary<string, object> results, out string compErrors)
+                                         ConcurrentDictionary<string, object> results, ref CompilationStatus cs, out string compErrors)
         {
             compErrors = "";
 
@@ -594,6 +599,8 @@ namespace NPC_Maker
 
             if (!cCacheHit)
             {
+                cs.CCode = true;
+
                 Helpers.DeleteFileStartingWith(Program.CCachePath, funcsAddrsName, cCacheFiles);
                 Helpers.DeleteFileStartingWith(Program.CCachePath, codeName, cCacheFiles);
 
@@ -652,7 +659,7 @@ namespace NPC_Maker
 
         private static void ProcessScripts(NPCFile data, NPCEntry entry, string jsonEntryPrefix, string baseDefines,
                                            bool cacheInvalid, bool extDataExists, HashSet<string> scriptCacheFiles,
-                                           ConcurrentDictionary<string, object> results)
+                                           ConcurrentDictionary<string, object> results, ref CompilationStatus cs)
         {
             int scriptNum = 0;
 
@@ -671,6 +678,8 @@ namespace NPC_Maker
 
                 if (!scriptCacheHit)
                 {
+                    cs.Scripts = true;
+
                     Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script" + scriptNum + "_", scriptCacheFiles);
 
                     var parser = new Scripts.ScriptParser(ref data, entry, scrEntry.Text, baseDefines);
@@ -789,14 +798,21 @@ namespace NPC_Maker
                         Program.ConsoleWriteS($"Processing entry {i}: {entry.NPCName}... ");
 
                         string compErrors = "";
+
+                        CompilationStatus cs = new CompilationStatus();
+                        object csi = cs;
+
+                        if (preProcessedFiles?.TryGetValue(i.ToString(), out csi) == true)
+                            cs = (CompilationStatus)csi;
+
                         var entryBytes = BuildEntryBytes(entry, localData, CLIMode, baseDefines,
                                                          cacheStatus, jsonFileName, i, preProcessedFiles, 
-                                                         parseErrors, definesCache, ref compErrors);
+                                                         parseErrors, definesCache, ref cs, ref compErrors);
 
                         if (parseErrors.IsEmpty)
                         {
                             compilationData[i] = new Common.CompilationEntryData(entryBytes);
-                            Program.ConsoleWriteS($"OK{Environment.NewLine}");
+                            Program.ConsoleWriteS($"OK {cs.ToString()}{Environment.NewLine}");
                         }
                         else
                         {
@@ -837,7 +853,7 @@ namespace NPC_Maker
         private static List<byte> BuildEntryBytes(NPCEntry entry, NPCFile data, bool CLIMode, string baseDefines,
                                                   CacheStatus cacheStatus, string jsonFileName, int entriesDone,
                                                   ConcurrentDictionary<string, object> preProcessedFiles, ConcurrentBag<string> parseErrors,
-                                                  ConcurrentDictionary<string, Dictionary<string, string>> definesCache, ref string compErrors)
+                                                  ConcurrentDictionary<string, Dictionary<string, string>> definesCache, ref CompilationStatus cs, ref string compErrors)
         {
             var defines = definesCache.GetOrAdd(entry.HeaderPath, Helpers.GetDefinesFromHeaders);
 
@@ -845,15 +861,15 @@ namespace NPC_Maker
             int curLen = 0;
 
             BuildFixedFields(entryBytes, entry, data, defines, CLIMode, ref curLen);
-            BuildMessages(entryBytes, entry, data, jsonFileName, entriesDone, parseErrors, CLIMode, ref curLen);
+            BuildMessages(entryBytes, entry, data, jsonFileName, entriesDone, parseErrors, CLIMode, ref cs, ref curLen);
             BuildAnimations(entryBytes, entry, defines, CLIMode, ref curLen);
             BuildExtraDisplayLists(entryBytes, entry, defines, CLIMode, ref curLen);
             BuildColors(entryBytes, entry, ref curLen);
             BuildSegments(entryBytes, entry, defines, CLIMode, ref curLen);
             BuildCCode(entryBytes, entry, data, jsonFileName, entriesDone, cacheStatus.CCacheInvalid,
-                       preProcessedFiles, parseErrors, CLIMode, ref compErrors, ref curLen);
+                       preProcessedFiles, parseErrors, CLIMode, ref cs, ref compErrors, ref curLen);
             BuildScripts(entryBytes, entry, data, jsonFileName, entriesDone, baseDefines,
-                         cacheStatus.CacheInvalid, preProcessedFiles, parseErrors, CLIMode, ref curLen);
+                         cacheStatus.CacheInvalid, preProcessedFiles, parseErrors, CLIMode, ref cs, ref curLen);
 
             return entryBytes;
         }
@@ -971,7 +987,7 @@ namespace NPC_Maker
         }
 
         private static void BuildMessages(List<byte> entryBytes, NPCEntry entry, NPCFile data, string jsonFileName, int entriesDone, 
-                                          ConcurrentBag<string> parseErrors, bool CLIMode, ref int curLen)
+                                          ConcurrentBag<string> parseErrors, bool CLIMode, ref CompilationStatus cs, ref int curLen)
         {
             string msgDataHash = Helpers.GetBase64Hash(JsonConvert.SerializeObject(new { entry.Messages, entry.Localization }));
             string cachedMsgFile = Path.Combine(Program.ScriptCachePath, $"{jsonFileName}_{entriesDone}_msg_{msgDataHash}");
@@ -984,6 +1000,8 @@ namespace NPC_Maker
                 Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
                 return;
             }
+
+            cs.Messages = true;
 
             Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{jsonFileName}_{entriesDone}_msg_");
 
@@ -1176,7 +1194,7 @@ namespace NPC_Maker
 
         private static void BuildCCode(List<byte> entryBytes, NPCEntry entry, NPCFile data, string jsonFileName, int entriesDone, bool cCacheInvalid,
                                        ConcurrentDictionary<string, object> preProcessedFiles, ConcurrentBag<string> parseErrors,
-                                       bool CLIMode, ref string compErrors, ref int curLen)
+                                       bool CLIMode, ref CompilationStatus cs, ref string compErrors, ref int curLen)
         {
             if (string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
             {
@@ -1215,6 +1233,8 @@ namespace NPC_Maker
             }
             else
             {
+                cs.CCode = true;
+
                 compErrors = "";
                 Helpers.DeleteFileStartingWith(Program.CCachePath, $"{jsonFileName}_{entriesDone}_funcsaddrs_");
                 Helpers.DeleteFileStartingWith(Program.CCachePath, $"{jsonFileName}_{entriesDone}_code_");
@@ -1285,7 +1305,7 @@ namespace NPC_Maker
         private static void BuildScripts(List<byte> entryBytes, NPCEntry entry, NPCFile data,
                                          string jsonFileName, int entriesDone, string baseDefines,
                                          bool cacheInvalid, ConcurrentDictionary<string, object> preProcessedFiles,
-                                         ConcurrentBag<string> parseErrors, bool CLIMode, ref int curLen)
+                                         ConcurrentBag<string> parseErrors, bool CLIMode, ref CompilationStatus cs, ref int curLen)
         {
             var nonEmptyScripts = entry.Scripts.FindAll(x => !string.IsNullOrEmpty(x.Text));
             entryBytes.AddRangeBigEndian((uint)nonEmptyScripts.Count);
@@ -1322,6 +1342,8 @@ namespace NPC_Maker
                 }
                 else
                 {
+                    cs.Scripts = true;
+
                     Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{jsonFileName}_{entriesDone}_script{scriptNum}_");
                     var parsed = new Scripts.ScriptParser(ref data, entry, scr.Text, baseDefines).ParseScript(scr.Name, true);
                     parsedScripts.Add(parsed);
