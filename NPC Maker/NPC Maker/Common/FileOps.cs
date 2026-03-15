@@ -461,44 +461,28 @@ namespace NPC_Maker
         private static string GetIncludesText(List<string> includeList)
         {
             var codeBuilder = new StringBuilder();
-
-            List<string> alreadyIncluded = new List<string>();
+            var alreadyIncluded = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (string hPath in includeList)
             {
                 string cleanPath = Helpers.DenormalizeExtPath(hPath);
-                string content = null;
 
-                // Try original path first
-                try
-                {
-                    if (!alreadyIncluded.Contains(cleanPath))
-                    {
-                        content = File.GetLastWriteTimeUtc(cleanPath).Ticks.ToString();
-                        alreadyIncluded.Add(cleanPath);
-                    }
-                }
-                catch
-                {
-                    // Try cleaned path as fallback
-                    try
-                    {
-                        if (!alreadyIncluded.Contains(cleanPath))
-                        {
-                            cleanPath = cleanPath.TrimStart('/', '\\');
-                            content = File.GetLastWriteTimeUtc(cleanPath).Ticks.ToString();
-                            alreadyIncluded.Add(cleanPath);
-                        }
-                    }
-                    catch
-                    {
-                        // Add random string. This way the cache always will be invalidated.
-                        Program.ConsoleWriteLineS($"Warning: Couldn't resolve path {hPath} for cache use.");
-                        content = Helpers.GenerateTemporaryFolderName();
-                    }
-                }
+                // Try trimmed path as fallback
+                if (!File.Exists(cleanPath))
+                    cleanPath = cleanPath.TrimStart('/', '\\');
 
-                codeBuilder.Append(content);
+                if (!alreadyIncluded.Add(cleanPath))
+                    continue;
+
+                if (File.Exists(cleanPath))
+                {
+                    codeBuilder.Append(File.GetLastWriteTime(cleanPath).Ticks);
+                }
+                else
+                {
+                    Program.ConsoleWriteLineS($"Warning: Couldn't resolve path {hPath} for cache use.");
+                    codeBuilder.Append(Helpers.GenerateTemporaryFolderName());
+                }
             }
 
             return codeBuilder.ToString();
