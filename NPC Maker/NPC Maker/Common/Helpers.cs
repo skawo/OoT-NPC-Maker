@@ -385,6 +385,22 @@ namespace NPC_Maker
             }
         }
 
+
+        public static string GetBase64Hash(byte[] b)
+        {
+            using (var sha1 = SHA1.Create())
+            {
+                byte[] hash = sha1.ComputeHash(b);
+
+                // URL-safe Base64 without extra Replace allocations
+                return Convert.ToBase64String(hash)
+                    .TrimEnd('=')
+                    .Replace('+', '_')
+                    .Replace('/', '-');
+            }
+        }
+
+
         public static string ReplacePathWithToken(string basePath, string fullPath, string token)
         {
             try
