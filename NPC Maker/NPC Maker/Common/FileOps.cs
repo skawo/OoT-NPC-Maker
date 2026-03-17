@@ -1373,6 +1373,7 @@ namespace NPC_Maker
             if (Program.IsRunningUnderMono || cliMode)
                 Console.WriteLine(msg);
 
+            // Occasionally crashed showing messagebox on another thread.
             if (Program.IsRunningUnderMono)
                 Program.CompileMonoErrors = msg;
             else if (!cliMode)
