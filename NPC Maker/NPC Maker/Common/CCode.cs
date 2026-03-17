@@ -13,15 +13,22 @@ namespace NPC_Maker
 {
     public static class CCode
     {
-        public static string gtempFolderName = "temp";
-        public static string gcompileFolderName = "compile";
-        public static string gtempFolderPath = Path.Combine(Program.ExecPath, gtempFolderName);
-        public static string gcompileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName);
-        public static string gcodeFileNameBase = "EmbeddedOverlay";
-        public static string gheaderFileName = "npc_maker_header.h";
-        public static string geditCodeFilePath = Path.Combine(gtempFolderPath, $"{gcodeFileNameBase}.c");
-        public static string geditHeaderFilePath = Path.Combine(gtempFolderPath, gheaderFileName);
-        public static uint gBaseAddr = 0x80800000;
+        // ───────────────────────────────────────────────────────
+
+        public static readonly string TempFolderName = "temp";
+        public static readonly string CompileFolderName = "compile";
+        public static readonly string TempFolderPath = Path.Combine(Program.ExecPath, TempFolderName);
+        public static readonly string CompileFolderPath = Path.Combine(Program.ExecPath, CompileFolderName);
+        public static readonly string CodeFileNameBase = "EmbeddedOverlay";
+        public static readonly string HeaderFileName = "npc_maker_header.h";
+        public static readonly string EditCodeFilePath = Path.Combine(TempFolderPath, $"{CodeFileNameBase}.c");
+        public static readonly string EditHeaderFilePath = Path.Combine(TempFolderPath, HeaderFileName);
+
+        public static uint BaseAddr = 0x80800000;
+
+        private const string CompilationFailedString = "Compilation failed.";
+
+        // ───────────────────────────────────────────────────────────
 
         public enum CodeEditorEnum
         {
@@ -34,7 +41,7 @@ namespace NPC_Maker
             Other
         }
 
-        public static string[] CodeEditors = new string[]
+        public static readonly string[] CodeEditors =
         {
             CodeEditorEnum.VSCode.ToString(),
             CodeEditorEnum.Notepad.ToString(),
@@ -43,6 +50,8 @@ namespace NPC_Maker
             CodeEditorEnum.WordPad.ToString(),
             CodeEditorEnum.Other.ToString()
         };
+
+        // ──────────────────────────────────────────────────────────
 
         private class CompilationConfig
         {
@@ -62,39 +71,395 @@ namespace NPC_Maker
         {
             public string CompileFileName { get; }
             public string WorkingDirectory { get; }
+            public string SourceFile { get; }
             public string ObjectFile { get; }
             public string ElfFile { get; }
             public string OvlFile { get; }
-            public string dFile { get; }
-            public string SourceFile { get; }
+            public string DFile { get; }
 
             public CompilationPaths(CompilationConfig config, string sourceFile)
             {
                 CompileFileName = Path.GetFileNameWithoutExtension(sourceFile);
-
                 SourceFile = sourceFile;
                 OvlFile = config.OutPath;
                 WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory);
-                ObjectFile = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, $"{CompileFileName}.o");
-                dFile = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, $"{CompileFileName}.d");
-                ElfFile = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, $"{CompileFileName}.elf");
+                ObjectFile = Path.Combine(WorkingDirectory, $"{CompileFileName}.o");
+                DFile = Path.Combine(WorkingDirectory, $"{CompileFileName}.d");
+                ElfFile = Path.Combine(WorkingDirectory, $"{CompileFileName}.elf");
             }
         }
+
+        // ──────────────────────────────────────────────────────────────
+
+        public static void Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string compileMsgs, out List<CSymbol> symbols)
+        {
+            string folder = Helpers.GenerateTemporaryFolderName();
+
+            if (Program.IsRunningUnderMono)
+                CompileUnderMono(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
+            else
+                CompileUnderWindows(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
+        }
+
+        public static byte[] Compile(string header, string linkerFiles, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols, string folder = "")
+        {
+            symbols = null;
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(codeEntry.Code))
+                    return new byte[0];
+
+                if (string.IsNullOrWhiteSpace(folder))
+                    folder = Helpers.GenerateTemporaryFolderName();
+
+                string code = ReplaceGameVersionInclude(codeEntry.Code);
+                string processedHeader = ReplaceGameVersionInclude(header);
+
+                string compileFolderPath = Path.Combine(Program.ExecPath, CompileFolderName, folder);
+                string compileFilePath = Path.Combine(compileFolderPath, $"{CodeFileNameBase}{folder}.c");
+                string compileHeaderPath = Path.Combine(compileFolderPath, HeaderFileName);
+                string outFilePath = Path.Combine(compileFolderPath, $"{Path.GetFileName(compileFilePath)}.ovl");
+
+                if (Directory.Exists(compileFolderPath))
+                    Directory.Delete(compileFolderPath, true);
+
+                Directory.CreateDirectory(compileFolderPath);
+                File.WriteAllText(compileFilePath, code);
+                File.WriteAllText(compileHeaderPath, processedHeader);
+
+                byte[] result = Program.IsRunningUnderMono
+                    ? CompileUnderMono(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles)
+                    : CompileUnderWindows(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles);
+
+                Directory.Delete(compileFolderPath, true);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                compileMsgs = "Compilation failed: " + ex.Message;
+                return null;
+            }
+        }
+
+        public static byte[] CompileUnderMono(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
+                                              string compileFile, string outFilePath, string linkerFiles = "", string compileFlags = "")
+        {
+            return CompileInternal(BuildMonoConfig(folder, outFilePath, linkerFiles, compileFlags),
+                                   codeEntry, ref compileMsgs, out outSymbols, compileFile);
+        }
+
+        public static byte[] CompileUnderWindows(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
+                                                 string compileFile = "", string outFilePath = "", string linkerFiles = "", string compileFlags = "")
+        {
+            return CompileInternal(BuildWindowsConfig(folder, outFilePath, linkerFiles, compileFlags),
+                                   codeEntry, ref compileMsgs, out outSymbols, compileFile);
+        }
+
+        public static string ReplaceGameVersionInclude(string code)
+        {
+            string replacement = $"#include <z64hdr/{Lists.GameVersionStrings[Lists.Library.z64hdr][(int)Program.Settings.GameVersion]}/z64hdr.h>";
+            code = code.Replace("#include <z64hdr/oot_u10/z64hdr.h>", replacement);
+            code = code.Replace("#include <z64hdr/oot_mq_debug/z64hdr.h>", replacement);
+            return code;
+        }
+
+        public static void CleanupStandardCompilationArtifacts()
+        {
+            foreach (string binDir in new[] { "bin", "binmono" })
+            {
+                string path = Path.Combine(Program.ExecPath, "gcc", binDir);
+                Helpers.DeleteFileStartingWith(path, "EmbeddedOverlayNPCCOMPILE");
+                Helpers.DeleteFileStartingWith(path, "EmbeddedOverlaytemp");
+            }
+        }
+
+        public static void ConsoleWriteCompileFail(string compilationMsgs)
+        {
+            Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{compilationMsgs}{Environment.NewLine}{Environment.NewLine}");
+        }
+
+        public static void Clean(string[] files)
+        {
+            try
+            {
+                foreach (string f in files)
+                    if (File.Exists(f))
+                        File.Delete(f);
+            }
+            catch (Exception) { }
+        }
+
+        // ── Compilation Configs ───────────────────────────────────────────────────
+
+        private static CompilationConfig BuildMonoConfig(string folder, string outFilePath, string linkerFiles, string compileFlags)
+        {
+            return new CompilationConfig
+            {
+                IsMonoEnvironment = true,
+                Folder = folder,
+                LinkerFiles = Helpers.ResolveSemicolonPaths(linkerFiles),
+                OutPath = outFilePath,
+                CompileFlags = compileFlags,
+                BinDirectory = "binmono",
+                GccExecutable = "mips64-gcc",
+                LdExecutable = Program.Settings.Linker == Lists.Linker.zlinker ? "zlinker" : "mips64-ld",
+                NovlExecutable = "nOVL",
+                NovlWorkingDirectory = "nOVL"
+            };
+        }
+
+        private static CompilationConfig BuildWindowsConfig(string folder, string outFilePath, string linkerFiles, string compileFlags)
+        {
+            return new CompilationConfig
+            {
+                IsMonoEnvironment = false,
+                Folder = folder,
+                LinkerFiles = Helpers.ResolveSemicolonPaths(linkerFiles),
+                OutPath = outFilePath,
+                CompileFlags = compileFlags,
+                BinDirectory = "bin",
+                GccExecutable = "mips64-gcc.exe",
+                LdExecutable = Program.Settings.Linker == Lists.Linker.zlinker ? "zlinker.exe" : "mips64-ld.exe",
+                NovlExecutable = "novl.exe",
+                NovlWorkingDirectory = Path.Combine("nOVL")
+            };
+        }
+
+        // ── Compilation ──────────────────────────────────────────────────
+
+        private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols, string compileFile = "")
+        {
+            var paths = new CompilationPaths(config, compileFile);
+            outSymbols = null;
+
+            try
+            {
+                if (codeEntry != null)
+                    codeEntry.HeaderPaths.Clear();
+
+                Clean(new[] { paths.ObjectFile, paths.ElfFile, paths.OvlFile });
+
+                if (!RunGccCompilation(config, paths, ref compileMsgs))
+                    return HandleCompilationFailure(CompilationFailedString, ref compileMsgs);
+
+                if (!RunLinkerPhase(config, paths, codeEntry, ref compileMsgs, out outSymbols))
+                    return HandleCompilationFailure(CompilationFailedString, ref compileMsgs);
+
+                if (Program.Settings.Linker == Lists.Linker.MipsLD)
+                {
+                    if (!RunNovlPhase(config, paths, ref compileMsgs))
+                        return HandleCompilationFailure(CompilationFailedString, ref compileMsgs, returnEmptyArray: true);
+                }
+                else
+                {
+                    if (new FileInfo(paths.OvlFile).Length == 0)
+                    {
+                        compileMsgs += "Code file was empty...";
+                        return new byte[0];
+                    }
+                }
+
+                if (codeEntry != null)
+                {
+                    string[] excludedHeaderPaths = Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths);
+                    codeEntry.HeaderPaths = ExtractHeaderPaths(paths.DFile, config.Folder, excludedHeaderPaths);
+                }
+
+                compileMsgs += "Done!";
+
+                if (Program.Settings.Linker == Lists.Linker.MipsLD)
+                {
+                    if (codeEntry != null)
+                    {
+                        codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
+                        outSymbols = codeEntry.Functions;
+                    }
+                    else
+                    {
+                        outSymbols = GetAllSymbolsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
+                    }
+                }
+
+                CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.DFile);
+                return File.ReadAllBytes(paths.OvlFile);
+            }
+            catch (Exception ex)
+            {
+                CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.DFile);
+                return HandleCompilationFailure($"{CompilationFailedString} {ex.Message}", ref compileMsgs);
+            }
+        }
+
+        private static bool RunGccCompilation(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
+        {
+            compileMsgs += $"+==============+ Compiler +==============+{Environment.NewLine}";
+
+            var info = CreateGccProcessInfo(config, paths);
+
+            if (Program.Settings.Verbose)
+                compileMsgs += $"{info.FileName} {info.Arguments}{Environment.NewLine}";
+
+            int exitCode;
+
+            using (var process = Process.Start(info))
+            {
+                GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
+                exitCode = process.ExitCode;
+            }
+
+            return File.Exists(paths.ObjectFile) && exitCode == 0;
+        }
+
+        private static bool RunLinkerPhase(CompilationConfig config, CompilationPaths paths, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols)
+        {
+            compileMsgs += $"+==============+ Linker +==============+{Environment.NewLine}";
+            symbols = null;
+
+            bool usingZLinker = Program.Settings.Linker == Lists.Linker.zlinker;
+            var info = usingZLinker
+                ? CreateZLinkerProcessInfo(config, paths)
+                : CreateMipsLDLinkerProcessInfo(config, paths);
+
+            if (Program.Settings.Verbose)
+                compileMsgs += $"{info.FileName} {info.Arguments}{Environment.NewLine}";
+
+            int exitCode;
+
+            using (var process = Process.Start(info))
+            {
+                if (usingZLinker)
+                {
+                    string symbolOutput = GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment, errorsOnly: true);
+                    exitCode = process.ExitCode;
+
+                    if (exitCode == 0 && codeEntry != null)
+                        codeEntry.Functions = GetNpcMFuncsFromZLinkerOutput(symbolOutput);
+                    else
+                        symbols = GetAllSymbolsFromZLinkerOutput(symbolOutput);
+                }
+                else
+                {
+                    GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
+                    exitCode = process.ExitCode;
+                }
+            }
+
+            return File.Exists(paths.ObjectFile) && exitCode == 0;
+        }
+
+        private static bool RunNovlPhase(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
+        {
+            compileMsgs += $"+==============+ NOVL +==============+{Environment.NewLine}";
+
+            var info = CreateNovlProcessInfo(config, paths);
+
+            if (Program.Settings.Verbose)
+                compileMsgs += $"{info.FileName} {info.Arguments}{Environment.NewLine}";
+
+            if (!File.Exists(info.FileName))
+                return false;
+
+            int exitCode;
+            using (var process = Process.Start(info))
+            {
+                GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
+                exitCode = process.ExitCode;
+            }
+
+            return File.Exists(paths.ObjectFile) && exitCode == 0;
+        }
+
+        // ── ProcessStartInfo ─────────────────────────────────────────────
+
+        private static ProcessStartInfo CreateGccProcessInfo(CompilationConfig config, CompilationPaths paths)
+        {
+            string includeFlags = BuildIncludeFlags();
+            string projectFlag = string.IsNullOrEmpty(Program.Settings.ProjectPath)
+                ? string.Empty
+                : $"-I {Program.Settings.ProjectPath.AppendQuotation()} ";
+
+            string arguments = $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -MMD -B {paths.WorkingDirectory.AppendQuotation()} {paths.SourceFile.AppendQuotation()}";
+
+            return CreateProcessStartInfo(paths.WorkingDirectory,
+                Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.GccExecutable),
+                arguments);
+        }
+
+        private static ProcessStartInfo CreateZLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
+        {
+            string extraLinkerFiles = BuildLinkerFileArgs(config.LinkerFiles);
+
+            string arguments = $"-s {extraLinkerFiles} " +
+                               $"-o {paths.OvlFile.AppendQuotation()} " +
+                               $"-e 0x{BaseAddr:X} " +
+                               $"-i {paths.ObjectFile.AppendQuotation()}";
+
+            return CreateProcessStartInfo(paths.WorkingDirectory,
+                Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
+                arguments);
+        }
+
+        private static ProcessStartInfo CreateMipsLDLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
+        {
+            string libraryFlags = BuildLibraryFlags(config);
+            string extraLinkerFile = "";
+
+            foreach (string lf in config.LinkerFiles)
+                if (!string.IsNullOrWhiteSpace(lf))
+                    extraLinkerFile = $"-T {lf.AppendQuotation()}";
+
+            string arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs " +
+                               $"-o {paths.ElfFile.AppendQuotation()} " +
+                               $"{paths.ObjectFile.AppendQuotation()} " +
+                               $"{Path.Combine(paths.WorkingDirectory, "libgcc.a").AppendQuotation()}";
+
+            return CreateProcessStartInfo(paths.WorkingDirectory,
+                Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
+                arguments);
+        }
+
+        private static ProcessStartInfo CreateNovlProcessInfo(CompilationConfig config, CompilationPaths paths)
+        {
+            string fileName = config.IsMonoEnvironment
+                ? Path.Combine(paths.WorkingDirectory, "nOVL")
+                : Path.Combine(paths.WorkingDirectory, "nOVL.exe");
+
+            string verboseFlag = Program.Settings.Verbose ? "-vv" : "";
+            string arguments = $"-c {verboseFlag} -A 0x{BaseAddr:X} -o {paths.OvlFile.AppendQuotation()} {paths.ElfFile.AppendQuotation()}";
+
+            return CreateProcessStartInfo(paths.WorkingDirectory, fileName, arguments);
+        }
+
+        private static ProcessStartInfo CreateProcessStartInfo(string workingDirectory, string fileName, string arguments)
+        {
+            return new ProcessStartInfo
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = workingDirectory,
+                FileName = fileName,
+                Arguments = arguments
+            };
+        }
+
+        // ── Process Output ────────────────────────────────────────────────────────
 
         private static string GetProcessOutput(Process process, ref string compileErrors, bool isMonoEnvironment, bool errorsOnly = false)
         {
             string outputResult = "";
             string errorResult = "";
-            bool processCompleted = true;
 
             try
             {
                 var outputTask = TaskEx.Run(() => process.StandardOutput.ReadToEnd());
                 var errorTask = TaskEx.Run(() => process.StandardError.ReadToEnd());
 
-                processCompleted = process.WaitForExit((int)Program.Settings.CompileTimeout);
+                bool completed = process.WaitForExit((int)Program.Settings.CompileTimeout);
 
-                if (!processCompleted)
+                if (!completed)
                 {
                     process.Kill();
                     compileErrors += $"{Environment.NewLine}Process timed out and was terminated.{Environment.NewLine}";
@@ -110,14 +475,13 @@ namespace NPC_Maker
                     compileErrors += $"{Environment.NewLine}Error reading process output: {ex.InnerException?.Message}{Environment.NewLine}";
                 }
 
-                string combinedOutput = FormatProcessOutput(errorsOnly ? "" : outputResult, errorResult);
+                string combined = FormatProcessOutput(errorsOnly ? "" : outputResult, errorResult);
+                if (!string.IsNullOrWhiteSpace(combined))
+                    compileErrors += combined;
 
-                if (!string.IsNullOrWhiteSpace(combinedOutput))
-                    compileErrors += combinedOutput;
-
-                if (processCompleted && process.ExitCode == 0)
+                if (completed && process.ExitCode == 0)
                     compileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
-                else if (processCompleted)
+                else if (completed)
                     compileErrors += $"{Environment.NewLine}Process exited with code: {process.ExitCode}{Environment.NewLine}";
 
                 return outputResult;
@@ -131,559 +495,52 @@ namespace NPC_Maker
 
         private static string FormatProcessOutput(string standardOutput, string standardError)
         {
-            var output = new StringBuilder();
-            output.AppendLine();
+            var sb = new StringBuilder();
+            sb.AppendLine();
 
             if (!string.IsNullOrEmpty(standardOutput))
-                output.AppendLine(standardOutput.Replace("\n", Environment.NewLine));
+                sb.AppendLine(standardOutput.Replace("\n", Environment.NewLine));
 
             if (!string.IsNullOrEmpty(standardError))
-                output.AppendLine(standardError.Replace("\n", Environment.NewLine));
+                sb.AppendLine(standardError.Replace("\n", Environment.NewLine));
 
-            string result = output.ToString();
-            return result;
+            return sb.ToString();
         }
 
-        public static void Clean(string[] Files)
-        {
-            try
-            {
-                foreach (string f in Files)
-                {
-                    if (File.Exists(f))
-                        File.Delete(f);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        public static void CleanupStandardCompilationArtifacts()
-        {
-            Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "bin"), "EmbeddedOverlayNPCCOMPILE");
-            Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlayNPCCOMPILE");
-            Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "bin"), "EmbeddedOverlaytemp");
-            Helpers.DeleteFileStartingWith(Path.Combine(Program.ExecPath, "gcc", "binmono"), "EmbeddedOverlaytemp");
-        }
-
-        public static void Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string CompileMsgs, out List<CSymbol> symbols)
-        {
-            string folder = Helpers.GenerateTemporaryFolderName();
-
-            if (Program.IsRunningUnderMono)
-                CompileUnderMono(folder, null, ref CompileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
-            else
-                CompileUnderWindows(folder, null, ref CompileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
-        }
-
-        public static byte[] Compile(string Header, string linkerFiles, CCodeEntry CodeEntry, ref string CompileMsgs, out List<CSymbol> symbols, string folder = "")
-        {
-            symbols = null;
-
-            try
-            {
-                if (String.IsNullOrWhiteSpace(CodeEntry.Code))
-                    return new byte[0];
-
-                if (String.IsNullOrWhiteSpace(folder))
-                    folder = Helpers.GenerateTemporaryFolderName();
-
-                string Code = ReplaceGameVersionInclude(CodeEntry.Code);
-                string _Header = ReplaceGameVersionInclude(Header);
-
-                string compileFolderPath = Path.Combine(Program.ExecPath, gcompileFolderName, folder);
-                string compileFilePath = Path.Combine(compileFolderPath, $"{gcodeFileNameBase}{folder}.c");
-                string compileHeaderPath = Path.Combine(compileFolderPath, gheaderFileName);
-                string compileFileName = Path.GetFileName(compileFilePath);
-                string outFilePath = Path.Combine(compileFolderPath, $"{compileFileName}.ovl");
-
-
-                if (Directory.Exists(compileFolderPath))
-                    Directory.Delete(compileFolderPath, true);
-
-                Directory.CreateDirectory(compileFolderPath);
-
-                File.WriteAllText(compileFilePath, Code);
-                File.WriteAllText(compileHeaderPath, _Header);
-
-                byte[] outf = Program.IsRunningUnderMono
-                    ? CompileUnderMono(folder, CodeEntry, ref CompileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles)
-                    : CompileUnderWindows(folder, CodeEntry, ref CompileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles);
-
-                Directory.Delete(compileFolderPath, true);
-
-                return outf;
-            }
-            catch (Exception ex)
-            {
-                CompileMsgs = "Compilation failed: " + ex.Message;
-                return null;
-            }
-        }
-
-        public static void ConsoleWriteCompileFail(string CompilationMsgs)
-        {
-            Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}{CompilationMsgs}{Environment.NewLine}{Environment.NewLine}");
-        }
-
-
-        public static byte[] CompileUnderMono(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
-                                              string compileFile, string outFilePath, string linkerFiles = "", string compileFlags = "")
-        {
-            var config = new CompilationConfig
-            {
-                IsMonoEnvironment = true,
-                Folder = folder,
-                LinkerFiles = Helpers.ResolveSemicolonPaths(linkerFiles),
-                OutPath = outFilePath,
-                CompileFlags = compileFlags,
-                BinDirectory = "binmono",
-                GccExecutable = "mips64-gcc",
-                LdExecutable = Program.Settings.Linker == Lists.Linker.zlinker ? "zlinker" : "mips64-ld",
-                NovlExecutable = "nOVL",
-                NovlWorkingDirectory = "nOVL"
-            };
-
-            return CompileInternal(config, codeEntry, ref compileMsgs, out outSymbols, compileFile);
-        }
-
-        public static byte[] CompileUnderWindows(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
-                                                 string compileFile = "", string outFilePath = "", string linkerFiles = "", string compileFlags = "")
-        {
-            var config = new CompilationConfig
-            {
-                IsMonoEnvironment = false,
-                Folder = folder,
-                LinkerFiles = Helpers.ResolveSemicolonPaths(linkerFiles),
-                OutPath = outFilePath,
-                CompileFlags = compileFlags,
-                BinDirectory = "bin",
-                GccExecutable = "mips64-gcc.exe",
-                LdExecutable = Program.Settings.Linker == Lists.Linker.zlinker ? "zlinker.exe" : "mips64-ld.exe",
-                NovlExecutable = "novl.exe",
-                NovlWorkingDirectory = Path.Combine("nOVL")
-            };
-
-            return CompileInternal(config, codeEntry, ref compileMsgs, out outSymbols, compileFile);
-        }
-
-        public static bool IsFullyQualified(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return false;
-
-            // Check if it's a Unix absolute path
-            if (Program.IsRunningUnderMono && path.StartsWith("/", StringComparison.Ordinal))
-                return true;
-
-            return Path.IsPathRooted(path) &&
-                   !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(),
-                                                 StringComparison.Ordinal);
-        }
-
-        public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath, string[] excludedPaths)
-        {
-            string content = File.ReadAllText(dFilePath);
-            List<string> excluded = excludedPaths.ToList();
-
-            // Remove everything before and including the first colon
-            int colonIndex = content.IndexOf(':');
-            if (colonIndex == -1) return new List<string>();
-
-            string dependencies = content.Substring(colonIndex + 1);
-
-            // Handle line continuations (backslash + newline)
-            dependencies = Regex.Replace(dependencies, @"\\\s*\r?\n\s*", " ");
-
-            // Match paths, handling escaped spaces
-            // This regex matches sequences of non-whitespace characters and escaped spaces
-            var matches = Regex.Matches(dependencies, @"(?:[^\s\\]|\\.)+");
-
-            var headerPaths = new List<string>();
-
-            foreach (Match match in matches)
-            {
-                string path = match.Value;
-
-                // Unescape spaces
-                path = path.Replace(@"\ ", " ");
-
-                if (!IsFullyQualified(path) && !(Program.IsRunningUnderMono && path.StartsWith("..")))
-                    path = Path.Combine(Program.ExecPath, path.TrimStart('/', '\\'));
-
-                if (!string.IsNullOrEmpty(path) &&
-                    !path.Contains(folderPath) &&
-                    !IsPathExcluded(path, excluded))
-                {
-                    path = Helpers.FixCygdrivePath(path);
-
-                    if (File.Exists(path))
-                    {
-                        string pathProjPathReplaced = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
-
-                        if (!headerPaths.Contains(pathProjPathReplaced))
-                            headerPaths.Add(pathProjPathReplaced);
-
-                        excluded.Add(path);
-                    }
-                }
-            }
-
-            return headerPaths;
-        }
-
-        private static bool IsPathExcluded(string path, List<string> excludedPaths)
-        {
-            if (excludedPaths == null || excludedPaths.Count == 0)
-                return false;
-
-            // Normalize the path for comparison
-            string normalizedPath = Path.GetFullPath(path);
-
-            foreach (string excludedPath in excludedPaths)
-            {
-                if (string.IsNullOrEmpty(excludedPath))
-                    continue;
-
-                try
-                {
-                    if (path.StartsWith(excludedPath, StringComparison.OrdinalIgnoreCase))
-                        return true;
-
-                    string normalizedExcludedPath = Path.GetFullPath(excludedPath);
-
-                    // Check if the path starts with the excluded path (is contained within)
-                    if (normalizedPath.StartsWith(normalizedExcludedPath, StringComparison.OrdinalIgnoreCase))
-                        return true;
-                }
-                catch (Exception)
-                {
-                    // If path normalization fails, fall back to simple string comparison
-                    if (path.StartsWith(excludedPath, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-
-        private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols, string compileFile = "")
-        {
-            var paths = new CompilationPaths(config, compileFile);
-            string compilationFailedString = "Compilation failed.";
-            outSymbols = null;
-
-            try
-            {
-                if (codeEntry != null)
-                    codeEntry.HeaderPaths.Clear();
-
-                Clean(new[] { paths.ObjectFile, paths.ElfFile, paths.OvlFile });
-
-                if (!RunGccCompilation(config, paths, ref compileMsgs))
-                    return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
-
-                if (!RunLinkerPhase(config, paths, codeEntry, ref compileMsgs, out outSymbols))
-                    return HandleCompilationFailure(compilationFailedString, ref compileMsgs);
-
-                if (Program.Settings.Linker == Lists.Linker.MipsLD)
-                {
-                    if (!RunNovlPhase(config, paths, ref compileMsgs))
-                        return HandleCompilationFailure(compilationFailedString, ref compileMsgs, true);
-                }
-                else
-                {
-                    if (new FileInfo(paths.OvlFile).Length == 0)
-                    {
-                        compileMsgs += "Code file was empty...";
-                        return new byte[0];
-                    }
-                }
-
-                if (codeEntry != null)
-                {
-                    string[] excludedHeaderPaths = GetIncludePaths(config);
-                    codeEntry.HeaderPaths = ExtractHeaderPaths(paths.dFile, config.Folder, excludedHeaderPaths);
-                }
-
-                compileMsgs += "Done!";
-
-                if (Program.Settings.Linker == Lists.Linker.MipsLD)
-                {
-                    if (codeEntry != null)
-                    {
-                        codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
-                        outSymbols = codeEntry.Functions;
-                    }
-                    else
-                        outSymbols = GetAllSymbolsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
-                }
-
-                CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.dFile);
-                return File.ReadAllBytes(paths.OvlFile);
-            }
-            catch (Exception ex)
-            {
-                CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.dFile);
-                return HandleCompilationFailure($"{compilationFailedString} {ex.Message}", ref compileMsgs);
-            }
-        }
-
-        private static bool RunGccCompilation(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
-        {
-            compileMsgs += $"+==============+ Compiler +==============+{Environment.NewLine}";
-
-            var gccInfo = CreateGccProcessInfo(config, paths);
-
-            if (Program.Settings.Verbose)
-                compileMsgs += $"{gccInfo.FileName} {gccInfo.Arguments}{Environment.NewLine}";
-
-            int result = -1;
-
-            using (var process = Process.Start(gccInfo))
-            {
-                GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
-                result = process.ExitCode;
-            }
-
-            return File.Exists(paths.ObjectFile) && (result == 0);
-        }
-
-        private static bool RunLinkerPhase(CompilationConfig config, CompilationPaths paths, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols)
-        {
-            compileMsgs += $"+==============+ Linker +==============+{Environment.NewLine}";
-            symbols = null;
-
-            var ldInfo = Program.Settings.Linker == Lists.Linker.zlinker ? CreateZLinkerProcessInfo(config, paths) : CreateMipsLDLinkerProcessInfo(config, paths);
-
-            if (Program.Settings.Verbose)
-                compileMsgs += $"{ldInfo.FileName} {ldInfo.Arguments}{Environment.NewLine}";
-
-            int result = -1;
-
-            using (var process = Process.Start(ldInfo))
-            {
-                if (Program.Settings.Linker == Lists.Linker.zlinker)
-                {
-                    string symbolOutput = GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment, true);
-                    result = process.ExitCode;
-
-                    if (result == 0 && codeEntry != null)
-                        codeEntry.Functions = GetNpcMFuncsFromZLinkerOutput(symbolOutput);
-                    else
-                        symbols = GetAllSymbolsFromZLinkerOutput(symbolOutput);
-                }
-                else
-                {
-                    GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
-                    result = process.ExitCode;
-                }
-            }
-
-            return File.Exists(paths.ObjectFile) && (result == 0);
-        }
-
-        private static bool RunNovlPhase(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
-        {
-            compileMsgs += $"+==============+ NOVL +==============+{Environment.NewLine}";
-
-            var novlInfo = CreateNovlProcessInfo(config, paths);
-
-            if (Program.Settings.Verbose)
-                compileMsgs += $"{novlInfo.FileName} {novlInfo.Arguments}{Environment.NewLine}";
-
-            int result = -1;
-
-            if (File.Exists(novlInfo.FileName))
-            {
-                using (var process = Process.Start(novlInfo))
-                {
-                    GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
-                    result = process.ExitCode;
-                }
-            }
-
-            return File.Exists(paths.ObjectFile) && (result == 0);
-        }
-
-        private static ProcessStartInfo CreateGccProcessInfo(CompilationConfig config, CompilationPaths paths)
-        {
-            var includeFlags = BuildIncludeFlags(config);
-            var projectFlag = string.IsNullOrEmpty(Program.Settings.ProjectPath)
-                ? string.Empty
-                : $"-I {Program.Settings.ProjectPath.AppendQuotation()} ";
-
-            var arguments = $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -MMD -B {paths.WorkingDirectory.AppendQuotation()} {paths.SourceFile.AppendQuotation()}";
-
-
-            return new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = paths.WorkingDirectory,
-                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.GccExecutable),
-                Arguments = arguments
-            };
-        }
-
-        private static ProcessStartInfo CreateZLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
-        {
-            var libraryFlags = BuildLibraryFlags(config);
-            var extraLinkerFiles = "";
-
-            foreach (string lf in config.LinkerFiles)
-            {
-                if (!string.IsNullOrWhiteSpace(lf))
-                    extraLinkerFiles += $" {lf.AppendQuotation()}";
-            }
-
-            var arguments = $"-s {extraLinkerFiles} " +
-                            $"-o {paths.OvlFile.AppendQuotation()} " +
-                            $"-e 0x{gBaseAddr.ToString("X")} " +
-                            $"-i {paths.ObjectFile.AppendQuotation()}";
-
-            return new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = paths.WorkingDirectory,
-                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
-                Arguments = arguments
-            };
-        }
-
-
-        private static ProcessStartInfo CreateMipsLDLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
-        {
-            var libraryFlags = BuildLibraryFlags(config);
-            var extraLinkerFile = "";
-
-            foreach (string lf in config.LinkerFiles)
-            {
-                if (!string.IsNullOrWhiteSpace(lf))
-                    extraLinkerFile = $"-T {lf.AppendQuotation()}";
-            }
-
-            var arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs -o {paths.ElfFile.AppendQuotation()} {paths.ObjectFile.AppendQuotation()} {Path.Combine(paths.WorkingDirectory, "libgcc.a").AppendQuotation()}";
-
-            return new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = paths.WorkingDirectory,
-                FileName = Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
-                Arguments = arguments
-            };
-        }
-
-        private static ProcessStartInfo CreateNovlProcessInfo(CompilationConfig config, CompilationPaths paths)
-        {
-            var workingDir = paths.WorkingDirectory;
-
-            var fileName = config.IsMonoEnvironment
-                ? Path.Combine(paths.WorkingDirectory, "nOVL")
-                : Path.Combine(paths.WorkingDirectory, "nOVL.exe");
-
-            var verboseFlag = Program.Settings.Verbose ? "-vv" : "";
-            var arguments = $"-c {verboseFlag} -A 0x{gBaseAddr:X} -o {paths.OvlFile.AppendQuotation()} {paths.ElfFile.AppendQuotation()}";
-
-            return new ProcessStartInfo
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = workingDir,
-                FileName = fileName,
-                Arguments = arguments
-            };
-        }
-
-        private static string[] GetIncludePaths(CompilationConfig config)
-        {
-            return Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths);
-        }
-
-        private static string BuildIncludeFlags(CompilationConfig config)
-        {
-            var includes = GetIncludePaths(config);
-            return string.Join(" ", includes.Select(path => $"-I {path.AppendQuotation()}"));
-        }
-
-        private static string BuildLibraryFlags(CompilationConfig config)
-        {
-            var basePath = config.IsMonoEnvironment ? ".." : Path.Combine(Program.ExecPath, "gcc");
-            var libraries = Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths);
-
-            return string.Join(" ", libraries.Select(path => $"-L {path.AppendQuotation()}"));
-        }
-
-        private static byte[] HandleCompilationFailure(string message, ref string compileMsgs, bool returnEmptyArray = false)
-        {
-            compileMsgs += message;
-            ConsoleWriteCompileFail(compileMsgs);
-            return returnEmptyArray ? new byte[0] : null;
-        }
-
-        private static void CleanupIntermediateFiles(params string[] files)
-        {
-            foreach (var file in files.Where(File.Exists))
-            {
-                File.Delete(file);
-            }
-        }
-
-        public static string ReplaceGameVersionInclude(string Code)
-        {
-            Code = Code.Replace("#include <z64hdr/oot_u10/z64hdr.h>", $"#include <z64hdr/{Lists.GameVersionStrings[Lists.Library.z64hdr][(int)Program.Settings.GameVersion]}/z64hdr.h>");
-            Code = Code.Replace("#include <z64hdr/oot_mq_debug/z64hdr.h>", $"#include <z64hdr/{Lists.GameVersionStrings[Lists.Library.z64hdr][(int)Program.Settings.GameVersion]}/z64hdr.h>");
-            return Code;
-        }
+        // ── Symbol Extraction ─────────────────────────────────────────────────────
 
         public static List<CSymbol> GetSymbolsFromO(string elfPath, string ovlPath, bool mono, bool addSection, Func<string[], bool> filter)
         {
-            var objDumpOutput = ExecuteObjDump(elfPath, mono);
-            var normalizedOutput = Regex.Replace(objDumpOutput.Replace("\t", " "), @"\s{2,}", " ", RegexOptions.Compiled);
-            var lines = normalizedOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            var ovlData = File.ReadAllBytes(ovlPath);
+            string raw = ExecuteObjDump(elfPath, mono);
+            string normalized = Regex.Replace(raw.Replace("\t", " "), @"\s{2,}", " ", RegexOptions.Compiled);
+            string[] lines = normalized.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            byte[] ovlData = File.ReadAllBytes(ovlPath);
             var sectionOffsets = CalculateSectionOffsets(ovlData);
 
             return lines
                 .Select(line => line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
                 .Where(filter)
                 .Select(words => CreateSymbol(words, sectionOffsets, addSection))
-                .Where(entry => entry != null)
-                .OrderBy(entry => entry.Symbol)
+                .Where(s => s != null)
+                .OrderBy(s => s.Symbol)
                 .ToList();
         }
 
         public static List<CSymbol> GetNpcMakerFunctionsFromO(string elfPath, string ovlPath, bool mono)
-            => GetSymbolsFromO(elfPath, ovlPath, mono, true, IsValidNpcMakerFunction);
+            => GetSymbolsFromO(elfPath, ovlPath, mono, addSection: true, filter: IsValidNpcMakerFunction);
 
         public static List<CSymbol> GetAllSymbolsFromO(string elfPath, string ovlPath, bool mono)
-            => GetSymbolsFromO(elfPath, ovlPath, mono, false, AllSymbols);
+            => GetSymbolsFromO(elfPath, ovlPath, mono, addSection: false, filter: _ => true);
 
-        public static List<CSymbol> GetSymbolsFromZLinkerOutput(string zLinkerOutput,
-            Func<string[], bool> filter)
+        public static List<CSymbol> GetSymbolsFromZLinkerOutput(string zLinkerOutput, Func<string[], bool> filter)
         {
-            var lines = zLinkerOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             var result = new List<CSymbol>();
 
-            foreach (var line in lines)
+            foreach (string line in zLinkerOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                string[] components = line.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                if (filter(components))
-                    result.Add(new CSymbol(components[1].Trim(), Convert.ToUInt32(components[0], 16) - gBaseAddr));
+                string[] parts = line.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (filter(parts))
+                    result.Add(new CSymbol(parts[1].Trim(), Convert.ToUInt32(parts[0], 16) - BaseAddr));
             }
 
             return result;
@@ -691,40 +548,33 @@ namespace NPC_Maker
 
         public static List<CSymbol> GetNpcMFuncsFromZLinkerOutput(string zLinkerOutput)
             => GetSymbolsFromZLinkerOutput(zLinkerOutput,
-                c => c[1].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase));
+                parts => parts[1].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase));
 
         public static List<CSymbol> GetAllSymbolsFromZLinkerOutput(string zLinkerOutput)
-            => GetSymbolsFromZLinkerOutput(zLinkerOutput,
-                c => true);
+            => GetSymbolsFromZLinkerOutput(zLinkerOutput, _ => true);
 
         private static string ExecuteObjDump(string elfPath, bool mono)
         {
-            var binDirectory = mono ? "binmono" : "bin";
-            var executable = mono ? "mips64-objdump" : "mips64-objdump.exe";
+            string binDir = mono ? "binmono" : "bin";
+            string executable = mono ? "mips64-objdump" : "mips64-objdump.exe";
 
-            var processInfo = new ProcessStartInfo
+            var info = CreateProcessStartInfo(
+                Path.Combine(Program.ExecPath, "gcc", binDir),
+                Path.Combine(Program.ExecPath, "gcc", binDir, executable),
+                $"-t {elfPath.AppendQuotation()}");
+
+            using (var process = Process.Start(info))
             {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = Path.Combine(Program.ExecPath, "gcc", binDirectory),
-                FileName = Path.Combine(Program.ExecPath, "gcc", binDirectory, executable),
-                Arguments = string.Format("-t {0}", elfPath.AppendQuotation())
-            };
-
-            var process = Process.Start(processInfo);
-            var output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-            process.Dispose();
-
-            return output;
+                string output = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
+                return output;
+            }
         }
 
         private static Dictionary<string, uint> CalculateSectionOffsets(byte[] ovlData)
         {
-            var sectionOffs = Program.BEConverter.ToUInt32(ovlData, ovlData.Length - 4);
-            var baseOffset = ovlData.Length - (int)sectionOffs;
+            uint sectionOffs = Program.BEConverter.ToUInt32(ovlData, ovlData.Length - 4);
+            int baseOffset = ovlData.Length - (int)sectionOffs;
 
             var offsets = new Dictionary<string, uint>
             {
@@ -741,16 +591,11 @@ namespace NPC_Maker
             return offsets;
         }
 
-        private static bool AllSymbols(string[] words)
-        {
-            return true;
-        }
-
         private static bool IsValidNpcMakerFunction(string[] words)
         {
-            return words.Length == 6 &&
-                   words[2] == "F" &&
-                   words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase);
+            return words.Length == 6
+                && words[2] == "F"
+                && words[5].StartsWith("NpcM_", StringComparison.OrdinalIgnoreCase);
         }
 
         private static CSymbol CreateSymbol(string[] words, Dictionary<string, uint> sectionOffsets, bool addSection)
@@ -758,157 +603,269 @@ namespace NPC_Maker
             if (words.Length < 6)
                 return null;
 
-            if (!uint.TryParse(words[0], System.Globalization.NumberStyles.HexNumber, null, out uint address))
+            uint address;
+            if (!uint.TryParse(words[0], System.Globalization.NumberStyles.HexNumber, null, out address))
                 return null;
 
             uint sectionOffset = 0;
-
             if (addSection && !sectionOffsets.TryGetValue(words[3], out sectionOffset))
                 return null;
 
-            return new CSymbol(words[5], address - gBaseAddr + sectionOffset);
+            return new CSymbol(words[5], address - BaseAddr + sectionOffset);
         }
 
-        public static bool CreateCTempDirectory(string Code, string Header, bool ErrorMsg = true, bool HeaderOnly = false)
+        // ── Header Path Extraction ────────────────────────────────────────────────
+
+        public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath, string[] excludedPaths)
+        {
+            string content = File.ReadAllText(dFilePath);
+
+            int colonIndex = content.IndexOf(':');
+            if (colonIndex == -1) return new List<string>();
+
+            string dependencies = content.Substring(colonIndex + 1);
+            dependencies = Regex.Replace(dependencies, @"\\\s*\r?\n\s*", " ");
+
+            var matches = Regex.Matches(dependencies, @"(?:[^\s\\]|\\.)+");
+            var headerPaths = new List<string>();
+            var excluded = excludedPaths.ToList();
+
+            foreach (Match match in matches)
+            {
+                string path = match.Value.Replace(@"\ ", " ");
+
+                if (!IsFullyQualified(path) && !(Program.IsRunningUnderMono && path.StartsWith("..")))
+                    path = Path.Combine(Program.ExecPath, path.TrimStart('/', '\\'));
+
+                if (string.IsNullOrEmpty(path) || path.Contains(folderPath) || IsPathExcluded(path, excluded))
+                    continue;
+
+                path = Helpers.FixCygdrivePath(path);
+
+                if (!File.Exists(path))
+                    continue;
+
+                string tokenized = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
+
+                if (!headerPaths.Contains(tokenized))
+                    headerPaths.Add(tokenized);
+
+                excluded.Add(path);
+            }
+
+            return headerPaths;
+        }
+
+        public static bool IsFullyQualified(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            if (Program.IsRunningUnderMono && path.StartsWith("/", StringComparison.Ordinal))
+                return true;
+
+            return Path.IsPathRooted(path)
+                && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
+        }
+
+        private static bool IsPathExcluded(string path, List<string> excludedPaths)
+        {
+            if (excludedPaths == null || excludedPaths.Count == 0)
+                return false;
+
+            string normalizedPath = null;
+            try { normalizedPath = Path.GetFullPath(path); } catch { }
+
+            foreach (string excluded in excludedPaths)
+            {
+                if (string.IsNullOrEmpty(excluded))
+                    continue;
+
+                if (path.StartsWith(excluded, StringComparison.OrdinalIgnoreCase))
+                    return true;
+
+                if (normalizedPath != null)
+                {
+                    string normalizedExcluded = null;
+                    try { normalizedExcluded = Path.GetFullPath(excluded); } catch { }
+
+                    if (normalizedExcluded != null
+                        && normalizedPath.StartsWith(normalizedExcluded, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        // ── Editors ───────────────────────────────────────────────
+
+        public static bool CreateCTempDirectory(string code, string header, bool errorMsg = true, bool headerOnly = false)
         {
             try
             {
-                if (Directory.Exists(gtempFolderPath))
-                    Directory.Delete(gtempFolderPath, true);
+                if (Directory.Exists(TempFolderPath))
+                    Directory.Delete(TempFolderPath, true);
 
-                Directory.CreateDirectory(gtempFolderPath);
+                Directory.CreateDirectory(TempFolderPath);
 
-                try
-                {
-                    string vscodeFolder = Path.Combine(gtempFolderPath, ".vscode");
-                    Directory.CreateDirectory(vscodeFolder);
+                TryCreateVsCodeFolder();
 
-                    string cprops = Properties.Resources.c_cpp_properties;
+                if (!headerOnly)
+                    File.WriteAllText(Path.Combine(TempFolderPath, $"{CodeFileNameBase}.c"), code);
 
-                    if (Program.Settings.Library == Lists.Library.zocarina)
-                        cprops = cprops.Replace("z64hdr", "zocarina");
-
-                    if (!string.IsNullOrEmpty(Program.Settings.ProjectPath))
-                    {
-                        string uriPath = new Uri(Program.Settings.ProjectPath).AbsolutePath;
-                        cprops = cprops.Replace(Lists.ProjectPathToken, uriPath);
-                    }
-                    else
-                        cprops = cprops.Replace(Lists.ProjectPathToken, "");
-
-                    File.WriteAllText(Path.Combine(vscodeFolder, "c_cpp_properties.json"), cprops);
-                    File.WriteAllText(Path.Combine(vscodeFolder, "settings.json"), Properties.Resources.settings);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Failed to create .vscode folder {ex.Message}");
-                }
-
-                if (!HeaderOnly)
-                    File.WriteAllText(Path.Combine(gtempFolderPath, $"{gcodeFileNameBase}.c"), Code);
-
-                File.WriteAllText(Path.Combine(gtempFolderPath, gheaderFileName), Header);
+                File.WriteAllText(Path.Combine(TempFolderPath, HeaderFileName), header);
                 return true;
             }
             catch (Exception ex)
             {
-                if (ErrorMsg)
+                if (errorMsg)
                     BigMessageBox.Show("Error creating temporary directory: " + ex.Message);
-
                 return false;
             }
         }
 
-        public static Process OpenCodeEditor(CodeEditorEnum SelectedCodeEditor, string Path, string Args, bool justHeader)
+        private static void TryCreateVsCodeFolder()
         {
             try
             {
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    Arguments = Args
-                };
+                string vsCodeFolder = Path.Combine(TempFolderPath, ".vscode");
+                Directory.CreateDirectory(vsCodeFolder);
 
-                switch (SelectedCodeEditor)
-                {
-                    case CodeEditorEnum.VSCode:
-                        {
-                            if (Program.IsRunningUnderMono)
-                            {
-                                startInfo.FileName = "code";
-                                startInfo.Arguments = $"-n {gtempFolderPath.AppendQuotation()}";
-                            }
-                            else
-                            {
-                                startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Programs\Microsoft VS Code\code";
-                                startInfo.Arguments = $"-n {gtempFolderPath.AppendQuotation()}";
-                            }
-                            break;
-                        }
-                    case CodeEditorEnum.Notepad:
-                        {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\notepad.exe";
-                            startInfo.Arguments = $"{geditCodeFilePath.AppendQuotation()}";
-                            break;
-                        }
-                    case CodeEditorEnum.NotepadPlusPlus:
-                        {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Notepad++\notepad++.exe";
+                string cprops = Properties.Resources.c_cpp_properties;
 
-                            if (justHeader)
-                                startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()} -multiInst";
-                            else
-                                startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()} {geditCodeFilePath.AppendQuotation()} -multiInst";
+                if (Program.Settings.Library == Lists.Library.zocarina)
+                    cprops = cprops.Replace("z64hdr", "zocarina");
 
-                            break;
-                        }
-                    case CodeEditorEnum.Sublime:
-                        {
-                            if (Program.IsRunningUnderMono)
-                            {
-                                startInfo.FileName = "subl";
-                                startInfo.Arguments = $"{geditCodeFilePath.AppendQuotation()}";
-                            }
-                            else
-                            {
-                                startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\Sublime Text\subl.exe";
-                                startInfo.Arguments = $"-n {geditCodeFilePath.AppendQuotation()}";
-                            }
-                            break;
-                        }
-                    case CodeEditorEnum.WordPad:
-                        {
-                            startInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + @"\write.exe";
-                            startInfo.Arguments = $"-n {geditCodeFilePath.AppendQuotation()}";
-                            break;
-                        }
-                    case CodeEditorEnum.Kate:
-                        {
-                            startInfo.FileName = "kate";
+                cprops = string.IsNullOrEmpty(Program.Settings.ProjectPath)
+                    ? cprops.Replace(Lists.ProjectPathToken, "")
+                    : cprops.Replace(Lists.ProjectPathToken, new Uri(Program.Settings.ProjectPath).AbsolutePath);
 
-                            if (justHeader)
-                                startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()}";
-                            else
-                                startInfo.Arguments = $"{geditHeaderFilePath.AppendQuotation()} {geditCodeFilePath.AppendQuotation()}";
+                File.WriteAllText(Path.Combine(vsCodeFolder, "c_cpp_properties.json"), cprops);
+                File.WriteAllText(Path.Combine(vsCodeFolder, "settings.json"), Properties.Resources.settings);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to create .vscode folder: {ex.Message}");
+            }
+        }
 
-                            break;
-                        }
-                    default:
-                        {
-                            startInfo.FileName = Path;
-                            startInfo.Arguments = Args;
-                            break;
-                        }
-                }
-
-                return Process.Start(startInfo);
+        public static Process OpenCodeEditor(CodeEditorEnum editor, string path, string args, bool justHeader)
+        {
+            try
+            {
+                var info = BuildEditorProcessInfo(editor, path, args, justHeader);
+                return Process.Start(info);
             }
             catch (Exception ex)
             {
                 BigMessageBox.Show("Error running editor: " + ex.Message);
                 return null;
             }
+        }
+
+        private static ProcessStartInfo BuildEditorProcessInfo(CodeEditorEnum editor, string path, string args, bool justHeader)
+        {
+            var info = new ProcessStartInfo
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                Arguments = args
+            };
+
+            switch (editor)
+            {
+                case CodeEditorEnum.VSCode:
+                    info.FileName = Program.IsRunningUnderMono
+                        ? "code"
+                        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                                       @"Programs\Microsoft VS Code\code");
+                    info.Arguments = $"-n {TempFolderPath.AppendQuotation()}";
+                    break;
+
+                case CodeEditorEnum.Notepad:
+                    info.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "notepad.exe");
+                    info.Arguments = EditCodeFilePath.AppendQuotation();
+                    break;
+
+                case CodeEditorEnum.NotepadPlusPlus:
+                    info.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                                                  @"Notepad++\notepad++.exe");
+                    info.Arguments = justHeader
+                        ? $"{EditHeaderFilePath.AppendQuotation()} -multiInst"
+                        : $"{EditHeaderFilePath.AppendQuotation()} {EditCodeFilePath.AppendQuotation()} -multiInst";
+                    break;
+
+                case CodeEditorEnum.Sublime:
+                    info.FileName = Program.IsRunningUnderMono
+                        ? "subl"
+                        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                                       @"Sublime Text\subl.exe");
+                    info.Arguments = Program.IsRunningUnderMono
+                        ? EditCodeFilePath.AppendQuotation()
+                        : $"-n {EditCodeFilePath.AppendQuotation()}";
+                    break;
+
+                case CodeEditorEnum.WordPad:
+                    info.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "write.exe");
+                    info.Arguments = $"-n {EditCodeFilePath.AppendQuotation()}";
+                    break;
+
+                case CodeEditorEnum.Kate:
+                    info.FileName = "kate";
+                    info.Arguments = justHeader
+                        ? EditHeaderFilePath.AppendQuotation()
+                        : $"{EditHeaderFilePath.AppendQuotation()} {EditCodeFilePath.AppendQuotation()}";
+                    break;
+
+                default:
+                    info.FileName = path;
+                    info.Arguments = args;
+                    break;
+            }
+
+            return info;
+        }
+
+        // ── Helpers ─────────────────────────────────────────────────────────
+
+        private static string BuildIncludeFlags()
+        {
+            return string.Join(" ",
+                Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths)
+                       .Select(p => $"-I {p.AppendQuotation()}"));
+        }
+
+        private static string BuildLibraryFlags(CompilationConfig config)
+        {
+            return string.Join(" ",
+                Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths)
+                       .Select(p => $"-L {p.AppendQuotation()}"));
+        }
+
+        private static string BuildLinkerFileArgs(string[] linkerFiles)
+        {
+            var sb = new StringBuilder();
+
+            foreach (string lf in linkerFiles)
+                if (!string.IsNullOrWhiteSpace(lf))
+                    sb.Append($" {lf.AppendQuotation()}"); 
+
+            return sb.ToString();
+        }
+
+        private static byte[] HandleCompilationFailure(string message, ref string compileMsgs, bool returnEmptyArray = false)
+        {
+            compileMsgs += message;
+            ConsoleWriteCompileFail(compileMsgs);
+            return returnEmptyArray ? new byte[0] : null;
+        }
+
+        private static void CleanupIntermediateFiles(params string[] files)
+        {
+            foreach (string file in files)
+                if (File.Exists(file))
+                    File.Delete(file);
         }
     }
 }

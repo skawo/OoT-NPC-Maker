@@ -14,6 +14,12 @@ namespace NPC_Maker.Common
         public bool ShowOrig;
     }
 
+    public struct CCacheKeys
+    {
+        public string CachedAddrs;
+        public string CachedCode;
+    }
+
     public class CompilationStatus
     {
         public bool CCode;

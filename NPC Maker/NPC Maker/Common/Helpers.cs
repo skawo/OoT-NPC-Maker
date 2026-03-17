@@ -891,5 +891,15 @@ namespace NPC_Maker
             string t = JsonConvert.SerializeObject(Data);
             return JsonConvert.DeserializeObject<T>(t);
         }
+
+        public static List<string> SplitToTrimmedLines(string text)
+        {
+            if (text == null) return null;
+            return text
+                .Split(Lists.NewlineSeparators, StringSplitOptions.None)
+                .Select(x => x.TrimEnd())
+                .ToList();
+        }
+
     }
 }

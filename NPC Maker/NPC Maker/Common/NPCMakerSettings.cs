@@ -211,5 +211,23 @@ namespace NPC_Maker
                 default: break;
             }
         }
+
+        public void EnsureSettingsSanity()
+        {
+            if (GUIScale <= 0 || GUIScale > 3)
+                GUIScale = 1;
+
+            if (MessageEditorFontSize <= 0)
+                MessageEditorFontSize = 8;
+
+            if (AutoSaveTime < 100)
+                AutoSaveTime = 100;
+
+            if (ParseTime < 100)
+                ParseTime = 100;
+
+            if (CompileTimeout < 500)
+                CompileTimeout = 500;
+        }
     }
 }

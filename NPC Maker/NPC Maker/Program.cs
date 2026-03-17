@@ -276,7 +276,7 @@ namespace NPC_Maker
 
                 if (c != null)
                 {
-                    string config = $"alloc_type = 0\nvram_addr = 0x{CCode.gBaseAddr.ToString("X")}\ninit_vars = 0x{(CCode.gBaseAddr + c.Addr).ToString("X")}";
+                    string config = $"alloc_type = 0\nvram_addr = 0x{CCode.BaseAddr.ToString("X")}\ninit_vars = 0x{(CCode.BaseAddr + c.Addr).ToString("X")}";
                     System.IO.File.WriteAllText(Path.Combine(Path.GetDirectoryName(args[3]), "config.toml"), config);
                 }
             }

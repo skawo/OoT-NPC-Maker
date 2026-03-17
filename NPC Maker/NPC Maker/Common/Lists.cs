@@ -5,6 +5,8 @@ namespace NPC_Maker
 {
     public static class Lists
     {
+        public static readonly string[] NewlineSeparators = { "\r\n", "\n" };
+
         public const string Keyword_True = "TRUE";
         public const string Keyword_False = "FALSE";
         public const string Keyword_Return = "RETURN";

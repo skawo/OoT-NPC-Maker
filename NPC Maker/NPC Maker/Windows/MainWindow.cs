@@ -1698,7 +1698,7 @@ namespace NPC_Maker
             Program.CodeEditorProcess = CCode.OpenCodeEditor(
                                                                 (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
                                                                 TextBox_CodeEditorPath.Text,
-                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.geditHeaderFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.gtempFolderPath.AppendQuotation()),
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.EditHeaderFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.TempFolderPath.AppendQuotation()),
                                                                 true
                                                             );
 
@@ -1767,7 +1767,7 @@ namespace NPC_Maker
 
                             if (c != null)
                             {
-                                string config = $"alloc_type = 0\nvram_addr = 0x{CCode.gBaseAddr.ToString("X")}\ninit_vars = 0x{(CCode.gBaseAddr + c.Addr).ToString("X")}";
+                                string config = $"alloc_type = 0\nvram_addr = 0x{CCode.BaseAddr.ToString("X")}\ninit_vars = 0x{(CCode.BaseAddr + c.Addr).ToString("X")}";
                                 File.WriteAllText(Path.Combine(Path.GetDirectoryName(sf.FileName), "config.toml"), config);
                             }
                         }
@@ -4819,7 +4819,7 @@ namespace NPC_Maker
             {
                 WatchedEntry = EditedEntry;
 
-                string fPath = Path.Combine(CCode.gtempFolderPath, $"{CCode.gcodeFileNameBase}.c");
+                string fPath = Path.Combine(CCode.TempFolderPath, $"{CCode.CodeFileNameBase}.c");
                 LastWriteTime = GetLastWriteTimeForFile(fPath);
 
                 autoSaveTimer = new System.Windows.Forms.Timer();
@@ -4879,8 +4879,8 @@ namespace NPC_Maker
         {
             autoSaveTimer.Stop();
 
-            var Dt = GetLastWriteTimeForFile(CCode.geditCodeFilePath);
-            var Dt2 = GetLastWriteTimeForFile(CCode.geditHeaderFilePath);
+            var Dt = GetLastWriteTimeForFile(CCode.EditCodeFilePath);
+            var Dt2 = GetLastWriteTimeForFile(CCode.EditHeaderFilePath);
 
             if (Dt != LastWriteTime || Dt2 != LastWriteTime2)
                 Watcher_Changed(null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
@@ -4953,20 +4953,20 @@ namespace NPC_Maker
                     // Hacky workaround
                     try
                     {
-                        if (File.Exists(CCode.geditCodeFilePath))
-                            fs = File.Open(CCode.geditCodeFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        if (File.Exists(CCode.EditCodeFilePath))
+                            fs = File.Open(CCode.EditCodeFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-                        if (File.Exists(CCode.geditHeaderFilePath))
-                            fs2 = File.Open(CCode.geditHeaderFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        if (File.Exists(CCode.EditHeaderFilePath))
+                            fs2 = File.Open(CCode.EditHeaderFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                     }
                     catch (Exception)
                     {
-                        if (File.Exists(CCode.geditCodeFilePath))
-                            fs = File.Open(Path.Combine(CCode.gtempFolderPath, $"{CCode.gcodeFileNameBase}.c"), FileMode.Open, FileAccess.Read, FileShare.Read);
+                        if (File.Exists(CCode.EditCodeFilePath))
+                            fs = File.Open(Path.Combine(CCode.TempFolderPath, $"{CCode.CodeFileNameBase}.c"), FileMode.Open, FileAccess.Read, FileShare.Read);
 
 
-                        if (File.Exists(CCode.geditHeaderFilePath))
-                            fs2 = File.Open(Path.Combine(CCode.gtempFolderPath, CCode.gheaderFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
+                        if (File.Exists(CCode.EditCodeFilePath))
+                            fs2 = File.Open(Path.Combine(CCode.TempFolderPath, CCode.HeaderFileName), FileMode.Open, FileAccess.Read, FileShare.Read);
                     }
 
                     if (fs2 != null)
@@ -5034,7 +5034,7 @@ namespace NPC_Maker
             Program.CodeEditorProcess = CCode.OpenCodeEditor(
                                                                 (CCode.CodeEditorEnum)Enum.Parse(typeof(CCode.CodeEditorEnum), Combo_CodeEditor.SelectedItem.ToString()),
                                                                 TextBox_CodeEditorPath.Text,
-                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.geditCodeFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.gtempFolderPath.AppendQuotation()).Replace("$CODEHEADER", CCode.geditHeaderFilePath.AppendQuotation()),
+                                                                Textbox_CodeEditorArgs.Text.Replace("$CODEFILE", CCode.EditCodeFilePath.AppendQuotation()).Replace("$CODEFOLDER", CCode.TempFolderPath.AppendQuotation()).Replace("$CODEHEADER", CCode.EditHeaderFilePath.AppendQuotation()),
                                                                 false
                                                             );
 
