@@ -20,7 +20,7 @@ namespace NPC_Maker.Common
         public string CachedCode;
     }
 
-    public class CompilationStatus
+    public class RecompilationStatus
     {
         public bool CCode;
         public bool Scripts;

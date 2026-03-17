@@ -399,7 +399,7 @@ namespace NPC_Maker
                                 return;
 
                             string prefix = jsonFileName + "_" + entryID + "_";
-                            var cs = new CompilationStatus();
+                            var cs = new RecompilationStatus();
                             string compErrors;
 
                             ProcessCCode(data, entry, entryID, prefix, cacheStatus,
@@ -489,12 +489,12 @@ namespace NPC_Maker
                         Program.ConsoleWriteS($"Processing entry {i}: {entry.NPCName}... ");
 
                         string compErrors = "";
-                        var cs = new CompilationStatus();
+                        var cs = new RecompilationStatus();
 
                         object csi;
 
                         if (preProcessedFiles?.TryGetValue(i.ToString(), out csi) == true)
-                            cs = (CompilationStatus)csi;
+                            cs = (RecompilationStatus)csi;
 
                         var entryBytes = BuildEntryBytes(entry, localData, cliMode, baseDefines,
                                                          cacheStatus, jsonFileName, i, preProcessedFiles,
@@ -565,7 +565,7 @@ namespace NPC_Maker
                                                   CacheStatus cacheStatus, string jsonFileName, int entriesDone,
                                                   ConcurrentDictionary<string, object> preProcessedFiles, ConcurrentBag<string> parseErrors,
                                                   ConcurrentDictionary<string, Dictionary<string, string>> definesCache,
-                                                  ref CompilationStatus cs, ref string compErrors)
+                                                  ref RecompilationStatus cs, ref string compErrors)
         {
             var defines = definesCache.GetOrAdd(entry.HeaderPath, Helpers.GetDefinesFromHeaders);
             var entryBytes = new List<byte>(InitialFieldsSize);
@@ -698,7 +698,7 @@ namespace NPC_Maker
         }
 
         private static void BuildMessages(List<byte> entryBytes, NPCEntry entry, NPCFile data, string jsonFileName, int entriesDone,
-                                          ConcurrentBag<string> parseErrors, bool cliMode, ref CompilationStatus cs, ref int curLen)
+                                          ConcurrentBag<string> parseErrors, bool cliMode, ref RecompilationStatus cs, ref int curLen)
         {
             string msgDataHash = Helpers.GetBase64Hash(JsonConvert.SerializeObject(new { entry.Messages, entry.Localization }));
             string cachedMsgFile = Path.Combine(Program.ScriptCachePath, $"{jsonFileName}_{entriesDone}_msg_{msgDataHash}");
@@ -888,7 +888,7 @@ namespace NPC_Maker
         private static void BuildCCode(List<byte> entryBytes, NPCEntry entry, NPCFile data, string jsonFileName, int entriesDone,
                                        CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles,
                                        ConcurrentBag<string> parseErrors, bool cliMode,
-                                       ref CompilationStatus cs, ref string compErrors, ref int curLen)
+                                       ref RecompilationStatus cs, ref string compErrors, ref int curLen)
         {
             if (string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
             {
@@ -961,7 +961,7 @@ namespace NPC_Maker
 
         private static void BuildScripts(List<byte> entryBytes, NPCEntry entry, NPCFile data, string jsonFileName, int entriesDone,
                                          string baseDefines, CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles,
-                                         ConcurrentBag<string> parseErrors, bool cliMode, ref CompilationStatus cs, ref int curLen)
+                                         ConcurrentBag<string> parseErrors, bool cliMode, ref RecompilationStatus cs, ref int curLen)
         {
             var nonEmptyScripts = entry.Scripts.FindAll(x => !string.IsNullOrEmpty(x.Text));
             entryBytes.AddRangeBigEndian((uint)nonEmptyScripts.Count);
@@ -1039,7 +1039,7 @@ namespace NPC_Maker
         }
 
         private static byte[] ResolveOverlay(NPCFile data, NPCEntry entry, string jsonEntryPrefix, CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles,
-                                             HashSet<string> cCacheFiles, HashSet<string> scriptCacheFiles, int entryID, ref CompilationStatus cs, ref string compErrors)
+                                             HashSet<string> cCacheFiles, HashSet<string> scriptCacheFiles, int entryID, ref RecompilationStatus cs, ref string compErrors)
         {
             var keys = GetCCacheKeys(jsonEntryPrefix, entry.EmbeddedOverlayCode);
 
@@ -1095,7 +1095,7 @@ namespace NPC_Maker
 
         private static void ProcessCCode(NPCFile data, NPCEntry entry, int entryID, string jsonEntryPrefix, CacheStatus cacheStatus,
                                          HashSet<string> cCacheFiles, HashSet<string> scriptCacheFiles, ConcurrentDictionary<string, object> results,
-                                         ref CompilationStatus cs, out string compErrors)
+                                         ref RecompilationStatus cs, out string compErrors)
         {
             compErrors = "";
 
@@ -1113,7 +1113,7 @@ namespace NPC_Maker
 
         private static Scripts.BScript ResolveScript(NPCFile data, NPCEntry entry, ScriptEntry scrEntry, string scriptPrefix, string cachedScriptFile, string baseDefines,
                                                     CacheStatus cacheStatus, bool extDataExists, ConcurrentDictionary<string, object> preProcessedFiles, HashSet<string> scriptCacheFiles, 
-                                                    ref CompilationStatus cs)
+                                                    ref RecompilationStatus cs)
         {
             if (preProcessedFiles != null)
             {
@@ -1157,7 +1157,7 @@ namespace NPC_Maker
 
         private static void ProcessScripts(NPCFile data, NPCEntry entry, string jsonEntryPrefix, string baseDefines,
                                            CacheStatus cacheStatus, bool extDataExists, HashSet<string> scriptCacheFiles, ConcurrentDictionary<string, object> results,
-                                           ref CompilationStatus cs)
+                                           ref RecompilationStatus cs)
         {
             int scriptNum = 0;
 
