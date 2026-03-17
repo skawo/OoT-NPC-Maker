@@ -358,18 +358,6 @@ namespace NPC_Maker
             }
         }
 
-        public static void ResetHorizScrollbar(Control c)
-        {
-            foreach (Control control in c.Controls)
-            {
-                if (control is HScrollBar hScrollBar)
-                {
-                    hScrollBar.Value = 0;
-                    break;
-                }
-            }
-        }
-
         public static void MakeNotResizableMonoSafe(System.Windows.Forms.Form f)
         {
             f.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -396,22 +384,6 @@ namespace NPC_Maker
                     .Replace('/', '-');
             }
         }
-
-
-        public static string GetBase64Hash(byte[] b)
-        {
-            using (var sha1 = SHA1.Create())
-            {
-                byte[] hash = sha1.ComputeHash(b);
-
-                // URL-safe Base64 without extra Replace allocations
-                return Convert.ToBase64String(hash)
-                    .TrimEnd('=')
-                    .Replace('+', '_')
-                    .Replace('/', '-');
-            }
-        }
-
 
         public static string ReplacePathWithToken(string basePath, string fullPath, string token)
         {
