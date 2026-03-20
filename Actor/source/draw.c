@@ -713,7 +713,7 @@ static void Draw_Orthographic(NpcMaker* en, PlayState* playState, ExDListEntry* 
     float scaleX = scale * (dlist->limb == STATIC_EXDLIST_ORTHOGRAPHIC_WIDE ? 0.75f : 1.0f);
     float sign = (scale < 0.0f) ? -1.0f : 1.0f;
 
-    Matrix_Scale(scaleX * sign, scale, scale, MTXMODE_APPLY);
+    Matrix_Scale(scaleX * sign, scale * sign, scale, MTXMODE_APPLY);
     Matrix_RotateZYX(dlist->rotation.x,
                      dlist->rotation.y,
                      dlist->rotation.z,
