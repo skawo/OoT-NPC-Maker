@@ -705,6 +705,7 @@ namespace NPC_Maker
 
             try
             {
+                DataGrid_NPCs.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
                 DataGrid_NPCs.Rows.Clear();
 
                 var rows = EditedFile.Entries
@@ -713,6 +714,8 @@ namespace NPC_Maker
 
                 foreach (var row in rows)
                     DataGrid_NPCs.Rows.Add(row);
+
+                DataGrid_NPCs.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             }
             finally
             {
@@ -893,6 +896,7 @@ namespace NPC_Maker
 
             #region Colors grid
 
+            ColorsDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             ColorsDataGridView.Rows.Clear();
 
             foreach (ColorEntry colorEntry in e.DisplayListColors)
@@ -907,10 +911,14 @@ namespace NPC_Maker
                 };
             }
 
+            ColorsDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+
+
             #endregion
 
             #region Animations grid
 
+            DataGrid_Animations.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             DataGrid_Animations.Rows.Clear();
 
             bool isLinkAnim = e.AnimationType == 1;
@@ -934,6 +942,8 @@ namespace NPC_Maker
                                                          });
             }
 
+            DataGrid_Animations.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+
             #endregion
 
             #region Segments grid
@@ -941,6 +951,7 @@ namespace NPC_Maker
             for (int j = 0; j < TabControl_Segments.TabPages.Count; j++)
             {
                 DataGridView grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
+                grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
                 grid.Rows.Clear();
 
                 foreach (SegmentEntry seg in SelectedEntry.Segments[j])
@@ -949,12 +960,15 @@ namespace NPC_Maker
                                   seg.FileStart < 0 ? "Same as main" : seg.FileStart.ToString("X"),
                                   seg.Address.ToString("X"),
                                   Dicts.GetStringFromBiDict(Dicts.ObjectIDs, seg.ObjectID));
+
+                grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             }
 
             #endregion
 
             #region Display lists grid
 
+            DataGridView_ExtraDLists.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             DataGridView_ExtraDLists.Rows.Clear();
 
             foreach (DListEntry dlist in e.ExtraDisplayLists)
@@ -979,6 +993,8 @@ namespace NPC_Maker
                 DataGridView_ExtraDLists.Rows[row].Cells[(int)EDlistsColumns.Color].Style.BackColor = dlist.Color;
             }
 
+            DataGridView_ExtraDLists.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+
             TabControl.SelectedIndex = Math.Min(TabControl.TabPages.Count - 1, savedTabIndex);
 
             #endregion
@@ -989,6 +1005,7 @@ namespace NPC_Maker
 
             Combo_Language.SelectedIndexChanged -= Combo_Language_SelectedIndexChanged;
             MessagesGrid.SelectionChanged -= MessagesGrid_SelectionChanged;
+            MessagesGrid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             MessagesGrid.Rows.Clear();
 
             List<MessageEntry> messageList = e.Messages;
@@ -1001,6 +1018,8 @@ namespace NPC_Maker
 
             foreach (MessageEntry msg in messageList)
                 MessagesGrid.Rows.Add(new object[] { msg.Name });
+
+            MessagesGrid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
 
             MessagesGrid_SelectionChanged(MessagesGrid, null);
             MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
