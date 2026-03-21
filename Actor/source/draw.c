@@ -277,8 +277,7 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
 
     s32 object = R_OBJECT(en, dList->objectId);
     u32 dListOffset = OFFSET_ADDRESS(6, dList->offset);
-    u32 curSeg = gSegments[6];
-	
+
     switch (object)
     {
         case OBJECT_NONE: return;
@@ -316,8 +315,8 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
     gSPDisplayList((*gfxP)++, dListOffset);
 
     // Resetting segment 6 if object that was used is different to what the npc is using.
-    if (gSegments[6] != curSeg)
-        gSPSegment((*gfxP)++, 6, curSeg);
+    if ((en->settings.objectId > 0 && object != en->settings.objectId) || dList->fileStart != OBJECT_CURRENT)
+        gSPSegment((*gfxP)++, 6, AADDR(Rom_GetObjectDataPtr(en->settings.objectId, playState), en->settings.fileStart));
 
     Draw_SetEnvColor(gfxP, en->curColor, en->curAlpha);
 
