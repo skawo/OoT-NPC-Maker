@@ -132,11 +132,5 @@ namespace NPC_Maker.Common
 
     }
 
-    public class SavedMsgPreviewData
-    {
-        public System.Drawing.Image previewImage;
-        public List<List<byte>> MessageArrays;
-        public int Type;
-        public int Position;
-    }
+
 }

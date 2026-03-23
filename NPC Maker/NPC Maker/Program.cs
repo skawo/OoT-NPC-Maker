@@ -15,7 +15,6 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -58,7 +57,8 @@ namespace NPC_Maker
         static void Main(string[] args)
         {
             DetectRuntime();
-            Application.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+
+            Console.WriteLine("Test:" + Program.IsRunningUnderMono.ToString());
 
             bool hasArgs = args.Length > 0;
 
@@ -67,12 +67,6 @@ namespace NPC_Maker
                 SetupConsole(ref args);
                 PrintBanner();
             }
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            if (!hasArgs)
-                Task.Run(() => GetMonospacedFonts());
 
             InitializePaths();
             EnsureDirectoriesExist();
@@ -83,9 +77,6 @@ namespace NPC_Maker
 
         private static void DetectRuntime()
         {
-            Type monoType = Type.GetType("Mono.Runtime");
-            if (monoType == null) return;
-
             IsRunningUnderMono = true;
             IsWSL = Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
         }
@@ -109,52 +100,16 @@ namespace NPC_Maker
             ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v{version}");
         }
 
-        private static void GetMonospacedFonts()
-        {
-            InstalledFontCollection fontsCollection = new InstalledFontCollection();
-            var fonts = fontsCollection.Families;
-            List<string> fnts = new List<string>();
-
-            using (var bmp = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(bmp))
-                {
-                    foreach (FontFamily fontFamily in fonts)
-                    {
-                        try
-                        {
-                            if (fontFamily.IsMonospaced(g))
-                                fnts.Add(fontFamily.Name);
-                        }
-                        catch { }
-                    }
-                }
-            }
-
-            Monofonts = fnts;
-        }
-
         private static void InitializePaths()
         {
-            ExecPath = Path.GetDirectoryName(Application.ExecutablePath);
+            ExecPath = Path.GetDirectoryName(
+                Assembly.GetExecutingAssembly().Location
+            ) ?? AppContext.BaseDirectory;
+
             ScriptCachePath = Path.Combine(ExecPath, "cache", "s_cache");
             CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
             AutoSavePath = Path.Combine(ExecPath, "autosave");
-
-            string settingsWindows = Path.Combine(ExecPath, "Settings.json");
-            string settingsMono = Path.Combine(ExecPath, "SettingsMono.json");
-
-            if (IsRunningUnderMono)
-            {
-                if (!File.Exists(settingsMono) && File.Exists(settingsWindows))
-                    File.Copy(settingsWindows, settingsMono);
-
-                SettingsFilePath = settingsMono;
-            }
-            else
-            {
-                SettingsFilePath = settingsWindows;
-            }
+            SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
         }
 
         private static void EnsureDirectoriesExist()

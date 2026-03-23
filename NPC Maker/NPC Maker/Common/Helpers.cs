@@ -10,7 +10,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -207,25 +206,6 @@ namespace NPC_Maker
             throw new Exception(error);
         }
 
-        public static void ResetVerticalScrollbar(Control c)
-        {
-            foreach (Control control in c.Controls)
-            {
-                if (control is VScrollBar vScrollBar)
-                {
-                    vScrollBar.Value = 0;
-                    break;
-                }
-            }
-        }
-
-        public static void MakeNotResizableMonoSafe(System.Windows.Forms.Form f)
-        {
-            f.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            f.MaximizeBox = false;
-            f.MinimizeBox = false;
-            f.ShowInTaskbar = false;
-        }
         public static string GenerateTemporaryFolderName()
         {
             return $"temp_{DateTime.Now.Ticks}_{System.Diagnostics.Process.GetCurrentProcess().Id}";

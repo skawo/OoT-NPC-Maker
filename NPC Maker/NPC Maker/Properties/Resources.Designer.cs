@@ -109,36 +109,7 @@ namespace NPC_Maker.Properties {
                 return ResourceManager.GetString("CHeader", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap comment {
-            get {
-                object obj = ResourceManager.GetObject("comment", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap commentNo {
-            get {
-                object obj = ResourceManager.GetObject("commentNo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap dn {
-            get {
-                object obj = ResourceManager.GetObject("dn", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
+       
         
         /// <summary>
         ///   Looks up a localized string similar to #include &quot;npc_maker_header.h&quot;
@@ -173,15 +144,6 @@ namespace NPC_Maker.Properties {
                 return ResourceManager.GetString("settings", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap up {
-            get {
-                object obj = ResourceManager.GetObject("up", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
+
     }
 }
