@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPC_Maker.Common;
-using NPC_Maker.Controls;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -39,7 +38,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to read settings: {ex.Message}");
+                Program.ConsoleWriteLineS($"Failed to read settings: {ex.Message}");
                 return new NPCMakerSettings();
             }
         }
@@ -52,7 +51,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to write settings: {ex.Message}");
+                Program.ConsoleWriteLineS($"Failed to write settings: {ex.Message}");
             }
         }
 
@@ -87,7 +86,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to read JSON: {ex.Message}");
+                Program.ConsoleWriteLineS($"Failed to read JSON: {ex.Message}");
                 return null;
             }
         }
@@ -104,7 +103,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to save JSON: {ex.Message}");
+                Program.ConsoleWriteLineS($"Failed to save JSON: {ex.Message}");
             }
         }
 
@@ -174,7 +173,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to process JSON: {ex.Message}");
+                Program.ConsoleWriteLineS($"Failed to process JSON: {ex.Message}");
                 return null;
             }
         }
@@ -198,7 +197,7 @@ namespace NPC_Maker
             catch (Exception)
             {
                 if (!allowFail)
-                    BigMessageBox.Show($"{filename} is missing or incorrect. ({offendingRow})");
+                    Program.ConsoleWriteLineS($"{filename} is missing or incorrect. ({offendingRow})");
             }
 
             return dict;
@@ -221,7 +220,7 @@ namespace NPC_Maker
             catch (Exception)
             {
                 if (!allowFail)
-                    BigMessageBox.Show($"{filename} is missing or incorrect. ({offendingRow})");
+                    Program.ConsoleWriteLineS($"{filename} is missing or incorrect. ({offendingRow})");
             }
 
             return dict;
@@ -369,79 +368,75 @@ namespace NPC_Maker
 
         // ── Compilation ──────────────────────────────────────────────────
 
-        public static async Task PreprocessCodeAndScripts(string outPath, string outputDepsPath, NPCFile data,
+        public static void PreprocessCodeAndScripts(string outPath, string outputDepsPath, NPCFile data,
                                                           CacheStatus cacheStatus, IProgress<ProgressReport> progress, bool cliMode)
         {
             float progressPer = 100f / data.Entries.Count;
             float curProgress = 0f;
             int lastReported = 0;
 
-            await TaskEx.Run(() =>
-            {
-                Program.ConsoleWriteS("Compiling...");
+            Program.ConsoleWriteS("Compiling...");
 
-                string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(data);
-                string jsonFileName = Program.JsonPath.FilenameFromPath();
+            string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(data);
+            string jsonFileName = Program.JsonPath.FilenameFromPath();
 
-                var scriptCacheFiles = new HashSet<string>(Directory.GetFiles(Program.ScriptCachePath));
-                var cCacheFiles = new HashSet<string>(Directory.GetFiles(Program.CCachePath));
-                var results = new ConcurrentDictionary<string, object>();
+            var scriptCacheFiles = new HashSet<string>(Directory.GetFiles(Program.ScriptCachePath));
+            var cCacheFiles = new HashSet<string>(Directory.GetFiles(Program.CCachePath));
+            var results = new ConcurrentDictionary<string, object>();
 
-                Parallel.For(0, data.Entries.Count,
-                    new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 3 },
-                    entryID =>
+            Parallel.For(0, data.Entries.Count,
+                new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 3 },
+                entryID =>
+                {
+                    try
                     {
-                        try
+                        var entry = data.Entries[entryID];
+
+                        if (entry.IsNull || entry.Omitted)
+                            return;
+
+                        string prefix = jsonFileName + "_" + entryID + "_";
+                        var cs = new RecompilationStatus();
+                        string compErrors;
+
+                        ProcessCCode(data, entry, entryID, prefix, cacheStatus,
+                                     cCacheFiles, scriptCacheFiles, results, ref cs, out compErrors);
+
+                        bool extDataExists = CheckExtDataCache(entry, prefix, scriptCacheFiles, out string extDataFile);
+
+                        ProcessScripts(data, entry, prefix, baseDefines, cacheStatus,
+                                       extDataExists, scriptCacheFiles, results, ref cs);
+
+                        results[entryID.ToString()] = cs;
+
+                        if (!extDataExists)
                         {
-                            var entry = data.Entries[entryID];
-
-                            if (entry.IsNull || entry.Omitted) 
-                                return;
-
-                            string prefix = jsonFileName + "_" + entryID + "_";
-                            var cs = new RecompilationStatus();
-                            string compErrors;
-
-                            ProcessCCode(data, entry, entryID, prefix, cacheStatus,
-                                         cCacheFiles, scriptCacheFiles, results, ref cs, out compErrors);
-
-                            bool extDataExists = CheckExtDataCache(entry, prefix, scriptCacheFiles, out string extDataFile);
-
-                            ProcessScripts(data, entry, prefix, baseDefines, cacheStatus,
-                                           extDataExists, scriptCacheFiles, results, ref cs);
-
-                            results[entryID.ToString()] = cs;
-
-                            if (!extDataExists)
-                            {
-                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath, prefix + "exdata_");
-                                File.Create(extDataFile).Dispose();
-                            }
+                            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, prefix + "exdata_");
+                            File.Create(extDataFile).Dispose();
                         }
-                        catch { }
-                        finally
+                    }
+                    catch { }
+                    finally
+                    {
+                        Helpers.AddInterlocked(ref curProgress, progressPer);
+                        int percent = (int)curProgress;
+
+                        if (Interlocked.CompareExchange(ref lastReported, percent, percent - 1) == percent - 1)
                         {
-                            Helpers.AddInterlocked(ref curProgress, progressPer);
-                            int percent = (int)curProgress;
-
-                            if (Interlocked.CompareExchange(ref lastReported, percent, percent - 1) == percent - 1)
-                            {
-                                if (progress != null)
-                                    progress.Report(new ProgressReport($"Compiling {percent}%", curProgress));
-                                else
-                                    Program.ConsoleWriteS($"\rCompiling {percent}%    ");
-                            }
+                            if (progress != null)
+                                progress.Report(new ProgressReport($"Compiling {percent}%", curProgress));
+                            else
+                                Program.ConsoleWriteS($"\rCompiling {percent}%    ");
                         }
-                    });
+                    }
+                });
 
-                Program.ConsoleWriteLineS("\nPre-processing done!");
+            Program.ConsoleWriteLineS("\nPre-processing done!");
 
-                SaveBinaryFile(outPath, outputDepsPath, ref data, progress, baseDefines,
-                               new CacheStatus { CCacheInvalid = false, CacheInvalid = false }, results, cliMode);
+            SaveBinaryFile(outPath, outputDepsPath, ref data, progress, baseDefines,
+                           new CacheStatus { CCacheInvalid = false, CacheInvalid = false }, results, cliMode);
 
-                CCode.CleanupStandardCompilationArtifacts();
-                Program.CompileInProgress = false;
-            });
+            CCode.CleanupStandardCompilationArtifacts();
         }
 
         public static void SaveBinaryFile(string outPath, string outputDepsPath, ref NPCFile data, IProgress<ProgressReport> progress, string baseDefines,
@@ -474,7 +469,7 @@ namespace NPC_Maker
 
                 Action<int> processEntry = i =>
                 {
-                    if (cts.IsCancellationRequested) 
+                    if (cts.IsCancellationRequested)
                         return;
 
                     var entry = localData.Entries[i];
@@ -1112,7 +1107,7 @@ namespace NPC_Maker
         }
 
         private static Scripts.BScript ResolveScript(NPCFile data, NPCEntry entry, ScriptEntry scrEntry, string scriptPrefix, string cachedScriptFile, string baseDefines,
-                                                    CacheStatus cacheStatus, bool extDataExists, ConcurrentDictionary<string, object> preProcessedFiles, HashSet<string> scriptCacheFiles, 
+                                                    CacheStatus cacheStatus, bool extDataExists, ConcurrentDictionary<string, object> preProcessedFiles, HashSet<string> scriptCacheFiles,
                                                     ref RecompilationStatus cs)
         {
             if (preProcessedFiles != null)
@@ -1376,8 +1371,6 @@ namespace NPC_Maker
             // Occasionally crashed showing messagebox on another thread.
             if (Program.IsRunningUnderMono)
                 Program.CompileMonoErrors = msg;
-            else if (!cliMode)
-                BigMessageBox.Show(msg, "Error", MessageBoxButtons.OK);
         }
 
         private static uint TryGetFromH(bool cliMode, string npcName, uint defaultValue, Dictionary<string, string> defines, string name)

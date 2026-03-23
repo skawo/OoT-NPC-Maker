@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NPC_Maker.Controls;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -475,7 +474,7 @@ namespace NPC_Maker
             catch (Exception)
             {
                 Member = Members.NOMEMBER;
-                BigMessageBox.Show($"Warning: {PassingObjectName} tag is incorrect!");
+                Program.ConsoleWriteLineS($"Warning: {PassingObjectName} tag is incorrect!");
             }
 
             return Member;

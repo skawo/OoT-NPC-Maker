@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NPC_Maker.Controls;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -425,33 +424,6 @@ namespace NPC_Maker
                 target.NewLineType = source.NewLineType;
         }
 
-        public static void ReloadSpellcheckDicts(List<string> languages)
-        {
-            Program.dictionary =
-                new Dictionary<string, WeCantSpell.Hunspell.WordList>();
-
-            LoadSpellcheckDictIfExists(Lists.DefaultLanguage, "dict.dic");
-            LoadSpellcheckDictIfExists(Lists.DefaultLanguage, "Default.dic");
-
-            if (languages == null)
-                return;
-
-            foreach (string lang in languages)
-            {
-                string file = lang + ".dic";
-                LoadSpellcheckDictIfExists(lang, file);
-            }
-        }
-
-        private static void LoadSpellcheckDictIfExists(string key, string file)
-        {
-            if (!File.Exists(file))
-                return;
-
-            Program.dictionary[key] =
-                WeCantSpell.Hunspell.WordList.CreateFromFiles(file);
-        }
-
         public static void ReloadDict(Lists.DictType type, bool allowFail = false)
         {
             try
@@ -482,8 +454,7 @@ namespace NPC_Maker
             catch (Exception ex)
             {
                 if (!allowFail)
-                    BigMessageBox.Show(
-                        "Error loading the " + type + " dict: " + ex.Message);
+                    Program.ConsoleWriteLineS("Error loading the " + type + " dict: " + ex.Message);
             }
         }
 

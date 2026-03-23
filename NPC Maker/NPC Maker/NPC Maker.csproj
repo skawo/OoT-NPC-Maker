@@ -1,18 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6FE79A30-1D21-4EB3-8190-0F3A4AFFF984}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <OutputType>Exe</OutputType>
     <RootNamespace>NPC_Maker</RootNamespace>
-    <AssemblyName>NPC Maker</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -28,442 +18,76 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>
-    </DocumentationFile>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup>
     <ApplicationIcon>nUhhuh.ico</ApplicationIcon>
+    <StartupObject />
+    <PostBuildEvent>del *.xml
+del *.pdb</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FastColoredTextBox, Version=0.0.0.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\FastColoredTextBox.dll</HintPath>
-    </Reference>
-    <Reference Include="FastColoredTextBoxCJK">
-      <HintPath>..\..\..\FastColoredTextBox\FastColoredTextBox\bin\Release\net40\FastColoredTextBoxCJK.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-    </Reference>
-    <Reference Include="MiscUtil, Version=0.2.0.0, Culture=neutral, PublicKeyToken=d3c42c4bfacf7596, processorArchitecture=MSIL">
-      <HintPath>..\packages\JonSkeet.MiscUtil.0.2.0\lib\net35\MiscUtil.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.IO, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.IO.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.Tasks, Version=2.6.8.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Threading.Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WeCantSpell.Hunspell, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WeCantSpell.Hunspell.2.1.0\lib\net35\WeCantSpell.Hunspell.dll</HintPath>
-    </Reference>
-    <Reference Include="ZeldaMessage, Version=1.23.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ZeldaMessagePreview\ZeldaMessagePreview\bin\Release\ZeldaMessage.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\CCode.cs" />
-    <Compile Include="Common\Classes.cs" />
-    <Compile Include="Common\Defaults.cs" />
-    <Compile Include="Common\Dicts.cs" />
-    <Compile Include="Common\Helpers.cs" />
-    <Compile Include="Common\JsonRevision.cs" />
-    <Compile Include="Common\Message.cs" />
-    <Compile Include="Common\NPCMakerSettings.cs" />
-    <Compile Include="Common\NativeDialogWrappers.cs" />
-    <Compile Include="Common\ScriptsUsages.cs" />
-    <Compile Include="Common\Yaz0Compress.cs" />
-    <Compile Include="Controls\BigCheckBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\BigMessageBox.cs" />
-    <Compile Include="Controls\BigTooltip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\FCTB_MonoCJK.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\FCTB_Mono.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="ScriptParser\IfParser.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Face\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Face\Face.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Fade\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Fade\Fade.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\GotoVar\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\GotoVar\GotoVar.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Async\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Async\Async.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Save\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Save\Save.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Player_Talk\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Player_Talk\PlayerTalk.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Pickup\Pickup.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Position\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Position\Position.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Scale\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Scale\Scale.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Rotation\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Rotation\Rotation.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Particle\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Particle\Particle.cs" />
-    <Compile Include="Common\ExtensionMethods.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Ocarina\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Ocarina\Ocarina.cs" />
-    <Compile Include="Controls\InputBox.cs" />
-    <Compile Include="Controls\MessagesContextMenu.cs" />
-    <Compile Include="Controls\ScriptContextMenu.cs" />
-    <Compile Include="Controls\ScriptEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\ScriptEditor.Designer.cs">
-      <DependentUpon>ScriptEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ScriptParser\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Item\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Item\Item.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Return\Return.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Get\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Get\Get.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Stop\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Stop\Stop.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Textbox\Close_Textbox.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Textbox\Show_TextboxSp.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Trade\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Script\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Script\Script.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\CCall\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\CCall\CCall.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Quake\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Quake\Quake.cs" />
-    <Compile Include="ScriptParser\ScriptHelpers.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Await\Classes.cs" />
-    <Compile Include="ScriptParser\Exceptions.cs" />
-    <Compile Include="ScriptParser\ScriptDataHelpers.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Spawn\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Spawn\Spawn.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Warp\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Warp\Warp.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\KIll\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\KIll\Kill.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Textbox\Talk.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Trade\Enable_Trading.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Textbox\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Goto\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Goto\Goto.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\If_While\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Nop\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Play\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Play\Play.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Set\Classes.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Textbox\Show_Textbox.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Textbox\Enable_Talking.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\If_While\If_While.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Await\Await.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Set\Set.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Nop\Nop.cs" />
-    <Compile Include="Common\Lists.cs" />
-    <Compile Include="ScriptParser\ScriptParser.cs" />
-    <Compile Include="ScriptParser\InstructionParsers\Common\Classes.cs" />
-    <Compile Include="Controls\SegmentDataGrid.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\SegmentDataGrid.Designer.cs">
-      <DependentUpon>SegmentDataGrid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\About.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\About.Designer.cs">
-      <DependentUpon>About.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\CustomDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DropDownScrollWheelFix.cs" />
-    <Compile Include="Common\SyntaxHighlighter.cs" />
-    <Compile Include="Common\FileOps.cs" />
-    <Compile Include="Windows\HeaderDefinitionPicker.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\HeaderDefinitionPicker.Designer.cs">
-      <DependentUpon>HeaderDefinitionPicker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\LongInputBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\LongInputBox.Designer.cs">
-      <DependentUpon>LongInputBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\YesNoAllBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\YesNoAllBox.Designer.cs">
-      <DependentUpon>YesNoAllBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ComboPicker.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\ComboPicker.Designer.cs">
-      <DependentUpon>ComboPicker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Debug.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\Debug.Designer.cs">
-      <DependentUpon>Debug.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\GlobalHeader.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\GlobalHeader.Designer.cs">
-      <DependentUpon>GlobalHeader.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\MainWindow.Designer.cs">
-      <DependentUpon>MainWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\NPCFile.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\PickableList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\PickableList.Designer.cs">
-      <DependentUpon>PickableList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\PickableListEntryEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\PickableListEntryEdit.Designer.cs">
-      <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ProgressWithLabel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Windows\ProgressWithLabel.Designer.cs">
-      <DependentUpon>ProgressWithLabel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Settings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Windows\Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Controls\ScriptEditor.resx">
-      <DependentUpon>ScriptEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\SegmentDataGrid.resx">
-      <DependentUpon>SegmentDataGrid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\About.resx">
-      <DependentUpon>About.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\HeaderDefinitionPicker.resx">
-      <DependentUpon>HeaderDefinitionPicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\LongInputBox.resx">
-      <DependentUpon>LongInputBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\YesNoAllBox.resx">
-      <DependentUpon>YesNoAllBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\ComboPicker.resx">
-      <DependentUpon>ComboPicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\Debug.resx">
-      <DependentUpon>Debug.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\GlobalHeader.resx">
-      <DependentUpon>GlobalHeader.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\MainWindow.resx">
-      <DependentUpon>MainWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\PickableList.resx">
-      <DependentUpon>PickableList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\PickableListEntryEdit.resx">
-      <DependentUpon>PickableListEntryEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\ProgressWithLabel.resx">
-      <DependentUpon>ProgressWithLabel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Windows\Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="dict.aff">
+    <None Update="dict.aff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="dict.dic">
+    <None Update="dict.dic">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dicts\Actors.csv">
+    <None Update="Dicts\Actors.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dicts\Default.json">
+    <None Update="Dicts\Default.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dicts\LinkAnims.csv">
+    <None Update="Dicts\LinkAnims.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dicts\MessageBase.json">
+    <None Update="Dicts\MessageBase.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dicts\MsgDefs.json">
+    <None Update="Dicts\MsgDefs.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dicts\Music.csv">
+    <None Update="Dicts\Music.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dicts\Objects.csv">
+    <None Update="Dicts\Objects.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <None Include="Dicts\SFX.csv">
+    <None Update="Dicts\SFX.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\settings.json" />
-    <None Include="Resources\tasks.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="nUhhuh.ico" />
-    <None Include="Resources\EmbeddedOverlay.c" />
-    <None Include="Resources\EmbeddedOverlay1.c" />
-    <None Include="Resources\commentNo.png" />
-    <None Include="Resources\comment.png" />
-    <None Include="Resources\up.png" />
-    <None Include="Resources\dn.png" />
     <Content Include="System.Runtime.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="uhhuh.ico" />
-    <None Include="Resources\c_cpp_properties.json" />
-    <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -472,15 +96,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>del *.xml
-del *.pdb</PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
+  <ItemGroup>
+    <Folder Include="Controls\" />
+    <Folder Include="Windows\" />
+  </ItemGroup>
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''" />
 </Project>

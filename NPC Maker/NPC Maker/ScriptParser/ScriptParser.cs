@@ -1235,7 +1235,7 @@ namespace NPC_Maker.Scripts
                     offsets.Add(0);
 
                 foreach (ushort offset in offsets)
-                    Out.AddRange(Program.BEConverter.GetBytes(offset));
+                    Out.AddRange(BigEndian.GetBytes(offset));
 
                 Out.AddRange(instructionBytes);
                 Helpers.Ensure4ByteAlign(Out);

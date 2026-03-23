@@ -1,6 +1,5 @@
 ﻿using Microsoft;
 using Newtonsoft.Json;
-using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,13 +16,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ZeldaMessage;
 
 namespace NPC_Maker
 {
     static class Program
     {
-        public static MiscUtil.Conversion.BigEndianBitConverter BEConverter = new MiscUtil.Conversion.BigEndianBitConverter();
         public static string ExecPath = "";
         public static bool IsRunningUnderMono = false;
         public static bool IsWSL = false;
@@ -32,7 +29,6 @@ namespace NPC_Maker
 
         public static string SettingsFilePath;
         public static NPCMakerSettings Settings;
-        public static MainWindow mw;
 
         public static string ScriptCachePath = "";
         public static string CCachePath = "";
@@ -43,8 +39,6 @@ namespace NPC_Maker
         public static bool CompileInProgress = false;
         public static bool CompileThereWereErrors = false;
         public static string CompileMonoErrors = "";
-
-        public static Dictionary<string, WeCantSpell.Hunspell.WordList> dictionary;
 
         public static bool consoleSilent = false;
         public static readonly Encoding Utf8 = Encoding.UTF8;
@@ -78,27 +72,13 @@ namespace NPC_Maker
             Application.SetCompatibleTextRenderingDefault(false);
 
             if (!hasArgs)
-                TaskEx.Run(() => GetMonospacedFonts());
+                Task.Run(() => GetMonospacedFonts());
 
             InitializePaths();
             EnsureDirectoriesExist();
             LoadSettings();
 
-            if (!hasArgs)
-            {
-                // Create this in memory, so it gets cached.
-                TaskEx.Run(() => new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]));
-
-                try
-                {
-                    DropDownMenuScrollWheelHandler.Enable(true);
-                }
-                catch { }
-
-                RunGUI();
-            }
-            else
-                RunCLI(args);
+            RunCLI(args);
         }
 
         private static void DetectRuntime()
@@ -117,9 +97,6 @@ namespace NPC_Maker
                 consoleSilent = true;
                 args = args.Where(a => !a.Equals("--silent", StringComparison.OrdinalIgnoreCase)).ToArray();
             }
-
-            if (!IsRunningUnderMono)
-                AttachConsole(-1);
         }
 
         private static void PrintBanner()
@@ -191,43 +168,6 @@ namespace NPC_Maker
         private static void LoadSettings()
         {
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
-        }
-
-        private static void RunGUI()
-        {
-            string fileToOpen = GetInitialFileToOpen();
-
-            while (true)
-            {
-                mw = new MainWindow(fileToOpen);
-                mw.Shown += (s, e) => 
-                { 
-                    mw.Activate(); 
-                    mw.BringToFront(); 
-                };
-
-                Application.Run(mw);
-
-                FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
-
-                if (mw.DialogResult != DialogResult.Retry)
-                    break;
-
-                fileToOpen = mw.OpenedPath;
-            }
-        }
-
-        private static string GetInitialFileToOpen()
-        {
-            bool hasBackup = File.Exists("backup");
-            if (!hasBackup) return "";
-
-            bool loadBackup = BigMessageBox.Show(
-                "NPCMaker was not closed properly the last time it was run. Load auto-saved backup?",
-                "Autosaved backup exists",
-                MessageBoxButtons.YesNo) == DialogResult.Yes;
-
-            return loadBackup ? "backup" : "";
         }
 
         private static void RunCLI(string[] args)
@@ -334,12 +274,7 @@ namespace NPC_Maker
 
         private static void RunParallelCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, NPCFile inFile)
         {
-            Program.CompileInProgress = true;
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, inFile, cacheStatus, null, true);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-            while (Program.CompileInProgress) {}
         }
 
         private static void RunSequentialCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, ref NPCFile inFile)

@@ -1,5 +1,4 @@
-﻿using NPC_Maker.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -471,7 +470,7 @@ namespace NPC_Maker.Scripts
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show("(If/while parser)" + ex.Message);
+                Program.ConsoleWriteLineS("(If/while parser)" + ex.Message);
                 outScript.ParseErrors.Add(ParseException.GeneralError(SplitLine));
                 return new List<Instruction>();
             }

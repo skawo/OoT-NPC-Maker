@@ -1,5 +1,4 @@
-﻿using NPC_Maker.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -64,7 +63,7 @@ namespace NPC_Maker.Scripts
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show("(Async parser)" + ex.Message);
+                Program.ConsoleWriteLineS("(Async parser)" + ex.Message);
                 outScript.ParseErrors.Add(
                     ParseException.GeneralError(SplitLine));
                 return new List<Instruction>();

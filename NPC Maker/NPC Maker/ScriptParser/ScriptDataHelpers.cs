@@ -1,5 +1,4 @@
-﻿using NPC_Maker.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +10,7 @@ namespace NPC_Maker.Scripts
         public static void ErrorIfExpectedLenWrong(List<byte> ByteList, int Len)
         {
             if (Len != ByteList.Count)
-                BigMessageBox.Show($"Critical error: Got wrong amount of bytes: {(Lists.Instructions)ByteList[0]}, data: {BitConverter.ToString(ByteList.ToArray())}");
+                Program.ConsoleWriteLineS($"Critical error: Got wrong amount of bytes: {(Lists.Instructions)ByteList[0]}, data: {BitConverter.ToString(ByteList.ToArray())}");
         }
 
         private static readonly char[] _labelChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();

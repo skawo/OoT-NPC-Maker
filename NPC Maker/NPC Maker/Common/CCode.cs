@@ -1,5 +1,4 @@
-﻿using NPC_Maker.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -454,8 +453,8 @@ namespace NPC_Maker
 
             try
             {
-                var outputTask = TaskEx.Run(() => process.StandardOutput.ReadToEnd());
-                var errorTask = TaskEx.Run(() => process.StandardError.ReadToEnd());
+                var outputTask = Task.Run(() => process.StandardOutput.ReadToEnd());
+                var errorTask = Task.Run(() => process.StandardError.ReadToEnd());
 
                 bool completed = process.WaitForExit((int)Program.Settings.CompileTimeout);
 
@@ -573,15 +572,15 @@ namespace NPC_Maker
 
         private static Dictionary<string, uint> CalculateSectionOffsets(byte[] ovlData)
         {
-            uint sectionOffs = Program.BEConverter.ToUInt32(ovlData, ovlData.Length - 4);
+            uint sectionOffs = BigEndian.ToUInt32(ovlData, ovlData.Length - 4);
             int baseOffset = ovlData.Length - (int)sectionOffs;
 
             var offsets = new Dictionary<string, uint>
             {
                 [".text"] = 0,
-                [".data"] = Program.BEConverter.ToUInt32(ovlData, baseOffset),
-                [".rodata"] = Program.BEConverter.ToUInt32(ovlData, baseOffset + 4),
-                [".bss"] = Program.BEConverter.ToUInt32(ovlData, baseOffset + 8)
+                [".data"] = BigEndian.ToUInt32(ovlData, baseOffset),
+                [".rodata"] = BigEndian.ToUInt32(ovlData, baseOffset + 4),
+                [".bss"] = BigEndian.ToUInt32(ovlData, baseOffset + 8)
             };
 
             offsets[".data"] += offsets[".text"];
@@ -720,7 +719,7 @@ namespace NPC_Maker
             catch (Exception ex)
             {
                 if (errorMsg)
-                    BigMessageBox.Show("Error creating temporary directory: " + ex.Message);
+                    Program.ConsoleWriteLineS("Error creating temporary directory: " + ex.Message);
                 return false;
             }
         }
@@ -759,7 +758,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show("Error running editor: " + ex.Message);
+                Program.ConsoleWriteLineS("Error running editor: " + ex.Message);
                 return null;
             }
         }

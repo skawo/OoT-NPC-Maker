@@ -43,11 +43,11 @@ namespace NPC_Maker
                    (text.Length >= 4 && text.StartsWith("-0x", StringComparison.OrdinalIgnoreCase));
         }
 
-        public static void AddRangeBigEndian(this List<byte> list, UInt16 item) => list.AddRange(Program.BEConverter.GetBytes(item));
-        public static void AddRangeBigEndian(this List<byte> list, UInt32 item) => list.AddRange(Program.BEConverter.GetBytes(item));
-        public static void AddRangeBigEndian(this List<byte> list, Int16 item) => list.AddRange(Program.BEConverter.GetBytes(item));
-        public static void AddRangeBigEndian(this List<byte> list, Int32 item) => list.AddRange(Program.BEConverter.GetBytes(item));
-        public static void AddRangeBigEndian(this List<byte> list, float item) => list.AddRange(Program.BEConverter.GetBytes(item));
+        public static void AddRangeBigEndian(this List<byte> list, UInt16 item) => list.AddRange(BigEndian.GetBytes(item));
+        public static void AddRangeBigEndian(this List<byte> list, UInt32 item) => list.AddRange(BigEndian.GetBytes(item));
+        public static void AddRangeBigEndian(this List<byte> list, Int16 item) => list.AddRange(BigEndian.GetBytes(item));
+        public static void AddRangeBigEndian(this List<byte> list, Int32 item) => list.AddRange(BigEndian.GetBytes(item));
+        public static void AddRangeBigEndian(this List<byte> list, float item) => list.AddRange(BigEndian.GetBytes(item));
         public static void AddRangeBigEndian(this List<byte> list, float[] array)
         {
             foreach (var item in array)

@@ -34,8 +34,8 @@ namespace NPC_Maker
 
         public MessageConfig()
         {
-            EndMessage = (int)ZeldaMessage.Data.MsgControlCode.END;
-            NewLine = (int)ZeldaMessage.Data.MsgControlCode.LINE_BREAK;
+            EndMessage = 2;
+            NewLine = 1;
             EndMessageType = MsgValueTypes.x.ToString();
             NewLineType = MsgValueTypes.x.ToString();
             ExtraFont = "";
@@ -108,16 +108,16 @@ namespace NPC_Maker
                 case MsgValueTypes.x:
                     return new byte[] { (byte)val };
                 case MsgValueTypes.h:
-                    return Program.BEConverter.GetBytes((short)val);
+                    return BigEndian.GetBytes((short)val);
                 case MsgValueTypes.t:
                     {
-                        byte[] vals = Program.BEConverter.GetBytes((int)val);
+                        byte[] vals = BigEndian.GetBytes((int)val);
                         byte[] result = new byte[vals.Length - 1];
                         Array.Copy(vals, 1, result, 0, result.Length);
                         return result;
                     }
                 case MsgValueTypes.w:
-                    return Program.BEConverter.GetBytes((int)val);
+                    return BigEndian.GetBytes((int)val);
                 default:
                     throw new Exception($"The definition {TypeToken} could not be resolved.");
             }
