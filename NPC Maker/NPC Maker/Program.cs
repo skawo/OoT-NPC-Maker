@@ -281,7 +281,8 @@ namespace NPC_Maker
                 }
             }
 
-            Console.WriteLine("Press ENTER to exit...");
+            if (!Program.IsRunningUnderMono)
+                Console.WriteLine("Press ENTER to exit...");
         }
 
         private static void RunConvertCommand(string[] args)
@@ -327,7 +328,8 @@ namespace NPC_Maker
             if (!String.Equals(jsonText, newJson)) 
                 FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
 
-            Console.WriteLine("Press ENTER to exit...");
+            if (!Program.IsRunningUnderMono)
+                Console.WriteLine("Press ENTER to exit...");
         }
 
         private static void RunParallelCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, NPCFile inFile)
