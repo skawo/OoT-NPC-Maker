@@ -202,7 +202,7 @@ namespace NPC_Maker
 
                 var cacheStatus = FileOps.GetCacheStatus(ref inFile);
 
-                if (Program.Settings.CompileInParallel && (cacheStatus.CacheInvalid || cacheStatus.CCacheInvalid))
+                if (Program.Settings.CompileInParallel)
                     RunParallelCompile(outPath, outDeps, cacheStatus, inFile);
                 else
                     RunSequentialCompile(outPath, outDeps, cacheStatus, ref inFile);
