@@ -642,7 +642,7 @@ namespace NPC_Maker
                 if (!File.Exists(path))
                     continue;
 
-                string tokenized = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
+                string tokenized = Helpers.NormalizeExtPath(path);
 
                 if (!headerPaths.Contains(tokenized))
                     headerPaths.Add(tokenized);
