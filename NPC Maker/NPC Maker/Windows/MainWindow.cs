@@ -1321,7 +1321,7 @@ namespace NPC_Maker
 
             var cacheStatus = FileOps.GetCacheStatus(ref EditedFile);
 
-            if (Program.Settings.CompileInParallel && (cacheStatus.CacheInvalid || cacheStatus.CCacheInvalid))
+            if (Program.Settings.CompileInParallel)
             {
                 await FileOps.PreprocessCodeAndScripts(Path, Program.Settings.OutputDeps ? Path + ".d" : null, EditedFile, cacheStatus, progress, false);
             }

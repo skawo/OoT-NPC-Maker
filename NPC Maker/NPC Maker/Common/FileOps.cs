@@ -310,29 +310,34 @@ namespace NPC_Maker
 
         private static string GetIncludesText(List<string> includeList)
         {
-            var sb = new StringBuilder();
-            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var seen = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
+            var results = new string[includeList.Count];
 
-            foreach (string hPath in includeList)
+            Parallel.For(0, includeList.Count, i =>
             {
+                string hPath = includeList[i];
                 string cleanPath = Helpers.DenormalizeExtPath(hPath);
+                var fi = new FileInfo(cleanPath);
 
-                if (!File.Exists(cleanPath))
-                    cleanPath = cleanPath.TrimStart('/', '\\');
-
-                if (!seen.Add(cleanPath))
-                    continue;
-
-                if (File.Exists(cleanPath))
-                    sb.Append(File.GetLastWriteTime(cleanPath).Ticks);
-                else
+                if (!fi.Exists)
                 {
-                    Program.ConsoleWriteLineS($"Warning: Couldn't resolve path {hPath} for cache use.");
-                    sb.Append(Helpers.GenerateTemporaryFolderName());
+                    string trimmed = cleanPath.TrimStart('/', '\\');
+                    fi = new FileInfo(trimmed);
+                    cleanPath = trimmed;
                 }
-            }
 
-            return sb.ToString();
+                if (!seen.TryAdd(cleanPath, 0))
+                    return;
+
+                results[i] = fi.Exists
+                    ? fi.LastWriteTime.Ticks.ToString()
+                    : Helpers.GenerateTemporaryFolderName();
+
+                if (!fi.Exists)
+                    Program.ConsoleWriteLineS($"Warning: Couldn't resolve path {hPath} for cache use.");
+            });
+
+            return string.Concat(results);
         }
 
         // ── Header Defines ────────────────────────────────────────────────────────
@@ -1068,7 +1073,6 @@ namespace NPC_Maker
                 return File.ReadAllBytes(keys.CachedCode);
             }
 
-            cs.CCode = true;
             compErrors = "";
 
             Helpers.DeleteFileStartingWith(Program.CCachePath, jsonEntryPrefix + "funcsaddrs_", cCacheFiles);
@@ -1077,6 +1081,7 @@ namespace NPC_Maker
             if (string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
                 return null;
 
+            cs.CCode = true;
             byte[] overlay = CCode.Compile(data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, ref compErrors, out _, "NPCCOMPILE" + entryID);
 
             if (overlay != null)

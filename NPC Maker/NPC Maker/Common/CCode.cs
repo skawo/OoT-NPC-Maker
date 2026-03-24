@@ -261,10 +261,7 @@ namespace NPC_Maker
                 }
 
                 if (codeEntry != null)
-                {
-                    string[] excludedHeaderPaths = Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths);
-                    codeEntry.HeaderPaths = ExtractHeaderPaths(paths.DFile, config.Folder, excludedHeaderPaths);
-                }
+                    codeEntry.HeaderPaths = ExtractHeaderPaths(paths.DFile, config.Folder);
 
                 compileMsgs += "Done!";
 
@@ -616,7 +613,7 @@ namespace NPC_Maker
 
         // ── Header Path Extraction ────────────────────────────────────────────────
 
-        public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath, string[] excludedPaths)
+        public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath)
         {
             string content = File.ReadAllText(dFilePath);
 
@@ -628,7 +625,7 @@ namespace NPC_Maker
 
             var matches = Regex.Matches(dependencies, @"(?:[^\s\\]|\\.)+");
             var headerPaths = new List<string>();
-            var excluded = excludedPaths.ToList();
+            var excluded = new List<string>();
 
             foreach (Match match in matches)
             {
@@ -668,8 +665,14 @@ namespace NPC_Maker
                 && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
         }
 
+
         private static bool IsPathExcluded(string path, List<string> excludedPaths)
         {
+            var parts = path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+            if (parts.Any(p => p.Equals("z64hdr", StringComparison.OrdinalIgnoreCase) || p.Equals("zocarina", StringComparison.OrdinalIgnoreCase)))
+                return true;
+
             if (excludedPaths == null || excludedPaths.Count == 0)
                 return false;
 
