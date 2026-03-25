@@ -736,6 +736,10 @@ namespace NPC_Maker
                 Directory.CreateDirectory(vsCodeFolder);
 
                 string cprops = Properties.Resources.c_cpp_properties;
+                string extPath = Path.Combine(Program.ExecPath, "c_cpp_properties.json");
+
+                if (File.Exists(extPath))
+                    cprops = File.ReadAllText(extPath);
 
                 if (Program.Settings.Library == Lists.Library.zocarina)
                     cprops = cprops.Replace("z64hdr", "zocarina");
