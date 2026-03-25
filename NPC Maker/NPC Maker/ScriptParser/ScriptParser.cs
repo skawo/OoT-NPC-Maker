@@ -189,7 +189,7 @@ namespace NPC_Maker.Scripts
 
         private static readonly Regex LineContinuationRegex = new Regex(@"\\\s*\r?\n",RegexOptions.Compiled);
 
-        private static readonly Regex IgnoredCharsRegex = new Regex(@"[(){},\t](?=(?:[^""]*""[^""]*"")*[^""]*$)",RegexOptions.Compiled);
+        private static readonly Regex IgnoredCharsRegex = new Regex(@"[{},\t](?=(?:[^""]*""[^""]*"")*[^""]*$)",RegexOptions.Compiled);
 
         private static readonly Regex BlockCommentRegex = new Regex(@"/\*([\s\S]*?)\*/",RegexOptions.Compiled);
 
@@ -584,7 +584,7 @@ namespace NPC_Maker.Scripts
             int lIndex = Lines.FindIndex(x =>
                 x.ToUpper().StartsWith(Lists.Instructions.IF.ToString()) &&
                 (x.ToUpper().Contains(AndKeyword) || x.ToUpper().Contains(OrKeyword)) &&
-                (x.Contains("[") && x.Contains("]"))
+                (x.Contains("(") && x.Contains(")"))
             );
 
             return lIndex;
@@ -1045,11 +1045,12 @@ namespace NPC_Maker.Scripts
 
         static string[] SplitWithQuotes(string input)
         {
-            return input.Split('"')
-                        .Select((s, i) => i % 2 == 0 ? s.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) : new[] { s })
-                        .SelectMany(s => s)
-                        .Where(s => !string.IsNullOrWhiteSpace(s))
-                        .ToArray();
+            var matches = Regex.Matches(input, @"(""[^""]*""|\([^)]*\)|\S+)");
+
+            return matches
+                .Cast<Match>()
+                .Select(m => m.Value.Trim('"', '(', ')'))
+                .ToArray();
         }
 
         private List<Instruction> GetInstructions(List<string> lines)

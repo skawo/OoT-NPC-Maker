@@ -403,6 +403,9 @@ namespace NPC_Maker
                 string name = parts[0];
                 string value = parts.Length > 1 ? parts[1].Trim() : string.Empty;
 
+                if (!Regex.IsMatch(value, @"^(0x[0-9A-Fa-f]+|\d+)$"))
+                    continue;
+
                 // Handle duplicates
                 string key = name;
                 int counter = 1;
