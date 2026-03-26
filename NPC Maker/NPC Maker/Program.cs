@@ -58,8 +58,6 @@ namespace NPC_Maker
         {
             DetectRuntime();
 
-            Console.WriteLine("Test:" + Program.IsRunningUnderMono.ToString());
-
             bool hasArgs = args.Length > 0;
 
             if (hasArgs)
@@ -92,12 +90,8 @@ namespace NPC_Maker
 
         private static void PrintBanner()
         {
-            var version = FileVersionInfo
-                .GetVersionInfo(Assembly.GetExecutingAssembly().Location)
-                .ProductVersion;
-
             ConsoleWriteLineS();
-            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v{version}");
+            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v. TEMPORARY CLI NET");
         }
 
         private static void InitializePaths()
