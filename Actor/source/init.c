@@ -828,13 +828,16 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
                 return;
             }
 
-            NpcM_LoadAnimation(en, anim.offset, R_OBJECT(en, anim.objectId));
+            if (en->currentAnimId != animId)
+            {        
+                NpcM_LoadAnimation(en, anim.offset, R_OBJECT(en, anim.objectId));
+                #if LOGGING > 0
+                    is64Printf("_%2d: User loaded animation ID %d has been loaded at %x\n", en->npcId, anim.offset, en->userLoadAnimBuf);
+                #endif                        
+            }
+            
             gSegments[6] = VIRTUAL_TO_PHYSICAL(en->userLoadAnimBuf);
             animOffset = 0;
-
-            #if LOGGING > 0
-                is64Printf("_%2d: User loaded animation ID %d has been loaded at %x\n", en->npcId, anim.offset, en->userLoadAnimBuf);
-            #endif
         }
         
         bool was_set = Setup_AnimationImpl(&en->actor, 
