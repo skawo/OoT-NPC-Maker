@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using NPC_Maker.Common;
 using NPC_Maker.Controls;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -576,12 +577,12 @@ namespace NPC_Maker
             var entryBytes = new List<byte>(InitialFieldsSize);
             int curLen = 0;
 
-            BuildFixedFields(entryBytes, entry, data, defines, cliMode, ref curLen);
+            BuildFixedFields(entryBytes, entry, data, defines, cliMode, parseErrors, ref curLen);
             BuildMessages(entryBytes, entry, data, jsonFileName, entriesDone, parseErrors, cliMode, ref cs, ref curLen);
-            BuildAnimations(entryBytes, entry, defines, cliMode, ref curLen);
-            BuildExtraDisplayLists(entryBytes, entry, defines, cliMode, ref curLen);
+            BuildAnimations(entryBytes, entry, defines, cliMode, parseErrors, ref curLen);
+            BuildExtraDisplayLists(entryBytes, entry, defines, cliMode, parseErrors, ref curLen);
             BuildColors(entryBytes, entry, ref curLen);
-            BuildSegments(entryBytes, entry, defines, cliMode, ref curLen);
+            BuildSegments(entryBytes, entry, defines, cliMode, parseErrors, ref curLen);
             BuildCCode(entryBytes, entry, data, jsonFileName, entriesDone, cacheStatus,
                        preProcessedFiles, parseErrors, cliMode, ref cs, ref compErrors, ref curLen);
             BuildScripts(entryBytes, entry, data, jsonFileName, entriesDone, baseDefines,
@@ -590,7 +591,7 @@ namespace NPC_Maker
             return entryBytes;
         }
 
-        private static void BuildFixedFields(List<byte> entryBytes, NPCEntry entry, NPCFile data, Dictionary<string, string> defines, bool cliMode, ref int curLen)
+        private static void BuildFixedFields(List<byte> entryBytes, NPCEntry entry, NPCFile data, Dictionary<string, string> defines, bool cliMode, ConcurrentBag<string> parseErrors, ref int curLen)
         {
             entryBytes.AddRange(new byte[]
             {
@@ -683,8 +684,8 @@ namespace NPC_Maker
             entryBytes.AddRangeBigEndian(entry.MovementSpeed);
             entryBytes.AddRangeBigEndian(entry.GravityForce);
             entryBytes.AddRangeBigEndian(entry.SmoothingConstant);
-            entryBytes.AddRangeBigEndian(TryGetFromH(cliMode, entry.NPCName, entry.Hierarchy, defines, entry.SkeletonHeaderDefinition));
-            entryBytes.AddRangeBigEndian(TryGetFromH(cliMode, entry.NPCName, (uint)entry.FileStart, defines, entry.FileStartHeaderDefinition));
+            entryBytes.AddRangeBigEndian(TryGetFromH(cliMode, entry.NPCName, entry.Hierarchy, defines, entry.SkeletonHeaderDefinition, parseErrors));
+            entryBytes.AddRangeBigEndian(TryGetFromH(cliMode, entry.NPCName, (uint)entry.FileStart, defines, entry.FileStartHeaderDefinition, parseErrors));
             entryBytes.AddRangeBigEndian(entry.CullForward);
             entryBytes.AddRangeBigEndian(entry.CullDown);
             entryBytes.AddRangeBigEndian(entry.CullScale);
@@ -801,7 +802,7 @@ namespace NPC_Maker
             target.AddRangeBigEndian((ushort)byteCount);
         }
 
-        private static void BuildAnimations(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, bool cliMode, ref int curLen)
+        private static void BuildAnimations(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, bool cliMode, ConcurrentBag<string> parseErrors, ref int curLen)
         {
             entryBytes.AddRangeBigEndian((uint)entry.Animations.Count);
             Helpers.Ensure4ByteAlign(entryBytes);
@@ -811,9 +812,16 @@ namespace NPC_Maker
             foreach (var anim in entry.Animations)
             {
                 var parts = Helpers.SplitHeaderDefsString(anim.HeaderDefinition);
-                anim.Address = TryGetFromH(cliMode, entry.NPCName, (uint)anim.Address, defines, parts[1]);
-                anim.FileStart = (int)TryGetFromH(cliMode, entry.NPCName, (uint)anim.FileStart, defines, parts[0]);
+
+                uint curAddr = anim.Address;
+                int curFileStart = anim.FileStart;
+
+                anim.Address = TryGetFromH(cliMode, entry.NPCName, (uint)anim.Address, defines, parts[1], parseErrors);
+                anim.FileStart = (int)TryGetFromH(cliMode, entry.NPCName, (uint)anim.FileStart, defines, parts[0], parseErrors);
                 entryBytes.AddRange(anim.ToBytes());
+
+                anim.Address = curAddr;
+                anim.FileStart = curFileStart;
             }
 
             Helpers.Ensure4ByteAlign(entryBytes);
@@ -821,7 +829,7 @@ namespace NPC_Maker
             Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
         }
 
-        private static void BuildExtraDisplayLists(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, bool cliMode, ref int curLen)
+        private static void BuildExtraDisplayLists(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, bool cliMode, ConcurrentBag<string> parseErrors, ref int curLen)
         {
             entryBytes.AddRangeBigEndian((uint)entry.ExtraDisplayLists.Count);
             Helpers.Ensure4ByteAlign(entryBytes);
@@ -830,10 +838,16 @@ namespace NPC_Maker
 
             foreach (var dlist in entry.ExtraDisplayLists)
             {
+                uint curAddr = dlist.Address;
+                int curFileStart = dlist.FileStart;
+
                 var parts = Helpers.SplitHeaderDefsString(dlist.HeaderDefinition);
-                dlist.Address = TryGetFromH(cliMode, entry.NPCName, dlist.Address, defines, parts[1]);
-                dlist.FileStart = (int)TryGetFromH(cliMode, entry.NPCName, (uint)dlist.FileStart, defines, parts[0]);
+                dlist.Address = TryGetFromH(cliMode, entry.NPCName, dlist.Address, defines, parts[1], parseErrors);
+                dlist.FileStart = (int)TryGetFromH(cliMode, entry.NPCName, (uint)dlist.FileStart, defines, parts[0], parseErrors);
                 entryBytes.AddRange(dlist.ToBytes());
+
+                dlist.Address = curAddr;
+                dlist.FileStart = curFileStart;
             }
 
             Helpers.Ensure4ByteAlign(entryBytes);
@@ -858,7 +872,7 @@ namespace NPC_Maker
             Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
         }
 
-        private static void BuildSegments(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, bool cliMode, ref int curLen)
+        private static void BuildSegments(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, bool cliMode, ConcurrentBag<string> parseErrors, ref int curLen)
         {
             var segOffsets = new List<byte>();
             var segEntries = new List<byte>();
@@ -875,9 +889,16 @@ namespace NPC_Maker
                 foreach (var segEntry in segmentList)
                 {
                     var parts = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
-                    segEntry.Address = TryGetFromH(cliMode, entry.NPCName, segEntry.Address, defines, parts[1]);
-                    segEntry.FileStart = (int)TryGetFromH(cliMode, entry.NPCName, (uint)segEntry.FileStart, defines, parts[0]);
+
+                    uint curAddr = segEntry.Address;
+                    int curFileStart = segEntry.FileStart;
+
+                    segEntry.Address = TryGetFromH(cliMode, entry.NPCName, segEntry.Address, defines, parts[1], parseErrors);
+                    segEntry.FileStart = (int)TryGetFromH(cliMode, entry.NPCName, (uint)segEntry.FileStart, defines, parts[0], parseErrors);
                     segEntries.AddRange(segEntry.ToBytes());
+
+                    segEntry.Address = curAddr;
+                    segEntry.FileStart = curFileStart;
                 }
             }
 
@@ -1385,7 +1406,7 @@ namespace NPC_Maker
                 BigMessageBox.Show(msg, "Error", MessageBoxButtons.OK);
         }
 
-        private static uint TryGetFromH(bool cliMode, string npcName, uint defaultValue, Dictionary<string, string> defines, string name)
+        private static uint TryGetFromH(bool cliMode, string npcName, uint defaultValue, Dictionary<string, string> defines, string name, ConcurrentBag<string> parseErrors)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return defaultValue;
@@ -1394,7 +1415,7 @@ namespace NPC_Maker
 
             if (defines.Count == 0)
             {
-                ShowMsg(cliMode, errorMsg);
+                parseErrors.Add(errorMsg);
                 return defaultValue;
             }
 
@@ -1404,7 +1425,7 @@ namespace NPC_Maker
 
                 if (h == null)
                 {
-                    ShowMsg(cliMode, errorMsg);
+                    parseErrors.Add(errorMsg);
                     return defaultValue;
                 }
 
@@ -1412,7 +1433,7 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                ShowMsg(cliMode, $"{npcName}: Error parsing define \"{name}\": {ex.Message}");
+                parseErrors.Add($"{npcName}: Error parsing define \"{name}\": {ex.Message}");
                 return defaultValue;
             }
         }
