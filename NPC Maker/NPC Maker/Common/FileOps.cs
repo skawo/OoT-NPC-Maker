@@ -146,6 +146,8 @@ namespace NPC_Maker
                             progress.Report(new ProgressReport($"Saving {pct:0}%", pct));
                         }
                     }
+
+                    entry.ClearHeaderValues();
                 });
 
                 foreach (var script in output.GlobalHeaders)
@@ -399,6 +401,8 @@ namespace NPC_Maker
                         if (entry.IsNull || entry.Omitted)
                             return;
 
+                        entry.ClearHeaderValues();
+
                         string prefix = jsonFileName + "_" + entryID + "_";
                         var cs = new RecompilationStatus();
                         string compErrors;
@@ -495,6 +499,7 @@ namespace NPC_Maker
                         if (preProcessedFiles?.TryGetValue(i.ToString(), out csi) == true)
                             cs = (RecompilationStatus)csi;
 
+                        entry.ClearHeaderValues();
                         var entryBytes = BuildEntryBytes(entry, localData, cliMode, baseDefines,
                                                          cacheStatus, jsonFileName, i, preProcessedFiles,
                                                          parseErrors, definesCache, ref cs, ref compErrors);

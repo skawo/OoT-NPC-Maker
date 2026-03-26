@@ -305,6 +305,51 @@ namespace NPC_Maker
             FileStartHeaderDefinition = "";
         }
 
+        public void ClearHeaderValues()
+        {
+            if (!String.IsNullOrWhiteSpace(FileStartHeaderDefinition))
+                FileStart = 0;
+            if (!String.IsNullOrWhiteSpace(SkeletonHeaderDefinition))
+                Hierarchy = 0;
+
+
+            foreach (var anim in Animations)
+            {
+                var parts = Helpers.SplitHeaderDefsString(anim.HeaderDefinition);
+
+                if (!String.IsNullOrWhiteSpace(parts[1]))
+                    anim.Address = 0;
+
+                if (!String.IsNullOrWhiteSpace(parts[0]))
+                    anim.FileStart = 0;
+            }
+
+            foreach (var dlist in ExtraDisplayLists)
+            {
+                var parts = Helpers.SplitHeaderDefsString(dlist.HeaderDefinition);
+
+                if (!String.IsNullOrWhiteSpace(parts[1]))
+                    dlist.Address = 0;
+
+                if (!String.IsNullOrWhiteSpace(parts[0]))
+                    dlist.FileStart = 0;
+            }
+
+            foreach (var seg in Segments)
+            {
+                foreach (var segEntry in seg)
+                {
+                    var parts = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
+
+                    if (!String.IsNullOrWhiteSpace(parts[1]))
+                        segEntry.Address = 0;
+
+                    if (!String.IsNullOrWhiteSpace(parts[0]))
+                        segEntry.FileStart = 0;
+                }
+            }
+        }
+
         public List<OutputColorEntry> ParseColorEntries()
         {
             List<OutputColorEntry> Out = new List<OutputColorEntry>();
