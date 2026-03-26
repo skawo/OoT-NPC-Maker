@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FastColoredTextBoxCJK;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPC_Maker.Common;
 using NPC_Maker.Controls;
@@ -149,6 +150,47 @@ namespace NPC_Maker
                             progress.Report(new ProgressReport($"Saving {pct:0}%", pct));
                         }
                     }
+
+                    if (String.IsNullOrEmpty(entry.FileStartHeaderDefinition))
+                        entry.FileStart = 0;
+                    if (String.IsNullOrEmpty(entry.SkeletonHeaderDefinition))
+                        entry.Hierarchy = 0;
+
+
+                    foreach (var anim in entry.Animations)
+                    {
+                        var parts = Helpers.SplitHeaderDefsString(anim.HeaderDefinition);
+
+                        if (String.IsNullOrEmpty(parts[1]))
+                            anim.Address = 0;
+
+                        if (String.IsNullOrEmpty(parts[0]))
+                            anim.FileStart = 0;
+                    }
+
+                    foreach (var dlist in entry.ExtraDisplayLists)
+                    {
+                        var parts = Helpers.SplitHeaderDefsString(dlist.HeaderDefinition);
+
+                        if (String.IsNullOrEmpty(parts[1]))
+                            dlist.Address = 0;
+
+                        if (String.IsNullOrEmpty(parts[0]))
+                            dlist.FileStart = 0;
+                    }
+
+                    foreach (var seg in entry.Animations)
+                    {
+                        var parts = Helpers.SplitHeaderDefsString(seg.HeaderDefinition);
+
+                        if (String.IsNullOrEmpty(parts[1]))
+                            seg.Address = 0;
+
+                        if (String.IsNullOrEmpty(parts[0]))
+                            seg.FileStart = 0;
+                    }
+
+
                 });
 
                 foreach (var script in output.GlobalHeaders)
