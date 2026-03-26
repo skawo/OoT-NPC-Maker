@@ -151,47 +151,7 @@ namespace NPC_Maker
                         }
                     }
 
-                    if (String.IsNullOrEmpty(entry.FileStartHeaderDefinition))
-                        entry.FileStart = 0;
-                    if (String.IsNullOrEmpty(entry.SkeletonHeaderDefinition))
-                        entry.Hierarchy = 0;
-
-
-                    foreach (var anim in entry.Animations)
-                    {
-                        var parts = Helpers.SplitHeaderDefsString(anim.HeaderDefinition);
-
-                        if (String.IsNullOrEmpty(parts[1]))
-                            anim.Address = 0;
-
-                        if (String.IsNullOrEmpty(parts[0]))
-                            anim.FileStart = 0;
-                    }
-
-                    foreach (var dlist in entry.ExtraDisplayLists)
-                    {
-                        var parts = Helpers.SplitHeaderDefsString(dlist.HeaderDefinition);
-
-                        if (String.IsNullOrEmpty(parts[1]))
-                            dlist.Address = 0;
-
-                        if (String.IsNullOrEmpty(parts[0]))
-                            dlist.FileStart = 0;
-                    }
-
-                    foreach (var seg in entry.Segments)
-                    {
-                        foreach (var segEntry in seg)
-                        {
-                            var parts = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
-
-                            if (String.IsNullOrEmpty(parts[1]))
-                                segEntry.Address = 0;
-
-                            if (String.IsNullOrEmpty(parts[0]))
-                                segEntry.FileStart = 0;
-                        }
-                    }
+                    ClearHeaderValues(entry);
                 });
 
                 foreach (var script in output.GlobalHeaders)
@@ -220,6 +180,51 @@ namespace NPC_Maker
             {
                 BigMessageBox.Show($"Failed to process JSON: {ex.Message}");
                 return null;
+            }
+        }
+
+        public static void ClearHeaderValues(NPCEntry entry)
+        {
+            if (!String.IsNullOrWhiteSpace(entry.FileStartHeaderDefinition))
+                entry.FileStart = 0;
+            if (!String.IsNullOrWhiteSpace(entry.SkeletonHeaderDefinition))
+                entry.Hierarchy = 0;
+
+
+            foreach (var anim in entry.Animations)
+            {
+                var parts = Helpers.SplitHeaderDefsString(anim.HeaderDefinition);
+
+                if (!String.IsNullOrWhiteSpace(parts[1]))
+                    anim.Address = 0;
+
+                if (!String.IsNullOrWhiteSpace(parts[0]))
+                    anim.FileStart = 0;
+            }
+
+            foreach (var dlist in entry.ExtraDisplayLists)
+            {
+                var parts = Helpers.SplitHeaderDefsString(dlist.HeaderDefinition);
+
+                if (!String.IsNullOrWhiteSpace(parts[1]))
+                    dlist.Address = 0;
+
+                if (!String.IsNullOrWhiteSpace(parts[0]))
+                    dlist.FileStart = 0;
+            }
+
+            foreach (var seg in entry.Segments)
+            {
+                foreach (var segEntry in seg)
+                {
+                    var parts = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
+
+                    if (!String.IsNullOrWhiteSpace(parts[1]))
+                        segEntry.Address = 0;
+
+                    if (!String.IsNullOrWhiteSpace(parts[0]))
+                        segEntry.FileStart = 0;
+                }
             }
         }
 
@@ -451,6 +456,7 @@ namespace NPC_Maker
                             var cs = new RecompilationStatus();
                             string compErrors;
 
+                            ClearHeaderValues(entry);
                             ProcessCCode(data, entry, entryID, prefix, cacheStatus,
                                          cCacheFiles, scriptCacheFiles, results, ref cs, out compErrors);
 
@@ -545,6 +551,7 @@ namespace NPC_Maker
                         if (preProcessedFiles?.TryGetValue(i.ToString(), out csi) == true)
                             cs = (RecompilationStatus)csi;
 
+                        ClearHeaderValues(entry);
                         var entryBytes = BuildEntryBytes(entry, localData, cliMode, baseDefines,
                                                          cacheStatus, jsonFileName, i, preProcessedFiles,
                                                          parseErrors, definesCache, ref cs, ref compErrors);
