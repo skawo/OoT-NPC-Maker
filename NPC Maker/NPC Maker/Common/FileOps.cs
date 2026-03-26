@@ -179,18 +179,19 @@ namespace NPC_Maker
                             dlist.FileStart = 0;
                     }
 
-                    foreach (var seg in entry.Animations)
+                    foreach (var seg in entry.Segments)
                     {
-                        var parts = Helpers.SplitHeaderDefsString(seg.HeaderDefinition);
+                        foreach (var segEntry in seg)
+                        {
+                            var parts = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
 
-                        if (String.IsNullOrEmpty(parts[1]))
-                            seg.Address = 0;
+                            if (String.IsNullOrEmpty(parts[1]))
+                                segEntry.Address = 0;
 
-                        if (String.IsNullOrEmpty(parts[0]))
-                            seg.FileStart = 0;
+                            if (String.IsNullOrEmpty(parts[0]))
+                                segEntry.FileStart = 0;
+                        }
                     }
-
-
                 });
 
                 foreach (var script in output.GlobalHeaders)
