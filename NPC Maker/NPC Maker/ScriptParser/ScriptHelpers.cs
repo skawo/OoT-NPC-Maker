@@ -299,9 +299,12 @@ namespace NPC_Maker.Scripts
                 {
                     try
                     {
-                        var res = Program._sharedTable.Compute(SplitLine[Index], null);
-                        if (res != null)
-                            SplitLine[Index] = res.ToString();
+                        if (!double.TryParse(SplitLine[Index], NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+                        {
+                            var res = Program._sharedTable.Compute(SplitLine[Index], null);
+                            if (res != null)
+                                SplitLine[Index] = ((IFormattable)res).ToString(null, CultureInfo.InvariantCulture);
+                        }
                     }
                     catch (Exception)
                     {

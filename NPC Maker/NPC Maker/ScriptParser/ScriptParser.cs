@@ -322,7 +322,10 @@ namespace NPC_Maker.Scripts
 
                         try
                         {
-                            result = Program._sharedTable.Compute(string.Join(" ", f), null)?.ToString() ?? string.Join(" ", f);
+                            var computed = Program._sharedTable.Compute(string.Join(" ", f), null);
+                            result = computed != null
+                                ? ((IFormattable)computed).ToString(null, System.Globalization.CultureInfo.InvariantCulture)
+                                : string.Join(" ", f);
                         }
                         catch
                         {
