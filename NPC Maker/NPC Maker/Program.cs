@@ -91,7 +91,7 @@ namespace NPC_Maker
         private static void PrintBanner()
         {
             ConsoleWriteLineS();
-            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v. TEMPORARY CLI NET");
+            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.3.742 TEMPORARY CLI NET");
         }
 
         private static void InitializePaths()
