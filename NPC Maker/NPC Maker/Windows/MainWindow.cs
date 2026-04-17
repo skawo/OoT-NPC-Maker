@@ -239,6 +239,7 @@ namespace NPC_Maker
 
                 var snap = _pendingSnapshot;
                 _pendingSnapshot = null;
+                Monitor.Pulse(_previewLock);
                 return snap;
             }
         }
@@ -308,6 +309,9 @@ namespace NPC_Maker
 
             lock (_previewLock)
             {
+                while (_pendingSnapshot != null)
+                    Monitor.Wait(_previewLock);
+
                 _pendingSnapshot = snap;
                 Monitor.Pulse(_previewLock);
             }
