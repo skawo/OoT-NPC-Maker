@@ -40,7 +40,7 @@ namespace NPC_Maker
         public static string AutoSavePath = "";
 
         public static bool SaveInProgress = false;
-        public static bool CompileInProgress = false;
+        public static volatile bool CompileInProgress = false;
         public static bool CompileThereWereErrors = false;
         public static string CompileMonoErrors = "";
 
