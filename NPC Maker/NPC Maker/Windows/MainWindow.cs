@@ -1197,6 +1197,7 @@ namespace NPC_Maker
             SelectedEntry = null;
 
             Panel_Editor.Enabled = true;
+            Program.JsonPath = Path.Combine(Program.ExecPath, Helpers.GenerateNewJsonName());
 
             SetupLanguageCombo();
             InsertDataIntoActorListGrid();

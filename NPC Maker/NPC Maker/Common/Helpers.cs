@@ -370,6 +370,11 @@ namespace NPC_Maker
             return $"temp_{DateTime.Now.Ticks}_{System.Diagnostics.Process.GetCurrentProcess().Id}";
         }
 
+        public static string GenerateNewJsonName()
+        {
+            return $"_{DateTime.Now.Ticks}";
+        }
+
         public static string GetBase64Hash(string s)
         {
             using (var sha1 = SHA1.Create())
