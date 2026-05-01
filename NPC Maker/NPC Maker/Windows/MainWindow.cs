@@ -4638,7 +4638,7 @@ namespace NPC_Maker
 
         private void FindMsgBtn_Click(object sender, EventArgs e)
         {
-            if (EditedFile == null)
+            if (EditedFile == null || String.IsNullOrWhiteSpace(txBox_Search.Text))
                 return;
 
             int MsgCount = 0;
