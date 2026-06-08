@@ -61,6 +61,7 @@ namespace NPC_Maker
 
         private NativeColorDialog ColorDialog = new NativeColorDialog();
 
+        private Panel _MsgPreviewOrigViewport, _MsgPreviewViewport;
         private VScrollBar _vScrollMsgPreviewOrigMono, _vScrollMsgPreviewMono;
         private HScrollBar _hScrollMsgPreviewOrigMono, _hScrollMsgPreviewMono;
 
@@ -152,11 +153,11 @@ namespace NPC_Maker
             PreviewSplitContainer.Panel1.AutoScroll = false;
             PreviewSplitContainer.Panel2.AutoScroll = false;
 
-            SetupPctBoxPanelMono(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _vScrollMsgPreviewOrigMono, out _hScrollMsgPreviewOrigMono);
-            SetupPctBoxPanelMono(PreviewSplitContainer.Panel2, MsgPreview, out _vScrollMsgPreviewMono, out _hScrollMsgPreviewMono);
+            SetupPctBoxPanelMono(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _MsgPreviewOrigViewport, out _vScrollMsgPreviewOrigMono, out _hScrollMsgPreviewOrigMono);
+            SetupPctBoxPanelMono(PreviewSplitContainer.Panel2, MsgPreview, out _MsgPreviewViewport, out _vScrollMsgPreviewMono, out _hScrollMsgPreviewMono);
         }
 
-        private void SetupPctBoxPanelMono(SplitterPanel panel, PictureBox pic, out VScrollBar vScroll, out HScrollBar hScroll)
+        private void SetupPctBoxPanelMono(SplitterPanel panel, PictureBox pic, out Panel viewport, out VScrollBar vScroll, out HScrollBar hScroll)
         {
             float size = 18 * Program.Settings.GUIScale;
 
@@ -168,8 +169,12 @@ namespace NPC_Maker
             var vs = vScroll;
             var hs = hScroll;
 
-            var viewport = new Panel { Dock = DockStyle.Fill, AutoScroll = false };
+            panel.Controls.Clear();
+
+            viewport = new Panel { Dock = DockStyle.Fill, AutoScroll = false };
             viewport.Controls.Add(pic);
+
+            var vp = viewport;
 
             vScroll.Scroll += (s, e) => pic.Top = -e.NewValue;
             hScroll.Scroll += (s, e) => pic.Left = -e.NewValue;
@@ -186,7 +191,7 @@ namespace NPC_Maker
                 pic.Top = -newVal;
             };
 
-            viewport.Resize += (s, e) => UpdatePctBoxScrollBarsMono(panel, viewport, pic, vs, hs);
+            viewport.Resize += (s, e) => UpdatePctBoxScrollBarsMono(panel, vp, pic, vs, hs);
 
             panel.Controls.Add(viewport);
             panel.Controls.Add(vs);
@@ -369,10 +374,7 @@ namespace NPC_Maker
                 SetPreviewImage(MsgPreviewOrig, bmpOrig, lastPreviewDataOrig, PreviewSplitContainer.Panel1);
 
                 if (Program.IsRunningUnderMono)
-                {
-                    var viewport1 = PreviewSplitContainer.Panel1.Controls.OfType<Panel>().First();
-                    UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel1, viewport1, MsgPreviewOrig, _vScrollMsgPreviewOrigMono, _hScrollMsgPreviewOrigMono);
-                }
+                    UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel1, _MsgPreviewOrigViewport, MsgPreviewOrig, _vScrollMsgPreviewOrigMono, _hScrollMsgPreviewOrigMono);
             }
             else
             {
@@ -382,10 +384,7 @@ namespace NPC_Maker
             SetPreviewImage(MsgPreview, bmp, lastPreviewData, PreviewSplitContainer.Panel2);
 
             if (Program.IsRunningUnderMono)
-            {
-                var viewport2 = PreviewSplitContainer.Panel2.Controls.OfType<Panel>().First();
-                UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel2, viewport2, MsgPreview, _vScrollMsgPreviewMono, _hScrollMsgPreviewMono);
-            }
+                UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel2, _MsgPreviewViewport, MsgPreview, _vScrollMsgPreviewMono, _hScrollMsgPreviewMono);
         }
 
         private void SetPreviewImage(PictureBox box, Bitmap bmp, dynamic lastData, Panel container)
