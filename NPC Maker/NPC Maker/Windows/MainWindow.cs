@@ -153,21 +153,16 @@ namespace NPC_Maker
             PreviewSplitContainer.Panel1.AutoScroll = false;
             PreviewSplitContainer.Panel2.AutoScroll = false;
 
-            SetupPctBoxPanelMono(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _MsgPreviewOrigViewport, out _vScrollMsgPreviewOrigMono, out _hScrollMsgPreviewOrigMono);
-            SetupPctBoxPanelMono(PreviewSplitContainer.Panel2, MsgPreview, out _MsgPreviewViewport, out _vScrollMsgPreviewMono, out _hScrollMsgPreviewMono);
+            SetupPctBoxPanelMono(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _MsgPreviewOrigViewport, out _vScrollMsgPreviewOrigMono);
+            SetupPctBoxPanelMono(PreviewSplitContainer.Panel2, MsgPreview, out _MsgPreviewViewport, out _vScrollMsgPreviewMono);
         }
 
-        private void SetupPctBoxPanelMono(SplitterPanel panel, PictureBox pic, out Panel viewport, out VScrollBar vScroll, out HScrollBar hScroll)
+        private void SetupPctBoxPanelMono(SplitterPanel panel, PictureBox pic, out Panel viewport, out VScrollBar vScroll)
         {
             float size = 18 * Program.Settings.GUIScale;
 
             vScroll = new VScrollBar { Width = (int)size, Dock = DockStyle.Right };
-            var hScrollWrapper = new Panel { Height = (int)size, Dock = DockStyle.Bottom };
-            hScroll = new HScrollBar { Dock = DockStyle.Fill };
-            hScrollWrapper.Controls.Add(hScroll);
-
             var vs = vScroll;
-            var hs = hScroll;
 
             panel.Controls.Clear();
 
@@ -177,7 +172,6 @@ namespace NPC_Maker
             var vp = viewport;
 
             vScroll.Scroll += (s, e) => pic.Top = -e.NewValue;
-            hScroll.Scroll += (s, e) => pic.Left = -e.NewValue;
 
             viewport.MouseWheel += (s, e) =>
             {
@@ -191,14 +185,11 @@ namespace NPC_Maker
                 pic.Top = -newVal;
             };
 
-            viewport.Resize += (s, e) => UpdatePctBoxScrollBarsMono(panel, vp, pic, vs, hs);
-
             panel.Controls.Add(viewport);
             panel.Controls.Add(vs);
-            panel.Controls.Add(hScrollWrapper);
         }
 
-        private void UpdatePctBoxScrollBarsMono(SplitterPanel panel, Panel viewport, PictureBox pic, VScrollBar vScroll, HScrollBar hScroll)
+        private void UpdatePctBoxScrollBarsMono(SplitterPanel panel, Panel viewport, PictureBox pic, VScrollBar vScroll)
         {
             if (!Program.IsRunningUnderMono)
                 return;
@@ -206,7 +197,6 @@ namespace NPC_Maker
             if (pic.Image == null)
             {
                 vScroll.Visible = false;
-                hScroll.Visible = false;
                 return;
             }
 
@@ -214,11 +204,10 @@ namespace NPC_Maker
             bool needsH = pic.Image.Width > viewport.Width;
 
             vScroll.Visible = needsV;
-            hScroll.Visible = needsH;
 
             if (needsV)
             {
-                int visibleHeight = viewport.Height - (needsH ? hScroll.Height : 0);
+                int visibleHeight = viewport.Height;
                 int contentHeight = pic.Image.Height;
 
                 vScroll.Minimum = 0;
@@ -232,25 +221,7 @@ namespace NPC_Maker
             else
             {
                 vScroll.Value = 0;
-                pic.Top = 0; 
-            }
-
-            if (needsH)
-            {
-                int visibleWidth = viewport.Width - (needsV ? vScroll.Width : 0);
-                int contentWidth = pic.Image.Width;
-
-                hScroll.Minimum = 0;
-                hScroll.LargeChange = visibleWidth;
-                hScroll.SmallChange = 20;
-                hScroll.Maximum = contentWidth - 1;
-                hScroll.Value = Math.Min(hScroll.Value, Math.Max(0, hScroll.Maximum - hScroll.LargeChange + 1));
-                pic.Left = -hScroll.Value;
-            }
-            else
-            {
-                hScroll.Value = 0;
-                pic.Left = (viewport.Width - pic.Image.Width) / 2; 
+                pic.Top = 0;
             }
         }
 
@@ -369,12 +340,14 @@ namespace NPC_Maker
             {
                 PreviewSplitContainer.SplitterDistance = PreviewSplitContainer.Width / 2;
                 PreviewSplitContainer.Panel1Collapsed = false;
-                PreviewSplitContainer.Panel1.AutoScroll = true;
+
+                if (!Program.IsRunningUnderMono)
+                    PreviewSplitContainer.Panel1.AutoScroll = true;
 
                 SetPreviewImage(MsgPreviewOrig, bmpOrig, lastPreviewDataOrig, PreviewSplitContainer.Panel1);
 
                 if (Program.IsRunningUnderMono)
-                    UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel1, _MsgPreviewOrigViewport, MsgPreviewOrig, _vScrollMsgPreviewOrigMono, _hScrollMsgPreviewOrigMono);
+                    UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel1, _MsgPreviewOrigViewport, MsgPreviewOrig, _vScrollMsgPreviewOrigMono);
             }
             else
             {
@@ -384,7 +357,7 @@ namespace NPC_Maker
             SetPreviewImage(MsgPreview, bmp, lastPreviewData, PreviewSplitContainer.Panel2);
 
             if (Program.IsRunningUnderMono)
-                UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel2, _MsgPreviewViewport, MsgPreview, _vScrollMsgPreviewMono, _hScrollMsgPreviewMono);
+                UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel2, _MsgPreviewViewport, MsgPreview, _vScrollMsgPreviewMono);
         }
 
         private void SetPreviewImage(PictureBox box, Bitmap bmp, dynamic lastData, Panel container)
@@ -1902,11 +1875,11 @@ namespace NPC_Maker
                     try
                     {
                         List<CSymbol> symbols = null;
-                        CCode.Compile(cFile, 
-                                      ofD == DialogResult.OK ? $"{Program.Settings.LinkerPaths};{of.FileName}" : Program.Settings.LinkerPaths, 
-                                      sf.FileName, 
-                                      flg.inputText, 
-                                      ref CompileMsgs, 
+                        CCode.Compile(cFile,
+                                      ofD == DialogResult.OK ? $"{Program.Settings.LinkerPaths};{of.FileName}" : Program.Settings.LinkerPaths,
+                                      sf.FileName,
+                                      flg.inputText,
+                                      ref CompileMsgs,
                                       out symbols);
 
                         if (symbols != null)
