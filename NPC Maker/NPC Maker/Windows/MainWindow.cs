@@ -63,7 +63,6 @@ namespace NPC_Maker
 
         private Panel _MsgPreviewOrigViewport, _MsgPreviewViewport;
         private VScrollBar _vScrollMsgPreviewOrigMono, _vScrollMsgPreviewMono;
-        private HScrollBar _hScrollMsgPreviewOrigMono, _hScrollMsgPreviewMono;
 
         public MainWindow(string FilePath = "")
         {
