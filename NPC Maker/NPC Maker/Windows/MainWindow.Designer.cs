@@ -3641,6 +3641,7 @@ namespace NPC_Maker
             this.MsgText.WordWrapAutoIndent = false;
             this.MsgText.Zoom = 100;
             this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
+            this.MsgText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MsgText_KeyDown);
             this.MsgText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
             this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
             // 
@@ -3697,6 +3698,7 @@ namespace NPC_Maker
             this.MsgTextCJK.WordWrapAutoIndent = false;
             this.MsgTextCJK.Zoom = 100;
             this.MsgTextCJK.TextChanged += new System.EventHandler<FastColoredTextBoxCJK.TextChangedEventArgs>(this.MsgTextCJK_TextChanged);
+            this.MsgTextCJK.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MsgText_KeyDown);
             this.MsgTextCJK.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
             this.MsgTextCJK.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgTextCJK_MouseDoubleClick);
             // 

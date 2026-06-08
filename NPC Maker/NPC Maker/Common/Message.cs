@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -247,6 +248,8 @@ namespace NPC_Maker
 
         public string ContextName { get; set; }
 
+        public string KeyboardShortcut { get; set; }
+
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public TagEntry Entry { get; set; }
 
@@ -261,6 +264,19 @@ namespace NPC_Maker
             ContextName = "";
             NewBoxSpecialHandling = false;
 
+        }
+
+        public bool MatchesShortcut(KeyEventArgs e)
+        {
+            if (string.IsNullOrEmpty(KeyboardShortcut)) return false;
+
+            string[] parts = KeyboardShortcut.Split('+');
+            if (!Enum.TryParse<Keys>(parts.Last(), out Keys key)) return false;
+
+            return e.KeyCode == key
+                && e.Control == parts.Contains("Ctrl")
+                && e.Shift == parts.Contains("Shift")
+                && e.Alt == parts.Contains("Alt");
         }
 
         public void ProcessTag()

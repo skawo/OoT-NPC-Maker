@@ -5278,8 +5278,26 @@ namespace NPC_Maker
 
             Program.Settings.UseCJK = ChkBox_UseCJK.Checked;
             SplitMsgContainer_Paint(null, null);
+        }
 
+        private void MsgText_KeyDown(object sender, KeyEventArgs e)
+        {
+            var kBordTags = Dicts.LanguageDefs[Combo_Language.Text].Entries.Where(x => !String.IsNullOrEmpty(x.KeyboardShortcut));
 
+            foreach (var tag in kBordTags)
+            {
+                if (tag.MatchesShortcut(e))
+                {
+                    if (Program.Settings.UseCJK)
+                        (sender as FastColoredTextBoxCJK.FastColoredTextBox).InsertText(tag.Token);
+                    else
+                        (sender as FastColoredTextBox).InsertText(tag.Token);
+
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                    break;
+                }
+            }
         }
 
         private void ExportCurrentActorMessagesToolStripMenuItem_Click(object sender, EventArgs e)
