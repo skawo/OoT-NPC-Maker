@@ -61,6 +61,9 @@ namespace NPC_Maker
 
         private NativeColorDialog ColorDialog = new NativeColorDialog();
 
+        private VScrollBar _vScrollMsgPreviewOrigMono, _vScrollMsgPreviewMono;
+        private HScrollBar _hScrollMsgPreviewOrigMono, _hScrollMsgPreviewMono;
+
         public MainWindow(string FilePath = "")
         {
             InitializeComponent();
@@ -132,7 +135,118 @@ namespace NPC_Maker
             SplitContainer1_Panel1_SizeChanged(null, null);
             MsgTabSplitContainer_SizeChanged(null, null);
 
+            SetupPctBoxScrollbarsMono();
             SetupScale();
+        }
+
+        private void MsgPreview_MouseClick(object sender, MouseEventArgs e)
+        {
+            (sender as PictureBox).Focus();
+        }
+
+        private void SetupPctBoxScrollbarsMono()
+        {
+            if (!Program.IsRunningUnderMono)
+                return;
+
+            PreviewSplitContainer.Panel1.AutoScroll = false;
+            PreviewSplitContainer.Panel2.AutoScroll = false;
+
+            SetupPctBoxPanelMono(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _vScrollMsgPreviewOrigMono, out _hScrollMsgPreviewOrigMono);
+            SetupPctBoxPanelMono(PreviewSplitContainer.Panel2, MsgPreview, out _vScrollMsgPreviewMono, out _hScrollMsgPreviewMono);
+        }
+
+        private void SetupPctBoxPanelMono(SplitterPanel panel, PictureBox pic, out VScrollBar vScroll, out HScrollBar hScroll)
+        {
+            float size = 18 * Program.Settings.GUIScale;
+
+            vScroll = new VScrollBar { Width = (int)size, Dock = DockStyle.Right };
+            var hScrollWrapper = new Panel { Height = (int)size, Dock = DockStyle.Bottom };
+            hScroll = new HScrollBar { Dock = DockStyle.Fill };
+            hScrollWrapper.Controls.Add(hScroll);
+
+            var vs = vScroll;
+            var hs = hScroll;
+
+            var viewport = new Panel { Dock = DockStyle.Fill, AutoScroll = false };
+            viewport.Controls.Add(pic);
+
+            vScroll.Scroll += (s, e) => pic.Top = -e.NewValue;
+            hScroll.Scroll += (s, e) => pic.Left = -e.NewValue;
+
+            viewport.MouseWheel += (s, e) =>
+            {
+                if (!vs.Visible)
+                    return;
+
+                int scrollAmount = (int)((e.Delta / 120) * 40 * Program.Settings.GUIScale);
+                int effectiveMax = vs.Maximum - vs.LargeChange + 1;
+                int newVal = Math.Max(vs.Minimum, Math.Min(effectiveMax, vs.Value - scrollAmount));
+                vs.Value = newVal;
+                pic.Top = -newVal;
+            };
+
+            viewport.Resize += (s, e) => UpdatePctBoxScrollBarsMono(panel, viewport, pic, vs, hs);
+
+            panel.Controls.Add(viewport);
+            panel.Controls.Add(vs);
+            panel.Controls.Add(hScrollWrapper);
+        }
+
+        private void UpdatePctBoxScrollBarsMono(SplitterPanel panel, Panel viewport, PictureBox pic, VScrollBar vScroll, HScrollBar hScroll)
+        {
+            if (!Program.IsRunningUnderMono)
+                return;
+
+            if (pic.Image == null)
+            {
+                vScroll.Visible = false;
+                hScroll.Visible = false;
+                return;
+            }
+
+            bool needsV = pic.Image.Height > viewport.Height;
+            bool needsH = pic.Image.Width > viewport.Width;
+
+            vScroll.Visible = needsV;
+            hScroll.Visible = needsH;
+
+            if (needsV)
+            {
+                int visibleHeight = viewport.Height - (needsH ? hScroll.Height : 0);
+                int contentHeight = pic.Image.Height;
+
+                vScroll.Minimum = 0;
+                vScroll.LargeChange = visibleHeight;
+                vScroll.SmallChange = 20;
+                vScroll.Maximum = contentHeight - 1;
+                vScroll.Value = Math.Min(vScroll.Value, Math.Max(0, vScroll.Maximum - vScroll.LargeChange + 1));
+                vScroll.Height = panel.Height - (int)(20 * Program.Settings.GUIScale);
+                pic.Top = -vScroll.Value;
+            }
+            else
+            {
+                vScroll.Value = 0;
+                pic.Top = 0; 
+            }
+
+            if (needsH)
+            {
+                int visibleWidth = viewport.Width - (needsV ? vScroll.Width : 0);
+                int contentWidth = pic.Image.Width;
+
+                hScroll.Minimum = 0;
+                hScroll.LargeChange = visibleWidth;
+                hScroll.SmallChange = 20;
+                hScroll.Maximum = contentWidth - 1;
+                hScroll.Value = Math.Min(hScroll.Value, Math.Max(0, hScroll.Maximum - hScroll.LargeChange + 1));
+                pic.Left = -hScroll.Value;
+            }
+            else
+            {
+                hScroll.Value = 0;
+                pic.Left = (viewport.Width - pic.Image.Width) / 2; 
+            }
         }
 
         private void SetupScale()
@@ -253,6 +367,12 @@ namespace NPC_Maker
                 PreviewSplitContainer.Panel1.AutoScroll = true;
 
                 SetPreviewImage(MsgPreviewOrig, bmpOrig, lastPreviewDataOrig, PreviewSplitContainer.Panel1);
+
+                if (Program.IsRunningUnderMono)
+                {
+                    var viewport1 = PreviewSplitContainer.Panel1.Controls.OfType<Panel>().First();
+                    UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel1, viewport1, MsgPreviewOrig, _vScrollMsgPreviewOrigMono, _hScrollMsgPreviewOrigMono);
+                }
             }
             else
             {
@@ -260,6 +380,12 @@ namespace NPC_Maker
             }
 
             SetPreviewImage(MsgPreview, bmp, lastPreviewData, PreviewSplitContainer.Panel2);
+
+            if (Program.IsRunningUnderMono)
+            {
+                var viewport2 = PreviewSplitContainer.Panel2.Controls.OfType<Panel>().First();
+                UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel2, viewport2, MsgPreview, _vScrollMsgPreviewMono, _hScrollMsgPreviewMono);
+            }
         }
 
         private void SetPreviewImage(PictureBox box, Bitmap bmp, dynamic lastData, Panel container)

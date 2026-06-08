@@ -344,6 +344,9 @@ namespace NPC_Maker
             this.FileMenu_Save = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_SaveBinary = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveBinaryToRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearThisListToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.scriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -378,9 +381,6 @@ namespace NPC_Maker
             this.msgCommentTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltipLoc = new NPC_Maker.Controls.BigToolTip();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
-            this.saveBinaryToRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearThisListToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -3747,6 +3747,7 @@ namespace NPC_Maker
             this.MsgPreviewOrig.TabIndex = 70;
             this.MsgPreviewOrig.TabStop = false;
             this.MsgPreviewOrig.DoubleClick += new System.EventHandler(this.MsgPreview_DoubleClick);
+            this.MsgPreviewOrig.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgPreview_MouseClick);
             // 
             // MsgPreview
             // 
@@ -3759,6 +3760,7 @@ namespace NPC_Maker
             this.MsgPreview.TabIndex = 69;
             this.MsgPreview.TabStop = false;
             this.MsgPreview.DoubleClick += new System.EventHandler(this.MsgPreviewDefault_Click);
+            this.MsgPreview.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgPreview_MouseClick);
             // 
             // chkBox_ShowDefaultLanguagePreview
             // 
@@ -4497,12 +4499,12 @@ namespace NPC_Maker
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(138, 6);
             // 
             // clearThisListToolStripMenuItem
             // 
             this.clearThisListToolStripMenuItem.Name = "clearThisListToolStripMenuItem";
-            this.clearThisListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearThisListToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.clearThisListToolStripMenuItem.Tag = "CLEAR";
             this.clearThisListToolStripMenuItem.Text = "Clear this list";
             this.clearThisListToolStripMenuItem.Click += new System.EventHandler(this.clearThisListToolStripMenuItem_Click);
@@ -4527,6 +4529,27 @@ namespace NPC_Maker
             this.FileMenu_SaveBinary.Size = new System.Drawing.Size(193, 22);
             this.FileMenu_SaveBinary.Text = "Save binary...";
             this.FileMenu_SaveBinary.Click += new System.EventHandler(this.FileMenu_SaveBinary_Click);
+            // 
+            // saveBinaryToRecentToolStripMenuItem
+            // 
+            this.saveBinaryToRecentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator2,
+            this.clearThisListToolStripMenuItem2});
+            this.saveBinaryToRecentToolStripMenuItem.Name = "saveBinaryToRecentToolStripMenuItem";
+            this.saveBinaryToRecentToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.saveBinaryToRecentToolStripMenuItem.Text = "Save binary to recent...";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            // 
+            // clearThisListToolStripMenuItem2
+            // 
+            this.clearThisListToolStripMenuItem2.Name = "clearThisListToolStripMenuItem2";
+            this.clearThisListToolStripMenuItem2.Size = new System.Drawing.Size(141, 22);
+            this.clearThisListToolStripMenuItem2.Text = "Clear this list";
+            this.clearThisListToolStripMenuItem2.Click += new System.EventHandler(this.clearThisListToolStripMenuItem2_Click);
             // 
             // FileMenu_Exit
             // 
@@ -4595,14 +4618,14 @@ namespace NPC_Maker
             // addNewToolStripMenuItem
             // 
             this.addNewToolStripMenuItem.Name = "addNewToolStripMenuItem";
-            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addNewToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.addNewToolStripMenuItem.Text = "Add new";
             this.addNewToolStripMenuItem.Click += new System.EventHandler(this.AddNewLocalizationToolClick);
             // 
             // removeToolStripMenuItem
             // 
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.RemoveLocalizationToolClick);
             // 
@@ -4665,14 +4688,14 @@ namespace NPC_Maker
             // documentationToolStripMenuItem
             // 
             this.documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.documentationToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.documentationToolStripMenuItem.Text = "Documentation";
             this.documentationToolStripMenuItem.Click += new System.EventHandler(this.DocumentationToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(157, 22);
             this.aboutToolStripMenuItem1.Text = "About";
             this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
@@ -4709,42 +4732,42 @@ namespace NPC_Maker
             // objectsToolStripMenuItem
             // 
             this.objectsToolStripMenuItem.Name = "objectsToolStripMenuItem";
-            this.objectsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.objectsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.objectsToolStripMenuItem.Text = "Objects";
             this.objectsToolStripMenuItem.Click += new System.EventHandler(this.ObjectsToolStripMenuItem_Click);
             // 
             // actorsToolStripMenuItem1
             // 
             this.actorsToolStripMenuItem1.Name = "actorsToolStripMenuItem1";
-            this.actorsToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.actorsToolStripMenuItem1.Size = new System.Drawing.Size(158, 22);
             this.actorsToolStripMenuItem1.Text = "Actors";
             this.actorsToolStripMenuItem1.Click += new System.EventHandler(this.ActorsToolStripMenuItem1_Click);
             // 
             // sFXToolStripMenuItem
             // 
             this.sFXToolStripMenuItem.Name = "sFXToolStripMenuItem";
-            this.sFXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sFXToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.sFXToolStripMenuItem.Text = "SFX";
             this.sFXToolStripMenuItem.Click += new System.EventHandler(this.SFXToolStripMenuItem_Click);
             // 
             // musicToolStripMenuItem1
             // 
             this.musicToolStripMenuItem1.Name = "musicToolStripMenuItem1";
-            this.musicToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.musicToolStripMenuItem1.Size = new System.Drawing.Size(158, 22);
             this.musicToolStripMenuItem1.Text = "Music";
             this.musicToolStripMenuItem1.Click += new System.EventHandler(this.MusicToolStripMenuItem1_Click);
             // 
             // linkAnimationsToolStripMenuItem
             // 
             this.linkAnimationsToolStripMenuItem.Name = "linkAnimationsToolStripMenuItem";
-            this.linkAnimationsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.linkAnimationsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.linkAnimationsToolStripMenuItem.Text = "Link animations";
             this.linkAnimationsToolStripMenuItem.Click += new System.EventHandler(this.LinkAnimsToolStripMenuItem1_Click);
             // 
             // colorPickerToolStripMenuItem
             // 
             this.colorPickerToolStripMenuItem.Name = "colorPickerToolStripMenuItem";
-            this.colorPickerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.colorPickerToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.colorPickerToolStripMenuItem.Text = "Color Picker";
             this.colorPickerToolStripMenuItem.Click += new System.EventHandler(this.ColorPickerToolStripMenuItem_Click);
             // 
@@ -4810,27 +4833,6 @@ namespace NPC_Maker
             this.progressL.Size = new System.Drawing.Size(376, 19);
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
-            // 
-            // saveBinaryToRecentToolStripMenuItem
-            // 
-            this.saveBinaryToRecentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripSeparator2,
-            this.clearThisListToolStripMenuItem2});
-            this.saveBinaryToRecentToolStripMenuItem.Name = "saveBinaryToRecentToolStripMenuItem";
-            this.saveBinaryToRecentToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.saveBinaryToRecentToolStripMenuItem.Text = "Save binary to recent...";
-            // 
-            // clearThisListToolStripMenuItem2
-            // 
-            this.clearThisListToolStripMenuItem2.Name = "clearThisListToolStripMenuItem2";
-            this.clearThisListToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
-            this.clearThisListToolStripMenuItem2.Text = "Clear this list";
-            this.clearThisListToolStripMenuItem2.Click += new System.EventHandler(this.clearThisListToolStripMenuItem2_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // MainWindow
             // 
