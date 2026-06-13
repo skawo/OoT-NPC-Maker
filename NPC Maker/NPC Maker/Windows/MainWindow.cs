@@ -55,6 +55,9 @@ namespace NPC_Maker
 
         private readonly object _previewLock = new object();
         private Common.PreviewSnapshot _pendingSnapshot;
+        private CancellationTokenSource _previewCts;
+        private readonly ManualResetEventSlim _previewSignal = new ManualResetEventSlim(false);
+
         private Task _previewWorker;
 
         private float lastScale = 0.0f;
@@ -349,11 +352,24 @@ namespace NPC_Maker
 
         private void StartPreviewWorker()
         {
+            _previewCts = new CancellationTokenSource();
+            var ct = _previewCts.Token;
+
             _previewWorker = Task.Factory.StartNew(() =>
             {
-                while (true)
+                while (!ct.IsCancellationRequested)
                 {
-                    Common.PreviewSnapshot snap = WaitForSnapshot();
+                    try { _previewSignal.Wait(ct); }
+                    catch (OperationCanceledException) { break; }
+
+                    _previewSignal.Reset();
+
+                    Common.PreviewSnapshot snap;
+                    lock (_previewLock)
+                    {
+                        snap = _pendingSnapshot;
+                        _pendingSnapshot = null;
+                    }
 
                     if (snap == null)
                         continue;
@@ -361,7 +377,6 @@ namespace NPC_Maker
                     Bitmap bmp = GetMessagePreviewImage(snap.Entry, snap.Language, ref lastPreviewData);
 
                     Bitmap bmpOrig = null;
-
                     if (snap.ShowOrig && snap.OrigEntry != null)
                         bmpOrig = GetMessagePreviewImage(snap.OrigEntry, Lists.DefaultLanguage, ref lastPreviewDataOrig);
 
@@ -474,12 +489,9 @@ namespace NPC_Maker
 
             lock (_previewLock)
             {
-                while (_pendingSnapshot != null)
-                    Monitor.Wait(_previewLock);
-
-                _pendingSnapshot = snap;
-                Monitor.Pulse(_previewLock);
+                _pendingSnapshot = snap; 
             }
+            _previewSignal.Set();
         }
 
         private void ComboFont_SelectedChanged(object sender, EventArgs e)
@@ -827,6 +839,8 @@ namespace NPC_Maker
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            _previewCts?.Cancel();
+
             if (Program.SaveInProgress)
             {
                 e.Cancel = true;
