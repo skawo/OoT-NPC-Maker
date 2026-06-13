@@ -153,7 +153,7 @@ namespace NPC_Maker
         {
             PreviewSplitContainer.Panel1.AutoScroll = false;
             PreviewSplitContainer.Panel2.AutoScroll = false;
-
+            
             SetupPctBoxPanel(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _MsgPreviewOrigViewport, out _vScrollMsgPreviewOrigMono);
             SetupPctBoxPanel(PreviewSplitContainer.Panel2, MsgPreview, out _MsgPreviewViewport, out _vScrollMsgPreviewMono);
         }
@@ -189,6 +189,8 @@ namespace NPC_Maker
                 pic.Top = -newVal;
                 SyncScrollPctBoxScrollbar(vs, newVal);
             };
+
+            viewport.Resize += (s, e) => LayoutPicture(pic, vp, vs);
 
             panel.Controls.Add(viewport);
             panel.Controls.Add(vs);
@@ -392,22 +394,17 @@ namespace NPC_Maker
                 PreviewSplitContainer.SplitterDistance = PreviewSplitContainer.Width / 2;
                 PreviewSplitContainer.Panel1Collapsed = false;
 
-                if (!Program.IsRunningUnderMono)
-                    PreviewSplitContainer.Panel1.AutoScroll = true;
-
-                SetPreviewImage(MsgPreviewOrig, bmpOrig, lastPreviewDataOrig, PreviewSplitContainer.Panel1);
-                UpdatePctBoxScrollBars(PreviewSplitContainer.Panel1, _MsgPreviewOrigViewport, MsgPreviewOrig, _vScrollMsgPreviewOrigMono);
+                SetPreviewImage(MsgPreviewOrig, bmpOrig, lastPreviewDataOrig, PreviewSplitContainer.Panel1, _MsgPreviewOrigViewport, _vScrollMsgPreviewOrigMono);
             }
             else
             {
                 PreviewSplitContainer.Panel1Collapsed = true;
             }
 
-            SetPreviewImage(MsgPreview, bmp, lastPreviewData, PreviewSplitContainer.Panel2);
-            UpdatePctBoxScrollBars(PreviewSplitContainer.Panel2, _MsgPreviewViewport, MsgPreview, _vScrollMsgPreviewMono);
+            SetPreviewImage(MsgPreview, bmp, lastPreviewData, PreviewSplitContainer.Panel2, _MsgPreviewViewport, _vScrollMsgPreviewMono);
         }
 
-        private void SetPreviewImage(PictureBox box, Bitmap bmp, dynamic lastData, Panel container)
+        private void SetPreviewImage(PictureBox box, Bitmap bmp, dynamic lastData, SplitterPanel container, Panel viewport, VScrollBar scrollBar)
         {
             if (bmp == null && lastData?.previewImage != null)
             {
@@ -417,15 +414,38 @@ namespace NPC_Maker
 
             if (bmp != null)
             {
-                bmp = bmp.ResizeImageKeepAspectRatio(Math.Min(container.Width - 35, bmp.Width), bmp.Height);
-            }
-
-            if (bmp != null)
-            {
-                box.Size = new Size(bmp.Width, bmp.Height);
-                box.Location = new Point((container.Width - box.Width) / 2, 0 - container.VerticalScroll.Value);
                 box.Image = bmp;
             }
+
+            LayoutPicture(box, viewport, scrollBar);
+            UpdatePctBoxScrollBars(container, viewport, box, scrollBar);
+
+        }
+
+        private void LayoutPicture(PictureBox _pic, Panel _viewport, VScrollBar scrollBar)
+        {
+            if (_pic.Image == null)
+                return;
+
+            int imgW = _pic.Image.Width;
+            int imgH = _pic.Image.Height;
+            int viewW = _viewport.Width;
+            int viewH = _viewport.Height;
+
+            if (imgW <= viewW)
+            {
+                _pic.Size = new Size(imgW, imgH);
+                _pic.SizeMode = PictureBoxSizeMode.Normal;
+            }
+            else
+            {
+                float ratio = (float)viewW / imgW;
+                int scaledH = (int)(imgH * ratio);
+                _pic.Size = new Size(viewW, scaledH);
+                _pic.SizeMode = PictureBoxSizeMode.Zoom;
+            }
+
+            _pic.Left = (viewW - _pic.Size.Width) / 2;
         }
 
         private void RequestPreviewUpdate()
@@ -4617,7 +4637,6 @@ namespace NPC_Maker
 
         private void PanelMsgPreview_Resize(object sender, EventArgs e)
         {
-            MsgPreview.Left = (this.PanelMsgPreview.Width - MsgPreview.Width) / 2;
             RequestPreviewUpdate();
         }
 
