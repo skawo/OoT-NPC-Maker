@@ -63,6 +63,7 @@ namespace NPC_Maker
 
         private Panel _MsgPreviewOrigViewport, _MsgPreviewViewport;
         private VScrollBar _vScrollMsgPreviewOrigMono, _vScrollMsgPreviewMono;
+        private bool _doingSyncScroll = false;
 
         public MainWindow(string FilePath = "")
         {
@@ -132,11 +133,15 @@ namespace NPC_Maker
             if (FilePath != "")
                 OpenFile(FilePath);
 
-            SplitContainer1_Panel1_SizeChanged(null, null);
-            MsgTabSplitContainer_SizeChanged(null, null);
 
-            SetupPctBoxScrollbarsMono();
             SetupScale();
+            SetupPctBoxScrollbars();
+
+            this.Shown += (s, e) =>
+            {
+                SplitContainer1_Panel1_SizeChanged(MainSplitPanel, null);
+                MsgTabSplitContainer_SizeChanged(MsgTabSplitContainer, EventArgs.Empty);
+            };
         }
 
         private void MsgPreview_MouseClick(object sender, MouseEventArgs e)
@@ -144,19 +149,16 @@ namespace NPC_Maker
             (sender as PictureBox).Focus();
         }
 
-        private void SetupPctBoxScrollbarsMono()
+        private void SetupPctBoxScrollbars()
         {
-            if (!Program.IsRunningUnderMono)
-                return;
-
             PreviewSplitContainer.Panel1.AutoScroll = false;
             PreviewSplitContainer.Panel2.AutoScroll = false;
 
-            SetupPctBoxPanelMono(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _MsgPreviewOrigViewport, out _vScrollMsgPreviewOrigMono);
-            SetupPctBoxPanelMono(PreviewSplitContainer.Panel2, MsgPreview, out _MsgPreviewViewport, out _vScrollMsgPreviewMono);
+            SetupPctBoxPanel(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _MsgPreviewOrigViewport, out _vScrollMsgPreviewOrigMono);
+            SetupPctBoxPanel(PreviewSplitContainer.Panel2, MsgPreview, out _MsgPreviewViewport, out _vScrollMsgPreviewMono);
         }
 
-        private void SetupPctBoxPanelMono(SplitterPanel panel, PictureBox pic, out Panel viewport, out VScrollBar vScroll)
+        private void SetupPctBoxPanel(SplitterPanel panel, PictureBox pic, out Panel viewport, out VScrollBar vScroll)
         {
             float size = 18 * Program.Settings.GUIScale;
 
@@ -167,10 +169,13 @@ namespace NPC_Maker
 
             viewport = new Panel { Dock = DockStyle.Fill, AutoScroll = false };
             viewport.Controls.Add(pic);
-
             var vp = viewport;
 
-            vScroll.Scroll += (s, e) => pic.Top = -e.NewValue;
+            vScroll.Scroll += (s, e) =>
+            {
+                pic.Top = -e.NewValue;
+                SyncScrollPctBoxScrollbar(vs, e.NewValue);
+            };
 
             viewport.MouseWheel += (s, e) =>
             {
@@ -182,39 +187,86 @@ namespace NPC_Maker
                 int newVal = Math.Max(vs.Minimum, Math.Min(effectiveMax, vs.Value - scrollAmount));
                 vs.Value = newVal;
                 pic.Top = -newVal;
+                SyncScrollPctBoxScrollbar(vs, newVal);
             };
 
             panel.Controls.Add(viewport);
             panel.Controls.Add(vs);
         }
 
-        private void UpdatePctBoxScrollBarsMono(SplitterPanel panel, Panel viewport, PictureBox pic, VScrollBar vScroll)
+        private void SyncScrollPctBoxScrollbar(VScrollBar movedScroll, int newValue)
         {
-            if (!Program.IsRunningUnderMono)
+            if (_doingSyncScroll)
                 return;
 
+            if ((Control.ModifierKeys & Keys.Control) == 0)
+                return;
+
+            VScrollBar otherScroll;
+            PictureBox otherPic;
+
+            if (movedScroll == _vScrollMsgPreviewOrigMono)
+            {
+                otherScroll = _vScrollMsgPreviewMono;
+                otherPic = MsgPreview;
+            }
+            else if (movedScroll == _vScrollMsgPreviewMono)
+            {
+                otherScroll = _vScrollMsgPreviewOrigMono;
+                otherPic = MsgPreviewOrig;
+            }
+            else
+                return;
+
+            if (!otherScroll.Visible)
+                return;
+
+            _doingSyncScroll = true;
+            try
+            {
+                int srcMax = Math.Max(1, movedScroll.Maximum - movedScroll.LargeChange + 1);
+                int destMax = Math.Max(1, otherScroll.Maximum - otherScroll.LargeChange + 1);
+
+                double ratio = (double)newValue / srcMax;
+                int syncedVal = (int)Math.Round(ratio * destMax);
+                syncedVal = Math.Max(otherScroll.Minimum, Math.Min(destMax, syncedVal));
+
+                otherScroll.Value = syncedVal;
+                otherPic.Top = -syncedVal;
+            }
+            finally
+            {
+                _doingSyncScroll = false;
+            }
+        }
+
+        private void ResetPctBoxScroll(PictureBox pic, VScrollBar vScroll)
+        {
+            vScroll.Value = 0;
+            pic.Top = -vScroll.Value;
+        }
+
+        private void UpdatePctBoxScrollBars(SplitterPanel panel, Panel viewport, PictureBox pic, VScrollBar vScroll)
+        {
             if (pic.Image == null)
             {
                 vScroll.Visible = false;
                 return;
             }
 
-            bool needsV = pic.Image.Height > viewport.Height;
-            bool needsH = pic.Image.Width > viewport.Width;
+            bool needsV = pic.Height > viewport.Height;
+            int contentHeight = pic.Height;
+            int visibleHeight = viewport.Height;
 
             vScroll.Visible = needsV;
 
             if (needsV)
             {
-                int visibleHeight = viewport.Height;
-                int contentHeight = pic.Image.Height;
-
                 vScroll.Minimum = 0;
                 vScroll.LargeChange = visibleHeight;
                 vScroll.SmallChange = 20;
                 vScroll.Maximum = contentHeight - 1;
                 vScroll.Value = Math.Min(vScroll.Value, Math.Max(0, vScroll.Maximum - vScroll.LargeChange + 1));
-                vScroll.Height = panel.Height - (int)(20 * Program.Settings.GUIScale);
                 pic.Top = -vScroll.Value;
             }
             else
@@ -344,9 +396,7 @@ namespace NPC_Maker
                     PreviewSplitContainer.Panel1.AutoScroll = true;
 
                 SetPreviewImage(MsgPreviewOrig, bmpOrig, lastPreviewDataOrig, PreviewSplitContainer.Panel1);
-
-                if (Program.IsRunningUnderMono)
-                    UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel1, _MsgPreviewOrigViewport, MsgPreviewOrig, _vScrollMsgPreviewOrigMono);
+                UpdatePctBoxScrollBars(PreviewSplitContainer.Panel1, _MsgPreviewOrigViewport, MsgPreviewOrig, _vScrollMsgPreviewOrigMono);
             }
             else
             {
@@ -354,9 +404,7 @@ namespace NPC_Maker
             }
 
             SetPreviewImage(MsgPreview, bmp, lastPreviewData, PreviewSplitContainer.Panel2);
-
-            if (Program.IsRunningUnderMono)
-                UpdatePctBoxScrollBarsMono(PreviewSplitContainer.Panel2, _MsgPreviewViewport, MsgPreview, _vScrollMsgPreviewMono);
+            UpdatePctBoxScrollBars(PreviewSplitContainer.Panel2, _MsgPreviewViewport, MsgPreview, _vScrollMsgPreviewMono);
         }
 
         private void SetPreviewImage(PictureBox box, Bitmap bmp, dynamic lastData, Panel container)
@@ -4228,6 +4276,9 @@ namespace NPC_Maker
                 Combo_MsgType.Enabled = true;
                 Combo_MsgPos.Enabled = true;
             }
+
+            ResetPctBoxScroll(MsgPreview, _vScrollMsgPreviewMono);
+            ResetPctBoxScroll(MsgPreviewOrig, _vScrollMsgPreviewOrigMono);
 
             MsgText.TextChanged -= MsgText_TextChanged;
             MsgTextCJK.TextChanged -= MsgTextCJK_TextChanged;
