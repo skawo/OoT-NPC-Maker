@@ -175,6 +175,9 @@
     <Compile Include="Controls\BigTooltip.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ColoredScrollbar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\FCTB_MonoCJK.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -165,8 +165,9 @@ namespace NPC_Maker
         {
             float size = 18 * Program.Settings.GUIScale;
 
-            vScroll = new VScrollBar { Width = (int)size, Dock = DockStyle.Right };
+            vScroll = new ColoredMonoScrollbar { Width = (int)size, Dock = DockStyle.Right};
             var vs = vScroll;
+            
 
             panel.Controls.Clear();
 
@@ -4028,7 +4029,7 @@ namespace NPC_Maker
                 MsgEntrySplitContainer.IsSplitterFixed = true;
             }
 
-            MessagesGrid_SelectionChanged(MessagesGrid, null);
+            MessagesGrid_SelectionChanged(Combo_Language, null);
 
             if (MessagesGrid.Rows.Count > curSelMsg)
             {
@@ -4311,8 +4312,11 @@ namespace NPC_Maker
                 Combo_MsgPos.Enabled = true;
             }
 
-            ResetPctBoxScroll(MsgPreview, _vScrollMsgPreviewMono);
-            ResetPctBoxScroll(MsgPreviewOrig, _vScrollMsgPreviewOrigMono);
+            if (sender != Combo_Language)
+            {
+                ResetPctBoxScroll(MsgPreview, _vScrollMsgPreviewMono);
+                ResetPctBoxScroll(MsgPreviewOrig, _vScrollMsgPreviewOrigMono);
+            }
 
             MsgText.TextChanged -= MsgText_TextChanged;
             MsgTextCJK.TextChanged -= MsgTextCJK_TextChanged;
