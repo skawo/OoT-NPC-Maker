@@ -4029,23 +4029,29 @@ namespace NPC_Maker
                 MsgEntrySplitContainer.IsSplitterFixed = true;
             }
 
-            MessagesGrid_SelectionChanged(Combo_Language, null);
+            SelectNewMessage(false);
+            MessagesGrid.SelectionChanged -= MessagesGrid_SelectionChanged;
 
             if (MessagesGrid.Rows.Count > curSelMsg)
             {
                 MessagesGrid.Rows[curSelMsg].Selected = true;
+                MessagesGrid.CurrentCell = MessagesGrid.Rows[curSelMsg].Cells[0];
 
                 if (Program.IsRunningUnderMono)
                 {
-                    ScrollToMsg = curSelMsg;
-                    messageSearchTimer.Interval = 10;
-                    messageSearchTimer.Tick += MessageSearchTimer_Tick;
-                    messageSearchTimer.Stop();
-                    messageSearchTimer.Start();
+                    // Needs to be delayed on mono or the index doesn't actually change.
+                    BeginInvoke((Action)(() =>
+                    {
+                        MessagesGrid.FirstDisplayedScrollingRowIndex = curSelMsg;
+                        btn_FindMsg.Enabled = true;
+                        MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
+                    }));
                 }
                 else
                 {
                     MessagesGrid.FirstDisplayedScrollingRowIndex = curSelMsg;
+                    btn_FindMsg.Enabled = true;
+                    MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
                 }
             }
 
@@ -4293,7 +4299,21 @@ namespace NPC_Maker
                 tip.SetToolTip(box, null);
         }
 
+        private bool _selectionPending = false;
+
         private void MessagesGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (_selectionPending) return;
+            _selectionPending = true;
+
+            BeginInvoke((Action)(() =>
+            {
+                _selectionPending = false;
+                SelectNewMessage(true);
+            }));
+        }
+
+        private void SelectNewMessage(bool resetScroll)
         {
             if (SelectedEntry == null)
                 return;
@@ -4312,7 +4332,7 @@ namespace NPC_Maker
                 Combo_MsgPos.Enabled = true;
             }
 
-            if (sender != Combo_Language)
+            if (resetScroll)
             {
                 ResetPctBoxScroll(MsgPreview, _vScrollMsgPreviewMono);
                 ResetPctBoxScroll(MsgPreviewOrig, _vScrollMsgPreviewOrigMono);
@@ -4320,6 +4340,7 @@ namespace NPC_Maker
 
             MsgText.TextChanged -= MsgText_TextChanged;
             MsgTextCJK.TextChanged -= MsgTextCJK_TextChanged;
+
             Combo_MsgType.SelectedIndexChanged -= Combo_MsgType_SelectedIndexChanged;
 
             if (SelectedEntry.Messages.Count != 0)
