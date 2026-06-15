@@ -33,9 +33,6 @@ namespace NPC_Maker
 
         private List<KeyValuePair<ComboBox, ComboBox>> FunctionComboBoxes;
 
-        private int LastSearchDepth = 0;
-        private int LastMsgCount = 0;
-        private string LastSearch = "";
         private int ScrollToMsg = 0;
 
         private readonly System.Windows.Forms.Timer compileTimer = new System.Windows.Forms.Timer();
@@ -156,7 +153,7 @@ namespace NPC_Maker
         {
             PreviewSplitContainer.Panel1.AutoScroll = false;
             PreviewSplitContainer.Panel2.AutoScroll = false;
-            
+
             SetupPctBoxPanel(PreviewSplitContainer.Panel1, MsgPreviewOrig, out _MsgPreviewOrigViewport, out _vScrollMsgPreviewOrigMono);
             SetupPctBoxPanel(PreviewSplitContainer.Panel2, MsgPreview, out _MsgPreviewViewport, out _vScrollMsgPreviewMono);
         }
@@ -165,9 +162,9 @@ namespace NPC_Maker
         {
             float size = 18 * Program.Settings.GUIScale;
 
-            vScroll = new ColoredMonoScrollbar { Width = (int)size, Dock = DockStyle.Right};
+            vScroll = new ColoredMonoScrollbar { Width = (int)size, Dock = DockStyle.Right };
             var vs = vScroll;
-            
+
 
             panel.Controls.Clear();
 
@@ -490,7 +487,7 @@ namespace NPC_Maker
 
             lock (_previewLock)
             {
-                _pendingSnapshot = snap; 
+                _pendingSnapshot = snap;
             }
             _previewSignal.Set();
         }
@@ -4842,111 +4839,162 @@ namespace NPC_Maker
             RequestPreviewUpdate();
         }
 
-        private void FindMsgBtn_Click(object sender, EventArgs e)
+        private void TxBox_Search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!btn_FindMsg.Enabled)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
+            }
+
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Right)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                FindMessage(false);
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                FindMessage(true);
+            }
+
+        }
+
+        private void btn_FindMsg_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (btn_FindMsg.Enabled)
+            {
+                if (e.Button == MouseButtons.Left)
+                    FindMessage(false);
+                else if (e.Button == MouseButtons.Right)
+                    FindMessage(true);
+            }
+        }
+
+        private void FindMessage(bool searchBackwards)
         {
             if (EditedFile == null || String.IsNullOrWhiteSpace(txBox_Search.Text))
                 return;
 
-            int MsgCount = 0;
             btn_FindMsg.Enabled = false;
 
-            foreach (NPCEntry n in EditedFile.Entries)
-                MsgCount += n.Messages.Count;
+            bool curSelectedInGrid = MessagesGrid.SelectedRows.Count != 0;
+            int lastMsgIndex = curSelectedInGrid ? MessagesGrid.SelectedRows[0].Index : (searchBackwards ? int.MaxValue : -1);
+            int lastNpcIndex = curSelectedInGrid ? DataGrid_NPCs.SelectedRows[0].Index : (searchBackwards ? int.MaxValue : -1);
 
-            if (LastSearch != txBox_Search.Text || LastMsgCount != MsgCount)
-                LastSearchDepth = 0;
+        start:
 
-            LastMsgCount = MsgCount;
-
-            int CurSearchDepth = 0;
-            int RowIndex = 0;
             bool thereWereMessages = false;
 
-            foreach (NPCEntry n in EditedFile.Entries)
+            int npcStart = searchBackwards ? EditedFile.Entries.Count - 1 : 0;
+            int npcEnd = searchBackwards ? -1 : EditedFile.Entries.Count;
+            int npcStep = searchBackwards ? -1 : 1;
+
+            for (int npcIndex = npcStart; npcIndex != npcEnd; npcIndex += npcStep)
             {
-                int MsgRowIndex = 0;
+                NPCEntry n = EditedFile.Entries[npcIndex];
 
                 List<MessageEntry> messageList = GetLanguageMessageList(n, Combo_Language.Text);
 
-                foreach (MessageEntry msg in messageList)
+                int msgStart = searchBackwards ? messageList.Count - 1 : 0;
+                int msgEnd = searchBackwards ? -1 : messageList.Count;
+                int msgStep = searchBackwards ? -1 : 1;
+
+                for (int msgIndex = msgStart; msgIndex != msgEnd; msgIndex += msgStep)
                 {
-                    string r = Regex.Replace(msg.MessageText.ToUpper().Replace(Environment.NewLine, " "), @"<([\s\S]*?)>", string.Empty, RegexOptions.Compiled);
+                    MessageEntry msg = messageList[msgIndex];
 
-                    if (r.Contains(txBox_Search.Text.ToUpper()))
+                    string r = Regex.Replace(msg.MessageText.ToUpper().Replace(Environment.NewLine, " "),
+                                                                               @"<([\s\S]*?)>",
+                                                                               string.Empty,
+                                                                               RegexOptions.Compiled);
+
+                    if (!r.Contains(txBox_Search.Text.ToUpper()))
+                        continue;
+
+                    thereWereMessages = true;
+
+                    bool isPastCurrentPosition;
+
+                    if (!searchBackwards)
+                        isPastCurrentPosition = npcIndex > lastNpcIndex || (npcIndex == lastNpcIndex && msgIndex > lastMsgIndex);
+                    else
+                        isPastCurrentPosition = npcIndex < lastNpcIndex || (npcIndex == lastNpcIndex && msgIndex < lastMsgIndex);
+
+                    if (!isPastCurrentPosition)
+                        continue;
+
+                    try
                     {
-                        thereWereMessages = true;
+                        NpcsFilter.Text = "";
+                        MessagesFilter.Text = "";
 
-                        if (CurSearchDepth >= LastSearchDepth)
+                        DataGrid_NPCs.SuspendLayout();
+                        MessagesGrid.SuspendLayout();
+
+                        DataGrid_NPCs.ClearSelection();
+                        MessagesGrid.ClearSelection();
+
+                        DataGrid_NPCs.Rows[npcIndex].Selected = true;
+                        DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[npcIndex].Cells[1];
+
+                        DataGrid_NPCs.FirstDisplayedScrollingRowIndex = npcIndex;
+                        DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[npcIndex].Cells[1];
+
+                        TabControl.SelectedTab = Tab4_Messages;
+
+                        MessagesGrid.Rows[msgIndex].Selected = true;
+
+                        if (Program.IsRunningUnderMono)
                         {
-                            try
-                            {
-                                NpcsFilter.Text = "";
-                                MessagesFilter.Text = "";
-                                DataGrid_NPCs.SuspendLayout();
-                                MessagesGrid.SuspendLayout();
-
-                                DataGrid_NPCs.ClearSelection();
-                                MessagesGrid.ClearSelection();
-
-                                DataGrid_NPCs.Rows[RowIndex].Selected = true;
-
-                                DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[RowIndex].Cells[1];
-                                DataGrid_NPCs.FirstDisplayedScrollingRowIndex = RowIndex;
-                                DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[RowIndex].Cells[1];
-                                TabControl.SelectedTab = Tab4_Messages;
-
-                                MessagesGrid.Rows[MsgRowIndex].Selected = true;
-
-                                if (Program.IsRunningUnderMono)
-                                {
-                                    ScrollToMsg = MsgRowIndex;
-                                    messageSearchTimer.Interval = 10;
-                                    messageSearchTimer.Tick += MessageSearchTimer_Tick;
-                                    messageSearchTimer.Start();
-                                }
-                                else
-                                {
-                                    MessagesGrid.FirstDisplayedScrollingRowIndex = MsgRowIndex;
-                                }
-
-                                LastSearchDepth = CurSearchDepth + 1;
-                                LastSearch = txBox_Search.Text;
-
-                            }
-                            catch (Exception)
-                            {
-                            }
-                            finally
-                            {
-                                DataGrid_NPCs.ResumeLayout();
-                                MessagesGrid.ResumeLayout();
-                            }
-
-                            if (!Program.IsRunningUnderMono)
-                                btn_FindMsg.Enabled = true;
-
-                            return;
+                            ScrollToMsg = msgIndex;
+                            messageSearchTimer.Interval = 10;
+                            messageSearchTimer.Tick += MessageSearchTimer_Tick;
+                            messageSearchTimer.Start();
                         }
                         else
-                            CurSearchDepth++;
+                        {
+                            MessagesGrid.FirstDisplayedScrollingRowIndex = msgIndex;
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        DataGrid_NPCs.ResumeLayout();
+                        MessagesGrid.ResumeLayout();
                     }
 
-                    MsgRowIndex++;
+                    if (!Program.IsRunningUnderMono)
+                        btn_FindMsg.Enabled = true;
+
+                    return;
                 }
-
-                RowIndex++;
-
             }
 
             SystemSounds.Exclamation.Play();
 
             if (thereWereMessages)
             {
-                LastSearchDepth = 0;
-                FindMsgBtn_Click(null, null);
+                if (searchBackwards)
+                {
+                    lastNpcIndex = int.MaxValue;
+                    lastMsgIndex = int.MaxValue;
+                }
+                else
+                {
+                    lastNpcIndex = -1;
+                    lastMsgIndex = -1;
+                }
+
+                goto start;
             }
-            else
-                btn_FindMsg.Enabled = true;
+
+            btn_FindMsg.Enabled = true;
         }
 
         private void MessageSearchTimer_Tick(object sender, EventArgs e)
@@ -4962,22 +5010,6 @@ namespace NPC_Maker
             { }
         }
 
-        private void TxBox_Search_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (!btn_FindMsg.Enabled)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                return;
-            }
-
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                FindMsgBtn_Click(null, null);
-            }
-        }
 
         private void MessagesFilter_TextChanged(object sender, EventArgs e)
         {

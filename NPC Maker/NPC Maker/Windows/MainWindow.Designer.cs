@@ -3745,7 +3745,6 @@ namespace NPC_Maker
             this.MsgPreviewOrig.Margin = new System.Windows.Forms.Padding(0);
             this.MsgPreviewOrig.Name = "MsgPreviewOrig";
             this.MsgPreviewOrig.Size = new System.Drawing.Size(474, 275);
-            this.MsgPreviewOrig.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Normal;
             this.MsgPreviewOrig.TabIndex = 70;
             this.MsgPreviewOrig.TabStop = false;
             this.MsgPreviewOrig.DoubleClick += new System.EventHandler(this.MsgPreview_DoubleClick);
@@ -3758,7 +3757,6 @@ namespace NPC_Maker
             this.MsgPreview.Margin = new System.Windows.Forms.Padding(0);
             this.MsgPreview.Name = "MsgPreview";
             this.MsgPreview.Size = new System.Drawing.Size(474, 275);
-            this.MsgPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Normal;
             this.MsgPreview.TabIndex = 69;
             this.MsgPreview.TabStop = false;
             this.MsgPreview.DoubleClick += new System.EventHandler(this.MsgPreviewDefault_Click);
@@ -4807,7 +4805,7 @@ namespace NPC_Maker
             this.btn_FindMsg.TabIndex = 7;
             this.btn_FindMsg.Text = "Find message";
             this.btn_FindMsg.UseVisualStyleBackColor = true;
-            this.btn_FindMsg.Click += new System.EventHandler(this.FindMsgBtn_Click);
+            this.btn_FindMsg.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btn_FindMsg_MouseDown);
             // 
             // msgCommentTooltip
             // 
