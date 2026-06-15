@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
+
 namespace NPC_Maker
 {
     public enum MsgValueTypes
@@ -246,6 +247,8 @@ namespace NPC_Maker
         public string ContextDict { get; set; }
         public bool NewBoxSpecialHandling { get; set; }
 
+        public string NoMarkupEquivalent { get; set; }
+
         public string ContextName { get; set; }
 
         public string KeyboardShortcut { get; set; }
@@ -262,8 +265,19 @@ namespace NPC_Maker
             ContextGroup = "";
             ContextDict = "";
             ContextName = "";
+            NoMarkupEquivalent = "";
             NewBoxSpecialHandling = false;
 
+        }
+
+        public bool IsTag()
+        {
+            return Token.StartsWith("<") && Token.EndsWith(">");
+        }
+
+        public static bool IsTag(string Token)
+        {
+            return Token.StartsWith("<") && Token.EndsWith(">");
         }
 
         public bool MatchesShortcut(KeyEventArgs e)
@@ -336,19 +350,74 @@ namespace NPC_Maker
             return $"\\x{Character:X2}\"\"";
         }
 
-        public string ToCString(string Language)
+        public string ToMarkuplessString(string Language)
         {
-            return "Unimplemented";
-        }
+            var tagDict = Dicts.LanguageDefs.TryGetValue(Language, out var dict)
+                ? dict
+                : Dicts.LanguageDefs[Lists.DefaultLanguage];
 
-        public bool IsTag(string token)
-        {
-            return token.StartsWith("<") && token.EndsWith(">");
+            var tokens = Tokenize();
+            bool ignoreNextLinebreak = false;
+            string msgTextOut = "";
+
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                var token = tokens[i];
+
+                if (token == "\n")
+                {
+                    if (ignoreNextLinebreak)
+                    {
+                        ignoreNextLinebreak = false;
+                        continue;
+                    }
+
+                    // Skip this linebreak if the next tag makes a new tag
+                    // (This is so that this looks nicer in the editor)
+                    if (i + 1 < tokens.Count &&
+                        GetTagIndex(tagDict, tokens[i + 1], out _) is int nextTagIndex &&
+                        nextTagIndex != -1 &&
+                        tagDict.Entries[nextTagIndex].NewBoxSpecialHandling)
+                    {
+                        continue;
+                    }
+
+                    msgTextOut += Environment.NewLine;
+                    continue;
+                }
+
+                ignoreNextLinebreak = false;
+                int tagIndex = GetTagIndex(tagDict, token, out string normalized);
+
+                if (tagIndex == -1)
+                {
+                    if (token.Length != 1)
+                        throw new Exception($"Could not convert tag: {token}");
+
+                    msgTextOut += token;
+                }
+                else
+                {
+                    var entry = tagDict.Entries[tagIndex];
+
+                    if (entry.IsTag() || !String.IsNullOrEmpty(entry.NoMarkupEquivalent))
+                    {
+                        msgTextOut += entry.NoMarkupEquivalent;
+                    }
+                    else
+                        msgTextOut += entry.Token;
+
+                    if (entry.NewBoxSpecialHandling)
+                        ignoreNextLinebreak = true;
+                }
+            }
+
+            return msgTextOut;
         }
 
         public int GetTagIndex(MessageConfig tagDict, string t, out string normalized)
         {
-            bool isTag = IsTag(t);
+            bool isTag = Tag.IsTag(t);
 
             // Normalize tag if it is a "tag", else keep as is
             normalized = isTag ? t.Trim().TrimStart('<').TrimEnd('>').ToUpper().Replace(' ', '_') : t;

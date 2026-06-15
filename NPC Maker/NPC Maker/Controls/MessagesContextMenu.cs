@@ -44,10 +44,23 @@ namespace NPC_Maker
 
         public static void MakeContextMenu(string Language)
         {
-            MenuStrip = new ContextMenuStrip();
-            MenuStrip.Name = "ContextMenuStrip";
-            MenuStrip.Size = new System.Drawing.Size(157, 268);
-            MenuStrip.Text = "Items";
+            MenuStrip = new ContextMenuStrip
+            {
+                Name = "ContextMenuStrip",
+                Size = new System.Drawing.Size(157, 268),
+                Text = "Items"
+            };
+
+            ToolStripMenuItem toc = new ToolStripMenuItem
+            {
+                Size = new System.Drawing.Size(156, 22),
+                Text = "Copy without markup"
+            };
+
+            toc.Click += NoMarkup_Click;
+
+            MenuStrip.Items.Add(toc);
+            MenuStrip.Items.Add(new ToolStripSeparator());
 
             var tagDict = Dicts.LanguageDefs[Lists.DefaultLanguage];
 
@@ -105,37 +118,32 @@ namespace NPC_Maker
                 }
             }
 
-            //ToolStripMenuItem toc = new ToolStripMenuItem();
-
-            //toc.Size = new System.Drawing.Size(156, 22);
-            //toc.Text = "Copy as C String";
-            //toc.Click += Toc_Click;
-
-            //MenuStrip.Items.Add(toc);
-
-            foreach (ToolStripMenuItem Item in MenuStrip.Items)
+            foreach (var obj in MenuStrip.Items)
             {
-                if (Item.Name == Lists.SoundsDictType)
-                    continue;
-
-                if (Item.Tag != null)
+                if (obj is ToolStripMenuItem Item)
                 {
-                    Item.DoubleClick += Tsmi_DoubleClick;
-                    Item.Click += Tsmi_Click;
+                    if (Item.Name == Lists.SoundsDictType)
+                        continue;
+
+                    if (Item.Tag != null)
+                    {
+                        Item.DoubleClick += Tsmi_DoubleClick;
+                        Item.Click += Tsmi_Click;
+                    }
+
+                    if (Item.HasDropDownItems)
+                        Item.DropDown.MaximumSize = new Size(300, 700);
+
+                    foreach (ToolStripItem SubItem in Item.DropDownItems)
+                        SubItem.Click += SubItem_Click;
                 }
-
-                if (Item.HasDropDownItems)
-                    Item.DropDown.MaximumSize = new Size(300, 700);
-
-                foreach (ToolStripItem SubItem in Item.DropDownItems)
-                    SubItem.Click += SubItem_Click;
             }
 
         }
 
-        private static void Toc_Click(object sender, EventArgs e)
+        private static void NoMarkup_Click(object sender, EventArgs e)
         {
-            if (Owner == null)
+            if (Owner == null && OwnerCJK == null)
                 return;
 
             FCTB_Mono fb = (FCTB_Mono)Owner;
@@ -147,7 +155,10 @@ namespace NPC_Maker
             MessageEntry me = new MessageEntry();
             me.MessageText = text;
 
-            string outS = me.ToCString((string)fb.Tag);
+            string outS = me.ToMarkuplessString((string)fb.Tag);
+
+            if (String.IsNullOrWhiteSpace(outS))
+                outS = " ";
 
             if (Program.IsRunningUnderMono)
             {
