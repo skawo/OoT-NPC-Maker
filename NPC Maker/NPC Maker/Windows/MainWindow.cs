@@ -4848,13 +4848,13 @@ namespace NPC_Maker
                 return;
             }
 
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Right)
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down)
             {
                 e.Handled = true;
                 e.SuppressKeyPress = true;
                 FindMessage(false);
             }
-            if (e.KeyCode == Keys.Left)
+            if (e.KeyCode == Keys.Up)
             {
                 e.Handled = true;
                 e.SuppressKeyPress = true;
