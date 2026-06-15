@@ -387,7 +387,7 @@ namespace NPC_Maker
                 }
 
                 ignoreNextLinebreak = false;
-                int tagIndex = GetTagIndex(tagDict, token, out string normalized);
+                int tagIndex = GetTagIndex(tagDict, token, out _);
 
                 if (tagIndex == -1)
                 {

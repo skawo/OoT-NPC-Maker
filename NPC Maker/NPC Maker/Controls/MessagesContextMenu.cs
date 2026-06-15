@@ -143,48 +143,31 @@ namespace NPC_Maker
 
         private static void NoMarkup_Click(object sender, EventArgs e)
         {
-            if (Owner == null && OwnerCJK == null)
-                return;
+            string language;
+            string text;
 
-            FCTB_Mono fb = (FCTB_Mono)Owner;
-            string text = fb.SelectedText;
-
-            if (String.IsNullOrWhiteSpace(text))
-                text = fb.Text;
-
-            MessageEntry me = new MessageEntry();
-            me.MessageText = text;
-
-            string outS = me.ToMarkuplessString((string)fb.Tag);
-
-            if (String.IsNullOrWhiteSpace(outS))
-                outS = " ";
-
-            if (Program.IsRunningUnderMono)
+            if (Owner is FCTB_Mono fb)
             {
-                try
-                {
-                    var tempFileName = Path.GetTempFileName();
-                    File.WriteAllText(tempFileName, outS);
-                    try
-                    {
-                        if (Program.IsWSL)
-                            Helpers.RunBash($"cat {tempFileName} | clip.exe ");
-
-                        Helpers.RunBash($"cat {tempFileName} | xsel -i --clipboard ");
-                    }
-                    finally
-                    {
-                        File.Delete(tempFileName);
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
+                language = (string)fb.Tag;
+                text = string.IsNullOrWhiteSpace(fb.SelectedText)
+                    ? fb.Text
+                    : fb.SelectedText;
+            }
+            else if (OwnerCJK is FCTB_MonoCJK fbcjk)
+            {
+                language = (string)fbcjk.Tag;
+                text = string.IsNullOrWhiteSpace(fbcjk.SelectedText)
+                    ? fbcjk.Text
+                    : fbcjk.SelectedText;
             }
             else
-                Clipboard.SetText(outS);
+                return;
+
+            var me = new MessageEntry { MessageText = text };
+
+            string outS = me.ToMarkuplessString(language);
+
+            Helpers.PutIntoClipboard(string.IsNullOrWhiteSpace(outS) ? " " : outS);
         }
 
         private static void Sounds_Click(object sender, EventArgs e)
