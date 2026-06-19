@@ -2509,7 +2509,7 @@ namespace NPC_Maker
         private void DoNpcFilter()
         {
             int index = 0;
-
+            
             foreach (NPCEntry entry in EditedFile.Entries)
             {
                 if (String.IsNullOrWhiteSpace(NpcsFilter.Text))
@@ -2523,35 +2523,33 @@ namespace NPC_Maker
             }
         }
 
-        private System.Windows.Forms.Timer _npcFilterTimer;
-
         private void NpcsFilter_TextChanged(object sender, EventArgs e)
         {
+            if (EditedFile.Entries.Count == 0)
+                return;
+
             if (Program.IsRunningUnderMono)
             {
+                foreach (DataGridViewRow row in DataGrid_NPCs.Rows)
+                    row.Visible = true;
+
                 DataGrid_NPCs.ClearSelection();
 
-                DataGrid_NPCs.Rows[0].Selected = true;
-                DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[0].Cells[1];
-
-                DataGrid_NPCs.FirstDisplayedScrollingRowIndex = 0;
-                DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[0].Cells[1];
-
-                _npcFilterTimer?.Stop();
-                _npcFilterTimer?.Dispose();
-
-                _npcFilterTimer = new System.Windows.Forms.Timer { Interval = 50 };
-                _npcFilterTimer.Tick += (s, args) =>
+                if (DataGrid_NPCs.Rows.Count > 0)
                 {
-                    _npcFilterTimer.Stop();
+                    DataGrid_NPCs.Rows[0].Selected = true;
+                    DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[0].Cells[1];
+                    DataGrid_NPCs.FirstDisplayedScrollingRowIndex = 0;
+                    DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[0].Cells[1];
+                }
+
+                BeginInvoke((Action)(() =>
+                {
                     DoNpcFilter();
-                };
-                _npcFilterTimer.Start();
+                }));
             }
             else
-            {
                 DoNpcFilter();
-            }
         }
 
         private NPCEntry GetNewNPCEntry()
@@ -5059,35 +5057,35 @@ namespace NPC_Maker
             }
         }
 
-        private System.Windows.Forms.Timer _msgFilterTimer;
-
         private void MessagesFilter_TextChanged(object sender, EventArgs e)
         {
+            if (SelectedEntry == null || SelectedEntry.Messages.Count == 0)
+                return;
+
+
             if (Program.IsRunningUnderMono)
             {
+                foreach (DataGridViewRow row in MessagesGrid.Rows)
+                    row.Visible = true;
+
                 MessagesGrid.ClearSelection();
 
-                MessagesGrid.Rows[0].Selected = true;
-                MessagesGrid.CurrentCell = MessagesGrid.Rows[0].Cells[0];
-
-                MessagesGrid.FirstDisplayedScrollingRowIndex = 0;
-                MessagesGrid.FirstDisplayedCell = MessagesGrid.Rows[0].Cells[0];
-
-                _msgFilterTimer?.Stop();
-                _msgFilterTimer?.Dispose();
-
-                _msgFilterTimer = new System.Windows.Forms.Timer { Interval = 50 };
-                _msgFilterTimer.Tick += (s, args) =>
+                if (MessagesGrid.Rows.Count > 0)
                 {
-                    _msgFilterTimer.Stop();
+                    MessagesGrid.Rows[0].Selected = true;
+                    MessagesGrid.CurrentCell = MessagesGrid.Rows[0].Cells[0];
+                    MessagesGrid.FirstDisplayedScrollingRowIndex = 0;
+                    MessagesGrid.FirstDisplayedCell = MessagesGrid.Rows[0].Cells[0];
+                }
+
+                BeginInvoke((Action)(() =>
+                {
                     DoMessagesFilter();
-                };
-                _msgFilterTimer.Start();
+                }));
             }
             else
-            {
                 DoMessagesFilter();
-            }
+
         }
 
         #endregion
