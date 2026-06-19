@@ -2523,11 +2523,10 @@ namespace NPC_Maker
             }
         }
 
+        private System.Windows.Forms.Timer _npcFilterTimer;
+
         private void NpcsFilter_TextChanged(object sender, EventArgs e)
         {
-            if (EditedFile.Entries.Count == 0)
-                return;
-
             if (Program.IsRunningUnderMono)
             {
                 DataGrid_NPCs.ClearSelection();
@@ -2537,20 +2536,22 @@ namespace NPC_Maker
 
                 DataGrid_NPCs.FirstDisplayedScrollingRowIndex = 0;
                 DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[0].Cells[1];
-            }
 
-            if (Program.IsRunningUnderMono)
-            {
-                BeginInvoke((Action)(() =>
+                _npcFilterTimer?.Stop();
+                _npcFilterTimer?.Dispose();
+
+                _npcFilterTimer = new System.Windows.Forms.Timer { Interval = 50 };
+                _npcFilterTimer.Tick += (s, args) =>
                 {
+                    _npcFilterTimer.Stop();
                     DoNpcFilter();
-                }));
+                };
+                _npcFilterTimer.Start();
             }
             else
             {
                 DoNpcFilter();
             }
-
         }
 
         private NPCEntry GetNewNPCEntry()
@@ -5058,11 +5059,10 @@ namespace NPC_Maker
             }
         }
 
+        private System.Windows.Forms.Timer _msgFilterTimer;
+
         private void MessagesFilter_TextChanged(object sender, EventArgs e)
         {
-            if (SelectedEntry == null || SelectedEntry.Messages.Count == 0)
-                return;
-
             if (Program.IsRunningUnderMono)
             {
                 MessagesGrid.ClearSelection();
@@ -5072,20 +5072,22 @@ namespace NPC_Maker
 
                 MessagesGrid.FirstDisplayedScrollingRowIndex = 0;
                 MessagesGrid.FirstDisplayedCell = MessagesGrid.Rows[0].Cells[0];
-            }
 
-            if (Program.IsRunningUnderMono)
-            {
-                BeginInvoke((Action)(() =>
+                _msgFilterTimer?.Stop();
+                _msgFilterTimer?.Dispose();
+
+                _msgFilterTimer = new System.Windows.Forms.Timer { Interval = 50 };
+                _msgFilterTimer.Tick += (s, args) =>
                 {
+                    _msgFilterTimer.Stop();
                     DoMessagesFilter();
-                }));
+                };
+                _msgFilterTimer.Start();
             }
             else
             {
                 DoMessagesFilter();
             }
-
         }
 
         #endregion
