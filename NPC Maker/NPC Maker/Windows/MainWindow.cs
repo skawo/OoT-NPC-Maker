@@ -2506,7 +2506,7 @@ namespace NPC_Maker
             }
         }
 
-        private void NpcsFilter_TextChanged(object sender, EventArgs e)
+        private void DoNpcFilter()
         {
             int index = 0;
 
@@ -2521,6 +2521,36 @@ namespace NPC_Maker
 
                 index++;
             }
+        }
+
+        private void NpcsFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (EditedFile.Entries.Count == 0)
+                return;
+
+            if (Program.IsRunningUnderMono)
+            {
+                DataGrid_NPCs.ClearSelection();
+
+                DataGrid_NPCs.Rows[0].Selected = true;
+                DataGrid_NPCs.CurrentCell = DataGrid_NPCs.Rows[0].Cells[1];
+
+                DataGrid_NPCs.FirstDisplayedScrollingRowIndex = 0;
+                DataGrid_NPCs.FirstDisplayedCell = DataGrid_NPCs.Rows[0].Cells[1];
+            }
+
+            if (Program.IsRunningUnderMono)
+            {
+                BeginInvoke((Action)(() =>
+                {
+                    DoNpcFilter();
+                }));
+            }
+            else
+            {
+                DoNpcFilter();
+            }
+
         }
 
         private NPCEntry GetNewNPCEntry()
@@ -5011,7 +5041,7 @@ namespace NPC_Maker
         }
 
 
-        private void MessagesFilter_TextChanged(object sender, EventArgs e)
+        private void DoMessagesFilter()
         {
             int index = 0;
 
@@ -5026,6 +5056,36 @@ namespace NPC_Maker
 
                 index++;
             }
+        }
+
+        private void MessagesFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (SelectedEntry == null || SelectedEntry.Messages.Count == 0)
+                return;
+
+            if (Program.IsRunningUnderMono)
+            {
+                MessagesGrid.ClearSelection();
+
+                MessagesGrid.Rows[0].Selected = true;
+                MessagesGrid.CurrentCell = MessagesGrid.Rows[0].Cells[0];
+
+                MessagesGrid.FirstDisplayedScrollingRowIndex = 0;
+                MessagesGrid.FirstDisplayedCell = MessagesGrid.Rows[0].Cells[0];
+            }
+
+            if (Program.IsRunningUnderMono)
+            {
+                BeginInvoke((Action)(() =>
+                {
+                    DoMessagesFilter();
+                }));
+            }
+            else
+            {
+                DoMessagesFilter();
+            }
+
         }
 
         #endregion
