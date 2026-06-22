@@ -511,14 +511,17 @@ namespace NPC_Maker.Scripts
             if (ID != (int)Lists.Instructions.IF || SplitLine.Length < 2)
                 return false;
 
-            // Check simple boolean literals
-            string condition = SplitLine[1].Trim().ToUpper();
-            if (condition == "0" || condition == Lists.Keyword_False)
-                return true;
-            if (condition == "1" || condition == Lists.Keyword_True)
+            if (SplitLine.Length == 2)
             {
-                Result = true;
-                return true;
+                // Check simple boolean literals
+                string condition = SplitLine[1].Trim().ToUpper();
+                if (condition == "0" || condition == Lists.Keyword_False)
+                    return true;
+                if (condition == "1" || condition == Lists.Keyword_True)
+                {
+                    Result = true;
+                    return true;
+                }
             }
 
             try
