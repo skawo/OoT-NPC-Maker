@@ -1,5 +1,4 @@
-﻿using FastColoredTextBoxCJK;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPC_Maker.Common;
 using System;
