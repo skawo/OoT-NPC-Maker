@@ -143,6 +143,5 @@ namespace NPC_Maker
 
             return 7;
         }
-
     }
 }

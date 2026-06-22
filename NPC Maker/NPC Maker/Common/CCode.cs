@@ -259,9 +259,7 @@ namespace NPC_Maker
                 }
 
                 if (codeEntry != null)
-                {
                     codeEntry.HeaderPaths = ExtractHeaderPaths(paths.DFile, config.Folder);
-                }
 
                 compileMsgs += "Done!";
 
@@ -665,9 +663,11 @@ namespace NPC_Maker
                 && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
         }
 
+
         private static bool IsPathExcluded(string path, List<string> excludedPaths)
         {
             var parts = path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
             if (parts.Any(p => p.Equals("z64hdr", StringComparison.OrdinalIgnoreCase) || p.Equals("zocarina", StringComparison.OrdinalIgnoreCase)))
                 return true;
 
@@ -734,6 +734,10 @@ namespace NPC_Maker
                 Directory.CreateDirectory(vsCodeFolder);
 
                 string cprops = Properties.Resources.c_cpp_properties;
+                string extPath = Path.Combine(Program.ExecPath, "c_cpp_properties.json");
+
+                if (File.Exists(extPath))
+                    cprops = File.ReadAllText(extPath);
 
                 if (Program.Settings.Library == Lists.Library.zocarina)
                     cprops = cprops.Replace("z64hdr", "zocarina");

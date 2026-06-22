@@ -520,13 +520,8 @@ namespace NPC_Maker.Scripts
                 return true;
             }
 
-            // Evaluate static comparisons
             try
             {
-                byte? SubID = ScriptHelpers.GetSubIDForRamType(SplitLine[1]);
-                if (SubID == null)
-                    return false;
-
                 ScriptHelpers.ErrorIfNumParamsNotEq(SplitLine, 4);
 
                 var Value1 = ScriptHelpers.GetScriptVarVal(SplitLine, 1, float.MinValue, float.MaxValue);
@@ -544,8 +539,18 @@ namespace NPC_Maker.Scripts
                     Result = (Condition == Lists.ConditionTypes.EQUALTO);
                     return true;
                 }
-
-                return false;
+                else
+                {
+                    if (Value1.Vartype == (byte)Lists.VarTypes.NORMAL)
+                    {
+                        Result = false;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
             catch
             {

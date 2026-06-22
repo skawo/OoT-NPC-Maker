@@ -12,11 +12,43 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace NPC_Maker
 {
     public static class Helpers
     {
+
+        public static void PutIntoClipboard(string s)
+        {
+            if (Program.IsRunningUnderMono)
+            {
+                try
+                {
+                    var tempFileName = Path.GetTempFileName();
+                    File.WriteAllText(tempFileName, s);
+                    try
+                    {
+                        if (Program.IsWSL)
+                            Helpers.RunBash($"cat {tempFileName} | clip.exe ");
+
+                        Helpers.RunBash($"cat {tempFileName} | xsel -i --clipboard ");
+                    }
+                    finally
+                    {
+                        File.Delete(tempFileName);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error copying. Is xsel installed?: " + ex.Message);
+                }
+            }
+            else
+                Clipboard.SetText(s);
+        }
+
         public static string StripTerminalControlCodes(string s)
         {
             return Regex.Replace(s, @"\x1B\[[^@-~]*[@-~]", "");
@@ -209,6 +241,11 @@ namespace NPC_Maker
         public static string GenerateTemporaryFolderName()
         {
             return $"temp_{DateTime.Now.Ticks}_{System.Diagnostics.Process.GetCurrentProcess().Id}";
+        }
+
+        public static string GenerateNewJsonName()
+        {
+            return $"_{DateTime.Now.Ticks}";
         }
 
         public static string GetBase64Hash(string s)

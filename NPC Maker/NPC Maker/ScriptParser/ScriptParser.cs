@@ -851,6 +851,8 @@ namespace NPC_Maker.Scripts
 
                                 case Lists.Keyword_DefaultCase:
                                     if (hasDefault) throw ParseException.MultipleDefaultsError(splitSwitch);
+                                    if (splitLine.Length != 1) throw ParseException.CaseFormatError(splitLine);
+
                                     hasDefault = true;
                                     inCase = true;
 
@@ -900,6 +902,9 @@ namespace NPC_Maker.Scripts
                                     else // DefaultCase
                                     {
                                         if (hasDefault) throw ParseException.MultipleDefaultsError(splitSwitch);
+
+                                        if (splitLine.Length != 1) throw ParseException.CaseFormatError(splitLine);
+
                                         hasDefault = true;
 
                                         lines[i] = $"{Lists.Keyword_Else}";
