@@ -536,25 +536,60 @@ namespace NPC_Maker.Scripts
 
                 int val1 = Convert.ToInt32(Value1.Value);
                 int val2 = Convert.ToInt32(Value2.Value);
+                Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
 
-                if (val1 == val2)
+                if (Value1.Vartype == (byte)Lists.VarTypes.RANDOM)
+                    return false;
+                else if (val1 == val2 && Value1.Vartype != (byte)Lists.VarTypes.NORMAL)
                 {
-                    Lists.ConditionTypes Condition = ScriptHelpers.GetConditionID(SplitLine, 2);
-                    Result = (Condition == Lists.ConditionTypes.EQUALTO);
+                    switch (Condition)
+                    {
+                        case Lists.ConditionTypes.EQUALTO:
+                        case Lists.ConditionTypes.MOREOREQ:
+                        case Lists.ConditionTypes.LESSOREQ:
+                            Result = true;
+                            break;
+                        case Lists.ConditionTypes.NOTEQUAL:
+                        case Lists.ConditionTypes.MORETHAN:
+                        case Lists.ConditionTypes.LESSTHAN:
+                            Result = false;
+                            break;
+                        default:
+                            return false;
+                    }
+
+                    return true;
+                }
+                else if (Value1.Vartype == (byte)Lists.VarTypes.NORMAL)
+                {
+                    switch (Condition)
+                    {
+                        case Lists.ConditionTypes.EQUALTO:
+                            Result = val1 == val2;
+                            break;
+                        case Lists.ConditionTypes.NOTEQUAL:
+                            Result = val1 != val2;
+                            break;
+                        case Lists.ConditionTypes.MORETHAN:
+                            Result = val1 > val2;
+                            break;
+                        case Lists.ConditionTypes.LESSTHAN:
+                            Result = val1 < val2;
+                            break;
+                        case Lists.ConditionTypes.MOREOREQ:
+                            Result = val1 >= val2;
+                            break;
+                        case Lists.ConditionTypes.LESSOREQ:
+                            Result = val1 <= val2;
+                            break;
+                        default:
+                            return false;
+                    }
+
                     return true;
                 }
                 else
-                {
-                    if (Value1.Vartype == (byte)Lists.VarTypes.NORMAL)
-                    {
-                        Result = false;
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
+                    return false;
             }
             catch
             {
