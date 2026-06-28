@@ -5483,7 +5483,12 @@ namespace NPC_Maker
 
         private void MsgText_KeyDown(object sender, KeyEventArgs e)
         {
-            var kBordTags = Dicts.LanguageDefs[Combo_Language.Text].Entries.Where(x => !String.IsNullOrEmpty(x.KeyboardShortcut));
+            string lang = Combo_Language.Text;
+
+            if (!Dicts.LanguageDefs.ContainsKey(lang))
+                lang = Lists.DefaultLanguage;
+
+            var kBordTags = Dicts.LanguageDefs[lang].Entries.Where(x => !String.IsNullOrEmpty(x.KeyboardShortcut));
 
             foreach (var tag in kBordTags)
             {
