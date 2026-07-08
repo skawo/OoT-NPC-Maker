@@ -73,6 +73,7 @@ namespace NPC_Maker.Windows
             this.Lbl_Input = new System.Windows.Forms.Label();
             this.Btn_DisabledColor = new System.Windows.Forms.Button();
             this.Lbl_Disabled = new System.Windows.Forms.Label();
+            this.Btn_SetDefault = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AutoSaveCTime)).BeginInit();
@@ -584,11 +585,22 @@ namespace NPC_Maker.Windows
             this.Lbl_Disabled.TabIndex = 57;
             this.Lbl_Disabled.Text = "Disabled field:";
             // 
+            // Btn_SetDefault
+            // 
+            this.Btn_SetDefault.Location = new System.Drawing.Point(414, 326);
+            this.Btn_SetDefault.Name = "Btn_SetDefault";
+            this.Btn_SetDefault.Size = new System.Drawing.Size(124, 23);
+            this.Btn_SetDefault.TabIndex = 58;
+            this.Btn_SetDefault.Text = "Set defaults";
+            this.Btn_SetDefault.UseVisualStyleBackColor = true;
+            this.Btn_SetDefault.Click += new System.EventHandler(this.Btn_SetDefault_Click);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(889, 413);
+            this.Controls.Add(this.Btn_SetDefault);
             this.Controls.Add(this.Lbl_Disabled);
             this.Controls.Add(this.Btn_DisabledColor);
             this.Controls.Add(this.Lbl_Input);
@@ -690,5 +702,6 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.Label Lbl_Input;
         private System.Windows.Forms.Button Btn_DisabledColor;
         private System.Windows.Forms.Label Lbl_Disabled;
+        private System.Windows.Forms.Button Btn_SetDefault;
     }
 }

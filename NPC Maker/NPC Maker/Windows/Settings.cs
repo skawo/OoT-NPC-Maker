@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NPC_Maker.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.IO;
-using NPC_Maker.Controls;
+using static ZeldaMessage.Data;
 
 namespace NPC_Maker.Windows
 {
@@ -242,6 +243,18 @@ namespace NPC_Maker.Windows
                 Btn_DisabledColor.BackColor = ColorDialog.Color;
                 EditedSettings.DisabledColor = ColorDialog.Color;
             }
+        }
+
+        private void Btn_SetDefault_Click(object sender, EventArgs e)
+        {
+            EditedSettings.BGColor = System.Drawing.Color.FromArgb(255, 240, 240, 240);
+            EditedSettings.TextColor = System.Drawing.Color.FromArgb(255, 0, 0, 0);
+            EditedSettings.InputColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
+            EditedSettings.DisabledColor = System.Drawing.Color.FromArgb(255, 210, 210, 210);
+            Btn_BgColor.BackColor = EditedSettings.BGColor;
+            Btn_TextColor.BackColor = EditedSettings.TextColor;
+            Btn_InputColor.BackColor = EditedSettings.InputColor;
+            Btn_DisabledColor.BackColor = EditedSettings.DisabledColor;
         }
     }
 }

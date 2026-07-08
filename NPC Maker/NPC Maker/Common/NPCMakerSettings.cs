@@ -128,9 +128,10 @@ namespace NPC_Maker
             Library = Lists.Library.z64hdr;
             IncludePaths = Lists.DefaultIncludePaths[Lists.Library.z64hdr];
             ChangeGUIColors = false;
-            BGColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Control);
-            TextColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.ControlText);
-            InputColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Window);
+            BGColor = System.Drawing.Color.FromArgb(255, 240, 240, 240);
+            TextColor = System.Drawing.Color.FromArgb(255, 0, 0, 0);
+            InputColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
+            DisabledColor = System.Drawing.Color.FromArgb(255, 250, 250, 250);
         }
 
         public enum Members

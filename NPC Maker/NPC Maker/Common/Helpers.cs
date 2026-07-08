@@ -209,7 +209,7 @@ namespace NPC_Maker
 
         public static void SetExplicitColors(Control root)
         {
-            if (Program.Settings == null) 
+            if (Program.Settings == null)
                 return;
 
             var visitedMenus = new HashSet<ToolStrip>();
@@ -270,7 +270,7 @@ namespace NPC_Maker
 
                 case TextBox textb:
                     textb.BackColor = textb.ReadOnly ? disabled : input;
-                    textb.ForeColor = textb.ReadOnly ? back : fore;
+                    textb.ForeColor = fore;
                     ApplyContextMenu(textb, visitedMenus);
                     return;
 
@@ -290,10 +290,27 @@ namespace NPC_Maker
                     tab.DrawMode = TabDrawMode.OwnerDrawFixed;
                     tab.DrawItem -= TabControl_DrawItem;
                     tab.DrawItem += TabControl_DrawItem;
+
                     break;
 
                 case MenuStrip strip:
                     ApplyMenuColors(strip, visitedMenus);
+                    break;
+
+                case Panel pan:
+                    pan.BackColor = back;
+                    pan.ForeColor = fore;
+                    break;
+
+                case SplitContainer cont:
+
+                    cont.Panel1.BackColor = back;
+                    cont.Panel1.ForeColor = fore;
+                    cont.Panel2.BackColor = back;
+                    cont.Panel2.ForeColor = fore;
+                    cont.BackColor = back;
+                    cont.ForeColor = fore;
+
                     break;
 
                 case Form form:
@@ -333,7 +350,7 @@ namespace NPC_Maker
 
         private static void ApplyMenuColors(ToolStrip strip, HashSet<ToolStrip> visited)
         {
-            if (!visited.Add(strip)) 
+            if (!visited.Add(strip))
                 return;
 
             strip.RenderMode = ToolStripRenderMode.System;
