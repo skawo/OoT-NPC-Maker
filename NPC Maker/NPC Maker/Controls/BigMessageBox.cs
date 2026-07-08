@@ -147,8 +147,19 @@ namespace NPC_Maker.Controls
                         (screen.Height - f.Height) / 2);
                 }
 
-                f.Activate();
-                f.BringToFront();
+                if (Program.IsRunningUnderMono)
+                {
+                    f.BeginInvoke((Action)(() =>
+                    {
+                        f.Activate();
+                        f.BringToFront();
+                    }));
+                }
+                else
+                {
+                    f.Activate();
+                    f.BringToFront();
+                }
             };
             return f.ShowDialog(owner);
         }

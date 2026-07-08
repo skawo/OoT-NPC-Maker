@@ -245,6 +245,7 @@ namespace NPC_Maker
                     fctb.ForeColor = fctb.ReadOnly ? input : fore;
                     fctb.LineNumberColor = fore;
                     fctb.IndentBackColor = fctb.ReadOnly ? disabled : input;
+                    fctb.CaretColor = fore;
                     ApplyContextMenu(fctb, visitedMenus);
                     return;
 
@@ -253,6 +254,7 @@ namespace NPC_Maker
                     fctbc.ForeColor = fctbc.Enabled ? fore : input;
                     fctbc.LineNumberColor = fore;
                     fctbc.IndentBackColor = fctbc.ReadOnly ? disabled : input;
+                    fctbc.CaretColor = fore;
                     ApplyContextMenu(fctbc, visitedMenus);
                     return;
 
