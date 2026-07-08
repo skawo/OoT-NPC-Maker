@@ -19,7 +19,7 @@ namespace NPC_Maker
         public PickableList(Lists.DictType Dict, bool PickMode = false, List<int> _SkipEntries = null)
         {
             InitializeComponent();
-            Helpers.AdjustFormScale(this);
+            Helpers.AdjustFormScaleAndColors(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 
@@ -73,7 +73,7 @@ namespace NPC_Maker
         public PickableList(Dictionary<string, int> Dict, List<int> _SkipEntries = null)
         {
             InitializeComponent();
-            Helpers.AdjustFormScale(this);
+            Helpers.AdjustFormScaleAndColors(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 

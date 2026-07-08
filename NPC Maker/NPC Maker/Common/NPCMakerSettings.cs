@@ -82,6 +82,12 @@ namespace NPC_Maker
 
         public Lists.Library Library { get; set; } 
 
+        public System.Drawing.Color BGColor { get; set; }
+        public System.Drawing.Color TextColor { get; set; }
+        public System.Drawing.Color InputColor { get; set; }
+        public System.Drawing.Color DisabledColor { get; set; }
+        public bool ChangeGUIColors { get; set; }
+
         public NPCMakerSettings()
         {
             Version = 3;
@@ -121,6 +127,10 @@ namespace NPC_Maker
             LastSavePaths = new List<string>();
             Library = Lists.Library.z64hdr;
             IncludePaths = Lists.DefaultIncludePaths[Lists.Library.z64hdr];
+            ChangeGUIColors = false;
+            BGColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Control);
+            TextColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.ControlText);
+            InputColor = System.Drawing.Color.FromKnownColor(System.Drawing.KnownColor.Window);
         }
 
         public enum Members
@@ -155,6 +165,7 @@ namespace NPC_Maker
             LINKER,
             LIBRARY,
             OUTPUTDEPS,
+            CHANGEGUICOLORS,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -208,6 +219,7 @@ namespace NPC_Maker
                 case Members.GUISCALE: GUIScale = Convert.ToSingle(Value); break;
                 case Members.LINKER: Linker = (Lists.Linker)Enum.Parse(typeof(Lists.Linker), (string)Value); break;
                 case Members.LIBRARY: Library = (Lists.Library)Enum.Parse(typeof(Lists.Library), (string)Value); break;
+                case Members.CHANGEGUICOLORS: ChangeGUIColors = (bool)Value; break;
                 default: break;
             }
         }

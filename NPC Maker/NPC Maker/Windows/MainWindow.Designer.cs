@@ -375,12 +375,12 @@ namespace NPC_Maker
             this.linkAnimationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorPickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.CodeParamsTooltip = new NPC_Maker.Controls.BigToolTip();
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
+            this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
+            this.CodeParamsTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltipLoc = new NPC_Maker.Controls.BigToolTip();
-            this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -2380,7 +2380,7 @@ namespace NPC_Maker
             // 
             // Checkbox_HaveCollision
             // 
-            this.Checkbox_HaveCollision.BackColor = System.Drawing.Color.White;
+            this.Checkbox_HaveCollision.BackColor = System.Drawing.SystemColors.Control;
             this.Checkbox_HaveCollision.BoxSize = 18;
             this.Checkbox_HaveCollision.Location = new System.Drawing.Point(8, 5);
             this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
@@ -2960,7 +2960,7 @@ namespace NPC_Maker
             // 
             // Checkbox_Targettable
             // 
-            this.Checkbox_Targettable.BackColor = System.Drawing.Color.White;
+            this.Checkbox_Targettable.BackColor = System.Drawing.SystemColors.Control;
             this.Checkbox_Targettable.BoxSize = 18;
             this.Checkbox_Targettable.Location = new System.Drawing.Point(7, 10);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
@@ -3031,7 +3031,7 @@ namespace NPC_Maker
             // 
             // Chkb_IgnoreY
             // 
-            this.Chkb_IgnoreY.BackColor = System.Drawing.Color.White;
+            this.Chkb_IgnoreY.BackColor = System.Drawing.SystemColors.Control;
             this.Chkb_IgnoreY.BoxSize = 18;
             this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 344);
             this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
@@ -3161,7 +3161,7 @@ namespace NPC_Maker
             // 
             // Checkbox_Loop
             // 
-            this.Checkbox_Loop.BackColor = System.Drawing.Color.White;
+            this.Checkbox_Loop.BackColor = System.Drawing.SystemColors.Control;
             this.Checkbox_Loop.BoxSize = 18;
             this.Checkbox_Loop.Location = new System.Drawing.Point(7, 344);
             this.Checkbox_Loop.Name = "Checkbox_Loop";
@@ -3417,6 +3417,7 @@ namespace NPC_Maker
             // 
             // Tab4_Messages
             // 
+            this.Tab4_Messages.BackColor = System.Drawing.Color.White;
             this.Tab4_Messages.Controls.Add(this.ChkBox_UseCJK);
             this.Tab4_Messages.Controls.Add(this.numUpDownFont);
             this.Tab4_Messages.Controls.Add(this.labelEditorFont);
@@ -3445,7 +3446,6 @@ namespace NPC_Maker
             this.Tab4_Messages.Size = new System.Drawing.Size(848, 633);
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
-            this.Tab4_Messages.UseVisualStyleBackColor = true;
             // 
             // ChkBox_UseCJK
             // 
@@ -3990,6 +3990,7 @@ namespace NPC_Maker
             // 
             // Tab5_Scripts
             // 
+            this.Tab5_Scripts.BackColor = System.Drawing.Color.White;
             this.Tab5_Scripts.Controls.Add(this.TabControl_Scripts);
             this.Tab5_Scripts.Location = new System.Drawing.Point(4, 22);
             this.Tab5_Scripts.Name = "Tab5_Scripts";
@@ -3997,7 +3998,6 @@ namespace NPC_Maker
             this.Tab5_Scripts.Size = new System.Drawing.Size(848, 633);
             this.Tab5_Scripts.TabIndex = 7;
             this.Tab5_Scripts.Text = "Scripts";
-            this.Tab5_Scripts.UseVisualStyleBackColor = true;
             // 
             // TabControl_Scripts
             // 
@@ -4011,6 +4011,7 @@ namespace NPC_Maker
             // 
             // Tab6_EmbeddedOverlay
             // 
+            this.Tab6_EmbeddedOverlay.BackColor = System.Drawing.Color.White;
             this.Tab6_EmbeddedOverlay.Controls.Add(this.LblPostLimb);
             this.Tab6_EmbeddedOverlay.Controls.Add(this.Combo_postLimb);
             this.Tab6_EmbeddedOverlay.Controls.Add(this.Button_UpdateCompile);
@@ -4045,7 +4046,6 @@ namespace NPC_Maker
             this.Tab6_EmbeddedOverlay.Size = new System.Drawing.Size(848, 633);
             this.Tab6_EmbeddedOverlay.TabIndex = 6;
             this.Tab6_EmbeddedOverlay.Text = "C Code";
-            this.Tab6_EmbeddedOverlay.UseVisualStyleBackColor = true;
             // 
             // LblPostLimb
             // 
@@ -4778,15 +4778,6 @@ namespace NPC_Maker
             this.settingsToolStripMenuItem1.Text = "Settings";
             this.settingsToolStripMenuItem1.Click += new System.EventHandler(this.OptionsToolStripMenuItem_Click);
             // 
-            // CodeParamsTooltip
-            // 
-            this.CodeParamsTooltip.AutoPopDelay = 6000;
-            this.CodeParamsTooltip.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Italic);
-            this.CodeParamsTooltip.InitialDelay = 100;
-            this.CodeParamsTooltip.OwnerDraw = true;
-            this.CodeParamsTooltip.ReshowDelay = 100;
-            this.CodeParamsTooltip.ShowAlways = true;
-            // 
             // txBox_Search
             // 
             this.txBox_Search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -4807,6 +4798,24 @@ namespace NPC_Maker
             this.btn_FindMsg.UseVisualStyleBackColor = true;
             this.btn_FindMsg.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btn_FindMsg_MouseDown);
             // 
+            // progressL
+            // 
+            this.progressL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressL.Location = new System.Drawing.Point(503, 2);
+            this.progressL.Name = "progressL";
+            this.progressL.Size = new System.Drawing.Size(376, 19);
+            this.progressL.TabIndex = 8;
+            this.progressL.Visible = false;
+            // 
+            // CodeParamsTooltip
+            // 
+            this.CodeParamsTooltip.AutoPopDelay = 6000;
+            this.CodeParamsTooltip.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Italic);
+            this.CodeParamsTooltip.InitialDelay = 100;
+            this.CodeParamsTooltip.OwnerDraw = true;
+            this.CodeParamsTooltip.ReshowDelay = 100;
+            this.CodeParamsTooltip.ShowAlways = true;
+            // 
             // msgCommentTooltip
             // 
             this.msgCommentTooltip.AutoPopDelay = 32000;
@@ -4824,15 +4833,6 @@ namespace NPC_Maker
             this.msgCommentTooltipLoc.OwnerDraw = true;
             this.msgCommentTooltipLoc.ReshowDelay = 50;
             this.msgCommentTooltipLoc.ShowAlways = true;
-            // 
-            // progressL
-            // 
-            this.progressL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressL.Location = new System.Drawing.Point(503, 2);
-            this.progressL.Name = "progressL";
-            this.progressL.Size = new System.Drawing.Size(376, 19);
-            this.progressL.TabIndex = 8;
-            this.progressL.Visible = false;
             // 
             // MainWindow
             // 

@@ -41,6 +41,9 @@ namespace NPC_Maker.Windows
             }
 
             SetupScale();
+
+            if (Program.Settings.ChangeGUIColors)
+                Helpers.SetExplicitColors(this);
         }
 
         private void SetupScale()
@@ -49,7 +52,7 @@ namespace NPC_Maker.Windows
             float fontSize = Helpers.GetScaleFontSize();
 
             this.MenuStrip.Font = new Font(this.MenuStrip.Font.FontFamily, fontSize);
-            Helpers.AdjustFormScale(this);
+            Helpers.AdjustFormScaleAndColors(this);
         }
 
         private string GetName(string Current = "")

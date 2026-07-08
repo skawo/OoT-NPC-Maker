@@ -297,6 +297,12 @@ namespace NPC_Maker
 
                 Helpers.AdjustControlScale(this);
 
+                if (Program.Settings.ChangeGUIColors)
+                {
+                    Helpers.SetExplicitColors(MainMenuStrip);
+                    Helpers.SetExplicitColors(this);
+                }
+
                 this.MsgText.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
                 this.MsgTextCJK.Font = new Font(this.MsgTextCJK.Font.FontFamily, Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
 
@@ -757,12 +763,12 @@ namespace NPC_Maker
 
                             if (json != null)
                             {
-                                FileOps.SaveNPCJSON("backup", null, null, json);
+                                FileOps.SaveNPCJSON("backup", null, null, json, true);
 
                                 if (!Directory.Exists(Program.AutoSavePath))
                                     Directory.CreateDirectory(Program.AutoSavePath);
 
-                                FileOps.SaveNPCJSON(Path.Combine(Program.AutoSavePath, $"autosave_{DateTime.Now.Ticks}.json"), null, null, json);
+                                FileOps.SaveNPCJSON(Path.Combine(Program.AutoSavePath, $"autosave_{DateTime.Now.Ticks}.json"), null, null, json, true);
                                 PruneOldAutosaves(Program.AutoSavePath, 30);
 
                                 LastBackup = currentBackup;
@@ -1840,6 +1846,12 @@ namespace NPC_Maker
         private void OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             float curScale = Program.Settings.GUIScale;
+            Color bgColor = Program.Settings.BGColor;
+            Color fgColor = Program.Settings.TextColor;
+            Color disableColor = Program.Settings.DisabledColor;
+            Color inputColor = Program.Settings.InputColor;
+            bool colorize = Program.Settings.ChangeGUIColors;
+
             Windows.Settings s = new Windows.Settings(ref EditedFile);
             s.StartPosition = FormStartPosition.CenterParent;
             s.ShowDialog();
@@ -1860,9 +1872,14 @@ namespace NPC_Maker
             MsgTextCJK_TextChanged(null, null);
             SplitMsgContainer_Paint(null, null);
 
-            if (curScale != Program.Settings.GUIScale)
+            if (curScale != Program.Settings.GUIScale || 
+                bgColor != Program.Settings.BGColor || 
+                fgColor != Program.Settings.TextColor ||
+                inputColor != Program.Settings.InputColor ||
+                disableColor != Program.Settings.DisabledColor ||
+                colorize != Program.Settings.ChangeGUIColors)
             {
-                BigMessageBox.Show("The GUI Scale has changed, so the program will now restart.");
+                BigMessageBox.Show("The GUI options have changed, so the program will now restart.");
                 this.DialogResult = DialogResult.Retry;
                 this.Close();
             }
@@ -4165,15 +4182,17 @@ namespace NPC_Maker
 
         private void SetMsgBackground(MessageEntry Loc, MessageEntry Default)
         {
+            BackColor = (Program.Settings.ChangeGUIColors ? Program.Settings.BGColor : Color.White);
+
             if (Loc.Type == (int)ZeldaMessage.Data.BoxType.None_White)
                 PreviewSplitContainer.Panel2.BackColor = Color.Black;
             else
-                PreviewSplitContainer.Panel2.BackColor = Color.White;
+                PreviewSplitContainer.Panel2.BackColor = BackColor;
 
             if (Default.Type == (int)ZeldaMessage.Data.BoxType.None_White)
                 PreviewSplitContainer.Panel1.BackColor = Color.Black;
             else
-                PreviewSplitContainer.Panel1.BackColor = Color.White;
+                PreviewSplitContainer.Panel1.BackColor = BackColor;
         }
 
         private List<MessageEntry> GetLanguageMessageList(NPCEntry entry, string Language)

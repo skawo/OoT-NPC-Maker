@@ -42,7 +42,8 @@ namespace NPC_Maker.Controls
             UpdateSize();
 
             Graphics g = pevent.Graphics;
-            g.Clear(this.BackColor == Color.Transparent ? Color.White : this.BackColor);
+
+            g.Clear(this.BackColor);
 
             // Draw the checkbox
             Rectangle boxRect = new Rectangle(0, (this.Height - BoxSize) / 2, BoxSize, BoxSize);

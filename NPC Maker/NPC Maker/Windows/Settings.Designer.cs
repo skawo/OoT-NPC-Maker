@@ -64,6 +64,15 @@ namespace NPC_Maker.Windows
             this.Cb_ColorizeScripts = new NPC_Maker.Controls.BigCheckBox();
             this.Cb_ImproveTextReadability = new NPC_Maker.Controls.BigCheckBox();
             this.outputDFile = new NPC_Maker.Controls.BigCheckBox();
+            this.Lbl_Background = new System.Windows.Forms.Label();
+            this.Btn_BgColor = new System.Windows.Forms.Button();
+            this.Btn_TextColor = new System.Windows.Forms.Button();
+            this.Lbl_ColorText = new System.Windows.Forms.Label();
+            this.Chk_ChangeGUI = new NPC_Maker.Controls.BigCheckBox();
+            this.Btn_InputColor = new System.Windows.Forms.Button();
+            this.Lbl_Input = new System.Windows.Forms.Label();
+            this.Btn_DisabledColor = new System.Windows.Forms.Button();
+            this.Lbl_Disabled = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpCompileTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpParseTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AutoSaveCTime)).BeginInit();
@@ -487,11 +496,108 @@ namespace NPC_Maker.Windows
             this.outputDFile.UseVisualStyleBackColor = true;
             this.outputDFile.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
+            // Lbl_Background
+            // 
+            this.Lbl_Background.AutoSize = true;
+            this.Lbl_Background.Location = new System.Drawing.Point(411, 227);
+            this.Lbl_Background.Name = "Lbl_Background";
+            this.Lbl_Background.Size = new System.Drawing.Size(68, 13);
+            this.Lbl_Background.TabIndex = 38;
+            this.Lbl_Background.Text = "Background:";
+            // 
+            // Btn_BgColor
+            // 
+            this.Btn_BgColor.BackColor = System.Drawing.Color.Black;
+            this.Btn_BgColor.Location = new System.Drawing.Point(485, 222);
+            this.Btn_BgColor.Name = "Btn_BgColor";
+            this.Btn_BgColor.Size = new System.Drawing.Size(53, 23);
+            this.Btn_BgColor.TabIndex = 50;
+            this.Btn_BgColor.UseVisualStyleBackColor = false;
+            this.Btn_BgColor.Click += new System.EventHandler(this.Btn_BgColor_Click);
+            // 
+            // Btn_TextColor
+            // 
+            this.Btn_TextColor.BackColor = System.Drawing.Color.Black;
+            this.Btn_TextColor.Location = new System.Drawing.Point(485, 247);
+            this.Btn_TextColor.Name = "Btn_TextColor";
+            this.Btn_TextColor.Size = new System.Drawing.Size(53, 23);
+            this.Btn_TextColor.TabIndex = 51;
+            this.Btn_TextColor.UseVisualStyleBackColor = false;
+            this.Btn_TextColor.Click += new System.EventHandler(this.Btn_TextColor_Click);
+            // 
+            // Lbl_ColorText
+            // 
+            this.Lbl_ColorText.AutoSize = true;
+            this.Lbl_ColorText.Location = new System.Drawing.Point(411, 252);
+            this.Lbl_ColorText.Name = "Lbl_ColorText";
+            this.Lbl_ColorText.Size = new System.Drawing.Size(31, 13);
+            this.Lbl_ColorText.TabIndex = 52;
+            this.Lbl_ColorText.Text = "Text:";
+            // 
+            // Chk_ChangeGUI
+            // 
+            this.Chk_ChangeGUI.BoxSize = 18;
+            this.Chk_ChangeGUI.Location = new System.Drawing.Point(412, 196);
+            this.Chk_ChangeGUI.Name = "Chk_ChangeGUI";
+            this.Chk_ChangeGUI.Size = new System.Drawing.Size(124, 22);
+            this.Chk_ChangeGUI.TabIndex = 53;
+            this.Chk_ChangeGUI.Tag = "CHANGEGUICOLORS";
+            this.Chk_ChangeGUI.Text = "Change GUI Colors";
+            this.Chk_ChangeGUI.UseVisualStyleBackColor = true;
+            this.Chk_ChangeGUI.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
+            // 
+            // Btn_InputColor
+            // 
+            this.Btn_InputColor.BackColor = System.Drawing.Color.Black;
+            this.Btn_InputColor.Location = new System.Drawing.Point(485, 273);
+            this.Btn_InputColor.Name = "Btn_InputColor";
+            this.Btn_InputColor.Size = new System.Drawing.Size(53, 23);
+            this.Btn_InputColor.TabIndex = 54;
+            this.Btn_InputColor.UseVisualStyleBackColor = false;
+            this.Btn_InputColor.Click += new System.EventHandler(this.Btn_InputColor_Click);
+            // 
+            // Lbl_Input
+            // 
+            this.Lbl_Input.AutoSize = true;
+            this.Lbl_Input.Location = new System.Drawing.Point(411, 278);
+            this.Lbl_Input.Name = "Lbl_Input";
+            this.Lbl_Input.Size = new System.Drawing.Size(56, 13);
+            this.Lbl_Input.TabIndex = 55;
+            this.Lbl_Input.Text = "Input field:";
+            // 
+            // Btn_DisabledColor
+            // 
+            this.Btn_DisabledColor.BackColor = System.Drawing.Color.Black;
+            this.Btn_DisabledColor.Location = new System.Drawing.Point(485, 299);
+            this.Btn_DisabledColor.Name = "Btn_DisabledColor";
+            this.Btn_DisabledColor.Size = new System.Drawing.Size(53, 23);
+            this.Btn_DisabledColor.TabIndex = 56;
+            this.Btn_DisabledColor.UseVisualStyleBackColor = false;
+            this.Btn_DisabledColor.Click += new System.EventHandler(this.Btn_DisabledColor_Click);
+            // 
+            // Lbl_Disabled
+            // 
+            this.Lbl_Disabled.AutoSize = true;
+            this.Lbl_Disabled.Location = new System.Drawing.Point(411, 304);
+            this.Lbl_Disabled.Name = "Lbl_Disabled";
+            this.Lbl_Disabled.Size = new System.Drawing.Size(73, 13);
+            this.Lbl_Disabled.TabIndex = 57;
+            this.Lbl_Disabled.Text = "Disabled field:";
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(889, 413);
+            this.Controls.Add(this.Lbl_Disabled);
+            this.Controls.Add(this.Btn_DisabledColor);
+            this.Controls.Add(this.Lbl_Input);
+            this.Controls.Add(this.Btn_InputColor);
+            this.Controls.Add(this.Chk_ChangeGUI);
+            this.Controls.Add(this.Lbl_ColorText);
+            this.Controls.Add(this.Btn_TextColor);
+            this.Controls.Add(this.Btn_BgColor);
+            this.Controls.Add(this.Lbl_Background);
             this.Controls.Add(this.outputDFile);
             this.Controls.Add(this.lbl_Library);
             this.Controls.Add(this.Combo_Library);
@@ -575,5 +681,14 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.ComboBox Combo_Library;
         private System.Windows.Forms.Label lbl_Library;
         private Controls.BigCheckBox outputDFile;
+        private System.Windows.Forms.Label Lbl_Background;
+        private System.Windows.Forms.Button Btn_BgColor;
+        private System.Windows.Forms.Button Btn_TextColor;
+        private System.Windows.Forms.Label Lbl_ColorText;
+        private Controls.BigCheckBox Chk_ChangeGUI;
+        private System.Windows.Forms.Button Btn_InputColor;
+        private System.Windows.Forms.Label Lbl_Input;
+        private System.Windows.Forms.Button Btn_DisabledColor;
+        private System.Windows.Forms.Label Lbl_Disabled;
     }
 }

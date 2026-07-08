@@ -27,7 +27,7 @@ namespace NPC_Maker
             this.LblVersionX.Font = new Font(this.LblVersionX.Font.FontFamily, fontSize, FontStyle.Bold);
             this.CreditsHeader.Font = new Font(this.CreditsHeader.Font.FontFamily, fontSize, FontStyle.Bold);
 
-            Helpers.AdjustFormScale(this);
+            Helpers.AdjustFormScaleAndColors(this);
         }
     }
 }

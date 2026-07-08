@@ -27,6 +27,9 @@ namespace NPC_Maker
             InitializeComponent();
             SetupScale();
 
+            if (Program.Settings.ChangeGUIColors)
+                Helpers.SetExplicitColors(this);
+
             AutoParseTimer = new System.Windows.Forms.Timer
             {
                 Interval = (int)Program.Settings.ParseTime,

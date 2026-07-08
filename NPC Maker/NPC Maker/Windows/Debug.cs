@@ -7,7 +7,7 @@ namespace NPC_Maker
         public Debug(string Text)
         {
             InitializeComponent();
-            Helpers.AdjustFormScale(this);
+            Helpers.AdjustFormScaleAndColors(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 

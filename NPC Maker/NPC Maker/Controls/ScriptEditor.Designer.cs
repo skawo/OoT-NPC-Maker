@@ -88,6 +88,7 @@ namespace NPC_Maker
             this.Textbox_ParseErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.Textbox_ParseErrors.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Textbox_ParseErrors.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Textbox_ParseErrors.Location = new System.Drawing.Point(0, 0);
             this.Textbox_ParseErrors.Multiline = true;
@@ -101,12 +102,13 @@ namespace NPC_Maker
             // 
             this.Button_TryParse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.Button_TryParse.BackColor = System.Drawing.Color.White;
             this.Button_TryParse.Location = new System.Drawing.Point(719, 0);
             this.Button_TryParse.Name = "Button_TryParse";
             this.Button_TryParse.Size = new System.Drawing.Size(80, 85);
             this.Button_TryParse.TabIndex = 6;
             this.Button_TryParse.Text = "Try parsing";
-            this.Button_TryParse.UseVisualStyleBackColor = true;
+            this.Button_TryParse.UseVisualStyleBackColor = false;
             this.Button_TryParse.Click += new System.EventHandler(this.Button_TryParse_Click);
             // 
             // notifyIcon1

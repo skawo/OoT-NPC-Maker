@@ -94,7 +94,7 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null)
+        public static void SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null, bool isBackup = false)
         {
             try
             {
@@ -106,7 +106,10 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to save JSON: {ex.Message}");
+                if (!isBackup)
+                    BigMessageBox.Show($"Failed to save JSON: {ex.Message}");
+                else
+                    Console.WriteLine("Warning: Count not save backup.");
             }
         }
 

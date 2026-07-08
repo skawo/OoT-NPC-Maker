@@ -14,7 +14,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using static System.Collections.Specialized.BitVector32;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NPC_Maker
 {
@@ -61,8 +61,11 @@ namespace NPC_Maker
             return (baseSize * Program.Settings.GUIScale);
         }
 
-        public static void AdjustFormScale(Form f)
+        public static void AdjustFormScaleAndColors(Form f)
         {
+            if (Program.Settings.ChangeGUIColors)
+                Helpers.SetExplicitColors(f);
+
             if (Program.Settings.GUIScale == 1.0f)
                 return;
 
@@ -201,6 +204,154 @@ namespace NPC_Maker
 
                 if (ctrl.HasChildren)
                     AdjustControlScale(ctrl);
+            }
+        }
+
+        public static void SetExplicitColors(Control root)
+        {
+            if (Program.Settings == null) 
+                return;
+
+            var visitedMenus = new HashSet<ToolStrip>();
+            SetExplicitColorsInternal(root, visitedMenus);
+        }
+
+        private static void SetExplicitColorsInternal(Control root, HashSet<ToolStrip> visitedMenus)
+        {
+            Color back = Program.Settings.BGColor;
+            Color fore = Program.Settings.TextColor;
+            Color input = Program.Settings.InputColor;
+            Color disabled = Program.Settings.DisabledColor;
+
+            switch (root)
+            {
+                case DataGridView grid:
+                    grid.ColumnHeadersDefaultCellStyle.BackColor = back;
+                    grid.ColumnHeadersDefaultCellStyle.ForeColor = fore;
+                    grid.EnableHeadersVisualStyles = false;
+                    grid.RowHeadersDefaultCellStyle.BackColor = back;
+                    grid.RowHeadersDefaultCellStyle.ForeColor = fore;
+                    grid.RowsDefaultCellStyle.BackColor = input;
+                    grid.RowsDefaultCellStyle.ForeColor = fore;
+                    grid.BackColor = input;
+                    grid.BackgroundColor = back;
+                    grid.ForeColor = fore;
+                    grid.GridColor = back;
+                    ApplyContextMenu(grid, visitedMenus);
+                    return;
+
+                case FCTB_Mono fctb:
+                    fctb.BackColor = fctb.ReadOnly ? disabled : input;
+                    fctb.ForeColor = fctb.ReadOnly ? input : fore;
+                    fctb.LineNumberColor = fore;
+                    fctb.IndentBackColor = fctb.ReadOnly ? disabled : input;
+                    ApplyContextMenu(fctb, visitedMenus);
+                    return;
+
+                case FCTB_MonoCJK fctbc:
+                    fctbc.BackColor = fctbc.ReadOnly ? disabled : input;
+                    fctbc.ForeColor = fctbc.Enabled ? fore : input;
+                    fctbc.LineNumberColor = fore;
+                    fctbc.IndentBackColor = fctbc.ReadOnly ? disabled : input;
+                    ApplyContextMenu(fctbc, visitedMenus);
+                    return;
+
+                case ComboBox cb:
+                    cb.BackColor = input;
+                    cb.ForeColor = fore;
+                    return;
+
+                case NumericUpDown numup:
+                    numup.BackColor = input;
+                    numup.ForeColor = fore;
+                    return;
+
+                case TextBox textb:
+                    textb.BackColor = textb.ReadOnly ? disabled : input;
+                    textb.ForeColor = textb.ReadOnly ? back : fore;
+                    ApplyContextMenu(textb, visitedMenus);
+                    return;
+
+                case DateTimePicker dtp:
+                    dtp.BackColor = dtp.Enabled ? input : disabled;
+                    dtp.ForeColor = fore;
+                    return;
+
+                case BigCheckBox bgcx:
+                    bgcx.BackColor = back;
+                    bgcx.ForeColor = fore;
+                    break;
+
+                case TabControl tab:
+                    tab.BackColor = back;
+                    tab.ForeColor = fore;
+                    tab.DrawMode = TabDrawMode.OwnerDrawFixed;
+                    tab.DrawItem -= TabControl_DrawItem;
+                    tab.DrawItem += TabControl_DrawItem;
+                    break;
+
+                case MenuStrip strip:
+                    ApplyMenuColors(strip, visitedMenus);
+                    break;
+
+                case Form form:
+                    form.BackColor = back;
+                    form.ForeColor = fore;
+                    ApplyContextMenu(form, visitedMenus);
+                    break;
+
+                default:
+                    root.BackColor = back;
+                    root.ForeColor = fore;
+                    ApplyContextMenu(root, visitedMenus);
+                    break;
+            }
+
+            foreach (Control child in root.Controls)
+                SetExplicitColorsInternal(child, visitedMenus);
+        }
+
+        private static void TabControl_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var tab = (TabControl)sender;
+            var tabPage = tab.TabPages[e.Index];
+            using (Brush brush = new SolidBrush(Program.Settings.InputColor))
+                e.Graphics.FillRectangle(brush, e.Bounds);
+
+            TextRenderer.DrawText(e.Graphics, tabPage.Text, tab.Font, e.Bounds,
+                Program.Settings.TextColor,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        }
+
+        private static void ApplyContextMenu(Control c, HashSet<ToolStrip> visited)
+        {
+            if (c.ContextMenuStrip != null)
+                ApplyMenuColors(c.ContextMenuStrip, visited);
+        }
+
+        private static void ApplyMenuColors(ToolStrip strip, HashSet<ToolStrip> visited)
+        {
+            if (!visited.Add(strip)) 
+                return;
+
+            strip.RenderMode = ToolStripRenderMode.System;
+            strip.BackColor = Program.Settings.BGColor;
+            strip.ForeColor = Program.Settings.TextColor;
+
+            foreach (ToolStripItem item in strip.Items)
+                ApplyMenuItemColors(item, visited);
+        }
+
+        private static void ApplyMenuItemColors(ToolStripItem item, HashSet<ToolStrip> visited)
+        {
+            item.BackColor = Program.Settings.BGColor;
+            item.ForeColor = Program.Settings.TextColor;
+
+            if (item is ToolStripDropDownItem dropDown)
+            {
+                ApplyMenuColors(dropDown.DropDown, visited);
+                foreach (ToolStripItem sub in dropDown.DropDownItems)
+                    ApplyMenuItemColors(sub, visited);
             }
         }
 

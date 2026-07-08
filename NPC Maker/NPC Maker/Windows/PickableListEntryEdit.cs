@@ -12,7 +12,7 @@ namespace NPC_Maker
         public PickableListEntryEdit(int ID, string Name, string Desc)
         {
             InitializeComponent();
-            Helpers.AdjustFormScale(this);
+            Helpers.AdjustFormScaleAndColors(this);
 
             Helpers.MakeNotResizableMonoSafe(this);
 
