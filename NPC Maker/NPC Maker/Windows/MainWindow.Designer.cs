@@ -2380,7 +2380,7 @@ namespace NPC_Maker
             // 
             // Checkbox_HaveCollision
             // 
-            this.Checkbox_HaveCollision.BackColor = System.Drawing.SystemColors.Control;
+            this.Checkbox_HaveCollision.BackColor = System.Drawing.Color.White;
             this.Checkbox_HaveCollision.BoxSize = 18;
             this.Checkbox_HaveCollision.Location = new System.Drawing.Point(8, 5);
             this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
@@ -2960,7 +2960,7 @@ namespace NPC_Maker
             // 
             // Checkbox_Targettable
             // 
-            this.Checkbox_Targettable.BackColor = System.Drawing.SystemColors.Control;
+            this.Checkbox_Targettable.BackColor = System.Drawing.Color.White;
             this.Checkbox_Targettable.BoxSize = 18;
             this.Checkbox_Targettable.Location = new System.Drawing.Point(7, 10);
             this.Checkbox_Targettable.Name = "Checkbox_Targettable";
@@ -3031,7 +3031,7 @@ namespace NPC_Maker
             // 
             // Chkb_IgnoreY
             // 
-            this.Chkb_IgnoreY.BackColor = System.Drawing.SystemColors.Control;
+            this.Chkb_IgnoreY.BackColor = System.Drawing.Color.White;
             this.Chkb_IgnoreY.BoxSize = 18;
             this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 344);
             this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
@@ -3161,7 +3161,7 @@ namespace NPC_Maker
             // 
             // Checkbox_Loop
             // 
-            this.Checkbox_Loop.BackColor = System.Drawing.SystemColors.Control;
+            this.Checkbox_Loop.BackColor = System.Drawing.Color.White;
             this.Checkbox_Loop.BoxSize = 18;
             this.Checkbox_Loop.Location = new System.Drawing.Point(7, 344);
             this.Checkbox_Loop.Name = "Checkbox_Loop";
