@@ -201,48 +201,36 @@ namespace NPC_Maker.Windows
                 EditedSettings.IncludePaths = liB.inputText;
         }
 
+        private void PickColor(Button button, Color currentColor, Action<Color> setColor)
+        {
+            ColorDialog.Color = currentColor;
+
+            if (ColorDialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            Color color = Color.FromArgb(255, ColorDialog.Color.R, ColorDialog.Color.G, ColorDialog.Color.B);
+            button.BackColor = color;
+            setColor(color);
+        }
+
         private void Btn_BgColor_Click(object sender, EventArgs e)
         {
-            ColorDialog.Color = EditedSettings.BGColor;
-
-            if (ColorDialog.ShowDialog() == DialogResult.OK)
-            {
-                Btn_BgColor.BackColor = ColorDialog.Color;
-                EditedSettings.BGColor = ColorDialog.Color;
-            }
+            PickColor(Btn_BgColor, EditedSettings.BGColor, c => EditedSettings.BGColor = c);
         }
 
         private void Btn_TextColor_Click(object sender, EventArgs e)
         {
-            ColorDialog.Color = EditedSettings.TextColor;
-
-            if (ColorDialog.ShowDialog() == DialogResult.OK)
-            {
-                Btn_TextColor.BackColor = ColorDialog.Color;
-                EditedSettings.TextColor = ColorDialog.Color;
-            }
+            PickColor(Btn_TextColor, EditedSettings.TextColor, c => EditedSettings.TextColor = c);
         }
 
         private void Btn_InputColor_Click(object sender, EventArgs e)
         {
-            ColorDialog.Color = EditedSettings.InputColor;
-
-            if (ColorDialog.ShowDialog() == DialogResult.OK)
-            {
-                Btn_InputColor.BackColor = ColorDialog.Color;
-                EditedSettings.InputColor = ColorDialog.Color;
-            }
+            PickColor(Btn_InputColor, EditedSettings.InputColor, c => EditedSettings.InputColor = c);
         }
 
         private void Btn_DisabledColor_Click(object sender, EventArgs e)
         {
-            ColorDialog.Color = EditedSettings.DisabledColor;
-
-            if (ColorDialog.ShowDialog() == DialogResult.OK)
-            {
-                Btn_DisabledColor.BackColor = ColorDialog.Color;
-                EditedSettings.DisabledColor = ColorDialog.Color;
-            }
+            PickColor(Btn_DisabledColor, EditedSettings.DisabledColor, c => EditedSettings.DisabledColor = c);
         }
 
         private void Btn_SetDefault_Click(object sender, EventArgs e)
