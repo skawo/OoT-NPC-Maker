@@ -7,11 +7,11 @@ using System.Windows.Forms;
 
 namespace NPC_Maker.Controls
 {
-    public class TabControl_MonoColorFix : TabControl
+    public class TabControl_ColorFix : TabControl
     {
-        public TabControl_MonoColorFix()
+        public TabControl_ColorFix()
         {
-            if (!Program.IsRunningUnderMono || !Program.Settings.ChangeGUIColors)
+            if (!Program.Settings.ChangeGUIColors)
                 return;
 
             SetStyle(ControlStyles.Opaque, false);
@@ -24,7 +24,7 @@ namespace NPC_Maker.Controls
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
-            if (!Program.IsRunningUnderMono || !Program.Settings.ChangeGUIColors)
+            if (!Program.Settings.ChangeGUIColors)
                 return;
 
             Color Back = Program.Settings.ChangeGUIColors ? Program.Settings.BGColor : BackColor;
@@ -35,7 +35,7 @@ namespace NPC_Maker.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (!Program.IsRunningUnderMono || !Program.Settings.ChangeGUIColors)
+            if (!Program.Settings.ChangeGUIColors)
             {
                 base.OnPaint(e);
                 return;

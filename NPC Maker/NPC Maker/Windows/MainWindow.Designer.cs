@@ -46,7 +46,7 @@ namespace NPC_Maker
             this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_NPCData = new System.Windows.Forms.Panel();
-            this.TabControl = new NPC_Maker.Controls.TabControl_MonoColorFix();
+            this.TabControl = new NPC_Maker.Controls.TabControl_ColorFix();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
             this.Tx_FileStartName = new System.Windows.Forms.TextBox();
             this.Tx_SkeletonName = new System.Windows.Forms.TextBox();
@@ -99,7 +99,7 @@ namespace NPC_Maker
             this.Label_BlinkingSegment = new System.Windows.Forms.Label();
             this.Label_ExtraTextures = new System.Windows.Forms.Label();
             this.Label_ExtraDisplayLists = new System.Windows.Forms.Label();
-            this.TabControl_Segments = new NPC_Maker.Controls.TabControl_MonoColorFix();
+            this.TabControl_Segments = new NPC_Maker.Controls.TabControl_ColorFix();
             this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
             this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
             this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
@@ -292,7 +292,7 @@ namespace NPC_Maker
             this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tab5_Scripts = new System.Windows.Forms.TabPage();
-            this.TabControl_Scripts = new NPC_Maker.Controls.TabControl_MonoColorFix();
+            this.TabControl_Scripts = new NPC_Maker.Controls.TabControl_ColorFix();
             this.Tab6_EmbeddedOverlay = new System.Windows.Forms.TabPage();
             this.LblPostLimb = new System.Windows.Forms.Label();
             this.Combo_postLimb = new System.Windows.Forms.ComboBox();
@@ -4993,7 +4993,7 @@ namespace NPC_Maker
         private System.Windows.Forms.ToolStripMenuItem questItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem itemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playerMasksToolStripMenuItem;
-        private TabControl_MonoColorFix TabControl;
+        private TabControl_ColorFix TabControl;
         private System.Windows.Forms.TabPage Tab1_Data;
         private NPC_Maker.Controls.BigCheckBox Checkbox_EnvColor;
         private System.Windows.Forms.Button Button_EnvironmentColorPreview;
@@ -5220,13 +5220,13 @@ namespace NPC_Maker
         private System.Windows.Forms.Label Label_OtherArguments;
         private System.Windows.Forms.TextBox Textbox_CodeEditorArgs;
         private System.Windows.Forms.TabPage Tab5_Scripts;
-        private TabControl_MonoColorFix TabControl_Scripts;
+        private TabControl_ColorFix TabControl_Scripts;
         private System.Windows.Forms.Button Button_CCompile;
         private System.Windows.Forms.Label Lbl_DBGOpts;
         private NPC_Maker.Controls.BigCheckBox ChkBox_DBGLookAt;
         private NPC_Maker.Controls.BigCheckBox ChkBox_DBGPrint;
         private NPC_Maker.Controls.BigCheckBox ChkBox_DBGDlist;
-        private TabControl_MonoColorFix TabControl_Segments;
+        private TabControl_ColorFix TabControl_Segments;
         private System.Windows.Forms.TabPage TabPage_Segment_8;
         private System.Windows.Forms.TabPage TabPage_Segment_9;
         private System.Windows.Forms.TabPage TabPage_Segment_A;

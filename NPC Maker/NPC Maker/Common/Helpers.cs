@@ -284,19 +284,6 @@ namespace NPC_Maker
                     bgcx.ForeColor = fore;
                     break;
 
-                case TabControl tab:
-
-                    if (!Program.IsRunningUnderMono)
-                    {
-                        tab.BackColor = back;
-                        tab.ForeColor = fore;
-                        tab.DrawMode = TabDrawMode.OwnerDrawFixed;
-                        tab.DrawItem -= TabControl_DrawItem;
-                        tab.DrawItem += TabControl_DrawItem;
-                    }
-
-                    break;
-
                 case MenuStrip strip:
                     ApplyMenuColors(strip, visitedMenus);
                     break;
@@ -335,18 +322,6 @@ namespace NPC_Maker
 
             foreach (Control child in root.Controls)
                 SetExplicitColorsInternal(child, visitedMenus);
-        }
-
-        private static void TabControl_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            var tab = (TabControl)sender;
-            var tabPage = tab.TabPages[e.Index];
-            using (Brush brush = new SolidBrush(Program.Settings.InputColor))
-                e.Graphics.FillRectangle(brush, e.Bounds);
-
-            TextRenderer.DrawText(e.Graphics, tabPage.Text, tab.Font, e.Bounds,
-                Program.Settings.TextColor,
-                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
         private static void ApplyContextMenu(Control c, HashSet<ToolStrip> visited)
