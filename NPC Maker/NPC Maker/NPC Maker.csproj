@@ -184,6 +184,9 @@
     <Compile Include="Controls\FCTB_Mono.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\TabControl_MonoColorFix.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ScriptParser\IfParser.cs" />
     <Compile Include="ScriptParser\InstructionParsers\Face\Classes.cs" />

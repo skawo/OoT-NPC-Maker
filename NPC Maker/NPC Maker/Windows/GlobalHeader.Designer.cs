@@ -1,4 +1,6 @@
 ﻿
+using NPC_Maker.Controls;
+
 namespace NPC_Maker.Windows
 {
     partial class GlobalHeader
@@ -35,7 +37,7 @@ namespace NPC_Maker.Windows
             this.AddNew = new System.Windows.Forms.ToolStripMenuItem();
             this.Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.Rename = new System.Windows.Forms.ToolStripMenuItem();
-            this.Tab = new System.Windows.Forms.TabControl();
+            this.Tab = new TabControl_MonoColorFix();
             this.Btn_HeaderBrowse = new System.Windows.Forms.Button();
             this.Label_Header = new System.Windows.Forms.Label();
             this.MenuStrip.SuspendLayout();
@@ -143,7 +145,7 @@ namespace NPC_Maker.Windows
         private System.Windows.Forms.ToolStripMenuItem AddNew;
         private System.Windows.Forms.ToolStripMenuItem Delete;
         private System.Windows.Forms.ToolStripMenuItem Rename;
-        private System.Windows.Forms.TabControl Tab;
+        private TabControl_MonoColorFix Tab;
         private System.Windows.Forms.Button Btn_HeaderBrowse;
         private System.Windows.Forms.Label Label_Header;
     }

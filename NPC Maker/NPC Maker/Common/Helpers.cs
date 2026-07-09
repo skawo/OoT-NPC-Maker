@@ -242,7 +242,7 @@ namespace NPC_Maker
 
                 case FCTB_Mono fctb:
                     fctb.BackColor = fctb.ReadOnly ? disabled : input;
-                    fctb.ForeColor = fctb.ReadOnly ? input : fore;
+                    fctb.ForeColor = fore;
                     fctb.LineNumberColor = fore;
                     fctb.IndentBackColor = fctb.ReadOnly ? disabled : input;
                     fctb.CaretColor = fore;
@@ -251,7 +251,7 @@ namespace NPC_Maker
 
                 case FCTB_MonoCJK fctbc:
                     fctbc.BackColor = fctbc.ReadOnly ? disabled : input;
-                    fctbc.ForeColor = fctbc.Enabled ? fore : input;
+                    fctbc.ForeColor = fore;
                     fctbc.LineNumberColor = fore;
                     fctbc.IndentBackColor = fctbc.ReadOnly ? disabled : input;
                     fctbc.CaretColor = fore;
@@ -285,11 +285,15 @@ namespace NPC_Maker
                     break;
 
                 case TabControl tab:
-                    tab.BackColor = back;
-                    tab.ForeColor = fore;
-                    tab.DrawMode = TabDrawMode.OwnerDrawFixed;
-                    tab.DrawItem -= TabControl_DrawItem;
-                    tab.DrawItem += TabControl_DrawItem;
+
+                    if (!Program.IsRunningUnderMono)
+                    {
+                        tab.BackColor = back;
+                        tab.ForeColor = fore;
+                        tab.DrawMode = TabDrawMode.OwnerDrawFixed;
+                        tab.DrawItem -= TabControl_DrawItem;
+                        tab.DrawItem += TabControl_DrawItem;
+                    }
 
                     break;
 
@@ -317,6 +321,9 @@ namespace NPC_Maker
                     form.BackColor = back;
                     form.ForeColor = fore;
                     ApplyContextMenu(form, visitedMenus);
+                    break;
+
+                case PictureBox pic:
                     break;
 
                 default:

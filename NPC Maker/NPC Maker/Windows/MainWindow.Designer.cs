@@ -42,8 +42,11 @@ namespace NPC_Maker
             this.Button_Duplicate = new System.Windows.Forms.Button();
             this.Button_Delete = new System.Windows.Forms.Button();
             this.Button_Add = new System.Windows.Forms.Button();
+            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Panel_NPCData = new System.Windows.Forms.Panel();
-            this.TabControl = new System.Windows.Forms.TabControl();
+            this.TabControl = new NPC_Maker.Controls.TabControl_MonoColorFix();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
             this.Tx_FileStartName = new System.Windows.Forms.TextBox();
             this.Tx_SkeletonName = new System.Windows.Forms.TextBox();
@@ -57,7 +60,11 @@ namespace NPC_Maker
             this.LblAlpha = new System.Windows.Forms.Label();
             this.Btn_SelectObject = new System.Windows.Forms.Button();
             this.Txb_ObjectID = new System.Windows.Forms.TextBox();
+            this.Checkbox_EnvColor = new NPC_Maker.Controls.BigCheckBox();
             this.Button_EnvironmentColorPreview = new System.Windows.Forms.Button();
+            this.ColorsDataGridView = new NPC_Maker.CustomDataGridView(this.components);
+            this.StartLimbColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColorColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_NPCName = new System.Windows.Forms.Label();
             this.Textbox_NPCName = new System.Windows.Forms.TextBox();
             this.Label_ObjectID = new System.Windows.Forms.Label();
@@ -65,6 +72,15 @@ namespace NPC_Maker
             this.Label_Hierarchy = new System.Windows.Forms.Label();
             this.NumUpDown_Hierarchy = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_YModelOffs = new System.Windows.Forms.NumericUpDown();
+            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
+            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_HDefine = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Filestart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_StartFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_EndFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Label_AnimDefs = new System.Windows.Forms.Label();
             this.NumUpDown_XModelOffs = new System.Windows.Forms.NumericUpDown();
             this.ComboBox_HierarchyType = new System.Windows.Forms.ComboBox();
@@ -83,7 +99,7 @@ namespace NPC_Maker
             this.Label_BlinkingSegment = new System.Windows.Forms.Label();
             this.Label_ExtraTextures = new System.Windows.Forms.Label();
             this.Label_ExtraDisplayLists = new System.Windows.Forms.Label();
-            this.TabControl_Segments = new System.Windows.Forms.TabControl();
+            this.TabControl_Segments = new NPC_Maker.Controls.TabControl_MonoColorFix();
             this.TabPage_Segment_8 = new System.Windows.Forms.TabPage();
             this.TabPage_Segment_9 = new System.Windows.Forms.TabPage();
             this.TabPage_Segment_A = new System.Windows.Forms.TabPage();
@@ -96,7 +112,20 @@ namespace NPC_Maker
             this.Textbox_BlinkPattern = new System.Windows.Forms.TextBox();
             this.Textbox_TalkingPattern = new System.Windows.Forms.TextBox();
             this.NumUpDown_BlinkSpeed = new System.Windows.Forms.NumericUpDown();
+            this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
+            this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_HeaderDefinition = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Color = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_FileStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDLists_Scale = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Tab3_BehaviorData = new System.Windows.Forms.TabPage();
+            this.Checkbox_Omitted = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_AnimInterpFrames = new System.Windows.Forms.NumericUpDown();
             this.Label_AnimInterpFrames = new System.Windows.Forms.Label();
             this.Label_UncullZoneScale = new System.Windows.Forms.Label();
@@ -105,10 +134,17 @@ namespace NPC_Maker
             this.UncullZLabel = new System.Windows.Forms.Label();
             this.UncullFwd = new System.Windows.Forms.NumericUpDown();
             this.Lbl_DBGOpts = new System.Windows.Forms.Label();
+            this.ChkBox_DBGLookAt = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkBox_DBGPrint = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkBox_DBGDlist = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkBox_ExistInAll = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_ScriptsFVar = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ScriptsVar = new System.Windows.Forms.NumericUpDown();
             this.Lbl_ScriptsFVars = new System.Windows.Forms.Label();
             this.Lbl_ScriptsVars = new System.Windows.Forms.Label();
+            this.ChkInvisible = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkOnlyWhenLens = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkBox_DBGCol = new NPC_Maker.Controls.BigCheckBox();
             this.Panel_Colors = new System.Windows.Forms.Panel();
             this.Lbl_Radius = new System.Windows.Forms.Label();
             this.NumUp_LightRadius = new System.Windows.Forms.NumericUpDown();
@@ -119,15 +155,21 @@ namespace NPC_Maker
             this.NumUp_LightXOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_LightLimbOffset = new System.Windows.Forms.Label();
             this.Label_LightLimb = new System.Windows.Forms.Label();
+            this.ChkBox_Glow = new NPC_Maker.Controls.BigCheckBox();
             this.NumUp_LightLimb = new System.Windows.Forms.NumericUpDown();
+            this.ChkBox_GenLight = new NPC_Maker.Controls.BigCheckBox();
             this.NumUp_RiddenBy = new System.Windows.Forms.NumericUpDown();
             this.Label_RiddenBy = new System.Windows.Forms.Label();
+            this.ChkB_FadeOut = new NPC_Maker.Controls.BigCheckBox();
             this.Btn_ReactIfAtt = new System.Windows.Forms.Panel();
             this.Combo_EffIfAtt = new System.Windows.Forms.ComboBox();
             this.Label_EffIfAtt = new System.Windows.Forms.Label();
             this.Btn_ReactIfAttList = new System.Windows.Forms.Button();
             this.Txtbox_ReactIfAtt = new System.Windows.Forms.TextBox();
             this.Lbl_ReactIfAttSnd = new System.Windows.Forms.Label();
+            this.Chkb_ReactIfAtt = new NPC_Maker.Controls.BigCheckBox();
+            this.Chkb_Opendoors = new NPC_Maker.Controls.BigCheckBox();
+            this.ChkRunJustScript = new NPC_Maker.Controls.BigCheckBox();
             this.Lbl_Misc = new System.Windows.Forms.Label();
             this.Label_CutsceneSlot = new System.Windows.Forms.Label();
             this.Panel_Collision = new System.Windows.Forms.Panel();
@@ -139,9 +181,11 @@ namespace NPC_Maker
             this.NumUpDown_ColHeight = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_ColRadius = new System.Windows.Forms.NumericUpDown();
             this.Label_ColRadius = new System.Windows.Forms.Label();
+            this.Checkbox_HaveCollision = new NPC_Maker.Controls.BigCheckBox();
             this.Panel_Shadow = new System.Windows.Forms.Panel();
             this.NumUpDown_ShRadius = new System.Windows.Forms.NumericUpDown();
             this.Label_ShRadius = new System.Windows.Forms.Label();
+            this.Checkbox_DrawShadow = new NPC_Maker.Controls.BigCheckBox();
             this.Panel_HeadRot = new System.Windows.Forms.Panel();
             this.NumUpDown_LookAt_Z = new System.Windows.Forms.NumericUpDown();
             this.Label_WaistSep = new System.Windows.Forms.Label();
@@ -180,9 +224,11 @@ namespace NPC_Maker
             this.label1 = new System.Windows.Forms.Label();
             this.NumUpDown_XTargetOffs = new System.Windows.Forms.NumericUpDown();
             this.Label_TargetOffset = new System.Windows.Forms.Label();
+            this.Checkbox_Targettable = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_TargetLimb = new System.Windows.Forms.NumericUpDown();
             this.Panel_Movement = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.Chkb_IgnoreY = new NPC_Maker.Controls.BigCheckBox();
             this.NumUp_MaxRoam = new System.Windows.Forms.NumericUpDown();
             this.SmoothingCnts = new System.Windows.Forms.Label();
             this.NumUp_Smoothing = new System.Windows.Forms.NumericUpDown();
@@ -193,6 +239,7 @@ namespace NPC_Maker
             this.Lbl_GravityForce = new System.Windows.Forms.Label();
             this.Label_LoopDelay = new System.Windows.Forms.Label();
             this.Label_LoopStartNode = new System.Windows.Forms.Label();
+            this.Checkbox_Loop = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_LoopStartNode = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_GravityForce = new System.Windows.Forms.NumericUpDown();
             this.NumUpDown_LoopDelay = new System.Windows.Forms.NumericUpDown();
@@ -206,19 +253,27 @@ namespace NPC_Maker
             this.NumUpDown_MovDistance = new System.Windows.Forms.NumericUpDown();
             this.Label_Speed = new System.Windows.Forms.Label();
             this.Label_Distance = new System.Windows.Forms.Label();
+            this.Checkbox_AlwaysDraw = new NPC_Maker.Controls.BigCheckBox();
             this.NumUpDown_CutsceneSlot = new System.Windows.Forms.NumericUpDown();
+            this.Checkbox_AlwaysActive = new NPC_Maker.Controls.BigCheckBox();
+            this.Checkbox_CanPressSwitches = new NPC_Maker.Controls.BigCheckBox();
             this.Tab4_Messages = new System.Windows.Forms.TabPage();
+            this.ChkBox_UseCJK = new NPC_Maker.Controls.BigCheckBox();
             this.numUpDownFont = new System.Windows.Forms.NumericUpDown();
             this.labelEditorFont = new System.Windows.Forms.Label();
             this.comboFont = new System.Windows.Forms.ComboBox();
             this.MsgTabSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgEntrySplitContainer = new System.Windows.Forms.SplitContainer();
             this.pictureBox_Comment = new System.Windows.Forms.PictureBox();
+            this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
             this.pictureBox_Comment_Loc = new System.Windows.Forms.PictureBox();
+            this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
+            this.MsgTextCJK = new NPC_Maker.FCTB_MonoCJK(this.components);
             this.PanelMsgPreview = new System.Windows.Forms.Panel();
             this.PreviewSplitContainer = new System.Windows.Forms.SplitContainer();
             this.MsgPreviewOrig = new System.Windows.Forms.PictureBox();
             this.MsgPreview = new System.Windows.Forms.PictureBox();
+            this.chkBox_ShowDefaultLanguagePreview = new NPC_Maker.Controls.BigCheckBox();
             this.Btn_RemoveLanguage = new System.Windows.Forms.Button();
             this.Combo_Language = new System.Windows.Forms.ComboBox();
             this.Lbl_Localization = new System.Windows.Forms.Label();
@@ -226,6 +281,7 @@ namespace NPC_Maker
             this.MessagesFilter = new System.Windows.Forms.TextBox();
             this.Btn_MsgMoveDown = new System.Windows.Forms.Button();
             this.Btn_MsgMoveUp = new System.Windows.Forms.Button();
+            this.ChkBox_UseSpaceFont = new NPC_Maker.Controls.BigCheckBox();
             this.Btn_MsgRename = new System.Windows.Forms.Button();
             this.Combo_MsgPos = new System.Windows.Forms.ComboBox();
             this.Lbl_MsgPos = new System.Windows.Forms.Label();
@@ -233,8 +289,10 @@ namespace NPC_Maker
             this.Lbl_MsgType = new System.Windows.Forms.Label();
             this.Btn_DeleteMsg = new System.Windows.Forms.Button();
             this.Btn_AddMsg = new System.Windows.Forms.Button();
+            this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tab5_Scripts = new System.Windows.Forms.TabPage();
-            this.TabControl_Scripts = new System.Windows.Forms.TabControl();
+            this.TabControl_Scripts = new NPC_Maker.Controls.TabControl_MonoColorFix();
             this.Tab6_EmbeddedOverlay = new System.Windows.Forms.TabPage();
             this.LblPostLimb = new System.Windows.Forms.Label();
             this.Combo_postLimb = new System.Windows.Forms.ComboBox();
@@ -320,64 +378,6 @@ namespace NPC_Maker
             this.txBox_Search = new System.Windows.Forms.TextBox();
             this.btn_FindMsg = new System.Windows.Forms.Button();
             this.progressL = new NPC_Maker.Windows.ProgressWithLabel();
-            this.DataGrid_NPCs = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Checkbox_EnvColor = new NPC_Maker.Controls.BigCheckBox();
-            this.ColorsDataGridView = new NPC_Maker.CustomDataGridView(this.components);
-            this.StartLimbColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColorColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DataGrid_Animations = new NPC_Maker.CustomDataGridView(this.components);
-            this.Col_AnimName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_HDefine = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Filestart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Anim = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_StartFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_EndFrame = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_Speed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col_OBJ = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DataGridView_ExtraDLists = new NPC_Maker.CustomDataGridView(this.components);
-            this.ExtraDlists_Purpose = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_HeaderDefinition = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Color = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_FileStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Translation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Rotation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDLists_Scale = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_Limb = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_ObjectID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ExtraDlists_ShowType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Checkbox_Omitted = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_DBGLookAt = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_DBGPrint = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_DBGDlist = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_ExistInAll = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkInvisible = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkOnlyWhenLens = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_DBGCol = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_Glow = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_GenLight = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkB_FadeOut = new NPC_Maker.Controls.BigCheckBox();
-            this.Chkb_ReactIfAtt = new NPC_Maker.Controls.BigCheckBox();
-            this.Chkb_Opendoors = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkRunJustScript = new NPC_Maker.Controls.BigCheckBox();
-            this.Checkbox_HaveCollision = new NPC_Maker.Controls.BigCheckBox();
-            this.Checkbox_DrawShadow = new NPC_Maker.Controls.BigCheckBox();
-            this.Checkbox_Targettable = new NPC_Maker.Controls.BigCheckBox();
-            this.Chkb_IgnoreY = new NPC_Maker.Controls.BigCheckBox();
-            this.Checkbox_Loop = new NPC_Maker.Controls.BigCheckBox();
-            this.Checkbox_AlwaysDraw = new NPC_Maker.Controls.BigCheckBox();
-            this.Checkbox_AlwaysActive = new NPC_Maker.Controls.BigCheckBox();
-            this.Checkbox_CanPressSwitches = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_UseCJK = new NPC_Maker.Controls.BigCheckBox();
-            this.MsgTextDefault = new NPC_Maker.FCTB_Mono(this.components);
-            this.MsgText = new NPC_Maker.FCTB_Mono(this.components);
-            this.MsgTextCJK = new NPC_Maker.FCTB_MonoCJK(this.components);
-            this.chkBox_ShowDefaultLanguagePreview = new NPC_Maker.Controls.BigCheckBox();
-            this.ChkBox_UseSpaceFont = new NPC_Maker.Controls.BigCheckBox();
-            this.MessagesGrid = new NPC_Maker.CustomDataGridView(this.components);
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CodeParamsTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltipLoc = new NPC_Maker.Controls.BigToolTip();
@@ -387,14 +387,17 @@ namespace NPC_Maker
             this.MainSplitPanel.Panel2.SuspendLayout();
             this.MainSplitPanel.SuspendLayout();
             this.Panel_NPCList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
             this.Panel_NPCData.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.Tab1_Data.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpFileStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpAlpha)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).BeginInit();
             this.Tab2_ExtraData.SuspendLayout();
@@ -403,6 +406,7 @@ namespace NPC_Maker
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSegment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
             this.Tab3_BehaviorData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AnimInterpFrames)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.UncullScale)).BeginInit();
@@ -461,7 +465,10 @@ namespace NPC_Maker
             this.MsgEntrySplitContainer.Panel2.SuspendLayout();
             this.MsgEntrySplitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Comment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Comment_Loc)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextCJK)).BeginInit();
             this.PanelMsgPreview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PreviewSplitContainer)).BeginInit();
             this.PreviewSplitContainer.Panel1.SuspendLayout();
@@ -469,18 +476,11 @@ namespace NPC_Maker
             this.PreviewSplitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreviewOrig)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.Tab5_Scripts.SuspendLayout();
             this.Tab6_EmbeddedOverlay.SuspendLayout();
             this.ContextMenuStrip.SuspendLayout();
             this.MenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgTextCJK)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_Editor
@@ -516,6 +516,7 @@ namespace NPC_Maker
             // 
             // Panel_NPCList
             // 
+            this.Panel_NPCList.BackColor = System.Drawing.Color.White;
             this.Panel_NPCList.Controls.Add(this.Button_Import);
             this.Panel_NPCList.Controls.Add(this.Button_Export);
             this.Panel_NPCList.Controls.Add(this.Label_NpcFilter);
@@ -604,6 +605,49 @@ namespace NPC_Maker
             this.Button_Add.Text = "Add";
             this.Button_Add.UseVisualStyleBackColor = true;
             this.Button_Add.Click += new System.EventHandler(this.Button_Add_Click);
+            // 
+            // DataGrid_NPCs
+            // 
+            this.DataGrid_NPCs.AllowUserToAddRows = false;
+            this.DataGrid_NPCs.AllowUserToDeleteRows = false;
+            this.DataGrid_NPCs.AllowUserToResizeColumns = false;
+            this.DataGrid_NPCs.AllowUserToResizeRows = false;
+            this.DataGrid_NPCs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGrid_NPCs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGrid_NPCs.BackgroundColor = System.Drawing.Color.White;
+            this.DataGrid_NPCs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGrid_NPCs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col_ID,
+            this.Col_Name});
+            this.DataGrid_NPCs.Location = new System.Drawing.Point(3, 0);
+            this.DataGrid_NPCs.MultiSelect = false;
+            this.DataGrid_NPCs.Name = "DataGrid_NPCs";
+            this.DataGrid_NPCs.ReadOnly = true;
+            this.DataGrid_NPCs.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DataGrid_NPCs.Size = new System.Drawing.Size(318, 545);
+            this.DataGrid_NPCs.TabIndex = 1;
+            this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
+            this.DataGrid_NPCs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.NPCGrid_CellPainting);
+            this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
+            // 
+            // Col_ID
+            // 
+            this.Col_ID.FillWeight = 20F;
+            this.Col_ID.HeaderText = "ID";
+            this.Col_ID.Name = "Col_ID";
+            this.Col_ID.ReadOnly = true;
+            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Col_ID.Visible = false;
+            // 
+            // Col_Name
+            // 
+            this.Col_Name.HeaderText = "NPC Name";
+            this.Col_Name.Name = "Col_Name";
+            this.Col_Name.ReadOnly = true;
+            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Panel_NPCData
             // 
@@ -810,6 +854,17 @@ namespace NPC_Maker
             this.Txb_ObjectID.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Txb_ObjectID_KeyUp);
             this.Txb_ObjectID.Leave += new System.EventHandler(this.Txb_ObjectID_Leave);
             // 
+            // Checkbox_EnvColor
+            // 
+            this.Checkbox_EnvColor.BoxSize = 18;
+            this.Checkbox_EnvColor.Location = new System.Drawing.Point(425, 118);
+            this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
+            this.Checkbox_EnvColor.Size = new System.Drawing.Size(154, 22);
+            this.Checkbox_EnvColor.TabIndex = 50;
+            this.Checkbox_EnvColor.Text = "Global environment color:";
+            this.Checkbox_EnvColor.UseVisualStyleBackColor = true;
+            this.Checkbox_EnvColor.CheckedChanged += new System.EventHandler(this.Checkbox_EnvColor_CheckedChanged);
+            // 
             // Button_EnvironmentColorPreview
             // 
             this.Button_EnvironmentColorPreview.BackColor = System.Drawing.Color.Black;
@@ -819,6 +874,43 @@ namespace NPC_Maker
             this.Button_EnvironmentColorPreview.TabIndex = 49;
             this.Button_EnvironmentColorPreview.UseVisualStyleBackColor = false;
             this.Button_EnvironmentColorPreview.Click += new System.EventHandler(this.Button_EnvironmentColorPreview_Click);
+            // 
+            // ColorsDataGridView
+            // 
+            this.ColorsDataGridView.AllowUserToResizeColumns = false;
+            this.ColorsDataGridView.AllowUserToResizeRows = false;
+            this.ColorsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ColorsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ColorsDataGridView.BackgroundColor = System.Drawing.Color.White;
+            this.ColorsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.StartLimbColumn,
+            this.ColorColumn});
+            this.ColorsDataGridView.Location = new System.Drawing.Point(769, 233);
+            this.ColorsDataGridView.MultiSelect = false;
+            this.ColorsDataGridView.Name = "ColorsDataGridView";
+            this.ColorsDataGridView.RowHeadersVisible = false;
+            this.ColorsDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.ColorsDataGridView.Size = new System.Drawing.Size(71, 394);
+            this.ColorsDataGridView.TabIndex = 75;
+            this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
+            this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
+            this.ColorsDataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorsDataGridView_KeyUp);
+            // 
+            // StartLimbColumn
+            // 
+            this.StartLimbColumn.FillWeight = 60F;
+            this.StartLimbColumn.HeaderText = "Start limb";
+            this.StartLimbColumn.Name = "StartLimbColumn";
+            this.StartLimbColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ColorColumn
+            // 
+            this.ColorColumn.FillWeight = 60F;
+            this.ColorColumn.HeaderText = "Color";
+            this.ColorColumn.Name = "ColorColumn";
+            this.ColorColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Label_NPCName
             // 
@@ -910,6 +1002,92 @@ namespace NPC_Maker
             this.NumUpDown_YModelOffs.TabIndex = 37;
             this.NumUpDown_YModelOffs.Tag = "YMODELOFFS";
             this.NumUpDown_YModelOffs.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // DataGrid_Animations
+            // 
+            this.DataGrid_Animations.AllowUserToResizeRows = false;
+            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
+            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col_AnimName,
+            this.Col_HDefine,
+            this.Col_Filestart,
+            this.Col_Anim,
+            this.Col_StartFrame,
+            this.Col_EndFrame,
+            this.Col_Speed,
+            this.Col_OBJ});
+            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 233);
+            this.DataGrid_Animations.MultiSelect = false;
+            this.DataGrid_Animations.Name = "DataGrid_Animations";
+            this.DataGrid_Animations.RowHeadersVisible = false;
+            this.DataGrid_Animations.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.DataGrid_Animations.Size = new System.Drawing.Size(749, 394);
+            this.DataGrid_Animations.TabIndex = 9;
+            this.DataGrid_Animations.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGrid_Animations_CellMouseDoubleClick);
+            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
+            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
+            // 
+            // Col_AnimName
+            // 
+            this.Col_AnimName.FillWeight = 90F;
+            this.Col_AnimName.HeaderText = "Purpose";
+            this.Col_AnimName.Name = "Col_AnimName";
+            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_HDefine
+            // 
+            this.Col_HDefine.FillWeight = 80F;
+            this.Col_HDefine.HeaderText = "Header Definition";
+            this.Col_HDefine.Name = "Col_HDefine";
+            this.Col_HDefine.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Col_HDefine.Visible = false;
+            // 
+            // Col_Filestart
+            // 
+            this.Col_Filestart.FillWeight = 50F;
+            this.Col_Filestart.HeaderText = "File start";
+            this.Col_Filestart.Name = "Col_Filestart";
+            this.Col_Filestart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Anim
+            // 
+            this.Col_Anim.FillWeight = 50F;
+            this.Col_Anim.HeaderText = "Offset";
+            this.Col_Anim.Name = "Col_Anim";
+            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_StartFrame
+            // 
+            this.Col_StartFrame.FillWeight = 45F;
+            this.Col_StartFrame.HeaderText = "Start frame";
+            this.Col_StartFrame.Name = "Col_StartFrame";
+            this.Col_StartFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_EndFrame
+            // 
+            this.Col_EndFrame.FillWeight = 45F;
+            this.Col_EndFrame.HeaderText = "End frame";
+            this.Col_EndFrame.Name = "Col_EndFrame";
+            this.Col_EndFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_Speed
+            // 
+            this.Col_Speed.FillWeight = 30F;
+            this.Col_Speed.HeaderText = "Speed";
+            this.Col_Speed.Name = "Col_Speed";
+            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Col_OBJ
+            // 
+            this.Col_OBJ.FillWeight = 60F;
+            this.Col_OBJ.HeaderText = "Object";
+            this.Col_OBJ.Name = "Col_OBJ";
+            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Label_AnimDefs
             // 
@@ -1053,7 +1231,7 @@ namespace NPC_Maker
             this.Tab2_ExtraData.Location = new System.Drawing.Point(4, 22);
             this.Tab2_ExtraData.Name = "Tab2_ExtraData";
             this.Tab2_ExtraData.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab2_ExtraData.Size = new System.Drawing.Size(849, 633);
+            this.Tab2_ExtraData.Size = new System.Drawing.Size(848, 633);
             this.Tab2_ExtraData.TabIndex = 2;
             this.Tab2_ExtraData.Text = "Extra data";
             // 
@@ -1316,6 +1494,123 @@ namespace NPC_Maker
             this.NumUpDown_BlinkSpeed.Tag = "BLINKSPE";
             this.NumUpDown_BlinkSpeed.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
             // 
+            // DataGridView_ExtraDLists
+            // 
+            this.DataGridView_ExtraDLists.AllowUserToResizeRows = false;
+            this.DataGridView_ExtraDLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGridView_ExtraDLists.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGridView_ExtraDLists.BackgroundColor = System.Drawing.Color.White;
+            this.DataGridView_ExtraDLists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridView_ExtraDLists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ExtraDlists_Purpose,
+            this.ExtraDlists_HeaderDefinition,
+            this.ExtraDlists_Color,
+            this.ExtraDlists_FileStart,
+            this.ExtraDlists_Offset,
+            this.ExtraDlists_Translation,
+            this.ExtraDlists_Rotation,
+            this.ExtraDLists_Scale,
+            this.ExtraDlists_Limb,
+            this.ExtraDlists_ObjectID,
+            this.ExtraDlists_ShowType});
+            this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(9, 19);
+            this.DataGridView_ExtraDLists.MultiSelect = false;
+            this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
+            this.DataGridView_ExtraDLists.RowHeadersVisible = false;
+            this.DataGridView_ExtraDLists.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(830, 276);
+            this.DataGridView_ExtraDLists.TabIndex = 51;
+            this.DataGridView_ExtraDLists.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_ExtraDLists_CellMouseDoubleClick);
+            this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
+            this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
+            // 
+            // ExtraDlists_Purpose
+            // 
+            this.ExtraDlists_Purpose.FillWeight = 70F;
+            this.ExtraDlists_Purpose.HeaderText = "Purpose";
+            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
+            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_HeaderDefinition
+            // 
+            this.ExtraDlists_HeaderDefinition.FillWeight = 80F;
+            this.ExtraDlists_HeaderDefinition.HeaderText = "Header Definition";
+            this.ExtraDlists_HeaderDefinition.Name = "ExtraDlists_HeaderDefinition";
+            this.ExtraDlists_HeaderDefinition.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ExtraDlists_HeaderDefinition.Visible = false;
+            // 
+            // ExtraDlists_Color
+            // 
+            this.ExtraDlists_Color.FillWeight = 30F;
+            this.ExtraDlists_Color.HeaderText = "Color";
+            this.ExtraDlists_Color.Name = "ExtraDlists_Color";
+            this.ExtraDlists_Color.ReadOnly = true;
+            this.ExtraDlists_Color.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_FileStart
+            // 
+            this.ExtraDlists_FileStart.FillWeight = 50F;
+            this.ExtraDlists_FileStart.HeaderText = "File start";
+            this.ExtraDlists_FileStart.Name = "ExtraDlists_FileStart";
+            this.ExtraDlists_FileStart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Offset
+            // 
+            this.ExtraDlists_Offset.FillWeight = 50F;
+            this.ExtraDlists_Offset.HeaderText = "Offset";
+            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
+            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Translation
+            // 
+            this.ExtraDlists_Translation.FillWeight = 60F;
+            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
+            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
+            this.ExtraDlists_Translation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Rotation
+            // 
+            this.ExtraDlists_Rotation.FillWeight = 60F;
+            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
+            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
+            this.ExtraDlists_Rotation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDLists_Scale
+            // 
+            this.ExtraDLists_Scale.FillWeight = 40F;
+            this.ExtraDLists_Scale.HeaderText = "Scale";
+            this.ExtraDLists_Scale.Name = "ExtraDLists_Scale";
+            this.ExtraDLists_Scale.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_Limb
+            // 
+            this.ExtraDlists_Limb.FillWeight = 45F;
+            this.ExtraDlists_Limb.HeaderText = "Limb / Pos";
+            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
+            this.ExtraDlists_Limb.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_ObjectID
+            // 
+            this.ExtraDlists_ObjectID.FillWeight = 60F;
+            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
+            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
+            this.ExtraDlists_ObjectID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ExtraDlists_ShowType
+            // 
+            this.ExtraDlists_ShowType.FillWeight = 60F;
+            this.ExtraDlists_ShowType.HeaderText = "Show type";
+            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
+            "Not visible",
+            "With limb",
+            "Replaces limb",
+            "In Skeleton",
+            "Control existing"});
+            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
+            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
             // Tab3_BehaviorData
             // 
             this.Tab3_BehaviorData.BackColor = System.Drawing.Color.White;
@@ -1360,9 +1655,21 @@ namespace NPC_Maker
             this.Tab3_BehaviorData.Location = new System.Drawing.Point(4, 22);
             this.Tab3_BehaviorData.Name = "Tab3_BehaviorData";
             this.Tab3_BehaviorData.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab3_BehaviorData.Size = new System.Drawing.Size(849, 633);
+            this.Tab3_BehaviorData.Size = new System.Drawing.Size(848, 633);
             this.Tab3_BehaviorData.TabIndex = 4;
             this.Tab3_BehaviorData.Text = "Behavior";
+            // 
+            // Checkbox_Omitted
+            // 
+            this.Checkbox_Omitted.BoxSize = 18;
+            this.Checkbox_Omitted.Location = new System.Drawing.Point(422, 598);
+            this.Checkbox_Omitted.Name = "Checkbox_Omitted";
+            this.Checkbox_Omitted.Size = new System.Drawing.Size(77, 22);
+            this.Checkbox_Omitted.TabIndex = 98;
+            this.Checkbox_Omitted.Tag = "OMIT";
+            this.Checkbox_Omitted.Text = "Omit actor";
+            this.Checkbox_Omitted.UseVisualStyleBackColor = true;
+            this.Checkbox_Omitted.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUpDown_AnimInterpFrames
             // 
@@ -1474,6 +1781,54 @@ namespace NPC_Maker
             this.Lbl_DBGOpts.TabIndex = 91;
             this.Lbl_DBGOpts.Text = "Development options";
             // 
+            // ChkBox_DBGLookAt
+            // 
+            this.ChkBox_DBGLookAt.BoxSize = 18;
+            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 577);
+            this.ChkBox_DBGLookAt.Name = "ChkBox_DBGLookAt";
+            this.ChkBox_DBGLookAt.Size = new System.Drawing.Size(92, 22);
+            this.ChkBox_DBGLookAt.TabIndex = 90;
+            this.ChkBox_DBGLookAt.Tag = "DEBUGLOOKAT";
+            this.ChkBox_DBGLookAt.Text = "Lookat Editor";
+            this.ChkBox_DBGLookAt.UseVisualStyleBackColor = true;
+            this.ChkBox_DBGLookAt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // ChkBox_DBGPrint
+            // 
+            this.ChkBox_DBGPrint.BoxSize = 18;
+            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 557);
+            this.ChkBox_DBGPrint.Name = "ChkBox_DBGPrint";
+            this.ChkBox_DBGPrint.Size = new System.Drawing.Size(98, 22);
+            this.ChkBox_DBGPrint.TabIndex = 89;
+            this.ChkBox_DBGPrint.Tag = "DEBUGPRINTSCR";
+            this.ChkBox_DBGPrint.Text = "Print to screen";
+            this.ChkBox_DBGPrint.UseVisualStyleBackColor = true;
+            this.ChkBox_DBGPrint.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // ChkBox_DBGDlist
+            // 
+            this.ChkBox_DBGDlist.BoxSize = 18;
+            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 577);
+            this.ChkBox_DBGDlist.Name = "ChkBox_DBGDlist";
+            this.ChkBox_DBGDlist.Size = new System.Drawing.Size(84, 22);
+            this.ChkBox_DBGDlist.TabIndex = 88;
+            this.ChkBox_DBGDlist.Tag = "DEBUGDLISTED";
+            this.ChkBox_DBGDlist.Text = "DList Editor";
+            this.ChkBox_DBGDlist.UseVisualStyleBackColor = true;
+            this.ChkBox_DBGDlist.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // ChkBox_ExistInAll
+            // 
+            this.ChkBox_ExistInAll.BoxSize = 18;
+            this.ChkBox_ExistInAll.Location = new System.Drawing.Point(422, 261);
+            this.ChkBox_ExistInAll.Name = "ChkBox_ExistInAll";
+            this.ChkBox_ExistInAll.Size = new System.Drawing.Size(111, 22);
+            this.ChkBox_ExistInAll.TabIndex = 87;
+            this.ChkBox_ExistInAll.Tag = "EXISTALLROOMS";
+            this.ChkBox_ExistInAll.Text = "Exist in all rooms";
+            this.ChkBox_ExistInAll.UseVisualStyleBackColor = true;
+            this.ChkBox_ExistInAll.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // NumUpDown_ScriptsFVar
             // 
             this.NumUpDown_ScriptsFVar.Location = new System.Drawing.Point(507, 81);
@@ -1519,6 +1874,42 @@ namespace NPC_Maker
             this.Lbl_ScriptsVars.Size = new System.Drawing.Size(53, 13);
             this.Lbl_ScriptsVars.TabIndex = 83;
             this.Lbl_ScriptsVars.Text = "Variables:";
+            // 
+            // ChkInvisible
+            // 
+            this.ChkInvisible.BoxSize = 18;
+            this.ChkInvisible.Location = new System.Drawing.Point(584, 238);
+            this.ChkInvisible.Name = "ChkInvisible";
+            this.ChkInvisible.Size = new System.Drawing.Size(66, 22);
+            this.ChkInvisible.TabIndex = 82;
+            this.ChkInvisible.Tag = "INVISIBLE";
+            this.ChkInvisible.Text = "Invisible";
+            this.ChkInvisible.UseVisualStyleBackColor = true;
+            this.ChkInvisible.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // ChkOnlyWhenLens
+            // 
+            this.ChkOnlyWhenLens.BoxSize = 18;
+            this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 238);
+            this.ChkOnlyWhenLens.Name = "ChkOnlyWhenLens";
+            this.ChkOnlyWhenLens.Size = new System.Drawing.Size(151, 22);
+            this.ChkOnlyWhenLens.TabIndex = 81;
+            this.ChkOnlyWhenLens.Tag = "VISIBLEONLYLENS";
+            this.ChkOnlyWhenLens.Text = "Affected by Lens of Truth";
+            this.ChkOnlyWhenLens.UseVisualStyleBackColor = true;
+            this.ChkOnlyWhenLens.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // ChkBox_DBGCol
+            // 
+            this.ChkBox_DBGCol.BoxSize = 18;
+            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 557);
+            this.ChkBox_DBGCol.Name = "ChkBox_DBGCol";
+            this.ChkBox_DBGCol.Size = new System.Drawing.Size(95, 22);
+            this.ChkBox_DBGCol.TabIndex = 80;
+            this.ChkBox_DBGCol.Tag = "DEBUGSHOWCOLS";
+            this.ChkBox_DBGCol.Text = "Draw collision";
+            this.ChkBox_DBGCol.UseVisualStyleBackColor = true;
+            this.ChkBox_DBGCol.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Panel_Colors
             // 
@@ -1657,6 +2048,18 @@ namespace NPC_Maker
             this.Label_LightLimb.TabIndex = 54;
             this.Label_LightLimb.Text = "Limb:";
             // 
+            // ChkBox_Glow
+            // 
+            this.ChkBox_Glow.BoxSize = 18;
+            this.ChkBox_Glow.Location = new System.Drawing.Point(3, 30);
+            this.ChkBox_Glow.Name = "ChkBox_Glow";
+            this.ChkBox_Glow.Size = new System.Drawing.Size(51, 22);
+            this.ChkBox_Glow.TabIndex = 76;
+            this.ChkBox_Glow.Tag = "GLOW";
+            this.ChkBox_Glow.Text = "Glow";
+            this.ChkBox_Glow.UseVisualStyleBackColor = true;
+            this.ChkBox_Glow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // NumUp_LightLimb
             // 
             this.NumUp_LightLimb.Location = new System.Drawing.Point(63, 55);
@@ -1670,6 +2073,18 @@ namespace NPC_Maker
             this.NumUp_LightLimb.TabIndex = 55;
             this.NumUp_LightLimb.Tag = "LIGHTLIMB";
             this.NumUp_LightLimb.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // ChkBox_GenLight
+            // 
+            this.ChkBox_GenLight.BoxSize = 18;
+            this.ChkBox_GenLight.Location = new System.Drawing.Point(3, 5);
+            this.ChkBox_GenLight.Name = "ChkBox_GenLight";
+            this.ChkBox_GenLight.Size = new System.Drawing.Size(96, 22);
+            this.ChkBox_GenLight.TabIndex = 72;
+            this.ChkBox_GenLight.Tag = "LIGHT";
+            this.ChkBox_GenLight.Text = "Generate light";
+            this.ChkBox_GenLight.UseVisualStyleBackColor = true;
+            this.ChkBox_GenLight.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUp_RiddenBy
             // 
@@ -1703,6 +2118,18 @@ namespace NPC_Maker
             this.Label_RiddenBy.Size = new System.Drawing.Size(78, 13);
             this.Label_RiddenBy.TabIndex = 78;
             this.Label_RiddenBy.Text = "NPC ID to ride:";
+            // 
+            // ChkB_FadeOut
+            // 
+            this.ChkB_FadeOut.BoxSize = 18;
+            this.ChkB_FadeOut.Location = new System.Drawing.Point(584, 190);
+            this.ChkB_FadeOut.Name = "ChkB_FadeOut";
+            this.ChkB_FadeOut.Size = new System.Drawing.Size(158, 22);
+            this.ChkB_FadeOut.TabIndex = 77;
+            this.ChkB_FadeOut.Tag = "FADEOUT";
+            this.ChkB_FadeOut.Text = "Fade out if player far away";
+            this.ChkB_FadeOut.UseVisualStyleBackColor = true;
+            this.ChkB_FadeOut.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Btn_ReactIfAtt
             // 
@@ -1783,6 +2210,42 @@ namespace NPC_Maker
             this.Lbl_ReactIfAttSnd.Size = new System.Drawing.Size(71, 13);
             this.Lbl_ReactIfAttSnd.TabIndex = 69;
             this.Lbl_ReactIfAttSnd.Text = "Sound effect:";
+            // 
+            // Chkb_ReactIfAtt
+            // 
+            this.Chkb_ReactIfAtt.BoxSize = 18;
+            this.Chkb_ReactIfAtt.Location = new System.Drawing.Point(3, 5);
+            this.Chkb_ReactIfAtt.Name = "Chkb_ReactIfAtt";
+            this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(109, 22);
+            this.Chkb_ReactIfAtt.TabIndex = 72;
+            this.Chkb_ReactIfAtt.Tag = "REACTATT";
+            this.Chkb_ReactIfAtt.Text = "React if attacked";
+            this.Chkb_ReactIfAtt.UseVisualStyleBackColor = true;
+            this.Chkb_ReactIfAtt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // Chkb_Opendoors
+            // 
+            this.Chkb_Opendoors.BoxSize = 18;
+            this.Chkb_Opendoors.Location = new System.Drawing.Point(584, 168);
+            this.Chkb_Opendoors.Name = "Chkb_Opendoors";
+            this.Chkb_Opendoors.Size = new System.Drawing.Size(176, 22);
+            this.Chkb_Opendoors.TabIndex = 74;
+            this.Chkb_Opendoors.Tag = "OPENDOORS";
+            this.Chkb_Opendoors.Text = "Opens doors if they\'re on path";
+            this.Chkb_Opendoors.UseVisualStyleBackColor = true;
+            this.Chkb_Opendoors.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // ChkRunJustScript
+            // 
+            this.ChkRunJustScript.BoxSize = 18;
+            this.ChkRunJustScript.Location = new System.Drawing.Point(584, 213);
+            this.ChkRunJustScript.Name = "ChkRunJustScript";
+            this.ChkRunJustScript.Size = new System.Drawing.Size(95, 22);
+            this.ChkRunJustScript.TabIndex = 73;
+            this.ChkRunJustScript.Tag = "JUSTSCRIPT";
+            this.ChkRunJustScript.Text = "Just run script";
+            this.ChkRunJustScript.UseVisualStyleBackColor = true;
+            this.ChkRunJustScript.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Lbl_Misc
             // 
@@ -1917,6 +2380,19 @@ namespace NPC_Maker
             this.Label_ColRadius.TabIndex = 28;
             this.Label_ColRadius.Text = "Radius:";
             // 
+            // Checkbox_HaveCollision
+            // 
+            this.Checkbox_HaveCollision.BackColor = System.Drawing.Color.White;
+            this.Checkbox_HaveCollision.BoxSize = 18;
+            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(8, 5);
+            this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
+            this.Checkbox_HaveCollision.Size = new System.Drawing.Size(89, 22);
+            this.Checkbox_HaveCollision.TabIndex = 21;
+            this.Checkbox_HaveCollision.Tag = "COLLISION";
+            this.Checkbox_HaveCollision.Text = "Has collision";
+            this.Checkbox_HaveCollision.UseVisualStyleBackColor = false;
+            this.Checkbox_HaveCollision.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // Panel_Shadow
             // 
             this.Panel_Shadow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1950,6 +2426,18 @@ namespace NPC_Maker
             this.Label_ShRadius.Size = new System.Drawing.Size(43, 13);
             this.Label_ShRadius.TabIndex = 35;
             this.Label_ShRadius.Text = "Radius:";
+            // 
+            // Checkbox_DrawShadow
+            // 
+            this.Checkbox_DrawShadow.BoxSize = 18;
+            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(9, 3);
+            this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
+            this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 22);
+            this.Checkbox_DrawShadow.TabIndex = 22;
+            this.Checkbox_DrawShadow.Tag = "SHADOW";
+            this.Checkbox_DrawShadow.Text = "Casts shadow";
+            this.Checkbox_DrawShadow.UseVisualStyleBackColor = true;
+            this.Checkbox_DrawShadow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Panel_HeadRot
             // 
@@ -2472,6 +2960,19 @@ namespace NPC_Maker
             this.Label_TargetOffset.TabIndex = 35;
             this.Label_TargetOffset.Text = "Offset:";
             // 
+            // Checkbox_Targettable
+            // 
+            this.Checkbox_Targettable.BackColor = System.Drawing.Color.White;
+            this.Checkbox_Targettable.BoxSize = 18;
+            this.Checkbox_Targettable.Location = new System.Drawing.Point(7, 10);
+            this.Checkbox_Targettable.Name = "Checkbox_Targettable";
+            this.Checkbox_Targettable.Size = new System.Drawing.Size(83, 22);
+            this.Checkbox_Targettable.TabIndex = 39;
+            this.Checkbox_Targettable.Tag = "TARGETTABLE";
+            this.Checkbox_Targettable.Text = "Targettable";
+            this.Checkbox_Targettable.UseVisualStyleBackColor = false;
+            this.Checkbox_Targettable.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // NumUpDown_TargetLimb
             // 
             this.NumUpDown_TargetLimb.Location = new System.Drawing.Point(124, 34);
@@ -2529,6 +3030,19 @@ namespace NPC_Maker
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 70;
             this.label2.Text = "(Roam) Max dist:";
+            // 
+            // Chkb_IgnoreY
+            // 
+            this.Chkb_IgnoreY.BackColor = System.Drawing.Color.White;
+            this.Chkb_IgnoreY.BoxSize = 18;
+            this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 344);
+            this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
+            this.Chkb_IgnoreY.Size = new System.Drawing.Size(121, 22);
+            this.Chkb_IgnoreY.TabIndex = 67;
+            this.Chkb_IgnoreY.Tag = "IGNORENODEYAXIS";
+            this.Chkb_IgnoreY.Text = "Ignore node Y Axis";
+            this.Chkb_IgnoreY.UseVisualStyleBackColor = false;
+            this.Chkb_IgnoreY.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUp_MaxRoam
             // 
@@ -2646,6 +3160,19 @@ namespace NPC_Maker
             this.Label_LoopStartNode.Size = new System.Drawing.Size(84, 13);
             this.Label_LoopStartNode.TabIndex = 45;
             this.Label_LoopStartNode.Text = "Loop start node:";
+            // 
+            // Checkbox_Loop
+            // 
+            this.Checkbox_Loop.BackColor = System.Drawing.Color.White;
+            this.Checkbox_Loop.BoxSize = 18;
+            this.Checkbox_Loop.Location = new System.Drawing.Point(7, 344);
+            this.Checkbox_Loop.Name = "Checkbox_Loop";
+            this.Checkbox_Loop.Size = new System.Drawing.Size(50, 22);
+            this.Checkbox_Loop.TabIndex = 41;
+            this.Checkbox_Loop.Tag = "LOOP";
+            this.Checkbox_Loop.Text = "Loop";
+            this.Checkbox_Loop.UseVisualStyleBackColor = false;
+            this.Checkbox_Loop.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // NumUpDown_LoopStartNode
             // 
@@ -2840,6 +3367,18 @@ namespace NPC_Maker
             this.Label_Distance.TabIndex = 35;
             this.Label_Distance.Text = "Movement distance:";
             // 
+            // Checkbox_AlwaysDraw
+            // 
+            this.Checkbox_AlwaysDraw.BoxSize = 18;
+            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(422, 192);
+            this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
+            this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(151, 22);
+            this.Checkbox_AlwaysDraw.TabIndex = 70;
+            this.Checkbox_AlwaysDraw.Tag = "DRAWOUTOFCAM";
+            this.Checkbox_AlwaysDraw.Text = "Draw even out of camera";
+            this.Checkbox_AlwaysDraw.UseVisualStyleBackColor = true;
+            this.Checkbox_AlwaysDraw.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
             // NumUpDown_CutsceneSlot
             // 
             this.NumUpDown_CutsceneSlot.Location = new System.Drawing.Point(422, 36);
@@ -2853,6 +3392,30 @@ namespace NPC_Maker
             this.NumUpDown_CutsceneSlot.TabIndex = 66;
             this.NumUpDown_CutsceneSlot.Tag = "CUTSCENEID";
             this.NumUpDown_CutsceneSlot.ValueChanged += new System.EventHandler(this.NumUpDown_ValueChanged);
+            // 
+            // Checkbox_AlwaysActive
+            // 
+            this.Checkbox_AlwaysActive.BoxSize = 18;
+            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(422, 169);
+            this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
+            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(161, 22);
+            this.Checkbox_AlwaysActive.TabIndex = 68;
+            this.Checkbox_AlwaysActive.Tag = "ACTIVE";
+            this.Checkbox_AlwaysActive.Text = "Update even out of camera";
+            this.Checkbox_AlwaysActive.UseVisualStyleBackColor = true;
+            this.Checkbox_AlwaysActive.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
+            // 
+            // Checkbox_CanPressSwitches
+            // 
+            this.Checkbox_CanPressSwitches.BoxSize = 18;
+            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(422, 215);
+            this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
+            this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(113, 22);
+            this.Checkbox_CanPressSwitches.TabIndex = 58;
+            this.Checkbox_CanPressSwitches.Tag = "SWITCHES";
+            this.Checkbox_CanPressSwitches.Text = "Presses switches";
+            this.Checkbox_CanPressSwitches.UseVisualStyleBackColor = true;
+            this.Checkbox_CanPressSwitches.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
             // 
             // Tab4_Messages
             // 
@@ -2882,9 +3445,21 @@ namespace NPC_Maker
             this.Tab4_Messages.Location = new System.Drawing.Point(4, 22);
             this.Tab4_Messages.Name = "Tab4_Messages";
             this.Tab4_Messages.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab4_Messages.Size = new System.Drawing.Size(849, 633);
+            this.Tab4_Messages.Size = new System.Drawing.Size(848, 633);
             this.Tab4_Messages.TabIndex = 5;
             this.Tab4_Messages.Text = "Messages";
+            // 
+            // ChkBox_UseCJK
+            // 
+            this.ChkBox_UseCJK.BoxSize = 18;
+            this.ChkBox_UseCJK.Location = new System.Drawing.Point(756, 29);
+            this.ChkBox_UseCJK.Name = "ChkBox_UseCJK";
+            this.ChkBox_UseCJK.Size = new System.Drawing.Size(47, 22);
+            this.ChkBox_UseCJK.TabIndex = 97;
+            this.ChkBox_UseCJK.Tag = "USECJK";
+            this.ChkBox_UseCJK.Text = "CJK";
+            this.ChkBox_UseCJK.UseVisualStyleBackColor = true;
+            this.ChkBox_UseCJK.CheckedChanged += new System.EventHandler(this.ChkBox_UseCJK_CheckedChanged);
             // 
             // numUpDownFont
             // 
@@ -2968,6 +3543,51 @@ namespace NPC_Maker
             this.pictureBox_Comment.TabStop = false;
             this.pictureBox_Comment.DoubleClick += new System.EventHandler(this.PictureBox_Comment_DoubleClick);
             // 
+            // MsgTextDefault
+            // 
+            this.MsgTextDefault.AccessibleDescription = "Textbox control";
+            this.MsgTextDefault.AccessibleName = "Fast Colored Text Box";
+            this.MsgTextDefault.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
+            this.MsgTextDefault.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgTextDefault.AutoIndent = false;
+            this.MsgTextDefault.AutoIndentChars = false;
+            this.MsgTextDefault.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
+            this.MsgTextDefault.AutoScrollMinSize = new System.Drawing.Size(2, 12);
+            this.MsgTextDefault.BackBrush = null;
+            this.MsgTextDefault.BackColor = System.Drawing.Color.Gainsboro;
+            this.MsgTextDefault.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgTextDefault.CharHeight = 12;
+            this.MsgTextDefault.CharWidth = 6;
+            this.MsgTextDefault.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgTextDefault.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgTextDefault.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgTextDefault.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgTextDefault.IsReplaceMode = false;
+            this.MsgTextDefault.Location = new System.Drawing.Point(0, 0);
+            this.MsgTextDefault.Name = "MsgTextDefault";
+            this.MsgTextDefault.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgTextDefault.ReadOnly = true;
+            this.MsgTextDefault.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgTextDefault.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgTextDefault.ServiceColors")));
+            this.MsgTextDefault.ShowLineNumbers = false;
+            this.MsgTextDefault.Size = new System.Drawing.Size(25, 100);
+            this.MsgTextDefault.TabIndex = 69;
+            this.MsgTextDefault.Tag = "Default";
+            this.MsgTextDefault.ToolTipDelay = 100;
+            this.MsgTextDefault.WordWrapAutoIndent = false;
+            this.MsgTextDefault.Zoom = 100;
+            // 
             // pictureBox_Comment_Loc
             // 
             this.pictureBox_Comment_Loc.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox_Comment_Loc.BackgroundImage")));
@@ -2979,6 +3599,110 @@ namespace NPC_Maker
             this.pictureBox_Comment_Loc.TabIndex = 69;
             this.pictureBox_Comment_Loc.TabStop = false;
             this.pictureBox_Comment_Loc.DoubleClick += new System.EventHandler(this.PictureBox_Comment_Loc_DoubleClick);
+            // 
+            // MsgText
+            // 
+            this.MsgText.AccessibleDescription = "Textbox control";
+            this.MsgText.AccessibleName = "Fast Colored Text Box";
+            this.MsgText.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
+            this.MsgText.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgText.AutoIndent = false;
+            this.MsgText.AutoIndentChars = false;
+            this.MsgText.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
+            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 12);
+            this.MsgText.BackBrush = null;
+            this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgText.CharHeight = 12;
+            this.MsgText.CharWidth = 6;
+            this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgText.IsReplaceMode = false;
+            this.MsgText.Location = new System.Drawing.Point(0, 0);
+            this.MsgText.Name = "MsgText";
+            this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
+            this.MsgText.ShowLineNumbers = false;
+            this.MsgText.Size = new System.Drawing.Size(639, 220);
+            this.MsgText.TabIndex = 68;
+            this.MsgText.Tag = "Default";
+            this.MsgText.ToolTipDelay = 100;
+            this.MsgText.WordWrapAutoIndent = false;
+            this.MsgText.Zoom = 100;
+            this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
+            this.MsgText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MsgText_KeyDown);
+            this.MsgText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
+            this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
+            // 
+            // MsgTextCJK
+            // 
+            this.MsgTextCJK.AccessibleDescription = "Textbox control";
+            this.MsgTextCJK.AccessibleName = "Fast Colored Text Box";
+            this.MsgTextCJK.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
+            this.MsgTextCJK.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.MsgTextCJK.AutoIndent = false;
+            this.MsgTextCJK.AutoIndentChars = false;
+            this.MsgTextCJK.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
+            this.MsgTextCJK.AutoScrollMinSize = new System.Drawing.Size(2, 12);
+            this.MsgTextCJK.BackBrush = null;
+            this.MsgTextCJK.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MsgTextCJK.CharCnWidth = 12;
+            this.MsgTextCJK.CharHeight = 12;
+            this.MsgTextCJK.CharWidth = 6;
+            this.MsgTextCJK.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.MsgTextCJK.DefaultMarkerSize = 8;
+            this.MsgTextCJK.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.MsgTextCJK.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MsgTextCJK.FindForm = null;
+            this.MsgTextCJK.FoldingHighlightColor = System.Drawing.Color.LightGray;
+            this.MsgTextCJK.FoldingHighlightEnabled = false;
+            this.MsgTextCJK.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
+            this.MsgTextCJK.GoToForm = null;
+            this.MsgTextCJK.Hotkeys = resources.GetString("MsgTextCJK.Hotkeys");
+            this.MsgTextCJK.IsReplaceMode = false;
+            this.MsgTextCJK.Location = new System.Drawing.Point(0, 0);
+            this.MsgTextCJK.Name = "MsgTextCJK";
+            this.MsgTextCJK.Paddings = new System.Windows.Forms.Padding(0);
+            this.MsgTextCJK.ReplaceForm = null;
+            this.MsgTextCJK.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.MsgTextCJK.ServiceColors = ((FastColoredTextBoxCJK.ServiceColors)(resources.GetObject("MsgTextCJK.ServiceColors")));
+            this.MsgTextCJK.ShowLineNumbers = false;
+            this.MsgTextCJK.Size = new System.Drawing.Size(639, 220);
+            this.MsgTextCJK.TabIndex = 70;
+            this.MsgTextCJK.Tag = "Default";
+            this.MsgTextCJK.ToolTipDelay = 100;
+            this.MsgTextCJK.UseCJK = FastColoredTextBoxCJK.CJKMode.Hanzi;
+            this.MsgTextCJK.Visible = false;
+            this.MsgTextCJK.WordWrapAutoIndent = false;
+            this.MsgTextCJK.Zoom = 100;
+            this.MsgTextCJK.TextChanged += new System.EventHandler<FastColoredTextBoxCJK.TextChangedEventArgs>(this.MsgTextCJK_TextChanged);
+            this.MsgTextCJK.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MsgText_KeyDown);
+            this.MsgTextCJK.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
+            this.MsgTextCJK.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgTextCJK_MouseDoubleClick);
             // 
             // PanelMsgPreview
             // 
@@ -3039,6 +3763,20 @@ namespace NPC_Maker
             this.MsgPreview.TabStop = false;
             this.MsgPreview.DoubleClick += new System.EventHandler(this.MsgPreviewDefault_Click);
             this.MsgPreview.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgPreview_MouseClick);
+            // 
+            // chkBox_ShowDefaultLanguagePreview
+            // 
+            this.chkBox_ShowDefaultLanguagePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBox_ShowDefaultLanguagePreview.BoxSize = 18;
+            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(470, 30);
+            this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
+            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(149, 22);
+            this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
+            this.chkBox_ShowDefaultLanguagePreview.Tag = "";
+            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default loc preview";
+            this.chkBox_ShowDefaultLanguagePreview.UseVisualStyleBackColor = true;
+            this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.ChkBox_ShowDefaultLanguagePreview_CheckedChanged);
             // 
             // Btn_RemoveLanguage
             // 
@@ -3120,6 +3858,18 @@ namespace NPC_Maker
             this.Btn_MsgMoveUp.TabIndex = 74;
             this.Btn_MsgMoveUp.UseVisualStyleBackColor = true;
             this.Btn_MsgMoveUp.Click += new System.EventHandler(this.Btn_MsgMoveUp_Click);
+            // 
+            // ChkBox_UseSpaceFont
+            // 
+            this.ChkBox_UseSpaceFont.BoxSize = 18;
+            this.ChkBox_UseSpaceFont.Location = new System.Drawing.Point(621, 30);
+            this.ChkBox_UseSpaceFont.Name = "ChkBox_UseSpaceFont";
+            this.ChkBox_UseSpaceFont.Size = new System.Drawing.Size(134, 22);
+            this.ChkBox_UseSpaceFont.TabIndex = 73;
+            this.ChkBox_UseSpaceFont.Tag = "USESPACEFONT";
+            this.ChkBox_UseSpaceFont.Text = "Space width from font";
+            this.ChkBox_UseSpaceFont.UseVisualStyleBackColor = true;
+            this.ChkBox_UseSpaceFont.CheckedChanged += new System.EventHandler(this.ChkBox_UseSpaceFont_CheckedChanged);
             // 
             // Btn_MsgRename
             // 
@@ -3207,6 +3957,39 @@ namespace NPC_Maker
             this.Btn_AddMsg.UseVisualStyleBackColor = true;
             this.Btn_AddMsg.Click += new System.EventHandler(this.Btn_AddMsg_Click);
             // 
+            // MessagesGrid
+            // 
+            this.MessagesGrid.AllowUserToAddRows = false;
+            this.MessagesGrid.AllowUserToDeleteRows = false;
+            this.MessagesGrid.AllowUserToResizeColumns = false;
+            this.MessagesGrid.AllowUserToResizeRows = false;
+            this.MessagesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.MessagesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.MessagesGrid.BackgroundColor = System.Drawing.Color.White;
+            this.MessagesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MessagesGrid.ColumnHeadersVisible = false;
+            this.MessagesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn2});
+            this.MessagesGrid.Location = new System.Drawing.Point(3, 3);
+            this.MessagesGrid.MultiSelect = false;
+            this.MessagesGrid.Name = "MessagesGrid";
+            this.MessagesGrid.ReadOnly = true;
+            this.MessagesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.MessagesGrid.Size = new System.Drawing.Size(189, 520);
+            this.MessagesGrid.TabIndex = 3;
+            this.MessagesGrid.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.MessagesGrid_CellPainting);
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Message title";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Tab5_Scripts
             // 
             this.Tab5_Scripts.BackColor = System.Drawing.Color.White;
@@ -3214,7 +3997,7 @@ namespace NPC_Maker
             this.Tab5_Scripts.Location = new System.Drawing.Point(4, 22);
             this.Tab5_Scripts.Name = "Tab5_Scripts";
             this.Tab5_Scripts.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab5_Scripts.Size = new System.Drawing.Size(849, 633);
+            this.Tab5_Scripts.Size = new System.Drawing.Size(848, 633);
             this.Tab5_Scripts.TabIndex = 7;
             this.Tab5_Scripts.Text = "Scripts";
             // 
@@ -3224,7 +4007,7 @@ namespace NPC_Maker
             this.TabControl_Scripts.Location = new System.Drawing.Point(3, 3);
             this.TabControl_Scripts.Name = "TabControl_Scripts";
             this.TabControl_Scripts.SelectedIndex = 0;
-            this.TabControl_Scripts.Size = new System.Drawing.Size(843, 627);
+            this.TabControl_Scripts.Size = new System.Drawing.Size(842, 627);
             this.TabControl_Scripts.TabIndex = 0;
             this.TabControl_Scripts.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TabControlScripts_MouseUp);
             // 
@@ -3262,7 +4045,7 @@ namespace NPC_Maker
             this.Tab6_EmbeddedOverlay.Location = new System.Drawing.Point(4, 22);
             this.Tab6_EmbeddedOverlay.Name = "Tab6_EmbeddedOverlay";
             this.Tab6_EmbeddedOverlay.Padding = new System.Windows.Forms.Padding(3);
-            this.Tab6_EmbeddedOverlay.Size = new System.Drawing.Size(849, 633);
+            this.Tab6_EmbeddedOverlay.Size = new System.Drawing.Size(848, 633);
             this.Tab6_EmbeddedOverlay.TabIndex = 6;
             this.Tab6_EmbeddedOverlay.Text = "C Code";
             // 
@@ -4026,788 +4809,6 @@ namespace NPC_Maker
             this.progressL.TabIndex = 8;
             this.progressL.Visible = false;
             // 
-            // DataGrid_NPCs
-            // 
-            this.DataGrid_NPCs.AllowUserToAddRows = false;
-            this.DataGrid_NPCs.AllowUserToDeleteRows = false;
-            this.DataGrid_NPCs.AllowUserToResizeColumns = false;
-            this.DataGrid_NPCs.AllowUserToResizeRows = false;
-            this.DataGrid_NPCs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGrid_NPCs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGrid_NPCs.BackgroundColor = System.Drawing.Color.White;
-            this.DataGrid_NPCs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid_NPCs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_ID,
-            this.Col_Name});
-            this.DataGrid_NPCs.Location = new System.Drawing.Point(3, 0);
-            this.DataGrid_NPCs.MultiSelect = false;
-            this.DataGrid_NPCs.Name = "DataGrid_NPCs";
-            this.DataGrid_NPCs.ReadOnly = true;
-            this.DataGrid_NPCs.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.DataGrid_NPCs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid_NPCs.Size = new System.Drawing.Size(318, 545);
-            this.DataGrid_NPCs.TabIndex = 1;
-            this.DataGrid_NPCs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_NPCs_CellDoubleClick);
-            this.DataGrid_NPCs.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.NPCGrid_CellPainting);
-            this.DataGrid_NPCs.SelectionChanged += new System.EventHandler(this.DataGrid_NPCs_SelectionChanged);
-            // 
-            // Col_ID
-            // 
-            this.Col_ID.FillWeight = 20F;
-            this.Col_ID.HeaderText = "ID";
-            this.Col_ID.Name = "Col_ID";
-            this.Col_ID.ReadOnly = true;
-            this.Col_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Col_ID.Visible = false;
-            // 
-            // Col_Name
-            // 
-            this.Col_Name.HeaderText = "NPC Name";
-            this.Col_Name.Name = "Col_Name";
-            this.Col_Name.ReadOnly = true;
-            this.Col_Name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Checkbox_EnvColor
-            // 
-            this.Checkbox_EnvColor.BoxSize = 18;
-            this.Checkbox_EnvColor.Location = new System.Drawing.Point(425, 118);
-            this.Checkbox_EnvColor.Name = "Checkbox_EnvColor";
-            this.Checkbox_EnvColor.Size = new System.Drawing.Size(154, 22);
-            this.Checkbox_EnvColor.TabIndex = 50;
-            this.Checkbox_EnvColor.Text = "Global environment color:";
-            this.Checkbox_EnvColor.UseVisualStyleBackColor = true;
-            this.Checkbox_EnvColor.CheckedChanged += new System.EventHandler(this.Checkbox_EnvColor_CheckedChanged);
-            // 
-            // ColorsDataGridView
-            // 
-            this.ColorsDataGridView.AllowUserToResizeColumns = false;
-            this.ColorsDataGridView.AllowUserToResizeRows = false;
-            this.ColorsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ColorsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.ColorsDataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.ColorsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ColorsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.StartLimbColumn,
-            this.ColorColumn});
-            this.ColorsDataGridView.Location = new System.Drawing.Point(769, 233);
-            this.ColorsDataGridView.MultiSelect = false;
-            this.ColorsDataGridView.Name = "ColorsDataGridView";
-            this.ColorsDataGridView.RowHeadersVisible = false;
-            this.ColorsDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.ColorsDataGridView.Size = new System.Drawing.Size(71, 394);
-            this.ColorsDataGridView.TabIndex = 75;
-            this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
-            this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
-            this.ColorsDataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorsDataGridView_KeyUp);
-            // 
-            // StartLimbColumn
-            // 
-            this.StartLimbColumn.FillWeight = 60F;
-            this.StartLimbColumn.HeaderText = "Start limb";
-            this.StartLimbColumn.Name = "StartLimbColumn";
-            this.StartLimbColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ColorColumn
-            // 
-            this.ColorColumn.FillWeight = 60F;
-            this.ColorColumn.HeaderText = "Color";
-            this.ColorColumn.Name = "ColorColumn";
-            this.ColorColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // DataGrid_Animations
-            // 
-            this.DataGrid_Animations.AllowUserToResizeRows = false;
-            this.DataGrid_Animations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGrid_Animations.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGrid_Animations.BackgroundColor = System.Drawing.Color.White;
-            this.DataGrid_Animations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid_Animations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col_AnimName,
-            this.Col_HDefine,
-            this.Col_Filestart,
-            this.Col_Anim,
-            this.Col_StartFrame,
-            this.Col_EndFrame,
-            this.Col_Speed,
-            this.Col_OBJ});
-            this.DataGrid_Animations.Location = new System.Drawing.Point(14, 233);
-            this.DataGrid_Animations.MultiSelect = false;
-            this.DataGrid_Animations.Name = "DataGrid_Animations";
-            this.DataGrid_Animations.RowHeadersVisible = false;
-            this.DataGrid_Animations.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.DataGrid_Animations.Size = new System.Drawing.Size(749, 394);
-            this.DataGrid_Animations.TabIndex = 9;
-            this.DataGrid_Animations.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGrid_Animations_CellMouseDoubleClick);
-            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
-            this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
-            // 
-            // Col_AnimName
-            // 
-            this.Col_AnimName.FillWeight = 90F;
-            this.Col_AnimName.HeaderText = "Purpose";
-            this.Col_AnimName.Name = "Col_AnimName";
-            this.Col_AnimName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_HDefine
-            // 
-            this.Col_HDefine.FillWeight = 80F;
-            this.Col_HDefine.HeaderText = "Header Definition";
-            this.Col_HDefine.Name = "Col_HDefine";
-            this.Col_HDefine.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Col_HDefine.Visible = false;
-            // 
-            // Col_Filestart
-            // 
-            this.Col_Filestart.FillWeight = 50F;
-            this.Col_Filestart.HeaderText = "File start";
-            this.Col_Filestart.Name = "Col_Filestart";
-            this.Col_Filestart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Anim
-            // 
-            this.Col_Anim.FillWeight = 50F;
-            this.Col_Anim.HeaderText = "Offset";
-            this.Col_Anim.Name = "Col_Anim";
-            this.Col_Anim.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_StartFrame
-            // 
-            this.Col_StartFrame.FillWeight = 45F;
-            this.Col_StartFrame.HeaderText = "Start frame";
-            this.Col_StartFrame.Name = "Col_StartFrame";
-            this.Col_StartFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_EndFrame
-            // 
-            this.Col_EndFrame.FillWeight = 45F;
-            this.Col_EndFrame.HeaderText = "End frame";
-            this.Col_EndFrame.Name = "Col_EndFrame";
-            this.Col_EndFrame.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_Speed
-            // 
-            this.Col_Speed.FillWeight = 30F;
-            this.Col_Speed.HeaderText = "Speed";
-            this.Col_Speed.Name = "Col_Speed";
-            this.Col_Speed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Col_OBJ
-            // 
-            this.Col_OBJ.FillWeight = 60F;
-            this.Col_OBJ.HeaderText = "Object";
-            this.Col_OBJ.Name = "Col_OBJ";
-            this.Col_OBJ.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // DataGridView_ExtraDLists
-            // 
-            this.DataGridView_ExtraDLists.AllowUserToResizeRows = false;
-            this.DataGridView_ExtraDLists.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGridView_ExtraDLists.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DataGridView_ExtraDLists.BackgroundColor = System.Drawing.Color.White;
-            this.DataGridView_ExtraDLists.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridView_ExtraDLists.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ExtraDlists_Purpose,
-            this.ExtraDlists_HeaderDefinition,
-            this.ExtraDlists_Color,
-            this.ExtraDlists_FileStart,
-            this.ExtraDlists_Offset,
-            this.ExtraDlists_Translation,
-            this.ExtraDlists_Rotation,
-            this.ExtraDLists_Scale,
-            this.ExtraDlists_Limb,
-            this.ExtraDlists_ObjectID,
-            this.ExtraDlists_ShowType});
-            this.DataGridView_ExtraDLists.Location = new System.Drawing.Point(9, 19);
-            this.DataGridView_ExtraDLists.MultiSelect = false;
-            this.DataGridView_ExtraDLists.Name = "DataGridView_ExtraDLists";
-            this.DataGridView_ExtraDLists.RowHeadersVisible = false;
-            this.DataGridView_ExtraDLists.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(830, 276);
-            this.DataGridView_ExtraDLists.TabIndex = 51;
-            this.DataGridView_ExtraDLists.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_ExtraDLists_CellMouseDoubleClick);
-            this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
-            this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
-            // 
-            // ExtraDlists_Purpose
-            // 
-            this.ExtraDlists_Purpose.FillWeight = 70F;
-            this.ExtraDlists_Purpose.HeaderText = "Purpose";
-            this.ExtraDlists_Purpose.Name = "ExtraDlists_Purpose";
-            this.ExtraDlists_Purpose.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_HeaderDefinition
-            // 
-            this.ExtraDlists_HeaderDefinition.FillWeight = 80F;
-            this.ExtraDlists_HeaderDefinition.HeaderText = "Header Definition";
-            this.ExtraDlists_HeaderDefinition.Name = "ExtraDlists_HeaderDefinition";
-            this.ExtraDlists_HeaderDefinition.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.ExtraDlists_HeaderDefinition.Visible = false;
-            // 
-            // ExtraDlists_Color
-            // 
-            this.ExtraDlists_Color.FillWeight = 30F;
-            this.ExtraDlists_Color.HeaderText = "Color";
-            this.ExtraDlists_Color.Name = "ExtraDlists_Color";
-            this.ExtraDlists_Color.ReadOnly = true;
-            this.ExtraDlists_Color.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_FileStart
-            // 
-            this.ExtraDlists_FileStart.FillWeight = 50F;
-            this.ExtraDlists_FileStart.HeaderText = "File start";
-            this.ExtraDlists_FileStart.Name = "ExtraDlists_FileStart";
-            this.ExtraDlists_FileStart.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Offset
-            // 
-            this.ExtraDlists_Offset.FillWeight = 50F;
-            this.ExtraDlists_Offset.HeaderText = "Offset";
-            this.ExtraDlists_Offset.Name = "ExtraDlists_Offset";
-            this.ExtraDlists_Offset.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Translation
-            // 
-            this.ExtraDlists_Translation.FillWeight = 60F;
-            this.ExtraDlists_Translation.HeaderText = "X,Y,Z Transl.";
-            this.ExtraDlists_Translation.Name = "ExtraDlists_Translation";
-            this.ExtraDlists_Translation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Rotation
-            // 
-            this.ExtraDlists_Rotation.FillWeight = 60F;
-            this.ExtraDlists_Rotation.HeaderText = "X,Y,Z Rot.";
-            this.ExtraDlists_Rotation.Name = "ExtraDlists_Rotation";
-            this.ExtraDlists_Rotation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDLists_Scale
-            // 
-            this.ExtraDLists_Scale.FillWeight = 40F;
-            this.ExtraDLists_Scale.HeaderText = "Scale";
-            this.ExtraDLists_Scale.Name = "ExtraDLists_Scale";
-            this.ExtraDLists_Scale.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_Limb
-            // 
-            this.ExtraDlists_Limb.FillWeight = 45F;
-            this.ExtraDlists_Limb.HeaderText = "Limb / Pos";
-            this.ExtraDlists_Limb.Name = "ExtraDlists_Limb";
-            this.ExtraDlists_Limb.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_ObjectID
-            // 
-            this.ExtraDlists_ObjectID.FillWeight = 60F;
-            this.ExtraDlists_ObjectID.HeaderText = "Object ID";
-            this.ExtraDlists_ObjectID.Name = "ExtraDlists_ObjectID";
-            this.ExtraDlists_ObjectID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ExtraDlists_ShowType
-            // 
-            this.ExtraDlists_ShowType.FillWeight = 60F;
-            this.ExtraDlists_ShowType.HeaderText = "Show type";
-            this.ExtraDlists_ShowType.Items.AddRange(new object[] {
-            "Not visible",
-            "With limb",
-            "Replaces limb",
-            "In Skeleton",
-            "Control existing"});
-            this.ExtraDlists_ShowType.Name = "ExtraDlists_ShowType";
-            this.ExtraDlists_ShowType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Checkbox_Omitted
-            // 
-            this.Checkbox_Omitted.BoxSize = 18;
-            this.Checkbox_Omitted.Location = new System.Drawing.Point(422, 598);
-            this.Checkbox_Omitted.Name = "Checkbox_Omitted";
-            this.Checkbox_Omitted.Size = new System.Drawing.Size(77, 22);
-            this.Checkbox_Omitted.TabIndex = 98;
-            this.Checkbox_Omitted.Tag = "OMIT";
-            this.Checkbox_Omitted.Text = "Omit actor";
-            this.Checkbox_Omitted.UseVisualStyleBackColor = true;
-            this.Checkbox_Omitted.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkBox_DBGLookAt
-            // 
-            this.ChkBox_DBGLookAt.BoxSize = 18;
-            this.ChkBox_DBGLookAt.Location = new System.Drawing.Point(584, 577);
-            this.ChkBox_DBGLookAt.Name = "ChkBox_DBGLookAt";
-            this.ChkBox_DBGLookAt.Size = new System.Drawing.Size(92, 22);
-            this.ChkBox_DBGLookAt.TabIndex = 90;
-            this.ChkBox_DBGLookAt.Tag = "DEBUGLOOKAT";
-            this.ChkBox_DBGLookAt.Text = "Lookat Editor";
-            this.ChkBox_DBGLookAt.UseVisualStyleBackColor = true;
-            this.ChkBox_DBGLookAt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkBox_DBGPrint
-            // 
-            this.ChkBox_DBGPrint.BoxSize = 18;
-            this.ChkBox_DBGPrint.Location = new System.Drawing.Point(584, 557);
-            this.ChkBox_DBGPrint.Name = "ChkBox_DBGPrint";
-            this.ChkBox_DBGPrint.Size = new System.Drawing.Size(98, 22);
-            this.ChkBox_DBGPrint.TabIndex = 89;
-            this.ChkBox_DBGPrint.Tag = "DEBUGPRINTSCR";
-            this.ChkBox_DBGPrint.Text = "Print to screen";
-            this.ChkBox_DBGPrint.UseVisualStyleBackColor = true;
-            this.ChkBox_DBGPrint.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkBox_DBGDlist
-            // 
-            this.ChkBox_DBGDlist.BoxSize = 18;
-            this.ChkBox_DBGDlist.Location = new System.Drawing.Point(422, 577);
-            this.ChkBox_DBGDlist.Name = "ChkBox_DBGDlist";
-            this.ChkBox_DBGDlist.Size = new System.Drawing.Size(84, 22);
-            this.ChkBox_DBGDlist.TabIndex = 88;
-            this.ChkBox_DBGDlist.Tag = "DEBUGDLISTED";
-            this.ChkBox_DBGDlist.Text = "DList Editor";
-            this.ChkBox_DBGDlist.UseVisualStyleBackColor = true;
-            this.ChkBox_DBGDlist.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkBox_ExistInAll
-            // 
-            this.ChkBox_ExistInAll.BoxSize = 18;
-            this.ChkBox_ExistInAll.Location = new System.Drawing.Point(422, 261);
-            this.ChkBox_ExistInAll.Name = "ChkBox_ExistInAll";
-            this.ChkBox_ExistInAll.Size = new System.Drawing.Size(111, 22);
-            this.ChkBox_ExistInAll.TabIndex = 87;
-            this.ChkBox_ExistInAll.Tag = "EXISTALLROOMS";
-            this.ChkBox_ExistInAll.Text = "Exist in all rooms";
-            this.ChkBox_ExistInAll.UseVisualStyleBackColor = true;
-            this.ChkBox_ExistInAll.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkInvisible
-            // 
-            this.ChkInvisible.BoxSize = 18;
-            this.ChkInvisible.Location = new System.Drawing.Point(584, 238);
-            this.ChkInvisible.Name = "ChkInvisible";
-            this.ChkInvisible.Size = new System.Drawing.Size(66, 22);
-            this.ChkInvisible.TabIndex = 82;
-            this.ChkInvisible.Tag = "INVISIBLE";
-            this.ChkInvisible.Text = "Invisible";
-            this.ChkInvisible.UseVisualStyleBackColor = true;
-            this.ChkInvisible.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkOnlyWhenLens
-            // 
-            this.ChkOnlyWhenLens.BoxSize = 18;
-            this.ChkOnlyWhenLens.Location = new System.Drawing.Point(422, 238);
-            this.ChkOnlyWhenLens.Name = "ChkOnlyWhenLens";
-            this.ChkOnlyWhenLens.Size = new System.Drawing.Size(151, 22);
-            this.ChkOnlyWhenLens.TabIndex = 81;
-            this.ChkOnlyWhenLens.Tag = "VISIBLEONLYLENS";
-            this.ChkOnlyWhenLens.Text = "Affected by Lens of Truth";
-            this.ChkOnlyWhenLens.UseVisualStyleBackColor = true;
-            this.ChkOnlyWhenLens.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkBox_DBGCol
-            // 
-            this.ChkBox_DBGCol.BoxSize = 18;
-            this.ChkBox_DBGCol.Location = new System.Drawing.Point(422, 557);
-            this.ChkBox_DBGCol.Name = "ChkBox_DBGCol";
-            this.ChkBox_DBGCol.Size = new System.Drawing.Size(95, 22);
-            this.ChkBox_DBGCol.TabIndex = 80;
-            this.ChkBox_DBGCol.Tag = "DEBUGSHOWCOLS";
-            this.ChkBox_DBGCol.Text = "Draw collision";
-            this.ChkBox_DBGCol.UseVisualStyleBackColor = true;
-            this.ChkBox_DBGCol.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkBox_Glow
-            // 
-            this.ChkBox_Glow.BoxSize = 18;
-            this.ChkBox_Glow.Location = new System.Drawing.Point(3, 30);
-            this.ChkBox_Glow.Name = "ChkBox_Glow";
-            this.ChkBox_Glow.Size = new System.Drawing.Size(51, 22);
-            this.ChkBox_Glow.TabIndex = 76;
-            this.ChkBox_Glow.Tag = "GLOW";
-            this.ChkBox_Glow.Text = "Glow";
-            this.ChkBox_Glow.UseVisualStyleBackColor = true;
-            this.ChkBox_Glow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkBox_GenLight
-            // 
-            this.ChkBox_GenLight.BoxSize = 18;
-            this.ChkBox_GenLight.Location = new System.Drawing.Point(3, 5);
-            this.ChkBox_GenLight.Name = "ChkBox_GenLight";
-            this.ChkBox_GenLight.Size = new System.Drawing.Size(96, 22);
-            this.ChkBox_GenLight.TabIndex = 72;
-            this.ChkBox_GenLight.Tag = "LIGHT";
-            this.ChkBox_GenLight.Text = "Generate light";
-            this.ChkBox_GenLight.UseVisualStyleBackColor = true;
-            this.ChkBox_GenLight.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkB_FadeOut
-            // 
-            this.ChkB_FadeOut.BoxSize = 18;
-            this.ChkB_FadeOut.Location = new System.Drawing.Point(584, 190);
-            this.ChkB_FadeOut.Name = "ChkB_FadeOut";
-            this.ChkB_FadeOut.Size = new System.Drawing.Size(158, 22);
-            this.ChkB_FadeOut.TabIndex = 77;
-            this.ChkB_FadeOut.Tag = "FADEOUT";
-            this.ChkB_FadeOut.Text = "Fade out if player far away";
-            this.ChkB_FadeOut.UseVisualStyleBackColor = true;
-            this.ChkB_FadeOut.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Chkb_ReactIfAtt
-            // 
-            this.Chkb_ReactIfAtt.BoxSize = 18;
-            this.Chkb_ReactIfAtt.Location = new System.Drawing.Point(3, 5);
-            this.Chkb_ReactIfAtt.Name = "Chkb_ReactIfAtt";
-            this.Chkb_ReactIfAtt.Size = new System.Drawing.Size(109, 22);
-            this.Chkb_ReactIfAtt.TabIndex = 72;
-            this.Chkb_ReactIfAtt.Tag = "REACTATT";
-            this.Chkb_ReactIfAtt.Text = "React if attacked";
-            this.Chkb_ReactIfAtt.UseVisualStyleBackColor = true;
-            this.Chkb_ReactIfAtt.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Chkb_Opendoors
-            // 
-            this.Chkb_Opendoors.BoxSize = 18;
-            this.Chkb_Opendoors.Location = new System.Drawing.Point(584, 168);
-            this.Chkb_Opendoors.Name = "Chkb_Opendoors";
-            this.Chkb_Opendoors.Size = new System.Drawing.Size(176, 22);
-            this.Chkb_Opendoors.TabIndex = 74;
-            this.Chkb_Opendoors.Tag = "OPENDOORS";
-            this.Chkb_Opendoors.Text = "Opens doors if they\'re on path";
-            this.Chkb_Opendoors.UseVisualStyleBackColor = true;
-            this.Chkb_Opendoors.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkRunJustScript
-            // 
-            this.ChkRunJustScript.BoxSize = 18;
-            this.ChkRunJustScript.Location = new System.Drawing.Point(584, 213);
-            this.ChkRunJustScript.Name = "ChkRunJustScript";
-            this.ChkRunJustScript.Size = new System.Drawing.Size(95, 22);
-            this.ChkRunJustScript.TabIndex = 73;
-            this.ChkRunJustScript.Tag = "JUSTSCRIPT";
-            this.ChkRunJustScript.Text = "Just run script";
-            this.ChkRunJustScript.UseVisualStyleBackColor = true;
-            this.ChkRunJustScript.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Checkbox_HaveCollision
-            // 
-            this.Checkbox_HaveCollision.BackColor = System.Drawing.Color.White;
-            this.Checkbox_HaveCollision.BoxSize = 18;
-            this.Checkbox_HaveCollision.Location = new System.Drawing.Point(8, 5);
-            this.Checkbox_HaveCollision.Name = "Checkbox_HaveCollision";
-            this.Checkbox_HaveCollision.Size = new System.Drawing.Size(89, 22);
-            this.Checkbox_HaveCollision.TabIndex = 21;
-            this.Checkbox_HaveCollision.Tag = "COLLISION";
-            this.Checkbox_HaveCollision.Text = "Has collision";
-            this.Checkbox_HaveCollision.UseVisualStyleBackColor = false;
-            this.Checkbox_HaveCollision.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Checkbox_DrawShadow
-            // 
-            this.Checkbox_DrawShadow.BoxSize = 18;
-            this.Checkbox_DrawShadow.Location = new System.Drawing.Point(9, 3);
-            this.Checkbox_DrawShadow.Name = "Checkbox_DrawShadow";
-            this.Checkbox_DrawShadow.Size = new System.Drawing.Size(96, 22);
-            this.Checkbox_DrawShadow.TabIndex = 22;
-            this.Checkbox_DrawShadow.Tag = "SHADOW";
-            this.Checkbox_DrawShadow.Text = "Casts shadow";
-            this.Checkbox_DrawShadow.UseVisualStyleBackColor = true;
-            this.Checkbox_DrawShadow.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Checkbox_Targettable
-            // 
-            this.Checkbox_Targettable.BackColor = System.Drawing.Color.White;
-            this.Checkbox_Targettable.BoxSize = 18;
-            this.Checkbox_Targettable.Location = new System.Drawing.Point(7, 10);
-            this.Checkbox_Targettable.Name = "Checkbox_Targettable";
-            this.Checkbox_Targettable.Size = new System.Drawing.Size(83, 22);
-            this.Checkbox_Targettable.TabIndex = 39;
-            this.Checkbox_Targettable.Tag = "TARGETTABLE";
-            this.Checkbox_Targettable.Text = "Targettable";
-            this.Checkbox_Targettable.UseVisualStyleBackColor = false;
-            this.Checkbox_Targettable.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Chkb_IgnoreY
-            // 
-            this.Chkb_IgnoreY.BackColor = System.Drawing.Color.White;
-            this.Chkb_IgnoreY.BoxSize = 18;
-            this.Chkb_IgnoreY.Location = new System.Drawing.Point(74, 344);
-            this.Chkb_IgnoreY.Name = "Chkb_IgnoreY";
-            this.Chkb_IgnoreY.Size = new System.Drawing.Size(121, 22);
-            this.Chkb_IgnoreY.TabIndex = 67;
-            this.Chkb_IgnoreY.Tag = "IGNORENODEYAXIS";
-            this.Chkb_IgnoreY.Text = "Ignore node Y Axis";
-            this.Chkb_IgnoreY.UseVisualStyleBackColor = false;
-            this.Chkb_IgnoreY.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Checkbox_Loop
-            // 
-            this.Checkbox_Loop.BackColor = System.Drawing.Color.White;
-            this.Checkbox_Loop.BoxSize = 18;
-            this.Checkbox_Loop.Location = new System.Drawing.Point(7, 344);
-            this.Checkbox_Loop.Name = "Checkbox_Loop";
-            this.Checkbox_Loop.Size = new System.Drawing.Size(50, 22);
-            this.Checkbox_Loop.TabIndex = 41;
-            this.Checkbox_Loop.Tag = "LOOP";
-            this.Checkbox_Loop.Text = "Loop";
-            this.Checkbox_Loop.UseVisualStyleBackColor = false;
-            this.Checkbox_Loop.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Checkbox_AlwaysDraw
-            // 
-            this.Checkbox_AlwaysDraw.BoxSize = 18;
-            this.Checkbox_AlwaysDraw.Location = new System.Drawing.Point(422, 192);
-            this.Checkbox_AlwaysDraw.Name = "Checkbox_AlwaysDraw";
-            this.Checkbox_AlwaysDraw.Size = new System.Drawing.Size(151, 22);
-            this.Checkbox_AlwaysDraw.TabIndex = 70;
-            this.Checkbox_AlwaysDraw.Tag = "DRAWOUTOFCAM";
-            this.Checkbox_AlwaysDraw.Text = "Draw even out of camera";
-            this.Checkbox_AlwaysDraw.UseVisualStyleBackColor = true;
-            this.Checkbox_AlwaysDraw.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Checkbox_AlwaysActive
-            // 
-            this.Checkbox_AlwaysActive.BoxSize = 18;
-            this.Checkbox_AlwaysActive.Location = new System.Drawing.Point(422, 169);
-            this.Checkbox_AlwaysActive.Name = "Checkbox_AlwaysActive";
-            this.Checkbox_AlwaysActive.Size = new System.Drawing.Size(161, 22);
-            this.Checkbox_AlwaysActive.TabIndex = 68;
-            this.Checkbox_AlwaysActive.Tag = "ACTIVE";
-            this.Checkbox_AlwaysActive.Text = "Update even out of camera";
-            this.Checkbox_AlwaysActive.UseVisualStyleBackColor = true;
-            this.Checkbox_AlwaysActive.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // Checkbox_CanPressSwitches
-            // 
-            this.Checkbox_CanPressSwitches.BoxSize = 18;
-            this.Checkbox_CanPressSwitches.Location = new System.Drawing.Point(422, 215);
-            this.Checkbox_CanPressSwitches.Name = "Checkbox_CanPressSwitches";
-            this.Checkbox_CanPressSwitches.Size = new System.Drawing.Size(113, 22);
-            this.Checkbox_CanPressSwitches.TabIndex = 58;
-            this.Checkbox_CanPressSwitches.Tag = "SWITCHES";
-            this.Checkbox_CanPressSwitches.Text = "Presses switches";
-            this.Checkbox_CanPressSwitches.UseVisualStyleBackColor = true;
-            this.Checkbox_CanPressSwitches.CheckedChanged += new System.EventHandler(this.CheckBox_ValueChanged);
-            // 
-            // ChkBox_UseCJK
-            // 
-            this.ChkBox_UseCJK.BoxSize = 18;
-            this.ChkBox_UseCJK.Location = new System.Drawing.Point(756, 29);
-            this.ChkBox_UseCJK.Name = "ChkBox_UseCJK";
-            this.ChkBox_UseCJK.Size = new System.Drawing.Size(47, 22);
-            this.ChkBox_UseCJK.TabIndex = 97;
-            this.ChkBox_UseCJK.Tag = "USECJK";
-            this.ChkBox_UseCJK.Text = "CJK";
-            this.ChkBox_UseCJK.UseVisualStyleBackColor = true;
-            this.ChkBox_UseCJK.CheckedChanged += new System.EventHandler(this.ChkBox_UseCJK_CheckedChanged);
-            // 
-            // MsgTextDefault
-            // 
-            this.MsgTextDefault.AccessibleDescription = "Textbox control";
-            this.MsgTextDefault.AccessibleName = "Fast Colored Text Box";
-            this.MsgTextDefault.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
-            this.MsgTextDefault.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.MsgTextDefault.AutoIndent = false;
-            this.MsgTextDefault.AutoIndentChars = false;
-            this.MsgTextDefault.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
-    "(?<range>:)\\s*(?<range>[^;]+);";
-            this.MsgTextDefault.AutoScrollMinSize = new System.Drawing.Size(2, 12);
-            this.MsgTextDefault.BackBrush = null;
-            this.MsgTextDefault.BackColor = System.Drawing.Color.Gainsboro;
-            this.MsgTextDefault.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MsgTextDefault.CharHeight = 12;
-            this.MsgTextDefault.CharWidth = 6;
-            this.MsgTextDefault.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.MsgTextDefault.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgTextDefault.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MsgTextDefault.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
-            this.MsgTextDefault.IsReplaceMode = false;
-            this.MsgTextDefault.Location = new System.Drawing.Point(0, 0);
-            this.MsgTextDefault.Name = "MsgTextDefault";
-            this.MsgTextDefault.Paddings = new System.Windows.Forms.Padding(0);
-            this.MsgTextDefault.ReadOnly = true;
-            this.MsgTextDefault.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.MsgTextDefault.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgTextDefault.ServiceColors")));
-            this.MsgTextDefault.ShowLineNumbers = false;
-            this.MsgTextDefault.Size = new System.Drawing.Size(25, 100);
-            this.MsgTextDefault.TabIndex = 69;
-            this.MsgTextDefault.Tag = "Default";
-            this.MsgTextDefault.ToolTipDelay = 100;
-            this.MsgTextDefault.WordWrapAutoIndent = false;
-            this.MsgTextDefault.Zoom = 100;
-            // 
-            // MsgText
-            // 
-            this.MsgText.AccessibleDescription = "Textbox control";
-            this.MsgText.AccessibleName = "Fast Colored Text Box";
-            this.MsgText.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
-            this.MsgText.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.MsgText.AutoIndent = false;
-            this.MsgText.AutoIndentChars = false;
-            this.MsgText.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
-    "(?<range>:)\\s*(?<range>[^;]+);";
-            this.MsgText.AutoScrollMinSize = new System.Drawing.Size(2, 12);
-            this.MsgText.BackBrush = null;
-            this.MsgText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MsgText.CharHeight = 12;
-            this.MsgText.CharWidth = 6;
-            this.MsgText.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.MsgText.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MsgText.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
-            this.MsgText.IsReplaceMode = false;
-            this.MsgText.Location = new System.Drawing.Point(0, 0);
-            this.MsgText.Name = "MsgText";
-            this.MsgText.Paddings = new System.Windows.Forms.Padding(0);
-            this.MsgText.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.MsgText.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("MsgText.ServiceColors")));
-            this.MsgText.ShowLineNumbers = false;
-            this.MsgText.Size = new System.Drawing.Size(639, 220);
-            this.MsgText.TabIndex = 68;
-            this.MsgText.Tag = "Default";
-            this.MsgText.ToolTipDelay = 100;
-            this.MsgText.WordWrapAutoIndent = false;
-            this.MsgText.Zoom = 100;
-            this.MsgText.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.MsgText_TextChanged);
-            this.MsgText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MsgText_KeyDown);
-            this.MsgText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
-            this.MsgText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseDoubleClick);
-            // 
-            // MsgTextCJK
-            // 
-            this.MsgTextCJK.AccessibleDescription = "Textbox control";
-            this.MsgTextCJK.AccessibleName = "Fast Colored Text Box";
-            this.MsgTextCJK.AccessibleRole = System.Windows.Forms.AccessibleRole.Text;
-            this.MsgTextCJK.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.MsgTextCJK.AutoIndent = false;
-            this.MsgTextCJK.AutoIndentChars = false;
-            this.MsgTextCJK.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
-    "(?<range>:)\\s*(?<range>[^;]+);";
-            this.MsgTextCJK.AutoScrollMinSize = new System.Drawing.Size(2, 12);
-            this.MsgTextCJK.BackBrush = null;
-            this.MsgTextCJK.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MsgTextCJK.CharCnWidth = 12;
-            this.MsgTextCJK.CharHeight = 12;
-            this.MsgTextCJK.CharWidth = 6;
-            this.MsgTextCJK.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.MsgTextCJK.DefaultMarkerSize = 8;
-            this.MsgTextCJK.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.MsgTextCJK.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MsgTextCJK.FindForm = null;
-            this.MsgTextCJK.FoldingHighlightColor = System.Drawing.Color.LightGray;
-            this.MsgTextCJK.FoldingHighlightEnabled = false;
-            this.MsgTextCJK.Font = new System.Drawing.Font("Cascadia Code", 8.25F);
-            this.MsgTextCJK.GoToForm = null;
-            this.MsgTextCJK.Hotkeys = resources.GetString("MsgTextCJK.Hotkeys");
-            this.MsgTextCJK.IsReplaceMode = false;
-            this.MsgTextCJK.Location = new System.Drawing.Point(0, 0);
-            this.MsgTextCJK.Name = "MsgTextCJK";
-            this.MsgTextCJK.Paddings = new System.Windows.Forms.Padding(0);
-            this.MsgTextCJK.ReplaceForm = null;
-            this.MsgTextCJK.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.MsgTextCJK.ServiceColors = ((FastColoredTextBoxCJK.ServiceColors)(resources.GetObject("MsgTextCJK.ServiceColors")));
-            this.MsgTextCJK.ShowLineNumbers = false;
-            this.MsgTextCJK.Size = new System.Drawing.Size(639, 220);
-            this.MsgTextCJK.TabIndex = 70;
-            this.MsgTextCJK.Tag = "Default";
-            this.MsgTextCJK.ToolTipDelay = 100;
-            this.MsgTextCJK.UseCJK = FastColoredTextBoxCJK.CJKMode.Hanzi;
-            this.MsgTextCJK.Visible = false;
-            this.MsgTextCJK.WordWrapAutoIndent = false;
-            this.MsgTextCJK.Zoom = 100;
-            this.MsgTextCJK.TextChanged += new System.EventHandler<FastColoredTextBoxCJK.TextChangedEventArgs>(this.MsgTextCJK_TextChanged);
-            this.MsgTextCJK.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MsgText_KeyDown);
-            this.MsgTextCJK.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MsgText_MouseClick);
-            this.MsgTextCJK.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MsgTextCJK_MouseDoubleClick);
-            // 
-            // chkBox_ShowDefaultLanguagePreview
-            // 
-            this.chkBox_ShowDefaultLanguagePreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkBox_ShowDefaultLanguagePreview.BoxSize = 18;
-            this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(470, 30);
-            this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
-            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(149, 22);
-            this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
-            this.chkBox_ShowDefaultLanguagePreview.Tag = "";
-            this.chkBox_ShowDefaultLanguagePreview.Text = "Show default loc preview";
-            this.chkBox_ShowDefaultLanguagePreview.UseVisualStyleBackColor = true;
-            this.chkBox_ShowDefaultLanguagePreview.CheckedChanged += new System.EventHandler(this.ChkBox_ShowDefaultLanguagePreview_CheckedChanged);
-            // 
-            // ChkBox_UseSpaceFont
-            // 
-            this.ChkBox_UseSpaceFont.BoxSize = 18;
-            this.ChkBox_UseSpaceFont.Location = new System.Drawing.Point(621, 30);
-            this.ChkBox_UseSpaceFont.Name = "ChkBox_UseSpaceFont";
-            this.ChkBox_UseSpaceFont.Size = new System.Drawing.Size(134, 22);
-            this.ChkBox_UseSpaceFont.TabIndex = 73;
-            this.ChkBox_UseSpaceFont.Tag = "USESPACEFONT";
-            this.ChkBox_UseSpaceFont.Text = "Space width from font";
-            this.ChkBox_UseSpaceFont.UseVisualStyleBackColor = true;
-            this.ChkBox_UseSpaceFont.CheckedChanged += new System.EventHandler(this.ChkBox_UseSpaceFont_CheckedChanged);
-            // 
-            // MessagesGrid
-            // 
-            this.MessagesGrid.AllowUserToAddRows = false;
-            this.MessagesGrid.AllowUserToDeleteRows = false;
-            this.MessagesGrid.AllowUserToResizeColumns = false;
-            this.MessagesGrid.AllowUserToResizeRows = false;
-            this.MessagesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.MessagesGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.MessagesGrid.BackgroundColor = System.Drawing.Color.White;
-            this.MessagesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.MessagesGrid.ColumnHeadersVisible = false;
-            this.MessagesGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn2});
-            this.MessagesGrid.Location = new System.Drawing.Point(3, 3);
-            this.MessagesGrid.MultiSelect = false;
-            this.MessagesGrid.Name = "MessagesGrid";
-            this.MessagesGrid.ReadOnly = true;
-            this.MessagesGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.MessagesGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.MessagesGrid.Size = new System.Drawing.Size(189, 520);
-            this.MessagesGrid.TabIndex = 3;
-            this.MessagesGrid.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.MessagesGrid_CellPainting);
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewTextBoxColumn2.HeaderText = "Message title";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // CodeParamsTooltip
             // 
             this.CodeParamsTooltip.AutoPopDelay = 6000;
@@ -4859,15 +4860,18 @@ namespace NPC_Maker
             this.MainSplitPanel.ResumeLayout(false);
             this.Panel_NPCList.ResumeLayout(false);
             this.Panel_NPCList.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
             this.Panel_NPCData.ResumeLayout(false);
             this.TabControl.ResumeLayout(false);
             this.Tab1_Data.ResumeLayout(false);
             this.Tab1_Data.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpFileStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpAlpha)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_ZModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Hierarchy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_YModelOffs)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_XModelOffs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_Scale)).EndInit();
             this.Tab2_ExtraData.ResumeLayout(false);
@@ -4877,6 +4881,7 @@ namespace NPC_Maker
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSegment)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_TalkSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_BlinkSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
             this.Tab3_BehaviorData.ResumeLayout(false);
             this.Tab3_BehaviorData.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumUpDown_AnimInterpFrames)).EndInit();
@@ -4944,7 +4949,10 @@ namespace NPC_Maker
             ((System.ComponentModel.ISupportInitialize)(this.MsgEntrySplitContainer)).EndInit();
             this.MsgEntrySplitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Comment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Comment_Loc)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MsgTextCJK)).EndInit();
             this.PanelMsgPreview.ResumeLayout(false);
             this.PreviewSplitContainer.Panel1.ResumeLayout(false);
             this.PreviewSplitContainer.Panel2.ResumeLayout(false);
@@ -4952,20 +4960,13 @@ namespace NPC_Maker
             this.PreviewSplitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreviewOrig)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MsgPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.Tab5_Scripts.ResumeLayout(false);
             this.Tab6_EmbeddedOverlay.ResumeLayout(false);
             this.Tab6_EmbeddedOverlay.PerformLayout();
             this.ContextMenuStrip.ResumeLayout(false);
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_NPCs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ColorsDataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid_Animations)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_ExtraDLists)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgTextDefault)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgText)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MsgTextCJK)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.MessagesGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -4992,7 +4993,7 @@ namespace NPC_Maker
         private System.Windows.Forms.ToolStripMenuItem questItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem itemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem playerMasksToolStripMenuItem;
-        private System.Windows.Forms.TabControl TabControl;
+        private TabControl_MonoColorFix TabControl;
         private System.Windows.Forms.TabPage Tab1_Data;
         private NPC_Maker.Controls.BigCheckBox Checkbox_EnvColor;
         private System.Windows.Forms.Button Button_EnvironmentColorPreview;
@@ -5219,13 +5220,13 @@ namespace NPC_Maker
         private System.Windows.Forms.Label Label_OtherArguments;
         private System.Windows.Forms.TextBox Textbox_CodeEditorArgs;
         private System.Windows.Forms.TabPage Tab5_Scripts;
-        private System.Windows.Forms.TabControl TabControl_Scripts;
+        private TabControl_MonoColorFix TabControl_Scripts;
         private System.Windows.Forms.Button Button_CCompile;
         private System.Windows.Forms.Label Lbl_DBGOpts;
         private NPC_Maker.Controls.BigCheckBox ChkBox_DBGLookAt;
         private NPC_Maker.Controls.BigCheckBox ChkBox_DBGPrint;
         private NPC_Maker.Controls.BigCheckBox ChkBox_DBGDlist;
-        private System.Windows.Forms.TabControl TabControl_Segments;
+        private TabControl_MonoColorFix TabControl_Segments;
         private System.Windows.Forms.TabPage TabPage_Segment_8;
         private System.Windows.Forms.TabPage TabPage_Segment_9;
         private System.Windows.Forms.TabPage TabPage_Segment_A;
