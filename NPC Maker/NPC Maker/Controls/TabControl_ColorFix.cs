@@ -11,7 +11,7 @@ namespace NPC_Maker.Controls
     {
         public TabControl_ColorFix()
         {
-            if (!Program.Settings.ChangeGUIColors)
+            if (Program.Settings == null || !Program.Settings.ChangeGUIColors)
                 return;
 
             SetStyle(ControlStyles.Opaque, false);
@@ -24,7 +24,7 @@ namespace NPC_Maker.Controls
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
-            if (!Program.Settings.ChangeGUIColors)
+            if (Program.Settings == null || !Program.Settings.ChangeGUIColors)
                 return;
 
             Color Back = Program.Settings.ChangeGUIColors ? Program.Settings.BGColor : BackColor;
@@ -35,7 +35,7 @@ namespace NPC_Maker.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (!Program.Settings.ChangeGUIColors)
+            if (Program.Settings == null || !Program.Settings.ChangeGUIColors)
             {
                 base.OnPaint(e);
                 return;
