@@ -12,6 +12,7 @@ namespace NPC_Maker.Controls
     {
         public Font Font { get; set; } = new Font("Segoe UI", 10, FontStyle.Italic);
         public bool ShowRight = false;
+        private bool IsVisible = false;
 
         public BigToolTip()
         {
@@ -25,12 +26,16 @@ namespace NPC_Maker.Controls
             base.SetToolTip(control, text);
 
             control.MouseEnter += (s, e) => ShowLeft(control);
-            control.MouseLeave += (s, e) => Hide(control);
+            control.MouseLeave += (s, e) =>
+            {
+                Hide(control);
+                IsVisible = false;
+            };
         }
 
         private void ShowLeft(Control control)
         {
-            if (!ShowRight)
+            if (!ShowRight && !IsVisible)
             {
                 string text = GetToolTip(control);
                 if (string.IsNullOrEmpty(text)) return;
@@ -47,6 +52,7 @@ namespace NPC_Maker.Controls
                 int y = screenPos.Y;
 
                 Show(text, control, control.PointToClient(new Point(x, y)), this.AutoPopDelay);
+                IsVisible = true;
             }
         }
 

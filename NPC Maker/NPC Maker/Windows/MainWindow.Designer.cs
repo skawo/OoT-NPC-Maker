@@ -3512,6 +3512,7 @@ namespace NPC_Maker
             this.MsgEntrySplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MsgEntrySplitContainer.Location = new System.Drawing.Point(0, 0);
             this.MsgEntrySplitContainer.Name = "MsgEntrySplitContainer";
+            this.MsgEntrySplitContainer.Resize += MsgEntrySplitContainer_Resize;
             // 
             // MsgEntrySplitContainer.Panel1
             // 

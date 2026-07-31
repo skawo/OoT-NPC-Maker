@@ -141,12 +141,18 @@ namespace NPC_Maker
             {
                 SplitContainer1_Panel1_SizeChanged(MainSplitPanel, null);
                 MsgTabSplitContainer_SizeChanged(MsgTabSplitContainer, EventArgs.Empty);
+                SplitMsgContainer_Paint(null, null);
             };
         }
 
         private void MsgPreview_MouseClick(object sender, MouseEventArgs e)
         {
             (sender as PictureBox).Focus();
+        }
+
+        private void MsgEntrySplitContainer_Resize(object sender, System.EventArgs e)
+        {
+            SplitMsgContainer_Paint(null, null);
         }
 
         private void SetupPctBoxScrollbars()
