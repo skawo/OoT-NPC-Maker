@@ -4105,6 +4105,7 @@ namespace NPC_Maker
             }
 
             RequestPreviewUpdate();
+            SplitMsgContainer_Paint(null, null);
         }
 
         private void Btn_MsgMoveUp_Click(object sender, EventArgs e)
