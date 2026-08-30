@@ -332,7 +332,7 @@ namespace NPC_Maker
         public int Type { get; set; }
         public int Position { get; set; }
 
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonIgnore]
         public List<byte> TempBytes { get; set; } // This is only temporarily used as a container during compile
 
         public MessageEntry()
