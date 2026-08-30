@@ -608,6 +608,7 @@ namespace NPC_Maker
             catch (Exception ex)
             {
                 ShowMsg(cliMode, $"Error writing file: {ex.Message}");
+                return false;
             }
             finally
             {
