@@ -106,6 +106,7 @@ namespace NPC_Maker
             catch (Exception ex)
             {
                 Program.ConsoleWriteLineS($"Failed to save JSON: {ex.Message}");
+                return false;
             }
         }
 
@@ -456,9 +457,9 @@ namespace NPC_Maker
                         var cs = new RecompilationStatus();
                         string compErrors;
 
-                            ClearHeaderValues(entry);
-                            ProcessCCode(data, entry, entryID, prefix, cacheStatus,
-                                         cCacheFiles, scriptCacheFiles, results, ref cs, out compErrors);
+                        ClearHeaderValues(entry);
+                        ProcessCCode(data, entry, entryID, prefix, cacheStatus,
+                                     cCacheFiles, scriptCacheFiles, results, ref cs, out compErrors);
 
                         bool extDataExists = CheckExtDataCache(entry, prefix, scriptCacheFiles, out string extDataFile);
 
@@ -491,12 +492,11 @@ namespace NPC_Maker
 
             Program.ConsoleWriteLineS("\nPre-processing done!");
 
-                ret = SaveBinaryFile(outPath, outputDepsPath, ref data, progress, baseDefines,
-                      new CacheStatus { CCacheInvalid = false, CacheInvalid = false }, results, cliMode);
+            ret = SaveBinaryFile(outPath, outputDepsPath, ref data, progress, baseDefines,
+                  new CacheStatus { CCacheInvalid = false, CacheInvalid = false }, results, cliMode);
 
-                CCode.CleanupStandardCompilationArtifacts();
-                Program.CompileInProgress = false;
-            });
+            CCode.CleanupStandardCompilationArtifacts();
+            Program.CompileInProgress = false;
 
             return ret;
         }

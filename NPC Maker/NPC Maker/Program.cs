@@ -12,11 +12,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
 
 namespace NPC_Maker
 {
@@ -72,21 +70,7 @@ namespace NPC_Maker
             EnsureDirectoriesExist();
             LoadSettings();
 
-            if (!hasArgs)
-            {
-                // Create this in memory, so it gets cached.
-                TaskEx.Run(() => new ZeldaMessage.MessagePreview(ZeldaMessage.Data.BoxType.Black, new byte[0]));
-
-                try
-                {
-                    DropDownMenuScrollWheelHandler.Enable(true);
-                }
-                catch { }
-
-                return RunGUI();
-            }
-            else
-                return RunCLI(args);
+            return RunCLI(args);
         }
 
         private static void DetectRuntime()
@@ -133,45 +117,6 @@ namespace NPC_Maker
         private static void LoadSettings()
         {
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
-        }
-
-        private static int RunGUI()
-        {
-            string fileToOpen = GetInitialFileToOpen();
-
-            while (true)
-            {
-                mw = new MainWindow(fileToOpen);
-                mw.Shown += (s, e) => 
-                { 
-                    mw.Activate(); 
-                    mw.BringToFront(); 
-                };
-
-                Application.Run(mw);
-
-                FileOps.SaveSettingsJSON(SettingsFilePath, Program.Settings);
-
-                if (mw.DialogResult != DialogResult.Retry)
-                    break;
-
-                fileToOpen = mw.OpenedPath;
-            }
-
-            return 0;
-        }
-
-        private static string GetInitialFileToOpen()
-        {
-            bool hasBackup = File.Exists("backup");
-            if (!hasBackup) return "";
-
-            bool loadBackup = BigMessageBox.Show(
-                "NPCMaker was not closed properly the last time it was run. Load auto-saved backup?",
-                "Autosaved backup exists",
-                MessageBoxButtons.YesNo) == DialogResult.Yes;
-
-            return loadBackup ? "backup" : "";
         }
 
         private static int RunCLI(string[] args)
