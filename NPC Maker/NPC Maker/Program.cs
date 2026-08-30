@@ -13,11 +13,13 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZeldaMessage;
+
 
 namespace NPC_Maker
 {
@@ -61,7 +63,7 @@ namespace NPC_Maker
         private static extern bool FreeConsole();
 
         [STAThread]
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             DetectRuntime();
             Application.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
@@ -95,10 +97,10 @@ namespace NPC_Maker
                 }
                 catch { }
 
-                RunGUI();
+                return RunGUI();
             }
             else
-                RunCLI(args);
+                return RunCLI(args);
         }
 
         private static void DetectRuntime()
@@ -198,7 +200,7 @@ namespace NPC_Maker
             Settings = FileOps.ParseSettingsJSON(SettingsFilePath);
         }
 
-        private static void RunGUI()
+        private static int RunGUI()
         {
             string fileToOpen = GetInitialFileToOpen();
 
@@ -220,6 +222,8 @@ namespace NPC_Maker
 
                 fileToOpen = mw.OpenedPath;
             }
+
+            return 0;
         }
 
         private static string GetInitialFileToOpen()
@@ -235,20 +239,65 @@ namespace NPC_Maker
             return loadBackup ? "backup" : "";
         }
 
-        private static void RunCLI(string[] args)
+        private static int RunCLI(string[] args)
         {
             bool isCompileCommand = args.Length >= 4 && args.Length <= 5 && args[0].ToUpper() == "-C";
+            bool isTableCommand = args.Length >= 5 && args.Length <= 6 && args[0].ToUpper() == "-M";
             bool isConvertCommand = args.Length >= 2;
 
             if (isCompileCommand)
-                RunCompileCommand(args);
+                return RunCompileCommand(args);
+            else if (isTableCommand)
+                return RunTableCommand(args);
             else if (isConvertCommand)
-                RunConvertCommand(args);
+                return RunConvertCommand(args);
             else
-                PrintUsage();
+                return PrintUsage();
         }
 
-        private static void RunCompileCommand(string[] args)
+        private static int RunTableCommand(string[] args)
+        {
+            try
+            {
+                NPCFile inFile = null;
+                string jsonText = "";
+                JsonPath = args[1];
+                int actorID = Convert.ToInt32(args[2]);
+                string outPathTable = args[3];
+                string outPathStrings = args[4];
+
+                jsonText = File.ReadAllText(JsonPath);
+                inFile = FileOps.ParseNPCJsonFile("", jsonText);
+
+                Dicts.LoadDicts();
+                Dicts.ReloadLanguages(inFile.Languages);
+                Program.Settings.GameVersion = inFile.GameVersion;
+
+                if (inFile.Entries.Count < actorID)
+                    throw new Exception($"Actor ID {actorID} not present in JSON");
+
+                ConsoleWriteLineS($"Converting \"{Path.GetFileName(args[1])}\", actor ID {actorID} to {outPathTable} and {outPathStrings}...");
+
+                List<byte> msgTable = new List<byte>();
+                List<byte> msgData = new List<byte>();
+
+                inFile.Entries[actorID].ConvertMessages(inFile.Languages, out msgTable, out msgData);
+                File.WriteAllBytes(outPathTable, msgTable.ToArray());
+                File.WriteAllBytes(outPathStrings, msgData.ToArray());
+
+                if (!Program.IsRunningUnderMono)
+                    Console.WriteLine("Press ENTER to exit...");
+
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error converting to message table: " + ex.Message);
+                return 1;
+            }
+        }
+
+        private static int RunCompileCommand(string[] args)
         {
             ConsoleWriteLineS($"Compiling \"{Path.GetFileName(args[1])}\" to {args[3]}...");
 
@@ -267,12 +316,15 @@ namespace NPC_Maker
             string compileFlags = args.Length > 4 ? args[4].Trim('"') : string.Empty;
 
             List<CSymbol> symbols = null;
-            CCode.Compile(inCFile,
+            byte[] res = CCode.Compile(inCFile,
                           linkerFiles,
                           outZovl, 
                           compileFlags, 
                           ref compileMsgs, 
                           out symbols);
+
+            if (res == null)
+                return 1;
 
             if (symbols != null)
             {
@@ -288,12 +340,15 @@ namespace NPC_Maker
 
             if (!Program.IsRunningUnderMono)
                 Console.WriteLine("Press ENTER to exit...");
+
+            return 0;
         }
 
-        private static void RunConvertCommand(string[] args)
+        private static int RunConvertCommand(string[] args)
         {
             NPCFile inFile = null;
             string jsonText = "";
+            bool res = false;
 
             try
             {
@@ -313,53 +368,60 @@ namespace NPC_Maker
                 var cacheStatus = FileOps.GetCacheStatus(ref inFile);
 
                 if (Program.Settings.CompileInParallel)
-                    RunParallelCompile(outPath, outDeps, cacheStatus, inFile);
+                    res = RunParallelCompile(outPath, outDeps, cacheStatus, inFile);
                 else
-                    RunSequentialCompile(outPath, outDeps, cacheStatus, ref inFile);
+                    res = RunSequentialCompile(outPath, outDeps, cacheStatus, ref inFile);
             }
             catch (Exception ex) when (inFile == null)
             {
                 Console.WriteLine($"Error reading input JSON: {ex.Message}");
-                return;
+                return 1;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error writing output: {ex.Message}");
-                return;
+                return 1;
             }
 
             string newJson = FileOps.ProcessNPCJSON(ref inFile);
 
-            if (!String.Equals(jsonText, newJson)) 
-                FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
+            if (!String.Equals(jsonText, newJson))
+                res = FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
 
             if (!Program.IsRunningUnderMono)
                 Console.WriteLine("Press ENTER to exit...");
+
+            return res ? 0 : 1;
         }
 
-        private static void RunParallelCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, NPCFile inFile)
+        private static bool RunParallelCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, NPCFile inFile)
         {
             Program.CompileInProgress = true;
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, inFile, cacheStatus, null, true);
+            var res = FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, inFile, cacheStatus, null, true);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             while (Program.CompileInProgress) {}
+            return res.Result;
         }
 
-        private static void RunSequentialCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, ref NPCFile inFile)
+        private static bool RunSequentialCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, ref NPCFile inFile)
         {
+            bool res = false;
             var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
 
-            FileOps.SaveBinaryFile(outputPath, outputDepsPath, ref inFile, null, baseDefines, cacheStatus, null, true);
+            res = FileOps.SaveBinaryFile(outputPath, outputDepsPath, ref inFile, null, baseDefines, cacheStatus, null, true);
             CCode.CleanupStandardCompilationArtifacts();
+            return res;
         }
 
-        private static void PrintUsage()
+        private static int PrintUsage()
         {
             Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps] [--silent]");
             Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c InputCFile OutputZovl [ExtraLinkerFiles|none] [\"COMPILEFLAGS\"] [--silent]");
+            Console.WriteLine("Usage to make msgtable: \"NPC Maker.exe\" -m InputJson InputActorId OutputTable OutputStrings [--silent]");
             Console.WriteLine("Press ENTER to exit...");
+            return 1;
         }
 
         public static void ConsoleWriteLineS(string s = "")
