@@ -91,7 +91,7 @@ namespace NPC_Maker
             }
         }
 
-        public static void SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null)
+        public static bool SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null, bool isBackup = false)
         {
             try
             {
@@ -100,6 +100,8 @@ namespace NPC_Maker
 
                 if (json != null)
                     File.WriteAllText(path, json);
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -420,12 +422,13 @@ namespace NPC_Maker
 
         // ── Compilation ──────────────────────────────────────────────────
 
-        public static void PreprocessCodeAndScripts(string outPath, string outputDepsPath, NPCFile data,
+        public static async Task<bool> PreprocessCodeAndScripts(string outPath, string outputDepsPath, NPCFile data,
                                                           CacheStatus cacheStatus, IProgress<ProgressReport> progress, bool cliMode)
         {
             float progressPer = 100f / data.Entries.Count;
             float curProgress = 0f;
             int lastReported = 0;
+            bool ret = false;
 
             Program.ConsoleWriteS("Compiling...");
 
@@ -488,20 +491,24 @@ namespace NPC_Maker
 
             Program.ConsoleWriteLineS("\nPre-processing done!");
 
-            SaveBinaryFile(outPath, outputDepsPath, ref data, progress, baseDefines,
-                           new CacheStatus { CCacheInvalid = false, CacheInvalid = false }, results, cliMode);
+                ret = SaveBinaryFile(outPath, outputDepsPath, ref data, progress, baseDefines,
+                      new CacheStatus { CCacheInvalid = false, CacheInvalid = false }, results, cliMode);
 
-            CCode.CleanupStandardCompilationArtifacts();
+                CCode.CleanupStandardCompilationArtifacts();
+                Program.CompileInProgress = false;
+            });
+
+            return ret;
         }
 
-        public static void SaveBinaryFile(string outPath, string outputDepsPath, ref NPCFile data, IProgress<ProgressReport> progress, string baseDefines,
+        public static bool SaveBinaryFile(string outPath, string outputDepsPath, ref NPCFile data, IProgress<ProgressReport> progress, string baseDefines,
                                          CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles, bool cliMode)
         {
             if (!data.Entries.Any())
             {
                 ShowMsg(cliMode, "Nothing to save.");
                 Program.CompileThereWereErrors = false;
-                return;
+                return false;
             }
 
             try
@@ -593,7 +600,7 @@ namespace NPC_Maker
                         $"There are errors in NPC: {string.Join(",", parseErrors.Distinct())}");
 
                     progress?.Report(new ProgressReport("Done!", 100));
-                    return;
+                    return false;
                 }
 
                 WriteOutput(outPath, outputDepsPath, data, compilationData.ToList(), progress, cliMode, ref offset);
@@ -606,6 +613,8 @@ namespace NPC_Maker
             {
                 Program.CompileInProgress = false;
             }
+
+            return true;
         }
 
         // ── Entry Building ────────────────────────────────────────────────────────

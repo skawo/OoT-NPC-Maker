@@ -305,6 +305,77 @@ namespace NPC_Maker
             FileStartHeaderDefinition = "";
         }
 
+        public void ConvertMessages(List<string> Languages, out List<byte> msgTable, out List<byte> msgData)
+        {
+            msgTable = new List<byte>();
+            msgData = new List<byte>();
+
+            UInt16 id = 0;
+            int numLanguages = Localization.Count() + 1;
+            int locOffset = 65532 / (Languages.Count + 1);
+
+            foreach (MessageEntry msg in Messages)
+            {
+                if (id >= locOffset)
+                    throw new Exception("Too many messages.");
+
+                var bytes = msg.ToBytes(Lists.DefaultLanguage);
+                Helpers.Ensure4ByteAlign(bytes);
+                msgData.AddRange(bytes);
+
+                msgTable.AddRange(msg.MakeHeaderEntry(id, msgData.Count - bytes.Count));
+
+                int locId = 1;
+
+                foreach (string ln in Languages)
+                {
+                    LocalizationEntry loc = Localization.Find(x => x.Language == ln);
+                    MessageEntry msgLoc = null;
+
+                    if (loc != null)
+                        msgLoc = loc.Messages.Find(x => x.Name == msg.Name);
+
+                    if (msgLoc == null)
+                    {
+                        msgLoc = new MessageEntry();
+                        msgLoc.MessageText = $"NO MESSAGE ({loc.Language})";
+                    }
+
+                    var bytesLoc = msgLoc.ToBytes(loc.Language);
+                    Helpers.Ensure4ByteAlign(bytesLoc);
+                    msgData.AddRange(bytesLoc);
+
+                    UInt16 localizedId = (UInt16)((locId * locOffset) + id);
+                    msgTable.AddRange(msgLoc.MakeHeaderEntry(localizedId, msgData.Count - bytesLoc.Count));
+
+                    locId++;
+                }
+
+                id++;
+
+                // Skip message ID 11A, since it's used by NPC Maker...
+                if (id == 0x11A)
+                    id++;
+            }
+
+            // Add dummy NPC Maker message entry if it doesn't already exist
+            MessageEntry msgDummy = new MessageEntry();
+            msgDummy.MessageText = "011a NPC MAKER DUMMY MSG";
+            var bytesDummy = msgDummy.ToBytes(Lists.DefaultLanguage);
+            Helpers.Ensure4ByteAlign(bytesDummy);
+
+            msgData.AddRange(bytesDummy);
+            msgTable.AddRange(msgDummy.MakeHeaderEntry(0x11A, msgData.Count - bytesDummy.Count));
+
+            msgDummy.MessageText = "End!";
+            bytesDummy = msgDummy.ToBytes(Lists.DefaultLanguage);
+            Helpers.Ensure4ByteAlign(bytesDummy);
+
+            msgData.AddRange(bytesDummy);
+            msgTable.AddRange(msgDummy.MakeHeaderEntry(UInt16.MaxValue - 2, msgData.Count - bytesDummy.Count));
+            msgTable.AddRange(msgDummy.MakeHeaderEntry(UInt16.MaxValue, 0));
+        }
+
         public void ClearHeaderValues()
         {
             if (!String.IsNullOrWhiteSpace(FileStartHeaderDefinition))
