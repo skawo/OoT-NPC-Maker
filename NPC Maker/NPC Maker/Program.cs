@@ -248,21 +248,20 @@ namespace NPC_Maker
             if (isCompileCommand)
                 return RunCompileCommand(args);
             else if (isTableCommand)
-                return RunTableCommand(args);
+                return RunMessageTableCommand(args);
             else if (isConvertCommand)
                 return RunConvertCommand(args);
             else
                 return PrintUsage();
         }
 
-        private static int RunTableCommand(string[] args)
+        private static int RunMessageTableCommand(string[] args)
         {
             try
             {
                 NPCFile inFile = null;
                 string jsonText = "";
                 JsonPath = args[1];
-                int actorID = Convert.ToInt32(args[2]);
                 string outPathTable = args[3];
                 string outPathStrings = args[4];
 
@@ -273,8 +272,11 @@ namespace NPC_Maker
                 Dicts.ReloadLanguages(inFile.Languages);
                 Program.Settings.GameVersion = inFile.GameVersion;
 
-                if (inFile.Entries.Count < actorID)
-                    throw new Exception($"Actor ID {actorID} not present in JSON");
+                if (!Int32.TryParse(args[2], out int actorID))
+                    actorID = inFile.Entries.FindIndex(x => x.NPCName == args[2]);
+
+                if (inFile.Entries.Count < actorID || actorID < 0)
+                    throw new Exception($"Actor ID {args[2]} not present in JSON");
 
                 ConsoleWriteLineS($"Converting \"{Path.GetFileName(args[1])}\", actor ID {actorID} to {outPathTable} and {outPathStrings}...");
 
