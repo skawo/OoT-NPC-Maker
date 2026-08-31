@@ -155,7 +155,7 @@ namespace NPC_Maker
                 if (!Int32.TryParse(args[2], out int actorID))
                     actorID = inFile.Entries.FindIndex(x => x.NPCName == args[2]);
 
-                if (inFile.Entries.Count < actorID || actorID < 0)
+                if (inFile.Entries.Count <= actorID || actorID < 0)
                     throw new Exception($"Actor ID {args[2]} not present in JSON");
 
                 ConsoleWriteLineS($"Converting \"{Path.GetFileName(args[1])}\", actor ID {actorID} to {outPathTable} and {outPathStrings}...");
