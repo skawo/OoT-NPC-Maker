@@ -1668,7 +1668,7 @@ namespace NPC_Maker
 
         private void FileMenu_Exit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.Close();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
