@@ -3512,6 +3512,7 @@ namespace NPC_Maker
             this.MsgEntrySplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MsgEntrySplitContainer.Location = new System.Drawing.Point(0, 0);
             this.MsgEntrySplitContainer.Name = "MsgEntrySplitContainer";
+            this.MsgEntrySplitContainer.Resize += MsgEntrySplitContainer_Resize;
             // 
             // MsgEntrySplitContainer.Panel1
             // 
@@ -3771,7 +3772,7 @@ namespace NPC_Maker
             this.chkBox_ShowDefaultLanguagePreview.BoxSize = 18;
             this.chkBox_ShowDefaultLanguagePreview.Location = new System.Drawing.Point(470, 30);
             this.chkBox_ShowDefaultLanguagePreview.Name = "chkBox_ShowDefaultLanguagePreview";
-            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(149, 22);
+            this.chkBox_ShowDefaultLanguagePreview.Size = new System.Drawing.Size(150, 22);
             this.chkBox_ShowDefaultLanguagePreview.TabIndex = 92;
             this.chkBox_ShowDefaultLanguagePreview.Tag = "";
             this.chkBox_ShowDefaultLanguagePreview.Text = "Show default loc preview";
