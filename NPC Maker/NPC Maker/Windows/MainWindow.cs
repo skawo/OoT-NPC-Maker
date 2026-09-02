@@ -26,6 +26,8 @@ namespace NPC_Maker
     {
         public string OpenedPath = "";
 
+        public DateTime OpenedFileLastWritten;
+
         private NPCFile EditedFile = null;
         private NPCEntry SelectedEntry = null;
         private int SelectedIndex = -1;
@@ -684,6 +686,7 @@ namespace NPC_Maker
             if (EditedFile != null)
             {
                 OpenedPath = FilePath;
+                OpenedFileLastWritten = Helpers.TryGetLastDatetimeWritten(FilePath);
                 Program.JsonPath = OpenedPath;
                 Panel_Editor.Enabled = true;
 
@@ -1416,6 +1419,21 @@ namespace NPC_Maker
             }
         }
 
+        private bool CheckOverwriteExternalChanges(string path)
+        {
+            DateTime curLastWrite = Helpers.TryGetLastDatetimeWritten(OpenedPath);
+
+            if (curLastWrite > OpenedFileLastWritten)
+            {
+                DialogResult Res = BigMessageBox.Show("File may have been edited externally. Possible data loss may occur. Overwrite anyway?", "Detected external changes", MessageBoxButtons.YesNo);
+
+                if (Res != DialogResult.Yes)
+                    return false;
+            }
+
+            return true;
+        }
+
         private async void FileMenu_Save_Click(object sender, EventArgs e)
         {
             if (EditedFile == null)
@@ -1425,8 +1443,12 @@ namespace NPC_Maker
                 FileMenu_SaveAs_Click(this, null);
             else
             {
+                if (!CheckOverwriteExternalChanges(OpenedPath))
+                    return;
+
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 await RunSave(OpenedPath);
+                OpenedFileLastWritten = Helpers.TryGetLastDatetimeWritten(OpenedPath);
             }
         }
 
@@ -1462,6 +1484,9 @@ namespace NPC_Maker
                 SaveAs_Sync(this, null);
             else
             {
+                if (!CheckOverwriteExternalChanges(OpenedPath))
+                    return;
+
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 RunSaveSync(OpenedPath);
             }

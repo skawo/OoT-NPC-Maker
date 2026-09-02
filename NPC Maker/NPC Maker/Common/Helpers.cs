@@ -21,6 +21,22 @@ namespace NPC_Maker
     public static class Helpers
     {
 
+        public static DateTime TryGetLastDatetimeWritten(string file)
+        {
+            DateTime dt = DateTime.Now;
+
+            try
+            {
+                dt = File.GetLastWriteTime(file);
+            }
+            catch
+            {
+
+            }
+
+            return dt;
+        }
+
         public static void PutIntoClipboard(string s)
         {
             if (Program.IsRunningUnderMono)
