@@ -722,6 +722,7 @@ namespace NPC_Maker
 
         public List<string> TextLines { get; set; }
 
+        [JsonIgnore]
         public List<string> ParseErrors { get; set; }
         public string Name { get; set; }
 
