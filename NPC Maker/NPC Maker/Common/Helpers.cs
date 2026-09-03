@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using NPC_Maker.Common;
-using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
