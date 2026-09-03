@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using NPC_Maker.Common;
+using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -44,11 +46,6 @@ namespace NPC_Maker
             return Regex.Replace(s, @"\x1B\[[^@-~]*[@-~]", "");
         }
 
-        public static float GetScaleFontSize(float baseSize = 8.25f)
-        {
-            return (baseSize * Program.Settings.GUIScale);
-        }
-
         public static string NormalizeExtPath(string path)
         {
             // Always replace the longer (more specific) path first
@@ -62,18 +59,6 @@ namespace NPC_Maker
                 path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Lists.ProgramPathToken);
                 path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
             }
-            return path;
-        }
-
-        public static string MakePathRelativeToProjectPath(string path)
-        {
-            string projectPath = Path.GetFullPath(Program.Settings.ProjectPath);
-            string fullPath = Path.GetFullPath(path);
-
-            Uri projectUri = new Uri(projectPath.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
-            Uri fileUri = new Uri(fullPath);
-            path = Uri.UnescapeDataString(projectUri.MakeRelativeUri(fileUri).ToString())
-                       .Replace('/', Path.DirectorySeparatorChar);
             return path;
         }
 
@@ -97,6 +82,18 @@ namespace NPC_Maker
             return path;
         }
 
+        public static string MakePathRelativeToProjectPath(string path)
+        {
+            string projectPath = Path.GetFullPath(Program.Settings.ProjectPath);
+            string fullPath = Path.GetFullPath(path);
+
+            Uri projectUri = new Uri(projectPath.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
+            Uri fileUri = new Uri(fullPath);
+            path = Uri.UnescapeDataString(projectUri.MakeRelativeUri(fileUri).ToString())
+                       .Replace('/', Path.DirectorySeparatorChar);
+            return path;
+        }
+
         public static string TruncatePath(string path, int maxLength = 60)
         {
             if (path.Length <= maxLength) return path;
@@ -110,54 +107,6 @@ namespace NPC_Maker
             return path.Substring(0, keepLength) + ellipsis + fileName;
         }
 
-        public static UInt32 HexConvertToUInt32(string value)
-        {
-            if (value.IsHex())
-                return Convert.ToUInt32(value, 16);
-            else
-                return Convert.ToUInt32(value);
-        }
-
-        public static UInt16 HexConvertToUInt16(string value)
-        {
-            if (value.IsHex())
-                return Convert.ToUInt16(value, 16);
-            else
-                return Convert.ToUInt16(value);
-        }
-
-        public static byte HexConvertToByte(string value)
-        {
-            if (value.IsHex())
-                return Convert.ToByte(value, 16);
-            else
-                return Convert.ToByte(value);
-        }
-
-        public static Int32 HexConvertToInt32(string value)
-        {
-            if (value.IsHex())
-                return Convert.ToInt32(value, 16);
-            else
-                return Convert.ToInt32(value);
-        }
-
-        public static Int16 HexConvertToInt16(string value)
-        {
-            if (value.IsHex())
-                return Convert.ToInt16(value, 16);
-            else
-                return Convert.ToInt16(value);
-        }
-
-        public static sbyte HexConvertToSByte(string value)
-        {
-            if (value.IsHex())
-                return Convert.ToSByte(value, 16);
-            else
-                return Convert.ToSByte(value);
-        }
-
         public static string GetDefinesStringFromH(string HeaderPath)
         {
             Dictionary<string, string> hDefines = Helpers.GetDefinesFromHeaders(HeaderPath);
@@ -165,16 +114,10 @@ namespace NPC_Maker
             return string.Join(
                 Environment.NewLine,
                 hDefines
-                    .Where(kvp => HasReplacement(kvp.Value))
+                    .Where(kvp => !string.IsNullOrWhiteSpace(kvp.Value))
                     .Select(kvp => $"#define H_{kvp.Key} {kvp.Value}")
             );
         }
-
-        private static bool HasReplacement(string value)
-        {
-            return !string.IsNullOrWhiteSpace(value);
-        }
-
 
         public static List<string> SplitHeaderDefsString(string headerDefinitionString)
         {
@@ -253,7 +196,6 @@ namespace NPC_Maker
             }
         }
 
-
         public static string GetBase64Hash(byte[] b)
         {
             using (var sha1 = SHA1.Create())
@@ -267,7 +209,6 @@ namespace NPC_Maker
                     .Replace('/', '-');
             }
         }
-
 
         public static string ReplacePathWithToken(string basePath, string fullPath, string token)
         {
@@ -406,7 +347,6 @@ namespace NPC_Maker
 
             return string.Join(Environment.NewLine, lines);
         }
-
 
         private static Dictionary<string, string> ParseDefinesH(string hPath)
         {
@@ -758,6 +698,54 @@ namespace NPC_Maker
                 .Split(Lists.NewlineSeparators, StringSplitOptions.None)
                 .Select(x => x.TrimEnd())
                 .ToList();
+        }
+
+        public static UInt32 HexConvertToUInt32(string value)
+        {
+            if (value.IsHex())
+                return Convert.ToUInt32(value, 16);
+            else
+                return Convert.ToUInt32(value);
+        }
+
+        public static UInt16 HexConvertToUInt16(string value)
+        {
+            if (value.IsHex())
+                return Convert.ToUInt16(value, 16);
+            else
+                return Convert.ToUInt16(value);
+        }
+
+        public static byte HexConvertToByte(string value)
+        {
+            if (value.IsHex())
+                return Convert.ToByte(value, 16);
+            else
+                return Convert.ToByte(value);
+        }
+
+        public static Int32 HexConvertToInt32(string value)
+        {
+            if (value.IsHex())
+                return Convert.ToInt32(value, 16);
+            else
+                return Convert.ToInt32(value);
+        }
+
+        public static Int16 HexConvertToInt16(string value)
+        {
+            if (value.IsHex())
+                return Convert.ToInt16(value, 16);
+            else
+                return Convert.ToInt16(value);
+        }
+
+        public static sbyte HexConvertToSByte(string value)
+        {
+            if (value.IsHex())
+                return Convert.ToSByte(value, 16);
+            else
+                return Convert.ToSByte(value);
         }
 
     }
