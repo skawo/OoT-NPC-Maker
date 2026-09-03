@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NPC_Maker.Common;
 using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,9 @@ namespace NPC_Maker.Windows
         public Settings(ref NPCFile _EditedFile)
         {
             InitializeComponent();
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
 
-            Helpers.MakeNotResizableMonoSafe(this);
+            GUIHacks.MakeNotResizableMonoSafe(this);
 
             string JSON = JsonConvert.SerializeObject(Program.Settings);
             EditedSettings = JsonConvert.DeserializeObject<NPCMakerSettings>(JSON);

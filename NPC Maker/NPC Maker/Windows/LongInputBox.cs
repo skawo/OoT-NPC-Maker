@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPC_Maker.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,7 +20,7 @@ namespace NPC_Maker.Windows
         public LongInputBox(string title, string command, string text, bool BrowseButton = false, string browseFilter = "", bool folderExplorer = false, string resetString = "")
         {
             InitializeComponent();
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
 
             inputText = text;
             this.Text = title;

@@ -1,4 +1,5 @@
-﻿using NPC_Maker.Controls;
+﻿using NPC_Maker.Common;
+using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,16 +44,16 @@ namespace NPC_Maker.Windows
             SetupScale();
 
             if (Program.Settings.ChangeGUIColors)
-                Helpers.SetExplicitColors(this);
+                GUIHacks.SetExplicitColors(this);
         }
 
         private void SetupScale()
         {
             float scale = Program.Settings.GUIScale;
-            float fontSize = Helpers.GetScaleFontSize();
+            float fontSize = GUIHacks.GetScaleFontSize();
 
             this.MenuStrip.Font = new Font(this.MenuStrip.Font.FontFamily, fontSize);
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
         }
 
         private string GetName(string Current = "")

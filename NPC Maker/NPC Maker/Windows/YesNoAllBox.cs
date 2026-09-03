@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPC_Maker.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,9 +15,9 @@ namespace NPC_Maker.Windows
         public YesNoAllBox(string Explanation, string Title, bool hasCancel = true)
         {
             InitializeComponent();
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
 
-            Helpers.MakeNotResizableMonoSafe(this);
+            GUIHacks.MakeNotResizableMonoSafe(this);
 
 
             LblExplanation.Text = Explanation;

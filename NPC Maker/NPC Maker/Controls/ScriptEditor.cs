@@ -1,4 +1,5 @@
 ﻿using FastColoredTextBoxNS;
+using NPC_Maker.Common;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,7 +29,7 @@ namespace NPC_Maker
             SetupScale();
 
             if (Program.Settings.ChangeGUIColors)
-                Helpers.SetExplicitColors(this);
+                GUIHacks.SetExplicitColors(this);
 
             AutoParseTimer = new System.Windows.Forms.Timer
             {
@@ -81,10 +82,10 @@ namespace NPC_Maker
 
         public void SetupScale()
         {
-            float fontSize = Helpers.GetScaleFontSize();
+            float fontSize = GUIHacks.GetScaleFontSize();
 
             this.Textbox_ParseErrors.Font = new Font(this.Textbox_ParseErrors.Font.FontFamily, fontSize);
-            this.Textbox_Script.Font = new Font(this.Textbox_Script.Font.FontFamily, Helpers.GetScaleFontSize(9.75f), this.Textbox_Script.Font.Style);
+            this.Textbox_Script.Font = new Font(this.Textbox_Script.Font.FontFamily, GUIHacks.GetScaleFontSize(9.75f), this.Textbox_Script.Font.Style);
             this.Button_TryParse.Font = new Font(this.Button_TryParse.Font.FontFamily, fontSize);
         }
 

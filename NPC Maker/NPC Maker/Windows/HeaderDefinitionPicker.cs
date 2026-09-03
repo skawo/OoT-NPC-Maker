@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPC_Maker.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,9 +20,9 @@ namespace NPC_Maker.Windows
         public OffsetFileStartPicker(List<string> Options, string CurrentOffset, string CurrentFileStart, string Explanation = "Offset:", string Title = "Select symbols from header...", string Explanation2 = "File start:", bool hasCancel = true)
         {
             InitializeComponent();
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
 
-            Helpers.MakeNotResizableMonoSafe(this);
+            GUIHacks.MakeNotResizableMonoSafe(this);
 
             Combo.Items.Add("None");
 

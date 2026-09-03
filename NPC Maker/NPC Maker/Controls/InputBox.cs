@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using NPC_Maker.Common;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace NPC_Maker
@@ -15,7 +16,7 @@ namespace NPC_Maker
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 ClientSize = size,
                 Text = Prompt,
-                Font = new System.Drawing.Font(SystemFonts.DefaultFont.FontFamily, Helpers.GetScaleFontSize())
+                Font = new System.Drawing.Font(SystemFonts.DefaultFont.FontFamily, GUIHacks.GetScaleFontSize())
             };
 
             TextBox textBox = new TextBox

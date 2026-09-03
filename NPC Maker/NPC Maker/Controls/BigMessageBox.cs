@@ -16,7 +16,7 @@ namespace NPC_Maker.Controls
                                 Font font = null, Form owner = null)
         {
             if (font == null)
-                font = new Font("Microsoft Sans Serif", Helpers.GetScaleFontSize());
+                font = new Font("Microsoft Sans Serif", Common.GUIHacks.GetScaleFontSize());
 
             // --- Form ---
             var f = new Form

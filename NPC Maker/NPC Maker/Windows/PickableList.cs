@@ -1,10 +1,11 @@
-﻿using System;
+﻿using NPC_Maker.Common;
+using NPC_Maker.Controls;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using NPC_Maker.Controls;
 
 namespace NPC_Maker
 {
@@ -19,9 +20,9 @@ namespace NPC_Maker
         public PickableList(Lists.DictType Dict, bool PickMode = false, List<int> _SkipEntries = null)
         {
             InitializeComponent();
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
 
-            Helpers.MakeNotResizableMonoSafe(this);
+            GUIHacks.MakeNotResizableMonoSafe(this);
 
             SkipEntries = _SkipEntries;
 
@@ -73,9 +74,9 @@ namespace NPC_Maker
         public PickableList(Dictionary<string, int> Dict, List<int> _SkipEntries = null)
         {
             InitializeComponent();
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
 
-            Helpers.MakeNotResizableMonoSafe(this);
+            GUIHacks.MakeNotResizableMonoSafe(this);
 
             SkipEntries = _SkipEntries;
             FileName = null;

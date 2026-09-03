@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPC_Maker.Common;
+using System;
 using System.Windows.Forms;
 
 namespace NPC_Maker
@@ -12,9 +13,9 @@ namespace NPC_Maker
         public PickableListEntryEdit(int ID, string Name, string Desc)
         {
             InitializeComponent();
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
 
-            Helpers.MakeNotResizableMonoSafe(this);
+            GUIHacks.MakeNotResizableMonoSafe(this);
 
             Txb_Desc.Text = Desc;
             Txb_Name.Text = Name;

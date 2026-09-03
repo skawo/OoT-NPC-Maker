@@ -161,6 +161,7 @@
     <Compile Include="Common\Classes.cs" />
     <Compile Include="Common\Defaults.cs" />
     <Compile Include="Common\Dicts.cs" />
+    <Compile Include="Common\GUIHacks.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\JsonRevision.cs" />
     <Compile Include="Common\Message.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using NPC_Maker.Common;
+using System.Windows.Forms;
 
 namespace NPC_Maker
 {
@@ -7,9 +8,9 @@ namespace NPC_Maker
         public Debug(string Text)
         {
             InitializeComponent();
-            Helpers.AdjustFormScaleAndColors(this);
+            GUIHacks.AdjustFormScaleAndColors(this);
 
-            Helpers.MakeNotResizableMonoSafe(this);
+            GUIHacks.MakeNotResizableMonoSafe(this);
 
             fastColoredTextBox1.Text = Text;
         }

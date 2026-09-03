@@ -618,7 +618,9 @@ namespace NPC_Maker
             string content = File.ReadAllText(dFilePath);
 
             int colonIndex = content.IndexOf(':');
-            if (colonIndex == -1) return new List<string>();
+
+            if (colonIndex == -1) 
+                return new List<string>();
 
             string dependencies = content.Substring(colonIndex + 1);
             dependencies = Regex.Replace(dependencies, @"\\\s*\r?\n\s*", " ");

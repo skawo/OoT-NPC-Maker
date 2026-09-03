@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPC_Maker.Common;
 using NPC_Maker.Controls;
+using NPC_Maker.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;

@@ -1,6 +1,7 @@
 ﻿using FastColoredTextBoxNS;
 using MiscUtil.Collections.Extensions;
 using Newtonsoft.Json;
+using NPC_Maker.Common;
 using NPC_Maker.Controls;
 using System;
 using System.Collections.Concurrent;
@@ -295,7 +296,7 @@ namespace NPC_Maker
             {
                 lastScale = scale;
 
-                float fontSize = Helpers.GetScaleFontSize();
+                float fontSize = GUIHacks.GetScaleFontSize();
 
                 this.Font = new Font(this.Font.FontFamily, fontSize);
                 this.MenuStrip.Font = new Font(this.MenuStrip.Font.FontFamily, fontSize);
@@ -303,20 +304,20 @@ namespace NPC_Maker
                 this.TextBox_CompileMsg.Font = new Font(this.TextBox_CompileMsg.Font.FontFamily, fontSize);
                 this.TextBox_CompileMsg.Height = LblFuncToRun.Location.Y - LblFuncToRun.Height - this.TextBox_CompileMsg.Location.Y - 12;
 
-                Helpers.AdjustControlScale(this);
+                GUIHacks.AdjustControlScale(this);
 
                 if (Program.Settings.ChangeGUIColors)
                 {
-                    Helpers.SetExplicitColors(MainMenuStrip);
-                    Helpers.SetExplicitColors(this);
+                    GUIHacks.SetExplicitColors(MainMenuStrip);
+                    GUIHacks.SetExplicitColors(this);
                 }
 
-                this.MsgText.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
-                this.MsgTextCJK.Font = new Font(this.MsgTextCJK.Font.FontFamily, Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
+                this.MsgText.Font = new Font(this.MsgText.Font.FontFamily, GUIHacks.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
+                this.MsgTextCJK.Font = new Font(this.MsgTextCJK.Font.FontFamily, GUIHacks.GetScaleFontSize(Program.Settings.MessageEditorFontSize));
 
-                msgCommentTooltip.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
-                msgCommentTooltipLoc.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
-                CodeParamsTooltip.Font = new Font(this.MsgText.Font.FontFamily, Helpers.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
+                msgCommentTooltip.Font = new Font(this.MsgText.Font.FontFamily, GUIHacks.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
+                msgCommentTooltipLoc.Font = new Font(this.MsgText.Font.FontFamily, GUIHacks.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
+                CodeParamsTooltip.Font = new Font(this.MsgText.Font.FontFamily, GUIHacks.GetScaleFontSize(1 + Program.Settings.MessageEditorFontSize));
             }
         }
 
@@ -510,7 +511,7 @@ namespace NPC_Maker
         {
             try
             {
-                float size = Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize);
+                float size = GUIHacks.GetScaleFontSize(Program.Settings.MessageEditorFontSize);
 
                 MsgTextDefault.Font = new Font(comboFont.Text, size);
                 MsgText.Font = new Font(comboFont.Text, size);
@@ -527,7 +528,7 @@ namespace NPC_Maker
             try
             {
                 Program.Settings.MessageEditorFontSize = (int)numUpDownFont.Value;
-                float size = Helpers.GetScaleFontSize(Program.Settings.MessageEditorFontSize);
+                float size = GUIHacks.GetScaleFontSize(Program.Settings.MessageEditorFontSize);
 
                 MsgTextDefault.Font = new Font(comboFont.Text, size);
                 MsgText.Font = new Font(comboFont.Text, size);
