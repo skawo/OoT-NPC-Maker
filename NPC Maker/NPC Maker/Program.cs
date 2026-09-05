@@ -75,7 +75,7 @@ namespace NPC_Maker
 
         private static void DetectRuntime()
         {
-            IsRunningUnderMono = true;
+            IsRunningUnderMono = OperatingSystem.IsLinux();
             IsWSL = Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
         }
 
@@ -91,7 +91,7 @@ namespace NPC_Maker
         private static void PrintBanner()
         {
             ConsoleWriteLineS();
-            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.3.773 tempCLI dotNET");
+            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.3.775 tempCLI dotNET");
         }
 
         private static void InitializePaths()
@@ -265,10 +265,13 @@ namespace NPC_Maker
                 return 1;
             }
 
-            string newJson = FileOps.ProcessNPCJSON(ref inFile);
+            if (res)
+            {
+                string newJson = FileOps.ProcessNPCJSON(ref inFile);
 
-            if (!String.Equals(jsonText, newJson))
-                res = FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
+                if (!String.Equals(jsonText, newJson))
+                    res = FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
+            }
 
             if (!Program.IsRunningUnderMono)
                 Console.WriteLine("Press ENTER to exit...");
