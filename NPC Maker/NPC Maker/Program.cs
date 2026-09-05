@@ -385,10 +385,13 @@ namespace NPC_Maker
                 return 1;
             }
 
-            string newJson = FileOps.ProcessNPCJSON(ref inFile);
+            if (res)
+            {
+                string newJson = FileOps.ProcessNPCJSON(ref inFile);
 
-            if (!String.Equals(jsonText, newJson))
-                res = FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
+                if (!String.Equals(jsonText, newJson))
+                    res = FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
+            }
 
             if (!Program.IsRunningUnderMono)
                 Console.WriteLine("Press ENTER to exit...");
