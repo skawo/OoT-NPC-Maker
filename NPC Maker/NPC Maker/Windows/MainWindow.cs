@@ -2228,7 +2228,8 @@ namespace NPC_Maker
                                 EditedFile.Languages.Add(SelectedLanguage);
                             }
 
-                            DialogResult y2aRes = DialogResult.None;
+                            DialogResult replaceAllRes = DialogResult.None;
+                            DialogResult addAllRes = DialogResult.None;
 
                             foreach (NPCEntry entry in EditedFile.Entries)
                             {
@@ -2284,13 +2285,13 @@ namespace NPC_Maker
 
                                             if (textDefault != textNew && textDefault != text && text != textNew)
                                             {
-                                                if (y2aRes != DialogResult.OK && y2aRes != DialogResult.Ignore)
+                                                if (replaceAllRes != DialogResult.OK && replaceAllRes != DialogResult.Ignore)
                                                 {
                                                     var w = new Windows.YesNoAllBox($"Localization of textbox {msg.Name} is already different. Update it with the one from the file?", "Message conflict");
-                                                    y2aRes = w.ShowDialog();
+                                                    replaceAllRes = w.ShowDialog();
                                                 }
 
-                                                if (y2aRes == DialogResult.Yes || y2aRes == DialogResult.OK)
+                                                if (replaceAllRes == DialogResult.Yes || replaceAllRes == DialogResult.OK)
                                                 {
                                                     MessageEntry import = messageList[importMsgIndex];
                                                     newLocalization.Messages.Add(import);
@@ -2329,18 +2330,16 @@ namespace NPC_Maker
 
                                 List<MessageEntry> diff = messageList.Where(item2 => !entry.Messages.Any(item1 => item1.Name == item2.Name)).ToList();
 
-                                y2aRes = DialogResult.None;
-
                                 // Add messages which exist in the new language, but don't in the default 
                                 foreach (MessageEntry msg in diff)
                                 {
-                                    if (y2aRes != DialogResult.OK && y2aRes != DialogResult.Ignore)
+                                    if (addAllRes != DialogResult.OK && addAllRes != DialogResult.Ignore)
                                     {
                                         var w = new Windows.YesNoAllBox($"Message {msg.Name} doesn't exist in the default language. Add it?", "New messages");
-                                        y2aRes = w.ShowDialog();
+                                        addAllRes = w.ShowDialog();
                                     }
 
-                                    if (y2aRes == DialogResult.Yes || y2aRes == DialogResult.OK)
+                                    if (addAllRes == DialogResult.Yes || addAllRes == DialogResult.OK)
                                     {
                                         int msgIndex = messageList.IndexOf(msg);
 
