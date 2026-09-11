@@ -14,6 +14,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -29,8 +30,8 @@ namespace NPC_Maker
 
         public DateTime OpenedFileLastWritten;
 
-        private NPCFile EditedFile = null;
-        private NPCEntry SelectedEntry = null;
+        public NPCFile EditedFile = null;
+        public NPCEntry SelectedEntry = null;
         private int SelectedIndex = -1;
         private string NPCSave = "";
 
@@ -47,11 +48,11 @@ namespace NPC_Maker
         private Common.SavedMsgPreviewData lastPreviewData;
         private Common.SavedMsgPreviewData lastPreviewDataOrig;
 
-        private Dictionary<string, float[]> fontsWidths = new Dictionary<string, float[]>();
-        private Dictionary<string, byte[]> fonts = new Dictionary<string, byte[]>();
+        public Dictionary<string, float[]> fontsWidths = new Dictionary<string, float[]>();
+        public Dictionary<string, byte[]> fonts = new Dictionary<string, byte[]>();
 
-        private Dictionary<string, float[]> exfontsWidths = new Dictionary<string, float[]>();
-        private Dictionary<string, byte[]> exfonts = new Dictionary<string, byte[]>();
+        public Dictionary<string, float[]> exfontsWidths = new Dictionary<string, float[]>();
+        public Dictionary<string, byte[]> exfonts = new Dictionary<string, byte[]>();
 
         private readonly object _previewLock = new object();
         private Common.PreviewSnapshot _pendingSnapshot;
@@ -136,6 +137,17 @@ namespace NPC_Maker
             if (FilePath != "")
                 OpenFile(FilePath);
 
+            FunctionExtend.GetTagExtensions();
+
+            foreach (var tool in FunctionExtend.extraTools)
+            {
+                ToolStripMenuItem tl = new ToolStripMenuItem();
+                tl.Name = tool.Key;
+                tl.Text = tool.Key;
+                tl.Click += Tl_Click;
+                optionsToolStripMenuItem.DropDownItems.Add(tl);
+            }
+
 
             SetupScale();
             SetupPctBoxScrollbars();
@@ -146,6 +158,11 @@ namespace NPC_Maker
                 MsgTabSplitContainer_SizeChanged(MsgTabSplitContainer, EventArgs.Empty);
                 SplitMsgContainer_Paint(null, null);
             };
+        }
+
+        private void Tl_Click(object sender, EventArgs e)
+        {
+            FunctionExtend.RunExtendFunc((sender as ToolStripMenuItem).Name, new object[] { this, progressL});
         }
 
         private void MsgPreview_MouseClick(object sender, MouseEventArgs e)
