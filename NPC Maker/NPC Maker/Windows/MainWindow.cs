@@ -139,6 +139,9 @@ namespace NPC_Maker
 
             foreach (var tool in FunctionExtend.extraTools)
             {
+                if (Enum.IsDefined(typeof(FunctionExtend.FuncExtendHooks), tool.Key))
+                    continue;
+
                 ToolStripMenuItem tl = new ToolStripMenuItem();
                 tl.Name = tool.Key;
                 tl.Text = tool.Key;
