@@ -160,12 +160,14 @@ namespace NPC_Maker
                 SplitMsgContainer_Paint(null, null);
             };
 
-            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnMainWindowOpen.ToString(), new object[] { this, progressL });
+            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnMainWindowOpen.ToString(),
+                new FunctionExtend.GenericTool() { window = this, progressControl = progressL });
         }
 
         private void Tl_Click(object sender, EventArgs e)
         {
-            FunctionExtend.RunExtendFunc((sender as ToolStripMenuItem).Name, new object[] { this, progressL});
+            FunctionExtend.RunExtendFunc((sender as ToolStripMenuItem).Name, 
+                                         new FunctionExtend.GenericTool() { window = this, progressControl = progressL });
         }
 
         private void MsgPreview_MouseClick(object sender, MouseEventArgs e)
@@ -881,7 +883,8 @@ namespace NPC_Maker
                 return;
             }
 
-            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.BeforeMainWindowClose.ToString(), new object[] { this, progressL });
+            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.BeforeMainWindowClose.ToString(),
+                                         new FunctionExtend.GenericTool() { window = this, progressControl = progressL });
 
             if (EditedFile != null)
             {
@@ -909,7 +912,8 @@ namespace NPC_Maker
                 //Explodes on mono sometimes otherwise (when filtering)
                 DataGrid_NPCs.SelectionChanged -= DataGrid_NPCs_SelectionChanged;
 
-                FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnMainWindowClose.ToString(), new object[] { this, progressL });
+                FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnMainWindowClose.ToString(),
+                                             new FunctionExtend.GenericTool() { window = this, progressControl = progressL });
             }
             catch (Exception)
             {

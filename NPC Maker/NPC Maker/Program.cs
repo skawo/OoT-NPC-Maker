@@ -68,9 +68,6 @@ namespace NPC_Maker
         {
             DetectRuntime();
             Application.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-            FunctionExtend.GetTagExtensions();
-
-            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnStart.ToString(), new object[] { });
 
             bool hasArgs = args.Length > 0;
 
@@ -89,6 +86,10 @@ namespace NPC_Maker
             InitializePaths();
             EnsureDirectoriesExist();
             LoadSettings();
+
+            FunctionExtend.GetTagExtensions();
+
+            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnStart.ToString(), null);
 
             int ret = 0;
 
@@ -109,8 +110,9 @@ namespace NPC_Maker
                 ret = RunCLI(args);
 
 
-            if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnEnd.ToString(), new object[] { ret })) is object[] ret2)
-                ret = (int)ret2[0];
+            if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnEnd.ToString(),
+                                                     new FunctionExtend.OnEnd { retVar = ret })) is FunctionExtend.OnEnd ret2)
+                ret = ret2.retVar;
 
             return ret;
         }

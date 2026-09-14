@@ -1,5 +1,6 @@
 ﻿using Microsoft.CSharp;
 using NPC_Maker.Controls;
+using NPC_Maker.Windows;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Xml.Linq;
 
 namespace NPC_Maker.Common
 {
-    internal class FunctionExtend
+    public class FunctionExtend
     {
         public enum FuncExtendHooks
         {
@@ -23,6 +24,36 @@ namespace NPC_Maker.Common
             BeforeJsonSave,
             OnJsonSerialize,
             OnJsonParse,
+        }
+
+        public struct OnJsonParse
+        {
+            public NPCFile file;
+            public string fileName;
+        }
+
+        public struct BeforeJsonSave
+        {
+            public NPCFile file;
+            public bool isBackup;
+        }
+
+        public struct OnJsonSerialize
+        {
+            public string json;
+
+            public bool isBackup;
+        }
+
+        public struct OnEnd
+        {
+            public int retVar;
+        }
+
+        public struct GenericTool
+        {
+            public MainWindow window;
+            public ProgressWithLabel progressControl;
         }
 
         public static Dictionary<string, object> extraTools = new Dictionary<string, object>();
@@ -102,26 +133,27 @@ namespace NPC_Maker.Common
             }
         }
 
-        public static void RunExtendFunc(string Name, object[] args = null, string MethodName = "ToolProcess")
+        public static void RunExtendFunc(string Name, object argStruct, string MethodName = "ToolProcess")
         {
             if (extraTools.ContainsKey(Name))
             {
                 object o = extraTools[Name];
                 MethodInfo mi = o.GetType().GetMethod(MethodName);
-                mi.Invoke(o, args);
+                mi.Invoke(o, new object[] { argStruct });
             }
         }
 
-        public static object RunExtendFuncWithRet(string Name, object[] args = null, string MethodName = "ToolProcess")
+        public static object RunExtendFuncWithRet(string Name, object argStruct, string MethodName = "ToolProcess")
         {
             if (extraTools.ContainsKey(Name))
             {
                 object o = extraTools[Name];
                 MethodInfo mi = o.GetType().GetMethod(MethodName);
-                return mi.Invoke(o, args);
+                return mi.Invoke(o, new object[] { argStruct });
             }
 
             return null;
         }
     }
+
 }

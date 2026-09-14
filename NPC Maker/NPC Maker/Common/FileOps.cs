@@ -89,9 +89,10 @@ namespace NPC_Maker
 
                 npcFile.Version = 7;
 
-                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonParse.ToString(), new object[] { npcFile, fileName })) is object[] ret)
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonParse.ToString(), 
+                                                         new FunctionExtend.OnJsonParse() { file = npcFile, fileName = fileName })) is FunctionExtend.OnJsonParse ret)
                 {
-                    npcFile = (NPCFile)ret[0];
+                    npcFile = ret.file;
                 }
 
                 return npcFile;
@@ -103,23 +104,26 @@ namespace NPC_Maker
             }
         }
 
+
         public static bool SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null, bool isBackup = false)
         {
             try
             {
-                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.BeforeJsonSave.ToString(), new object[] { data, isBackup, progress })) is object[] ret)
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.BeforeJsonSave.ToString(), 
+                                                         new FunctionExtend.BeforeJsonSave { file = data, isBackup = isBackup })) is FunctionExtend.BeforeJsonSave ret)
                 {
-                    data = (NPCFile)ret[0];
-                    isBackup = (bool)ret[1];
+                    data = ret.file;
+                    isBackup = ret.isBackup;
                 }
 
                 if (json == null)
                     json = ProcessNPCJSON(ref data, progress, isBackup);
 
-                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSerialize.ToString(), new object[] { json, isBackup, progress })) is object[] ret2)
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSerialize.ToString(),
+                                                         new FunctionExtend.OnJsonSerialize { json = json, isBackup = isBackup })) is FunctionExtend.OnJsonSerialize ret2)
                 {
-                    json = (string)ret2[0];
-                    isBackup = (bool)ret2[1];
+                    json = ret2.json;
+                    isBackup = ret2.isBackup;
                 }
 
                 if (json != null)
