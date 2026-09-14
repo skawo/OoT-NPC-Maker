@@ -1,5 +1,6 @@
 ﻿using Microsoft;
 using Newtonsoft.Json;
+using NPC_Maker.Common;
 using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,9 @@ namespace NPC_Maker
         {
             DetectRuntime();
             Application.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            FunctionExtend.GetTagExtensions();
+
+            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnStart.ToString(), new object[] { });
 
             bool hasArgs = args.Length > 0;
 
@@ -86,6 +90,8 @@ namespace NPC_Maker
             EnsureDirectoriesExist();
             LoadSettings();
 
+            int ret = 0;
+
             if (!hasArgs)
             {
                 // Create this in memory, so it gets cached.
@@ -97,12 +103,18 @@ namespace NPC_Maker
                 }
                 catch { }
 
-                return RunGUI();
+                ret = RunGUI();
             }
             else
-                return RunCLI(args);
-        }
+                ret = RunCLI(args);
 
+
+            if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnEnd.ToString(), new object[] { ret })) is object[] ret2)
+                ret = (int)ret2[0];
+
+            return ret;
+        }
+        
         private static void DetectRuntime()
         {
             Type monoType = Type.GetType("Mono.Runtime");

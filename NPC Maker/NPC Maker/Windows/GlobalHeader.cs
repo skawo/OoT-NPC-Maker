@@ -59,7 +59,7 @@ namespace NPC_Maker.Windows
         private string GetName(string Current = "")
         {
             string ScriptName = Current;
-            DialogResult Dr = InputBox.ShowInputDialog("Header name?", ref ScriptName);
+            DialogResult Dr = InputBox.ShowInputDialog("Header name?", ref ScriptName, this);
 
             if (Dr != DialogResult.OK)
                 return "";

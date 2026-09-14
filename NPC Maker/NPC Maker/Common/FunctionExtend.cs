@@ -7,11 +7,24 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 
 namespace NPC_Maker.Common
 {
     internal class FunctionExtend
     {
+        public enum FuncExtendHooks
+        {
+            OnStart,
+            OnEnd,
+            OnMainWindowOpen,
+            BeforeMainWindowClose,
+            OnMainWindowClose,
+            BeforeJsonSave,
+            OnJsonSerialize,
+            OnJsonParse,
+        }
+
         public static Dictionary<string, object> extraTools = new Dictionary<string, object>();
 
         public static void GetTagExtensions()
@@ -97,6 +110,18 @@ namespace NPC_Maker.Common
                 MethodInfo mi = o.GetType().GetMethod(MethodName);
                 mi.Invoke(o, args);
             }
+        }
+
+        public static object RunExtendFuncWithRet(string Name, object[] args = null, string MethodName = "ToolProcess")
+        {
+            if (extraTools.ContainsKey(Name))
+            {
+                object o = extraTools[Name];
+                MethodInfo mi = o.GetType().GetMethod(MethodName);
+                return mi.Invoke(o, args);
+            }
+
+            return null;
         }
     }
 }

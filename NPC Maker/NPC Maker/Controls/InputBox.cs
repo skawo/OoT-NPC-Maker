@@ -6,7 +6,7 @@ namespace NPC_Maker
 {
     public static class InputBox
     {
-        public static DialogResult ShowInputDialog(string Prompt, ref string input)
+        public static DialogResult ShowInputDialog(string Prompt, ref string input, Control owner = null)
         {
             System.Drawing.Size size = new System.Drawing.Size(300, 70);
 
@@ -52,7 +52,7 @@ namespace NPC_Maker
             inputBox.AcceptButton = okButton;
             inputBox.CancelButton = cancelButton;
 
-            DialogResult result = inputBox.ShowDialog();
+            DialogResult result = inputBox.ShowDialog(owner);
             input = textBox.Text;
             return result;
         }

@@ -137,8 +137,6 @@ namespace NPC_Maker
             if (FilePath != "")
                 OpenFile(FilePath);
 
-            FunctionExtend.GetTagExtensions();
-
             foreach (var tool in FunctionExtend.extraTools)
             {
                 ToolStripMenuItem tl = new ToolStripMenuItem();
@@ -158,6 +156,8 @@ namespace NPC_Maker
                 MsgTabSplitContainer_SizeChanged(MsgTabSplitContainer, EventArgs.Empty);
                 SplitMsgContainer_Paint(null, null);
             };
+
+            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnMainWindowOpen.ToString(), new object[] { this, progressL });
         }
 
         private void Tl_Click(object sender, EventArgs e)
@@ -786,7 +786,7 @@ namespace NPC_Maker
 
                         if (currentBackup != LastBackup)
                         {
-                            string json = FileOps.ProcessNPCJSON(ref EditedFile, null);
+                            string json = FileOps.ProcessNPCJSON(ref EditedFile, null, true);
 
                             if (json != null)
                             {
@@ -878,6 +878,8 @@ namespace NPC_Maker
                 return;
             }
 
+            FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.BeforeMainWindowClose.ToString(), new object[] { this, progressL });
+
             if (EditedFile != null)
             {
                 string CurrentFile = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
@@ -900,6 +902,11 @@ namespace NPC_Maker
             try
             {
                 Program.CodeEditorProcess?.Kill();
+
+                //Explodes on mono sometimes otherwise (when filtering)
+                DataGrid_NPCs.SelectionChanged -= DataGrid_NPCs_SelectionChanged;
+
+                FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnMainWindowClose.ToString(), new object[] { this, progressL });
             }
             catch (Exception)
             {
@@ -939,7 +946,7 @@ namespace NPC_Maker
             }
         }
 
-        private void InsertDataToEditor()
+        public void InsertDataToEditor()
         {
             if (SelectedEntry == null)
                 return;
@@ -1612,7 +1619,7 @@ namespace NPC_Maker
             if (EditedFile != null)
             {
                 string Language = "";
-                DialogResult DR = InputBox.ShowInputDialog("Language name?", ref Language);
+                DialogResult DR = InputBox.ShowInputDialog("Language name?", ref Language, this);
 
                 if (DR != DialogResult.OK)
                     return;
@@ -1777,7 +1784,7 @@ namespace NPC_Maker
         private string GetScriptName(string Current = "")
         {
             string ScriptName = Current;
-            DialogResult Dr = InputBox.ShowInputDialog("Script name?", ref ScriptName);
+            DialogResult Dr = InputBox.ShowInputDialog("Script name?", ref ScriptName, this);
 
             if (Dr != DialogResult.OK)
                 return "";
@@ -2574,7 +2581,7 @@ namespace NPC_Maker
         private void DoNpcFilter()
         {
             int index = 0;
-            
+
             foreach (NPCEntry entry in EditedFile.Entries)
             {
                 if (String.IsNullOrWhiteSpace(NpcsFilter.Text))
@@ -2583,6 +2590,27 @@ namespace NPC_Maker
                     DataGrid_NPCs.Rows[index].Visible = true;
                 else
                     DataGrid_NPCs.Rows[index].Visible = false;
+
+                index++;
+            }
+
+            BeginInvoke((Action)(() =>
+            {
+                SelectTopVisibleCell();
+            }));
+        }
+
+        private void SelectTopVisibleCell()
+        {
+            int index = 0;
+
+            foreach (NPCEntry entry in EditedFile.Entries)
+            {
+                if (DataGrid_NPCs.Rows[index].Visible)
+                {
+                    DataGrid_NPCs.Rows[index].Selected = true;
+                    break;
+                }
 
                 index++;
             }
@@ -2614,7 +2642,9 @@ namespace NPC_Maker
                 }));
             }
             else
+            {
                 DoNpcFilter();
+            }
         }
 
         private NPCEntry GetNewNPCEntry()
@@ -2637,7 +2667,7 @@ namespace NPC_Maker
             Entry.NPCName = $"NPC_{EditedFile.Entries.Count}";
 
             string Title = Entry.NPCName;
-            DialogResult DR = InputBox.ShowInputDialog("NPC Name?", ref Title);
+            DialogResult DR = InputBox.ShowInputDialog("NPC Name?", ref Title, this);
 
             if (DR != DialogResult.OK)
                 return;
@@ -2692,7 +2722,7 @@ namespace NPC_Maker
             }
         }
 
-        private void DataGrid_NPCs_SelectionChanged(object sender, EventArgs e)
+        public void DataGrid_NPCs_SelectionChanged(object sender, EventArgs e)
         {
             if (DataGrid_NPCs.SelectedRows.Count != 0)
             {
@@ -2891,7 +2921,7 @@ namespace NPC_Maker
 
             string Title = SelectedEntry.NPCName;
 
-            if (InputBox.ShowInputDialog("New NPC Name?", ref Title) != DialogResult.OK)
+            if (InputBox.ShowInputDialog("New NPC Name?", ref Title, this) != DialogResult.OK)
                 return;
 
             if (!SanitizeName(ref Title))
@@ -4395,7 +4425,7 @@ namespace NPC_Maker
 
         private bool _selectionPending = false;
 
-        private void MessagesGrid_SelectionChanged(object sender, EventArgs e)
+        public void MessagesGrid_SelectionChanged(object sender, EventArgs e)
         {
             if (_selectionPending) return;
             _selectionPending = true;
@@ -4806,7 +4836,7 @@ namespace NPC_Maker
         private void Btn_AddMsg_Click(object sender, EventArgs e)
         {
             string Title = "";
-            DialogResult DR = InputBox.ShowInputDialog("Message title?", ref Title);
+            DialogResult DR = InputBox.ShowInputDialog("Message title?", ref Title, this);
 
             if (DR != DialogResult.OK)
                 return;
@@ -4866,7 +4896,7 @@ namespace NPC_Maker
 
             string Title = (MessagesGrid.SelectedRows[0].Cells[0].Value as string);
 
-            if (InputBox.ShowInputDialog("New message title?", ref Title) != DialogResult.OK)
+            if (InputBox.ShowInputDialog("New message title?", ref Title, this) != DialogResult.OK)
                 return;
 
             if (!SanitizeName(ref Title))

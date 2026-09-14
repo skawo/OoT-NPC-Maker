@@ -1,4 +1,5 @@
 ﻿using FastColoredTextBoxCJK;
+using Microsoft;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NPC_Maker.Common;
@@ -17,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZeldaMessage;
 
 namespace NPC_Maker
 {
@@ -86,6 +88,12 @@ namespace NPC_Maker
                 ResolveHeaderDefines(ref npcFile);
 
                 npcFile.Version = 7;
+
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonParse.ToString(), new object[] { npcFile, fileName })) is object[] ret)
+                {
+                    npcFile = (NPCFile)ret[0];
+                }
+
                 return npcFile;
             }
             catch (Exception ex)
@@ -99,8 +107,20 @@ namespace NPC_Maker
         {
             try
             {
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.BeforeJsonSave.ToString(), new object[] { data, isBackup, progress })) is object[] ret)
+                {
+                    data = (NPCFile)ret[0];
+                    isBackup = (bool)ret[1];
+                }
+
                 if (json == null)
-                    json = ProcessNPCJSON(ref data, progress);
+                    json = ProcessNPCJSON(ref data, progress, isBackup);
+
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSerialize.ToString(), new object[] { json, isBackup, progress })) is object[] ret2)
+                {
+                    json = (string)ret2[0];
+                    isBackup = (bool)ret2[1];
+                }
 
                 if (json != null)
                     File.WriteAllText(path, json);
@@ -112,13 +132,13 @@ namespace NPC_Maker
                 if (!isBackup)
                     BigMessageBox.Show($"Failed to save JSON: {ex.Message}");
                 else
-                    Console.WriteLine("Warning: Count not save backup.");
+                    Console.WriteLine("Warning: Could not save backup.");
 
                 return false;
             }
         }
 
-        public static string ProcessNPCJSON(ref NPCFile data, IProgress<ProgressReport> progress = null)
+        public static string ProcessNPCJSON(ref NPCFile data, IProgress<ProgressReport> progress = null, bool isBackup = false)
         {
             try
             {
@@ -186,7 +206,9 @@ namespace NPC_Maker
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to process JSON: {ex.Message}");
+                if (!isBackup)
+                    BigMessageBox.Show($"Failed to process JSON: {ex.Message}");
+
                 return null;
             }
         }
@@ -458,7 +480,7 @@ namespace NPC_Maker
                         {
                             var entry = data.Entries[entryID];
 
-                            if (entry.IsNull || entry.Omitted) 
+                            if (entry.IsNull || entry.Omitted)
                                 return;
 
                             string prefix = jsonFileName + "_" + entryID + "_";
@@ -540,7 +562,7 @@ namespace NPC_Maker
 
                 Action<int> processEntry = i =>
                 {
-                    if (cts.IsCancellationRequested) 
+                    if (cts.IsCancellationRequested)
                         return;
 
                     var entry = localData.Entries[i];
@@ -1202,7 +1224,7 @@ namespace NPC_Maker
         }
 
         private static Scripts.BScript ResolveScript(NPCFile data, NPCEntry entry, ScriptEntry scrEntry, string scriptPrefix, string cachedScriptFile, string baseDefines,
-                                                    CacheStatus cacheStatus, bool extDataExists, ConcurrentDictionary<string, object> preProcessedFiles, HashSet<string> scriptCacheFiles, 
+                                                    CacheStatus cacheStatus, bool extDataExists, ConcurrentDictionary<string, object> preProcessedFiles, HashSet<string> scriptCacheFiles,
                                                     ref RecompilationStatus cs)
         {
             if (preProcessedFiles != null)
