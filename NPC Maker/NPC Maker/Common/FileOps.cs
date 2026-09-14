@@ -109,21 +109,14 @@ namespace NPC_Maker
         {
             try
             {
-                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.BeforeJsonSave.ToString(), 
-                                                         new FunctionExtend.BeforeJsonSave { file = data, isBackup = isBackup })) is FunctionExtend.BeforeJsonSave ret)
-                {
-                    data = ret.file;
-                    isBackup = ret.isBackup;
-                }
-
                 if (json == null)
                     json = ProcessNPCJSON(ref data, progress, isBackup);
 
-                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSerialize.ToString(),
-                                                         new FunctionExtend.OnJsonSerialize { json = json, isBackup = isBackup })) is FunctionExtend.OnJsonSerialize ret2)
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSave.ToString(),
+                                                         new FunctionExtend.OnJsonSave { json = json, isBackup = isBackup })) is FunctionExtend.OnJsonSave ret)
                 {
-                    json = ret2.json;
-                    isBackup = ret2.isBackup;
+                    json = ret.json;
+                    isBackup = ret.isBackup;
                 }
 
                 if (json != null)
@@ -194,6 +187,13 @@ namespace NPC_Maker
 
                 output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
                 output.CHeader = null;
+
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSerialize.ToString(),
+                                                         new FunctionExtend.OnJsonSerialize { file = data, isBackup = isBackup })) is FunctionExtend.OnJsonSerialize ret)
+                {
+                    data = ret.file;
+                    isBackup = ret.isBackup;
+                }
 
                 string json = JsonConvert.SerializeObject(output, new JsonSerializerSettings
                 {

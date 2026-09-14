@@ -21,8 +21,8 @@ namespace NPC_Maker.Common
             OnMainWindowOpen,
             BeforeMainWindowClose,
             OnMainWindowClose,
-            BeforeJsonSave,
             OnJsonSerialize,
+            OnJsonSave,
             OnJsonParse,
         }
 
@@ -32,13 +32,13 @@ namespace NPC_Maker.Common
             public string fileName;
         }
 
-        public struct BeforeJsonSave
+        public struct OnJsonSerialize
         {
             public NPCFile file;
             public bool isBackup;
         }
 
-        public struct OnJsonSerialize
+        public struct OnJsonSave
         {
             public string json;
 
