@@ -166,7 +166,7 @@ namespace NPC_Maker
 
         private void Tl_Click(object sender, EventArgs e)
         {
-            FunctionExtend.RunExtendFunc((sender as ToolStripMenuItem).Name, 
+            FunctionExtend.RunExtendFunc((sender as ToolStripMenuItem).Name,
                                          new FunctionExtend.GenericTool() { window = this, progressControl = progressL });
         }
 
@@ -1935,8 +1935,8 @@ namespace NPC_Maker
             MsgTextCJK_TextChanged(null, null);
             SplitMsgContainer_Paint(null, null);
 
-            if (curScale != Program.Settings.GUIScale || 
-                bgColor != Program.Settings.BGColor || 
+            if (curScale != Program.Settings.GUIScale ||
+                bgColor != Program.Settings.BGColor ||
                 fgColor != Program.Settings.TextColor ||
                 inputColor != Program.Settings.InputColor ||
                 disableColor != Program.Settings.DisabledColor ||
@@ -2245,9 +2245,9 @@ namespace NPC_Maker
                             string SelectedLanguage = pick.SelectedOption;
                             int SelectedLangIndex = pick.SelectedIndex;
 
-                            int IndexInCur = EditedFile.Languages.FindIndex(x => x == SelectedLanguage);
+                            int existingLangIndex = EditedFile.Languages.FindIndex(x => x == SelectedLanguage);
 
-                            if (IndexInCur != -1 || SelectedLanguage == Lists.DefaultLanguage)
+                            if (existingLangIndex != -1 || SelectedLanguage == Lists.DefaultLanguage)
                             {
                                 DialogResult Res = BigMessageBox.Show("This language already exists. Replace it?", "Confirmation", MessageBoxButtons.YesNoCancel);
 
@@ -2271,6 +2271,8 @@ namespace NPC_Maker
 
                                 NPCEntry ImportedEntry = LocalizationFile.Entries[importIndex];
 
+                                int IndexInCur = -1;
+
                                 // Make a copy of all the default language textboxes if the language doesn't exist in an actor
                                 if (ImportedEntry.Localization.FindIndex(x => x.Language == SelectedLanguage) != -1)
                                 {
@@ -2291,6 +2293,9 @@ namespace NPC_Maker
                                         }
                                     }
                                 }
+
+                                if (SelectedLangIndex != 0 && IndexInCur == -1)
+                                    continue;
 
                                 LocalizationEntry newLocalization = new LocalizationEntry();
                                 newLocalization.Language = SelectedLanguage;
@@ -2318,7 +2323,7 @@ namespace NPC_Maker
                                             {
                                                 if (replaceAllRes != DialogResult.OK && replaceAllRes != DialogResult.Ignore)
                                                 {
-                                                    var w = new Windows.YesNoAllBox($"Localization of textbox {msg.Name} is already different. Update it with the one from the file?", "Message conflict");
+                                                    var w = new Windows.YesNoAllBox($"Localization of textbox {entry.NPCName} : {msg.Name} is already different. Update it with the one from the file?", "Message conflict");
                                                     replaceAllRes = w.ShowDialog();
                                                 }
 
@@ -2366,14 +2371,12 @@ namespace NPC_Maker
                                 {
                                     if (addAllRes != DialogResult.OK && addAllRes != DialogResult.Ignore)
                                     {
-                                        var w = new Windows.YesNoAllBox($"Message {msg.Name} doesn't exist in the default language. Add it?", "New messages");
+                                        var w = new Windows.YesNoAllBox($"Message {entry.NPCName} : {msg.Name} doesn't exist in the default language. Add it?", "New messages");
                                         addAllRes = w.ShowDialog();
                                     }
 
                                     if (addAllRes == DialogResult.Yes || addAllRes == DialogResult.OK)
                                     {
-                                        int msgIndex = messageList.IndexOf(msg);
-
                                         MessageEntry msgN = Helpers.Clone<MessageEntry>(msg);
 
                                         // If importing a non-default language, blank the text for the new entry in the default language.
@@ -2384,7 +2387,8 @@ namespace NPC_Maker
                                             msgN.Comment = "";
                                         }
 
-                                        entry.Messages.Insert(msgIndex, msgN);
+                                        int insertIndex = FindInsertionIndex(messageList, msg, entry.Messages);
+                                        entry.Messages.Insert(insertIndex, msgN);
 
                                         // Add to each localized language too
                                         foreach (var loc in entry.Localization)
@@ -2399,7 +2403,8 @@ namespace NPC_Maker
                                                 msgNLoc.Comment = "";
                                             }
 
-                                            loc.Messages.Insert(msgIndex, msgNLoc);
+                                            int locInsertIndex = FindInsertionIndex(messageList, msg, loc.Messages);
+                                            loc.Messages.Insert(locInsertIndex, msgNLoc);
                                         }
                                     }
                                 }
@@ -2415,6 +2420,22 @@ namespace NPC_Maker
                     }
                 }
             }
+        }
+
+        private int FindInsertionIndex(List<MessageEntry> orderedSource, MessageEntry msg, List<MessageEntry> targetList)
+        {
+            int sourceIndex = orderedSource.FindIndex(x => x.Name == msg.Name);
+
+            for (int i = sourceIndex - 1; i >= 0; i--)
+            {
+                string anchorName = orderedSource[i].Name;
+                int anchorIndexInTarget = targetList.FindIndex(x => x.Name == anchorName);
+
+                if (anchorIndexInTarget != -1)
+                    return anchorIndexInTarget + 1;
+            }
+
+            return 0;
         }
 
         #endregion
@@ -4133,12 +4154,15 @@ namespace NPC_Maker
             MsgText.Tag = Combo_Language.Text;
 
             int curSelMsg = 0;
+            bool noMsgSelected = false;
 
             lastPreviewData = null;
             lastPreviewDataOrig = null;
 
             if (MessagesGrid.SelectedRows.Count != 0)
                 curSelMsg = MessagesGrid.SelectedRows[0].Index;
+            else
+                noMsgSelected = true;
 
             if (Combo_Language.SelectedIndex != 0)
             {
@@ -4157,33 +4181,37 @@ namespace NPC_Maker
                 MsgEntrySplitContainer.IsSplitterFixed = true;
             }
 
-            SelectNewMessage(false);
-            MessagesGrid.SelectionChanged -= MessagesGrid_SelectionChanged;
-
-            if (MessagesGrid.Rows.Count > curSelMsg)
+            if (!noMsgSelected)
             {
-                MessagesGrid.Rows[curSelMsg].Selected = true;
-                MessagesGrid.CurrentCell = MessagesGrid.Rows[curSelMsg].Cells[0];
+                SelectNewMessage(false);
+                MessagesGrid.SelectionChanged -= MessagesGrid_SelectionChanged;
 
-                if (Program.IsRunningUnderMono)
+                if (MessagesGrid.Rows.Count > curSelMsg)
                 {
-                    // Needs to be delayed on mono or the index doesn't actually change.
-                    BeginInvoke((Action)(() =>
+                    MessagesGrid.Rows[curSelMsg].Selected = true;
+                    MessagesGrid.CurrentCell = MessagesGrid.Rows[curSelMsg].Cells[0];
+
+                    if (Program.IsRunningUnderMono)
+                    {
+                        // Needs to be delayed on mono or the index doesn't actually change.
+                        BeginInvoke((Action)(() =>
+                        {
+                            MessagesGrid.FirstDisplayedScrollingRowIndex = curSelMsg;
+                            btn_FindMsg.Enabled = true;
+                            MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
+                        }));
+                    }
+                    else
                     {
                         MessagesGrid.FirstDisplayedScrollingRowIndex = curSelMsg;
                         btn_FindMsg.Enabled = true;
                         MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
-                    }));
+                    }
                 }
-                else
-                {
-                    MessagesGrid.FirstDisplayedScrollingRowIndex = curSelMsg;
-                    btn_FindMsg.Enabled = true;
-                    MessagesGrid.SelectionChanged += MessagesGrid_SelectionChanged;
-                }
+
+                RequestPreviewUpdate();
             }
 
-            RequestPreviewUpdate();
             SplitMsgContainer_Paint(null, null);
         }
 
