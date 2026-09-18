@@ -89,7 +89,7 @@ namespace NPC_Maker
             return path;
         }
 
-        public static string DenormalizeExtPath(string path, bool relativeToProjectPath = false)
+        public static string DenormalizeExtPath(string path, bool relativeToProjectPath = false, bool relativeToCwd = false)
         {
             if (Program.Settings.ProjectPath.Length >= Program.ExecPath.Length)
             {
@@ -106,19 +106,57 @@ namespace NPC_Maker
             if (relativeToProjectPath)
                 path = MakePathRelativeToProjectPath(path);
 
+            if (relativeToCwd)
+                path = MakePathRelativeToCwd(path);
+
             return path;
+        }
+
+        public static string GetFullPathResolvingLinks(string path)
+        {
+            // Whoops there's no good equivalent for NET Framework 4. Oh well.
+            string fullPath = Path.GetFullPath(path);
+            return fullPath;
+        }
+
+        public static string GetRelativePath(string relativeTo, string path)
+        {
+            relativeTo = Path.GetFullPath(relativeTo).TrimEnd(Path.DirectorySeparatorChar);
+            path = Path.GetFullPath(path);
+
+            var comparison = StringComparison.OrdinalIgnoreCase; 
+            var fromParts = relativeTo.Split(Path.DirectorySeparatorChar);
+            var toParts = path.Split(Path.DirectorySeparatorChar);
+
+            int common = 0;
+
+            while (common < fromParts.Length && common < toParts.Length && string.Equals(fromParts[common], toParts[common], comparison))
+            {
+                common++;
+            }
+
+            if (common == 0) 
+                return path;
+
+            var upSegments = Enumerable.Repeat("..", fromParts.Length - common);
+            var downSegments = toParts.Skip(common);
+            var result = upSegments.Concat(downSegments);
+
+            return string.Join(Path.DirectorySeparatorChar.ToString(), result);
         }
 
         public static string MakePathRelativeToProjectPath(string path)
         {
-            string projectPath = Path.GetFullPath(Program.Settings.ProjectPath);
-            string fullPath = Path.GetFullPath(path);
+            string projectPath = GetFullPathResolvingLinks(Program.Settings.ProjectPath);
+            string fullPath = GetFullPathResolvingLinks(path);
+            return GetRelativePath(projectPath, fullPath);
+        }
 
-            Uri projectUri = new Uri(projectPath.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
-            Uri fileUri = new Uri(fullPath);
-            path = Uri.UnescapeDataString(projectUri.MakeRelativeUri(fileUri).ToString())
-                       .Replace('/', Path.DirectorySeparatorChar);
-            return path;
+        public static string MakePathRelativeToCwd(string path)
+        {
+            string cwd = GetFullPathResolvingLinks(Environment.CurrentDirectory);
+            string fullPath = GetFullPathResolvingLinks(path);
+            return GetRelativePath(cwd, fullPath);
         }
 
         public static string TruncatePath(string path, int maxLength = 60)
@@ -353,7 +391,7 @@ namespace NPC_Maker
             }
         }
 
-        public static string[] ResolveSemicolonPaths(string PathsString, bool relativeToProjectPath = false)
+        public static string[] ResolveSemicolonPaths(string PathsString, bool relativeToProjectPath = false, bool relativeToCwd = false)
         {
             string[] Paths = PathsString.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -361,7 +399,7 @@ namespace NPC_Maker
             {
                 if (!String.IsNullOrWhiteSpace(Paths[i]))
                 {
-                    Paths[i] = Helpers.DenormalizeExtPath(Paths[i], relativeToProjectPath);
+                    Paths[i] = Helpers.DenormalizeExtPath(Paths[i], relativeToProjectPath, relativeToCwd);
                 }
             }
 
