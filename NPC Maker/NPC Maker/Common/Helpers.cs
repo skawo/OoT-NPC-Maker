@@ -84,17 +84,57 @@ namespace NPC_Maker
             return path;
         }
 
+        public static string GetFullPathResolvingLinks(string path)
+        {
+            string fullPath = Path.GetFullPath(path);
+
+            // Split into components
+            string root = Path.GetPathRoot(fullPath) ?? "/";
+            string[] parts = fullPath.Substring(root.Length)
+                                      .Split(Path.DirectorySeparatorChar,
+                                             StringSplitOptions.RemoveEmptyEntries);
+
+            string resolved = root;
+
+            foreach (string part in parts)
+            {
+                string candidate = Path.Combine(resolved, part);
+
+                if (Directory.Exists(candidate) || File.Exists(candidate))
+                {
+                    var info = Directory.Exists(candidate) ? (FileSystemInfo)new DirectoryInfo(candidate) : new FileInfo(candidate);
+
+                    try
+                    {
+                        var target = info.ResolveLinkTarget(returnFinalTarget: true);
+                        resolved = target?.FullName ?? candidate;
+                    }
+                    catch (IOException)
+                    {
+                        resolved = candidate;
+                    }
+                }
+                else
+                {
+                    // Doesn't exist - just append, no resolving possible
+                    resolved = candidate;
+                }
+            }
+
+            return resolved;
+        }
+
         public static string MakePathRelativeToProjectPath(string path)
         {
-            string projectPath = Path.GetFullPath(Program.Settings.ProjectPath);
-            string fullPath = Path.GetFullPath(path);
+            string projectPath = GetFullPathResolvingLinks(Program.Settings.ProjectPath);
+            string fullPath = GetFullPathResolvingLinks(path);
             return Path.GetRelativePath(projectPath, fullPath);
         }
 
         public static string MakePathRelativeToCwd(string path)
         {
-            string cwd = Environment.CurrentDirectory;
-            string fullPath = Path.GetFullPath(path);
+            string cwd = GetFullPathResolvingLinks(Environment.CurrentDirectory);
+            string fullPath = GetFullPathResolvingLinks(path);
             return Path.GetRelativePath(cwd, fullPath);
         }
 
