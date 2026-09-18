@@ -1350,25 +1350,25 @@ namespace NPC_Maker
                     deps.Add(escaped);
             };
 
-            addDep(Helpers.MakePathRelativeToProjectPath(Program.JsonPath));
+            addDep(Helpers.MakePathRelativeToCwd(Program.JsonPath));
 
             foreach (var entry in data.Entries)
             {
                 foreach (var header in entry.EmbeddedOverlayCode.HeaderPaths)
-                    addDep(Helpers.DenormalizeExtPath(header, true));
+                    addDep(Helpers.DenormalizeExtPath(header, false, true));
 
-                foreach (var p in Helpers.ResolveSemicolonPaths(entry.HeaderPath, true))
+                foreach (var p in Helpers.ResolveSemicolonPaths(entry.HeaderPath, false, true))
                     addDep(p);
 
-                foreach (var p in Helpers.ResolveSemicolonPaths(data.ExtScriptHeaderPath, true))
+                foreach (var p in Helpers.ResolveSemicolonPaths(data.ExtScriptHeaderPath, false, true))
                     addDep(p);
             }
 
-            string escapedTarget = Helpers.MakePathRelativeToProjectPath(zobjFilename).Replace(" ", "\\ ");
+            string escapedTarget = Helpers.MakePathRelativeToCwd(zobjFilename).Replace(" ", "\\ ");
 
             var sb = new StringBuilder();
             sb.Append(escapedTarget);
-            sb.Append(":");
+            sb.Append(':');
 
             foreach (var dep in deps)
             {

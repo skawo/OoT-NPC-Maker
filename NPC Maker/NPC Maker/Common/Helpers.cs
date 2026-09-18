@@ -61,7 +61,7 @@ namespace NPC_Maker
             return path;
         }
 
-        public static string DenormalizeExtPath(string path, bool relativeToProjectPath = false)
+        public static string DenormalizeExtPath(string path, bool relativeToProjectPath = false, bool relativeToCwd = false)
         {
             if (Program.Settings.ProjectPath.Length >= Program.ExecPath.Length)
             {
@@ -78,6 +78,9 @@ namespace NPC_Maker
             if (relativeToProjectPath)
                 path = MakePathRelativeToProjectPath(path);
 
+            if (relativeToCwd)
+                path = MakePathRelativeToCwd(path);
+
             return path;
         }
 
@@ -85,12 +88,14 @@ namespace NPC_Maker
         {
             string projectPath = Path.GetFullPath(Program.Settings.ProjectPath);
             string fullPath = Path.GetFullPath(path);
+            return Path.GetRelativePath(projectPath, fullPath);
+        }
 
-            Uri projectUri = new Uri(projectPath.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar);
-            Uri fileUri = new Uri(fullPath);
-            path = Uri.UnescapeDataString(projectUri.MakeRelativeUri(fileUri).ToString())
-                       .Replace('/', Path.DirectorySeparatorChar);
-            return path;
+        public static string MakePathRelativeToCwd(string path)
+        {
+            string cwd = Environment.CurrentDirectory;
+            string fullPath = Path.GetFullPath(path);
+            return Path.GetRelativePath(cwd, fullPath);
         }
 
         public static string TruncatePath(string path, int maxLength = 60)
@@ -270,7 +275,7 @@ namespace NPC_Maker
             }
         }
 
-        public static string[] ResolveSemicolonPaths(string PathsString, bool relativeToProjectPath = false)
+        public static string[] ResolveSemicolonPaths(string PathsString, bool relativeToProjectPath = false, bool relativeToCwd = false)
         {
             string[] Paths = PathsString.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -278,7 +283,7 @@ namespace NPC_Maker
             {
                 if (!String.IsNullOrWhiteSpace(Paths[i]))
                 {
-                    Paths[i] = Helpers.DenormalizeExtPath(Paths[i], relativeToProjectPath);
+                    Paths[i] = Helpers.DenormalizeExtPath(Paths[i], relativeToProjectPath, relativeToCwd);
                 }
             }
 
