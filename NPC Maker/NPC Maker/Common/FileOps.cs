@@ -1398,6 +1398,16 @@ namespace NPC_Maker
                     addDep(p);
             }
 
+            var dictFiles = Directory.GetFiles(Path.Combine(Program.ExecPath, "Dicts"));
+
+            foreach (var dict in dictFiles)
+                addDep(Helpers.MakePathRelativeToCwd(dict));
+
+            var dictFilesJson = Directory.GetFiles(Path.Combine(Program.JsonPath, "Dicts"));
+
+            foreach (var dict in dictFilesJson)
+                addDep(Helpers.MakePathRelativeToCwd(dict));
+
             string escapedTarget = Helpers.MakePathRelativeToCwd(zobjFilename).Replace(" ", "\\ ");
 
             var sb = new StringBuilder();
