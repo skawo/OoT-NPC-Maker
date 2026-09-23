@@ -1401,7 +1401,7 @@ namespace NPC_Maker
             var dictDirs = new[]
             {
                 Path.Combine(Program.ExecPath, "Dicts"),
-                Path.Combine(Path.GetDirectoryName(Program.JsonPath)!, "Dicts")
+                Path.Combine(Path.GetDirectoryName(Program.JsonPath), "Dicts")
             };
 
             foreach (var dir in dictDirs)
