@@ -548,28 +548,28 @@ bool Setup_Objects(NpcMaker* en, PlayState* playState)
         en->status |= NPCMAKER_STATUS_OBJECTS_LOADING;
     }
     
-    if (!Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
+    if (en->settings.objectId > 0 && !Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
         return false;    
     
     for (int i = 0; i < en->numAnims; i++)
     {
         if (en->animations[i].fileStart != USER_ANIMLOAD)
         {
-            if (!Rom_IsObjectLoaded(playState, en->animations[i].objectId))
+            if (en->animations[i].objectId > 0 && !Rom_IsObjectLoaded(playState, en->animations[i].objectId))
                 return false;
         }
     }        
     
     for (int i = 0; i < en->numExDLists; i++)
     {
-        if (!Rom_IsObjectLoaded(playState, en->extraDLists[i].objectId))
+        if (en->extraDLists[i].objectId > 0 && !Rom_IsObjectLoaded(playState, en->extraDLists[i].objectId))
             return false;       
     }
     
     for (int i = NULL_SEG_BLOCK_SIZE; i < en->exSegDataBlSize; i += 12)
     {
         ExSegDataEntry* ex = (ExSegDataEntry*)AADDR(en->exSegData, i);
-        if (!Rom_IsObjectLoaded(playState, ex->objectId))
+        if (ex->objectId > 0 && !Rom_IsObjectLoaded(playState, ex->objectId))
             return false;  
     }    
     
