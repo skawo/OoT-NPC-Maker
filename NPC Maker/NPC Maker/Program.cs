@@ -34,6 +34,9 @@ namespace NPC_Maker
         public static Process CodeEditorProcess;
 
         public static string SettingsFilePath;
+
+        public static string ExtSettingsPathOverride = null;
+
         public static NPCMakerSettings Settings;
         public static MainWindow mw;
 
@@ -134,6 +137,18 @@ namespace NPC_Maker
                 args = args.Where(a => !a.Equals("--silent", StringComparison.OrdinalIgnoreCase)).ToArray();
             }
 
+            string extSettingsArg = args.FirstOrDefault(a =>
+                a.StartsWith("--extsettings=", StringComparison.OrdinalIgnoreCase));
+
+            if (extSettingsArg != null)
+            {
+                ExtSettingsPathOverride = extSettingsArg
+                    .Substring("--extsettings=".Length)
+                    .Trim('"');
+
+                args = args.Where(a => !a.Equals(extSettingsArg, StringComparison.OrdinalIgnoreCase)).ToArray();
+            }
+
             if (!IsRunningUnderMono)
                 AttachConsole(-1);
         }
@@ -199,6 +214,9 @@ namespace NPC_Maker
             {
                 SettingsFilePath = settingsWindows;
             }
+
+            if (!string.IsNullOrEmpty(ExtSettingsPathOverride))
+                SettingsFilePath = ExtSettingsPathOverride;
         }
 
         private static void EnsureDirectoriesExist()
@@ -436,9 +454,9 @@ namespace NPC_Maker
 
         private static int PrintUsage()
         {
-            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps] [--silent]");
-            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c InputCFile OutputZovl [ExtraLinkerFiles|none] [\"COMPILEFLAGS\"] [--silent]");
-            Console.WriteLine("Usage to make msgtable: \"NPC Maker.exe\" -m InputJson InputActorId OutputTable OutputStrings [--silent]");
+            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps] [--silent] [--extsettings=Path]");
+            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c InputCFile OutputZovl [ExtraLinkerFiles|none] [\"COMPILEFLAGS\"] [--silent] [--extsettings=Path]");
+            Console.WriteLine("Usage to make msgtable: \"NPC Maker.exe\" -m InputJson InputActorId OutputTable OutputStrings [--silent] [--extsettings=Path]");
             Console.WriteLine("Press ENTER to exit...");
             return 1;
         }
