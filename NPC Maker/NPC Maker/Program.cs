@@ -15,6 +15,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NPC_Maker
 {
@@ -27,6 +28,9 @@ namespace NPC_Maker
         public static Process CodeEditorProcess;
 
         public static string SettingsFilePath;
+
+        public static string ExtSettingsPathOverride = null;
+
         public static NPCMakerSettings Settings;
 
         public static string ScriptCachePath = "";
@@ -86,12 +90,24 @@ namespace NPC_Maker
                 consoleSilent = true;
                 args = args.Where(a => !a.Equals("--silent", StringComparison.OrdinalIgnoreCase)).ToArray();
             }
+
+            string extSettingsArg = args.FirstOrDefault(a =>
+                a.StartsWith("--extsettings=", StringComparison.OrdinalIgnoreCase));
+
+            if (extSettingsArg != null)
+            {
+                ExtSettingsPathOverride = extSettingsArg
+                    .Substring("--extsettings=".Length)
+                    .Trim('"');
+
+                args = args.Where(a => !a.Equals(extSettingsArg, StringComparison.OrdinalIgnoreCase)).ToArray();
+            }
         }
 
         private static void PrintBanner()
         {
             ConsoleWriteLineS();
-            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.3.782 tempCLI dotNET");
+            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.3.783 tempCLI dotNET");
         }
 
         private static void InitializePaths()
@@ -103,8 +119,13 @@ namespace NPC_Maker
             ScriptCachePath = Path.Combine(ExecPath, "cache", "s_cache");
             CCachePath = Path.Combine(ExecPath, "cache", "c_cache");
             AutoSavePath = Path.Combine(ExecPath, "autosave");
-            SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
+
+            if (!string.IsNullOrEmpty(ExtSettingsPathOverride))
+                SettingsFilePath = ExtSettingsPathOverride;
+            else
+                SettingsFilePath = Path.Combine(ExecPath, "Settings.json");
         }
+
 
         private static void EnsureDirectoriesExist()
         {
@@ -302,9 +323,9 @@ namespace NPC_Maker
 
         private static int PrintUsage()
         {
-            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps] [--silent]");
-            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c InputCFile OutputZovl [ExtraLinkerFiles|none] [\"COMPILEFLAGS\"] [--silent]");
-            Console.WriteLine("Usage to make msgtable: \"NPC Maker.exe\" -m InputJson InputActorId OutputTable OutputStrings [--silent]");
+            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps] [--silent] [--extsettings=Path]");
+            Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c InputCFile OutputZovl [ExtraLinkerFiles|none] [\"COMPILEFLAGS\"] [--silent] [--extsettings=Path]");
+            Console.WriteLine("Usage to make msgtable: \"NPC Maker.exe\" -m InputJson InputActorId OutputTable OutputStrings [--silent] [--extsettings=Path]");
             Console.WriteLine("Press ENTER to exit...");
             return 1;
         }
