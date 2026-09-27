@@ -51,23 +51,28 @@ static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
     #if LOGGING > 0
         is64Printf("___NPC MAKER SPAWNED___\n");
     #endif
-    
+
+    #ifdef NPCM_Z64ROM
+        NpcMaker_LoadVtable();
+    #endif
+
     Setup_Defaults(en, playState);
 }
 
-// Setting up the object needs to happen in update for some unknown reason,
-// because otherwise it fails if the object is already loaded in by the scene.
 static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 {
-    if (!Setup_LoadSetup(en, playState))
+    if (!(en->status & NPCMAKER_STATUS_SETUP_LOADED) && !Setup_LoadSetup(en, playState))
         return;
+    
+    en->status |= NPCMAKER_STATUS_SETUP_LOADED;
     
     if (!Setup_Objects(en, playState))
         return;
-
+    
+    en->status |= NPCMAKER_STATUS_OBJECTS_LOADED;
+    
     en->actor.shape.rot.z = 0;
-    en->actor.world.rot.z = 0;      
-   
+    en->actor.world.rot.z = 0;         
     NpcMaker_RunCFunc(en, playState, en->CFuncs[0], NULL);
 
     Setup_Misc(en, playState);
@@ -79,7 +84,7 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 
     en->actor.update = (ActorFunc)&NpcMaker_Update;
 	en->actor.draw = (ActorFunc)&NpcMaker_Draw;
-	en->actor.destroy = (ActorFunc)&NpcMaker_Destroy;
+	en->actor.destroy = (ActorFunc)&NpcMaker_Destroy; 
 }
 
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
@@ -100,7 +105,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 
     if (en->CFuncsWhen[1] == BEFORE_SCRIPTS)
         NpcMaker_RunCFunc(en, playState, en->CFuncs[1], NULL);
-    
+
     if (en->CFuncsWhen[1] == INSTEAD_OF_SCRIPTS)
         NpcMaker_RunCFunc(en, playState, en->CFuncs[1], NULL);
     else
@@ -111,7 +116,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 
     // Update current conversation status and copy messages into message context if need be...
     Update_Conversation(en, playState);
-	
+
     if (en->pauseCutscene)
     {
         playState->csCtx.curFrame--;
@@ -122,7 +127,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
     if (!en->settings.execJustScript)
     {
         // If we're in cutscene mode, we're always moving in the cutscene movement mode
-        if (playState->csCtx.state && en->settings.cutsceneId)        
+        if (playState->csCtx.state && en->settings.cutsceneId)
             Movement_Main(en, playState, MOVEMENT_CUTSCENE, false, false);
         else
         {
@@ -142,7 +147,7 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 
         if (en->settings.hasCollision)
             Update_Collision(en, playState);
-        
+
         Update_ModelAlpha(en, playState);
     }
 
@@ -161,7 +166,7 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
 
     // Compute the focus point; this is later replaced if the model is drawn with a focus point based on limb
     Vec3f in = { en->settings.targetPosOffset.x, en->settings.targetPosOffset.y, en->settings.targetPosOffset.z };
-    Matrix_MultVec3f(&in, &en->actor.focus.pos);    
+    Matrix_MultVec3f(&in, &en->actor.focus.pos);
 
     if (en->CFuncsWhen[2] == REPLACE_DRAW && en->CFuncs[2] != 0xFFFFFFF)
         NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
@@ -171,17 +176,17 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
 
         if (en->settings.execJustScript)
             return;
-        
+
         Draw_LightsRebind(en, playState);
         Draw_SetGlobalEnvColor(en, playState);
         Draw_SetupSegments(en, playState);
-		
+
         if (en->CFuncsWhen[2] == BEFORE_MODEL)
-            NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);		
+            NpcMaker_RunCFunc(en, playState, en->CFuncs[2], NULL);
 
         if (!en->settings.invisible && en->curAlpha != 0)
             Draw_Model(en, playState);
-            
+
         if (en->settings.castsShadow && !en->settings.hasCollision)
         {
             // Simple shadow for stationary, collisionless, ground-based objects.
@@ -197,10 +202,10 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
                 Matrix_Scale((float)en->settings.shadowRadius / 90.0f, 1.0f, (float)en->settings.shadowRadius / 90.0f, MTXMODE_APPLY);
                 gSPMatrix(POLY_OPA_DISP++, MATRIX_FINALIZE(__gfxCtx, __FILE__, __LINE__), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
                 gSPDisplayList(POLY_OPA_DISP++, gCircleShadowDL);
-            }         
+            }
             // This shadow will respect the ground position
             else
-            {                
+            {
                 Vec3f shadow;
                 shadow.z = shadow.y = shadow.x = en->settings.shadowRadius / 90.0f;
                 //z_actor_shadow_draw_vec3f
@@ -263,11 +268,11 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
     }
 
     NpcMaker_RunCFunc(en, playState, en->CFuncs[4], NULL);
-	
+
     if (en->embeddedOverlay != 0)
         ZeldaArena_Free(en->embeddedOverlay);
-	
-    SkelAnime_Free(&en->skin.skelAnime, playState);	
+
+    SkelAnime_Free(&en->skin.skelAnime, playState);
 
     if (en->userLoadAnimBuf != NULL)
         ZeldaArena_Free(en->userLoadAnimBuf );
@@ -282,7 +287,7 @@ static void NpcMaker_None(NpcMaker* en, PlayState* playState)
 }
 
 /* .data */
-ActorProfile sNpcMakerInit = 	
+ActorProfile sNpcMakerInit =
 {
     .id = 0x0003, // <-- Set this to whichever actor ID you're using.
     .category = ACTORCAT_NPC,
@@ -295,7 +300,7 @@ ActorProfile sNpcMakerInit =
     .draw = (ActorFunc)NpcMaker_None
 };
 
-ActorInitExplPad __attribute__((section(".data"))) sActorVars = 
+ActorInitExplPad __attribute__((section(".data"))) sActorVars =
 {
     .id = 0xDEAD, .padding = 0xBEEF, // <-- magic values, do not change
     .category = ACTORCAT_NPC,

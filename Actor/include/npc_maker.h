@@ -1,8 +1,13 @@
 #ifndef NPC_MAKER_H
 #define NPC_MAKER_H
 
+#if __has_include("npc_maker_project.h")
+    #include "npc_maker_project.h"
+#endif
+
+
 #define MAJOR_VERSION 1
-#define MINOR_VERSION 0
+#define MINOR_VERSION 1
 
 #ifndef GAME_VERSION
     #define GAME_VERSION 0
@@ -58,10 +63,10 @@
     #endif
     #ifndef DEBUG_STRUCT
         #define DEBUG_STRUCT 0
-    #endif    
+    #endif
     #ifndef LOG_VERSION
         #define LOG_VERSION 0
-    #endif    
+    #endif
 #endif
 
 #ifndef COLLISION_VIEWER

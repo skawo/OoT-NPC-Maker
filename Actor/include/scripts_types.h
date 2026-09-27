@@ -33,7 +33,7 @@ typedef struct ScriptInstance
 
     u8 completed;
     AsyncContext* ctx;
-    
+
 } ScriptInstance;
 
 typedef struct AsyncContext
@@ -60,7 +60,7 @@ typedef union ScriptVarval
 {
     u32 ui32;
     s32 i32;
-    float flo;    
+    float flo;
 } ScriptVarval;
 
 typedef union CommonType
@@ -248,7 +248,7 @@ typedef struct ScrInstrIfCCall
     u16 falseInstrNum;
 
     u8 varTypeArgs[4];
-    ScriptVarval Arg[]; 
+    ScriptVarval Arg[];
 
 } ScrInstrIfCCall;
 
@@ -273,7 +273,7 @@ typedef struct ScrInstrExtVarIf
     u8 varType : 4;
     u8 actorNumVarType : 4;
     u8 condition;
-    u8 extVarNum; 
+    u8 extVarNum;
     u8 pad[3];
     ScriptVarval value;
     ScriptVarval actorNum;
@@ -310,7 +310,7 @@ typedef struct ScrInstrAwaitCCall
     u32 funcOffs;
 
     u8 varTypeArgs[4];
-    ScriptVarval Arg[]; 
+    ScriptVarval Arg[];
 
 } ScrInstrAwaitCCall;
 
@@ -399,7 +399,7 @@ typedef struct ScrInstrFace
     u8 target : 4;
     u8 subject : 4;
     u8 subjectActorNumType : 4;
-    u8 targetActorNumType : 4;   
+    u8 targetActorNumType : 4;
     u8 faceType;
     ScriptVarval subjectActorNum;
     ScriptVarval targetActorNum;
@@ -417,7 +417,7 @@ typedef struct ScrInstrRotation
     u8 subId;
     u8 target;
     u8 speedType;
-    
+
     ScriptVarval x;
     ScriptVarval y;
     ScriptVarval z;
@@ -444,7 +444,7 @@ typedef struct ScrInstrPosition
     u8 ignoreY : 4;
     u8 target : 4;
     u8 actorNumType;
-    
+
     ScriptVarval x;
     ScriptVarval y;
     ScriptVarval z;
@@ -674,7 +674,7 @@ typedef struct ScrInstrParticle
     ScriptVarval velX;
     ScriptVarval velY;
     ScriptVarval velZ;
-    
+
     ScriptVarval primR;
     ScriptVarval primG;
     ScriptVarval primB;
@@ -724,12 +724,12 @@ typedef struct ScrInstrQuake
     u8 varTypeSpeed;
     u8 varTypeType;
     u8 varTypeDuration;
-	
+
     u8 varTypeX;
     u8 varTypeY;
     u8 varTypeZRot;
-    u8 varTypeZoom;	
-	
+    u8 varTypeZoom;
+
     ScriptVarval speed;
     ScriptVarval type;
     ScriptVarval duration;
@@ -755,7 +755,7 @@ typedef struct ScrInstrCCall
     ScriptVarval DestVar;
 
     u8 varTypeArgs[4];
-    ScriptVarval Arg[];    
+    ScriptVarval Arg[];
 } ScrInstrCCall;
 
 

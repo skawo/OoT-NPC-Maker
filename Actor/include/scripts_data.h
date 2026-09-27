@@ -5,7 +5,7 @@
 
 u16 basic_set_offsets[] =
 {
-    offsetof(NpcMaker, settings.targetLimb),            
+    offsetof(NpcMaker, settings.targetLimb),
     offsetof(NpcMaker, settings.targetDistance),
     offsetof(NpcMaker, settings.headLimb),
     offsetof(NpcMaker, settings.waistLimb),
@@ -47,7 +47,7 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, skin.skelAnime.curFrame),
     offsetof(NpcMaker, settings.lightPosOffset.x),
     offsetof(NpcMaker, settings.lightPosOffset.y),
-    offsetof(NpcMaker, settings.lightPosOffset.z),    
+    offsetof(NpcMaker, settings.lightPosOffset.z),
     offsetof(NpcMaker, settings.timedPathStart),
     offsetof(NpcMaker, settings.timedPathEnd),
 
@@ -58,7 +58,7 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, actor.cullingVolumeDistance),
     offsetof(NpcMaker, actor.cullingVolumeDownward),
     offsetof(NpcMaker, actor.cullingVolumeScale),
-    
+
     offsetof(NpcMaker, settings.loopPath),
     offsetof(NpcMaker, settings.hasCollision),
     offsetof(NpcMaker, doBlinkingAnm),
@@ -75,14 +75,14 @@ u16 basic_set_offsets[] =
     offsetof(NpcMaker, settings.animInterpFrames),
 };
 
-u16 setAnimsIdsOffsets[] = 
+u16 setAnimsIdsOffsets[] =
 {
     offsetof(NpcMaker, animIdIdle),
     offsetof(NpcMaker, animIdWalk),
     offsetof(NpcMaker, animIdAtk),
 };
 
-u8 setAnimsOffsets[] = 
+u8 setAnimsOffsets[] =
 {
     offsetof(NpcAnimationEntry, objectId),
     offsetof(NpcAnimationEntry, offset),
@@ -91,7 +91,7 @@ u8 setAnimsOffsets[] =
     offsetof(NpcAnimationEntry, speed),
 };
 
-u8 setDlistOffsets[] = 
+u8 setDlistOffsets[] =
 {
     offsetof(ExDListEntry, offset),
     offsetof(ExDListEntry, translation.x),
@@ -107,11 +107,11 @@ u8 setDlistOffsets[] =
 
 u32 toggle_offsets[][2] =
 {
-    {offsetof(NpcMaker, settings.pushesSwitches), ACTOR_FLAG_CAN_PRESS_SWITCHES},
-    {offsetof(NpcMaker, settings.isTargettable), ACTOR_FLAG_ATTENTION_ENABLED},
-    {offsetof(NpcMaker, settings.visibleWithLens), ACTOR_FLAG_REACT_TO_LENS},
-    {offsetof(NpcMaker, settings.alwaysActive), ACTOR_FLAG_UPDATE_CULLING_DISABLED},
-    {offsetof(NpcMaker, settings.alwaysDrawn), ACTOR_FLAG_DRAW_CULLING_DISABLED},
+    {offsetof(NpcMaker, settings.pushesSwitches), PUSH_SWITCHES_MASK},
+    {offsetof(NpcMaker, settings.isTargettable), TARGETTABLE_MASK},
+    {offsetof(NpcMaker, settings.visibleWithLens), DRAWN_WITH_LENS_MASK},
+    {offsetof(NpcMaker, settings.alwaysActive), ALWAYS_ACTIVE_MASK},
+    {offsetof(NpcMaker, settings.alwaysDrawn), ALWAYS_DRAWN_MASK},
 };
 
 u8 inventory_set_slots[][2] =

@@ -6,4 +6,4 @@
 ExSegDataEntry* Data_GetExtraSegmentData(NpcMaker* en, int segment_index, int entry);
 InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int ID);
 
-#endif 
+#endif

@@ -49,6 +49,7 @@ static ColliderCylinderInit npcMakerCollision =
 
 void Setup_Defaults(NpcMaker* en, PlayState* playState)
 {
+    en->status = 0;
     en->npcId = UINT16_MAX;
     en->exSegData = NULL;
     en->animations = NULL;
@@ -98,7 +99,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
 
     for (int i = 0; i < 6; i++)
         en->CFuncs[i] = 0xFFFFFFFF;
-    
+
     for (int i = 0; i < 8; i++)
         en->CFuncsWhen[i] = 0xFF;
 
@@ -106,7 +107,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
 
     // Get the message address.
     en->dummyMesEntry = Rom_GetMessageEntry(DUMMY_MESSAGE);
-    
+
     if (en->dummyMesEntry == NULL)
     {
         #if LOGGING > 0
@@ -118,7 +119,7 @@ void Setup_Defaults(NpcMaker* en, PlayState* playState)
 }
 
 u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset, u32 entryAddress,
-                      u32* allocDest, u16* entriesNumberOut,  u32 entrySize, u32 nullSize, bool noCopy, 
+                      u32* allocDest, u16* entriesNumberOut,  u32 entrySize, u32 nullSize, bool noCopy,
                       bool compressedIndividually, s32 blockSize)
 {
     #if LOGGING > 0
@@ -129,7 +130,7 @@ u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset
     // This is specifically a workaround so we can reuse this function for loading the scripts.
     if (blockSize < 0)
     {
-        *entriesNumberOut = (u16)AVAL(buffer, u32, offset); 
+        *entriesNumberOut = (u16)AVAL(buffer, u32, offset);
         offset += 4;
 
         blockSize = (*entriesNumberOut) * entrySize;
@@ -157,17 +158,17 @@ u32 Setup_LoadSection(NpcMaker* en, PlayState* playState, u8* buffer, u32 offset
             }
             else
                 bcopy(buffer + offset, (u32*)*allocDest, blockSize);
-        } 
+        }
     }
     else
     {
         #if LOGGING > 0
             is64Printf("_No entries defined for section.\n");
-        #endif        
+        #endif
 
         *entriesNumberOut = 0;
         *allocDest = 0;
-    }   
+    }
 
     offset += blockSize;
     return offset;
@@ -178,7 +179,7 @@ void Setup_ScriptVars(NpcMaker* en, void** ptr, u32 count)
     if (count != 0)
         *ptr = ZeldaArena_Malloc(4 * count);
     else
-        *ptr = NULL;   
+        *ptr = NULL;
 
     if (*ptr == NULL && count != 0)
     {
@@ -200,14 +201,14 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
     OverlayRelocationSection* ovl = (OverlayRelocationSection*)(buffer + offset + len - ovlOffset);
 
     u8* addr = ZeldaArena_Malloc(len + ovl->bssSize);
-    
+
     #if LOGGING > 0
         is64Printf("_Copying overlay to 0x%8x\n", addr);
     #endif
-    
+
     bcopy(buffer + offset, addr, len);
 
-   
+
     ovlOffset = AVAL(addr + len, u32, -4);
 
     #if LOGGING > 0
@@ -216,7 +217,7 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
 
     ovl = (OverlayRelocationSection*)(addr + len - ovlOffset);
 
-    
+
     #if LOGGING > 0
         is64Printf("_Relocating section is at 0x%8x\n", ovl);
         is64Printf("_Relocations num is %2d\n", ovl->nRelocations);
@@ -227,12 +228,12 @@ static u8* Setup_LoadEmbeddedOverlay(NpcMaker* en, PlayState* playState, u8* buf
     #if LOGGING > 0
         is64Printf("_Clearing bss...\n");
     #endif
-    
+
     if (ovl->bssSize != 0)
-        bzero((void*)addr + len, ovl->bssSize);    
-    
+        bzero((void*)addr + len, ovl->bssSize);
+
     int size = (uintptr_t)&ovl->relocations[ovl->nRelocations] - (uintptr_t)ovl;
-    bzero(ovl, size);   
+    bzero(ovl, size);
 
     #if LOGGING > 0
         is64Printf("_Invalidating cache...\n");
@@ -248,11 +249,11 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 {
     static u32 buf[4]; // has to be static, or Wii VC explodes
     bzero(&buf, 16);
-    
+
     u16 settingsObjectId = en->actor.params;
 
     #if LOGGING > 0
-        is64Printf("_Loading NPC Entry %2d from object %4d.\n", en->npcId, settingsObjectId);
+        is64Printf("_Loading NPC Entry %2d from object %4d.\n", en->actor.shape.rot.z, settingsObjectId);
     #endif
 
     #if DIRECT_ROM_LOAD == 1
@@ -265,20 +266,20 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     {
         #if LOGGING > 0
             is64Printf("_%2d: _Loading settings file into RAM...\n", en->npcId);
-        #endif  
+        #endif
 
         int bankIndex = Rom_LoadObjectIfUnloaded(playState, settingsObjectId);
-        
+
         if (!Object_IsLoaded(&playState->objectCtx, bankIndex))
             return false;
     }
-    
-    en->npcId = en->actor.shape.rot.z;  
-    
+
+    en->npcId = en->actor.shape.rot.z;
+
     // Load number of entries from ROM...
     Rom_LoadDataFromObject(playState, settingsObjectId, &buf, 0, 4, en->getSettingsFromRAMObject);
     u32 numEntries = buf[0];
-    
+
     // If the selected entry id is bigger than the number of entries, exit.
     if (en->npcId >= numEntries)
     {
@@ -289,9 +290,9 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         Actor_Kill(&en->actor);
         return false;
     }
-    
+
     bzero(&buf, 16);
-    
+
     // Load the entry offset...
     Rom_LoadDataFromObject(playState, settingsObjectId, &buf, 4 + (12 * en->npcId), 16, en->getSettingsFromRAMObject);
 
@@ -299,7 +300,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     u32 entrySizeCompr = buf[1];
     u32 entrySize = buf[2];
     u8* buffer;
-    
+
     // If the entry offset is 0, the actor was nulled.
     if (entryAddress == 0 || entrySize == 0)
     {
@@ -310,7 +311,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         Actor_Kill(&en->actor);
         return false;
     }
-    
+
     // If compressed size is 0, then the actor is not compressed.
     if (entrySizeCompr)
     {
@@ -356,8 +357,8 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     {
         u32 len = AVAL(buffer, u32, offset);
         en->messagesDataOffset = entryAddress + offset + 16;
-        en->numLanguages = AVAL(buffer, u32, offset + 8); 
-        en->numMessages = AVAL(buffer, u32, offset + 12);         
+        en->numLanguages = AVAL(buffer, u32, offset + 8);
+        en->numMessages = AVAL(buffer, u32, offset + 12);
         offset += len;
 
     }
@@ -365,15 +366,15 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
     {
         u8* msgBuf = NULL;
         u32 sectionLen = AVAL(buffer, u32, offset);
-        en->numLanguages = AVAL(buffer, u32, offset + 8); 
-        en->numMessages = AVAL(buffer, u32, offset + 12); 
+        en->numLanguages = AVAL(buffer, u32, offset + 8);
+        en->numMessages = AVAL(buffer, u32, offset + 12);
 
         u8* dataStart = buffer + offset + 16;
 
         if (en->numMessages != 0)
         {
             int currentLang = NpcM_GetLanguage();
-            
+
             if (currentLang >= en->numLanguages)
                 currentLang = 0;
 
@@ -388,12 +389,12 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
             {
                 // Multiple languages: copy only the data for that language
                 u32 headerSize = en->numMessages * sizeof(InternalMsgEntry);
-                u32 langDataOffset = currentLang * headerSize;                
+                u32 langDataOffset = currentLang * headerSize;
 
                 InternalMsgEntry* langHeaders = (InternalMsgEntry*)(dataStart + langDataOffset);
                 InternalMsgEntry* firstMsg = &langHeaders[0];
                 InternalMsgEntry* lastMsg = &langHeaders[en->numMessages - 1];
-                
+
                 u32 msgDataSize = (lastMsg->offset + lastMsg->msgLen) - firstMsg->offset;
                 u32 allocLen = headerSize + msgDataSize;
 
@@ -413,14 +414,14 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
                 for (int i = 0; i < en->numMessages; i++)
                     newHeaders[i].offset -= offsetAdjustment;
             }
-            
-            en->messagesDataOffset = (u32)msgBuf;    
-        }      
+
+            en->messagesDataOffset = (u32)msgBuf;
+        }
 
         offset += sectionLen;
     }
 
-    SectionLoad sLoadList[] = 
+    SectionLoad sLoadList[] =
     {
         {.allocDest = (u32*)&en->animations,  .entriesNumberOut = &en->numAnims,        .entrySize = sizeof(NpcAnimationEntry),  .nullBlockSize = NULL_ANIM_BLOCK_SIZE,      .noCopy = false},
         {.allocDest = (u32*)&en->extraDLists, .entriesNumberOut = &en->numExDLists,     .entrySize = sizeof(ExDListEntry),       .nullBlockSize = NULL_EXDLIST_BLOCK_SIZE,   .noCopy = false},
@@ -474,15 +475,15 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
         }
 
         int size = (i == ARRAY_COUNT(sLoadList) - 1) ? entrySize - offset : -1;
-        offset = Setup_LoadSection(en, 
-                                   playState, 
-                                   buffer, 
-                                   offset, 
-                                   entryAddress, 
-                                   sLoadList[i].allocDest, 
-                                   sLoadList[i].entriesNumberOut, 
-                                   sLoadList[i].entrySize, 
-                                   sLoadList[i].nullBlockSize, 
+        offset = Setup_LoadSection(en,
+                                   playState,
+                                   buffer,
+                                   offset,
+                                   entryAddress,
+                                   sLoadList[i].allocDest,
+                                   sLoadList[i].entriesNumberOut,
+                                   sLoadList[i].entrySize,
+                                   sLoadList[i].nullBlockSize,
                                    sLoadList[i].noCopy,
                                    entrySizeCompr,
                                    size);
@@ -490,7 +491,7 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 
     #if LOGGING > 0
         is64Printf("_%2d: Allocating script variables...\n", en->npcId);
-    #endif  
+    #endif
 
     Setup_ScriptVars(en, (void*)&en->scriptVars, en->settings.numVars);
     Setup_ScriptVars(en, (void*)&en->scriptFVars, en->settings.numFVars);
@@ -501,51 +502,77 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 
 bool Setup_Objects(NpcMaker* en, PlayState* playState)
 {
-    // Loading and setting the main object ID.
-    if (en->settings.objectId > 0)
+    if (!(en->status & NPCMAKER_STATUS_OBJECTS_LOADING))
     {
-        Rom_LoadObjectIfUnloaded(playState, en->settings.objectId);
-        if (!Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
-            return false;
+        // Loading and setting the main object ID.
+        if (en->settings.objectId > 0)
+            Rom_LoadObjectIfUnloaded(playState, en->settings.objectId);
+        
+        int largestUserAnim = 0;
+
+        for (int i = 0; i < en->numAnims; i++)
+        {
+            if (en->animations[i].fileStart != USER_ANIMLOAD)
+            {
+                Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
+            }
+            else
+            {
+                int animS = NpcM_GetAnimationSize(en, en->animations[i].offset, en->animations[i].objectId);
+                largestUserAnim = MAX(largestUserAnim, animS);
+
+                #if LOGGING > 1
+                    is64Printf("_%2d: Checking for largest animation... %d bytes.\n", en->npcId, largestUserAnim);
+                #endif 
+            }
+        }
+
+        if (largestUserAnim != 0)
+        {
+            en->userLoadAnimBuf = ZeldaArena_Malloc(largestUserAnim);
+
+            #if LOGGING > 0
+                if (en->userLoadAnimBuf == NULL)
+                    is64Printf("_%2d: Could not allocate animations...\n", en->npcId);
+            #endif 
+        }
+        
+        for (int i = 0; i < en->numExDLists; i++)
+            Rom_LoadObjectIfUnloaded(playState, en->extraDLists[i].objectId);
+
+        for (int i = NULL_SEG_BLOCK_SIZE; i < en->exSegDataBlSize; i += 12)
+        {
+            ExSegDataEntry* ex = (ExSegDataEntry*)AADDR(en->exSegData, i);
+            Rom_LoadObjectIfUnloaded(playState, ex->objectId);
+        }
+        
+        en->status |= NPCMAKER_STATUS_OBJECTS_LOADING;
     }
-
-    int largestUserAnim = 0;
-
+    
+    if (en->settings.objectId > 0 && !Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
+        return false;    
+    
     for (int i = 0; i < en->numAnims; i++)
     {
         if (en->animations[i].fileStart != USER_ANIMLOAD)
         {
-            Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
+            if (en->animations[i].objectId > 0 && !Rom_IsObjectLoaded(playState, en->animations[i].objectId))
+                return false;
         }
-        else
-        {
-            int animS = NpcM_GetAnimationSize(en, en->animations[i].offset, en->animations[i].objectId);
-            largestUserAnim = MAX(largestUserAnim, animS);
-
-            #if LOGGING > 1
-                is64Printf("_%2d: Checking for largest animation... %d bytes.\n", en->npcId, largestUserAnim);
-            #endif 
-        }
-    }
-
-    if (largestUserAnim != 0)
-    {
-        en->userLoadAnimBuf = ZeldaArena_Malloc(largestUserAnim);
-
-        #if LOGGING > 0
-            if (en->userLoadAnimBuf == NULL)
-                is64Printf("_%2d: Could not allocate animations...\n", en->npcId);
-        #endif 
-    }
+    }        
     
     for (int i = 0; i < en->numExDLists; i++)
-        Rom_LoadObjectIfUnloaded(playState, en->extraDLists[i].objectId);
-
+    {
+        if (en->extraDLists[i].objectId > 0 && !Rom_IsObjectLoaded(playState, en->extraDLists[i].objectId))
+            return false;       
+    }
+    
     for (int i = NULL_SEG_BLOCK_SIZE; i < en->exSegDataBlSize; i += 12)
     {
         ExSegDataEntry* ex = (ExSegDataEntry*)AADDR(en->exSegData, i);
-        Rom_LoadObjectIfUnloaded(playState, ex->objectId);
-    }
+        if (ex->objectId > 0 && !Rom_IsObjectLoaded(playState, ex->objectId))
+            return false;  
+    }    
     
     return true;
 }
@@ -553,10 +580,10 @@ bool Setup_Objects(NpcMaker* en, PlayState* playState)
 void Setup_Misc(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 0
-        is64Printf("_%2d: Setting up collision with radius %04d, height %04d, yoffs %04d\n", 
+        is64Printf("_%2d: Setting up collision with radius %04d, height %04d, yoffs %04d\n",
                      en->npcId, en->settings.collisionRadius, en->settings.collisionHeight, en->settings.collisionyShift);
     #endif
-    
+
     // Only one of these can be enabled
     if (en->settings.showDlistEditorDebugOn && en->settings.showLookAtEditorDebugOn)
         en->settings.showLookAtEditorDebugOn = false;
@@ -567,7 +594,7 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
     en->collider.dim.height = en->settings.collisionHeight;
     en->collider.dim.yShift = en->settings.collisionyShift;
     Collider_UpdateCylinder(&en->actor, &en->collider);
-    
+
     if (en->settings.castsShadow)
     {
         #if LOGGING > 0
@@ -594,24 +621,24 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
     #pragma region Actor flags
 
         if (!en->settings.alwaysActive)
-            en->actor.flags &= ~ACTOR_FLAG_UPDATE_CULLING_DISABLED;
+            en->actor.flags &= ~ALWAYS_ACTIVE_MASK;
 
         if (en->settings.isTargettable)
-            en->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;
+            en->actor.flags |= TARGETTABLE_MASK;
 
         if (en->settings.pushesSwitches)
-            en->actor.flags |= ACTOR_FLAG_CAN_PRESS_SWITCHES;
+            en->actor.flags |= PUSH_SWITCHES_MASK;
 
         if (en->settings.alwaysDrawn)
-            en->actor.flags |= ACTOR_FLAG_DRAW_CULLING_DISABLED;
+            en->actor.flags |= ALWAYS_DRAWN_MASK;
 
         if (en->settings.visibleWithLens)
-            en->actor.flags |= ACTOR_FLAG_REACT_TO_LENS;
+            en->actor.flags |= DRAWN_WITH_LENS_MASK;
 
         if (en->settings.existsInAllRooms)
             en->actor.room = -1;
 
-        en->actor.flags |= ACTOR_FLAG_IGNORE_POINT_LIGHTS;
+        en->actor.flags |= NO_LIGHT_BIND;
 
         en->actor.attentionRangeType = en->settings.targetDistance;
         // If the actor is meant to be pushable, we set its mass lower.
@@ -650,13 +677,13 @@ void Setup_Misc(NpcMaker* en, PlayState* playState)
             en->scriptInstances[i].jumpToWhenSpottedInstrNum = -1;
             en->scriptInstances[i].active = 1;
             en->scriptInstances[i].completed = 0;
-            
+
             Scripts_FreeTemp(&en->scriptInstances[i]);
         }
 
         #if LOGGING > 0
             is64Printf("_%2d: Script init complete.\n", en->npcId);
-        #endif            
+        #endif
     }
 
     #pragma endregion
@@ -675,7 +702,7 @@ void Setup_Path(NpcMaker* en, PlayState* playState, int pathId)
 
         #if LOGGING > 0
             is64Printf("_%2d: Tried to setup an invalid path.\n", en->npcId);
-        #endif  
+        #endif
 
         return;
     }
@@ -684,7 +711,7 @@ void Setup_Path(NpcMaker* en, PlayState* playState, int pathId)
     {
         #if LOGGING > 0
             is64Printf("_%2d: Requested path doesn't exist, or path list was not found.\n", en->npcId);
-        #endif     
+        #endif
 
         en->curPathNode = INVALID_NODE;
         en->settings.pathId = INVALID_PATH;
@@ -701,7 +728,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
     #if LOGGING > 0
         is64Printf("_%2d: Setting up model.\n", en->npcId);
     #endif
-    
+
     if (en->settings.objectId > 0)
     {
         // We assume the model is in Segment 6.
@@ -709,7 +736,7 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
 
         #if LOGGING > 0
             is64Printf("_%2d: Setting up skeleton at 0x%08x.\n", en->npcId, en->settings.skeleton);
-        #endif        
+        #endif
 
         switch (en->settings.drawType)
         {
@@ -719,8 +746,8 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
                 SkelAnime_InitFlex(playState,
                                    &en->skin.skelAnime,
                                    (void*)en->settings.skeleton,
-                                   0, 0, 0, 0); 
-                                 
+                                   0, 0, 0, 0);
+
                 break;
             }
             case OPA_NONMATRIX:
@@ -729,8 +756,8 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
                 SkelAnime_Init(playState,
                                &en->skin.skelAnime,
                                (void*)en->settings.skeleton,
-                               0, 0, 0, 0); 
-                                 
+                               0, 0, 0, 0);
+
                 break;
             }
             case SKIN:
@@ -739,8 +766,8 @@ void Setup_Model(NpcMaker* en, PlayState* playState)
                 Skin_Init(playState,
                               &en->skin,
                               (void*)en->settings.skeleton,
-                              0); 
-                                          
+                              0);
+
                 break;
             }
             default: break;
@@ -793,9 +820,9 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
     {
         #if LOGGING > 0
             is64Printf("_%2d: Animations are undefined, or couldn't be allocated.\n", en->npcId, animId);
-        #endif      
+        #endif
 
-        return; 
+        return;
     }
 
     if (en->currentAnimId != animId || forceSet)
@@ -823,35 +850,38 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
             {
                 #if LOGGING > 0
                     is64Printf("_%2d: User-loaded animations could not be allocated, so animation won't play...\n", en->npcId);
-                #endif      
+                #endif
 
                 return;
             }
 
-            NpcM_LoadAnimation(en, anim.offset, R_OBJECT(en, anim.objectId));
+            if (en->currentAnimId != animId)
+            {
+                NpcM_LoadAnimation(en, anim.offset, R_OBJECT(en, anim.objectId));
+                #if LOGGING > 0
+                    is64Printf("_%2d: User loaded animation ID %d has been loaded at %x\n", en->npcId, anim.offset, en->userLoadAnimBuf);
+                #endif
+            }
+
             gSegments[6] = OS_K0_TO_PHYSICAL(en->userLoadAnimBuf);
             animOffset = 0;
-
-            #if LOGGING > 0
-                is64Printf("_%2d: User loaded animation ID %d has been loaded at %x\n", en->npcId, anim.offset, en->userLoadAnimBuf);
-            #endif
         }
-        
-        bool was_set = Setup_AnimationImpl(&en->actor, 
-                                             playState, 
-                                             &en->skin.skelAnime, 
-                                             animOffset, 
-                                             en->settings.animationType, 
+
+        bool was_set = Setup_AnimationImpl(&en->actor,
+                                             playState,
+                                             &en->skin.skelAnime,
+                                             animOffset,
+                                             en->settings.animationType,
                                              R_OBJECT(en, anim.objectId),
                                              anim.fileStart,
                                              (R_FILESTART(en, anim.fileStart)),
-                                             en->settings.objectId, 
+                                             en->settings.objectId,
                                              en->settings.fileStart,
-                                             anim.startFrame, 
-                                             anim.endFrame, 
-                                             anim.speed, 
+                                             anim.startFrame,
+                                             anim.endFrame,
+                                             anim.speed,
                                              -en->settings.animInterpFrames,
-                                             interpolate, 
+                                             interpolate,
                                              playOnce,
                                              external);
 
@@ -863,30 +893,30 @@ void Setup_Animation(NpcMaker* en, PlayState* playState, int animId, bool interp
     }
 }
 
-bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int rFileStart, 
-                           int actorObject, int actorObjectFileStart, int animStart, int animEnd, float speed, int interpolateFrames, bool interpolate, 
+bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanime, int animAddr, int animType, int object, int fileStart, int rFileStart,
+                           int actorObject, int actorObjectFileStart, int animStart, int animEnd, float speed, int interpolateFrames, bool interpolate,
                            bool playOnce, bool external)
 {
 #pragma region AnimMode
         /*
             if (anim.start_frame != 0 || anim.end_frame != 255)
             {
-                anim_mode = interpolate ? 
-                                    play_once ? ANIMMODE_ONCE_INTERP : ANIMMODE_LOOP_PARTIAL_INTERP 
-                                    : 
+                anim_mode = interpolate ?
+                                    play_once ? ANIMMODE_ONCE_INTERP : ANIMMODE_LOOP_PARTIAL_INTERP
+                                    :
                                     play_once ? ANIMMODE_ONCE : ANIMMODE_LOOP_PARTIAL;
             }
             else
             {
-                anim_mode = interpolate ? 
-                                    play_once ? ANIMMODE_ONCE_INTERP : ANIMMODE_LOOP_INTERP 
-                                    : 
-                                    play_once ? ANIMMODE_ONCE : ANIMMODE_LOOP;            
+                anim_mode = interpolate ?
+                                    play_once ? ANIMMODE_ONCE_INTERP : ANIMMODE_LOOP_INTERP
+                                    :
+                                    play_once ? ANIMMODE_ONCE : ANIMMODE_LOOP;
             }
         */
 
         int animMode;
-        
+
         if (animStart != 0 || animEnd != 255)
             animMode = ANIMMODE_LOOP_PARTIAL + interpolate - (2 * playOnce);
         else
@@ -899,7 +929,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
             case ANIMTYPE_LINK:
             {
                 animAddr = OFFSET_ADDRESS(4, animAddr);
-                
+
                 #if LOGGING > 1
                     is64Printf("_Link animation type at 0x%08x, animation mode %01d\n", animAddr, animMode);
                 #endif
@@ -912,7 +942,7 @@ bool Setup_AnimationImpl(Actor* actor, PlayState* playState, SkelAnime* skelanim
                                      (void*)animAddr,
                                      speed,
                                      startFrame,
-                                     endFrame, 
+                                     endFrame,
                                      animMode,
                                      interpolate ? interpolateFrames : -1);
 

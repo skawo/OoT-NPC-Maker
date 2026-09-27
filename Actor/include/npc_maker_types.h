@@ -6,6 +6,9 @@
 #include "npc_maker_defines.h"
 #include "scripts_defines.h"
 #include "message_data_static.h"
+#ifdef NPCM_Z64ROM
+#include "npc_maker_z64rom.h"
+#endif
 
 typedef struct NpcMaker NpcMaker;
 typedef struct InternalMsgEntry InternalMsgEntry;
@@ -41,7 +44,7 @@ typedef struct InternalMsgEntry InternalMsgEntry;
 #ifndef GetInternalMessageDataFunc
 	typedef InternalMsgEntry GetInternalMessageDataFunc(NpcMaker* en, PlayState* playState, int ID);
 #endif
- 
+
 typedef struct NpcSettings
 {
     u8 cutsceneId;
@@ -70,7 +73,7 @@ typedef struct NpcSettings
     Color_RGB8 lightColor;
     u8 animInterpFrames;
     u8 pad[3];
-    
+
     u8 hasCollision;
     u8 pushesSwitches;
     u8 ignorePathYAxis;
@@ -135,7 +138,7 @@ typedef struct NpcSettings
     u8 blinkPattern[4];
     u8 talkPattern[4];
 
-} NpcSettings;    
+} NpcSettings;
 
 typedef struct InternalMsgEntry
 {
@@ -203,12 +206,12 @@ typedef struct SectionLoad
 
 typedef struct NpcMaker
 {
-    union 
+    union
     {
         Actor actor;
         DynaPolyActor dyna;
     };
-    
+
     NpcSettings settings;
 
     u16 npcId;
@@ -217,7 +220,7 @@ typedef struct NpcMaker
 
     u16 numAnims;
     u16 numExDLists;
-    u16 numExColors; 
+    u16 numExColors;
     u16 exSegDataBlSize;
 
     u16 lastDayTime;
@@ -228,7 +231,7 @@ typedef struct NpcMaker
 
     u8 segmentDataIds[0x7];
     u16 blinkTimer;
-    
+
     u8 currentBlinkFrame;
     u8 currentTalkFrame;
     u8 blinkingFramesBetween;
@@ -242,7 +245,7 @@ typedef struct NpcMaker
     u8 canTrade;
     u8 canTalk;
     u8 stopPlayer;
-    
+
     u8 isTalking;
     u8 persistTalk;
     u8 textboxDisplayed;
@@ -303,7 +306,7 @@ typedef struct NpcMaker
     u16 curTextBuffPos;
 
     u32 CFuncs[6];
-    u8 CFuncsWhen[8];    
+    u8 CFuncsWhen[8];
     u8* embeddedOverlay;
     u8 pad2;
 
@@ -320,13 +323,14 @@ typedef struct NpcMaker
 	GetInternalMessageFunc* GetInternalMsgFunc;
 	GetInternalMessagePtrFunc* GetInternalMsgPtrFunc;
     GetInternalMessageDataFunc* GetInternalMsgDataPtrFunc;
-    
+
     u32 numLanguages;
-    u32 numMessages;    
+    u32 numMessages;
     void* userLoadAnimBuf;
     AsyncContext* asyncCtxs;
     u32 flags_internal[8];
-    
+    u8 status;
+
     #if DEBUG_STRUCT == 1
         s32 dbgVar;
         s32 dbgVar2;

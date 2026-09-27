@@ -9,7 +9,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
         is64Printf("_%2d: DEBUG DRAW\n", en->npcId);
-    #endif   
+    #endif
 
     #if COLLISION_VIEWER == 1
 
@@ -37,7 +37,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
         {
             #if LOGGING > 2
                 is64Printf("_%2d: LOOKAT editor is enabled.\n", en->npcId);
-            #endif  
+            #endif
 
             Gfx* gfx = Gfx_Open(playState->state.gfxCtx->polyOpa.p);
             gSPDisplayList(playState->state.gfxCtx->overlay.p++, gfx);
@@ -48,43 +48,43 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
             GfxPrint_SetColor(&printer, 255, 255, 255, 255);
 
 
-            char lookAts[5][15] = {"None", "Body", "Head", "Waist", "H & W"}; 
-            char axises[6][3] = {"+X", "-X", "+Y", "-Y", "+Z", "-Z"}; 
+            char lookAts[5][15] = {"None", "Body", "Head", "Waist", "H & W"};
+            char axises[6][3] = {"+X", "-X", "+Y", "-Y", "+Z", "-Z"};
 
 
             GfxPrint_SetPos(&printer, 24, 10);
-            GfxPrint_Printf(&printer, "Type %s", lookAts[en->settings.lookAtType]);  
+            GfxPrint_Printf(&printer, "Type %s", lookAts[en->settings.lookAtType]);
             GfxPrint_SetPos(&printer, 24, 11);
-            GfxPrint_Printf(&printer, "Head limb %d", en->settings.headLimb); 
+            GfxPrint_Printf(&printer, "Head limb %d", en->settings.headLimb);
             GfxPrint_SetPos(&printer, 24, 12);
-            GfxPrint_Printf(&printer, "Head V Axis %s", axises[en->settings.headVertAxis]); 
+            GfxPrint_Printf(&printer, "Head V Axis %s", axises[en->settings.headVertAxis]);
             GfxPrint_SetPos(&printer, 24, 13);
-            GfxPrint_Printf(&printer, "Head H Axis %s", axises[en->settings.headHorAxis]); 
+            GfxPrint_Printf(&printer, "Head H Axis %s", axises[en->settings.headHorAxis]);
             GfxPrint_SetPos(&printer, 24, 14);
-            GfxPrint_Printf(&printer, "Waist limb %d", en->settings.waistLimb); 
+            GfxPrint_Printf(&printer, "Waist limb %d", en->settings.waistLimb);
             GfxPrint_SetPos(&printer, 24, 15);
-            GfxPrint_Printf(&printer, "Waist V Axis %s", axises[en->settings.waistVertAxis]); 
+            GfxPrint_Printf(&printer, "Waist V Axis %s", axises[en->settings.waistVertAxis]);
             GfxPrint_SetPos(&printer, 24, 16);
-            GfxPrint_Printf(&printer, "Waist H Axis %s", axises[en->settings.waistHorAxis]); 
+            GfxPrint_Printf(&printer, "Waist H Axis %s", axises[en->settings.waistHorAxis]);
             GfxPrint_SetPos(&printer, 24, 17);
-            GfxPrint_Printf(&printer, "Deg Ver %d", en->settings.lookAtDegreesVert);  
+            GfxPrint_Printf(&printer, "Deg Ver %d", en->settings.lookAtDegreesVert);
             GfxPrint_SetPos(&printer, 24, 18);
-            GfxPrint_Printf(&printer, "Deg Hor %d", en->settings.lookAtDegreesHor);         
+            GfxPrint_Printf(&printer, "Deg Hor %d", en->settings.lookAtDegreesHor);
             GfxPrint_SetPos(&printer, 24, 19);
-            GfxPrint_Printf(&printer, "Offset X %d", (int)en->settings.lookAtPosOffset.x); 
+            GfxPrint_Printf(&printer, "Offset X %d", (int)en->settings.lookAtPosOffset.x);
             GfxPrint_SetPos(&printer, 24, 20);
-            GfxPrint_Printf(&printer, "Offset Y %d", (int)en->settings.lookAtPosOffset.y); 
+            GfxPrint_Printf(&printer, "Offset Y %d", (int)en->settings.lookAtPosOffset.y);
             GfxPrint_SetPos(&printer, 24, 21);
-            GfxPrint_Printf(&printer, "Offset Z %d", (int)en->settings.lookAtPosOffset.z);   
+            GfxPrint_Printf(&printer, "Offset Z %d", (int)en->settings.lookAtPosOffset.z);
 
             GfxPrint_SetPos(&printer, 22, 10 + en->dbgPosEditorCursorPos);
-            GfxPrint_Printf(&printer, ">");   
+            GfxPrint_Printf(&printer, ">");
 
             gfx = GfxPrint_Close(&printer);
             GfxPrint_Destroy(&printer);
             gSPEndDisplayList(gfx++);
             Gfx_Close(playState->state.gfxCtx->polyOpa.p, gfx);
-            playState->state.gfxCtx->polyOpa.p = gfx;                     
+            playState->state.gfxCtx->polyOpa.p = gfx;
         }
 
         #endif
@@ -122,7 +122,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
                 GfxPrint_SetPos(&printer, 24, 17);
                 GfxPrint_Printf(&printer, "Sc %04f", dlist.scale);
                 GfxPrint_SetPos(&printer, 24, 18);
-                GfxPrint_Printf(&printer, "St %01d", dlist.showType);                
+                GfxPrint_Printf(&printer, "St %01d", dlist.showType);
                 GfxPrint_SetPos(&printer, 24, 19);
                 GfxPrint_Printf(&printer, "L %04d", dlist.limb);
             }
@@ -166,11 +166,11 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
 
         #endif
 
-    #endif    
+    #endif
 
     #if LOGGING > 2
         is64Printf("_%2d: DEBUG DRAW END\n", en->npcId);
-    #endif 
+    #endif
 }
 
 inline u32 Draw_GetDrawDestType(NpcMaker* en, PlayState* playState)
@@ -190,7 +190,7 @@ void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
 {
     #if LOGGING > 2
         is64Printf("_%2d: Drawing light\n", en->npcId);
-    #endif 
+    #endif
 
     Vec3f transl_in_dir;
     Math_Vec3s_ToVec3f(&transl_in_dir, &en->settings.lightPosOffset);
@@ -210,18 +210,18 @@ void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
                             en->settings.lightGlow ? Rand_S16Offset(en->settings.lightRadius, 15) : en->settings.lightRadius,
                             en->settings.lightGlow ? LIGHT_POINT_GLOW : LIGHT_POINT_NOGLOW);
 
-    }  
+    }
 
     #if LOGGING > 2
         is64Printf("_%2d: Drawing light complete\n", en->npcId);
-    #endif   
+    #endif
 }
 
-void Draw_LightsRebind(NpcMaker* en, PlayState* playState) 
+void Draw_LightsRebind(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
         is64Printf("_%2d: Rebinding lights\n", en->npcId);
-    #endif 
+    #endif
 
     Vec3f bindPos = en->actor.world.pos;
     bindPos.y += ((en->actor.focus.pos.y - en->actor.world.pos.y) / 2);
@@ -233,7 +233,7 @@ void Draw_LightsRebind(NpcMaker* en, PlayState* playState)
 
     #if LOGGING > 2
         is64Printf("_%2d: Rebinding lights done\n", en->npcId);
-    #endif     
+    #endif
 }
 
 inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
@@ -273,7 +273,7 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
 {
     #if LOGGING > 2
         is64Printf("_%2d: Drawing extra display list at limb %2d\n", en->npcId, dList->limb);
-    #endif 
+    #endif
 
     s32 object = R_OBJECT(en, dList->objectId);
     u32 dListOffset = OFFSET_ADDRESS(6, dList->offset);
@@ -301,16 +301,16 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
 
                     return;
                 }
-                else  
+                else
                     gSPSegment((*gfxP)++, 6, AADDR(pointer, (R_FILESTART(en, dList->fileStart))));
             }
-                
+
             break;
         }
     }
 
     Draw_SetEnvColor(gfxP, dList->envColor, en->curAlpha);
-    gDPPipeSync((*gfxP)++);    
+    gDPPipeSync((*gfxP)++);
     gSPMatrix((*gfxP)++, MATRIX_FINALIZE(playState->state.gfxCtx, __FILE__, __LINE__), G_MTX_MODELVIEW | G_MTX_LOAD);
     gSPDisplayList((*gfxP)++, dListOffset);
 
@@ -322,7 +322,7 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
 
     #if LOGGING > 2
         is64Printf("_%2d: Drawing extra display list complete\n", en->npcId);
-    #endif 
+    #endif
 }
 
 void Draw_AffectMatrix(ExDListEntry dlist, Vec3f* translation, Vec3s* rotation)
@@ -354,15 +354,15 @@ void Draw_PostLimbDraw(PlayState* playState, s32 limb, Gfx** dListPtr, Vec3s* ro
 {
     NpcMaker* en = (NpcMaker*)instance;
     Draw_CalcFocusPos(playState, limb, en);
-    
+
     u32 cFuncOffs = en->CFuncs[5];
-	
+
     if (cFuncOffs != 0xFFFFFFFF)
     {
         #if LOGGING > 2
             is64Printf("_Running embedded post-limb function %8x\n", en->embeddedOverlay + cFuncOffs);
         #endif
-        
+
         typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP);
         EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + cFuncOffs;
         f(en, playState, limb, dListPtr, NULL, rot, instance, gfxP);
@@ -379,15 +379,15 @@ s32 Draw_PostLimbDrawSkin(Actor* instance, PlayState* playState, s32 limb, Skin*
     NpcMaker* en = (NpcMaker*)instance;
     Draw_SetupSegments(en, playState);
     Draw_CalcFocusPos(playState, limb, en);
-    
+
     u32 cFuncOffs = en->CFuncs[5];
-	
+
     if (cFuncOffs != 0xFFFFFFFF)
     {
         #if LOGGING > 2
             is64Printf("_Running embedded post-limb function %8x\n", en->embeddedOverlay + cFuncOffs);
         #endif
-        
+
         typedef float EmbeddedFunction(NpcMaker* en, PlayState* playState, s32 limbNumber, Gfx** dListPtr, Vec3f* translation, Vec3s* rotation, void* instance, Gfx** gfxP);
         EmbeddedFunction* f = (EmbeddedFunction*)en->embeddedOverlay + cFuncOffs;
         f(en, playState, limb, NULL, NULL, NULL, instance, NULL);
@@ -396,7 +396,7 @@ s32 Draw_PostLimbDrawSkin(Actor* instance, PlayState* playState, s32 limb, Skin*
             is64Printf("_Embedded function finished.\n");
         #endif
     }
-    
+
     return 1;
 }
 
@@ -450,21 +450,21 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
         Vec3f worldPos;
         Vec3f in = { translation->x, translation->y, translation->z};
 		Matrix_MultVec3f(&in, &worldPos);
-        
+
         Draw_Lights(en, playState, &worldPos);
     }
 
-#pragma endregion 
+#pragma endregion
 
 #pragma region External Dlists
 
     for (int i = 0; i < en->numExDLists; i++)
     {
         ExDListEntry dlist = en->extraDLists[i];
-        
+
         if (sLimbNumber == dlist.limb)
         {
-            s32 object = R_OBJECT(en, dlist.objectId);  
+            s32 object = R_OBJECT(en, dlist.objectId);
 
             if (dlist.showType == INSTEAD_OF_LIMB || dlist.showType == IN_SKELETON)
                 *dListPtr = 0;
@@ -474,7 +474,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
                 Math_Vec3s_Sum(rotation, &dlist.rotation, rotation);
                 Math_Vec3f_Sum(translation, &dlist.translation, translation);
                 Matrix_Scale(dlist.scale, dlist.scale, dlist.scale, 1);
-				
+
 				if (dlist.showType != CONTROL_EXISTING)
 				{
 					u32 dListOffset = object == OBJECT_RAM ? dlist.offset : OFFSET_ADDRESS(6, dlist.offset);
@@ -493,7 +493,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
                     Matrix_Push();
                     Draw_AffectMatrix(dlist, translation, rotation);
                     Draw_ExtDList(en, playState, &dlist, true);
-                    Matrix_Pop();               
+                    Matrix_Pop();
                 }
                 else
                     out = 1;
@@ -518,7 +518,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
 #pragma endregion
 
     u32 cFuncOffs = en->CFuncs[3];
-	
+
     if (cFuncOffs == 0xFFFFFFFF)
         return out;
     else
@@ -544,7 +544,7 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
         is64Printf("_%2d: Setting up segment data.\n", en->npcId);
-    #endif 
+    #endif
 
     if (en->exSegData == NULL)
         return;
@@ -580,7 +580,7 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
                         #endif
 
                         continue;
-                    }                       
+                    }
                 }
             }
 
@@ -591,7 +591,7 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
 
     #if LOGGING > 1
         is64Printf("_%2d: Setting up segment data done.\n", en->npcId);
-    #endif     
+    #endif
 }
 
 void Draw_SetGlobalEnvColor(NpcMaker* en, PlayState* playState)
@@ -731,7 +731,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
         is64Printf("_%2d: Drawing static ExDLists.\n", en->npcId);
-    #endif  
+    #endif
 
     for (int i = 0; i < en->numExDLists; i++)
     {
@@ -745,18 +745,18 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
             case STATIC_EXDLIST_RELATIVE:
             case STATIC_EXDLIST_ABSOLUTE:
             case STATIC_EXDLIST_AT_CAM:
-                Draw_WorldRelative(en, playState, &dlist); break;            
-            case STATIC_EXDLIST_AT_DISPLAY:                 
+                Draw_WorldRelative(en, playState, &dlist); break;
+            case STATIC_EXDLIST_AT_DISPLAY:
                 Draw_AtDisplay(en, playState, &dlist); break;
             case STATIC_EXDLIST_ORTHOGRAPHIC:
-            case STATIC_EXDLIST_ORTHOGRAPHIC_WIDE:          
+            case STATIC_EXDLIST_ORTHOGRAPHIC_WIDE:
                 Draw_Orthographic(en, playState, &dlist); break;
         }
     }
 
     #if LOGGING > 1
         is64Printf("_%2d: Drawing static ExDLists done.\n", en->npcId);
-    #endif 
+    #endif
 }
 
 
@@ -766,25 +766,33 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     int dT = Draw_GetDrawDestType(en, playState);
 
     TwoHeadGfxArena* dest = (dT ? &POLY_XLU : &POLY_OPA);
-	
+
     Draw_Setup(en, playState, dT);
 
     // Reset the file location to account for the file start offset.
     if (en->settings.objectId > 0)
     {
-        Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
-        gSPSegment(POLY_XLU.p++, 0x06, playState->objectCtx.slots[en->actor.objectSlot].segment + en->settings.fileStart);
-        gSPSegment(POLY_OPA.p++, 0x06, playState->objectCtx.slots[en->actor.objectSlot].segment + en->settings.fileStart);
-    }    
+        if (!Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
+        {
+            #if LOGGING > 0
+                is64Printf("_%2d: Tried drawing model that is not loaded (%d)\n", en->npcId, en->settings.objectId);
+            #endif              
+            
+            return;
+        }
+        
+        gSPSegment(POLY_XLU.p++, 0x06, getObjectSlot(playState, en->actor.objectSlot).segment + en->settings.fileStart);
+        gSPSegment(POLY_OPA.p++, 0x06, getObjectSlot(playState, en->actor.objectSlot).segment + en->settings.fileStart);
+    }
 
     // Draw static exdlists (ones not attached to a limb)
     if (en->hasStaticExDlists)
         Draw_StaticExtDLists(en, playState);
-	
+
 
     #if LOGGING > 1
         is64Printf("_%2d: Drawing the skeleton.\n", en->npcId);
-    #endif  
+    #endif
 
     // Draw skeleton
     if (en->settings.objectId > 0)
@@ -803,13 +811,13 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
                                                     &Draw_PostLimbDraw,
                                                     &en->actor,
                                                     dest->p
-                                                   ); 
+                                                   );
                 break;
             }
             case OPA_NONMATRIX:
             case XLU_NONMATRIX:
             {
-                dest->p = (Gfx*) SkelAnime_Draw( 
+                dest->p = (Gfx*) SkelAnime_Draw(
                                                 playState,
                                                 (void*)en->skin.skelAnime.skeleton,
                                                 en->skin.skelAnime.jointTable,
@@ -817,7 +825,7 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
                                                 &Draw_PostLimbDraw,
                                                 &en->actor,
                                                 dest->p
-                                               ); 
+                                               );
                 break;
             }
             case SKIN:
@@ -830,7 +838,7 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
                                 NULL,
                                 &Draw_PostLimbDrawSkin,
                                 1
-                             ); 
+                             );
                 break;
             }
             default: break;
@@ -839,5 +847,5 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
 
     #if LOGGING > 1
         is64Printf("_%2d: Drawing the skeleton complete.\n", en->npcId);
-    #endif  
+    #endif
 }

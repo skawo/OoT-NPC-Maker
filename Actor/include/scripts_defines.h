@@ -22,11 +22,11 @@ typedef enum InstructionId
     SHOW_TEXTBOX,
     SHOW_TEXTBOX_SP,
     CLOSE_TEXTBOX,
-    ITEM,  
+    ITEM,
     PLAY,
     SCRIPT,
     KILL,
-    SPAWN,  
+    SPAWN,
     WARP,
     ROTATION,
     POSITION,
@@ -67,7 +67,7 @@ typedef enum Vartype
     SAVE32 = 12,
     SAVEF = 13,
     SCRIPT_VAR = 14,
-    SCRIPT_VARF = 15,  
+    SCRIPT_VARF = 15,
 } Vartype;
 
 typedef enum Operator
@@ -76,7 +76,7 @@ typedef enum Operator
     O_SUBTRACT = 1,
     O_ADD = 2,
     O_DIVIDE = 3,
-    O_MULTIPLY = 4,  
+    O_MULTIPLY = 4,
 } Operator;
 
 typedef enum TargetActor
@@ -230,7 +230,7 @@ typedef enum SetSubId
     SET_FLAG_SCENE_COLLECT,
     SET_FLAG_TEMPORARY,
     SET_FLAG_INTERNAL,
-    
+
     SET_MASS,
 
     SET_PRESS_SWITCHES,
@@ -262,7 +262,7 @@ typedef enum SetSubId
     SET_REF_ACTOR,
     SET_PLAYER_ANIMATION,
     SET_PLAYER_ANIMATE_MODE,
-    
+
     SET_DLIST_COLOR,
     SET_DLIST_OFFSET,
 
@@ -274,7 +274,7 @@ typedef enum SetSubId
     SET_DLIST_ROT_X,
     SET_DLIST_ROT_Y,
     SET_DLIST_ROT_Z,
-    
+
     SET_DLIST_LIMB,
     SET_DLIST_OBJECT,
 

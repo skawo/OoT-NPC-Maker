@@ -1,14 +1,44 @@
 #ifndef NPC_MAKER_DEFINES_H
 #define NPC_MAKER_DEFINES_H
 
+#if GFX_LOGGING
+    #include <libc64/sprintf.h>
+    #define _NPCM_GFX_SHIFT(i, n, s) (((u32)(i) & (((u32)(1) << (n)) - 1)) << (s))
+    #define _NPCM_GFX_PKT(pkt, c, s, l, p)                                                   \
+        *(pkt) = (Gfx)                                                                       \
+        {                                                                                    \
+            _NPCM_GFX_SHIFT(c, 8, 24) | _NPCM_GFX_SHIFT(p, 8, 16) | _NPCM_GFX_SHIFT(l, 16, 0), (u32)s \
+        }
+    #define NPCM_GFX_PRINT(state, pkt, fmt, ...)                         \
+        ({                                                               \
+            char* _buf = Graph_Alloc(((GameState*)(state))->gfxCtx, 64); \
+            _NPCM_GFX_PKT(pkt, 0, _buf, 0, 2);                           \
+            sprintf(_buf, fmt, ##__VA_ARGS__);                           \
+            _buf[63] = '\0';                                             \
+        })
+#else
+    #define NPCM_GFX_PRINT(state, pkt, fmt, ...) (void)0
+#endif
+
 #define DUMMY_MSG_DATA 0x30313161
 #define DUMMY_MESSAGE 0x011A
-#define NO_CUSTOM_MESSAGE -1 
+#define NO_CUSTOM_MESSAGE -1
+
+#define GlobalContext PlayState
+#define PSkinAwb Skin
 
 #define IS_MASK(item) item >= ITEM_MASK_BUNNY_HOOD && item <= ITEM_MASK_TRUTH
-#define IS_BOTTLE_ITEM(item) (((item >= ITEM_BOTTLE_POTION_RED) && (item <= ITEM_BOTTLE_POE)) || (item == ITEM_MILK))
+#define IS_BOTTLE_ITEM(item) item >= ITEM_BOTTLE_POTION_RED && item <= ITEM_BOTTLE_POE
 
-#define PLAYER_STOPPED_MASK (1 << 29)
+#define NUM_USER_VARIABLES 10
+
+#define PUSH_SWITCHES_MASK 0x04000000
+#define TARGETTABLE_MASK 0x00000001
+#define ALWAYS_ACTIVE_MASK 0x00000010
+#define ALWAYS_DRAWN_MASK 0x00000020
+#define DRAWN_WITH_LENS_MASK 0x00000080
+#define PLAYER_STOPPED_MASK 0x20000000
+#define NO_LIGHT_BIND (1 << 22)
 
 #define NULL_ANIM_BLOCK_SIZE 0
 #define NULL_EXDLIST_BLOCK_SIZE 0
@@ -34,15 +64,15 @@
 
 #define USER_ANIMLOAD -2
 #define OBJECT_CURRENT -1
-#define OBJECT_RAM -2 
+#define OBJECT_RAM -2
 #define OBJECT_NONE -3
 #define OBJECT_XLUDLIST -4
 #define OBJECT_ENDDLIST -5
 
 #define STATIC_EXDLIST_RELATIVE -1
-#define STATIC_EXDLIST_ABSOLUTE -2 
-#define STATIC_EXDLIST_AT_CAM -3 
-#define STATIC_EXDLIST_AT_DISPLAY -4 
+#define STATIC_EXDLIST_ABSOLUTE -2
+#define STATIC_EXDLIST_AT_CAM -3
+#define STATIC_EXDLIST_AT_DISPLAY -4
 #define STATIC_EXDLIST_ORTHOGRAPHIC -5
 #define STATIC_EXDLIST_ORTHOGRAPHIC_WIDE -6
 
@@ -50,16 +80,17 @@
 #define OFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset : offset + SEG_OFFSET(segment)
 #define UNOFFSET_ADDRESS(segment, offset) offset >= SEG_OFFSET(segment) ? offset - SEG_OFFSET(segment) : offset
 
+
 #define STOPPED_NODE -2
 #define INVALID_NODE -1
 #define INVALID_PATH 0
 #define START_NODE(en) (en->settings.pathLoopStartNode >= 0 ? en->settings.pathLoopStartNode : 0)
 #define END_NODE(en) (en->settings.pathLoopEndNode >= 0 ? en->settings.pathLoopEndNode : en->curPathNumNodes - 1)
 
-#define PATH_ID(en) (en->settings.pathId - 1) 
+#define PATH_ID(en) (en->settings.pathId - 1)
 #define CUTSCENE_ID(en) (en->settings.cutsceneId - 1)
-#define R_OBJECT(en, obj) obj == OBJECT_CURRENT ? en->settings.objectId : obj
-#define R_FILESTART(en, fS) fS == OBJECT_CURRENT ? en->settings.fileStart : fS
+#define R_OBJECT(en, obj) ((obj) == OBJECT_CURRENT ? (en)->settings.objectId : (obj))
+#define R_FILESTART(en, fS) ((fS) == OBJECT_CURRENT ? (en)->settings.fileStart : (fS))
 #define R_CUSTOM_MSG_ID(id) (id - 32768)
 
 #define MAX_BLINK_FRAME 4
@@ -107,8 +138,8 @@
 
 #define MOVEMENT_SPEED_DEFAULT 1.0f
 
-#define MORNING_TIME CLOCK_TIME(6, 30)
-#define NIGHT_TIME CLOCK_TIME(18, 00)
+#define MORNING_TIME 0x4555
+#define NIGHT_TIME 0xC001
 
 #define ONE_HEART 0x10
 
@@ -116,23 +147,41 @@
 #define MAX_THROW_VELOCITY 12
 
 #ifndef MAX
-    #define MAX(a, b) ((a) > (b) ? (a) : (b))
+    #define MAX(a, b)               ((a) > (b) ? (a) : (b))
 #endif
 
 #ifndef MIN
-    #define MIN(a, b) ((a) < (b) ? (a) : (b))
+    #define MIN(a, b)               ((a) < (b) ? (a) : (b))
 #endif
 
-extern void is64Printf(const char* fmt, ...);
-    #if GAME_VERSION == 0
-		#ifdef NPCM_Z64ROM
-			asm("is64Printf = osLibPrintf");
-		#else
-        	asm("is64Printf = osSyncPrintf");
-		#endif
+#ifdef NPCM_Z64ROM
+#include "is_debug.h"
+#include "ultra64.h"
+#include "versions.h"
+#endif
+
+#if GAME_VERSION == 0
+    #ifdef NPCM_Z64ROM
+        static
+    #endif
+#endif
+void is64Printf(const char* fmt, ...)
+#if GAME_VERSION == 0
+    #ifdef NPCM_Z64ROM
+        {
+            va_list args;
+            va_start(args, fmt);
+
+            _Printf(is_proutSyncPrintf, NULL, fmt, args);
+
+            va_end(args);
+        }
     #else
-        //is64Printf does not really work in 1.0. Substitute your own!          
-    #endif	
+        ; asm("is64Printf = osSyncPrintf");
+    #endif
+#else
+    ; //is64Printf does not really work in 1.0. Substitute your own!
+#endif
 
 #undef ROT16
 #undef AVAL
@@ -141,6 +190,10 @@ extern void is64Printf(const char* fmt, ...);
 #define ROT16(R16A0) (182.044444 * (R16A0))
 #define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
 #define AADDR(a,o)  ((void*)((u8*)(a)+(o)))
+
+#define NPCMAKER_STATUS_SETUP_LOADED (1 << 0)
+#define NPCMAKER_STATUS_OBJECTS_LOADING (1 << 1) 
+#define NPCMAKER_STATUS_OBJECTS_LOADED (1 << 2)  
 
 typedef enum item_award_upgrades
 {
@@ -203,7 +256,7 @@ typedef enum picked_up_state
 // OcarinaMode in decomp, but the states are not documented...
 typedef enum song_status
 {
-	SONGSTATUS_NONE = 0, 
+	SONGSTATUS_NONE = 0,
 	SONGSTATUS_PLAYING = 1,
     SONGSTATUS_WARP = 2,
     SONGSTATUS_CORRECT = 3,
@@ -250,4 +303,4 @@ typedef enum movement_type
     MOVEMENT_MISC = 7,
 } movement_type;
 
-#endif 
+#endif

@@ -41,7 +41,7 @@ bool Scripts_InstructionFadeIn(NpcMaker* en, PlayState* playState, ScriptInstanc
 bool Scripts_InstructionFadeOut(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrFade* in);
 bool Scripts_InstructionQuake(NpcMaker* en, PlayState* playState, ScriptInstance* script, ScrInstrQuake* in);
 
-u16 Scripts_IfValueCommon(NpcMaker* en, PlayState* playState, float value, DataType read_type, u32 condition, u8 val_type, 
+u16 Scripts_IfValueCommon(NpcMaker* en, PlayState* playState, float value, DataType read_type, u32 condition, u8 val_type,
                          ScriptVarval compared_value, u16 goto_true, u16 goto_false);
 
 void* Scripts_GetActorByType(NpcMaker* en, PlayState* playState, u32 targetActor, u8 actorNumType, ScriptVarval actorNumValue);

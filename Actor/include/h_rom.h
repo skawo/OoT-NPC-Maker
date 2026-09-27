@@ -3,17 +3,19 @@
 
 #include "npc_maker_types.h"
 
-#if ZZROMTOOL == 1
+#if ZZROMTOOL
     #define dmaData 0x800097E0
-#else
-    #define dmaData gDmaDataTable   
-#endif 
-
-#if ZZROMTOOL == 1
     #define objectTable (*(RomFile(*)[]) 0x801281C0)
+    #define getObjectSlot(play, id) ((play)->objectCtx.slots[id])
+#elif defined(NPCM_Z64ROM)
+    #define dmaData (NpcM_Vtable->dmaTable)
+    #define objectTable (NpcM_Vtable->objectTable)
+    #define getObjectSlot(play, id) (*NpcM_Vtable->objectSlot(play, id))
 #else
-    #define objectTable (*(RomFile(*)[]) gObjectTable)
-#endif 
+    #define dmaData gDmaDataTable
+    #define objectTable gObjectTable
+    #define getObjectSlot(play, id) ((play)->objectCtx.slots[id])
+#endif
 
 extern MessageTableEntry* sNesMessageEntryTablePtr;
 
@@ -31,5 +33,6 @@ void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dram_addr, u3
 void Message_Overwrite(NpcMaker* en, PlayState* playState, s16 msgId);
 void Message_Get(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer);
 void* Message_GetMessageRAMAddr(NpcMaker* en, PlayState* playState, s16 msgId);
+bool Rom_IsObjectLoaded(PlayState* playState, u16 object);
 
 #endif

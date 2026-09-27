@@ -13,12 +13,12 @@ InternalMsgEntry Data_GetCustomMessage(NpcMaker* en, PlayState* playState, int I
     InternalMsgEntry msgData = {};
 
     if (!en->messagesDataOffset)
-        return msgData;    
+        return msgData;
 
     if (en->getSettingsFromRAMObject)
     {
         int language = NpcM_GetLanguage();
- 
+
         if (language <= en->numLanguages - 1)
             ID += (language * en->numMessages);
     }

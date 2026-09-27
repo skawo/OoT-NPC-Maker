@@ -18,7 +18,7 @@ RomFile Rom_GetPhysicalROMAddrFromVirtual(u32 virtual)
 
     for (dma = (DmaEntry*)dmaData; ; ++dma)
     {
-        if (dma->romStart == (uintptr_t)virtual)
+        if (dma->file.vromStart == (uintptr_t)virtual)
         {
             out.vromStart = dma->romStart;
             out.vromEnd   = dma->romEnd;
@@ -45,7 +45,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
     {
         #if LOGGING > 0
             is64Printf("_Object %4d was not found!\n", objId);
-        #endif       
+        #endif
 
         return;
     }
@@ -67,7 +67,7 @@ void Rom_LoadDataFromObjectFromROM(int objId, void* ram, u32 fileOffs, size_t si
 
     #if LOGGING > 0
         is64Printf("_Loading 0x%08x bytes from ROM at 0x%08x\n", size, start);
-    #endif    
+    #endif
 
     DMA_REQUEST_SYNC(dest, start, sz, __FILE__, __LINE__);
 
@@ -85,7 +85,7 @@ void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dest, u32 fil
         {
             #if LOGGING > 0
                 is64Printf("_The file to load from was not found in RAM!\n");
-            #endif   
+            #endif
 
             return;
         }
@@ -105,8 +105,8 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
 
     #if LOGGING > 0
         is64Printf("_Loading object %4d...\n", objId);
-    #endif   
-    
+    #endif
+
     bankIndex = Object_GetSlot(&playState->objectCtx, objId);
 
     if (bankIndex < 0)
@@ -119,23 +119,29 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
     {
         #if LOGGING > 0
             is64Printf("_It's already loaded.\n");
-        #endif         
+        #endif
     }
 
     return bankIndex;
+}
+
+bool Rom_IsObjectLoaded(PlayState* playState, u16 object)
+{
+    int bankIndex = Object_GetSlot(&playState->objectCtx, object);
+    return Object_IsLoaded(&playState->objectCtx, bankIndex);
 }
 
 bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileStart)
 {
     if (object == 0)
         return true;
-    
+
     int bankIndex = Object_GetSlot(&playState->objectCtx, object);
 
-    if (Object_IsLoaded(&playState->objectCtx, bankIndex))
+    if (bankIndex >= 0 && Object_IsLoaded(&playState->objectCtx, bankIndex))
     {
         en->objectSlot = bankIndex;
-        gSegments[6] = OS_K0_TO_PHYSICAL(playState->objectCtx.slots[en->objectSlot].segment) + fileStart;
+        gSegments[6] = OS_K0_TO_PHYSICAL(getObjectSlot(playState, en->objectSlot).segment) + fileStart;
         return true;
     }
     else
@@ -149,7 +155,7 @@ void* Rom_GetObjectDataPtr(u16 objId, PlayState* playState)
     if (index < 0)
         return NULL;
 
-    return playState->objectCtx.slots[index].segment;
+    return getObjectSlot(playState, index).segment;
 }
 
 MessageTableEntry* Rom_GetMessageEntry(s16 msgId)
@@ -159,7 +165,7 @@ MessageTableEntry* Rom_GetMessageEntry(s16 msgId)
 
     while (MsgE->textId != 0xFFFF)
     {
-        MsgE = (MessageTableEntry*)&sNesMessageEntryTablePtr[0];
+        MsgE = (MessageTableEntry*)&sNesMessageEntryTablePtr[i];
 
         if (MsgE->textId == msgId)
             return MsgE;
@@ -195,7 +201,7 @@ void* Message_GetMessageRAMAddr(NpcMaker* en, PlayState* playState, s16 msgId)
 
     InternalMsgEntry msgdata = Data_GetCustomMessage(en, playState, msgId);
     void* ptr = 0;
-    
+
     if (en->getSettingsFromRAMObject)
         ptr = Rom_GetObjectDataPtr(en->actor.params, playState);
 

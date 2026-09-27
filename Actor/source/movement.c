@@ -32,10 +32,10 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, PlayState* playState, float speed
 {
     // We don't move in these instances. Can't move if movement type is timed path since that snaps the NPC into place.
     if (!en->canMove ||
-        !speed ||  
-         en->stopped || 
-         en->listeningToSong || 
-         en->wasHit || 
+        !speed ||
+         en->stopped ||
+         en->listeningToSong ||
+         en->wasHit ||
          movementType == MOVEMENT_TIMED_PATH)
     {
         en->actor.speed = 0;
@@ -63,19 +63,19 @@ void Movement_MoveTowardsNextPos(NpcMaker* en, PlayState* playState, float speed
             en->traversedDistance = 0;
             en->lastTraversedDistance = 0;
             en->movementStartPos = en->actor.world.pos;
-            
+
             #if LOGGING > 0
                 is64Printf("_Started movement.\n");
-            #endif  
+            #endif
         }
 
         if (setAnims && en->currentAnimId != en->animIdWalk)
             Setup_Animation(en, playState, en->animIdWalk, true, false, false, !en->autoAnims, false);
 
         // Calculate the direction. Set the rotation faced immediately to the smoothed direction.
-        Math_SmoothStepToS(&en->actor.world.rot.y, 
-                            Math_Vec3f_Yaw(&en->actor.world.pos, &en->movementNextPos), 
-                            MAX(1, MOVEMENT_SMOOTHEN_ROTATION_SCALE + en->settings.smoothingConstant), 
+        Math_SmoothStepToS(&en->actor.world.rot.y,
+                            Math_Vec3f_Yaw(&en->actor.world.pos, &en->movementNextPos),
+                            MAX(1, MOVEMENT_SMOOTHEN_ROTATION_SCALE + en->settings.smoothingConstant),
                             MOVEMENT_SMOOTHEN_ROTATION_MAX,
                             MOVEMENT_SMOOTHEN_ROTATION_MIN);
 
@@ -164,7 +164,7 @@ bool Movement_RideActor(NpcMaker* en, PlayState* playState)
         return true;
     }
     else
-        return false;    
+        return false;
 }
 
 bool Movement_PickUp(NpcMaker* en, PlayState* playState)
@@ -179,10 +179,10 @@ bool Movement_PickUp(NpcMaker* en, PlayState* playState)
                 en->pickedUpState = STATE_PICKED_UP;
                 en->hadCollision = en->settings.hasCollision;
                 en->settings.hasCollision = false;
-                en->actor.flags &= ~ACTOR_FLAG_ATTENTION_ENABLED;      
+                en->actor.flags &= ~TARGETTABLE_MASK;
             }
 
-            break; 
+            break;
         }
         // If player stopped holding us, we've been thrown. Restore collision and targetting.
         case STATE_PICKED_UP:
@@ -193,10 +193,10 @@ bool Movement_PickUp(NpcMaker* en, PlayState* playState)
                 en->settings.hasCollision = en->hadCollision;
 
                 if (en->settings.isTargettable)
-                    en->actor.flags |= ACTOR_FLAG_ATTENTION_ENABLED;   
+                    en->actor.flags |= TARGETTABLE_MASK;
             }
 
-            break; 
+            break;
         }
         // If we've been thrown and are on the ground, we've landed.
         case STATE_THROWN:
@@ -207,7 +207,7 @@ bool Movement_PickUp(NpcMaker* en, PlayState* playState)
             {
                 // Else, move in the thrown direction with speed calculated relative to mass.
                 en->actor.speed = MIN(MAX_THROW_VELOCITY, MIN_THROW_VELOCITY + (255 - en->actor.colChkInfo.mass));
-                Movement_Apply(&en->actor, NULL);      
+                Movement_Apply(&en->actor, NULL);
             }
 
             break;
@@ -262,7 +262,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                         s16 yaw = Math_Vec3f_Yaw(&en->actor.world.pos, &en->actor.home.pos);
                         en->actor.world.rot.y = yaw;
 
-                        DiffVect = (Vec3f){en->settings.movementDistance * Math_SinS(yaw), 
+                        DiffVect = (Vec3f){en->settings.movementDistance * Math_SinS(yaw),
                                            0,
                                            en->settings.movementDistance * Math_CosS(yaw)};
                     }
@@ -300,26 +300,26 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                 Movement_SetNextPos(en, &GET_PLAYER(playState)->actor.world.pos);
             else
                 Movement_StopMoving(en, playState, setAnims);
-            
+
             break;
         }
         // In this case, if the actor is close enough, we set a point away from Link.
         case MOVEMENT_RUN_AWAY:
         {
-            float minDist = en->settings.collisionRadius * LINK_RUNAWAY_RADIUS_MULTIPLIER;       
+            float minDist = en->settings.collisionRadius * LINK_RUNAWAY_RADIUS_MULTIPLIER;
 
             if (en->actor.xzDistToPlayer < minDist && !en->isMoving)
             {
-                Vec3f vector = {en->settings.movementDistance * Math_SinS(GET_PLAYER(playState)->actor.world.rot.y), 
-                                0, 
+                Vec3f vector = {en->settings.movementDistance * Math_SinS(GET_PLAYER(playState)->actor.world.rot.y),
+                                0,
                                 en->settings.movementDistance * Math_CosS(GET_PLAYER(playState)->actor.world.rot.y)};
-                                  
+
                 Math_Vec3f_Sum(&en->actor.world.pos, &vector, &en->movementNextPos);
                 Movement_SetNextPos(en, &en->movementNextPos);
             }
             else if (Movement_HasReachedDestination(en, MOVEMENT_DISTANCE_EQUAL_MARGIN))
                 Movement_StopMoving(en, playState, setAnims);
-        
+
             break;
         }
         // In this case, we calculate a point on the path according to current time.
@@ -346,7 +346,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
 
                 // If time indicates we shouldn't yet be moving, we set node to start node
                 if (percentCompl <= 0)
-                    en->curPathNode = START_NODE(en);    
+                    en->curPathNode = START_NODE(en);
                 // If time indicates we should have already completed the path, we set node to end node
                 else if (percentCompl > 1)
                 {
@@ -355,19 +355,19 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                 }
                 else
                 {
-                    float totalPathLen = Scene_GetPathLen(playState, 
-                                                          PATH_ID(en), 
+                    float totalPathLen = Scene_GetPathLen(playState,
+                                                          PATH_ID(en),
                                                           START_NODE(en),
                                                           END_NODE(en),
                                                           ignoreY);
-                                                    
+
                     // Next, we calculate the distance we've traversed by multiplying the whole path by the percent of it we've completed.
                     float curProgress = totalPathLen * percentCompl;
                     float pathLen = 0;
                     float sectionLen = 0;
                     int i = 0;
 
-                    // Then, we start calculating where on the path we should be, by getting the length of every node it has and adding it up until we exceed the 
+                    // Then, we start calculating where on the path we should be, by getting the length of every node it has and adding it up until we exceed the
                     // distance we're supposed to have traversed.
                     for (i = 0; i < en->curPathNumNodes - 1; i++)
                     {
@@ -409,7 +409,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                     if (!en->isMoving)
                     {
                         // If we've not yet started moving, set walking animation, and position yourself on path towards the next node.
-                        Vec3f fSectionEnd = {sectionEnd->x, sectionEnd->y, sectionEnd->z}; 
+                        Vec3f fSectionEnd = {sectionEnd->x, sectionEnd->y, sectionEnd->z};
                         en->actor.shape.rot.y = Math_Vec3f_Yaw(&en->movementNextPos, &fSectionEnd);
                         en->isMoving = true;
                     }
@@ -420,9 +420,9 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
 
                         if (dist > 0)
                         {
-                            Setup_Animation(en, playState, en->animIdWalk, true, false, false, !en->autoAnims, false); 
+                            Setup_Animation(en, playState, en->animIdWalk, true, false, false, !en->autoAnims, false);
 
-                            // Multiply animation speed according to how quickly time is passing. 
+                            // Multiply animation speed according to how quickly time is passing.
                             //u32 time_diff = gSaveContext.dayTime < en->lastDayTime ? 0xFFFF - en->lastDayTime : gSaveContext.dayTime - en->lastDayTime;
                             //float anim_speed_mult = MIN((float)time_diff / (float)time_diff, 5);
                             //en->skin.skelAnime.playSpeed = en->animations[en->currentAnimId].speed * anim_speed_mult;
@@ -467,37 +467,37 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                         en->movementDelayCounter = en->settings.movementDelay;
 
                         if (en->movementDelayCounter != 0)
-                            Setup_Animation(en, playState, en->animIdIdle, true, false, false, !en->autoAnims, false); 
+                            Setup_Animation(en, playState, en->animIdIdle, true, false, false, !en->autoAnims, false);
                     }
                     else
                     {
                         en->curPathNode = STOPPED_NODE;
-                        Setup_Animation(en, playState, en->animIdIdle, true, false, false, !en->autoAnims, false); 
+                        Setup_Animation(en, playState, en->animIdIdle, true, false, false, !en->autoAnims, false);
                         break;
                     }
                 }
                 else
-                    en->curPathNode++;                
+                    en->curPathNode++;
             }
 
             if (!en->isMoving)
             {
                 // Next, we wait for the delay to expire...
                 if (en->movementDelayCounter)
-                {    
+                {
                     en->movementDelayCounter--;
                     break;
                 }
                 // And set the next node position.
                 else
-                {   
+                {
                     Vec3s* next_node = Scene_GetPathNodePos(playState, PATH_ID(en), en->curPathNode);
 
                     if (next_node == NULL)
                     {
                         #if LOGGING > 0
                             is64Printf("_Error: Next node was NULL.\n");
-                        #endif                         
+                        #endif
 
                         break;
                     }
@@ -506,7 +506,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                     Movement_SetNextPos(en, &en->movementNextPos);
                 }
             }
-                
+
             break;
         }
         // In this case, we handle cutscene movement by waiting for the next event and setting the next position and animation according
@@ -529,7 +529,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                     // Set the animation based on the current action.
                     if (curActionPtr->id != 0)
                         Setup_Animation(en, playState, curActionPtr->id - 1, true, false, false, false, false);
-                    
+
                     if (en->settings.smoothingConstant < 0)
                     {
                         en->actor.world.pos.x = curActionPtr->startPos.x;
@@ -541,10 +541,10 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
                     en->movementStartPos = en->actor.world.pos;
 
                     // Set the next position...
-                    Vec3f nextPos = {curActionPtr->endPos.x, 
-                                     en->settings.ignorePathYAxis ? en->actor.world.pos.y : curActionPtr->endPos.y, 
+                    Vec3f nextPos = {curActionPtr->endPos.x,
+                                     en->settings.ignorePathYAxis ? en->actor.world.pos.y : curActionPtr->endPos.y,
                                      curActionPtr->endPos.z};
-                                        
+
                     Movement_SetNextPos(en, &nextPos);
 
                     // Set the speed here and save it for next time.
@@ -564,7 +564,7 @@ void Movement_Main(NpcMaker* en, PlayState* playState, movement_type movementTyp
             {
                 Movement_StopMoving(en, playState, true);
                 speed = 0;
-            }            
+            }
 
             break;
         }
@@ -603,7 +603,7 @@ void Movement_SetNextPos(NpcMaker* en, Vec3f* next_pos)
 
     #if LOGGING > 1
         is64Printf("_Set next position at %08x, %08x, %08x.\n", en->movementNextPos.x, en->movementNextPos.y, en->movementNextPos.z);
-    #endif  
+    #endif
 }
 
 void Movement_StopMoving(NpcMaker* en, PlayState* playState, bool stopAnim)
@@ -614,19 +614,19 @@ void Movement_StopMoving(NpcMaker* en, PlayState* playState, bool stopAnim)
     en->stopped = true;
     en->isMoving = false;
     en->actor.speed = 0;
-    en->currentDistToNextPos = 0xFFFFFFFF; 
+    en->currentDistToNextPos = 0xFFFFFFFF;
 }
 
 bool Movement_HasReachedDestination(NpcMaker* en, float distance_margin)
 {
-    bool result = ((en->isMoving && 
-                   (en->currentDistToNextPos < distance_margin)) || 
+    bool result = ((en->isMoving &&
+                   (en->currentDistToNextPos < distance_margin)) ||
                    (en->isMoving && en->traversedDistance >= en->distanceTotal));
 
     #if LOGGING > 0
         if (result)
             is64Printf("_Reached end position or travelled far enough.\n");
-    #endif  
+    #endif
 
     return result;
 }

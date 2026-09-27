@@ -13,16 +13,16 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
     {
         #if LOGGING > 2
             is64Printf("_%2d: Stopping player!\n", en->npcId);
-        #endif           
+        #endif
 
         GET_PLAYER(playState)->stateFlags1 |= PLAYER_STOPPED_MASK;
     }
-        
+
     if (en->cameraId - 1 > 0)
     {
         #if LOGGING > 2
             is64Printf("_%2d: Setting camera ID to %2d\n", en->npcId, en->cameraId - 1);
-        #endif   
+        #endif
 
         Camera_RequestBgCam(&playState->mainCamera, en->cameraId - 1);
     }
@@ -36,7 +36,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
     {
         #if LOGGING > 3
             is64Printf("_%2d: LOOKAT editor is enabled.\n", en->npcId);
-        #endif  
+        #endif
 
         if (en->dbgPosEditorCooldown)
         {
@@ -46,11 +46,11 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 
         if (CHECK_BTN_ALL(playState->state.input->press.button, BTN_DDOWN))
         {
-            SET_FIELD(en->dbgPosEditorCursorPos, 12, 0, 1); 
+            SET_FIELD(en->dbgPosEditorCursorPos, 12, 0, 1);
         }
         else if (CHECK_BTN_ALL(playState->state.input->press.button, BTN_DUP))
         {
-            SET_FIELD_MINUS(en->dbgPosEditorCursorPos, 12, 0, 1); 
+            SET_FIELD_MINUS(en->dbgPosEditorCursorPos, 12, 0, 1);
         }
         else if (CHECK_BTN_ALL(playState->state.input->cur.button, BTN_DRIGHT))
         {
@@ -97,7 +97,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
                 case 5: SET_FIELD_MINUS(en->settings.waistVertAxis, 6, 0, 1); break;
                 case 6: SET_FIELD_MINUS(en->settings.waistHorAxis, 6, 0, 1); break;
                 case 7: SET_FIELD_MINUS(en->settings.lookAtDegreesVert, 360, 0, mul == 100 ? 10 : 1); break;
-                case 8: SET_FIELD_MINUS(en->settings.lookAtDegreesHor, 360, 0, mul == 100 ? 10 : 1); break;                
+                case 8: SET_FIELD_MINUS(en->settings.lookAtDegreesHor, 360, 0, mul == 100 ? 10 : 1); break;
                 case 9: SET_FIELD_MINUS(en->settings.lookAtPosOffset.x, 32767, -332767, mul); break;
                 case 10: SET_FIELD_MINUS(en->settings.lookAtPosOffset.y, 32767, -332767, mul); break;
                 case 11: SET_FIELD_MINUS(en->settings.lookAtPosOffset.z, 32767, -332767, mul); break;
@@ -113,7 +113,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
     {
         #if LOGGING > 3
             is64Printf("_%2d: EXDLIST editor is enabled.\n", en->npcId);
-        #endif   
+        #endif
 
         if (en->dbgPosEditorCooldown)
         {
@@ -151,13 +151,13 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 
             switch (en->dbgPosEditorCursorPos)
             {
-                case 0: 
+                case 0:
                 {
                     if (en->dbgPosEditorCurEditing + 1 < en->numExDLists)
-                        en->dbgPosEditorCurEditing++; 
+                        en->dbgPosEditorCurEditing++;
                     else
                         en->dbgPosEditorCurEditing = 0;
-                        
+
                     break;
                 }
                 case 1: en->extraDLists[en->dbgPosEditorCurEditing].translation.x += (1 * mul); break;
@@ -185,13 +185,13 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 
             switch (en->dbgPosEditorCursorPos)
             {
-                case 0: 
+                case 0:
                 {
                     if (en->dbgPosEditorCurEditing - 1 >= 0)
                         en->dbgPosEditorCurEditing--;
                     else
                         en->dbgPosEditorCurEditing = en->numExDLists - 1;
-                        
+
                     break;
                 }
                 case 1: en->extraDLists[en->dbgPosEditorCurEditing].translation.x -= (1 * mul); break;
@@ -202,7 +202,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
                 case 6: en->extraDLists[en->dbgPosEditorCurEditing].rotation.z -= (10 * mul); break;
                 case 7: en->extraDLists[en->dbgPosEditorCurEditing].scale -= (0.01f * mul); break;
                 case 8: en->extraDLists[en->dbgPosEditorCurEditing].showType -= 1; break;
-                case 9: en->extraDLists[en->dbgPosEditorCurEditing].limb -= 1; break;                
+                case 9: en->extraDLists[en->dbgPosEditorCurEditing].limb -= 1; break;
             }
         }
     }
@@ -215,7 +215,7 @@ void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
 {
     #if LOGGING > 2
         is64Printf("_%2d: Updating texture animations.\n", en->npcId);
-    #endif    
+    #endif
 
     if (en->exSegData == NULL)
         return;
@@ -271,7 +271,7 @@ void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
         if (en->isTalking && playState->msgCtx.msgMode == MSGMODE_TEXT_DISPLAYING)
         {
             float rate = (float)((float)3 / (float)R_UPDATE_RATE);
-            
+
             if (en->talkingFramesBetween >= (en->settings.talkAnimSpeed * rate))
             {
                 en->talkingFramesBetween = 0;
@@ -303,14 +303,14 @@ void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
 
     #if LOGGING > 2
         is64Printf("_%2d: Updating texture animations complete.\n", en->npcId);
-    #endif       
+    #endif
 }
 
 void Update_Animations(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
         is64Printf("_%2d: Updating animation.\n", en->npcId);
-    #endif    
+    #endif
 
     if (en->animations == NULL || en->currentAnimId < 0)
     {
@@ -329,9 +329,9 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
             {
                 #if LOGGING > 0
                     is64Printf("_%2d: Animation had object %04x set, but it wasn't loaded, so the animation will not play.\n", en->npcId, realObjId);
-                #endif       
+                #endif
 
-                en->animationFinished = true;       
+                en->animationFinished = true;
                 return;
             }
         }
@@ -370,7 +370,7 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
 
     #if LOGGING > 2
         is64Printf("_%2d: Updating animation complete.\n", en->npcId);
-    #endif            
+    #endif
 }
 
 void Update_HeadWaistRot(NpcMaker *en, PlayState* playState)
@@ -396,7 +396,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
         is64Printf("_%2d: Updating conversation status.\n", en->npcId);
-    #endif    
+    #endif
 
     int talkState = Message_GetState(&playState->msgCtx);
 
@@ -405,7 +405,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     {
         #if LOGGING > 0
             is64Printf("_%2d: Started talking!\n", en->npcId);
-        #endif  
+        #endif
 
         en->talkingFinished = false;
         en->isTalking = true;
@@ -437,7 +437,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
         {
             #if LOGGING > 1
                 is64Printf("_%2d: Setting a custom message.\n", en->npcId);
-            #endif  
+            #endif
 
             Message_Overwrite(en, playState, en->customMsgId);
         }
@@ -448,7 +448,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     {
         #if LOGGING > 0
             is64Printf("_%2d: Textbox shown!\n", en->npcId);
-        #endif  
+        #endif
 
         en->textboxDisplayed = true;
     }
@@ -458,7 +458,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     {
         #if LOGGING > 0
             is64Printf("_%2d: _Talking has finished!\n", en->npcId);
-        #endif  
+        #endif
 
         en->talkingFinished = true;
         en->isTalking = false;
@@ -470,14 +470,14 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
 
     #if LOGGING > 2
         is64Printf("_%2d: Conversation status updated.\n", en->npcId);
-    #endif       
+    #endif
 }
 
 void Update_HitsReaction(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
         is64Printf("_%2d: Checking for hits.\n", en->npcId);
-    #endif    
+    #endif
 
     en->wasHitThisFrame = en->collider.base.acFlags & AC_HIT;
 
@@ -488,7 +488,7 @@ void Update_HitsReaction(NpcMaker* en, PlayState* playState)
 
     // If hit collider is on...
     if (en->collider.base.acFlags & AC_ON)
-    {   
+    {
         // ...and we have been hit...
         if (en->collider.base.acFlags & AC_HIT)
         {
@@ -513,7 +513,7 @@ void Update_HitsReaction(NpcMaker* en, PlayState* playState)
 
     // If we've been hit...
     if (en->wasHit)
-    {   
+    {
         // If the timer is set, we decrease it.
         if (en->wasHitTimer)
             en->wasHitTimer--;
@@ -536,14 +536,14 @@ void Update_HitsReaction(NpcMaker* en, PlayState* playState)
 
     #if LOGGING > 2
         is64Printf("_%2d: Checking for hits complete.\n", en->npcId);
-    #endif       
+    #endif
 }
 
 void Update_Collision(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
         is64Printf("_%2d: Updating collision.\n", en->npcId);
-    #endif    
+    #endif
 
     // Update the collider
     Collider_UpdateCylinder(&en->actor, &en->collider);
@@ -563,21 +563,21 @@ void Update_Collision(NpcMaker* en, PlayState* playState)
 
     #if LOGGING > 1
         is64Printf("_%2d: Updating collision complete.\n", en->npcId);
-    #endif 
+    #endif
 }
 
 void Update_ModelAlpha(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
         is64Printf("_%2d: Updating model transparency.\n", en->npcId);
-    #endif   
+    #endif
 
     if (en->settings.fadeOut)
     {
         if (en->actor.xzDistToPlayer > FADE_OUT_DISTANCE && en->curAlpha)
         {
             Math_SmoothStepToS((s16*)&en->curAlpha, 0, FADE_OUT_FADE_IN_SCALE, FADE_OUT_FADE_IN_SPEED_MAX, FADE_OUT_FADE_IN_SPEED_MIN);
-            
+
             if (en->actor.shape.shadowAlpha)
                 en->actor.shape.shadowAlpha -= SHADOW_ALPHA_UPDATE;
         }
@@ -594,10 +594,10 @@ void Update_ModelAlpha(NpcMaker* en, PlayState* playState)
         // In case this is turned off by scripts
         en->curAlpha = en->settings.alpha;
         en->actor.shape.shadowAlpha = SHADOW_ALPHA;
-    }    
+    }
 
     #if LOGGING > 2
         is64Printf("_%2d: Updating model transparency complete.\n", en->npcId);
-    #endif   
+    #endif
 
 }
