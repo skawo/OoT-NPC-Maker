@@ -55,19 +55,20 @@ static void NpcMaker_Init(NpcMaker* en, PlayState* playState)
     Setup_Defaults(en, playState);
 }
 
-// Setting up the object needs to happen in update for some unknown reason,
-// because otherwise it fails if the object is already loaded in by the scene.
 static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 {
-    if (!Setup_LoadSetup(en, playState))
+    if (!(en->status & NPCMAKER_STATUS_SETUP_LOADED) && !Setup_LoadSetup(en, playState))
         return;
+    
+    en->status |= NPCMAKER_STATUS_SETUP_LOADED;
     
     if (!Setup_Objects(en, playState))
         return;
-
+    
+    en->status |= NPCMAKER_STATUS_OBJECTS_LOADED;
+    
     en->actor.shape.rot.z = 0;
-    en->actor.world.rot.z = 0;      
-   
+    en->actor.world.rot.z = 0;         
     NpcMaker_RunCFunc(en, playState, en->CFuncs[0], NULL);
 
     Setup_Misc(en, playState);
@@ -79,7 +80,7 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 
     en->actor.update = (ActorFunc)&NpcMaker_Update;
 	en->actor.draw = (ActorFunc)&NpcMaker_Draw;
-	en->actor.destroy = (ActorFunc)&NpcMaker_Destroy;
+	en->actor.destroy = (ActorFunc)&NpcMaker_Destroy; 
 }
 
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState)

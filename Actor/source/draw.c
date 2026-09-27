@@ -779,7 +779,15 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     // Reset the file location to account for the file start offset.
     if (en->settings.objectId > 0)
     {
-        Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
+        if (!Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
+        {
+            #if LOGGING > 0
+                is64Printf("_%2d: Tried drawing model that is not loaded (%d)\n", en->npcId, en->settings.objectId);
+            #endif              
+            
+            return;
+        }
+        
         gSPSegment(POLY_XLU.p++, 0x06, playState->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
         gSPSegment(POLY_OPA.p++, 0x06, playState->objectCtx.status[en->actor.objBankIndex].segment + en->settings.fileStart);
     }    

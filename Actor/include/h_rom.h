@@ -40,5 +40,6 @@ void Rom_LoadDataFromObject(PlayState* playState, int objId, void* dram_addr, u3
 void Message_Overwrite(NpcMaker* en, PlayState* playState, s16 msgId);
 void Message_Get(NpcMaker* en, PlayState* playState, s16 msgId, void* buffer);
 void* Message_GetMessageRAMAddr(NpcMaker* en, PlayState* playState, s16 msgId);
+bool Rom_IsObjectLoaded(PlayState* playState, u16 object);
 
 #endif

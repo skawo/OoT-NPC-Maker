@@ -173,7 +173,9 @@ extern void is64Printf(const char* fmt, ...);
 #define AVAL(base,type,offset)  (*(type*)((u8*)(base)+(offset)))
 #define AADDR(a,o)  ((void*)((u8*)(a)+(o)))
 
-   
+#define NPCMAKER_STATUS_SETUP_LOADED (1 << 0)
+#define NPCMAKER_STATUS_OBJECTS_LOADING (1 << 1) 
+#define NPCMAKER_STATUS_OBJECTS_LOADED (1 << 2)  
 
 typedef enum item_award_upgrades
 {

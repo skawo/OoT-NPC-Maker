@@ -501,51 +501,77 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
 
 bool Setup_Objects(NpcMaker* en, PlayState* playState)
 {
-    // Loading and setting the main object ID.
-    if (en->settings.objectId > 0)
+    if (!(en->status & NPCMAKER_STATUS_OBJECTS_LOADING))
     {
-        Rom_LoadObjectIfUnloaded(playState, en->settings.objectId);
-        if (!Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
-            return false;
+        // Loading and setting the main object ID.
+        if (en->settings.objectId > 0)
+            Rom_LoadObjectIfUnloaded(playState, en->settings.objectId);
+        
+        int largestUserAnim = 0;
+
+        for (int i = 0; i < en->numAnims; i++)
+        {
+            if (en->animations[i].fileStart != USER_ANIMLOAD)
+            {
+                Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
+            }
+            else
+            {
+                int animS = NpcM_GetAnimationSize(en, en->animations[i].offset, en->animations[i].objectId);
+                largestUserAnim = MAX(largestUserAnim, animS);
+
+                #if LOGGING > 1
+                    is64Printf("_%2d: Checking for largest animation... %d bytes.\n", en->npcId, largestUserAnim);
+                #endif 
+            }
+        }
+
+        if (largestUserAnim != 0)
+        {
+            en->userLoadAnimBuf = ZeldaArena_Malloc(largestUserAnim);
+
+            #if LOGGING > 0
+                if (en->userLoadAnimBuf == NULL)
+                    is64Printf("_%2d: Could not allocate animations...\n", en->npcId);
+            #endif 
+        }
+        
+        for (int i = 0; i < en->numExDLists; i++)
+            Rom_LoadObjectIfUnloaded(playState, en->extraDLists[i].objectId);
+
+        for (int i = NULL_SEG_BLOCK_SIZE; i < en->exSegDataBlSize; i += 12)
+        {
+            ExSegDataEntry* ex = (ExSegDataEntry*)AADDR(en->exSegData, i);
+            Rom_LoadObjectIfUnloaded(playState, ex->objectId);
+        }
+        
+        en->status |= NPCMAKER_STATUS_OBJECTS_LOADING;
     }
-
-    int largestUserAnim = 0;
-
+    
+    if (!Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
+        return false;    
+    
     for (int i = 0; i < en->numAnims; i++)
     {
         if (en->animations[i].fileStart != USER_ANIMLOAD)
         {
-            Rom_LoadObjectIfUnloaded(playState, en->animations[i].objectId);
+            if (!Rom_IsObjectLoaded(playState, en->animations[i].objectId))
+                return false;
         }
-        else
-        {
-            int animS = NpcM_GetAnimationSize(en, en->animations[i].offset, en->animations[i].objectId);
-            largestUserAnim = MAX(largestUserAnim, animS);
-
-            #if LOGGING > 1
-                is64Printf("_%2d: Checking for largest animation... %d bytes.\n", en->npcId, largestUserAnim);
-            #endif 
-        }
-    }
-
-    if (largestUserAnim != 0)
-    {
-        en->userLoadAnimBuf = ZeldaArena_Malloc(largestUserAnim);
-
-        #if LOGGING > 0
-            if (en->userLoadAnimBuf == NULL)
-                is64Printf("_%2d: Could not allocate animations...\n", en->npcId);
-        #endif 
-    }
+    }        
     
     for (int i = 0; i < en->numExDLists; i++)
-        Rom_LoadObjectIfUnloaded(playState, en->extraDLists[i].objectId);
-
+    {
+        if (!Rom_IsObjectLoaded(playState, en->extraDLists[i].objectId))
+            return false;       
+    }
+    
     for (int i = NULL_SEG_BLOCK_SIZE; i < en->exSegDataBlSize; i += 12)
     {
         ExSegDataEntry* ex = (ExSegDataEntry*)AADDR(en->exSegData, i);
-        Rom_LoadObjectIfUnloaded(playState, ex->objectId);
-    }
+        if (!Rom_IsObjectLoaded(playState, ex->objectId))
+            return false;  
+    }    
     
     return true;
 }

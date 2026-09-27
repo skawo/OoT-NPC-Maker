@@ -326,6 +326,7 @@ typedef struct NpcMaker
     void* userLoadAnimBuf;
     AsyncContext* asyncCtxs;
     u32 flags_internal[8];
+    u8 status;
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

@@ -134,6 +134,12 @@ s32 Rom_LoadObjectIfUnloaded(PlayState* playState, s16 objId)
     return bankIndex;
 }
 
+bool Rom_IsObjectLoaded(PlayState* playState, u16 object)
+{
+    int bankIndex = Object_GetIndex(&playState->objectCtx, object);
+    return Object_IsLoaded(&playState->objectCtx, bankIndex);
+}
+
 bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileStart)
 {
     if (object == 0)
@@ -141,7 +147,7 @@ bool Rom_SetObjectToActor(Actor* en, PlayState* playState, u16 object, s32 fileS
     
     int bankIndex = Object_GetIndex(&playState->objectCtx, object);
 
-    if (Object_IsLoaded(&playState->objectCtx, bankIndex))
+    if (bankIndex >= 0 && Object_IsLoaded(&playState->objectCtx, bankIndex))
     {
         en->objBankIndex = bankIndex;
         gSegments[6] = VIRTUAL_TO_PHYSICAL(playState->objectCtx.status[en->objBankIndex].segment) + fileStart;
