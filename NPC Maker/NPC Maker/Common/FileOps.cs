@@ -1381,18 +1381,12 @@ namespace NPC_Maker
             var npcs = new List<string>();
 
             var sb = new StringBuilder();
-            sb.AppendLine("#ifndef NPC_MAKER_NPCIDS");
-            sb.AppendLine("#define NPC_MAKER_NPCIDS");
-            sb.AppendLine();
 
             for (int i = 0; i < data.Entries.Count(); i++)
             {
                 if (!data.Entries[i].IsNull)
                     sb.AppendLine($"#define {data.Entries[i].NPCName} {i}");
             }
-
-            sb.AppendLine();
-            sb.AppendLine("#endif");
 
             return sb.ToString();
         }
