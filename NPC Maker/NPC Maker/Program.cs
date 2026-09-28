@@ -390,6 +390,14 @@ namespace NPC_Maker
                 string outPath = args[1];
                 string outDeps = args.Length > 2 ? args[2] : null;
 
+                if (outDeps == "skip")
+                    outDeps = null;
+
+                string outH = args.Length > 3 ? args[3] : null;
+
+                if (outH == "skip")
+                    outH = null;
+
                 jsonText = File.ReadAllText(JsonPath);
                 inFile = FileOps.ParseNPCJsonFile("", jsonText);
 
@@ -402,9 +410,9 @@ namespace NPC_Maker
                 var cacheStatus = FileOps.GetCacheStatus(ref inFile);
 
                 if (Program.Settings.CompileInParallel)
-                    res = RunParallelCompile(outPath, outDeps, cacheStatus, inFile);
+                    res = RunParallelCompile(outPath, outDeps, outH, cacheStatus, inFile);
                 else
-                    res = RunSequentialCompile(outPath, outDeps, cacheStatus, ref inFile);
+                    res = RunSequentialCompile(outPath, outDeps, outH, cacheStatus, ref inFile);
             }
             catch (Exception ex) when (inFile == null)
             {
@@ -431,30 +439,30 @@ namespace NPC_Maker
             return res ? 0 : 1;
         }
 
-        private static bool RunParallelCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, NPCFile inFile)
+        private static bool RunParallelCompile(string outputPath, string outputDepsPath, string outHPath, Common.CacheStatus cacheStatus, NPCFile inFile)
         {
             Program.CompileInProgress = true;
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            var res = FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, inFile, cacheStatus, null, true);
+            var res = FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, outHPath, inFile, cacheStatus, null, true);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             while (Program.CompileInProgress) {}
             return res.Result;
         }
 
-        private static bool RunSequentialCompile(string outputPath, string outputDepsPath, Common.CacheStatus cacheStatus, ref NPCFile inFile)
+        private static bool RunSequentialCompile(string outputPath, string outputDepsPath, string outHPath, Common.CacheStatus cacheStatus, ref NPCFile inFile)
         {
             bool res = false;
             var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
 
-            res = FileOps.SaveBinaryFile(outputPath, outputDepsPath, ref inFile, null, baseDefines, cacheStatus, null, true);
+            res = FileOps.SaveBinaryFile(outputPath, outputDepsPath, outHPath, ref inFile, null, baseDefines, cacheStatus, null, true);
             CCode.CleanupStandardCompilationArtifacts();
             return res;
         }
 
         private static int PrintUsage()
         {
-            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps] [--silent] [--extsettings=Path]");
+            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps|skip] [OutputH|skip] [--silent] [--extsettings=Path]");
             Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c InputCFile OutputZovl [ExtraLinkerFiles|none] [\"COMPILEFLAGS\"] [--silent] [--extsettings=Path]");
             Console.WriteLine("Usage to make msgtable: \"NPC Maker.exe\" -m InputJson InputActorId OutputTable OutputStrings [--silent] [--extsettings=Path]");
             Console.WriteLine("Press ENTER to exit...");

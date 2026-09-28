@@ -66,6 +66,8 @@ namespace NPC_Maker
 
         public bool OutputDeps { get; set; }
 
+        public bool OutputH { get; set; }
+
         public string LinkerPaths { get; set; }
 
         public string IncludePaths { get; set; }
@@ -119,6 +121,7 @@ namespace NPC_Maker
             MessageEditorFontSize = 8;
             UseCJK = false;
             OutputDeps = false;
+            OutputH = false;
             LinkerPaths = "";
             AllowCommentsOnLoc = true;
             GUIScale = 1.0f;
@@ -167,6 +170,7 @@ namespace NPC_Maker
             LIBRARY,
             OUTPUTDEPS,
             CHANGEGUICOLORS,
+            OUTPUTH,
         }
         public static Members GetMemberFromTag(object Tag, string PassingObjectName)
         {
@@ -213,6 +217,7 @@ namespace NPC_Maker
                 case Members.PARALLEL: CompileInParallel = (bool)Value; break;
                 case Members.SPELLCHECK: Spellcheck = (bool)Value; break;
                 case Members.OUTPUTDEPS: OutputDeps = (bool)Value; break;
+                case Members.OUTPUTH: OutputH = (bool)Value; break;
                 case Members.COMPRESS: CompressIndividually = (bool)Value; break;
                 case Members.ORIGPREVIEW: OrigPreview = (bool)Value; break;
                 case Members.PROJPATH: ProjectPath = (string)Value; break;

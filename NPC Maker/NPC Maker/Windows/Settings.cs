@@ -51,6 +51,7 @@ namespace NPC_Maker.Windows
             Txt_ProjectPath.Text = EditedSettings.ProjectPath;
             Chk_AllowCommentsOnLoc.Checked = EditedSettings.AllowCommentsOnLoc;
             outputDFile.Checked = EditedSettings.OutputDeps;
+            Chk_NPCIDH.Checked = EditedSettings.OutputH;
             guiScale.Value = (decimal)EditedSettings.GUIScale;
 
             Combo_Linker.SelectedIndex = (int)EditedSettings.Linker;

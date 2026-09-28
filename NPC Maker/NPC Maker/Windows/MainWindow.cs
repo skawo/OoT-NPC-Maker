@@ -1574,14 +1574,14 @@ namespace NPC_Maker
 
             if (Program.Settings.CompileInParallel)
             {
-                await FileOps.PreprocessCodeAndScripts(Path, Program.Settings.OutputDeps ? Path + ".d" : null, EditedFile, cacheStatus, progress, false);
+                await FileOps.PreprocessCodeAndScripts(Path, Program.Settings.OutputDeps ? Path + ".d" : null, Program.Settings.OutputH ? Path + ".d" : null, EditedFile, cacheStatus, progress, false);
             }
             else
             {
                 await TaskEx.Run(() =>
                 {
                     string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(EditedFile);
-                    FileOps.SaveBinaryFile(Path, Program.Settings.OutputDeps ? Path + ".d" : null, ref EditedFile, progress, baseDefines, cacheStatus, null, false);
+                    FileOps.SaveBinaryFile(Path, Program.Settings.OutputDeps ? Path + ".d" : null, Program.Settings.OutputH ? Path + ".d" : null, ref EditedFile, progress, baseDefines, cacheStatus, null, false);
                     CCode.CleanupStandardCompilationArtifacts();
                 });
             }
