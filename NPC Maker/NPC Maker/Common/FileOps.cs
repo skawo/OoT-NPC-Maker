@@ -1351,7 +1351,7 @@ namespace NPC_Maker
             for (int i = 0; i < data.Entries.Count(); i++)
             {
                 if (!data.Entries[i].IsNull)
-                    sb.AppendLine($"#define {data.Entries[i].NPCName} {i}");
+                    sb.AppendLine($"#define NPCID_{data.Entries[i].NPCName} {i}");
             }
 
             return sb.ToString();
