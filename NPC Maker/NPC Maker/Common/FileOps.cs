@@ -424,7 +424,7 @@ namespace NPC_Maker
 
         // ── Compilation ──────────────────────────────────────────────────
 
-        public static async Task<bool> PreprocessCodeAndScripts(string outPath, string outputDepsPath, NPCFile data,
+        public static async Task<bool> PreprocessCodeAndScripts(string outPath, string outputDepsPath, string outputHPath, NPCFile data,
                                                           CacheStatus cacheStatus, IProgress<ProgressReport> progress, bool cliMode)
         {
             float progressPer = 100f / data.Entries.Count;
@@ -493,7 +493,7 @@ namespace NPC_Maker
 
             Program.ConsoleWriteLineS("\nPre-processing done!");
 
-            ret = SaveBinaryFile(outPath, outputDepsPath, ref data, progress, baseDefines,
+            ret = SaveBinaryFile(outPath, outputDepsPath, outputHPath, ref data, progress, baseDefines,
                   new CacheStatus { CCacheInvalid = false, CacheInvalid = false }, results, cliMode);
 
             CCode.CleanupStandardCompilationArtifacts();
@@ -502,7 +502,7 @@ namespace NPC_Maker
             return ret;
         }
 
-        public static bool SaveBinaryFile(string outPath, string outputDepsPath, ref NPCFile data, IProgress<ProgressReport> progress, string baseDefines,
+        public static bool SaveBinaryFile(string outPath, string outputDepsPath, string outputHPath, ref NPCFile data, IProgress<ProgressReport> progress, string baseDefines,
                                          CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles, bool cliMode)
         {
             if (!data.Entries.Any())
@@ -604,7 +604,7 @@ namespace NPC_Maker
                     return false;
                 }
 
-                WriteOutput(outPath, outputDepsPath, data, compilationData.ToList(), progress, cliMode, ref offset);
+                WriteOutput(outPath, outputDepsPath, outputHPath, data, compilationData.ToList(), progress, cliMode, ref offset);
             }
             catch (Exception ex)
             {
@@ -1275,7 +1275,7 @@ namespace NPC_Maker
         // ── Output ────────────────────────────────────────────────────────────────
 
         private static void WriteOutput(
-            string outPath, string outputDepsPath, NPCFile data,
+            string outPath, string outputDepsPath, string outputHPath, NPCFile data,
             List<CompilationEntryData> compilationData,
             IProgress<ProgressReport> progress, bool cliMode, ref int offset)
         {
@@ -1334,9 +1334,33 @@ namespace NPC_Maker
             if (!string.IsNullOrEmpty(outputDepsPath))
                 File.WriteAllText(outputDepsPath, CreateDepsFile(data, outPath));
 
+            if (!string.IsNullOrEmpty(outputHPath))
+                File.WriteAllText(outputHPath, CreateNPCHFile(data, outPath));
+
             Program.ConsoleWriteLineS("\nDone!");
             progress?.Report(new ProgressReport("Done!", 100));
             File.WriteAllBytes(outPath, output.ToArray());
+        }
+
+        public static string CreateNPCHFile(NPCFile data, string zobjFilename)
+        {
+            var npcs = new List<string>();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("#ifndef NPC_MAKER_NPCIDS");
+            sb.AppendLine("#define NPC_MAKER_NPCIDS");
+            sb.AppendLine();
+
+            for (int i = 0; i < data.Entries.Count(); i++)
+            {
+                if (!data.Entries[i].IsNull)
+                    sb.AppendLine($"#define {data.Entries[i].NPCName} {i}");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("#endif");
+
+            return sb.ToString();
         }
 
         public static string CreateDepsFile(NPCFile data, string zobjFilename)
