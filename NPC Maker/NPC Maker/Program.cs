@@ -1,21 +1,12 @@
-﻿using Microsoft;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace NPC_Maker
 {
@@ -249,23 +240,33 @@ namespace NPC_Maker
 
         private static int RunConvertCommand(string[] args)
         {
+            const string Skip = "skip";
+
+            // Returns the argument at the given index, or null if missing or "skip".
+            string Arg(int i) => i < args.Length && args[i] != Skip ? args[i] : null;
+
             NPCFile inFile = null;
             string jsonText = "";
-            bool res = false;
+            bool success;
 
             try
             {
                 JsonPath = args[0];
-                string outPath = args[1];
-                string outDeps = args.Length > 2 ? args[2] : null;
+                string outPath = Arg(1);
+                string outDeps = Arg(2);
+                string outH = Arg(3);
 
-                if (outDeps == "skip")
-                    outDeps = null;
+                if (outPath == null && outH == null)
+                {
+                    Console.WriteLine("Nothing to do.");
+                    return 0;
+                }
 
-                string outH = args.Length > 3 ? args[3] : null;
-
-                if (outH == "skip")
-                    outH = null;
+                if (outPath == null && outDeps != null)
+                {
+                    Console.WriteLine("Cannot generate deps without outPath.");
+                    return 1;
+                }
 
                 jsonText = File.ReadAllText(JsonPath);
                 inFile = FileOps.ParseNPCJsonFile("", jsonText);
@@ -274,14 +275,21 @@ namespace NPC_Maker
                 Dicts.ReloadLanguages(inFile.Languages);
                 Program.Settings.GameVersion = inFile.GameVersion;
 
-                ConsoleWriteLineS($"Saving \"{Path.GetFileName(args[0])}\" to binary...");
+                // Header-only output
+                if (outPath == null)
+                {
+                    ConsoleWriteLineS($"Saving \"{Path.GetFileName(JsonPath)}\" to header...");
+                    File.WriteAllText(outH, FileOps.CreateNPCHFile(inFile, outPath));
+                    return 0;
+                }
+
+                ConsoleWriteLineS($"Saving \"{Path.GetFileName(JsonPath)}\" to binary...");
 
                 var cacheStatus = FileOps.GetCacheStatus(ref inFile);
 
-                if (Program.Settings.CompileInParallel)
-                    res = RunParallelCompile(outPath, outDeps, outH, cacheStatus, inFile);
-                else
-                    res = RunSequentialCompile(outPath, outDeps, outH, cacheStatus, ref inFile);
+                success = Program.Settings.CompileInParallel
+                    ? RunParallelCompile(outPath, outDeps, outH, cacheStatus, inFile)
+                    : RunSequentialCompile(outPath, outDeps, outH, cacheStatus, ref inFile);
             }
             catch (Exception ex) when (inFile == null)
             {
@@ -294,18 +302,18 @@ namespace NPC_Maker
                 return 1;
             }
 
-            if (res)
+            if (success)
             {
                 string newJson = FileOps.ProcessNPCJSON(ref inFile);
 
-                if (!String.Equals(jsonText, newJson))
-                    res = FileOps.SaveNPCJSON(args[0], inFile, null, newJson);
+                if (jsonText != newJson)
+                    success = FileOps.SaveNPCJSON(JsonPath, inFile, null, newJson);
             }
 
             if (!Program.IsRunningUnderMono)
                 Console.WriteLine("Press ENTER to exit...");
 
-            return res ? 0 : 1;
+            return success ? 0 : 1;
         }
 
         private static bool RunParallelCompile(string outputPath, string outputDepsPath, string outputHPath, Common.CacheStatus cacheStatus, NPCFile inFile)
@@ -331,7 +339,7 @@ namespace NPC_Maker
 
         private static int PrintUsage()
         {
-            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson OutputZobj [OutputDeps|skip] [OutputH|skip] [--silent] [--extsettings=Path]");
+            Console.WriteLine("Usage: \"NPC Maker.exe\" InputJson [OutputZobj|skip] [OutputDeps|skip] [OutputH|skip] [--silent] [--extsettings=Path]");
             Console.WriteLine("Usage to compile C: \"NPC Maker.exe\" -c InputCFile OutputZovl [ExtraLinkerFiles|none] [\"COMPILEFLAGS\"] [--silent] [--extsettings=Path]");
             Console.WriteLine("Usage to make msgtable: \"NPC Maker.exe\" -m InputJson InputActorId OutputTable OutputStrings [--silent] [--extsettings=Path]");
             Console.WriteLine("Press ENTER to exit...");
