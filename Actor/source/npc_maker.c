@@ -75,7 +75,7 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
     Setup_Model(en, playState);
 
     #if LOGGING > 0
-        is64Printf("_%2d: Initialization complete.\n", en->npcId);
+        is64Printf("_%d: Initialization complete.\n", en->npcId);
     #endif    
 
     en->actor.update = (ActorFunc)&NpcMaker_Update;
@@ -86,7 +86,7 @@ static void NpcMaker_PostInit(NpcMaker* en, PlayState* playState)
 static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
-        is64Printf("_%2d: ======== Actor update, frame %2d ======== \n", en->npcId, playState->gameplayFrames);
+        is64Printf("_%d: ======== Actor update, frame %d ======== \n", en->npcId, playState->gameplayFrames);
     #endif
 
     if (en->CFuncsWhen[1] == REPLACE_UPDATE && en->CFuncs[1] != 0xFFFFFFFF)
@@ -150,14 +150,14 @@ static void NpcMaker_Update(NpcMaker* en, PlayState* playState)
     Update_Misc(en, playState);
 
     #if LOGGING > 1
-        is64Printf("_%2d: Actor update complete.\n", en->npcId);
+        is64Printf("_%d: Actor update complete.\n", en->npcId);
     #endif
 }
 
 static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
-        is64Printf("_%2d: Drawing actor.\n", en->npcId);
+        is64Printf("_%d: Drawing actor.\n", en->npcId);
     #endif
 
     // Compute the focus point; this is later replaced if the model is drawn with a focus point based on limb
@@ -214,14 +214,14 @@ static void NpcMaker_Draw(NpcMaker* en, PlayState* playState)
     }
 
     #if LOGGING > 1
-        is64Printf("_%2d: Drawing actor complete.\n", en->npcId);
+        is64Printf("_%d: Drawing actor complete.\n", en->npcId);
     #endif
 }
 
 static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
-        is64Printf("_%2d: Destroying actor.\n", en->npcId);
+        is64Printf("_%d: Destroying actor.\n", en->npcId);
     #endif
 
     Collider_DestroyCylinder(playState, &en->collider);
@@ -237,7 +237,8 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
                         en->dListColors,
                         en->exSegData,
                         en->scriptFVars,
-                        en->scriptVars
+                        en->scriptVars,
+                        en->exDlistMatrixes,
                     };
 
     for (int i = 0; i < ARRAY_COUNT(frees); i++)
@@ -274,7 +275,7 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
         ZeldaArena_Free(en->userLoadAnimBuf );
 
     #if LOGGING > 1
-        is64Printf("_%2d: Destroying actor complete.\n", en->npcId);
+        is64Printf("_%d: Destroying actor complete.\n", en->npcId);
     #endif
 }
 

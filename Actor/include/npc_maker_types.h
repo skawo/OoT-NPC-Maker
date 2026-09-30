@@ -199,6 +199,7 @@ typedef struct SectionLoad
     u32 entrySize;
     u32 nullBlockSize;
     u8 noCopy;
+    char* name;
 } SectionLoad;
 
 typedef struct NpcMaker
@@ -327,6 +328,8 @@ typedef struct NpcMaker
     AsyncContext* asyncCtxs;
     u32 flags_internal[8];
     u8 status;
+    
+    MtxF* exDlistMatrixes;
     
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

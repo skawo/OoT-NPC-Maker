@@ -53,7 +53,7 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
             if (addr == NULL)
             {
                 #if LOGGING > 0
-                    is64Printf("_%2d: Attempted GetVarVal from a NULL address (refActor is NULL?).\n");
+                    is64Printf("_%d: Attempted GetVarVal from a NULL address (refActor is NULL?).\n");
                 #endif   
                    
                 return 0;
@@ -76,7 +76,7 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
             if (en->scriptVars == NULL || en->settings.numVars < value.ui32)
             {
                 #if LOGGING > 0
-                    is64Printf("_%2d: Attempted read from script var out of range.\n");
+                    is64Printf("_%d: Attempted read from script var out of range.\n");
                 #endif   
                    
                 return 0;
@@ -88,7 +88,7 @@ float Scripts_GetVarval(NpcMaker* en, PlayState* playState, Vartype type, Script
             if (en->scriptFVars == NULL || en->settings.numFVars < value.ui32)
             {
                 #if LOGGING > 0
-                    is64Printf("_%2d: Attempted read from float script var out of range.\n");
+                    is64Printf("_%d: Attempted read from float script var out of range.\n");
                 #endif   
 
                 return 0;
@@ -132,7 +132,7 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, PlayState* playState, u32 value, u32 s
         if (en->scriptFVars == NULL || en->settings.numFVars < value)
         {
             #if LOGGING > 0
-                is64Printf("_%2d: Attempted write to float script var out of range.\n");
+                is64Printf("_%d: Attempted write to float script var out of range.\n");
             #endif   
 
             return NULL;
@@ -147,7 +147,7 @@ void* Scripts_RamSubIdSetup(NpcMaker* en, PlayState* playState, u32 value, u32 s
         if (en->scriptVars == NULL || en->settings.numVars < value)
         {
             #if LOGGING > 0
-                is64Printf("_%2d: Attempted write to script var out of range.\n");
+                is64Printf("_%d: Attempted write to script var out of range.\n");
             #endif   
 
             return NULL;

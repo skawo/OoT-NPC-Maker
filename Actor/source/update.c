@@ -12,7 +12,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
     if (en->stopPlayer)
     {
         #if LOGGING > 2
-            is64Printf("_%2d: Stopping player!\n", en->npcId);
+            is64Printf("_%d: Stopping player!\n", en->npcId);
         #endif           
 
         GET_PLAYER(playState)->stateFlags1 |= PLAYER_STOPPED_MASK;
@@ -21,7 +21,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
     if (en->cameraId - 1 > 0)
     {
         #if LOGGING > 2
-            is64Printf("_%2d: Setting camera ID to %2d\n", en->npcId, en->cameraId - 1);
+            is64Printf("_%d: Setting camera ID to %d\n", en->npcId, en->cameraId - 1);
         #endif   
 
         Camera_ChangeBgCamIndex(&playState->mainCamera, en->cameraId - 1);
@@ -35,7 +35,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
     if (en->settings.showLookAtEditorDebugOn)
     {
         #if LOGGING > 3
-            is64Printf("_%2d: LOOKAT editor is enabled.\n", en->npcId);
+            is64Printf("_%d: LOOKAT editor is enabled.\n", en->npcId);
         #endif  
 
         if (en->dbgPosEditorCooldown)
@@ -112,7 +112,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
     if (en->settings.showDlistEditorDebugOn && en->numExDLists != 0)
     {
         #if LOGGING > 3
-            is64Printf("_%2d: EXDLIST editor is enabled.\n", en->npcId);
+            is64Printf("_%d: EXDLIST editor is enabled.\n", en->npcId);
         #endif   
 
         if (en->dbgPosEditorCooldown)
@@ -214,7 +214,7 @@ void Update_Misc(NpcMaker* en, PlayState* playState)
 void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
 {
     #if LOGGING > 2
-        is64Printf("_%2d: Updating texture animations.\n", en->npcId);
+        is64Printf("_%d: Updating texture animations.\n", en->npcId);
     #endif    
 
     if (en->exSegData == NULL)
@@ -302,14 +302,14 @@ void Update_TextureAnimations(NpcMaker *en, PlayState* playState)
     #pragma endregion
 
     #if LOGGING > 2
-        is64Printf("_%2d: Updating texture animations complete.\n", en->npcId);
+        is64Printf("_%d: Updating texture animations complete.\n", en->npcId);
     #endif       
 }
 
 void Update_Animations(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
-        is64Printf("_%2d: Updating animation.\n", en->npcId);
+        is64Printf("_%d: Updating animation.\n", en->npcId);
     #endif    
 
     if (en->animations == NULL || en->currentAnimId < 0)
@@ -328,7 +328,7 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
             if (!Rom_SetObjectToActor(&en->actor, playState, realObjId, (R_FILESTART(en, anim.fileStart))))
             {
                 #if LOGGING > 0
-                    is64Printf("_%2d: Animation had object %04x set, but it wasn't loaded, so the animation will not play.\n", en->npcId, realObjId);
+                    is64Printf("_%d: Animation had object %04x set, but it wasn't loaded, so the animation will not play.\n", en->npcId, realObjId);
                 #endif       
 
                 en->animationFinished = true;       
@@ -369,7 +369,7 @@ void Update_Animations(NpcMaker* en, PlayState* playState)
         Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart);
 
     #if LOGGING > 2
-        is64Printf("_%2d: Updating animation complete.\n", en->npcId);
+        is64Printf("_%d: Updating animation complete.\n", en->npcId);
     #endif            
 }
 
@@ -395,7 +395,7 @@ void Update_HeadWaistRot(NpcMaker *en, PlayState* playState)
 void Update_Conversation(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
-        is64Printf("_%2d: Updating conversation status.\n", en->npcId);
+        is64Printf("_%d: Updating conversation status.\n", en->npcId);
     #endif    
 
     int talkState = Message_GetState(&playState->msgCtx);
@@ -404,7 +404,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     if (Actor_ProcessTalkRequest(&en->actor, playState))
     {
         #if LOGGING > 0
-            is64Printf("_%2d: Started talking!\n", en->npcId);
+            is64Printf("_%d: Started talking!\n", en->npcId);
         #endif  
 
         en->talkingFinished = false;
@@ -436,7 +436,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
         if (DUMMY_MSG_DATA == *(u32*)playState->msgCtx.font.msgBuf)
         {
             #if LOGGING > 1
-                is64Printf("_%2d: Setting a custom message.\n", en->npcId);
+                is64Printf("_%d: Setting a custom message.\n", en->npcId);
             #endif  
 
             Message_Overwrite(en, playState, en->customMsgId);
@@ -447,7 +447,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     if (en->isTalking && playState->msgCtx.msgMode == MSGMODE_TEXT_STARTING)
     {
         #if LOGGING > 0
-            is64Printf("_%2d: Textbox shown!\n", en->npcId);
+            is64Printf("_%d: Textbox shown!\n", en->npcId);
         #endif  
 
         en->textboxDisplayed = true;
@@ -457,7 +457,7 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     if (en->textboxDisplayed && (playState->msgCtx.msgMode == MSGMODE_NONE || talkState == MSGMODE_TEXT_CONTINUING))
     {
         #if LOGGING > 0
-            is64Printf("_%2d: _Talking has finished!\n", en->npcId);
+            is64Printf("_%d: _Talking has finished!\n", en->npcId);
         #endif  
 
         en->talkingFinished = true;
@@ -469,14 +469,14 @@ void Update_Conversation(NpcMaker* en, PlayState* playState)
     }
 
     #if LOGGING > 2
-        is64Printf("_%2d: Conversation status updated.\n", en->npcId);
+        is64Printf("_%d: Conversation status updated.\n", en->npcId);
     #endif       
 }
 
 void Update_HitsReaction(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
-        is64Printf("_%2d: Checking for hits.\n", en->npcId);
+        is64Printf("_%d: Checking for hits.\n", en->npcId);
     #endif    
 
     en->wasHitThisFrame = en->collider.base.acFlags & AC_HIT;
@@ -536,14 +536,14 @@ void Update_HitsReaction(NpcMaker* en, PlayState* playState)
     }
 
     #if LOGGING > 2
-        is64Printf("_%2d: Checking for hits complete.\n", en->npcId);
+        is64Printf("_%d: Checking for hits complete.\n", en->npcId);
     #endif       
 }
 
 void Update_Collision(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
-        is64Printf("_%2d: Updating collision.\n", en->npcId);
+        is64Printf("_%d: Updating collision.\n", en->npcId);
     #endif    
 
     // Update the collider
@@ -563,14 +563,14 @@ void Update_Collision(NpcMaker* en, PlayState* playState)
         CollisionCheck_SetAC(playState, &playState->colChkCtx, &en->collider.base);
 
     #if LOGGING > 1
-        is64Printf("_%2d: Updating collision complete.\n", en->npcId);
+        is64Printf("_%d: Updating collision complete.\n", en->npcId);
     #endif 
 }
 
 void Update_ModelAlpha(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
-        is64Printf("_%2d: Updating model transparency.\n", en->npcId);
+        is64Printf("_%d: Updating model transparency.\n", en->npcId);
     #endif   
 
     if (en->settings.fadeOut)
@@ -598,7 +598,7 @@ void Update_ModelAlpha(NpcMaker* en, PlayState* playState)
     }    
 
     #if LOGGING > 2
-        is64Printf("_%2d: Updating model transparency complete.\n", en->npcId);
+        is64Printf("_%d: Updating model transparency complete.\n", en->npcId);
     #endif   
 
 }

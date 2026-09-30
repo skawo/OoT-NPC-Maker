@@ -8,7 +8,7 @@
 void Draw_Debug(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
-        is64Printf("_%2d: DEBUG DRAW\n", en->npcId);
+        is64Printf("_%d: DEBUG DRAW\n", en->npcId);
     #endif   
 
     #if COLLISION_VIEWER == 1
@@ -38,7 +38,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
         if (en->settings.showLookAtEditorDebugOn)
         {
             #if LOGGING > 2
-                is64Printf("_%2d: LOOKAT editor is enabled.\n", en->npcId);
+                is64Printf("_%d: LOOKAT editor is enabled.\n", en->npcId);
             #endif  
 
             Gfx* gfx = Graph_GfxPlusOne(playState->state.gfxCtx->polyOpa.p);
@@ -104,7 +104,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
             GfxPrint_SetColor(&printer, 255, 255, 255, 255);
 
             GfxPrint_SetPos(&printer, 24, 10);
-            GfxPrint_Printf(&printer, "E %02d", en->dbgPosEditorCurEditing);
+            GfxPrint_Printf(&printer, "E %d", en->dbgPosEditorCurEditing);
 
             if (en->dbgPosEditorCurEditing <= en->numExDLists)
             {
@@ -171,7 +171,7 @@ void Draw_Debug(NpcMaker* en, PlayState* playState)
     #endif    
 
     #if LOGGING > 2
-        is64Printf("_%2d: DEBUG DRAW END\n", en->npcId);
+        is64Printf("_%d: DEBUG DRAW END\n", en->npcId);
     #endif 
 }
 
@@ -191,7 +191,7 @@ void Draw_Setup(NpcMaker* en, PlayState* playState, int drawType)
 void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
 {
     #if LOGGING > 2
-        is64Printf("_%2d: Drawing light\n", en->npcId);
+        is64Printf("_%d: Drawing light\n", en->npcId);
     #endif 
 
     Vec3f transl_in_dir;
@@ -215,14 +215,14 @@ void Draw_Lights(NpcMaker* en, PlayState* playState, Vec3f* translation)
     }  
 
     #if LOGGING > 2
-        is64Printf("_%2d: Drawing light complete\n", en->npcId);
+        is64Printf("_%d: Drawing light complete\n", en->npcId);
     #endif   
 }
 
 void Draw_LightsRebind(NpcMaker* en, PlayState* playState) 
 {
     #if LOGGING > 2
-        is64Printf("_%2d: Rebinding lights\n", en->npcId);
+        is64Printf("_%d: Rebinding lights\n", en->npcId);
     #endif 
 
     Vec3f bindPos = en->actor.world.pos;
@@ -234,7 +234,7 @@ void Draw_LightsRebind(NpcMaker* en, PlayState* playState)
     Lights_Draw(lights, playState->state.gfxCtx);
 
     #if LOGGING > 2
-        is64Printf("_%2d: Rebinding lights done\n", en->npcId);
+        is64Printf("_%d: Rebinding lights done\n", en->npcId);
     #endif     
 }
 
@@ -256,17 +256,9 @@ inline void Draw_SetAxis(u8 axis, s16 value, Vec3s* rotation)
    *((u16*)rotation + axis / 2) += (axis % 2 ? -value : value);
 }
 
-void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool SwapDest)
+void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList)
 {
-    int dT = Draw_GetDrawDestType(en, playState);
-
-    TwoHeadGfxArena* dest;
-
-	if (SwapDest)
-		dest = dT ? &POLY_OPA : &POLY_XLU;
-	else
-		dest = dT ? &POLY_XLU : &POLY_OPA;
-
+    TwoHeadGfxArena* dest = Draw_GetDrawDestType(en, playState) ? &POLY_XLU : &POLY_OPA;
     Draw_ExtDListInt(en, playState, dList, &dest->p);
 }
 
@@ -274,7 +266,7 @@ void Draw_ExtDList(NpcMaker *en, PlayState* playState, ExDListEntry* dList, bool
 void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, Gfx** gfxP)
 {
     #if LOGGING > 2
-        is64Printf("_%2d: Drawing extra display list at limb %2d\n", en->npcId, dList->limb);
+        is64Printf("_%d: Drawing extra display list at limb %d\n", en->npcId, dList->limb);
     #endif 
 
     s32 object = R_OBJECT(en, dList->objectId);
@@ -323,7 +315,7 @@ void Draw_ExtDListInt(NpcMaker *en, PlayState* playState, ExDListEntry* dList, G
     Draw_SetEnvColor(gfxP, en->curColor, en->curAlpha);
 
     #if LOGGING > 2
-        is64Printf("_%2d: Drawing extra display list complete\n", en->npcId);
+        is64Printf("_%d: Drawing extra display list complete\n", en->npcId);
     #endif 
 }
 
@@ -409,7 +401,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
     s32 out = 0;
 
     #if LOGGING > 2
-        is64Printf("_%2d: Drawing limb %2d\n", en->npcId, sLimbNumber);
+        is64Printf("_%d: Drawing limb %d\n", en->npcId, sLimbNumber);
     #endif
 
 #pragma region LimbRotations
@@ -494,7 +486,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
                 {
                     Matrix_Push();
                     Draw_AffectMatrix(dlist, translation, rotation);
-                    Draw_ExtDList(en, playState, &dlist, true);
+                    Matrix_Get(&en->exDlistMatrixes[i]);
                     Matrix_Pop();               
                 }
                 else
@@ -545,7 +537,7 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
 void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
-        is64Printf("_%2d: Setting up segment data.\n", en->npcId);
+        is64Printf("_%d: Setting up segment data.\n", en->npcId);
     #endif 
 
     if (en->exSegData == NULL)
@@ -592,7 +584,7 @@ void Draw_SetupSegments(NpcMaker* en, PlayState* playState)
     }
 
     #if LOGGING > 1
-        is64Printf("_%2d: Setting up segment data done.\n", en->npcId);
+        is64Printf("_%d: Setting up segment data done.\n", en->npcId);
     #endif     
 }
 
@@ -663,7 +655,7 @@ static void Draw_WorldRelative(NpcMaker* en, PlayState* playState, ExDListEntry*
     float scale = dlist->scale * en->actor.scale.x;
     Matrix_Scale(scale, scale, scale, MTXMODE_APPLY);
 
-    Draw_ExtDList(en, playState, dlist, false);
+    Draw_ExtDList(en, playState, dlist);
     Matrix_Pop();
 }
 
@@ -685,7 +677,7 @@ static void Draw_AtDisplay(NpcMaker* en, PlayState* playState, ExDListEntry* dli
 
     Matrix_Translate(dlist->translation.x, dlist->translation.y, zOffset, MTXMODE_APPLY);
     Matrix_RotateZYX(dlist->rotation.x, dlist->rotation.y, dlist->rotation.z, MTXMODE_APPLY);
-    Draw_ExtDList(en, playState, dlist, false);
+    Draw_ExtDList(en, playState, dlist);
     Matrix_Pop();
 }
 
@@ -739,7 +731,7 @@ static void Draw_Orthographic(NpcMaker* en, PlayState* playState, ExDListEntry* 
 void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 1
-        is64Printf("_%2d: Drawing static ExDLists.\n", en->npcId);
+        is64Printf("_%d: Drawing static ExDLists.\n", en->npcId);
     #endif  
 
     for (int i = 0; i < en->numExDLists; i++)
@@ -764,7 +756,7 @@ void Draw_StaticExtDLists(NpcMaker* en, PlayState* playState)
     }
 
     #if LOGGING > 1
-        is64Printf("_%2d: Drawing static ExDLists done.\n", en->npcId);
+        is64Printf("_%d: Drawing static ExDLists done.\n", en->npcId);
     #endif 
 }
 
@@ -782,7 +774,7 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
         if (!Rom_SetObjectToActor(&en->actor, playState, en->settings.objectId, en->settings.fileStart))
         {
             #if LOGGING > 0
-                is64Printf("_%2d: Tried drawing model that is not loaded (%d)\n", en->npcId, en->settings.objectId);
+                is64Printf("_%d: Tried drawing model that is not loaded (%d)\n", en->npcId, en->settings.objectId);
             #endif              
             
             return;
@@ -798,7 +790,7 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
 	
 
     #if LOGGING > 1
-        is64Printf("_%2d: Drawing the skeleton.\n", en->npcId);
+        is64Printf("_%d: Drawing the skeleton.\n", en->npcId);
     #endif  
 
     // Draw skeleton
@@ -850,9 +842,25 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
             }
             default: break;
         }
+        
+        for (int i = 0; i < en->numExDLists; i++)
+        {
+            ExDListEntry dlist = en->extraDLists[i];
+
+            if (dlist.showType == NOT_VISIBLE || dlist.showType >= IN_SKELETON)
+                continue;
+
+            if (dlist.objectId == OBJECT_NONE ||
+                dlist.objectId == OBJECT_ENDDLIST ||
+                dlist.objectId == OBJECT_XLUDLIST)
+                continue;
+
+            Matrix_Put(&en->exDlistMatrixes[i]);
+            Draw_ExtDList(en, playState, &dlist);
+        }         
     }
 
     #if LOGGING > 1
-        is64Printf("_%2d: Drawing the skeleton complete.\n", en->npcId);
+        is64Printf("_%d: Drawing the skeleton complete.\n", en->npcId);
     #endif  
 }
