@@ -1,24 +1,19 @@
 #include "../include/npc_maker_user.h"
-#include <hol/common.h>
 
-// z64rom hosts these functions in lib_user
-#ifndef NPCM_Z64ROM
-
-int NpcM_GetLanguage()
+int NpcM_GetLanguage() 
 {
-    return SAVE_LANGUAGE;
+    // To get support for translations, fill this in with an implementation that returns the current language ID (e.g. from the save file).
+    return 0;
 }
 
 void* NpcM_LoadAnimation(NpcMaker* en, int animId, int objectId)
 {
-    return LoadFromHeaderObjectToDest(objectId, animId, en->userLoadAnimBuf, en->userLoadAnimBuf, false, NULL);
+    // Implement loading external animations here
+    return NULL;
 }
 
 int NpcM_GetAnimationSize(NpcMaker* en, int animId, int objectId)
 {
-    int outSize = 0;
-    LoadFromHeaderObjectToDest(objectId, animId, NULL, NULL, true, &outSize);
-    return outSize;
+    // Implement returning the size of an external animation here
+    return 0;
 }
-
-#endif
