@@ -709,12 +709,11 @@ namespace NPC_Maker
             if (EditedFile != null)
             {
                 OpenedPath = FilePath;
-                OpenedFileLastWritten = Helpers.TryGetLastDatetimeWritten(FilePath);
+                OpenedFileLastWritten = GetLastTimeWritten();
                 Program.JsonPath = OpenedPath;
                 Panel_Editor.Enabled = true;
 
                 chkBox_FolderMode.Checked = EditedFile.isFolder;
-                chkBox_FolderMode.Visible = true;
 
                 SetupLanguageCombo();
 
@@ -1457,17 +1456,35 @@ namespace NPC_Maker
 
         private bool CheckOverwriteExternalChanges(string path)
         {
-            DateTime curLastWrite = Helpers.TryGetLastDatetimeWritten(OpenedPath);
+            DateTime curLastWrite = GetLastTimeWritten();
 
             if (curLastWrite > OpenedFileLastWritten)
             {
-                DialogResult Res = BigMessageBox.Show("File may have been edited externally. Possible data loss may occur. Overwrite anyway?", "Detected external changes", MessageBoxButtons.YesNo);
+                DialogResult Res = BigMessageBox.Show("File(s) may have been edited externally. Possible data loss may occur. Overwrite anyway?", "Detected external changes", MessageBoxButtons.YesNo);
 
                 if (Res != DialogResult.Yes)
                     return false;
             }
 
             return true;
+        }
+
+        private DateTime GetLastTimeWritten()
+        {
+            DateTime curLastWrite = Helpers.TryGetLastDatetimeWritten(OpenedPath);
+
+            if (EditedFile.isFolder)
+            {
+                string rootDirectory = Path.Combine(Path.GetDirectoryName(OpenedPath),
+                                                    Path.GetFileNameWithoutExtension(OpenedPath));
+
+                DateTime curLastWriteFolder = Helpers.GetNewestWriteTimeInDirectory(rootDirectory);
+
+                if (curLastWriteFolder > curLastWrite)
+                    curLastWrite = curLastWriteFolder;
+            }
+
+            return curLastWrite;
         }
 
         private async void FileMenu_Save_Click(object sender, EventArgs e)
@@ -1484,7 +1501,8 @@ namespace NPC_Maker
 
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 await RunSave(OpenedPath);
-                OpenedFileLastWritten = Helpers.TryGetLastDatetimeWritten(OpenedPath);
+                
+                OpenedFileLastWritten = GetLastTimeWritten();
             }
         }
 

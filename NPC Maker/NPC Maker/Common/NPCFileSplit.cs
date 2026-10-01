@@ -12,13 +12,72 @@ namespace NPC_Maker.Common
 {
     internal class NPCFileSplit
     {
+        public static List<string> GetSplitNPCFilePaths(string fileName, NPCFile npcFile)
+        {
+            var paths = new List<string>();
+
+            string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "_content");
+
+            string headersPath = Path.Combine(rootDirectory, "headers");
+            string npcsPath = Path.Combine(rootDirectory, "npcs");
+            string cHeaderPath = Path.Combine(rootDirectory, "cHeader.h");
+
+            paths.Add(cHeaderPath);
+
+            // Global headers
+            paths.AddRange(GetScriptPaths(headersPath, npcFile.GlobalHeaders));
+
+            // Per-entry files
+            int total = npcFile.Entries.Count;
+            for (int i = 0; i < total; i++)
+            {
+                var entry = npcFile.Entries[i];
+                string name = entry.IsNull ? "NULL_ENTRY" : entry.NPCName;
+                string directory = Path.Combine(npcsPath, Prefixed(i, total, name));
+
+                paths.Add(Path.Combine(directory, "npc.json"));
+
+                if (entry.IsNull)
+                    continue;
+
+                var codeLines = entry.EmbeddedOverlayCode?.CodeLines;
+                if (codeLines != null && codeLines.Count > 0)
+                    paths.Add(Path.Combine(directory, "code.c"));
+
+                paths.AddRange(GetScriptPaths(Path.Combine(directory, "scripts"), entry.Scripts));
+
+                string messagesPath = Path.Combine(directory, "messages");
+                paths.Add(Path.Combine(messagesPath, "Default.txt"));
+
+                if (entry.Localization != null)
+                {
+                    foreach (var le in entry.Localization)
+                        paths.Add(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}.txt"));
+                }
+            }
+
+            return paths;
+        }
+
+        private static IEnumerable<string> GetScriptPaths(string folder, List<ScriptEntry> scripts)
+        {
+            if (scripts == null)
+                yield break;
+
+            for (int i = 0; i < scripts.Count; i++)
+            {
+                string fileName = Prefixed(i, scripts.Count, scripts[i].Name) + ".npcm";
+                yield return Path.Combine(folder, fileName);
+            }
+        }
+
         public static void ReconstructNPCFileFromFolder(string fileName, ref NPCFile inFile)
         {
             if (!inFile.isFolder)
                 return;
 
-            string jsonPath = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName));
-            string headersPath = Path.Combine(jsonPath, "gScriptHeaders");
+            string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "_content");
+            string headersPath = Path.Combine(rootDirectory, "headers");
 
             try
             {
@@ -42,7 +101,7 @@ namespace NPC_Maker.Common
                 return;
             }
 
-            string cHeaderPath = Path.Combine(jsonPath, "cHeader.h");
+            string cHeaderPath = Path.Combine(rootDirectory, "cHeader.h");
 
             try
             {
@@ -54,7 +113,13 @@ namespace NPC_Maker.Common
                 return;
             }
 
-            string npcsPath = Path.Combine(jsonPath, "npcs");
+            string npcsPath = Path.Combine(rootDirectory, "npcs");
+
+            if (!Directory.Exists(npcsPath))
+            {
+                BigMessageBox.Show($"Failed to reconstruct JSON: No NPCs folder?");
+                return;
+            }
 
             try
             {
@@ -150,13 +215,13 @@ namespace NPC_Maker.Common
 
         public static bool SplitNPCFileToFolder(string fileName, NPCFile inFile, IProgress<ProgressReport> progress = null)
         {
-            string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName));
-            string headersPath = Path.Combine(rootDirectory, "gScriptHeaders");
+            string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "_content");
+            string headersPath = Path.Combine(rootDirectory, "headers");
             string npcsPath = Path.Combine(rootDirectory, "npcs");
             string cHeaderPath = Path.Combine(rootDirectory, "cHeader.h");
 
             string tempRoot = Path.Combine(rootDirectory, ".split_tmp_" + Guid.NewGuid().ToString("N"));
-            string tempHeadersPath = Path.Combine(tempRoot, "gScriptHeaders");
+            string tempHeadersPath = Path.Combine(tempRoot, "headers");
             string tempNpcsPath = Path.Combine(tempRoot, "npcs");
             string tempCHeaderPath = Path.Combine(tempRoot, "cHeader.h");
             string tempJsonPath = Path.Combine(tempRoot, Path.GetFileName(fileName));
@@ -341,11 +406,11 @@ namespace NPC_Maker.Common
             }
         }
 
-        // "007 - Name"
+        // "007-Name"
         private static string Prefixed(int index, int count, string name)
         {
             int digits = Math.Max(2, (count - 1).ToString().Length);
-            return $"{index.ToString().PadLeft(digits, '0')} - {SanitizeName(name)}";
+            return $"{index.ToString().PadLeft(digits, '0')}-{SanitizeName(name)}";
         }
 
         private static string SanitizeName(string name)

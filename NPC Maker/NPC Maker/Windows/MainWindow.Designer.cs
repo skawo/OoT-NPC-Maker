@@ -48,7 +48,6 @@ namespace NPC_Maker
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new NPC_Maker.Controls.TabControl_ColorFix();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
-            this.chkBox_FolderMode = new NPC_Maker.Controls.BigCheckBox();
             this.Tx_FileStartName = new System.Windows.Forms.TextBox();
             this.Tx_SkeletonName = new System.Windows.Forms.TextBox();
             this.Btn_HeaderBrowse = new System.Windows.Forms.Button();
@@ -323,6 +322,7 @@ namespace NPC_Maker
             this.LblOnInit = new System.Windows.Forms.Label();
             this.LblFuncToRun = new System.Windows.Forms.Label();
             this.Button_OpenCCode = new System.Windows.Forms.Button();
+            this.chkBox_FolderMode = new NPC_Maker.Controls.BigCheckBox();
             this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keywordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -717,17 +717,6 @@ namespace NPC_Maker
             this.Tab1_Data.Size = new System.Drawing.Size(848, 633);
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
-            // 
-            // chkBox_FolderMode
-            // 
-            this.chkBox_FolderMode.BoxSize = 18;
-            this.chkBox_FolderMode.Location = new System.Drawing.Point(332, 2);
-            this.chkBox_FolderMode.Name = "chkBox_FolderMode";
-            this.chkBox_FolderMode.Size = new System.Drawing.Size(89, 22);
-            this.chkBox_FolderMode.TabIndex = 85;
-            this.chkBox_FolderMode.Text = "Folder mode";
-            this.chkBox_FolderMode.UseVisualStyleBackColor = true;
-            this.chkBox_FolderMode.CheckedChanged += new System.EventHandler(this.chkBox_FolderMode_CheckedChanged);
             // 
             // Tx_FileStartName
             // 
@@ -4378,6 +4367,17 @@ namespace NPC_Maker
             this.Button_OpenCCode.Text = "Open C code...";
             this.Button_OpenCCode.UseVisualStyleBackColor = true;
             this.Button_OpenCCode.Click += new System.EventHandler(this.Button_OpenCCode_Click);
+            // 
+            // chkBox_FolderMode
+            // 
+            this.chkBox_FolderMode.BoxSize = 18;
+            this.chkBox_FolderMode.Location = new System.Drawing.Point(332, 2);
+            this.chkBox_FolderMode.Name = "chkBox_FolderMode";
+            this.chkBox_FolderMode.Size = new System.Drawing.Size(89, 22);
+            this.chkBox_FolderMode.TabIndex = 85;
+            this.chkBox_FolderMode.Text = "Folder mode";
+            this.chkBox_FolderMode.UseVisualStyleBackColor = true;
+            this.chkBox_FolderMode.CheckedChanged += new System.EventHandler(this.chkBox_FolderMode_CheckedChanged);
             // 
             // ContextMenuStrip
             // 

@@ -22,20 +22,62 @@ namespace NPC_Maker
     public static class Helpers
     {
 
-        public static DateTime TryGetLastDatetimeWritten(string file)
+        public static DateTime TryGetLastDatetimeWritten(string path)
         {
             DateTime dt = DateTime.Now;
 
             try
             {
-                dt = File.GetLastWriteTime(file);
+                if (Directory.Exists(path))
+                    dt = Directory.GetLastWriteTime(path);
+                else
+                    dt = File.GetLastWriteTime(path);
             }
             catch
             {
-
             }
 
             return dt;
+        }
+
+        public static DateTime GetNewestWriteTimeInDirectory(string path)
+        {
+            DateTime newest = DateTime.MinValue;
+
+            if (!Directory.Exists(path))
+                return newest;
+
+            var pending = new Stack<DirectoryInfo>();
+            pending.Push(new DirectoryInfo(path));
+
+            while (pending.Count > 0)
+            {
+                DirectoryInfo dir = pending.Pop();
+
+                try
+                {
+                    if (dir.LastWriteTime > newest)
+                        newest = dir.LastWriteTime;
+
+                    foreach (FileSystemInfo info in dir.EnumerateFileSystemInfos())
+                    {
+                        if (info.LastWriteTime > newest)
+                            newest = info.LastWriteTime;
+
+                        if (info is DirectoryInfo sub &&
+                            !sub.Name.StartsWith(".split_tmp_", StringComparison.Ordinal))
+                        {
+                            pending.Push(sub);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Skip unreadable directories instead of aborting the whole scan
+                }
+            }
+
+            return newest;
         }
 
         public static void PutIntoClipboard(string s)

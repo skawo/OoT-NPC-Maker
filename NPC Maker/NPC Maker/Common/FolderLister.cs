@@ -45,7 +45,7 @@ namespace NPC_Maker.Common
             }
         }
 
-        // Get files/folders sorted by numeric prefix ("12 - Name"), with full path and prefix-stripped name.
+        // Get files/folders sorted by numeric prefix ("12-Name"), with full path and prefix-stripped name.
         public static List<FolderEntry> ListSortedWithPaths(string folder, EntryKind kind = EntryKind.Both)
         {
             return GetEntries(folder, kind)

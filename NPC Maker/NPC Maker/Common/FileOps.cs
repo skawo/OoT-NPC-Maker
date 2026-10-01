@@ -1458,6 +1458,12 @@ namespace NPC_Maker
                     addDep(p);
             }
 
+            if (data.isFolder)
+            {
+                foreach (var p in NPCFileSplit.GetSplitNPCFilePaths(Program.JsonPath, data))
+                    addDep(Helpers.DenormalizeExtPath(p, false, true));
+            }
+
             var dictDirs = new[]
             {
                 Path.Combine(Program.ExecPath, "Dicts"),
