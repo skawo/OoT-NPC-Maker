@@ -94,6 +94,24 @@ namespace NPC_Maker
             NTSC1_0,
         }
 
+        public enum BoxType
+        {
+            Black,
+            Wooden,
+            Blue,
+            Ocarina,
+            None_White,
+            None_Black,
+        }
+
+        public enum BoxPosition
+        {
+            Dynamic,
+            Top,
+            Center,
+            Bottom,
+        }
+
         public static Dictionary<Library, string[]> GameVersionStrings = new Dictionary<Library, string[]>()
         {
             {Library.z64hdr, new string[] { "oot_mq_debug", "oot_u10" } },

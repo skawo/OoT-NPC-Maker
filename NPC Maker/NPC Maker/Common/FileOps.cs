@@ -68,6 +68,8 @@ namespace NPC_Maker
                 var npcFile = JsonConvert.DeserializeObject<NPCFile>(jsonText);
                 int version = npcFile.Version > 0 ? npcFile.Version : 1;
 
+                NPCFileSplit.ReconstructNPCFileFromFolder(fileName, ref npcFile);
+
                 version = MigrateToVersion2(ref npcFile, version > 1 ? null : JObject.Parse(jsonText), version);
                 version = MigrateToVersion3(ref npcFile, version);
 
@@ -82,7 +84,7 @@ namespace NPC_Maker
                 NormalizeLineBreaks(ref npcFile);
                 ResolveHeaderDefines(ref npcFile);
 
-                npcFile.Version = 7;
+                npcFile.Version = 8;
                 return npcFile;
             }
             catch (Exception ex)
@@ -92,54 +94,88 @@ namespace NPC_Maker
             }
         }
 
+        public static string ConvertNPCFileToJSON(NPCFile npcFile)
+        {
+            string json = JsonConvert.SerializeObject(npcFile, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+            return json.Replace(Environment.NewLine, "\n");
+        }
+
         public static bool SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null, bool isBackup = false)
         {
             try
             {
+                NPCFile processedData = data;
+
                 if (json == null)
-                    json = ProcessNPCJSON(ref data, progress);
+                    processedData = ProcessNPCJSON(data, progress, isBackup);
 
-                if (json != null)
-                    File.WriteAllText(path, json);
+                if (json == null && data.isFolder && !isBackup)
+                {
+                    return NPCFileSplit.SplitNPCFileToFolder(path, processedData, progress);
+                }
+                else
+                {
+                    if (json == null)
+                        json = ConvertNPCFileToJSON(processedData);
 
-                return true;
+                    if (json != null)
+                        File.WriteAllText(path, json);
+
+                    return true;
+                }
             }
             catch (Exception ex)
             {
-                Program.ConsoleWriteLineS($"Failed to save JSON: {ex.Message}");
+                Console.WriteLine("Warning: Could not save backup.");
                 return false;
             }
         }
 
-        public static string ProcessNPCJSON(ref NPCFile data, IProgress<ProgressReport> progress = null)
+        public static NPCFile ProcessNPCJSON(NPCFile data, IProgress<ProgressReport> progress = null, bool isBackup = false)
         {
             try
             {
                 var output = Helpers.Clone<NPCFile>(data);
-                string envNewline = Environment.NewLine;
 
                 float progressPer = 100f / output.Entries.Count;
                 int processedCount = 0;
 
                 Parallel.ForEach(output.Entries, entry =>
                 {
-                    foreach (var script in entry.Scripts)
+                    if (entry.Scripts != null)
                     {
-                        script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
-                        script.Text = null;
+                        foreach (var script in entry.Scripts)
+                        {
+                            script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
+                            script.Text = null;
+                        }
                     }
 
-                    foreach (var message in entry.Messages)
-                        FlattenMessage(message, envNewline);
+                    if (entry.Messages != null)
+                    {
+                        foreach (var message in entry.Messages)
+                            message.FlattenMessage();
+                    }
 
-                    foreach (var loc in entry.Localization)
-                        foreach (var message in loc.Messages)
-                            FlattenMessage(message, envNewline);
+                    if (entry.Localization != null)
+                    {
+                        foreach (var loc in entry.Localization)
+                            foreach (var message in loc.Messages)
+                                message.FlattenMessage();
+                    }
 
                     if (entry.EmbeddedOverlayCode?.Code != null)
                     {
-                        entry.EmbeddedOverlayCode.CodeLines = Helpers.SplitToTrimmedLines(entry.EmbeddedOverlayCode.Code);
-                        entry.EmbeddedOverlayCode.Code = null;
+                        if (entry.EmbeddedOverlayCode.Code != null)
+                        {
+                            entry.EmbeddedOverlayCode.CodeLines = Helpers.SplitToTrimmedLines(entry.EmbeddedOverlayCode.Code);
+                            entry.EmbeddedOverlayCode.Code = null;
+                        }
                     }
 
                     if (progress != null)
@@ -155,22 +191,22 @@ namespace NPC_Maker
                     ClearHeaderValues(entry);
                 });
 
-                foreach (var script in output.GlobalHeaders)
+                if (output.GlobalHeaders != null)
                 {
-                    script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
-                    script.Text = null;
+                    foreach (var script in output.GlobalHeaders)
+                    {
+                        script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
+                        script.Text = null;
+                    }
                 }
 
-                output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
-                output.CHeader = null;
-
-                string json = JsonConvert.SerializeObject(output, new JsonSerializerSettings
+                if (output.CHeader != null)
                 {
-                    Formatting = Formatting.Indented,
-                    NullValueHandling = NullValueHandling.Ignore
-                });
+                    output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
+                    output.CHeader = null;
+                }
 
-                return json.Replace(envNewline, "\n");
+                return output;
             }
             catch (ThreadAbortException)
             {
@@ -1382,6 +1418,12 @@ namespace NPC_Maker
                     addDep(p);
             }
 
+            if (data.isFolder)
+            {
+                foreach (var p in NPCFileSplit.GetSplitNPCFilePaths(Program.JsonPath, data))
+                    addDep(Helpers.DenormalizeExtPath(p, false, true));
+            }
+
             var dictDirs = new[]
             {
                 Path.Combine(Program.ExecPath, "Dicts"),
@@ -1552,14 +1594,6 @@ namespace NPC_Maker
                 entry.Segments,
                 entry.Animations
             }) + Helpers.GetDefinesStringFromH(entry.HeaderPath);
-        }
-
-        private static void FlattenMessage(MessageEntry message, string envNewline)
-        {
-            message.MessageText = message.MessageText?.Replace(envNewline, "\n");
-            message.MessageTextLines = message.MessageText?.Split(Lists.NewlineSeparators, StringSplitOptions.None).ToList();
-            message.MessageText = null;
-            message.Comment = message.Comment?.Replace(envNewline, "\n");
         }
     }
 }

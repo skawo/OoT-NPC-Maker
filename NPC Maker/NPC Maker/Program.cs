@@ -175,7 +175,7 @@ namespace NPC_Maker
                 List<byte> msgTable = new List<byte>();
                 List<byte> msgData = new List<byte>();
 
-                inFile.Entries[actorID].ConvertMessages(inFile.Languages, out msgTable, out msgData);
+                inFile.Entries[actorID].ConvertMessagesToGameTables(inFile.Languages, out msgTable, out msgData);
                 File.WriteAllBytes(outPathTable, msgTable.ToArray());
                 File.WriteAllBytes(outPathStrings, msgData.ToArray());
 
@@ -304,7 +304,7 @@ namespace NPC_Maker
 
             if (success)
             {
-                string newJson = FileOps.ProcessNPCJSON(ref inFile);
+                string newJson = FileOps.ConvertNPCFileToJSON(FileOps.ProcessNPCJSON(inFile));
 
                 if (jsonText != newJson)
                     success = FileOps.SaveNPCJSON(JsonPath, inFile, null, newJson);

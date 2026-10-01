@@ -14,6 +14,8 @@ namespace NPC_Maker
     public class NPCFile
     {
         public int Version { get; set; }
+
+        public bool isFolder { get; set; }
         public List<NPCEntry> Entries { get; set; }
         public List<ScriptEntry> GlobalHeaders { get; set; }
 
@@ -31,8 +33,9 @@ namespace NPC_Maker
 
         public NPCFile()
         {
-            Version = 7;
+            Version = 8;
             Entries = new List<NPCEntry>();
+            isFolder = false;
             GlobalHeaders = new List<ScriptEntry>();
             SpaceFromFont = false;
             CHeader = "";
@@ -305,7 +308,80 @@ namespace NPC_Maker
             FileStartHeaderDefinition = "";
         }
 
-        public void ConvertMessages(List<string> Languages, out List<byte> msgTable, out List<byte> msgData)
+        public List<MessageEntry> GetLanguageMessageList(string Language)
+        {
+            List<MessageEntry> MessageList = Messages;
+
+            if (Language != Lists.DefaultLanguage)
+            {
+                int LocalizationIndex = Localization.FindIndex(x => x.Language == Language);
+
+                if (LocalizationIndex != -1)
+                    MessageList = Localization[LocalizationIndex].Messages;
+            }
+
+            return MessageList;
+        }
+
+        public string ConvertMessagesToTxt(string Language)
+        {
+            List<MessageEntry> msgList = GetLanguageMessageList(Language);
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var entry in msgList)
+            {
+                sb.Append(entry.TxtFormat());
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
+
+        public static List<MessageEntry> ConvertTxtToMessages(string[] lines)
+        {
+            bool IsHeaderAt(int i)
+            {
+                string header = lines[i].TrimEnd();
+                if (header.Length == 0 || !MessageEntry.TxtHeaderRegex.IsMatch(header))
+                    return false;
+
+                string next = lines[i + 1].TrimEnd();
+                return next.Length == header.Length && next.Trim('-').Length == 0;
+            }
+
+            List<MessageEntry> outList = new List<MessageEntry>();
+
+            var starts = new List<int>();
+            for (int i = 0; i < lines.Count() - 1; i++)
+            {
+                if (IsHeaderAt(i))
+                    starts.Add(i);
+            }
+
+            if (starts.Count == 0)
+                return new List<MessageEntry>();
+
+            for (int i = 0; i < starts.Count; i++)
+            {
+                // Exclusive end: first line NOT in this block.
+                int endL = (i == starts.Count - 1) ? lines.Length : starts[i + 1];
+
+                // Drop the single separator blank line, if there is one.
+                if (endL - 1 > starts[i] && String.IsNullOrWhiteSpace(lines[endL - 1]))
+                    endL--;
+
+                var messagelines = lines.Skip(starts[i]).Take(endL - starts[i]).ToArray();
+                messagelines[messagelines.Length - 1] = messagelines[messagelines.Length - 1].TrimEnd(Environment.NewLine.ToCharArray());
+
+                MessageEntry entry = MessageEntry.FromTxtFormat(messagelines);
+                outList.Add(entry);
+            }
+
+            return outList;
+        }
+
+        public void ConvertMessagesToGameTables(List<string> Languages, out List<byte> msgTable, out List<byte> msgData)
         {
             msgTable = new List<byte>();
             msgData = new List<byte>();
