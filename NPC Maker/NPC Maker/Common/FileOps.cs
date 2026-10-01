@@ -90,7 +90,7 @@ namespace NPC_Maker
                 NormalizeLineBreaks(ref npcFile);
                 ResolveHeaderDefines(ref npcFile);
 
-                npcFile.Version = 7;
+                npcFile.Version = 8;
 
                 if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonParse.ToString(),
                                                          new FunctionExtend.OnJsonParse() { file = npcFile, fileName = fileName })) is FunctionExtend.OnJsonParse ret)
