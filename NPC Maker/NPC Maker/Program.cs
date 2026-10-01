@@ -31,6 +31,8 @@ namespace NPC_Maker
         public static bool IsRunningUnderMono = false;
         public static bool IsWSL = false;
 
+        public static bool CliMode = false;
+
         public static Process CodeEditorProcess;
 
         public static string SettingsFilePath;
@@ -273,6 +275,7 @@ namespace NPC_Maker
 
         private static int RunCLI(string[] args)
         {
+            CliMode = true;
             bool isCompileCommand = args.Length >= 4 && args.Length <= 5 && args[0].ToUpper() == "-C";
             bool isTableCommand = args.Length >= 5 && args.Length <= 6 && args[0].ToUpper() == "-M";
             bool isConvertCommand = args.Length >= 2;
@@ -315,7 +318,7 @@ namespace NPC_Maker
                 List<byte> msgTable = new List<byte>();
                 List<byte> msgData = new List<byte>();
 
-                inFile.Entries[actorID].ConvertMessages(inFile.Languages, out msgTable, out msgData);
+                inFile.Entries[actorID].ConvertMessagesToGameTables(inFile.Languages, out msgTable, out msgData);
                 File.WriteAllBytes(outPathTable, msgTable.ToArray());
                 File.WriteAllBytes(outPathStrings, msgData.ToArray());
 
@@ -444,7 +447,7 @@ namespace NPC_Maker
 
             if (success)
             {
-                string newJson = FileOps.ProcessNPCJSON(ref inFile);
+                string newJson = FileOps.ConvertNPCFileToJSON(FileOps.ProcessNPCJSON(inFile));
 
                 if (jsonText != newJson)
                     success = FileOps.SaveNPCJSON(JsonPath, inFile, null, newJson);

@@ -11,10 +11,83 @@ namespace NPC_Maker.Controls
 
     public static class BigMessageBox
     {
+        private sealed class Option
+        {
+            public readonly string Answer;
+            public readonly DialogResult Result;
+
+            public Option(string answer, DialogResult result)
+            {
+                Answer = answer;
+                Result = result;
+            }
+        }
+
+        private static DialogResult ShowCli(string text, MessageBoxButtons buttons)
+        {
+            Console.WriteLine(text);
+
+            switch (buttons)
+            {
+                case MessageBoxButtons.OK:
+                    return DialogResult.OK;
+
+                case MessageBoxButtons.OKCancel:
+                    return Prompt(
+                        new Option("ok", DialogResult.OK),
+                        new Option("cancel", DialogResult.Cancel));
+
+                case MessageBoxButtons.YesNo:
+                    return Prompt(
+                        new Option("yes", DialogResult.Yes),
+                        new Option("no", DialogResult.No));
+
+                case MessageBoxButtons.YesNoCancel:
+                    return Prompt(
+                        new Option("yes", DialogResult.Yes),
+                        new Option("no", DialogResult.No),
+                        new Option("cancel", DialogResult.Cancel));
+
+                default:
+                    Console.WriteLine("Cli Mode Error: unsupported button set");
+                    return DialogResult.No;
+            }
+        }
+
+        private static DialogResult Prompt(params Option[] options)
+        {
+            string[] answers = new string[options.Length];
+            for (int i = 0; i < options.Length; i++)
+                answers[i] = "\"" + options[i].Answer + "\"";
+
+            Console.WriteLine("Reply with " + string.Join(", ", answers));
+
+            while (true)
+            {
+                string reply = Console.ReadLine();
+
+                if (reply == null)
+                    return options[options.Length - 1].Result;
+
+                reply = reply.Trim();
+
+                foreach (Option option in options)
+                {
+                    if (string.Equals(reply, option.Answer, StringComparison.OrdinalIgnoreCase))
+                        return option.Result;
+                }
+
+                Console.WriteLine("?");
+            }
+        }
+
         public static DialogResult Show(string text, string caption = "",
                                 MessageBoxButtons buttons = MessageBoxButtons.OK,
                                 Font font = null, Form owner = null)
         {
+            if (Program.CliMode)
+                return ShowCli(text, buttons);
+
             if (font == null)
                 font = new Font("Microsoft Sans Serif", Common.GUIHacks.GetScaleFontSize());
 

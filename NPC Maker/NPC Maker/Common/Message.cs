@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
+using NPC_Maker;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -337,6 +339,117 @@ namespace NPC_Maker
 
         public MessageEntry()
         {
+        }
+
+        public static readonly Regex TxtHeaderRegex = new Regex(@"^(?<name>.*?)\s*\[Type=(?<type>[^\]]*)\],\s*\[Position=(?<pos>[^\]]*)\]\s*$", RegexOptions.Compiled);
+
+        public static MessageEntry FromTxtFormat(string text)
+        {
+            if (String.IsNullOrWhiteSpace(text))
+                throw new Exception("Empty message text.");
+
+            var lines = new List<string>(text.Replace("\r\n", "\n").Split('\n'));
+
+            // Remove all newlines at the end
+            if (lines.Count > 0 && lines[lines.Count - 1] == "")
+                lines.RemoveAt(lines.Count - 1);
+
+            return FromTxtFormat(lines.ToArray());
+        }
+
+        public static MessageEntry FromTxtFormat(string[] lines)
+        {
+            if (lines.Length == 0)
+                throw new Exception("Empty message text.");
+
+            // --- Header ---
+            var match = TxtHeaderRegex.Match(lines[0]);
+            if (!match.Success)
+                throw new Exception($"Invalid header line: \"{lines[0]}\"");
+
+            string name = match.Groups["name"].Value;
+
+            if (!Enum.TryParse(match.Groups["type"].Value.Trim(), true, out ZeldaMessage.Data.BoxType type))
+                throw new Exception($"Unknown Box Type: \"{match.Groups["type"].Value}\"");
+            if (!Enum.TryParse(match.Groups["pos"].Value.Trim(), true, out ZeldaMessage.Data.BoxPosition position))
+                throw new Exception($"Unknown Box Position: \"{match.Groups["pos"].Value}\"");
+
+            int index = 1;
+
+            // Omit separator line
+            if (index < lines.Length && lines[index].Length > 0 && lines[index].Trim('-').Length == 0)
+                index++;
+
+            // Comments
+            var commentLines = new List<string>();
+            while (index < lines.Length && lines[index].StartsWith("#"))
+            {
+                string line = lines[index];
+                commentLines.Add(line.Substring(1).TrimStart());
+                index++;
+            }
+
+            // Message body()
+            var body = lines.Skip(index).Take(lines.Length - index).ToList();
+
+            return new MessageEntry
+            {
+                Name = name,
+                Comment = commentLines.Count > 0 ? string.Join(Environment.NewLine, commentLines) : null,
+                MessageText = null,
+                MessageTextLines = body,
+                Type = (int)type,
+                Position = (int)position,
+            };
+        }
+
+        public string TxtFormat()
+        {
+            var sb = new StringBuilder();
+
+            string header = $"{Name} [Type={(ZeldaMessage.Data.BoxType)Type}], [Position={(ZeldaMessage.Data.BoxPosition)Position}]";
+
+            sb.AppendLine(header);
+            sb.AppendLine(new string ('-', header.Length));
+
+            if (!string.IsNullOrEmpty(Comment))
+            {
+                foreach (var line in Comment.Replace("\r\n", "\n").Split('\n'))
+                    sb.Append("# ").AppendLine(line);
+            }
+
+            MessageEntry flattened = this;
+
+            if (MessageText != null)
+                flattened = GetFlattenedMessage(this);
+
+            foreach (var line in flattened.MessageTextLines)
+                sb.AppendLine(line);   
+
+            return sb.ToString();
+        }
+
+        public void FlattenMessage()
+        {
+            string envNewline = Environment.NewLine;
+            MessageText = MessageText?.Replace(envNewline, "\n");
+            MessageTextLines = MessageText?.Split(Lists.NewlineSeparators, StringSplitOptions.None).ToList();
+            MessageText = null;
+            Comment = Comment?.Replace(envNewline, "\n");
+        }
+
+        public static MessageEntry GetFlattenedMessage(MessageEntry msg)
+        {
+            string envNewline = Environment.NewLine;
+
+            MessageEntry message = Helpers.Clone<MessageEntry>(msg);
+
+            message.MessageText = message.MessageText?.Replace(envNewline, "\n");
+            message.MessageTextLines = message.MessageText?.Split(Lists.NewlineSeparators, StringSplitOptions.None).ToList();
+            message.MessageText = null;
+            message.Comment = message.Comment?.Replace(envNewline, "\n");
+
+           return message;
         }
 
         public byte GetMessageTypePos()

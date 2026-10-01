@@ -381,6 +381,7 @@ namespace NPC_Maker
             this.CodeParamsTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltipLoc = new NPC_Maker.Controls.BigToolTip();
+            this.chkBox_FolderMode = new NPC_Maker.Controls.BigCheckBox();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -4836,12 +4837,25 @@ namespace NPC_Maker
             this.msgCommentTooltipLoc.ReshowDelay = 50;
             this.msgCommentTooltipLoc.ShowAlways = true;
             // 
+            // chkBox_FolderMode
+            // 
+            this.chkBox_FolderMode.BoxSize = 18;
+            this.chkBox_FolderMode.Location = new System.Drawing.Point(349, 2);
+            this.chkBox_FolderMode.Name = "chkBox_FolderMode";
+            this.chkBox_FolderMode.Size = new System.Drawing.Size(89, 22);
+            this.chkBox_FolderMode.TabIndex = 85;
+            this.chkBox_FolderMode.Text = "Folder mode";
+            this.chkBox_FolderMode.UseVisualStyleBackColor = true;
+            this.chkBox_FolderMode.Visible = false;
+            this.chkBox_FolderMode.CheckedChanged += new System.EventHandler(this.chkBox_FolderMode_CheckedChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1184, 683);
+            this.Controls.Add(this.chkBox_FolderMode);
             this.Controls.Add(this.progressL);
             this.Controls.Add(this.btn_FindMsg);
             this.Controls.Add(this.txBox_Search);
@@ -5322,6 +5336,7 @@ namespace NPC_Maker
         private System.Windows.Forms.ToolStripMenuItem saveBinaryToRecentToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem clearThisListToolStripMenuItem2;
+        private BigCheckBox chkBox_FolderMode;
     }
 }
 

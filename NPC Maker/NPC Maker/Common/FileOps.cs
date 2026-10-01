@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -73,6 +74,8 @@ namespace NPC_Maker
                 var npcFile = JsonConvert.DeserializeObject<NPCFile>(jsonText);
                 int version = npcFile.Version > 0 ? npcFile.Version : 1;
 
+                NPCFileSplit.ReconstructNPCFileFromFolder(fileName, ref npcFile);
+
                 version = MigrateToVersion2(ref npcFile, version > 1 ? null : JObject.Parse(jsonText), version);
                 version = MigrateToVersion3(ref npcFile, version);
 
@@ -89,7 +92,7 @@ namespace NPC_Maker
 
                 npcFile.Version = 7;
 
-                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonParse.ToString(), 
+                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonParse.ToString(),
                                                          new FunctionExtend.OnJsonParse() { file = npcFile, fileName = fileName })) is FunctionExtend.OnJsonParse ret)
                 {
                     npcFile = ret.file;
@@ -104,25 +107,53 @@ namespace NPC_Maker
             }
         }
 
+        public static string ConvertNPCFileToJSON(NPCFile npcFile)
+        {
+            string json = JsonConvert.SerializeObject(npcFile, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+            return json.Replace(Environment.NewLine, "\n");
+        }
 
         public static bool SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null, bool isBackup = false)
         {
             try
             {
+                NPCFile processedData = data;
+
                 if (json == null)
-                    json = ProcessNPCJSON(ref data, progress, isBackup);
+                    processedData = ProcessNPCJSON(data, progress, isBackup);
 
-                if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSave.ToString(),
-                                                         new FunctionExtend.OnJsonSave { json = json, isBackup = isBackup })) is FunctionExtend.OnJsonSave ret)
+                if (json == null && data.isFolder && !isBackup)
                 {
-                    json = ret.json;
-                    isBackup = ret.isBackup;
+                    if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnFolderSave.ToString(),
+                                                                new FunctionExtend.OnFolderSave { file = processedData })) is FunctionExtend.OnFolderSave ret)
+                    {
+                        processedData = ret.file;
+                    }
+
+                    return NPCFileSplit.SplitNPCFileToFolder(path, processedData, progress);
                 }
+                else
+                {
+                    if (json == null)
+                        json = ConvertNPCFileToJSON(processedData);
 
-                if (json != null)
-                    File.WriteAllText(path, json);
+                    if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSave.ToString(),
+                                                                new FunctionExtend.OnJsonSave { json = json, isBackup = isBackup })) is FunctionExtend.OnJsonSave ret)
+                    {
+                        json = ret.json;
+                        isBackup = ret.isBackup;
+                    }
 
-                return true;
+                    if (json != null)
+                        File.WriteAllText(path, json);
+
+                    return true;
+                }
             }
             catch (Exception ex)
             {
@@ -135,35 +166,46 @@ namespace NPC_Maker
             }
         }
 
-        public static string ProcessNPCJSON(ref NPCFile data, IProgress<ProgressReport> progress = null, bool isBackup = false)
+        public static NPCFile ProcessNPCJSON(NPCFile data, IProgress<ProgressReport> progress = null, bool isBackup = false)
         {
             try
             {
                 var output = Helpers.Clone<NPCFile>(data);
-                string envNewline = Environment.NewLine;
 
                 float progressPer = 100f / output.Entries.Count;
                 int processedCount = 0;
 
                 Parallel.ForEach(output.Entries, entry =>
                 {
-                    foreach (var script in entry.Scripts)
+                    if (entry.Scripts != null)
                     {
-                        script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
-                        script.Text = null;
+                        foreach (var script in entry.Scripts)
+                        {
+                            script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
+                            script.Text = null;
+                        }
                     }
 
-                    foreach (var message in entry.Messages)
-                        FlattenMessage(message, envNewline);
+                    if (entry.Messages != null)
+                    {
+                        foreach (var message in entry.Messages)
+                            message.FlattenMessage();
+                    }
 
-                    foreach (var loc in entry.Localization)
-                        foreach (var message in loc.Messages)
-                            FlattenMessage(message, envNewline);
+                    if (entry.Localization != null)
+                    {
+                        foreach (var loc in entry.Localization)
+                            foreach (var message in loc.Messages)
+                                message.FlattenMessage();
+                    }
 
                     if (entry.EmbeddedOverlayCode?.Code != null)
                     {
-                        entry.EmbeddedOverlayCode.CodeLines = Helpers.SplitToTrimmedLines(entry.EmbeddedOverlayCode.Code);
-                        entry.EmbeddedOverlayCode.Code = null;
+                        if (entry.EmbeddedOverlayCode.Code != null)
+                        {
+                            entry.EmbeddedOverlayCode.CodeLines = Helpers.SplitToTrimmedLines(entry.EmbeddedOverlayCode.Code);
+                            entry.EmbeddedOverlayCode.Code = null;
+                        }
                     }
 
                     if (progress != null)
@@ -179,29 +221,29 @@ namespace NPC_Maker
                     ClearHeaderValues(entry);
                 });
 
-                foreach (var script in output.GlobalHeaders)
+                if (output.GlobalHeaders != null)
                 {
-                    script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
-                    script.Text = null;
+                    foreach (var script in output.GlobalHeaders)
+                    {
+                        script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
+                        script.Text = null;
+                    }
                 }
 
-                output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
-                output.CHeader = null;
+                if (output.CHeader != null)
+                {
+                    output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
+                    output.CHeader = null;
+                }
 
                 if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSerialize.ToString(),
-                                                         new FunctionExtend.OnJsonSerialize { file = data, isBackup = isBackup })) is FunctionExtend.OnJsonSerialize ret)
+                                                         new FunctionExtend.OnJsonSerialize { file = output, isBackup = isBackup })) is FunctionExtend.OnJsonSerialize ret)
                 {
-                    data = ret.file;
+                    output = ret.file;
                     isBackup = ret.isBackup;
                 }
 
-                string json = JsonConvert.SerializeObject(output, new JsonSerializerSettings
-                {
-                    Formatting = Formatting.Indented,
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-
-                return json.Replace(envNewline, "\n");
+                return output;
             }
             catch (ThreadAbortException)
             {
@@ -1309,7 +1351,7 @@ namespace NPC_Maker
         // ── Output ────────────────────────────────────────────────────────────────
 
         private static void WriteOutput(
-            string outPath, string outputDepsPath, string outHPath,NPCFile data,
+            string outPath, string outputDepsPath, string outHPath, NPCFile data,
             List<CompilationEntryData> compilationData,
             IProgress<ProgressReport> progress, bool cliMode, ref int offset)
         {
@@ -1590,12 +1632,6 @@ namespace NPC_Maker
             }) + Helpers.GetDefinesStringFromH(entry.HeaderPath);
         }
 
-        private static void FlattenMessage(MessageEntry message, string envNewline)
-        {
-            message.MessageText = message.MessageText?.Replace(envNewline, "\n");
-            message.MessageTextLines = message.MessageText?.Split(Lists.NewlineSeparators, StringSplitOptions.None).ToList();
-            message.MessageText = null;
-            message.Comment = message.Comment?.Replace(envNewline, "\n");
-        }
+
     }
 }

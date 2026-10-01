@@ -507,7 +507,7 @@ namespace NPC_Maker
             string language = Combo_Language.Text;
             bool showOrig = Program.Settings.OrigPreview && Combo_Language.SelectedIndex != 0;
 
-            List<MessageEntry> list = GetLanguageMessageList(SelectedEntry, language);
+            List<MessageEntry> list = SelectedEntry.GetLanguageMessageList(language);
             list[rowIndex].MessageText = MsgText.Text;
 
             if (showOrig)
@@ -713,6 +713,9 @@ namespace NPC_Maker
                 Program.JsonPath = OpenedPath;
                 Panel_Editor.Enabled = true;
 
+                chkBox_FolderMode.Checked = EditedFile.isFolder;
+                chkBox_FolderMode.Visible = true;
+
                 SetupLanguageCombo();
 
                 InsertDataIntoActorListGrid();
@@ -791,7 +794,7 @@ namespace NPC_Maker
 
                         if (currentBackup != LastBackup)
                         {
-                            string json = FileOps.ProcessNPCJSON(ref EditedFile, null, true);
+                            string json = FileOps.ConvertNPCFileToJSON(FileOps.ProcessNPCJSON(EditedFile, null, true));
 
                             if (json != null)
                             {
@@ -1419,6 +1422,7 @@ namespace NPC_Maker
             EditedFile = new NPCFile();
             EditedFile.GlobalHeaders.AddRange(new List<ScriptEntry>() { Defaults.DefaultDefines, Defaults.DefaultMacros });
             SelectedEntry = null;
+            chkBox_FolderMode.Checked = false;
 
             Panel_Editor.Enabled = true;
             Program.JsonPath = Path.Combine(Program.ExecPath, Helpers.GenerateNewJsonName());
@@ -1526,6 +1530,9 @@ namespace NPC_Maker
 
         private async Task RunSave(string path)
         {
+            if (Program.SaveInProgress)
+                return;
+
             IProgress<Common.ProgressReport> progress = new Microsoft.Progress<Common.ProgressReport>(n => progressL.NewProgress = n);
 
             progressL.Visible = true;
@@ -2300,7 +2307,7 @@ namespace NPC_Maker
                                 LocalizationEntry newLocalization = new LocalizationEntry();
                                 newLocalization.Language = SelectedLanguage;
 
-                                List<MessageEntry> messageList = GetLanguageMessageList(ImportedEntry, SelectedLanguage);
+                                List<MessageEntry> messageList = ImportedEntry.GetLanguageMessageList(SelectedLanguage);
 
                                 foreach (MessageEntry msg in entry.Messages)
                                 {
@@ -4309,21 +4316,6 @@ namespace NPC_Maker
                 PreviewSplitContainer.Panel1.BackColor = BackColor;
         }
 
-        private List<MessageEntry> GetLanguageMessageList(NPCEntry entry, string Language)
-        {
-            List<MessageEntry> MessageList = entry.Messages;
-
-            if (Language != Lists.DefaultLanguage)
-            {
-                int LocalizationIndex = entry.Localization.FindIndex(x => x.Language == Language);
-
-                if (LocalizationIndex != -1)
-                    MessageList = entry.Localization[LocalizationIndex].Messages;
-            }
-
-            return MessageList;
-        }
-
         private void SplitMsgContainer_Paint(object sender, PaintEventArgs e)
         {
             int msgCommentSize = (int)(18 * Program.Settings.GUIScale);
@@ -4386,7 +4378,7 @@ namespace NPC_Maker
             if (index >= MessagesGrid.RowCount)
                 index = MessagesGrid.RowCount - 1;
 
-            List<MessageEntry> messageList = GetLanguageMessageList(SelectedEntry, Language);
+            List<MessageEntry> messageList = SelectedEntry.GetLanguageMessageList(Language);
             MessageEntry entry = messageList[index];
             return entry;
         }
@@ -4509,7 +4501,7 @@ namespace NPC_Maker
                 if (index >= MessagesGrid.RowCount)
                     index = MessagesGrid.RowCount - 1;
 
-                List<MessageEntry> MessageList = GetLanguageMessageList(SelectedEntry, Combo_Language.Text);
+                List<MessageEntry> MessageList = SelectedEntry.GetLanguageMessageList(Combo_Language.Text);
 
                 MessageEntry Entry = MessageList[index];
                 MsgText.Text = Entry.MessageText;
@@ -5059,7 +5051,7 @@ namespace NPC_Maker
             {
                 NPCEntry n = EditedFile.Entries[npcIndex];
 
-                List<MessageEntry> messageList = GetLanguageMessageList(n, Combo_Language.Text);
+                List<MessageEntry> messageList = n.GetLanguageMessageList(Combo_Language.Text);
 
                 int msgStart = searchBackwards ? messageList.Count - 1 : 0;
                 int msgEnd = searchBackwards ? -1 : messageList.Count;
@@ -5639,6 +5631,12 @@ namespace NPC_Maker
             }
         }
 
+        private void chkBox_FolderMode_CheckedChanged(object sender, EventArgs e)
+        {
+            if (EditedFile != null)
+                EditedFile.isFolder = (sender as BigCheckBox).Checked;
+        }
+
         private void ExportCurrentActorMessagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (EditedFile == null || SelectedEntry == null)
@@ -5649,7 +5647,7 @@ namespace NPC_Maker
 
             try
             {
-                SelectedEntry.ConvertMessages(EditedFile.Languages, out msgTable, out msgData);
+                SelectedEntry.ConvertMessagesToGameTables(EditedFile.Languages, out msgTable, out msgData);
             }
             catch (Exception ex)
             {
