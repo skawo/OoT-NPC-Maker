@@ -244,7 +244,7 @@ namespace NPC_Maker
             string Arg(int i) => i < args.Length && args[i] != Skip ? args[i] : null;
 
             NPCFile inFile = null;
-            string jsonText = "";
+            string headerPathsHash = "";
             bool success;
 
             try
@@ -267,7 +267,15 @@ namespace NPC_Maker
                 }
 
                 inFile = FileOps.ParseNPCJsonFile(JsonPath);
-                jsonText = FileOps.ConvertNPCFileToJSON(FileOps.ProcessNPCJSON(inFile));
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var entry in inFile.Entries)
+                {
+                    foreach (var path in entry.EmbeddedOverlayCode.HeaderPaths)
+                        sb.Append(path);
+                }
+
+                headerPathsHash = Helpers.GetBase64Hash(sb.ToString());
 
                 Dicts.LoadDicts();
                 Dicts.ReloadLanguages(inFile.Languages);
@@ -302,9 +310,17 @@ namespace NPC_Maker
 
             if (success)
             {
-                string newJson = FileOps.ConvertNPCFileToJSON(FileOps.ProcessNPCJSON(inFile));
+                StringBuilder sb = new StringBuilder();
 
-                if (jsonText != newJson)
+                foreach (var entry in inFile.Entries)
+                {
+                    foreach (var path in entry.EmbeddedOverlayCode.HeaderPaths)
+                        sb.Append(path);
+                }
+
+                string headerPathsHashNew = Helpers.GetBase64Hash(sb.ToString());
+
+                if (headerPathsHash != headerPathsHashNew)
                     success = FileOps.SaveNPCJSON(JsonPath, inFile);
             }
 
