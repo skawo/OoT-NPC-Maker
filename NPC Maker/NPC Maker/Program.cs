@@ -284,7 +284,7 @@ namespace NPC_Maker
                 // Header-only output
                 if (outPath == null)
                 {
-                    ConsoleWriteLineS($"Saving \"{Path.GetFileName(JsonPath)}\" to header... {inFile.Entries.Count}");
+                    ConsoleWriteLineS($"Saving \"{Path.GetFileName(JsonPath)}\" to header...");
                     File.WriteAllText(outH, FileOps.CreateNPCHFile(inFile, outPath));
                     return 0;
                 }
