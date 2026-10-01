@@ -297,17 +297,17 @@ namespace NPC_Maker.Common
                 // Everything was generated successfully. Now replace the real destination.
                 try
                 {
-                    SwapIntoPlace(new SwapItem[]
+                    FileSwapper.SwapFiles(new FileSwapper.FileSwap[]
                     {
-                        new SwapItem(tempNpcsPath, npcsPath),
-                        new SwapItem(tempHeadersPath, headersPath),
-                        new SwapItem(tempCHeaderPath, cHeaderPath),
-                        new SwapItem(tempJsonPath, fileName),
+                        new FileSwapper.FileSwap(tempNpcsPath, npcsPath),
+                        new FileSwapper.FileSwap(tempHeadersPath, headersPath),
+                        new FileSwapper.FileSwap(tempCHeaderPath, cHeaderPath),
+                        new FileSwapper.FileSwap(tempJsonPath, fileName),
                     });
                 }
                 catch (Exception ex)
                 {
-                    BigMessageBox.Show($"Failed to split JSON: Couldn't write to files: {ex.Message}");
+                    BigMessageBox.Show($"Failed to split JSON: {ex.Message}");
                     return false;
                 }
 
@@ -321,105 +321,6 @@ namespace NPC_Maker.Common
                 {
                     if (Directory.Exists(tempRoot))
                         Directory.Delete(tempRoot, true);
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        private class SwapItem
-        {
-            public readonly string Source;
-            public readonly string Destination;
-            public string Backup;
-
-            public SwapItem(string source, string destination)
-            {
-                Source = source;
-                Destination = destination;
-            }
-        }
-
-        // Replaces each destination (file or directory).
-        // Existing destinations are first renamed to backups; if anything fails, all
-        // swaps made so far are rolled back. Backups are deleted only after every swap succeeded.
-        private static void SwapIntoPlace(SwapItem[] items)
-        {
-            string suffix = ".old_" + Guid.NewGuid().ToString("N");
-            List<SwapItem> done = new List<SwapItem>();
-
-            try
-            {
-                foreach (SwapItem item in items)
-                {
-                    try
-                    {
-                        if (Directory.Exists(item.Destination))
-                        {
-                            item.Backup = item.Destination + suffix;
-                            Directory.Move(item.Destination, item.Backup);
-                        }
-                        else if (File.Exists(item.Destination))
-                        {
-                            item.Backup = item.Destination + suffix;
-                            File.Move(item.Destination, item.Backup);
-                        }
-
-                        // Record before moving so a failed move still restores the backup.
-                        done.Add(item);
-
-                        if (Directory.Exists(item.Source))
-                            Directory.Move(item.Source, item.Destination);
-                        else
-                            File.Move(item.Source, item.Destination);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new IOException($"'{item.Destination}': {ex.Message}", ex);
-                    }
-                }
-            }
-            catch
-            {
-                // Roll back in reverse order.
-                for (int i = done.Count - 1; i >= 0; i--)
-                {
-                    SwapItem item = done[i];
-                    try
-                    {
-                        if (item.Backup != null)
-                        {
-                            if (Directory.Exists(item.Destination))
-                                Directory.Delete(item.Destination, true);
-                            else if (File.Exists(item.Destination))
-                                File.Delete(item.Destination);
-
-                            if (Directory.Exists(item.Backup))
-                                Directory.Move(item.Backup, item.Destination);
-                            else if (File.Exists(item.Backup))
-                                File.Move(item.Backup, item.Destination);
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
-
-                throw;
-            }
-
-            // Success: discard the old versions.
-            foreach (SwapItem item in done)
-            {
-                if (item.Backup == null) continue;
-
-                try
-                {
-                    if (Directory.Exists(item.Backup))
-                        Directory.Delete(item.Backup, true);
-                    else if (File.Exists(item.Backup))
-                        File.Delete(item.Backup);
                 }
                 catch
                 {

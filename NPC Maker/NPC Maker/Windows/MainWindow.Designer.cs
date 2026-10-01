@@ -48,6 +48,7 @@ namespace NPC_Maker
             this.Panel_NPCData = new System.Windows.Forms.Panel();
             this.TabControl = new NPC_Maker.Controls.TabControl_ColorFix();
             this.Tab1_Data = new System.Windows.Forms.TabPage();
+            this.chkBox_FolderMode = new NPC_Maker.Controls.BigCheckBox();
             this.Tx_FileStartName = new System.Windows.Forms.TextBox();
             this.Tx_SkeletonName = new System.Windows.Forms.TextBox();
             this.Btn_HeaderBrowse = new System.Windows.Forms.Button();
@@ -381,7 +382,6 @@ namespace NPC_Maker
             this.CodeParamsTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltip = new NPC_Maker.Controls.BigToolTip();
             this.msgCommentTooltipLoc = new NPC_Maker.Controls.BigToolTip();
-            this.chkBox_FolderMode = new NPC_Maker.Controls.BigCheckBox();
             this.Panel_Editor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitPanel)).BeginInit();
             this.MainSplitPanel.Panel1.SuspendLayout();
@@ -717,6 +717,17 @@ namespace NPC_Maker
             this.Tab1_Data.Size = new System.Drawing.Size(848, 633);
             this.Tab1_Data.TabIndex = 0;
             this.Tab1_Data.Text = "General data";
+            // 
+            // chkBox_FolderMode
+            // 
+            this.chkBox_FolderMode.BoxSize = 18;
+            this.chkBox_FolderMode.Location = new System.Drawing.Point(332, 2);
+            this.chkBox_FolderMode.Name = "chkBox_FolderMode";
+            this.chkBox_FolderMode.Size = new System.Drawing.Size(89, 22);
+            this.chkBox_FolderMode.TabIndex = 85;
+            this.chkBox_FolderMode.Text = "Folder mode";
+            this.chkBox_FolderMode.UseVisualStyleBackColor = true;
+            this.chkBox_FolderMode.CheckedChanged += new System.EventHandler(this.chkBox_FolderMode_CheckedChanged);
             // 
             // Tx_FileStartName
             // 
@@ -4836,18 +4847,6 @@ namespace NPC_Maker
             this.msgCommentTooltipLoc.OwnerDraw = true;
             this.msgCommentTooltipLoc.ReshowDelay = 50;
             this.msgCommentTooltipLoc.ShowAlways = true;
-            // 
-            // chkBox_FolderMode
-            // 
-            this.chkBox_FolderMode.BoxSize = 18;
-            this.chkBox_FolderMode.Location = new System.Drawing.Point(349, 2);
-            this.chkBox_FolderMode.Name = "chkBox_FolderMode";
-            this.chkBox_FolderMode.Size = new System.Drawing.Size(89, 22);
-            this.chkBox_FolderMode.TabIndex = 85;
-            this.chkBox_FolderMode.Text = "Folder mode";
-            this.chkBox_FolderMode.UseVisualStyleBackColor = true;
-            this.chkBox_FolderMode.Visible = false;
-            this.chkBox_FolderMode.CheckedChanged += new System.EventHandler(this.chkBox_FolderMode_CheckedChanged);
             // 
             // MainWindow
             // 
