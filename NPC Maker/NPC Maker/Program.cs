@@ -295,13 +295,11 @@ namespace NPC_Maker
             try
             {
                 NPCFile inFile = null;
-                string jsonText = "";
                 JsonPath = args[1];
                 string outPathTable = args[3];
                 string outPathStrings = args[4];
 
-                jsonText = File.ReadAllText(JsonPath);
-                inFile = FileOps.ParseNPCJsonFile("", jsonText);
+                inFile = FileOps.ParseNPCJsonFile(JsonPath);
 
                 Dicts.LoadDicts();
                 Dicts.ReloadLanguages(inFile.Languages);
@@ -389,7 +387,7 @@ namespace NPC_Maker
             string Arg(int i) => i < args.Length && args[i] != Skip ? args[i] : null;
 
             NPCFile inFile = null;
-            string jsonText = "";
+            string headerPathsHash = "";
             bool success;
 
             try
@@ -411,8 +409,16 @@ namespace NPC_Maker
                     return 1;
                 }
 
-                jsonText = File.ReadAllText(JsonPath);
-                inFile = FileOps.ParseNPCJsonFile("", jsonText);
+                inFile = FileOps.ParseNPCJsonFile(JsonPath);
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var entry in inFile.Entries)
+                {
+                    foreach (var path in entry.EmbeddedOverlayCode.HeaderPaths)
+                        sb.Append(path);
+                }
+
+                headerPathsHash = Helpers.GetBase64Hash(sb.ToString());
 
                 Dicts.LoadDicts();
                 Dicts.ReloadLanguages(inFile.Languages);
@@ -447,10 +453,18 @@ namespace NPC_Maker
 
             if (success)
             {
-                string newJson = FileOps.ConvertNPCFileToJSON(FileOps.ProcessNPCJSON(inFile));
+                StringBuilder sb = new StringBuilder();
 
-                if (jsonText != newJson)
-                    success = FileOps.SaveNPCJSON(JsonPath, inFile, null, newJson);
+                foreach (var entry in inFile.Entries)
+                {
+                    foreach (var path in entry.EmbeddedOverlayCode.HeaderPaths)
+                        sb.Append(path);
+                }
+
+                string headerPathsHashNew = Helpers.GetBase64Hash(sb.ToString());
+
+                if (headerPathsHash != headerPathsHashNew)
+                    success = FileOps.SaveNPCJSON(JsonPath, inFile);
             }
 
             if (!Program.IsRunningUnderMono)
