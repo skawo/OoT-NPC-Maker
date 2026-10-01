@@ -98,7 +98,7 @@ namespace NPC_Maker
         private static void PrintBanner()
         {
             ConsoleWriteLineS();
-            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.3.784 tempCLI dotNET");
+            ConsoleWriteLineS($"Zelda Ocarina of Time NPC Creation Tool v.3.785 tempCLI dotNET");
         }
 
         private static void InitializePaths()
@@ -152,13 +152,11 @@ namespace NPC_Maker
             try
             {
                 NPCFile inFile = null;
-                string jsonText = "";
                 JsonPath = args[1];
                 string outPathTable = args[3];
                 string outPathStrings = args[4];
 
-                jsonText = File.ReadAllText(JsonPath);
-                inFile = FileOps.ParseNPCJsonFile("", jsonText);
+                inFile = FileOps.ParseNPCJsonFile(JsonPath);
 
                 Dicts.LoadDicts();
                 Dicts.ReloadLanguages(inFile.Languages);
@@ -268,8 +266,8 @@ namespace NPC_Maker
                     return 1;
                 }
 
-                jsonText = File.ReadAllText(JsonPath);
-                inFile = FileOps.ParseNPCJsonFile("", jsonText);
+                inFile = FileOps.ParseNPCJsonFile(JsonPath);
+                jsonText = FileOps.ConvertNPCFileToJSON(FileOps.ProcessNPCJSON(inFile));
 
                 Dicts.LoadDicts();
                 Dicts.ReloadLanguages(inFile.Languages);
@@ -278,7 +276,7 @@ namespace NPC_Maker
                 // Header-only output
                 if (outPath == null)
                 {
-                    ConsoleWriteLineS($"Saving \"{Path.GetFileName(JsonPath)}\" to header...");
+                    ConsoleWriteLineS($"Saving \"{Path.GetFileName(JsonPath)}\" to header... {inFile.Entries.Count}");
                     File.WriteAllText(outH, FileOps.CreateNPCHFile(inFile, outPath));
                     return 0;
                 }
@@ -307,7 +305,7 @@ namespace NPC_Maker
                 string newJson = FileOps.ConvertNPCFileToJSON(FileOps.ProcessNPCJSON(inFile));
 
                 if (jsonText != newJson)
-                    success = FileOps.SaveNPCJSON(JsonPath, inFile, null, newJson);
+                    success = FileOps.SaveNPCJSON(JsonPath, inFile);
             }
 
             if (!Program.IsRunningUnderMono)
