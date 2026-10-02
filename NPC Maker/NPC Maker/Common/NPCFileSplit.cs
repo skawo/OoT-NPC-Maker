@@ -306,7 +306,7 @@ namespace NPC_Maker.Common
 
                         if (!entry.IsNull)
                         {
-                            if (codeLines != null && codeLines.Count > 0)
+                            if (codeLines != null && codeLines.Any(l => !string.IsNullOrWhiteSpace(l)))
                                 File.WriteAllLines(Path.Combine(directory, "code.c"), codeLines);
 
                             WriteScripts(Path.Combine(directory, "scripts"), scripts);
