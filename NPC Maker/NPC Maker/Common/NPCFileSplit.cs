@@ -96,7 +96,7 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to reconstruct JSON: Couldn't load external headers: {ex.Message}");
+                Console.WriteLine($"Failed to open unpacked JSON: Couldn't load external headers: {ex.Message}");
                 return;
             }
 
@@ -108,7 +108,7 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to reconstruct JSON: Couldn't load C header: {ex.Message}");
+                Console.WriteLine($"Failed to open unpacked JSON: Couldn't load C header: {ex.Message}");
                 return;
             }
 
@@ -116,7 +116,7 @@ namespace NPC_Maker.Common
 
             if (!Directory.Exists(npcsPath))
             {
-                Console.WriteLine($"Failed to reconstruct JSON: No NPCs folder?");
+                Console.WriteLine($"Failed to open unpacked JSON: No NPCs folder?");
                 return;
             }
 
@@ -148,7 +148,7 @@ namespace NPC_Maker.Common
 
                 if (failure != null)
                 {
-                    Console.WriteLine($"Failed to reconstruct JSON: {failure}");
+                    Console.WriteLine($"Failed to open unpacked JSON: {failure}");
                     return;
                 }
 
@@ -156,7 +156,7 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to reconstruct JSON: {ex.Message}");
+                Console.WriteLine($"Failed to open unpacked JSON: {ex.Message}");
                 return;
             }
         }
@@ -208,7 +208,7 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                throw new Exception($"{Lists.DefaultLanguage}:, {ex.Message}");
+                throw new Exception($"{Lists.DefaultLanguage}: {ex.Message}");
             }
 
             foreach (string language in languages)
@@ -258,7 +258,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to split JSON: Couldn't create temporary directory: {ex.Message}");
+                    Console.WriteLine($"Failed to unpack JSON: Couldn't create temporary directory: {ex.Message}");
                     return false;
                 }
 
@@ -269,7 +269,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to split JSON: Couldn't save external headers: {ex.Message}");
+                    Console.WriteLine($"Failed to unpack JSON: Couldn't save external headers: {ex.Message}");
                     return false;
                 }
 
@@ -281,7 +281,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to split JSON: Couldn't save C header: {ex.Message}");
+                    Console.WriteLine($"Failed to unpack JSON: Couldn't save C header: {ex.Message}");
                     return false;
                 }
 
@@ -366,7 +366,7 @@ namespace NPC_Maker.Common
 
                 if (failure != null)
                 {
-                    Console.WriteLine($"Failed to split JSON: {failure}");
+                    Console.WriteLine($"Failed to unpack JSON: {failure}");
                     return false;
                 }
 
@@ -384,7 +384,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to split JSON: Couldn't write main JSON to temp path: {ex.Message}");
+                    Console.WriteLine($"Failed to unpack JSON: Couldn't write main JSON to temp path: {ex.Message}");
                     return false;
                 }
 
@@ -401,7 +401,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to split JSON: {ex.Message}");
+                    Console.WriteLine($"Failed to unpack JSON: {ex.Message}");
                     return false;
                 }
 
@@ -444,6 +444,8 @@ namespace NPC_Maker.Common
 
         private static string SanitizeName(string name)
         {
+            name = name.Replace(" ", "_");
+
             foreach (char c in Path.GetInvalidFileNameChars())
                 name = name.Replace(c, '_');
             return name.Trim();
