@@ -13,7 +13,7 @@ namespace NPC_Maker
 {
     public static class CCode
     {
-        // ───────────────────────────────────────────────────────
+        //  ---------------------------------------------------------
 
         public static readonly string TempFolderName = "temp";
         public static readonly string CompileFolderName = "compile";
@@ -28,7 +28,11 @@ namespace NPC_Maker
 
         private const string CompilationFailedString = "Compilation failed.";
 
-        // ───────────────────────────────────────────────────────────
+        private static bool CompileInWsl => IsWslPath(Program.Settings.ProjectPath);
+
+        private static bool UseLinuxToolchain => Program.IsRunningUnderMono || CompileInWsl;
+
+        //  ---------------------------------------------------------
 
         public enum CodeEditorEnum
         {
@@ -51,7 +55,7 @@ namespace NPC_Maker
             CodeEditorEnum.Other.ToString()
         };
 
-        // ──────────────────────────────────────────────────────────
+        //  ---------------------------------------------------------
 
         private class CompilationConfig
         {
@@ -89,16 +93,22 @@ namespace NPC_Maker
             }
         }
 
-        // ──────────────────────────────────────────────────────────────
+        private static bool IsWslPath(string path)
+        {
+            return !string.IsNullOrEmpty(path)
+                && (path.StartsWith(WslLocalhostPrefix, StringComparison.OrdinalIgnoreCase)
+                 || path.StartsWith(WslDollarPrefix, StringComparison.OrdinalIgnoreCase));
+        }
+
+        //  ---------------------------------------------------------
 
         public static byte[] Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string compileMsgs, out List<CSymbol> symbols)
         {
             string folder = Helpers.GenerateTemporaryFolderName();
 
-            if (Program.IsRunningUnderMono)
-                return CompileUnderMono(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
-            else
-                return CompileUnderWindows(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
+            return UseLinuxToolchain
+                ? CompileUnderMono(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags)
+                : CompileUnderWindows(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
         }
 
         public static byte[] Compile(string header, string linkerFiles, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols, string folder = "")
@@ -128,7 +138,7 @@ namespace NPC_Maker
                 File.WriteAllText(compileFilePath, code);
                 File.WriteAllText(compileHeaderPath, processedHeader);
 
-                byte[] result = Program.IsRunningUnderMono
+                byte[] result = UseLinuxToolchain
                     ? CompileUnderMono(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles)
                     : CompileUnderWindows(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles);
 
@@ -190,7 +200,7 @@ namespace NPC_Maker
             catch (Exception) { }
         }
 
-        // ── Compilation Configs ───────────────────────────────────────────────────
+        // Compilation Configs  ---------------------------------------------------------
 
         private static CompilationConfig BuildMonoConfig(string folder, string outFilePath, string linkerFiles, string compileFlags)
         {
@@ -226,7 +236,7 @@ namespace NPC_Maker
             };
         }
 
-        // ── Compilation ──────────────────────────────────────────────────
+        // Compilation ---------------------------------------------------------
 
         private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols, string compileFile = "")
         {
@@ -367,65 +377,61 @@ namespace NPC_Maker
             return File.Exists(paths.ObjectFile) && exitCode == 0;
         }
 
-        // ── ProcessStartInfo ─────────────────────────────────────────────
+        // Processes ---------------------------------------------------------
 
         private static ProcessStartInfo CreateGccProcessInfo(CompilationConfig config, CompilationPaths paths)
         {
-            string includeFlags = BuildIncludeFlags();
             string projectFlag = string.IsNullOrEmpty(Program.Settings.ProjectPath)
                 ? string.Empty
-                : $"-I {Program.Settings.ProjectPath.AppendQuotation()} ";
+                : $"-I {ToolPath(Program.Settings.ProjectPath).AppendQuotation()} ";
 
-            string arguments = $"{includeFlags} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} -MMD -B {paths.WorkingDirectory.AppendQuotation()} {paths.SourceFile.AppendQuotation()}";
+            string arguments = $"{BuildIncludeFlags()} {projectFlag}{Program.Settings.GCCFlags} {config.CompileFlags} " +
+                               $"-MMD -B {ToolPath(paths.WorkingDirectory).AppendQuotation()} " +
+                               $"{ToolPath(paths.SourceFile).AppendQuotation()}";
 
-            return CreateProcessStartInfo(paths.WorkingDirectory,
+            return CreateToolProcessInfo(paths.WorkingDirectory,
                 Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.GccExecutable),
                 arguments);
         }
 
         private static ProcessStartInfo CreateZLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
         {
-            string extraLinkerFiles = BuildLinkerFileArgs(config.LinkerFiles);
-
-            string arguments = $"-s {extraLinkerFiles} " +
-                               $"-o {paths.OvlFile.AppendQuotation()} " +
+            string arguments = $"-s {BuildLinkerFileArgs(config.LinkerFiles)} " +
+                               $"-o {ToolPath(paths.OvlFile).AppendQuotation()} " +
                                $"-e 0x{BaseAddr:X} " +
-                               $"-i {paths.ObjectFile.AppendQuotation()}";
+                               $"-i {ToolPath(paths.ObjectFile).AppendQuotation()}";
 
-            return CreateProcessStartInfo(paths.WorkingDirectory,
+            return CreateToolProcessInfo(paths.WorkingDirectory,
                 Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
                 arguments);
         }
 
         private static ProcessStartInfo CreateMipsLDLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
         {
-            string libraryFlags = BuildLibraryFlags(config);
-            string extraLinkerFile = "";
+            string extraLinkerFiles = string.Join(" ", config.LinkerFiles
+                      .Where(lf => !string.IsNullOrWhiteSpace(lf))
+                      .Select(lf => $"-T {ToolPath(lf).AppendQuotation()}"));
 
-            foreach (string lf in config.LinkerFiles)
-                if (!string.IsNullOrWhiteSpace(lf))
-                    extraLinkerFile = $"-T {lf.AppendQuotation()}";
+            string arguments = $"{BuildLibraryFlags(config)} -T syms.ld -T z64hdr_actor.ld {extraLinkerFiles} --emit-relocs " +
+                               $"-o {ToolPath(paths.ElfFile).AppendQuotation()} " +
+                               $"{ToolPath(paths.ObjectFile).AppendQuotation()} " +
+                               $"{ToolPath(Path.Combine(paths.WorkingDirectory, "libgcc.a")).AppendQuotation()}";
 
-            string arguments = $"{libraryFlags} -T syms.ld -T z64hdr_actor.ld {extraLinkerFile} --emit-relocs " +
-                               $"-o {paths.ElfFile.AppendQuotation()} " +
-                               $"{paths.ObjectFile.AppendQuotation()} " +
-                               $"{Path.Combine(paths.WorkingDirectory, "libgcc.a").AppendQuotation()}";
-
-            return CreateProcessStartInfo(paths.WorkingDirectory,
+            return CreateToolProcessInfo(paths.WorkingDirectory,
                 Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
                 arguments);
         }
 
         private static ProcessStartInfo CreateNovlProcessInfo(CompilationConfig config, CompilationPaths paths)
         {
-            string fileName = config.IsMonoEnvironment
-                ? Path.Combine(paths.WorkingDirectory, "nOVL")
-                : Path.Combine(paths.WorkingDirectory, "nOVL.exe");
-
+            string fileName = Path.Combine(paths.WorkingDirectory, config.IsMonoEnvironment ? "nOVL" : "nOVL.exe");
             string verboseFlag = Program.Settings.Verbose ? "-vv" : "";
-            string arguments = $"-c {verboseFlag} -A 0x{BaseAddr:X} -o {paths.OvlFile.AppendQuotation()} {paths.ElfFile.AppendQuotation()}";
 
-            return CreateProcessStartInfo(paths.WorkingDirectory, fileName, arguments);
+            string arguments = $"-c {verboseFlag} -A 0x{BaseAddr:X} " +
+                               $"-o {ToolPath(paths.OvlFile).AppendQuotation()} " +
+                               $"{ToolPath(paths.ElfFile).AppendQuotation()}";
+
+            return CreateToolProcessInfo(paths.WorkingDirectory, fileName, arguments);
         }
 
         private static ProcessStartInfo CreateProcessStartInfo(string workingDirectory, string fileName, string arguments)
@@ -442,7 +448,155 @@ namespace NPC_Maker
             };
         }
 
-        // ── Process Output ────────────────────────────────────────────────────────
+        // WSL ---------------------------------------------------------
+
+        private const string WslLocalhostPrefix = @"\\wsl.localhost\";
+        private const string WslDollarPrefix = @"\\wsl$\";
+
+        private static HashSet<string> _wslDistros;
+
+        /// Converts a path to its WSL form in WSL project paths
+        private static string ToolPath(string path)
+        {
+            return CompileInWsl ? ToWslPath(path, out _) : path;
+        }
+
+        /// \\wsl.localhost\Ubuntu\home\me\proj -> /home/me/proj (distro = "Ubuntu")
+        /// C:\dir\file.c                       -> /mnt/c/dir/file.c (distro = null)
+        /// /already/linux                      -> unchanged
+        private static string ToWslPath(string windowsPath, out string distro)
+        {
+            distro = null;
+
+            if (string.IsNullOrEmpty(windowsPath) || windowsPath.StartsWith("/"))
+                return windowsPath;
+
+            string full = Path.GetFullPath(windowsPath);
+            string afterPrefix = null;
+
+            if (full.StartsWith(WslLocalhostPrefix, StringComparison.OrdinalIgnoreCase))
+                afterPrefix = full.Substring(WslLocalhostPrefix.Length);
+            else if (full.StartsWith(WslDollarPrefix, StringComparison.OrdinalIgnoreCase))
+                afterPrefix = full.Substring(WslDollarPrefix.Length);
+
+            if (afterPrefix != null)
+            {
+                int slash = afterPrefix.IndexOf('\\');
+                distro = slash < 0 ? afterPrefix : afterPrefix.Substring(0, slash);
+                string rest = slash < 0 ? string.Empty : afterPrefix.Substring(slash);
+                return rest.Length == 0 ? "/" : rest.Replace('\\', '/');
+            }
+
+            if (full.Length >= 2 && full[1] == ':')
+                return $"/mnt/{char.ToLowerInvariant(full[0])}{full.Substring(2).Replace('\\', '/')}";
+
+            return full.Replace('\\', '/');
+        }
+
+        private static string FromWslPath(string linuxPath)
+        {
+            if (string.IsNullOrEmpty(linuxPath) || !linuxPath.StartsWith("/"))
+                return linuxPath;
+
+            var m = Regex.Match(linuxPath, @"^/mnt/([a-zA-Z])(/.*)?$");
+            if (m.Success)
+            {
+                string rest = m.Groups[2].Success ? m.Groups[2].Value : "/";
+                return char.ToUpperInvariant(m.Groups[1].Value[0]) + ":" + rest.Replace('/', '\\');
+            }
+
+            string distro = GetWslDistroName();
+            return distro == null
+                ? linuxPath
+                : WslLocalhostPrefix + distro + linuxPath.Replace('/', '\\');
+        }
+
+        /// Runs a tool natively, or through wsl.exe.
+        /// Under WSL the executable must be a Linux binary.
+        private static ProcessStartInfo CreateToolProcessInfo(string workingDirectory, string exePath, string arguments)
+        {
+            if (!CompileInWsl)
+                return CreateProcessStartInfo(workingDirectory, exePath, arguments);
+
+            string distro;
+            string workDir = ToWslPath(workingDirectory, out distro);
+
+            // The working dir usually lives on /mnt/<drive> and carries no distro name
+            if (distro == null)
+                distro = GetWslDistroName();
+
+            // Fall back to the default distro if the name isn't registered for this user
+            if (distro != null && !IsWSLDistroAvailable(distro))
+                distro = null;
+
+            // wsl.exe treats quotes around the distro name as part of the name, so only quote if needed
+            string distroFlag = distro == null ? string.Empty
+                : distro.IndexOf(' ') >= 0 ? $"-d {distro.AppendQuotation()} "
+                : $"-d {distro} ";
+
+            string wslArguments = $"{distroFlag}--cd {workDir.AppendQuotation()} " +
+                                  $"--exec {ToWslPath(exePath, out _).AppendQuotation()} {arguments}";
+
+            // UNC paths make a bad Windows-side cwd; --cd sets the Linux-side one
+            return CreateProcessStartInfo(Environment.SystemDirectory, "wsl.exe", wslArguments);
+        }
+
+        private static string GetWslDistroName()
+        {
+            var candidates = Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths)
+                .Concat(new[] { Program.Settings.ProjectPath });
+
+            foreach (string p in candidates)
+            {
+                if (string.IsNullOrEmpty(p))
+                    continue;
+
+                string distro;
+                ToWslPath(p, out distro);
+
+                if (distro != null)
+                    return distro;
+            }
+
+            return null;
+        }
+
+        private static bool IsWSLDistroAvailable(string name)
+        {
+            if (_wslDistros == null)
+            {
+                _wslDistros = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                try
+                {
+                    var psi = new ProcessStartInfo("wsl.exe", "-l -q")
+                    {
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,
+                        StandardOutputEncoding = Encoding.Unicode // wsl.exe lists names as UTF-16
+                    };
+
+                    using (var p = Process.Start(psi))
+                    {
+                        string output = p.StandardOutput.ReadToEnd();
+                        p.WaitForExit();
+
+                        foreach (string line in output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            string n = line.Trim().Trim('\0');
+                            if (n.Length > 0)
+                                _wslDistros.Add(n);
+                        }
+                    }
+                }
+                catch { }
+            }
+
+            return _wslDistros.Contains(name);
+        }
+
+        // Process Output ---------------------------------------------------------
 
         private static string GetProcessOutput(Process process, ref string compileErrors, bool isMonoEnvironment, bool errorsOnly = false)
         {
@@ -451,8 +605,8 @@ namespace NPC_Maker
 
             try
             {
-                var outputTask = TaskEx.Run(() => process.StandardOutput.ReadToEnd());
-                var errorTask = TaskEx.Run(() => process.StandardError.ReadToEnd());
+                var outputTask = TaskEx.Run(() => ReadDecoded(process.StandardOutput));
+                var errorTask = TaskEx.Run(() => ReadDecoded(process.StandardError));
 
                 bool completed = process.WaitForExit((int)Program.Settings.CompileTimeout);
 
@@ -490,6 +644,34 @@ namespace NPC_Maker
             }
         }
 
+        // Reads a redirected stream as raw bytes and decodes it. wsl.exe's own messages are UTF-16LE
+        private static string ReadDecoded(StreamReader reader)
+        {
+            byte[] bytes;
+            using (var ms = new MemoryStream())
+            {
+                reader.BaseStream.CopyTo(ms);
+                bytes = ms.ToArray();
+            }
+
+            if (bytes.Length == 0)
+                return string.Empty;
+
+            int zeros = 0;
+            foreach (byte b in bytes)
+                if (b == 0)
+                    zeros++;
+
+            bool looksUtf16 = bytes.Length >= 2 && zeros * 4 >= bytes.Length;
+
+            Encoding fallback = reader.CurrentEncoding;
+            if (fallback is UnicodeEncoding || fallback is UTF32Encoding)
+                fallback = new UTF8Encoding(false);
+
+            string text = (looksUtf16 ? Encoding.Unicode : fallback).GetString(bytes);
+            return text.TrimStart('\uFEFF');
+        }
+
         private static string FormatProcessOutput(string standardOutput, string standardError)
         {
             var sb = new StringBuilder();
@@ -504,7 +686,7 @@ namespace NPC_Maker
             return sb.ToString();
         }
 
-        // ── Symbol Extraction ─────────────────────────────────────────────────────
+        // Symbol Extraction ---------------------------------------------------------
 
         public static List<CSymbol> GetSymbolsFromO(string elfPath, string ovlPath, bool mono, bool addSection, Func<string[], bool> filter)
         {
@@ -533,11 +715,32 @@ namespace NPC_Maker
         {
             var result = new List<CSymbol>();
 
-            foreach (string line in zLinkerOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string rawLine in zLinkerOutput.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries))
             {
+                string line = rawLine.Trim();
+                if (line.Length == 0)
+                    continue;
+
                 string[] parts = line.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                if (filter(parts))
-                    result.Add(new CSymbol(parts[1].Trim(), Convert.ToUInt32(parts[0], 16) - BaseAddr));
+                if (parts.Length < 2)
+                    continue; // not a symbol line
+
+                for (int i = 0; i < parts.Length; i++)
+                    parts[i] = parts[i].Trim();
+
+                if (!filter(parts))
+                    continue;
+
+                string addr = parts[0];
+                if (addr.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                    addr = addr.Substring(2);
+
+                uint value;
+                if (!uint.TryParse(addr, System.Globalization.NumberStyles.HexNumber,
+                                   System.Globalization.CultureInfo.InvariantCulture, out value))
+                    continue; // not an address
+
+                result.Add(new CSymbol(parts[1], unchecked(value - BaseAddr)));
             }
 
             return result;
@@ -555,10 +758,10 @@ namespace NPC_Maker
             string binDir = mono ? "binmono" : "bin";
             string executable = mono ? "mips64-objdump" : "mips64-objdump.exe";
 
-            var info = CreateProcessStartInfo(
+            var info = CreateToolProcessInfo(
                 Path.Combine(Program.ExecPath, "gcc", binDir),
                 Path.Combine(Program.ExecPath, "gcc", binDir, executable),
-                $"-t {elfPath.AppendQuotation()}");
+                $"-t {ToolPath(elfPath).AppendQuotation()}");
 
             using (var process = Process.Start(info))
             {
@@ -611,7 +814,7 @@ namespace NPC_Maker
             return new CSymbol(words[5], address - BaseAddr + sectionOffset);
         }
 
-        // ── Header Path Extraction ────────────────────────────────────────────────
+        // Header Path Extraction ---------------------------------------------------------
 
         public static List<string> ExtractHeaderPaths(string dFilePath, string folderPath)
         {
@@ -619,7 +822,7 @@ namespace NPC_Maker
 
             int colonIndex = content.IndexOf(':');
 
-            if (colonIndex == -1) 
+            if (colonIndex == -1)
                 return new List<string>();
 
             string dependencies = content.Substring(colonIndex + 1);
@@ -632,6 +835,9 @@ namespace NPC_Maker
             foreach (Match match in matches)
             {
                 string path = match.Value.Replace(@"\ ", " ");
+
+                if (CompileInWsl)
+                    path = FromWslPath(path);
 
                 if (!IsFullyQualified(path) && !(Program.IsRunningUnderMono && path.StartsWith("..")))
                     path = Path.Combine(Program.ExecPath, path.TrimStart('/', '\\'));
@@ -666,7 +872,6 @@ namespace NPC_Maker
             return Path.IsPathRooted(path)
                 && !Path.GetPathRoot(path).Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
         }
-
 
         private static bool IsPathExcluded(string path, List<string> excludedPaths)
         {
@@ -703,7 +908,7 @@ namespace NPC_Maker
             return false;
         }
 
-        // ── Editors ───────────────────────────────────────────────
+        // Editor stuff ---------------------------------------------------------
 
         public static bool CreateCTempDirectory(string code, string header, bool errorMsg = true, bool headerOnly = false)
         {
@@ -836,20 +1041,20 @@ namespace NPC_Maker
             return info;
         }
 
-        // ── Helpers ─────────────────────────────────────────────────────────
+        // Helpers ---------------------------------------------------------
 
         private static string BuildIncludeFlags()
         {
             return string.Join(" ",
                 Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths)
-                       .Select(p => $"-I {p.AppendQuotation()}"));
+                       .Select(p => $"-I {ToolPath(p).AppendQuotation()}"));
         }
 
         private static string BuildLibraryFlags(CompilationConfig config)
         {
             return string.Join(" ",
                 Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths)
-                       .Select(p => $"-L {p.AppendQuotation()}"));
+                       .Select(p => $"-L {ToolPath(p).AppendQuotation()}"));
         }
 
         private static string BuildLinkerFileArgs(string[] linkerFiles)
@@ -858,7 +1063,7 @@ namespace NPC_Maker
 
             foreach (string lf in linkerFiles)
                 if (!string.IsNullOrWhiteSpace(lf))
-                    sb.Append($" {lf.AppendQuotation()}"); 
+                    sb.Append($" {ToolPath(lf).AppendQuotation()}");
 
             return sb.ToString();
         }
