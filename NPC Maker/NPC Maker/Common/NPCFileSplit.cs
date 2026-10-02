@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,15 +11,43 @@ namespace NPC_Maker.Common
 {
     internal class NPCFileSplit
     {
+        // Folder / file names
+        private const string ContentFolderSuffix = "_content";
+        private const string HeadersFolder = "headers";
+        private const string NpcsFolder = "npcs";
+        private const string ScriptsFolder = "scripts";
+        private const string MessagesFolder = "messages";
+        private const string CHeaderFileName = "npc_maker_header.h";
+        private const string NpcJsonFileName = "npc.json";
+        private const string CodeFileName = "code.c";
+        private const string DefaultMessagesFileName = "Default.txt";
+        private const string TempFolderPrefix = ".split_tmp_";
+
+        // Extensions
+        private const string ScriptExtension = ".npcm";
+        private const string MessagesExtension = ".txt";
+
+        // Misc
+        private const string NullEntryName = "NULL_ENTRY";
+
+        // Error message prefixes
+        private const string OpenFailed = "Failed to open unpacked JSON";
+        private const string UnpackFailed = "Failed to unpack JSON";
+
+        private static string GetRootDirectory(string fileName)
+        {
+            return Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + ContentFolderSuffix);
+        }
+
         public static List<string> GetSplitNPCFilePaths(string fileName, NPCFile npcFile)
         {
             var paths = new List<string>();
 
-            string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "_content");
+            string rootDirectory = GetRootDirectory(fileName);
 
-            string headersPath = Path.Combine(rootDirectory, "headers");
-            string npcsPath = Path.Combine(rootDirectory, "npcs");
-            string cHeaderPath = Path.Combine(rootDirectory, "npc_maker_header.h");
+            string headersPath = Path.Combine(rootDirectory, HeadersFolder);
+            string npcsPath = Path.Combine(rootDirectory, NpcsFolder);
+            string cHeaderPath = Path.Combine(rootDirectory, CHeaderFileName);
 
             paths.Add(cHeaderPath);
 
@@ -32,27 +59,27 @@ namespace NPC_Maker.Common
             for (int i = 0; i < total; i++)
             {
                 var entry = npcFile.Entries[i];
-                string name = entry.IsNull ? "NULL_ENTRY" : entry.NPCName;
+                string name = entry.IsNull ? NullEntryName : entry.NPCName;
                 string directory = Path.Combine(npcsPath, Prefixed(i, total, name));
 
-                paths.Add(Path.Combine(directory, "npc.json"));
+                paths.Add(Path.Combine(directory, NpcJsonFileName));
 
                 if (entry.IsNull)
                     continue;
 
                 var codeLines = entry.EmbeddedOverlayCode?.CodeLines;
                 if (codeLines != null && codeLines.Count > 0)
-                    paths.Add(Path.Combine(directory, "code.c"));
+                    paths.Add(Path.Combine(directory, CodeFileName));
 
-                paths.AddRange(GetScriptPaths(Path.Combine(directory, "scripts"), entry.Scripts));
+                paths.AddRange(GetScriptPaths(Path.Combine(directory, ScriptsFolder), entry.Scripts));
 
-                string messagesPath = Path.Combine(directory, "messages");
-                paths.Add(Path.Combine(messagesPath, "Default.txt"));
+                string messagesPath = Path.Combine(directory, MessagesFolder);
+                paths.Add(Path.Combine(messagesPath, DefaultMessagesFileName));
 
                 if (entry.Localization != null)
                 {
                     foreach (var le in entry.Localization)
-                        paths.Add(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}.txt"));
+                        paths.Add(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}{MessagesExtension}"));
                 }
             }
 
@@ -66,7 +93,7 @@ namespace NPC_Maker.Common
 
             for (int i = 0; i < scripts.Count; i++)
             {
-                string fileName = Prefixed(i, scripts.Count, scripts[i].Name) + ".npcm";
+                string fileName = Prefixed(i, scripts.Count, scripts[i].Name) + ScriptExtension;
                 yield return Path.Combine(folder, fileName);
             }
         }
@@ -76,8 +103,8 @@ namespace NPC_Maker.Common
             if (!inFile.IsFolder)
                 return;
 
-            string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "_content");
-            string headersPath = Path.Combine(rootDirectory, "headers");
+            string rootDirectory = GetRootDirectory(fileName);
+            string headersPath = Path.Combine(rootDirectory, HeadersFolder);
 
             try
             {
@@ -85,7 +112,7 @@ namespace NPC_Maker.Common
 
                 foreach (FolderEntry file in FolderLister.ListSortedWithPaths(headersPath, EntryKind.FilesOnly))
                 {
-                    if (Path.GetExtension(file.Name) == ".npcm")
+                    if (Path.GetExtension(file.Name) == ScriptExtension)
                     {
                         ScriptEntry scr = new ScriptEntry();
                         scr.Name = Path.GetFileNameWithoutExtension(file.Name);
@@ -93,15 +120,15 @@ namespace NPC_Maker.Common
                         inFile.GlobalHeaders.Add(scr);
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to open unpacked JSON: Couldn't load external headers: {ex.Message}");
+                Console.WriteLine($"{OpenFailed}: Couldn't load external headers: {ex.Message}");
                 return;
             }
 
-            string cHeaderPath = Path.Combine(rootDirectory, "npc_maker_header.h");
+            string cHeaderPath = Path.Combine(rootDirectory, CHeaderFileName);
 
             try
             {
@@ -109,15 +136,15 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to open unpacked JSON: Couldn't load C header: {ex.Message}");
+                Console.WriteLine($"{OpenFailed}: Couldn't load C header: {ex.Message}");
                 return;
             }
 
-            string npcsPath = Path.Combine(rootDirectory, "npcs");
+            string npcsPath = Path.Combine(rootDirectory, NpcsFolder);
 
             if (!Directory.Exists(npcsPath))
             {
-                BigMessageBox.Show($"Failed to open unpacked JSON: No NPCs folder?");
+                Console.WriteLine($"{OpenFailed}: No NPCs folder?");
                 return;
             }
 
@@ -149,7 +176,7 @@ namespace NPC_Maker.Common
 
                 if (failure != null)
                 {
-                    BigMessageBox.Show($"Failed to open unpacked JSON: {failure}");
+                    Console.WriteLine($"{OpenFailed}: {failure}");
                     return;
                 }
 
@@ -157,20 +184,20 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                BigMessageBox.Show($"Failed to open unpacked JSON: {ex.Message}");
+                Console.WriteLine($"{OpenFailed}: {ex.Message}");
                 return;
             }
         }
 
         private static NPCEntry LoadNPCEntry(string directory, List<string> languages)
         {
-            string jsonText = File.ReadAllText(Path.Combine(directory, "npc.json"));
+            string jsonText = File.ReadAllText(Path.Combine(directory, NpcJsonFileName));
             var entry = JsonConvert.DeserializeObject<NPCEntry>(jsonText);
 
             if (entry.IsNull)
                 return entry;
 
-            string cCodePath = Path.Combine(directory, "code.c");
+            string cCodePath = Path.Combine(directory, CodeFileName);
             if (File.Exists(cCodePath))
             {
                 if (entry.EmbeddedOverlayCode == null)
@@ -180,11 +207,11 @@ namespace NPC_Maker.Common
             }
 
             entry.Scripts = new List<ScriptEntry>();
-            string scriptsPath = Path.Combine(directory, "scripts");
+            string scriptsPath = Path.Combine(directory, ScriptsFolder);
 
             foreach (FolderEntry scriptFile in FolderLister.ListSortedWithPaths(scriptsPath, EntryKind.FilesOnly))
             {
-                if (Path.GetExtension(scriptFile.Name) == ".npcm")
+                if (Path.GetExtension(scriptFile.Name) == ScriptExtension)
                 {
                     ScriptEntry scr = new ScriptEntry();
                     scr.Name = Path.GetFileNameWithoutExtension(scriptFile.Name);
@@ -193,15 +220,16 @@ namespace NPC_Maker.Common
                 }
             }
 
+            entry.Messages = new List<MessageEntry>();
             entry.Localization = new List<LocalizationEntry>();
-            string messagesPath = Path.Combine(directory, "messages");
+            string messagesPath = Path.Combine(directory, MessagesFolder);
 
             if (!Directory.Exists(messagesPath))
                 throw new Exception($"Failed to load NPC: No messages folder?");
 
             try
             {
-                string defaultLPath = Path.Combine(messagesPath, "Default.txt");
+                string defaultLPath = Path.Combine(messagesPath, DefaultMessagesFileName);
 
                 if (File.Exists(defaultLPath))
                     entry.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(defaultLPath));
@@ -213,7 +241,8 @@ namespace NPC_Maker.Common
 
             foreach (string language in languages)
             {
-                string langPath = Path.Combine(messagesPath, $"{language}.txt");
+                string langPath = Path.Combine(messagesPath, $"{language}{MessagesExtension}");
+
                 if (File.Exists(langPath))
                 {
                     try
@@ -235,15 +264,15 @@ namespace NPC_Maker.Common
 
         public static bool SplitNPCFileToFolder(string fileName, NPCFile inFile, IProgress<ProgressReport> progress = null)
         {
-            string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "_content");
-            string headersPath = Path.Combine(rootDirectory, "headers");
-            string npcsPath = Path.Combine(rootDirectory, "npcs");
-            string cHeaderPath = Path.Combine(rootDirectory, "npc_maker_header.h");
+            string rootDirectory = GetRootDirectory(fileName);
+            string headersPath = Path.Combine(rootDirectory, HeadersFolder);
+            string npcsPath = Path.Combine(rootDirectory, NpcsFolder);
+            string cHeaderPath = Path.Combine(rootDirectory, CHeaderFileName);
 
-            string tempRoot = Path.Combine(rootDirectory, ".split_tmp_" + Guid.NewGuid().ToString("N"));
-            string tempHeadersPath = Path.Combine(tempRoot, "headers");
-            string tempNpcsPath = Path.Combine(tempRoot, "npcs");
-            string tempCHeaderPath = Path.Combine(tempRoot, "npc_maker_header.h");
+            string tempRoot = Path.Combine(rootDirectory, TempFolderPrefix + Guid.NewGuid().ToString("N"));
+            string tempHeadersPath = Path.Combine(tempRoot, HeadersFolder);
+            string tempNpcsPath = Path.Combine(tempRoot, NpcsFolder);
+            string tempCHeaderPath = Path.Combine(tempRoot, CHeaderFileName);
             string tempJsonPath = Path.Combine(tempRoot, Path.GetFileName(fileName));
 
             NPCFile npcFile = Helpers.Clone<NPCFile>(inFile);
@@ -257,7 +286,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    BigMessageBox.Show($"Failed to unpack JSON: Couldn't create temporary directory: {ex.Message}");
+                    Console.WriteLine($"{UnpackFailed}: Couldn't create temporary directory: {ex.Message}");
                     return false;
                 }
 
@@ -268,7 +297,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    BigMessageBox.Show($"Failed to unpack JSON: Couldn't save external headers: {ex.Message}");
+                    Console.WriteLine($"{UnpackFailed}: Couldn't save external headers: {ex.Message}");
                     return false;
                 }
 
@@ -280,7 +309,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    BigMessageBox.Show($"Failed to unpack JSON: Couldn't save C header: {ex.Message}");
+                    Console.WriteLine($"{UnpackFailed}: Couldn't save C header: {ex.Message}");
                     return false;
                 }
 
@@ -292,7 +321,7 @@ namespace NPC_Maker.Common
                 Parallel.For(0, total, (i, state) =>
                 {
                     var entry = npcFile.Entries[i];
-                    string name = entry.IsNull ? "NULL_ENTRY" : entry.NPCName;
+                    string name = entry.IsNull ? NullEntryName : entry.NPCName;
                     string directory = Path.Combine(tempNpcsPath, Prefixed(i, total, name));
 
                     try
@@ -306,17 +335,17 @@ namespace NPC_Maker.Common
                         if (!entry.IsNull)
                         {
                             if (codeLines != null && codeLines.Any(l => !string.IsNullOrWhiteSpace(l)))
-                                File.WriteAllLines(Path.Combine(directory, "code.c"), codeLines);
+                                File.WriteAllLines(Path.Combine(directory, CodeFileName), codeLines);
 
-                            WriteScripts(Path.Combine(directory, "scripts"), scripts);
+                            WriteScripts(Path.Combine(directory, ScriptsFolder), scripts);
 
-                            string messagesPath = Path.Combine(directory, "messages");
+                            string messagesPath = Path.Combine(directory, MessagesFolder);
                             Directory.CreateDirectory(messagesPath);
 
                             string mes = entry.ConvertMessagesToTxt(Lists.DefaultLanguage);
 
                             if (!String.IsNullOrWhiteSpace(mes))
-                                File.WriteAllText(Path.Combine(messagesPath, "Default.txt"), mes);
+                                File.WriteAllText(Path.Combine(messagesPath, DefaultMessagesFileName), mes);
 
                             if (localization != null)
                             {
@@ -325,7 +354,7 @@ namespace NPC_Maker.Common
                                     mes = entry.ConvertMessagesToTxt(le.Language);
 
                                     if (!String.IsNullOrWhiteSpace(mes))
-                                        File.WriteAllText(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}.txt"), mes);
+                                        File.WriteAllText(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}{MessagesExtension}"), mes);
                                 }
                             }
 
@@ -346,7 +375,7 @@ namespace NPC_Maker.Common
                             NullValueHandling = NullValueHandling.Ignore
                         });
 
-                        File.WriteAllText(Path.Combine(directory, "npc.json"), json);
+                        File.WriteAllText(Path.Combine(directory, NpcJsonFileName), json);
 
                         int done = Interlocked.Increment(ref processedCount);
                         float pct = done * 100f / total;
@@ -365,7 +394,7 @@ namespace NPC_Maker.Common
 
                 if (failure != null)
                 {
-                    BigMessageBox.Show($"Failed to unpack JSON: {failure}");
+                    Console.WriteLine($"{UnpackFailed}: {failure}");
                     return false;
                 }
 
@@ -383,7 +412,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    BigMessageBox.Show($"Failed to unpack JSON: Couldn't write main JSON to temp path: {ex.Message}");
+                    Console.WriteLine($"{UnpackFailed}: Couldn't write main JSON to temp path: {ex.Message}");
                     return false;
                 }
 
@@ -400,11 +429,11 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    BigMessageBox.Show($"Failed to unpack JSON: {ex.Message}");
+                    Console.WriteLine($"{UnpackFailed}: {ex.Message}");
                     return false;
                 }
 
-                progress?.Report(new ProgressReport($"Saved as unpacked.", 100.0f));
+                progress?.Report(new ProgressReport($"Saved as folder.", 100.0f));
 
                 return true;
             }
@@ -429,7 +458,7 @@ namespace NPC_Maker.Common
 
             for (int i = 0; i < scripts.Count; i++)
             {
-                string fileName = Prefixed(i, scripts.Count, scripts[i].Name) + ".npcm";
+                string fileName = Prefixed(i, scripts.Count, scripts[i].Name) + ScriptExtension;
                 File.WriteAllLines(Path.Combine(folder, fileName), scripts[i].TextLines);
             }
         }
