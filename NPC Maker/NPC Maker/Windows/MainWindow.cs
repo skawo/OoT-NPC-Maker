@@ -713,8 +713,6 @@ namespace NPC_Maker
                 Program.JsonPath = OpenedPath;
                 Panel_Editor.Enabled = true;
 
-                chkBox_FolderMode.Checked = EditedFile.isFolder;
-
                 SetupLanguageCombo();
 
                 InsertDataIntoActorListGrid();
@@ -1421,7 +1419,6 @@ namespace NPC_Maker
             EditedFile = new NPCFile();
             EditedFile.GlobalHeaders.AddRange(new List<ScriptEntry>() { Defaults.DefaultDefines, Defaults.DefaultMacros });
             SelectedEntry = null;
-            chkBox_FolderMode.Checked = false;
 
             Panel_Editor.Enabled = true;
             Program.JsonPath = Path.Combine(Program.ExecPath, Helpers.GenerateNewJsonName());
@@ -1442,6 +1439,11 @@ namespace NPC_Maker
                 FileName = "ActorData.json",
                 Filter = "Json Files | *.json"
             };
+
+            if (sender == FileMenu_SaveAsFolder)
+                EditedFile.IsFolder = true;
+            else
+                EditedFile.IsFolder = false;
 
             DialogResult DR = SFD.ShowDialog();
 
@@ -1473,7 +1475,7 @@ namespace NPC_Maker
         {
             DateTime curLastWrite = Helpers.TryGetLastDatetimeWritten(OpenedPath);
 
-            if (EditedFile.isFolder)
+            if (EditedFile.IsFolder)
             {
                 string rootDirectory = Path.Combine(Path.GetDirectoryName(OpenedPath),
                                                     Path.GetFileNameWithoutExtension(OpenedPath));
@@ -5652,7 +5654,7 @@ namespace NPC_Maker
         private void chkBox_FolderMode_CheckedChanged(object sender, EventArgs e)
         {
             if (EditedFile != null)
-                EditedFile.isFolder = (sender as BigCheckBox).Checked;
+                EditedFile.IsFolder = (sender as BigCheckBox).Checked;
         }
 
         private void ExportCurrentActorMessagesToolStripMenuItem_Click(object sender, EventArgs e)

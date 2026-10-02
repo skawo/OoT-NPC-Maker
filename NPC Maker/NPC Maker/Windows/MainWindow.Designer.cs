@@ -322,7 +322,6 @@ namespace NPC_Maker
             this.LblOnInit = new System.Windows.Forms.Label();
             this.LblFuncToRun = new System.Windows.Forms.Label();
             this.Button_OpenCCode = new System.Windows.Forms.Button();
-            this.chkBox_FolderMode = new NPC_Maker.Controls.BigCheckBox();
             this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keywordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -343,7 +342,8 @@ namespace NPC_Maker
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.clearThisListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_Save = new System.Windows.Forms.ToolStripMenuItem();
-            this.FileMenu_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileMenu_SaveAsPacked = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileMenu_SaveAsFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.FileMenu_SaveBinary = new System.Windows.Forms.ToolStripMenuItem();
             this.saveBinaryToRecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -4368,17 +4368,6 @@ namespace NPC_Maker
             this.Button_OpenCCode.UseVisualStyleBackColor = true;
             this.Button_OpenCCode.Click += new System.EventHandler(this.Button_OpenCCode_Click);
             // 
-            // chkBox_FolderMode
-            // 
-            this.chkBox_FolderMode.BoxSize = 18;
-            this.chkBox_FolderMode.Location = new System.Drawing.Point(332, 2);
-            this.chkBox_FolderMode.Name = "chkBox_FolderMode";
-            this.chkBox_FolderMode.Size = new System.Drawing.Size(89, 22);
-            this.chkBox_FolderMode.TabIndex = 85;
-            this.chkBox_FolderMode.Text = "Folder mode";
-            this.chkBox_FolderMode.UseVisualStyleBackColor = true;
-            this.chkBox_FolderMode.CheckedChanged += new System.EventHandler(this.chkBox_FolderMode_CheckedChanged);
-            // 
             // ContextMenuStrip
             // 
             this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -4478,7 +4467,8 @@ namespace NPC_Maker
             this.FileMenu_Open,
             this.openRecentToolStripMenuItem,
             this.FileMenu_Save,
-            this.FileMenu_SaveAs,
+            this.FileMenu_SaveAsPacked,
+            this.FileMenu_SaveAsFolder,
             this.FileMenu_SaveBinary,
             this.saveBinaryToRecentToolStripMenuItem,
             this.FileMenu_Exit});
@@ -4530,12 +4520,19 @@ namespace NPC_Maker
             this.FileMenu_Save.Text = "Save...";
             this.FileMenu_Save.Click += new System.EventHandler(this.FileMenu_Save_Click);
             // 
-            // FileMenu_SaveAs
+            // FileMenu_SaveAsPacked
             // 
-            this.FileMenu_SaveAs.Name = "FileMenu_SaveAs";
-            this.FileMenu_SaveAs.Size = new System.Drawing.Size(193, 22);
-            this.FileMenu_SaveAs.Text = "Save as...";
-            this.FileMenu_SaveAs.Click += new System.EventHandler(this.FileMenu_SaveAs_Click);
+            this.FileMenu_SaveAsPacked.Name = "FileMenu_SaveAsPacked";
+            this.FileMenu_SaveAsPacked.Size = new System.Drawing.Size(193, 22);
+            this.FileMenu_SaveAsPacked.Text = "Save as packed...";
+            this.FileMenu_SaveAsPacked.Click += new System.EventHandler(this.FileMenu_SaveAs_Click);
+            // 
+            // FileMenu_SaveAsFolder
+            // 
+            this.FileMenu_SaveAsFolder.Name = "FileMenu_SaveAsFolder";
+            this.FileMenu_SaveAsFolder.Size = new System.Drawing.Size(193, 22);
+            this.FileMenu_SaveAsFolder.Text = "Save as folder...";
+            this.FileMenu_SaveAsFolder.Click += new System.EventHandler(this.FileMenu_SaveAs_Click);
             // 
             // FileMenu_SaveBinary
             // 
@@ -4854,7 +4851,6 @@ namespace NPC_Maker
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1184, 683);
-            this.Controls.Add(this.chkBox_FolderMode);
             this.Controls.Add(this.progressL);
             this.Controls.Add(this.btn_FindMsg);
             this.Controls.Add(this.txBox_Search);
@@ -5133,7 +5129,7 @@ namespace NPC_Maker
         private System.Windows.Forms.ToolStripMenuItem FileMenu_New;
         private System.Windows.Forms.ToolStripMenuItem FileMenu_Open;
         private System.Windows.Forms.ToolStripMenuItem FileMenu_Save;
-        private System.Windows.Forms.ToolStripMenuItem FileMenu_SaveAs;
+        private System.Windows.Forms.ToolStripMenuItem FileMenu_SaveAsFolder;
         private System.Windows.Forms.ToolStripMenuItem FileMenu_SaveBinary;
         private System.Windows.Forms.ToolStripMenuItem FileMenu_Exit;
         private System.Windows.Forms.ToolStripMenuItem scriptsToolStripMenuItem;
@@ -5335,7 +5331,7 @@ namespace NPC_Maker
         private System.Windows.Forms.ToolStripMenuItem saveBinaryToRecentToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem clearThisListToolStripMenuItem2;
-        private BigCheckBox chkBox_FolderMode;
+        private System.Windows.Forms.ToolStripMenuItem FileMenu_SaveAsPacked;
     }
 }
 

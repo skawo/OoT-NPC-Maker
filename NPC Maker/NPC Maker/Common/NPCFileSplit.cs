@@ -20,7 +20,7 @@ namespace NPC_Maker.Common
 
             string headersPath = Path.Combine(rootDirectory, "headers");
             string npcsPath = Path.Combine(rootDirectory, "npcs");
-            string cHeaderPath = Path.Combine(rootDirectory, "cHeader.h");
+            string cHeaderPath = Path.Combine(rootDirectory, "npc_maker_header.h");
 
             paths.Add(cHeaderPath);
 
@@ -73,7 +73,7 @@ namespace NPC_Maker.Common
 
         public static void ReconstructNPCFileFromFolder(string fileName, ref NPCFile inFile)
         {
-            if (!inFile.isFolder)
+            if (!inFile.IsFolder)
                 return;
 
             string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "_content");
@@ -101,7 +101,7 @@ namespace NPC_Maker.Common
                 return;
             }
 
-            string cHeaderPath = Path.Combine(rootDirectory, "cHeader.h");
+            string cHeaderPath = Path.Combine(rootDirectory, "npc_maker_header.h");
 
             try
             {
@@ -196,17 +196,37 @@ namespace NPC_Maker.Common
             entry.Localization = new List<LocalizationEntry>();
             string messagesPath = Path.Combine(directory, "messages");
 
-            entry.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(Path.Combine(messagesPath, "Default.txt")));
+            if (!Directory.Exists(messagesPath))
+                throw new Exception($"Failed to load NPC: No messages folder?");
+
+            try
+            {
+                string defaultLPath = Path.Combine(messagesPath, "Default.txt");
+
+                if (File.Exists(defaultLPath))
+                    entry.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(defaultLPath));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{Lists.DefaultLanguage}:, {ex.Message}");
+            }
 
             foreach (string language in languages)
             {
                 string langPath = Path.Combine(messagesPath, $"{language}.txt");
                 if (File.Exists(langPath))
                 {
-                    LocalizationEntry le = new LocalizationEntry();
-                    le.Language = language;
-                    le.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(langPath));
-                    entry.Localization.Add(le);
+                    try
+                    {
+                        LocalizationEntry le = new LocalizationEntry();
+                        le.Language = language;
+                        le.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(langPath));
+                        entry.Localization.Add(le);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"{language}:, {ex.Message}");
+                    }
                 }
             }
 
@@ -218,12 +238,12 @@ namespace NPC_Maker.Common
             string rootDirectory = Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(fileName) + "_content");
             string headersPath = Path.Combine(rootDirectory, "headers");
             string npcsPath = Path.Combine(rootDirectory, "npcs");
-            string cHeaderPath = Path.Combine(rootDirectory, "cHeader.h");
+            string cHeaderPath = Path.Combine(rootDirectory, "npc_maker_header.h");
 
             string tempRoot = Path.Combine(rootDirectory, ".split_tmp_" + Guid.NewGuid().ToString("N"));
             string tempHeadersPath = Path.Combine(tempRoot, "headers");
             string tempNpcsPath = Path.Combine(tempRoot, "npcs");
-            string tempCHeaderPath = Path.Combine(tempRoot, "cHeader.h");
+            string tempCHeaderPath = Path.Combine(tempRoot, "npc_maker_header.h");
             string tempJsonPath = Path.Combine(tempRoot, Path.GetFileName(fileName));
 
             NPCFile npcFile = Helpers.Clone<NPCFile>(inFile);
@@ -285,7 +305,7 @@ namespace NPC_Maker.Common
 
                         if (!entry.IsNull)
                         {
-                            if (codeLines != null && codeLines.Count > 0)
+                            if (codeLines != null && codeLines.Any(l => !string.IsNullOrWhiteSpace(l)))
                                 File.WriteAllLines(Path.Combine(directory, "code.c"), codeLines);
 
                             WriteScripts(Path.Combine(directory, "scripts"), scripts);
@@ -293,12 +313,20 @@ namespace NPC_Maker.Common
                             string messagesPath = Path.Combine(directory, "messages");
                             Directory.CreateDirectory(messagesPath);
 
-                            File.WriteAllText(Path.Combine(messagesPath, "Default.txt"), entry.ConvertMessagesToTxt(Lists.DefaultLanguage));
+                            string mes = entry.ConvertMessagesToTxt(Lists.DefaultLanguage);
+
+                            if (!String.IsNullOrWhiteSpace(mes))
+                                File.WriteAllText(Path.Combine(messagesPath, "Default.txt"), mes);
 
                             if (localization != null)
                             {
                                 foreach (var le in localization)
-                                    File.WriteAllText(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}.txt"), entry.ConvertMessagesToTxt(le.Language));
+                                {
+                                    mes = entry.ConvertMessagesToTxt(le.Language);
+
+                                    if (!String.IsNullOrWhiteSpace(mes))
+                                        File.WriteAllText(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}.txt"), mes);
+                                }
                             }
 
                             entry.Scripts = null;
@@ -409,7 +437,7 @@ namespace NPC_Maker.Common
         // "007-Name"
         private static string Prefixed(int index, int count, string name)
         {
-            int digits = Math.Max(2, (count - 1).ToString().Length);
+            int digits = Math.Max(3, (count - 1).ToString().Length);
             return $"{index.ToString().PadLeft(digits, '0')}-{SanitizeName(name)}";
         }
 
