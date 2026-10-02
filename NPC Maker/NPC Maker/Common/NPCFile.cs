@@ -15,7 +15,7 @@ namespace NPC_Maker
     {
         public int Version { get; set; }
 
-        public bool isFolder { get; set; }
+        public bool IsFolder { get; set; }
         public List<NPCEntry> Entries { get; set; }
         public List<ScriptEntry> GlobalHeaders { get; set; }
 
@@ -35,7 +35,7 @@ namespace NPC_Maker
         {
             Version = 8;
             Entries = new List<NPCEntry>();
-            isFolder = false;
+            IsFolder = false;
             GlobalHeaders = new List<ScriptEntry>();
             SpaceFromFont = false;
             CHeader = "";
@@ -347,7 +347,7 @@ namespace NPC_Maker
                     return false;
 
                 string next = lines[i + 1].TrimEnd();
-                return next.Length == header.Length && next.Trim('-').Length == 0;
+                return next.Trim('-').Length == 0;
             }
 
             List<MessageEntry> outList = new List<MessageEntry>();
@@ -362,6 +362,9 @@ namespace NPC_Maker
             if (starts.Count == 0)
                 return new List<MessageEntry>();
 
+            if (starts[0] != 0)
+                throw new FormatException("First message not at start.");
+                
             for (int i = 0; i < starts.Count; i++)
             {
                 // Exclusive end: first line NOT in this block.

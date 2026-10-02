@@ -102,6 +102,7 @@ namespace NPC_Maker
             Ocarina,
             None_White,
             None_Black,
+            Credits,
         }
 
         public enum BoxPosition

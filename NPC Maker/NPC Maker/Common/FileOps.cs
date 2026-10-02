@@ -114,7 +114,7 @@ namespace NPC_Maker
                 if (json == null)
                     processedData = ProcessNPCJSON(data, progress, isBackup);
 
-                if (json == null && data.isFolder && !isBackup)
+                if (json == null && data.IsFolder && !isBackup)
                 {
                     return NPCFileSplit.SplitNPCFileToFolder(path, processedData, progress);
                 }
@@ -1418,7 +1418,7 @@ namespace NPC_Maker
                     addDep(p);
             }
 
-            if (data.isFolder)
+            if (data.IsFolder)
             {
                 foreach (var p in NPCFileSplit.GetSplitNPCFilePaths(Program.JsonPath, data))
                     addDep(Helpers.DenormalizeExtPath(p, false, true));

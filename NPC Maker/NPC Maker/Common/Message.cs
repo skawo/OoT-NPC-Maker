@@ -324,7 +324,7 @@ namespace NPC_Maker
         {
         }
 
-        public static readonly Regex TxtHeaderRegex = new Regex(@"^(?<name>.*?)\s*\[Type=(?<type>[^\]]*)\],\s*\[Position=(?<pos>[^\]]*)\]\s*$", RegexOptions.Compiled);
+        public static readonly Regex TxtHeaderRegex = new Regex(@"^(?<name>.*?)\s*\[Type=(?<type>[^,\]]*),\s*Position=(?<pos>[^\]]*)\]\s*$", RegexOptions.Compiled);
 
         public static MessageEntry FromTxtFormat(string text)
         {
@@ -390,7 +390,7 @@ namespace NPC_Maker
         {
             var sb = new StringBuilder();
 
-            string header = $"{Name} [Type={(Lists.BoxType)Type}], [Position={(Lists.BoxPosition)Position}]";
+            string header = $"{Name} [Type={(Lists.BoxType)Type}], Position={(Lists.BoxPosition)Position}]";
 
             sb.AppendLine(header);
             sb.AppendLine(new string('-', header.Length));
