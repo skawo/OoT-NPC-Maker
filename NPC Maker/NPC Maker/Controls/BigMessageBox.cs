@@ -50,7 +50,7 @@ namespace NPC_Maker.Controls
 
                 default:
                     Console.WriteLine("Cli Mode Error: unsupported button set");
-                    return DialogResult.No;
+                    return DialogResult.Cancel;
             }
         }
 

@@ -116,9 +116,9 @@ namespace NPC_Maker.Windows
             this.Lbl_GCCArgs.AutoSize = true;
             this.Lbl_GCCArgs.Location = new System.Drawing.Point(411, 59);
             this.Lbl_GCCArgs.Name = "Lbl_GCCArgs";
-            this.Lbl_GCCArgs.Size = new System.Drawing.Size(85, 13);
+            this.Lbl_GCCArgs.Size = new System.Drawing.Size(84, 13);
             this.Lbl_GCCArgs.TabIndex = 7;
-            this.Lbl_GCCArgs.Text = "GCC Arguments:";
+            this.Lbl_GCCArgs.Text = "GCC arguments:";
             // 
             // BtnSave
             // 
@@ -217,7 +217,7 @@ namespace NPC_Maker.Windows
             this.Btn_ResetCache.Name = "Btn_ResetCache";
             this.Btn_ResetCache.Size = new System.Drawing.Size(120, 72);
             this.Btn_ResetCache.TabIndex = 17;
-            this.Btn_ResetCache.Text = "Reset Cache";
+            this.Btn_ResetCache.Text = "Reset cache";
             this.Btn_ResetCache.UseVisualStyleBackColor = true;
             this.Btn_ResetCache.Click += new System.EventHandler(this.ResetCache_Click);
             // 
@@ -264,9 +264,9 @@ namespace NPC_Maker.Windows
             this.Lbl_LinkerFiles.AutoSize = true;
             this.Lbl_LinkerFiles.Location = new System.Drawing.Point(708, 205);
             this.Lbl_LinkerFiles.Name = "Lbl_LinkerFiles";
-            this.Lbl_LinkerFiles.Size = new System.Drawing.Size(70, 13);
+            this.Lbl_LinkerFiles.Size = new System.Drawing.Size(66, 13);
             this.Lbl_LinkerFiles.TabIndex = 25;
-            this.Lbl_LinkerFiles.Text = "C Linker files:";
+            this.Lbl_LinkerFiles.Text = "C linker files:";
             // 
             // guiScale
             // 
@@ -303,9 +303,9 @@ namespace NPC_Maker.Windows
             this.guiScaleLabel.AutoSize = true;
             this.guiScaleLabel.Location = new System.Drawing.Point(12, 9);
             this.guiScaleLabel.Name = "guiScaleLabel";
-            this.guiScaleLabel.Size = new System.Drawing.Size(152, 13);
+            this.guiScaleLabel.Size = new System.Drawing.Size(150, 13);
             this.guiScaleLabel.TabIndex = 28;
-            this.guiScaleLabel.Text = "GUI Scale (Will require restart):";
+            this.guiScaleLabel.Text = "GUI scale (Will require restart):";
             // 
             // Btn_CIncludePaths
             // 
@@ -322,9 +322,9 @@ namespace NPC_Maker.Windows
             this.Lbl_IncludePaths.AutoSize = true;
             this.Lbl_IncludePaths.Location = new System.Drawing.Point(708, 232);
             this.Lbl_IncludePaths.Name = "Lbl_IncludePaths";
-            this.Lbl_IncludePaths.Size = new System.Drawing.Size(84, 13);
+            this.Lbl_IncludePaths.Size = new System.Drawing.Size(83, 13);
             this.Lbl_IncludePaths.TabIndex = 30;
-            this.Lbl_IncludePaths.Text = "C Include paths:";
+            this.Lbl_IncludePaths.Text = "C include paths:";
             // 
             // Combo_Linker
             // 
@@ -419,10 +419,10 @@ namespace NPC_Maker.Windows
             this.Cb_AutoCompile.BoxSize = 18;
             this.Cb_AutoCompile.Location = new System.Drawing.Point(15, 104);
             this.Cb_AutoCompile.Name = "Cb_AutoCompile";
-            this.Cb_AutoCompile.Size = new System.Drawing.Size(205, 22);
+            this.Cb_AutoCompile.Size = new System.Drawing.Size(197, 22);
             this.Cb_AutoCompile.TabIndex = 16;
             this.Cb_AutoCompile.Tag = "AUTOSAVESWITCH";
-            this.Cb_AutoCompile.Text = "Auto Compile Code on Actor Switch";
+            this.Cb_AutoCompile.Text = "Auto compile code on actor switch";
             this.Cb_AutoCompile.UseVisualStyleBackColor = true;
             this.Cb_AutoCompile.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
@@ -431,10 +431,10 @@ namespace NPC_Maker.Windows
             this.AutoSaveC.BoxSize = 18;
             this.AutoSaveC.Location = new System.Drawing.Point(15, 303);
             this.AutoSaveC.Name = "AutoSaveC";
-            this.AutoSaveC.Size = new System.Drawing.Size(172, 22);
+            this.AutoSaveC.Size = new System.Drawing.Size(167, 22);
             this.AutoSaveC.TabIndex = 14;
             this.AutoSaveC.Tag = "AUTOSAVE";
-            this.AutoSaveC.Text = "C Code Update Interval (ms):";
+            this.AutoSaveC.Text = "C code update interval (ms):";
             this.AutoSaveC.UseVisualStyleBackColor = true;
             this.AutoSaveC.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 
@@ -541,10 +541,10 @@ namespace NPC_Maker.Windows
             this.Chk_ChangeGUI.BoxSize = 18;
             this.Chk_ChangeGUI.Location = new System.Drawing.Point(412, 196);
             this.Chk_ChangeGUI.Name = "Chk_ChangeGUI";
-            this.Chk_ChangeGUI.Size = new System.Drawing.Size(124, 22);
+            this.Chk_ChangeGUI.Size = new System.Drawing.Size(121, 22);
             this.Chk_ChangeGUI.TabIndex = 53;
             this.Chk_ChangeGUI.Tag = "CHANGEGUICOLORS";
-            this.Chk_ChangeGUI.Text = "Change GUI Colors";
+            this.Chk_ChangeGUI.Text = "Change GUI colors";
             this.Chk_ChangeGUI.UseVisualStyleBackColor = true;
             this.Chk_ChangeGUI.CheckedChanged += new System.EventHandler(this.Cb_CheckedChanged);
             // 

@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using ZeldaMessage;
 
 namespace NPC_Maker
@@ -69,6 +70,12 @@ namespace NPC_Maker
         private VScrollBar _vScrollMsgPreviewOrigMono, _vScrollMsgPreviewMono;
         private bool _doingSyncScroll = false;
 
+        private MonoCellParsingShim _dlistShim;
+        private MonoCellParsingShim _animationsShim;
+
+        private MonoCellParsingShim _colorsShim;
+        private readonly Dictionary<DataGridView, MonoCellParsingShim> _segmentShims = new Dictionary<DataGridView, MonoCellParsingShim>();
+
         public MainWindow(string FilePath = "")
         {
             InitializeComponent();
@@ -79,7 +86,8 @@ namespace NPC_Maker
             foreach (TabPage Page in TabControl_Segments.TabPages)
             {
                 SegmentDataGrid sg = new SegmentDataGrid();
-                sg.Grid.CellParsing += DataGridViewSegments_CellParse;
+                _segmentShims[sg.Grid] = new MonoCellParsingShim(sg.Grid, DataGridViewSegments_CellParse);
+
                 sg.Grid.CellMouseDoubleClick += Segments_CellMouseDoubleClick;
                 sg.Grid.KeyUp += DataGridViewSegments_KeyUp;
                 sg.Dock = DockStyle.Fill;
@@ -159,6 +167,10 @@ namespace NPC_Maker
                 MsgTabSplitContainer_SizeChanged(MsgTabSplitContainer, EventArgs.Empty);
                 SplitMsgContainer_Paint(null, null);
             };
+
+            _dlistShim = new MonoCellParsingShim(DataGridView_ExtraDLists, DataGridView_ExtraDLists_CellParsing);
+            _animationsShim = new MonoCellParsingShim(DataGrid_Animations, DataGridViewAnimations_CellParse);
+            _colorsShim = new MonoCellParsingShim(ColorsDataGridView, ColorsDataGridView_CellParsing);
 
             FunctionExtend.RunExtendFunc(FunctionExtend.FuncExtendHooks.OnMainWindowOpen.ToString(),
                 new FunctionExtend.GenericTool() { window = this, progressControl = progressL });
@@ -686,6 +698,17 @@ namespace NPC_Maker
 
         }
 
+        private void AddPathToRecents(string FilePath)
+        {
+            if (Program.Settings.LastPaths.Contains(FilePath))
+                Program.Settings.LastPaths.Remove(FilePath);
+
+            Program.Settings.LastPaths.Insert(0, FilePath);
+
+            if (Program.Settings.LastPaths.Count > 10)
+                Program.Settings.LastPaths.RemoveAt(10);
+        }
+
         private void OpenFile(string FilePath)
         {
             autoBackupTimer.Stop();
@@ -696,14 +719,7 @@ namespace NPC_Maker
             EditedFile = FileOps.ParseNPCJsonFile(FilePath);
             NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
 
-            if (Program.Settings.LastPaths.Contains(FilePath))
-                Program.Settings.LastPaths.Remove(FilePath);
-
-            Program.Settings.LastPaths.Insert(0, FilePath);
-
-            if (Program.Settings.LastPaths.Count > 10)
-                Program.Settings.LastPaths.RemoveAt(10);
-
+            AddPathToRecents(FilePath);
             UpdateLastPathsList();
 
             if (EditedFile != null)
@@ -1129,14 +1145,17 @@ namespace NPC_Maker
 
             foreach (ColorEntry colorEntry in e.DisplayListColors)
             {
-                int rowIndex = ColorsDataGridView.Rows.Add(new object[] { colorEntry.Limbs, "" });
-
-                ColorsDataGridView.Rows[rowIndex].Cells[1].Style = new DataGridViewCellStyle()
+                _colorsShim.RunSilently(() =>
                 {
-                    BackColor = colorEntry.Color,
-                    SelectionBackColor = colorEntry.Color,
-                    SelectionForeColor = colorEntry.Color
-                };
+                    int rowIndex = ColorsDataGridView.Rows.Add(new object[] { colorEntry.Limbs, "" });
+
+                    ColorsDataGridView.Rows[rowIndex].Cells[1].Style = new DataGridViewCellStyle()
+                    {
+                        BackColor = colorEntry.Color,
+                        SelectionBackColor = colorEntry.Color,
+                        SelectionForeColor = colorEntry.Color
+                    };
+                });
             }
 
             ColorsDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -1158,7 +1177,10 @@ namespace NPC_Maker
                     ? Dicts.GetStringFromBiDict(Dicts.LinkAnims, (int)anim.Address)
                     : anim.Address.ToString("X");
 
-                DataGrid_Animations.Rows.Add(new object[] {
+                _animationsShim.RunSilently(() =>
+                {
+
+                    DataGrid_Animations.Rows.Add(new object[] {
                                                             anim.Name,
                                                             anim.HeaderDefinition,
                                                             cValue,
@@ -1168,6 +1190,7 @@ namespace NPC_Maker
                                                             anim.Speed,
                                                             Dicts.GetStringFromBiDict(Dicts.ObjectIDs, anim.ObjID)
                                                          });
+                });
             }
 
             DataGrid_Animations.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -1179,17 +1202,22 @@ namespace NPC_Maker
             for (int j = 0; j < TabControl_Segments.TabPages.Count; j++)
             {
                 DataGridView grid = (TabControl_Segments.TabPages[j].Controls[0] as Controls.SegmentDataGrid).Grid;
-                grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-                grid.Rows.Clear();
+                int segIndex = j;   // don't capture the loop variable in the lambda
 
-                foreach (SegmentEntry seg in SelectedEntry.Segments[j])
-                    grid.Rows.Add(seg.Name,
-                                  seg.HeaderDefinition,
-                                  seg.FileStart < 0 ? "Same as main" : seg.FileStart.ToString("X"),
-                                  seg.Address.ToString("X"),
-                                  Dicts.GetStringFromBiDict(Dicts.ObjectIDs, seg.ObjectID));
+                _segmentShims[grid].RunSilently(() =>
+                {
+                    grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+                    grid.Rows.Clear();
 
-                grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+                    foreach (SegmentEntry seg in SelectedEntry.Segments[segIndex])
+                        grid.Rows.Add(seg.Name,
+                                      seg.HeaderDefinition,
+                                      seg.FileStart < 0 ? "Same as main" : seg.FileStart.ToString("X"),
+                                      seg.Address.ToString("X"),
+                                      Dicts.GetStringFromBiDict(Dicts.ObjectIDs, seg.ObjectID));
+
+                    grid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+                });
             }
 
             #endregion
@@ -1204,7 +1232,10 @@ namespace NPC_Maker
                 string selCombo = ExtraDlists_ShowType.Items[(int)dlist.ShowType].ToString();
                 string posType = Dicts.GetStringFromStringIntDict(Dicts.LimbIndexSubTypes, dlist.Limb, null);
 
-                int row = DataGridView_ExtraDLists.Rows.Add(new object[] {
+                _dlistShim.RunSilently(() =>
+                {
+
+                    int row = DataGridView_ExtraDLists.Rows.Add(new object[] {
                                                                             dlist.Name,
                                                                             dlist.HeaderDefinition,
                                                                             "",
@@ -1218,7 +1249,8 @@ namespace NPC_Maker
                                                                             selCombo
                                                                         });
 
-                DataGridView_ExtraDLists.Rows[row].Cells[(int)EDlistsColumns.Color].Style.BackColor = dlist.Color;
+                    DataGridView_ExtraDLists.Rows[row].Cells[(int)EDlistsColumns.Color].Style.BackColor = dlist.Color;
+                });
             }
 
             DataGridView_ExtraDLists.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -1440,19 +1472,22 @@ namespace NPC_Maker
                 Filter = "Json Files | *.json"
             };
 
-            if (sender == FileMenu_SaveAsFolder)
-                EditedFile.IsFolder = true;
-            else
-                EditedFile.IsFolder = false;
-
             DialogResult DR = SFD.ShowDialog();
 
             if (DR == DialogResult.OK)
             {
+                if (sender == FileMenu_SaveAsFolder)
+                    EditedFile.IsFolder = true;
+                else
+                    EditedFile.IsFolder = false;
+
                 NPCSave = JsonConvert.SerializeObject(EditedFile, Formatting.Indented);
                 await RunSave(SFD.FileName);
 
                 Program.Settings.LastOpenPath = SFD.FileName;
+                OpenedPath = SFD.FileName;
+                AddPathToRecents(SFD.FileName);
+                OpenedFileLastWritten = GetLastTimeWritten();
             }
         }
 
@@ -1823,7 +1858,12 @@ namespace NPC_Maker
             if (Dr != DialogResult.OK)
                 return "";
             else
-                return ScriptName;
+            {
+                foreach (char c in Path.GetInvalidFileNameChars())
+                    ScriptName = ScriptName.Replace(c, '_');
+
+                return ScriptName.Replace(" ", "_");
+            }
         }
 
         private bool CheckScriptOpForValidity(bool OnTab = false)
@@ -3097,6 +3137,9 @@ namespace NPC_Maker
 
         private void DataGrid_Animations_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            if (e.RowIndex < 0)
+                return;
+
             bool wasNewRow = e.RowIndex >= SelectedEntry.Animations.Count;
 
             if (wasNewRow)
@@ -3110,9 +3153,7 @@ namespace NPC_Maker
                 PickableList objects = new PickableList(Lists.DictType.Objects, true, new List<int>() { -2, -3, -4, -5 });
                 if (objects.ShowDialog() != DialogResult.OK) return;
 
-                string id = objects.Chosen.ID.ToString();
-                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = id;
-                DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                _animationsShim.Parse(e.RowIndex, e.ColumnIndex, objects.Chosen.ID.ToString());
                 DataGrid_Animations.RefreshEdit();
             }
             else if (e.ColumnIndex == (int)AnimGridColumns.Address && SelectedEntry.AnimationType == 1)
@@ -3120,9 +3161,8 @@ namespace NPC_Maker
                 PickableList anims = new PickableList(Lists.DictType.LinkAnims, true);
                 if (anims.ShowDialog() != DialogResult.OK) return;
 
-                string id = anims.Chosen.ID.ToString();
                 DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = anims.Chosen.ID.ToString("X");
-                DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                _animationsShim.Parse(e.RowIndex, e.ColumnIndex, anims.Chosen.ID.ToString());
                 DataGrid_Animations.RefreshEdit();
             }
             else if (e.ColumnIndex == (int)AnimGridColumns.HeaderDefinition && SelectedEntry.AnimationType == 0)
@@ -3131,20 +3171,13 @@ namespace NPC_Maker
                 Common.HDefine hD = Helpers.SelectOffsetFileStartFromH(SelectedEntry, curr[1], curr[0]);
                 if (hD == null || ShowHDefineError(hD)) return;
 
-                DataGrid_Animations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
-                DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
+                _animationsShim.SetCell(e.RowIndex, e.ColumnIndex, hD.ToString());
 
                 if (hD.Value1 != null)
-                {
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.Address].Value = hD.Value1String;
-                    DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)AnimGridColumns.Address, hD.Value1String, e.GetType(), null));
-                }
+                    _animationsShim.SetCell(e.RowIndex, (int)AnimGridColumns.Address, hD.Value1String);
 
                 if (hD.Value2 != null)
-                {
-                    DataGrid_Animations.Rows[e.RowIndex].Cells[(int)AnimGridColumns.FileStart].Value = hD.Value2String;
-                    DataGridViewAnimations_CellParse(DataGrid_Animations, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)AnimGridColumns.FileStart, hD.Value2String, e.GetType(), null));
-                }
+                    _animationsShim.SetCell(e.RowIndex, (int)AnimGridColumns.FileStart, hD.Value2String);
 
                 DataGrid_Animations.RefreshEdit();
             }
@@ -3437,9 +3470,8 @@ namespace NPC_Maker
                         PickableList objects = new PickableList(Lists.DictType.Objects, true);
                         if (objects.ShowDialog() != DialogResult.OK) break;
 
-                        string id = objects.Chosen.ID.ToString();
-                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = id;
-                        DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                        // Parser resolves the ID and writes the display name into the cell itself
+                        _dlistShim.Parse(e.RowIndex, e.ColumnIndex, objects.Chosen.ID.ToString());
                         grid.Update();
                         break;
                     }
@@ -3448,25 +3480,25 @@ namespace NPC_Maker
                         PickableList subTypes = new PickableList(Dicts.LimbIndexSubTypes);
                         if (subTypes.ShowDialog() != DialogResult.OK) break;
 
-                        string id = subTypes.Chosen.ID.ToString();
-                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = id;
-                        DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                        _dlistShim.Parse(e.RowIndex, e.ColumnIndex, subTypes.Chosen.ID.ToString());
                         grid.Update();
                         break;
                     }
                 case (int)EDlistsColumns.Color:
                     {
-                        ColorDialog.Color = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor;
+                        var cell = grid.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                        ColorDialog.Color = cell.Style.BackColor;
                         if (ColorDialog.ShowDialog() != DialogResult.OK) break;
 
-                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Style = new DataGridViewCellStyle()
+                        // Style changes never raise CellValueChanged, so parse explicitly (on all runtimes)
+                        cell.Style = new DataGridViewCellStyle()
                         {
                             BackColor = ColorDialog.Color,
                             SelectionBackColor = ColorDialog.Color,
                             SelectionForeColor = ColorDialog.Color
                         };
 
-                        DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, "", e.GetType(), null));
+                        _dlistShim.Parse(e.RowIndex, e.ColumnIndex, "");
                         grid.Update();
                         break;
                     }
@@ -3476,20 +3508,13 @@ namespace NPC_Maker
                         Common.HDefine hD = Helpers.SelectOffsetFileStartFromH(SelectedEntry, curr[1], curr[0]);
                         if (hD == null || ShowHDefineError(hD)) break;
 
-                        grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
-                        DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
+                        _dlistShim.SetCell(e.RowIndex, e.ColumnIndex, hD.ToString());
 
                         if (hD.Value1 != null)
-                        {
-                            grid.Rows[e.RowIndex].Cells[(int)EDlistsColumns.Offset].Value = hD.Value1String;
-                            DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.Offset, hD.Value1String, e.GetType(), null));
-                        }
+                            _dlistShim.SetCell(e.RowIndex, (int)EDlistsColumns.Offset, hD.Value1String);
 
                         if (hD.Value2 != null)
-                        {
-                            grid.Rows[e.RowIndex].Cells[(int)EDlistsColumns.FileStart].Value = hD.Value2String;
-                            DataGridView_ExtraDLists_CellParsing(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)EDlistsColumns.FileStart, hD.Value2String, e.GetType(), null));
-                        }
+                            _dlistShim.SetCell(e.RowIndex, (int)EDlistsColumns.FileStart, hD.Value2String);
 
                         break;
                     }
@@ -3788,7 +3813,8 @@ namespace NPC_Maker
             if (e.RowIndex < 0)
                 return;
 
-            var grid = sender as DataGridView;
+            var grid = (DataGridView)sender;
+            var shim = _segmentShims[grid];
             int segIndex = TabControl_Segments.SelectedIndex;
             bool wasNewRow = e.RowIndex >= SelectedEntry.Segments[segIndex].Count;
 
@@ -3803,9 +3829,8 @@ namespace NPC_Maker
                 PickableList objects = new PickableList(Lists.DictType.Objects, true);
                 if (objects.ShowDialog() != DialogResult.OK) return;
 
-                string id = objects.Chosen.ID.ToString();
-                grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = id;
-                DataGridViewSegments_CellParse(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, id, e.GetType(), null));
+                // Parser resolves the ID and writes the display name into the cell itself
+                shim.Parse(e.RowIndex, e.ColumnIndex, objects.Chosen.ID.ToString());
                 grid.Update();
             }
             else if (e.ColumnIndex == (int)SegmentsColumns.HeaderDefinition)
@@ -3814,20 +3839,13 @@ namespace NPC_Maker
                 Common.HDefine hD = Helpers.SelectOffsetFileStartFromH(SelectedEntry, curr[1], curr[0]);
                 if (hD == null || ShowHDefineError(hD)) return;
 
-                grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = hD.ToString();
-                DataGridViewSegments_CellParse(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, e.ColumnIndex, hD.ToString(), e.GetType(), null));
+                shim.SetCell(e.RowIndex, e.ColumnIndex, hD.ToString());
 
                 if (hD.Value1 != null)
-                {
-                    grid.Rows[e.RowIndex].Cells[(int)SegmentsColumns.Address].Value = hD.Value1String;
-                    DataGridViewSegments_CellParse(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)SegmentsColumns.Address, hD.Value1String, e.GetType(), null));
-                }
+                    shim.SetCell(e.RowIndex, (int)SegmentsColumns.Address, hD.Value1String);
 
                 if (hD.Value2 != null)
-                {
-                    grid.Rows[e.RowIndex].Cells[(int)SegmentsColumns.FileStart].Value = hD.Value2String;
-                    DataGridViewSegments_CellParse(grid, new DataGridViewCellParsingEventArgs(e.RowIndex, (int)SegmentsColumns.FileStart, hD.Value2String, e.GetType(), null));
-                }
+                    shim.SetCell(e.RowIndex, (int)SegmentsColumns.FileStart, hD.Value2String);
 
                 grid.Update();
             }
@@ -4037,7 +4055,7 @@ namespace NPC_Maker
 
             if (colors.Count - 1 < e.RowIndex)
             {
-                Color white = Color.FromArgb(0, 0, 0, 0);
+                Color white = Color.FromArgb(255, 255, 255, 255);
                 colors.Add(new ColorEntry(e.Value.ToString(), white));
                 ColorsDataGridView.Rows[e.RowIndex].Cells[1].Style = new DataGridViewCellStyle()
                 {
@@ -4998,6 +5016,9 @@ namespace NPC_Maker
                     return false;
                 }
             }
+
+            foreach (char c in Path.GetInvalidFileNameChars())
+                Title = Title.Replace(c, '_');
 
             return true;
         }

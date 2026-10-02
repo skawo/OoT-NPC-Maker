@@ -896,7 +896,6 @@ namespace NPC_Maker
             this.ColorsDataGridView.Size = new System.Drawing.Size(71, 394);
             this.ColorsDataGridView.TabIndex = 75;
             this.ColorsDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ColorsDataGridView_CellDoubleClick);
-            this.ColorsDataGridView.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.ColorsDataGridView_CellParsing);
             this.ColorsDataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ColorsDataGridView_KeyUp);
             // 
             // StartLimbColumn
@@ -1030,7 +1029,6 @@ namespace NPC_Maker
             this.DataGrid_Animations.Size = new System.Drawing.Size(749, 394);
             this.DataGrid_Animations.TabIndex = 9;
             this.DataGrid_Animations.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGrid_Animations_CellMouseDoubleClick);
-            this.DataGrid_Animations.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridViewAnimations_CellParse);
             this.DataGrid_Animations.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGrid_Animations_KeyUp);
             // 
             // Col_AnimName
@@ -1524,7 +1522,6 @@ namespace NPC_Maker
             this.DataGridView_ExtraDLists.Size = new System.Drawing.Size(830, 276);
             this.DataGridView_ExtraDLists.TabIndex = 51;
             this.DataGridView_ExtraDLists.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_ExtraDLists_CellMouseDoubleClick);
-            this.DataGridView_ExtraDLists.CellParsing += new System.Windows.Forms.DataGridViewCellParsingEventHandler(this.DataGridView_ExtraDLists_CellParsing);
             this.DataGridView_ExtraDLists.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_ExtraDLists_KeyUp);
             // 
             // ExtraDlists_Purpose
@@ -4531,7 +4528,7 @@ namespace NPC_Maker
             // 
             this.FileMenu_SaveAsFolder.Name = "FileMenu_SaveAsFolder";
             this.FileMenu_SaveAsFolder.Size = new System.Drawing.Size(193, 22);
-            this.FileMenu_SaveAsFolder.Text = "Save as folder...";
+            this.FileMenu_SaveAsFolder.Text = "Save as unpacked...";
             this.FileMenu_SaveAsFolder.Click += new System.EventHandler(this.FileMenu_SaveAs_Click);
             // 
             // FileMenu_SaveBinary
@@ -4607,7 +4604,7 @@ namespace NPC_Maker
             // 
             this.globalCHeaderToolStripMenuItem.Name = "globalCHeaderToolStripMenuItem";
             this.globalCHeaderToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.globalCHeaderToolStripMenuItem.Text = "Global C Header";
+            this.globalCHeaderToolStripMenuItem.Text = "Global C header";
             this.globalCHeaderToolStripMenuItem.Click += new System.EventHandler(this.GlobalCHeaderToolStripMenuItem_Click);
             // 
             // editGlobalHeaderToolStripMenuItem
@@ -4779,7 +4776,7 @@ namespace NPC_Maker
             // 
             this.colorPickerToolStripMenuItem.Name = "colorPickerToolStripMenuItem";
             this.colorPickerToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.colorPickerToolStripMenuItem.Text = "Color Picker";
+            this.colorPickerToolStripMenuItem.Text = "Color picker";
             this.colorPickerToolStripMenuItem.Click += new System.EventHandler(this.ColorPickerToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem1

@@ -168,6 +168,7 @@
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\JsonRevision.cs" />
     <Compile Include="Common\Message.cs" />
+    <Compile Include="Common\MonoCellParsingShim.cs" />
     <Compile Include="Common\NPCFileSplit.cs" />
     <Compile Include="Common\NPCMakerSettings.cs" />
     <Compile Include="Common\NativeDialogWrappers.cs" />
