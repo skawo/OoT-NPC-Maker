@@ -4060,7 +4060,6 @@ namespace NPC_Maker
             // Combo_postLimb
             // 
             this.Combo_postLimb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Combo_postLimb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_postLimb.FormattingEnabled = true;
             this.Combo_postLimb.Location = new System.Drawing.Point(73, 575);
             this.Combo_postLimb.Name = "Combo_postLimb";
@@ -4205,7 +4204,6 @@ namespace NPC_Maker
             // Combo_FuncOnDelete
             // 
             this.Combo_FuncOnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Combo_FuncOnDelete.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_FuncOnDelete.FormattingEnabled = true;
             this.Combo_FuncOnDelete.Location = new System.Drawing.Point(73, 602);
             this.Combo_FuncOnDelete.Name = "Combo_FuncOnDelete";
@@ -4217,7 +4215,6 @@ namespace NPC_Maker
             // Combo_FuncOnLimb
             // 
             this.Combo_FuncOnLimb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Combo_FuncOnLimb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_FuncOnLimb.FormattingEnabled = true;
             this.Combo_FuncOnLimb.Location = new System.Drawing.Point(73, 548);
             this.Combo_FuncOnLimb.Name = "Combo_FuncOnLimb";
@@ -4239,7 +4236,6 @@ namespace NPC_Maker
             // Combo_FuncOnDraw
             // 
             this.Combo_FuncOnDraw.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Combo_FuncOnDraw.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_FuncOnDraw.FormattingEnabled = true;
             this.Combo_FuncOnDraw.Location = new System.Drawing.Point(73, 518);
             this.Combo_FuncOnDraw.Name = "Combo_FuncOnDraw";
@@ -4286,7 +4282,6 @@ namespace NPC_Maker
             // Combo_FuncOnUpdate
             // 
             this.Combo_FuncOnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Combo_FuncOnUpdate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_FuncOnUpdate.FormattingEnabled = true;
             this.Combo_FuncOnUpdate.Location = new System.Drawing.Point(73, 488);
             this.Combo_FuncOnUpdate.Name = "Combo_FuncOnUpdate";
@@ -4324,7 +4319,6 @@ namespace NPC_Maker
             // Combo_FuncOnInit
             // 
             this.Combo_FuncOnInit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Combo_FuncOnInit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.Combo_FuncOnInit.FormattingEnabled = true;
             this.Combo_FuncOnInit.Location = new System.Drawing.Point(73, 461);
             this.Combo_FuncOnInit.Name = "Combo_FuncOnInit";

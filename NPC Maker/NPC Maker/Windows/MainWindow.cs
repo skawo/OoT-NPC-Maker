@@ -1320,29 +1320,37 @@ namespace NPC_Maker
                 ComboBox c = kvp.Key;
                 ComboBox w = kvp.Value;
 
-                c.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
-                if (w != null) w.SelectedIndexChanged -= Combo_Func_SelectedIndexChanged;
+                c.TextChanged -= Combo_Func_TextChanged;
 
-                if (!hasFunctions)
+                if (w != null) 
+                    w.TextChanged -= Combo_Func_TextChanged;
+
+                c.BeginUpdate();
+                try
                 {
-                    c.DataSource = null;
+                    c.Items.Clear();
+
+                    if (hasFunctions)
+                    {
+                        c.Items.AddRange(code.Functions.ToArray());
+                        c.DisplayMember = "Symbol";          
+                        c.Text = code.FunctionHooks[index].name;
+
+                        if (w != null && w.Items.Count > code.FunctionHooks[index].hookType)
+                            w.SelectedIndex = (int)code.FunctionHooks[index].hookType;
+                    }
                 }
-                else
+                finally
                 {
-                    c.DisplayMember = "Symbol";
-                    c.ValueMember = "Addr";
-                    c.DataSource = code.Functions;
-                    c.SelectedIndex = -1;
-                    c.BindingContext = new BindingContext();
-                    c.SelectedIndex = code.Functions.FindIndex(x => x.Symbol == code.SetFuncNames[index]);
-
-                    if (w != null)
-                        w.SelectedIndex = code.FuncsRunWhen[index, 1];
+                    c.EndUpdate();
                 }
 
                 index++;
-                c.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
-                if (w != null) w.SelectedIndexChanged += Combo_Func_SelectedIndexChanged;
+
+                c.TextChanged += Combo_Func_TextChanged;
+
+                if (w != null) 
+                    w.TextChanged += Combo_Func_TextChanged;
             }
 
             #endregion
@@ -5553,20 +5561,18 @@ namespace NPC_Maker
 
         }
 
-        private void Combo_Func_SelectedIndexChanged(object sender, EventArgs e)
+        private void Combo_Func_TextChanged(object sender, EventArgs e)
         {
-            ComboBox c = (sender as ComboBox);
+            if (sender == null)
+                return;
 
+            ComboBox c = (sender as ComboBox);
             int ComboId = Convert.ToInt32(c.Tag);
 
             if (ComboId < 6)
-            {
-                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId, 0] = c.SelectedIndex;
-                SelectedEntry.EmbeddedOverlayCode.SetFuncNames[ComboId] = c.Text;
-
-            }
+                SelectedEntry.EmbeddedOverlayCode.FunctionHooks[ComboId].name = c.Text;
             else
-                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen[ComboId - 6, 1] = c.SelectedIndex;
+                SelectedEntry.EmbeddedOverlayCode.FunctionHooks[ComboId - 6].hookType = (sbyte)c.SelectedIndex;
         }
 
         private void Combo_Func_MouseDown(object sender, MouseEventArgs e)
@@ -5579,20 +5585,8 @@ namespace NPC_Maker
         {
             if (BigMessageBox.Show("Are you sure? This operation wipes the code completely and cannot be reversed.", "Code Removal", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
             {
-                SelectedEntry.EmbeddedOverlayCode.Code = "";
-                SelectedEntry.EmbeddedOverlayCode.Functions = new List<CSymbol>();
-                SelectedEntry.EmbeddedOverlayCode.FuncsRunWhen = new int[6, 2]
-                {
-                    {-1, -1},
-                    {-1, -1},
-                    {-1, -1},
-                    {-1, -1},
-                    {-1, -1},
-                    {-1, -1},
-                };
-
-                SelectedEntry.EmbeddedOverlayCode.SetFuncNames = new string[6];
-
+                SelectedEntry.EmbeddedOverlayCode = new CCodeEntry();
+               
                 foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
                 {
                     ComboBox c = kvp.Key;

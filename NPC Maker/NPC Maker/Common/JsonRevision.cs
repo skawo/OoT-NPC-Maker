@@ -143,5 +143,27 @@ namespace NPC_Maker
 
             return 7;
         }
+
+        private static int MigrateToVersion9(ref NPCFile npcFile, int currentVersion)
+        {
+            if (currentVersion >= 9)
+                return currentVersion;
+
+            foreach (var entry in npcFile.Entries)
+            {
+                var embeddedCode = entry.EmbeddedOverlayCode;
+
+                for (int i = 0; i < embeddedCode.SetFuncNames.Length; i++)
+                {
+                    embeddedCode.FunctionHooks[i].name = embeddedCode.SetFuncNames[i] ?? string.Empty;
+                    embeddedCode.FunctionHooks[i].hookType = (sbyte)embeddedCode.FuncsRunWhen[i, 1];
+                }
+
+                embeddedCode.FuncsRunWhen = null;
+                embeddedCode.SetFuncNames = null;
+            }
+
+            return 9;
+        }
     }
 }
