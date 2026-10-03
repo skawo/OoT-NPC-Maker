@@ -33,7 +33,7 @@ namespace NPC_Maker
 
         public NPCFile()
         {
-            Version = 8;
+            Version = 9;
             Entries = new List<NPCEntry>();
             IsFolder = false;
             GlobalHeaders = new List<ScriptEntry>();
@@ -364,7 +364,7 @@ namespace NPC_Maker
 
             if (starts[0] != 0)
                 throw new FormatException("First message not at start.");
-                
+
             for (int i = 0; i < starts.Count; i++)
             {
                 // Exclusive end: first line NOT in this block.
@@ -1041,46 +1041,45 @@ namespace NPC_Maker
         }
     }
 
+    public class CCodeFunctionHook
+    {
+        public string Symbol;
+        public sbyte RunWhen;
+    }
+
     public class CCodeEntry
     {
+        public List<string> CodeLines { get; set; }
+        public List<CSymbol> Functions { get; set; }
+        public CCodeFunctionHook[] FunctionHooks { get; set; }
+        public List<string> HeaderPaths { get; set; }
+
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public string Code { get; set; }
 
-        public List<string> CodeLines { get; set; }
-        public List<CSymbol> Functions { get; set; }
-
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public int[,] FuncsRunWhen { get; set; }
 
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public string[] SetFuncNames { get; set; }
 
-        public List<string> HeaderPaths { get; set; }
-
-        public CCodeEntry(string _Code = "", List<CSymbol> _Funcs = null, int[,] _FuncsRunWhen = null)
+        public CCodeEntry()
         {
-            Code = _Code;
+
             CodeLines = new List<string>();
             HeaderPaths = new List<string>();
-            Functions = _Funcs;
-
-            if (Functions == null)
-                Functions = new List<CSymbol>();
-
-            FuncsRunWhen = _FuncsRunWhen;
-            SetFuncNames = new string[6];
-
-            if (FuncsRunWhen == null)
-                FuncsRunWhen = new int[6, 2]
+            Functions = new List<CSymbol>();
+            FunctionHooks = new CCodeFunctionHook[6]
                 {
-                    {-1, -1},
-                    {-1, -1},
-                    {-1, -1},
-                    {-1, -1},
-                    {-1, -1},
-                    {-1, -1},
+                    new CCodeFunctionHook() { Symbol = string.Empty, RunWhen = -1},
+                    new CCodeFunctionHook() { Symbol = string.Empty, RunWhen = -1},
+                    new CCodeFunctionHook() { Symbol = string.Empty, RunWhen = -1},
+                    new CCodeFunctionHook() { Symbol = string.Empty, RunWhen = -1},
+                    new CCodeFunctionHook() { Symbol = string.Empty, RunWhen = -1},
+                    new CCodeFunctionHook() { Symbol = string.Empty, RunWhen = -1}
                 };
         }
     }
-
 
     public class CSymbol
     {

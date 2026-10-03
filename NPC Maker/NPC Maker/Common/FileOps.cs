@@ -81,10 +81,12 @@ namespace NPC_Maker
 
                 if (version >= 6) ProcessCHeader(ref npcFile);
 
+                version = MigrateToVersion9(ref npcFile, version);
+
                 NormalizeLineBreaks(ref npcFile);
                 ResolveHeaderDefines(ref npcFile);
 
-                npcFile.Version = 8;
+                npcFile.Version = 9;
                 return npcFile;
             }
             catch (Exception ex)
@@ -1039,11 +1041,10 @@ namespace NPC_Maker
 
             var funcsList = new List<byte>();
             var funcsWhenList = new List<byte>();
-            int funcCount = entry.EmbeddedOverlayCode.FuncsRunWhen.GetLength(0);
 
-            for (int i = 0; i < funcCount; i++)
+            for (int i = 0; i < entry.EmbeddedOverlayCode.FunctionHooks.Length; i++)
             {
-                string fname = entry.EmbeddedOverlayCode.SetFuncNames[i];
+                string fname = entry.EmbeddedOverlayCode.FunctionHooks[i].Symbol;
                 int funcIdx = entry.EmbeddedOverlayCode.Functions.FindIndex(x => x.Symbol == fname);
 
                 if (funcIdx == -1 && !string.IsNullOrEmpty(fname))
@@ -1057,7 +1058,7 @@ namespace NPC_Maker
                     : uint.MaxValue;
 
                 funcsList.AddRangeBigEndian(funcAddr);
-                funcsWhenList.Add((byte)entry.EmbeddedOverlayCode.FuncsRunWhen[i, 1]);
+                funcsWhenList.Add((byte)entry.EmbeddedOverlayCode.FunctionHooks[i].RunWhen);
             }
 
             entryBytes.AddRange(funcsList);
