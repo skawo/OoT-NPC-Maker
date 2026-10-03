@@ -47,18 +47,27 @@ namespace NPC_Maker
 
         public static string NormalizeExtPath(string path)
         {
-            // Always replace the longer (more specific) path first
-            if (Program.Settings.ProjectPath.Length >= Program.ExecPath.Length)
-            {
-                path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
-                path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Lists.ProgramPathToken);
-            }
-            else
-            {
-                path = Helpers.ReplacePathWithToken(Program.ExecPath, path, Lists.ProgramPathToken);
-                path = Helpers.ReplacePathWithToken(Program.Settings.ProjectPath, path, Lists.ProjectPathToken);
-            }
-            return path;
+            if (string.IsNullOrEmpty(path))
+                return path;
+
+            if (path.Contains(Lists.ProjectPathToken) || path.Contains(Lists.ProgramPathToken))
+                return path;
+
+            string projectPath = Program.Settings.ProjectPath;
+            string execPath = Program.ExecPath;
+
+            bool projectFirst = (projectPath ?? "").Length >= (execPath ?? "").Length;
+
+            string firstRoot = projectFirst ? projectPath : execPath;
+            string firstToken = projectFirst ? Lists.ProjectPathToken : Lists.ProgramPathToken;
+            string secondRoot = projectFirst ? execPath : projectPath;
+            string secondToken = projectFirst ? Lists.ProgramPathToken : Lists.ProjectPathToken;
+
+            string result = Helpers.ReplacePathWithToken(firstRoot, path, firstToken);
+            if (!string.Equals(result, path, StringComparison.Ordinal))
+                return result;
+
+            return Helpers.ReplacePathWithToken(secondRoot, path, secondToken);
         }
 
         public static string DenormalizeExtPath(string path, bool relativeToProjectPath = false, bool relativeToCwd = false)
