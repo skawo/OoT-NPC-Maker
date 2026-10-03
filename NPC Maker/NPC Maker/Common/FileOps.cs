@@ -137,7 +137,8 @@ namespace NPC_Maker
                         processedData = ret.file;
                     }
 
-                    return NPCFileSplit.SplitNPCFileToFolder(path, processedData, progress);
+                    NPCFileSplit.SplitNPCFileToFolder(path, processedData, progress);
+                    return true;
                 }
                 else
                 {
@@ -162,7 +163,7 @@ namespace NPC_Maker
                 if (!isBackup)
                     BigMessageBox.Show($"Failed to save JSON: {ex.Message}");
                 else
-                    Console.WriteLine("Warning: Could not save backup.");
+                    Console.WriteLine($"Warning: Could not save backup: {ex.Message}");
 
                 return false;
             }
