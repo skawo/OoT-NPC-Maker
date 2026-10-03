@@ -1085,7 +1085,7 @@ namespace NPC_Maker
 
             for (int i = 0; i < funcCount; i++)
             {
-                string fname = entry.EmbeddedOverlayCode.FunctionHooks[i].name;
+                string fname = entry.EmbeddedOverlayCode.FunctionHooks[i].symbolName;
                 int funcIdx = entry.EmbeddedOverlayCode.Functions.FindIndex(x => x.Symbol == fname);
 
                 if (funcIdx == -1 && !string.IsNullOrEmpty(fname))
@@ -1099,7 +1099,7 @@ namespace NPC_Maker
                     : uint.MaxValue;
 
                 funcsList.AddRangeBigEndian(funcAddr);
-                funcsWhenList.Add((byte)entry.EmbeddedOverlayCode.FunctionHooks[i].hookType);
+                funcsWhenList.Add((byte)entry.EmbeddedOverlayCode.FunctionHooks[i].runWhen);
             }
 
             entryBytes.AddRange(funcsList);

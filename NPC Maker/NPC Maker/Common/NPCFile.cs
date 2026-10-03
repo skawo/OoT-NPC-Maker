@@ -1001,8 +1001,8 @@ namespace NPC_Maker
 
     public class CCodeFunctionHook
     {
-        public string name;
-        public sbyte hookType;
+        public string symbolName;
+        public sbyte runWhen;
     }
 
     public class CCodeEntry
@@ -1028,12 +1028,12 @@ namespace NPC_Maker
             Functions = new List<CSymbol>();
             FunctionHooks = new CCodeFunctionHook[6]
                 {
-                    new CCodeFunctionHook() { name = string.Empty, hookType = -1},
-                    new CCodeFunctionHook() { name = string.Empty, hookType = -1},
-                    new CCodeFunctionHook() { name = string.Empty, hookType = -1},
-                    new CCodeFunctionHook() { name = string.Empty, hookType = -1},
-                    new CCodeFunctionHook() { name = string.Empty, hookType = -1},
-                    new CCodeFunctionHook() { name = string.Empty, hookType = -1}
+                    new CCodeFunctionHook() { symbolName = string.Empty, runWhen = -1},
+                    new CCodeFunctionHook() { symbolName = string.Empty, runWhen = -1},
+                    new CCodeFunctionHook() { symbolName = string.Empty, runWhen = -1},
+                    new CCodeFunctionHook() { symbolName = string.Empty, runWhen = -1},
+                    new CCodeFunctionHook() { symbolName = string.Empty, runWhen = -1},
+                    new CCodeFunctionHook() { symbolName = string.Empty, runWhen = -1}
                 };
         }
     }

@@ -155,8 +155,8 @@ namespace NPC_Maker
 
                 for (int i = 0; i < embeddedCode.SetFuncNames.Length; i++)
                 {
-                    embeddedCode.FunctionHooks[i].name = embeddedCode.SetFuncNames[i] ?? string.Empty;
-                    embeddedCode.FunctionHooks[i].hookType = (sbyte)embeddedCode.FuncsRunWhen[i, 1];
+                    embeddedCode.FunctionHooks[i].symbolName = embeddedCode.SetFuncNames[i] ?? string.Empty;
+                    embeddedCode.FunctionHooks[i].runWhen = (sbyte)embeddedCode.FuncsRunWhen[i, 1];
                 }
 
                 embeddedCode.FuncsRunWhen = null;

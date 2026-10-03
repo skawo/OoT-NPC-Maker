@@ -1334,10 +1334,10 @@ namespace NPC_Maker
                     {
                         c.Items.AddRange(code.Functions.ToArray());
                         c.DisplayMember = "Symbol";          
-                        c.Text = code.FunctionHooks[index].name;
+                        c.Text = code.FunctionHooks[index].symbolName;
 
-                        if (w != null && w.Items.Count > code.FunctionHooks[index].hookType)
-                            w.SelectedIndex = (int)code.FunctionHooks[index].hookType;
+                        if (w != null && w.Items.Count > code.FunctionHooks[index].runWhen)
+                            w.SelectedIndex = (int)code.FunctionHooks[index].runWhen;
                     }
                 }
                 finally
@@ -5570,9 +5570,9 @@ namespace NPC_Maker
             int ComboId = Convert.ToInt32(c.Tag);
 
             if (ComboId < 6)
-                SelectedEntry.EmbeddedOverlayCode.FunctionHooks[ComboId].name = c.Text;
+                SelectedEntry.EmbeddedOverlayCode.FunctionHooks[ComboId].symbolName = c.Text;
             else
-                SelectedEntry.EmbeddedOverlayCode.FunctionHooks[ComboId - 6].hookType = (sbyte)c.SelectedIndex;
+                SelectedEntry.EmbeddedOverlayCode.FunctionHooks[ComboId - 6].runWhen = (sbyte)c.SelectedIndex;
         }
 
         private void Combo_Func_MouseDown(object sender, MouseEventArgs e)
