@@ -261,7 +261,7 @@ namespace NPC_Maker.Common
             return entry;
         }
 
-        public static bool SplitNPCFileToFolder(string fileName, NPCFile inFile, IProgress<ProgressReport> progress = null)
+        public static void SplitNPCFileToFolder(string fileName, NPCFile inFile, IProgress<ProgressReport> progress = null)
         {
             string rootDirectory = GetRootDirectory(fileName);
             string headersPath = Path.Combine(rootDirectory, HeadersFolder);
@@ -285,8 +285,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{UnpackFailed}: Couldn't create temporary directory: {ex.Message}");
-                    return false;
+                    throw new Exception($"{UnpackFailed}: Couldn't create temporary directory: {ex.Message}");
                 }
 
                 try
@@ -296,8 +295,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{UnpackFailed}: Couldn't save external headers: {ex.Message}");
-                    return false;
+                    throw new Exception($"{UnpackFailed}: Couldn't save external headers: {ex.Message}");
                 }
 
                 try
@@ -308,8 +306,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{UnpackFailed}: Couldn't save C header: {ex.Message}");
-                    return false;
+                    throw new Exception($"{UnpackFailed}: Couldn't save C header: {ex.Message}");
                 }
 
                 int total = npcFile.Entries.Count;
@@ -393,8 +390,7 @@ namespace NPC_Maker.Common
 
                 if (failure != null)
                 {
-                    Console.WriteLine($"{UnpackFailed}: {failure}");
-                    return false;
+                    throw new Exception($"{UnpackFailed}: {failure}");
                 }
 
                 npcFile.Entries = null;
@@ -411,8 +407,7 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{UnpackFailed}: Couldn't write main JSON to temp path: {ex.Message}");
-                    return false;
+                    throw new Exception($"{UnpackFailed}: Couldn't write main JSON to temp path: {ex.Message}");
                 }
 
                 // Everything was generated successfully. Now replace the real destination.
@@ -428,13 +423,10 @@ namespace NPC_Maker.Common
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{UnpackFailed}: {ex.Message}");
-                    return false;
+                    throw new Exception($"{UnpackFailed}: {ex.Message}");
                 }
 
                 progress?.Report(new ProgressReport($"Saved as folder.", 100.0f));
-
-                return true;
             }
             finally
             {
