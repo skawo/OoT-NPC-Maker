@@ -1339,6 +1339,8 @@ namespace NPC_Maker
                         if (w != null && w.Items.Count > code.FunctionHooks[index].RunWhen)
                             w.SelectedIndex = (int)code.FunctionHooks[index].RunWhen;
                     }
+                    else
+                        c.Text = "";
                 }
                 finally
                 {
@@ -5397,32 +5399,48 @@ namespace NPC_Maker
                 TextBox_CompileMsg.Text = Helpers.StripTerminalControlCodes(CompileMsgs);
             });
 
+            int index = 0;
+            var code = SelectedEntry.EmbeddedOverlayCode;
+            bool hasFunctions = code.Functions != null && code.Functions.Count > 0;
+
             foreach (KeyValuePair<ComboBox, ComboBox> kvp in FunctionComboBoxes)
             {
                 ComboBox c = kvp.Key;
+                ComboBox w = kvp.Value;
 
-                c.Invoke((MethodInvoker)delegate
+                c.TextChanged -= Combo_Func_TextChanged;
+
+                if (w != null)
+                    w.TextChanged -= Combo_Func_TextChanged;
+
+                c.BeginUpdate();
+                try
                 {
-                    string CurrentSelection = c.Text;
+                    c.Items.Clear();
 
-                    if (SelectedEntry.EmbeddedOverlayCode.Functions == null || SelectedEntry.EmbeddedOverlayCode.Functions.Count == 0)
-                        c.DataSource = null;
-                    else
+                    if (hasFunctions)
                     {
+                        c.Items.AddRange(code.Functions.ToArray());
                         c.DisplayMember = "Symbol";
-                        c.ValueMember = "Addr";
-                        c.DataSource = SelectedEntry.EmbeddedOverlayCode.Functions;
-                        c.SelectedIndex = -1;
-                        c.BindingContext = new BindingContext();
+                        c.Text = code.FunctionHooks[index].Symbol;
 
-                        CSymbol Function = SelectedEntry.EmbeddedOverlayCode.Functions.FirstOrDefault(x => x.Symbol == CurrentSelection);
-
-                        if (Function != null)
-                            c.SelectedIndex = c.Items.IndexOf(Function);
-                        else
-                            c.SelectedIndex = -1;
+                        if (w != null && w.Items.Count > code.FunctionHooks[index].RunWhen)
+                            w.SelectedIndex = (int)code.FunctionHooks[index].RunWhen;
                     }
-                });
+                    else
+                        c.Text = "";
+                }
+                finally
+                {
+                    c.EndUpdate();
+                }
+
+                index++;
+
+                c.TextChanged += Combo_Func_TextChanged;
+
+                if (w != null)
+                    w.TextChanged += Combo_Func_TextChanged;
             }
         }
 
