@@ -5,6 +5,28 @@
 #include "../include/h_math.h"
 #include "../include/h_graphics.h"
 
+#define EX_DLIST_MAX 64
+
+static MtxF sExDListMatrices[EX_DLIST_MAX];
+static u32 sExtDListMtxPool[(EX_DLIST_MAX + 31) / 32];
+
+static void ExtDlistMtxPool_Clear(void) {
+	for (u32 i = 0; i < ARRAY_COUNT(sExtDListMtxPool); i++)
+		sExtDListMtxPool[i] = 0;
+}
+
+static void ExtDlistMtxPool_Mark(u32 id) {
+	u32 word = id / 32;
+	u32 shift = id % 32;
+	sExtDListMtxPool[word] |= (1u << shift);
+}
+
+static bool ExtDlistMtxPool_Check(u32 id) {
+	u32 word = id / 32;
+	u32 shift = id % 32;
+	return sExtDListMtxPool[word] & (1u << shift);
+}
+
 void Draw_Debug(NpcMaker* en, PlayState* playState)
 {
     #if LOGGING > 2
@@ -484,7 +506,8 @@ s32 Draw_OverrideLimbDraw(PlayState* playState, s32 limbNumber, Gfx** dListPtr, 
                 {
                     Matrix_Push();
                     Draw_AffectMatrix(dlist, translation, rotation);
-                    Matrix_Get(&en->exDlistMatrixes[i]);
+                    Matrix_Get(sExDListMatrices + i);
+					ExtDlistMtxPool_Mark(i);
                     Matrix_Pop();
                 }
                 else
@@ -789,6 +812,8 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
     // Draw skeleton
     if (en->settings.objectId > 0)
     {
+		ExtDlistMtxPool_Clear();
+		
         switch (en->settings.drawType)
         {
             case OPA_MATRIX:
@@ -847,8 +872,17 @@ void Draw_Model(NpcMaker* en, PlayState* playState)
                 dlist.objectId == OBJECT_ENDDLIST ||
                 dlist.objectId == OBJECT_XLUDLIST)
                 continue;
+				
+			if (!ExtDlistMtxPool_Check(i))
+            {
+                #if LOGGING > 0
+                    is64Printf("_%d: No matrix set for drawn limb?\n", en->npcId);
+                #endif
 
-            Matrix_Put(&en->exDlistMatrixes[i]);
+                continue;
+            }
+
+            Matrix_Put(sExDListMatrices + i);
             Draw_ExtDList(en, playState, &dlist);
         }       
         

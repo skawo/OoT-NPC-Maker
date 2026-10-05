@@ -7,7 +7,7 @@
 
 
 #define MAJOR_VERSION 1
-#define MINOR_VERSION 2
+#define MINOR_VERSION 3
 
 #ifndef GAME_VERSION
     #define GAME_VERSION 0
@@ -43,7 +43,6 @@
 #include "libc64/qrand.h"
 #include "save.h"
 #include "audio.h"
-#include "assets/objects/gameplay_keep/gameplay_keep.h"
 
 #if GAME_VERSION == 0
     #ifndef LOGGING
@@ -55,6 +54,9 @@
     #ifndef LOG_VERSION
         #define LOG_VERSION 1
     #endif
+
+    #include "zocarina/version/gc-eu-mq-dbg/assets/objects/gameplay_keep/gameplay_keep.h"
+
 #endif
 
 #if GAME_VERSION == 1
@@ -67,6 +69,8 @@
     #ifndef LOG_VERSION
         #define LOG_VERSION 0
     #endif
+
+    #include "zocarina/version/ntsc-1.0/assets/objects/gameplay_keep/gameplay_keep.h"
 #endif
 
 #ifndef COLLISION_VIEWER

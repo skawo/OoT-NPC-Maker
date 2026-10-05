@@ -332,7 +332,7 @@ typedef struct NpcMaker
     u32 flags_internal[8];
     u8 status;
     
-    MtxF* exDlistMatrixes;
+    u32 pad3;
 
     #if DEBUG_STRUCT == 1
         s32 dbgVar;

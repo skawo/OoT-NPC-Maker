@@ -242,7 +242,6 @@ static void NpcMaker_Destroy(NpcMaker* en, PlayState* playState)
                         en->exSegData,
                         en->scriptFVars,
                         en->scriptVars,
-                        en->exDlistMatrixes,
                     };
 
     for (int i = 0; i < ARRAY_COUNT(frees); i++)

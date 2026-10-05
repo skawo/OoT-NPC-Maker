@@ -491,9 +491,6 @@ bool Setup_LoadSetup(NpcMaker* en, PlayState* playState)
                                    sLoadList[i].noCopy,
                                    entrySizeCompr,
                                    size);
-                                   
-        if (i == 1)
-            en->exDlistMatrixes = ZeldaArena_Malloc(sizeof(MtxF) * en->numExDLists);
     }
 
     #if LOGGING > 0
