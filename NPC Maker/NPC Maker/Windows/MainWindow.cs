@@ -3637,9 +3637,9 @@ namespace NPC_Maker
 
         private void DataGridView_ExtraDLists_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
         {
-            if (e.RowIndex > 255)
+            if (e.RowIndex > 64)
             {
-                BigMessageBox.Show("Cannot define more than 255 extra display lists.");
+                BigMessageBox.Show("Cannot define more than 64 extra display lists.");
                 (sender as DataGridView).Rows.RemoveAt(e.RowIndex);
                 e.ParsingApplied = true;
                 return;
