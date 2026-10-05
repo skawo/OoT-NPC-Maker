@@ -3911,7 +3911,7 @@ namespace NPC_Maker
             this.Combo_MsgType.FormattingEnabled = true;
             this.Combo_MsgType.Items.AddRange(new object[] {
             "Black",
-            "Wood",
+            "Wooden",
             "Blue",
             "Ocarina",
             "None (White text)",

@@ -157,6 +157,11 @@ namespace NPC_Maker
                 optionsToolStripMenuItem.DropDownItems.Add(tl);
             }
 
+            Combo_MsgType.Items.Clear();
+            Combo_MsgType.Items.AddRange(Enum.GetNames(typeof(ZeldaMessage.Data.BoxType)));
+
+            Combo_MsgPos.Items.Clear();
+            Combo_MsgPos.Items.AddRange(Enum.GetNames(typeof(ZeldaMessage.Data.BoxPosition)));
 
             SetupScale();
             SetupPctBoxScrollbars();

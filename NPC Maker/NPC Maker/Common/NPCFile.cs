@@ -329,16 +329,7 @@ namespace NPC_Maker
         public string ConvertMessagesToTxt(string Language)
         {
             List<MessageEntry> msgList = GetLanguageMessageList(Language);
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (var entry in msgList)
-            {
-                sb.Append(entry.TxtFormat());
-                sb.AppendLine();
-            }
-
-            return sb.ToString();
+            return string.Join(Environment.NewLine, msgList.Select(e => e.TxtFormat()));
         }
 
         public static List<MessageEntry> ConvertTxtToMessages(string[] lines)
