@@ -150,63 +150,67 @@ namespace NPC_Maker
 
                 Parallel.ForEach(output.Entries, entry =>
                 {
-                    if (entry.Scripts != null)
+                    if (!data.IsFolder)
                     {
-                        foreach (var script in entry.Scripts)
+                        if (entry.Scripts != null)
+                        {
+                            foreach (var script in entry.Scripts)
+                            {
+                                script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
+                                script.Text = null;
+                            }
+                        }
+
+                        if (entry.Messages != null)
+                        {
+                            foreach (var message in entry.Messages)
+                                message.FlattenMessage();
+                        }
+
+                        if (entry.Localization != null)
+                        {
+                            foreach (var loc in entry.Localization)
+                                foreach (var message in loc.Messages)
+                                    message.FlattenMessage();
+                        }
+
+                        if (entry.EmbeddedOverlayCode?.Code != null)
+                        {
+                            if (entry.EmbeddedOverlayCode.Code != null)
+                            {
+                                entry.EmbeddedOverlayCode.CodeLines = Helpers.SplitToTrimmedLines(entry.EmbeddedOverlayCode.Code);
+                                entry.EmbeddedOverlayCode.Code = null;
+                            }
+                        }
+                        ClearHeaderValues(entry);
+                        if (progress != null)
+                        {
+                            int current = Interlocked.Increment(ref processedCount);
+                            if (current % 10 == 0 || current == output.Entries.Count)
+                            {
+                                float pct = Math.Min(current * progressPer, 100f);
+                                progress.Report(new ProgressReport($"Saving {pct:0}%", pct));
+                            }
+                        }
+                    }
+                });
+
+                if (!data.IsFolder)
+                {
+                    if (output.GlobalHeaders != null)
+                    {
+                        foreach (var script in output.GlobalHeaders)
                         {
                             script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
                             script.Text = null;
                         }
                     }
 
-                    if (entry.Messages != null)
+                    if (output.CHeader != null)
                     {
-                        foreach (var message in entry.Messages)
-                            message.FlattenMessage();
+                        output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
+                        output.CHeader = null;
                     }
-
-                    if (entry.Localization != null)
-                    {
-                        foreach (var loc in entry.Localization)
-                            foreach (var message in loc.Messages)
-                                message.FlattenMessage();
-                    }
-
-                    if (entry.EmbeddedOverlayCode?.Code != null)
-                    {
-                        if (entry.EmbeddedOverlayCode.Code != null)
-                        {
-                            entry.EmbeddedOverlayCode.CodeLines = Helpers.SplitToTrimmedLines(entry.EmbeddedOverlayCode.Code);
-                            entry.EmbeddedOverlayCode.Code = null;
-                        }
-                    }
-
-                    if (progress != null)
-                    {
-                        int current = Interlocked.Increment(ref processedCount);
-                        if (current % 10 == 0 || current == output.Entries.Count)
-                        {
-                            float pct = Math.Min(current * progressPer, 100f);
-                            progress.Report(new ProgressReport($"Saving {pct:0}%", pct));
-                        }
-                    }
-
-                    ClearHeaderValues(entry);
-                });
-
-                if (output.GlobalHeaders != null)
-                {
-                    foreach (var script in output.GlobalHeaders)
-                    {
-                        script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
-                        script.Text = null;
-                    }
-                }
-
-                if (output.CHeader != null)
-                {
-                    output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
-                    output.CHeader = null;
                 }
 
                 return output;
