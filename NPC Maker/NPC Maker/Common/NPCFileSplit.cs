@@ -277,6 +277,21 @@ namespace NPC_Maker.Common
 
             NPCFile npcFile = Helpers.Clone<NPCFile>(inFile);
 
+            void WriteScripts(string folder, List<ScriptEntry> scripts)
+            {
+                Directory.CreateDirectory(folder);
+                if (scripts == null)
+                    return;
+
+                for (int i = 0; i < scripts.Count; i++)
+                {
+                    string fn = Prefixed(i, scripts.Count, scripts[i].Name) + ScriptExtension;
+                    File.WriteAllText(Path.Combine(folder, fn), NormalizeStringLbreaks(scripts[i].Text));
+                }
+            }
+
+            string NormalizeStringLbreaks(string s) => s.Replace("\r\n", "\n").Replace('\r', '\n').Replace("\n", "\n");
+
             try
             {
                 try
@@ -301,7 +316,7 @@ namespace NPC_Maker.Common
 
                 try
                 {
-                    File.WriteAllLines(tempCHeaderPath, npcFile.CHeaderLines);
+                    File.WriteAllText(tempCHeaderPath, NormalizeStringLbreaks(npcFile.CHeader));
                     npcFile.CHeader = null;
                     npcFile.CHeaderLines = null;
                 }
@@ -325,14 +340,14 @@ namespace NPC_Maker.Common
                     {
                         var scripts = entry.Scripts;
                         var localization = entry.Localization;
-                        var codeLines = entry.EmbeddedOverlayCode?.CodeLines;
+                        var code = entry.EmbeddedOverlayCode?.Code;
 
                         Directory.CreateDirectory(directory);
 
                         if (!entry.IsNull)
                         {
-                            if (codeLines != null && codeLines.Any(l => !string.IsNullOrWhiteSpace(l)))
-                                File.WriteAllLines(Path.Combine(directory, CodeFileName), codeLines);
+                            if (code != null && !string.IsNullOrWhiteSpace(code))
+                                File.WriteAllText(Path.Combine(directory, CodeFileName), NormalizeStringLbreaks(code));
 
                             WriteScripts(Path.Combine(directory, ScriptsFolder), scripts);
 
@@ -342,7 +357,7 @@ namespace NPC_Maker.Common
                             string mes = entry.ConvertMessagesToTxt(Lists.DefaultLanguage);
 
                             if (!String.IsNullOrWhiteSpace(mes))
-                                File.WriteAllText(Path.Combine(messagesPath, DefaultMessagesFileName), mes);
+                                File.WriteAllText(Path.Combine(messagesPath, DefaultMessagesFileName), NormalizeStringLbreaks(mes));
 
                             if (localization != null)
                             {
@@ -351,7 +366,7 @@ namespace NPC_Maker.Common
                                     mes = entry.ConvertMessagesToTxt(le.Language);
 
                                     if (!String.IsNullOrWhiteSpace(mes))
-                                        File.WriteAllText(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}{MessagesExtension}"), mes);
+                                        File.WriteAllText(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}{MessagesExtension}"), NormalizeStringLbreaks(mes));
                                 }
                             }
 
@@ -439,19 +454,6 @@ namespace NPC_Maker.Common
                 catch
                 {
                 }
-            }
-        }
-
-        private static void WriteScripts(string folder, List<ScriptEntry> scripts)
-        {
-            Directory.CreateDirectory(folder);
-            if (scripts == null)
-                return;
-
-            for (int i = 0; i < scripts.Count; i++)
-            {
-                string fileName = Prefixed(i, scripts.Count, scripts[i].Name) + ScriptExtension;
-                File.WriteAllLines(Path.Combine(folder, fileName), scripts[i].TextLines);
             }
         }
 

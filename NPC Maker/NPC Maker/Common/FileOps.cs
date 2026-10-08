@@ -178,38 +178,44 @@ namespace NPC_Maker
                 float progressPer = 100f / output.Entries.Count;
                 int processedCount = 0;
 
+
                 Parallel.ForEach(output.Entries, entry =>
                 {
-                    if (entry.Scripts != null)
+                    if (!data.IsFolder)
                     {
-                        foreach (var script in entry.Scripts)
+                        if (entry.Scripts != null)
                         {
-                            script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
-                            script.Text = null;
+                            foreach (var script in entry.Scripts)
+                            {
+                                script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
+                                script.Text = null;
+                            }
                         }
-                    }
 
-                    if (entry.Messages != null)
-                    {
-                        foreach (var message in entry.Messages)
-                            message.FlattenMessage();
-                    }
-
-                    if (entry.Localization != null)
-                    {
-                        foreach (var loc in entry.Localization)
-                            foreach (var message in loc.Messages)
+                        if (entry.Messages != null)
+                        {
+                            foreach (var message in entry.Messages)
                                 message.FlattenMessage();
-                    }
+                        }
 
-                    if (entry.EmbeddedOverlayCode?.Code != null)
-                    {
-                        if (entry.EmbeddedOverlayCode.Code != null)
+                        if (entry.Localization != null)
                         {
-                            entry.EmbeddedOverlayCode.CodeLines = Helpers.SplitToTrimmedLines(entry.EmbeddedOverlayCode.Code);
-                            entry.EmbeddedOverlayCode.Code = null;
+                            foreach (var loc in entry.Localization)
+                                foreach (var message in loc.Messages)
+                                    message.FlattenMessage();
+                        }
+
+                        if (entry.EmbeddedOverlayCode?.Code != null)
+                        {
+                            if (entry.EmbeddedOverlayCode.Code != null)
+                            {
+                                entry.EmbeddedOverlayCode.CodeLines = Helpers.SplitToTrimmedLines(entry.EmbeddedOverlayCode.Code);
+                                entry.EmbeddedOverlayCode.Code = null;
+                            }
                         }
                     }
+
+                    ClearHeaderValues(entry);
 
                     if (progress != null)
                     {
@@ -221,22 +227,24 @@ namespace NPC_Maker
                         }
                     }
 
-                    ClearHeaderValues(entry);
                 });
 
-                if (output.GlobalHeaders != null)
+                if (!data.IsFolder)
                 {
-                    foreach (var script in output.GlobalHeaders)
+                    if (output.GlobalHeaders != null)
                     {
-                        script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
-                        script.Text = null;
+                        foreach (var script in output.GlobalHeaders)
+                        {
+                            script.TextLines = Helpers.SplitToTrimmedLines(script.Text);
+                            script.Text = null;
+                        }
                     }
-                }
 
-                if (output.CHeader != null)
-                {
-                    output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
-                    output.CHeader = null;
+                    if (output.CHeader != null)
+                    {
+                        output.CHeaderLines = Helpers.SplitToTrimmedLines(output.CHeader);
+                        output.CHeader = null;
+                    }
                 }
 
                 if ((FunctionExtend.RunExtendFuncWithRet(FunctionExtend.FuncExtendHooks.OnJsonSerialize.ToString(),
