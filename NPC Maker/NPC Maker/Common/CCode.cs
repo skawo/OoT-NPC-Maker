@@ -100,16 +100,18 @@ namespace NPC_Maker
 
         //  ---------------------------------------------------------
 
-        public static byte[] Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string compileMsgs, out List<CSymbol> symbols)
+        public static byte[] Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string compileMsgs, 
+                                     out List<CSymbol> symbols, string cacheObjectPath = "", string relinkObjectPath = "")
         {
             string folder = Helpers.GenerateTemporaryFolderName();
 
             return UseLinuxToolchain
-                ? CompileUnderMono(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags)
-                : CompileUnderWindows(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags);
+                ? CompileUnderMono(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags, cacheObjectPath, relinkObjectPath)
+                : CompileUnderWindows(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags, cacheObjectPath, relinkObjectPath);
         }
 
-        public static byte[] Compile(string header, string linkerFiles, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols, string folder = "")
+        public static byte[] Compile(string header, string linkerFiles, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols, 
+                                     string folder = "", string cacheObjectPath = "", string relinkObjectPath = "")
         {
             symbols = null;
 
@@ -137,8 +139,8 @@ namespace NPC_Maker
                 File.WriteAllText(compileHeaderPath, processedHeader);
 
                 byte[] result = UseLinuxToolchain
-                    ? CompileUnderMono(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles)
-                    : CompileUnderWindows(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles);
+                    ? CompileUnderMono(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles, "", cacheObjectPath, relinkObjectPath)
+                    : CompileUnderWindows(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles, "", cacheObjectPath, relinkObjectPath);
 
                 Directory.Delete(compileFolderPath, true);
                 return result;
@@ -151,17 +153,19 @@ namespace NPC_Maker
         }
 
         public static byte[] CompileUnderMono(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
-                                              string compileFile, string outFilePath, string linkerFiles = "", string compileFlags = "")
+                                              string compileFile, string outFilePath, string linkerFiles = "", string compileFlags = "",
+                                              string cacheObjectPath = "", string relinkObjectPath = "")
         {
             return CompileInternal(BuildMonoConfig(folder, outFilePath, linkerFiles, compileFlags),
-                                   codeEntry, ref compileMsgs, out outSymbols, compileFile);
+                                   codeEntry, ref compileMsgs, out outSymbols, compileFile, cacheObjectPath, relinkObjectPath);
         }
 
         public static byte[] CompileUnderWindows(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
-                                                 string compileFile = "", string outFilePath = "", string linkerFiles = "", string compileFlags = "")
+                                                 string compileFile = "", string outFilePath = "", string linkerFiles = "", string compileFlags = "",
+                                                 string cacheObjectPath = "", string relinkObjectPath = "")
         {
             return CompileInternal(BuildWindowsConfig(folder, outFilePath, linkerFiles, compileFlags),
-                                   codeEntry, ref compileMsgs, out outSymbols, compileFile);
+                                   codeEntry, ref compileMsgs, out outSymbols, compileFile, cacheObjectPath, relinkObjectPath);
         }
 
         public static string ReplaceGameVersionInclude(string code)
@@ -236,20 +240,41 @@ namespace NPC_Maker
 
         // Compilation ---------------------------------------------------------
 
-        private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols, string compileFile = "")
+        private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols, 
+                                              string compileFile = "", string cacheObjectPath = null, string relinkObjectPath = null)
         {
             var paths = new CompilationPaths(config, compileFile);
             outSymbols = null;
 
+            bool relink = !string.IsNullOrEmpty(relinkObjectPath);
+
             try
             {
-                if (codeEntry != null)
+                if (codeEntry != null && !relink)
                     codeEntry.HeaderPaths.Clear();
 
                 Clean(new[] { paths.ObjectFile, paths.ElfFile, paths.OvlFile });
 
-                if (!RunGccCompilation(config, paths, ref compileMsgs))
-                    return HandleCompilationFailure(CompilationFailedString, ref compileMsgs);
+                if (relink)
+                {
+                    // Restore the saved object into temp folder
+                    string source = relinkObjectPath;
+
+                    if (!File.Exists(source))
+                        return HandleCompilationFailure($"{CompilationFailedString} Object file not found: {source}", ref compileMsgs);
+
+                    File.Copy(source, paths.ObjectFile, true);
+                    compileMsgs += $"Re-linking from {source}{Environment.NewLine}";
+                }
+                else
+                {
+                    if (!RunGccCompilation(config, paths, ref compileMsgs))
+                        return HandleCompilationFailure(CompilationFailedString, ref compileMsgs);
+
+                    // Export so it survives a link failure.
+                    if (!string.IsNullOrEmpty(cacheObjectPath))
+                        SaveObjectFile(paths.ObjectFile, cacheObjectPath, ref compileMsgs);
+                }
 
                 if (!RunLinkerPhase(config, paths, codeEntry, ref compileMsgs, out outSymbols))
                     return HandleCompilationFailure(CompilationFailedString, ref compileMsgs);
@@ -268,7 +293,8 @@ namespace NPC_Maker
                     }
                 }
 
-                if (codeEntry != null)
+                // The .d file only exists after a real GCC run.
+                if (codeEntry != null && !relink)
                     codeEntry.HeaderPaths = ExtractHeaderPaths(paths.DFile, config.Folder);
 
                 compileMsgs += "Done!";
@@ -293,6 +319,21 @@ namespace NPC_Maker
             {
                 CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.DFile);
                 return HandleCompilationFailure($"{CompilationFailedString} {ex.Message}", ref compileMsgs);
+            }
+        }
+
+        private static void SaveObjectFile(string tempObjectFile, string saveObjectDir, ref string compileMsgs)
+        {
+            try
+            {
+                File.Copy(tempObjectFile, saveObjectDir, true);
+
+                if (Program.Settings.Verbose)
+                    compileMsgs += $"Object file saved to {saveObjectDir}{Environment.NewLine}";
+            }
+            catch (Exception ex)
+            {
+                compileMsgs += $"Could not cache object file: {ex.Message}{Environment.NewLine}";
             }
         }
 
