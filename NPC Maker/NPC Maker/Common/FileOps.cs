@@ -180,7 +180,9 @@ namespace NPC_Maker
                                 entry.EmbeddedOverlayCode.Code = null;
                             }
                         }
-                        ClearHeaderValues(entry);
+
+                        entry.ClearHeaderValues();
+
                         if (progress != null)
                         {
                             int current = Interlocked.Increment(ref processedCount);
@@ -222,51 +224,6 @@ namespace NPC_Maker
             {
                 Program.ConsoleWriteLineS($"Failed to process JSON: {ex.Message}");
                 return null;
-            }
-        }
-
-        public static void ClearHeaderValues(NPCEntry entry)
-        {
-            if (!String.IsNullOrWhiteSpace(entry.FileStartHeaderDefinition))
-                entry.FileStart = 0;
-            if (!String.IsNullOrWhiteSpace(entry.SkeletonHeaderDefinition))
-                entry.Hierarchy = 0;
-
-
-            foreach (var anim in entry.Animations)
-            {
-                var parts = Helpers.SplitHeaderDefsString(anim.HeaderDefinition);
-
-                if (!String.IsNullOrWhiteSpace(parts[1]))
-                    anim.Address = 0;
-
-                if (!String.IsNullOrWhiteSpace(parts[0]))
-                    anim.FileStart = 0;
-            }
-
-            foreach (var dlist in entry.ExtraDisplayLists)
-            {
-                var parts = Helpers.SplitHeaderDefsString(dlist.HeaderDefinition);
-
-                if (!String.IsNullOrWhiteSpace(parts[1]))
-                    dlist.Address = 0;
-
-                if (!String.IsNullOrWhiteSpace(parts[0]))
-                    dlist.FileStart = 0;
-            }
-
-            foreach (var seg in entry.Segments)
-            {
-                foreach (var segEntry in seg)
-                {
-                    var parts = Helpers.SplitHeaderDefsString(segEntry.HeaderDefinition);
-
-                    if (!String.IsNullOrWhiteSpace(parts[1]))
-                        segEntry.Address = 0;
-
-                    if (!String.IsNullOrWhiteSpace(parts[0]))
-                        segEntry.FileStart = 0;
-                }
             }
         }
 

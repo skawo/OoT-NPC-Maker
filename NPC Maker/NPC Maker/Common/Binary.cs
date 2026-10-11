@@ -286,7 +286,6 @@ namespace NPC_Maker
                             return;
 
                         ec.Entry.ClearHeaderValues();
-                        ClearHeaderValues(ec.Entry);
 
                         ProcessCCode(ec);
 
@@ -379,7 +378,7 @@ namespace NPC_Maker
                         if (preProcessedFiles?.TryGetValue(i.ToString(), out csi) == true)
                             ec.Status = (RecompilationStatus)csi;
 
-                        ClearHeaderValues(ec.Entry);
+                        ec.Entry.ClearHeaderValues();
                         BuildEntryBytes(ec);
 
                         if (ctx.ParseErrors.IsEmpty)
