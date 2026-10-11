@@ -91,6 +91,45 @@ namespace NPC_Maker
             }
         }
 
+        private class CompilationJob
+        {
+            // Inputs
+            public bool UseLinuxToolchain { get; set; }
+            public string Folder { get; set; }
+            public CCodeEntry CodeEntry { get; set; }
+            public string SourceFile { get; set; }
+            public string OutFilePath { get; set; }
+            public string LinkerFiles { get; set; } = "";
+            public string CompileFlags { get; set; } = "";
+            public string CacheObjectPath { get; set; } = "";
+            public string RelinkObjectPath { get; set; } = "";
+
+            // Derived
+            public CompilationConfig Config { get; set; }
+            public CompilationPaths Paths { get; set; }
+            public bool Relink => !string.IsNullOrEmpty(RelinkObjectPath);
+
+            // Outputs
+            public string Messages { get; set; } = "";
+            public List<CSymbol> Symbols { get; set; }
+
+            public void Log(string text)
+            {
+                Messages += text;
+            }
+
+            public void LogLine(string text)
+            {
+                Messages += text + Environment.NewLine;
+            }
+
+            public void LogVerbose(string text)
+            {
+                if (Program.Settings.Verbose)
+                    LogLine(text);
+            }
+        }
+
         private static bool IsWslPath(string path)
         {
             return !string.IsNullOrEmpty(path)
@@ -100,17 +139,25 @@ namespace NPC_Maker
 
         //  ---------------------------------------------------------
 
-        public static byte[] Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string compileMsgs, 
+        public static byte[] Compile(string cFilePath, string linkerFiles, string outFilePath, string compileFlags, ref string compileMsgs,
                                      out List<CSymbol> symbols, string cacheObjectPath = "", string relinkObjectPath = "")
         {
-            string folder = Helpers.GenerateTemporaryFolderName();
+            var job = new CompilationJob
+            {
+                UseLinuxToolchain = UseLinuxToolchain,
+                Folder = Helpers.GenerateTemporaryFolderName(),
+                SourceFile = cFilePath,
+                OutFilePath = outFilePath,
+                LinkerFiles = linkerFiles,
+                CompileFlags = compileFlags,
+                CacheObjectPath = cacheObjectPath,
+                RelinkObjectPath = relinkObjectPath
+            };
 
-            return UseLinuxToolchain
-                ? CompileUnderMono(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags, cacheObjectPath, relinkObjectPath)
-                : CompileUnderWindows(folder, null, ref compileMsgs, out symbols, cFilePath, outFilePath, linkerFiles, compileFlags, cacheObjectPath, relinkObjectPath);
+            return Execute(job, ref compileMsgs, out symbols);
         }
 
-        public static byte[] Compile(string header, string linkerFiles, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols, 
+        public static byte[] Compile(string header, string linkerFiles, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols,
                                      string folder = "", string cacheObjectPath = "", string relinkObjectPath = "")
         {
             symbols = null;
@@ -138,9 +185,19 @@ namespace NPC_Maker
                 File.WriteAllText(compileFilePath, code);
                 File.WriteAllText(compileHeaderPath, processedHeader);
 
-                byte[] result = UseLinuxToolchain
-                    ? CompileUnderMono(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles, "", cacheObjectPath, relinkObjectPath)
-                    : CompileUnderWindows(folder, codeEntry, ref compileMsgs, out symbols, compileFilePath, outFilePath, linkerFiles, "", cacheObjectPath, relinkObjectPath);
+                var job = new CompilationJob
+                {
+                    UseLinuxToolchain = UseLinuxToolchain,
+                    Folder = folder,
+                    CodeEntry = codeEntry,
+                    SourceFile = compileFilePath,
+                    OutFilePath = outFilePath,
+                    LinkerFiles = linkerFiles,
+                    CacheObjectPath = cacheObjectPath,
+                    RelinkObjectPath = relinkObjectPath
+                };
+
+                byte[] result = Execute(job, ref compileMsgs, out symbols);
 
                 Directory.Delete(compileFolderPath, true);
                 return result;
@@ -156,16 +213,53 @@ namespace NPC_Maker
                                               string compileFile, string outFilePath, string linkerFiles = "", string compileFlags = "",
                                               string cacheObjectPath = "", string relinkObjectPath = "")
         {
-            return CompileInternal(BuildMonoConfig(folder, outFilePath, linkerFiles, compileFlags),
-                                   codeEntry, ref compileMsgs, out outSymbols, compileFile, cacheObjectPath, relinkObjectPath);
+            var job = new CompilationJob
+            {
+                UseLinuxToolchain = true,
+                Folder = folder,
+                CodeEntry = codeEntry,
+                SourceFile = compileFile,
+                OutFilePath = outFilePath,
+                LinkerFiles = linkerFiles,
+                CompileFlags = compileFlags,
+                CacheObjectPath = cacheObjectPath,
+                RelinkObjectPath = relinkObjectPath
+            };
+
+            return Execute(job, ref compileMsgs, out outSymbols);
         }
 
         public static byte[] CompileUnderWindows(string folder, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols,
                                                  string compileFile = "", string outFilePath = "", string linkerFiles = "", string compileFlags = "",
                                                  string cacheObjectPath = "", string relinkObjectPath = "")
         {
-            return CompileInternal(BuildWindowsConfig(folder, outFilePath, linkerFiles, compileFlags),
-                                   codeEntry, ref compileMsgs, out outSymbols, compileFile, cacheObjectPath, relinkObjectPath);
+            var job = new CompilationJob
+            {
+                UseLinuxToolchain = false,
+                Folder = folder,
+                CodeEntry = codeEntry,
+                SourceFile = compileFile,
+                OutFilePath = outFilePath,
+                LinkerFiles = linkerFiles,
+                CompileFlags = compileFlags,
+                CacheObjectPath = cacheObjectPath,
+                RelinkObjectPath = relinkObjectPath
+            };
+
+            return Execute(job, ref compileMsgs, out outSymbols);
+        }
+
+        private static byte[] Execute(CompilationJob job, ref string compileMsgs, out List<CSymbol> symbols)
+        {
+            job.Messages = compileMsgs ?? "";
+            job.Config = job.UseLinuxToolchain ? BuildMonoConfig(job) : BuildWindowsConfig(job);
+            job.Paths = new CompilationPaths(job.Config, job.SourceFile);
+
+            byte[] result = CompileInternal(job);
+
+            compileMsgs = job.Messages;
+            symbols = job.Symbols;
+            return result;
         }
 
         public static string ReplaceGameVersionInclude(string code)
@@ -204,15 +298,15 @@ namespace NPC_Maker
 
         // Compilation Configs  ---------------------------------------------------------
 
-        private static CompilationConfig BuildMonoConfig(string folder, string outFilePath, string linkerFiles, string compileFlags)
+        private static CompilationConfig BuildMonoConfig(CompilationJob job)
         {
             return new CompilationConfig
             {
                 IsMonoEnvironment = true,
-                Folder = folder,
-                LinkerFiles = Helpers.ResolveSemicolonPaths(linkerFiles),
-                OutPath = outFilePath,
-                CompileFlags = compileFlags,
+                Folder = job.Folder,
+                LinkerFiles = Helpers.ResolveSemicolonPaths(job.LinkerFiles),
+                OutPath = job.OutFilePath,
+                CompileFlags = job.CompileFlags,
                 BinDirectory = "binmono",
                 GccExecutable = "mips64-gcc",
                 LdExecutable = Program.Settings.Linker == Lists.Linker.zlinker ? "zlinker" : "mips64-ld",
@@ -221,15 +315,15 @@ namespace NPC_Maker
             };
         }
 
-        private static CompilationConfig BuildWindowsConfig(string folder, string outFilePath, string linkerFiles, string compileFlags)
+        private static CompilationConfig BuildWindowsConfig(CompilationJob job)
         {
             return new CompilationConfig
             {
                 IsMonoEnvironment = false,
-                Folder = folder,
-                LinkerFiles = Helpers.ResolveSemicolonPaths(linkerFiles),
-                OutPath = outFilePath,
-                CompileFlags = compileFlags,
+                Folder = job.Folder,
+                LinkerFiles = Helpers.ResolveSemicolonPaths(job.LinkerFiles),
+                OutPath = job.OutFilePath,
+                CompileFlags = job.CompileFlags,
                 BinDirectory = "bin",
                 GccExecutable = "mips64-gcc.exe",
                 LdExecutable = Program.Settings.Linker == Lists.Linker.zlinker ? "zlinker.exe" : "mips64-ld.exe",
@@ -240,13 +334,13 @@ namespace NPC_Maker
 
         // Compilation ---------------------------------------------------------
 
-        private static byte[] CompileInternal(CompilationConfig config, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> outSymbols, 
-                                              string compileFile = "", string cacheObjectPath = null, string relinkObjectPath = null)
+        private static byte[] CompileInternal(CompilationJob job)
         {
-            var paths = new CompilationPaths(config, compileFile);
-            outSymbols = null;
+            var paths = job.Paths;
+            var codeEntry = job.CodeEntry;
+            job.Symbols = null;
 
-            bool relink = !string.IsNullOrEmpty(relinkObjectPath);
+            bool relink = job.Relink;
 
             try
             {
@@ -257,58 +351,58 @@ namespace NPC_Maker
 
                 if (relink)
                 {
-                    // Restore the saved object into temp folder
-                    string source = relinkObjectPath;
+                    string source = job.RelinkObjectPath;
 
                     if (!File.Exists(source))
-                        return HandleCompilationFailure($"{CompilationFailedString} Object file not found: {source}", ref compileMsgs);
+                        return HandleCompilationFailure(job, $"{CompilationFailedString} Object file not found: {source}");
 
                     File.Copy(source, paths.ObjectFile, true);
-                    compileMsgs += $"Re-linking from {source}{Environment.NewLine}";
+                    job.LogLine($"Re-linking from {source}");
                 }
                 else
                 {
-                    if (!RunGccCompilation(config, paths, ref compileMsgs))
-                        return HandleCompilationFailure(CompilationFailedString, ref compileMsgs);
+                    if (!RunGccCompilation(job))
+                        return HandleCompilationFailure(job, CompilationFailedString);
 
-                    // Export so it survives a link failure.
-                    if (!string.IsNullOrEmpty(cacheObjectPath))
-                        SaveObjectFile(paths.ObjectFile, cacheObjectPath, ref compileMsgs);
+                    if (!string.IsNullOrEmpty(job.CacheObjectPath))
+                        SaveObjectFile(job);
                 }
 
-                if (!RunLinkerPhase(config, paths, codeEntry, ref compileMsgs, out outSymbols))
-                    return HandleCompilationFailure(CompilationFailedString, ref compileMsgs);
+                if (!RunLinkerPhase(job))
+                    return HandleCompilationFailure(job, CompilationFailedString);
 
                 if (Program.Settings.Linker == Lists.Linker.MipsLD)
                 {
-                    if (!RunNovlPhase(config, paths, ref compileMsgs))
-                        return HandleCompilationFailure(CompilationFailedString, ref compileMsgs, returnEmptyArray: true);
+                    if (!RunNovlPhase(job))
+                        return HandleCompilationFailure(job, CompilationFailedString, returnEmptyArray: true);
                 }
                 else
                 {
                     if (new FileInfo(paths.OvlFile).Length == 0)
                     {
-                        compileMsgs += "Code file was empty...";
+                        job.Log("Code file was empty...");
                         return new byte[0];
                     }
                 }
 
                 // The .d file only exists after a real GCC run.
                 if (codeEntry != null && !relink)
-                    codeEntry.HeaderPaths = ExtractHeaderPaths(paths.DFile, config.Folder);
+                    codeEntry.HeaderPaths = ExtractHeaderPaths(paths.DFile, job.Config.Folder);
 
-                compileMsgs += "Done!";
+                job.Log("Done!");
 
                 if (Program.Settings.Linker == Lists.Linker.MipsLD)
                 {
+                    bool mono = job.Config.IsMonoEnvironment;
+
                     if (codeEntry != null)
                     {
-                        codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
-                        outSymbols = codeEntry.Functions;
+                        codeEntry.Functions = GetNpcMakerFunctionsFromO(paths.ElfFile, paths.OvlFile, mono);
+                        job.Symbols = codeEntry.Functions;
                     }
                     else
                     {
-                        outSymbols = GetAllSymbolsFromO(paths.ElfFile, paths.OvlFile, config.IsMonoEnvironment);
+                        job.Symbols = GetAllSymbolsFromO(paths.ElfFile, paths.OvlFile, mono);
                     }
                 }
 
@@ -318,57 +412,52 @@ namespace NPC_Maker
             catch (Exception ex)
             {
                 CleanupIntermediateFiles(paths.ObjectFile, paths.ElfFile, paths.DFile);
-                return HandleCompilationFailure($"{CompilationFailedString} {ex.Message}", ref compileMsgs);
+                return HandleCompilationFailure(job, $"{CompilationFailedString} {ex.Message}");
             }
         }
 
-        private static void SaveObjectFile(string tempObjectFile, string saveObjectDir, ref string compileMsgs)
+        private static void SaveObjectFile(CompilationJob job)
         {
             try
             {
-                File.Copy(tempObjectFile, saveObjectDir, true);
-
-                if (Program.Settings.Verbose)
-                    compileMsgs += $"Object file saved to {saveObjectDir}{Environment.NewLine}";
+                File.Copy(job.Paths.ObjectFile, job.CacheObjectPath, true);
+                job.LogVerbose($"Object file saved to {job.CacheObjectPath}");
             }
             catch (Exception ex)
             {
-                compileMsgs += $"Could not cache object file: {ex.Message}{Environment.NewLine}";
+                job.LogLine($"Could not cache object file: {ex.Message}");
             }
         }
 
-        private static bool RunGccCompilation(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
+        private static bool RunGccCompilation(CompilationJob job)
         {
-            compileMsgs += $"+==============+ Compiler +==============+{Environment.NewLine}";
+            job.LogLine("+==============+ Compiler +==============+");
 
-            var info = CreateGccProcessInfo(config, paths);
-
-            if (Program.Settings.Verbose)
-                compileMsgs += $"{info.FileName} {info.Arguments}{Environment.NewLine}";
+            var info = CreateGccProcessInfo(job);
+            job.LogVerbose($"{info.FileName} {info.Arguments}");
 
             int exitCode;
 
             using (var process = Process.Start(info))
             {
-                GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
+                GetProcessOutput(process, job);
                 exitCode = process.ExitCode;
             }
 
-            return File.Exists(paths.ObjectFile) && exitCode == 0;
+            return File.Exists(job.Paths.ObjectFile) && exitCode == 0;
         }
 
-        private static bool RunLinkerPhase(CompilationConfig config, CompilationPaths paths, CCodeEntry codeEntry, ref string compileMsgs, out List<CSymbol> symbols)
+        private static bool RunLinkerPhase(CompilationJob job)
         {
-            compileMsgs += $"+==============+ Linker +==============+{Environment.NewLine}";
-            symbols = null;
+            job.LogLine("+==============+ Linker +==============+");
+            job.Symbols = null;
 
             bool usingZLinker = Program.Settings.Linker == Lists.Linker.zlinker;
             var info = usingZLinker
-                ? CreateZLinkerProcessInfo(config, paths)
-                : CreateMipsLDLinkerProcessInfo(config, paths);
+                ? CreateZLinkerProcessInfo(job)
+                : CreateMipsLDLinkerProcessInfo(job);
 
-            if (Program.Settings.Verbose)
-                compileMsgs += $"{info.FileName} {info.Arguments}{Environment.NewLine}";
+            job.LogVerbose($"{info.FileName} {info.Arguments}");
 
             int exitCode;
 
@@ -376,32 +465,31 @@ namespace NPC_Maker
             {
                 if (usingZLinker)
                 {
-                    string symbolOutput = GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment, errorsOnly: true);
+                    string symbolOutput = GetProcessOutput(process, job, errorsOnly: true);
                     exitCode = process.ExitCode;
 
-                    if (exitCode == 0 && codeEntry != null)
-                        codeEntry.Functions = GetNpcMFuncsFromZLinkerOutput(symbolOutput);
+                    if (exitCode == 0 && job.CodeEntry != null)
+                        job.CodeEntry.Functions = GetNpcMFuncsFromZLinkerOutput(symbolOutput);
                     else
-                        symbols = GetAllSymbolsFromZLinkerOutput(symbolOutput);
+                        job.Symbols = GetAllSymbolsFromZLinkerOutput(symbolOutput);
                 }
                 else
                 {
-                    GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
+                    GetProcessOutput(process, job);
                     exitCode = process.ExitCode;
                 }
             }
 
-            return File.Exists(paths.ObjectFile) && exitCode == 0;
+            string expectedOutput = usingZLinker ? job.Paths.OvlFile : job.Paths.ElfFile;
+            return File.Exists(expectedOutput) && exitCode == 0;
         }
 
-        private static bool RunNovlPhase(CompilationConfig config, CompilationPaths paths, ref string compileMsgs)
+        private static bool RunNovlPhase(CompilationJob job)
         {
-            compileMsgs += $"+==============+ NOVL +==============+{Environment.NewLine}";
+            job.LogLine("+==============+ NOVL +==============+");
 
-            var info = CreateNovlProcessInfo(config, paths);
-
-            if (Program.Settings.Verbose)
-                compileMsgs += $"{info.FileName} {info.Arguments}{Environment.NewLine}";
+            var info = CreateNovlProcessInfo(job);
+            job.LogVerbose($"{info.FileName} {info.Arguments}");
 
             if (!File.Exists(info.FileName))
                 return false;
@@ -409,17 +497,20 @@ namespace NPC_Maker
             int exitCode;
             using (var process = Process.Start(info))
             {
-                GetProcessOutput(process, ref compileMsgs, config.IsMonoEnvironment);
+                GetProcessOutput(process, job);
                 exitCode = process.ExitCode;
             }
 
-            return File.Exists(paths.ObjectFile) && exitCode == 0;
+            return File.Exists(job.Paths.OvlFile) && exitCode == 0;
         }
 
         // Processes ---------------------------------------------------------
 
-        private static ProcessStartInfo CreateGccProcessInfo(CompilationConfig config, CompilationPaths paths)
+        private static ProcessStartInfo CreateGccProcessInfo(CompilationJob job)
         {
+            var config = job.Config;
+            var paths = job.Paths;
+
             string projectFlag = string.IsNullOrEmpty(Program.Settings.ProjectPath)
                 ? string.Empty
                 : $"-I {ToolPath(Program.Settings.ProjectPath).AppendQuotation()} ";
@@ -433,8 +524,11 @@ namespace NPC_Maker
                 arguments);
         }
 
-        private static ProcessStartInfo CreateZLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
+        private static ProcessStartInfo CreateZLinkerProcessInfo(CompilationJob job)
         {
+            var config = job.Config;
+            var paths = job.Paths;
+
             string arguments = $"-s {BuildLinkerFileArgs(config.LinkerFiles)} " +
                                $"-o {ToolPath(paths.OvlFile).AppendQuotation()} " +
                                $"-e 0x{BaseAddr:X} " +
@@ -445,13 +539,16 @@ namespace NPC_Maker
                 arguments);
         }
 
-        private static ProcessStartInfo CreateMipsLDLinkerProcessInfo(CompilationConfig config, CompilationPaths paths)
+        private static ProcessStartInfo CreateMipsLDLinkerProcessInfo(CompilationJob job)
         {
+            var config = job.Config;
+            var paths = job.Paths;
+
             string extraLinkerFiles = string.Join(" ", config.LinkerFiles
                       .Where(lf => !string.IsNullOrWhiteSpace(lf))
                       .Select(lf => $"-T {ToolPath(lf).AppendQuotation()}"));
 
-            string arguments = $"{BuildLibraryFlags(config)} -T syms.ld -T z64hdr_actor.ld {extraLinkerFiles} --emit-relocs " +
+            string arguments = $"{BuildLibraryFlags()} -T syms.ld -T z64hdr_actor.ld {extraLinkerFiles} --emit-relocs " +
                                $"-o {ToolPath(paths.ElfFile).AppendQuotation()} " +
                                $"{ToolPath(paths.ObjectFile).AppendQuotation()} " +
                                $"{ToolPath(Path.Combine(paths.WorkingDirectory, "libgcc.a")).AppendQuotation()}";
@@ -461,9 +558,11 @@ namespace NPC_Maker
                 arguments);
         }
 
-        private static ProcessStartInfo CreateNovlProcessInfo(CompilationConfig config, CompilationPaths paths)
+        private static ProcessStartInfo CreateNovlProcessInfo(CompilationJob job)
         {
-            string fileName = Path.Combine(paths.WorkingDirectory, config.IsMonoEnvironment ? "nOVL" : "nOVL.exe");
+            var paths = job.Paths;
+
+            string fileName = Path.Combine(paths.WorkingDirectory, job.Config.IsMonoEnvironment ? "nOVL" : "nOVL.exe");
             string verboseFlag = Program.Settings.Verbose ? "-vv" : "";
 
             string arguments = $"-c {verboseFlag} -A 0x{BaseAddr:X} " +
@@ -637,7 +736,7 @@ namespace NPC_Maker
 
         // Process Output ---------------------------------------------------------
 
-        private static string GetProcessOutput(Process process, ref string compileErrors, bool isMonoEnvironment, bool errorsOnly = false)
+        private static string GetProcessOutput(Process process, CompilationJob job, bool errorsOnly = false)
         {
             string outputResult = "";
             string errorResult = "";
@@ -652,7 +751,7 @@ namespace NPC_Maker
                 if (!completed)
                 {
                     process.Kill();
-                    compileErrors += $"{Environment.NewLine}Process timed out and was terminated.{Environment.NewLine}";
+                    job.Log($"{Environment.NewLine}Process timed out and was terminated.{Environment.NewLine}");
                 }
 
                 try
@@ -662,23 +761,23 @@ namespace NPC_Maker
                 }
                 catch (AggregateException ex)
                 {
-                    compileErrors += $"{Environment.NewLine}Error reading process output: {ex.InnerException?.Message}{Environment.NewLine}";
+                    job.Log($"{Environment.NewLine}Error reading process output: {ex.InnerException?.Message}{Environment.NewLine}");
                 }
 
                 string combined = FormatProcessOutput(errorsOnly ? "" : outputResult, errorResult);
                 if (!string.IsNullOrWhiteSpace(combined))
-                    compileErrors += combined;
+                    job.Log(combined);
 
                 if (completed && process.ExitCode == 0)
-                    compileErrors += $"{Environment.NewLine}OK!{Environment.NewLine}";
+                    job.Log($"{Environment.NewLine}OK!{Environment.NewLine}");
                 else if (completed)
-                    compileErrors += $"{Environment.NewLine}Process exited with code: {process.ExitCode}{Environment.NewLine}";
+                    job.Log($"{Environment.NewLine}Process exited with code: {process.ExitCode}{Environment.NewLine}");
 
                 return outputResult;
             }
             catch (Exception ex)
             {
-                compileErrors += $"{Environment.NewLine}Exception while reading process output: {ex.Message}{Environment.NewLine}";
+                job.Log($"{Environment.NewLine}Exception while reading process output: {ex.Message}{Environment.NewLine}");
                 return "";
             }
         }
@@ -1089,7 +1188,7 @@ namespace NPC_Maker
                        .Select(p => $"-I {ToolPath(p).AppendQuotation()}"));
         }
 
-        private static string BuildLibraryFlags(CompilationConfig config)
+        private static string BuildLibraryFlags()
         {
             return string.Join(" ",
                 Helpers.ResolveSemicolonPaths(Program.Settings.IncludePaths)
@@ -1107,10 +1206,10 @@ namespace NPC_Maker
             return sb.ToString();
         }
 
-        private static byte[] HandleCompilationFailure(string message, ref string compileMsgs, bool returnEmptyArray = false)
+        private static byte[] HandleCompilationFailure(CompilationJob job, string message, bool returnEmptyArray = false)
         {
-            compileMsgs += message;
-            ConsoleWriteCompileFail(compileMsgs);
+            job.Log(message);
+            ConsoleWriteCompileFail(job.Messages);
             return returnEmptyArray ? new byte[0] : null;
         }
 

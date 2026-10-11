@@ -69,7 +69,7 @@ namespace NPC_Maker
             finally
             {
                 stopwatch.Stop();
-                Console.WriteLine($"NPC Maker finished in {stopwatch.Elapsed.TotalSeconds:F2}s (exit code {exitCode})");
+                Program.ConsoleWriteLineS($"NPC Maker finished in {stopwatch.Elapsed.TotalSeconds:F2}s (exit code {exitCode})");
             }
         }
 

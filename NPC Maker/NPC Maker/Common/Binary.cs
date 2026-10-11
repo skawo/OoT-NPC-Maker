@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NPC_Maker.Common;
-using NPC_Maker.Scripts;
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +17,76 @@ namespace NPC_Maker
     public partial class FileOps
     {
         private const int MaxMessageBytes = 1280;
+        private const int InitialFieldsSize = 56;
+        private sealed class BuildContext
+        {
+            public NPCFile Data;
+            public CacheStatus CacheStatus;
+            public string BaseDefines;
+            public string JsonFileName;
+
+            public ConcurrentDictionary<string, object> PreProcessed;
+            public ConcurrentDictionary<string, object> Results;
+            public HashSet<string> ScriptCacheFiles;
+            public HashSet<string> CCacheFiles;
+
+            public readonly ConcurrentBag<string> ParseErrors = new ConcurrentBag<string>();
+            public readonly ConcurrentDictionary<string, Dictionary<string, string>> DefinesCache =
+                new ConcurrentDictionary<string, Dictionary<string, string>>();
+        }
+
+        private sealed class EntryContext
+        {
+            public readonly BuildContext Build;
+            public readonly NPCEntry Entry;
+            public readonly int Index;
+            public readonly string Prefix;
+            public RecompilationStatus Status = new RecompilationStatus();
+            public string CompErrors = "";
+            public bool ExtDataExists;
+            public readonly List<byte> Bytes = new List<byte>(InitialFieldsSize);
+            public int CurLen;
+
+            private Dictionary<string, string> _defines;
+
+            public EntryContext(BuildContext build, int index)
+            {
+                Build = build;
+                Index = index;
+                Entry = build.Data.Entries[index];
+                Prefix = build.JsonFileName + "_" + index + "_";
+            }
+
+            public NPCFile Data => Build.Data;
+
+            public Dictionary<string, string> Defines =>
+                _defines ?? (_defines = Build.DefinesCache.GetOrAdd(Entry.HeaderPath, Helpers.GetDefinesFromHeaders));
+
+            public void AddParseError()
+            {
+                if (!Build.ParseErrors.Contains(Entry.NPCName))
+                    Build.ParseErrors.Add(Entry.NPCName);
+            }
+
+            public uint Resolve(uint defaultValue, string defineName) =>
+                TryGetFromH(Entry.NPCName, defaultValue, Defines, defineName, Build.ParseErrors);
+
+            public void CheckLen() => Helpers.ErrorIfExpectedLenWrong(Bytes, CurLen);
+
+            public void AlignAndCheck(int addedLen)
+            {
+                Helpers.Ensure4ByteAlign(Bytes);
+                CurLen += addedLen;
+                CheckLen();
+            }
+        }
+
+        private sealed class OutputTargets
+        {
+            public string Bin;
+            public string Deps;
+            public string H;
+        }
 
         // ── Cache ─────────────────────────────────────────────────────────────────
 
@@ -183,7 +250,7 @@ namespace NPC_Maker
             }
         }
 
-        // ── Compilation ──────────────────────────────────────────────────
+        // ── Compilation ───────────────────────────────────────────────────────────
 
         public static async Task<bool> PreprocessCodeAndScripts(string outPath, string outputDepsPath, string outputHPath, NPCFile data,
                                                           CacheStatus cacheStatus, IProgress<ProgressReport> progress)
@@ -191,16 +258,21 @@ namespace NPC_Maker
             float progressPer = 100f / data.Entries.Count;
             float curProgress = 0f;
             int lastReported = 0;
-            bool ret = false;
 
             Program.ConsoleWriteS("Compiling...");
 
-            string baseDefines = Scripts.ScriptHelpers.GetBaseDefines(data);
-            string jsonFileName = Program.JsonPath.FilenameFromPath();
-
-            var scriptCacheFiles = new HashSet<string>(Directory.GetFiles(Program.ScriptCachePath));
-            var cCacheFiles = new HashSet<string>(Directory.GetFiles(Program.CCachePath));
             var results = new ConcurrentDictionary<string, object>();
+
+            var ctx = new BuildContext
+            {
+                Data = data,
+                CacheStatus = cacheStatus,
+                BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(data),
+                JsonFileName = Program.JsonPath.FilenameFromPath(),
+                Results = results,
+                ScriptCacheFiles = new HashSet<string>(Directory.GetFiles(Program.ScriptCachePath)),
+                CCacheFiles = new HashSet<string>(Directory.GetFiles(Program.CCachePath))
+            };
 
             Parallel.For(0, data.Entries.Count,
                 new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 3 },
@@ -208,31 +280,24 @@ namespace NPC_Maker
                 {
                     try
                     {
-                        var entry = data.Entries[entryID];
+                        var ec = new EntryContext(ctx, entryID);
 
-                        if (entry.IsNull || entry.Omitted)
+                        if (ec.Entry.IsNull || ec.Entry.Omitted)
                             return;
 
-                        entry.ClearHeaderValues();
+                        ec.Entry.ClearHeaderValues();
+                        ClearHeaderValues(ec.Entry);
 
-                        string prefix = jsonFileName + "_" + entryID + "_";
-                        var cs = new RecompilationStatus();
-                        string compErrors;
+                        ProcessCCode(ec);
 
-                        ClearHeaderValues(entry);
-                        ProcessCCode(data, entry, entryID, prefix, cacheStatus,
-                                     cCacheFiles, scriptCacheFiles, results, ref cs, out compErrors);
+                        ec.ExtDataExists = CheckExtDataCache(ec, out string extDataFile);
+                        ProcessScripts(ec);
 
-                        bool extDataExists = CheckExtDataCache(entry, prefix, scriptCacheFiles, out string extDataFile);
+                        results[entryID.ToString()] = ec.Status;
 
-                        ProcessScripts(data, entry, prefix, baseDefines, cacheStatus,
-                                       extDataExists, scriptCacheFiles, results, ref cs);
-
-                        results[entryID.ToString()] = cs;
-
-                        if (!extDataExists)
+                        if (!ec.ExtDataExists)
                         {
-                            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, prefix + "exdata_");
+                            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, ec.Prefix + "exdata_");
                             File.Create(extDataFile).Dispose();
                         }
                     }
@@ -254,8 +319,8 @@ namespace NPC_Maker
 
             Program.ConsoleWriteLineS("\nPre-processing done!");
 
-            ret = SaveBinaryFile(outPath, outputDepsPath, outputHPath, ref data, progress, baseDefines,
-                                 new CacheStatus { CCacheInvalid = false, CacheInvalid = false, SymbolsInvalid = false }, results);
+            bool ret = SaveBinaryFile(outPath, outputDepsPath, outputHPath, ref data, progress, ctx.BaseDefines,
+                                      new CacheStatus { CCacheInvalid = false, CacheInvalid = false, SymbolsInvalid = false }, results);
 
             CCode.CleanupStandardCompilationArtifacts();
             Program.CompileInProgress = false;
@@ -275,12 +340,16 @@ namespace NPC_Maker
 
             try
             {
-                int offset = data.Entries.Count * 12 + 4;
-                string jsonFileName = Program.JsonPath.FilenameFromPath();
+                var ctx = new BuildContext
+                {
+                    Data = data,
+                    CacheStatus = cacheStatus,
+                    BaseDefines = baseDefines,
+                    JsonFileName = Program.JsonPath.FilenameFromPath(),
+                    PreProcessed = preProcessedFiles
+                };
 
-                var parseErrors = new ConcurrentBag<string>();
                 var compilationData = new CompilationEntryData[data.Entries.Count];
-                var definesCache = new ConcurrentDictionary<string, Dictionary<string, string>>();
 
                 float progressPer = 100f / data.Entries.Count;
                 float curProgress = 0f;
@@ -289,41 +358,34 @@ namespace NPC_Maker
                 progress?.Report(new ProgressReport("Saving...", 0));
 
                 var cts = new CancellationTokenSource();
-                var localData = data;
 
                 Action<int> processEntry = i =>
                 {
                     if (cts.IsCancellationRequested)
                         return;
 
-                    var entry = localData.Entries[i];
+                    var ec = new EntryContext(ctx, i);
 
-                    if (entry.IsNull || entry.Omitted)
+                    if (ec.Entry.IsNull || ec.Entry.Omitted)
                     {
                         compilationData[i] = new CompilationEntryData(null);
                         Program.ConsoleWriteLineS($"Entry {i} is blank or omitted.");
                     }
                     else
                     {
-                        Program.ConsoleWriteS($"Processing entry {i}: {entry.NPCName}... ");
-
-                        string compErrors = "";
-                        var cs = new RecompilationStatus();
+                        Program.ConsoleWriteS($"Processing entry {i}: {ec.Entry.NPCName}... ");
 
                         object csi;
-
                         if (preProcessedFiles?.TryGetValue(i.ToString(), out csi) == true)
-                            cs = (RecompilationStatus)csi;
+                            ec.Status = (RecompilationStatus)csi;
 
-                        ClearHeaderValues(entry);
-                        var entryBytes = BuildEntryBytes(entry, localData, baseDefines,
-                                                         cacheStatus, jsonFileName, i, preProcessedFiles,
-                                                         parseErrors, definesCache, ref cs, ref compErrors);
+                        ClearHeaderValues(ec.Entry);
+                        BuildEntryBytes(ec);
 
-                        if (parseErrors.IsEmpty)
+                        if (ctx.ParseErrors.IsEmpty)
                         {
-                            compilationData[i] = new CompilationEntryData(entryBytes);
-                            Program.ConsoleWriteS($"OK {cs}{Environment.NewLine}");
+                            compilationData[i] = new CompilationEntryData(ec.Bytes);
+                            Program.ConsoleWriteS($"OK {ec.Status}{Environment.NewLine}");
                         }
                         else
                         {
@@ -334,37 +396,38 @@ namespace NPC_Maker
 
                     Helpers.AddInterlocked(ref curProgress, progressPer);
                     Interlocked.Increment(ref entriesDone);
-                    progress?.Report(new ProgressReport($"Saving {entriesDone}/{localData.Entries.Count}", curProgress));
+                    progress?.Report(new ProgressReport($"Saving {entriesDone}/{ctx.Data.Entries.Count}", curProgress));
                 };
 
                 if (!Program.Settings.CompileInParallel || (Program.CliMode && !Program.consoleSilent))
                 {
-                    for (int i = 0; i < localData.Entries.Count; i++)
+                    for (int i = 0; i < ctx.Data.Entries.Count; i++)
                         processEntry(i);
                 }
                 else
                 {
                     try
                     {
-                        Parallel.For(0, localData.Entries.Count,
+                        Parallel.For(0, ctx.Data.Entries.Count,
                             new ParallelOptions { CancellationToken = cts.Token },
                             i => processEntry(i));
                     }
                     catch (OperationCanceledException) { }
                 }
 
-                data = localData;
+                data = ctx.Data;
 
-                if (!parseErrors.IsEmpty)
+                if (!ctx.ParseErrors.IsEmpty)
                 {
                     ShowMsg($"File could not be saved.{Environment.NewLine}{Environment.NewLine}" +
-                            $"There are errors in NPC: {string.Join(",", parseErrors.Distinct())}");
+                            $"There are errors in NPC: {string.Join(",", ctx.ParseErrors.Distinct())}");
 
                     progress?.Report(new ProgressReport("Done!", 100));
                     return false;
                 }
 
-                WriteOutput(outPath, outputDepsPath, outputHPath, data, compilationData.ToList(), progress, ref offset);
+                var targets = new OutputTargets { Bin = outPath, Deps = outputDepsPath, H = outputHPath };
+                WriteOutput(targets, data, compilationData.ToList(), progress);
             }
             catch (Exception ex)
             {
@@ -381,36 +444,24 @@ namespace NPC_Maker
 
         // ── Entry Building ────────────────────────────────────────────────────────
 
-        private const int InitialFieldsSize = 56;
-
-        private static List<byte> BuildEntryBytes(NPCEntry entry, NPCFile data, string baseDefines,
-                                                  CacheStatus cacheStatus, string jsonFileName, int entriesDone,
-                                                  ConcurrentDictionary<string, object> preProcessedFiles, ConcurrentBag<string> parseErrors,
-                                                  ConcurrentDictionary<string, Dictionary<string, string>> definesCache,
-                                                  ref RecompilationStatus cs, ref string compErrors)
+        private static void BuildEntryBytes(EntryContext e)
         {
-            var defines = definesCache.GetOrAdd(entry.HeaderPath, Helpers.GetDefinesFromHeaders);
-            var entryBytes = new List<byte>(InitialFieldsSize);
-            int curLen = 0;
-
-            BuildFixedFields(entryBytes, entry, data, defines, parseErrors, ref curLen);
-            BuildMessages(entryBytes, entry, data, jsonFileName, entriesDone, parseErrors, ref cs, ref curLen);
-            BuildAnimations(entryBytes, entry, defines, parseErrors, ref curLen);
-            BuildExtraDisplayLists(entryBytes, entry, defines, parseErrors, ref curLen);
-            BuildColors(entryBytes, entry, ref curLen);
-            BuildSegments(entryBytes, entry, defines, parseErrors, ref curLen);
-            BuildCCode(entryBytes, entry, data, jsonFileName, entriesDone, cacheStatus,
-                       preProcessedFiles, parseErrors, ref cs, ref compErrors, ref curLen);
-            BuildScripts(entryBytes, entry, data, jsonFileName, entriesDone, baseDefines,
-                         cacheStatus, preProcessedFiles, parseErrors, ref cs, ref curLen);
-
-            return entryBytes;
+            BuildFixedFields(e);
+            BuildMessages(e);
+            BuildAnimations(e);
+            BuildExtraDisplayLists(e);
+            BuildColors(e);
+            BuildSegments(e);
+            BuildCCode(e);
+            BuildScripts(e);
         }
 
-        private static void BuildFixedFields(List<byte> entryBytes, NPCEntry entry, NPCFile data, Dictionary<string, string> defines, 
-                                             ConcurrentBag<string> parseErrors, ref int curLen)
+        private static void BuildFixedFields(EntryContext e)
         {
-            entryBytes.AddRange(new byte[]
+            var entry = e.Entry;
+            var bytes = e.Bytes;
+
+            bytes.AddRange(new byte[]
             {
                 entry.CutsceneID,
                 entry.HeadLimb,
@@ -466,79 +517,69 @@ namespace NPC_Maker
                 Convert.ToByte(entry.DEBUGLookAtEditor),
                 Convert.ToByte(entry.DEBUGPrintToScreen)
             });
+            e.AlignAndCheck(InitialFieldsSize);
 
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += InitialFieldsSize;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            bytes.AddRangeBigEndian(entry.ObjectID);
+            bytes.AddRangeBigEndian(entry.LookAtDegreesVertical);
+            bytes.AddRangeBigEndian(entry.LookAtDegreesHorizontal);
+            bytes.AddRangeBigEndian(entry.CollisionRadius);
+            bytes.AddRangeBigEndian(entry.CollisionHeight);
+            bytes.AddRangeBigEndian(entry.CollisionYShift);
+            bytes.AddRangeBigEndian(entry.ShadowRadius);
+            bytes.AddRangeBigEndian(entry.MovementDistance);
+            bytes.AddRangeBigEndian(entry.MaxDistRoam);
+            bytes.AddRangeBigEndian(entry.PathStartNodeID);
+            bytes.AddRangeBigEndian(entry.PathEndNodeID);
+            bytes.AddRangeBigEndian(entry.MovementDelayTime);
+            bytes.AddRangeBigEndian(entry.TimedPathStart);
+            bytes.AddRangeBigEndian(entry.TimedPathEnd);
+            bytes.AddRangeBigEndian(entry.SfxIfAttacked);
+            bytes.AddRangeBigEndian(entry.NPCToRide);
+            bytes.AddRangeBigEndian(entry.LightRadius);
+            bytes.AddRangeBigEndian(entry.TargetPositionOffsets);
+            bytes.AddRangeBigEndian(entry.ModelPositionOffsets);
+            bytes.AddRangeBigEndian(entry.LightPositionOffsets);
+            e.AlignAndCheck(52);
 
-            entryBytes.AddRangeBigEndian(entry.ObjectID);
-            entryBytes.AddRangeBigEndian(entry.LookAtDegreesVertical);
-            entryBytes.AddRangeBigEndian(entry.LookAtDegreesHorizontal);
-            entryBytes.AddRangeBigEndian(entry.CollisionRadius);
-            entryBytes.AddRangeBigEndian(entry.CollisionHeight);
-            entryBytes.AddRangeBigEndian(entry.CollisionYShift);
-            entryBytes.AddRangeBigEndian(entry.ShadowRadius);
-            entryBytes.AddRangeBigEndian(entry.MovementDistance);
-            entryBytes.AddRangeBigEndian(entry.MaxDistRoam);
-            entryBytes.AddRangeBigEndian(entry.PathStartNodeID);
-            entryBytes.AddRangeBigEndian(entry.PathEndNodeID);
-            entryBytes.AddRangeBigEndian(entry.MovementDelayTime);
-            entryBytes.AddRangeBigEndian(entry.TimedPathStart);
-            entryBytes.AddRangeBigEndian(entry.TimedPathEnd);
-            entryBytes.AddRangeBigEndian(entry.SfxIfAttacked);
-            entryBytes.AddRangeBigEndian(entry.NPCToRide);
-            entryBytes.AddRangeBigEndian(entry.LightRadius);
-            entryBytes.AddRangeBigEndian(entry.TargetPositionOffsets);
-            entryBytes.AddRangeBigEndian(entry.ModelPositionOffsets);
-            entryBytes.AddRangeBigEndian(entry.LightPositionOffsets);
+            bytes.AddRangeBigEndian(entry.ModelScale);
+            bytes.AddRangeBigEndian(entry.TalkRadius);
+            bytes.AddRangeBigEndian(entry.MovementSpeed);
+            bytes.AddRangeBigEndian(entry.GravityForce);
+            bytes.AddRangeBigEndian(entry.SmoothingConstant);
+            bytes.AddRangeBigEndian(e.Resolve(entry.Hierarchy, entry.SkeletonHeaderDefinition));
+            bytes.AddRangeBigEndian(e.Resolve((uint)entry.FileStart, entry.FileStartHeaderDefinition));
+            bytes.AddRangeBigEndian(entry.CullForward);
+            bytes.AddRangeBigEndian(entry.CullDown);
+            bytes.AddRangeBigEndian(entry.CullScale);
+            bytes.AddRangeBigEndian(entry.LookAtPositionOffsets);
+            e.AlignAndCheck(52);
 
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 52;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
-
-            entryBytes.AddRangeBigEndian(entry.ModelScale);
-            entryBytes.AddRangeBigEndian(entry.TalkRadius);
-            entryBytes.AddRangeBigEndian(entry.MovementSpeed);
-            entryBytes.AddRangeBigEndian(entry.GravityForce);
-            entryBytes.AddRangeBigEndian(entry.SmoothingConstant);
-            entryBytes.AddRangeBigEndian(TryGetFromH(entry.NPCName, entry.Hierarchy, defines, entry.SkeletonHeaderDefinition, parseErrors));
-            entryBytes.AddRangeBigEndian(TryGetFromH(entry.NPCName, (uint)entry.FileStart, defines, entry.FileStartHeaderDefinition, parseErrors));
-            entryBytes.AddRangeBigEndian(entry.CullForward);
-            entryBytes.AddRangeBigEndian(entry.CullDown);
-            entryBytes.AddRangeBigEndian(entry.CullScale);
-            entryBytes.AddRangeBigEndian(entry.LookAtPositionOffsets);
-
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 52;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
-
-            entryBytes.AddRange(entry.GetBlinkPatternBytes());
-            entryBytes.AddRange(entry.GetTalkPatternBytes());
-
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 8;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            bytes.AddRange(entry.GetBlinkPatternBytes());
+            bytes.AddRange(entry.GetTalkPatternBytes());
+            e.AlignAndCheck(8);
         }
 
-        private static void BuildMessages(List<byte> entryBytes, NPCEntry entry, NPCFile data, string jsonFileName, int entriesDone,
-                                          ConcurrentBag<string> parseErrors, ref RecompilationStatus cs, ref int curLen)
+        private static void BuildMessages(EntryContext e)
         {
+            var entry = e.Entry;
+
             string msgDataHash = Helpers.GetBase64Hash(JsonConvert.SerializeObject(new { entry.Messages, entry.Localization }));
-            string cachedMsgFile = Path.Combine(Program.ScriptCachePath, $"{jsonFileName}_{entriesDone}_msg_{msgDataHash}");
+            string msgPrefix = e.Prefix + "msg_";
+            string cachedMsgFile = Path.Combine(Program.ScriptCachePath, msgPrefix + msgDataHash);
 
             if (File.Exists(cachedMsgFile))
             {
                 var cached = File.ReadAllBytes(cachedMsgFile);
-                entryBytes.AddRange(cached);
-                curLen += cached.Length;
-                Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+                e.Bytes.AddRange(cached);
+                e.CurLen += cached.Length;
+                e.CheckLen();
                 return;
             }
 
-            cs.Messages = RecompStatus.Recompiled;
-            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, $"{jsonFileName}_{entriesDone}_msg_");
+            e.Status.Messages = RecompStatus.Recompiled;
+            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, msgPrefix);
 
-            var locales = BuildLocaleList(entry, data);
+            var locales = BuildLocaleList(entry, e.Data);
             int msgOffset = 8 * entry.Messages.Count * locales.Count;
             var header = new List<byte>();
             var defaultHeader = new List<byte>();
@@ -568,7 +609,7 @@ namespace NPC_Maker
                 if (errors.Any())
                 {
                     ShowMsg(errors.First());
-                    if (!parseErrors.Contains(entry.NPCName)) parseErrors.Add(entry.NPCName);
+                    e.AddParseError();
                     break;
                 }
 
@@ -583,7 +624,7 @@ namespace NPC_Maker
                     if (messageBytes.Count > MaxMessageBytes)
                     {
                         ShowMsg($"{entry.NPCName}: Message '{msg.Name}' exceeded {MaxMessageBytes} bytes and could not be saved.");
-                        if (!parseErrors.Contains(entry.NPCName)) parseErrors.Add(entry.NPCName);
+                        e.AddParseError();
                         messageBytes.Clear();
                     }
 
@@ -599,14 +640,14 @@ namespace NPC_Maker
 
             msgBytes.AddRangeBigEndian(len);
             msgBytes.AddRangeBigEndian(0);
-            msgBytes.AddRangeBigEndian(data.Languages.Count + 1);
+            msgBytes.AddRangeBigEndian(e.Data.Languages.Count + 1);
             msgBytes.AddRangeBigEndian(entry.Messages.Count);
             msgBytes.AddRange(header);
             msgBytes.AddRange(msgData);
 
-            entryBytes.AddRange(msgBytes);
-            curLen += len;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            e.Bytes.AddRange(msgBytes);
+            e.CurLen += len;
+            e.CheckLen();
 
             File.WriteAllBytes(cachedMsgFile, msgBytes.ToArray());
         }
@@ -619,89 +660,81 @@ namespace NPC_Maker
             target.AddRangeBigEndian((ushort)byteCount);
         }
 
-        private static void BuildAnimations(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, ConcurrentBag<string> parseErrors, ref int curLen)
+        private static void BuildAnimations(EntryContext e)
         {
-            entryBytes.AddRangeBigEndian((uint)entry.Animations.Count);
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 4;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            var anims = e.Entry.Animations;
 
-            foreach (var anim in entry.Animations)
+            e.Bytes.AddRangeBigEndian((uint)anims.Count);
+            e.AlignAndCheck(4);
+
+            foreach (var anim in anims)
             {
                 var parts = Helpers.SplitHeaderDefsString(anim.HeaderDefinition);
 
                 uint curAddr = anim.Address;
                 int curFileStart = anim.FileStart;
 
-                anim.Address = TryGetFromH(entry.NPCName, (uint)anim.Address, defines, parts[1], parseErrors);
-                anim.FileStart = (int)TryGetFromH(entry.NPCName, (uint)anim.FileStart, defines, parts[0], parseErrors);
-                entryBytes.AddRange(anim.ToBytes());
+                anim.Address = e.Resolve(anim.Address, parts[1]);
+                anim.FileStart = (int)e.Resolve((uint)anim.FileStart, parts[0]);
+                e.Bytes.AddRange(anim.ToBytes());
 
                 anim.Address = curAddr;
                 anim.FileStart = curFileStart;
             }
 
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 16 * entry.Animations.Count;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            e.AlignAndCheck(16 * anims.Count);
         }
 
-        private static void BuildExtraDisplayLists(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, ConcurrentBag<string> parseErrors, ref int curLen)
+        private static void BuildExtraDisplayLists(EntryContext e)
         {
-            entryBytes.AddRangeBigEndian((uint)entry.ExtraDisplayLists.Count);
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 4;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            var dlists = e.Entry.ExtraDisplayLists;
 
-            foreach (var dlist in entry.ExtraDisplayLists)
+            e.Bytes.AddRangeBigEndian((uint)dlists.Count);
+            e.AlignAndCheck(4);
+
+            foreach (var dlist in dlists)
             {
                 uint curAddr = dlist.Address;
                 int curFileStart = dlist.FileStart;
 
                 var parts = Helpers.SplitHeaderDefsString(dlist.HeaderDefinition);
-                dlist.Address = TryGetFromH(entry.NPCName, dlist.Address, defines, parts[1], parseErrors);
-                dlist.FileStart = (int)TryGetFromH(entry.NPCName, (uint)dlist.FileStart, defines, parts[0], parseErrors);
-                entryBytes.AddRange(dlist.ToBytes());
+                dlist.Address = e.Resolve(dlist.Address, parts[1]);
+                dlist.FileStart = (int)e.Resolve((uint)dlist.FileStart, parts[0]);
+                e.Bytes.AddRange(dlist.ToBytes());
 
                 dlist.Address = curAddr;
                 dlist.FileStart = curFileStart;
             }
 
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 40 * entry.ExtraDisplayLists.Count;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            e.AlignAndCheck(40 * dlists.Count);
         }
 
-        private static void BuildColors(List<byte> entryBytes, NPCEntry entry, ref int curLen)
+        private static void BuildColors(EntryContext e)
         {
-            var colors = entry.ParseColorEntries().OrderBy(c => c.LimbID).ToList();
+            var colors = e.Entry.ParseColorEntries().OrderBy(c => c.LimbID).ToList();
 
-            entryBytes.AddRangeBigEndian((uint)colors.Count);
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 4;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            e.Bytes.AddRangeBigEndian((uint)colors.Count);
+            e.AlignAndCheck(4);
 
             foreach (var color in colors)
-                entryBytes.AddRange(color.ToBytes());
+                e.Bytes.AddRange(color.ToBytes());
 
-            Helpers.Ensure4ByteAlign(entryBytes);
-            curLen += 4 * colors.Count;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            e.AlignAndCheck(4 * colors.Count);
         }
 
-        private static void BuildSegments(List<byte> entryBytes, NPCEntry entry, Dictionary<string, string> defines, ConcurrentBag<string> parseErrors, ref int curLen)
+        private static void BuildSegments(EntryContext e)
         {
             var segOffsets = new List<byte>();
             var segEntries = new List<byte>();
             uint segOffset = 7 * 4;
-            curLen += (int)segOffset + 4;
+            e.CurLen += (int)segOffset + 4;
 
-            foreach (var segmentList in entry.Segments)
+            foreach (var segmentList in e.Entry.Segments)
             {
                 uint segBytes = (uint)(12 * segmentList.Count);
                 segOffsets.AddRangeBigEndian(segBytes != 0 ? segOffset : 0);
                 segOffset += segBytes;
-                curLen += (int)segBytes;
+                e.CurLen += (int)segBytes;
 
                 foreach (var segEntry in segmentList)
                 {
@@ -710,8 +743,8 @@ namespace NPC_Maker
                     uint curAddr = segEntry.Address;
                     int curFileStart = segEntry.FileStart;
 
-                    segEntry.Address = TryGetFromH(entry.NPCName, segEntry.Address, defines, parts[1], parseErrors);
-                    segEntry.FileStart = (int)TryGetFromH(entry.NPCName, (uint)segEntry.FileStart, defines, parts[0], parseErrors);
+                    segEntry.Address = e.Resolve(segEntry.Address, parts[1]);
+                    segEntry.FileStart = (int)e.Resolve((uint)segEntry.FileStart, parts[0]);
                     segEntries.AddRange(segEntry.ToBytes());
 
                     segEntry.Address = curAddr;
@@ -719,138 +752,126 @@ namespace NPC_Maker
                 }
             }
 
-            entryBytes.AddRangeBigEndian((uint)(segOffsets.Count + segEntries.Count));
-            curLen += 4;
-            entryBytes.AddRange(segOffsets);
-            entryBytes.AddRange(segEntries);
+            e.Bytes.AddRangeBigEndian((uint)(segOffsets.Count + segEntries.Count));
+            e.CurLen += 4;
+            e.Bytes.AddRange(segOffsets);
+            e.Bytes.AddRange(segEntries);
 
-            Helpers.Ensure4ByteAlign(entryBytes);
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            Helpers.Ensure4ByteAlign(e.Bytes);
+            e.CheckLen();
         }
 
-        private static void BuildCCode(List<byte> entryBytes, NPCEntry entry, NPCFile data, string jsonFileName, int entriesDone,
-                                       CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles,
-                                       ConcurrentBag<string> parseErrors, ref RecompilationStatus cs, ref string compErrors, ref int curLen)
+        private static void BuildCCode(EntryContext e)
         {
-            if (string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
+            var code = e.Entry.EmbeddedOverlayCode;
+
+            if (string.IsNullOrEmpty(code.Code))
             {
-                entryBytes.AddRangeBigEndian(-1);
-                curLen += 4;
+                e.Bytes.AddRangeBigEndian(-1);
+                e.CurLen += 4;
                 return;
             }
 
-            string prefix = jsonFileName + "_" + entriesDone + "_";
-            byte[] overlay = ResolveOverlay(data, entry, prefix, cacheStatus,
-                                            preProcessedFiles, null, null,
-                                            entriesDone, ref cs, ref compErrors);
+            byte[] overlay = ResolveOverlay(e);
 
             if (overlay == null)
             {
-                if (!parseErrors.Contains(entry.NPCName))
-                    parseErrors.Add(entry.NPCName);
+                e.AddParseError();
+                e.Bytes.AddRangeBigEndian(-1);
+                e.CurLen += 4;
                 return;
             }
 
-            curLen += 4;
+            // ResolveOverlay may have replaced the entry's code object with the cached one.
+            code = e.Entry.EmbeddedOverlayCode;
 
-            if (entry.EmbeddedOverlayCode.Functions == null || entry.EmbeddedOverlayCode.Functions.Count == 0)
+            e.CurLen += 4;
+
+            if (code.Functions == null || code.Functions.Count == 0)
             {
-                entryBytes.AddRangeBigEndian(-1);
+                e.Bytes.AddRangeBigEndian(-1);
                 return;
             }
 
-            entryBytes.AddRangeBigEndian(overlay.Length);
+            e.Bytes.AddRangeBigEndian(overlay.Length);
 
             var funcsList = new List<byte>();
             var funcsWhenList = new List<byte>();
 
-            for (int i = 0; i < entry.EmbeddedOverlayCode.FunctionHooks.Length; i++)
+            for (int i = 0; i < code.FunctionHooks.Length; i++)
             {
-                string fname = entry.EmbeddedOverlayCode.FunctionHooks[i].Symbol;
-                int funcIdx = entry.EmbeddedOverlayCode.Functions.FindIndex(x => x.Symbol == fname);
+                string fname = code.FunctionHooks[i].Symbol;
+                int funcIdx = code.Functions.FindIndex(x => x.Symbol == fname);
 
                 if (funcIdx == -1 && !string.IsNullOrEmpty(fname))
                 {
-                    ShowMsg($"{entry.NPCName}: Function {fname} not found in the C Code!");
+                    ShowMsg($"{e.Entry.NPCName}: Function {fname} not found in the C Code!");
+                    e.AddParseError();
                     return;
                 }
 
-                uint funcAddr = funcIdx >= 0
-                    ? entry.EmbeddedOverlayCode.Functions[funcIdx].Addr
-                    : uint.MaxValue;
+                uint funcAddr = funcIdx >= 0 ? code.Functions[funcIdx].Addr : uint.MaxValue;
 
                 funcsList.AddRangeBigEndian(funcAddr);
-                funcsWhenList.Add((byte)entry.EmbeddedOverlayCode.FunctionHooks[i].RunWhen);
+                funcsWhenList.Add((byte)code.FunctionHooks[i].RunWhen);
             }
 
-            entryBytes.AddRange(funcsList);
-            entryBytes.AddRange(funcsWhenList);
-            Helpers.Ensure4ByteAlign(entryBytes);
+            e.Bytes.AddRange(funcsList);
+            e.Bytes.AddRange(funcsWhenList);
+            e.AlignAndCheck(24 + 8);
 
-            curLen += 24 + 8;
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
-
-            entryBytes.AddRange(overlay);
-            curLen += overlay.Length;
-            Helpers.Ensure4ByteAlign(entryBytes);
+            e.Bytes.AddRange(overlay);
+            e.CurLen += overlay.Length;
+            Helpers.Ensure4ByteAlign(e.Bytes);
 
             if (overlay.Length % 4 != 0)
-                curLen += overlay.Length % 4;
+                e.CurLen += 4 - (overlay.Length % 4);
 
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            e.CheckLen();
         }
 
-        private static void BuildScripts(List<byte> entryBytes, NPCEntry entry, NPCFile data, string jsonFileName, int entriesDone,
-                                         string baseDefines, CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles,
-                                         ConcurrentBag<string> parseErrors, ref RecompilationStatus cs, ref int curLen)
+        private static void BuildScripts(EntryContext e)
         {
+            var entry = e.Entry;
             var nonEmptyScripts = entry.Scripts.FindAll(x => !string.IsNullOrEmpty(x.Text));
-            entryBytes.AddRangeBigEndian((uint)nonEmptyScripts.Count);
-            curLen += 4;
-            Helpers.Ensure4ByteAlign(entryBytes);
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
 
-            string extData = BuildExtDataString(entry);
-            string cachedExtData = Path.Combine(Program.ScriptCachePath, jsonFileName + "_" + entriesDone + "_exdata_" + Helpers.GetBase64Hash(extData));
-            bool extDataExists = File.Exists(cachedExtData);
+            e.Bytes.AddRangeBigEndian((uint)nonEmptyScripts.Count);
+            e.CurLen += 4;
+            Helpers.Ensure4ByteAlign(e.Bytes);
+            e.CheckLen();
+
+            string extDataPrefix = e.Prefix + "exdata_";
+            string cachedExtData = Path.Combine(Program.ScriptCachePath, extDataPrefix + Helpers.GetBase64Hash(BuildExtDataString(entry)));
+            e.ExtDataExists = File.Exists(cachedExtData);
 
             var parsedScripts = new List<Scripts.BScript>();
             int scriptNum = 0;
 
             foreach (var scr in nonEmptyScripts)
             {
-                string hash = Helpers.GetBase64Hash(scr.Text);
-                string scriptPrefix = jsonFileName + "_" + entriesDone + "_script" + scriptNum + "_";
-                string cachedScriptFile = Path.Combine(Program.ScriptCachePath, scriptPrefix + hash);
-
-                var result = ResolveScript(data, entry, scr, scriptPrefix, cachedScriptFile,
-                                           baseDefines, cacheStatus, extDataExists,
-                                           preProcessedFiles, null, ref cs);
-
-                parsedScripts.Add(result);
+                parsedScripts.Add(ResolveScript(e, scr, scriptNum));
                 scriptNum++;
             }
 
-            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonFileName + "_" + entriesDone + "_exdata_");
+            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, extDataPrefix);
             File.Create(cachedExtData).Dispose();
 
             int scrOffset = 0;
             foreach (var scr in parsedScripts)
             {
-                entryBytes.AddRangeBigEndian(scrOffset);
+                e.Bytes.AddRangeBigEndian(scrOffset);
                 scrOffset += scr.Script.Length;
-                curLen += 4;
+                e.CurLen += 4;
             }
 
             foreach (var scr in parsedScripts)
             {
-                entryBytes.AddRange(scr.Script);
-                curLen += scr.Script.Length;
+                e.Bytes.AddRange(scr.Script);
+                e.CurLen += scr.Script.Length;
 
                 if (scr.ParseErrors.Count != 0)
                 {
-                    if (!parseErrors.Contains(entry.NPCName))
-                        parseErrors.Add(entry.NPCName);
+                    e.AddParseError();
 
                     Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}" +
                                       $"Script \"{scr.Name}\" had errors:{Environment.NewLine}");
@@ -858,8 +879,8 @@ namespace NPC_Maker
                 }
             }
 
-            Helpers.Ensure4ByteAlign(entryBytes);
-            Helpers.ErrorIfExpectedLenWrong(entryBytes, curLen);
+            Helpers.Ensure4ByteAlign(e.Bytes);
+            e.CheckLen();
         }
 
         // ── Overlay / Script Resolution ───────────────────────────────────────────
@@ -879,16 +900,17 @@ namespace NPC_Maker
             };
         }
 
-        private static byte[] ResolveOverlay(NPCFile data, NPCEntry entry, string jsonEntryPrefix, CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles,
-                                             HashSet<string> cCacheFiles, HashSet<string> scriptCacheFiles, int entryID, ref RecompilationStatus cs, ref string compErrors)
+        private static byte[] ResolveOverlay(EntryContext e)
         {
-            var keys = GetCCacheKeys(jsonEntryPrefix, entry.EmbeddedOverlayCode);
+            var ctx = e.Build;
+            var entry = e.Entry;
+            var keys = GetCCacheKeys(e.Prefix, entry.EmbeddedOverlayCode);
 
-            if (preProcessedFiles != null)
+            if (ctx.PreProcessed != null)
             {
                 object addrsData, codeData;
-                preProcessedFiles.TryGetValue(keys.CachedAddrs, out addrsData);
-                preProcessedFiles.TryGetValue(keys.CachedCode, out codeData);
+                ctx.PreProcessed.TryGetValue(keys.CachedAddrs, out addrsData);
+                ctx.PreProcessed.TryGetValue(keys.CachedCode, out codeData);
 
                 if (addrsData != null && codeData != null)
                 {
@@ -897,11 +919,13 @@ namespace NPC_Maker
                 }
             }
 
-            bool diskCacheHit = !cacheStatus.CCacheInvalid 
+            var cCacheFiles = ctx.CCacheFiles;
+
+            bool diskCacheHit = !ctx.CacheStatus.CCacheInvalid
                 && (cCacheFiles != null ? cCacheFiles.Contains(keys.CachedAddrs) : File.Exists(keys.CachedAddrs))
                 && (cCacheFiles != null ? cCacheFiles.Contains(keys.CachedCode) : File.Exists(keys.CachedCode));
 
-            if (diskCacheHit && !cacheStatus.SymbolsInvalid)
+            if (diskCacheHit && !ctx.CacheStatus.SymbolsInvalid)
             {
                 entry.EmbeddedOverlayCode = JsonConvert.DeserializeObject<CCodeEntry>(
                     File.ReadAllText(keys.CachedAddrs), IgnoreAttributeSettings);
@@ -909,72 +933,71 @@ namespace NPC_Maker
                 return File.ReadAllBytes(keys.CachedCode);
             }
 
-            compErrors = "";
+            e.CompErrors = "";
 
-            Helpers.DeleteFileStartingWith(Program.CCachePath, jsonEntryPrefix + "funcsaddrs_", cCacheFiles);
-            Helpers.DeleteFileStartingWith(Program.CCachePath, jsonEntryPrefix + "code_", cCacheFiles);
+            Helpers.DeleteFileStartingWith(Program.CCachePath, e.Prefix + "funcsaddrs_", cCacheFiles);
+            Helpers.DeleteFileStartingWith(Program.CCachePath, e.Prefix + "code_", cCacheFiles);
 
             if (string.IsNullOrEmpty(entry.EmbeddedOverlayCode.Code))
                 return null;
 
             string cachedObjectPath = "";
-            cs.CCode = RecompStatus.Recompiled;
+            e.Status.CCode = RecompStatus.Recompiled;
 
             if (diskCacheHit)
             {
                 if (File.Exists(keys.CachedObject))
                 {
                     cachedObjectPath = keys.CachedObject;
-                    cs.CCode = RecompStatus.Relinked;
+                    e.Status.CCode = RecompStatus.Relinked;
                 }
                 else
-                    Helpers.DeleteFileStartingWith(Program.CCachePath, jsonEntryPrefix + "object_", cCacheFiles);
+                    Helpers.DeleteFileStartingWith(Program.CCachePath, e.Prefix + "object_", cCacheFiles);
             }
 
-            byte[] overlay = CCode.Compile(data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode, 
-                                           ref compErrors, out _, "NPCCOMPILE" + entryID, keys.CachedObject, cachedObjectPath);
+            string compErrors = e.CompErrors;
+            byte[] overlay = CCode.Compile(e.Data.CHeader, Program.Settings.LinkerPaths, entry.EmbeddedOverlayCode,
+                                           ref compErrors, out _, "NPCCOMPILE" + e.Index, keys.CachedObject, cachedObjectPath);
+            e.CompErrors = compErrors;
 
             if (overlay != null)
             {
                 if (!diskCacheHit)
-                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, jsonEntryPrefix + "script", scriptCacheFiles);
+                    Helpers.DeleteFileStartingWith(Program.ScriptCachePath, e.Prefix + "script", ctx.ScriptCacheFiles);
 
                 File.WriteAllText(keys.CachedAddrs, JsonConvert.SerializeObject(entry.EmbeddedOverlayCode, IgnoreAttributeSettings));
                 File.WriteAllBytes(keys.CachedCode, overlay);
 
-                preProcessedFiles?.TryAdd(keys.CachedAddrs, entry.EmbeddedOverlayCode);
-                preProcessedFiles?.TryAdd(keys.CachedCode, overlay);
+                ctx.PreProcessed?.TryAdd(keys.CachedAddrs, entry.EmbeddedOverlayCode);
+                ctx.PreProcessed?.TryAdd(keys.CachedCode, overlay);
             }
 
             return overlay;
         }
 
-        private static void ProcessCCode(NPCFile data, NPCEntry entry, int entryID, string jsonEntryPrefix, CacheStatus cacheStatus,
-                                         HashSet<string> cCacheFiles, HashSet<string> scriptCacheFiles, ConcurrentDictionary<string, object> results,
-                                         ref RecompilationStatus cs, out string compErrors)
+        private static void ProcessCCode(EntryContext e)
         {
-            compErrors = "";
-
-            byte[] overlay = ResolveOverlay(data, entry, jsonEntryPrefix, cacheStatus,
-                                            null, cCacheFiles, scriptCacheFiles,
-                                            entryID, ref cs, ref compErrors);
+            byte[] overlay = ResolveOverlay(e);
 
             if (overlay != null)
             {
-                var keys = GetCCacheKeys(jsonEntryPrefix, entry.EmbeddedOverlayCode);
-                results[keys.CachedAddrs] = entry.EmbeddedOverlayCode;
-                results[keys.CachedCode] = overlay;
+                var keys = GetCCacheKeys(e.Prefix, e.Entry.EmbeddedOverlayCode);
+                e.Build.Results[keys.CachedAddrs] = e.Entry.EmbeddedOverlayCode;
+                e.Build.Results[keys.CachedCode] = overlay;
             }
         }
 
-        private static Scripts.BScript ResolveScript(NPCFile data, NPCEntry entry, ScriptEntry scrEntry, string scriptPrefix, string cachedScriptFile, string baseDefines,
-                                                    CacheStatus cacheStatus, bool extDataExists, ConcurrentDictionary<string, object> preProcessedFiles, HashSet<string> scriptCacheFiles,
-                                                    ref RecompilationStatus cs)
+        private static Scripts.BScript ResolveScript(EntryContext e, ScriptEntry scrEntry, int scriptNum)
         {
-            if (preProcessedFiles != null)
+            var ctx = e.Build;
+
+            string scriptPrefix = e.Prefix + "script" + scriptNum + "_";
+            string cachedScriptFile = Path.Combine(Program.ScriptCachePath, scriptPrefix + Helpers.GetBase64Hash(scrEntry.Text));
+
+            if (ctx.PreProcessed != null)
             {
                 object cached;
-                preProcessedFiles.TryGetValue(cachedScriptFile, out cached);
+                ctx.PreProcessed.TryGetValue(cachedScriptFile, out cached);
                 if (cached != null)
                     return new Scripts.BScript
                     {
@@ -983,10 +1006,10 @@ namespace NPC_Maker
                     };
             }
 
-            bool diskCacheHit = !cacheStatus.CacheInvalid
-                && extDataExists
-                && (scriptCacheFiles != null
-                    ? scriptCacheFiles.Contains(cachedScriptFile)
+            bool diskCacheHit = !ctx.CacheStatus.CacheInvalid
+                && e.ExtDataExists
+                && (ctx.ScriptCacheFiles != null
+                    ? ctx.ScriptCacheFiles.Contains(cachedScriptFile)
                     : File.Exists(cachedScriptFile));
 
             if (diskCacheHit)
@@ -996,60 +1019,58 @@ namespace NPC_Maker
                     ParseErrors = new List<Scripts.ParseException>()
                 };
 
-            cs.Scripts = RecompStatus.Recompiled;
-            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, scriptPrefix, scriptCacheFiles);
+            e.Status.Scripts = RecompStatus.Recompiled;
+            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, scriptPrefix, ctx.ScriptCacheFiles);
 
-            var result = new Scripts.ScriptParser(ref data, entry, scrEntry.Text, baseDefines).ParseScript(scrEntry.Name, true);
+            var result = new Scripts.ScriptParser(ref ctx.Data, e.Entry, scrEntry.Text, ctx.BaseDefines)
+                            .ParseScript(scrEntry.Name, true);
 
             if (result.ParseErrors.Count == 0)
             {
                 File.WriteAllBytes(cachedScriptFile, result.Script);
-                preProcessedFiles?.TryAdd(cachedScriptFile, result.Script);
+                ctx.PreProcessed?.TryAdd(cachedScriptFile, result.Script);
             }
 
             return result;
         }
 
-        private static void ProcessScripts(NPCFile data, NPCEntry entry, string jsonEntryPrefix, string baseDefines,
-                                           CacheStatus cacheStatus, bool extDataExists, HashSet<string> scriptCacheFiles, ConcurrentDictionary<string, object> results,
-                                           ref RecompilationStatus cs)
+        private static void ProcessScripts(EntryContext e)
         {
-            int scriptNum = 0;
+            var scripts = e.Entry.Scripts;
 
-            foreach (var scrEntry in entry.Scripts)
+            for (int scriptNum = 0; scriptNum < scripts.Count; scriptNum++)
             {
+                var scrEntry = scripts[scriptNum];
+
                 if (string.IsNullOrEmpty(scrEntry.Text))
-                {
-                    scriptNum++;
                     continue;
-                }
 
-                string hash = Helpers.GetBase64Hash(scrEntry.Text);
-                string scriptPrefix = jsonEntryPrefix + "script" + scriptNum + "_";
-                string cachedScriptFile = Path.Combine(Program.ScriptCachePath, scriptPrefix + hash);
-
-                var result = ResolveScript(data, entry, scrEntry, scriptPrefix, cachedScriptFile,
-                                           baseDefines, cacheStatus, extDataExists, null, scriptCacheFiles, ref cs);
+                var result = ResolveScript(e, scrEntry, scriptNum);
 
                 if (result.ParseErrors.Count == 0)
-                    results[cachedScriptFile] = result.Script;
+                {
+                    string cachedScriptFile = Path.Combine(Program.ScriptCachePath,
+                        e.Prefix + "script" + scriptNum + "_" + Helpers.GetBase64Hash(scrEntry.Text));
 
-                scriptNum++;
+                    e.Build.Results[cachedScriptFile] = result.Script;
+                }
             }
         }
 
-        private static bool CheckExtDataCache(NPCEntry entry, string jsonEntryPrefix, HashSet<string> scriptCacheFiles, out string extDataFile)
+        private static bool CheckExtDataCache(EntryContext e, out string extDataFile)
         {
-            string hash = Helpers.GetBase64Hash(BuildExtDataString(entry));
-            extDataFile = Path.Combine(Program.ScriptCachePath, jsonEntryPrefix + "exdata_" + hash);
-            return scriptCacheFiles.Contains(extDataFile);
+            string hash = Helpers.GetBase64Hash(BuildExtDataString(e.Entry));
+            extDataFile = Path.Combine(Program.ScriptCachePath, e.Prefix + "exdata_" + hash);
+            return e.Build.ScriptCacheFiles.Contains(extDataFile);
         }
 
         // ── Output ────────────────────────────────────────────────────────────────
 
-        private static void WriteOutput(string outPath, string outputDepsPath, string outputHPath, NPCFile data,
-                                        List<CompilationEntryData> compilationData, IProgress<ProgressReport> progress,  ref int offset)
+        private static void WriteOutput(OutputTargets targets, NPCFile data,
+                                        List<CompilationEntryData> compilationData, IProgress<ProgressReport> progress)
         {
+            int offset = data.Entries.Count * 12 + 4;
+
             var output = new List<byte>();
             output.AddRangeBigEndian((uint)data.Entries.Count);
 
@@ -1102,21 +1123,19 @@ namespace NPC_Maker
                 if (entry.data != null)
                     output.AddRange(entry.data);
 
-            if (!string.IsNullOrEmpty(outputDepsPath))
-                File.WriteAllText(outputDepsPath, CreateDepsFile(data, outPath));
+            if (!string.IsNullOrEmpty(targets.Deps))
+                File.WriteAllText(targets.Deps, CreateDepsFile(data, targets.Bin));
 
-            if (!string.IsNullOrEmpty(outputHPath))
-                File.WriteAllText(outputHPath, CreateNPCHFile(data, outPath));
+            if (!string.IsNullOrEmpty(targets.H))
+                File.WriteAllText(targets.H, CreateNPCHFile(data, targets.Bin));
 
             Program.ConsoleWriteLineS("\nDone!");
             progress?.Report(new ProgressReport("Done!", 100));
-            File.WriteAllBytes(outPath, output.ToArray());
+            File.WriteAllBytes(targets.Bin, output.ToArray());
         }
 
         public static string CreateNPCHFile(NPCFile data, string zobjFilename)
         {
-            var npcs = new List<string>();
-
             var sb = new StringBuilder();
 
             for (int i = 0; i < data.Entries.Count(); i++)
@@ -1258,7 +1277,7 @@ namespace NPC_Maker
             }
         }
 
-        // ── Helpers ─────────────────────────────────────────────────────────
+        // ── Helpers ───────────────────────────────────────────────────────────────
 
         private static void ShowMsg(string msg)
         {
