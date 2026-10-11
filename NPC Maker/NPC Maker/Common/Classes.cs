@@ -18,22 +18,42 @@ namespace NPC_Maker.Common
     {
         public string CachedAddrs;
         public string CachedCode;
+        public string CachedObject;
+    }
+
+    public enum RecompStatus
+    {
+        Cached,
+        Recompiled,
+        Relinked,
     }
 
     public class RecompilationStatus
     {
-        public bool CCode;
-        public bool Scripts;
-        public bool Messages;
+        public RecompStatus CCode;
+        public RecompStatus Scripts;
+        public RecompStatus Messages;
 
         public override string ToString()
         {
-            if (!CCode && !Scripts && !Messages)
+            if (CCode == RecompStatus.Cached && Scripts == RecompStatus.Cached && Messages == RecompStatus.Cached)
                 return "(All cached)";
 
-            string cCode = CCode ? "(C Recompiled)" : "(C Cached)";
-            string scripts = Scripts ? "(Scripts Recompiled)" : "(Scripts Cached)";
-            string messages = Messages ? "(Messages Recompiled)" : "(Messages Cached)";
+            string RecompToString(RecompStatus s, string prefix)
+            {
+                switch (s)
+                {
+                    case RecompStatus.Cached: return $"{prefix} Cached";
+                    case RecompStatus.Recompiled: return $"{prefix} Recompiled";
+                    case RecompStatus.Relinked: return $"{prefix} Relinked";
+                    default: return "Unknown";
+                }
+            }
+
+
+            string cCode = RecompToString(CCode, "Code");
+            string scripts = RecompToString(Scripts, "Scripts");
+            string messages = RecompToString(Messages, "Messages");
 
             return $"{cCode} {scripts} {messages}";
         }
@@ -42,6 +62,7 @@ namespace NPC_Maker.Common
     public struct CacheStatus
     {
         public bool CCacheInvalid;
+        public bool SymbolsInvalid;
         public bool CacheInvalid;
     }
 

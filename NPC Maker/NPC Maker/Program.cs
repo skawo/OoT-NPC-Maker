@@ -477,7 +477,7 @@ namespace NPC_Maker
         {
             Program.CompileInProgress = true;
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            var res = FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, outHPath, inFile, cacheStatus, null, true);
+            var res = FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, outHPath, inFile, cacheStatus, null);
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             while (Program.CompileInProgress) {}
@@ -489,7 +489,7 @@ namespace NPC_Maker
             bool res = false;
             var baseDefines = Scripts.ScriptHelpers.GetBaseDefines(inFile);
 
-            res = FileOps.SaveBinaryFile(outputPath, outputDepsPath, outHPath, ref inFile, null, baseDefines, cacheStatus, null, true);
+            res = FileOps.SaveBinaryFile(outputPath, outputDepsPath, outHPath, ref inFile, null, baseDefines, cacheStatus, null);
             CCode.CleanupStandardCompilationArtifacts();
             return res;
         }

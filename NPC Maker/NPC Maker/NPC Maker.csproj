@@ -157,6 +157,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Binary.cs" />
     <Compile Include="Common\CCode.cs" />
     <Compile Include="Common\Classes.cs" />
     <Compile Include="Common\Defaults.cs" />
