@@ -37,35 +37,38 @@ namespace NPC_Maker
         public static bool consoleSilent = false;
         public static readonly Encoding Utf8 = Encoding.UTF8;
         public static readonly DataTable _sharedTable = new DataTable();
-        public static Stopwatch _stopWatch;
         public static readonly Random _random = new Random();
-
-        public static List<string> Monofonts = null;
-
-        [DllImport("kernel32.dll")]
-        private static extern bool AttachConsole(int dwProcessId);
-
-        [DllImport("kernel32.dll")]
-        private static extern bool FreeConsole();
 
         [STAThread]
         static int Main(string[] args)
         {
-            DetectRuntime();
+            var stopwatch = Stopwatch.StartNew();
+            int exitCode = 0;
 
-            bool hasArgs = args.Length > 0;
-
-            if (hasArgs)
+            try
             {
-                SetupConsole(ref args);
-                PrintBanner();
+                DetectRuntime();
+
+                bool hasArgs = args.Length > 0;
+
+                if (hasArgs)
+                {
+                    SetupConsole(ref args);
+                    PrintBanner();
+                }
+
+                InitializePaths();
+                EnsureDirectoriesExist();
+                LoadSettings();
+
+                exitCode = RunCLI(args);
+                return exitCode;
             }
-
-            InitializePaths();
-            EnsureDirectoriesExist();
-            LoadSettings();
-
-            return RunCLI(args);
+            finally
+            {
+                stopwatch.Stop();
+                Console.WriteLine($"NPC Maker finished in {stopwatch.Elapsed.TotalSeconds:F2}s (exit code {exitCode})");
+            }
         }
 
         private static void DetectRuntime()
