@@ -335,7 +335,7 @@ namespace NPC_Maker
         public static bool SaveBinaryFile(string outPath, string outputDepsPath, string outputHPath, ref NPCFile data, IProgress<ProgressReport> progress, string baseDefines,
                                          CacheStatus cacheStatus, ConcurrentDictionary<string, object> preProcessedFiles)
         {
-            if (!data.Entries.Any())
+            if (data.Entries.Count == 0)
             {
                 ShowMsg("Nothing to save.");
                 Program.CompileThereWereErrors = false;
@@ -610,7 +610,7 @@ namespace NPC_Maker
                     }
                 });
 
-                if (errors.Any())
+                if (errors.IsEmpty)
                 {
                     ShowMsg(errors.First());
                     e.AddParseError();
@@ -1131,14 +1131,14 @@ namespace NPC_Maker
                 File.WriteAllText(targets.Deps, CreateDepsFile(data, targets.Bin));
 
             if (!string.IsNullOrEmpty(targets.H))
-                File.WriteAllText(targets.H, CreateNPCHFile(data, targets.Bin));
+                File.WriteAllText(targets.H, CreateNPCHFile(data));
 
             Program.ConsoleWriteLineS("\nDone!");
             progress?.Report(new ProgressReport("Done!", 100));
             File.WriteAllBytes(targets.Bin, output.ToArray());
         }
 
-        public static string CreateNPCHFile(NPCFile data, string zobjFilename)
+        public static string CreateNPCHFile(NPCFile data)
         {
             var sb = new StringBuilder();
 

@@ -276,8 +276,8 @@ namespace NPC_Maker
         private static int RunCLI(string[] args)
         {
             CliMode = true;
-            bool isCompileCommand = args.Length >= 4 && args.Length <= 5 && args[0].ToUpper() == "-C";
-            bool isTableCommand = args.Length >= 5 && args.Length <= 6 && args[0].ToUpper() == "-M";
+            bool isCompileCommand = args.Length >= 4 && args.Length <= 5 && args[0].Equals("-C", StringComparison.CurrentCultureIgnoreCase);
+            bool isTableCommand = args.Length >= 5 && args.Length <= 6 && args[0].Equals("-M", StringComparison.CurrentCultureIgnoreCase);
             bool isConvertCommand = args.Length >= 2;
 
             if (isCompileCommand)
@@ -428,7 +428,7 @@ namespace NPC_Maker
                 if (outPath == null)
                 {
                     ConsoleWriteLineS($"Saving \"{Path.GetFileName(JsonPath)}\" to header...");
-                    File.WriteAllText(outH, FileOps.CreateNPCHFile(inFile, outPath));
+                    File.WriteAllText(outH, FileOps.CreateNPCHFile(inFile));
                     return 0;
                 }
 
@@ -476,9 +476,8 @@ namespace NPC_Maker
         private static bool RunParallelCompile(string outputPath, string outputDepsPath, string outHPath, Common.CacheStatus cacheStatus, NPCFile inFile)
         {
             Program.CompileInProgress = true;
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
             var res = FileOps.PreprocessCodeAndScripts(outputPath, outputDepsPath, outHPath, inFile, cacheStatus, null);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             while (Program.CompileInProgress) {}
             return res.Result;
