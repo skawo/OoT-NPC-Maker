@@ -258,71 +258,76 @@ namespace NPC_Maker
             float progressPer = 100f / data.Entries.Count;
             float curProgress = 0f;
             int lastReported = 0;
+            bool ret = false;
 
-            Program.ConsoleWriteS("Compiling...");
-
-            var results = new ConcurrentDictionary<string, object>();
-
-            var ctx = new BuildContext
+            await Task.Run(() =>
             {
-                Data = data,
-                CacheStatus = cacheStatus,
-                BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(data),
-                JsonFileName = Program.JsonPath.FilenameFromPath(),
-                Results = results,
-                ScriptCacheFiles = new HashSet<string>(Directory.GetFiles(Program.ScriptCachePath)),
-                CCacheFiles = new HashSet<string>(Directory.GetFiles(Program.CCachePath))
-            };
 
-            Parallel.For(0, data.Entries.Count,
-                new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 3 },
-                entryID =>
+                Program.ConsoleWriteS("Compiling...");
+
+                var results = new ConcurrentDictionary<string, object>();
+
+                var ctx = new BuildContext
                 {
-                    try
+                    Data = data,
+                    CacheStatus = cacheStatus,
+                    BaseDefines = Scripts.ScriptHelpers.GetBaseDefines(data),
+                    JsonFileName = Program.JsonPath.FilenameFromPath(),
+                    Results = results,
+                    ScriptCacheFiles = new HashSet<string>(Directory.GetFiles(Program.ScriptCachePath)),
+                    CCacheFiles = new HashSet<string>(Directory.GetFiles(Program.CCachePath))
+                };
+
+                Parallel.For(0, data.Entries.Count,
+                    new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * 3 },
+                    entryID =>
                     {
-                        var ec = new EntryContext(ctx, entryID);
-
-                        if (ec.Entry.IsNull || ec.Entry.Omitted)
-                            return;
-
-                        ec.Entry.ClearHeaderValues();
-
-                        ProcessCCode(ec);
-
-                        ec.ExtDataExists = CheckExtDataCache(ec, out string extDataFile);
-                        ProcessScripts(ec);
-
-                        results[entryID.ToString()] = ec.Status;
-
-                        if (!ec.ExtDataExists)
+                        try
                         {
-                            Helpers.DeleteFileStartingWith(Program.ScriptCachePath, ec.Prefix + "exdata_");
-                            File.Create(extDataFile).Dispose();
-                        }
-                    }
-                    catch { }
-                    finally
-                    {
-                        Helpers.AddInterlocked(ref curProgress, progressPer);
-                        int percent = (int)curProgress;
+                            var ec = new EntryContext(ctx, entryID);
 
-                        if (Interlocked.CompareExchange(ref lastReported, percent, percent - 1) == percent - 1)
+                            if (ec.Entry.IsNull || ec.Entry.Omitted)
+                                return;
+
+                            ec.Entry.ClearHeaderValues();
+
+                            ProcessCCode(ec);
+
+                            ec.ExtDataExists = CheckExtDataCache(ec, out string extDataFile);
+                            ProcessScripts(ec);
+
+                            results[entryID.ToString()] = ec.Status;
+
+                            if (!ec.ExtDataExists)
+                            {
+                                Helpers.DeleteFileStartingWith(Program.ScriptCachePath, ec.Prefix + "exdata_");
+                                File.Create(extDataFile).Dispose();
+                            }
+                        }
+                        catch { }
+                        finally
                         {
-                            if (progress != null)
-                                progress.Report(new ProgressReport($"Compiling {percent}%", curProgress));
-                            else
-                                Program.ConsoleWriteS($"\rCompiling {percent}%    ");
+                            Helpers.AddInterlocked(ref curProgress, progressPer);
+                            int percent = (int)curProgress;
+
+                            if (Interlocked.CompareExchange(ref lastReported, percent, percent - 1) == percent - 1)
+                            {
+                                if (progress != null)
+                                    progress.Report(new ProgressReport($"Compiling {percent}%", curProgress));
+                                else
+                                    Program.ConsoleWriteS($"\rCompiling {percent}%    ");
+                            }
                         }
-                    }
-                });
+                    });
 
-            Program.ConsoleWriteLineS("\nPre-processing done!");
+                Program.ConsoleWriteLineS("\nPre-processing done!");
 
-            bool ret = SaveBinaryFile(outPath, outputDepsPath, outputHPath, ref data, progress, ctx.BaseDefines,
-                                      new CacheStatus { CCacheInvalid = false, CacheInvalid = false, SymbolsInvalid = false }, results);
+                ret = SaveBinaryFile(outPath, outputDepsPath, outputHPath, ref data, progress, ctx.BaseDefines,
+                                          new CacheStatus { CCacheInvalid = false, CacheInvalid = false, SymbolsInvalid = false }, results);
 
-            CCode.CleanupStandardCompilationArtifacts();
-            Program.CompileInProgress = false;
+                CCode.CleanupStandardCompilationArtifacts();
+                Program.CompileInProgress = false;
+            });
 
             return ret;
         }
