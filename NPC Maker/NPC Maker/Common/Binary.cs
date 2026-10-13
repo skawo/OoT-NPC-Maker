@@ -610,7 +610,7 @@ namespace NPC_Maker
                     }
                 });
 
-                if (errors.IsEmpty)
+                if (!errors.IsEmpty)
                 {
                     ShowMsg(errors.First());
                     e.AddParseError();
