@@ -324,8 +324,6 @@ namespace NPC_Maker
         {
         }
 
-        public static readonly Regex TxtHeaderRegex = new Regex(@"^(?<name>.*?)\s*(?:\[(?<attrs>[^\]]*)\])?\s*$",RegexOptions.Compiled);
-
         public static bool IsSeparator(string line) => line.Length > 0 && line.Trim('-').Length == 0;
 
         public static MessageEntry FromTxtFormat(string[] lines)
@@ -333,28 +331,26 @@ namespace NPC_Maker
             if (lines.Length == 0)
                 throw new Exception("Empty message text.");
 
-            var match = TxtHeaderRegex.Match(lines[0]);
-            if (!match.Success)
-                throw new Exception($"Invalid header line: \"{lines[0]}\"");
+            string header = lines[0].TrimEnd();
+            string name = header;
+            Lists.BoxType type = 0;
+            Lists.BoxPosition position = 0;
 
-            string name = match.Groups["name"].Value;
-            ZeldaMessage.Data.BoxType type = 0;
-            ZeldaMessage.Data.BoxPosition position = 0;
-
-            if (match.Groups["attrs"].Success)
+            int open = header.LastIndexOf('[');
+            if (open >= 0 && header.EndsWith("]"))
             {
-                foreach (string part in match.Groups["attrs"].Value.Split(','))
+                name = header.Substring(0, open).TrimEnd();
+
+                string attrs = header.Substring(open + 1, header.Length - open - 2);
+                foreach (string part in attrs.Split(','))
                 {
-                    int eq = part.IndexOf('=');
+                    string[] kv = part.Split('=');
 
-                    if (eq < 0)
+                    if (kv.Length != 2 || kv[1].Trim().Length == 0)
                         continue;
 
-                    string key = part.Substring(0, eq).Trim();
-                    string value = part.Substring(eq + 1).Trim();
-
-                    if (value.Length == 0)
-                        continue;
+                    string key = kv[0].Trim();
+                    string value = kv[1].Trim();
 
                     if (key.Equals("Type", StringComparison.OrdinalIgnoreCase))
                     {
@@ -398,7 +394,6 @@ namespace NPC_Maker
         {
             var sb = new StringBuilder();
 
-            // Only write non-default values
             var attrs = new List<string>();
             if (Type != 0)
                 attrs.Add($"Type={(Lists.BoxType)Type}");
@@ -409,7 +404,7 @@ namespace NPC_Maker
             if (attrs.Count > 0)
                 header = $"{Name} [{string.Join(", ", attrs)}]";
             else if (Name.EndsWith("]"))
-                header = $"{Name} []"; // keeps a trailing [..] in the name from being read as attributes
+                header = $"{Name} []"; // keeps a trailing square bracket in the name from interfering
             else
                 header = Name;
 
@@ -453,7 +448,7 @@ namespace NPC_Maker
             message.MessageText = null;
             message.Comment = message.Comment?.Replace(envNewline, "\n");
 
-           return message;
+            return message;
         }
 
         public byte GetMessageTypePos()
