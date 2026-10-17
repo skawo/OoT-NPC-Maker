@@ -102,7 +102,7 @@ namespace NPC_Maker
                 NullValueHandling = NullValueHandling.Ignore,
             });
 
-            return json.Replace("\r\n", "\n");
+            return Helpers.NormalizeStringLbreaks(json);
         }
 
         public static bool SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null, bool isBackup = false)
