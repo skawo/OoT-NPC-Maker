@@ -12,6 +12,7 @@ namespace NPC_Maker.Common
     internal class NPCFileSplit
     {
         // Folder / file names
+
         private const string ContentFolderSuffix = "_content";
         private const string HeadersFolder = "headers";
         private const string NpcsFolder = "npcs";
@@ -110,14 +111,17 @@ namespace NPC_Maker.Common
             {
                 inFile.GlobalHeaders = new List<ScriptEntry>();
 
-                foreach (FolderEntry file in FolderLister.ListSortedWithPaths(headersPath, EntryKind.FilesOnly))
+                if (Directory.Exists(headersPath))
                 {
-                    if (Path.GetExtension(file.Name) == ScriptExtension)
+                    foreach (FolderEntry file in FolderLister.ListSortedWithPaths(headersPath, EntryKind.FilesOnly))
                     {
-                        ScriptEntry scr = new ScriptEntry();
-                        scr.Name = Path.GetFileNameWithoutExtension(file.Name);
-                        scr.TextLines = File.ReadAllLines(file.FullPath).ToList();
-                        inFile.GlobalHeaders.Add(scr);
+                        if (Path.GetExtension(file.Name) == ScriptExtension)
+                        {
+                            ScriptEntry scr = new ScriptEntry();
+                            scr.Name = Path.GetFileNameWithoutExtension(file.Name);
+                            scr.TextLines = File.ReadAllLines(file.FullPath).ToList();
+                            inFile.GlobalHeaders.Add(scr);
+                        }
                     }
                 }
 
@@ -209,14 +213,17 @@ namespace NPC_Maker.Common
             entry.Scripts = new List<ScriptEntry>();
             string scriptsPath = Path.Combine(directory, ScriptsFolder);
 
-            foreach (FolderEntry scriptFile in FolderLister.ListSortedWithPaths(scriptsPath, EntryKind.FilesOnly))
+            if (Directory.Exists(scriptsPath))
             {
-                if (Path.GetExtension(scriptFile.Name) == ScriptExtension)
+                foreach (FolderEntry scriptFile in FolderLister.ListSortedWithPaths(scriptsPath, EntryKind.FilesOnly))
                 {
-                    ScriptEntry scr = new ScriptEntry();
-                    scr.Name = Path.GetFileNameWithoutExtension(scriptFile.Name);
-                    scr.TextLines = File.ReadAllLines(scriptFile.FullPath).ToList();
-                    entry.Scripts.Add(scr);
+                    if (Path.GetExtension(scriptFile.Name) == ScriptExtension)
+                    {
+                        ScriptEntry scr = new ScriptEntry();
+                        scr.Name = Path.GetFileNameWithoutExtension(scriptFile.Name);
+                        scr.TextLines = File.ReadAllLines(scriptFile.FullPath).ToList();
+                        entry.Scripts.Add(scr);
+                    }
                 }
             }
 
@@ -224,37 +231,37 @@ namespace NPC_Maker.Common
             entry.Localization = new List<LocalizationEntry>();
             string messagesPath = Path.Combine(directory, MessagesFolder);
 
-            if (!Directory.Exists(messagesPath))
-                throw new Exception($"Failed to load NPC: No messages folder?");
-
-            try
+            if (Directory.Exists(messagesPath))
             {
-                string defaultLPath = Path.Combine(messagesPath, DefaultMessagesFileName);
-
-                if (File.Exists(defaultLPath))
-                    entry.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(defaultLPath));
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"{Lists.DefaultLanguage}: {ex.Message}");
-            }
-
-            foreach (string language in languages)
-            {
-                string langPath = Path.Combine(messagesPath, $"{language}{MessagesExtension}");
-
-                if (File.Exists(langPath))
+                try
                 {
-                    try
+                    string defaultLPath = Path.Combine(messagesPath, DefaultMessagesFileName);
+
+                    if (File.Exists(defaultLPath))
+                        entry.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(defaultLPath));
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"{Lists.DefaultLanguage}: {ex.Message}");
+                }
+
+                foreach (string language in languages)
+                {
+                    string langPath = Path.Combine(messagesPath, $"{language}{MessagesExtension}");
+
+                    if (File.Exists(langPath))
                     {
-                        LocalizationEntry le = new LocalizationEntry();
-                        le.Language = language;
-                        le.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(langPath));
-                        entry.Localization.Add(le);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception($"{language}:, {ex.Message}");
+                        try
+                        {
+                            LocalizationEntry le = new LocalizationEntry();
+                            le.Language = language;
+                            le.Messages = NPCEntry.ConvertTxtToMessages(File.ReadAllLines(langPath));
+                            entry.Localization.Add(le);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception($"{language}:, {ex.Message}");
+                        }
                     }
                 }
             }
@@ -280,6 +287,7 @@ namespace NPC_Maker.Common
             void WriteScripts(string folder, List<ScriptEntry> scripts)
             {
                 Directory.CreateDirectory(folder);
+
                 if (scripts == null)
                     return;
 
