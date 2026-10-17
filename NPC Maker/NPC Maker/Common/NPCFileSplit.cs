@@ -382,7 +382,7 @@ namespace NPC_Maker.Common
                             entry.Messages = null;
                             entry.Localization = null;
 
-                            if (entry.EmbeddedOverlayCode != null && String.IsNullOrWhiteSpace(entry.EmbeddedOverlayCode.Code))
+                            if (entry.EmbeddedOverlayCode != null)
                             {
                                 entry.EmbeddedOverlayCode.CodeLines = null;
                                 entry.EmbeddedOverlayCode.Code = null;
