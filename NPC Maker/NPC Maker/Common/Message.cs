@@ -337,11 +337,13 @@ namespace NPC_Maker
             Lists.BoxPosition position = 0;
 
             int open = header.LastIndexOf('[');
+            
             if (open >= 0 && header.EndsWith("]"))
             {
                 name = header.Substring(0, open).TrimEnd();
 
                 string attrs = header.Substring(open + 1, header.Length - open - 2);
+                
                 foreach (string part in attrs.Split(','))
                 {
                     string[] kv = part.Split('=');
@@ -401,6 +403,7 @@ namespace NPC_Maker
                 attrs.Add($"Position={(Lists.BoxPosition)Position}");
 
             string header;
+
             if (attrs.Count > 0)
                 header = $"{Name} [{string.Join(", ", attrs)}]";
             else if (Name.EndsWith("]"))
@@ -430,23 +433,20 @@ namespace NPC_Maker
 
         public void FlattenMessage()
         {
-            string envNewline = Environment.NewLine;
-            MessageText = MessageText?.Replace(envNewline, "\n");
+            MessageText = MessageText?.Replace("\r\n", "\n");
             MessageTextLines = MessageText?.Split(Lists.NewlineSeparators, StringSplitOptions.None).ToList();
             MessageText = null;
-            Comment = Comment?.Replace(envNewline, "\n");
+            Comment = Comment?.Replace("\r\n", "\n");
         }
 
         public static MessageEntry GetFlattenedMessage(MessageEntry msg)
         {
-            string envNewline = Environment.NewLine;
-
             MessageEntry message = Helpers.Clone<MessageEntry>(msg);
 
-            message.MessageText = message.MessageText?.Replace(envNewline, "\n");
+            message.MessageText = message.MessageText?.Replace("\r\n", "\n");
             message.MessageTextLines = message.MessageText?.Split(Lists.NewlineSeparators, StringSplitOptions.None).ToList();
             message.MessageText = null;
-            message.Comment = message.Comment?.Replace(envNewline, "\n");
+            message.Comment = message.Comment?.Replace("\r\n", "\n");
 
             return message;
         }
