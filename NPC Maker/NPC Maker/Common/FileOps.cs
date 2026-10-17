@@ -112,10 +112,10 @@ namespace NPC_Maker
             string json = JsonConvert.SerializeObject(npcFile, new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
             });
 
-            return json.Replace(Environment.NewLine, "\n");
+            return json.Replace("\r\n", "\n");
         }
 
         public static bool SaveNPCJSON(string path, NPCFile data, IProgress<ProgressReport> progress = null, string json = null, bool isBackup = false)
