@@ -75,12 +75,15 @@ namespace NPC_Maker.Common
                 paths.AddRange(GetScriptPaths(Path.Combine(directory, ScriptsFolder), entry.Scripts));
 
                 string messagesPath = Path.Combine(directory, MessagesFolder);
-                paths.Add(Path.Combine(messagesPath, DefaultMessagesFileName));
+
+                if (npcFile.Entries[i].Messages.Count > 0)
+                    paths.Add(Path.Combine(messagesPath, DefaultMessagesFileName));
 
                 if (entry.Localization != null)
                 {
                     foreach (var le in entry.Localization)
-                        paths.Add(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}{MessagesExtension}"));
+                        if (le.Messages.Count > 0)
+                            paths.Add(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}{MessagesExtension}"));
                 }
             }
 
