@@ -326,19 +326,7 @@ namespace NPC_Maker
 
         public static readonly Regex TxtHeaderRegex = new Regex(@"^(?<name>.*?)\s*(?:\[(?<attrs>[^\]]*)\])?\s*$",RegexOptions.Compiled);
 
-        public static MessageEntry FromTxtFormat(string text)
-        {
-            if (String.IsNullOrWhiteSpace(text))
-                throw new Exception("Empty message text.");
-
-            var lines = new List<string>(text.Replace("\r\n", "\n").Split('\n'));
-
-            // Remove all newlines at the end
-            if (lines.Count > 0 && lines[lines.Count - 1] == "")
-                lines.RemoveAt(lines.Count - 1);
-
-            return FromTxtFormat(lines.ToArray());
-        }
+        public static bool IsSeparator(string line) => line.Length > 0 && line.Trim('-').Length == 0;
 
         public static MessageEntry FromTxtFormat(string[] lines)
         {
@@ -350,8 +338,8 @@ namespace NPC_Maker
                 throw new Exception($"Invalid header line: \"{lines[0]}\"");
 
             string name = match.Groups["name"].Value;
-            Lists.BoxType type = 0;
-            Lists.BoxPosition position = 0;
+            ZeldaMessage.Data.BoxType type = 0;
+            ZeldaMessage.Data.BoxPosition position = 0;
 
             if (match.Groups["attrs"].Success)
             {
@@ -382,14 +370,13 @@ namespace NPC_Maker
 
             int index = 1;
 
-            if (index < lines.Length && lines[index].Length > 0 && lines[index].Trim('-').Length == 0)
+            if (index < lines.Length && IsSeparator(lines[index]))
                 index++;
 
             var commentLines = new List<string>();
             while (index < lines.Length && lines[index].StartsWith("#"))
             {
-                string line = lines[index];
-                commentLines.Add(line.Substring(1).TrimStart());
+                commentLines.Add(lines[index].Substring(1).TrimStart());
                 index++;
             }
 
@@ -410,14 +397,20 @@ namespace NPC_Maker
         {
             var sb = new StringBuilder();
 
+            // Only write non-default values
             var attrs = new List<string>();
-
             if (Type != 0)
-                attrs.Add($"Type={(Lists.BoxType)Type}");
+                attrs.Add($"Type={(ZeldaMessage.Data.BoxType)Type}");
             if (Position != 0)
-                attrs.Add($"Position={(Lists.BoxPosition)Position}");
+                attrs.Add($"Position={(ZeldaMessage.Data.BoxPosition)Position}");
 
-            string header = attrs.Count > 0 ? $"{Name} [{string.Join(", ", attrs)}]" : Name;
+            string header;
+            if (attrs.Count > 0)
+                header = $"{Name} [{string.Join(", ", attrs)}]";
+            else if (Name.EndsWith("]"))
+                header = $"{Name} []"; // keeps a trailing [..] in the name from being read as attributes
+            else
+                header = Name;
 
             sb.AppendLine(header);
             sb.AppendLine(new string('-', header.Length));
