@@ -334,15 +334,13 @@ namespace NPC_Maker
 
         public static List<MessageEntry> ConvertTxtToMessages(string[] lines)
         {
-            bool IsSeparator(string s) => s.Length > 0 && s.Trim('-').Length == 0;
-
             bool IsHeaderAt(int i)
             {
                 string header = lines[i].TrimEnd();
                 if (header.Length == 0 || MessageEntry.IsSeparator(header))
                     return false;
 
-                return IsSeparator(lines[i + 1].TrimEnd());
+                return MessageEntry.IsSeparator(lines[i + 1].TrimEnd());
             }
 
             List<MessageEntry> outList = new List<MessageEntry>();
