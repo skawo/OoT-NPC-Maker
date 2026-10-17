@@ -334,20 +334,21 @@ namespace NPC_Maker
 
         public static List<MessageEntry> ConvertTxtToMessages(string[] lines)
         {
+            bool IsSeparator(string s) => s.Length > 0 && s.Trim('-').Length == 0;
+
             bool IsHeaderAt(int i)
             {
                 string header = lines[i].TrimEnd();
-                if (header.Length == 0 || !MessageEntry.TxtHeaderRegex.IsMatch(header))
+                if (header.Length == 0 || MessageEntry.IsSeparator(header))
                     return false;
 
-                string next = lines[i + 1].TrimEnd();
-                return next.Trim('-').Length == 0;
+                return IsSeparator(lines[i + 1].TrimEnd());
             }
 
             List<MessageEntry> outList = new List<MessageEntry>();
 
             var starts = new List<int>();
-            for (int i = 0; i < lines.Count() - 1; i++)
+            for (int i = 0; i < lines.Length - 1; i++)
             {
                 if (IsHeaderAt(i))
                     starts.Add(i);
@@ -361,10 +362,8 @@ namespace NPC_Maker
 
             for (int i = 0; i < starts.Count; i++)
             {
-                // Exclusive end: first line NOT in this block.
                 int endL = (i == starts.Count - 1) ? lines.Length : starts[i + 1];
 
-                // Drop the single separator blank line, if there is one.
                 if (endL - 1 > starts[i] && String.IsNullOrWhiteSpace(lines[endL - 1]))
                     endL--;
 
