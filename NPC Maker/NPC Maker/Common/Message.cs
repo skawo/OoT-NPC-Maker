@@ -448,7 +448,7 @@ namespace NPC_Maker
             message.MessageText = null;
             message.Comment = message.Comment?.Replace(envNewline, "\n");
 
-            return message;
+           return message;
         }
 
         public byte GetMessageTypePos()
