@@ -21,6 +21,11 @@ namespace NPC_Maker
 {
     public static class Helpers
     {
+        public static string NormalizeStringLbreaks(string s)
+        {
+            s = s.Replace("\r\n", "\n").Replace('\r', '\n').Replace("\n", "\n");
+            return s.TrimEnd('\n');
+        }
 
         public static DateTime TryGetLastDatetimeWritten(string path)
         {

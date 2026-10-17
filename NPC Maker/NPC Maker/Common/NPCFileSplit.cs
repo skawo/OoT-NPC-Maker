@@ -294,11 +294,9 @@ namespace NPC_Maker.Common
                 for (int i = 0; i < scripts.Count; i++)
                 {
                     string fn = Prefixed(i, scripts.Count, scripts[i].Name) + ScriptExtension;
-                    File.WriteAllText(Path.Combine(folder, fn), NormalizeStringLbreaks(scripts[i].Text));
+                    File.WriteAllText(Path.Combine(folder, fn), Helpers.NormalizeStringLbreaks(scripts[i].Text));
                 }
             }
-
-            string NormalizeStringLbreaks(string s) => s.Replace("\r\n", "\n").Replace('\r', '\n').Replace("\n", "\n");
 
             try
             {
@@ -324,7 +322,7 @@ namespace NPC_Maker.Common
 
                 try
                 {
-                    File.WriteAllText(tempCHeaderPath, NormalizeStringLbreaks(npcFile.CHeader));
+                    File.WriteAllText(tempCHeaderPath, Helpers.NormalizeStringLbreaks(npcFile.CHeader));
                     npcFile.CHeader = null;
                     npcFile.CHeaderLines = null;
                 }
@@ -355,7 +353,7 @@ namespace NPC_Maker.Common
                         if (!entry.IsNull)
                         {
                             if (code != null && !string.IsNullOrWhiteSpace(code))
-                                File.WriteAllText(Path.Combine(directory, CodeFileName), NormalizeStringLbreaks(code));
+                                File.WriteAllText(Path.Combine(directory, CodeFileName), Helpers.NormalizeStringLbreaks(code));
 
                             WriteScripts(Path.Combine(directory, ScriptsFolder), scripts);
 
@@ -365,7 +363,7 @@ namespace NPC_Maker.Common
                             string mes = entry.ConvertMessagesToTxt(Lists.DefaultLanguage);
 
                             if (!String.IsNullOrWhiteSpace(mes))
-                                File.WriteAllText(Path.Combine(messagesPath, DefaultMessagesFileName), NormalizeStringLbreaks(mes));
+                                File.WriteAllText(Path.Combine(messagesPath, DefaultMessagesFileName), Helpers.NormalizeStringLbreaks(mes));
 
                             if (localization != null)
                             {
@@ -374,7 +372,7 @@ namespace NPC_Maker.Common
                                     mes = entry.ConvertMessagesToTxt(le.Language);
 
                                     if (!String.IsNullOrWhiteSpace(mes))
-                                        File.WriteAllText(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}{MessagesExtension}"), NormalizeStringLbreaks(mes));
+                                        File.WriteAllText(Path.Combine(messagesPath, $"{SanitizeName(le.Language)}{MessagesExtension}"), Helpers.NormalizeStringLbreaks(mes));
                                 }
                             }
 
@@ -395,7 +393,7 @@ namespace NPC_Maker.Common
                             NullValueHandling = NullValueHandling.Ignore
                         });
 
-                        File.WriteAllText(Path.Combine(directory, NpcJsonFileName), json);
+                        File.WriteAllText(Path.Combine(directory, NpcJsonFileName), Helpers.NormalizeStringLbreaks(json));
 
                         int done = Interlocked.Increment(ref processedCount);
                         float pct = done * 100f / total;
@@ -427,7 +425,7 @@ namespace NPC_Maker.Common
                         NullValueHandling = NullValueHandling.Ignore
                     });
 
-                    File.WriteAllText(tempJsonPath, json);
+                    File.WriteAllText(tempJsonPath, Helpers.NormalizeStringLbreaks(json));
                 }
                 catch (Exception ex)
                 {
