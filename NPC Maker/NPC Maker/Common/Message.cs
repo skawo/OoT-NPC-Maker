@@ -324,7 +324,7 @@ namespace NPC_Maker
         {
         }
 
-        public static readonly Regex TxtHeaderRegex = new Regex(@"^(?<name>.*?)\s*\[Type=(?<type>[^,\]]*),\s*Position=(?<pos>[^\]]*)\]\s*$", RegexOptions.Compiled);
+        public static readonly Regex TxtHeaderRegex = new Regex(@"^(?<name>.*?)\s*(?:\[(?<attrs>[^\]]*)\])?\s*$",RegexOptions.Compiled);
 
         public static MessageEntry FromTxtFormat(string text)
         {
@@ -345,25 +345,46 @@ namespace NPC_Maker
             if (lines.Length == 0)
                 throw new Exception("Empty message text.");
 
-            // --- Header ---
             var match = TxtHeaderRegex.Match(lines[0]);
             if (!match.Success)
                 throw new Exception($"Invalid header line: \"{lines[0]}\"");
 
             string name = match.Groups["name"].Value;
+            Lists.BoxType type = 0;
+            Lists.BoxPosition position = 0;
 
-            if (!Enum.TryParse(match.Groups["type"].Value.Trim(), true, out Lists.BoxType type))
-                throw new Exception($"Unknown Box Type: \"{match.Groups["type"].Value}\"");
-            if (!Enum.TryParse(match.Groups["pos"].Value.Trim(), true, out Lists.BoxPosition position))
-                throw new Exception($"Unknown Box Position: \"{match.Groups["pos"].Value}\"");
+            if (match.Groups["attrs"].Success)
+            {
+                foreach (string part in match.Groups["attrs"].Value.Split(','))
+                {
+                    int eq = part.IndexOf('=');
+                    if (eq < 0)
+                        continue;
+
+                    string key = part.Substring(0, eq).Trim();
+                    string value = part.Substring(eq + 1).Trim();
+
+                    if (value.Length == 0)
+                        continue;
+
+                    if (key.Equals("Type", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (!Enum.TryParse(value, true, out type))
+                            throw new Exception($"Unknown Box Type: \"{value}\"");
+                    }
+                    else if (key.Equals("Position", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (!Enum.TryParse(value, true, out position))
+                            throw new Exception($"Unknown Box Position: \"{value}\"");
+                    }
+                }
+            }
 
             int index = 1;
 
-            // Omit separator line
             if (index < lines.Length && lines[index].Length > 0 && lines[index].Trim('-').Length == 0)
                 index++;
 
-            // Comments
             var commentLines = new List<string>();
             while (index < lines.Length && lines[index].StartsWith("#"))
             {
@@ -372,8 +393,7 @@ namespace NPC_Maker
                 index++;
             }
 
-            // Message body()
-            var body = lines.Skip(index).Take(lines.Length - index).ToList();
+            var body = lines.Skip(index).ToList();
 
             return new MessageEntry
             {
@@ -390,7 +410,14 @@ namespace NPC_Maker
         {
             var sb = new StringBuilder();
 
-            string header = $"{Name} [Type={(Lists.BoxType)Type}, Position={(Lists.BoxPosition)Position}]";
+            var attrs = new List<string>();
+
+            if (Type != 0)
+                attrs.Add($"Type={(Lists.BoxType)Type}");
+            if (Position != 0)
+                attrs.Add($"Position={(Lists.BoxPosition)Position}");
+
+            string header = attrs.Count > 0 ? $"{Name} [{string.Join(", ", attrs)}]" : Name;
 
             sb.AppendLine(header);
             sb.AppendLine(new string('-', header.Length));
