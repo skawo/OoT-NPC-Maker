@@ -2226,7 +2226,7 @@ namespace NPC_Maker
 
                     ConcurrentBag<string> reportItems = new ConcurrentBag<string>();
 
-                    Parallel.ForEach(EditedFile.Entries, ent =>
+                    foreach (var ent in EditedFile.Entries)
                     {
                         if (ent.Localization.FindIndex(x => x.Language == selectedLanguage) != -1)
                         {
@@ -2274,7 +2274,7 @@ namespace NPC_Maker
                         {
                             reportItems.Add($"{ent.NPCName} does not contain this language.");
                         }
-                    });
+                    };
 
                     StringBuilder report = new StringBuilder();
                     foreach (string item in reportItems)
@@ -4817,11 +4817,11 @@ namespace NPC_Maker
 
             Bitmap[] previews = new Bitmap[mp.MessageCount];
 
-            Parallel.For(0, mp.MessageCount, i =>
+            for (int i = 0; i < mp.MessageCount; i++)
             {
                 if (!canReuse || !mp.Message[i].SequenceEqual(localSaved.MessageArrays[i]))
                     previews[i] = mp.GetPreview(i, Program.Settings.ImproveTextMsgReadability, 1.5f * Program.Settings.GUIScale);
-            });
+            };
 
             Graphics grfx = null;
 
