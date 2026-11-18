@@ -532,7 +532,8 @@ namespace NPC_Maker
             string arguments = $"-s {BuildLinkerFileArgs(config.LinkerFiles)} " +
                                $"-o {ToolPath(paths.OvlFile).AppendQuotation()} " +
                                $"-e 0x{BaseAddr:X} " +
-                               $"-i {ToolPath(paths.ObjectFile).AppendQuotation()}";
+                               $"-i {ToolPath(paths.ObjectFile).AppendQuotation()} " +
+                               $"-W";
 
             return CreateToolProcessInfo(paths.WorkingDirectory,
                 Path.Combine(Program.ExecPath, "gcc", config.BinDirectory, config.LdExecutable),
