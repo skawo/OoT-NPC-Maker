@@ -179,29 +179,8 @@ namespace NPC_Maker
         {
             if (Program.IsRunningUnderMono)
             {
-                try
-                {
-                    if (Selection.End != Selection.Start)
-                    {
-                        var tempFileName = Path.GetTempFileName();
-                        File.WriteAllText(tempFileName, SelectedText);
-                        try
-                        {
-                            if (Program.IsWSL)
-                                Helpers.RunBash($"cat {tempFileName} | clip.exe ");
-
-                            Helpers.RunBash($"cat {tempFileName} | xsel -i --clipboard ");
-                        }
-                        finally
-                        {
-                            File.Delete(tempFileName);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error copying. Is xsel installed?: " + ex.Message);
-                }
+                if (Selection.End != Selection.Start)
+                    Helpers.PutIntoClipboard(SelectedText);
             }
             else
                 base.Copy();
@@ -213,40 +192,28 @@ namespace NPC_Maker
             {
                 try
                 {
-                    base.Paste();
-                }
-                catch
-                {
-                    string text = null;
-
-                    var thread = new Thread(() =>
+                    var psi = new ProcessStartInfo("xsel", "-o --clipboard")
                     {
-                        try
-                        {
-                            IDataObject data = Clipboard.GetDataObject();
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        StandardOutputEncoding = Encoding.UTF8
+                    };
+                    psi.EnvironmentVariables["LC_ALL"] = "C.UTF-8";
 
-                            if (data == null)
-                                return;
+                    string text;
+                    using (var p = Process.Start(psi))
+                    {
+                        text = p.StandardOutput.ReadToEnd();
+                        p.WaitForExit();
+                    }
 
-                            if (data.GetDataPresent(DataFormats.UnicodeText))
-                                text = data.GetData(DataFormats.UnicodeText) as string;
-                            else if (data.GetDataPresent(DataFormats.Text))
-                                text = data.GetData(DataFormats.Text) as string;
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("Error pasting: " + ex.Message);
-                        }
-                    });
-
-                    thread.SetApartmentState(ApartmentState.STA);
-                    thread.Start();
-                    thread.Join();
-
-                    if (string.IsNullOrEmpty(text))
-                        return;
-
-                    InsertText(text);
+                    if (!string.IsNullOrEmpty(text))
+                        InsertText(text);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error pasting. Is xsel installed?: " + ex.Message);
                 }
             }
             else

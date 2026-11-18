@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NPC_Maker.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -131,7 +132,7 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{OpenFailed}: Couldn't load external headers: {ex.Message}");
+                BigMessageBox.Show($"{OpenFailed}: Couldn't load external headers: {ex.Message}");
                 return;
             }
 
@@ -143,7 +144,7 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{OpenFailed}: Couldn't load C header: {ex.Message}");
+                BigMessageBox.Show($"{OpenFailed}: Couldn't load C header: {ex.Message}");
                 return;
             }
 
@@ -151,7 +152,7 @@ namespace NPC_Maker.Common
 
             if (!Directory.Exists(npcsPath))
             {
-                Console.WriteLine($"{OpenFailed}: No NPCs folder?");
+                BigMessageBox.Show($"{OpenFailed}: No NPCs folder?");
                 return;
             }
 
@@ -183,7 +184,7 @@ namespace NPC_Maker.Common
 
                 if (failure != null)
                 {
-                    Console.WriteLine($"{OpenFailed}: {failure}");
+                    BigMessageBox.Show($"{OpenFailed}: {failure}");
                     return;
                 }
 
@@ -191,7 +192,7 @@ namespace NPC_Maker.Common
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{OpenFailed}: {ex.Message}");
+                BigMessageBox.Show($"{OpenFailed}: {ex.Message}");
                 return;
             }
         }
